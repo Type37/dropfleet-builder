@@ -948,7 +948,12 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-faint);
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
 }
+.stat-cell-label svg { opacity: 0.6; flex-shrink: 0; }
 
 .stat-cell-value {
   font-family: var(--font-body);
@@ -1240,6 +1245,7 @@ h1, h2, h3, h4, h5, h6 {
 .weapon-type-k { color: var(--navy); font-weight: var(--weight-bold); }
 .weapon-type-e { color: #8b5e1a; font-weight: var(--weight-bold); }
 .weapon-type-c { color: var(--error); font-weight: var(--weight-bold); }
+.weapon-col-type svg { vertical-align: middle; }
 
 /* Weapon special chips */
 .weapon-special-chip {

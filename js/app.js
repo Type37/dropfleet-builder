@@ -821,6 +821,13 @@ const App = (() => {
 
   const WEAPON_TYPE_LABELS = { K: 'Kinetic', E: 'Energy', C: 'Close Action' };
 
+  // Weapon type inline icons — 14px, used in weapon row type column
+  const WEAPON_TYPE_ICONS = {
+    K: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.5 5H15l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5.5z"/></svg>',
+    E: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M9 1L4 8h4l-1 7 6-8H9l1-6z"/></svg>',
+    C: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>'
+  };
+
   const ARC_LABELS = {
     'B': 'Broadside (Port & Starboard)',
     'F': 'Front',
@@ -832,6 +839,18 @@ const App = (() => {
     'SL': 'Side Left',
     'SR': 'Side Right',
     'R': 'Rear'
+  };
+
+  // Inline SVG icons for stat cells — monochrome, 12px, geometric/Art Deco
+  const STAT_ICONS = {
+    scan:   '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M8 8L12 4"/><circle cx="8" cy="8" r="1.5" fill="currentColor" stroke="none"/></svg>',
+    sig:    '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l8 8M12 4l-8 8"/><circle cx="8" cy="8" r="2" fill="currentColor" stroke="none"/></svg>',
+    thrust: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l4 6H4l4-6z"/><path d="M6 10l2 4 2-4"/></svg>',
+    hull:   '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5L14 5v6l-6 3.5L2 11V5L8 1.5z"/></svg>',
+    es:     '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1C5 1 3 3 3 3v5c0 3 5 6 5 6s5-3 5-6V3s-2-2-5-2z"/><path d="M8 5v4M6 7h4"/></svg>',
+    ks:     '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1C5 1 3 3 3 3v5c0 3 5 6 5 6s5-3 5-6V3s-2-2-5-2z"/><path d="M6 6l4 4M10 6l-4 4"/></svg>',
+    bs:     '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1C5 1 3 3 3 3v5c0 3 5 6 5 6s5-3 5-6V3s-2-2-5-2z"/></svg>',
+    g:      '<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><circle cx="5" cy="8" r="2"/><circle cx="11" cy="8" r="2"/></svg>'
   };
 
   const STAT_META = {
@@ -854,8 +873,9 @@ const App = (() => {
       let cellClass = meta.cssClass || '';
       // Gray out BS when it's "-"
       if (k === 'bs' && (v === '-' || v === '--')) cellClass = 'stat-cell-none';
+      const icon = STAT_ICONS[k] || '';
       return `<div class="stat-cell ${cellClass}" title="${meta.title}">
-        <div class="stat-cell-label">${meta.label}</div>
+        <div class="stat-cell-label">${icon} ${meta.label}</div>
         <div class="stat-cell-value">${v}</div>
       </div>`;
     }).filter(Boolean).join('');
@@ -922,13 +942,14 @@ const App = (() => {
     const special = w.special && w.special !== '-' ? w.special : '';
     const typeLabel = WEAPON_TYPE_LABELS[w.type] || w.type || '?';
     const typeClass = w.type ? `weapon-type-${w.type.toLowerCase()}` : '';
+    const typeIcon = WEAPON_TYPE_ICONS[w.type] || '';
     return `<div class="weapon-row">
       <span class="weapon-col weapon-col-name">${esc(w.name)}</span>
       <span class="weapon-col weapon-col-arc" title="${ARC_LABELS[w.arc] || 'Firing Arc: ' + (w.arc || '')}">${esc(w.arc || '')}</span>
       <span class="weapon-col weapon-col-att">${w.attack}</span>
       <span class="weapon-col weapon-col-lock">${w.lock}</span>
       <span class="weapon-col weapon-col-dmg">${w.damage}</span>
-      <span class="weapon-col weapon-col-type ${typeClass}" title="${typeLabel}">${w.type || '?'}</span>
+      <span class="weapon-col weapon-col-type ${typeClass}" title="${typeLabel}">${typeIcon || w.type || '?'}</span>
       ${special ? `<span class="weapon-col weapon-col-special">${renderWeaponSpecialChips(special)}</span>` : ''}
     </div>`;
   }
@@ -1640,6 +1661,7 @@ const App = (() => {
       offensive.forEach(a => {
         const typeLabel = WEAPON_TYPE_LABELS[a.type] || a.type || '';
         const typeClass = a.type ? `weapon-type-${a.type.toLowerCase()}` : '';
+        const typeIcon = WEAPON_TYPE_ICONS[a.type] || '';
         const special = a.special && a.special !== '-' ? a.special : '';
         html += `<div class="launch-ref-row">
           <span class="launch-ref-col launch-ref-col-name">${esc(a.name)}</span>
@@ -1647,7 +1669,7 @@ const App = (() => {
           <span class="launch-ref-col launch-ref-col-att">${a.attack}</span>
           <span class="launch-ref-col launch-ref-col-lock">${a.lock}</span>
           <span class="launch-ref-col launch-ref-col-dmg">${a.damage}</span>
-          <span class="launch-ref-col launch-ref-col-type ${typeClass}" title="${typeLabel}">${a.type || ''}</span>
+          <span class="launch-ref-col launch-ref-col-type ${typeClass}" title="${typeLabel}">${typeIcon || a.type || ''}</span>
           <span class="launch-ref-col launch-ref-col-special">${special ? renderWeaponSpecialChips(special) : ''}</span>
         </div>`;
       });
