@@ -346,6 +346,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Game size detail in sidebar */
+#builder-fleet-size {
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+#builder-fleet-size:hover {
+  background: rgba(255,255,255,0.25);
+  color: #fff;
+}
+
 .game-size-detail {
   display: flex;
   flex-wrap: wrap;
@@ -491,8 +500,8 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
   border-color: var(--navy);
 }
-.btn-primary:hover { background: var(--navy-light); border-color: var(--navy-light); }
-.btn-primary:active { background: var(--navy-dark); }
+.btn-primary:hover { background: var(--navy-light); border-color: var(--navy-light); box-shadow: var(--shadow-sm); }
+.btn-primary:active { background: var(--navy-dark); transform: scale(0.97); box-shadow: none; }
 
 .btn-gold {
   background: var(--gold);
@@ -506,7 +515,8 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink);
   border-color: var(--stroke);
 }
-.btn-outline:hover { border-color: var(--navy); color: var(--navy); }
+.btn-outline:hover { border-color: var(--navy); color: var(--navy); box-shadow: var(--shadow-sm); }
+.btn-outline:active { transform: scale(0.97); box-shadow: none; }
 
 .btn-ghost {
   background: transparent;
@@ -514,6 +524,7 @@ h1, h2, h3, h4, h5, h6 {
   border: none;
 }
 .btn-ghost:hover { background: var(--navy-subtle); color: var(--ink); }
+.btn-ghost:active { background: rgba(27, 58, 92, 0.12); transform: scale(0.97); }
 
 /* Ghost variant for dark backgrounds */
 .btn-ghost-light {
@@ -617,6 +628,8 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed;
   inset: 0;
   background: rgba(28, 26, 23, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -854,6 +867,11 @@ h1, h2, h3, h4, h5, h6 {
 .fleet-card:hover {
   border-color: var(--navy);
   box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.fleet-card:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
 .fleet-card-name {
@@ -996,15 +1014,12 @@ h1, h2, h3, h4, h5, h6 {
 .weapon-col-arc { width: 40px; }
 
 .weapon-col-special {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   min-width: 0;
   padding-left: var(--sp-sm);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-regular);
-  font-style: italic;
-  color: var(--ink-muted);
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
 }
 
 .weapon-row-header {
@@ -1153,7 +1168,31 @@ h1, h2, h3, h4, h5, h6 {
 /* Weapon type colors */
 .weapon-type-k { color: var(--navy); font-weight: var(--weight-bold); }
 .weapon-type-e { color: #8b5e1a; font-weight: var(--weight-bold); }
-.weapon-type-c { color: var(--error); font-weight: var(--weight-bold);
+.weapon-type-c { color: var(--error); font-weight: var(--weight-bold); }
+
+/* Weapon special chips */
+.weapon-special-chip {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  font-size: 10px;
+  font-weight: var(--weight-semibold);
+  font-style: normal;
+  background: var(--paper-alt);
+  color: var(--ink-muted);
+  border: 1px solid var(--stroke-light);
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+.weapon-special-chip.has-tooltip {
+  cursor: help;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+.weapon-special-chip.has-tooltip:hover {
+  background: var(--navy-subtle);
+  color: var(--navy);
+  border-color: var(--stroke-accent);
+  text-decoration: underline;
 }
 
 /* ── Ship Lore ──────────────────────────────────────────────── */
@@ -1250,6 +1289,11 @@ h1, h2, h3, h4, h5, h6 {
 .ship-card:hover {
   border-color: var(--navy);
   box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.ship-card:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
 .ship-card-top {
@@ -1359,9 +1403,12 @@ h1, h2, h3, h4, h5, h6 {
   align-items: flex-start;
   gap: var(--sp-lg);
   position: relative;
-  transition: border-color var(--duration-fast) var(--ease-out);
+  transition: all var(--duration-normal) var(--ease-out);
 }
-.group-ship-entry:hover { border-color: var(--stroke-strong); }
+.group-ship-entry:hover {
+  border-color: var(--stroke-strong);
+  box-shadow: var(--shadow-sm);
+}
 
 .group-ship-entry .ship-card-image {
   width: 120px;
@@ -1393,6 +1440,116 @@ h1, h2, h3, h4, h5, h6 {
   border-color: var(--navy);
   background: var(--navy-wash);
   color: var(--navy);
+}
+
+/* ── Group Quantity Bar ── */
+.group-quantity-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-md) var(--sp-lg);
+  margin-top: var(--sp-lg);
+  background: var(--navy-wash);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-md);
+  gap: var(--sp-md);
+}
+.group-quantity-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-xxs);
+}
+.group-quantity-count {
+  font-family: var(--font-condensed);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: var(--ink);
+}
+.group-quantity-limit {
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.group-quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+}
+.group-quantity-num {
+  font-family: var(--font-condensed);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--navy);
+  min-width: 24px;
+  text-align: center;
+}
+.group-qty-btn {
+  min-width: 36px;
+  min-height: 36px;
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.group-qty-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+  background: var(--paper-alt) !important;
+  border-color: var(--stroke-light) !important;
+  color: var(--ink-faint) !important;
+}
+
+/* ── Game Size Popover ── */
+.game-size-popover {
+  background: var(--paper);
+  border: 1px solid var(--stroke-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 1500;
+  min-width: 220px;
+  padding: var(--sp-xs);
+  animation: fadeSlideIn 0.15s var(--ease-out);
+}
+.game-size-popover-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: var(--sp-sm) var(--sp-md);
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+}
+.game-size-popover-item:hover {
+  background: var(--navy-subtle);
+}
+.game-size-popover-item.active {
+  background: var(--navy);
+  color: #fff;
+}
+.game-size-popover-item.active .game-size-popover-desc {
+  color: rgba(255,255,255,0.7);
+}
+.game-size-popover-name {
+  font-family: var(--font-condensed);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+.game-size-popover-desc {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── 19. Empty States ────────────────────────────────────────── */

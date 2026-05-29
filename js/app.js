@@ -12,6 +12,7 @@ const App = (() => {
   let activeGroupId = null;
   let shipSortMode = 'name';
   let activeCategory = 'all';
+  let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
 
   // Game sizes per rulebook Section 4.2. maxAdmiralLevel is the highest admiral
   // level permitted at this game size (not a cap on the number of admirals —
@@ -374,6 +375,58 @@ const App = (() => {
     }
   }
 
+  function openGameSizeChanger() {
+    if (!currentFleet) return;
+    // Remove any existing popover
+    const existing = document.getElementById('game-size-popover');
+    if (existing) { existing.remove(); return; }
+
+    const popover = document.createElement('div');
+    popover.id = 'game-size-popover';
+    popover.className = 'game-size-popover';
+    popover.innerHTML = Object.entries(GAME_SIZES).map(([key, size]) => {
+      const active = key === currentFleet.gameSize ? ' active' : '';
+      const colText = size.colossalMax > 0 ? `, ${size.colossalMax} Colossal` : '';
+      return `<button class="game-size-popover-item${active}" onclick="App.applyGameSize('${key}')">
+        <span class="game-size-popover-name">${size.label}</span>
+        <span class="game-size-popover-desc">${size.desc} · ${size.groups} groups${colText}</span>
+      </button>`;
+    }).join('');
+
+    // Position near the badge
+    const badge = document.getElementById('builder-fleet-size');
+    const rect = badge.getBoundingClientRect();
+    popover.style.position = 'fixed';
+    popover.style.top = (rect.bottom + 4) + 'px';
+    popover.style.left = rect.left + 'px';
+    document.body.appendChild(popover);
+
+    // Dismiss on click outside
+    function dismiss(e) {
+      if (!popover.contains(e.target) && e.target !== badge) {
+        popover.remove();
+        document.removeEventListener('click', dismiss, true);
+      }
+    }
+    setTimeout(() => document.addEventListener('click', dismiss, true), 10);
+  }
+
+  function applyGameSize(key) {
+    if (!currentFleet) return;
+    currentFleet.gameSize = key;
+    const sizeInfo = GAME_SIZES[key];
+    currentFleet.pointsLimit = sizeInfo.max;
+    currentFleet.maxGroups = sizeInfo.groups;
+    saveFleets();
+
+    // Remove popover
+    const popover = document.getElementById('game-size-popover');
+    if (popover) popover.remove();
+
+    renderBuilder();
+    showToast(`Game size changed to ${sizeInfo.label}`);
+  }
+
   function createFleet() {
     const selectedFaction = document.querySelector('.faction-pick-btn[data-selected="true"]');
     if (!selectedFaction) return;
@@ -536,7 +589,11 @@ const App = (() => {
 
     document.getElementById('builder-fleet-name').textContent = f.name;
     document.getElementById('builder-fleet-faction').textContent = fName;
-    document.getElementById('builder-fleet-size').textContent = sizeInfo.label;
+    const sizeEl = document.getElementById('builder-fleet-size');
+    sizeEl.textContent = sizeInfo.label;
+    sizeEl.style.cursor = 'pointer';
+    sizeEl.title = 'Click to change game size';
+    sizeEl.onclick = () => App.openGameSizeChanger();
 
     // Game size summary beneath the badge
     const sizeDetail = document.getElementById('game-size-detail');
@@ -615,16 +672,13 @@ const App = (() => {
   function addGroup() {
     if (!currentFleet) return;
     const sizeInfo = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
-    if (currentFleet.battleGroups.length >= sizeInfo.groups) return;
-
-    const num = currentFleet.battleGroups.length + 1;
-    const group = { id: uuid(), name: `Group ${num}`, ships: [] };
-    currentFleet.battleGroups.push(group);
-    activeGroupId = group.id;
-    saveFleets();
-    renderGroupsNav();
-    renderActiveGroup();
-    updatePoints();
+    if (currentFleet.battleGroups.length >= sizeInfo.groups) {
+      showToast('Maximum groups reached for ' + sizeInfo.label);
+      return;
+    }
+    // Open ship selection — picking a ship creates the group
+    pendingGroupCreation = true;
+    openShipSelectModal(null);
   }
 
   function selectGroup(gid) {
@@ -708,13 +762,36 @@ const App = (() => {
         html += renderGroupShipEntry(ship, dbShip, group.id);
       });
       html += '</div>';
-    }
 
-    html += `
-    <div class="add-ship-area" onclick="App.openShipSelectModal('${group.id}')" style="margin-top:var(--sp-lg)">
-      <span style="font-size:24px">+</span>
-      <span>Add Unit to ${esc(group.name)}</span>
-    </div>`;
+      // Quantity controls — add/remove copies of the same ship type
+      const firstShip = group.ships[0];
+      const dbFirst = findShipInDB(currentFleet.faction, firstShip.groupCategory, firstShip.shipKey);
+      const shipName = dbFirst ? dbFirst.name : firstShip.shipKey;
+      const groupMax = dbFirst ? (dbFirst.groupMax || 12) : 12;
+      const groupMin = dbFirst ? (dbFirst.groupMin || 1) : 1;
+      const atMax = group.ships.length >= groupMax;
+      const atMin = group.ships.length <= groupMin;
+
+      html += `
+      <div class="group-quantity-bar">
+        <div class="group-quantity-info">
+          <span class="group-quantity-count">${group.ships.length} × ${esc(shipName)}</span>
+          <span class="group-quantity-limit">${groupMin}–${groupMax} per group</span>
+        </div>
+        <div class="group-quantity-controls">
+          <button class="btn btn-outline btn-sm group-qty-btn" onclick="App.removeLastShip('${group.id}')" ${atMin ? 'disabled' : ''} title="Remove one">−</button>
+          <span class="group-quantity-num">${group.ships.length}</span>
+          <button class="btn btn-primary btn-sm group-qty-btn" onclick="App.addSameShip('${group.id}')" ${atMax ? 'disabled' : ''} title="Add one more">+</button>
+        </div>
+      </div>`;
+    } else {
+      // Empty group — shouldn't happen with new flow, but handle gracefully
+      html += `
+      <div class="add-ship-area" onclick="App.openShipSelectModal('${group.id}')" style="margin-top:var(--sp-lg)">
+        <span style="font-size:24px">+</span>
+        <span>Choose a ship for ${esc(group.name)}</span>
+      </div>`;
+    }
 
     contentEl.innerHTML = html;
   }
@@ -733,6 +810,62 @@ const App = (() => {
 
   const WEAPON_TYPE_LABELS = { K: 'Kinetic', E: 'Energy', C: 'Close Action' };
 
+  // Weapon special rules — descriptions from the rulebook
+  const WEAPON_SPECIAL_RULES = {
+    'Air to Air':       'Can only target Launch Assets (fighters, bombers, etc.), not ships.',
+    'Alt':              'This weapon has an alternative fire mode. Choose one mode when attacking.',
+    'Anti Wing':        'Effective against Launch Assets. Hits against wings are resolved with bonus dice.',
+    'Arrest':           'Target\'s Thrust is reduced by the Arrest value next turn.',
+    'Bloom':            'Firing this weapon increases the ship\'s Signature by the Bloom value until the end of the turn.',
+    'Bombardment':      'Used for orbital bombardment of ground targets. Cannot target ships.',
+    'Burnthrough':      'For each critical hit, roll additional attack dice equal to the Burnthrough value.',
+    'Calibre-L':        'Can only target Light tonnage ships.',
+    'Calibre-L/M':      'Can only target Light or Medium tonnage ships.',
+    'Calibre-M':        'Can only target Medium tonnage ships.',
+    'Calibre-H':        'Can only target Heavy tonnage ships.',
+    'Calibre-H/C':      'Can only target Heavy or Colossal tonnage ships.',
+    'Calibre-M/H/C':    'Can only target Medium, Heavy, or Colossal tonnage ships.',
+    'Close Action':     'Close Action weapons fire at targets within Scan range. Uses the Close Action combat sequence.',
+    'Crippling':        'When this weapon causes damage, the target also suffers a Crippling effect (roll on Crippling table).',
+    'Crippling-Fire':           'When this weapon causes damage, the target suffers the Fire crippling effect.',
+    'Crippling-2xFire':         'When this weapon causes damage, the target suffers two Fire crippling effects.',
+    'Crippling-Navigation Offline': 'When this weapon causes damage, the target suffers Navigation Offline.',
+    'Crippling-Weapons Offline':    'When this weapon causes damage, the target suffers Weapons Offline.',
+    'Critical':         'Extra critical damage — each critical hit inflicts additional hits equal to the Critical value.',
+    'Escape Velocity':  'Can only be fired if the ship has not turned this activation.',
+    'Flash':            'Reduces the target\'s Scan value by the Flash value until end of turn.',
+    'Focused':          'All attack dice from this weapon must be allocated to the same target.',
+    'Fusillade':        'Gains additional attack dice equal to (Fusillade value × number of other ships in group firing this weapon).',
+    'High Power':       'Adds +1 to the Damage value of this weapon.',
+    'Impel':            'On hit, push the target directly away from the firing ship by the Impel value in inches.',
+    'Limited':          'This weapon can only fire a number of times per game equal to the Limited value.',
+    'Low Power':        'Reduces the Damage value of this weapon by 1 (minimum 1).',
+    'Mauler':           'If the target is within Scan range, this weapon gains +1 Damage.',
+    'Overcharge':       'May worsen Lock by 1 to gain +1 Damage for this attack.',
+    'Penetrator':       'Enemy armour saves (ES/KS) are worsened by 1 against this weapon.',
+    'Re-Entry':         'This weapon can target ground sectors for bombardment in addition to normal fire.',
+    'Reave':            'For each point of hull damage inflicted, the target loses additional hull points equal to the Reave value.',
+    'Scald':            'Reduces the target\'s Point Defence by the Scald value for the rest of the turn.',
+    'Status':           'Applies a status effect to the target instead of dealing damage.',
+    'Sustained Fire':   'If the ship did not use the Course Change order this activation, gain extra attack dice.',
+    'Volley':           'Roll additional attack dice equal to the Volley value, but at Lock worsened by 1.'
+  };
+
+  function renderWeaponSpecialChips(specialStr) {
+    if (!specialStr || specialStr === '-') return '';
+    return specialStr.split(',').map(s => {
+      const trimmed = s.trim();
+      if (!trimmed) return '';
+      // Find matching rule — try exact match first, then base keyword (strip numbers)
+      const baseKey = trimmed.replace(/-?\d+$/, '');
+      const desc = WEAPON_SPECIAL_RULES[trimmed] || WEAPON_SPECIAL_RULES[baseKey] || '';
+      if (desc) {
+        return `<span class="weapon-special-chip has-tooltip" data-rule-desc="${esc(desc)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(trimmed)}</span>`;
+      }
+      return `<span class="weapon-special-chip">${esc(trimmed)}</span>`;
+    }).join('');
+  }
+
   function renderWeaponRow(w) {
     const special = w.special && w.special !== '-' ? w.special : '';
     const typeLabel = WEAPON_TYPE_LABELS[w.type] || w.type || '?';
@@ -744,7 +877,7 @@ const App = (() => {
       <span class="weapon-col weapon-col-lock">${w.lock}</span>
       <span class="weapon-col weapon-col-dmg">${w.damage}</span>
       <span class="weapon-col weapon-col-type ${typeClass}" title="${typeLabel}">${w.type || '?'}</span>
-      ${special ? `<span class="weapon-col weapon-col-special">${esc(special)}</span>` : ''}
+      ${special ? `<span class="weapon-col weapon-col-special">${renderWeaponSpecialChips(special)}</span>` : ''}
     </div>`;
   }
 
@@ -894,7 +1027,7 @@ const App = (() => {
 
   // ── Ship Selection Modal ──
   function openShipSelectModal(groupId) {
-    activeGroupId = groupId;
+    if (groupId) activeGroupId = groupId;
     activeCategory = 'all';
 
     const factionKey = currentFleet.faction;
@@ -905,7 +1038,10 @@ const App = (() => {
     renderShipSelectGrid(factionShips.groups, 'all');
     openModal('modal-ship-select');
 
-    document.getElementById('ship-select-title').textContent = `Add Unit - ${(factionData[factionKey] || {}).name || factionKey.toUpperCase()}`;
+    const fName = (factionData[factionKey] || {}).name || factionKey.toUpperCase();
+    document.getElementById('ship-select-title').textContent = pendingGroupCreation
+      ? `New Group — ${fName}`
+      : `Add Unit — ${fName}`;
   }
 
   function renderCategoryTabs(groups) {
@@ -1002,6 +1138,25 @@ const App = (() => {
   }
 
   function addShipToGroup(shipKey, category) {
+    if (pendingGroupCreation) {
+      // Create a brand-new group with this ship and close the modal
+      const dbShip = findShipInDB(currentFleet.faction, category, shipKey);
+      if (!dbShip) return;
+
+      const group = { id: uuid(), name: dbShip.name, ships: [] };
+      addShipToGroupInner(group, shipKey, category, dbShip);
+      currentFleet.battleGroups.push(group);
+      activeGroupId = group.id;
+
+      pendingGroupCreation = false;
+      closeModal('modal-ship-select');
+      saveFleets();
+      renderGroupsNav();
+      renderActiveGroup();
+      updatePoints();
+      showToast(`Created group: ${dbShip.name}`);
+      return;
+    }
     addShipToGroupEnforced(shipKey, category);
   }
 
@@ -1038,6 +1193,49 @@ const App = (() => {
     const group = currentFleet.battleGroups.find(g => g.id === groupId);
     if (!group) return;
     group.ships = group.ships.filter(s => s.id !== shipId);
+    saveFleets();
+    updatePoints();
+    renderGroupsNav();
+    renderActiveGroup();
+  }
+
+  function addSameShip(groupId) {
+    if (!currentFleet) return;
+    const group = currentFleet.battleGroups.find(g => g.id === groupId);
+    if (!group || group.ships.length === 0) return;
+
+    const firstShip = group.ships[0];
+    const dbShip = findShipInDB(currentFleet.faction, firstShip.groupCategory, firstShip.shipKey);
+    if (!dbShip) return;
+
+    const groupMax = dbShip.groupMax || 12;
+    if (group.ships.length >= groupMax) {
+      showToast(`Maximum ${groupMax} ships per group`);
+      return;
+    }
+
+    addShipToGroupInner(group, firstShip.shipKey, firstShip.groupCategory, dbShip);
+    saveFleets();
+    updatePoints();
+    renderGroupsNav();
+    renderActiveGroup();
+  }
+
+  function removeLastShip(groupId) {
+    if (!currentFleet) return;
+    const group = currentFleet.battleGroups.find(g => g.id === groupId);
+    if (!group || group.ships.length === 0) return;
+
+    const firstShip = group.ships[0];
+    const dbShip = findShipInDB(currentFleet.faction, firstShip.groupCategory, firstShip.shipKey);
+    const groupMin = dbShip ? (dbShip.groupMin || 1) : 1;
+
+    if (group.ships.length <= groupMin) {
+      showToast(`Minimum ${groupMin} ship${groupMin > 1 ? 's' : ''} per group`);
+      return;
+    }
+
+    group.ships.pop();
     saveFleets();
     updatePoints();
     renderGroupsNav();
@@ -1297,6 +1495,7 @@ const App = (() => {
       modal.classList.remove('active');
       document.body.style.overflow = '';
     }
+    if (id === 'modal-ship-select') pendingGroupCreation = false;
   }
 
   function confirmAction(title, message, onConfirm) {
@@ -1467,6 +1666,7 @@ const App = (() => {
     if (e.target.classList.contains('modal-overlay') && e.target.classList.contains('active')) {
       e.target.classList.remove('active');
       document.body.style.overflow = '';
+      pendingGroupCreation = false;
     }
   });
 
@@ -1477,6 +1677,7 @@ const App = (() => {
         m.classList.remove('active');
       });
       document.body.style.overflow = '';
+      pendingGroupCreation = false;
     }
   });
 
@@ -1491,8 +1692,8 @@ const App = (() => {
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet,
     loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup,
-    openShipSelectModal, filterCategory, addShipToGroup, removeShip, sortShips, changeLoadout,
+    openShipSelectModal, filterCategory, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
     openAdmiralModal, selectAdmiral, selectGenericAdmiral, selectFamousAdmiral, toggleSidebar, printFleet, shareFleet,
-    openModal, closeModal, showRuleTooltip
+    openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize
   };
 })();
