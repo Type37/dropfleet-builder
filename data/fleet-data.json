@@ -46,6 +46,10 @@
       {
         "level": 4,
         "cost": 60
+      },
+      {
+        "level": 5,
+        "cost": 80
       }
     ],
     "objectives": [

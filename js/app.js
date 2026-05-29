@@ -17,7 +17,7 @@ const App = (() => {
     skirmish:   { label: 'Skirmish',   min: 501,  max: 1000,  groups: 16, admiralMax: 2, colossalMax: 0, time: '1–1.5 hrs', desc: '501–1000 pts' },
     clash:      { label: 'Clash',      min: 1001, max: 2000,  groups: 20, admiralMax: 3, colossalMax: 1, time: '2–3 hrs',   desc: '1001–2000 pts' },
     battle:     { label: 'Battle',     min: 2001, max: 3000,  groups: 24, admiralMax: 4, colossalMax: 2, time: '3–4 hrs',   desc: '2001–3000 pts' },
-    reconquest: { label: 'Reconquest', min: 3001, max: 99999, groups: 28, admiralMax: 4, colossalMax: 3, time: '4+ hrs',    desc: '3001+ pts' }
+    reconquest: { label: 'Reconquest', min: 3001, max: 99999, groups: 28, admiralMax: 5, colossalMax: 3, time: '4+ hrs',    desc: '3001+ pts' }
   };
 
   const FACTION_COLORS = {
@@ -68,12 +68,14 @@ const App = (() => {
     'pompeius','priam','ptolemy','remus','rhadamanthus','romulus','sarpedon',
     'seleucus','sysyphus','teucer','theseus','trajan',
     // UCM
-    'babylon','beijing','berlin','boston','bruges','bucharest','byzantium',
+    'babylon','beijing','berlin','boston','bruges','bucharest','busan','byzantium',
     'caracas','carthage','delhi','detroit','edmonton','geneva','glasgow',
-    'hanoi','havana','istanbul','jakarta','johannesburg','kyiv','lima','london',
-    'lysander','madrid','osaka','oslo','perth','reykjavik','rio','rome',
-    'santiago','seattle','sheffield','taipei','thebes','tokyo','toulon',
-    'ulaanbaatar','vancouver','venice','vienna','washington',
+    'halsey','hanoi','havana','havelock','istanbul','jakarta','johannesburg',
+    'kyiv','lima','london','lysander','madrid','milwaukee','osaka','oslo',
+    'perth','reykjavik','rio','rome','rotterdam','santiago','seattle',
+    'sheffield','siam','taipei','tayne','thebes','tokyo','toulon',
+    'ulaanbaatar','vancouver','venice','vienna','vilnius','warsaw',
+    'washington','weaver','yokohama',
     // Scourge
     'akuma','apsasu','bael','banshee','beelzebub','charybdis','chimera',
     'cthulhu','daemon','devil','djinn','dragon','ebisu','faust','gargoyle',
@@ -91,10 +93,11 @@ const App = (() => {
     'farragut','iowa','lexington','musashi','nelson','nimitz','pathfinder',
     'phalanx','senator','seneca','vanguard','yamamoto',
     // Bioficer
-    'cache','cacophony','cataphract','cavern','charger','choral','cipher',
-    'combine','comet','conqueror','construct','cosmic','diode','domain',
-    'foray','forestall','fresco','fugue','fulcrum','logic','mantle','matrix',
-    'monarch','supercell','tally','tine','torrent','vertex','zenith','zodiac'
+    'binder','blackbird','brutal','cache','cacophony','carronade','cataphract',
+    'cavern','charger','choral','cipher','combine','comet','conqueror',
+    'construct','cosmic','diode','domain','foray','forestall','fresco',
+    'fugue','fulcrum','logic','mantle','matrix','monarch','sanctum','scion',
+    'stature','supercell','tally','tine','torrent','vertex','zenith','zodiac'
   ]);
   const SHIP_ART_SPECIAL = {
     'New York':'new_york','New Cairo':'new_cairo','New Mombasa':'new_mombasa',
@@ -112,10 +115,22 @@ const App = (() => {
     'Triumvir':'trumvir','Tribune':'tribute','Disciple':'discipline'
   };
   const ADMIRAL_ART = {
+    // PHR
     'claudia rhee': 'claudia_rhee',
     'gaius chau': 'gaius_chau',
     'javelin': 'director_javelin',
-    'helena of asgard': 'helena_of_asgard'
+    'helena of asgard': 'helena_of_asgard',
+    // UCM
+    'halsey': 'halsey',
+    'havelock': 'havelock',
+    'weaver': 'weaver',
+    'tayne': 'tayne',
+    // Bioficer
+    'ascendant': 'ascendant_zenith',
+    'agency': 'agency_bastion',
+    'atom': 'atom_scion',
+    'atlas': 'atlas_catastrophe',
+    'genitor': 'genitor'
   };
 
   function shipArtPath(shipName) {
@@ -279,7 +294,7 @@ const App = (() => {
     scourge: 'assets/factions/scourge.webp',
     shaltari: 'assets/factions/shaltari.webp',
     resistance: 'assets/factions/resistance.webp',
-    bioficer: null
+    bioficer: 'assets/factions/bioficer.webp'
   };
 
   function renderFactionPicker() {
@@ -470,7 +485,15 @@ const App = (() => {
         const picked = [];
         for (let i = 0; i < Math.min(count, entries.length); i++) {
           const [key, ship] = entries[i];
-          picked.push({ id: uuid(), shipKey: key, groupCategory: catKey, points: ship.points || 0, loadouts: {} });
+          const loadouts = {};
+          let loadoutCost = 0;
+          if (ship.loadoutOptions && ship.loadoutOptions.length > 0) {
+            ship.loadoutOptions.forEach((lo, loIdx) => {
+              loadouts[loIdx] = 0;
+              loadoutCost += lo.options[0]?.cost || 0;
+            });
+          }
+          picked.push({ id: uuid(), shipKey: key, groupCategory: catKey, points: (ship.points || 0) + loadoutCost, loadouts });
         }
         return picked;
       }
@@ -683,6 +706,19 @@ const App = (() => {
     contentEl.innerHTML = html;
   }
 
+  function renderWeaponRow(w) {
+    return `<div class="weapon-row">
+      <span class="weapon-row-name">${esc(w.name)}</span>
+      <div class="weapon-row-stats">
+        <span class="weapon-stat-chip">${w.type || '?'}</span>
+        <span class="weapon-stat-chip">Lk ${w.lock}</span>
+        <span class="weapon-stat-chip">Atk ${w.attack}</span>
+        <span class="weapon-stat-chip">Dmg ${w.damage}</span>
+        <span class="weapon-stat-chip">${w.arc}</span>
+      </div>
+    </div>`;
+  }
+
   function renderGroupShipEntry(ship, dbShip, groupId) {
     const name = dbShip ? dbShip.name : ship.shipKey;
     const img = dbShip ? dbShip.image : '';
@@ -702,21 +738,80 @@ const App = (() => {
       ).join('') + '</div>';
     }
 
+    // Base weapons
     let weaponsHtml = '';
     const wpns = dbShip && Array.isArray(dbShip.weapons) ? dbShip.weapons : [];
     if (wpns.length > 0) {
-      weaponsHtml = '<div class="weapon-list">' + wpns.map(w =>
-        `<div class="weapon-row">
-          <span class="weapon-row-name">${esc(w.name)}</span>
-          <div class="weapon-row-stats">
-            <span class="weapon-stat-chip">${w.type || '?'}</span>
-            <span class="weapon-stat-chip">Lk ${w.lock}</span>
-            <span class="weapon-stat-chip">Atk ${w.attack}</span>
-            <span class="weapon-stat-chip">Dmg ${w.damage}</span>
-            <span class="weapon-stat-chip">${w.arc}</span>
-          </div>
-        </div>`
-      ).join('') + '</div>';
+      weaponsHtml = '<div class="weapon-list">' + wpns.map(renderWeaponRow).join('') + '</div>';
+    }
+
+    // Loadout options — render selected option's weapons + selector
+    let loadoutsHtml = '';
+    const loadoutOpts = dbShip && Array.isArray(dbShip.loadoutOptions) ? dbShip.loadoutOptions : [];
+    if (loadoutOpts.length > 0) {
+      loadoutsHtml = loadoutOpts.map((lo, loIdx) => {
+        const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
+        const selOpt = lo.options[selIdx];
+        const selWeapons = selOpt && selOpt.weapons ? selOpt.weapons : [];
+        const selLoads = selOpt && selOpt.loads ? selOpt.loads : [];
+
+        // Selector (only if multiple choices)
+        let selectorHtml = '';
+        if (lo.options.length > 1) {
+          const opts = lo.options.map((opt, oi) => {
+            const costLabel = opt.cost > 0 ? ` (+${opt.cost} pts)` : opt.cost < 0 ? ` (${opt.cost} pts)` : '';
+            return `<option value="${oi}" ${oi === selIdx ? 'selected' : ''}>${esc(opt.name)}${costLabel}</option>`;
+          }).join('');
+          selectorHtml = `<div class="loadout-selector">
+            <label class="loadout-label">${esc(lo.name)}</label>
+            <select class="loadout-select" onchange="App.changeLoadout('${groupId}','${ship.id}',${loIdx},parseInt(this.value))">
+              ${opts}
+            </select>
+          </div>`;
+        } else {
+          selectorHtml = '';
+        }
+
+        // Render selected option's weapons
+        let optWpnsHtml = '';
+        if (selWeapons.length > 0) {
+          optWpnsHtml = '<div class="weapon-list loadout-weapons">' + selWeapons.map(renderWeaponRow).join('') + '</div>';
+        }
+
+        // Render selected option's loads
+        let optLoadsHtml = '';
+        if (selLoads.length > 0) {
+          optLoadsHtml = '<div class="load-list">' + selLoads.map(l =>
+            `<div class="load-row">
+              <span class="load-row-name">${esc(l.name)}</span>
+              <div class="weapon-row-stats">
+                <span class="weapon-stat-chip">Launch ${l.launch}</span>
+                ${l.special && l.special !== '-' ? `<span class="weapon-stat-chip">${esc(l.special)}</span>` : ''}
+              </div>
+            </div>`
+          ).join('') + '</div>';
+        }
+
+        return selectorHtml + optWpnsHtml + optLoadsHtml;
+      }).join('');
+    }
+
+    // Base launch assets (loads)
+    let loadsHtml = '';
+    const loads = dbShip && Array.isArray(dbShip.loads) ? dbShip.loads : [];
+    if (loads.length > 0) {
+      loadsHtml = `<div class="load-list">
+        <div class="load-section-label">Launch Assets</div>
+        ${loads.map(l =>
+          `<div class="load-row">
+            <span class="load-row-name">${esc(l.name)}</span>
+            <div class="weapon-row-stats">
+              <span class="weapon-stat-chip">Launch ${l.launch}</span>
+              ${l.special && l.special !== '-' ? `<span class="weapon-stat-chip">${esc(l.special)}</span>` : ''}
+            </div>
+          </div>`
+        ).join('')}
+      </div>`;
     }
 
     let rulesHtml = '';
@@ -739,6 +834,8 @@ const App = (() => {
         </div>
         ${statsHtml}
         ${weaponsHtml}
+        ${loadoutsHtml}
+        ${loadsHtml}
         ${rulesHtml}
       </div>
       <button class="btn btn-ghost btn-icon btn-sm group-ship-remove" onclick="App.removeShip('${groupId}','${ship.id}')" data-tooltip="Remove ship">✕</button>
@@ -856,15 +953,53 @@ const App = (() => {
     const dbShip = findShipInDB(currentFleet.faction, category, shipKey);
     if (!dbShip) return;
 
+    // Auto-select default loadout options and sum their cost
+    const loadouts = {};
+    let loadoutCost = 0;
+    if (dbShip.loadoutOptions && dbShip.loadoutOptions.length > 0) {
+      dbShip.loadoutOptions.forEach((lo, loIdx) => {
+        loadouts[loIdx] = 0; // select first option by default
+        loadoutCost += lo.options[0]?.cost || 0;
+      });
+    }
+
     const entry = {
       id: uuid(),
       shipKey,
       groupCategory: category,
-      points: dbShip.points || 0,
-      loadouts: {}
+      points: (dbShip.points || 0) + loadoutCost,
+      loadouts
     };
 
     group.ships.push(entry);
+    saveFleets();
+    updatePoints();
+    renderGroupsNav();
+    renderActiveGroup();
+  }
+
+  function changeLoadout(groupId, shipId, loadoutIdx, optionIdx) {
+    if (!currentFleet) return;
+    const group = currentFleet.battleGroups.find(g => g.id === groupId);
+    if (!group) return;
+    const ship = group.ships.find(s => s.id === shipId);
+    if (!ship) return;
+
+    const dbShip = findShipInDB(currentFleet.faction, ship.groupCategory, ship.shipKey);
+    if (!dbShip || !dbShip.loadoutOptions) return;
+
+    // Update selection
+    if (!ship.loadouts) ship.loadouts = {};
+    ship.loadouts[loadoutIdx] = optionIdx;
+
+    // Recalculate total points: base + all loadout costs
+    let total = dbShip.points || 0;
+    dbShip.loadoutOptions.forEach((lo, li) => {
+      const selIdx = ship.loadouts[li] ?? 0;
+      total += lo.options[selIdx]?.cost || 0;
+    });
+    ship.points = total;
+
     saveFleets();
     updatePoints();
     renderGroupsNav();
@@ -1204,7 +1339,7 @@ const App = (() => {
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet,
     loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup,
-    openShipSelectModal, filterCategory, addShipToGroup, removeShip, sortShips,
+    openShipSelectModal, filterCategory, addShipToGroup, removeShip, sortShips, changeLoadout,
     openAdmiralModal, selectAdmiral, selectGenericAdmiral, selectFamousAdmiral, toggleSidebar, printFleet, shareFleet,
     openModal, closeModal
   };
