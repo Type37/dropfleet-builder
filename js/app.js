@@ -182,6 +182,7 @@ const App = (() => {
           groupMin: s.groupMin, groupMax: s.groupMax,
           isRare: s.isRare, isUnique: s.isUnique,
           loadoutOptions: s.loadoutOptions || [],
+          lore: s.lore || '',
           image: shipArtPath(s.name)
         };
       });
@@ -837,6 +838,17 @@ const App = (() => {
       ).join('') + '</div>';
     }
 
+    // Lore / flavor text (collapsible, hidden in print)
+    let loreHtml = '';
+    const loreText = dbShip ? dbShip.lore : '';
+    if (loreText) {
+      const loreId = `lore-${ship.id}`;
+      loreHtml = `<details class="ship-lore no-print" id="${loreId}">
+        <summary class="ship-lore-toggle">Lore</summary>
+        <div class="ship-lore-text">${esc(loreText)}</div>
+      </details>`;
+    }
+
     return `
     <div class="group-ship-entry animate-in">
       ${img ? `<div class="ship-card-image"><img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
@@ -853,6 +865,7 @@ const App = (() => {
         ${loadoutsHtml}
         ${loadsHtml}
         ${rulesHtml}
+        ${loreHtml}
       </div>
       <button class="btn btn-ghost btn-icon btn-sm group-ship-remove" onclick="App.removeShip('${groupId}','${ship.id}')" data-tooltip="Remove ship">✕</button>
     </div>`;
