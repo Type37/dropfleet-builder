@@ -382,6 +382,18 @@ const App = (() => {
           if (currentFleet) {
             show('view-builder');
             topContext.textContent = currentFleet.name;
+            topActions.innerHTML = `
+              <button class="btn btn-ghost btn-sm topbar-action-btn" onclick="App.shareFleet()" data-tooltip="Share">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="8" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="12" cy="12" r="2"/><path d="M6 7l4-2M6 9l4 2"/></svg>
+                <span class="topbar-action-label">Share</span>
+              </button>
+              <button class="btn btn-ghost btn-sm topbar-action-btn" onclick="App.printFleet()" data-tooltip="Print">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6V2h8v4M4 12H2V7h12v5h-2"/><rect x="4" y="10" width="8" height="4"/></svg>
+                <span class="topbar-action-label">Print</span>
+              </button>
+              <button class="btn btn-ghost btn-sm topbar-action-btn" onclick="App.openSettings()" data-tooltip="Settings">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/></svg>
+              </button>`;
             renderBuilder();
             return;
           }
@@ -1624,7 +1636,7 @@ const App = (() => {
         <div class="flex items-center justify-between">
           <div>
             <div class="ship-card-name">${esc(name)}${badges ? ` ${badges}` : ''}</div>
-            <div class="text-caption">${esc(tonnage)}</div>
+            <div class="ship-tonnage-label ship-tonnage-${ship.groupCategory || 'medium'}">${esc(tonnage)}</div>
           </div>
           <div class="ship-card-cost">${ship.points} pts</div>
         </div>
