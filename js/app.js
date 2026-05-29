@@ -337,14 +337,11 @@ const App = (() => {
   // Quick start: create a new fleet for the chosen faction
   function startFactionFleet(factionKey) {
     navigate('fleets');
-    // Small delay to ensure fleet list is rendered, then open modal with pre-selected faction
+    // Wait for view render, then open modal with pre-selected faction
     setTimeout(() => {
       openNewFleetModal();
-      setTimeout(() => {
-        const factionSelect = document.querySelector('[name="new-fleet-faction"]');
-        if (factionSelect) { factionSelect.value = factionKey; selectFaction(factionKey); }
-      }, 50);
-    }, 50);
+      setTimeout(() => selectFaction(factionKey), 100);
+    }, 150);
   }
 
   // ── Routing ──
@@ -585,6 +582,7 @@ const App = (() => {
       btn.classList.add('btn-outline');
       btn.style.background = '';
       btn.style.color = '';
+      delete btn.dataset.selected;
     });
     const btn = document.querySelector(`.faction-pick-btn[data-faction="${key}"]`);
     if (btn) {
@@ -592,8 +590,8 @@ const App = (() => {
       btn.classList.add('btn-primary');
       btn.style.background = FACTION_COLORS[key];
       btn.style.color = '#fff';
+      btn.dataset.selected = 'true';
     }
-    btn.dataset.selected = 'true';
   }
 
   function renderSizePicker() {
@@ -3311,6 +3309,13 @@ const App = (() => {
       }
     }
 
+    // Check group size limit
+    const maxSize = dbShip.groupMax || 12;
+    if (group.ships.length >= maxSize) {
+      showToast(`${group.name} is full (max ${maxSize})`);
+      return;
+    }
+
     // Same ship or empty group — add directly
     addShipToGroupInner(group, shipKey, category, dbShip);
     saveFleets();
@@ -3318,6 +3323,13 @@ const App = (() => {
     renderGroupsNav();
     renderActiveGroup();
     showToast(`Added ${dbShip.name} to ${group.name}`);
+
+    // Visual flash on the clicked card
+    const cardEl = document.querySelector(`.ship-card[onclick*="'${shipKey}'"]`);
+    if (cardEl) {
+      cardEl.classList.add('ship-card-added');
+      setTimeout(() => cardEl.classList.remove('ship-card-added'), 600);
+    }
   }
 
   function addShipToGroupInner(group, shipKey, category, dbShip) {

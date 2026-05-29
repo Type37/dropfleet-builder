@@ -1897,6 +1897,14 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(0);
   box-shadow: var(--shadow-sm);
 }
+.ship-card-added {
+  animation: cardAddFlash 0.5s var(--ease-out);
+}
+@keyframes cardAddFlash {
+  0% { box-shadow: 0 0 0 0 rgba(62, 153, 69, 0.4); }
+  40% { box-shadow: 0 0 0 4px rgba(62, 153, 69, 0.25); border-color: var(--success); }
+  100% { box-shadow: var(--shadow-sm); }
+}
 
 .ship-card-top {
   display: flex;
