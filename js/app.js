@@ -463,6 +463,7 @@ const App = (() => {
         })
       }))
     };
+    if (fleet.description) mini.d = fleet.description;
     if (fleet.admirals && fleet.admirals.length > 0) {
       mini.as = fleet.admirals.map(adm => {
         const a = { n: adm.name, p: adm.points };
@@ -472,6 +473,10 @@ const App = (() => {
         if (adm.type) a.t = adm.type;
         return a;
       });
+    }
+    if (fleet.spaceStation) {
+      mini.ss = { n: fleet.spaceStation.name, c: fleet.spaceStation.cost };
+      if (fleet.spaceStation.stationKey) mini.ss.k = fleet.spaceStation.stationKey;
     }
     const json = JSON.stringify(mini);
     // base64url encode (no padding, URL-safe chars)
@@ -489,7 +494,7 @@ const App = (() => {
       const fleet = {
         id: uuid(),
         name: mini.n || 'Shared Fleet',
-        description: '',
+        description: mini.d || '',
         faction: mini.f,
         gameSize: mini.s || 'clash',
         pointsLimit: (GAME_SIZES[mini.s] || GAME_SIZES.clash).max,
@@ -506,9 +511,19 @@ const App = (() => {
             loadoutSelections: s.l || {}
           }))
         })),
+        spaceStation: null,
         createdAt: Date.now(),
         updatedAt: Date.now()
       };
+
+      // Decode space station
+      if (mini.ss) {
+        fleet.spaceStation = {
+          name: mini.ss.n,
+          cost: mini.ss.c || 0,
+          stationKey: mini.ss.k || null
+        };
+      }
 
       // Decode admirals array (new format) or legacy single admiral
       if (mini.as && mini.as.length > 0) {
@@ -1935,10 +1950,18 @@ const App = (() => {
 
   function searchShips(query) {
     shipSearchQuery = (query || '').trim().toLowerCase();
+    const clearBtn = document.getElementById('ship-search-clear');
+    if (clearBtn) clearBtn.classList.toggle('hidden', !shipSearchQuery);
     const factionShips = shipDB[currentFleet.faction];
     if (factionShips && factionShips.groups) {
       renderShipSelectGrid(factionShips.groups, activeCategory);
     }
+  }
+
+  function clearShipSearch() {
+    const input = document.getElementById('ship-search-input');
+    if (input) { input.value = ''; input.focus(); }
+    searchShips('');
   }
 
   function renderShipSelectGrid(groups, category) {
@@ -1987,8 +2010,29 @@ const App = (() => {
       ships.sort((a, b) => (a.data.name || '').localeCompare(b.data.name || ''));
     }
 
+    // Update results bar
+    const resultsBar = document.getElementById('ship-results-bar');
+    if (resultsBar) {
+      const isFiltered = shipSearchQuery || activeFilters.size > 0 || category !== 'all';
+      if (isFiltered) {
+        let ctx = [];
+        if (shipSearchQuery) ctx.push(`"${esc(shipSearchQuery)}"`);
+        if (activeFilters.size > 0) ctx.push([...activeFilters].join(', '));
+        resultsBar.innerHTML = `<span class="results-count">${ships.length} ship${ships.length !== 1 ? 's' : ''}</span>${ctx.length ? ` <span class="results-context">matching ${ctx.join(' + ')}</span>` : ''}`;
+        resultsBar.classList.remove('hidden');
+      } else {
+        resultsBar.classList.add('hidden');
+        resultsBar.innerHTML = '';
+      }
+    }
+
     if (ships.length === 0) {
-      grid.innerHTML = '<div class="empty-state"><p class="text-caption">No ships match these filters</p></div>';
+      const suggestion = shipSearchQuery
+        ? `No ships match "<strong>${esc(shipSearchQuery)}</strong>". Try a different search term or clear filters.`
+        : activeFilters.size > 0
+          ? 'No ships match the active filters. Try removing some filters.'
+          : 'No ships available in this category.';
+      grid.innerHTML = `<div class="empty-state"><p class="text-caption">${suggestion}</p></div>`;
       return;
     }
 
@@ -2865,28 +2909,65 @@ const App = (() => {
     const fName = (factionData[fleet.faction] || {}).name || fleet.faction.toUpperCase();
     const pts = calcFleetPoints(fleet);
     const sizeInfo = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
+    const fIcon = FACTION_ICONS[fleet.faction];
 
     let html = `
       <div class="shared-fleet-header">
-        <div>
-          <h1 class="shared-fleet-name">${esc(fleet.name)}</h1>
-          <div class="shared-fleet-meta">
-            <span class="badge badge-faction badge-${fleet.faction}">${fName}</span>
-            <span class="badge badge-neutral">${sizeInfo.label}</span>
-            <span class="shared-fleet-points">${pts} pts</span>
+        <div class="shared-header-left">
+          ${fIcon ? `<img src="${esc(fIcon)}" alt="${fName}" class="shared-faction-icon">` : ''}
+          <div>
+            <h1 class="shared-fleet-name">${esc(fleet.name)}</h1>
+            <div class="shared-fleet-meta">
+              <span class="badge badge-faction badge-${fleet.faction}">${fName}</span>
+              <span class="badge badge-neutral">${sizeInfo.label}</span>
+              <span class="shared-fleet-sublabel">${sizeInfo.desc}</span>
+            </div>
           </div>
         </div>
-        <div class="shared-fleet-actions">
-          <button class="btn btn-primary" onclick="App.importSharedFleet()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg> Import to My Fleets</button>
-          <button class="btn btn-outline" onclick="location.hash='fleets'">My Fleets</button>
+        <div class="shared-header-right">
+          <div class="shared-fleet-points">${pts}<span class="shared-fleet-pts-label"> / ${sizeInfo.max} pts</span></div>
+          <div class="shared-fleet-actions">
+            <button class="btn btn-primary" onclick="App.importSharedFleet()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg> Import to My Fleets</button>
+            <button class="btn btn-outline" onclick="location.hash='fleets'">My Fleets</button>
+          </div>
         </div>
       </div>
     `;
 
+    if (fleet.description) {
+      html += `<div class="shared-desc">${esc(fleet.description)}</div>`;
+    }
+
+    // Composition summary
+    const compCounts = {};
+    fleet.battleGroups.forEach(g => {
+      g.ships.forEach(s => {
+        const ton = s.tonnage || 'Unknown';
+        compCounts[ton] = (compCounts[ton] || 0) + 1;
+      });
+    });
+    const COMP_ORDER = ['Light', 'Medium', 'Heavy', 'Super Heavy', 'Colossal'];
+    const compParts = COMP_ORDER.filter(t => compCounts[t]).map(t =>
+      `<span class="shared-comp-tag shared-comp-${t.toLowerCase().replace(/\s+/g, '-')}">${compCounts[t]} ${t}</span>`
+    );
+    if (compParts.length > 0) {
+      html += `<div class="shared-comp">${compParts.join('')}</div>`;
+    }
+
     if (fleet.admirals && fleet.admirals.length > 0) {
       html += `<div class="shared-section">
         <div class="shared-section-title">Admiral${fleet.admirals.length > 1 ? 's' : ''}</div>
-        ${fleet.admirals.map(a => `<div class="shared-admiral">${esc(a.name)} — Level ${a.level || '?'}${a.type === 'Famous' ? ' (Famous)' : ''} — ${a.points} pts</div>`).join('')}
+        ${fleet.admirals.map(a => {
+          let admiralHtml = `<div class="shared-admiral-card">
+            <div class="shared-admiral-info">
+              <span class="shared-admiral-name">${esc(a.name)}</span>
+              ${a.type === 'Famous' ? '<span class="ship-badge ship-badge-unique">Famous</span>' : ''}
+              <span class="shared-admiral-level">Level ${a.level || '?'}</span>
+            </div>
+            <span class="shared-admiral-pts">${a.points} pts</span>
+          </div>`;
+          return admiralHtml;
+        }).join('')}
       </div>`;
     }
 
@@ -2894,15 +2975,19 @@ const App = (() => {
       const ss = fleet.spaceStation;
       html += `<div class="shared-section">
         <div class="shared-section-title">Space Station</div>
-        <div class="shared-admiral">${esc(ss.name)} — ${ss.cost} pts</div>
+        <div class="shared-admiral-card">
+          <span class="shared-admiral-name">${esc(ss.name)}</span>
+          <span class="shared-admiral-pts">${ss.cost} pts</span>
+        </div>
       </div>`;
     }
 
     fleet.battleGroups.forEach((g, i) => {
       const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
+      const shipCount = g.ships.length;
       html += `<div class="shared-section">
-        <div class="shared-section-title">${esc(g.name)} <span class="text-caption">${gPts} pts</span></div>
-        <div class="group-ships-list">`;
+        <div class="shared-section-title">${esc(g.name)} <span class="text-caption">${shipCount} ship${shipCount !== 1 ? 's' : ''} · ${gPts} pts</span></div>
+        <div class="shared-group-ships">`;
 
       // Group ships by profile
       const profiles = {};
@@ -2915,30 +3000,53 @@ const App = (() => {
       Object.values(profiles).forEach(({ ship, count }) => {
         const dbShip = findShipInDB(fleet.faction, ship.groupCategory, ship.shipKey);
         const name = dbShip ? dbShip.name : ship.shipKey;
+        const tonnage = dbShip ? dbShip.tonnage : '';
         const cat = CATEGORY_LABELS[ship.groupCategory] || ship.groupCategory;
         const img = shipArtPath(name);
 
-        html += `<div class="group-ship-entry">`;
-        if (img) html += `<div class="ship-card-image"><img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>`;
-        html += `<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
-          <div class="flex items-center justify-between">
-            <div>
-              <div class="ship-card-name">${count > 1 ? count + '× ' : ''}${esc(name)}</div>
-              <div class="ship-card-class">${cat}</div>
-            </div>
-            <div class="ship-card-cost">${ship.points * count} pts</div>
-          </div>`;
+        html += `<div class="shared-ship-card">`;
+        html += `<div class="shared-ship-top">`;
+        if (img) html += `<div class="shared-ship-art"><img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>`;
+        html += `<div class="shared-ship-info">
+            <div class="shared-ship-name">${count > 1 ? count + '× ' : ''}${esc(name)}</div>
+            <div class="shared-ship-type">${esc(tonnage)} · ${cat}</div>
+          </div>
+          <div class="shared-ship-pts">${ship.points * count}<span class="shared-ship-pts-label"> pts</span></div>
+        </div>`;
 
         // Show stats if available
         if (dbShip) {
           html += renderStatGrid(dbShip);
+
+          // Loadout info
+          if (ship.loadout && dbShip.loadoutOptions) {
+            const loGroup = dbShip.loadoutOptions.find(lo => lo.options.some(o => o.key === ship.loadout));
+            const loOption = loGroup ? loGroup.options.find(o => o.key === ship.loadout) : null;
+            if (loOption) {
+              html += `<div class="shared-loadout">Loadout: <strong>${esc(loOption.name)}</strong></div>`;
+            }
+          }
+
           const wpns = dbShip.weapons || [];
           if (wpns.length > 0) {
             html += '<div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
           }
+
+          // Special rules
+          const rules = dbShip.special_rules || [];
+          if (rules.length > 0) {
+            html += `<div class="special-rules">${rules.map(r => {
+              const detail = (dbShip.specialRuleDetails || []).find(d => d.name === r);
+              if (detail && detail.description) {
+                const pgA = detail.page ? ` data-rule-page="${esc(detail.page)}"` : '';
+                return `<span class="rule-chip has-tooltip" data-rule-desc="${esc(detail.description)}"${pgA} onclick="App.showRuleTooltip(event, this)">${esc(r)}</span>`;
+              }
+              return `<span class="rule-chip">${esc(r)}</span>`;
+            }).join('')}</div>`;
+          }
         }
 
-        html += `</div></div>`;
+        html += `</div>`;
       });
 
       html += `</div></div>`;
@@ -3801,7 +3909,7 @@ const App = (() => {
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup, moveGroup,
-    openShipSelectModal, filterCategory, toggleShipFilter, searchShips, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
+    openShipSelectModal, filterCategory, toggleShipFilter, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
     openAdmiralModal, addGenericAdmiral, addFamousAdmiral, removeAdmiral,
     openStationModal, selectStation, removeStation,
     toggleSidebar, printFleet,
