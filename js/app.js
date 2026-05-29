@@ -1149,6 +1149,9 @@ const App = (() => {
     if (group.ships.length > max) {
       errors.push(`max ${max} ${db.name} (has ${group.ships.length})`);
     }
+    if (group.ships.length < min) {
+      errors.push(`needs at least ${min} ${db.name} (has ${group.ships.length})`);
+    }
     if (db.isUnique) {
       // Check fleet-wide for other groups with same ship
       const otherGroups = fleet.battleGroups.filter(g =>
@@ -1611,6 +1614,12 @@ const App = (() => {
       ).join('')}</div>`;
     }
 
+    // Fleet budget context
+    const fleetPts = calcFleetPoints(currentFleet);
+    const sizeInfo = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
+    const remaining = sizeInfo.max - fleetPts;
+    const budgetClass = remaining < 0 ? 'budget-over' : remaining < 50 ? 'budget-tight' : '';
+
     let html = `
     <div class="group-header-bar">
       <div class="flex items-center gap-md flex-wrap">
@@ -1624,6 +1633,10 @@ const App = (() => {
         <button class="btn btn-danger btn-sm" onclick="App.removeGroup('${group.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
       </div>
     </div>
+    ${sizeInfo.max !== 99999 ? `<div class="group-budget-bar ${budgetClass}">
+      <span class="group-budget-label">${fleetPts} / ${sizeInfo.max} pts</span>
+      <span class="group-budget-remaining">${remaining >= 0 ? remaining + ' pts remaining' : Math.abs(remaining) + ' pts over budget'}</span>
+    </div>` : ''}
     ${groupWarnings}`;
 
     if (group.ships.length > 0) {
