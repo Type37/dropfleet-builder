@@ -954,8 +954,9 @@ const App = (() => {
     const panel = document.getElementById('fleet-info-panel');
     panel.closest('[id="view-builder"]').dataset.faction = f.faction;
 
-    if (f.battleGroups.length > 0 && !activeGroupId) {
-      activeGroupId = f.battleGroups[0].id;
+    // Default to fleet overview (no group selected)
+    if (!activeGroupId) {
+      activeGroupId = null;
     }
 
     updatePoints();
@@ -1177,7 +1178,10 @@ const App = (() => {
     }
 
     const total = currentFleet.battleGroups.length;
-    nav.innerHTML = currentFleet.battleGroups.map((g, i) => {
+    const overviewItem = `<div class="group-nav-item group-nav-overview ${!activeGroupId ? 'active' : ''}" onclick="App.selectGroup(null)">
+      <div class="group-nav-name"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg> Overview</div>
+    </div>`;
+    nav.innerHTML = overviewItem + currentFleet.battleGroups.map((g, i) => {
       const shipCount = g.ships.length;
       const groupPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
       const isActive = g.id === activeGroupId;
@@ -1216,13 +1220,15 @@ const App = (() => {
   }
 
   function selectGroup(gid) {
-    activeGroupId = gid;
+    activeGroupId = gid || null;
     renderGroupsNav();
     renderActiveGroup();
 
     // On mobile, collapse sidebar
-    const sidebar = document.getElementById('builder-sidebar');
-    if (sidebar.classList.contains('expanded')) sidebar.classList.remove('expanded');
+    if (gid) {
+      const sidebar = document.getElementById('builder-sidebar');
+      if (sidebar.classList.contains('expanded')) sidebar.classList.remove('expanded');
+    }
   }
 
   function removeGroup(gid) {
@@ -1330,21 +1336,137 @@ const App = (() => {
     });
   }
 
+  // ── Fleet Overview ──
+  function renderFleetOverview() {
+    const f = currentFleet;
+    const pts = calcFleetPoints(f);
+    const sizeInfo = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
+    const fName = (factionData[f.faction] || {}).name || f.faction.toUpperCase();
+    const warnings = validateFleet(f);
+    const errors = warnings.filter(w => w.type === 'error');
+    const notes = warnings.filter(w => w.type === 'warn');
+    const fIcon = FACTION_ICONS[f.faction];
+
+    // Group cards
+    const groupCards = f.battleGroups.map(g => {
+      const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
+      const shipNames = [];
+      const shipCounts = {};
+      g.ships.forEach(s => {
+        const db = findShipInDB(f.faction, s.groupCategory, s.shipKey);
+        const n = db ? db.name : s.shipKey;
+        shipCounts[n] = (shipCounts[n] || 0) + 1;
+      });
+      Object.entries(shipCounts).forEach(([n, c]) => {
+        shipNames.push(c > 1 ? `${c}× ${n}` : n);
+      });
+      const cat = g.ships.length > 0 ? (g.ships[0].groupCategory || 'medium') : 'medium';
+      const catLabel = CATEGORY_LABELS[cat] || cat;
+      const firstShip = g.ships[0];
+      const artSrc = firstShip ? shipArtPath((findShipInDB(f.faction, firstShip.groupCategory, firstShip.shipKey) || {}).name) : null;
+
+      return `<div class="overview-group-card card-deco" onclick="App.selectGroup('${g.id}')" style="cursor:pointer">
+        <div class="overview-group-top">
+          ${artSrc ? `<div class="overview-group-art"><img src="${artSrc}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
+          <div class="overview-group-info">
+            <div class="overview-group-name">${esc(g.name)}</div>
+            <div class="overview-group-meta">
+              <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size:10px;padding:1px 6px">${esc(catLabel)}</span>
+              <span class="text-caption">${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
+            </div>
+            <div class="overview-group-ships">${shipNames.map(n => esc(n)).join(', ')}</div>
+          </div>
+          <div class="overview-group-pts">${gPts} pts</div>
+        </div>
+      </div>`;
+    }).join('');
+
+    // Admirals summary
+    const factionInfo = shipDB[f.faction];
+    let admHtml = '';
+    if (f.admirals && f.admirals.length > 0) {
+      admHtml = f.admirals.map(a => {
+        return `<div class="overview-admiral">
+          <span class="overview-admiral-name">${esc(a.name)}</span>
+          <span class="text-caption">Lv${a.level || '?'}${a.type === 'Famous' ? ' (Famous)' : ''} — ${a.points} pts</span>
+        </div>`;
+      }).join('');
+      admHtml = `<div class="overview-section">
+        <div class="overview-section-label">Admirals</div>
+        ${admHtml}
+      </div>`;
+    }
+
+    // Station summary
+    let stationHtml = '';
+    if (f.spaceStation) {
+      stationHtml = `<div class="overview-section">
+        <div class="overview-section-label">Space Station</div>
+        <div class="overview-admiral">
+          <span class="overview-admiral-name">${esc(f.spaceStation.name)}</span>
+          <span class="text-caption">${f.spaceStation.cost} pts</span>
+        </div>
+      </div>`;
+    }
+
+    // Validation summary
+    let validHtml = '';
+    if (warnings.length > 0) {
+      validHtml = `<div class="overview-validation">
+        ${errors.map(w => `<div class="overview-valid-item overview-valid-error">${esc(w.msg)}</div>`).join('')}
+        ${notes.map(w => `<div class="overview-valid-item overview-valid-warn">${esc(w.msg)}</div>`).join('')}
+      </div>`;
+    }
+
+    return `
+      <div class="fleet-overview">
+        <div class="overview-header">
+          <div class="overview-header-left">
+            ${fIcon ? `<img src="${fIcon}" alt="" class="overview-faction-icon">` : ''}
+            <div>
+              <h2 class="overview-title">Fleet Overview</h2>
+              <div class="overview-subtitle">${esc(fName)} — ${sizeInfo.label}</div>
+            </div>
+          </div>
+          <div class="overview-header-right">
+            <div class="overview-pts-big">${pts}</div>
+            <div class="overview-pts-cap">${sizeInfo.max !== 99999 ? '/ ' + sizeInfo.max : ''} pts</div>
+          </div>
+        </div>
+        ${validHtml}
+        <div class="overview-section">
+          <div class="overview-section-label">Battle Groups (${f.battleGroups.length})</div>
+          <div class="overview-groups">${groupCards}</div>
+        </div>
+        ${admHtml}
+        ${stationHtml}
+      </div>`;
+  }
+
   // ── Active Group View ──
   function renderActiveGroup() {
     const emptyEl = document.getElementById('builder-empty');
     const contentEl = document.getElementById('builder-content');
 
-    if (!currentFleet || currentFleet.battleGroups.length === 0 || !activeGroupId) {
+    if (!currentFleet || currentFleet.battleGroups.length === 0) {
       emptyEl.classList.remove('hidden');
       contentEl.classList.add('hidden');
       return;
     }
 
+    // Show fleet overview when no group is selected
+    if (!activeGroupId) {
+      emptyEl.classList.add('hidden');
+      contentEl.classList.remove('hidden');
+      contentEl.innerHTML = renderFleetOverview();
+      return;
+    }
+
     const group = currentFleet.battleGroups.find(g => g.id === activeGroupId);
     if (!group) {
-      emptyEl.classList.remove('hidden');
-      contentEl.classList.add('hidden');
+      emptyEl.classList.add('hidden');
+      contentEl.classList.remove('hidden');
+      contentEl.innerHTML = renderFleetOverview();
       return;
     }
 

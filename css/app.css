@@ -549,6 +549,21 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--gold);
   border-radius: 0 2px 2px 0;
 }
+.group-nav-overview {
+  margin-bottom: var(--sp-xs);
+  padding-bottom: var(--sp-sm);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.group-nav-overview .group-nav-name {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  font-family: var(--font-condensed);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
 
 .group-nav-name {
   flex: 1;
@@ -3138,6 +3153,173 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Merriweather', serif;
   font-size: 7.5pt;
 }
+
+/* ── Fleet Overview (no group selected) ──────────────────────── */
+.fleet-overview {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.overview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-xl);
+  padding-bottom: var(--sp-lg);
+  border-bottom: 2px solid var(--navy);
+}
+.overview-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+}
+.overview-faction-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  opacity: 0.8;
+}
+.overview-title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--navy);
+  line-height: 1.2;
+}
+.overview-subtitle {
+  font-family: var(--font-condensed);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.overview-header-right {
+  text-align: right;
+}
+.overview-pts-big {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-heavy);
+  color: var(--navy);
+  line-height: 1;
+}
+.overview-pts-cap {
+  font-family: var(--font-condensed);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.overview-section {
+  margin-bottom: var(--sp-xl);
+}
+.overview-section-label {
+  font-family: var(--font-condensed);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  margin-bottom: var(--sp-md);
+  padding-bottom: var(--sp-xs);
+  border-bottom: 1px solid var(--stroke-light);
+}
+.overview-groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+.overview-group-card {
+  padding: var(--sp-md) var(--sp-lg);
+  border-left: 3px solid var(--navy);
+  transition: background var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+}
+.overview-group-card:hover {
+  background: var(--navy-wash);
+  box-shadow: var(--shadow-md);
+}
+.overview-group-top {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+}
+.overview-group-art {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--paper-alt);
+  border: 1px solid var(--stroke-light);
+}
+.overview-group-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.overview-group-info {
+  flex: 1;
+  min-width: 0;
+}
+.overview-group-name {
+  font-family: var(--font-heading);
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  color: var(--navy);
+  line-height: 1.3;
+}
+.overview-group-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  margin-top: 2px;
+}
+.overview-group-ships {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+.overview-group-pts {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--navy);
+  flex-shrink: 0;
+}
+.overview-admiral {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: var(--sp-sm) 0;
+  border-bottom: 1px dotted var(--stroke-light);
+}
+.overview-admiral:last-child { border-bottom: none; }
+.overview-admiral-name {
+  font-weight: var(--weight-bold);
+  color: var(--navy);
+}
+.overview-validation {
+  margin-bottom: var(--sp-xl);
+  padding: var(--sp-md) var(--sp-lg);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-md);
+  background: var(--paper-alt);
+}
+.overview-valid-item {
+  font-size: var(--text-sm);
+  padding: var(--sp-xs) 0;
+  border-bottom: 1px dotted var(--stroke-light);
+}
+.overview-valid-item:last-child { border-bottom: none; }
+.overview-valid-error {
+  color: var(--error);
+  font-weight: var(--weight-semibold);
+}
+.overview-valid-error::before { content: 'ILLEGAL: '; font-weight: var(--weight-bold); }
+.overview-valid-warn {
+  color: var(--ink-soft);
+}
+.overview-valid-warn::before { content: 'NOTE: '; font-weight: var(--weight-semibold); color: var(--ink-muted); }
 
 /* ── 27. Ship Detail Modal ───────────────────────────────────── */
 .detail-hero {
