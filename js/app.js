@@ -7,6 +7,7 @@ const App = (() => {
   // ── State ──
   let shipDB = {};
   let factionData = {};
+  let sharedRulesDB = {};  // Global rules lookup from BSData (ship + weapon rules)
   let fleets = [];
   let currentFleet = null;
   let activeGroupId = null;
@@ -169,6 +170,9 @@ const App = (() => {
   }
 
   function transformData(raw) {
+    // Store global shared rules (ship + weapon rules from BSData)
+    if (raw.sharedRules) sharedRulesDB = raw.sharedRules;
+
     Object.entries(raw.factions).forEach(([factionKey, faction]) => {
       factionData[factionKey] = { name: faction.name, shortName: faction.shortName };
 
@@ -1160,14 +1164,21 @@ const App = (() => {
     'Volley':           'Roll additional attack dice equal to the Volley value, but at Lock worsened by 1.'
   };
 
+  function lookupRule(name) {
+    // Shared rules lookup: try exact, then base keyword (strip numeric suffix),
+    // then base-X form (BSData uses e.g. "Crippling-X" for parameterized rules)
+    const baseKey = name.replace(/-?\d+$/, '').replace(/\s+\d+$/, '').trim();
+    const xKey = baseKey + '-X';
+    return sharedRulesDB[name] || sharedRulesDB[baseKey] || sharedRulesDB[xKey] ||
+           WEAPON_SPECIAL_RULES[name] || WEAPON_SPECIAL_RULES[baseKey] || '';
+  }
+
   function renderWeaponSpecialChips(specialStr) {
     if (!specialStr || specialStr === '-') return '';
     return specialStr.split(',').map(s => {
       const trimmed = s.trim();
       if (!trimmed) return '';
-      // Find matching rule — try exact match first, then base keyword (strip numbers)
-      const baseKey = trimmed.replace(/-?\d+$/, '');
-      const desc = WEAPON_SPECIAL_RULES[trimmed] || WEAPON_SPECIAL_RULES[baseKey] || '';
+      const desc = lookupRule(trimmed);
       if (desc) {
         return `<span class="weapon-special-chip has-tooltip" data-rule-desc="${esc(desc)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(trimmed)}</span>`;
       }
@@ -1920,7 +1931,7 @@ const App = (() => {
           if (r.description) rulesGlossary[r.name] = r.description;
         });
 
-        // Collect weapon special rules for glossary
+        // Collect weapon special rules for glossary (prefer BSData descriptions)
         const collectWeaponSpecials = (weapons) => {
           (weapons || []).forEach(w => {
             if (!w.special || w.special === '-') return;
@@ -1928,7 +1939,7 @@ const App = (() => {
               const trimmed = s.trim();
               if (!trimmed) return;
               const baseKey = trimmed.replace(/-?\d+$/, '');
-              const desc = WEAPON_SPECIAL_RULES[trimmed] || WEAPON_SPECIAL_RULES[baseKey];
+              const desc = lookupRule(trimmed);
               if (desc) rulesGlossary[baseKey || trimmed] = desc;
             });
           });
