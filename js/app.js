@@ -2785,15 +2785,36 @@ const App = (() => {
 
     fleet.battleGroups.forEach(g => {
       const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
-      text += `\n── ${g.name} (${gPts} pts) ──\n`;
+      text += `\n── ${g.name} (${gPts} pts, ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}) ──\n`;
+      // Group ships by profile to show quantity
+      const profiles = {};
       g.ships.forEach(s => {
+        const key = s.groupCategory + '/' + s.shipKey + '/' + JSON.stringify(s.loadouts || []);
+        if (!profiles[key]) profiles[key] = { ship: s, count: 0 };
+        profiles[key].count++;
+      });
+      Object.values(profiles).forEach(({ ship: s, count }) => {
         const dbShip = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
-        text += `  • ${dbShip ? dbShip.name : s.shipKey} - ${s.points} pts\n`;
+        const name = dbShip ? dbShip.name : s.shipKey;
+        const prefix = count > 1 ? `${count}× ` : '';
+        let loadoutInfo = '';
+        if (dbShip && dbShip.loadoutOptions) {
+          const parts = [];
+          dbShip.loadoutOptions.forEach((lo, loIdx) => {
+            if (lo.options.length > 1) {
+              const selIdx = (s.loadouts && s.loadouts[loIdx] !== undefined) ? s.loadouts[loIdx] : 0;
+              const selOpt = lo.options[selIdx];
+              if (selOpt) parts.push(selOpt.name);
+            }
+          });
+          if (parts.length > 0) loadoutInfo = ` [${parts.join(', ')}]`;
+        }
+        text += `  • ${prefix}${name}${loadoutInfo} — ${s.points * count} pts\n`;
       });
     });
 
     text += '\n' + '═'.repeat(40);
-    text += `\nTotal: ${pts} pts`;
+    text += `\nTotal: ${pts}/${sizeInfo.max !== 99999 ? sizeInfo.max : '∞'} pts`;
     return text;
   }
 
