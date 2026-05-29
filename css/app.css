@@ -950,6 +950,170 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.6;
 }
 
+/* Landing — Stats Bar */
+.landing-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+  margin-top: var(--sp-xl);
+  font-family: var(--font-condensed);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+.landing-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.landing-stat-num {
+  font-weight: 700;
+  color: var(--navy);
+}
+.landing-stat-sep {
+  color: var(--gold-line);
+  margin: 0 2px;
+  user-select: none;
+}
+
+/* Landing — Faction Showcase */
+.landing-factions {
+  margin-top: var(--sp-3xl);
+  max-width: 800px;
+  width: 100%;
+}
+.landing-factions-title {
+  font-family: var(--font-condensed);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+  text-align: center;
+  margin-bottom: var(--sp-lg);
+}
+.faction-showcase {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--sp-sm);
+}
+.faction-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--sp-md) var(--sp-sm);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--stroke);
+  background: var(--paper);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out);
+  text-decoration: none;
+}
+.faction-chip:hover {
+  border-color: var(--current-faction, var(--navy));
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+.faction-chip-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--current-faction, var(--navy));
+}
+.faction-chip-name {
+  font-family: var(--font-condensed);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.faction-chip-count {
+  font-family: var(--font-condensed);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+/* Landing — Objectives Reference */
+.landing-objectives {
+  margin-top: var(--sp-3xl);
+  max-width: 800px;
+  width: 100%;
+}
+.objectives-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-lg);
+  cursor: pointer;
+  user-select: none;
+}
+.objectives-header:hover .objectives-title {
+  color: var(--ink-soft);
+}
+.objectives-title {
+  font-family: var(--font-condensed);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+  transition: color var(--duration-fast);
+}
+.objectives-toggle {
+  font-family: var(--font-condensed);
+  font-size: var(--text-xs);
+  color: var(--navy-light);
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.objectives-toggle svg {
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+.objectives-list-expanded .objectives-toggle svg {
+  transform: rotate(180deg);
+}
+.objectives-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: var(--sp-md);
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+.objectives-list-expanded .objectives-grid {
+  max-height: 2000px;
+  opacity: 1;
+}
+.objective-card {
+  padding: var(--sp-lg);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  border-left: 3px solid var(--gold);
+}
+.objective-card-name {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: var(--sp-xs);
+}
+.objective-card-desc {
+  font-family: var(--font-reading);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
 /* ── 13. Fleet List ──────────────────────────────────────────── */
 .fleet-list {
   padding: var(--sp-3xl) var(--sp-2xl);
@@ -2353,6 +2517,8 @@ h1, h2, h3, h4, h5, h6 {
   .landing { padding: var(--sp-2xl) var(--sp-lg); }
   .landing-grid { grid-template-columns: 1fr; }
   .landing-logo { max-width: 280px; }
+  .faction-showcase { grid-template-columns: repeat(3, 1fr); }
+  .objectives-grid { grid-template-columns: 1fr; }
 
   .fleet-list { padding: var(--sp-2xl) var(--sp-lg); }
   .fleet-grid { grid-template-columns: 1fr; }
@@ -2452,6 +2618,9 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 480px) {
   .landing-title { font-size: var(--text-2xl); }
   .landing-subtitle { font-size: var(--text-sm); }
+  .faction-showcase { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .faction-chip { padding: var(--sp-sm) var(--sp-xs); }
+  .faction-chip-name { font-size: var(--text-xs); }
 
   /* 4-column stat grid for even 4+4 wrap on 8-stat ships */
   .stat-grid { grid-template-columns: repeat(4, 1fr); }

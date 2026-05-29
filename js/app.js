@@ -56,6 +56,7 @@ const App = (() => {
       const res = await fetch('data/fleet-data.json');
       rawFleetData = await res.json();
       transformData(rawFleetData);
+      populateLanding(rawFleetData);
     } catch (e) {
       console.error('Failed to load fleet data:', e);
     }
@@ -239,6 +240,84 @@ const App = (() => {
 
       shipDB[factionKey] = { groups, admirals: faction.admirals || [], launchAssets };
     });
+  }
+
+  // ── Landing Page Dynamic Content ──
+  function populateLanding(raw) {
+    // Stats bar
+    const statsEl = document.getElementById('landing-stats');
+    if (statsEl && raw) {
+      let totalShips = 0, totalAdmirals = 0;
+      const factionKeys = Object.keys(raw.factions || {});
+      factionKeys.forEach(fk => {
+        const f = raw.factions[fk];
+        totalShips += (f.groups || []).length;
+        totalAdmirals += (f.admirals || []).length;
+      });
+      const totalRules = Object.keys(raw.sharedRules || {}).length;
+      const stats = [
+        { num: totalShips, label: 'Ships' },
+        { num: totalAdmirals, label: 'Admirals' },
+        { num: factionKeys.length, label: 'Factions' },
+        { num: totalRules, label: 'Rules' }
+      ];
+      statsEl.innerHTML = stats.map((s, i) =>
+        (i > 0 ? '<span class="landing-stat-sep">·</span>' : '') +
+        `<span class="landing-stat"><span class="landing-stat-num">${s.num}</span> ${s.label}</span>`
+      ).join('');
+    }
+
+    // Faction showcase
+    const factionsEl = document.getElementById('landing-factions');
+    if (factionsEl && raw) {
+      const factionKeys = ['ucm','phr','scourge','shaltari','bioficer','resistance']
+        .filter(k => raw.factions[k]);
+      const chips = factionKeys.map(fk => {
+        const f = raw.factions[fk];
+        const color = FACTION_COLORS[fk] || 'var(--navy)';
+        const label = FACTION_LABELS[fk] || fk.toUpperCase();
+        const count = (f.groups || []).length;
+        return `<div class="faction-chip" style="--current-faction:${color}" onclick="App.startFactionFleet('${fk}')">
+          <div class="faction-chip-dot"></div>
+          <span class="faction-chip-name">${label}</span>
+          <span class="faction-chip-count">${count} ships</span>
+        </div>`;
+      }).join('');
+      factionsEl.innerHTML = `
+        <div class="landing-factions-title">Choose Your Faction</div>
+        <div class="faction-showcase">${chips}</div>`;
+    }
+
+    // Objectives reference
+    const objEl = document.getElementById('landing-objectives');
+    const objectives = raw?.gameSystem?.objectives || [];
+    if (objEl && objectives.length > 0) {
+      const cards = objectives.map(o =>
+        `<div class="objective-card">
+          <div class="objective-card-name">${esc(o.name)}</div>
+          <div class="objective-card-desc">${esc(o.description)}</div>
+        </div>`
+      ).join('');
+      objEl.innerHTML = `
+        <div class="objectives-header" onclick="this.parentElement.classList.toggle('objectives-list-expanded')">
+          <span class="objectives-title">Secondary Objectives Reference</span>
+          <span class="objectives-toggle">Show <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></span>
+        </div>
+        <div class="objectives-grid">${cards}</div>`;
+    }
+  }
+
+  // Quick start: create a new fleet for the chosen faction
+  function startFactionFleet(factionKey) {
+    navigate('fleets');
+    // Small delay to ensure fleet list is rendered, then open modal with pre-selected faction
+    setTimeout(() => {
+      openNewFleetModal();
+      setTimeout(() => {
+        const factionSelect = document.querySelector('[name="new-fleet-faction"]');
+        if (factionSelect) { factionSelect.value = factionKey; selectFaction(factionKey); }
+      }, 50);
+    }, 50);
   }
 
   // ── Routing ──
@@ -2602,7 +2681,7 @@ const App = (() => {
 
   // ── Public API ──
   return {
-    navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet,
+    navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet,
     loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup,
     openShipSelectModal, filterCategory, toggleShipFilter, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
     openAdmiralModal, addGenericAdmiral, addFamousAdmiral, removeAdmiral, toggleSidebar, printFleet,
