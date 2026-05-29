@@ -1654,7 +1654,142 @@ const App = (() => {
 
   // ── Print / Share ──
   function printFleet() {
+    if (!currentFleet) return;
+    const f = currentFleet;
+    const fName = (factionData[f.faction] || {}).name || f.faction.toUpperCase();
+    const pts = calcFleetPoints(f);
+    const sizeInfo = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
+    const factionInfo = shipDB[f.faction];
+
+    // Collect all special rules used across the fleet for the rules glossary
+    const rulesGlossary = {};
+
+    let html = `<div class="print-fleet">
+      <div class="print-header">
+        <div class="print-fleet-name">${esc(f.name)}</div>
+        <div class="print-fleet-meta">${esc(fName)} — ${sizeInfo.label} — ${pts} pts</div>
+      </div>`;
+
+    // Admiral
+    if (f.admiral) {
+      html += `<div class="print-section">
+        <div class="print-section-title">Admiral</div>
+        <div class="print-admiral">${esc(f.admiral.name)} — ${f.admiral.points} pts</div>
+      </div>`;
+    }
+
+    // Groups
+    const allLaunchAssetNames = new Set();
+    f.battleGroups.forEach(g => {
+      const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
+      html += `<div class="print-group">
+        <div class="print-group-header">
+          <span class="print-group-name">${esc(g.name)}</span>
+          <span class="print-group-pts">${gPts} pts — ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
+        </div>`;
+
+      g.ships.forEach(ship => {
+        const db = findShipInDB(f.faction, ship.groupCategory, ship.shipKey);
+        if (!db) return;
+        const name = db.name;
+        const statsHtml = renderStatGrid(db);
+
+        // Weapons
+        let wpnsHtml = '';
+        const wpns = db.weapons || [];
+        if (wpns.length > 0) {
+          wpnsHtml = '<div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
+        }
+
+        // Loadout weapons
+        let loadoutWpnsHtml = '';
+        (db.loadoutOptions || []).forEach((lo, loIdx) => {
+          const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
+          const selOpt = lo.options[selIdx];
+          if (selOpt && selOpt.weapons && selOpt.weapons.length > 0) {
+            const loLabel = lo.name || 'Loadout';
+            loadoutWpnsHtml += `<div class="print-loadout-label">${esc(loLabel)}: ${esc(selOpt.name || selOpt.weapons[0].name)}</div>`;
+            loadoutWpnsHtml += '<div class="weapon-list">' + renderWeaponHeader() + selOpt.weapons.map(renderWeaponRow).join('') + '</div>';
+          }
+        });
+
+        // Loads
+        const loads = db.loads || [];
+        let loadsHtml = '';
+        if (loads.length > 0) {
+          loadsHtml = loads.map(l => {
+            allLaunchAssetNames.add(l.name);
+            return `<span class="print-load">${esc(l.name)} (Launch ${l.launch}${l.special && l.special !== '-' ? ', ' + l.special : ''})</span>`;
+          }).join(' ');
+          loadsHtml = `<div class="print-loads">Launch: ${loadsHtml}</div>`;
+        }
+
+        // Collect special rules for glossary
+        (db.specialRuleDetails || []).forEach(r => {
+          if (r.description) rulesGlossary[r.name] = r.description;
+        });
+
+        // Rules chips
+        const ruleNames = (db.specialRuleDetails || []).map(r => esc(r.name)).join(', ') ||
+                          (db.special_rules || []).map(r => esc(r)).join(', ');
+
+        html += `<div class="print-ship">
+          <div class="print-ship-header">
+            <span class="print-ship-name">${esc(name)}</span>
+            <span class="print-ship-pts">${ship.points} pts</span>
+          </div>
+          ${statsHtml}
+          ${wpnsHtml}
+          ${loadoutWpnsHtml}
+          ${loadsHtml}
+          ${ruleNames ? `<div class="print-rules">Rules: ${ruleNames}</div>` : ''}
+        </div>`;
+      });
+
+      html += '</div>';
+    });
+
+    // Launch asset reference for the whole fleet
+    if (factionInfo && factionInfo.launchAssets && allLaunchAssetNames.size > 0) {
+      const relevantAssets = [];
+      const seenNames = new Set();
+      allLaunchAssetNames.forEach(loadName => {
+        loadName.split(/\s*&\s*/).forEach(part => {
+          const key = part.trim().toLowerCase();
+          if (!seenNames.has(key)) {
+            const match = factionInfo.launchAssets.find(a => a.name.toLowerCase() === key);
+            if (match) { seenNames.add(key); relevantAssets.push(match); }
+          }
+        });
+      });
+      if (relevantAssets.length > 0) {
+        html += renderLaunchAssetReference(relevantAssets);
+      }
+    }
+
+    // Rules glossary — full text for every rule used
+    const glossaryEntries = Object.entries(rulesGlossary).sort((a, b) => a[0].localeCompare(b[0]));
+    if (glossaryEntries.length > 0) {
+      html += `<div class="print-section print-glossary">
+        <div class="print-section-title">Rules Reference</div>
+        ${glossaryEntries.map(([name, desc]) =>
+          `<div class="print-glossary-entry">
+            <span class="print-glossary-name">${esc(name)}</span>
+            <span class="print-glossary-desc">${esc(desc).replace(/\n/g, '<br>')}</span>
+          </div>`
+        ).join('')}
+      </div>`;
+    }
+
+    html += '</div>';
+
+    // Create print container, print, then remove
+    const printDiv = document.createElement('div');
+    printDiv.id = 'print-container';
+    printDiv.innerHTML = html;
+    document.body.appendChild(printDiv);
     window.print();
+    printDiv.remove();
   }
 
   function shareFleet() {

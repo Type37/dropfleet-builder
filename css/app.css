@@ -1835,29 +1835,153 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── 25. Print ───────────────────────────────────────────────── */
 @media print {
-  body { background: white; color: black; font-size: 11pt; }
-  .topbar, .builder-sidebar, .btn, .modal-overlay, .add-ship-area, .no-print { display: none !important; }
-  .builder-main { padding: 0; max-width: none; }
-  .app-shell { padding-top: 0; }
-  .builder-layout { display: block; }
-  .card, .ship-card, .group-ship-entry, .admiral-card {
-    background: white;
-    border-color: #ccc;
-    box-shadow: none;
-    break-inside: avoid;
-  }
+  /* Hide everything except the print container */
+  body { background: white !important; color: black !important; font-size: 10pt; }
+  body > *:not(#print-container) { display: none !important; }
+  #print-container { display: block !important; }
+
   .stat-cell { border-color: #ccc; background: #f5f5f5; }
+  .stat-cell-label svg { opacity: 0.8; }
   .weapon-row { background: #f5f5f5; border-color: #ddd; }
-  .load-row { background: #f9f7f4; border-color: #ddd; }
-  .loadout-selector { display: none; }
-  .loadout-weapons { border-left-color: #999; }
-  .rule-chip { background: #eee; color: #333; }
-  .badge { border: 1px solid #ccc; background: #f5f5f5; }
+  .weapon-col-type svg { opacity: 0.9; }
+  .weapon-special-chip { background: #eee; color: #333; border-color: #ccc; }
   .launch-ref { border-color: #ccc; break-inside: avoid; }
   .launch-ref-header { background: #f5f5f5; border-color: #ddd; }
   .launch-ref-row { border-color: #ddd; }
   .launch-ref-row-header { background: #f5f5f5; }
-  .group-quantity-bar { display: none; }
+}
+
+/* Print layout classes (used by printFleet JS) */
+.print-fleet {
+  font-family: 'Jost', sans-serif;
+  color: #1c1a17;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.print-header {
+  text-align: center;
+  border-bottom: 2px solid #1b3a5c;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+.print-fleet-name {
+  font-family: 'Roboto Slab', serif;
+  font-size: 20pt;
+  font-weight: 700;
+  color: #1b3a5c;
+}
+.print-fleet-meta {
+  font-size: 10pt;
+  color: #666;
+  margin-top: 4px;
+}
+
+.print-section { margin-top: 16px; }
+.print-section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 9pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #888;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+}
+
+.print-admiral {
+  font-weight: 600;
+  font-size: 11pt;
+}
+
+.print-group {
+  margin-top: 16px;
+  break-inside: avoid;
+}
+.print-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 2px solid #1b3a5c;
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+}
+.print-group-name {
+  font-family: 'Roboto Slab', serif;
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1b3a5c;
+}
+.print-group-pts {
+  font-size: 10pt;
+  color: #666;
+}
+
+.print-ship {
+  margin-bottom: 12px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  break-inside: avoid;
+}
+.print-ship-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.print-ship-name {
+  font-weight: 700;
+  font-size: 11pt;
+}
+.print-ship-pts {
+  font-size: 10pt;
+  color: #666;
+}
+
+.print-loads {
+  font-size: 9pt;
+  color: #444;
+  margin-top: 4px;
+}
+.print-load { font-weight: 600; }
+
+.print-loadout-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 8pt;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  margin-top: 4px;
+  margin-bottom: 1px;
+}
+
+.print-rules {
+  font-size: 9pt;
+  color: #444;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* Rules glossary */
+.print-glossary {
+  margin-top: 24px;
+  page-break-before: auto;
+}
+.print-glossary-entry {
+  margin-bottom: 6px;
+  font-size: 9pt;
+  line-height: 1.4;
+}
+.print-glossary-name {
+  font-weight: 700;
+  color: #1b3a5c;
+}
+.print-glossary-name::after { content: ': '; }
+.print-glossary-desc {
+  color: #333;
 }
 
 /* ── 26. Responsive ──────────────────────────────────────────── */
