@@ -3960,15 +3960,24 @@ const App = (() => {
 
   function formatLore(text) {
     if (!text) return '';
-    const m = text.match(/^((?:In)?famous ships of the class:\s*)(.+)/i);
-    if (!m) return `<p>${esc(text)}</p>`;
+    const prefixRe = /^((?:Famous|Infamous|Known|Encountered|Recorded|Noted|Only)\s+ships?\s+of\s+the\s+class:\s*)(.+)/is;
+    const m = text.match(prefixRe);
+    if (!m) {
+      const paras = text.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('');
+      return paras;
+    }
+    const prefix = m[1].trim();
     const shipsPart = m[2];
     const splitIdx = shipsPart.search(/ The [A-Z]/);
-    if (splitIdx < 0) return `<p>${esc(text)}</p>`;
+    if (splitIdx < 0) {
+      const paras = text.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('');
+      return paras;
+    }
     const shipNames = shipsPart.slice(0, splitIdx).trim();
     const loreBody = shipsPart.slice(splitIdx + 1).trim();
-    return `<p>${esc(loreBody)}</p>
-      <div class="lore-famous-ships"><strong>Known ships of the class:</strong> <em>${esc(shipNames)}</em></div>`;
+    const paras = loreBody.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('');
+    return `${paras}
+      <div class="lore-famous-ships"><strong>${esc(prefix)}</strong> <em>${esc(shipNames)}</em></div>`;
   }
 
   function formatTimeAgo(date) {

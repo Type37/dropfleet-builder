@@ -427,19 +427,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .game-size-detail {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-xs);
-  margin-top: var(--sp-sm);
+  margin-top: var(--sp-xs);
+  font-size: 10px;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.6;
 }
 .game-size-detail span {
-  font-size: 10px;
-  color: rgba(255,255,255,0.4);
-  background: rgba(255,255,255,0.06);
-  padding: 1px 6px;
-  border-radius: var(--radius-sm);
   white-space: nowrap;
-  letter-spacing: 0.02em;
+}
+.game-size-detail span + span::before {
+  content: ' · ';
 }
 
 /* Points bar (in sidebar) */
