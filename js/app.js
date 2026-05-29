@@ -2973,7 +2973,21 @@ const App = (() => {
           <span class="print-group-pts">${gPts} pts — ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
         </div>`;
 
+      // Collapse identical ships: group by shipKey + loadout config
+      // so stats/weapons print once, with N damage tracks
+      const shipBuckets = [];
       g.ships.forEach(ship => {
+        const loadoutKey = JSON.stringify(ship.loadouts || {});
+        const bucketKey = `${ship.shipKey}:${ship.groupCategory}:${loadoutKey}`;
+        let bucket = shipBuckets.find(b => b.key === bucketKey);
+        if (!bucket) {
+          bucket = { key: bucketKey, ship, count: 0 };
+          shipBuckets.push(bucket);
+        }
+        bucket.count++;
+      });
+
+      shipBuckets.forEach(({ ship, count }) => {
         const db = findShipInDB(f.faction, ship.groupCategory, ship.shipKey);
         if (!db) return;
         const name = db.name;
@@ -3060,15 +3074,26 @@ const App = (() => {
         const artSrc = shipArtPath(db.name);
 
         // Damage tracking boxes — hull boxes with cripple point marker
+        // Show N rows of damage tracks when count > 1
         const hullVal = parseInt(db.hull, 10);
         let dmgBoxesHtml = '';
         if (hullVal && hullVal > 0) {
           const crippleAt = Math.ceil(hullVal / 2);
-          const boxes = Array.from({length: hullVal}, (_, i) => {
-            const isCripple = (i + 1) === crippleAt;
-            return `<span class="print-dmg-box${isCripple ? ' print-dmg-cripple' : ''}"></span>`;
-          }).join('');
-          dmgBoxesHtml = `<div class="print-dmg-track"><span class="print-dmg-label">Hull</span>${boxes}<span class="print-dmg-cripple-label">Crippled at ${crippleAt}</span></div>`;
+          const makeTrack = (label) => {
+            const boxes = Array.from({length: hullVal}, (_, i) => {
+              const isCripple = (i + 1) === crippleAt;
+              return `<span class="print-dmg-box${isCripple ? ' print-dmg-cripple' : ''}"></span>`;
+            }).join('');
+            return `<div class="print-dmg-track"><span class="print-dmg-label">${label}</span>${boxes}<span class="print-dmg-cripple-label">Crippled at ${crippleAt}</span></div>`;
+          };
+          if (count === 1) {
+            dmgBoxesHtml = makeTrack('Hull');
+          } else {
+            // One damage track per ship for easy tabletop use
+            dmgBoxesHtml = Array.from({length: count}, (_, i) =>
+              makeTrack(`#${i + 1}`)
+            ).join('');
+          }
         }
 
         // Badge indicators
@@ -3077,13 +3102,17 @@ const App = (() => {
         else if (db.isRare) badges.push('<span class="print-badge print-badge-rare">Rare</span>');
         const badgeHtml = badges.length > 0 ? ` ${badges.join(' ')}` : '';
 
+        // Quantity prefix for collapsed ships
+        const qtyPrefix = count > 1 ? `<span class="print-ship-qty">${count}x</span> ` : '';
+        const totalPts = ship.points * count;
+
         html += `<div class="print-ship">
           <div class="print-ship-top">
             ${artSrc ? `<div class="print-ship-art"><img src="${artSrc}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
             <div class="print-ship-content">
               <div class="print-ship-header">
-                <span class="print-ship-name">${esc(name)}${tonnageLabel ? ` <span class="print-ship-tonnage">${esc(tonnageLabel)}</span>` : ''}${badgeHtml}</span>
-                <span class="print-ship-pts">${ship.points} pts</span>
+                <span class="print-ship-name">${qtyPrefix}${esc(name)}${tonnageLabel ? ` <span class="print-ship-tonnage">${esc(tonnageLabel)}</span>` : ''}${badgeHtml}</span>
+                <span class="print-ship-pts">${count > 1 ? `${totalPts} pts <span class="print-ship-each">(${ship.points} ea)</span>` : `${ship.points} pts`}</span>
               </div>
               ${statsHtml}
               ${dmgBoxesHtml}

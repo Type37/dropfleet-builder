@@ -3566,6 +3566,17 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+.print-ship-qty {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 12pt;
+  color: #1b3a5c;
+}
+.print-ship-each {
+  font-size: 8pt;
+  font-weight: 400;
+  color: #999;
+}
 
 .print-rules {
   font-size: 9pt;
