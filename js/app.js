@@ -12,6 +12,7 @@ const App = (() => {
   let activeGroupId = null;
   let shipSortMode = 'name';
   let activeCategory = 'all';
+  let activeFilters = new Set();  // 'launch', 'loadout', 'rare', 'unique'
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
 
   // Game sizes per rulebook Section 4.2. maxAdmiralLevel is the highest admiral
@@ -1179,12 +1180,14 @@ const App = (() => {
   function openShipSelectModal(groupId) {
     if (groupId) activeGroupId = groupId;
     activeCategory = 'all';
+    activeFilters = new Set();
 
     const factionKey = currentFleet.faction;
     const factionShips = shipDB[factionKey];
     if (!factionShips || !factionShips.groups) return;
 
     renderCategoryTabs(factionShips.groups);
+    renderShipFilters();
     renderShipSelectGrid(factionShips.groups, 'all');
     openModal('modal-ship-select');
 
@@ -1220,6 +1223,34 @@ const App = (() => {
     }
   }
 
+  const SHIP_FILTERS = [
+    { key: 'launch',  label: 'Has Launch',   test: s => (s.loads && s.loads.length > 0) || (s.loadoutOptions || []).some(lo => lo.options.some(o => o.loads && o.loads.length > 0)) },
+    { key: 'loadout', label: 'Has Loadout',  test: s => s.loadoutOptions && s.loadoutOptions.length > 0 },
+    { key: 'rare',    label: 'Rare',         test: s => s.isRare },
+    { key: 'unique',  label: 'Unique',       test: s => s.isUnique }
+  ];
+
+  function renderShipFilters() {
+    const container = document.getElementById('ship-select-filters');
+    if (!container) return;
+    container.innerHTML = SHIP_FILTERS.map(f =>
+      `<button class="filter-chip ${activeFilters.has(f.key) ? 'active' : ''}" onclick="App.toggleShipFilter('${f.key}')">${f.label}</button>`
+    ).join('');
+  }
+
+  function toggleShipFilter(key) {
+    if (activeFilters.has(key)) {
+      activeFilters.delete(key);
+    } else {
+      activeFilters.add(key);
+    }
+    renderShipFilters();
+    const factionShips = shipDB[currentFleet.faction];
+    if (factionShips && factionShips.groups) {
+      renderShipSelectGrid(factionShips.groups, activeCategory);
+    }
+  }
+
   function renderShipSelectGrid(groups, category) {
     const grid = document.getElementById('ship-select-grid');
     let ships = [];
@@ -1235,6 +1266,16 @@ const App = (() => {
       }
     });
 
+    // Apply active filters (AND logic — ship must pass all active filters)
+    if (activeFilters.size > 0) {
+      ships = ships.filter(s => {
+        for (const f of SHIP_FILTERS) {
+          if (activeFilters.has(f.key) && !f.test(s.data)) return false;
+        }
+        return true;
+      });
+    }
+
     if (shipSortMode === 'cost') {
       ships.sort((a, b) => (a.data.points || 0) - (b.data.points || 0));
     } else {
@@ -1242,7 +1283,7 @@ const App = (() => {
     }
 
     if (ships.length === 0) {
-      grid.innerHTML = '<div class="empty-state"><p class="text-caption">No ships in this category</p></div>';
+      grid.innerHTML = '<div class="empty-state"><p class="text-caption">No ships match these filters</p></div>';
       return;
     }
 
@@ -1981,7 +2022,7 @@ const App = (() => {
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet,
     loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup,
-    openShipSelectModal, filterCategory, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
+    openShipSelectModal, filterCategory, toggleShipFilter, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
     openAdmiralModal, selectAdmiral, selectGenericAdmiral, selectFamousAdmiral, toggleSidebar, printFleet, shareFleet,
     openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize
   };
