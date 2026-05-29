@@ -1913,8 +1913,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .ship-card-image {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: var(--radius-md);
   background: var(--paper-alt);
   border: 1px solid var(--stroke-light);
@@ -2212,8 +2212,8 @@ h1, h2, h3, h4, h5, h6 {
 [data-faction="resistance"] .group-ship-entry:hover { border-left-color: var(--faction-resistance); }
 
 .group-ship-entry .ship-card-image {
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
 }
 
 /* Compact view — smaller cards, no stat/weapon detail */
@@ -3064,7 +3064,7 @@ h1, h2, h3, h4, h5, h6 {
   .stat-cell-value { font-size: var(--text-sm); }
 
   .ship-card-top { flex-direction: column; }
-  .ship-card-image { width: 100%; height: 100px; border-radius: var(--radius-md); }
+  .ship-card-image { width: 100%; height: 120px; border-radius: var(--radius-md); }
   .ship-card-image img { object-position: center; }
 
   /* Weapon rows stack on small screens — no horizontal scroll needed */
