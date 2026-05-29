@@ -2259,6 +2259,84 @@ h1, h2, h3, h4, h5, h6 {
 }
 .feature-carrier-block .loadout-select { width: 100%; }
 
+/* Systems / Hardpoint picker (Resistance Cruiser/Frigate/Dreadnought Systems) */
+.systems-picker {
+  margin-top: var(--sp-xs);
+  border: 1px solid var(--stroke-light);
+  border-left: 3px solid var(--navy);
+  border-radius: var(--radius-sm);
+  background: var(--paper-alt);
+  overflow: hidden;
+}
+.systems-picker.systems-picker-incomplete { border-left-color: #c43c2f; }
+.systems-picker-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: var(--sp-xs) var(--sp-sm);
+  background: var(--warm);
+  border-bottom: 1px solid var(--stroke-light);
+}
+.systems-picker-title {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--navy);
+}
+.systems-picker-count {
+  font-family: var(--font-condensed);
+  font-weight: var(--weight-heavy);
+  font-size: var(--text-sm);
+  color: var(--ink);
+}
+.systems-picker-incomplete .systems-picker-count { color: #c43c2f; }
+.sys-cat { padding: var(--sp-xs) var(--sp-sm); }
+.sys-cat + .sys-cat { border-top: 1px dashed var(--stroke-light); }
+.sys-cat-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  margin-bottom: 2px;
+}
+.sys-cat-cap { color: var(--navy); font-family: var(--font-condensed); }
+.sys-opt {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: 2px 0;
+}
+.sys-opt-active { }
+.sys-opt-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sys-opt-name { font-size: var(--text-xs); font-weight: var(--weight-semibold); color: var(--ink); }
+.sys-opt-star { color: #c48820; font-weight: var(--weight-bold); }
+.sys-opt-detail { font-size: 10px; color: var(--ink-muted); font-family: var(--font-condensed); }
+.sys-opt-cost {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: var(--navy);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sys-opt-step { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.sys-opt-count { min-width: 12px; text-align: center; font-weight: var(--weight-bold); font-size: var(--text-xs); }
+.sys-step-btn {
+  width: 20px; height: 20px;
+  border: 1px solid var(--stroke);
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+  line-height: 1;
+  color: var(--ink);
+}
+.sys-step-btn:hover:not(:disabled) { background: var(--navy); color: #fff; border-color: var(--navy); }
+.sys-step-btn:disabled { opacity: 0.35; cursor: default; }
+
 /* ── 16. Ship Cards (selection modal) ────────────────────────── */
 .ship-category-tabs {
   display: flex;

@@ -210,7 +210,7 @@
   <div class="modal-panel" style="max-width:500px">
     <div class="modal-header">
       <h2 class="modal-title">Share Fleet</h2>
-      <button class="modal-close" onclick="App.closeModal('modal-share')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+      <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-share')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body" id="share-body">
       <!-- Populated by JS -->
@@ -223,7 +223,7 @@
   <div class="modal-panel">
     <div class="modal-header">
       <h2 class="modal-title">New Fleet</h2>
-      <button class="modal-close" onclick="App.closeModal('modal-new-fleet')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+      <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-new-fleet')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body">
       <div class="flex flex-col gap-xl">
@@ -266,7 +266,7 @@
           <button class="sort-btn active" onclick="App.sortShips('name')" data-sort="name">Name</button>
           <button class="sort-btn" onclick="App.sortShips('cost')" data-sort="cost">Cost</button>
         </div>
-        <button class="modal-close" onclick="App.closeModal('modal-ship-select')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+        <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-ship-select')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
       </div>
     </div>
     <div class="modal-body">
@@ -296,7 +296,7 @@
   <div class="modal-panel modal-panel--lg">
     <div class="modal-header">
       <h2 class="modal-title">Choose Space Station</h2>
-      <button class="modal-close" onclick="App.closeModal('modal-station')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+      <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-station')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body">
       <p class="text-caption" style="margin-bottom:var(--sp-lg)">Select a space station for your fleet. Station cost is added to fleet total.</p>
@@ -312,7 +312,7 @@
   <div class="modal-panel modal-panel--lg">
     <div class="modal-header">
       <h2 class="modal-title">Choose Admiral</h2>
-      <button class="modal-close" onclick="App.closeModal('modal-admiral')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+      <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-admiral')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body">
       <p class="text-caption" style="margin-bottom:var(--sp-lg)">Generic admirals can be placed on any ship. Famous admirals come with their own flagship.</p>
@@ -328,7 +328,7 @@
   <div class="modal-panel modal-panel--lg">
     <div class="modal-header">
       <h2 class="modal-title" id="detail-ship-name">Ship Name</h2>
-      <button class="modal-close" onclick="App.closeModal('modal-ship-detail')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+      <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-ship-detail')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body" id="detail-ship-body">
       <!-- Populated by JS -->
@@ -341,7 +341,7 @@
   <div class="modal-panel" style="max-width:400px">
     <div class="modal-header">
       <h2 class="modal-title" id="confirm-title">Confirm</h2>
-      <button class="modal-close" onclick="App.closeModal('modal-confirm')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+      <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-confirm')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body">
       <p id="confirm-message">Are you sure?</p>
@@ -357,7 +357,7 @@
   <div class="modal-panel" style="max-width:440px">
     <div class="modal-header">
       <h2 class="modal-title">Fleet Settings</h2>
-      <button class="modal-close" onclick="App.closeModal('modal-settings')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+      <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-settings')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body" id="settings-body">
       <!-- Populated by JS -->

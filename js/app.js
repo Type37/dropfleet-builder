@@ -256,7 +256,8 @@ const App = (() => {
         famousShipsPrefix: s.famousShipsPrefix || '',
         famousShips: s.famousShips || [],
         image: shipArtPath(s.name),
-        variants: s.variants || []
+        variants: s.variants || [],
+        systemSelection: s.systemSelection || null
       };
     });
 
@@ -309,7 +310,7 @@ const App = (() => {
       rules: df.rules || []
     }));
 
-    shipDB[factionKey] = { groups, admirals: faction.admirals || [], launchAssets, spaceStations, deployableFeatures };
+    shipDB[factionKey] = { groups, admirals: faction.admirals || [], launchAssets, spaceStations, deployableFeatures, systemsLists: faction.systemsLists || {} };
   }
 
   // ── Landing Page Dynamic Content ──
@@ -1309,6 +1310,14 @@ const App = (() => {
       }
     });
 
+    // 7c. Systems/Hardpoint selections must satisfy their list rules
+    fleet.battleGroups.forEach(g => {
+      if (g.ships.length === 0) return;
+      const s = g.ships[0];
+      const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
+      validateSystems(s, db, fleet.faction).forEach(msg => warnings.push({ type: 'warn', msg }));
+    });
+
     // 8. Admiral checks
     const admirals = fleet.admirals || [];
     let namedCount = 0;
@@ -1481,7 +1490,7 @@ const App = (() => {
            </span>`
         : '';
       return `
-      <div class="group-nav-item ${isActive ? 'active' : ''}${hasError ? ' has-error' : ''}" onclick="App.selectGroup('${g.id}')" style="--nav-accent:${accentColor}">
+      <div class="group-nav-item ${isActive ? 'active' : ''}${hasError ? ' has-error' : ''}" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-pressed="${isActive}" aria-label="${esc(g.name)}, ${catLabel}, ${groupPts} points, ${shipCount} ship${shipCount !== 1 ? 's' : ''}" style="--nav-accent:${accentColor}">
         ${artThumb}
         <div class="group-nav-body">
           <div class="group-nav-top">
@@ -1651,7 +1660,7 @@ const App = (() => {
         : '';
       lastCat = cat;
 
-      return `${sectionDivider}<div class="overview-group-card card-deco" onclick="App.selectGroup('${g.id}')" style="cursor:pointer;border-left-color:${catColor}">
+      return `${sectionDivider}<div class="overview-group-card card-deco" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-label="${esc(g.name)}, ${esc(catLabel)}, ${gPts} points" style="cursor:pointer;border-left-color:${catColor}">
         <div class="overview-group-top">
           ${artSrc ? `<div class="overview-group-art"><img src="${artSrc}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
           <div class="overview-group-info">
@@ -2077,6 +2086,138 @@ const App = (() => {
     </div>`;
   }
 
+  // ── Systems / Hardpoint selection (Resistance Cruiser/Frigate/Dreadnought) ──
+  function systemsListFor(dbShip, factionKey) {
+    const sel = dbShip && dbShip.systemSelection;
+    if (!sel) return null;
+    const lists = (shipDB[factionKey] && shipDB[factionKey].systemsLists) || {};
+    const list = lists[sel.listName];
+    return (list && Array.isArray(list.options) && list.options.length) ? list : null;
+  }
+
+  function findSystemOption(list, name) {
+    return list.options.find(o => o.name === name) || null;
+  }
+
+  // Selections are stored on the ship as an array of option names (repeats
+  // allowed unless oncePerShip). Returns {counts, total, capUsage, byCategory}.
+  function summariseSystems(ship, list, sel) {
+    const counts = {};
+    (ship.systems || []).forEach(n => { counts[n] = (counts[n] || 0) + 1; });
+    const total = (ship.systems || []).length;
+    // Cap usage: a cap key matches an option category by prefix (startsWith).
+    const capUsage = {};
+    Object.keys(sel.categoryCaps || {}).forEach(k => { capUsage[k] = 0; });
+    (ship.systems || []).forEach(n => {
+      const o = findSystemOption(list, n);
+      if (!o) return;
+      Object.keys(capUsage).forEach(k => { if ((o.category || '').startsWith(k)) capUsage[k]++; });
+    });
+    return { counts, total, capUsage };
+  }
+
+  function validateSystems(ship, dbShip, factionKey) {
+    const sel = dbShip && dbShip.systemSelection;
+    const list = systemsListFor(dbShip, factionKey);
+    if (!sel || !list) return [];
+    const errors = [];
+    const { total, capUsage } = summariseSystems(ship, list, sel);
+    if (sel.totalIsExact && total !== sel.totalRequired) {
+      errors.push(total < sel.totalRequired
+        ? `${dbShip.name}: choose ${sel.totalRequired} ${sel.listName} (has ${total})`
+        : `${dbShip.name}: too many ${sel.listName} — max ${sel.totalRequired} (has ${total})`);
+    } else if (!sel.totalIsExact && total > sel.totalRequired) {
+      errors.push(`${dbShip.name}: max ${sel.totalRequired} ${sel.listName} (has ${total})`);
+    }
+    Object.entries(sel.categoryCaps || {}).forEach(([k, max]) => {
+      if (capUsage[k] > max) errors.push(`${dbShip.name}: max ${max} from ${k} (has ${capUsage[k]})`);
+    });
+    return errors;
+  }
+
+  // True if another copy of this option can still be added right now.
+  function canAddSystem(ship, dbShip, factionKey, optName) {
+    const sel = dbShip.systemSelection;
+    const list = systemsListFor(dbShip, factionKey);
+    if (!sel || !list) return false;
+    const opt = findSystemOption(list, optName);
+    if (!opt) return false;
+    const { counts, total, capUsage } = summariseSystems(ship, list, sel);
+    if (total >= sel.totalRequired) return false;            // at the total cap
+    if (opt.oncePerShip && (counts[optName] || 0) >= 1) return false;
+    for (const [k, max] of Object.entries(sel.categoryCaps || {})) {
+      if ((opt.category || '').startsWith(k) && capUsage[k] >= max) return false;
+    }
+    return true;
+  }
+
+  function systemOptionSummary(opt) {
+    if (opt.weapons && opt.weapons.length) {
+      const w = opt.weapons[0];
+      const icon = WEAPON_TYPE_ICONS[w.type] || '';
+      return `<span class="sys-opt-detail">${esc(w.arc || '')} · ${esc(w.attack || '')}/${esc(w.lock || '')}/${esc(w.damage || '')}${icon}${w.special && w.special !== '-' ? ' · ' + esc(w.special) : ''}</span>`;
+    }
+    if (opt.loads && opt.loads.length) {
+      const l = opt.loads[0];
+      return `<span class="sys-opt-detail">Launch ${esc(l.launch || '')}${l.special && l.special !== '-' ? ' · ' + esc(l.special) : ''}</span>`;
+    }
+    if (opt.effect) return `<span class="sys-opt-detail">${esc(opt.effect)}</span>`;
+    return '';
+  }
+
+  function renderSystemsPicker(ship, dbShip, groupId, factionKey) {
+    const sel = dbShip && dbShip.systemSelection;
+    if (!sel) return '';
+    const list = systemsListFor(dbShip, factionKey);
+    if (!list) return '';   // option table not loaded yet — Ship Rules text still explains it
+
+    const { counts, total, capUsage } = summariseSystems(ship, list, sel);
+    const required = sel.totalRequired;
+    const complete = sel.totalIsExact ? total === required : total <= required;
+    const headerClass = complete ? '' : ' systems-picker-incomplete';
+    const reqLabel = sel.totalIsExact ? `${total} / ${required}` : `${total} / up to ${required}`;
+
+    const cats = list.categories && list.categories.length
+      ? list.categories
+      : [...new Set(list.options.map(o => o.category))];
+
+    const body = cats.map(cat => {
+      const opts = list.options.filter(o => o.category === cat);
+      if (!opts.length) return '';
+      // cap label for this category (match by prefix)
+      let capNote = '';
+      Object.entries(sel.categoryCaps || {}).forEach(([k, max]) => {
+        if (cat.startsWith(k)) capNote = `<span class="sys-cat-cap">${capUsage[k]}/${max}</span>`;
+      });
+      const rows = opts.map(o => {
+        const c = counts[o.name] || 0;
+        const canAdd = canAddSystem(ship, dbShip, factionKey, o.name);
+        const star = o.oncePerShip ? '<span class="sys-opt-star" title="Max one per ship">*</span>' : '';
+        return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}">
+          <div class="sys-opt-main">
+            <span class="sys-opt-name">${esc(o.name)}${star}</span>
+            ${systemOptionSummary(o)}
+          </div>
+          <span class="sys-opt-cost">${o.cost > 0 ? '+' + o.cost : o.cost} pts</span>
+          <div class="sys-opt-step">
+            <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeSystem('${groupId}','${ship.id}','${esc(o.name).replace(/'/g, "\\'")}')">−</button>
+            <span class="sys-opt-count" aria-label="${c} selected">${c}</span>
+            <button class="sys-step-btn" aria-label="Add one ${esc(o.name)}" ${canAdd ? '' : 'disabled'} onclick="App.addSystem('${groupId}','${ship.id}','${esc(o.name).replace(/'/g, "\\'")}')">+</button>
+          </div>
+        </div>`;
+      }).join('');
+      return `<div class="sys-cat"><div class="sys-cat-head">${esc(cat)}${capNote}</div>${rows}</div>`;
+    }).join('');
+
+    return `<div class="systems-picker${headerClass}">
+      <div class="systems-picker-head">
+        <span class="systems-picker-title">${esc(sel.listName)}</span>
+        <span class="systems-picker-count">${reqLabel}</span>
+      </div>
+      ${body}
+    </div>`;
+  }
+
   function renderGroupShipEntry(ship, dbShip, groupId, count = 1) {
     const name = dbShip ? dbShip.name : ship.shipKey;
     const img = dbShip ? dbShip.image : '';
@@ -2266,6 +2407,7 @@ const App = (() => {
         ${compact ? '' : launchBlockHtml}
         ${rulesHtml}
         ${rulesTextHtml}
+        ${renderSystemsPicker(ship, dbShip, groupId, currentFleet.faction)}
         ${renderFeatureCarrierBlock(ship, dbShip, groupId)}
         ${compact ? '' : loreHtml}
         ${compact ? '' : variantsHtml}
@@ -2616,6 +2758,67 @@ const App = (() => {
     group.ships
       .filter(s => s.shipKey === ship.shipKey && s.groupCategory === ship.groupCategory)
       .forEach(s => { s.feature = featureName || undefined; });
+    saveFleets();
+    updatePoints();
+    scheduleRender(renderGroupsNav, renderActiveGroup);
+  }
+
+  // Recompute a ship's points: base + selected loadout options + chosen systems.
+  function recalcShipPoints(ship, dbShip, factionKey) {
+    let total = dbShip.points || 0;
+    (dbShip.loadoutOptions || []).forEach((lo, li) => {
+      const selIdx = (ship.loadouts && ship.loadouts[li] !== undefined) ? ship.loadouts[li] : 0;
+      total += lo.options[selIdx]?.cost || 0;
+    });
+    const list = systemsListFor(dbShip, factionKey);
+    if (list && ship.systems) {
+      ship.systems.forEach(n => {
+        const o = findSystemOption(list, n);
+        if (o) total += o.cost || 0;
+      });
+    }
+    return total;
+  }
+
+  // Every ship in a group takes the same Hardpoint options, so add/remove
+  // applies to all copies of this ship type in the group.
+  function sameTypeShips(group, ship) {
+    return group.ships.filter(s => s.shipKey === ship.shipKey && s.groupCategory === ship.groupCategory);
+  }
+
+  function addSystem(groupId, shipId, optName) {
+    if (!currentFleet) return;
+    const group = currentFleet.battleGroups.find(g => g.id === groupId);
+    if (!group) return;
+    const ship = group.ships.find(s => s.id === shipId);
+    if (!ship) return;
+    const dbShip = findShipInDB(currentFleet.faction, ship.groupCategory, ship.shipKey);
+    if (!dbShip) return;
+    if (!canAddSystem(ship, dbShip, currentFleet.faction, optName)) return;
+    sameTypeShips(group, ship).forEach(s => {
+      if (!s.systems) s.systems = [];
+      s.systems.push(optName);
+      s.points = recalcShipPoints(s, dbShip, currentFleet.faction);
+    });
+    saveFleets();
+    updatePoints();
+    scheduleRender(renderGroupsNav, renderActiveGroup);
+  }
+
+  function removeSystem(groupId, shipId, optName) {
+    if (!currentFleet) return;
+    const group = currentFleet.battleGroups.find(g => g.id === groupId);
+    if (!group) return;
+    const ship = group.ships.find(s => s.id === shipId);
+    if (!ship) return;
+    const dbShip = findShipInDB(currentFleet.faction, ship.groupCategory, ship.shipKey);
+    if (!dbShip) return;
+    sameTypeShips(group, ship).forEach(s => {
+      if (!s.systems) return;
+      const i = s.systems.lastIndexOf(optName);
+      if (i >= 0) s.systems.splice(i, 1);
+      s.points = recalcShipPoints(s, dbShip, currentFleet.faction);
+    });
     saveFleets();
     updatePoints();
     scheduleRender(renderGroupsNav, renderActiveGroup);
@@ -4417,6 +4620,14 @@ const App = (() => {
 
   // Keyboard shortcuts
   document.addEventListener('keydown', (e) => {
+    // Keyboard activation for focusable clickable divs (role="button")
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.getAttribute &&
+        e.target.getAttribute('role') === 'button' && e.target.tagName !== 'BUTTON') {
+      e.preventDefault();
+      e.target.click();
+      return;
+    }
+
     // Escape: close modals, rule tooltips, popovers
     if (e.key === 'Escape') {
       const activeModals = document.querySelectorAll('.modal-overlay.active');
@@ -4514,7 +4725,7 @@ const App = (() => {
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, moveGroup,
-    openShipSelectModal, filterCategory, toggleShipFilter, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature,
+    openShipSelectModal, filterCategory, toggleShipFilter, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral,
     openStationModal, selectStation, removeStation,
     toggleSidebar, printFleet,
