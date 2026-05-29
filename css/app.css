@@ -2219,6 +2219,14 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1px;
 }
 
+.print-ship-tonnage {
+  font-weight: 400;
+  font-size: 9pt;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .print-rules {
   font-size: 9pt;
   color: #444;
@@ -2226,15 +2234,34 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
 }
 
+.print-rules-inline {
+  margin-top: 6px;
+  padding-top: 4px;
+  border-top: 1px dotted #ddd;
+}
+.print-rule-entry {
+  font-size: 8pt;
+  line-height: 1.35;
+  color: #444;
+  margin-bottom: 2px;
+}
+.print-rule-name {
+  font-weight: 700;
+  color: #1b3a5c;
+}
+
 /* Rules glossary */
 .print-glossary {
   margin-top: 24px;
   page-break-before: auto;
+  column-count: 2;
+  column-gap: 24px;
 }
 .print-glossary-entry {
   margin-bottom: 6px;
   font-size: 9pt;
   line-height: 1.4;
+  break-inside: avoid;
 }
 .print-glossary-name {
   font-weight: 700;

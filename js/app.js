@@ -1912,20 +1912,32 @@ const App = (() => {
           if (selOpt && selOpt.weapons) collectWeaponSpecials(selOpt.weapons);
         });
 
-        // Rules chips
-        const ruleNames = (db.specialRuleDetails || []).map(r => esc(r.name)).join(', ') ||
+        // Rules — inline with full descriptions for print
+        const ruleDetails = db.specialRuleDetails || [];
+        const ruleNames = ruleDetails.map(r => esc(r.name)).join(', ') ||
                           (db.special_rules || []).map(r => esc(r)).join(', ');
+        let rulesInlineHtml = '';
+        if (ruleDetails.length > 0) {
+          rulesInlineHtml = `<div class="print-rules-inline">
+            ${ruleDetails.map(r => `<div class="print-rule-entry"><span class="print-rule-name">${esc(r.name)}</span>${r.description ? ` — ${esc(r.description)}` : ''}</div>`).join('')}
+          </div>`;
+        } else if (ruleNames) {
+          rulesInlineHtml = `<div class="print-rules">Rules: ${ruleNames}</div>`;
+        }
+
+        // Tonnage label
+        const tonnageLabel = db.tonnage || CATEGORY_LABELS[ship.groupCategory] || '';
 
         html += `<div class="print-ship">
           <div class="print-ship-header">
-            <span class="print-ship-name">${esc(name)}</span>
+            <span class="print-ship-name">${esc(name)}${tonnageLabel ? ` <span class="print-ship-tonnage">${esc(tonnageLabel)}</span>` : ''}</span>
             <span class="print-ship-pts">${ship.points} pts</span>
           </div>
           ${statsHtml}
           ${wpnsHtml}
           ${loadoutWpnsHtml}
           ${loadsHtml}
-          ${ruleNames ? `<div class="print-rules">Rules: ${ruleNames}</div>` : ''}
+          ${rulesInlineHtml}
         </div>`;
       });
 

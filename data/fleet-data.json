@@ -2907,8 +2907,34 @@
               "g": "1",
               "special": "Rare, Subservient Mercenaries"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Harpoon Strike",
+                "arc": "F/S/R",
+                "attack": "3",
+                "lock": "4+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Boarding Pods",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Bulk Landers",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Fire Ships",
+                "launch": "3",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Subservient Mercenaries",
@@ -2927,8 +2953,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Misc"
+            "tonnage": "M"
           }
         },
         {
@@ -2949,8 +2974,24 @@
               "g": "1",
               "special": "Marines-2, Stealth, Unique"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "9K Snub Mass Drivers",
+                "arc": "F",
+                "attack": "4",
+                "lock": "2+",
+                "damage": "1",
+                "type": "K",
+                "special": "Critical-1"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Fighters & Bombers",
+                "launch": "1",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Marines-X",
@@ -2969,8 +3010,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "L",
-            "source": "Misc"
+            "tonnage": "L"
           }
         },
         {
@@ -2991,7 +3031,17 @@
               "g": "1",
               "special": "Unique"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Party Poppers",
+                "arc": "F/S",
+                "attack": "3",
+                "lock": "4+",
+                "damage": "1",
+                "type": "E",
+                "special": "Status"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -3003,8 +3053,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -3025,7 +3074,17 @@
               "g": "1-2",
               "special": "Vectored, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Mining Laser",
+                "arc": "F",
+                "attack": "3",
+                "lock": "2+",
+                "damage": "2",
+                "type": "E",
+                "special": "Burnthrough-2, Close Action"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -3037,8 +3096,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -3071,8 +3129,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -3093,7 +3150,26 @@
               "g": "1-4",
               "special": "Descent, Monitor, Vectored, Tugging Along"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              },
+              {
+                "name": "Drag to Hell",
+                "arc": "F",
+                "attack": "3",
+                "lock": "3+",
+                "damage": "2",
+                "type": "C",
+                "special": "Close Action"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -3117,8 +3193,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -3139,8 +3214,38 @@
               "g": "1",
               "special": "Marines-1, Unique, Penal Legions"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              },
+              {
+                "name": "Anti-Fighter Lasers",
+                "arc": "F/S/R",
+                "attack": "5",
+                "lock": "3+",
+                "damage": "0",
+                "type": "E",
+                "special": "Anti Wing, Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Drop Pods",
+                "launch": "2",
+                "special": "Alt-1"
+              },
+              {
+                "name": "Boarding Pods",
+                "launch": "2",
+                "special": "Alt-1"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Marines-X",
@@ -3159,8 +3264,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -3181,8 +3285,24 @@
               "g": "1",
               "special": "Monitor, Feature Carrier (Outpost)"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Military Outpost",
+                "launch": "1",
+                "special": "Limited-1"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Monitor",
@@ -3193,8 +3313,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -3215,8 +3334,24 @@
               "g": "1",
               "special": "Rare, Reinforced Armour, Acquired Mines"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Expel Hazards",
+                "arc": "F",
+                "attack": "2",
+                "lock": "3+",
+                "damage": "1",
+                "type": "C",
+                "special": "Anti Wing"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Mines",
+                "launch": "3",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Rare",
@@ -3231,8 +3366,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -3253,7 +3387,17 @@
               "g": "1",
               "special": "Porter F-2, Reinforced Armour, Monitor, Scrap Hauler, Scratch Bodge Job, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Colossal Salvage Cutter",
+                "arc": "F",
+                "attack": "5",
+                "lock": "2+",
+                "damage": "3",
+                "type": "C",
+                "special": "Close Action, Bloom-3"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -3277,8 +3421,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "H",
-            "source": "Civilian"
+            "tonnage": "H"
           }
         },
         {
@@ -3299,7 +3442,17 @@
               "g": "-",
               "special": "Payload F-1, Vectored, Scrap Collection, Unload, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Sawblade Prow",
+                "arc": "F",
+                "attack": "2",
+                "lock": "2+",
+                "damage": "2",
+                "type": "C",
+                "special": "Close Action, Bloom-1"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -3319,8 +3472,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -3341,15 +3493,53 @@
               "g": "1",
               "special": "Expansive Radiator Systems"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Heavy Dual Vent Cannon Turret",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "2",
+                "type": "E",
+                "special": "Fusillade-1, Overcharge, Reave-1"
+              },
+              {
+                "name": "NC-16 Missile Bank",
+                "arc": "F/S/R",
+                "attack": "6",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action, Volley-2"
+              },
+              {
+                "name": "Genesis Spikes",
+                "arc": "F/S/R",
+                "attack": "3",
+                "lock": "5+",
+                "damage": "2",
+                "type": "K",
+                "special": "Bombardment, Penetrator"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Fighters & Bombers",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Bulk Landers",
+                "launch": "2",
+                "special": "-"
+              }
+            ],
             "specialRules": [],
             "groupMin": 1,
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "C",
-            "source": "Civilian"
+            "tonnage": "C"
           }
         }
       ],
@@ -6720,8 +6910,34 @@
               "g": "1",
               "special": "Rare, Subservient Mercenaries"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Harpoon Strike",
+                "arc": "F/S/R",
+                "attack": "3",
+                "lock": "4+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Boarding Pods",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Bulk Landers",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Fire Ships",
+                "launch": "3",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Subservient Mercenaries",
@@ -6740,8 +6956,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Misc"
+            "tonnage": "M"
           }
         },
         {
@@ -6762,8 +6977,24 @@
               "g": "1",
               "special": "Marines-2, Stealth, Unique"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "9K Snub Mass Drivers",
+                "arc": "F",
+                "attack": "4",
+                "lock": "2+",
+                "damage": "1",
+                "type": "K",
+                "special": "Critical-1"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Fighters & Bombers",
+                "launch": "1",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Marines-X",
@@ -6782,8 +7013,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "L",
-            "source": "Misc"
+            "tonnage": "L"
           }
         },
         {
@@ -6804,7 +7034,17 @@
               "g": "1",
               "special": "Command Ship-1, Detector, Rare, Advanced Artillery, Magellan Lifeboats"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "N-12 Artillery Cannons",
+                "arc": "F",
+                "attack": "8",
+                "lock": "4+",
+                "damage": "1",
+                "type": "K",
+                "special": "-"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -6832,8 +7072,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "H",
-            "source": "Misc"
+            "tonnage": "H"
           }
         },
         {
@@ -6854,7 +7093,26 @@
               "g": "1",
               "special": "-"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "9K Mass Driver Turret",
+                "arc": "F/S",
+                "attack": "2",
+                "lock": "2+",
+                "damage": "2",
+                "type": "K",
+                "special": "Critical-1, Penetrator"
+              },
+              {
+                "name": "N-31 Hybrid Gun Battery",
+                "arc": "B",
+                "attack": "8",
+                "lock": "4+",
+                "damage": "1",
+                "type": "K",
+                "special": "Volley-2"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -6866,8 +7124,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Misc"
+            "tonnage": "M"
           }
         },
         {
@@ -6888,7 +7145,17 @@
               "g": "1",
               "special": "Unique"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Party Poppers",
+                "arc": "F/S",
+                "attack": "3",
+                "lock": "4+",
+                "damage": "1",
+                "type": "E",
+                "special": "Status"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -6900,8 +7167,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -6922,7 +7188,17 @@
               "g": "1-2",
               "special": "Vectored, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Mining Laser",
+                "arc": "F",
+                "attack": "3",
+                "lock": "2+",
+                "damage": "2",
+                "type": "E",
+                "special": "Burnthrough-2, Close Action"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -6934,8 +7210,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -6968,8 +7243,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -6990,7 +7264,26 @@
               "g": "1-4",
               "special": "Descent, Monitor, Vectored, Tugging Along"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              },
+              {
+                "name": "Drag to Hell",
+                "arc": "F",
+                "attack": "3",
+                "lock": "3+",
+                "damage": "2",
+                "type": "C",
+                "special": "Close Action"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -7014,8 +7307,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -7036,8 +7328,38 @@
               "g": "1",
               "special": "Marines-1, Unique, Penal Legions"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              },
+              {
+                "name": "Anti-Fighter Lasers",
+                "arc": "F/S/R",
+                "attack": "5",
+                "lock": "3+",
+                "damage": "0",
+                "type": "E",
+                "special": "Anti Wing, Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Drop Pods",
+                "launch": "2",
+                "special": "Alt-1"
+              },
+              {
+                "name": "Boarding Pods",
+                "launch": "2",
+                "special": "Alt-1"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Marines-X",
@@ -7056,8 +7378,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -7098,8 +7419,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -7120,8 +7440,24 @@
               "g": "1",
               "special": "Monitor, Feature Carrier (Outpost)"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Military Outpost",
+                "launch": "1",
+                "special": "Limited-1"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Monitor",
@@ -7132,8 +7468,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -7154,8 +7489,24 @@
               "g": "1",
               "special": "Rare, Reinforced Armour, Acquired Mines"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Expel Hazards",
+                "arc": "F",
+                "attack": "2",
+                "lock": "3+",
+                "damage": "1",
+                "type": "C",
+                "special": "Anti Wing"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Mines",
+                "launch": "3",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Rare",
@@ -7170,8 +7521,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -7192,7 +7542,17 @@
               "g": "1",
               "special": "Porter F-2, Reinforced Armour, Monitor, Scrap Hauler, Scratch Bodge Job, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Colossal Salvage Cutter",
+                "arc": "F",
+                "attack": "5",
+                "lock": "2+",
+                "damage": "3",
+                "type": "C",
+                "special": "Close Action, Bloom-3"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -7216,8 +7576,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "H",
-            "source": "Civilian"
+            "tonnage": "H"
           }
         },
         {
@@ -7238,7 +7597,17 @@
               "g": "-",
               "special": "Payload F-1, Vectored, Scrap Collection, Unload, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Sawblade Prow",
+                "arc": "F",
+                "attack": "2",
+                "lock": "2+",
+                "damage": "2",
+                "type": "C",
+                "special": "Close Action, Bloom-1"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -7258,8 +7627,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -7280,15 +7648,53 @@
               "g": "1",
               "special": "Expansive Radiator Systems"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Heavy Dual Vent Cannon Turret",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "2",
+                "type": "E",
+                "special": "Fusillade-1, Overcharge, Reave-1"
+              },
+              {
+                "name": "NC-16 Missile Bank",
+                "arc": "F/S/R",
+                "attack": "6",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action, Volley-2"
+              },
+              {
+                "name": "Genesis Spikes",
+                "arc": "F/S/R",
+                "attack": "3",
+                "lock": "5+",
+                "damage": "2",
+                "type": "K",
+                "special": "Bombardment, Penetrator"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Fighters & Bombers",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Bulk Landers",
+                "launch": "2",
+                "special": "-"
+              }
+            ],
             "specialRules": [],
             "groupMin": 1,
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "C",
-            "source": "Civilian"
+            "tonnage": "C"
           }
         }
       ],
@@ -9543,8 +9949,34 @@
               "g": "1",
               "special": "Rare, Subservient Mercenaries"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Harpoon Strike",
+                "arc": "F/S/R",
+                "attack": "3",
+                "lock": "4+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Boarding Pods",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Bulk Landers",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Fire Ships",
+                "launch": "3",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Subservient Mercenaries",
@@ -9563,8 +9995,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Misc"
+            "tonnage": "M"
           }
         },
         {
@@ -9585,8 +10016,24 @@
               "g": "1",
               "special": "Marines-2, Stealth, Unique"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "9K Snub Mass Drivers",
+                "arc": "F",
+                "attack": "4",
+                "lock": "2+",
+                "damage": "1",
+                "type": "K",
+                "special": "Critical-1"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Fighters & Bombers",
+                "launch": "1",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Marines-X",
@@ -9605,8 +10052,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "L",
-            "source": "Misc"
+            "tonnage": "L"
           }
         },
         {
@@ -9627,7 +10073,17 @@
               "g": "1",
               "special": "Command Ship-1, Detector, Rare, Advanced Artillery, Magellan Lifeboats"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "N-12 Artillery Cannons",
+                "arc": "F",
+                "attack": "8",
+                "lock": "4+",
+                "damage": "1",
+                "type": "K",
+                "special": "-"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -9655,8 +10111,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "H",
-            "source": "Misc"
+            "tonnage": "H"
           }
         },
         {
@@ -9677,7 +10132,26 @@
               "g": "1",
               "special": "-"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "9K Mass Driver Turret",
+                "arc": "F/S",
+                "attack": "2",
+                "lock": "2+",
+                "damage": "2",
+                "type": "K",
+                "special": "Critical-1, Penetrator"
+              },
+              {
+                "name": "N-31 Hybrid Gun Battery",
+                "arc": "B",
+                "attack": "8",
+                "lock": "4+",
+                "damage": "1",
+                "type": "K",
+                "special": "Volley-2"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -9689,8 +10163,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Misc"
+            "tonnage": "M"
           }
         },
         {
@@ -9711,7 +10184,17 @@
               "g": "1",
               "special": "Unique"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Party Poppers",
+                "arc": "F/S",
+                "attack": "3",
+                "lock": "4+",
+                "damage": "1",
+                "type": "E",
+                "special": "Status"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -9723,8 +10206,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -9745,7 +10227,17 @@
               "g": "1-2",
               "special": "Vectored, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Mining Laser",
+                "arc": "F",
+                "attack": "3",
+                "lock": "2+",
+                "damage": "2",
+                "type": "E",
+                "special": "Burnthrough-2, Close Action"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -9757,8 +10249,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -9791,8 +10282,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -9813,7 +10303,26 @@
               "g": "1-4",
               "special": "Descent, Monitor, Vectored, Tugging Along"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              },
+              {
+                "name": "Drag to Hell",
+                "arc": "F",
+                "attack": "3",
+                "lock": "3+",
+                "damage": "2",
+                "type": "C",
+                "special": "Close Action"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -9837,8 +10346,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -9859,8 +10367,38 @@
               "g": "1",
               "special": "Marines-1, Unique, Penal Legions"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              },
+              {
+                "name": "Anti-Fighter Lasers",
+                "arc": "F/S/R",
+                "attack": "5",
+                "lock": "3+",
+                "damage": "0",
+                "type": "E",
+                "special": "Anti Wing, Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Drop Pods",
+                "launch": "2",
+                "special": "Alt-1"
+              },
+              {
+                "name": "Boarding Pods",
+                "launch": "2",
+                "special": "Alt-1"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Marines-X",
@@ -9879,8 +10417,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -9921,8 +10458,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -9943,8 +10479,24 @@
               "g": "1",
               "special": "Monitor, Feature Carrier (Outpost)"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Military Outpost",
+                "launch": "1",
+                "special": "Limited-1"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Monitor",
@@ -9955,8 +10507,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -9977,8 +10528,24 @@
               "g": "1",
               "special": "Rare, Reinforced Armour, Acquired Mines"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Expel Hazards",
+                "arc": "F",
+                "attack": "2",
+                "lock": "3+",
+                "damage": "1",
+                "type": "C",
+                "special": "Anti Wing"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Mines",
+                "launch": "3",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Rare",
@@ -9993,8 +10560,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -10015,7 +10581,17 @@
               "g": "1",
               "special": "Porter F-2, Reinforced Armour, Monitor, Scrap Hauler, Scratch Bodge Job, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Colossal Salvage Cutter",
+                "arc": "F",
+                "attack": "5",
+                "lock": "2+",
+                "damage": "3",
+                "type": "C",
+                "special": "Close Action, Bloom-3"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -10039,8 +10615,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "H",
-            "source": "Civilian"
+            "tonnage": "H"
           }
         },
         {
@@ -10061,7 +10636,17 @@
               "g": "-",
               "special": "Payload F-1, Vectored, Scrap Collection, Unload, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Sawblade Prow",
+                "arc": "F",
+                "attack": "2",
+                "lock": "2+",
+                "damage": "2",
+                "type": "C",
+                "special": "Close Action, Bloom-1"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -10081,8 +10666,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -10103,15 +10687,53 @@
               "g": "1",
               "special": "Expansive Radiator Systems"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Heavy Dual Vent Cannon Turret",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "2",
+                "type": "E",
+                "special": "Fusillade-1, Overcharge, Reave-1"
+              },
+              {
+                "name": "NC-16 Missile Bank",
+                "arc": "F/S/R",
+                "attack": "6",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action, Volley-2"
+              },
+              {
+                "name": "Genesis Spikes",
+                "arc": "F/S/R",
+                "attack": "3",
+                "lock": "5+",
+                "damage": "2",
+                "type": "K",
+                "special": "Bombardment, Penetrator"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Fighters & Bombers",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Bulk Landers",
+                "launch": "2",
+                "special": "-"
+              }
+            ],
             "specialRules": [],
             "groupMin": 1,
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "C",
-            "source": "Civilian"
+            "tonnage": "C"
           }
         }
       ],
@@ -13339,8 +13961,34 @@
               "g": "1",
               "special": "Rare, Subservient Mercenaries"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Harpoon Strike",
+                "arc": "F/S/R",
+                "attack": "3",
+                "lock": "4+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Boarding Pods",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Bulk Landers",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Fire Ships",
+                "launch": "3",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Subservient Mercenaries",
@@ -13359,8 +14007,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Misc"
+            "tonnage": "M"
           }
         },
         {
@@ -13381,8 +14028,24 @@
               "g": "1",
               "special": "Marines-2, Stealth, Unique"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "9K Snub Mass Drivers",
+                "arc": "F",
+                "attack": "4",
+                "lock": "2+",
+                "damage": "1",
+                "type": "K",
+                "special": "Critical-1"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Fighters & Bombers",
+                "launch": "1",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Marines-X",
@@ -13401,8 +14064,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "L",
-            "source": "Misc"
+            "tonnage": "L"
           }
         },
         {
@@ -13423,7 +14085,17 @@
               "g": "1",
               "special": "Unique"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Party Poppers",
+                "arc": "F/S",
+                "attack": "3",
+                "lock": "4+",
+                "damage": "1",
+                "type": "E",
+                "special": "Status"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -13435,8 +14107,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -13457,7 +14128,17 @@
               "g": "1-2",
               "special": "Vectored, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Mining Laser",
+                "arc": "F",
+                "attack": "3",
+                "lock": "2+",
+                "damage": "2",
+                "type": "E",
+                "special": "Burnthrough-2, Close Action"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -13469,8 +14150,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -13503,8 +14183,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -13525,7 +14204,26 @@
               "g": "1-4",
               "special": "Descent, Monitor, Vectored, Tugging Along"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              },
+              {
+                "name": "Drag to Hell",
+                "arc": "F",
+                "attack": "3",
+                "lock": "3+",
+                "damage": "2",
+                "type": "C",
+                "special": "Close Action"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -13549,8 +14247,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -13571,8 +14268,38 @@
               "g": "1",
               "special": "Marines-1, Unique, Penal Legions"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              },
+              {
+                "name": "Anti-Fighter Lasers",
+                "arc": "F/S/R",
+                "attack": "5",
+                "lock": "3+",
+                "damage": "0",
+                "type": "E",
+                "special": "Anti Wing, Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Drop Pods",
+                "launch": "2",
+                "special": "Alt-1"
+              },
+              {
+                "name": "Boarding Pods",
+                "launch": "2",
+                "special": "Alt-1"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Marines-X",
@@ -13591,8 +14318,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -13613,8 +14339,24 @@
               "g": "1",
               "special": "Monitor, Feature Carrier (Outpost)"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Military Outpost",
+                "launch": "1",
+                "special": "Limited-1"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Monitor",
@@ -13625,8 +14367,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -13647,8 +14388,24 @@
               "g": "1",
               "special": "Rare, Reinforced Armour, Acquired Mines"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Expel Hazards",
+                "arc": "F",
+                "attack": "2",
+                "lock": "3+",
+                "damage": "1",
+                "type": "C",
+                "special": "Anti Wing"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Mines",
+                "launch": "3",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Rare",
@@ -13663,8 +14420,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -13685,7 +14441,17 @@
               "g": "1",
               "special": "Porter F-2, Reinforced Armour, Monitor, Scrap Hauler, Scratch Bodge Job, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Colossal Salvage Cutter",
+                "arc": "F",
+                "attack": "5",
+                "lock": "2+",
+                "damage": "3",
+                "type": "C",
+                "special": "Close Action, Bloom-3"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -13709,8 +14475,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "H",
-            "source": "Civilian"
+            "tonnage": "H"
           }
         },
         {
@@ -13731,7 +14496,17 @@
               "g": "-",
               "special": "Payload F-1, Vectored, Scrap Collection, Unload, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Sawblade Prow",
+                "arc": "F",
+                "attack": "2",
+                "lock": "2+",
+                "damage": "2",
+                "type": "C",
+                "special": "Close Action, Bloom-1"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -13751,8 +14526,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -13773,15 +14547,53 @@
               "g": "1",
               "special": "Expansive Radiator Systems"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Heavy Dual Vent Cannon Turret",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "2",
+                "type": "E",
+                "special": "Fusillade-1, Overcharge, Reave-1"
+              },
+              {
+                "name": "NC-16 Missile Bank",
+                "arc": "F/S/R",
+                "attack": "6",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action, Volley-2"
+              },
+              {
+                "name": "Genesis Spikes",
+                "arc": "F/S/R",
+                "attack": "3",
+                "lock": "5+",
+                "damage": "2",
+                "type": "K",
+                "special": "Bombardment, Penetrator"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Fighters & Bombers",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Bulk Landers",
+                "launch": "2",
+                "special": "-"
+              }
+            ],
             "specialRules": [],
             "groupMin": 1,
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "C",
-            "source": "Civilian"
+            "tonnage": "C"
           }
         }
       ],
@@ -17254,8 +18066,34 @@
               "g": "1",
               "special": "Rare, Subservient Mercenaries"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Harpoon Strike",
+                "arc": "F/S/R",
+                "attack": "3",
+                "lock": "4+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Boarding Pods",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Bulk Landers",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Fire Ships",
+                "launch": "3",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Subservient Mercenaries",
@@ -17274,8 +18112,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Misc"
+            "tonnage": "M"
           }
         },
         {
@@ -17296,8 +18133,24 @@
               "g": "1",
               "special": "Marines-2, Stealth, Unique"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "9K Snub Mass Drivers",
+                "arc": "F",
+                "attack": "4",
+                "lock": "2+",
+                "damage": "1",
+                "type": "K",
+                "special": "Critical-1"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Fighters & Bombers",
+                "launch": "1",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Marines-X",
@@ -17316,8 +18169,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "L",
-            "source": "Misc"
+            "tonnage": "L"
           }
         },
         {
@@ -17338,7 +18190,17 @@
               "g": "1",
               "special": "Unique"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Party Poppers",
+                "arc": "F/S",
+                "attack": "3",
+                "lock": "4+",
+                "damage": "1",
+                "type": "E",
+                "special": "Status"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -17350,8 +18212,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -17372,7 +18233,17 @@
               "g": "1-2",
               "special": "Vectored, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Mining Laser",
+                "arc": "F",
+                "attack": "3",
+                "lock": "2+",
+                "damage": "2",
+                "type": "E",
+                "special": "Burnthrough-2, Close Action"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -17384,8 +18255,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -17418,8 +18288,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -17440,7 +18309,26 @@
               "g": "1-4",
               "special": "Descent, Monitor, Vectored, Tugging Along"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              },
+              {
+                "name": "Drag to Hell",
+                "arc": "F",
+                "attack": "3",
+                "lock": "3+",
+                "damage": "2",
+                "type": "C",
+                "special": "Close Action"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -17464,8 +18352,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -17486,8 +18373,38 @@
               "g": "1",
               "special": "Marines-1, Unique, Penal Legions"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              },
+              {
+                "name": "Anti-Fighter Lasers",
+                "arc": "F/S/R",
+                "attack": "5",
+                "lock": "3+",
+                "damage": "0",
+                "type": "E",
+                "special": "Anti Wing, Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Drop Pods",
+                "launch": "2",
+                "special": "Alt-1"
+              },
+              {
+                "name": "Boarding Pods",
+                "launch": "2",
+                "special": "Alt-1"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Marines-X",
@@ -17506,8 +18423,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -17548,8 +18464,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -17570,8 +18485,24 @@
               "g": "1",
               "special": "Monitor, Feature Carrier (Outpost)"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Military Outpost",
+                "launch": "1",
+                "special": "Limited-1"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Monitor",
@@ -17582,8 +18513,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -17604,8 +18534,24 @@
               "g": "1",
               "special": "Rare, Reinforced Armour, Acquired Mines"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Expel Hazards",
+                "arc": "F",
+                "attack": "2",
+                "lock": "3+",
+                "damage": "1",
+                "type": "C",
+                "special": "Anti Wing"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Mines",
+                "launch": "3",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Rare",
@@ -17620,8 +18566,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -17642,7 +18587,17 @@
               "g": "1",
               "special": "Porter F-2, Reinforced Armour, Monitor, Scrap Hauler, Scratch Bodge Job, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Colossal Salvage Cutter",
+                "arc": "F",
+                "attack": "5",
+                "lock": "2+",
+                "damage": "3",
+                "type": "C",
+                "special": "Close Action, Bloom-3"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -17666,8 +18621,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "H",
-            "source": "Civilian"
+            "tonnage": "H"
           }
         },
         {
@@ -17688,7 +18642,17 @@
               "g": "-",
               "special": "Payload F-1, Vectored, Scrap Collection, Unload, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Sawblade Prow",
+                "arc": "F",
+                "attack": "2",
+                "lock": "2+",
+                "damage": "2",
+                "type": "C",
+                "special": "Close Action, Bloom-1"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -17708,8 +18672,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -17730,15 +18693,53 @@
               "g": "1",
               "special": "Expansive Radiator Systems"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Heavy Dual Vent Cannon Turret",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "2",
+                "type": "E",
+                "special": "Fusillade-1, Overcharge, Reave-1"
+              },
+              {
+                "name": "NC-16 Missile Bank",
+                "arc": "F/S/R",
+                "attack": "6",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action, Volley-2"
+              },
+              {
+                "name": "Genesis Spikes",
+                "arc": "F/S/R",
+                "attack": "3",
+                "lock": "5+",
+                "damage": "2",
+                "type": "K",
+                "special": "Bombardment, Penetrator"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Fighters & Bombers",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Bulk Landers",
+                "launch": "2",
+                "special": "-"
+              }
+            ],
             "specialRules": [],
             "groupMin": 1,
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "C",
-            "source": "Civilian"
+            "tonnage": "C"
           }
         }
       ],
@@ -22036,8 +23037,34 @@
               "g": "1",
               "special": "Rare, Subservient Mercenaries"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Harpoon Strike",
+                "arc": "F/S/R",
+                "attack": "3",
+                "lock": "4+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Boarding Pods",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Bulk Landers",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Fire Ships",
+                "launch": "3",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Subservient Mercenaries",
@@ -22056,8 +23083,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Misc"
+            "tonnage": "M"
           }
         },
         {
@@ -22078,8 +23104,24 @@
               "g": "1",
               "special": "Marines-2, Stealth, Unique"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "9K Snub Mass Drivers",
+                "arc": "F",
+                "attack": "4",
+                "lock": "2+",
+                "damage": "1",
+                "type": "K",
+                "special": "Critical-1"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Fighters & Bombers",
+                "launch": "1",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Marines-X",
@@ -22098,8 +23140,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "L",
-            "source": "Misc"
+            "tonnage": "L"
           }
         },
         {
@@ -22120,7 +23161,17 @@
               "g": "1",
               "special": "Command Ship-1, Detector, Rare, Advanced Artillery, Magellan Lifeboats"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "N-12 Artillery Cannons",
+                "arc": "F",
+                "attack": "8",
+                "lock": "4+",
+                "damage": "1",
+                "type": "K",
+                "special": "-"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -22148,8 +23199,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "H",
-            "source": "Misc"
+            "tonnage": "H"
           }
         },
         {
@@ -22170,7 +23220,26 @@
               "g": "1",
               "special": "-"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "9K Mass Driver Turret",
+                "arc": "F/S",
+                "attack": "2",
+                "lock": "2+",
+                "damage": "2",
+                "type": "K",
+                "special": "Critical-1, Penetrator"
+              },
+              {
+                "name": "N-31 Hybrid Gun Battery",
+                "arc": "B",
+                "attack": "8",
+                "lock": "4+",
+                "damage": "1",
+                "type": "K",
+                "special": "Volley-2"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -22182,8 +23251,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Misc"
+            "tonnage": "M"
           }
         },
         {
@@ -22204,7 +23272,17 @@
               "g": "1",
               "special": "Unique"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Party Poppers",
+                "arc": "F/S",
+                "attack": "3",
+                "lock": "4+",
+                "damage": "1",
+                "type": "E",
+                "special": "Status"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -22216,8 +23294,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -22238,7 +23315,17 @@
               "g": "1-2",
               "special": "Vectored, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Mining Laser",
+                "arc": "F",
+                "attack": "3",
+                "lock": "2+",
+                "damage": "2",
+                "type": "E",
+                "special": "Burnthrough-2, Close Action"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -22250,8 +23337,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -22284,8 +23370,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -22306,7 +23391,26 @@
               "g": "1-4",
               "special": "Descent, Monitor, Vectored, Tugging Along"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              },
+              {
+                "name": "Drag to Hell",
+                "arc": "F",
+                "attack": "3",
+                "lock": "3+",
+                "damage": "2",
+                "type": "C",
+                "special": "Close Action"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -22330,8 +23434,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -22352,8 +23455,38 @@
               "g": "1",
               "special": "Marines-1, Unique, Penal Legions"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              },
+              {
+                "name": "Anti-Fighter Lasers",
+                "arc": "F/S/R",
+                "attack": "5",
+                "lock": "3+",
+                "damage": "0",
+                "type": "E",
+                "special": "Anti Wing, Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Drop Pods",
+                "launch": "2",
+                "special": "Alt-1"
+              },
+              {
+                "name": "Boarding Pods",
+                "launch": "2",
+                "special": "Alt-1"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Marines-X",
@@ -22372,8 +23505,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": true,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -22414,8 +23546,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -22436,8 +23567,24 @@
               "g": "1",
               "special": "Monitor, Feature Carrier (Outpost)"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Deterrence Missiles",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Military Outpost",
+                "launch": "1",
+                "special": "Limited-1"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Monitor",
@@ -22448,8 +23595,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -22470,8 +23616,24 @@
               "g": "1",
               "special": "Rare, Reinforced Armour, Acquired Mines"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Expel Hazards",
+                "arc": "F",
+                "attack": "2",
+                "lock": "3+",
+                "damage": "1",
+                "type": "C",
+                "special": "Anti Wing"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Mines",
+                "launch": "3",
+                "special": "-"
+              }
+            ],
             "specialRules": [
               {
                 "name": "Rare",
@@ -22486,8 +23648,7 @@
             "groupMax": 1,
             "isRare": true,
             "isUnique": false,
-            "tonnage": "M",
-            "source": "Civilian"
+            "tonnage": "M"
           }
         },
         {
@@ -22508,7 +23669,17 @@
               "g": "1",
               "special": "Porter F-2, Reinforced Armour, Monitor, Scrap Hauler, Scratch Bodge Job, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Colossal Salvage Cutter",
+                "arc": "F",
+                "attack": "5",
+                "lock": "2+",
+                "damage": "3",
+                "type": "C",
+                "special": "Close Action, Bloom-3"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -22532,8 +23703,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "H",
-            "source": "Civilian"
+            "tonnage": "H"
           }
         },
         {
@@ -22554,7 +23724,17 @@
               "g": "-",
               "special": "Payload F-1, Vectored, Scrap Collection, Unload, Industrial Design"
             },
-            "weapons": [],
+            "weapons": [
+              {
+                "name": "Sawblade Prow",
+                "arc": "F",
+                "attack": "2",
+                "lock": "2+",
+                "damage": "2",
+                "type": "C",
+                "special": "Close Action, Bloom-1"
+              }
+            ],
             "loads": [],
             "specialRules": [
               {
@@ -22574,8 +23754,7 @@
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "L",
-            "source": "Civilian"
+            "tonnage": "L"
           }
         },
         {
@@ -22596,15 +23775,53 @@
               "g": "1",
               "special": "Expansive Radiator Systems"
             },
-            "weapons": [],
-            "loads": [],
+            "weapons": [
+              {
+                "name": "Heavy Dual Vent Cannon Turret",
+                "arc": "F/S",
+                "attack": "4",
+                "lock": "3+",
+                "damage": "2",
+                "type": "E",
+                "special": "Fusillade-1, Overcharge, Reave-1"
+              },
+              {
+                "name": "NC-16 Missile Bank",
+                "arc": "F/S/R",
+                "attack": "6",
+                "lock": "3+",
+                "damage": "1",
+                "type": "K",
+                "special": "Close Action, Volley-2"
+              },
+              {
+                "name": "Genesis Spikes",
+                "arc": "F/S/R",
+                "attack": "3",
+                "lock": "5+",
+                "damage": "2",
+                "type": "K",
+                "special": "Bombardment, Penetrator"
+              }
+            ],
+            "loads": [
+              {
+                "name": "Fighters & Bombers",
+                "launch": "4",
+                "special": "-"
+              },
+              {
+                "name": "Bulk Landers",
+                "launch": "2",
+                "special": "-"
+              }
+            ],
             "specialRules": [],
             "groupMin": 1,
             "groupMax": 1,
             "isRare": false,
             "isUnique": false,
-            "tonnage": "C",
-            "source": "Civilian"
+            "tonnage": "C"
           }
         }
       ],
