@@ -216,7 +216,13 @@ const App = (() => {
         });
       }
 
-      shipDB[factionKey] = { groups, admirals: faction.admirals || [] };
+      // Store launch asset profiles for this faction
+      const launchAssets = [];
+      (faction.launchAssets || []).forEach(la => {
+        (la.assets || []).forEach(a => launchAssets.push(a));
+      });
+
+      shipDB[factionKey] = { groups, admirals: faction.admirals || [], launchAssets };
     });
   }
 
@@ -784,6 +790,11 @@ const App = (() => {
           <button class="btn btn-primary btn-sm group-qty-btn" onclick="App.addSameShip('${group.id}')" ${atMax ? 'disabled' : ''} title="Add one more">+</button>
         </div>
       </div>`;
+      // Launch asset reference — show stat profiles for any assets this group can launch
+      const launchAssets = collectGroupLaunchAssets(group, currentFleet.faction);
+      if (launchAssets.length > 0) {
+        html += renderLaunchAssetReference(launchAssets);
+      }
     } else {
       // Empty group — shouldn't happen with new flow, but handle gracefully
       html += `
@@ -809,6 +820,47 @@ const App = (() => {
   }
 
   const WEAPON_TYPE_LABELS = { K: 'Kinetic', E: 'Energy', C: 'Close Action' };
+
+  const ARC_LABELS = {
+    'B': 'Broadside (Port & Starboard)',
+    'F': 'Front',
+    'F/S': 'Front & Side',
+    'F/S/R': 'Front, Side & Rear',
+    'FN': 'Front Narrow',
+    'Fn': 'Front Narrow',
+    'S': 'Side',
+    'SL': 'Side Left',
+    'SR': 'Side Right',
+    'R': 'Rear'
+  };
+
+  const STAT_META = {
+    scan:   { label: 'Scan',   title: 'Scan range — detection distance' },
+    sig:    { label: 'Sig',    title: 'Signature — how visible the ship is' },
+    thrust: { label: 'Thrust', title: 'Thrust — movement speed' },
+    hull:   { label: 'Hull',   title: 'Hull points — structural integrity' },
+    es:     { label: 'ES',     title: 'Energy Shield — save vs Energy weapons', cssClass: 'stat-cell-es' },
+    ks:     { label: 'KS',     title: 'Kinetic Shield — save vs Kinetic weapons', cssClass: 'stat-cell-ks' },
+    bs:     { label: 'BS',     title: 'Backup Save — last-resort save', cssClass: 'stat-cell-bs' },
+    g:      { label: 'G',      title: 'Group size — ships per battle group' }
+  };
+
+  function renderStatGrid(ship) {
+    const keys = ['scan','sig','thrust','hull','es','ks','bs','g'];
+    const cells = keys.map(k => {
+      const v = ship[k];
+      if (v === undefined || v === 0) return '';
+      const meta = STAT_META[k];
+      let cellClass = meta.cssClass || '';
+      // Gray out BS when it's "-"
+      if (k === 'bs' && (v === '-' || v === '--')) cellClass = 'stat-cell-none';
+      return `<div class="stat-cell ${cellClass}" title="${meta.title}">
+        <div class="stat-cell-label">${meta.label}</div>
+        <div class="stat-cell-value">${v}</div>
+      </div>`;
+    }).filter(Boolean).join('');
+    return cells ? `<div class="stat-grid">${cells}</div>` : '';
+  }
 
   // Weapon special rules — descriptions from the rulebook
   const WEAPON_SPECIAL_RULES = {
@@ -872,7 +924,7 @@ const App = (() => {
     const typeClass = w.type ? `weapon-type-${w.type.toLowerCase()}` : '';
     return `<div class="weapon-row">
       <span class="weapon-col weapon-col-name">${esc(w.name)}</span>
-      <span class="weapon-col weapon-col-arc" title="Firing Arc: ${esc(w.arc || '')}">${esc(w.arc || '')}</span>
+      <span class="weapon-col weapon-col-arc" title="${ARC_LABELS[w.arc] || 'Firing Arc: ' + (w.arc || '')}">${esc(w.arc || '')}</span>
       <span class="weapon-col weapon-col-att">${w.attack}</span>
       <span class="weapon-col weapon-col-lock">${w.lock}</span>
       <span class="weapon-col weapon-col-dmg">${w.damage}</span>
@@ -887,18 +939,7 @@ const App = (() => {
     const tonnage = dbShip ? dbShip.tonnage : '';
     const specialRules = dbShip && dbShip.special_rules ? dbShip.special_rules : [];
 
-    let statsHtml = '';
-    if (dbShip) {
-      const stats = [
-        { l: 'Scan', v: dbShip.scan }, { l: 'Sig', v: dbShip.sig },
-        { l: 'Thrust', v: dbShip.thrust }, { l: 'Hull', v: dbShip.hull },
-        { l: 'ES', v: dbShip.es }, { l: 'KS', v: dbShip.ks },
-        { l: 'BS', v: dbShip.bs }, { l: 'G', v: dbShip.g }
-      ];
-      statsHtml = '<div class="stat-grid">' + stats.filter(s => s.v !== undefined && s.v !== 0).map(s =>
-        `<div class="stat-cell"><div class="stat-cell-label">${s.l}</div><div class="stat-cell-value">${s.v}</div></div>`
-      ).join('') + '</div>';
-    }
+    const statsHtml = dbShip ? renderStatGrid(dbShip) : '';
 
     // Base weapons
     let weaponsHtml = '';
@@ -1100,13 +1141,6 @@ const App = (() => {
   }
 
   function renderShipSelectCard({ key, data, category }) {
-    const stats = [
-      { l: 'Scan', v: data.scan }, { l: 'Sig', v: data.sig },
-      { l: 'Thr', v: data.thrust }, { l: 'Hull', v: data.hull },
-      { l: 'ES', v: data.es }, { l: 'KS', v: data.ks },
-      { l: 'BS', v: data.bs }, { l: 'G', v: data.g }
-    ].filter(s => s.v !== undefined && s.v !== 0 && s.v !== '-');
-
     const catLabel = CATEGORY_LABELS[category] || category;
     const specialRules = data.special_rules || [];
 
@@ -1120,9 +1154,7 @@ const App = (() => {
         </div>
         <div class="ship-card-cost">${data.points || 0}<span style="font-size:var(--text-sm);font-weight:var(--weight-regular)"> pts</span></div>
       </div>
-      <div class="stat-grid">
-        ${stats.map(s => `<div class="stat-cell"><div class="stat-cell-label">${s.l}</div><div class="stat-cell-value">${s.v}</div></div>`).join('')}
-      </div>
+      ${renderStatGrid(data)}
       ${specialRules.length > 0 ? `<div class="special-rules">${specialRules.slice(0, 4).map(r => {
         const detail = (data.specialRuleDetails || []).find(d => d.name === r);
         if (detail && detail.description) {
@@ -1531,6 +1563,117 @@ const App = (() => {
       toast.style.transform = 'translateX(-50%) translateY(0)';
       setTimeout(() => { toast.style.transform = 'translateX(-50%) translateY(100px)'; }, 2500);
     });
+  }
+
+  // ── Launch Asset Reference ──
+  // Collects all unique launch asset profiles needed by ships in a group.
+  // Splits compound load names like "Fighters & Bombers" into individual
+  // asset lookups against the faction's launch asset table.
+  function collectGroupLaunchAssets(group, factionKey) {
+    const factionInfo = shipDB[factionKey];
+    if (!factionInfo || !factionInfo.launchAssets || factionInfo.launchAssets.length === 0) return [];
+
+    const assetsByName = {};
+    factionInfo.launchAssets.forEach(a => { assetsByName[a.name.toLowerCase()] = a; });
+
+    const needed = new Set();
+    const result = [];
+
+    group.ships.forEach(ship => {
+      const dbShip = findShipInDB(factionKey, ship.groupCategory, ship.shipKey);
+      if (!dbShip) return;
+
+      // Gather loads from base ship
+      const allLoads = [...(dbShip.loads || [])];
+
+      // Gather loads from selected loadout options
+      const loadoutOpts = dbShip.loadoutOptions || [];
+      loadoutOpts.forEach((lo, loIdx) => {
+        const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
+        const selOpt = lo.options[selIdx];
+        if (selOpt && selOpt.loads) {
+          allLoads.push(...selOpt.loads);
+        }
+      });
+
+      allLoads.forEach(load => {
+        if (!load.name) return;
+        // Split compound names: "Fighters & Bombers" → ["Fighters", "Bombers"]
+        const parts = load.name.split(/\s*&\s*/);
+        parts.forEach(part => {
+          const key = part.trim().toLowerCase();
+          if (!needed.has(key) && assetsByName[key]) {
+            needed.add(key);
+            result.push(assetsByName[key]);
+          }
+        });
+      });
+    });
+
+    return result;
+  }
+
+  // Renders the full launch asset reference panel — stat table for each
+  // asset type the group's ships can launch.
+  function renderLaunchAssetReference(assets) {
+    if (!assets || assets.length === 0) return '';
+
+    // Separate fighters (no attack/damage) from offensive assets
+    const offensive = assets.filter(a => a.attack);
+    const defensive = assets.filter(a => a.ksReroll !== undefined && !a.attack);
+
+    let html = '<div class="launch-ref">';
+    html += '<div class="launch-ref-header">Launch Asset Reference</div>';
+
+    // Offensive assets table (torpedoes, bombers, mines)
+    if (offensive.length > 0) {
+      html += `<div class="launch-ref-table">
+        <div class="launch-ref-row launch-ref-row-header">
+          <span class="launch-ref-col launch-ref-col-name">Asset</span>
+          <span class="launch-ref-col launch-ref-col-thrust">Thrust</span>
+          <span class="launch-ref-col launch-ref-col-att">Att</span>
+          <span class="launch-ref-col launch-ref-col-lock">Lk</span>
+          <span class="launch-ref-col launch-ref-col-dmg">Dmg</span>
+          <span class="launch-ref-col launch-ref-col-type">Type</span>
+          <span class="launch-ref-col launch-ref-col-special">Special</span>
+        </div>`;
+      offensive.forEach(a => {
+        const typeLabel = WEAPON_TYPE_LABELS[a.type] || a.type || '';
+        const typeClass = a.type ? `weapon-type-${a.type.toLowerCase()}` : '';
+        const special = a.special && a.special !== '-' ? a.special : '';
+        html += `<div class="launch-ref-row">
+          <span class="launch-ref-col launch-ref-col-name">${esc(a.name)}</span>
+          <span class="launch-ref-col launch-ref-col-thrust">${esc(a.thrust)}</span>
+          <span class="launch-ref-col launch-ref-col-att">${a.attack}</span>
+          <span class="launch-ref-col launch-ref-col-lock">${a.lock}</span>
+          <span class="launch-ref-col launch-ref-col-dmg">${a.damage}</span>
+          <span class="launch-ref-col launch-ref-col-type ${typeClass}" title="${typeLabel}">${a.type || ''}</span>
+          <span class="launch-ref-col launch-ref-col-special">${special ? renderWeaponSpecialChips(special) : ''}</span>
+        </div>`;
+      });
+      html += '</div>';
+    }
+
+    // Fighters table (different stat line — thrust + KS reroll)
+    if (defensive.length > 0) {
+      html += `<div class="launch-ref-table">
+        <div class="launch-ref-row launch-ref-row-header">
+          <span class="launch-ref-col launch-ref-col-name">Asset</span>
+          <span class="launch-ref-col launch-ref-col-thrust">Thrust</span>
+          <span class="launch-ref-col launch-ref-col-special">Kinetic Save Reroll</span>
+        </div>`;
+      defensive.forEach(a => {
+        html += `<div class="launch-ref-row">
+          <span class="launch-ref-col launch-ref-col-name">${esc(a.name)}</span>
+          <span class="launch-ref-col launch-ref-col-thrust">${esc(a.thrust)}</span>
+          <span class="launch-ref-col launch-ref-col-special">Reroll ${a.ksReroll} KS die per Fighter token</span>
+        </div>`;
+      });
+      html += '</div>';
+    }
+
+    html += '</div>';
+    return html;
   }
 
   // ── Helpers ──

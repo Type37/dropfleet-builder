@@ -957,6 +957,15 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink);
 }
 
+/* Color-coded stat cells */
+.stat-cell-es { border-bottom: 2px solid #8b5e1a; }
+.stat-cell-es .stat-cell-value { color: #8b5e1a; }
+.stat-cell-ks { border-bottom: 2px solid var(--navy); }
+.stat-cell-ks .stat-cell-value { color: var(--navy); }
+.stat-cell-bs { border-bottom: 2px solid var(--gold-dark); }
+.stat-cell-bs .stat-cell-value { color: var(--gold-dark); }
+.stat-cell-none .stat-cell-value { color: var(--ink-faint); opacity: 0.4; }
+
 /* ── 15. Weapon Table ────────────────────────────────────────── */
 .weapon-list {
   display: flex;
@@ -1074,6 +1083,68 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink);
   flex-shrink: 0;
 }
+
+/* Launch asset reference panel */
+.launch-ref {
+  margin-top: var(--sp-md);
+  border: 1px solid var(--stroke-medium);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.launch-ref-header {
+  font-family: var(--font-header);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  padding: var(--sp-sm) var(--sp-md);
+  background: var(--warm);
+  border-bottom: 1px solid var(--stroke-light);
+}
+
+.launch-ref-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.launch-ref-table + .launch-ref-table {
+  border-top: 1px solid var(--stroke-light);
+}
+
+.launch-ref-row {
+  display: flex;
+  align-items: center;
+  padding: var(--sp-xs) var(--sp-md);
+  border-bottom: 1px solid var(--stroke-light);
+  font-family: var(--font-stat);
+  font-size: var(--text-sm);
+  gap: var(--sp-xs);
+}
+
+.launch-ref-row:last-child {
+  border-bottom: none;
+}
+
+.launch-ref-row-header {
+  font-weight: var(--weight-bold);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+  background: var(--warm);
+}
+
+.launch-ref-col { flex-shrink: 0; }
+.launch-ref-col-name { flex: 1 1 auto; min-width: 100px; font-weight: var(--weight-bold); color: var(--ink); }
+.launch-ref-col-thrust { width: 52px; text-align: center; }
+.launch-ref-col-att { width: 32px; text-align: center; }
+.launch-ref-col-lock { width: 32px; text-align: center; }
+.launch-ref-col-dmg { width: 32px; text-align: center; }
+.launch-ref-col-type { width: 32px; text-align: center; }
+.launch-ref-col-special { flex: 1 1 auto; display: flex; flex-wrap: wrap; gap: 3px; }
 
 /* Loadout selectors */
 .loadout-selector {
@@ -1723,6 +1794,11 @@ h1, h2, h3, h4, h5, h6 {
   .loadout-weapons { border-left-color: #999; }
   .rule-chip { background: #eee; color: #333; }
   .badge { border: 1px solid #ccc; background: #f5f5f5; }
+  .launch-ref { border-color: #ccc; break-inside: avoid; }
+  .launch-ref-header { background: #f5f5f5; border-color: #ddd; }
+  .launch-ref-row { border-color: #ddd; }
+  .launch-ref-row-header { background: #f5f5f5; }
+  .group-quantity-bar { display: none; }
 }
 
 /* ── 26. Responsive ──────────────────────────────────────────── */
@@ -1813,6 +1889,9 @@ h1, h2, h3, h4, h5, h6 {
   .weapon-col-special { flex-basis: 100%; padding-left: 0; }
   .load-row { flex-direction: column; align-items: flex-start; }
   .loadout-selector { flex-direction: column; align-items: flex-start; }
+  .launch-ref-row { flex-wrap: wrap; }
+  .launch-ref-col-name { flex-basis: 100%; }
+  .launch-ref-col-special { flex-basis: 100%; padding-left: 0; }
 }
 
 /* ── 27. Tooltip ─────────────────────────────────────────────── */
