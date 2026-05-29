@@ -910,64 +910,169 @@ const App = (() => {
   }
 
   // ── Demo Fleets ──
+  // Each demo fleet is a legal Clash-size roster with proper group structure:
+  // one ship type per group, quantities within the ship's G stat range.
   function loadDemoFleets() {
     if (fleets.some(f => f.name.includes('Demo'))) {
       showToast('Demo fleets already loaded');
       return;
     }
 
+    // Helper: find a ship key by name within a faction+category
+    // Prefers exact match, then starts-with, then substring
+    function findShipKey(factionKey, category, namePart) {
+      const faction = shipDB[factionKey];
+      if (!faction || !faction.groups || !faction.groups[category]) return null;
+      const ships = faction.groups[category].ships;
+      const lc = namePart.toLowerCase();
+      let substringMatch = null;
+      for (const [key, ship] of Object.entries(ships)) {
+        const sn = ship.name.toLowerCase();
+        if (sn === lc || sn === lc + 's') return { key, ship }; // exact (plural-tolerant)
+        if (!substringMatch && sn.startsWith(lc)) substringMatch = { key, ship };
+        if (!substringMatch && sn.includes(lc)) substringMatch = { key, ship };
+      }
+      return substringMatch;
+    }
+
+    // Helper: build N copies of the same ship for a group
+    function makeGroup(factionKey, groupName, category, namePart, qty) {
+      const found = findShipKey(factionKey, category, namePart);
+      if (!found) return null;
+      const { key, ship } = found;
+      const ships = [];
+      for (let i = 0; i < qty; i++) {
+        const loadouts = {};
+        let loadoutCost = 0;
+        if (ship.loadoutOptions && ship.loadoutOptions.length > 0) {
+          ship.loadoutOptions.forEach((lo, loIdx) => {
+            loadouts[loIdx] = 0;
+            loadoutCost += lo.options[0]?.cost || 0;
+          });
+        }
+        ships.push({ id: uuid(), shipKey: key, groupCategory: category, points: (ship.points || 0) + loadoutCost, loadouts });
+      }
+      return { id: uuid(), name: groupName || ship.name, ships };
+    }
+
+    // Fleet composition specs: [category, shipNameSubstring, quantity]
     const demoSpecs = [
-      { faction: 'ucm', name: 'Demo - UCM Battlefleet', desc: 'A balanced UCM strike force' },
-      { faction: 'scourge', name: 'Demo - Scourge Swarm', desc: 'An aggressive Scourge raiding force' }
+      {
+        faction: 'ucm', name: 'Demo - UCM Battlefleet',
+        desc: 'A balanced UCM strike force built around a Beijing Battleship, with cruiser and frigate escort.',
+        groups: [
+          ['heavy',  'Beijing',          1],
+          ['heavy',  'Siam',             1],
+          ['medium', 'Glasgow',          2],
+          ['medium', 'Seattle',          1],
+          ['medium', 'Berlin',           2],
+          ['light',  'Havana',           3],
+          ['light',  'New Orleans',      2],
+          ['light',  'Jakarta',          2],
+          ['light',  'Toulon',           4],
+          ['light',  'Santiago',         3],
+        ]
+      },
+      {
+        faction: 'scourge', name: 'Demo - Scourge Swarm',
+        desc: 'An aggressive Scourge raiding force that overwhelms with numbers and close-range firepower.',
+        groups: [
+          ['heavy',  'Akuma',            1],
+          ['heavy',  'Shadow',           1],
+          ['medium', 'Wyvern',           2],
+          ['medium', 'Ifrit',            2],
+          ['medium', 'Yokai',            3],
+          ['light',  'Gargoyle',         2],
+          ['light',  'Djinn',            4],
+          ['light',  'Nickar',           3],
+          ['light',  'Scylla',           3],
+        ]
+      },
+      {
+        faction: 'phr', name: 'Demo - PHR Phalanx',
+        desc: 'A heavily armoured PHR battleline. Fewer ships, but each one hits like a freight train.',
+        groups: [
+          ['heavy',  'Agrippa',          1],
+          ['heavy',  'Pompeius',         1],
+          ['medium', 'Orion',            2],
+          ['medium', 'Ajax',             2],
+          ['medium', 'Otera',            3],
+          ['light',  'Cadmus',           3],
+          ['light',  'Medea',            2],
+          ['light',  'Pandora',          4],
+          ['light',  'Echo',             4],
+        ]
+      },
+      {
+        faction: 'shaltari', name: 'Demo - Shaltari Warhost',
+        desc: 'A Shaltari gate network fleet using Voidgates to teleport troops and redirect firepower.',
+        groups: [
+          ['heavy',  'Hematite',         1],
+          ['heavy',  'Sapphire',         1],
+          ['medium', 'Turquoise',        2],
+          ['medium', 'Amber',            2],
+          ['medium', 'Azurite',          3],
+          ['light',  'Cobalt',           2],
+          ['light',  'Amethyst',         4],
+          ['light',  'Jade',             3],
+          ['light',  'Voidgate',         3],
+          ['light',  'Glass',            4],
+        ]
+      },
+      {
+        faction: 'bioficer', name: 'Demo - Bioficer Swarm',
+        desc: 'A Bioficer organism fleet. Organic ships with modular payload cells for flexible tactics.',
+        groups: [
+          ['heavy',  'Sanctum',          1],
+          ['heavy',  'Stature',          1],
+          ['medium', 'Cosmic',           2],
+          ['medium', 'Comet',            2],
+          ['medium', 'Charger',          3],
+          ['light',  'Disciple',         3],
+          ['light',  'Tine',             3],
+          ['light',  'Fresco',           6],
+          ['light',  'Vertex',           3],
+        ]
+      },
+      {
+        faction: 'resistance', name: 'Demo - Resistance Flotilla',
+        desc: 'A ragtag Resistance fleet of refitted civilian ships and repurposed warships.',
+        groups: [
+          ['heavy',  'Vanguard',         1],
+          ['heavy',  'Senator',          1],
+          ['medium', 'Gladiator',        1],
+          ['medium', 'Cruiser',          2],
+          ['medium', 'Light Cruiser',    3],
+          ['light',  'Armstrong',        3],
+          ['light',  'Strike Carrier',   3],
+          ['light',  'Heavy Frigate',    4],
+          ['light',  'Frigate',          6],
+        ]
+      }
     ];
 
+    let loaded = 0;
     demoSpecs.forEach(spec => {
-      const factionShips = shipDB[spec.faction];
-      if (!factionShips || !factionShips.groups) return;
-      const groups = factionShips.groups;
-
+      if (!shipDB[spec.faction]) return;
       const battleGroups = [];
+      spec.groups.forEach(([cat, name, qty]) => {
+        const g = makeGroup(spec.faction, null, cat, name, qty);
+        if (g) battleGroups.push(g);
+      });
+      if (battleGroups.length === 0) return;
 
-      function pickShips(catKey, count) {
-        if (!groups[catKey] || !groups[catKey].ships) return [];
-        const entries = Object.entries(groups[catKey].ships);
-        const picked = [];
-        for (let i = 0; i < Math.min(count, entries.length); i++) {
-          const [key, ship] = entries[i];
-          const loadouts = {};
-          let loadoutCost = 0;
-          if (ship.loadoutOptions && ship.loadoutOptions.length > 0) {
-            ship.loadoutOptions.forEach((lo, loIdx) => {
-              loadouts[loIdx] = 0;
-              loadoutCost += lo.options[0]?.cost || 0;
-            });
-          }
-          picked.push({ id: uuid(), shipKey: key, groupCategory: catKey, points: (ship.points || 0) + loadoutCost, loadouts });
-        }
-        return picked;
-      }
-
-      if (groups.heavy) {
-        battleGroups.push({ id: uuid(), name: 'Group 1', ships: pickShips('heavy', 2) });
-      }
-      if (groups.medium) {
-        battleGroups.push({ id: uuid(), name: 'Group 2', ships: pickShips('medium', 3) });
-      }
-      if (groups.light) {
-        battleGroups.push({ id: uuid(), name: 'Group 3', ships: pickShips('light', 2) });
-      }
-
-      const fleet = {
+      fleets.push({
         id: uuid(), name: spec.name, description: spec.desc,
         faction: spec.faction, gameSize: 'clash', pointsLimit: 2000, maxGroups: 20,
-        admirals: [], battleGroups, createdAt: Date.now(), updatedAt: Date.now()
-      };
-      fleets.push(fleet);
+        admirals: [], battleGroups, spaceStation: null,
+        createdAt: Date.now() - (5 - loaded) * 60000, updatedAt: Date.now() - (5 - loaded) * 60000
+      });
+      loaded++;
     });
 
     saveFleets();
     renderFleetList();
-    showToast('Demo fleets loaded!');
+    showToast(`${loaded} demo fleet${loaded !== 1 ? 's' : ''} loaded!`);
   }
 
   // ── Builder View ──
