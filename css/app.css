@@ -3321,6 +3321,34 @@ h1, h2, h3, h4, h5, h6 {
 }
 .overview-valid-warn::before { content: 'NOTE: '; font-weight: var(--weight-semibold); color: var(--ink-muted); }
 
+.overview-desc {
+  margin-bottom: var(--sp-lg);
+}
+.overview-desc-input {
+  width: 100%;
+  background: transparent;
+  border: 1px dashed var(--stroke-light);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-sm) var(--sp-md);
+  font-family: var(--font-reading);
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
+}
+.overview-desc-input:focus {
+  outline: none;
+  border-color: var(--navy);
+  border-style: solid;
+  background: var(--paper);
+  color: var(--ink);
+}
+.overview-desc-input::placeholder {
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
 /* ── 27. Ship Detail Modal ───────────────────────────────────── */
 .detail-hero {
   display: flex;

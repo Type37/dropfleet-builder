@@ -1433,14 +1433,23 @@ const App = (() => {
             <div class="overview-pts-cap">${sizeInfo.max !== 99999 ? '/ ' + sizeInfo.max : ''} pts</div>
           </div>
         </div>
+        <div class="overview-desc" onclick="this.querySelector('.overview-desc-input')?.focus()">
+          <textarea class="overview-desc-input" placeholder="Add fleet notes..." rows="2" onblur="App.saveFleetDesc(this.value)" onkeydown="if(event.key==='Escape'){this.blur()}">${esc(f.description || '')}</textarea>
+        </div>
         ${validHtml}
         <div class="overview-section">
           <div class="overview-section-label">Battle Groups (${f.battleGroups.length})</div>
-          <div class="overview-groups">${groupCards}</div>
+          <div class="overview-groups stagger">${groupCards}</div>
         </div>
         ${admHtml}
         ${stationHtml}
       </div>`;
+  }
+
+  function saveFleetDesc(val) {
+    if (!currentFleet) return;
+    currentFleet.description = val.trim();
+    saveFleets();
   }
 
   // ── Active Group View ──
@@ -3737,6 +3746,6 @@ const App = (() => {
     openStationModal, selectStation, removeStation,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard,
-    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail
+    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail, saveFleetDesc
   };
 })();
