@@ -2143,8 +2143,8 @@ const App = (() => {
         ${compact ? '' : loadoutsHtml}
         ${compact ? '' : loadsHtml}
         ${rulesHtml}
-        ${compact ? '' : variantsHtml}
         ${compact ? '' : loreHtml}
+        ${compact ? '' : variantsHtml}
       </div>
       <button class="btn btn-ghost btn-icon btn-sm group-ship-remove" onclick="App.removeShip('${groupId}','${ship.id}')" data-tooltip="Remove ship"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>`;
@@ -3976,8 +3976,7 @@ const App = (() => {
     const shipNames = shipsPart.slice(0, splitIdx).trim();
     const loreBody = shipsPart.slice(splitIdx + 1).trim();
     const paras = loreBody.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('');
-    return `${paras}
-      <div class="lore-famous-ships"><strong>${esc(prefix)}</strong> <em>${esc(shipNames)}</em></div>`;
+    return `${paras}<div class="lore-famous-ships"><strong>${esc(prefix)}</strong> <em>${esc(shipNames)}</em></div>`;
   }
 
   function formatTimeAgo(date) {
@@ -4110,8 +4109,8 @@ const App = (() => {
       ${loadoutsHtml}
       ${loadsHtml}
       ${rulesHtml}
-      ${variantsHtml}
       ${loreHtml}
+      ${variantsHtml}
     `;
 
     openModal('modal-ship-detail');
