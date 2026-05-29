@@ -2108,7 +2108,7 @@ const App = (() => {
       const openAttr = settings.autoExpandLore ? ' open' : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
-        <div class="ship-lore-text">${esc(loreText)}</div>
+        <div class="ship-lore-text">${formatLore(loreText)}</div>
       </details>`;
     }
 
@@ -3953,6 +3953,19 @@ const App = (() => {
     return div.innerHTML;
   }
 
+  function formatLore(text) {
+    if (!text) return '';
+    const m = text.match(/^((?:In)?famous ships of the class:\s*)(.+)/i);
+    if (!m) return `<p>${esc(text)}</p>`;
+    const shipsPart = m[2];
+    const splitIdx = shipsPart.search(/ The [A-Z]/);
+    if (splitIdx < 0) return `<p>${esc(text)}</p>`;
+    const shipNames = shipsPart.slice(0, splitIdx).trim();
+    const loreBody = shipsPart.slice(splitIdx + 1).trim();
+    return `<p>${esc(loreBody)}</p>
+      <div class="lore-famous-ships"><strong>Known ships of the class:</strong> <em>${esc(shipNames)}</em></div>`;
+  }
+
   function formatTimeAgo(date) {
     const now = Date.now();
     const diff = now - date.getTime();
@@ -4062,7 +4075,7 @@ const App = (() => {
     if (dbShip.lore) {
       loreHtml = `<div class="detail-lore">
         <div class="detail-section-label">Lore</div>
-        <p class="text-rules">${esc(dbShip.lore)}</p>
+        <div class="text-rules">${formatLore(dbShip.lore)}</div>
       </div>`;
     }
 

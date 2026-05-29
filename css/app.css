@@ -11,7 +11,7 @@
   --font-brand: "Arkhip", "Roboto Slab", serif;
   --font-reading: var(--font-lore);
   --font-condensed: "Barlow Condensed", "Arial Narrow", sans-serif;
-  --font-lore: "Cardo", "Georgia", serif;
+  --font-lore: "Libre Baskerville", "Georgia", serif;
   --font-mono: Consolas, "Courier New", monospace;
 
   /* Font Sizes */
@@ -2068,6 +2068,21 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-soft);
   background: var(--paper-alt);
   border-top: 1px solid var(--stroke-light);
+}
+.ship-lore-text p { margin: 0; }
+.lore-famous-ships {
+  margin-top: var(--sp-sm);
+  font-family: var(--font-lore);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+.lore-famous-ships strong {
+  font-weight: var(--weight-bold);
+  color: var(--ink-soft);
+}
+.lore-famous-ships em {
+  font-style: italic;
 }
 
 /* ── 16. Ship Cards (selection modal) ────────────────────────── */
