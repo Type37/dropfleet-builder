@@ -161,14 +161,17 @@
       <main class="builder-main" id="builder-main">
         <div class="empty-state" id="builder-empty">
           <div class="empty-state-icon">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.3">
-              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
-              <path d="M12 8v4l3 3"/>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.25">
+              <path d="M2 20l10-6 10 6"/>
+              <path d="M12 14V2"/>
+              <path d="M5 17l7-4 7 4"/>
+              <path d="M8 6l4-4 4 4"/>
+              <path d="M6 10l6-3 6 3"/>
             </svg>
           </div>
           <h2 class="empty-state-title">Ready to build</h2>
-          <p class="empty-state-desc">Add a group from the sidebar to start assembling your fleet. Each group contains ships of the same type.</p>
-          <button class="btn btn-primary btn-lg" onclick="App.addGroup()">+ Add First Group</button>
+          <p class="empty-state-desc">Select a group from the sidebar, or add your first group to start assembling your fleet. Each group contains ships of the same type.</p>
+          <button class="btn btn-primary" onclick="App.addGroup()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> Add First Group</button>
         </div>
         <div class="hidden" id="builder-content">
           <!-- Group view rendered here -->
