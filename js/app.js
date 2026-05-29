@@ -493,9 +493,9 @@ const App = (() => {
         n: g.name,
         sh: g.ships.map(s => {
           const entry = { c: s.groupCategory, k: s.shipKey, p: s.points };
-          if (s.loadoutSelections && Object.keys(s.loadoutSelections).length > 0) {
-            entry.l = s.loadoutSelections;
-          }
+          if (s.loadouts && Object.keys(s.loadouts).length > 0) entry.l = s.loadouts;
+          if (s.feature) entry.ft = s.feature;
+          if (s.systems && s.systems.length > 0) entry.sy = s.systems;
           return entry;
         })
       }))
@@ -545,7 +545,9 @@ const App = (() => {
             groupCategory: s.c,
             shipKey: s.k,
             points: s.p,
-            loadoutSelections: s.l || {}
+            loadouts: s.l || {},
+            feature: s.ft || undefined,
+            systems: s.sy || []
           }))
         })),
         spaceStation: null,
@@ -3517,6 +3519,37 @@ const App = (() => {
           if (selOpt && selOpt.weapons) collectWeaponSpecials(selOpt.weapons);
         });
 
+        // Chosen Systems / Hardpoint options (Resistance) — these carry the
+        // ship's actual weapons/loads, so they MUST print.
+        let systemsPrintHtml = '';
+        const sysList = systemsListFor(db, f.faction);
+        if (sysList && ship.systems && ship.systems.length) {
+          const counts = {};
+          ship.systems.forEach(n => { counts[n] = (counts[n] || 0) + 1; });
+          const sysWeapons = [];
+          const rows = Object.entries(counts).map(([nm, c]) => {
+            const o = findSystemOption(sysList, nm);
+            if (!o) return '';
+            (o.weapons || []).forEach(w => sysWeapons.push(w));
+            const w = (o.weapons || [])[0];
+            const l = (o.loads || [])[0];
+            const detail = w ? `${w.arc} · ${w.attack}/${w.lock}/${w.damage}${w.special && w.special !== '-' ? ' · ' + w.special : ''}`
+              : l ? `Launch ${l.launch}${l.special && l.special !== '-' ? ', ' + l.special : ''}`
+              : (o.effect || '');
+            return `<div class="print-rule-entry"><span class="print-rule-name">${c > 1 ? c + 'x ' : ''}${esc(nm)}</span>${detail ? ` — ${esc(detail)}` : ''}</div>`;
+          }).join('');
+          collectWeaponSpecials(sysWeapons);
+          systemsPrintHtml = `<div class="print-rules-inline"><div class="print-rules-heading">${esc(db.systemSelection.listName)}</div>${rows}</div>`;
+        }
+
+        // Chosen Deployable Feature (Feature Carriers)
+        let featurePrintHtml = '';
+        if (ship.feature) {
+          const feat = ((shipDB[f.faction] || {}).deployableFeatures || []).find(df => df.name === ship.feature);
+          const fStat = feat ? (feat.features || []).map(x => `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? ` · ${x.special}` : ''}`).join('; ') : '';
+          featurePrintHtml = `<div class="print-rules-inline"><div class="print-rules-heading">Deployable Feature</div><div class="print-rule-entry"><span class="print-rule-name">${esc(ship.feature)}</span>${fStat ? ` — ${esc(fStat)}` : ''}</div></div>`;
+        }
+
         // Rules — inline with full descriptions for print
         const ruleDetails = db.specialRuleDetails || [];
         const ruleNames = ruleDetails.map(r => esc(r.name)).join(', ') ||
@@ -3598,6 +3631,8 @@ const App = (() => {
           </div>
           ${wpnsHtml}
           ${loadoutWpnsHtml}
+          ${systemsPrintHtml}
+          ${featurePrintHtml}
           ${loadsHtml}
           ${rulesInlineHtml}
           ${weaponAbilitiesHtml}
