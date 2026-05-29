@@ -17,6 +17,7 @@ const App = (() => {
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
   let settings = { showAuxiliaries: true, compactView: false, autoExpandLore: false };
+  let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Game sizes per rulebook Section 4.2. maxAdmiralLevel is the highest admiral
   // level permitted at this game size (not a cap on the number of admirals —
@@ -760,10 +761,33 @@ const App = (() => {
     showToast(`Duplicated "${src.name}"`);
   }
 
+  function sortFleetList(mode) {
+    fleetSortMode = mode;
+    document.querySelectorAll('.fleet-sort-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.sort === mode);
+    });
+    renderFleetList();
+  }
+
   // ── Fleet List View ──
   function renderFleetList() {
     const grid = document.getElementById('fleet-grid');
-    const cards = fleets.map(f => {
+    const sortBar = document.getElementById('fleet-sort-bar');
+    if (sortBar) sortBar.style.display = fleets.length > 1 ? '' : 'none';
+
+    // Sort fleets before rendering
+    const sortedFleets = [...fleets];
+    if (fleetSortMode === 'name') {
+      sortedFleets.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (fleetSortMode === 'faction') {
+      sortedFleets.sort((a, b) => a.faction.localeCompare(b.faction) || a.name.localeCompare(b.name));
+    } else if (fleetSortMode === 'points') {
+      sortedFleets.sort((a, b) => calcFleetPoints(b) - calcFleetPoints(a));
+    } else {
+      sortedFleets.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+    }
+
+    const cards = sortedFleets.map(f => {
       const pts = calcFleetPoints(f);
       const sizeInfo = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
       const fName = (factionData[f.faction] || {}).name || f.faction.toUpperCase();
@@ -3538,7 +3562,7 @@ const App = (() => {
 
   // ── Public API ──
   return {
-    navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName,
+    navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup, moveGroup,
     openShipSelectModal, filterCategory, toggleShipFilter, searchShips, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
     openAdmiralModal, addGenericAdmiral, addFamousAdmiral, removeAdmiral,

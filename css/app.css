@@ -1390,6 +1390,44 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.6;
 }
 
+/* Fleet sort bar */
+.fleet-sort-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  margin-bottom: var(--sp-lg);
+}
+.fleet-sort-label {
+  font-family: var(--font-condensed);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  margin-right: var(--sp-xs);
+}
+.fleet-sort-btn {
+  background: none;
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-xs) var(--sp-md);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+.fleet-sort-btn:hover {
+  border-color: var(--navy);
+  color: var(--navy);
+}
+.fleet-sort-btn.active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
 /* ── 14. Ship Stats Grid ─────────────────────────────────────── */
 .stat-grid {
   display: grid;

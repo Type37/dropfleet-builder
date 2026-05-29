@@ -81,6 +81,13 @@
         <button class="btn btn-primary" onclick="App.openNewFleetModal()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> New Fleet</button>
       </div>
     </div>
+    <div class="fleet-sort-bar" id="fleet-sort-bar">
+      <span class="fleet-sort-label">Sort by</span>
+      <button class="fleet-sort-btn active" data-sort="updated" onclick="App.sortFleetList('updated')">Recent</button>
+      <button class="fleet-sort-btn" data-sort="name" onclick="App.sortFleetList('name')">Name</button>
+      <button class="fleet-sort-btn" data-sort="faction" onclick="App.sortFleetList('faction')">Faction</button>
+      <button class="fleet-sort-btn" data-sort="points" onclick="App.sortFleetList('points')">Points</button>
+    </div>
     <div class="fleet-grid" id="fleet-grid">
       <!-- Populated by JS -->
     </div>
