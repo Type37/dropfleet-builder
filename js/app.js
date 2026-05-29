@@ -255,6 +255,7 @@ const App = (() => {
         rulesText: s.rulesText || '',
         famousShipsPrefix: s.famousShipsPrefix || '',
         famousShips: s.famousShips || [],
+        namesake: s.namesake || '',
         image: shipArtPath(s.name),
         variants: s.variants || [],
         systemSelection: s.systemSelection || null
@@ -2367,9 +2368,20 @@ const App = (() => {
     if (loreText) {
       const loreId = `lore-${ship.id}`;
       const openAttr = settings.autoExpandLore ? ' open' : '';
+      const namesakeHtml = dbShip.namesake
+        ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake</span>${esc(dbShip.namesake)}</div>`
+        : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
-        <div class="ship-lore-text">${formatLore(loreText, dbShip.famousShipsPrefix, dbShip.famousShips)}</div>
+        <div class="ship-lore-text">${formatLore(loreText, dbShip.famousShipsPrefix, dbShip.famousShips)}${namesakeHtml}</div>
+      </details>`;
+    } else if (dbShip.namesake) {
+      // Namesake flavour even when there's no main lore block
+      const loreId = `lore-${ship.id}`;
+      const openAttr = settings.autoExpandLore ? ' open' : '';
+      loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
+        <summary class="ship-lore-toggle">Lore</summary>
+        <div class="ship-lore-text"><div class="lore-namesake"><span class="lore-namesake-label">Namesake</span>${esc(dbShip.namesake)}</div></div>
       </details>`;
     }
 
