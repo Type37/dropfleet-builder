@@ -3728,7 +3728,67 @@ const App = (() => {
         printFleet();
       }
     }
+
+    // Skip shortcuts if typing in an input/textarea
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+    if (document.querySelector('.modal-overlay.active')) return;
+
+    // N: new fleet (from fleet list)
+    if (e.key === 'n' && !e.ctrlKey && !e.metaKey && !currentFleet) {
+      e.preventDefault();
+      openNewFleetModal();
+    }
+
+    // A: add group (in builder)
+    if (e.key === 'a' && !e.ctrlKey && !e.metaKey && currentFleet) {
+      e.preventDefault();
+      addGroup();
+    }
+
+    // O: fleet overview (in builder)
+    if (e.key === 'o' && !e.ctrlKey && !e.metaKey && currentFleet) {
+      e.preventDefault();
+      selectGroup(null);
+    }
+
+    // 1-9: select group by number (in builder)
+    if (currentFleet && e.key >= '1' && e.key <= '9') {
+      const idx = parseInt(e.key, 10) - 1;
+      if (idx < currentFleet.battleGroups.length) {
+        e.preventDefault();
+        selectGroup(currentFleet.battleGroups[idx].id);
+      }
+    }
+
+    // ?: show keyboard shortcuts help
+    if (e.key === '?') {
+      e.preventDefault();
+      showKeyboardHelp();
+    }
   });
+
+  function showKeyboardHelp() {
+    const shortcuts = [
+      ['?', 'Show this help'],
+      ['Esc', 'Close modal / tooltip'],
+      ['Ctrl+P', 'Print fleet'],
+      ['N', 'New fleet (from fleet list)'],
+      ['A', 'Add group (in builder)'],
+      ['O', 'Fleet overview'],
+      ['1–9', 'Select group by number']
+    ];
+    const body = document.getElementById('detail-ship-body');
+    document.getElementById('detail-ship-name').textContent = 'Keyboard Shortcuts';
+    body.innerHTML = `<div class="detail-rules-list" style="gap:var(--sp-md)">
+      ${shortcuts.map(([key, desc]) =>
+        `<div class="flex items-center gap-md" style="padding:var(--sp-xs) 0;border-bottom:1px dotted var(--stroke-light)">
+          <kbd class="kbd">${key}</kbd>
+          <span>${esc(desc)}</span>
+        </div>`
+      ).join('')}
+    </div>`;
+    openModal('modal-ship-detail');
+  }
 
   // Init on DOM ready
   if (document.readyState === 'loading') {

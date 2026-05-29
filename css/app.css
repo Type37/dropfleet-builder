@@ -3507,6 +3507,14 @@ h1, h2, h3, h4, h5, h6 {
   .fleet-grid { grid-template-columns: 1fr; }
   .fleet-list-header { flex-direction: column; align-items: stretch; }
   .fleet-list-header .btn { width: 100%; justify-content: center; }
+  .fleet-sort-bar { flex-wrap: wrap; }
+
+  /* Fleet overview mobile */
+  .overview-header { flex-direction: column; align-items: flex-start; gap: var(--sp-md); }
+  .overview-header-right { text-align: left; display: flex; align-items: baseline; gap: var(--sp-sm); }
+  .overview-pts-big { font-size: var(--text-2xl); }
+  .overview-group-top { flex-wrap: wrap; }
+  .overview-group-pts { margin-left: auto; }
 
   /* Sidebar becomes bottom sheet */
   .builder-layout { flex-direction: column; }
@@ -3607,6 +3615,17 @@ h1, h2, h3, h4, h5, h6 {
   .faction-chip { padding: var(--sp-sm) var(--sp-xs); }
   .faction-chip-name { font-size: var(--text-xs); }
 
+  /* Sort bar compact */
+  .fleet-sort-btn { padding: var(--sp-xs) var(--sp-sm); font-size: 10px; }
+  .fleet-sort-label { font-size: 10px; }
+
+  /* Overview compact */
+  .overview-faction-icon { width: 28px; height: 28px; }
+  .overview-title { font-size: var(--text-lg); }
+  .overview-group-art { width: 40px; height: 40px; }
+  .overview-group-name { font-size: var(--text-sm); }
+  .overview-group-pts { font-size: var(--text-md); }
+
   /* 4-column stat grid for even 4+4 wrap on 8-stat ships */
   .stat-grid { grid-template-columns: repeat(4, 1fr); }
   .stat-cell-label { font-size: 8px; }
@@ -3648,6 +3667,23 @@ h1, h2, h3, h4, h5, h6 {
   .category-tab { padding: var(--sp-xs) var(--sp-sm); font-size: 10px; }
   .topbar-brand { font-size: var(--text-xs); }
   .topbar-logo { height: 18px; }
+}
+
+/* Keyboard shortcut key */
+.kbd {
+  display: inline-block;
+  min-width: 24px;
+  padding: 2px 8px;
+  font-family: var(--font-condensed);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-align: center;
+  color: var(--navy);
+  background: var(--paper-alt);
+  border: 1px solid var(--stroke);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
 }
 
 /* ── 28. Tooltip ─────────────────────────────────────────────── */
