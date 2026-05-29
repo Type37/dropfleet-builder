@@ -519,6 +519,12 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
 }
 
+.btn svg,
+.sidebar-btn svg {
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
 .btn:focus-visible {
   outline: 2px solid var(--navy);
   outline-offset: 2px;

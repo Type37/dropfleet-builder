@@ -73,8 +73,8 @@
         <p class="text-caption">Manage your battle fleet rosters</p>
       </div>
       <div class="flex gap-sm">
-        <button class="btn btn-outline btn-sm" onclick="App.loadDemoFleets()" data-tooltip="Load sample fleets">Load Demos</button>
-        <button class="btn btn-primary" onclick="App.openNewFleetModal()">+ New Fleet</button>
+        <button class="btn btn-outline btn-sm" onclick="App.loadDemoFleets()" data-tooltip="Load sample fleets"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12V4c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2z"/><path d="M6 6h4M6 9h4"/></svg> Load Demos</button>
+        <button class="btn btn-primary" onclick="App.openNewFleetModal()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> New Fleet</button>
       </div>
     </div>
     <div class="fleet-grid" id="fleet-grid">
@@ -128,7 +128,7 @@
           <div class="sidebar-section-title">Admiral</div>
           <div id="admiral-slot">
             <div class="add-ship-area" onclick="App.openAdmiralModal()" style="padding:var(--sp-lg);min-height:60px">
-              <span style="font-size:var(--text-sm)">+ Add Admiral</span>
+              <span style="font-size:var(--text-sm)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="8" cy="5" r="3"/><path d="M2 15c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg> Add Admiral</span>
             </div>
           </div>
         </div>
@@ -147,13 +147,13 @@
         <!-- Actions -->
         <div class="flex flex-col gap-xs" style="border-top:1px solid rgba(255,255,255,0.1);padding-top:var(--sp-lg)">
           <div class="flex gap-xs">
-            <button class="sidebar-btn" style="flex:1" onclick="App.printFleet()">Print Fleet</button>
+            <button class="sidebar-btn" style="flex:1" onclick="App.printFleet()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5V1h8v4M4 12H2V7h12v5h-2"/><rect x="4" y="10" width="8" height="5"/></svg> Print Fleet</button>
             <button class="sidebar-btn sidebar-btn-icon" onclick="App.openSettings()" data-tooltip="Fleet Settings">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M2.9 2.9l1.4 1.4M11.7 11.7l1.4 1.4M13.1 2.9l-1.4 1.4M4.3 11.7l-1.4 1.4"/></svg>
             </button>
           </div>
-          <button class="sidebar-btn" onclick="App.shareFleet()">Share Fleet</button>
-          <button class="btn btn-ghost-light btn-sm btn-block" onclick="App.navigate('fleets')">Back to Fleets</button>
+          <button class="sidebar-btn" onclick="App.shareFleet()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3" r="2"/><circle cx="4" cy="8" r="2"/><circle cx="12" cy="13" r="2"/><path d="M5.8 9l4.4 3M10.2 4L5.8 7"/></svg> Share Fleet</button>
+          <button class="btn btn-ghost-light btn-sm btn-block" onclick="App.navigate('fleets')"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg> Back to Fleets</button>
         </div>
       </aside>
 

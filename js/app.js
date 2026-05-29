@@ -617,8 +617,8 @@ const App = (() => {
           <span class="text-caption">${f.battleGroups.length} groups</span>
         </div>
         <div class="fleet-card-actions" onclick="event.stopPropagation()">
-          <button class="btn btn-ghost btn-sm" onclick="App.duplicateFleet('${f.id}')">Duplicate</button>
-          <button class="btn btn-danger btn-sm" onclick="App.deleteFleet('${f.id}')">Delete</button>
+          <button class="btn btn-ghost btn-sm" onclick="App.duplicateFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1"/><path d="M2 11V3c0-.6.4-1 1-1h8"/></svg> Duplicate</button>
+          <button class="btn btn-danger btn-sm" onclick="App.deleteFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Delete</button>
         </div>
       </div>`;
     }).join('');
@@ -956,8 +956,8 @@ const App = (() => {
         <span class="badge badge-neutral">${group.ships.length} ships</span>
       </div>
       <div class="flex gap-sm">
-        <button class="btn btn-ghost btn-sm" onclick="App.renameGroup('${group.id}')">Rename</button>
-        <button class="btn btn-danger btn-sm" onclick="App.removeGroup('${group.id}')">Remove</button>
+        <button class="btn btn-ghost btn-sm" onclick="App.renameGroup('${group.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 1l4 4-9 9H2v-4L11 1z"/></svg> Rename</button>
+        <button class="btn btn-danger btn-sm" onclick="App.removeGroup('${group.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
       </div>
     </div>`;
 
@@ -1935,7 +1935,7 @@ const App = (() => {
           </div>
         </div>
         <div class="shared-fleet-actions">
-          <button class="btn btn-primary" onclick="App.importSharedFleet()">Import to My Fleets</button>
+          <button class="btn btn-primary" onclick="App.importSharedFleet()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg> Import to My Fleets</button>
           <button class="btn btn-outline" onclick="location.hash='fleets'">My Fleets</button>
         </div>
       </div>
