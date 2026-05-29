@@ -1626,6 +1626,14 @@ h1, h2, h3, h4, h5, h6 {
   padding-bottom: var(--sp-xs);
   border-bottom: 1px solid var(--stroke-light);
 }
+.rule-tooltip-page {
+  font-family: var(--font-condensed);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-normal);
+  color: var(--ink-faint);
+  margin-left: var(--sp-sm);
+  font-style: italic;
+}
 .rule-tooltip-body {
   font-family: var(--font-reading);
   font-size: var(--text-sm);
@@ -2616,6 +2624,12 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.06em;
   margin-top: 2px;
 }
+.print-fleet-date {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 7.5pt;
+  color: #bbb;
+  margin-top: 1px;
+}
 .print-warnings {
   margin-top: 8px;
   padding: 6px 8px;
@@ -2823,6 +2837,12 @@ h1, h2, h3, h4, h5, h6 {
   color: #1b3a5c;
 }
 .print-glossary-name::after { content: ': '; }
+.print-glossary-page {
+  font-weight: 400;
+  font-size: 7.5pt;
+  color: #888;
+  font-style: italic;
+}
 .print-glossary-desc {
   color: #333;
 }

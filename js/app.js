@@ -173,7 +173,16 @@ const App = (() => {
 
   function transformData(raw) {
     // Store global shared rules (ship + weapon rules from BSData)
-    if (raw.sharedRules) sharedRulesDB = raw.sharedRules;
+    // Normalize: values may be plain strings or {description, page} objects
+    if (raw.sharedRules) {
+      Object.entries(raw.sharedRules).forEach(([k, v]) => {
+        if (typeof v === 'string') {
+          sharedRulesDB[k] = { description: v, page: '' };
+        } else {
+          sharedRulesDB[k] = { description: v.description || '', page: v.page || '' };
+        }
+      });
+    }
 
     Object.entries(raw.factions).forEach(([factionKey, faction]) => {
       factionData[factionKey] = { name: faction.name, shortName: faction.shortName };
@@ -1439,10 +1448,20 @@ const App = (() => {
   function lookupRule(name) {
     // Shared rules lookup: try exact, then base keyword (strip numeric suffix),
     // then base-X form (BSData uses e.g. "Crippling-X" for parameterized rules)
+    // Returns description string only
+    const full = lookupRuleFull(name);
+    return full ? full.description : '';
+  }
+
+  function lookupRuleFull(name) {
+    // Returns {description, page} or null
     const baseKey = name.replace(/-?\d+$/, '').replace(/\s+\d+$/, '').trim();
     const xKey = baseKey + '-X';
-    return sharedRulesDB[name] || sharedRulesDB[baseKey] || sharedRulesDB[xKey] ||
-           WEAPON_SPECIAL_RULES[name] || WEAPON_SPECIAL_RULES[baseKey] || '';
+    const entry = sharedRulesDB[name] || sharedRulesDB[baseKey] || sharedRulesDB[xKey];
+    if (entry) return entry;
+    const wpnDesc = WEAPON_SPECIAL_RULES[name] || WEAPON_SPECIAL_RULES[baseKey];
+    if (wpnDesc) return { description: wpnDesc, page: '' };
+    return null;
   }
 
   function renderWeaponSpecialChips(specialStr) {
@@ -1450,9 +1469,10 @@ const App = (() => {
     return specialStr.split(',').map(s => {
       const trimmed = s.trim();
       if (!trimmed) return '';
-      const desc = lookupRule(trimmed);
-      if (desc) {
-        return `<span class="weapon-special-chip has-tooltip" data-rule-desc="${esc(desc)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(trimmed)}</span>`;
+      const full = lookupRuleFull(trimmed);
+      if (full && full.description) {
+        const pageAttr = full.page ? ` data-rule-page="${esc(full.page)}"` : '';
+        return `<span class="weapon-special-chip has-tooltip" data-rule-desc="${esc(full.description)}"${pageAttr} onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(trimmed)}</span>`;
       }
       return `<span class="weapon-special-chip">${esc(trimmed)}</span>`;
     }).join('');
@@ -1564,7 +1584,8 @@ const App = (() => {
       rulesHtml = '<div class="special-rules">' + ruleDetails.map(r => {
         const desc = r.description || '';
         if (desc) {
-          return `<span class="rule-chip has-tooltip" data-rule-desc="${esc(desc)}" onclick="App.showRuleTooltip(event, this)">${esc(r.name)}</span>`;
+          const pgAttr = r.page ? ` data-rule-page="${esc(r.page)}"` : '';
+          return `<span class="rule-chip has-tooltip" data-rule-desc="${esc(desc)}"${pgAttr} onclick="App.showRuleTooltip(event, this)">${esc(r.name)}</span>`;
         }
         return `<span class="rule-chip">${esc(r.name)}</span>`;
       }).join('') + '</div>';
@@ -1808,7 +1829,8 @@ const App = (() => {
       ${specialRules.length > 0 ? `<div class="special-rules">${specialRules.slice(0, 4).map(r => {
         const detail = (data.specialRuleDetails || []).find(d => d.name === r);
         if (detail && detail.description) {
-          return `<span class="rule-chip has-tooltip" data-rule-desc="${esc(detail.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(r)}</span>`;
+          const pgA = detail.page ? ` data-rule-page="${esc(detail.page)}"` : '';
+          return `<span class="rule-chip has-tooltip" data-rule-desc="${esc(detail.description)}"${pgA} onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(r)}</span>`;
         }
         return `<span class="rule-chip">${esc(r)}</span>`;
       }).join('')}${specialRules.length > 4 ? `<span class="rule-chip" style="background:rgba(255,255,255,0.06);color:var(--ink-faint)">+${specialRules.length - 4}</span>` : ''}</div>` : ''}
@@ -2333,11 +2355,29 @@ const App = (() => {
         ).join('')}</div>`
       : '';
 
+    // Fleet composition by tonnage for print
+    const printCatCounts = {};
+    f.battleGroups.forEach(g => {
+      g.ships.forEach(s => {
+        const cat = s.groupCategory || 'medium';
+        if (!printCatCounts[cat]) printCatCounts[cat] = 0;
+        printCatCounts[cat]++;
+      });
+    });
+    const compParts = CATEGORY_ORDER
+      .filter(c => printCatCounts[c])
+      .map(c => `${printCatCounts[c]} ${CATEGORY_LABELS[c]}`);
+    const compLine = compParts.length > 0 ? compParts.join(' · ') : '';
+
+    // Print date
+    const printDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
     let html = `<div class="print-fleet">
       <div class="print-header">
         <div class="print-fleet-name">${esc(f.name)}</div>
-        <div class="print-fleet-meta">${esc(fName)} — ${sizeInfo.label} — ${pts} pts</div>
-        <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''} · ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? ` · ${esc(f.spaceStation.name)}` : ''}</div>
+        <div class="print-fleet-meta">${esc(fName)} — ${sizeInfo.label} — ${pts}${sizeInfo.max !== 99999 ? '/' + sizeInfo.max : ''} pts</div>
+        <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''} · ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? ` · ${esc(f.spaceStation.name)}` : ''}${compLine ? ` · ${compLine}` : ''}</div>
+        <div class="print-fleet-date">${printDate}</div>
       </div>
       ${printWarnings}`;
 
@@ -2389,7 +2429,7 @@ const App = (() => {
       </div>`;
       // Collect station rules for glossary
       (ss.specialRules || []).forEach(r => {
-        if (r.description) rulesGlossary[r.name] = r.description;
+        if (r.description) rulesGlossary[r.name] = { description: r.description, page: r.page || '' };
       });
     }
 
@@ -2446,7 +2486,7 @@ const App = (() => {
 
         // Collect special rules for glossary
         (db.specialRuleDetails || []).forEach(r => {
-          if (r.description) rulesGlossary[r.name] = r.description;
+          if (r.description) rulesGlossary[r.name] = { description: r.description, page: r.page || '' };
         });
 
         // Collect weapon special rules for glossary (prefer BSData descriptions)
@@ -2457,8 +2497,8 @@ const App = (() => {
               const trimmed = s.trim();
               if (!trimmed) return;
               const baseKey = trimmed.replace(/-?\d+$/, '');
-              const desc = lookupRule(trimmed);
-              if (desc) rulesGlossary[baseKey || trimmed] = desc;
+              const full = lookupRuleFull(trimmed);
+              if (full) rulesGlossary[baseKey || trimmed] = { description: full.description, page: full.page || '' };
             });
           });
         };
@@ -2476,7 +2516,10 @@ const App = (() => {
         let rulesInlineHtml = '';
         if (ruleDetails.length > 0) {
           rulesInlineHtml = `<div class="print-rules-inline">
-            ${ruleDetails.map(r => `<div class="print-rule-entry"><span class="print-rule-name">${esc(r.name)}</span>${r.description ? ` — ${esc(r.description)}` : ''}</div>`).join('')}
+            ${ruleDetails.map(r => {
+              const pageRef = r.page ? ` <span class="print-glossary-page">p.${esc(r.page)}</span>` : '';
+              return `<div class="print-rule-entry"><span class="print-rule-name">${esc(r.name)}${pageRef}</span>${r.description ? ` — ${esc(r.description)}` : ''}</div>`;
+            }).join('')}
           </div>`;
         } else if (ruleNames) {
           rulesInlineHtml = `<div class="print-rules">Rules: ${ruleNames}</div>`;
@@ -2519,17 +2562,20 @@ const App = (() => {
       }
     }
 
-    // Rules glossary — full text for every rule used
+    // Rules glossary — full text for every rule used, with page references
     const glossaryEntries = Object.entries(rulesGlossary).sort((a, b) => a[0].localeCompare(b[0]));
     if (glossaryEntries.length > 0) {
       html += `<div class="print-section print-glossary">
         <div class="print-section-title">Rules Reference</div>
-        ${glossaryEntries.map(([name, desc]) =>
-          `<div class="print-glossary-entry">
-            <span class="print-glossary-name">${esc(name)}</span>
+        ${glossaryEntries.map(([name, entry]) => {
+          const desc = typeof entry === 'string' ? entry : (entry.description || '');
+          const page = typeof entry === 'object' ? (entry.page || '') : '';
+          const pageRef = page ? ` <span class="print-glossary-page">p.${esc(page)}</span>` : '';
+          return `<div class="print-glossary-entry">
+            <span class="print-glossary-name">${esc(name)}${pageRef}</span>
             <span class="print-glossary-desc">${esc(desc).replace(/\n/g, '<br>')}</span>
-          </div>`
-        ).join('')}
+          </div>`;
+        }).join('')}
       </div>`;
     }
 
@@ -3004,7 +3050,9 @@ const App = (() => {
     const tooltip = document.createElement('div');
     tooltip.id = 'rule-tooltip';
     tooltip.className = 'rule-tooltip-popup';
-    tooltip.innerHTML = `<div class="rule-tooltip-title">${el.textContent}</div><div class="rule-tooltip-body">${esc(desc).replace(/\n/g, '<br>')}</div>`;
+    const page = el.getAttribute('data-rule-page');
+    const pageHtml = page ? `<span class="rule-tooltip-page">Rulebook p.${esc(page)}</span>` : '';
+    tooltip.innerHTML = `<div class="rule-tooltip-title">${el.textContent}${pageHtml}</div><div class="rule-tooltip-body">${esc(desc).replace(/\n/g, '<br>')}</div>`;
     document.body.appendChild(tooltip);
 
     // Position near the chip
