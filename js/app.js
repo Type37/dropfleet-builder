@@ -861,7 +861,7 @@ const App = (() => {
     </div>`;
 
     if (group.ships.length > 0) {
-      html += '<div class="group-ships-list">';
+      html += '<div class="group-ships-list stagger">';
       group.ships.forEach(ship => {
         const dbShip = findShipInDB(currentFleet.faction, ship.groupCategory, ship.shipKey);
         html += renderGroupShipEntry(ship, dbShip, group.id);
@@ -1924,7 +1924,6 @@ const App = (() => {
     if (!toast) {
       toast = document.createElement('div');
       toast.id = 'app-toast';
-      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--paper);border:1px solid var(--stroke-strong);color:var(--ink);padding:12px 24px;border-radius:var(--radius-lg);font-size:var(--text-sm);z-index:2000;transition:transform 0.3s var(--ease-out);box-shadow:var(--shadow-lg);pointer-events:none';
       document.body.appendChild(toast);
     }
     toast.textContent = message;

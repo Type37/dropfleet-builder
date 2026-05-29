@@ -238,6 +238,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 var(--sp-xl);
   z-index: 900;
   gap: var(--sp-md);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.06), 0 4px 12px rgba(15, 38, 64, 0.35);
 }
 
 .topbar-brand {
@@ -751,17 +752,24 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--paper);
   border: 1px solid var(--stroke);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 2px 4px rgba(28, 26, 23, 0.04),
+              0 8px 24px rgba(28, 26, 23, 0.10),
+              0 24px 48px rgba(28, 26, 23, 0.08);
   width: 100%;
   max-width: 560px;
   max-height: calc(100vh - var(--sp-3xl) * 2);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transform: translateY(12px);
-  transition: transform var(--duration-slow) var(--ease-out);
+  transform: translateY(16px) scale(0.98);
+  opacity: 0;
+  transition: transform var(--duration-slow) var(--ease-out),
+              opacity var(--duration-normal) var(--ease-out);
 }
-.modal-overlay.active .modal-panel { transform: translateY(0); }
+.modal-overlay.active .modal-panel {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
 
 .modal-panel--lg { max-width: 800px; }
 .modal-panel--xl { max-width: 1100px; }
@@ -1523,6 +1531,7 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--stroke-light);
   overflow: hidden;
   flex-shrink: 0;
+  box-shadow: inset 0 1px 3px rgba(28, 26, 23, 0.06);
 }
 .ship-card-image img {
   width: 100%;
@@ -1592,6 +1601,16 @@ h1, h2, h3, h4, h5, h6 {
   gap: var(--sp-sm);
   padding-bottom: var(--sp-lg);
   border-bottom: 2px solid var(--stroke);
+  position: relative;
+}
+.group-header-bar::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 48px;
+  height: 2px;
+  background: var(--gold);
 }
 
 .group-title {
@@ -1610,8 +1629,10 @@ h1, h2, h3, h4, h5, h6 {
 .group-ship-entry {
   background: var(--paper);
   border: 1px solid var(--stroke);
+  border-left: 3px solid var(--stroke);
   border-radius: var(--radius-lg);
   padding: var(--sp-lg);
+  padding-left: calc(var(--sp-lg) - 2px);
   display: flex;
   align-items: flex-start;
   gap: var(--sp-lg);
@@ -1620,8 +1641,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 .group-ship-entry:hover {
   border-color: var(--stroke-strong);
-  box-shadow: var(--shadow-sm);
+  border-left-color: var(--navy);
+  box-shadow: var(--shadow-md);
 }
+
+/* Faction-colored left accent on ship entries */
+[data-faction="ucm"] .group-ship-entry:hover { border-left-color: var(--faction-ucm); }
+[data-faction="phr"] .group-ship-entry:hover { border-left-color: var(--faction-phr); }
+[data-faction="scourge"] .group-ship-entry:hover { border-left-color: var(--faction-scourge); }
+[data-faction="shaltari"] .group-ship-entry:hover { border-left-color: var(--faction-shaltari); }
+[data-faction="bioficer"] .group-ship-entry:hover { border-left-color: var(--faction-bioficer); }
+[data-faction="resistance"] .group-ship-entry:hover { border-left-color: var(--faction-resistance); }
 
 .group-ship-entry .ship-card-image {
   width: 120px;
@@ -1872,7 +1902,27 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
 }
 
-/* ── 23. Animations ──────────────────────────────────────────── */
+/* ── 23. Toast Notification ─────────────────────────────────── */
+#app-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--paper);
+  border: 1px solid var(--stroke-strong);
+  color: var(--ink);
+  padding: var(--sp-md) var(--sp-2xl);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  z-index: 2000;
+  transition: transform 0.35s var(--ease-out), opacity 0.35s var(--ease-out);
+  box-shadow: 0 4px 16px rgba(28, 26, 23, 0.12), 0 1px 3px rgba(28, 26, 23, 0.08);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ── 24. Animations ──────────────────────────────────────────── */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -1890,6 +1940,8 @@ h1, h2, h3, h4, h5, h6 {
 .stagger > *:nth-child(2) { animation-delay: 60ms; }
 .stagger > *:nth-child(3) { animation-delay: 120ms; }
 .stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+.stagger > *:nth-child(6) { animation-delay: 300ms; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1898,7 +1950,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* ── 24. Utility Classes ─────────────────────────────────────── */
+/* ── 25. Utility Classes ─────────────────────────────────────── */
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
 .flex-wrap { flex-wrap: wrap; }
@@ -1916,7 +1968,7 @@ h1, h2, h3, h4, h5, h6 {
 .w-full { width: 100%; }
 .hidden { display: none !important; }
 
-/* ── 25. Print ───────────────────────────────────────────────── */
+/* ── 26. Print ───────────────────────────────────────────────── */
 @media print {
   /* Hide everything except the print container */
   body { background: white !important; color: black !important; font-size: 10pt; }
@@ -2067,7 +2119,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #333;
 }
 
-/* ── 26. Responsive ──────────────────────────────────────────── */
+/* ── 27. Responsive ──────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .builder-sidebar { width: 220px; }
   .builder-main { padding: var(--sp-xl); }
@@ -2160,7 +2212,7 @@ h1, h2, h3, h4, h5, h6 {
   .launch-ref-col-special { flex-basis: 100%; padding-left: 0; }
 }
 
-/* ── 27. Tooltip ─────────────────────────────────────────────── */
+/* ── 28. Tooltip ─────────────────────────────────────────────── */
 [data-tooltip] { position: relative; }
 [data-tooltip]::after {
   content: attr(data-tooltip);
