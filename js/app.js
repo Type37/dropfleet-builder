@@ -1107,6 +1107,31 @@ const App = (() => {
     return warnings;
   }
 
+  function validateGroupSize(group, fleet) {
+    if (!group || group.ships.length === 0) return [];
+    const errors = [];
+    const s = group.ships[0];
+    const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
+    if (!db) return [];
+
+    const min = db.groupMin || 1;
+    const max = db.groupMax || 1;
+    if (group.ships.length > max) {
+      errors.push(`max ${max} ${db.name} (has ${group.ships.length})`);
+    }
+    if (db.isUnique) {
+      // Check fleet-wide for other groups with same ship
+      const otherGroups = fleet.battleGroups.filter(g =>
+        g.id !== group.id && g.ships.length > 0 &&
+        g.ships[0].groupCategory === s.groupCategory && g.ships[0].shipKey === s.shipKey
+      );
+      if (otherGroups.length > 0) {
+        errors.push(`${db.name} is Unique — only 1 group allowed`);
+      }
+    }
+    return errors;
+  }
+
   function renderFleetWarnings() {
     const el = document.getElementById('fleet-warnings');
     if (!el || !currentFleet) { if (el) el.innerHTML = ''; return; }
@@ -1499,18 +1524,40 @@ const App = (() => {
 
     const groupPts = group.ships.reduce((t, s) => t + (s.points || 0), 0);
 
+    // Determine tonnage category from first ship
+    let tonnageBadge = '';
+    if (group.ships.length > 0) {
+      const firstDb = findShipInDB(currentFleet.faction, group.ships[0].groupCategory, group.ships[0].shipKey);
+      const ton = firstDb ? (firstDb.tonnage || '') : '';
+      if (ton) {
+        const tonClass = ton.toLowerCase().replace(/\s+/g, '-');
+        tonnageBadge = `<span class="badge badge-tonnage badge-tonnage-${tonClass}">${ton}</span>`;
+      }
+    }
+
+    // Check for group-level validation errors
+    let groupWarnings = '';
+    const groupErrors = validateGroupSize(group, currentFleet);
+    if (groupErrors.length > 0) {
+      groupWarnings = `<div class="group-warnings">${groupErrors.map(e =>
+        `<div class="group-warning-item">${esc(e)}</div>`
+      ).join('')}</div>`;
+    }
+
     let html = `
     <div class="group-header-bar">
-      <div class="flex items-center gap-md">
+      <div class="flex items-center gap-md flex-wrap">
         <h2 class="group-title">${esc(group.name)}</h2>
+        ${tonnageBadge}
         <span class="badge badge-navy">${groupPts} pts</span>
-        <span class="badge badge-neutral">${group.ships.length} ships</span>
+        <span class="badge badge-neutral">${group.ships.length} ship${group.ships.length !== 1 ? 's' : ''}</span>
       </div>
       <div class="flex gap-sm">
         <button class="btn btn-ghost btn-sm" onclick="App.renameGroup('${group.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 1l4 4-9 9H2v-4L11 1z"/></svg> Rename</button>
         <button class="btn btn-danger btn-sm" onclick="App.removeGroup('${group.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
       </div>
-    </div>`;
+    </div>
+    ${groupWarnings}`;
 
     if (group.ships.length > 0) {
       html += '<div class="group-ships-list stagger">';
