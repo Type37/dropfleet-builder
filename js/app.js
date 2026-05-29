@@ -31,8 +31,8 @@ const App = (() => {
   };
 
   const FACTION_COLORS = {
-    ucm: '#3e9945', phr: '#6a4c9c', scourge: '#c43c2f',
-    shaltari: '#d98c1f', bioficer: '#2a8c8c', resistance: '#b04a2a'
+    ucm: '#3e9945', phr: '#B8952F', scourge: '#c43c2f',
+    shaltari: '#d98c1f', bioficer: '#2a8c8c', resistance: '#2a6099'
   };
 
   const FACTION_LABELS = {
@@ -851,8 +851,6 @@ const App = (() => {
       const barClass = pts > limit ? 'fleet-card-bar-over' : pctFill > 85 ? 'fleet-card-bar-near' : '';
       const validationBadge = errorCount > 0
         ? `<span class="badge badge-error">${errorCount} issue${errorCount > 1 ? 's' : ''}</span>`
-        : warnCount > 0
-        ? `<span class="badge badge-warn">${warnCount} note${warnCount > 1 ? 's' : ''}</span>`
         : '';
       const fIcon = FACTION_ICONS[f.faction];
       return `
@@ -1170,6 +1168,10 @@ const App = (() => {
     const groupCount = f.battleGroups.length;
     document.getElementById('groups-count').textContent = `${groupCount} group${groupCount !== 1 ? 's' : ''}`;
     document.getElementById('groups-limit').textContent = `/ ${sizeInfo.groups} max`;
+
+    const totalAP = (f.admirals || []).reduce((t, a) => t + (a.level || 0), 0);
+    const apEl = document.getElementById('fleet-ap-per-turn');
+    if (apEl) apEl.textContent = totalAP > 0 ? `${totalAP} AP/turn` : '';
 
     // Update mobile sidebar peek summary
     const peekPts = document.getElementById('sidebar-peek-points');
@@ -2027,7 +2029,7 @@ const App = (() => {
     const typeIcon = WEAPON_TYPE_ICONS[w.type] || '';
     return `<div class="weapon-row">
       <span class="weapon-col weapon-col-name">${esc(w.name)}</span>
-      <span class="weapon-col weapon-col-arc" title="${ARC_LABELS[w.arc] || 'Firing Arc: ' + (w.arc || '')}">${ARC_ICONS[w.arc] || esc(w.arc || '')}</span>
+      <span class="weapon-col weapon-col-arc" title="${ARC_LABELS[w.arc] || 'Firing Arc: ' + (w.arc || '')}">${ARC_ICONS[w.arc] ? ARC_ICONS[w.arc] + '<span class="arc-label">' + esc(w.arc || '') + '</span>' : esc(w.arc || '')}</span>
       <span class="weapon-col weapon-col-att">${w.attack}</span>
       <span class="weapon-col weapon-col-lock">${w.lock}</span>
       <span class="weapon-col weapon-col-dmg">${w.damage}</span>
@@ -4047,7 +4049,8 @@ const App = (() => {
     const shipNames = afterPrefix.slice(0, splitIdx).trim();
     const loreBody = afterPrefix.slice(splitIdx + 1).trim();
     const paras = loreBody.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('');
-    return `${paras}<div class="lore-famous-ships"><strong>${esc(prefix)}</strong> <em>${esc(shipNames)}</em></div>`;
+    const shipList = shipNames.split(/,\s*/).map(s => `<li>${esc(s.trim())}</li>`).join('');
+    return `${paras}<div class="lore-famous-ships"><strong>${esc(prefix)}</strong><ul>${shipList}</ul></div>`;
   }
 
   function formatTimeAgo(date) {

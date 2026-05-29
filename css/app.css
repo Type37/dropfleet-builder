@@ -15,8 +15,8 @@
   --font-mono: Consolas, "Courier New", monospace;
 
   /* Font Sizes */
-  --text-xs: 11px;
-  --text-sm: 13px;
+  --text-xs: 12px;
+  --text-sm: 14px;
   --text-base: 15px;
   --text-md: 17px;
   --text-lg: 20px;
@@ -1832,7 +1832,21 @@ h1, h2, h3, h4, h5, h6 {
   text-overflow: ellipsis;
 }
 
-.weapon-col-arc,
+.weapon-col-arc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-xs);
+}
+.weapon-col-arc svg { flex-shrink: 0; }
+.arc-label {
+  font-size: 8px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--ink-muted);
+}
 .weapon-col-att,
 .weapon-col-lock,
 .weapon-col-dmg,
@@ -2154,9 +2168,20 @@ h1, h2, h3, h4, h5, h6 {
 .lore-famous-ships strong {
   font-weight: var(--weight-bold);
   color: var(--ink-soft);
+  display: block;
+  margin-bottom: var(--sp-xs);
 }
-.lore-famous-ships em {
+.lore-famous-ships ul {
+  list-style: disc;
+  padding-left: var(--sp-lg);
+  margin: 0;
+  columns: 2;
+  column-gap: var(--sp-lg);
+}
+.lore-famous-ships li {
   font-style: italic;
+  color: var(--ink-muted);
+  break-inside: avoid;
 }
 
 /* ── 16. Ship Cards (selection modal) ────────────────────────── */
