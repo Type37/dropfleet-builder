@@ -58,20 +58,20 @@ const App = (() => {
       ['light','Toulon',2],['light','New Orleans',2],['light','Lima',2]] },
     { faction: 'scourge', name: 'Scourge Starter Fleet', size: 'skirmish', groups: [
       ['medium','Sphinx',1],['medium','Hydra',1],['medium','Chimera',1],
-      ['light','Gargoyle',1],['light','Harpy',1]] },
+      ['light','Gargoyle',2],['light','Harpy',2]] },
     { faction: 'phr', name: 'PHR Starter Fleet', size: 'skirmish', groups: [
       ['medium','Theseus',1],['medium','Ikarus',1],['medium','Orpheus',1],
-      ['light','Pandora',1],['light','Medea',1]] },
+      ['light','Pandora',2],['light','Medea',2]] },
     { faction: 'shaltari', name: 'Shaltari Starter Fleet', size: 'skirmish', groups: [
       ['medium','Obsidian',1],['medium','Basalt',1],['medium','Emerald',1],
-      ['light','Topaz',1],['light','Opal',1],['light','Voidgate',1]] },
+      ['light','Topaz',2],['light','Opal',2],['light','Voidgate',3]] },
     { faction: 'bioficer', name: 'Bioficer Starter Fleet', size: 'skirmish', groups: [
       ['medium','Comet',1],['medium','Cavern',1],['medium','Catastrophe',1],
-      ['payload','Prism Cell',1],['light','Fulcrum',1],['light','Foray',1],
-      ['payload','Invasion Cell',1],['payload','Lander Cell',1]] },
+      ['payload','Prism Cell',1],['light','Fulcrum',2],['light','Foray',2],
+      ['payload','Invasion Cell',2],['payload','Lander Cell',2]] },
     { faction: 'resistance', name: 'Resistance Starter Fleet', size: 'skirmish', groups: [
       ['medium','Heavy Cruiser',1],['medium','Cruiser',1],['medium','Light Cruiser',1],
-      ['light','Strike Carrier',1],['light','Heavy Frigate',1]] }
+      ['light','Strike Carrier',2],['light','Heavy Frigate',2]] }
   ];
 
   // ── Init ──
@@ -1105,8 +1105,24 @@ const App = (() => {
   }
 
   // ── Render Batching ──
+  // Coalesce render calls within a frame: multiple mutations in one tick
+  // (e.g. updatePoints + nav + panels) collapse into a single paint, and
+  // duplicate render functions are deduped by reference.
+  let _renderQueue = new Set();
+  let _renderPending = false;
   function scheduleRender(...fns) {
-    fns.forEach(fn => { try { fn(); } catch(e) { console.error('Render error:', e); } });
+    fns.forEach(fn => _renderQueue.add(fn));
+    if (_renderPending) return;
+    _renderPending = true;
+    // Microtask, not requestAnimationFrame: it still coalesces a burst of
+    // mutations from one handler into a single render, but always fires —
+    // rAF is throttled/paused in background tabs, which would freeze the UI.
+    queueMicrotask(() => {
+      const queued = Array.from(_renderQueue);
+      _renderQueue.clear();
+      _renderPending = false;
+      queued.forEach(fn => { try { fn(); } catch(e) { console.error('Render error:', e); } });
+    });
   }
 
   // ── Builder View ──
@@ -1283,6 +1299,16 @@ const App = (() => {
       warnings.push({ type: 'warn', msg: `Light ships (${lightPts}pts) exceed Medium+Heavy (${mediumPts + heavyPts}pts)` });
     }
 
+    // 7b. Feature carriers must choose a Deployable Feature
+    fleet.battleGroups.forEach(g => {
+      if (g.ships.length === 0) return;
+      const s = g.ships[0];
+      const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
+      if (db && isFeatureCarrier(db) && !s.feature) {
+        warnings.push({ type: 'warn', msg: `${db.name} must choose a Deployable Feature` });
+      }
+    });
+
     // 8. Admiral checks
     const admirals = fleet.admirals || [];
     let namedCount = 0;
@@ -1416,10 +1442,10 @@ const App = (() => {
 
     const total = currentFleet.battleGroups.length;
     const catColors = { light: '#5b9bd5', medium: '#3e9945', heavy: '#d98c1f', colossal: '#c43c2f', payload: '#6a4c9c' };
-    const overviewItem = `<div class="group-nav-item group-nav-overview ${!activeGroupId ? 'active' : ''}" onclick="App.selectGroup(null)">
-      <div class="group-nav-name"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg> Overview</div>
-    </div>`;
-    nav.innerHTML = overviewItem + currentFleet.battleGroups.map((g, i) => {
+    // The centre panel always shows the fleet overview, so a dedicated
+    // "Overview" nav row in the sidebar is redundant — clicking the active
+    // group again deselects it and returns focus to the overview.
+    nav.innerHTML = currentFleet.battleGroups.map((g, i) => {
       const shipCount = g.ships.length;
       const groupPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
       const isActive = g.id === activeGroupId;
@@ -1486,8 +1512,12 @@ const App = (() => {
   }
 
   function selectGroup(gid) {
-    activeGroupId = gid || null;
-    scheduleRender(renderGroupsNav, renderActiveGroup);
+    // Clicking the already-active group toggles it off, returning focus to the
+    // always-visible overview (there's no dedicated Overview nav row anymore).
+    activeGroupId = (gid && gid === activeGroupId) ? null : (gid || null);
+    // Selection only changes the nav highlight + which group the detail panel
+    // shows — the overview content is unchanged, so don't rebuild it.
+    scheduleRender(renderGroupsNav, renderDetailPanel);
 
     // On mobile, collapse sidebar
     if (gid) {
@@ -1550,46 +1580,6 @@ const App = (() => {
       }
       nameEl.textContent = currentFleet.name;
       nameEl.onclick = () => editFleetName();
-    };
-
-    input.addEventListener('blur', commit);
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
-      if (e.key === 'Escape') { input.value = current; input.blur(); }
-    });
-  }
-
-  function renameGroup(gid) {
-    const g = currentFleet.battleGroups.find(gg => gg.id === gid);
-    if (!g) return;
-    // Find the group name element in the header bar
-    const headerName = document.querySelector('.group-header-bar h2');
-    if (!headerName) {
-      // Fallback to prompt if header not found
-      const name = prompt('Group name:', g.name);
-      if (name && name.trim()) { g.name = name.trim(); saveFleets(); renderGroupsNav(); renderActiveGroup(); }
-      return;
-    }
-    const current = g.name;
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.value = current;
-    input.className = 'group-name-input';
-    input.style.cssText = 'font:inherit;color:inherit;background:var(--paper-warm);border:1px solid var(--stroke);border-radius:3px;padding:2px 8px;width:300px;max-width:100%;outline:none;';
-    headerName.textContent = '';
-    headerName.appendChild(input);
-    input.focus();
-    input.select();
-
-    const commit = () => {
-      const val = input.value.trim();
-      if (val && val !== current) {
-        g.name = val;
-        saveFleets();
-        showToast('Group renamed');
-      }
-      renderGroupsNav();
-      renderActiveGroup();
     };
 
     input.addEventListener('blur', commit);
@@ -1736,7 +1726,7 @@ const App = (() => {
         ${validHtml}
         <div class="overview-section">
           <div class="overview-section-label">Battle Groups (${f.battleGroups.length})</div>
-          <div class="overview-groups stagger">${groupCards}</div>
+          <div class="overview-groups">${groupCards}</div>
         </div>
         ${admHtml}
         ${stationHtml}
@@ -1750,14 +1740,23 @@ const App = (() => {
   }
 
   // ── Active Group View ──
+  // Full render of both centre + right panels. Use the narrower
+  // renderOverviewPanel / renderDetailPanel when only one side changed —
+  // notably group selection, which must NOT rebuild the overview.
   function renderActiveGroup() {
-    const overviewEl = document.getElementById('builder-overview');
-    const detailEl = document.getElementById('builder-detail');
+    renderOverviewPanel();
+    renderDetailPanel();
+  }
 
+  function renderOverviewPanel() {
     if (!currentFleet) return;
+    const overviewEl = document.getElementById('builder-overview');
+    if (overviewEl) overviewEl.innerHTML = renderFleetOverview();
+  }
 
-    // Overview always renders
-    overviewEl.innerHTML = renderFleetOverview();
+  function renderDetailPanel() {
+    const detailEl = document.getElementById('builder-detail');
+    if (!currentFleet || !detailEl) return;
 
     // Detail panel: show when a group is selected
     if (!activeGroupId) {
@@ -1810,17 +1809,27 @@ const App = (() => {
         <span class="badge badge-neutral">${group.ships.length} ship${group.ships.length !== 1 ? 's' : ''}</span>
       </div>
       <div class="flex gap-sm">
-        <button class="btn btn-ghost btn-sm" onclick="App.renameGroup('${group.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 1l4 4-9 9H2v-4L11 1z"/></svg> Rename</button>
         <button class="btn btn-danger btn-sm" onclick="App.removeGroup('${group.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
       </div>
     </div>
     ${groupWarnings}`;
 
     if (group.ships.length > 0) {
-      html += '<div class="group-ships-list stagger">';
+      html += '<div class="group-ships-list">';
+      // Collapse identical ships (same loadout selection) into a single card
+      // with a ×N count instead of repeating the whole card per copy.
+      const sigOrder = [];
+      const sigGroups = {};
       group.ships.forEach(ship => {
-        const dbShip = findShipInDB(currentFleet.faction, ship.groupCategory, ship.shipKey);
-        html += renderGroupShipEntry(ship, dbShip, group.id);
+        const sig = JSON.stringify(ship.loadouts || {});
+        if (!sigGroups[sig]) { sigGroups[sig] = []; sigOrder.push(sig); }
+        sigGroups[sig].push(ship);
+      });
+      sigOrder.forEach(sig => {
+        const ships = sigGroups[sig];
+        const rep = ships[0];
+        const dbShip = findShipInDB(currentFleet.faction, rep.groupCategory, rep.shipKey);
+        html += renderGroupShipEntry(rep, dbShip, group.id, ships.length);
       });
       html += '</div>';
 
@@ -1845,11 +1854,7 @@ const App = (() => {
           <button class="btn btn-primary btn-sm group-qty-btn" onclick="App.addSameShip('${group.id}')" ${atMax ? 'disabled' : ''} title="Add one more">+</button>
         </div>
       </div>`;
-      // Launch asset reference — show stat profiles for any assets this group can launch
-      const launchAssets = collectGroupLaunchAssets(group, currentFleet.faction);
-      if (launchAssets.length > 0) {
-        html += renderLaunchAssetReference(launchAssets);
-      }
+      // (Launch Asset Reference now renders inline on each ship card.)
     } else {
       // Empty group — shouldn't happen with new flow, but handle gracefully
       html += `
@@ -2033,7 +2038,46 @@ const App = (() => {
     </div>`;
   }
 
-  function renderGroupShipEntry(ship, dbShip, groupId) {
+  // A Feature Carrier deploys one Deployable Feature chosen at fleet-build time.
+  // Detected from the rules text ("choose one Deployable Feature from the
+  // [Faction] Deployable Features List").
+  function isFeatureCarrier(dbShip) {
+    if (!dbShip) return false;
+    const hay = (dbShip.rulesText || '') + ' ' + JSON.stringify(dbShip.specialRules || []);
+    return /Deployable Feature/i.test(hay);
+  }
+
+  function renderFeatureStats(feat) {
+    if (!feat) return '';
+    const statLine = (feat.features || []).map(f =>
+      `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.special && f.special !== '-' ? ` · ${esc(f.special)}` : ''}</span>`
+    ).join('');
+    const ruleChips = (feat.rules || []).map(r =>
+      r.description
+        ? `<span class="rule-chip rule-chip-sm has-tooltip" data-rule-desc="${esc(r.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(r.name)}</span>`
+        : `<span class="rule-chip rule-chip-sm">${esc(r.name)}</span>`
+    ).join('');
+    return `${statLine ? `<div class="station-stats" style="margin-top:var(--sp-xs)">${statLine}</div>` : ''}${ruleChips ? `<div style="margin-top:var(--sp-xs)">${ruleChips}</div>` : ''}`;
+  }
+
+  function renderFeatureCarrierBlock(ship, dbShip, groupId) {
+    if (!isFeatureCarrier(dbShip)) return '';
+    const faction = shipDB[currentFleet.faction];
+    const feats = (faction && faction.deployableFeatures) || [];
+    if (feats.length === 0) return '';
+    const chosen = ship.feature || '';
+    const opts = ['<option value="">— Choose a feature —</option>']
+      .concat(feats.map(f => `<option value="${esc(f.name)}" ${f.name === chosen ? 'selected' : ''}>${esc(f.name)}</option>`))
+      .join('');
+    const chosenFeat = feats.find(f => f.name === chosen);
+    return `<div class="feature-carrier-block${chosen ? '' : ' feature-carrier-unset'}">
+      <div class="feature-carrier-label">Deployable Feature${chosen ? '' : ' — required'}</div>
+      <select class="loadout-select" onchange="App.changeFeature('${groupId}','${ship.id}', this.value)">${opts}</select>
+      ${renderFeatureStats(chosenFeat)}
+    </div>`;
+  }
+
+  function renderGroupShipEntry(ship, dbShip, groupId, count = 1) {
     const name = dbShip ? dbShip.name : ship.shipKey;
     const img = dbShip ? dbShip.image : '';
     const tonnage = dbShip ? dbShip.tonnage : '';
@@ -2117,6 +2161,15 @@ const App = (() => {
       </div>`;
     }
 
+    // Launch Asset Reference — stat profiles for any assets this ship launches.
+    // Kept in the SAME block as the Launch loads above (the "shit with launch"),
+    // so the per-ship Launch values and the asset stat table read as one unit.
+    const shipLaunchAssets = dbShip ? collectShipLaunchAssets(currentFleet.faction, dbShip, ship) : [];
+    const launchRefHtml = shipLaunchAssets.length > 0 ? renderLaunchAssetReference(shipLaunchAssets) : '';
+    const launchBlockHtml = (loadsHtml || launchRefHtml)
+      ? `<div class="launch-block">${loadsHtml}${launchRefHtml}</div>`
+      : '';
+
     let rulesHtml = '';
     const ruleDetails = dbShip && dbShip.specialRuleDetails ? dbShip.specialRuleDetails : [];
     if (ruleDetails.length > 0) {
@@ -2135,13 +2188,14 @@ const App = (() => {
     }
 
     // Ship-specific rules text (loadout options, deployable features, etc.)
+    // Always visible — this is build-critical info, not flavour.
     let rulesTextHtml = '';
     const rulesText = dbShip ? dbShip.rulesText : '';
     if (rulesText) {
-      rulesTextHtml = `<details class="ship-lore no-print">
-        <summary class="ship-lore-toggle" style="font-size:var(--text-xs)">Ship Rules</summary>
-        <div class="ship-lore-text" style="font-family:var(--font-body);font-size:var(--text-xs)">${esc(rulesText)}</div>
-      </details>`;
+      rulesTextHtml = `<div class="ship-rules-block">
+        <div class="ship-rules-block-label">Ship Rules</div>
+        <div class="ship-rules-block-text">${esc(rulesText)}</div>
+      </div>`;
     }
 
     // Variants / counts-as
@@ -2188,23 +2242,31 @@ const App = (() => {
     else if (isRare) badges += '<span class="ship-badge ship-badge-rare">Rare</span>';
     if (groupMax > 1) badges += `<span class="ship-badge ship-badge-group">${groupMin}–${groupMax}</span>`;
 
+    // When several identical ships are collapsed into one card, show a ×N
+    // multiplier and the combined cost (per-ship cost shown alongside).
+    const qtyBadge = count > 1 ? `<span class="ship-qty-badge">×${count}</span>` : '';
+    const costHtml = count > 1
+      ? `<div class="ship-card-cost">${ship.points * count} pts<span class="ship-card-cost-each">${count} × ${ship.points}</span></div>`
+      : `<div class="ship-card-cost">${ship.points} pts</div>`;
+
     return `
-    <div class="group-ship-entry animate-in${compact ? ' compact' : ''}">
-      ${img ? `<div class="ship-card-image"><img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+    <div class="group-ship-entry${compact ? ' compact' : ''}">
+      ${img ? `<div class="ship-card-image">${qtyBadge}<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
       <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
         <div class="flex items-center justify-between">
           <div>
-            <div class="ship-card-name ship-card-name-link" onclick="event.stopPropagation(); App.openShipDetail('${currentFleet.faction}','${ship.groupCategory}','${ship.shipKey}')">${esc(name)}${badges ? ` ${badges}` : ''}</div>
+            <div class="ship-card-name ship-card-name-link" onclick="event.stopPropagation(); App.openShipDetail('${currentFleet.faction}','${ship.groupCategory}','${ship.shipKey}')">${esc(name)}${count > 1 ? ` <span class="ship-name-qty">×${count}</span>` : ''}${badges ? ` ${badges}` : ''}</div>
             <div class="ship-tonnage-label ship-tonnage-${ship.groupCategory || 'medium'}">${esc(tonnage)}</div>
           </div>
-          <div class="ship-card-cost">${ship.points} pts</div>
+          ${costHtml}
         </div>
         ${compact ? '' : statsHtml}
         ${compact ? '' : weaponsHtml}
         ${compact ? '' : loadoutsHtml}
-        ${compact ? '' : loadsHtml}
+        ${compact ? '' : launchBlockHtml}
         ${rulesHtml}
-        ${compact ? '' : rulesTextHtml}
+        ${rulesTextHtml}
+        ${renderFeatureCarrierBlock(ship, dbShip, groupId)}
         ${compact ? '' : loreHtml}
         ${compact ? '' : variantsHtml}
       </div>
@@ -2517,18 +2579,43 @@ const App = (() => {
     const dbShip = findShipInDB(currentFleet.faction, ship.groupCategory, ship.shipKey);
     if (!dbShip || !dbShip.loadoutOptions) return;
 
-    // Update selection
-    if (!ship.loadouts) ship.loadouts = {};
-    ship.loadouts[loadoutIdx] = optionIdx;
+    // The card is collapsed by loadout signature, so apply the change to every
+    // copy that currently matches this ship's loadout — they're shown as one.
+    const beforeSig = JSON.stringify(ship.loadouts || {});
+    const targets = group.ships.filter(s =>
+      s.shipKey === ship.shipKey &&
+      s.groupCategory === ship.groupCategory &&
+      JSON.stringify(s.loadouts || {}) === beforeSig
+    );
 
-    // Recalculate total points: base + all loadout costs
-    let total = dbShip.points || 0;
-    dbShip.loadoutOptions.forEach((lo, li) => {
-      const selIdx = ship.loadouts[li] ?? 0;
-      total += lo.options[selIdx]?.cost || 0;
+    targets.forEach(s => {
+      if (!s.loadouts) s.loadouts = {};
+      s.loadouts[loadoutIdx] = optionIdx;
+      // Recalculate total points: base + all loadout costs
+      let total = dbShip.points || 0;
+      dbShip.loadoutOptions.forEach((lo, li) => {
+        const selIdx = s.loadouts[li] ?? 0;
+        total += lo.options[selIdx]?.cost || 0;
+      });
+      s.points = total;
     });
-    ship.points = total;
 
+    saveFleets();
+    updatePoints();
+    scheduleRender(renderGroupsNav, renderActiveGroup);
+  }
+
+  function changeFeature(groupId, shipId, featureName) {
+    if (!currentFleet) return;
+    const group = currentFleet.battleGroups.find(g => g.id === groupId);
+    if (!group) return;
+    const ship = group.ships.find(s => s.id === shipId);
+    if (!ship) return;
+    // Every ship in a group must carry the same options — apply to all copies
+    // of this ship type so the collapsed card stays consistent.
+    group.ships
+      .filter(s => s.shipKey === ship.shipKey && s.groupCategory === ship.groupCategory)
+      .forEach(s => { s.feature = featureName || undefined; });
     saveFleets();
     updatePoints();
     scheduleRender(renderGroupsNav, renderActiveGroup);
@@ -3915,47 +4002,50 @@ const App = (() => {
   // Collects all unique launch asset profiles needed by ships in a group.
   // Splits compound load names like "Fighters & Bombers" into individual
   // asset lookups against the faction's launch asset table.
-  function collectGroupLaunchAssets(group, factionKey) {
+  // Launch asset profiles a single ship can deploy (base loads + the loads on
+  // its currently-selected loadout options). Compound names like
+  // "Fighters & Bombers" are split into individual asset lookups.
+  function collectShipLaunchAssets(factionKey, dbShip, ship) {
     const factionInfo = shipDB[factionKey];
     if (!factionInfo || !factionInfo.launchAssets || factionInfo.launchAssets.length === 0) return [];
+    if (!dbShip) return [];
 
     const assetsByName = {};
     factionInfo.launchAssets.forEach(a => { assetsByName[a.name.toLowerCase()] = a; });
 
-    const needed = new Set();
-    const result = [];
-
-    group.ships.forEach(ship => {
-      const dbShip = findShipInDB(factionKey, ship.groupCategory, ship.shipKey);
-      if (!dbShip) return;
-
-      // Gather loads from base ship
-      const allLoads = [...(dbShip.loads || [])];
-
-      // Gather loads from selected loadout options
-      const loadoutOpts = dbShip.loadoutOptions || [];
-      loadoutOpts.forEach((lo, loIdx) => {
-        const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
-        const selOpt = lo.options[selIdx];
-        if (selOpt && selOpt.loads) {
-          allLoads.push(...selOpt.loads);
-        }
-      });
-
-      allLoads.forEach(load => {
-        if (!load.name) return;
-        // Split compound names: "Fighters & Bombers" → ["Fighters", "Bombers"]
-        const parts = load.name.split(/\s*&\s*/);
-        parts.forEach(part => {
-          const key = part.trim().toLowerCase();
-          if (!needed.has(key) && assetsByName[key]) {
-            needed.add(key);
-            result.push(assetsByName[key]);
-          }
-        });
-      });
+    const allLoads = [...(dbShip.loads || [])];
+    (dbShip.loadoutOptions || []).forEach((lo, loIdx) => {
+      const selIdx = (ship && ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
+      const selOpt = lo.options[selIdx];
+      if (selOpt && selOpt.loads) allLoads.push(...selOpt.loads);
     });
 
+    const needed = new Set();
+    const result = [];
+    allLoads.forEach(load => {
+      if (!load.name) return;
+      load.name.split(/\s*&\s*/).forEach(part => {
+        const key = part.trim().toLowerCase();
+        if (!needed.has(key) && assetsByName[key]) {
+          needed.add(key);
+          result.push(assetsByName[key]);
+        }
+      });
+    });
+    return result;
+  }
+
+  // Group-wide dedup across all ships (kept for callers that need it).
+  function collectGroupLaunchAssets(group, factionKey) {
+    const needed = new Set();
+    const result = [];
+    group.ships.forEach(ship => {
+      const dbShip = findShipInDB(factionKey, ship.groupCategory, ship.shipKey);
+      collectShipLaunchAssets(factionKey, dbShip, ship).forEach(a => {
+        const key = a.name.toLowerCase();
+        if (!needed.has(key)) { needed.add(key); result.push(a); }
+      });
+    });
     return result;
   }
 
@@ -4423,8 +4513,8 @@ const App = (() => {
   // ── Public API ──
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
-    loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup, moveGroup,
-    openShipSelectModal, filterCategory, toggleShipFilter, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
+    loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, moveGroup,
+    openShipSelectModal, filterCategory, toggleShipFilter, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral,
     openStationModal, selectStation, removeStation,
     toggleSidebar, printFleet,
