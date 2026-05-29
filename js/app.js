@@ -1892,6 +1892,26 @@ const App = (() => {
           if (r.description) rulesGlossary[r.name] = r.description;
         });
 
+        // Collect weapon special rules for glossary
+        const collectWeaponSpecials = (weapons) => {
+          (weapons || []).forEach(w => {
+            if (!w.special || w.special === '-') return;
+            w.special.split(',').forEach(s => {
+              const trimmed = s.trim();
+              if (!trimmed) return;
+              const baseKey = trimmed.replace(/-?\d+$/, '');
+              const desc = WEAPON_SPECIAL_RULES[trimmed] || WEAPON_SPECIAL_RULES[baseKey];
+              if (desc) rulesGlossary[baseKey || trimmed] = desc;
+            });
+          });
+        };
+        collectWeaponSpecials(wpns);
+        (db.loadoutOptions || []).forEach((lo, loIdx) => {
+          const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
+          const selOpt = lo.options[selIdx];
+          if (selOpt && selOpt.weapons) collectWeaponSpecials(selOpt.weapons);
+        });
+
         // Rules chips
         const ruleNames = (db.specialRuleDetails || []).map(r => esc(r.name)).join(', ') ||
                           (db.special_rules || []).map(r => esc(r)).join(', ');
