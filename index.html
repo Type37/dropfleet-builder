@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Dropfleet Commander — Fleet Builder</title>
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="assets/logos/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="assets/logos/favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800&family=Roboto+Slab:wght@700;800&family=Merriweather:wght@400;700&family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<!-- ═══ Top Bar ═══ -->
+<header class="topbar" id="topbar">
+  <a class="topbar-brand" href="#" onclick="App.navigate('landing'); return false;">
+    <img src="assets/logos/dfc_logo_text.webp" alt="Dropfleet Commander" class="topbar-logo">
+  </a>
+  <div class="topbar-sep desktop-only"></div>
+  <span class="topbar-context" id="topbar-context">Fleet Builder</span>
+  <div class="topbar-actions" id="topbar-actions"></div>
+</header>
+
+<!-- ═══ App Shell ═══ -->
+<div class="app-shell" id="app">
+
+  <!-- ── Landing Page ── -->
+  <section class="landing" id="view-landing">
+    <div class="landing-hero">
+      <div class="landing-logo">
+        <img src="assets/logos/dfc_logo.webp" alt="Dropfleet Commander" class="landing-logo-img">
+      </div>
+      <div class="deco-divider"><div class="deco-diamond"></div></div>
+      <p class="landing-subtitle">Fleet builder and mission tools for Dropfleet Commander by TTCombat.</p>
+    </div>
+    <div class="landing-grid stagger">
+      <div class="tool-card tool-card--builder card-deco" onclick="App.navigate('fleets')">
+        <div class="tool-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+            <line x1="4" y1="22" x2="4" y2="15"/>
+          </svg>
+        </div>
+        <h2 class="tool-card-title">Fleet Builder</h2>
+        <p class="tool-card-desc">Build and manage your battle fleets. Choose your faction, select ships, and optimize your force composition.</p>
+        <div class="badge badge-navy badge-lg" style="margin-top: var(--sp-md)">Start Building</div>
+      </div>
+      <div class="tool-card tool-card--mission card-deco" onclick="window.open('https://jetwong.neocities.org/wargaming/dropfleet-commander/dropfleet-mission-maker','_blank')">
+        <div class="tool-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>
+            <line x1="9" y1="3" x2="9" y2="18"/>
+            <line x1="15" y1="6" x2="15" y2="21"/>
+          </svg>
+        </div>
+        <h2 class="tool-card-title">Mission Maker</h2>
+        <p class="tool-card-desc">Generate randomized scenarios with deployment zones, objectives, and special conditions for your battles.</p>
+        <div class="badge badge-gold badge-lg" style="margin-top: var(--sp-md)">Open Tool</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Fleet List ── -->
+  <section class="fleet-list hidden" id="view-fleets">
+    <div class="fleet-list-header">
+      <div>
+        <h1 class="text-title-2" style="margin-bottom:var(--sp-xs)">Your Fleets</h1>
+        <p class="text-caption">Manage your battle fleet rosters</p>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-outline btn-sm" onclick="App.loadDemoFleets()" data-tooltip="Load sample fleets">Load Demos</button>
+        <button class="btn btn-primary" onclick="App.openNewFleetModal()">+ New Fleet</button>
+      </div>
+    </div>
+    <div class="fleet-grid" id="fleet-grid">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+  <!-- ── Fleet Builder ── -->
+  <section class="hidden" id="view-builder">
+    <div class="builder-layout" id="builder-layout">
+      <!-- Sidebar -->
+      <aside class="builder-sidebar" id="builder-sidebar">
+        <div class="sidebar-handle mobile-only" onclick="App.toggleSidebar()">
+          <div class="sidebar-handle-bar"></div>
+        </div>
+
+        <!-- Fleet Info -->
+        <div class="fleet-info-panel" id="fleet-info-panel">
+          <div class="fleet-info-name" id="builder-fleet-name">Fleet Name</div>
+          <div class="fleet-info-faction" id="builder-fleet-faction">Faction</div>
+          <div class="flex gap-xs" style="margin-top:var(--sp-sm)">
+            <span class="badge badge-neutral" id="builder-fleet-size">Clash</span>
+          </div>
+        </div>
+
+        <!-- Points -->
+        <div class="points-bar" id="points-bar">
+          <div class="points-bar-header">
+            <span class="points-current" id="points-current">0</span>
+            <span class="points-limit">/ <span id="points-limit">2000</span> pts</span>
+          </div>
+          <div class="points-track">
+            <div class="points-fill" id="points-fill" style="width:0%"></div>
+          </div>
+          <div class="flex justify-between" style="margin-top:var(--sp-xs)">
+            <span class="text-overline" id="groups-count">0 groups</span>
+            <span class="text-overline" id="groups-limit">/ 20 max</span>
+          </div>
+        </div>
+
+        <!-- Admiral -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Admiral</div>
+          <div id="admiral-slot">
+            <div class="add-ship-area" onclick="App.openAdmiralModal()" style="padding:var(--sp-lg);min-height:60px">
+              <span style="font-size:var(--text-sm)">+ Add Admiral</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Battle Groups -->
+        <div class="sidebar-section" style="flex:1">
+          <div class="flex items-center justify-between">
+            <div class="sidebar-section-title" style="border:none;padding:0">Groups</div>
+            <button class="btn btn-ghost-light btn-sm" onclick="App.addGroup()" data-tooltip="Add group">+</button>
+          </div>
+          <div id="groups-nav" class="flex flex-col gap-xs">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col gap-xs" style="border-top:1px solid rgba(255,255,255,0.1);padding-top:var(--sp-lg)">
+          <button class="sidebar-btn" onclick="App.printFleet()">Print Fleet</button>
+          <button class="sidebar-btn" onclick="App.shareFleet()">Share Fleet</button>
+          <button class="btn btn-ghost-light btn-sm btn-block" onclick="App.navigate('fleets')">Back to Fleets</button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="builder-main" id="builder-main">
+        <div class="empty-state" id="builder-empty">
+          <div class="empty-state-icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.3">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+              <path d="M12 8v4l3 3"/>
+            </svg>
+          </div>
+          <h2 class="empty-state-title">Ready to build</h2>
+          <p class="empty-state-desc">Add a group from the sidebar to start assembling your fleet. Each group contains ships of the same type.</p>
+          <button class="btn btn-primary btn-lg" onclick="App.addGroup()">+ Add First Group</button>
+        </div>
+        <div class="hidden" id="builder-content">
+          <!-- Group view rendered here -->
+        </div>
+      </main>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ Modals ═══ -->
+
+<!-- New Fleet Modal -->
+<div class="modal-overlay" id="modal-new-fleet">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h2 class="modal-title">New Fleet</h2>
+      <button class="modal-close" onclick="App.closeModal('modal-new-fleet')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="flex flex-col gap-xl">
+        <div class="form-group">
+          <label class="form-label">Fleet Name</label>
+          <input class="form-input" id="new-fleet-name" type="text" placeholder="e.g. Task Force Aegis">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-textarea" id="new-fleet-desc" placeholder="Optionally describe your fleet's purpose or lore..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Faction</label>
+          <div class="flex flex-wrap gap-sm" id="faction-picker">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Game Size</label>
+          <div class="flex flex-col gap-xs" id="size-picker">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="App.closeModal('modal-new-fleet')">Cancel</button>
+      <button class="btn btn-primary" id="btn-create-fleet" onclick="App.createFleet()">Create Fleet</button>
+    </div>
+  </div>
+</div>
+
+<!-- Ship Selection Modal -->
+<div class="modal-overlay" id="modal-ship-select">
+  <div class="modal-panel modal-panel--xl">
+    <div class="modal-header">
+      <h2 class="modal-title" id="ship-select-title">Add Ships</h2>
+      <div class="flex items-center gap-md">
+        <div class="sort-controls">
+          <button class="sort-btn active" onclick="App.sortShips('name')" data-sort="name">Name</button>
+          <button class="sort-btn" onclick="App.sortShips('cost')" data-sort="cost">Cost</button>
+        </div>
+        <button class="modal-close" onclick="App.closeModal('modal-ship-select')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="ship-category-tabs" id="ship-category-tabs">
+        <!-- Populated by JS -->
+      </div>
+      <div class="ship-grid" id="ship-select-grid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Admiral Selection Modal -->
+<div class="modal-overlay" id="modal-admiral">
+  <div class="modal-panel modal-panel--lg">
+    <div class="modal-header">
+      <h2 class="modal-title">Choose Admiral</h2>
+      <button class="modal-close" onclick="App.closeModal('modal-admiral')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="text-caption" style="margin-bottom:var(--sp-lg)">Generic admirals can be placed on any ship. Famous admirals come with their own flagship.</p>
+      <div id="admiral-options" class="flex flex-col gap-md">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ship Detail Modal -->
+<div class="modal-overlay" id="modal-ship-detail">
+  <div class="modal-panel modal-panel--lg">
+    <div class="modal-header">
+      <h2 class="modal-title" id="detail-ship-name">Ship Name</h2>
+      <button class="modal-close" onclick="App.closeModal('modal-ship-detail')">✕</button>
+    </div>
+    <div class="modal-body" id="detail-ship-body">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Modal -->
+<div class="modal-overlay" id="modal-confirm">
+  <div class="modal-panel" style="max-width:400px">
+    <div class="modal-header">
+      <h2 class="modal-title" id="confirm-title">Confirm</h2>
+      <button class="modal-close" onclick="App.closeModal('modal-confirm')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirm-message">Are you sure?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="App.closeModal('modal-confirm')">Cancel</button>
+      <button class="btn btn-danger" id="confirm-action">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

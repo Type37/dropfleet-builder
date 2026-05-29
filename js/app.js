@@ -1,0 +1,1211 @@
+/* ═══════════════════════════════════════════════════════════════
+   DROPFLEET COMMANDER — FLEET BUILDER
+   Application Logic
+   ═══════════════════════════════════════════════════════════════ */
+
+const App = (() => {
+  // ── State ──
+  let shipDB = {};
+  let factionData = {};
+  let fleets = [];
+  let currentFleet = null;
+  let activeGroupId = null;
+  let shipSortMode = 'name';
+  let activeCategory = 'all';
+
+  const GAME_SIZES = {
+    skirmish:   { label: 'Skirmish',   min: 501,  max: 1000,  groups: 16, admiralMax: 2, colossalMax: 0, time: '1–1.5 hrs', desc: '501–1000 pts' },
+    clash:      { label: 'Clash',      min: 1001, max: 2000,  groups: 20, admiralMax: 3, colossalMax: 1, time: '2–3 hrs',   desc: '1001–2000 pts' },
+    battle:     { label: 'Battle',     min: 2001, max: 3000,  groups: 24, admiralMax: 4, colossalMax: 2, time: '3–4 hrs',   desc: '2001–3000 pts' },
+    reconquest: { label: 'Reconquest', min: 3001, max: 99999, groups: 28, admiralMax: 4, colossalMax: 3, time: '4+ hrs',    desc: '3001+ pts' }
+  };
+
+  const FACTION_COLORS = {
+    ucm: '#3e9945', phr: '#6a4c9c', scourge: '#c43c2f',
+    shaltari: '#d98c1f', bioficer: '#2a8c8c', resistance: '#b04a2a'
+  };
+
+  const FACTION_LABELS = {
+    ucm: 'UCM', phr: 'PHR', scourge: 'Scourge',
+    shaltari: 'Shaltari', bioficer: 'Bioficers', resistance: 'Resistance'
+  };
+
+  const CATEGORY_LABELS = {
+    colossal: 'Colossal',
+    heavy: 'Heavy',
+    medium: 'Medium',
+    light: 'Light',
+    payload: 'Payload'
+  };
+
+  const CATEGORY_ORDER = ['colossal','heavy','medium','light','payload'];
+
+  let rawFleetData = null;
+
+  // ── Init ──
+  async function init() {
+    try {
+      const res = await fetch('data/fleet-data.json');
+      rawFleetData = await res.json();
+      transformData(rawFleetData);
+    } catch (e) {
+      console.error('Failed to load fleet data:', e);
+    }
+
+    loadFleets();
+    setupRouting();
+    window.dispatchEvent(new Event('hashchange'));
+  }
+
+  const SHIP_ART = new Set([
+    // PHR
+    'achilles','agamemnon','agrippa','ajax','amphion','andromeda','antigonus',
+    'antony','ariadne','augustus','bellerophon','brutus','cadmus','caesar',
+    'calypso','castor','cato','chrysaor','echo','electra','europa','ganymede',
+    'harpocrates','hector','heracles','ikarus','jason','kairos','leonnatus',
+    'medea','meleager','memnon','minos','octavius','odysseus','orion','orpheus',
+    'otera','ourania','pandora','pegasus','perseus','philonoe','pollux',
+    'pompeius','priam','ptolemy','remus','rhadamanthus','romulus','sarpedon',
+    'seleucus','sysyphus','teucer','theseus','trajan',
+    // UCM
+    'babylon','beijing','berlin','boston','bruges','bucharest','byzantium',
+    'caracas','carthage','delhi','detroit','edmonton','geneva','glasgow',
+    'hanoi','havana','istanbul','jakarta','johannesburg','kyiv','lima','london',
+    'lysander','madrid','osaka','oslo','perth','reykjavik','rio','rome',
+    'santiago','seattle','sheffield','taipei','thebes','tokyo','toulon',
+    'ulaanbaatar','vancouver','venice','vienna','washington',
+    // Scourge
+    'akuma','apsasu','bael','banshee','beelzebub','charybdis','chimera',
+    'cthulhu','daemon','devil','djinn','dragon','ebisu','faust','gargoyle',
+    'harpy','hiruko','hydra','ifrit','incubus','lucifer','nephilim',
+    'nosferatu','parasite','raiju','raum','revenant','samael','scylla',
+    'shadow','sphinx','strix','succubus','wraith','wyvern','yokai',
+    // Shaltari
+    'actinium','amber','amethyst','aquamarine','azurite','basalt','bronze',
+    'cerium','chromium','cobalt','copper','diamond','emerald','gallium',
+    'gold','granite','hematite','iron','jade','jet','lanthanum','mercury',
+    'obsidian','onyx','opal','platinum','ruby','sapphire','silver','topaz',
+    'turquoise',
+    // Resistance
+    'aldrin','armstrong','barbarossa','collins','coloniser','drake','explorer',
+    'farragut','iowa','lexington','musashi','nelson','nimitz','pathfinder',
+    'phalanx','senator','seneca','vanguard','yamamoto',
+    // Bioficer
+    'cache','cacophony','cataphract','cavern','charger','choral','cipher',
+    'combine','comet','conqueror','construct','cosmic','diode','domain',
+    'foray','forestall','fresco','fugue','fulcrum','logic','mantle','matrix',
+    'monarch','supercell','tally','tine','torrent','vertex','zenith','zodiac'
+  ]);
+  const SHIP_ART_SPECIAL = {
+    'New York':'new_york','New Cairo':'new_cairo','New Mombasa':'new_mombasa',
+    'New Orleans':'new_orleans','Las Vegas':'las_vegas',
+    'San Francisco':'san_francisco','St Petersburg':'st_petersburg',
+    'Nuuk':'nuuk_em_harraser',
+    'Summoner Cell':'summoner_cell','Prism Cell':'prism_cell',
+    'Torpedo Cell':'torpedo_cell','Lander Cell':'lander_cell',
+    'Invasion Cell':'invasion_cell',
+    'Yi Sun-sin':'yi-sun-sin','Voidgate':'voidgates',
+    'Bastion':'bioficer_battleship_bastion',
+    'Binary':'bioficer_battleship_binary',
+    'Bishop':'bioficer_battleship_bishop',
+    'Callous':'callouis','Catastrophe':'catastrope',
+    'Triumvir':'trumvir','Tribune':'tribute','Disciple':'discipline'
+  };
+  const ADMIRAL_ART = {
+    'claudia rhee': 'claudia_rhee',
+    'gaius chau': 'gaius_chau',
+    'javelin': 'director_javelin',
+    'helena of asgard': 'helena_of_asgard'
+  };
+
+  function shipArtPath(shipName) {
+    if (!shipName) return null;
+    // Check special multi-word / irregular mappings first
+    for (const [prefix, file] of Object.entries(SHIP_ART_SPECIAL)) {
+      if (shipName.startsWith(prefix)) return `assets/art/${file}.webp`;
+    }
+    const first = shipName.split(/\s+/)[0].toLowerCase();
+    return SHIP_ART.has(first) ? `assets/art/${first}.webp` : null;
+  }
+
+  function admiralArtPath(admiralName) {
+    if (!admiralName) return null;
+    const lower = admiralName.toLowerCase();
+    for (const [pattern, file] of Object.entries(ADMIRAL_ART)) {
+      if (lower.includes(pattern)) return `assets/art/${file}.webp`;
+    }
+    return null;
+  }
+
+  function transformData(raw) {
+    Object.entries(raw.factions).forEach(([factionKey, faction]) => {
+      factionData[factionKey] = { name: faction.name, shortName: faction.shortName };
+
+      const groups = {};
+
+      (faction.groups || []).forEach(g => {
+        const cat = g.category || 'medium';
+        if (!groups[cat]) groups[cat] = { ships: {} };
+        const s = g.ship;
+        groups[cat].ships[g.id] = {
+          name: s.name,
+          points: s.cost,
+          tonnage: s.stats?.tonnage || cat.charAt(0).toUpperCase(),
+          scan: s.stats?.scan, sig: s.stats?.sig,
+          thrust: s.stats?.thrust, hull: s.stats?.hull,
+          es: s.stats?.es, ks: s.stats?.ks,
+          bs: s.stats?.bs, g: s.stats?.g,
+          special: s.stats?.special,
+          weapons: s.weapons || [],
+          loads: s.loads || [],
+          special_rules: (s.specialRules || []).map(r => r.name),
+          specialRuleDetails: s.specialRules || [],
+          groupMin: s.groupMin, groupMax: s.groupMax,
+          isRare: s.isRare, isUnique: s.isUnique,
+          loadoutOptions: s.loadoutOptions || [],
+          image: shipArtPath(s.name)
+        };
+      });
+
+      const famous = (faction.admirals || []).filter(a => a.isFamous);
+      if (famous.length > 0) {
+        groups.famous_admirals = { ships: {} };
+        famous.forEach(a => {
+          const fs = a.flagship;
+          groups.famous_admirals.ships[a.id] = {
+            name: a.name,
+            points: fs ? (a.cost + fs.cost) : a.cost,
+            admiral_cost: a.cost,
+            ship_cost: fs ? fs.cost : 0,
+            level: a.level,
+            type: 'Famous',
+            special_abilities: a.abilities || [],
+            scan: fs?.stats?.scan, sig: fs?.stats?.sig,
+            thrust: fs?.stats?.thrust, hull: fs?.stats?.hull,
+            es: fs?.stats?.es, ks: fs?.stats?.ks,
+            bs: fs?.stats?.bs, g: fs?.stats?.g,
+            special: fs?.stats?.special,
+            tonnage: fs?.stats?.tonnage,
+            weapons: fs?.weapons || [],
+            loads: fs?.loads || [],
+            special_rules: (fs?.specialRules || []).map(r => r.name),
+            specialRuleDetails: fs?.specialRules || [],
+            image: admiralArtPath(a.name) || shipArtPath(fs?.name)
+          };
+        });
+      }
+
+      shipDB[factionKey] = { groups, admirals: faction.admirals || [] };
+    });
+  }
+
+  // ── Routing ──
+  function setupRouting() {
+    window.addEventListener('hashchange', () => {
+      const hash = location.hash.slice(1) || 'landing';
+      const [view, param] = hash.split('/');
+      showView(view, param);
+    });
+  }
+
+  function navigate(view, param) {
+    location.hash = param ? `${view}/${param}` : view;
+  }
+
+  function showView(view, param) {
+    document.querySelectorAll('#app > section').forEach(s => s.classList.add('hidden'));
+    const topActions = document.getElementById('topbar-actions');
+    const topContext = document.getElementById('topbar-context');
+    topActions.innerHTML = '';
+
+    switch (view) {
+      case 'landing':
+        show('view-landing');
+        topContext.textContent = 'Fleet Builder';
+        break;
+      case 'fleets':
+        show('view-fleets');
+        topContext.textContent = 'Your Fleets';
+        renderFleetList();
+        break;
+      case 'builder':
+        if (param) {
+          currentFleet = fleets.find(f => f.id === param);
+          if (currentFleet) {
+            show('view-builder');
+            topContext.textContent = currentFleet.name;
+            renderBuilder();
+            return;
+          }
+        }
+        navigate('fleets');
+        break;
+      default:
+        show('view-landing');
+    }
+  }
+
+  function show(id) {
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  // ── Persistence ──
+  function loadFleets() {
+    try { fleets = JSON.parse(localStorage.getItem('dfc_fleets') || '[]'); }
+    catch { fleets = []; }
+  }
+
+  function saveFleets() {
+    localStorage.setItem('dfc_fleets', JSON.stringify(fleets));
+  }
+
+  function uuid() {
+    return 'xxxx-xxxx'.replace(/x/g, () => ((Math.random() * 16) | 0).toString(16));
+  }
+
+  // ── Fleet CRUD ──
+  function openNewFleetModal() {
+    document.getElementById('new-fleet-name').value = '';
+    document.getElementById('new-fleet-desc').value = '';
+    renderFactionPicker();
+    renderSizePicker();
+    openModal('modal-new-fleet');
+    setTimeout(() => document.getElementById('new-fleet-name').focus(), 200);
+  }
+
+  const FACTION_ICONS = {
+    ucm: 'assets/factions/ucm.webp',
+    phr: 'assets/factions/phr.webp',
+    scourge: 'assets/factions/scourge.webp',
+    shaltari: 'assets/factions/shaltari.webp',
+    resistance: 'assets/factions/resistance.webp',
+    bioficer: null
+  };
+
+  function renderFactionPicker() {
+    const container = document.getElementById('faction-picker');
+    const factions = ['ucm','phr','scourge','shaltari','bioficer','resistance'];
+    container.innerHTML = factions.map(key => {
+      const name = FACTION_LABELS[key] || (factionData[key] || {}).name || key.toUpperCase();
+      const icon = FACTION_ICONS[key]
+        ? `<img src="${FACTION_ICONS[key]}" alt="" style="width:20px;height:20px;object-fit:contain;flex-shrink:0">`
+        : `<span style="width:20px;height:20px;border-radius:2px;background:${FACTION_COLORS[key]};flex-shrink:0;display:block"></span>`;
+      return `<button type="button" class="btn btn-outline faction-pick-btn" data-faction="${key}"
+        onclick="App.selectFaction('${key}')"
+        style="flex:1;min-width:100px;border-color:${FACTION_COLORS[key]}33;position:relative;overflow:hidden">
+        ${icon}
+        <span>${name}</span>
+      </button>`;
+    }).join('');
+  }
+
+  function selectFaction(key) {
+    document.querySelectorAll('.faction-pick-btn').forEach(btn => {
+      btn.classList.remove('btn-primary');
+      btn.classList.add('btn-outline');
+      btn.style.background = '';
+      btn.style.color = '';
+    });
+    const btn = document.querySelector(`.faction-pick-btn[data-faction="${key}"]`);
+    if (btn) {
+      btn.classList.remove('btn-outline');
+      btn.classList.add('btn-primary');
+      btn.style.background = FACTION_COLORS[key];
+      btn.style.color = '#fff';
+    }
+    btn.dataset.selected = 'true';
+  }
+
+  function renderSizePicker() {
+    const container = document.getElementById('size-picker');
+    const barProfiles = {
+      skirmish:   [8, 12, 6, 4],
+      clash:      [10, 16, 12, 8],
+      battle:     [14, 22, 18, 12],
+      reconquest: [16, 28, 24, 18]
+    };
+    container.innerHTML = Object.entries(GAME_SIZES).map(([key, size]) => {
+      const bars = barProfiles[key].map(h => `<div class="game-size-bar" style="height:${h}px"></div>`).join('');
+      const colossalText = size.colossalMax > 0 ? ` · ${size.colossalMax} Colossal` : '';
+      return `
+      <div class="game-size-option ${key === 'clash' ? 'selected' : ''}" data-size="${key}" onclick="App.selectGameSize('${key}')">
+        <input type="radio" name="game-size" value="${key}" style="display:none" ${key === 'clash' ? 'checked' : ''}>
+        <div class="game-size-visual">${bars}</div>
+        <div class="game-size-info">
+          <div class="game-size-name">${size.label}</div>
+          <div class="game-size-details">${size.desc} · ${size.groups} groups max</div>
+          <div class="game-size-time">~${size.time} · Admiral Lv${size.admiralMax} max${colossalText}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function selectGameSize(key) {
+    document.querySelectorAll('.game-size-option').forEach(opt => {
+      opt.classList.remove('selected');
+      const radio = opt.querySelector('input[type="radio"]');
+      if (radio) radio.checked = false;
+    });
+    const selected = document.querySelector(`.game-size-option[data-size="${key}"]`);
+    if (selected) {
+      selected.classList.add('selected');
+      const radio = selected.querySelector('input[type="radio"]');
+      if (radio) radio.checked = true;
+    }
+  }
+
+  function createFleet() {
+    const name = document.getElementById('new-fleet-name').value.trim();
+    if (!name) { document.getElementById('new-fleet-name').focus(); return; }
+
+    const selectedFaction = document.querySelector('.faction-pick-btn[data-selected="true"]');
+    if (!selectedFaction) return;
+    const faction = selectedFaction.dataset.faction;
+
+    const sizeRadio = document.querySelector('input[name="game-size"]:checked');
+    const gameSize = sizeRadio ? sizeRadio.value : 'clash';
+    const sizeInfo = GAME_SIZES[gameSize];
+
+    const fleet = {
+      id: uuid(),
+      name,
+      description: document.getElementById('new-fleet-desc').value.trim(),
+      faction,
+      gameSize,
+      pointsLimit: sizeInfo.max,
+      maxGroups: sizeInfo.groups,
+      admiral: null,
+      battleGroups: [],
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+
+    fleets.push(fleet);
+    saveFleets();
+    closeModal('modal-new-fleet');
+    navigate('builder', fleet.id);
+  }
+
+  function deleteFleet(id) {
+    const fleet = fleets.find(f => f.id === id);
+    if (!fleet) return;
+    confirmAction(`Delete "${fleet.name}"?`, 'This cannot be undone.', () => {
+      fleets = fleets.filter(f => f.id !== id);
+      saveFleets();
+      if (currentFleet && currentFleet.id === id) currentFleet = null;
+      renderFleetList();
+    });
+  }
+
+  function duplicateFleet(id) {
+    const src = fleets.find(f => f.id === id);
+    if (!src) return;
+    const copy = JSON.parse(JSON.stringify(src));
+    copy.id = uuid();
+    copy.name = src.name + ' (copy)';
+    copy.createdAt = Date.now();
+    copy.updatedAt = Date.now();
+    copy.battleGroups.forEach(g => { g.id = uuid(); g.ships.forEach(s => { s.id = uuid(); }); });
+    fleets.push(copy);
+    saveFleets();
+    renderFleetList();
+  }
+
+  // ── Fleet List View ──
+  function renderFleetList() {
+    const grid = document.getElementById('fleet-grid');
+    const cards = fleets.map(f => {
+      const pts = calcFleetPoints(f);
+      const sizeInfo = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
+      const fName = (factionData[f.faction] || {}).name || f.faction.toUpperCase();
+      return `
+      <div class="fleet-card card-deco" onclick="App.navigate('builder','${f.id}')">
+        <div class="flex items-center justify-between">
+          <span class="badge badge-${f.faction}">${fName}</span>
+          <span class="badge badge-neutral">${sizeInfo.label}</span>
+        </div>
+        <div class="fleet-card-name">${esc(f.name)}</div>
+        ${f.description ? `<div class="text-caption" style="line-height:1.4">${esc(f.description)}</div>` : ''}
+        <div class="flex items-center justify-between" style="margin-top:var(--sp-sm)">
+          <span class="fleet-card-points">${pts} pts</span>
+          <span class="text-caption">${f.battleGroups.length} groups</span>
+        </div>
+        <div class="fleet-card-actions" onclick="event.stopPropagation()">
+          <button class="btn btn-ghost btn-sm" onclick="App.duplicateFleet('${f.id}')">Duplicate</button>
+          <button class="btn btn-danger btn-sm" onclick="App.deleteFleet('${f.id}')">Delete</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    grid.innerHTML = cards + `
+      <div class="fleet-card fleet-card-new" onclick="App.openNewFleetModal()">
+        <div class="fleet-card-new-icon">+</div>
+        <div style="font-family:var(--font-display);font-weight:var(--weight-semibold);font-size:var(--text-md)">Create New Fleet</div>
+        <div class="text-caption">Start building a new fleet roster</div>
+      </div>`;
+  }
+
+  // ── Demo Fleets ──
+  function loadDemoFleets() {
+    if (fleets.some(f => f.name.includes('Demo'))) {
+      showToast('Demo fleets already loaded');
+      return;
+    }
+
+    const demoSpecs = [
+      { faction: 'ucm', name: 'Demo — UCM Battlefleet', desc: 'A balanced UCM strike force' },
+      { faction: 'scourge', name: 'Demo — Scourge Swarm', desc: 'An aggressive Scourge raiding force' }
+    ];
+
+    demoSpecs.forEach(spec => {
+      const factionShips = shipDB[spec.faction];
+      if (!factionShips || !factionShips.groups) return;
+      const groups = factionShips.groups;
+
+      const battleGroups = [];
+
+      function pickShips(catKey, count) {
+        if (!groups[catKey] || !groups[catKey].ships) return [];
+        const entries = Object.entries(groups[catKey].ships);
+        const picked = [];
+        for (let i = 0; i < Math.min(count, entries.length); i++) {
+          const [key, ship] = entries[i];
+          picked.push({ id: uuid(), shipKey: key, groupCategory: catKey, points: ship.points || 0, loadouts: {} });
+        }
+        return picked;
+      }
+
+      if (groups.heavy) {
+        battleGroups.push({ id: uuid(), name: 'Vanguard', ships: pickShips('heavy', 2) });
+      }
+      if (groups.medium) {
+        battleGroups.push({ id: uuid(), name: 'Line', ships: pickShips('medium', 3) });
+      }
+      if (groups.light) {
+        battleGroups.push({ id: uuid(), name: 'Pathfinders', ships: pickShips('light', 2) });
+      }
+
+      const fleet = {
+        id: uuid(), name: spec.name, description: spec.desc,
+        faction: spec.faction, gameSize: 'clash', pointsLimit: 2000, maxGroups: 20,
+        admiral: null, battleGroups, createdAt: Date.now(), updatedAt: Date.now()
+      };
+      fleets.push(fleet);
+    });
+
+    saveFleets();
+    renderFleetList();
+    showToast('Demo fleets loaded!');
+  }
+
+  // ── Builder View ──
+  function renderBuilder() {
+    if (!currentFleet) return;
+    const f = currentFleet;
+    const sizeInfo = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
+    const fName = (factionData[f.faction] || {}).name || f.faction.toUpperCase();
+
+    document.getElementById('builder-fleet-name').textContent = f.name;
+    document.getElementById('builder-fleet-faction').textContent = fName;
+    document.getElementById('builder-fleet-size').textContent = sizeInfo.label;
+
+    const panel = document.getElementById('fleet-info-panel');
+    panel.closest('[id="view-builder"]').dataset.faction = f.faction;
+
+    if (f.battleGroups.length > 0 && !activeGroupId) {
+      activeGroupId = f.battleGroups[0].id;
+    }
+
+    updatePoints();
+    renderAdmiralSlot();
+    renderGroupsNav();
+    renderActiveGroup();
+  }
+
+  function updatePoints() {
+    const f = currentFleet;
+    if (!f) return;
+    const pts = calcFleetPoints(f);
+    const sizeInfo = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
+    const limit = sizeInfo.max;
+    const pct = Math.min((pts / limit) * 100, 100);
+
+    document.getElementById('points-current').textContent = pts;
+    document.getElementById('points-limit').textContent = limit === 99999 ? '∞' : limit;
+
+    const fill = document.getElementById('points-fill');
+    fill.style.width = limit === 99999 ? '0%' : pct + '%';
+    fill.className = 'points-fill' + (pts > limit ? ' over-budget' : pct > 85 ? ' near-limit' : '');
+
+    const groupCount = f.battleGroups.length;
+    document.getElementById('groups-count').textContent = `${groupCount} group${groupCount !== 1 ? 's' : ''}`;
+    document.getElementById('groups-limit').textContent = `/ ${sizeInfo.groups} max`;
+
+    f.updatedAt = Date.now();
+    saveFleets();
+  }
+
+  function calcFleetPoints(fleet) {
+    let total = 0;
+    if (fleet.admiral) total += fleet.admiral.points || 0;
+    fleet.battleGroups.forEach(g => {
+      g.ships.forEach(s => { total += s.points || 0; });
+    });
+    return total;
+  }
+
+  // ── Groups ──
+  function renderGroupsNav() {
+    const nav = document.getElementById('groups-nav');
+    if (!currentFleet) return;
+
+    if (currentFleet.battleGroups.length === 0) {
+      nav.innerHTML = '<div class="text-caption text-center" style="padding:var(--sp-md)">No groups yet</div>';
+      return;
+    }
+
+    nav.innerHTML = currentFleet.battleGroups.map((g, i) => {
+      const shipCount = g.ships.length;
+      const groupPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
+      return `
+      <div class="group-nav-item ${g.id === activeGroupId ? 'active' : ''}" onclick="App.selectGroup('${g.id}')">
+        <div class="group-nav-name">${esc(g.name)}</div>
+        <span class="text-caption" style="white-space:nowrap">${groupPts}pts</span>
+        <span class="group-nav-count">${shipCount}</span>
+      </div>`;
+    }).join('');
+  }
+
+  function addGroup() {
+    if (!currentFleet) return;
+    const sizeInfo = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
+    if (currentFleet.battleGroups.length >= sizeInfo.groups) return;
+
+    const num = currentFleet.battleGroups.length + 1;
+    const group = { id: uuid(), name: `Group ${num}`, ships: [] };
+    currentFleet.battleGroups.push(group);
+    activeGroupId = group.id;
+    saveFleets();
+    renderGroupsNav();
+    renderActiveGroup();
+    updatePoints();
+  }
+
+  function selectGroup(gid) {
+    activeGroupId = gid;
+    renderGroupsNav();
+    renderActiveGroup();
+
+    // On mobile, collapse sidebar
+    const sidebar = document.getElementById('builder-sidebar');
+    if (sidebar.classList.contains('expanded')) sidebar.classList.remove('expanded');
+  }
+
+  function removeGroup(gid) {
+    if (!currentFleet) return;
+    const g = currentFleet.battleGroups.find(g => g.id === gid);
+    if (!g) return;
+    confirmAction(`Remove "${g.name}"?`, 'All ships in this group will be removed.', () => {
+      currentFleet.battleGroups = currentFleet.battleGroups.filter(g => g.id !== gid);
+      if (activeGroupId === gid) {
+        activeGroupId = currentFleet.battleGroups.length > 0 ? currentFleet.battleGroups[0].id : null;
+      }
+      saveFleets();
+      renderGroupsNav();
+      renderActiveGroup();
+      updatePoints();
+    });
+  }
+
+  function renameGroup(gid) {
+    const g = currentFleet.battleGroups.find(g => g.id === gid);
+    if (!g) return;
+    const name = prompt('Group name:', g.name);
+    if (name && name.trim()) {
+      g.name = name.trim();
+      saveFleets();
+      renderGroupsNav();
+      renderActiveGroup();
+    }
+  }
+
+  // ── Active Group View ──
+  function renderActiveGroup() {
+    const emptyEl = document.getElementById('builder-empty');
+    const contentEl = document.getElementById('builder-content');
+
+    if (!currentFleet || currentFleet.battleGroups.length === 0 || !activeGroupId) {
+      emptyEl.classList.remove('hidden');
+      contentEl.classList.add('hidden');
+      return;
+    }
+
+    const group = currentFleet.battleGroups.find(g => g.id === activeGroupId);
+    if (!group) {
+      emptyEl.classList.remove('hidden');
+      contentEl.classList.add('hidden');
+      return;
+    }
+
+    emptyEl.classList.add('hidden');
+    contentEl.classList.remove('hidden');
+
+    const groupPts = group.ships.reduce((t, s) => t + (s.points || 0), 0);
+
+    let html = `
+    <div class="group-header-bar">
+      <div class="flex items-center gap-md">
+        <h2 class="group-title">${esc(group.name)}</h2>
+        <span class="badge badge-navy">${groupPts} pts</span>
+        <span class="badge badge-neutral">${group.ships.length} ships</span>
+      </div>
+      <div class="flex gap-sm">
+        <button class="btn btn-ghost btn-sm" onclick="App.renameGroup('${group.id}')">Rename</button>
+        <button class="btn btn-danger btn-sm" onclick="App.removeGroup('${group.id}')">Remove</button>
+      </div>
+    </div>`;
+
+    if (group.ships.length > 0) {
+      html += '<div class="group-ships-list">';
+      group.ships.forEach(ship => {
+        const dbShip = findShipInDB(currentFleet.faction, ship.groupCategory, ship.shipKey);
+        html += renderGroupShipEntry(ship, dbShip, group.id);
+      });
+      html += '</div>';
+    }
+
+    html += `
+    <div class="add-ship-area" onclick="App.openShipSelectModal('${group.id}')" style="margin-top:var(--sp-lg)">
+      <span style="font-size:24px">+</span>
+      <span>Add Ships to ${esc(group.name)}</span>
+    </div>`;
+
+    contentEl.innerHTML = html;
+  }
+
+  function renderGroupShipEntry(ship, dbShip, groupId) {
+    const name = dbShip ? dbShip.name : ship.shipKey;
+    const img = dbShip ? dbShip.image : '';
+    const tonnage = dbShip ? dbShip.tonnage : '';
+    const specialRules = dbShip && dbShip.special_rules ? dbShip.special_rules : [];
+
+    let statsHtml = '';
+    if (dbShip) {
+      const stats = [
+        { l: 'Scan', v: dbShip.scan }, { l: 'Sig', v: dbShip.sig },
+        { l: 'Thrust', v: dbShip.thrust }, { l: 'Hull', v: dbShip.hull },
+        { l: 'ES', v: dbShip.es }, { l: 'KS', v: dbShip.ks },
+        { l: 'BS', v: dbShip.bs }, { l: 'G', v: dbShip.g }
+      ];
+      statsHtml = '<div class="stat-grid">' + stats.filter(s => s.v !== undefined && s.v !== 0).map(s =>
+        `<div class="stat-cell"><div class="stat-cell-label">${s.l}</div><div class="stat-cell-value">${s.v}</div></div>`
+      ).join('') + '</div>';
+    }
+
+    let weaponsHtml = '';
+    const wpns = dbShip && Array.isArray(dbShip.weapons) ? dbShip.weapons : [];
+    if (wpns.length > 0) {
+      weaponsHtml = '<div class="weapon-list">' + wpns.map(w =>
+        `<div class="weapon-row">
+          <span class="weapon-row-name">${esc(w.name)}</span>
+          <div class="weapon-row-stats">
+            <span class="weapon-stat-chip">${w.type || '?'}</span>
+            <span class="weapon-stat-chip">Lk ${w.lock}</span>
+            <span class="weapon-stat-chip">Atk ${w.attack}</span>
+            <span class="weapon-stat-chip">Dmg ${w.damage}</span>
+            <span class="weapon-stat-chip">${w.arc}</span>
+          </div>
+        </div>`
+      ).join('') + '</div>';
+    }
+
+    let rulesHtml = '';
+    if (specialRules.length > 0) {
+      rulesHtml = '<div class="special-rules">' + specialRules.map(r =>
+        `<span class="rule-chip">${esc(r)}</span>`
+      ).join('') + '</div>';
+    }
+
+    return `
+    <div class="group-ship-entry animate-in">
+      ${img ? `<div class="ship-card-image"><img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="ship-card-name">${esc(name)}</div>
+            <div class="text-caption">${esc(tonnage)}</div>
+          </div>
+          <div class="ship-card-cost">${ship.points} pts</div>
+        </div>
+        ${statsHtml}
+        ${weaponsHtml}
+        ${rulesHtml}
+      </div>
+      <button class="btn btn-ghost btn-icon btn-sm group-ship-remove" onclick="App.removeShip('${groupId}','${ship.id}')" data-tooltip="Remove ship">✕</button>
+    </div>`;
+  }
+
+  // ── Ship Selection Modal ──
+  function openShipSelectModal(groupId) {
+    activeGroupId = groupId;
+    activeCategory = 'all';
+
+    const factionKey = currentFleet.faction;
+    const factionShips = shipDB[factionKey];
+    if (!factionShips || !factionShips.groups) return;
+
+    renderCategoryTabs(factionShips.groups);
+    renderShipSelectGrid(factionShips.groups, 'all');
+    openModal('modal-ship-select');
+
+    document.getElementById('ship-select-title').textContent = `Add Ships — ${(factionData[factionKey] || {}).name || factionKey.toUpperCase()}`;
+  }
+
+  function renderCategoryTabs(groups) {
+    const container = document.getElementById('ship-category-tabs');
+    let tabs = '<button class="category-tab active" onclick="App.filterCategory(\'all\',this)">All Ships</button>';
+
+    CATEGORY_ORDER.forEach(catKey => {
+      if (groups[catKey] && groups[catKey].ships && Object.keys(groups[catKey].ships).length > 0) {
+        const label = CATEGORY_LABELS[catKey] || catKey;
+        const count = Object.keys(groups[catKey].ships).length;
+        tabs += `<button class="category-tab" onclick="App.filterCategory('${catKey}',this)">${label} <span class="text-muted">(${count})</span></button>`;
+      }
+    });
+
+    container.innerHTML = tabs;
+  }
+
+  function filterCategory(cat, el) {
+    activeCategory = cat;
+    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+    if (el) el.classList.add('active');
+
+    const factionShips = shipDB[currentFleet.faction];
+    if (factionShips && factionShips.groups) {
+      renderShipSelectGrid(factionShips.groups, cat);
+    }
+  }
+
+  function renderShipSelectGrid(groups, category) {
+    const grid = document.getElementById('ship-select-grid');
+    let ships = [];
+
+    const catsToShow = category === 'all' ? CATEGORY_ORDER : [category];
+
+    catsToShow.forEach(catKey => {
+      if (groups[catKey] && groups[catKey].ships) {
+        Object.entries(groups[catKey].ships).forEach(([shipKey, ship]) => {
+          if (ship.type === 'launch_asset') return;
+          ships.push({ key: shipKey, data: ship, category: catKey });
+        });
+      }
+    });
+
+    if (shipSortMode === 'cost') {
+      ships.sort((a, b) => (a.data.points || 0) - (b.data.points || 0));
+    } else {
+      ships.sort((a, b) => (a.data.name || '').localeCompare(b.data.name || ''));
+    }
+
+    if (ships.length === 0) {
+      grid.innerHTML = '<div class="empty-state"><p class="text-caption">No ships in this category</p></div>';
+      return;
+    }
+
+    grid.innerHTML = ships.map(s => renderShipSelectCard(s)).join('');
+  }
+
+  function renderShipSelectCard({ key, data, category }) {
+    const stats = [
+      { l: 'Scan', v: data.scan }, { l: 'Sig', v: data.sig },
+      { l: 'Thr', v: data.thrust }, { l: 'Hull', v: data.hull },
+      { l: 'ES', v: data.es }, { l: 'KS', v: data.ks },
+      { l: 'BS', v: data.bs }, { l: 'G', v: data.g }
+    ].filter(s => s.v !== undefined && s.v !== 0 && s.v !== '-');
+
+    const catLabel = CATEGORY_LABELS[category] || category;
+    const specialRules = data.special_rules || [];
+
+    return `
+    <div class="ship-card" onclick="App.addShipToGroup('${key}','${category}')">
+      <div class="ship-card-top">
+        ${data.image ? `<div class="ship-card-image"><img src="${esc(data.image)}" alt="${esc(data.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+        <div class="ship-card-info">
+          <div class="ship-card-name">${esc(data.name)}</div>
+          <div class="ship-card-type">${esc(data.tonnage || '')} · ${catLabel}</div>
+        </div>
+        <div class="ship-card-cost">${data.points || 0}<span style="font-size:var(--text-sm);font-weight:var(--weight-regular)"> pts</span></div>
+      </div>
+      <div class="stat-grid">
+        ${stats.map(s => `<div class="stat-cell"><div class="stat-cell-label">${s.l}</div><div class="stat-cell-value">${s.v}</div></div>`).join('')}
+      </div>
+      ${specialRules.length > 0 ? `<div class="special-rules">${specialRules.slice(0, 4).map(r => `<span class="rule-chip">${esc(r)}</span>`).join('')}${specialRules.length > 4 ? `<span class="rule-chip" style="background:rgba(255,255,255,0.06);color:var(--ink-faint)">+${specialRules.length - 4}</span>` : ''}</div>` : ''}
+      <div class="flex items-center justify-between" style="margin-top:auto">
+        <span class="text-caption">${data.g ? `Group size: ${data.g}` : ''}</span>
+        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addShipToGroup('${key}','${category}')">+ Add</button>
+      </div>
+    </div>`;
+  }
+
+  function addShipToGroup(shipKey, category) {
+    if (!currentFleet || !activeGroupId) return;
+    const group = currentFleet.battleGroups.find(g => g.id === activeGroupId);
+    if (!group) return;
+
+    const dbShip = findShipInDB(currentFleet.faction, category, shipKey);
+    if (!dbShip) return;
+
+    const entry = {
+      id: uuid(),
+      shipKey,
+      groupCategory: category,
+      points: dbShip.points || 0,
+      loadouts: {}
+    };
+
+    group.ships.push(entry);
+    saveFleets();
+    updatePoints();
+    renderGroupsNav();
+    renderActiveGroup();
+  }
+
+  function removeShip(groupId, shipId) {
+    if (!currentFleet) return;
+    const group = currentFleet.battleGroups.find(g => g.id === groupId);
+    if (!group) return;
+    group.ships = group.ships.filter(s => s.id !== shipId);
+    saveFleets();
+    updatePoints();
+    renderGroupsNav();
+    renderActiveGroup();
+  }
+
+  function sortShips(mode) {
+    shipSortMode = mode;
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.toggle('active', b.dataset.sort === mode));
+    const factionShips = shipDB[currentFleet.faction];
+    if (factionShips && factionShips.groups) {
+      renderShipSelectGrid(factionShips.groups, activeCategory);
+    }
+  }
+
+  // ── Admiral ──
+  function getAdmiralLevelCost(level) {
+    if (!rawFleetData || !rawFleetData.gameSystem || !rawFleetData.gameSystem.admiralLevels) return 0;
+    const entry = rawFleetData.gameSystem.admiralLevels.find(a => a.level === level);
+    return entry ? entry.cost : 0;
+  }
+
+  function openAdmiralModal() {
+    if (!currentFleet) return;
+    const factionShips = shipDB[currentFleet.faction];
+    if (!factionShips) return;
+
+    const sizeInfo = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
+    const maxLevel = sizeInfo.admiralMax || 4;
+    const genericAdmirals = (factionShips.admirals || []).filter(a => !a.isFamous);
+    const admiralGroup = factionShips.groups?.famous_admirals;
+
+    const container = document.getElementById('admiral-options');
+
+    let html = `
+    <div class="card card-interactive" onclick="App.selectAdmiral(null)" style="padding:var(--sp-lg)">
+      <div class="flex items-center gap-md">
+        <span style="font-size:var(--text-md);opacity:0.5;font-weight:600">&mdash;</span>
+        <div>
+          <div style="font-weight:var(--weight-semibold)">No Admiral</div>
+          <div class="text-caption">Run your fleet without an admiral</div>
+        </div>
+      </div>
+    </div>`;
+
+    if (genericAdmirals.length > 0) {
+      html += `<div style="margin-top:var(--sp-lg);margin-bottom:var(--sp-sm);font-weight:var(--weight-semibold);font-size:var(--text-sm);text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-muted)">Generic Admirals</div>`;
+      genericAdmirals.forEach(adm => {
+        const baseLevel = adm.level || 1;
+        const baseCost = adm.cost || 0;
+        let levelOptions = '';
+        for (let lv = baseLevel; lv <= maxLevel; lv++) {
+          const upgradeCost = lv > baseLevel ? getAdmiralLevelCost(lv) : 0;
+          const totalCost = baseCost + upgradeCost;
+          const selected = lv === baseLevel ? 'checked' : '';
+          levelOptions += `<label class="level-option" style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;padding:4px 8px;border:1px solid var(--stroke);border-radius:var(--radius-sm);font-size:var(--text-sm)">
+            <input type="radio" name="generic-level-${adm.id}" value="${lv}" data-cost="${totalCost}" ${selected} style="margin:0">
+            Lv${lv} <span class="text-muted">${totalCost}pts</span>
+          </label> `;
+        }
+        const abilities = (adm.abilities || []).slice(0, 3);
+        html += `
+        <div class="admiral-card card-interactive" style="cursor:pointer" data-admiral-id="${adm.id}">
+          <div style="flex:1;min-width:0">
+            <div class="admiral-name">${esc(adm.name)}</div>
+            <div class="admiral-level" style="margin-bottom:var(--sp-sm)">Base Level ${baseLevel} · ${esc(baseCost)} pts</div>
+            <div class="flex gap-sm flex-wrap" style="margin-bottom:var(--sp-sm)">${levelOptions}</div>
+            <button class="btn btn-primary btn-sm" onclick="App.selectGenericAdmiral('${adm.id}', this)">Select</button>
+          </div>
+          ${abilities.length > 0 ? `<div style="margin-top:var(--sp-sm);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.description ? ': ' + esc(a.description) : ''}</div>`).join('')}</div>` : ''}
+        </div>`;
+      });
+    }
+
+    if (admiralGroup && admiralGroup.ships && Object.keys(admiralGroup.ships).length > 0) {
+      html += `<div style="margin-top:var(--sp-lg);margin-bottom:var(--sp-sm);font-weight:var(--weight-semibold);font-size:var(--text-sm);text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-muted)">Famous Admirals</div>`;
+      Object.entries(admiralGroup.ships).forEach(([key, admiral]) => {
+        const abilities = admiral.special_abilities || [];
+        html += `
+        <div class="admiral-card card-interactive" onclick="App.selectFamousAdmiral('${key}')" style="cursor:pointer">
+          <div class="flex gap-md items-start">
+            ${admiral.image ? `<div class="ship-card-image"><img src="${esc(admiral.image)}" alt="${esc(admiral.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+            <div style="flex:1;min-width:0">
+              <div class="admiral-name">${esc(admiral.name)}</div>
+              <div class="admiral-level">Level ${admiral.level || '?'} · Famous</div>
+              <div class="flex gap-sm flex-wrap" style="margin-top:var(--sp-xs)">
+                <span class="badge badge-gold">${admiral.points} pts total</span>
+                <span class="badge badge-neutral">Admiral: ${admiral.admiral_cost} pts</span>
+                <span class="badge badge-neutral">Ship: ${admiral.ship_cost} pts</span>
+              </div>
+            </div>
+          </div>
+          ${abilities.length > 0 ? `<div style="margin-top:var(--sp-md);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.description ? ': ' + esc(a.description) : ''}</div>`).join('')}</div>` : ''}
+        </div>`;
+      });
+    }
+
+    container.innerHTML = html;
+    openModal('modal-admiral');
+  }
+
+  function selectGenericAdmiral(admiralId, btn) {
+    if (!currentFleet) return;
+    const factionShips = shipDB[currentFleet.faction];
+    const adm = (factionShips.admirals || []).find(a => a.id === admiralId);
+    if (!adm) return;
+
+    const card = btn.closest('.admiral-card');
+    const checked = card.querySelector(`input[name="generic-level-${admiralId}"]:checked`);
+    const level = checked ? parseInt(checked.value) : adm.level;
+    const cost = checked ? parseInt(checked.dataset.cost) : adm.cost;
+
+    currentFleet.admiral = {
+      admiralId,
+      name: adm.name,
+      points: cost,
+      level,
+      type: 'Generic'
+    };
+
+    saveFleets();
+    closeModal('modal-admiral');
+    renderAdmiralSlot();
+    updatePoints();
+  }
+
+  function selectFamousAdmiral(shipKey) {
+    if (!currentFleet) return;
+    const factionShips = shipDB[currentFleet.faction];
+    const admiralGroup = factionShips.groups?.famous_admirals;
+    const admiral = admiralGroup?.ships?.[shipKey];
+    if (!admiral) return;
+
+    currentFleet.admiral = {
+      shipKey,
+      name: admiral.name,
+      points: admiral.points || 0,
+      level: admiral.level,
+      type: 'Famous'
+    };
+
+    saveFleets();
+    closeModal('modal-admiral');
+    renderAdmiralSlot();
+    updatePoints();
+  }
+
+  function selectAdmiral(shipKey) {
+    if (!currentFleet) return;
+    if (!shipKey) {
+      currentFleet.admiral = null;
+      saveFleets();
+      closeModal('modal-admiral');
+      renderAdmiralSlot();
+      updatePoints();
+    }
+  }
+
+  function renderAdmiralSlot() {
+    const slot = document.getElementById('admiral-slot');
+    if (!currentFleet || !currentFleet.admiral) {
+      slot.innerHTML = `
+      <div class="add-ship-area" onclick="App.openAdmiralModal()" style="padding:var(--sp-lg);min-height:60px">
+        <span style="font-size:var(--text-sm)">+ Add Admiral</span>
+      </div>`;
+      return;
+    }
+
+    const a = currentFleet.admiral;
+    slot.innerHTML = `
+    <div class="admiral-card">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="admiral-name">${esc(a.name)}</div>
+          <div class="admiral-level">Level ${a.level || '?'}</div>
+        </div>
+        <span class="badge badge-gold">${a.points} pts</span>
+      </div>
+      <div class="flex gap-xs" style="margin-top:var(--sp-sm)">
+        <button class="btn btn-ghost btn-sm" onclick="App.openAdmiralModal()">Change</button>
+        <button class="btn btn-danger btn-sm" onclick="App.selectAdmiral(null)">Remove</button>
+      </div>
+    </div>`;
+  }
+
+  // ── Print / Share ──
+  function printFleet() {
+    window.print();
+  }
+
+  function shareFleet() {
+    if (!currentFleet) return;
+    const text = generateFleetText(currentFleet);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Fleet list copied to clipboard!');
+      });
+    } else {
+      prompt('Copy your fleet list:', text);
+    }
+  }
+
+  function generateFleetText(fleet) {
+    const fName = (factionData[fleet.faction] || {}).name || fleet.faction.toUpperCase();
+    const pts = calcFleetPoints(fleet);
+    const sizeInfo = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
+    let text = `${fleet.name}\n${fName} — ${sizeInfo.label} (${pts} pts)\n`;
+    text += '═'.repeat(40) + '\n';
+
+    if (fleet.admiral) {
+      text += `\nADMIRAL: ${fleet.admiral.name} (${fleet.admiral.points} pts)\n`;
+    }
+
+    fleet.battleGroups.forEach(g => {
+      const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
+      text += `\n── ${g.name} (${gPts} pts) ──\n`;
+      g.ships.forEach(s => {
+        const dbShip = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
+        text += `  • ${dbShip ? dbShip.name : s.shipKey} — ${s.points} pts\n`;
+      });
+    });
+
+    text += '\n' + '═'.repeat(40);
+    text += `\nTotal: ${pts} pts`;
+    return text;
+  }
+
+  // ── Modals ──
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) {
+      modal.style.removeProperty('opacity');
+      modal.style.removeProperty('visibility');
+      modal.style.removeProperty('pointer-events');
+      modal.offsetHeight;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  function confirmAction(title, message, onConfirm) {
+    document.getElementById('confirm-title').textContent = title;
+    document.getElementById('confirm-message').textContent = message;
+    const btn = document.getElementById('confirm-action');
+    const newBtn = btn.cloneNode(true);
+    btn.parentNode.replaceChild(newBtn, btn);
+    newBtn.addEventListener('click', () => {
+      closeModal('modal-confirm');
+      onConfirm();
+    });
+    openModal('modal-confirm');
+  }
+
+  // ── Sidebar Toggle (mobile) ──
+  function toggleSidebar() {
+    const sidebar = document.getElementById('builder-sidebar');
+    sidebar.classList.toggle('expanded');
+  }
+
+  // ── Toast ──
+  function showToast(message) {
+    let toast = document.getElementById('app-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'app-toast';
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--paper);border:1px solid var(--stroke-strong);color:var(--ink);padding:12px 24px;border-radius:var(--radius-lg);font-size:var(--text-sm);z-index:2000;transition:transform 0.3s var(--ease-out);box-shadow:var(--shadow-lg);pointer-events:none';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    requestAnimationFrame(() => {
+      toast.style.transform = 'translateX(-50%) translateY(0)';
+      setTimeout(() => { toast.style.transform = 'translateX(-50%) translateY(100px)'; }, 2500);
+    });
+  }
+
+  // ── Helpers ──
+  function findShipInDB(factionKey, category, shipKey) {
+    const faction = shipDB[factionKey];
+    if (!faction || !faction.groups) return null;
+    const group = faction.groups[category];
+    if (!group || !group.ships) return null;
+    return group.ships[shipKey] || null;
+  }
+
+  function esc(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = String(str);
+    return div.innerHTML;
+  }
+
+  // Close modals on overlay click
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal-overlay') && e.target.classList.contains('active')) {
+      e.target.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Close modals on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.active').forEach(m => {
+        m.classList.remove('active');
+      });
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Init on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // ── Public API ──
+  return {
+    navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet,
+    loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup,
+    openShipSelectModal, filterCategory, addShipToGroup, removeShip, sortShips,
+    openAdmiralModal, selectAdmiral, selectGenericAdmiral, selectFamousAdmiral, toggleSidebar, printFleet, shareFleet,
+    openModal, closeModal
+  };
+})();

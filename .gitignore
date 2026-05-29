@@ -1,0 +1,37 @@
+# Source data & build tools (not needed for the live site)
+mirror_extract/
+bsdata-repo/
+tools/
+Faction Icons/
+.claude/
+
+# Source archives & reference PDFs
+*.zip
+*.pdf
+
+# Concept art / reference images in root
+robert-mallinson-*
+ship_database.json
+
+# DZC logos (wrong game, reference only)
+DZC_Logo_*
+
+# Stale / reference files
+faction_data.json
+fluent2-reference.html
+dropfleet_commander_logo.webp
+dropfleet_commander_logo_text.webp
+
+# OS junk
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+
+# Temp favicon source
+assets/logos/favicon_crop.png
