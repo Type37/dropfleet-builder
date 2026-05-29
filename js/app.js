@@ -52,6 +52,28 @@ const App = (() => {
 
   let rawFleetData = null;
 
+  const fastplaySpecs = [
+    { faction: 'ucm', name: 'UCM Starter Fleet', size: 'skirmish', groups: [
+      ['medium','Bruges',1],['medium','Edmonton',1],['medium','San Francisco',1],
+      ['light','Toulon',1],['light','New Orleans',1],['light','Lima',1]] },
+    { faction: 'scourge', name: 'Scourge Starter Fleet', size: 'skirmish', groups: [
+      ['medium','Sphinx',1],['medium','Hydra',1],['medium','Chimera',1],
+      ['light','Gargoyle',1],['light','Harpy',1]] },
+    { faction: 'phr', name: 'PHR Starter Fleet', size: 'skirmish', groups: [
+      ['medium','Theseus',1],['medium','Ikarus',1],['medium','Orpheus',1],
+      ['light','Pandora',1],['light','Medea',1]] },
+    { faction: 'shaltari', name: 'Shaltari Starter Fleet', size: 'skirmish', groups: [
+      ['medium','Obsidian',1],['medium','Basalt',1],['medium','Emerald',1],
+      ['light','Topaz',1],['light','Opal',1],['light','Voidgate',1]] },
+    { faction: 'bioficer', name: 'Bioficer Starter Fleet', size: 'skirmish', groups: [
+      ['medium','Comet',1],['medium','Cavern',1],['medium','Catastrophe',1],
+      ['payload','Prism Cell',1],['light','Fulcrum',1],['light','Foray',1],
+      ['payload','Invasion Cell',1],['payload','Lander Cell',1]] },
+    { faction: 'resistance', name: 'Resistance Starter Fleet', size: 'skirmish', groups: [
+      ['medium','Heavy Cruiser',1],['medium','Cruiser',1],['medium','Light Cruiser',1],
+      ['light','Strike Carrier',1],['light','Heavy Frigate',1]] }
+  ];
+
   // ── Init ──
   let factionLoadPromises = {};
 
@@ -879,14 +901,89 @@ const App = (() => {
             <path d="M6 10l6-3 6 3"/>
           </svg>
           <h2 class="fleet-list-empty-title">No fleets yet</h2>
-          <div class="flex gap-sm" style="margin-top:var(--sp-lg)">
-            <button class="btn btn-primary" onclick="App.openNewFleetModal()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> New Fleet</button>
-            <button class="btn btn-outline" onclick="App.loadDemoFleets()">Load Demos</button>
-          </div>
+          <button class="btn btn-primary" style="margin-top:var(--sp-lg)" onclick="App.openNewFleetModal()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> New Fleet</button>
         </div>`;
     } else {
       grid.innerHTML = cards + newCard;
     }
+  }
+
+  let activeFleetTab = 'my';
+  function showFleetTab(tab) {
+    activeFleetTab = tab;
+    const myTab = document.getElementById('tab-my-fleets');
+    const fpTab = document.getElementById('tab-fastplay');
+    const grid = document.getElementById('fleet-grid');
+    const sortBar = document.getElementById('fleet-sort-bar');
+    const fpContainer = document.getElementById('fastplay-container');
+    const actions = document.getElementById('fleet-actions');
+
+    if (tab === 'my') {
+      myTab.classList.add('active'); fpTab.classList.remove('active');
+      grid.classList.remove('hidden'); sortBar.classList.remove('hidden');
+      fpContainer.classList.add('hidden');
+      if (actions) actions.style.display = '';
+    } else {
+      fpTab.classList.add('active'); myTab.classList.remove('active');
+      grid.classList.add('hidden'); sortBar.classList.add('hidden');
+      fpContainer.classList.remove('hidden');
+      if (actions) actions.style.display = 'none';
+      renderFastplayFleets();
+    }
+  }
+
+  function renderFastplayFleets() {
+    const container = document.getElementById('fastplay-container');
+    if (!container) return;
+
+    const factionKeys = ['ucm','phr','scourge','shaltari','bioficer','resistance'];
+    const cards = factionKeys.map(fk => {
+      const meta = factionData[fk];
+      if (!meta) return '';
+      const label = FACTION_LABELS[fk] || fk.toUpperCase();
+      const fIcon = FACTION_ICONS[fk];
+      const spec = fastplaySpecs.find(s => s.faction === fk);
+      if (!spec) return '';
+      const shipList = spec.groups.map(([cat, name, qty]) => {
+        const qtyStr = qty > 1 ? `${qty}x ` : '';
+        return `<div class="fastplay-ship">${qtyStr}${esc(name)}</div>`;
+      }).join('');
+      return `<div class="fastplay-card">
+        <div class="fastplay-card-header">
+          ${fIcon ? `<img src="${fIcon}" alt="" style="width:20px;height:20px;object-fit:contain">` : ''}
+          <span class="fastplay-card-faction">${label}</span>
+          <span class="fastplay-card-size">Skirmish</span>
+        </div>
+        <div class="fastplay-card-ships">${shipList}</div>
+        <button class="btn btn-primary btn-sm" style="margin-top:var(--sp-sm);width:100%" onclick="App.loadSingleFastplay('${fk}')">Add to My Fleets</button>
+      </div>`;
+    }).join('');
+
+    container.innerHTML = `<div class="fastplay-grid">${cards}</div>`;
+  }
+
+  function loadSingleFastplay(factionKey) {
+    ensureFactionLoaded(factionKey).then(() => {
+      const spec = fastplaySpecs.find(s => s.faction === factionKey);
+      if (!spec) return;
+      const battleGroups = [];
+      spec.groups.forEach(([cat, name, qty]) => {
+        const g = makeGroup(factionKey, null, cat, name, qty);
+        if (g) battleGroups.push(g);
+      });
+      if (battleGroups.length === 0) return;
+      const gs = GAME_SIZES[spec.size || 'skirmish'] || GAME_SIZES.skirmish;
+      fleets.push({
+        id: uuid(), name: spec.name,
+        faction: factionKey, gameSize: spec.size || 'skirmish', pointsLimit: gs.max, maxGroups: gs.groups,
+        admirals: [], battleGroups, spaceStation: null,
+        createdAt: Date.now(), updatedAt: Date.now()
+      });
+      saveFleets();
+      showFleetTab('my');
+      renderFleetList();
+      showToast(`${FACTION_LABELS[factionKey]} starter fleet added`);
+    });
   }
 
   // Mini composition strip for fleet cards
@@ -964,74 +1061,7 @@ const App = (() => {
       return { id: uuid(), name: groupName || ship.name, ships };
     }
 
-    // Fastplay starter fleet compositions (from official A5 fastplay sheets v2.3)
-    const demoSpecs = [
-      {
-        faction: 'ucm', name: 'UCM Starter Fleet', size: 'skirmish',
-        groups: [
-          ['medium', 'Bruges',           1],
-          ['medium', 'Edmonton',         1],
-          ['medium', 'San Francisco',    1],
-          ['light',  'Toulon',           1],
-          ['light',  'New Orleans',      1],
-          ['light',  'Lima',             1],
-        ]
-      },
-      {
-        faction: 'scourge', name: 'Scourge Starter Fleet', size: 'skirmish',
-        groups: [
-          ['medium', 'Sphinx',           1],
-          ['medium', 'Hydra',            1],
-          ['medium', 'Chimera',          1],
-          ['light',  'Gargoyle',         1],
-          ['light',  'Harpy',            1],
-        ]
-      },
-      {
-        faction: 'phr', name: 'PHR Starter Fleet', size: 'skirmish',
-        groups: [
-          ['medium', 'Theseus',          1],
-          ['medium', 'Ikarus',           1],
-          ['medium', 'Orpheus',          1],
-          ['light',  'Pandora',          1],
-          ['light',  'Medea',            1],
-        ]
-      },
-      {
-        faction: 'shaltari', name: 'Shaltari Starter Fleet', size: 'skirmish',
-        groups: [
-          ['medium', 'Obsidian',         1],
-          ['medium', 'Basalt',           1],
-          ['medium', 'Emerald',          1],
-          ['light',  'Topaz',            1],
-          ['light',  'Opal',             1],
-          ['light',  'Voidgate',         1],
-        ]
-      },
-      {
-        faction: 'bioficer', name: 'Bioficer Starter Fleet', size: 'skirmish',
-        groups: [
-          ['medium', 'Comet',            1],
-          ['medium', 'Cavern',           1],
-          ['medium', 'Catastrophe',      1],
-          ['payload','Prism Cell',       1],
-          ['light',  'Fulcrum',          1],
-          ['light',  'Foray',            1],
-          ['payload','Invasion Cell',    1],
-          ['payload','Lander Cell',      1],
-        ]
-      },
-      {
-        faction: 'resistance', name: 'Resistance Starter Fleet', size: 'skirmish',
-        groups: [
-          ['medium', 'Heavy Cruiser',    1],
-          ['medium', 'Cruiser',          1],
-          ['medium', 'Light Cruiser',    1],
-          ['light',  'Strike Carrier',   1],
-          ['light',  'Heavy Frigate',    1],
-        ]
-      }
-    ];
+    const demoSpecs = fastplaySpecs;
 
     let loaded = 0;
     const loadPromises = demoSpecs.map(spec => ensureFactionLoaded(spec.faction));
@@ -4362,7 +4392,7 @@ const App = (() => {
   // ── Public API ──
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
-    loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup, moveGroup,
+    loadDemoFleets, showFleetTab, loadSingleFastplay, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup, moveGroup,
     openShipSelectModal, filterCategory, toggleShipFilter, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral,
     openStationModal, selectStation, removeStation,

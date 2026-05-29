@@ -69,12 +69,12 @@
   <!-- ── Fleet List ── -->
   <section class="fleet-list hidden" id="view-fleets">
     <div class="fleet-list-header">
-      <div>
-        <h1 class="text-title-2" style="margin-bottom:var(--sp-xs)">Your Fleets</h1>
+      <div class="fleet-tabs">
+        <button class="fleet-tab active" id="tab-my-fleets" onclick="App.showFleetTab('my')">Your Fleets</button>
+        <button class="fleet-tab" id="tab-fastplay" onclick="App.showFleetTab('fastplay')">Fastplay Fleets</button>
       </div>
-      <div class="flex gap-sm">
+      <div class="flex gap-sm" id="fleet-actions">
         <button class="btn btn-outline btn-sm" onclick="App.importFleetFromClipboard()" data-tooltip="Import fleet from clipboard"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8v6H2V2h6"/><path d="M10 2h4v4"/><path d="M14 2L7 9"/></svg> Import</button>
-        <button class="btn btn-outline btn-sm" onclick="App.loadDemoFleets()" data-tooltip="Load sample fleets"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12V4c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2z"/><path d="M6 6h4M6 9h4"/></svg> Demos</button>
         <button class="btn btn-primary" onclick="App.openNewFleetModal()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> New Fleet</button>
       </div>
     </div>
@@ -86,6 +86,9 @@
       <button class="fleet-sort-btn" data-sort="points" onclick="App.sortFleetList('points')">Points</button>
     </div>
     <div class="fleet-grid" id="fleet-grid">
+      <!-- Populated by JS -->
+    </div>
+    <div class="fastplay-container hidden" id="fastplay-container">
       <!-- Populated by JS -->
     </div>
   </section>
