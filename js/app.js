@@ -930,7 +930,23 @@ const App = (() => {
       }
     });
 
-    // 6. Admiral checks
+    // 6. Group size validation (ships per group within min-max)
+    fleet.battleGroups.forEach(g => {
+      if (g.ships.length === 0) return;
+      const s = g.ships[0];
+      const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
+      if (!db) return;
+      const min = db.groupMin || 1;
+      const max = db.groupMax || 1;
+      if (g.ships.length < min) {
+        warnings.push({ type: 'warn', msg: `${esc(g.name)}: needs ${min} ${db.name} (has ${g.ships.length})` });
+      }
+      if (g.ships.length > max) {
+        warnings.push({ type: 'error', msg: `${esc(g.name)}: max ${max} ${db.name} (has ${g.ships.length})` });
+      }
+    });
+
+    // 7. Admiral checks
     const admirals = fleet.admirals || [];
     let famousCount = 0;
     admirals.forEach(adm => {
@@ -960,7 +976,9 @@ const App = (() => {
     }
 
     el.innerHTML = warnings.map(w => {
-      const icon = w.type === 'error' ? '⚠' : 'ℹ';
+      const icon = w.type === 'error'
+        ? '<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1L1 14h14L8 1zm0 4.5v4m0 1.5v1"/><path d="M7.25 5.5h1.5v4h-1.5zm0 5.5h1.5v1.5h-1.5z"/></svg>'
+        : '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 7v4M8 5v.5"/></svg>';
       return `<div class="fleet-warning fleet-warning-${w.type}">${icon} ${esc(w.msg)}</div>`;
     }).join('');
   }
@@ -1957,12 +1975,21 @@ const App = (() => {
     const totalGroups = f.battleGroups.length;
     const admCount = (f.admirals || []).length;
 
+    // Validation warnings
+    const warnings = validateFleet(f);
+    const printWarnings = warnings.length > 0
+      ? `<div class="print-warnings">${warnings.map(w =>
+          `<div class="print-warning print-warning-${w.type}">${w.type === 'error' ? 'ILLEGAL' : 'NOTE'}: ${esc(w.msg)}</div>`
+        ).join('')}</div>`
+      : '';
+
     let html = `<div class="print-fleet">
       <div class="print-header">
         <div class="print-fleet-name">${esc(f.name)}</div>
         <div class="print-fleet-meta">${esc(fName)} — ${sizeInfo.label} — ${pts} pts</div>
         <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''} · ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}</div>
-      </div>`;
+      </div>
+      ${printWarnings}`;
 
     // Admirals
     if (f.admirals && f.admirals.length > 0) {

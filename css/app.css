@@ -2384,6 +2384,21 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.06em;
   margin-top: 2px;
 }
+.print-warnings {
+  margin-top: 8px;
+  padding: 6px 8px;
+  border: 1px solid #e0c46c;
+  border-radius: 3px;
+  background: #fef9ea;
+}
+.print-warning {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 8pt;
+  font-weight: 600;
+  color: #8a6d1e;
+  margin-bottom: 1px;
+}
+.print-warning-error { color: #c43c2f; }
 
 .print-section { margin-top: 16px; }
 .print-section-title {
