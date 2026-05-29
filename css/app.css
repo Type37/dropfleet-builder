@@ -140,6 +140,15 @@ a:hover { color: var(--navy-light); }
 
 ::selection { background: var(--gold-light); color: var(--ink); }
 
+/* Global focus-visible ring for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 2px;
+}
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline-offset: -1px;
+}
+
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: var(--paper-alt); }
 ::-webkit-scrollbar-thumb { background: var(--stroke-strong); border-radius: 4px; }
@@ -2613,7 +2622,17 @@ h1, h2, h3, h4, h5, h6 {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes viewEnter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .animate-in { animation: slideUp var(--duration-slow) var(--ease-out) forwards; }
+
+/* View transitions */
+#app > section:not(.hidden) {
+  animation: viewEnter 0.2s var(--ease-out);
+}
 
 .stagger > * { opacity: 0; animation: slideUp var(--duration-slow) var(--ease-out) forwards; }
 .stagger > *:nth-child(1) { animation-delay: 0ms; }
