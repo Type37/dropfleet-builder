@@ -1091,6 +1091,21 @@ const App = (() => {
     });
   }
 
+  // ── Render Batching ──
+  let _pendingRenders = new Set();
+  let _renderRaf = 0;
+  function scheduleRender(...fns) {
+    fns.forEach(fn => _pendingRenders.add(fn));
+    if (!_renderRaf) {
+      _renderRaf = requestAnimationFrame(() => {
+        _renderRaf = 0;
+        const batch = [..._pendingRenders];
+        _pendingRenders.clear();
+        batch.forEach(fn => fn());
+      });
+    }
+  }
+
   // ── Builder View ──
   function renderBuilder() {
     if (!currentFleet) return;
@@ -1128,8 +1143,7 @@ const App = (() => {
     updatePoints();
     renderAdmiralSlot();
     renderStationSlot();
-    renderGroupsNav();
-    renderActiveGroup();
+    scheduleRender(renderGroupsNav, renderActiveGroup);
   }
 
   function updatePoints() {
@@ -1465,8 +1479,7 @@ const App = (() => {
 
   function selectGroup(gid) {
     activeGroupId = gid || null;
-    renderGroupsNav();
-    renderActiveGroup();
+    scheduleRender(renderGroupsNav, renderActiveGroup);
 
     // On mobile, collapse sidebar
     if (gid) {
@@ -1485,9 +1498,7 @@ const App = (() => {
         activeGroupId = currentFleet.battleGroups.length > 0 ? currentFleet.battleGroups[0].id : null;
       }
       saveFleets();
-      renderGroupsNav();
-      renderActiveGroup();
-      updatePoints();
+      scheduleRender(renderGroupsNav, renderActiveGroup, updatePoints);
     });
   }
 
@@ -2481,9 +2492,7 @@ const App = (() => {
       pendingGroupCreation = false;
       closeModal('modal-ship-select');
       saveFleets();
-      renderGroupsNav();
-      renderActiveGroup();
-      updatePoints();
+      scheduleRender(renderGroupsNav, renderActiveGroup, updatePoints);
       showToast(`Created group: ${dbShip.name}`);
       return;
     }
@@ -2514,8 +2523,7 @@ const App = (() => {
 
     saveFleets();
     updatePoints();
-    renderGroupsNav();
-    renderActiveGroup();
+    scheduleRender(renderGroupsNav, renderActiveGroup);
   }
 
   function removeShip(groupId, shipId) {
@@ -2525,8 +2533,7 @@ const App = (() => {
     group.ships = group.ships.filter(s => s.id !== shipId);
     saveFleets();
     updatePoints();
-    renderGroupsNav();
-    renderActiveGroup();
+    scheduleRender(renderGroupsNav, renderActiveGroup);
   }
 
   function addSameShip(groupId) {
@@ -2547,8 +2554,7 @@ const App = (() => {
     addShipToGroupInner(group, firstShip.shipKey, firstShip.groupCategory, dbShip);
     saveFleets();
     updatePoints();
-    renderGroupsNav();
-    renderActiveGroup();
+    scheduleRender(renderGroupsNav, renderActiveGroup);
   }
 
   function removeLastShip(groupId) {
@@ -2568,8 +2574,7 @@ const App = (() => {
     group.ships.pop();
     saveFleets();
     updatePoints();
-    renderGroupsNav();
-    renderActiveGroup();
+    scheduleRender(renderGroupsNav, renderActiveGroup);
   }
 
   function sortShips(mode) {
@@ -4272,8 +4277,7 @@ const App = (() => {
     addShipToGroupInner(group, shipKey, category, dbShip);
     saveFleets();
     updatePoints();
-    renderGroupsNav();
-    renderActiveGroup();
+    scheduleRender(renderGroupsNav, renderActiveGroup);
     showToast(`Added ${dbShip.name} to ${group.name}`);
 
     // Visual flash on the clicked card
