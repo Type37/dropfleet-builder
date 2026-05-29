@@ -136,6 +136,16 @@
           </div>
         </div>
 
+        <!-- Space Station -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Space Station</div>
+          <div id="station-slot">
+            <div class="add-ship-area" onclick="App.openStationModal()" style="padding:var(--sp-lg);min-height:60px">
+              <span style="font-size:var(--text-sm)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M8 1l6 3.5v7L8 15l-6-3.5v-7L8 1z"/><path d="M8 8v7M2 4.5L8 8l6-3.5"/></svg> Choose Station</span>
+            </div>
+          </div>
+        </div>
+
         <!-- Battle Groups -->
         <div class="sidebar-section" style="flex:1">
           <div class="flex items-center justify-between">
@@ -211,7 +221,7 @@
   <div class="modal-panel">
     <div class="modal-header">
       <h2 class="modal-title">New Fleet</h2>
-      <button class="modal-close" onclick="App.closeModal('modal-new-fleet')">✕</button>
+      <button class="modal-close" onclick="App.closeModal('modal-new-fleet')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body">
       <div class="flex flex-col gap-xl">
@@ -254,7 +264,7 @@
           <button class="sort-btn active" onclick="App.sortShips('name')" data-sort="name">Name</button>
           <button class="sort-btn" onclick="App.sortShips('cost')" data-sort="cost">Cost</button>
         </div>
-        <button class="modal-close" onclick="App.closeModal('modal-ship-select')">✕</button>
+        <button class="modal-close" onclick="App.closeModal('modal-ship-select')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
       </div>
     </div>
     <div class="modal-body">
@@ -275,12 +285,28 @@
   </div>
 </div>
 
+<!-- Space Station Selection Modal -->
+<div class="modal-overlay" id="modal-station">
+  <div class="modal-panel modal-panel--lg">
+    <div class="modal-header">
+      <h2 class="modal-title">Choose Space Station</h2>
+      <button class="modal-close" onclick="App.closeModal('modal-station')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p class="text-caption" style="margin-bottom:var(--sp-lg)">Select a space station for your fleet. Station cost is added to fleet total.</p>
+      <div id="station-options" class="flex flex-col gap-sm">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Admiral Selection Modal -->
 <div class="modal-overlay" id="modal-admiral">
   <div class="modal-panel modal-panel--lg">
     <div class="modal-header">
       <h2 class="modal-title">Choose Admiral</h2>
-      <button class="modal-close" onclick="App.closeModal('modal-admiral')">✕</button>
+      <button class="modal-close" onclick="App.closeModal('modal-admiral')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body">
       <p class="text-caption" style="margin-bottom:var(--sp-lg)">Generic admirals can be placed on any ship. Famous admirals come with their own flagship.</p>
@@ -296,7 +322,7 @@
   <div class="modal-panel modal-panel--lg">
     <div class="modal-header">
       <h2 class="modal-title" id="detail-ship-name">Ship Name</h2>
-      <button class="modal-close" onclick="App.closeModal('modal-ship-detail')">✕</button>
+      <button class="modal-close" onclick="App.closeModal('modal-ship-detail')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body" id="detail-ship-body">
       <!-- Populated by JS -->
@@ -309,7 +335,7 @@
   <div class="modal-panel" style="max-width:400px">
     <div class="modal-header">
       <h2 class="modal-title" id="confirm-title">Confirm</h2>
-      <button class="modal-close" onclick="App.closeModal('modal-confirm')">✕</button>
+      <button class="modal-close" onclick="App.closeModal('modal-confirm')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body">
       <p id="confirm-message">Are you sure?</p>

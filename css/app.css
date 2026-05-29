@@ -1846,6 +1846,98 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-muted);
 }
 
+/* ── 17b. Space Station ─────────────────────────────────────── */
+.station-card {
+  background: var(--paper);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-md);
+  position: relative;
+}
+.station-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--navy);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.station-name {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--navy);
+}
+.station-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-xs);
+  margin-top: 2px;
+}
+.station-stat {
+  font-family: var(--font-stat);
+  font-size: 11px;
+  color: var(--ink-muted);
+  background: var(--paper-warm);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--stroke);
+}
+.station-rules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-xs);
+  margin-top: var(--sp-sm);
+}
+.rule-chip-sm {
+  font-size: 10px;
+  padding: 1px 6px;
+}
+
+/* Station modal */
+.station-option {
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-md);
+  padding: var(--sp-md);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.station-option:hover {
+  border-color: var(--navy);
+  background: var(--navy-subtle);
+}
+.station-option-active {
+  border-color: var(--navy);
+  background: var(--navy-subtle);
+}
+.station-option-name {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+}
+.station-modal-rules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-xs);
+  margin-top: var(--sp-xs);
+}
+
+/* Deployable features reference */
+.feature-ref-card {
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-sm) var(--sp-md);
+  margin-bottom: var(--sp-xs);
+  background: var(--paper-warm);
+}
+.feature-ref-name {
+  font-family: var(--font-stat);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--ink);
+}
+
 /* ── 18. Group View (builder main) ───────────────────────────── */
 .group-header-bar {
   display: flex;
@@ -2482,6 +2574,27 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   color: #8a6d1e;
   font-size: 7.5pt;
+}
+
+/* Print space station */
+.print-station {
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  break-inside: avoid;
+}
+.print-station-stats {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 9pt;
+  color: #444;
+  margin-top: 2px;
+}
+.print-station-rules {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 8pt;
+  color: #555;
+  margin-top: 2px;
 }
 
 .print-group {

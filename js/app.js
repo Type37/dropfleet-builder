@@ -239,7 +239,24 @@ const App = (() => {
         (la.assets || []).forEach(a => launchAssets.push(a));
       });
 
-      shipDB[factionKey] = { groups, admirals: faction.admirals || [], launchAssets };
+      // Store space stations and deployable features for this faction
+      const spaceStations = (faction.spaceStations || []).map(ss => ({
+        id: ss.id,
+        name: ss.name,
+        cost: ss.cost || 0,
+        stats: ss.stats || {},
+        specialRules: ss.specialRules || [],
+        special: ss.stats?.special || '-'
+      }));
+      const deployableFeatures = (faction.deployableFeatures || []).map(df => ({
+        id: df.id,
+        name: df.name,
+        cost: df.cost || 0,
+        features: df.features || [],
+        rules: df.rules || []
+      }));
+
+      shipDB[factionKey] = { groups, admirals: faction.admirals || [], launchAssets, spaceStations, deployableFeatures };
     });
   }
 
@@ -842,6 +859,7 @@ const App = (() => {
 
     updatePoints();
     renderAdmiralSlot();
+    renderStationSlot();
     renderGroupsNav();
     renderActiveGroup();
   }
@@ -993,6 +1011,7 @@ const App = (() => {
     fleet.battleGroups.forEach(g => {
       g.ships.forEach(s => { total += s.points || 0; });
     });
+    if (fleet.spaceStation) total += fleet.spaceStation.cost || 0;
     return total;
   }
 
@@ -1530,7 +1549,7 @@ const App = (() => {
         ${rulesHtml}
         ${compact ? '' : loreHtml}
       </div>
-      <button class="btn btn-ghost btn-icon btn-sm group-ship-remove" onclick="App.removeShip('${groupId}','${ship.id}')" data-tooltip="Remove ship">✕</button>
+      <button class="btn btn-ghost btn-icon btn-sm group-ship-remove" onclick="App.removeShip('${groupId}','${ship.id}')" data-tooltip="Remove ship"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>`;
   }
 
@@ -2048,6 +2067,155 @@ const App = (() => {
     slot.innerHTML = html;
   }
 
+  // ── Space Station ──
+  function renderStationSlot() {
+    const slot = document.getElementById('station-slot');
+    if (!currentFleet || !slot) return;
+    const station = currentFleet.spaceStation;
+
+    if (!station) {
+      slot.innerHTML = `
+      <div class="add-ship-area" onclick="App.openStationModal()" style="padding:var(--sp-lg);min-height:60px">
+        <span style="font-size:var(--text-sm)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M8 1l6 3.5v7L8 15l-6-3.5v-7L8 1z"/><path d="M8 8v7M2 4.5L8 8l6-3.5"/></svg> Choose Station</span>
+      </div>`;
+      return;
+    }
+
+    // Show station stats inline
+    const ss = station;
+    const stats = ss.stats || {};
+    const statPairs = [
+      ['Hull', stats.hull], ['ES', stats.es], ['KS', stats.ks],
+      ['Scan', stats.scan], ['Sig', stats.sig]
+    ].filter(([,v]) => v && v !== '-' && v !== '--');
+    const statLine = statPairs.map(([l,v]) => `<span class="station-stat">${l} ${v}</span>`).join('');
+
+    const specialRules = (ss.specialRules || []).map(r => r.name || '').filter(Boolean);
+    const rulesLine = specialRules.length > 0
+      ? `<div class="station-rules">${specialRules.map(r => `<span class="rule-chip rule-chip-sm">${esc(r)}</span>`).join('')}</div>`
+      : '';
+
+    slot.innerHTML = `
+    <div class="station-card">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="station-name">${esc(ss.name)}</div>
+          <div class="station-stats">${statLine}</div>
+        </div>
+        <span class="badge badge-gold">${ss.cost} pts</span>
+      </div>
+      ${rulesLine}
+      <div class="flex gap-xs" style="margin-top:var(--sp-sm)">
+        <button class="btn btn-outline btn-sm" onclick="App.openStationModal()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 1l4 4-9 9H2v-4L11 1z"/></svg> Change</button>
+        <button class="btn btn-danger btn-sm" onclick="App.removeStation()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
+      </div>
+    </div>`;
+  }
+
+  function openStationModal() {
+    if (!currentFleet) return;
+    const factionInfo = shipDB[currentFleet.faction];
+    if (!factionInfo) return;
+
+    const stations = factionInfo.spaceStations || [];
+    const container = document.getElementById('station-options');
+    if (!container) return;
+
+    const currentId = currentFleet.spaceStation ? currentFleet.spaceStation.id : null;
+
+    container.innerHTML = stations.map(ss => {
+      const stats = ss.stats || {};
+      const statPairs = [
+        ['Hull', stats.hull], ['ES', stats.es], ['KS', stats.ks],
+        ['Scan', stats.scan], ['Sig', stats.sig]
+      ].filter(([,v]) => v && v !== '-' && v !== '--');
+      const statLine = statPairs.map(([l,v]) => `<span class="station-stat">${l} ${v}</span>`).join('');
+
+      const specialRules = (ss.specialRules || []).map(r => r.name || '').filter(Boolean);
+      const specialStr = ss.special && ss.special !== '-' ? ss.special : '';
+      const rulesLine = specialRules.length > 0
+        ? `<div class="station-modal-rules">${specialRules.map(r => {
+            const desc = r.description || lookupRule(r);
+            if (desc) {
+              return `<span class="rule-chip has-tooltip" data-rule-desc="${esc(typeof desc === 'string' ? desc : '')}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(r)}</span>`;
+            }
+            return `<span class="rule-chip">${esc(r)}</span>`;
+          }).join('')}</div>`
+        : specialStr
+          ? `<div class="station-modal-rules">${renderWeaponSpecialChips(specialStr)}</div>`
+          : '';
+
+      const isCurrent = ss.id === currentId;
+      return `<div class="station-option${isCurrent ? ' station-option-active' : ''}" onclick="App.selectStation('${ss.id}')">
+        <div class="flex items-center justify-between" style="margin-bottom:var(--sp-xs)">
+          <span class="station-option-name">${esc(ss.name)}${isCurrent ? ' <span class="badge badge-navy" style="font-size:9px">Current</span>' : ''}</span>
+          <span class="badge badge-gold">${ss.cost} pts</span>
+        </div>
+        <div class="station-stats">${statLine}</div>
+        ${rulesLine}
+      </div>`;
+    }).join('');
+
+    // Add deployable features reference if faction has them
+    const features = factionInfo.deployableFeatures || [];
+    if (features.length > 0) {
+      container.innerHTML += `
+      <div style="border-top:1px solid var(--stroke);padding-top:var(--sp-md);margin-top:var(--sp-sm)">
+        <div class="text-overline" style="margin-bottom:var(--sp-sm)">Deployable Sector Features</div>
+        <p class="text-caption" style="margin-bottom:var(--sp-sm)">These features are deployed to dropsites during the game. Cost is 0 pts — they are included with your faction.</p>
+        ${features.map(df => {
+          const featureStats = (df.features || []).map(f =>
+            `<span class="station-stat">${esc(f.name)}${f.es ? ` ES:${f.es}` : ''}${f.ks ? ` KS:${f.ks}` : ''}</span>`
+          ).join('');
+          const featureRules = (df.rules || []).map(r =>
+            r.description
+              ? `<span class="rule-chip rule-chip-sm has-tooltip" data-rule-desc="${esc(r.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(r.name)}</span>`
+              : `<span class="rule-chip rule-chip-sm">${esc(r.name)}</span>`
+          ).join('');
+          return `<div class="feature-ref-card">
+            <div class="feature-ref-name">${esc(df.name)}</div>
+            ${featureStats ? `<div class="station-stats">${featureStats}</div>` : ''}
+            ${featureRules ? `<div style="margin-top:var(--sp-xs)">${featureRules}</div>` : ''}
+          </div>`;
+        }).join('')}
+      </div>`;
+    }
+
+    openModal('modal-station');
+  }
+
+  function selectStation(stationId) {
+    if (!currentFleet) return;
+    const factionInfo = shipDB[currentFleet.faction];
+    if (!factionInfo) return;
+    const station = (factionInfo.spaceStations || []).find(ss => ss.id === stationId);
+    if (!station) return;
+
+    currentFleet.spaceStation = {
+      id: station.id,
+      name: station.name,
+      cost: station.cost,
+      stats: station.stats,
+      specialRules: station.specialRules
+    };
+
+    saveFleets();
+    closeModal('modal-station');
+    renderStationSlot();
+    updatePoints();
+    showToast(`${station.name} selected`);
+  }
+
+  function removeStation() {
+    if (!currentFleet || !currentFleet.spaceStation) return;
+    const name = currentFleet.spaceStation.name;
+    currentFleet.spaceStation = null;
+    saveFleets();
+    renderStationSlot();
+    updatePoints();
+    showToast(`${name} removed`);
+  }
+
   // ── Print / Share ──
   function printFleet() {
     if (!currentFleet) return;
@@ -2077,7 +2245,7 @@ const App = (() => {
       <div class="print-header">
         <div class="print-fleet-name">${esc(f.name)}</div>
         <div class="print-fleet-meta">${esc(fName)} — ${sizeInfo.label} — ${pts} pts</div>
-        <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''} · ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}</div>
+        <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''} · ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? ` · ${esc(f.spaceStation.name)}` : ''}</div>
       </div>
       ${printWarnings}`;
 
@@ -2104,6 +2272,33 @@ const App = (() => {
           </div>`;
         }).join('')}
       </div>`;
+    }
+
+    // Space Station
+    if (f.spaceStation) {
+      const ss = f.spaceStation;
+      const ssStats = ss.stats || {};
+      const ssStatPairs = [
+        ['Hull', ssStats.hull], ['ES', ssStats.es], ['KS', ssStats.ks],
+        ['Scan', ssStats.scan], ['Sig', ssStats.sig]
+      ].filter(([,v]) => v && v !== '-' && v !== '--');
+      const ssStatLine = ssStatPairs.map(([l,v]) => `${l}: ${v}`).join(' · ');
+      const ssRules = (ss.specialRules || []).map(r => esc(r.name || '')).filter(Boolean).join(', ');
+      html += `<div class="print-section">
+        <div class="print-section-title">Space Station</div>
+        <div class="print-station">
+          <div class="print-ship-header">
+            <span class="print-ship-name">${esc(ss.name)}</span>
+            <span class="print-ship-pts">${ss.cost} pts</span>
+          </div>
+          <div class="print-station-stats">${ssStatLine}</div>
+          ${ssRules ? `<div class="print-station-rules">Rules: ${ssRules}</div>` : ''}
+        </div>
+      </div>`;
+      // Collect station rules for glossary
+      (ss.specialRules || []).forEach(r => {
+        if (r.description) rulesGlossary[r.name] = r.description;
+      });
     }
 
     // Groups
@@ -2294,6 +2489,14 @@ const App = (() => {
       </div>`;
     }
 
+    if (fleet.spaceStation) {
+      const ss = fleet.spaceStation;
+      html += `<div class="shared-section">
+        <div class="shared-section-title">Space Station</div>
+        <div class="shared-admiral">${esc(ss.name)} — ${ss.cost} pts</div>
+      </div>`;
+    }
+
     fleet.battleGroups.forEach((g, i) => {
       const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
       html += `<div class="shared-section">
@@ -2424,6 +2627,10 @@ const App = (() => {
       fleet.admirals.forEach(a => {
         text += `\nADMIRAL: ${a.name} — Lv${a.level || '?'}${a.type === 'Famous' ? ' (Famous)' : ''} (${a.points} pts)\n`;
       });
+    }
+
+    if (fleet.spaceStation) {
+      text += `\nSTATION: ${fleet.spaceStation.name} (${fleet.spaceStation.cost} pts)\n`;
     }
 
     fleet.battleGroups.forEach(g => {
@@ -2836,7 +3043,9 @@ const App = (() => {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName,
     loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup, moveGroup,
     openShipSelectModal, filterCategory, toggleShipFilter, searchShips, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
-    openAdmiralModal, addGenericAdmiral, addFamousAdmiral, removeAdmiral, toggleSidebar, printFleet,
+    openAdmiralModal, addGenericAdmiral, addFamousAdmiral, removeAdmiral,
+    openStationModal, selectStation, removeStation,
+    toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, importSharedFleet,
     openSettings, toggleSetting, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize
   };
