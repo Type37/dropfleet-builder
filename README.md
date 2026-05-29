@@ -11,14 +11,15 @@ A fleet builder for [Dropfleet Commander](https://www.ttcombat.com/games/dropfle
 - Generic and famous admiral selection with level-based costing
 - Game size presets (Skirmish / Clash / Battle / Reconquest) with appropriate group and admiral caps
 - Ship art for ~230 profiles, converted from TTCombat's own renders
+- Systems/Hardpoint selection for Resistance cruisers, frigates and dreadnoughts (choose-N with category caps), Feature Carriers, and per-ship loadout refits
+- Fleet construction validation (tonnage limits, group/colossal caps, unique/rare, admiral limits, required Systems/Features)
+- Ship lore plus "Namesake" flavour, a print view with full reference cards, and fleet sharing via URL/clipboard
 - Works on mobile
 
 ## What it doesn't do (yet)
 
-- Print view with reference cards (planned, and it will be good)
-- Fleet sharing via URL
-- Group composition validation (tonnage limits, max-one-space-station, etc.)
 - Offline / PWA support
+- Systems/Hardpoint lists for factions other than Resistance (other factions use loadout refits, which are supported)
 
 ## Data
 
