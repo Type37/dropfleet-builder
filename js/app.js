@@ -1717,6 +1717,32 @@ const App = (() => {
     if (data.isUnique) selectBadges += '<span class="ship-badge ship-badge-unique">Unique</span>';
     else if (data.isRare) selectBadges += '<span class="ship-badge ship-badge-rare">Rare</span>';
 
+    // Compact weapon summary for ship select cards
+    const wpns = data.weapons || [];
+    const loadoutCount = (data.loadoutOptions || []).length;
+    const hasLoads = (data.loads && data.loads.length > 0) || (data.loadoutOptions || []).some(lo => lo.options.some(o => o.loads && o.loads.length > 0));
+    let weaponSummary = '';
+    if (wpns.length > 0 || loadoutCount > 0) {
+      const parts = [];
+      wpns.forEach(w => {
+        const typeIcon = WEAPON_TYPE_ICONS[w.type] || '';
+        parts.push(`<span class="weapon-mini" title="${esc(w.name)}: ${w.attack}A Lk${w.lock} D${w.damage} ${w.arc || ''}">${typeIcon} ${esc(w.name)}</span>`);
+      });
+      if (loadoutCount > 0) {
+        parts.push(`<span class="weapon-mini weapon-mini-loadout" title="${loadoutCount} loadout option${loadoutCount > 1 ? 's' : ''}">+ ${loadoutCount} loadout</span>`);
+      }
+      weaponSummary = `<div class="weapon-summary">${parts.join('')}</div>`;
+    }
+
+    // Launch capability indicator
+    let launchIndicator = '';
+    if (hasLoads) {
+      const totalLaunch = (data.loads || []).reduce((t, l) => t + (parseInt(l.launch) || 0), 0);
+      launchIndicator = totalLaunch > 0
+        ? `<span class="launch-indicator" title="Launch capacity: ${totalLaunch}"><svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l2 5h5l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5z"/></svg> ${totalLaunch}</span>`
+        : '';
+    }
+
     return `
     <div class="ship-card" onclick="App.addShipToGroup('${key}','${category}')">
       <div class="ship-card-top">
@@ -1728,6 +1754,7 @@ const App = (() => {
         <div class="ship-card-cost">${data.points || 0}<span style="font-size:var(--text-sm);font-weight:var(--weight-regular)"> pts</span></div>
       </div>
       ${renderStatGrid(data)}
+      ${weaponSummary}
       ${specialRules.length > 0 ? `<div class="special-rules">${specialRules.slice(0, 4).map(r => {
         const detail = (data.specialRuleDetails || []).find(d => d.name === r);
         if (detail && detail.description) {
@@ -1736,7 +1763,7 @@ const App = (() => {
         return `<span class="rule-chip">${esc(r)}</span>`;
       }).join('')}${specialRules.length > 4 ? `<span class="rule-chip" style="background:rgba(255,255,255,0.06);color:var(--ink-faint)">+${specialRules.length - 4}</span>` : ''}</div>` : ''}
       <div class="flex items-center justify-between" style="margin-top:auto">
-        <span class="text-caption">${data.g ? `Group size: ${data.g}` : ''}</span>
+        <span class="text-caption">${data.g ? `Group: ${data.g}` : ''}${launchIndicator ? (data.g ? ' · ' : '') + launchIndicator : ''}</span>
         <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addShipToGroup('${key}','${category}')">+ Add</button>
       </div>
     </div>`;
