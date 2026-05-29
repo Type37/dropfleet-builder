@@ -1218,6 +1218,7 @@ const App = (() => {
     }
 
     const total = currentFleet.battleGroups.length;
+    const catColors = { light: '#5b9bd5', medium: '#3e9945', heavy: '#d98c1f', colossal: '#c43c2f', payload: '#6a4c9c' };
     const overviewItem = `<div class="group-nav-item group-nav-overview ${!activeGroupId ? 'active' : ''}" onclick="App.selectGroup(null)">
       <div class="group-nav-name"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg> Overview</div>
     </div>`;
@@ -1225,12 +1226,31 @@ const App = (() => {
       const shipCount = g.ships.length;
       const groupPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
       const isActive = g.id === activeGroupId;
-      // Get the ship category for this group (from the first ship)
+
+      // Ship info from first ship
       let catLabel = '';
+      let catKey = 'medium';
+      let artThumb = '';
+      let shipName = '';
       if (g.ships.length > 0) {
-        const cat = g.ships[0].groupCategory || 'medium';
-        catLabel = CATEGORY_LABELS[cat] || cat;
+        catKey = g.ships[0].groupCategory || 'medium';
+        catLabel = CATEGORY_LABELS[catKey] || catKey;
+        const firstDb = findShipInDB(currentFleet.faction, g.ships[0].groupCategory, g.ships[0].shipKey);
+        if (firstDb) {
+          shipName = firstDb.name;
+          const art = shipArtPath(firstDb.name);
+          if (art) artThumb = `<div class="group-nav-art"><img src="${art}" alt="" loading="lazy"></div>`;
+        }
       }
+
+      // Validation status
+      const groupErrors = validateGroupSize(g, currentFleet);
+      const hasError = groupErrors.length > 0;
+      const statusDot = hasError ? `<span class="group-nav-dot group-nav-dot-error" title="${esc(groupErrors[0])}"></span>` : '';
+
+      // Tonnage accent color
+      const accentColor = catColors[catKey] || 'rgba(255,255,255,0.15)';
+
       const reorderBtns = isActive && total > 1
         ? `<span class="group-nav-reorder" onclick="event.stopPropagation()">
             <button class="group-move-btn" onclick="App.moveGroup('${g.id}',-1)" ${i === 0 ? 'disabled' : ''} title="Move up"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10l4-4 4 4"/></svg></button>
@@ -1238,11 +1258,20 @@ const App = (() => {
            </span>`
         : '';
       return `
-      <div class="group-nav-item ${isActive ? 'active' : ''}" onclick="App.selectGroup('${g.id}')">
-        <div class="group-nav-name">${esc(g.name)}${catLabel ? `<span class="group-nav-cat">${catLabel}</span>` : ''}</div>
-        ${reorderBtns}
-        <span class="text-caption" style="white-space:nowrap">${groupPts}pts</span>
-        <span class="group-nav-count">${shipCount}</span>
+      <div class="group-nav-item ${isActive ? 'active' : ''}${hasError ? ' has-error' : ''}" onclick="App.selectGroup('${g.id}')" style="--nav-accent:${accentColor}">
+        ${artThumb}
+        <div class="group-nav-body">
+          <div class="group-nav-top">
+            <span class="group-nav-name">${esc(g.name)}</span>
+            ${statusDot}
+            ${reorderBtns}
+          </div>
+          <div class="group-nav-meta">
+            <span class="group-nav-cat">${catLabel}</span>
+            <span class="group-nav-pts">${groupPts}pts</span>
+            <span class="group-nav-count">${shipCount} ship${shipCount !== 1 ? 's' : ''}</span>
+          </div>
+        </div>
       </div>`;
     }).join('');
   }
@@ -2682,6 +2711,11 @@ const App = (() => {
 
     const fIcon = FACTION_ICONS[f.faction];
 
+    // Fleet description
+    const descHtml = f.description
+      ? `<div class="print-desc">${esc(f.description)}</div>`
+      : '';
+
     let html = `<div class="print-fleet" data-fleet-name="${esc(f.name)}">
       <div class="print-header">
         <div class="print-header-top">
@@ -2698,6 +2732,7 @@ const App = (() => {
         <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''} · ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? ` · ${esc(f.spaceStation.name)}` : ''}${compLine ? ` · ${compLine}` : ''}</div>
         <div class="print-fleet-date">Printed ${printDate}</div>
       </div>
+      ${descHtml}
       ${printWarnings}`;
 
     // Admirals
@@ -2735,12 +2770,16 @@ const App = (() => {
       ].filter(([,v]) => v && v !== '-' && v !== '--');
       const ssStatLine = ssStatPairs.map(([l,v]) => `${l}: ${v}`).join(' · ');
       const ssRules = (ss.specialRules || []).map(r => esc(r.name || '')).filter(Boolean).join(', ');
-      // Station hull damage boxes
+      // Station hull damage boxes with cripple marker
       const ssHull = parseInt(ssStats.hull, 10);
       let ssDmgHtml = '';
       if (ssHull && ssHull > 0) {
-        const boxes = Array.from({length: ssHull}, () => '<span class="print-dmg-box"></span>').join('');
-        ssDmgHtml = `<div class="print-dmg-track"><span class="print-dmg-label">Hull</span>${boxes}</div>`;
+        const ssCripple = Math.ceil(ssHull / 2);
+        const boxes = Array.from({length: ssHull}, (_, i) => {
+          const isCripple = (i + 1) === ssCripple;
+          return `<span class="print-dmg-box${isCripple ? ' print-dmg-cripple' : ''}"></span>`;
+        }).join('');
+        ssDmgHtml = `<div class="print-dmg-track"><span class="print-dmg-label">Hull</span>${boxes}<span class="print-dmg-cripple-label">Crippled at ${ssCripple}</span></div>`;
       }
       // Station weapons
       let ssWeaponsHtml = '';
@@ -2770,9 +2809,11 @@ const App = (() => {
     const allLaunchAssetNames = new Set();
     f.battleGroups.forEach(g => {
       const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
+      const gCat = g.ships.length > 0 ? (g.ships[0].groupCategory || 'medium') : 'medium';
+      const gCatLabel = CATEGORY_LABELS[gCat] || gCat;
       html += `<div class="print-group">
         <div class="print-group-header">
-          <span class="print-group-name">${esc(g.name)}</span>
+          <span class="print-group-name">${esc(g.name)} <span class="print-group-cat print-group-cat-${gCat}">${gCatLabel}</span></span>
           <span class="print-group-pts">${gPts} pts — ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
         </div>`;
 
@@ -2862,12 +2903,16 @@ const App = (() => {
         const tonnageLabel = db.tonnage || CATEGORY_LABELS[ship.groupCategory] || '';
         const artSrc = shipArtPath(db.name);
 
-        // Damage tracking boxes — hull boxes for marking damage during play
+        // Damage tracking boxes — hull boxes with cripple point marker
         const hullVal = parseInt(db.hull, 10);
         let dmgBoxesHtml = '';
         if (hullVal && hullVal > 0) {
-          const boxes = Array.from({length: hullVal}, () => '<span class="print-dmg-box"></span>').join('');
-          dmgBoxesHtml = `<div class="print-dmg-track"><span class="print-dmg-label">Hull</span>${boxes}</div>`;
+          const crippleAt = Math.ceil(hullVal / 2);
+          const boxes = Array.from({length: hullVal}, (_, i) => {
+            const isCripple = (i + 1) === crippleAt;
+            return `<span class="print-dmg-box${isCripple ? ' print-dmg-cripple' : ''}"></span>`;
+          }).join('');
+          dmgBoxesHtml = `<div class="print-dmg-track"><span class="print-dmg-label">Hull</span>${boxes}<span class="print-dmg-cripple-label">Crippled at ${crippleAt}</span></div>`;
         }
 
         // Badge indicators
@@ -2915,6 +2960,38 @@ const App = (() => {
         html += renderLaunchAssetReference(relevantAssets);
       }
     }
+
+    // Fleet totals summary
+    const admPts = (f.admirals || []).reduce((t, a) => t + (a.points || 0), 0);
+    const stationPts = f.spaceStation ? (f.spaceStation.cost || 0) : 0;
+    const shipPts = pts - admPts - stationPts;
+    const groupPtsList = f.battleGroups.map(g => {
+      const gp = g.ships.reduce((t, s) => t + (s.points || 0), 0);
+      return `<span class="print-totals-item">${esc(g.name)}: ${gp}</span>`;
+    }).join('');
+
+    html += `<div class="print-totals">
+      <div class="print-totals-header">Fleet Summary</div>
+      <div class="print-totals-grid">
+        <div class="print-totals-row">
+          <span class="print-totals-label">Ships</span>
+          <span class="print-totals-value">${shipPts} pts</span>
+        </div>
+        ${admPts > 0 ? `<div class="print-totals-row">
+          <span class="print-totals-label">Admirals</span>
+          <span class="print-totals-value">${admPts} pts</span>
+        </div>` : ''}
+        ${stationPts > 0 ? `<div class="print-totals-row">
+          <span class="print-totals-label">Space Station</span>
+          <span class="print-totals-value">${stationPts} pts</span>
+        </div>` : ''}
+        <div class="print-totals-row print-totals-total">
+          <span class="print-totals-label">Total</span>
+          <span class="print-totals-value">${pts}${sizeInfo.max !== 99999 ? ' / ' + sizeInfo.max : ''} pts</span>
+        </div>
+      </div>
+      <div class="print-totals-breakdown">${groupPtsList}</div>
+    </div>`;
 
     // Rules glossary — full text for every rule used, with page references
     const glossaryEntries = Object.entries(rulesGlossary).sort((a, b) => a[0].localeCompare(b[0]));
