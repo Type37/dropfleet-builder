@@ -18,7 +18,7 @@
 <link rel="icon" href="assets/logos/favicon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="assets/logos/favicon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700;800&family=Roboto+Slab:wght@700;800&family=Merriweather:wght@400;700&family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Jost:wght@400;500;600;700;800&family=Roboto+Slab:wght@700;800&family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
@@ -43,8 +43,6 @@
         <img src="assets/logos/dfc_logo.webp" alt="Dropfleet Commander" class="landing-logo-img">
       </div>
       <div class="deco-divider"><div class="deco-diamond"></div></div>
-      <p class="landing-subtitle">Fleet builder and mission tools for Dropfleet Commander by TTCombat.</p>
-      <div class="landing-stats" id="landing-stats"></div>
     </div>
     <div class="landing-grid stagger">
       <div class="tool-card tool-card--builder card-deco" onclick="App.navigate('fleets')">
@@ -52,7 +50,7 @@
           <svg width="32" height="32" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM19 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM21 19a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM5 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" fill="currentColor"/><path d="M7.83 6a2.995 2.995 0 0 0 0-2h4.67A2.5 2.5 0 0 1 15 6.5V9h2.5a2.5 2.5 0 0 1 2.5 2.5v4.67a2.997 2.997 0 0 0-2 0V11.5a.5.5 0 0 0-.5-.5H15v1.5a2.5 2.5 0 0 1-2.5 2.5H11v2.5a.5.5 0 0 0 .5.5h4.67a2.997 2.997 0 0 0 0 2H11.5A2.5 2.5 0 0 1 9 17.5V15H6.5A2.5 2.5 0 0 1 4 12.5V7.83a2.995 2.995 0 0 0 2 0v4.67a.5.5 0 0 0 .5.5H9v-1.5A2.5 2.5 0 0 1 11.5 9H13V6.5a.5.5 0 0 0-.5-.5H7.83ZM13 12.5V11h-1.5a.5.5 0 0 0-.5.5V13h1.5a.5.5 0 0 0 .5-.5Z" fill="currentColor"/></svg>
         </div>
         <h2 class="tool-card-title">Fleet Builder</h2>
-        <p class="tool-card-desc">Build and manage your battle fleets. Choose your faction, select ships, and optimize your force composition.</p>
+        <p class="tool-card-desc">Build and manage fleet rosters for all six factions.</p>
         <div class="badge badge-navy badge-lg" style="margin-top: var(--sp-md)">Start Building</div>
       </div>
       <div class="tool-card tool-card--mission card-deco" onclick="window.open('https://jetwong.neocities.org/wargaming/dropfleet-commander/dropfleet-mission-maker','_blank')">
@@ -60,7 +58,7 @@
           <svg width="32" height="32" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m3.001 11.996 3 .004a1 1 0 0 1 .114 1.993L6 14 4 13.996v5.003L6 19a1 1 0 0 1 .993.883L7 20a1 1 0 0 1-.883.993L6 21H3a1 1 0 0 1-.993-.883L2 20v-7.004a1 1 0 0 1 .885-.994L3 11.996ZM21 17a1 1 0 0 1 .117 1.993L21 19H9a1 1 0 0 1-.117-1.993L9 17h12Zm0-3a1 1 0 0 1 .117 1.993L21 16H9a1 1 0 0 1-.117-1.993L9 14h12ZM6 2a1 1 0 0 1 .117 1.993L6 4H4v4.995h2a1 1 0 0 1 .993.883L7 9.995a1 1 0 0 1-.883.993L6 10.995H3a1 1 0 0 1-.993-.883L2 9.995V3a1 1 0 0 1 .883-.993L3 2h3Zm15 5a1 1 0 0 1 .117 1.993L21 9H9a1 1 0 0 1-.117-1.993L9 7h12Zm0-3a1 1 0 0 1 .117 1.993L21 6H9a1 1 0 0 1-.117-1.993L9 4h12Z" fill="currentColor"/></svg>
         </div>
         <h2 class="tool-card-title">Mission Maker</h2>
-        <p class="tool-card-desc">Generate randomized scenarios with deployment zones, objectives, and special conditions for your battles.</p>
+        <p class="tool-card-desc">Randomized scenarios with deployment zones and objectives.</p>
         <div class="badge badge-gold badge-lg" style="margin-top: var(--sp-md)">Open Tool</div>
       </div>
     </div>
@@ -73,7 +71,6 @@
     <div class="fleet-list-header">
       <div>
         <h1 class="text-title-2" style="margin-bottom:var(--sp-xs)">Your Fleets</h1>
-        <p class="text-caption">Manage your battle fleet rosters</p>
       </div>
       <div class="flex gap-sm">
         <button class="btn btn-outline btn-sm" onclick="App.importFleetFromClipboard()" data-tooltip="Import fleet from clipboard"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8v6H2V2h6"/><path d="M10 2h4v4"/><path d="M14 2L7 9"/></svg> Import</button>
@@ -137,6 +134,18 @@
         <!-- Fleet Warnings -->
         <div id="fleet-warnings"></div>
 
+        <!-- Battle Groups — primary action -->
+        <div class="sidebar-section" style="flex:1">
+          <div class="sidebar-section-title">Groups</div>
+          <button class="sidebar-add-group-btn" onclick="App.addGroup()">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+            Add Group
+          </button>
+          <div id="groups-nav" class="flex flex-col gap-xs">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
         <!-- Admiral -->
         <div class="sidebar-section">
           <div class="sidebar-section-title">Admirals</div>
@@ -154,17 +163,6 @@
             <div class="add-ship-area" onclick="App.openStationModal()" style="padding:var(--sp-lg);min-height:60px">
               <span style="font-size:var(--text-sm)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M8 1l6 3.5v7L8 15l-6-3.5v-7L8 1z"/><path d="M8 8v7M2 4.5L8 8l6-3.5"/></svg> Choose Station</span>
             </div>
-          </div>
-        </div>
-
-        <!-- Battle Groups -->
-        <div class="sidebar-section" style="flex:1">
-          <div class="flex items-center justify-between">
-            <div class="sidebar-section-title" style="border:none;padding:0">Groups</div>
-            <button class="btn btn-ghost-light btn-sm" onclick="App.addGroup()" data-tooltip="Add group">+</button>
-          </div>
-          <div id="groups-nav" class="flex flex-col gap-xs">
-            <!-- Populated by JS -->
           </div>
         </div>
 
@@ -193,8 +191,7 @@
               <path d="M6 10l6-3 6 3"/>
             </svg>
           </div>
-          <h2 class="empty-state-title">Ready to build</h2>
-          <p class="empty-state-desc">Select a group from the sidebar, or add your first group to start assembling your fleet. Each group contains ships of the same type.</p>
+          <h2 class="empty-state-title">Add a group to start</h2>
           <button class="btn btn-primary" onclick="App.addGroup()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> Add First Group</button>
         </div>
         <div class="hidden" id="builder-content">
@@ -242,7 +239,7 @@
         </div>
         <div class="form-group">
           <label class="form-label">Description</label>
-          <textarea class="form-textarea" id="new-fleet-desc" placeholder="Optionally describe your fleet's purpose or lore..."></textarea>
+          <textarea class="form-textarea" id="new-fleet-desc" placeholder="Fleet notes..."></textarea>
         </div>
         <div class="form-group">
           <label class="form-label">Faction</label>

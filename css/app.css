@@ -9,8 +9,9 @@
   --font-body: "Jost", "Segoe UI", -apple-system, sans-serif;
   --font-display: "Roboto Slab", Georgia, serif;
   --font-brand: "Arkhip", "Roboto Slab", serif;
-  --font-reading: "Merriweather", "Georgia", serif;
+  --font-reading: var(--font-lore);
   --font-condensed: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-lore: "Cardo", "Georgia", serif;
   --font-mono: Consolas, "Courier New", monospace;
 
   /* Font Sizes */
@@ -184,9 +185,9 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-muted);
 }
 .text-rules {
-  font-family: var(--font-reading);
+  font-family: var(--font-lore);
   font-size: var(--text-sm);
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--ink-soft);
 }
 
@@ -370,6 +371,29 @@ h1, h2, h3, h4, h5, h6 {
   color: rgba(255,255,255,0.4);
   padding-bottom: var(--sp-xs);
   border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.sidebar-add-group-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+  width: 100%;
+  padding: var(--sp-sm) var(--sp-md);
+  margin-bottom: var(--sp-sm);
+  background: rgba(255,255,255,0.12);
+  border: 1px dashed rgba(255,255,255,0.3);
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+.sidebar-add-group-btn:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.5);
 }
 
 /* Fleet info in sidebar */
@@ -1413,10 +1437,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .fleet-card {
-  --fc: var(--navy);
   background: var(--paper);
   border: 1px solid var(--stroke);
-  border-left: 3px solid var(--fc);
   border-radius: var(--radius-lg);
   padding: 0;
   cursor: pointer;
@@ -1427,9 +1449,8 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
 }
 .fleet-card:hover {
-  border-color: color-mix(in srgb, var(--fc) 50%, var(--stroke));
-  border-left-color: var(--fc);
-  box-shadow: var(--shadow-md), 0 0 0 1px color-mix(in srgb, var(--fc) 12%, transparent);
+  border-color: var(--navy);
+  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
 .fleet-card:active {
@@ -1437,14 +1458,12 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: var(--shadow-sm);
 }
 
-/* Card header with faction accent */
 .fleet-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: var(--sp-sm) var(--sp-lg);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--fc) 8%, var(--paper)) 0%, var(--paper) 70%);
-  border-bottom: 1px solid color-mix(in srgb, var(--fc) 10%, var(--stroke-light));
+  border-bottom: 1px solid var(--stroke-light);
 }
 
 /* Card body content */
@@ -1479,7 +1498,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
   font-weight: var(--weight-heavy);
-  color: var(--fc);
+  color: var(--navy);
 }
 .fleet-card-pts-label {
   font-size: var(--text-sm);
@@ -1495,7 +1514,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .fleet-card-bar-fill {
   height: 100%;
-  background: var(--fc);
+  background: var(--navy);
   border-radius: 2px;
   transition: width 0.3s ease;
 }
@@ -1709,7 +1728,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .weapon-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(120px, 1.5fr) 40px 32px 32px 32px 32px minmax(80px, 1fr);
   align-items: baseline;
   gap: 0;
   padding: 2px var(--sp-sm);
@@ -1725,20 +1745,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .weapon-col {
-  flex-shrink: 0;
   white-space: nowrap;
   color: var(--ink-soft);
   font-weight: var(--weight-medium);
 }
 
 .weapon-col-name {
-  flex: 1 1 auto;
   min-width: 0;
   font-weight: var(--weight-semibold);
   color: var(--ink);
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-right: var(--sp-sm);
 }
 
 .weapon-col-arc,
@@ -1746,18 +1763,14 @@ h1, h2, h3, h4, h5, h6 {
 .weapon-col-lock,
 .weapon-col-dmg,
 .weapon-col-type {
-  width: 36px;
   text-align: center;
   font-weight: var(--weight-semibold);
   font-size: var(--text-xs);
 }
 
-.weapon-col-arc { width: 40px; }
-
 .weapon-col-special {
-  flex: 1 1 auto;
   min-width: 0;
-  padding-left: var(--sp-sm);
+  padding-left: var(--sp-xs);
   display: flex;
   flex-wrap: wrap;
   gap: 3px;
@@ -2049,9 +2062,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .ship-lore-text {
   padding: var(--sp-sm) var(--sp-md);
-  font-family: var(--font-reading);
+  font-family: var(--font-lore);
   font-size: var(--text-sm);
-  line-height: 1.65;
+  line-height: 1.7;
   color: var(--ink-soft);
   background: var(--paper-alt);
   border-top: 1px solid var(--stroke-light);
@@ -3370,7 +3383,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Fleet description in print */
 .print-desc {
-  font-family: 'Merriweather', serif;
+  font-family: var(--font-lore);
   font-size: 9pt;
   color: #555;
   line-height: 1.5;
@@ -3788,7 +3801,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .print-glossary-desc {
   color: #333;
-  font-family: 'Merriweather', serif;
+  font-family: var(--font-lore);
   font-size: 7.5pt;
 }
 
@@ -4315,11 +4328,10 @@ h1, h2, h3, h4, h5, h6 {
   .ship-card-image { width: 100%; height: 120px; border-radius: var(--radius-md); }
   .ship-card-image img { object-position: center; }
 
-  /* Weapon rows stack on small screens — no horizontal scroll needed */
+  /* Weapon rows stack on small screens */
   .weapon-list { overflow-x: visible; }
-  .weapon-row { flex-wrap: wrap; min-width: 0; }
-  .weapon-col-name { flex-basis: 100%; padding-right: 0; }
-  .weapon-col-special { flex-basis: 100%; padding-left: 0; margin-top: 2px; }
+  .weapon-row { grid-template-columns: 1fr 32px 28px 28px 28px 28px; min-width: 0; }
+  .weapon-col-special { grid-column: 1 / -1; padding-left: 0; margin-top: 2px; }
 
   .load-row { flex-direction: column; align-items: flex-start; }
   .loadout-selector { flex-direction: column; align-items: flex-start; }

@@ -53,20 +53,37 @@ const App = (() => {
   let rawFleetData = null;
 
   // ── Init ──
+  let factionLoadPromises = {};
+
   async function init() {
     try {
-      const res = await fetch('data/fleet-data.json');
+      const res = await fetch('data/fleet-index.json');
       rawFleetData = await res.json();
-      transformData(rawFleetData);
+      transformIndex(rawFleetData);
       populateLanding(rawFleetData);
     } catch (e) {
-      console.error('Failed to load fleet data:', e);
+      console.error('Failed to load fleet index:', e);
     }
 
     loadSettings();
     loadFleets();
     setupRouting();
     window.dispatchEvent(new Event('hashchange'));
+  }
+
+  async function ensureFactionLoaded(factionKey) {
+    if (shipDB[factionKey]) return;
+    if (factionLoadPromises[factionKey]) return factionLoadPromises[factionKey];
+    factionLoadPromises[factionKey] = (async () => {
+      try {
+        const res = await fetch(`data/faction-${factionKey}.json`);
+        const faction = await res.json();
+        transformFaction(factionKey, faction);
+      } catch (e) {
+        console.error(`Failed to load faction ${factionKey}:`, e);
+      }
+    })();
+    return factionLoadPromises[factionKey];
   }
 
   const SHIP_ART = new Set([
@@ -172,9 +189,7 @@ const App = (() => {
     return null;
   }
 
-  function transformData(raw) {
-    // Store global shared rules (ship + weapon rules from BSData)
-    // Normalize: values may be plain strings or {description, page} objects
+  function transformIndex(raw) {
     if (raw.sharedRules) {
       Object.entries(raw.sharedRules).forEach(([k, v]) => {
         if (typeof v === 'string') {
@@ -184,117 +199,95 @@ const App = (() => {
         }
       });
     }
+    Object.entries(raw.factions).forEach(([factionKey, meta]) => {
+      factionData[factionKey] = { name: meta.name, shortName: meta.shortName };
+    });
+  }
 
-    Object.entries(raw.factions).forEach(([factionKey, faction]) => {
-      factionData[factionKey] = { name: faction.name, shortName: faction.shortName };
+  function transformFaction(factionKey, faction) {
+    factionData[factionKey] = { name: faction.name, shortName: faction.shortName };
 
-      const groups = {};
+    const groups = {};
 
-      (faction.groups || []).forEach(g => {
-        const cat = g.category || 'medium';
-        if (!groups[cat]) groups[cat] = { ships: {} };
-        const s = g.ship;
-        groups[cat].ships[g.id] = {
-          name: s.name,
-          points: s.cost,
-          tonnage: (s.stats?.tonnage && s.stats.tonnage !== '?') ? s.stats.tonnage : (CATEGORY_LABELS[cat] || cat),
-          scan: s.stats?.scan, sig: s.stats?.sig,
-          thrust: s.stats?.thrust, hull: s.stats?.hull,
-          es: s.stats?.es, ks: s.stats?.ks,
-          bs: s.stats?.bs, g: s.stats?.g,
-          special: s.stats?.special,
-          weapons: s.weapons || [],
-          loads: s.loads || [],
-          special_rules: (s.specialRules || []).map(r => r.name),
-          specialRuleDetails: s.specialRules || [],
-          groupMin: s.groupMin, groupMax: s.groupMax,
-          isRare: s.isRare, isUnique: s.isUnique,
-          loadoutOptions: s.loadoutOptions || [],
-          lore: s.lore || '',
-          image: shipArtPath(s.name)
+    (faction.groups || []).forEach(g => {
+      const cat = g.category || 'medium';
+      if (!groups[cat]) groups[cat] = { ships: {} };
+      const s = g.ship;
+      groups[cat].ships[g.id] = {
+        name: s.name,
+        points: s.cost,
+        tonnage: (s.stats?.tonnage && s.stats.tonnage !== '?') ? s.stats.tonnage : (CATEGORY_LABELS[cat] || cat),
+        scan: s.stats?.scan, sig: s.stats?.sig,
+        thrust: s.stats?.thrust, hull: s.stats?.hull,
+        es: s.stats?.es, ks: s.stats?.ks,
+        bs: s.stats?.bs, g: s.stats?.g,
+        special: s.stats?.special,
+        weapons: s.weapons || [],
+        loads: s.loads || [],
+        special_rules: (s.specialRules || []).map(r => r.name),
+        specialRuleDetails: s.specialRules || [],
+        groupMin: s.groupMin, groupMax: s.groupMax,
+        isRare: s.isRare, isUnique: s.isUnique,
+        loadoutOptions: s.loadoutOptions || [],
+        lore: s.lore || '',
+        image: shipArtPath(s.name)
+      };
+    });
+
+    const famous = (faction.admirals || []).filter(a => a.isFamous);
+    if (famous.length > 0) {
+      groups.famous_admirals = { ships: {} };
+      famous.forEach(a => {
+        const fs = a.flagship;
+        groups.famous_admirals.ships[a.id] = {
+          name: a.name,
+          points: fs ? (a.cost + fs.cost) : a.cost,
+          admiral_cost: a.cost,
+          ship_cost: fs ? fs.cost : 0,
+          level: a.level,
+          type: 'Famous',
+          special_abilities: a.abilities || [],
+          scan: fs?.stats?.scan, sig: fs?.stats?.sig,
+          thrust: fs?.stats?.thrust, hull: fs?.stats?.hull,
+          es: fs?.stats?.es, ks: fs?.stats?.ks,
+          bs: fs?.stats?.bs, g: fs?.stats?.g,
+          special: fs?.stats?.special,
+          tonnage: fs?.stats?.tonnage,
+          weapons: fs?.weapons || [],
+          loads: fs?.loads || [],
+          special_rules: (fs?.specialRules || []).map(r => r.name),
+          specialRuleDetails: fs?.specialRules || [],
+          image: admiralArtPath(a.name) || shipArtPath(fs?.name)
         };
       });
+    }
 
-      const famous = (faction.admirals || []).filter(a => a.isFamous);
-      if (famous.length > 0) {
-        groups.famous_admirals = { ships: {} };
-        famous.forEach(a => {
-          const fs = a.flagship;
-          groups.famous_admirals.ships[a.id] = {
-            name: a.name,
-            points: fs ? (a.cost + fs.cost) : a.cost,
-            admiral_cost: a.cost,
-            ship_cost: fs ? fs.cost : 0,
-            level: a.level,
-            type: 'Famous',
-            special_abilities: a.abilities || [],
-            scan: fs?.stats?.scan, sig: fs?.stats?.sig,
-            thrust: fs?.stats?.thrust, hull: fs?.stats?.hull,
-            es: fs?.stats?.es, ks: fs?.stats?.ks,
-            bs: fs?.stats?.bs, g: fs?.stats?.g,
-            special: fs?.stats?.special,
-            tonnage: fs?.stats?.tonnage,
-            weapons: fs?.weapons || [],
-            loads: fs?.loads || [],
-            special_rules: (fs?.specialRules || []).map(r => r.name),
-            specialRuleDetails: fs?.specialRules || [],
-            image: admiralArtPath(a.name) || shipArtPath(fs?.name)
-          };
-        });
-      }
-
-      // Store launch asset profiles for this faction
-      const launchAssets = [];
-      (faction.launchAssets || []).forEach(la => {
-        (la.assets || []).forEach(a => launchAssets.push(a));
-      });
-
-      // Store space stations and deployable features for this faction
-      const spaceStations = (faction.spaceStations || []).map(ss => ({
-        id: ss.id,
-        name: ss.name,
-        cost: ss.cost || 0,
-        stats: ss.stats || {},
-        specialRules: ss.specialRules || [],
-        special: ss.stats?.special || '-'
-      }));
-      const deployableFeatures = (faction.deployableFeatures || []).map(df => ({
-        id: df.id,
-        name: df.name,
-        cost: df.cost || 0,
-        features: df.features || [],
-        rules: df.rules || []
-      }));
-
-      shipDB[factionKey] = { groups, admirals: faction.admirals || [], launchAssets, spaceStations, deployableFeatures };
+    const launchAssets = [];
+    (faction.launchAssets || []).forEach(la => {
+      (la.assets || []).forEach(a => launchAssets.push(a));
     });
+
+    const spaceStations = (faction.spaceStations || []).map(ss => ({
+      id: ss.id,
+      name: ss.name,
+      cost: ss.cost || 0,
+      stats: ss.stats || {},
+      specialRules: ss.specialRules || [],
+      special: ss.stats?.special || '-'
+    }));
+    const deployableFeatures = (faction.deployableFeatures || []).map(df => ({
+      id: df.id,
+      name: df.name,
+      cost: df.cost || 0,
+      features: df.features || [],
+      rules: df.rules || []
+    }));
+
+    shipDB[factionKey] = { groups, admirals: faction.admirals || [], launchAssets, spaceStations, deployableFeatures };
   }
 
   // ── Landing Page Dynamic Content ──
   function populateLanding(raw) {
-    // Stats bar
-    const statsEl = document.getElementById('landing-stats');
-    if (statsEl && raw) {
-      let totalShips = 0, totalAdmirals = 0;
-      const factionKeys = Object.keys(raw.factions || {});
-      factionKeys.forEach(fk => {
-        const f = raw.factions[fk];
-        totalShips += (f.groups || []).length;
-        totalAdmirals += (f.admirals || []).length;
-      });
-      const totalRules = Object.keys(raw.sharedRules || {}).length;
-      const stats = [
-        { num: totalShips, label: 'Ships' },
-        { num: totalAdmirals, label: 'Admirals' },
-        { num: factionKeys.length, label: 'Factions' },
-        { num: totalRules, label: 'Rules' }
-      ];
-      statsEl.innerHTML = stats.map((s, i) =>
-        (i > 0 ? '<span class="landing-stat-sep">·</span>' : '') +
-        `<span class="landing-stat"><span class="landing-stat-num">${s.num}</span> ${s.label}</span>`
-      ).join('');
-    }
-
     // Faction showcase — with hero ship art per faction
     const factionsEl = document.getElementById('landing-factions');
     if (factionsEl && raw) {
@@ -313,7 +306,7 @@ const App = (() => {
         const f = raw.factions[fk];
         const color = FACTION_COLORS[fk] || 'var(--navy)';
         const label = FACTION_LABELS[fk] || fk.toUpperCase();
-        const count = (f.groups || []).length;
+        const count = f.shipCount || (f.groups || []).length;
         const fIcon = FACTION_ICONS[fk];
         const heroes = (heroShips[fk] || []).map(h => shipArtPath(h)).filter(Boolean);
         const heroStrip = heroes.length > 0
@@ -409,7 +402,7 @@ const App = (() => {
               <button class="btn btn-ghost btn-sm topbar-action-btn" onclick="App.openSettings()" data-tooltip="Settings">
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/></svg>
               </button>`;
-            renderBuilder();
+            ensureFactionLoaded(currentFleet.faction).then(() => renderBuilder());
             return;
           }
         }
@@ -840,7 +833,7 @@ const App = (() => {
         : '';
       const fIcon = FACTION_ICONS[f.faction];
       return `
-      <div class="fleet-card card-deco" onclick="App.navigate('builder','${f.id}')" style="--fc:${fColor}">
+      <div class="fleet-card card-deco" onclick="App.navigate('builder','${f.id}')">
         <div class="fleet-card-header">
           <div class="flex items-center gap-xs">
             ${fIcon ? `<img src="${fIcon}" alt="" class="fleet-card-faction-icon">` : ''}
@@ -871,7 +864,7 @@ const App = (() => {
       <div class="fleet-card fleet-card-new" onclick="App.openNewFleetModal()">
         <div class="fleet-card-new-icon"><svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg></div>
         <div style="font-family:var(--font-display);font-weight:var(--weight-semibold);font-size:var(--text-md)">Create New Fleet</div>
-        <div class="text-caption">Start building a new fleet roster</div>
+        <div class="text-caption">New Fleet</div>
       </div>`;
 
     if (fleets.length === 0) {
@@ -885,7 +878,6 @@ const App = (() => {
             <path d="M6 10l6-3 6 3"/>
           </svg>
           <h2 class="fleet-list-empty-title">No fleets yet</h2>
-          <p class="fleet-list-empty-desc">Create your first fleet roster to get started, or load demo fleets to explore the builder.</p>
           <div class="flex gap-sm" style="margin-top:var(--sp-lg)">
             <button class="btn btn-primary" onclick="App.openNewFleetModal()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> New Fleet</button>
             <button class="btn btn-outline" onclick="App.loadDemoFleets()">Load Demos</button>
@@ -971,124 +963,101 @@ const App = (() => {
       return { id: uuid(), name: groupName || ship.name, ships };
     }
 
-    // Fleet composition specs: [category, shipNameSubstring, quantity]
+    // Fastplay starter fleet compositions (from official A5 fastplay sheets v2.3)
     const demoSpecs = [
       {
-        faction: 'ucm', name: 'Demo - UCM Battlefleet',
-        desc: 'A balanced UCM strike force built around a Beijing Battleship, with cruiser and frigate escort.',
+        faction: 'ucm', name: 'UCM Starter Fleet', size: 'skirmish',
         groups: [
-          ['heavy',  'Beijing',          1],
-          ['heavy',  'Siam',             1],
-          ['medium', 'Glasgow',          2],
-          ['medium', 'Seattle',          1],
-          ['medium', 'Berlin',           2],
-          ['light',  'Havana',           3],
-          ['light',  'New Orleans',      2],
-          ['light',  'Jakarta',          2],
-          ['light',  'Toulon',           4],
-          ['light',  'Santiago',         3],
+          ['medium', 'Bruges',           1],
+          ['medium', 'Edmonton',         1],
+          ['medium', 'San Francisco',    1],
+          ['light',  'Toulon',           1],
+          ['light',  'New Orleans',      1],
+          ['light',  'Lima',             1],
         ]
       },
       {
-        faction: 'scourge', name: 'Demo - Scourge Swarm',
-        desc: 'An aggressive Scourge raiding force that overwhelms with numbers and close-range firepower.',
+        faction: 'scourge', name: 'Scourge Starter Fleet', size: 'skirmish',
         groups: [
-          ['heavy',  'Akuma',            1],
-          ['heavy',  'Shadow',           1],
-          ['medium', 'Wyvern',           2],
-          ['medium', 'Ifrit',            2],
-          ['medium', 'Yokai',            3],
-          ['light',  'Gargoyle',         2],
-          ['light',  'Djinn',            4],
-          ['light',  'Nickar',           3],
-          ['light',  'Scylla',           3],
+          ['medium', 'Sphinx',           1],
+          ['medium', 'Hydra',            1],
+          ['medium', 'Chimera',          1],
+          ['light',  'Gargoyle',         1],
+          ['light',  'Harpy',            1],
         ]
       },
       {
-        faction: 'phr', name: 'Demo - PHR Phalanx',
-        desc: 'A heavily armoured PHR battleline. Fewer ships, but each one hits like a freight train.',
+        faction: 'phr', name: 'PHR Starter Fleet', size: 'skirmish',
         groups: [
-          ['heavy',  'Agrippa',          1],
-          ['heavy',  'Pompeius',         1],
-          ['medium', 'Orion',            2],
-          ['medium', 'Ajax',             2],
-          ['medium', 'Otera',            3],
-          ['light',  'Cadmus',           3],
-          ['light',  'Medea',            2],
-          ['light',  'Pandora',          4],
-          ['light',  'Echo',             4],
+          ['medium', 'Theseus',          1],
+          ['medium', 'Ikarus',           1],
+          ['medium', 'Orpheus',          1],
+          ['light',  'Pandora',          1],
+          ['light',  'Medea',            1],
         ]
       },
       {
-        faction: 'shaltari', name: 'Demo - Shaltari Warhost',
-        desc: 'A Shaltari gate network fleet using Voidgates to teleport troops and redirect firepower.',
+        faction: 'shaltari', name: 'Shaltari Starter Fleet', size: 'skirmish',
         groups: [
-          ['heavy',  'Hematite',         1],
-          ['heavy',  'Sapphire',         1],
-          ['medium', 'Turquoise',        2],
-          ['medium', 'Amber',            2],
-          ['medium', 'Azurite',          3],
-          ['light',  'Cobalt',           2],
-          ['light',  'Amethyst',         4],
-          ['light',  'Jade',             3],
-          ['light',  'Voidgate',         3],
-          ['light',  'Glass',            4],
+          ['medium', 'Obsidian',         1],
+          ['medium', 'Basalt',           1],
+          ['medium', 'Emerald',          1],
+          ['light',  'Topaz',            1],
+          ['light',  'Opal',             1],
+          ['light',  'Voidgate',         1],
         ]
       },
       {
-        faction: 'bioficer', name: 'Demo - Bioficer Swarm',
-        desc: 'A Bioficer organism fleet. Organic ships with modular payload cells for flexible tactics.',
+        faction: 'bioficer', name: 'Bioficer Starter Fleet', size: 'skirmish',
         groups: [
-          ['heavy',  'Sanctum',          1],
-          ['heavy',  'Stature',          1],
-          ['medium', 'Cosmic',           2],
-          ['medium', 'Comet',            2],
-          ['medium', 'Charger',          3],
-          ['light',  'Disciple',         3],
-          ['light',  'Tine',             3],
-          ['light',  'Fresco',           6],
-          ['light',  'Vertex',           3],
+          ['medium', 'Comet',            1],
+          ['medium', 'Cavern',           1],
+          ['medium', 'Catastrophe',      1],
+          ['payload','Prism Cell',       1],
+          ['light',  'Fulcrum',          1],
+          ['light',  'Foray',            1],
+          ['payload','Invasion Cell',    1],
+          ['payload','Lander Cell',      1],
         ]
       },
       {
-        faction: 'resistance', name: 'Demo - Resistance Flotilla',
-        desc: 'A ragtag Resistance fleet of refitted civilian ships and repurposed warships.',
+        faction: 'resistance', name: 'Resistance Starter Fleet', size: 'skirmish',
         groups: [
-          ['heavy',  'Vanguard',         1],
-          ['heavy',  'Senator',          1],
-          ['medium', 'Gladiator',        1],
-          ['medium', 'Cruiser',          2],
-          ['medium', 'Light Cruiser',    3],
-          ['light',  'Armstrong',        3],
-          ['light',  'Strike Carrier',   3],
-          ['light',  'Heavy Frigate',    4],
-          ['light',  'Frigate',          6],
+          ['medium', 'Heavy Cruiser',    1],
+          ['medium', 'Cruiser',          1],
+          ['medium', 'Light Cruiser',    1],
+          ['light',  'Strike Carrier',   1],
+          ['light',  'Heavy Frigate',    1],
         ]
       }
     ];
 
     let loaded = 0;
-    demoSpecs.forEach(spec => {
-      if (!shipDB[spec.faction]) return;
-      const battleGroups = [];
-      spec.groups.forEach(([cat, name, qty]) => {
-        const g = makeGroup(spec.faction, null, cat, name, qty);
-        if (g) battleGroups.push(g);
-      });
-      if (battleGroups.length === 0) return;
+    const loadPromises = demoSpecs.map(spec => ensureFactionLoaded(spec.faction));
+    Promise.all(loadPromises).then(() => {
+      demoSpecs.forEach(spec => {
+        if (!shipDB[spec.faction]) return;
+        const battleGroups = [];
+        spec.groups.forEach(([cat, name, qty]) => {
+          const g = makeGroup(spec.faction, null, cat, name, qty);
+          if (g) battleGroups.push(g);
+        });
+        if (battleGroups.length === 0) return;
 
-      fleets.push({
-        id: uuid(), name: spec.name, description: spec.desc,
-        faction: spec.faction, gameSize: 'clash', pointsLimit: 2000, maxGroups: 20,
-        admirals: [], battleGroups, spaceStation: null,
-        createdAt: Date.now() - (5 - loaded) * 60000, updatedAt: Date.now() - (5 - loaded) * 60000
+        const gs = GAME_SIZES[spec.size || 'skirmish'] || GAME_SIZES.skirmish;
+        fleets.push({
+          id: uuid(), name: spec.name,
+          faction: spec.faction, gameSize: spec.size || 'skirmish', pointsLimit: gs.max, maxGroups: gs.groups,
+          admirals: [], battleGroups, spaceStation: null,
+          createdAt: Date.now() - (5 - loaded) * 60000, updatedAt: Date.now() - (5 - loaded) * 60000
+        });
+        loaded++;
       });
-      loaded++;
+
+      saveFleets();
+      renderFleetList();
+      showToast(`${loaded} demo fleet${loaded !== 1 ? 's' : ''} loaded!`);
     });
-
-    saveFleets();
-    renderFleetList();
-    showToast(`${loaded} demo fleet${loaded !== 1 ? 's' : ''} loaded!`);
   }
 
   // ── Builder View ──
@@ -2222,14 +2191,18 @@ const App = (() => {
     }
   }
 
+  let _searchTimer = 0;
   function searchShips(query) {
     shipSearchQuery = (query || '').trim().toLowerCase();
     const clearBtn = document.getElementById('ship-search-clear');
     if (clearBtn) clearBtn.classList.toggle('hidden', !shipSearchQuery);
-    const factionShips = shipDB[currentFleet.faction];
-    if (factionShips && factionShips.groups) {
-      renderShipSelectGrid(factionShips.groups, activeCategory);
-    }
+    clearTimeout(_searchTimer);
+    _searchTimer = setTimeout(() => {
+      const factionShips = shipDB[currentFleet.faction];
+      if (factionShips && factionShips.groups) {
+        renderShipSelectGrid(factionShips.groups, activeCategory);
+      }
+    }, 120);
   }
 
   function clearShipSearch() {
@@ -2352,7 +2325,7 @@ const App = (() => {
         ${data.image ? `<div class="ship-card-image"><img src="${esc(data.image)}" alt="${esc(data.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
         <div class="ship-card-info">
           <div class="ship-card-name">${esc(data.name)}${selectBadges ? ` ${selectBadges}` : ''}</div>
-          <div class="ship-card-type">${esc(data.tonnage || '')} · ${catLabel}</div>
+          <div class="ship-card-type">${esc(data.tonnage || catLabel)}</div>
         </div>
         <div class="ship-card-cost">${data.points || 0}<span style="font-size:var(--text-sm);font-weight:var(--weight-regular)"> pts</span></div>
       </div>
@@ -2977,7 +2950,7 @@ const App = (() => {
           const isCripple = (i + 1) === ssCripple;
           return `<span class="print-dmg-box${isCripple ? ' print-dmg-cripple' : ''}"></span>`;
         }).join('');
-        ssDmgHtml = `<div class="print-dmg-track"><span class="print-dmg-label">Hull</span>${boxes}<span class="print-dmg-cripple-label">Crippled at ${ssCripple}</span></div>`;
+        ssDmgHtml = `<div class="print-dmg-track"><span class="print-dmg-label">Hull</span>${boxes}</div>`;
       }
       // Station weapons
       let ssWeaponsHtml = '';
@@ -3144,7 +3117,7 @@ const App = (() => {
               const isCripple = (i + 1) === crippleAt;
               return `<span class="print-dmg-box${isCripple ? ' print-dmg-cripple' : ''}"></span>`;
             }).join('');
-            return `<div class="print-dmg-track"><span class="print-dmg-label">${label}</span>${boxes}<span class="print-dmg-cripple-label">Crippled at ${crippleAt}</span></div>`;
+            return `<div class="print-dmg-track"><span class="print-dmg-label">${label}</span>${boxes}</div>`;
           };
           if (count === 1) {
             dmgBoxesHtml = makeTrack('Hull');
@@ -3653,7 +3626,7 @@ const App = (() => {
         <div class="settings-group-title">Fleet Details</div>
         <div style="display:flex;flex-direction:column;gap:var(--sp-sm)">
           <label class="form-label" style="margin-top:var(--sp-sm)">Description</label>
-          <textarea class="form-textarea" id="settings-fleet-desc" placeholder="Describe your fleet's purpose or lore..." style="min-height:60px;font-size:var(--text-sm)">${esc(descValue)}</textarea>
+          <textarea class="form-textarea" id="settings-fleet-desc" placeholder="Fleet notes..." style="min-height:60px;font-size:var(--text-sm)">${esc(descValue)}</textarea>
           <button class="btn btn-outline btn-sm" style="align-self:flex-start" onclick="App.updateFleetDescription()">Save Description</button>
         </div>
       </div>` : '';
