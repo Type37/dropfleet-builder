@@ -252,6 +252,7 @@ const App = (() => {
         isRare: s.isRare, isUnique: s.isUnique,
         loadoutOptions: s.loadoutOptions || [],
         lore: s.lore || '',
+        rulesText: s.rulesText || '',
         image: shipArtPath(s.name),
         variants: s.variants || []
       };
@@ -2173,6 +2174,16 @@ const App = (() => {
       ).join('') + '</div>';
     }
 
+    // Ship-specific rules text (loadout options, deployable features, etc.)
+    let rulesTextHtml = '';
+    const rulesText = dbShip ? dbShip.rulesText : '';
+    if (rulesText) {
+      rulesTextHtml = `<details class="ship-lore no-print">
+        <summary class="ship-lore-toggle" style="font-size:var(--text-xs)">Ship Rules</summary>
+        <div class="ship-lore-text" style="font-family:var(--font-body);font-size:var(--text-xs)">${esc(rulesText)}</div>
+      </details>`;
+    }
+
     // Variants / counts-as
     let variantsHtml = '';
     const variants = dbShip ? dbShip.variants : [];
@@ -2233,6 +2244,7 @@ const App = (() => {
         ${compact ? '' : loadoutsHtml}
         ${compact ? '' : loadsHtml}
         ${rulesHtml}
+        ${compact ? '' : rulesTextHtml}
         ${compact ? '' : loreHtml}
         ${compact ? '' : variantsHtml}
       </div>
