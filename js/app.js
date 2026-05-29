@@ -304,8 +304,9 @@ const App = (() => {
         const color = FACTION_COLORS[fk] || 'var(--navy)';
         const label = FACTION_LABELS[fk] || fk.toUpperCase();
         const count = (f.groups || []).length;
+        const fIcon = FACTION_ICONS[fk];
         return `<div class="faction-chip" style="--current-faction:${color}" onclick="App.startFactionFleet('${fk}')">
-          <div class="faction-chip-dot"></div>
+          ${fIcon ? `<img src="${fIcon}" alt="" class="faction-chip-icon">` : '<div class="faction-chip-dot"></div>'}
           <span class="faction-chip-name">${label}</span>
           <span class="faction-chip-count">${count} ships</span>
         </div>`;
@@ -547,7 +548,12 @@ const App = (() => {
     renderFactionPicker();
     renderSizePicker();
     openModal('modal-new-fleet');
-    setTimeout(() => document.getElementById('new-fleet-name').focus(), 200);
+    const nameInput = document.getElementById('new-fleet-name');
+    setTimeout(() => nameInput.focus(), 200);
+    // Enter key creates fleet (from name input only, not desc textarea)
+    nameInput.onkeydown = (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); createFleet(); }
+    };
   }
 
   const FACTION_ICONS = {
@@ -641,12 +647,22 @@ const App = (() => {
     const popover = document.createElement('div');
     popover.id = 'game-size-popover';
     popover.className = 'game-size-popover';
+    const barProfiles = {
+      skirmish:   [8, 12, 6, 4],
+      clash:      [10, 16, 12, 8],
+      battle:     [14, 22, 18, 12],
+      reconquest: [16, 28, 24, 18]
+    };
     popover.innerHTML = Object.entries(GAME_SIZES).map(([key, size]) => {
       const active = key === currentFleet.gameSize ? ' active' : '';
-      const colText = size.colossalMax > 0 ? `, ${size.colossalMax} Colossal` : '';
+      const colText = size.colossalMax > 0 ? ` · ${size.colossalMax} Colossal` : '';
+      const bars = barProfiles[key].map(h => `<div class="game-size-bar" style="height:${h}px"></div>`).join('');
       return `<button class="game-size-popover-item${active}" onclick="App.applyGameSize('${key}')">
-        <span class="game-size-popover-name">${size.label}</span>
-        <span class="game-size-popover-desc">${size.desc} · ${size.groups} groups${colText}</span>
+        <div class="game-size-visual">${bars}</div>
+        <div>
+          <span class="game-size-popover-name">${size.label}</span>
+          <span class="game-size-popover-desc">${size.desc} · ~${size.time} · ${size.groups} groups${colText}</span>
+        </div>
       </button>`;
     }).join('');
 
@@ -767,10 +783,14 @@ const App = (() => {
         : warnCount > 0
         ? `<span class="badge badge-warn">${warnCount} note${warnCount > 1 ? 's' : ''}</span>`
         : '';
+      const fIcon = FACTION_ICONS[f.faction];
       return `
       <div class="fleet-card card-deco" onclick="App.navigate('builder','${f.id}')" style="border-left:3px solid ${fColor}">
         <div class="flex items-center justify-between">
-          <span class="badge badge-${f.faction}">${fName}</span>
+          <div class="flex items-center gap-xs">
+            ${fIcon ? `<img src="${fIcon}" alt="" class="fleet-card-faction-icon">` : ''}
+            <span class="badge badge-${f.faction}">${fName}</span>
+          </div>
           <div class="flex gap-xs items-center">
             ${validationBadge}
             <span class="badge badge-neutral">${sizeInfo.label}</span>
@@ -1137,6 +1157,12 @@ const App = (() => {
       const shipCount = g.ships.length;
       const groupPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
       const isActive = g.id === activeGroupId;
+      // Get the ship category for this group (from the first ship)
+      let catLabel = '';
+      if (g.ships.length > 0) {
+        const cat = g.ships[0].groupCategory || 'medium';
+        catLabel = CATEGORY_LABELS[cat] || cat;
+      }
       const reorderBtns = isActive && total > 1
         ? `<span class="group-nav-reorder" onclick="event.stopPropagation()">
             <button class="group-move-btn" onclick="App.moveGroup('${g.id}',-1)" ${i === 0 ? 'disabled' : ''} title="Move up"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10l4-4 4 4"/></svg></button>
@@ -1145,7 +1171,7 @@ const App = (() => {
         : '';
       return `
       <div class="group-nav-item ${isActive ? 'active' : ''}" onclick="App.selectGroup('${g.id}')">
-        <div class="group-nav-name">${esc(g.name)}</div>
+        <div class="group-nav-name">${esc(g.name)}${catLabel ? `<span class="group-nav-cat">${catLabel}</span>` : ''}</div>
         ${reorderBtns}
         <span class="text-caption" style="white-space:nowrap">${groupPts}pts</span>
         <span class="group-nav-count">${shipCount}</span>
@@ -1656,7 +1682,7 @@ const App = (() => {
       <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
         <div class="flex items-center justify-between">
           <div>
-            <div class="ship-card-name">${esc(name)}${badges ? ` ${badges}` : ''}</div>
+            <div class="ship-card-name ship-card-name-link" onclick="event.stopPropagation(); App.openShipDetail('${currentFleet.faction}','${ship.groupCategory}','${ship.shipKey}')">${esc(name)}${badges ? ` ${badges}` : ''}</div>
             <div class="ship-tonnage-label ship-tonnage-${ship.groupCategory || 'medium'}">${esc(tonnage)}</div>
           </div>
           <div class="ship-card-cost">${ship.points} pts</div>
@@ -1869,7 +1895,10 @@ const App = (() => {
       }).join('')}${specialRules.length > 4 ? `<span class="rule-chip" style="background:rgba(255,255,255,0.06);color:var(--ink-faint)">+${specialRules.length - 4}</span>` : ''}</div>` : ''}
       <div class="flex items-center justify-between" style="margin-top:auto">
         <span class="text-caption">${data.g ? `Group: ${data.g}` : ''}${launchIndicator ? (data.g ? ' · ' : '') + launchIndicator : ''}</span>
-        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addShipToGroup('${key}','${category}')">+ Add</button>
+        <div class="flex gap-xs">
+          <button class="btn btn-ghost btn-sm btn-icon" onclick="event.stopPropagation(); App.openShipDetail('${currentFleet.faction}','${category}','${key}')" title="View details"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7v4M8 5v.5"/></svg></button>
+          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addShipToGroup('${key}','${category}')">+ Add</button>
+        </div>
       </div>
     </div>`;
   }
@@ -3230,6 +3259,111 @@ const App = (() => {
     return `${Math.floor(months / 12)}y ago`;
   }
 
+  // ── Ship Detail Modal ──
+  function openShipDetail(faction, category, shipKey) {
+    const dbShip = findShipInDB(faction, category, shipKey);
+    if (!dbShip) return;
+
+    document.getElementById('detail-ship-name').textContent = dbShip.name;
+    const body = document.getElementById('detail-ship-body');
+
+    const img = dbShip.image;
+    const tonnage = dbShip.tonnage || CATEGORY_LABELS[category] || category;
+    const badges = [];
+    if (dbShip.isUnique) badges.push('<span class="ship-badge ship-badge-unique">Unique</span>');
+    else if (dbShip.isRare) badges.push('<span class="ship-badge ship-badge-rare">Rare</span>');
+    if (dbShip.groupMax > 1) badges.push(`<span class="ship-badge ship-badge-group">${dbShip.groupMin || 1}–${dbShip.groupMax}</span>`);
+
+    const statsHtml = renderStatGrid(dbShip);
+
+    // Weapons
+    const wpns = dbShip.weapons || [];
+    let weaponsHtml = '';
+    if (wpns.length > 0) {
+      weaponsHtml = '<div class="detail-section-label">Weapons</div><div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
+    }
+
+    // Loadout options
+    let loadoutsHtml = '';
+    const loadoutOpts = dbShip.loadoutOptions || [];
+    if (loadoutOpts.length > 0) {
+      loadoutsHtml = '<div class="detail-section-label">Loadout Options</div>';
+      loadoutsHtml += loadoutOpts.map(lo => {
+        const items = lo.options.map(opt => {
+          const costLabel = opt.cost > 0 ? ` (+${opt.cost} pts)` : opt.cost < 0 ? ` (${opt.cost} pts)` : ' (free)';
+          const optWpns = opt.weapons || [];
+          let wpnDetail = '';
+          if (optWpns.length > 0) {
+            wpnDetail = '<div class="weapon-list" style="margin-top:var(--sp-xs)">' + renderWeaponHeader() + optWpns.map(renderWeaponRow).join('') + '</div>';
+          }
+          return `<div class="detail-loadout-option">
+            <div class="detail-loadout-name">${esc(opt.name)}${costLabel}</div>
+            ${wpnDetail}
+          </div>`;
+        }).join('');
+        return `<div class="detail-loadout-group">
+          <div class="detail-loadout-title">${esc(lo.name)}</div>
+          ${items}
+        </div>`;
+      }).join('');
+    }
+
+    // Launch assets
+    const loads = dbShip.loads || [];
+    let loadsHtml = '';
+    if (loads.length > 0) {
+      loadsHtml = '<div class="detail-section-label">Launch Assets</div>' +
+        loads.map(l =>
+          `<div class="load-row"><span class="load-row-name">${esc(l.name)}</span>
+          <div class="weapon-row-stats"><span class="weapon-stat-chip">Launch ${l.launch}</span>
+          ${l.special && l.special !== '-' ? `<span class="weapon-stat-chip">${esc(l.special)}</span>` : ''}
+          </div></div>`
+        ).join('');
+    }
+
+    // Special rules with full descriptions
+    const ruleDetails = dbShip.specialRuleDetails || [];
+    let rulesHtml = '';
+    if (ruleDetails.length > 0) {
+      rulesHtml = '<div class="detail-section-label">Special Rules</div><div class="detail-rules-list">' +
+        ruleDetails.map(r => {
+          const page = r.page ? ` <span class="detail-rule-page">p.${esc(r.page)}</span>` : '';
+          return `<div class="detail-rule-entry">
+            <span class="detail-rule-name">${esc(r.name)}${page}</span>
+            ${r.description ? `<span class="detail-rule-desc">${esc(r.description)}</span>` : ''}
+          </div>`;
+        }).join('') + '</div>';
+    }
+
+    // Lore
+    let loreHtml = '';
+    if (dbShip.lore) {
+      loreHtml = `<div class="detail-lore">
+        <div class="detail-section-label">Lore</div>
+        <p class="text-rules">${esc(dbShip.lore)}</p>
+      </div>`;
+    }
+
+    body.innerHTML = `
+      <div class="detail-hero">
+        ${img ? `<div class="detail-hero-image"><img src="${esc(img)}" alt="${esc(dbShip.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+        <div class="detail-hero-info">
+          <div class="detail-hero-tonnage ship-tonnage-label ship-tonnage-${category}">${esc(tonnage)}</div>
+          <div class="detail-hero-cost">${dbShip.points} pts</div>
+          ${badges.length > 0 ? `<div class="flex gap-xs" style="margin-top:var(--sp-sm)">${badges.join('')}</div>` : ''}
+        </div>
+      </div>
+      ${statsHtml}
+      ${weaponsHtml}
+      ${loadoutsHtml}
+      ${loadsHtml}
+      ${rulesHtml}
+      ${loreHtml}
+    `;
+
+    openModal('modal-ship-detail');
+  }
+
   // ── Rule Tooltip ──
   function showRuleTooltip(event, el) {
     event.stopPropagation();
@@ -3411,6 +3545,6 @@ const App = (() => {
     openStationModal, selectStation, removeStation,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard,
-    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize
+    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail
   };
 })();
