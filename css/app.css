@@ -1633,6 +1633,34 @@ h1, h2, h3, h4, h5, h6 {
   border-color: var(--navy);
 }
 
+/* Ship search bar */
+.ship-search-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: var(--sp-sm) var(--sp-md);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-md);
+  background: var(--paper-warm);
+  margin-bottom: var(--sp-md);
+  transition: border-color var(--duration-fast);
+}
+.ship-search-bar:focus-within {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 2px var(--navy-subtle);
+}
+.ship-search-bar svg { color: var(--ink-faint); flex-shrink: 0; }
+.ship-search-input {
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  width: 100%;
+  outline: none;
+}
+.ship-search-input::placeholder { color: var(--ink-faint); }
+
 /* Ship selection filters */
 .ship-select-filters {
   display: flex;

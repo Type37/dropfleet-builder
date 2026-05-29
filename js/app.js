@@ -14,6 +14,7 @@ const App = (() => {
   let shipSortMode = 'name';
   let activeCategory = 'all';
   let activeFilters = new Set();  // 'launch', 'loadout', 'rare', 'unique'
+  let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
   let settings = { showAuxiliaries: true, compactView: false, autoExpandLore: false };
 
@@ -1430,15 +1431,20 @@ const App = (() => {
     if (groupId) activeGroupId = groupId;
     activeCategory = 'all';
     activeFilters = new Set();
+    shipSearchQuery = '';
 
     const factionKey = currentFleet.faction;
     const factionShips = shipDB[factionKey];
     if (!factionShips || !factionShips.groups) return;
 
+    const searchInput = document.getElementById('ship-search-input');
+    if (searchInput) searchInput.value = '';
+
     renderCategoryTabs(factionShips.groups);
     renderShipFilters();
     renderShipSelectGrid(factionShips.groups, 'all');
     openModal('modal-ship-select');
+    if (searchInput) setTimeout(() => searchInput.focus(), 200);
 
     const fName = (factionData[factionKey] || {}).name || factionKey.toUpperCase();
     document.getElementById('ship-select-title').textContent = pendingGroupCreation
@@ -1500,6 +1506,14 @@ const App = (() => {
     }
   }
 
+  function searchShips(query) {
+    shipSearchQuery = (query || '').trim().toLowerCase();
+    const factionShips = shipDB[currentFleet.faction];
+    if (factionShips && factionShips.groups) {
+      renderShipSelectGrid(factionShips.groups, activeCategory);
+    }
+  }
+
   function renderShipSelectGrid(groups, category) {
     const grid = document.getElementById('ship-select-grid');
     let ships = [];
@@ -1518,6 +1532,16 @@ const App = (() => {
     // Hide auxiliary/mercenary ships when setting is off
     if (!settings.showAuxiliaries) {
       ships = ships.filter(s => s.data.image);
+    }
+
+    // Apply search filter
+    if (shipSearchQuery) {
+      ships = ships.filter(s => {
+        const name = (s.data.name || '').toLowerCase();
+        const tonnage = (s.data.tonnage || '').toLowerCase();
+        const rules = (s.data.special_rules || []).join(' ').toLowerCase();
+        return name.includes(shipSearchQuery) || tonnage.includes(shipSearchQuery) || rules.includes(shipSearchQuery);
+      });
     }
 
     // Apply active filters (AND logic — ship must pass all active filters)
@@ -2683,7 +2707,7 @@ const App = (() => {
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet,
     loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup,
-    openShipSelectModal, filterCategory, toggleShipFilter, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
+    openShipSelectModal, filterCategory, toggleShipFilter, searchShips, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
     openAdmiralModal, addGenericAdmiral, addFamousAdmiral, removeAdmiral, toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, importSharedFleet,
     openSettings, toggleSetting, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize
