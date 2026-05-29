@@ -842,6 +842,7 @@ const App = (() => {
           <span class="text-caption">${f.battleGroups.length} group${f.battleGroups.length !== 1 ? 's' : ''} · ${shipCount} ship${shipCount !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} adm` : ''}${f.spaceStation ? ` · ${esc(f.spaceStation.name).replace(' Space Station','')}` : ''}</span>
         </div>
         <div class="fleet-card-bar"><div class="fleet-card-bar-fill ${barClass}" style="width:${pctFill}%"></div></div>
+        ${renderFleetCardComp(f)}
         <div class="fleet-card-actions" onclick="event.stopPropagation()">
           ${timeAgo ? `<span class="text-caption" style="margin-right:auto;font-size:var(--text-xs)">${timeAgo}</span>` : ''}
           <button class="btn btn-ghost btn-sm" onclick="App.duplicateFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1"/><path d="M2 11V3c0-.6.4-1 1-1h8"/></svg> Duplicate</button>
@@ -877,6 +878,35 @@ const App = (() => {
     } else {
       grid.innerHTML = cards + newCard;
     }
+  }
+
+  // Mini composition strip for fleet cards
+  function renderFleetCardComp(f) {
+    if (f.battleGroups.length === 0) return '';
+    const catColors = { light: '#5b9bd5', medium: '#3e9945', heavy: '#d98c1f', colossal: '#c43c2f', payload: '#6a4c9c' };
+    // Collect unique ship names with art paths (deduplicated)
+    const seen = new Set();
+    const shipPreviews = [];
+    f.battleGroups.forEach(g => {
+      if (g.ships.length === 0) return;
+      const s = g.ships[0];
+      const key = `${s.groupCategory}:${s.shipKey}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      const db = findShipInDB(f.faction, s.groupCategory, s.shipKey);
+      if (db) {
+        const art = shipArtPath(db.name);
+        if (art) shipPreviews.push({ art, name: db.name, cat: s.groupCategory });
+      }
+    });
+    if (shipPreviews.length === 0) return '';
+    const maxShow = 5;
+    const shown = shipPreviews.slice(0, maxShow);
+    const overflow = shipPreviews.length - maxShow;
+    const thumbs = shown.map(sp =>
+      `<div class="fleet-card-thumb" style="border-color:${catColors[sp.cat] || '#999'}" title="${esc(sp.name)}"><img src="${sp.art}" alt="" loading="lazy"></div>`
+    ).join('');
+    return `<div class="fleet-card-comp">${thumbs}${overflow > 0 ? `<span class="fleet-card-thumb-more">+${overflow}</span>` : ''}</div>`;
   }
 
   // ── Demo Fleets ──
@@ -1434,7 +1464,14 @@ const App = (() => {
       const firstShip = g.ships[0];
       const artSrc = firstShip ? shipArtPath((findShipInDB(f.faction, firstShip.groupCategory, firstShip.shipKey) || {}).name) : null;
 
-      return `<div class="overview-group-card card-deco" onclick="App.selectGroup('${g.id}')" style="cursor:pointer">
+      const catColor = { light: '#4a8dc7', medium: '#3e8a45', heavy: '#c48820', colossal: '#b83828', payload: '#6a4c9c' }[cat] || 'var(--navy)';
+      // Validation status for this group
+      const gErrors = validateGroupSize(g, f);
+      const gErrorDot = gErrors.length > 0
+        ? `<span class="overview-group-error" title="${esc(gErrors[0])}">ILLEGAL: ${esc(gErrors[0])}</span>`
+        : '';
+
+      return `<div class="overview-group-card card-deco" onclick="App.selectGroup('${g.id}')" style="cursor:pointer;border-left-color:${catColor}">
         <div class="overview-group-top">
           ${artSrc ? `<div class="overview-group-art"><img src="${artSrc}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
           <div class="overview-group-info">
@@ -1444,6 +1481,7 @@ const App = (() => {
               <span class="text-caption">${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
             </div>
             <div class="overview-group-ships">${shipNames.map(n => esc(n)).join(', ')}</div>
+            ${gErrorDot}
           </div>
           <div class="overview-group-pts">${gPts} pts</div>
         </div>
