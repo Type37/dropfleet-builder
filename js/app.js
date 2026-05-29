@@ -13,11 +13,15 @@ const App = (() => {
   let shipSortMode = 'name';
   let activeCategory = 'all';
 
+  // Game sizes per rulebook Section 4.2. maxAdmiralLevel is the highest admiral
+  // level permitted at this game size (not a cap on the number of admirals —
+  // you may take any number of admirals per Section 4.2.1).
+  // Level 5 Famous Admirals count as Level 4 for game-size restrictions.
   const GAME_SIZES = {
-    skirmish:   { label: 'Skirmish',   min: 501,  max: 1000,  groups: 16, admiralMax: 2, colossalMax: 0, time: '1–1.5 hrs', desc: '501–1000 pts' },
-    clash:      { label: 'Clash',      min: 1001, max: 2000,  groups: 20, admiralMax: 3, colossalMax: 1, time: '2–3 hrs',   desc: '1001–2000 pts' },
-    battle:     { label: 'Battle',     min: 2001, max: 3000,  groups: 24, admiralMax: 4, colossalMax: 2, time: '3–4 hrs',   desc: '2001–3000 pts' },
-    reconquest: { label: 'Reconquest', min: 3001, max: 99999, groups: 28, admiralMax: 5, colossalMax: 3, time: '4+ hrs',    desc: '3001+ pts' }
+    skirmish:   { label: 'Skirmish',   min: 501,  max: 1000,  groups: 16, maxAdmiralLevel: 2, colossalMax: 0, time: '1-1.5 hrs', desc: '501-1000 pts' },
+    clash:      { label: 'Clash',      min: 1001, max: 2000,  groups: 20, maxAdmiralLevel: 3, colossalMax: 1, time: '2-3 hrs',   desc: '1001-2000 pts' },
+    battle:     { label: 'Battle',     min: 2001, max: 3000,  groups: 24, maxAdmiralLevel: 4, colossalMax: 2, time: '3-4 hrs',   desc: '2001-3000 pts' },
+    reconquest: { label: 'Reconquest', min: 3001, max: 99999, groups: 28, maxAdmiralLevel: 5, colossalMax: 3, time: '4+ hrs',    desc: '3001+ pts' }
   };
 
   const FACTION_COLORS = {
@@ -349,7 +353,7 @@ const App = (() => {
         <div class="game-size-info">
           <div class="game-size-name">${size.label}</div>
           <div class="game-size-details">${size.desc} · ${size.groups} groups max</div>
-          <div class="game-size-time">~${size.time} · Admiral Lv${size.admiralMax} max${colossalText}</div>
+          <div class="game-size-time">~${size.time} · Admiral Lv${size.maxAdmiralLevel} max${colossalText}</div>
         </div>
       </div>`;
     }).join('');
@@ -468,8 +472,8 @@ const App = (() => {
     }
 
     const demoSpecs = [
-      { faction: 'ucm', name: 'Demo — UCM Battlefleet', desc: 'A balanced UCM strike force' },
-      { faction: 'scourge', name: 'Demo — Scourge Swarm', desc: 'An aggressive Scourge raiding force' }
+      { faction: 'ucm', name: 'Demo - UCM Battlefleet', desc: 'A balanced UCM strike force' },
+      { faction: 'scourge', name: 'Demo - Scourge Swarm', desc: 'An aggressive Scourge raiding force' }
     ];
 
     demoSpecs.forEach(spec => {
@@ -499,13 +503,13 @@ const App = (() => {
       }
 
       if (groups.heavy) {
-        battleGroups.push({ id: uuid(), name: 'Vanguard', ships: pickShips('heavy', 2) });
+        battleGroups.push({ id: uuid(), name: 'Group 1', ships: pickShips('heavy', 2) });
       }
       if (groups.medium) {
-        battleGroups.push({ id: uuid(), name: 'Line', ships: pickShips('medium', 3) });
+        battleGroups.push({ id: uuid(), name: 'Group 2', ships: pickShips('medium', 3) });
       }
       if (groups.light) {
-        battleGroups.push({ id: uuid(), name: 'Pathfinders', ships: pickShips('light', 2) });
+        battleGroups.push({ id: uuid(), name: 'Group 3', ships: pickShips('light', 2) });
       }
 
       const fleet = {
@@ -700,22 +704,34 @@ const App = (() => {
     html += `
     <div class="add-ship-area" onclick="App.openShipSelectModal('${group.id}')" style="margin-top:var(--sp-lg)">
       <span style="font-size:24px">+</span>
-      <span>Add Ships to ${esc(group.name)}</span>
+      <span>Add Unit to ${esc(group.name)}</span>
     </div>`;
 
     contentEl.innerHTML = html;
   }
 
+  function renderWeaponHeader() {
+    return `<div class="weapon-row weapon-row-header">
+      <span class="weapon-col weapon-col-name">Weapon</span>
+      <span class="weapon-col weapon-col-arc">Arc</span>
+      <span class="weapon-col weapon-col-att">Att</span>
+      <span class="weapon-col weapon-col-lock">Lk</span>
+      <span class="weapon-col weapon-col-dmg">Dmg</span>
+      <span class="weapon-col weapon-col-type">Type</span>
+      <span class="weapon-col weapon-col-special">Special</span>
+    </div>`;
+  }
+
   function renderWeaponRow(w) {
+    const special = w.special && w.special !== '-' ? w.special : '';
     return `<div class="weapon-row">
-      <span class="weapon-row-name">${esc(w.name)}</span>
-      <div class="weapon-row-stats">
-        <span class="weapon-stat-chip">${w.type || '?'}</span>
-        <span class="weapon-stat-chip">Lk ${w.lock}</span>
-        <span class="weapon-stat-chip">Atk ${w.attack}</span>
-        <span class="weapon-stat-chip">Dmg ${w.damage}</span>
-        <span class="weapon-stat-chip">${w.arc}</span>
-      </div>
+      <span class="weapon-col weapon-col-name">${esc(w.name)}</span>
+      <span class="weapon-col weapon-col-arc">${w.arc}</span>
+      <span class="weapon-col weapon-col-att">${w.attack}</span>
+      <span class="weapon-col weapon-col-lock">${w.lock}</span>
+      <span class="weapon-col weapon-col-dmg">${w.damage}</span>
+      <span class="weapon-col weapon-col-type">${w.type || '?'}</span>
+      ${special ? `<span class="weapon-col weapon-col-special">${esc(special)}</span>` : ''}
     </div>`;
   }
 
@@ -742,7 +758,7 @@ const App = (() => {
     let weaponsHtml = '';
     const wpns = dbShip && Array.isArray(dbShip.weapons) ? dbShip.weapons : [];
     if (wpns.length > 0) {
-      weaponsHtml = '<div class="weapon-list">' + wpns.map(renderWeaponRow).join('') + '</div>';
+      weaponsHtml = '<div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
     }
 
     // Loadout options — render selected option's weapons + selector
@@ -775,7 +791,7 @@ const App = (() => {
         // Render selected option's weapons
         let optWpnsHtml = '';
         if (selWeapons.length > 0) {
-          optWpnsHtml = '<div class="weapon-list loadout-weapons">' + selWeapons.map(renderWeaponRow).join('') + '</div>';
+          optWpnsHtml = '<div class="weapon-list loadout-weapons">' + renderWeaponHeader() + selWeapons.map(renderWeaponRow).join('') + '</div>';
         }
 
         // Render selected option's loads
@@ -855,7 +871,7 @@ const App = (() => {
     renderShipSelectGrid(factionShips.groups, 'all');
     openModal('modal-ship-select');
 
-    document.getElementById('ship-select-title').textContent = `Add Ships — ${(factionData[factionKey] || {}).name || factionKey.toUpperCase()}`;
+    document.getElementById('ship-select-title').textContent = `Add Unit - ${(factionData[factionKey] || {}).name || factionKey.toUpperCase()}`;
   }
 
   function renderCategoryTabs(groups) {
@@ -976,6 +992,7 @@ const App = (() => {
     updatePoints();
     renderGroupsNav();
     renderActiveGroup();
+    showToast(`Added ${dbShip.name} to ${group.name}`);
   }
 
   function changeLoadout(groupId, shipId, loadoutIdx, optionIdx) {
@@ -1027,6 +1044,13 @@ const App = (() => {
   }
 
   // ── Admiral ──
+  // TODO: The current implementation stores a single `admiral` object on each
+  // fleet. Per rulebook Section 4.2.1, you may take ANY NUMBER of admirals —
+  // each assigned to a Capital Ship (Medium/Heavy/Colossal). The only
+  // restriction is that you may only include ONE Famous or Faction Admiral per
+  // fleet. To support this properly, `fleet.admiral` should become an
+  // `fleet.admirals` array, the admiral slot UI should allow adding/removing
+  // multiple admirals, and calcFleetPoints should sum all admiral costs.
   function getAdmiralLevelCost(level) {
     if (!rawFleetData || !rawFleetData.gameSystem || !rawFleetData.gameSystem.admiralLevels) return 0;
     const entry = rawFleetData.gameSystem.admiralLevels.find(a => a.level === level);
@@ -1039,13 +1063,19 @@ const App = (() => {
     if (!factionShips) return;
 
     const sizeInfo = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
-    const maxLevel = sizeInfo.admiralMax || 4;
+    const maxLevel = sizeInfo.maxAdmiralLevel || 4;
     const genericAdmirals = (factionShips.admirals || []).filter(a => !a.isFamous);
     const admiralGroup = factionShips.groups?.famous_admirals;
 
     const container = document.getElementById('admiral-options');
 
     let html = `
+    <div style="margin-bottom:var(--sp-md);padding:var(--sp-md);background:var(--surface);border:1px solid var(--stroke);border-radius:var(--radius-md);font-size:var(--text-sm);line-height:1.6;color:var(--ink-muted)">
+      <strong style="color:var(--ink)">Admiral Rules (Section 4.2.1)</strong><br>
+      You may take any number of Admirals. Each must be assigned to a Capital Ship
+      (Medium, Heavy, or Colossal tonnage). Only one Famous or Faction Admiral is
+      allowed per fleet. Admiral level is capped at Lv${maxLevel} for ${sizeInfo.label} games.
+    </div>
     <div class="card card-interactive" onclick="App.selectAdmiral(null)" style="padding:var(--sp-lg)">
       <div class="flex items-center gap-md">
         <span style="font-size:var(--text-md);opacity:0.5;font-weight:600">&mdash;</span>
@@ -1217,7 +1247,7 @@ const App = (() => {
     const fName = (factionData[fleet.faction] || {}).name || fleet.faction.toUpperCase();
     const pts = calcFleetPoints(fleet);
     const sizeInfo = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
-    let text = `${fleet.name}\n${fName} — ${sizeInfo.label} (${pts} pts)\n`;
+    let text = `${fleet.name}\n${fName} - ${sizeInfo.label} (${pts} pts)\n`;
     text += '═'.repeat(40) + '\n';
 
     if (fleet.admiral) {
@@ -1229,7 +1259,7 @@ const App = (() => {
       text += `\n── ${g.name} (${gPts} pts) ──\n`;
       g.ships.forEach(s => {
         const dbShip = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
-        text += `  • ${dbShip ? dbShip.name : s.shipKey} — ${s.points} pts\n`;
+        text += `  • ${dbShip ? dbShip.name : s.shipKey} - ${s.points} pts\n`;
       });
     });
 
