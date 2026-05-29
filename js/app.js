@@ -1304,6 +1304,14 @@ const App = (() => {
     }
 
     const compact = settings.compactView;
+    const isRare = dbShip && dbShip.isRare;
+    const isUnique = dbShip && dbShip.isUnique;
+    const groupMin = dbShip ? dbShip.groupMin : 1;
+    const groupMax = dbShip ? dbShip.groupMax : 1;
+    let badges = '';
+    if (isUnique) badges += '<span class="ship-badge ship-badge-unique">Unique</span>';
+    else if (isRare) badges += '<span class="ship-badge ship-badge-rare">Rare</span>';
+    if (groupMax > 1) badges += `<span class="ship-badge ship-badge-group">${groupMin}–${groupMax}</span>`;
 
     return `
     <div class="group-ship-entry animate-in${compact ? ' compact' : ''}">
@@ -1311,7 +1319,7 @@ const App = (() => {
       <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
         <div class="flex items-center justify-between">
           <div>
-            <div class="ship-card-name">${esc(name)}</div>
+            <div class="ship-card-name">${esc(name)}${badges ? ` ${badges}` : ''}</div>
             <div class="text-caption">${esc(tonnage)}</div>
           </div>
           <div class="ship-card-cost">${ship.points} pts</div>
@@ -1449,13 +1457,16 @@ const App = (() => {
   function renderShipSelectCard({ key, data, category }) {
     const catLabel = CATEGORY_LABELS[category] || category;
     const specialRules = data.special_rules || [];
+    let selectBadges = '';
+    if (data.isUnique) selectBadges += '<span class="ship-badge ship-badge-unique">Unique</span>';
+    else if (data.isRare) selectBadges += '<span class="ship-badge ship-badge-rare">Rare</span>';
 
     return `
     <div class="ship-card" onclick="App.addShipToGroup('${key}','${category}')">
       <div class="ship-card-top">
         ${data.image ? `<div class="ship-card-image"><img src="${esc(data.image)}" alt="${esc(data.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
         <div class="ship-card-info">
-          <div class="ship-card-name">${esc(data.name)}</div>
+          <div class="ship-card-name">${esc(data.name)}${selectBadges ? ` ${selectBadges}` : ''}</div>
           <div class="ship-card-type">${esc(data.tonnage || '')} · ${catLabel}</div>
         </div>
         <div class="ship-card-cost">${data.points || 0}<span style="font-size:var(--text-sm);font-weight:var(--weight-regular)"> pts</span></div>
@@ -1835,9 +1846,26 @@ const App = (() => {
 
     // Admirals
     if (f.admirals && f.admirals.length > 0) {
+      const factionAdmirals = factionInfo ? factionInfo.admirals || [] : [];
       html += `<div class="print-section">
         <div class="print-section-title">Admiral${f.admirals.length > 1 ? 's' : ''}</div>
-        ${f.admirals.map(a => `<div class="print-admiral">${esc(a.name)} — Level ${a.level || '?'}${a.type === 'Famous' ? ' (Famous)' : ''} — ${a.points} pts</div>`).join('')}
+        ${f.admirals.map(a => {
+          const fullAdm = a.admiralId ? factionAdmirals.find(fa => fa.id === a.admiralId) : null;
+          const abilities = fullAdm ? (fullAdm.abilities || []) : [];
+          let abilitiesHtml = '';
+          if (abilities.length > 0) {
+            abilitiesHtml = `<div class="print-admiral-abilities">
+              ${abilities.map(ab => `<div class="print-admiral-ability"><span class="print-ability-name">${esc(ab.name)}</span> <span class="print-ability-cost">${esc(ab.cost)}</span> — ${esc(ab.effect)}</div>`).join('')}
+            </div>`;
+          }
+          return `<div class="print-admiral-card">
+            <div class="print-admiral-header">
+              <span class="print-admiral-name">${esc(a.name)} — Level ${a.level || '?'}${a.type === 'Famous' ? ' (Famous)' : ''}</span>
+              <span class="print-admiral-pts">${a.points} pts</span>
+            </div>
+            ${abilitiesHtml}
+          </div>`;
+        }).join('')}
       </div>`;
     }
 

@@ -1560,6 +1560,32 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink);
 }
 
+.ship-badge {
+  display: inline-block;
+  font-family: var(--font-condensed);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 1px 6px;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+.ship-badge-unique {
+  background: var(--gold);
+  color: white;
+}
+.ship-badge-rare {
+  background: var(--navy-light);
+  color: white;
+}
+.ship-badge-group {
+  background: var(--paper-alt);
+  color: var(--ink-muted);
+  border: 1px solid var(--stroke);
+}
+
 .ship-card-type {
   font-size: var(--text-sm);
   color: var(--ink-muted);
@@ -2154,6 +2180,46 @@ h1, h2, h3, h4, h5, h6 {
 .print-admiral {
   font-weight: 600;
   font-size: 11pt;
+}
+.print-admiral-card {
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  break-inside: avoid;
+}
+.print-admiral-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.print-admiral-name {
+  font-weight: 700;
+  font-size: 11pt;
+}
+.print-admiral-pts {
+  font-size: 10pt;
+  color: #666;
+}
+.print-admiral-abilities {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px dotted #ddd;
+}
+.print-admiral-ability {
+  font-size: 8pt;
+  line-height: 1.35;
+  color: #444;
+  margin-bottom: 2px;
+}
+.print-ability-name {
+  font-weight: 700;
+  color: #1b3a5c;
+}
+.print-ability-cost {
+  font-weight: 600;
+  color: #8a6d1e;
+  font-size: 7.5pt;
 }
 
 .print-group {
