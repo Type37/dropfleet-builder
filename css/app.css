@@ -345,6 +345,23 @@ h1, h2, h3, h4, h5, h6 {
   color: rgba(255,255,255,0.5);
 }
 
+/* Game size detail in sidebar */
+.game-size-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-xs);
+  margin-top: var(--sp-sm);
+}
+.game-size-detail span {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.06);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
 /* Points bar (in sidebar) */
 .points-bar {
   background: rgba(255,255,255,0.06);
@@ -1097,6 +1114,46 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--navy-subtle);
   color: var(--navy);
   cursor: help;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+.rule-chip.has-tooltip:hover {
+  background: rgba(27, 58, 92, 0.18);
+  text-decoration: underline;
+}
+
+/* Rule tooltip popup */
+.rule-tooltip-popup {
+  position: fixed;
+  z-index: 2000;
+  background: var(--paper);
+  border: 1px solid var(--stroke-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: var(--sp-lg);
+  max-height: 50vh;
+  overflow-y: auto;
+  animation: fadeIn var(--duration-fast) var(--ease-out);
+}
+.rule-tooltip-title {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  color: var(--navy);
+  margin-bottom: var(--sp-sm);
+  padding-bottom: var(--sp-xs);
+  border-bottom: 1px solid var(--stroke-light);
+}
+.rule-tooltip-body {
+  font-family: var(--font-reading);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+/* Weapon type colors */
+.weapon-type-k { color: var(--navy); font-weight: var(--weight-bold); }
+.weapon-type-e { color: #8b5e1a; font-weight: var(--weight-bold); }
+.weapon-type-c { color: var(--error); font-weight: var(--weight-bold);
 }
 
 /* ── Ship Lore ──────────────────────────────────────────────── */

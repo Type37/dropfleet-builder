@@ -42,7 +42,7 @@ const App = (() => {
     payload: 'Payload'
   };
 
-  const CATEGORY_ORDER = ['colossal','heavy','medium','light','payload'];
+  const CATEGORY_ORDER = ['light','medium','heavy','colossal','payload'];
 
   let rawFleetData = null;
 
@@ -169,7 +169,7 @@ const App = (() => {
         groups[cat].ships[g.id] = {
           name: s.name,
           points: s.cost,
-          tonnage: s.stats?.tonnage || cat.charAt(0).toUpperCase(),
+          tonnage: (s.stats?.tonnage && s.stats.tonnage !== '?') ? s.stats.tonnage : (CATEGORY_LABELS[cat] || cat),
           scan: s.stats?.scan, sig: s.stats?.sig,
           thrust: s.stats?.thrust, hull: s.stats?.hull,
           es: s.stats?.es, ks: s.stats?.ks,
@@ -375,9 +375,6 @@ const App = (() => {
   }
 
   function createFleet() {
-    const name = document.getElementById('new-fleet-name').value.trim();
-    if (!name) { document.getElementById('new-fleet-name').focus(); return; }
-
     const selectedFaction = document.querySelector('.faction-pick-btn[data-selected="true"]');
     if (!selectedFaction) return;
     const faction = selectedFaction.dataset.faction;
@@ -385,6 +382,10 @@ const App = (() => {
     const sizeRadio = document.querySelector('input[name="game-size"]:checked');
     const gameSize = sizeRadio ? sizeRadio.value : 'clash';
     const sizeInfo = GAME_SIZES[gameSize];
+
+    const rawName = document.getElementById('new-fleet-name').value.trim();
+    const fLabel = FACTION_LABELS[faction] || faction.toUpperCase();
+    const name = rawName || `${fLabel} ${sizeInfo.label} Fleet`;
 
     const fleet = {
       id: uuid(),
@@ -536,6 +537,13 @@ const App = (() => {
     document.getElementById('builder-fleet-name').textContent = f.name;
     document.getElementById('builder-fleet-faction').textContent = fName;
     document.getElementById('builder-fleet-size').textContent = sizeInfo.label;
+
+    // Game size summary beneath the badge
+    const sizeDetail = document.getElementById('game-size-detail');
+    if (sizeDetail) {
+      const colText = sizeInfo.colossalMax > 0 ? `${sizeInfo.colossalMax} Colossal` : 'No Colossal';
+      sizeDetail.innerHTML = `<span>${sizeInfo.desc}</span><span>${sizeInfo.groups} groups max</span><span>Admiral Lv${sizeInfo.maxAdmiralLevel} max</span><span>${colText}</span><span>~${sizeInfo.time}</span>`;
+    }
 
     const panel = document.getElementById('fleet-info-panel');
     panel.closest('[id="view-builder"]').dataset.faction = f.faction;
@@ -723,15 +731,19 @@ const App = (() => {
     </div>`;
   }
 
+  const WEAPON_TYPE_LABELS = { K: 'Kinetic', E: 'Energy', C: 'Close Action' };
+
   function renderWeaponRow(w) {
     const special = w.special && w.special !== '-' ? w.special : '';
+    const typeLabel = WEAPON_TYPE_LABELS[w.type] || w.type || '?';
+    const typeClass = w.type ? `weapon-type-${w.type.toLowerCase()}` : '';
     return `<div class="weapon-row">
       <span class="weapon-col weapon-col-name">${esc(w.name)}</span>
-      <span class="weapon-col weapon-col-arc">${w.arc}</span>
+      <span class="weapon-col weapon-col-arc" title="Firing Arc: ${esc(w.arc || '')}">${esc(w.arc || '')}</span>
       <span class="weapon-col weapon-col-att">${w.attack}</span>
       <span class="weapon-col weapon-col-lock">${w.lock}</span>
       <span class="weapon-col weapon-col-dmg">${w.damage}</span>
-      <span class="weapon-col weapon-col-type">${w.type || '?'}</span>
+      <span class="weapon-col weapon-col-type ${typeClass}" title="${typeLabel}">${w.type || '?'}</span>
       ${special ? `<span class="weapon-col weapon-col-special">${esc(special)}</span>` : ''}
     </div>`;
   }
@@ -832,7 +844,16 @@ const App = (() => {
     }
 
     let rulesHtml = '';
-    if (specialRules.length > 0) {
+    const ruleDetails = dbShip && dbShip.specialRuleDetails ? dbShip.specialRuleDetails : [];
+    if (ruleDetails.length > 0) {
+      rulesHtml = '<div class="special-rules">' + ruleDetails.map(r => {
+        const desc = r.description || '';
+        if (desc) {
+          return `<span class="rule-chip has-tooltip" data-rule-desc="${esc(desc)}" onclick="App.showRuleTooltip(event, this)">${esc(r.name)}</span>`;
+        }
+        return `<span class="rule-chip">${esc(r.name)}</span>`;
+      }).join('') + '</div>';
+    } else if (specialRules.length > 0) {
       rulesHtml = '<div class="special-rules">' + specialRules.map(r =>
         `<span class="rule-chip">${esc(r)}</span>`
       ).join('') + '</div>';
@@ -966,7 +987,13 @@ const App = (() => {
       <div class="stat-grid">
         ${stats.map(s => `<div class="stat-cell"><div class="stat-cell-label">${s.l}</div><div class="stat-cell-value">${s.v}</div></div>`).join('')}
       </div>
-      ${specialRules.length > 0 ? `<div class="special-rules">${specialRules.slice(0, 4).map(r => `<span class="rule-chip">${esc(r)}</span>`).join('')}${specialRules.length > 4 ? `<span class="rule-chip" style="background:rgba(255,255,255,0.06);color:var(--ink-faint)">+${specialRules.length - 4}</span>` : ''}</div>` : ''}
+      ${specialRules.length > 0 ? `<div class="special-rules">${specialRules.slice(0, 4).map(r => {
+        const detail = (data.specialRuleDetails || []).find(d => d.name === r);
+        if (detail && detail.description) {
+          return `<span class="rule-chip has-tooltip" data-rule-desc="${esc(detail.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(r)}</span>`;
+        }
+        return `<span class="rule-chip">${esc(r)}</span>`;
+      }).join('')}${specialRules.length > 4 ? `<span class="rule-chip" style="background:rgba(255,255,255,0.06);color:var(--ink-faint)">+${specialRules.length - 4}</span>` : ''}</div>` : ''}
       <div class="flex items-center justify-between" style="margin-top:auto">
         <span class="text-caption">${data.g ? `Group size: ${data.g}` : ''}</span>
         <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addShipToGroup('${key}','${category}')">+ Add</button>
@@ -975,37 +1002,7 @@ const App = (() => {
   }
 
   function addShipToGroup(shipKey, category) {
-    if (!currentFleet || !activeGroupId) return;
-    const group = currentFleet.battleGroups.find(g => g.id === activeGroupId);
-    if (!group) return;
-
-    const dbShip = findShipInDB(currentFleet.faction, category, shipKey);
-    if (!dbShip) return;
-
-    // Auto-select default loadout options and sum their cost
-    const loadouts = {};
-    let loadoutCost = 0;
-    if (dbShip.loadoutOptions && dbShip.loadoutOptions.length > 0) {
-      dbShip.loadoutOptions.forEach((lo, loIdx) => {
-        loadouts[loIdx] = 0; // select first option by default
-        loadoutCost += lo.options[0]?.cost || 0;
-      });
-    }
-
-    const entry = {
-      id: uuid(),
-      shipKey,
-      groupCategory: category,
-      points: (dbShip.points || 0) + loadoutCost,
-      loadouts
-    };
-
-    group.ships.push(entry);
-    saveFleets();
-    updatePoints();
-    renderGroupsNav();
-    renderActiveGroup();
-    showToast(`Added ${dbShip.name} to ${group.name}`);
+    addShipToGroupEnforced(shipKey, category);
   }
 
   function changeLoadout(groupId, shipId, loadoutIdx, optionIdx) {
@@ -1353,6 +1350,118 @@ const App = (() => {
     return div.innerHTML;
   }
 
+  // ── Rule Tooltip ──
+  function showRuleTooltip(event, el) {
+    event.stopPropagation();
+    // Remove any existing tooltip
+    const existing = document.getElementById('rule-tooltip');
+    if (existing) existing.remove();
+
+    const desc = el.getAttribute('data-rule-desc');
+    if (!desc) return;
+
+    const tooltip = document.createElement('div');
+    tooltip.id = 'rule-tooltip';
+    tooltip.className = 'rule-tooltip-popup';
+    tooltip.innerHTML = `<div class="rule-tooltip-title">${el.textContent}</div><div class="rule-tooltip-body">${esc(desc).replace(/\n/g, '<br>')}</div>`;
+    document.body.appendChild(tooltip);
+
+    // Position near the chip
+    const rect = el.getBoundingClientRect();
+    const tooltipW = Math.min(380, window.innerWidth - 24);
+    tooltip.style.width = tooltipW + 'px';
+
+    let left = rect.left + rect.width / 2 - tooltipW / 2;
+    if (left < 8) left = 8;
+    if (left + tooltipW > window.innerWidth - 8) left = window.innerWidth - 8 - tooltipW;
+    tooltip.style.left = left + 'px';
+
+    let top = rect.bottom + 8;
+    if (top + 200 > window.innerHeight) top = rect.top - tooltip.offsetHeight - 8;
+    if (top < 8) top = 8;
+    tooltip.style.top = top + 'px';
+
+    // Dismiss on click anywhere
+    function dismiss(e) {
+      if (!tooltip.contains(e.target)) {
+        tooltip.remove();
+        document.removeEventListener('click', dismiss, true);
+      }
+    }
+    setTimeout(() => document.addEventListener('click', dismiss, true), 10);
+  }
+
+  // ── Group Enforcement: same ship per group ──
+  // When adding a ship to a group that already has ships, check if the new
+  // ship matches the existing ships. If the group already contains a different
+  // ship type, auto-create a new group for it.
+  function addShipToGroupEnforced(shipKey, category) {
+    if (!currentFleet || !activeGroupId) return;
+    const group = currentFleet.battleGroups.find(g => g.id === activeGroupId);
+    if (!group) return;
+
+    const dbShip = findShipInDB(currentFleet.faction, category, shipKey);
+    if (!dbShip) return;
+
+    // Check if the group already has ships of a different type
+    if (group.ships.length > 0) {
+      const firstShip = group.ships[0];
+      if (firstShip.shipKey !== shipKey || firstShip.groupCategory !== category) {
+        // Different ship — create a new group and add there
+        const sizeInfo = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
+        if (currentFleet.battleGroups.length >= sizeInfo.groups) {
+          showToast('Maximum groups reached');
+          return;
+        }
+        const num = currentFleet.battleGroups.length + 1;
+        const newGroup = { id: uuid(), name: dbShip.name, ships: [] };
+        currentFleet.battleGroups.push(newGroup);
+        activeGroupId = newGroup.id;
+        addShipToGroupInner(newGroup, shipKey, category, dbShip);
+        saveFleets();
+        renderGroupsNav();
+        renderActiveGroup();
+        updatePoints();
+        showToast(`Created new group for ${dbShip.name}`);
+        return;
+      }
+    }
+
+    // Same ship or empty group — add directly
+    addShipToGroupInner(group, shipKey, category, dbShip);
+    saveFleets();
+    updatePoints();
+    renderGroupsNav();
+    renderActiveGroup();
+    showToast(`Added ${dbShip.name} to ${group.name}`);
+  }
+
+  function addShipToGroupInner(group, shipKey, category, dbShip) {
+    const loadouts = {};
+    let loadoutCost = 0;
+    if (dbShip.loadoutOptions && dbShip.loadoutOptions.length > 0) {
+      dbShip.loadoutOptions.forEach((lo, loIdx) => {
+        loadouts[loIdx] = 0;
+        loadoutCost += lo.options[0]?.cost || 0;
+      });
+    }
+
+    const entry = {
+      id: uuid(),
+      shipKey,
+      groupCategory: category,
+      points: (dbShip.points || 0) + loadoutCost,
+      loadouts
+    };
+
+    group.ships.push(entry);
+
+    // Auto-name the group to match ship name if it's still a default name
+    if (group.ships.length === 1 && /^Group \d+$/.test(group.name)) {
+      group.name = dbShip.name;
+    }
+  }
+
   // Close modals on overlay click
   document.addEventListener('click', (e) => {
     if (e.target.classList.contains('modal-overlay') && e.target.classList.contains('active')) {
@@ -1384,6 +1493,6 @@ const App = (() => {
     loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup,
     openShipSelectModal, filterCategory, addShipToGroup, removeShip, sortShips, changeLoadout,
     openAdmiralModal, selectAdmiral, selectGenericAdmiral, selectFamousAdmiral, toggleSidebar, printFleet, shareFleet,
-    openModal, closeModal
+    openModal, closeModal, showRuleTooltip
   };
 })();
