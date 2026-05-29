@@ -55,7 +55,7 @@ const App = (() => {
   const fastplaySpecs = [
     { faction: 'ucm', name: 'UCM Starter Fleet', size: 'skirmish', groups: [
       ['medium','Bruges',1],['medium','Edmonton',1],['medium','San Francisco',1],
-      ['light','Toulon',1],['light','New Orleans',1],['light','Lima',1]] },
+      ['light','Toulon',2],['light','New Orleans',2],['light','Lima',2]] },
     { faction: 'scourge', name: 'Scourge Starter Fleet', size: 'skirmish', groups: [
       ['medium','Sphinx',1],['medium','Hydra',1],['medium','Chimera',1],
       ['light','Gargoyle',1],['light','Harpy',1]] },
@@ -253,6 +253,8 @@ const App = (() => {
         loadoutOptions: s.loadoutOptions || [],
         lore: s.lore || '',
         rulesText: s.rulesText || '',
+        famousShipsPrefix: s.famousShipsPrefix || '',
+        famousShips: s.famousShips || [],
         image: shipArtPath(s.name),
         variants: s.variants || []
       };
@@ -2152,7 +2154,7 @@ const App = (() => {
       const varNames = variants.map(v => esc(v.name)).join(', ');
       const varDetails = variants.map(v => {
         const vImg = v.image ? `<img src="${esc(v.image)}" alt="${esc(v.name)}" loading="lazy" style="height:56px;width:auto;object-fit:contain;border-radius:var(--radius-sm)" onerror="this.style.display='none'">` : '';
-        const vLore = v.lore ? `<div class="ship-lore-text" style="border:none;padding:var(--sp-xs) 0 0;background:none;font-size:var(--text-xs)">${formatLore(v.famousShips ? 'Famous ships of the class: ' + v.famousShips + ' ' + v.lore : v.lore)}</div>` : '';
+        const vLore = v.lore ? `<div class="ship-lore-text" style="border:none;padding:var(--sp-xs) 0 0;background:none;font-size:var(--text-xs)">${formatLore(v.lore, v.famousShips ? 'Famous ships of the class:' : '', v.famousShips ? v.famousShips.split(', ') : [])}</div>` : '';
         return `<div style="margin-top:var(--sp-sm);padding:var(--sp-sm);background:var(--paper-alt);border-radius:var(--radius-sm);display:flex;gap:var(--sp-sm);align-items:flex-start">
           ${vImg}
           <div style="flex:1;min-width:0">
@@ -2175,7 +2177,7 @@ const App = (() => {
       const openAttr = settings.autoExpandLore ? ' open' : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
-        <div class="ship-lore-text">${formatLore(loreText)}</div>
+        <div class="ship-lore-text">${formatLore(loreText, dbShip.famousShipsPrefix, dbShip.famousShips)}</div>
       </details>`;
     }
 
@@ -4040,24 +4042,17 @@ const App = (() => {
     return div.innerHTML;
   }
 
-  function formatLore(text) {
-    if (!text) return '';
-    const prefixRe = /((?:Famous|Infamous|Known|Encountered|Recorded|Noted|Only)\s+ships?\s+of\s+the\s+class:\s*)(.+)/is;
-    const m = text.match(prefixRe);
-    if (!m) {
-      return text.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('');
+  function formatLore(loreText, famousShipsPrefix, famousShips) {
+    if (!loreText && (!famousShips || famousShips.length === 0)) return '';
+    let html = '';
+    if (loreText) {
+      html += loreText.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('');
     }
-    const prefix = m[1].trim();
-    const afterPrefix = m[2];
-    const splitIdx = afterPrefix.search(/ The [A-Z]/);
-    if (splitIdx < 0) {
-      return text.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('');
+    if (famousShips && famousShips.length > 0) {
+      const shipList = famousShips.map(s => `<li>${esc(s)}</li>`).join('');
+      html += `<div class="lore-famous-ships"><strong>${esc(famousShipsPrefix || 'Known ships of the class:')}</strong><ul>${shipList}</ul></div>`;
     }
-    const shipNames = afterPrefix.slice(0, splitIdx).trim();
-    const loreBody = afterPrefix.slice(splitIdx + 1).trim();
-    const paras = loreBody.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('');
-    const shipList = shipNames.split(/,\s*/).map(s => `<li>${esc(s.trim())}</li>`).join('');
-    return `${paras}<div class="lore-famous-ships"><strong>${esc(prefix)}</strong><ul>${shipList}</ul></div>`;
+    return html;
   }
 
   function formatTimeAgo(date) {
@@ -4161,7 +4156,7 @@ const App = (() => {
           <div style="flex:1;min-width:0">
             <div style="font-weight:var(--weight-semibold)">${esc(v.name)}</div>
             <div class="text-muted" style="font-size:var(--text-sm)">${esc(v.note)}</div>
-            ${v.lore ? `<div class="text-rules" style="margin-top:var(--sp-xs)">${formatLore(v.famousShips ? 'Famous ships of the class: ' + v.famousShips + ' ' + v.lore : v.lore)}</div>` : ''}
+            ${v.lore ? `<div class="text-rules" style="margin-top:var(--sp-xs)">${formatLore(v.lore, v.famousShips ? 'Famous ships of the class:' : '', v.famousShips ? v.famousShips.split(', ') : [])}</div>` : ''}
           </div>
         </div>`).join('')}
       </div>`;
@@ -4172,7 +4167,7 @@ const App = (() => {
     if (dbShip.lore) {
       loreHtml = `<div class="detail-lore">
         <div class="detail-section-label">Lore</div>
-        <div class="text-rules">${formatLore(dbShip.lore)}</div>
+        <div class="text-rules">${formatLore(dbShip.lore, dbShip.famousShipsPrefix, dbShip.famousShips)}</div>
       </div>`;
     }
 
