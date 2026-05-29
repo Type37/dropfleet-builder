@@ -2088,12 +2088,17 @@ const App = (() => {
     const variants = dbShip ? dbShip.variants : [];
     if (variants.length > 0) {
       const varNames = variants.map(v => esc(v.name)).join(', ');
-      const varDetails = variants.filter(v => v.lore).map(v =>
-        `<div style="margin-top:var(--sp-sm);padding:var(--sp-sm);background:var(--paper-alt);border-radius:var(--radius-sm)">
-          <div style="font-weight:var(--weight-semibold);font-size:var(--text-sm)">${esc(v.name)}</div>
-          <div class="ship-lore-text" style="border:none;padding:var(--sp-xs) 0 0;background:none;font-size:var(--text-xs)">${esc(v.lore)}</div>
-        </div>`
-      ).join('');
+      const varDetails = variants.map(v => {
+        const vImg = v.image ? `<img src="${esc(v.image)}" alt="${esc(v.name)}" loading="lazy" style="height:56px;width:auto;object-fit:contain;border-radius:var(--radius-sm)" onerror="this.style.display='none'">` : '';
+        const vLore = v.lore ? `<div class="ship-lore-text" style="border:none;padding:var(--sp-xs) 0 0;background:none;font-size:var(--text-xs)">${formatLore(v.famousShips ? 'Famous ships of the class: ' + v.famousShips + ' ' + v.lore : v.lore)}</div>` : '';
+        return `<div style="margin-top:var(--sp-sm);padding:var(--sp-sm);background:var(--paper-alt);border-radius:var(--radius-sm);display:flex;gap:var(--sp-sm);align-items:flex-start">
+          ${vImg}
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:var(--weight-semibold);font-size:var(--text-sm)">${esc(v.name)}</div>
+            ${vLore}
+          </div>
+        </div>`;
+      }).join('');
       variantsHtml = `<details class="ship-lore no-print">
         <summary class="ship-lore-toggle" style="font-size:var(--text-xs)">Also available as: ${varNames}</summary>
         ${varDetails}
@@ -4062,10 +4067,13 @@ const App = (() => {
     if (dbShip.variants && dbShip.variants.length > 0) {
       variantsHtml = `<div class="detail-lore">
         <div class="detail-section-label">Also available as</div>
-        ${dbShip.variants.map(v => `<div style="margin-bottom:var(--sp-sm)">
-          <span style="font-weight:var(--weight-semibold)">${esc(v.name)}</span>
-          <span class="text-muted" style="font-size:var(--text-sm)"> — ${esc(v.note)}</span>
-          ${v.lore ? `<p class="text-rules" style="margin-top:var(--sp-xs)">${esc(v.lore)}</p>` : ''}
+        ${dbShip.variants.map(v => `<div style="margin-bottom:var(--sp-md);display:flex;gap:var(--sp-md);align-items:flex-start">
+          ${v.image ? `<img src="${esc(v.image)}" alt="${esc(v.name)}" loading="lazy" style="height:80px;width:auto;object-fit:contain;border-radius:var(--radius-sm)" onerror="this.style.display='none'">` : ''}
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:var(--weight-semibold)">${esc(v.name)}</div>
+            <div class="text-muted" style="font-size:var(--text-sm)">${esc(v.note)}</div>
+            ${v.lore ? `<div class="text-rules" style="margin-top:var(--sp-xs)">${formatLore(v.famousShips ? 'Famous ships of the class: ' + v.famousShips + ' ' + v.lore : v.lore)}</div>` : ''}
+          </div>
         </div>`).join('')}
       </div>`;
     }
