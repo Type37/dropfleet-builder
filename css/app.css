@@ -1213,20 +1213,82 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: var(--sp-md) var(--sp-sm);
+  gap: 0;
+  padding: 0;
   border-radius: var(--radius-md);
   border: 1px solid var(--stroke);
   background: var(--paper);
   cursor: pointer;
   transition: all var(--duration-normal) var(--ease-out);
   text-decoration: none;
+  overflow: hidden;
 }
 .faction-chip:hover {
   border-color: var(--current-faction, var(--navy));
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
+.faction-chip:hover .faction-chip-heroes img {
+  filter: brightness(1.08);
+}
+
+/* Hero ship art strip at top of faction chip */
+.faction-chip-heroes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 80px;
+  padding: var(--sp-xs);
+  background: linear-gradient(135deg,
+    rgba(27,58,92,0.06) 0%,
+    rgba(27,58,92,0.02) 100%);
+  border-bottom: 1px solid var(--stroke);
+  position: relative;
+  overflow: hidden;
+}
+/* Faction color accent line at top */
+.faction-chip-heroes::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--current-faction, var(--navy));
+  opacity: 0.5;
+}
+.faction-chip-heroes img {
+  height: 64px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  margin: 0 -8px;
+  filter: drop-shadow(1px 1px 3px rgba(0,0,0,0.2));
+  transition: filter var(--duration-normal) var(--ease-out),
+              transform var(--duration-normal) var(--ease-out);
+  position: relative;
+}
+.faction-chip-heroes img:nth-child(1) { z-index: 1; }
+.faction-chip-heroes img:nth-child(2) { z-index: 2; transform: scale(1.1); }
+.faction-chip-heroes img:nth-child(3) { z-index: 1; }
+.faction-chip:hover .faction-chip-heroes img:nth-child(2) {
+  transform: scale(1.15);
+}
+
+/* When no hero strip, accent the top of the info section */
+.faction-chip-info:first-child {
+  border-top: 2px solid var(--current-faction, var(--navy));
+}
+
+/* Info row below hero strip */
+.faction-chip-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--sp-sm) var(--sp-xs);
+  width: 100%;
+}
+
 .faction-chip-dot {
   width: 10px;
   height: 10px;
@@ -4045,6 +4107,8 @@ h1, h2, h3, h4, h5, h6 {
   .landing-grid { grid-template-columns: 1fr; }
   .landing-logo { max-width: 280px; }
   .faction-showcase { grid-template-columns: repeat(3, 1fr); }
+  .faction-chip-heroes { height: 60px; }
+  .faction-chip-heroes img { height: 50px; margin: 0 -6px; }
   .objectives-grid { grid-template-columns: 1fr; }
 
   .fleet-list { padding: var(--sp-2xl) var(--sp-lg); }
@@ -4156,7 +4220,10 @@ h1, h2, h3, h4, h5, h6 {
   .landing-title { font-size: var(--text-2xl); }
   .landing-subtitle { font-size: var(--text-sm); }
   .faction-showcase { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-  .faction-chip { padding: var(--sp-sm) var(--sp-xs); }
+  .faction-chip-heroes { height: 50px; padding: 2px 2px 0; }
+  .faction-chip-heroes img { height: 42px; margin: 0 -4px; }
+  .faction-chip-info { padding: var(--sp-xs) 2px; }
+  .faction-chip-icon { width: 18px; height: 18px; }
   .faction-chip-name { font-size: var(--text-xs); }
 
   /* Sort bar compact */

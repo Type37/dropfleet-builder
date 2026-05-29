@@ -295,9 +295,18 @@ const App = (() => {
       ).join('');
     }
 
-    // Faction showcase
+    // Faction showcase — with hero ship art per faction
     const factionsEl = document.getElementById('landing-factions');
     if (factionsEl && raw) {
+      // Pick 3 signature ships per faction for the preview strip
+      const heroShips = {
+        ucm: ['beijing', 'tokyo', 'seattle'],
+        phr: ['agamemnon', 'orion', 'ajax'],
+        scourge: ['akuma', 'wyvern', 'djinn'],
+        shaltari: ['hematite', 'turquoise', 'cobalt'],
+        bioficer: [],
+        resistance: ['vanguard', 'gladiator', 'armstrong']
+      };
       const factionKeys = ['ucm','phr','scourge','shaltari','bioficer','resistance']
         .filter(k => raw.factions[k]);
       const chips = factionKeys.map(fk => {
@@ -306,10 +315,17 @@ const App = (() => {
         const label = FACTION_LABELS[fk] || fk.toUpperCase();
         const count = (f.groups || []).length;
         const fIcon = FACTION_ICONS[fk];
+        const heroes = (heroShips[fk] || []).map(h => shipArtPath(h)).filter(Boolean);
+        const heroStrip = heroes.length > 0
+          ? `<div class="faction-chip-heroes">${heroes.map(h => `<img src="${h}" alt="" loading="lazy">`).join('')}</div>`
+          : '';
         return `<div class="faction-chip" style="--current-faction:${color}" onclick="App.startFactionFleet('${fk}')">
-          ${fIcon ? `<img src="${fIcon}" alt="" class="faction-chip-icon">` : '<div class="faction-chip-dot"></div>'}
-          <span class="faction-chip-name">${label}</span>
-          <span class="faction-chip-count">${count} ships</span>
+          ${heroStrip}
+          <div class="faction-chip-info">
+            ${fIcon ? `<img src="${fIcon}" alt="" class="faction-chip-icon">` : '<div class="faction-chip-dot"></div>'}
+            <span class="faction-chip-name">${label}</span>
+            <span class="faction-chip-count">${count} ships</span>
+          </div>
         </div>`;
       }).join('');
       factionsEl.innerHTML = `
