@@ -1798,7 +1798,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .weapon-row {
   display: grid;
-  grid-template-columns: minmax(120px, 1.5fr) 40px 32px 32px 32px 32px minmax(80px, 1fr);
+  grid-template-columns: minmax(120px, 1.5fr) 40px 32px 32px 40px minmax(80px, 1fr);
   align-items: baseline;
   gap: 0;
   padding: 2px var(--sp-sm);
@@ -1843,13 +1843,20 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-muted);
 }
 .weapon-col-att,
-.weapon-col-lock,
-.weapon-col-dmg,
-.weapon-col-type {
+.weapon-col-lock {
   text-align: center;
   font-weight: var(--weight-semibold);
   font-size: var(--text-xs);
 }
+.weapon-col-dmg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-weight: var(--weight-bold);
+  font-size: var(--text-xs);
+}
+.weapon-col-dmg svg { flex-shrink: 0; }
 
 .weapon-col-special {
   min-width: 0;
@@ -4439,7 +4446,7 @@ h1, h2, h3, h4, h5, h6 {
 
   /* Weapon rows stack on small screens */
   .weapon-list { overflow-x: visible; }
-  .weapon-row { grid-template-columns: 1fr 32px 28px 28px 28px 28px; min-width: 0; }
+  .weapon-row { grid-template-columns: 1fr 32px 28px 28px 36px; min-width: 0; }
   .weapon-col-special { grid-column: 1 / -1; padding-left: 0; margin-top: 2px; }
 
   .load-row { flex-direction: column; align-items: flex-start; }

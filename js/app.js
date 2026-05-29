@@ -1869,7 +1869,6 @@ const App = (() => {
       <span class="weapon-col weapon-col-att">Att</span>
       <span class="weapon-col weapon-col-lock">Lk</span>
       <span class="weapon-col weapon-col-dmg">Dmg</span>
-      <span class="weapon-col weapon-col-type">Type</span>
       <span class="weapon-col weapon-col-special">Special</span>
     </div>`;
   }
@@ -2023,15 +2022,13 @@ const App = (() => {
   function renderWeaponRow(w) {
     const special = w.special && w.special !== '-' ? w.special : '';
     const typeLabel = WEAPON_TYPE_LABELS[w.type] || w.type || '?';
-    const typeClass = w.type ? `weapon-type-${w.type.toLowerCase()}` : '';
     const typeIcon = WEAPON_TYPE_ICONS[w.type] || '';
     return `<div class="weapon-row">
       <span class="weapon-col weapon-col-name">${esc(w.name)}</span>
       <span class="weapon-col weapon-col-arc" title="${ARC_LABELS[w.arc] || 'Firing Arc: ' + (w.arc || '')}">${ARC_ICONS[w.arc] ? ARC_ICONS[w.arc] + '<span class="arc-label">' + esc(w.arc || '') + '</span>' : esc(w.arc || '')}</span>
       <span class="weapon-col weapon-col-att">${w.attack}</span>
       <span class="weapon-col weapon-col-lock">${w.lock}</span>
-      <span class="weapon-col weapon-col-dmg">${w.damage}</span>
-      <span class="weapon-col weapon-col-type ${typeClass}" title="${typeLabel}">${typeIcon || w.type || '?'}</span>
+      <span class="weapon-col weapon-col-dmg" title="${typeLabel}">${w.damage}${typeIcon}</span>
       ${special ? `<span class="weapon-col weapon-col-special">${renderWeaponSpecialChips(special)}</span>` : ''}
     </div>`;
   }
