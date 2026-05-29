@@ -278,6 +278,18 @@ const App = (() => {
         }
         navigate('fleets');
         break;
+      case 'share':
+        if (param) {
+          const shared = decodeFleet(param);
+          if (shared) {
+            showSharedFleet(shared);
+            return;
+          } else {
+            showToast('Invalid share link');
+          }
+        }
+        navigate('fleets');
+        break;
       default:
         show('view-landing');
     }
@@ -299,6 +311,89 @@ const App = (() => {
 
   function uuid() {
     return 'xxxx-xxxx'.replace(/x/g, () => ((Math.random() * 16) | 0).toString(16));
+  }
+
+  // ── Fleet Sharing (URL encode/decode) ──
+  function encodeFleet(fleet) {
+    // Build a minimal representation — only data needed to reconstruct
+    const mini = {
+      n: fleet.name,
+      f: fleet.faction,
+      s: fleet.gameSize,
+      g: fleet.battleGroups.map(g => ({
+        n: g.name,
+        sh: g.ships.map(s => {
+          const entry = { c: s.groupCategory, k: s.shipKey, p: s.points };
+          if (s.loadoutSelections && Object.keys(s.loadoutSelections).length > 0) {
+            entry.l = s.loadoutSelections;
+          }
+          return entry;
+        })
+      }))
+    };
+    if (fleet.admiral) {
+      mini.a = { n: fleet.admiral.name, p: fleet.admiral.points };
+      if (fleet.admiral.admiralId) mini.a.i = fleet.admiral.admiralId;
+      if (fleet.admiral.shipKey) mini.a.k = fleet.admiral.shipKey;
+      if (fleet.admiral.level) mini.a.l = fleet.admiral.level;
+    }
+    const json = JSON.stringify(mini);
+    // base64url encode (no padding, URL-safe chars)
+    return btoa(json).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  function decodeFleet(encoded) {
+    try {
+      // Restore base64 padding and standard chars
+      let b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      const json = atob(b64);
+      const mini = JSON.parse(json);
+
+      const fleet = {
+        id: uuid(),
+        name: mini.n || 'Shared Fleet',
+        description: '',
+        faction: mini.f,
+        gameSize: mini.s || 'clash',
+        pointsLimit: (GAME_SIZES[mini.s] || GAME_SIZES.clash).max,
+        maxGroups: (GAME_SIZES[mini.s] || GAME_SIZES.clash).groups,
+        admiral: null,
+        battleGroups: (mini.g || []).map(g => ({
+          id: uuid(),
+          name: g.n || 'Group',
+          ships: (g.sh || []).map(s => ({
+            id: uuid(),
+            groupCategory: s.c,
+            shipKey: s.k,
+            points: s.p,
+            loadoutSelections: s.l || {}
+          }))
+        })),
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      };
+
+      if (mini.a) {
+        fleet.admiral = {
+          name: mini.a.n,
+          points: mini.a.p || 0,
+          admiralId: mini.a.i || null,
+          shipKey: mini.a.k || null,
+          level: mini.a.l || 1
+        };
+      }
+
+      return fleet;
+    } catch (e) {
+      console.error('Failed to decode fleet:', e);
+      return null;
+    }
+  }
+
+  function getShareURL(fleet) {
+    const encoded = encodeFleet(fleet);
+    return `${location.origin}${location.pathname}#share/${encoded}`;
   }
 
   // ── Fleet CRUD ──
@@ -1816,13 +1911,157 @@ const App = (() => {
     printDiv.remove();
   }
 
+  // ── Shared Fleet Viewer ──
+  function showSharedFleet(fleet) {
+    document.querySelectorAll('#app > section').forEach(s => s.classList.add('hidden'));
+    show('view-shared');
+
+    const topContext = document.getElementById('topbar-context');
+    topContext.textContent = 'Shared Fleet';
+    document.getElementById('topbar-actions').innerHTML = '';
+
+    const fName = (factionData[fleet.faction] || {}).name || fleet.faction.toUpperCase();
+    const pts = calcFleetPoints(fleet);
+    const sizeInfo = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
+
+    let html = `
+      <div class="shared-fleet-header">
+        <div>
+          <h1 class="shared-fleet-name">${esc(fleet.name)}</h1>
+          <div class="shared-fleet-meta">
+            <span class="badge badge-faction badge-${fleet.faction}">${fName}</span>
+            <span class="badge badge-neutral">${sizeInfo.label}</span>
+            <span class="shared-fleet-points">${pts} pts</span>
+          </div>
+        </div>
+        <div class="shared-fleet-actions">
+          <button class="btn btn-primary" onclick="App.importSharedFleet()">Import to My Fleets</button>
+          <button class="btn btn-outline" onclick="location.hash='fleets'">My Fleets</button>
+        </div>
+      </div>
+    `;
+
+    if (fleet.admiral) {
+      html += `<div class="shared-section">
+        <div class="shared-section-title">Admiral</div>
+        <div class="shared-admiral">${esc(fleet.admiral.name)} — ${fleet.admiral.points} pts</div>
+      </div>`;
+    }
+
+    fleet.battleGroups.forEach((g, i) => {
+      const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
+      html += `<div class="shared-section">
+        <div class="shared-section-title">${esc(g.name)} <span class="text-caption">${gPts} pts</span></div>
+        <div class="group-ships-list">`;
+
+      // Group ships by profile
+      const profiles = {};
+      g.ships.forEach(s => {
+        const key = s.groupCategory + '/' + s.shipKey;
+        if (!profiles[key]) profiles[key] = { ship: s, count: 0 };
+        profiles[key].count++;
+      });
+
+      Object.values(profiles).forEach(({ ship, count }) => {
+        const dbShip = findShipInDB(fleet.faction, ship.groupCategory, ship.shipKey);
+        const name = dbShip ? dbShip.name : ship.shipKey;
+        const cat = CATEGORY_LABELS[ship.groupCategory] || ship.groupCategory;
+        const img = shipArtPath(name);
+
+        html += `<div class="group-ship-entry">`;
+        if (img) html += `<div class="ship-card-image"><img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>`;
+        html += `<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="ship-card-name">${count > 1 ? count + '× ' : ''}${esc(name)}</div>
+              <div class="ship-card-class">${cat}</div>
+            </div>
+            <div class="ship-card-cost">${ship.points * count} pts</div>
+          </div>`;
+
+        // Show stats if available
+        if (dbShip) {
+          html += renderStatGrid(dbShip);
+          const wpns = dbShip.weapons || [];
+          if (wpns.length > 0) {
+            html += '<div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
+          }
+        }
+
+        html += `</div></div>`;
+      });
+
+      html += `</div></div>`;
+    });
+
+    const container = document.getElementById('shared-fleet-content');
+    container.innerHTML = html;
+
+    // Store temporarily for import
+    window._sharedFleet = fleet;
+  }
+
+  function importSharedFleet() {
+    const fleet = window._sharedFleet;
+    if (!fleet) return;
+
+    // Clone and give fresh IDs
+    const imported = JSON.parse(JSON.stringify(fleet));
+    imported.id = uuid();
+    imported.name = fleet.name + ' (imported)';
+    imported.createdAt = Date.now();
+    imported.updatedAt = Date.now();
+    imported.battleGroups.forEach(g => {
+      g.id = uuid();
+      g.ships.forEach(s => s.id = uuid());
+    });
+
+    fleets.push(imported);
+    saveFleets();
+    showToast('Fleet imported!');
+    navigate('builder', imported.id);
+  }
+
   function shareFleet() {
+    if (!currentFleet) return;
+    const url = getShareURL(currentFleet);
+    const text = generateFleetText(currentFleet);
+
+    const body = document.getElementById('share-body');
+    body.innerHTML = `
+      <div class="settings-group">
+        <div class="settings-group-title">Share Link</div>
+        <div class="share-url-row">
+          <input type="text" class="share-url-input" value="${esc(url)}" readonly id="share-url-input" onclick="this.select()">
+          <button class="btn btn-primary btn-sm" onclick="App.copyShareURL()">Copy</button>
+        </div>
+        <p class="text-caption" style="margin-top:var(--sp-sm)">Anyone with this link can view and import your fleet.</p>
+      </div>
+      <div class="settings-group">
+        <div class="settings-group-title">Text Export</div>
+        <textarea class="share-text-export" readonly onclick="this.select()">${esc(text)}</textarea>
+        <button class="btn btn-outline btn-sm" style="margin-top:var(--sp-sm)" onclick="App.copyShareText()">Copy Text</button>
+      </div>
+    `;
+    openModal('modal-share');
+  }
+
+  function copyShareURL() {
+    const input = document.getElementById('share-url-input');
+    if (input && navigator.clipboard) {
+      navigator.clipboard.writeText(input.value).then(() => showToast('Share link copied!'));
+    } else if (input) {
+      input.select();
+      document.execCommand('copy');
+      showToast('Share link copied!');
+    }
+  }
+
+  function copyShareText() {
     if (!currentFleet) return;
     const text = generateFleetText(currentFleet);
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('Fleet list copied to clipboard!');
-      });
+      navigator.clipboard.writeText(text).then(() => showToast('Fleet text copied!'));
     } else {
       prompt('Copy your fleet list:', text);
     }
@@ -2234,7 +2473,8 @@ const App = (() => {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet,
     loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup,
     openShipSelectModal, filterCategory, toggleShipFilter, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
-    openAdmiralModal, selectAdmiral, selectGenericAdmiral, selectFamousAdmiral, toggleSidebar, printFleet, shareFleet,
+    openAdmiralModal, selectAdmiral, selectGenericAdmiral, selectFamousAdmiral, toggleSidebar, printFleet,
+    shareFleet, copyShareURL, copyShareText, importSharedFleet,
     openSettings, toggleSetting, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize
   };
 })();

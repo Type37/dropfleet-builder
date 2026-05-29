@@ -176,9 +176,29 @@
       </main>
     </div>
   </section>
+
+  <!-- Shared Fleet View (read-only) -->
+  <section class="hidden" id="view-shared">
+    <div class="shared-fleet-container" id="shared-fleet-content">
+      <!-- Populated by JS -->
+    </div>
+  </section>
 </div>
 
 <!-- ═══ Modals ═══ -->
+
+<!-- Share Fleet Modal -->
+<div class="modal-overlay" id="modal-share">
+  <div class="modal-panel" style="max-width:500px">
+    <div class="modal-header">
+      <h2 class="modal-title">Share Fleet</h2>
+      <button class="modal-close" onclick="App.closeModal('modal-share')">&#x2715;</button>
+    </div>
+    <div class="modal-body" id="share-body">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
 
 <!-- New Fleet Modal -->
 <div class="modal-overlay" id="modal-new-fleet">
