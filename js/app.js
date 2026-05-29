@@ -1570,8 +1570,15 @@ const App = (() => {
     const notes = warnings.filter(w => w.type === 'warn');
     const fIcon = FACTION_ICONS[f.faction];
 
-    // Group cards
-    const groupCards = f.battleGroups.map(g => {
+    // Group cards — sorted by tonnage category then rendered with section dividers
+    const catOrder = { colossal: 0, heavy: 1, medium: 2, light: 3, payload: 4 };
+    const sortedGroups = [...f.battleGroups].sort((a, b) => {
+      const aCat = a.ships.length > 0 ? (a.ships[0].groupCategory || 'medium') : 'medium';
+      const bCat = b.ships.length > 0 ? (b.ships[0].groupCategory || 'medium') : 'medium';
+      return (catOrder[aCat] ?? 5) - (catOrder[bCat] ?? 5);
+    });
+    let lastCat = null;
+    const groupCards = sortedGroups.map(g => {
       const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
       const shipNames = [];
       const shipCounts = {};
@@ -1595,7 +1602,26 @@ const App = (() => {
         ? `<span class="overview-group-error" title="${esc(gErrors[0])}">ILLEGAL: ${esc(gErrors[0])}</span>`
         : '';
 
-      return `<div class="overview-group-card card-deco" onclick="App.selectGroup('${g.id}')" style="cursor:pointer;border-left-color:${catColor}">
+      // Count groups in this category for the section header
+      const catCount = sortedGroups.filter(sg => {
+        const sc = sg.ships.length > 0 ? (sg.ships[0].groupCategory || 'medium') : 'medium';
+        return sc === cat;
+      }).length;
+      const catSectionPts = sortedGroups.filter(sg => {
+        const sc = sg.ships.length > 0 ? (sg.ships[0].groupCategory || 'medium') : 'medium';
+        return sc === cat;
+      }).reduce((t, sg) => t + sg.ships.reduce((st, s) => st + (s.points || 0), 0), 0);
+
+      // Insert section divider when tonnage category changes
+      const sectionDivider = cat !== lastCat
+        ? `<div class="overview-cat-divider" style="--cat-color:${catColor}">
+            <span class="overview-cat-label">${esc(catLabel)}</span>
+            <span class="overview-cat-count">${catCount} group${catCount !== 1 ? 's' : ''} · ${catSectionPts} pts</span>
+          </div>`
+        : '';
+      lastCat = cat;
+
+      return `${sectionDivider}<div class="overview-group-card card-deco" onclick="App.selectGroup('${g.id}')" style="cursor:pointer;border-left-color:${catColor}">
         <div class="overview-group-top">
           ${artSrc ? `<div class="overview-group-art"><img src="${artSrc}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
           <div class="overview-group-info">
