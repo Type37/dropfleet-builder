@@ -739,9 +739,11 @@ const App = (() => {
     copy.createdAt = Date.now();
     copy.updatedAt = Date.now();
     copy.battleGroups.forEach(g => { g.id = uuid(); g.ships.forEach(s => { s.id = uuid(); }); });
+    if (copy.admirals) copy.admirals.forEach(a => { a.id = uuid(); });
     fleets.push(copy);
     saveFleets();
     renderFleetList();
+    showToast(`Duplicated "${src.name}"`);
   }
 
   // ── Fleet List View ──
@@ -791,12 +793,33 @@ const App = (() => {
       </div>`;
     }).join('');
 
-    grid.innerHTML = cards + `
+    const newCard = `
       <div class="fleet-card fleet-card-new" onclick="App.openNewFleetModal()">
-        <div class="fleet-card-new-icon">+</div>
+        <div class="fleet-card-new-icon"><svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg></div>
         <div style="font-family:var(--font-display);font-weight:var(--weight-semibold);font-size:var(--text-md)">Create New Fleet</div>
         <div class="text-caption">Start building a new fleet roster</div>
       </div>`;
+
+    if (fleets.length === 0) {
+      grid.innerHTML = `
+        <div class="fleet-list-empty">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.2">
+            <path d="M2 20l10-6 10 6"/>
+            <path d="M12 14V2"/>
+            <path d="M5 17l7-4 7 4"/>
+            <path d="M8 6l4-4 4 4"/>
+            <path d="M6 10l6-3 6 3"/>
+          </svg>
+          <h2 class="fleet-list-empty-title">No fleets yet</h2>
+          <p class="fleet-list-empty-desc">Create your first fleet roster to get started, or load demo fleets to explore the builder.</p>
+          <div class="flex gap-sm" style="margin-top:var(--sp-lg)">
+            <button class="btn btn-primary" onclick="App.openNewFleetModal()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> New Fleet</button>
+            <button class="btn btn-outline" onclick="App.loadDemoFleets()">Load Demos</button>
+          </div>
+        </div>`;
+    } else {
+      grid.innerHTML = cards + newCard;
+    }
   }
 
   // ── Demo Fleets ──
@@ -2741,6 +2764,11 @@ const App = (() => {
         <textarea class="share-text-export" readonly onclick="this.select()">${esc(text)}</textarea>
         <button class="btn btn-outline btn-sm" style="margin-top:var(--sp-sm)" onclick="App.copyShareText()">Copy Text</button>
       </div>
+      <div class="settings-group">
+        <div class="settings-group-title">JSON Export</div>
+        <p class="text-caption" style="margin-bottom:var(--sp-sm)">Copy the fleet as JSON data. Paste into another browser's Import to transfer fleets between devices.</p>
+        <button class="btn btn-outline btn-sm" onclick="App.copyShareJSON()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v12M12 2v12M4 6h8M4 10h8"/></svg> Copy JSON</button>
+      </div>
     `;
     openModal('modal-share');
   }
@@ -2763,6 +2791,98 @@ const App = (() => {
       navigator.clipboard.writeText(text).then(() => showToast('Fleet text copied!'));
     } else {
       prompt('Copy your fleet list:', text);
+    }
+  }
+
+  function copyShareJSON() {
+    if (!currentFleet) return;
+    const json = JSON.stringify(currentFleet, null, 2);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(json).then(() => showToast('Fleet JSON copied!'));
+    } else {
+      prompt('Copy fleet JSON:', json);
+    }
+  }
+
+  function importFleetFromClipboard() {
+    if (!navigator.clipboard || !navigator.clipboard.readText) {
+      showToast('Clipboard access not available');
+      return;
+    }
+    navigator.clipboard.readText().then(text => {
+      if (!text || !text.trim()) {
+        showToast('Clipboard is empty');
+        return;
+      }
+      try {
+        // Try to decode a share URL first
+        const urlMatch = text.match(/[?#]share\/([A-Za-z0-9+/=_-]+)/);
+        if (urlMatch) {
+          const fleet = decodeFleet(urlMatch[1]);
+          if (fleet) {
+            importSingleFleet(fleet);
+            return;
+          }
+        }
+
+        // Try raw JSON — could be single fleet or array of fleets (backup)
+        const parsed = JSON.parse(text);
+
+        if (Array.isArray(parsed)) {
+          // Bulk import from backup
+          let count = 0;
+          parsed.forEach(f => {
+            if (f && f.faction && f.battleGroups) {
+              importSingleFleet(f, true);
+              count++;
+            }
+          });
+          if (count > 0) {
+            renderFleetList();
+            showToast(`Imported ${count} fleet${count > 1 ? 's' : ''}`);
+          } else {
+            showToast('No valid fleets found in data');
+          }
+          return;
+        }
+
+        if (parsed && parsed.faction && parsed.battleGroups) {
+          importSingleFleet(parsed);
+          return;
+        }
+
+        showToast('Invalid fleet data');
+      } catch (e) {
+        showToast('Could not parse fleet data');
+      }
+    }).catch(() => {
+      showToast('Clipboard access denied');
+    });
+  }
+
+  function importSingleFleet(fleet, skipRender) {
+    const imported = JSON.parse(JSON.stringify(fleet));
+    imported.id = uuid();
+    if (!imported.name) imported.name = 'Imported Fleet';
+    // Don't double-tag
+    if (!imported.name.endsWith('(imported)')) {
+      imported.name += ' (imported)';
+    }
+    imported.createdAt = Date.now();
+    imported.updatedAt = Date.now();
+    if (imported.battleGroups) {
+      imported.battleGroups.forEach(g => {
+        g.id = uuid();
+        if (g.ships) g.ships.forEach(s => s.id = uuid());
+      });
+    }
+    if (imported.admirals) imported.admirals.forEach(a => { a.id = uuid(); });
+
+    fleets.push(imported);
+    saveFleets();
+    if (!skipRender) {
+      renderFleetList();
+      showToast(`Imported "${imported.name}"`);
     }
   }
 
@@ -2821,7 +2941,19 @@ const App = (() => {
   // ── Settings ──
   function openSettings() {
     const body = document.getElementById('settings-body');
+    const descValue = currentFleet ? (currentFleet.description || '') : '';
+    const fleetSection = currentFleet ? `
+      <div class="settings-group">
+        <div class="settings-group-title">Fleet Details</div>
+        <div style="display:flex;flex-direction:column;gap:var(--sp-sm)">
+          <label class="form-label" style="margin-top:var(--sp-sm)">Description</label>
+          <textarea class="form-textarea" id="settings-fleet-desc" placeholder="Describe your fleet's purpose or lore..." style="min-height:60px;font-size:var(--text-sm)">${esc(descValue)}</textarea>
+          <button class="btn btn-outline btn-sm" style="align-self:flex-start" onclick="App.updateFleetDescription()">Save Description</button>
+        </div>
+      </div>` : '';
+
     body.innerHTML = `
+      ${fleetSection}
       <div class="settings-group">
         <div class="settings-group-title">Ship Selection</div>
         <label class="settings-toggle">
@@ -2852,8 +2984,38 @@ const App = (() => {
           <span class="settings-toggle-switch"></span>
         </label>
       </div>
+      <div class="settings-group">
+        <div class="settings-group-title">Data</div>
+        <div class="flex gap-sm">
+          <button class="btn btn-outline btn-sm" onclick="App.exportAllFleets()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg> Export All Fleets</button>
+        </div>
+        <p class="text-caption" style="margin-top:var(--sp-sm)">Download all your fleet data as a JSON backup file.</p>
+      </div>
     `;
     openModal('modal-settings');
+  }
+
+  function updateFleetDescription() {
+    if (!currentFleet) return;
+    const textarea = document.getElementById('settings-fleet-desc');
+    if (!textarea) return;
+    currentFleet.description = textarea.value.trim();
+    saveFleets();
+    showToast('Description updated');
+  }
+
+  function exportAllFleets() {
+    const data = JSON.stringify(fleets, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dropfleet-fleets-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Fleets exported!');
   }
 
   function toggleSetting(key, value) {
@@ -3193,14 +3355,31 @@ const App = (() => {
     }
   });
 
-  // Close modals on Escape
+  // Keyboard shortcuts
   document.addEventListener('keydown', (e) => {
+    // Escape: close modals, rule tooltips, popovers
     if (e.key === 'Escape') {
-      document.querySelectorAll('.modal-overlay.active').forEach(m => {
-        m.classList.remove('active');
-      });
-      document.body.style.overflow = '';
-      pendingGroupCreation = false;
+      const activeModals = document.querySelectorAll('.modal-overlay.active');
+      if (activeModals.length > 0) {
+        activeModals.forEach(m => m.classList.remove('active'));
+        document.body.style.overflow = '';
+        pendingGroupCreation = false;
+        return;
+      }
+      // Dismiss rule tooltip
+      const tooltip = document.getElementById('rule-tooltip');
+      if (tooltip) { tooltip.remove(); return; }
+      // Dismiss game size popover
+      const popover = document.getElementById('game-size-popover');
+      if (popover) { popover.remove(); return; }
+    }
+
+    // Ctrl/Cmd+P: print fleet (only in builder view)
+    if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+      if (currentFleet && !document.querySelector('.modal-overlay.active')) {
+        e.preventDefault();
+        printFleet();
+      }
     }
   });
 
@@ -3219,7 +3398,7 @@ const App = (() => {
     openAdmiralModal, addGenericAdmiral, addFamousAdmiral, removeAdmiral,
     openStationModal, selectStation, removeStation,
     toggleSidebar, printFleet,
-    shareFleet, copyShareURL, copyShareText, importSharedFleet,
-    openSettings, toggleSetting, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize
+    shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard,
+    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize
   };
 })();

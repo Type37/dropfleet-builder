@@ -76,7 +76,8 @@
         <p class="text-caption">Manage your battle fleet rosters</p>
       </div>
       <div class="flex gap-sm">
-        <button class="btn btn-outline btn-sm" onclick="App.loadDemoFleets()" data-tooltip="Load sample fleets"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12V4c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2z"/><path d="M6 6h4M6 9h4"/></svg> Load Demos</button>
+        <button class="btn btn-outline btn-sm" onclick="App.importFleetFromClipboard()" data-tooltip="Import fleet from clipboard"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8v6H2V2h6"/><path d="M10 2h4v4"/><path d="M14 2L7 9"/></svg> Import</button>
+        <button class="btn btn-outline btn-sm" onclick="App.loadDemoFleets()" data-tooltip="Load sample fleets"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12V4c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2z"/><path d="M6 6h4M6 9h4"/></svg> Demos</button>
         <button class="btn btn-primary" onclick="App.openNewFleetModal()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> New Fleet</button>
       </div>
     </div>
@@ -211,7 +212,7 @@
   <div class="modal-panel" style="max-width:500px">
     <div class="modal-header">
       <h2 class="modal-title">Share Fleet</h2>
-      <button class="modal-close" onclick="App.closeModal('modal-share')">&#x2715;</button>
+      <button class="modal-close" onclick="App.closeModal('modal-share')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body" id="share-body">
       <!-- Populated by JS -->
@@ -354,7 +355,7 @@
   <div class="modal-panel" style="max-width:440px">
     <div class="modal-header">
       <h2 class="modal-title">Fleet Settings</h2>
-      <button class="modal-close" onclick="App.closeModal('modal-settings')">&#x2715;</button>
+      <button class="modal-close" onclick="App.closeModal('modal-settings')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body" id="settings-body">
       <!-- Populated by JS -->
