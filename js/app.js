@@ -898,13 +898,6 @@ const App = (() => {
     if (fleets.length === 0) {
       grid.innerHTML = `
         <div class="fleet-list-empty">
-          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.2">
-            <path d="M2 20l10-6 10 6"/>
-            <path d="M12 14V2"/>
-            <path d="M5 17l7-4 7 4"/>
-            <path d="M8 6l4-4 4 4"/>
-            <path d="M6 10l6-3 6 3"/>
-          </svg>
           <h2 class="fleet-list-empty-title">No fleets yet</h2>
           <button class="btn btn-primary" style="margin-top:var(--sp-lg)" onclick="App.openNewFleetModal()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> New Fleet</button>
         </div>`;
@@ -1635,7 +1628,9 @@ const App = (() => {
       const cat = g.ships.length > 0 ? (g.ships[0].groupCategory || 'medium') : 'medium';
       const catLabel = CATEGORY_LABELS[cat] || cat;
       const firstShip = g.ships[0];
-      const artSrc = firstShip ? shipArtPath((findShipInDB(f.faction, firstShip.groupCategory, firstShip.shipKey) || {}).name) : null;
+      const firstDbForArt = firstShip ? findShipInDB(f.faction, firstShip.groupCategory, firstShip.shipKey) : null;
+      const artSrc = firstDbForArt ? shipArtPath(firstDbForArt.name) : null;
+      const artModularClass = isFullyModular(firstDbForArt) ? ' ship-img-modular' : '';
 
       const catColor = { light: '#4a8dc7', medium: '#3e8a45', heavy: '#c48820', colossal: '#b83828', payload: '#6a4c9c' }[cat] || 'var(--navy)';
       // Validation status for this group
@@ -1665,7 +1660,7 @@ const App = (() => {
 
       return `${sectionDivider}<div class="overview-group-card card-deco" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-label="${esc(g.name)}, ${esc(catLabel)}, ${gPts} points" style="cursor:pointer;border-left-color:${catColor}">
         <div class="overview-group-top">
-          ${artSrc ? `<div class="overview-group-art"><img src="${artSrc}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
+          ${artSrc ? `<div class="overview-group-art${artModularClass}"><img src="${artSrc}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
           <div class="overview-group-info">
             <div class="overview-group-name">${esc(g.name)}</div>
             <div class="overview-group-meta">
@@ -2059,6 +2054,13 @@ const App = (() => {
     return /Deployable Feature/i.test(hay);
   }
 
+  // A ship is "fully modular" when it has a Systems selection and NO base
+  // weapons — its entire armament comes from chosen options, so the art is just
+  // a base-hull placeholder (we desaturate it to make that clear).
+  function isFullyModular(dbShip) {
+    return !!(dbShip && dbShip.systemSelection && (!dbShip.weapons || dbShip.weapons.length === 0));
+  }
+
   function renderFeatureStats(feat) {
     if (!feat) return '';
     const statLine = (feat.features || []).map(f =>
@@ -2406,7 +2408,7 @@ const App = (() => {
 
     return `
     <div class="group-ship-entry${compact ? ' compact' : ''}">
-      ${img ? `<div class="ship-card-image">${qtyBadge}<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+      ${img ? `<div class="ship-card-image${isFullyModular(dbShip) ? ' ship-img-modular' : ''}"${isFullyModular(dbShip) ? ' title="Base hull shown — your ship\'s actual look depends on the systems you choose"' : ''}>${qtyBadge}<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
       <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
         <div class="flex items-center justify-between">
           <div>
@@ -3963,60 +3965,56 @@ const App = (() => {
     }
   }
 
+  // Open a manual paste modal. Reading the clipboard programmatically is blocked
+  // by iOS Safari outside a synchronous gesture (it shows a native paste bubble
+  // + denial), so a paste-it-yourself textarea is the reliable cross-platform UX.
+  // We still try a best-effort clipboard pre-fill, ignoring any failure silently.
   function importFleetFromClipboard() {
-    if (!navigator.clipboard || !navigator.clipboard.readText) {
-      showToast('Clipboard access not available');
-      return;
+    const ta = document.getElementById('import-text');
+    if (ta) ta.value = '';
+    openModal('modal-import');
+    if (ta) setTimeout(() => ta.focus(), 50);
+    if (navigator.clipboard && navigator.clipboard.readText) {
+      navigator.clipboard.readText()
+        .then(text => { if (ta && !ta.value && text && text.trim()) ta.value = text.trim(); })
+        .catch(() => {}); // denial is expected on mobile — no toast, the textarea handles it
     }
-    navigator.clipboard.readText().then(text => {
-      if (!text || !text.trim()) {
-        showToast('Clipboard is empty');
-        return;
+  }
+
+  function doImportFromText() {
+    const ta = document.getElementById('import-text');
+    const text = ta ? ta.value.trim() : '';
+    if (!text) { showToast('Paste a share link or fleet code first'); return; }
+    if (importFleetFromText(text)) closeModal('modal-import');
+  }
+
+  // Parse + import from a raw string (share URL, single-fleet JSON, or a backup
+  // array). Returns true on success. Shared by the manual paste flow.
+  function importFleetFromText(text) {
+    try {
+      const urlMatch = text.match(/[?#]share\/([A-Za-z0-9+/=_-]+)/);
+      if (urlMatch) {
+        const fleet = decodeFleet(urlMatch[1]);
+        if (fleet) { importSingleFleet(fleet); return true; }
       }
-      try {
-        // Try to decode a share URL first
-        const urlMatch = text.match(/[?#]share\/([A-Za-z0-9+/=_-]+)/);
-        if (urlMatch) {
-          const fleet = decodeFleet(urlMatch[1]);
-          if (fleet) {
-            importSingleFleet(fleet);
-            return;
-          }
-        }
-
-        // Try raw JSON — could be single fleet or array of fleets (backup)
-        const parsed = JSON.parse(text);
-
-        if (Array.isArray(parsed)) {
-          // Bulk import from backup
-          let count = 0;
-          parsed.forEach(f => {
-            if (f && f.faction && f.battleGroups) {
-              importSingleFleet(f, true);
-              count++;
-            }
-          });
-          if (count > 0) {
-            renderFleetList();
-            showToast(`Imported ${count} fleet${count > 1 ? 's' : ''}`);
-          } else {
-            showToast('No valid fleets found in data');
-          }
-          return;
-        }
-
-        if (parsed && parsed.faction && parsed.battleGroups) {
-          importSingleFleet(parsed);
-          return;
-        }
-
-        showToast('Invalid fleet data');
-      } catch (e) {
-        showToast('Could not parse fleet data');
+      const parsed = JSON.parse(text);
+      if (Array.isArray(parsed)) {
+        let count = 0;
+        parsed.forEach(f => {
+          if (f && f.faction && f.battleGroups) { importSingleFleet(f, true); count++; }
+        });
+        if (count > 0) { renderFleetList(); showToast(`Imported ${count} fleet${count > 1 ? 's' : ''}`); return true; }
+        showToast('No valid fleets found in data');
+        return false;
       }
-    }).catch(() => {
-      showToast('Clipboard access denied');
-    });
+      if (parsed && parsed.faction && parsed.battleGroups) { importSingleFleet(parsed); return true; }
+      showToast('Invalid fleet data');
+      return false;
+    } catch (e) {
+      // Not JSON and not a recognised share link
+      showToast('Could not read that — paste a share link or fleet code');
+      return false;
+    }
   }
 
   function importSingleFleet(fleet, skipRender) {
@@ -4234,6 +4232,7 @@ const App = (() => {
   }
 
   // ── Toast ──
+  let _toastTimer = null;
   function showToast(message) {
     let toast = document.getElementById('app-toast');
     if (!toast) {
@@ -4242,10 +4241,15 @@ const App = (() => {
       document.body.appendChild(toast);
     }
     toast.textContent = message;
-    requestAnimationFrame(() => {
-      toast.style.transform = 'translateX(-50%) translateY(0)';
-      setTimeout(() => { toast.style.transform = 'translateX(-50%) translateY(100px)'; }, 2500);
-    });
+    toast.style.pointerEvents = 'none'; // never intercept taps (mobile)
+    // Show immediately — don't depend on rAF (throttled/unreliable on mobile).
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    // A single tracked timer so rapid toasts don't leave one stuck visible.
+    if (_toastTimer) clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => {
+      toast.style.transform = 'translateX(-50%) translateY(100px)';
+      _toastTimer = null;
+    }, 2500);
   }
 
   // ── Launch Asset Reference ──
@@ -4776,7 +4780,7 @@ const App = (() => {
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral,
     openStationModal, selectStation, removeStation,
     toggleSidebar, printFleet,
-    shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard,
+    shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText,
     openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail, saveFleetDesc
   };
 })();

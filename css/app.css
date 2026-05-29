@@ -2542,12 +2542,17 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   width: 120px;
   height: 120px;
-  border-radius: var(--radius-md);
-  background: var(--paper-alt);
-  border: 1px solid var(--stroke-light);
-  overflow: hidden;
+  /* No frame — the ship art should float, not sit in a visible box */
+  background: transparent;
+  overflow: visible;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 3px rgba(28, 26, 23, 0.06);
+}
+.ship-card-image img { width: 100%; height: 100%; object-fit: contain; }
+/* Fully-modular ships (built entirely from chosen systems): the art is just a
+   base-hull placeholder, so desaturate it to signal "not necessarily your config". */
+.ship-card-image.ship-img-modular img,
+.overview-group-art.ship-img-modular img {
+  filter: grayscale(1) opacity(0.5);
 }
 /* ×N multiplier on collapsed identical-ship cards */
 .ship-qty-badge {
@@ -4248,10 +4253,8 @@ h1, h2, h3, h4, h5, h6 {
   width: 64px;
   height: 64px;
   flex-shrink: 0;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  background: var(--paper-alt);
-  border: 1px solid var(--stroke-light);
+  overflow: visible;
+  background: transparent;
 }
 .overview-group-art img {
   width: 100%;

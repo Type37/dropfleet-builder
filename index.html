@@ -219,6 +219,24 @@
   </div>
 </div>
 
+<!-- Import Fleet Modal -->
+<div class="modal-overlay" id="modal-import">
+  <div class="modal-panel" style="max-width:520px">
+    <div class="modal-header">
+      <h2 class="modal-title">Import Fleet</h2>
+      <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-import')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p class="text-caption" style="margin-bottom:var(--sp-md)">Paste a share link or fleet code below, then tap Import.</p>
+      <textarea class="form-textarea" id="import-text" rows="5" placeholder="Paste your fleet share link or code here…" style="width:100%;font-family:var(--font-condensed);font-size:var(--text-sm)"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="App.closeModal('modal-import')">Cancel</button>
+      <button class="btn btn-primary" onclick="App.doImportFromText()">Import</button>
+    </div>
+  </div>
+</div>
+
 <!-- New Fleet Modal -->
 <div class="modal-overlay" id="modal-new-fleet">
   <div class="modal-panel">
