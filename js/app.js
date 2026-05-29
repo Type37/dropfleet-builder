@@ -1208,20 +1208,35 @@ const App = (() => {
       }
     });
 
-    // 7. Admiral checks
+    // 7. Tonnage restrictions (Section 4.2)
+    let lightPts = 0, mediumPts = 0, heavyPts = 0;
+    fleet.battleGroups.forEach(g => {
+      const cat = g.ships[0]?.groupCategory;
+      const groupPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
+      if (cat === 'light') lightPts += groupPts;
+      else if (cat === 'medium') mediumPts += groupPts;
+      else if (cat === 'heavy') heavyPts += groupPts;
+    });
+    if (heavyPts > mediumPts && mediumPts > 0) {
+      warnings.push({ type: 'error', msg: `Heavy ships (${heavyPts}pts) cannot exceed Medium ships (${mediumPts}pts)` });
+    }
+    if (lightPts > mediumPts + heavyPts && (mediumPts + heavyPts) > 0) {
+      warnings.push({ type: 'warn', msg: `Light ships (${lightPts}pts) exceed Medium+Heavy (${mediumPts + heavyPts}pts)` });
+    }
+
+    // 8. Admiral checks
     const admirals = fleet.admirals || [];
-    let famousCount = 0;
+    let namedCount = 0;
     admirals.forEach(adm => {
       const admLvl = adm.level || 0;
-      // Level 5 Famous Admirals count as Level 4 for game-size restrictions
       const effectiveLvl = admLvl >= 5 ? 4 : admLvl;
       if (effectiveLvl > sizeInfo.maxAdmiralLevel) {
         warnings.push({ type: 'error', msg: `${adm.name} (Lv${admLvl}) exceeds max Lv${sizeInfo.maxAdmiralLevel} for ${sizeInfo.label}` });
       }
-      if (adm.type === 'Famous') famousCount++;
+      if (adm.type === 'Famous' || adm.type === 'Faction') namedCount++;
     });
-    if (famousCount > 1) {
-      warnings.push({ type: 'error', msg: `Only one Famous/Faction Admiral per fleet (you have ${famousCount})` });
+    if (namedCount > 1) {
+      warnings.push({ type: 'error', msg: `Only one Famous/Faction Admiral per fleet (you have ${namedCount})` });
     }
 
     return warnings;
