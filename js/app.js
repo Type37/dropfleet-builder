@@ -629,8 +629,13 @@ const App = (() => {
       const pts = calcFleetPoints(f);
       const sizeInfo = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
       const fName = (factionData[f.faction] || {}).name || f.faction.toUpperCase();
+      const shipCount = f.battleGroups.reduce((t, g) => t + g.ships.length, 0);
+      const admCount = (f.admirals || []).length;
+      const fColor = FACTION_COLORS[f.faction] || 'var(--navy)';
+      const updated = f.updatedAt ? new Date(f.updatedAt) : null;
+      const timeAgo = updated ? formatTimeAgo(updated) : '';
       return `
-      <div class="fleet-card card-deco" onclick="App.navigate('builder','${f.id}')">
+      <div class="fleet-card card-deco" onclick="App.navigate('builder','${f.id}')" style="border-left:3px solid ${fColor}">
         <div class="flex items-center justify-between">
           <span class="badge badge-${f.faction}">${fName}</span>
           <span class="badge badge-neutral">${sizeInfo.label}</span>
@@ -639,9 +644,10 @@ const App = (() => {
         ${f.description ? `<div class="text-caption" style="line-height:1.4">${esc(f.description)}</div>` : ''}
         <div class="flex items-center justify-between" style="margin-top:var(--sp-sm)">
           <span class="fleet-card-points">${pts} pts</span>
-          <span class="text-caption">${f.battleGroups.length} groups</span>
+          <span class="text-caption">${f.battleGroups.length} group${f.battleGroups.length !== 1 ? 's' : ''} · ${shipCount} ship${shipCount !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} adm` : ''}</span>
         </div>
         <div class="fleet-card-actions" onclick="event.stopPropagation()">
+          ${timeAgo ? `<span class="text-caption" style="margin-right:auto;font-size:var(--text-xs)">${timeAgo}</span>` : ''}
           <button class="btn btn-ghost btn-sm" onclick="App.duplicateFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1"/><path d="M2 11V3c0-.6.4-1 1-1h8"/></svg> Duplicate</button>
           <button class="btn btn-danger btn-sm" onclick="App.deleteFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Delete</button>
         </div>
@@ -2367,6 +2373,21 @@ const App = (() => {
     const div = document.createElement('div');
     div.textContent = String(str);
     return div.innerHTML;
+  }
+
+  function formatTimeAgo(date) {
+    const now = Date.now();
+    const diff = now - date.getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    const days = Math.floor(hrs / 24);
+    if (days < 30) return `${days}d ago`;
+    const months = Math.floor(days / 30);
+    if (months < 12) return `${months}mo ago`;
+    return `${Math.floor(months / 12)}y ago`;
   }
 
   // ── Rule Tooltip ──

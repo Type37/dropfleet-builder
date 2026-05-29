@@ -983,9 +983,13 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-direction: column;
   gap: var(--sp-md);
+  /* Left accent border set inline via style attr (faction color) */
+  border-left-width: 3px;
 }
 .fleet-card:hover {
-  border-color: var(--navy);
+  border-top-color: var(--navy);
+  border-right-color: var(--navy);
+  border-bottom-color: var(--navy);
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
@@ -1009,6 +1013,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .fleet-card-actions {
   display: flex;
+  align-items: center;
   gap: var(--sp-sm);
   margin-top: auto;
   padding-top: var(--sp-md);
