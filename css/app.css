@@ -465,6 +465,15 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-sm);
   color: rgba(255,255,255,0.4);
 }
+.points-remaining {
+  margin-left: auto;
+  font-size: var(--text-sm);
+  color: rgba(255,255,255,0.5);
+  font-weight: var(--weight-medium);
+}
+.points-remaining.points-over {
+  color: var(--danger, #c43c2f);
+}
 
 .points-track {
   width: 100%;

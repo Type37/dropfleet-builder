@@ -1112,6 +1112,12 @@ const App = (() => {
 
     document.getElementById('points-current').textContent = pts;
     document.getElementById('points-limit').textContent = limit === 99999 ? '∞' : limit;
+    const remainEl = document.getElementById('points-remaining');
+    if (remainEl && limit !== 99999) {
+      const rem = limit - pts;
+      remainEl.textContent = rem >= 0 ? `${rem} left` : `${Math.abs(rem)} over`;
+      remainEl.className = 'points-remaining' + (rem < 0 ? ' points-over' : '');
+    }
 
     const fill = document.getElementById('points-fill');
     fill.style.width = limit === 99999 ? '0%' : pct + '%';
@@ -1765,10 +1771,6 @@ const App = (() => {
         <button class="btn btn-danger btn-sm" onclick="App.removeGroup('${group.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
       </div>
     </div>
-    ${sizeInfo.max !== 99999 ? `<div class="group-budget-bar ${budgetClass}">
-      <span class="group-budget-label">${fleetPts} / ${sizeInfo.max} pts</span>
-      <span class="group-budget-remaining">${remaining >= 0 ? remaining + ' pts remaining' : Math.abs(remaining) + ' pts over budget'}</span>
-    </div>` : ''}
     ${groupWarnings}`;
 
     if (group.ships.length > 0) {
