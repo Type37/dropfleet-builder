@@ -14,6 +14,7 @@ const App = (() => {
   let activeCategory = 'all';
   let activeFilters = new Set();  // 'launch', 'loadout', 'rare', 'unique'
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
+  let settings = { showAuxiliaries: true };  // fleet builder settings
 
   // Game sizes per rulebook Section 4.2. maxAdmiralLevel is the highest admiral
   // level permitted at this game size (not a cap on the number of admirals —
@@ -58,6 +59,7 @@ const App = (() => {
       console.error('Failed to load fleet data:', e);
     }
 
+    loadSettings();
     loadFleets();
     setupRouting();
     window.dispatchEvent(new Event('hashchange'));
@@ -1274,6 +1276,11 @@ const App = (() => {
       }
     });
 
+    // Hide auxiliary/mercenary ships when setting is off
+    if (!settings.showAuxiliaries) {
+      ships = ships.filter(s => s.data.image);
+    }
+
     // Apply active filters (AND logic — ship must pass all active filters)
     if (activeFilters.size > 0) {
       ships = ships.filter(s => {
@@ -1837,6 +1844,39 @@ const App = (() => {
     return text;
   }
 
+  // ── Settings ──
+  function openSettings() {
+    const body = document.getElementById('settings-body');
+    body.innerHTML = `
+      <div class="settings-group">
+        <div class="settings-group-title">Ship Selection</div>
+        <label class="settings-toggle">
+          <span class="settings-toggle-label">
+            <span class="settings-toggle-name">Show Auxiliary Ships</span>
+            <span class="settings-toggle-desc">Display mercenary and auxiliary ships (transports, barges, etc.) in the ship selection grid</span>
+          </span>
+          <input type="checkbox" ${settings.showAuxiliaries ? 'checked' : ''} onchange="App.toggleSetting('showAuxiliaries', this.checked)">
+          <span class="settings-toggle-switch"></span>
+        </label>
+      </div>
+    `;
+    openModal('modal-settings');
+  }
+
+  function toggleSetting(key, value) {
+    settings[key] = value;
+    // Persist to localStorage
+    try { localStorage.setItem('dfc_settings', JSON.stringify(settings)); } catch(e) {}
+    showToast(value ? 'Setting enabled' : 'Setting disabled');
+  }
+
+  function loadSettings() {
+    try {
+      const saved = localStorage.getItem('dfc_settings');
+      if (saved) Object.assign(settings, JSON.parse(saved));
+    } catch(e) {}
+  }
+
   // ── Modals ──
   function openModal(id) {
     const modal = document.getElementById(id);
@@ -2167,6 +2207,6 @@ const App = (() => {
     loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup,
     openShipSelectModal, filterCategory, toggleShipFilter, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
     openAdmiralModal, selectAdmiral, selectGenericAdmiral, selectFamousAdmiral, toggleSidebar, printFleet, shareFleet,
-    openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize
+    openSettings, toggleSetting, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize
   };
 })();
