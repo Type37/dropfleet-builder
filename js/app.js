@@ -2772,19 +2772,44 @@ const App = (() => {
       return;
     }
 
-    let html = admirals.map((a, i) => `
-    <div class="admiral-card" style="margin-bottom:var(--sp-sm)">
-      <div class="flex items-center justify-between">
-        <div>
-          <div class="admiral-name">${esc(a.name)}</div>
-          <div class="admiral-level">Level ${a.level || '?'}${a.type !== 'Generic' ? ' · ' + a.type : ''}</div>
+    let html = admirals.map((a, i) => {
+      let flagshipHtml = '';
+      if (a.type === 'Famous' && a.shipKey) {
+        const factionShips = shipDB[currentFleet.faction];
+        const admiralGroup = factionShips?.groups?.famous_admirals;
+        const flagship = admiralGroup?.ships?.[a.shipKey];
+        if (flagship && flagship.weapons) {
+          const img = flagship.image ? `<img src="${esc(flagship.image)}" alt="" style="height:48px;width:auto;object-fit:contain;border-radius:var(--radius-sm)" loading="lazy" onerror="this.style.display='none'">` : '';
+          const statsKeys = ['scan','sig','thrust','hull','es','ks','bs','g'];
+          const statLine = statsKeys.map(k => flagship[k] !== undefined && flagship[k] !== 0 ? `${STAT_META[k].label}:${flagship[k]}` : '').filter(Boolean).join(' · ');
+          const wpnLine = flagship.weapons.map(w => `${esc(w.name)} (${w.arc} ${w.attack}A Lk${w.lock})`).join(', ');
+          flagshipHtml = `<div style="margin-top:var(--sp-sm);padding:var(--sp-sm);background:var(--surface);border:1px solid var(--stroke-light);border-radius:var(--radius-sm)">
+            <div class="flex gap-sm items-center">
+              ${img}
+              <div style="min-width:0">
+                <div style="font-weight:var(--weight-semibold);font-size:var(--text-sm)">${esc(flagship.tonnage || '')} Flagship</div>
+                <div style="font-size:var(--text-xs);color:var(--ink-muted)">${statLine}</div>
+                <div style="font-size:var(--text-xs);color:var(--ink-muted);margin-top:2px">${wpnLine}</div>
+              </div>
+            </div>
+          </div>`;
+        }
+      }
+      return `
+      <div class="admiral-card" style="margin-bottom:var(--sp-sm)">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="admiral-name">${esc(a.name)}</div>
+            <div class="admiral-level">Level ${a.level || '?'}${a.type !== 'Generic' ? ' · ' + a.type : ''}</div>
+          </div>
+          <span class="badge badge-gold">${a.points} pts</span>
         </div>
-        <span class="badge badge-gold">${a.points} pts</span>
-      </div>
-      <div class="flex gap-xs" style="margin-top:var(--sp-sm)">
-        <button class="btn btn-danger btn-sm" onclick="App.removeAdmiral(${i})"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
-      </div>
-    </div>`).join('');
+        ${flagshipHtml}
+        <div class="flex gap-xs" style="margin-top:var(--sp-sm)">
+          <button class="btn btn-danger btn-sm" onclick="App.removeAdmiral(${i})"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
+        </div>
+      </div>`;
+    }).join('');
 
     html += `
     <div class="add-ship-area" onclick="App.openAdmiralModal()" style="padding:var(--sp-sm) var(--sp-lg);min-height:40px;margin-top:var(--sp-xs)">
