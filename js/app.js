@@ -303,6 +303,17 @@ const App = (() => {
   function loadFleets() {
     try { fleets = JSON.parse(localStorage.getItem('dfc_fleets') || '[]'); }
     catch { fleets = []; }
+
+    // Migrate legacy single-admiral → admirals array
+    let migrated = false;
+    fleets.forEach(f => {
+      if (!Array.isArray(f.admirals)) {
+        f.admirals = f.admiral ? [f.admiral] : [];
+        delete f.admiral;
+        migrated = true;
+      }
+    });
+    if (migrated) saveFleets();
   }
 
   function saveFleets() {
@@ -331,11 +342,15 @@ const App = (() => {
         })
       }))
     };
-    if (fleet.admiral) {
-      mini.a = { n: fleet.admiral.name, p: fleet.admiral.points };
-      if (fleet.admiral.admiralId) mini.a.i = fleet.admiral.admiralId;
-      if (fleet.admiral.shipKey) mini.a.k = fleet.admiral.shipKey;
-      if (fleet.admiral.level) mini.a.l = fleet.admiral.level;
+    if (fleet.admirals && fleet.admirals.length > 0) {
+      mini.as = fleet.admirals.map(adm => {
+        const a = { n: adm.name, p: adm.points };
+        if (adm.admiralId) a.i = adm.admiralId;
+        if (adm.shipKey) a.k = adm.shipKey;
+        if (adm.level) a.l = adm.level;
+        if (adm.type) a.t = adm.type;
+        return a;
+      });
     }
     const json = JSON.stringify(mini);
     // base64url encode (no padding, URL-safe chars)
@@ -358,7 +373,7 @@ const App = (() => {
         gameSize: mini.s || 'clash',
         pointsLimit: (GAME_SIZES[mini.s] || GAME_SIZES.clash).max,
         maxGroups: (GAME_SIZES[mini.s] || GAME_SIZES.clash).groups,
-        admiral: null,
+        admirals: [],
         battleGroups: (mini.g || []).map(g => ({
           id: uuid(),
           name: g.n || 'Group',
@@ -374,14 +389,24 @@ const App = (() => {
         updatedAt: Date.now()
       };
 
-      if (mini.a) {
-        fleet.admiral = {
+      // Decode admirals array (new format) or legacy single admiral
+      if (mini.as && mini.as.length > 0) {
+        fleet.admirals = mini.as.map(a => ({
+          name: a.n,
+          points: a.p || 0,
+          admiralId: a.i || null,
+          shipKey: a.k || null,
+          level: a.l || 1,
+          type: a.t || 'Generic'
+        }));
+      } else if (mini.a) {
+        fleet.admirals = [{
           name: mini.a.n,
           points: mini.a.p || 0,
           admiralId: mini.a.i || null,
           shipKey: mini.a.k || null,
           level: mini.a.l || 1
-        };
+        }];
       }
 
       return fleet;
@@ -560,7 +585,7 @@ const App = (() => {
       gameSize,
       pointsLimit: sizeInfo.max,
       maxGroups: sizeInfo.groups,
-      admiral: null,
+      admirals: [],
       battleGroups: [],
       createdAt: Date.now(),
       updatedAt: Date.now()
@@ -682,7 +707,7 @@ const App = (() => {
       const fleet = {
         id: uuid(), name: spec.name, description: spec.desc,
         faction: spec.faction, gameSize: 'clash', pointsLimit: 2000, maxGroups: 20,
-        admiral: null, battleGroups, createdAt: Date.now(), updatedAt: Date.now()
+        admirals: [], battleGroups, createdAt: Date.now(), updatedAt: Date.now()
       };
       fleets.push(fleet);
     });
@@ -815,14 +840,20 @@ const App = (() => {
       }
     });
 
-    // 6. Admiral level check
-    if (fleet.admiral) {
-      const admLvl = fleet.admiral.level || 0;
+    // 6. Admiral checks
+    const admirals = fleet.admirals || [];
+    let famousCount = 0;
+    admirals.forEach(adm => {
+      const admLvl = adm.level || 0;
       // Level 5 Famous Admirals count as Level 4 for game-size restrictions
       const effectiveLvl = admLvl >= 5 ? 4 : admLvl;
       if (effectiveLvl > sizeInfo.maxAdmiralLevel) {
-        warnings.push({ type: 'error', msg: `Admiral Lv${admLvl} exceeds max Lv${sizeInfo.maxAdmiralLevel} for ${sizeInfo.label}` });
+        warnings.push({ type: 'error', msg: `${adm.name} (Lv${admLvl}) exceeds max Lv${sizeInfo.maxAdmiralLevel} for ${sizeInfo.label}` });
       }
+      if (adm.type === 'Famous') famousCount++;
+    });
+    if (famousCount > 1) {
+      warnings.push({ type: 'error', msg: `Only one Famous/Faction Admiral per fleet (you have ${famousCount})` });
     }
 
     return warnings;
@@ -846,7 +877,7 @@ const App = (() => {
 
   function calcFleetPoints(fleet) {
     let total = 0;
-    if (fleet.admiral) total += fleet.admiral.points || 0;
+    (fleet.admirals || []).forEach(a => { total += a.points || 0; });
     fleet.battleGroups.forEach(g => {
       g.ships.forEach(s => { total += s.points || 0; });
     });
@@ -1588,18 +1619,20 @@ const App = (() => {
     }
   }
 
-  // ── Admiral ──
-  // TODO: The current implementation stores a single `admiral` object on each
-  // fleet. Per rulebook Section 4.2.1, you may take ANY NUMBER of admirals —
-  // each assigned to a Capital Ship (Medium/Heavy/Colossal). The only
-  // restriction is that you may only include ONE Famous or Faction Admiral per
-  // fleet. To support this properly, `fleet.admiral` should become an
-  // `fleet.admirals` array, the admiral slot UI should allow adding/removing
-  // multiple admirals, and calcFleetPoints should sum all admiral costs.
+  // ── Admirals ──
+  // Per rulebook Section 4.2.1, you may take ANY NUMBER of admirals — each
+  // assigned to a Capital Ship (Medium/Heavy/Colossal). The only restriction is
+  // that you may only include ONE Famous or Faction Admiral per fleet. Admirals
+  // are stored as `fleet.admirals` (array).
   function getAdmiralLevelCost(level) {
     if (!rawFleetData || !rawFleetData.gameSystem || !rawFleetData.gameSystem.admiralLevels) return 0;
     const entry = rawFleetData.gameSystem.admiralLevels.find(a => a.level === level);
     return entry ? entry.cost : 0;
+  }
+
+  function hasFamousAdmiral() {
+    if (!currentFleet) return false;
+    return (currentFleet.admirals || []).some(a => a.type === 'Famous');
   }
 
   function openAdmiralModal() {
@@ -1611,6 +1644,7 @@ const App = (() => {
     const maxLevel = sizeInfo.maxAdmiralLevel || 4;
     const genericAdmirals = (factionShips.admirals || []).filter(a => !a.isFamous);
     const admiralGroup = factionShips.groups?.famous_admirals;
+    const alreadyHasFamous = hasFamousAdmiral();
 
     const container = document.getElementById('admiral-options');
 
@@ -1620,15 +1654,6 @@ const App = (() => {
       You may take any number of Admirals. Each must be assigned to a Capital Ship
       (Medium, Heavy, or Colossal tonnage). Only one Famous or Faction Admiral is
       allowed per fleet. Admiral level is capped at Lv${maxLevel} for ${sizeInfo.label} games.
-    </div>
-    <div class="card card-interactive" onclick="App.selectAdmiral(null)" style="padding:var(--sp-lg)">
-      <div class="flex items-center gap-md">
-        <span style="font-size:var(--text-md);opacity:0.5;font-weight:600">&mdash;</span>
-        <div>
-          <div style="font-weight:var(--weight-semibold)">No Admiral</div>
-          <div class="text-caption">Run your fleet without an admiral</div>
-        </div>
-      </div>
     </div>`;
 
     if (genericAdmirals.length > 0) {
@@ -1653,7 +1678,7 @@ const App = (() => {
             <div class="admiral-name">${esc(adm.name)}</div>
             <div class="admiral-level" style="margin-bottom:var(--sp-sm)">Base Level ${baseLevel} · ${esc(baseCost)} pts</div>
             <div class="flex gap-sm flex-wrap" style="margin-bottom:var(--sp-sm)">${levelOptions}</div>
-            <button class="btn btn-primary btn-sm" onclick="App.selectGenericAdmiral('${adm.id}', this)">Select</button>
+            <button class="btn btn-primary btn-sm" onclick="App.addGenericAdmiral('${adm.id}', this)">Add to Fleet</button>
           </div>
           ${abilities.length > 0 ? `<div style="margin-top:var(--sp-sm);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.description ? ': ' + esc(a.description) : ''}</div>`).join('')}</div>` : ''}
         </div>`;
@@ -1662,10 +1687,14 @@ const App = (() => {
 
     if (admiralGroup && admiralGroup.ships && Object.keys(admiralGroup.ships).length > 0) {
       html += `<div style="margin-top:var(--sp-lg);margin-bottom:var(--sp-sm);font-weight:var(--weight-semibold);font-size:var(--text-sm);text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-muted)">Famous Admirals</div>`;
+      if (alreadyHasFamous) {
+        html += `<div style="margin-bottom:var(--sp-sm);padding:var(--sp-sm) var(--sp-md);background:var(--gold-subtle);border:1px solid var(--gold-line);border-radius:var(--radius-sm);font-size:var(--text-sm);color:var(--gold-dark)">Your fleet already has a Famous Admiral. Only one is allowed per fleet.</div>`;
+      }
       Object.entries(admiralGroup.ships).forEach(([key, admiral]) => {
         const abilities = admiral.special_abilities || [];
+        const disabled = alreadyHasFamous;
         html += `
-        <div class="admiral-card card-interactive" onclick="App.selectFamousAdmiral('${key}')" style="cursor:pointer">
+        <div class="admiral-card card-interactive${disabled ? ' disabled' : ''}" ${disabled ? '' : `onclick="App.addFamousAdmiral('${key}')"`} style="cursor:${disabled ? 'not-allowed' : 'pointer'};${disabled ? 'opacity:0.5;' : ''}">
           <div class="flex gap-md items-start">
             ${admiral.image ? `<div class="ship-card-image"><img src="${esc(admiral.image)}" alt="${esc(admiral.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
             <div style="flex:1;min-width:0">
@@ -1687,8 +1716,9 @@ const App = (() => {
     openModal('modal-admiral');
   }
 
-  function selectGenericAdmiral(admiralId, btn) {
+  function addGenericAdmiral(admiralId, btn) {
     if (!currentFleet) return;
+    if (!currentFleet.admirals) currentFleet.admirals = [];
     const factionShips = shipDB[currentFleet.faction];
     const adm = (factionShips.admirals || []).find(a => a.id === admiralId);
     if (!adm) return;
@@ -1698,13 +1728,13 @@ const App = (() => {
     const level = checked ? parseInt(checked.value) : adm.level;
     const cost = checked ? parseInt(checked.dataset.cost) : adm.cost;
 
-    currentFleet.admiral = {
+    currentFleet.admirals.push({
       admiralId,
       name: adm.name,
       points: cost,
       level,
       type: 'Generic'
-    };
+    });
 
     saveFleets();
     closeModal('modal-admiral');
@@ -1712,20 +1742,23 @@ const App = (() => {
     updatePoints();
   }
 
-  function selectFamousAdmiral(shipKey) {
+  function addFamousAdmiral(shipKey) {
     if (!currentFleet) return;
+    if (!currentFleet.admirals) currentFleet.admirals = [];
+    if (hasFamousAdmiral()) return; // enforce one Famous max
+
     const factionShips = shipDB[currentFleet.faction];
     const admiralGroup = factionShips.groups?.famous_admirals;
     const admiral = admiralGroup?.ships?.[shipKey];
     if (!admiral) return;
 
-    currentFleet.admiral = {
+    currentFleet.admirals.push({
       shipKey,
       name: admiral.name,
       points: admiral.points || 0,
       level: admiral.level,
       type: 'Famous'
-    };
+    });
 
     saveFleets();
     closeModal('modal-admiral');
@@ -1733,42 +1766,47 @@ const App = (() => {
     updatePoints();
   }
 
-  function selectAdmiral(shipKey) {
-    if (!currentFleet) return;
-    if (!shipKey) {
-      currentFleet.admiral = null;
-      saveFleets();
-      closeModal('modal-admiral');
-      renderAdmiralSlot();
-      updatePoints();
-    }
+  function removeAdmiral(index) {
+    if (!currentFleet || !currentFleet.admirals) return;
+    currentFleet.admirals.splice(index, 1);
+    saveFleets();
+    renderAdmiralSlot();
+    updatePoints();
   }
 
   function renderAdmiralSlot() {
     const slot = document.getElementById('admiral-slot');
-    if (!currentFleet || !currentFleet.admiral) {
+    if (!currentFleet) return;
+    const admirals = currentFleet.admirals || [];
+
+    if (admirals.length === 0) {
       slot.innerHTML = `
       <div class="add-ship-area" onclick="App.openAdmiralModal()" style="padding:var(--sp-lg);min-height:60px">
-        <span style="font-size:var(--text-sm)">+ Add Admiral</span>
+        <span style="font-size:var(--text-sm)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><circle cx="8" cy="5" r="3"/><path d="M2 15c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg> Add Admiral</span>
       </div>`;
       return;
     }
 
-    const a = currentFleet.admiral;
-    slot.innerHTML = `
-    <div class="admiral-card">
+    let html = admirals.map((a, i) => `
+    <div class="admiral-card" style="margin-bottom:var(--sp-sm)">
       <div class="flex items-center justify-between">
         <div>
           <div class="admiral-name">${esc(a.name)}</div>
-          <div class="admiral-level">Level ${a.level || '?'}</div>
+          <div class="admiral-level">Level ${a.level || '?'}${a.type === 'Famous' ? ' · Famous' : ''}</div>
         </div>
         <span class="badge badge-gold">${a.points} pts</span>
       </div>
       <div class="flex gap-xs" style="margin-top:var(--sp-sm)">
-        <button class="btn btn-ghost btn-sm" onclick="App.openAdmiralModal()">Change</button>
-        <button class="btn btn-danger btn-sm" onclick="App.selectAdmiral(null)">Remove</button>
+        <button class="btn btn-danger btn-sm" onclick="App.removeAdmiral(${i})"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
       </div>
+    </div>`).join('');
+
+    html += `
+    <div class="add-ship-area" onclick="App.openAdmiralModal()" style="padding:var(--sp-sm) var(--sp-lg);min-height:40px;margin-top:var(--sp-xs)">
+      <span style="font-size:var(--text-xs)">+ Add Another Admiral</span>
     </div>`;
+
+    slot.innerHTML = html;
   }
 
   // ── Print / Share ──
@@ -1789,11 +1827,11 @@ const App = (() => {
         <div class="print-fleet-meta">${esc(fName)} — ${sizeInfo.label} — ${pts} pts</div>
       </div>`;
 
-    // Admiral
-    if (f.admiral) {
+    // Admirals
+    if (f.admirals && f.admirals.length > 0) {
       html += `<div class="print-section">
-        <div class="print-section-title">Admiral</div>
-        <div class="print-admiral">${esc(f.admiral.name)} — ${f.admiral.points} pts</div>
+        <div class="print-section-title">Admiral${f.admirals.length > 1 ? 's' : ''}</div>
+        ${f.admirals.map(a => `<div class="print-admiral">${esc(a.name)} — Level ${a.level || '?'}${a.type === 'Famous' ? ' (Famous)' : ''} — ${a.points} pts</div>`).join('')}
       </div>`;
     }
 
@@ -1941,10 +1979,10 @@ const App = (() => {
       </div>
     `;
 
-    if (fleet.admiral) {
+    if (fleet.admirals && fleet.admirals.length > 0) {
       html += `<div class="shared-section">
-        <div class="shared-section-title">Admiral</div>
-        <div class="shared-admiral">${esc(fleet.admiral.name)} — ${fleet.admiral.points} pts</div>
+        <div class="shared-section-title">Admiral${fleet.admirals.length > 1 ? 's' : ''}</div>
+        ${fleet.admirals.map(a => `<div class="shared-admiral">${esc(a.name)} — Level ${a.level || '?'}${a.type === 'Famous' ? ' (Famous)' : ''} — ${a.points} pts</div>`).join('')}
       </div>`;
     }
 
@@ -2074,8 +2112,10 @@ const App = (() => {
     let text = `${fleet.name}\n${fName} - ${sizeInfo.label} (${pts} pts)\n`;
     text += '═'.repeat(40) + '\n';
 
-    if (fleet.admiral) {
-      text += `\nADMIRAL: ${fleet.admiral.name} (${fleet.admiral.points} pts)\n`;
+    if (fleet.admirals && fleet.admirals.length > 0) {
+      fleet.admirals.forEach(a => {
+        text += `\nADMIRAL: ${a.name} — Lv${a.level || '?'}${a.type === 'Famous' ? ' (Famous)' : ''} (${a.points} pts)\n`;
+      });
     }
 
     fleet.battleGroups.forEach(g => {
@@ -2473,7 +2513,7 @@ const App = (() => {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet,
     loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup,
     openShipSelectModal, filterCategory, toggleShipFilter, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
-    openAdmiralModal, selectAdmiral, selectGenericAdmiral, selectFamousAdmiral, toggleSidebar, printFleet,
+    openAdmiralModal, addGenericAdmiral, addFamousAdmiral, removeAdmiral, toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, importSharedFleet,
     openSettings, toggleSetting, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize
   };
