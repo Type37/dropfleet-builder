@@ -1889,11 +1889,10 @@ const App = (() => {
 
   const WEAPON_TYPE_LABELS = { K: 'Kinetic', E: 'Energy', C: 'Core' };
 
-  // Weapon type inline icons — 14px, used in weapon row type column
   const WEAPON_TYPE_ICONS = {
-    K: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l1.5 5H15l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5.5z"/></svg>',
-    E: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M9 1L4 8h4l-1 7 6-8H9l1-6z"/></svg>',
-    C: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>'
+    K: '<svg width="14" height="14" viewBox="0 0 16 16" fill="#0057A3"><path d="M8 1l1.5 5H15l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5.5z"/></svg>',
+    E: '<svg width="14" height="14" viewBox="0 0 16 16" fill="#92400E"><path d="M9 1L4 8h4l-1 7 6-8H9l1-6z"/></svg>',
+    C: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#c43c2f" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>'
   };
 
   const ARC_LABELS = {
@@ -1920,16 +1919,15 @@ const App = (() => {
     'R': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,81.1A44,44 0 0,1 18.9,81.1Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>'
   };
 
-  // Inline SVG icons for stat cells — monochrome, 12px, geometric/Art Deco
   const STAT_ICONS = {
-    scan:   '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><path d="M8 8L12 4"/><circle cx="8" cy="8" r="1.5" fill="currentColor" stroke="none"/></svg>',
-    sig:    '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l8 8M12 4l-8 8"/><circle cx="8" cy="8" r="2" fill="currentColor" stroke="none"/></svg>',
-    thrust: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l4 6H4l4-6z"/><path d="M6 10l2 4 2-4"/></svg>',
-    hull:   '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5L14 5v6l-6 3.5L2 11V5L8 1.5z"/></svg>',
-    es:     '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1C5 1 3 3 3 3v5c0 3 5 6 5 6s5-3 5-6V3s-2-2-5-2z"/><path d="M8 5v4M6 7h4"/></svg>',
-    ks:     '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1C5 1 3 3 3 3v5c0 3 5 6 5 6s5-3 5-6V3s-2-2-5-2z"/><path d="M6 6l4 4M10 6l-4 4"/></svg>',
-    bs:     '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1C5 1 3 3 3 3v5c0 3 5 6 5 6s5-3 5-6V3s-2-2-5-2z"/></svg>',
-    g:      '<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><circle cx="5" cy="8" r="2"/><circle cx="11" cy="8" r="2"/></svg>'
+    scan:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3,12 A9,9 0 0,1 21,12"/><path d="M7,12 A5,5 0 0,1 17,12"/><circle cx="12" cy="12" fill="currentColor" r="1.5" stroke="none"/></svg>',
+    sig:    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="11"/></svg>',
+    thrust: '<svg width="14" height="14" viewBox="0 0 24 24"><polygon fill="currentColor" points="4,4 20,12 4,20 8,12"/></svg>',
+    hull:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/></svg>',
+    es:     '<svg width="14" height="14" viewBox="0 0 16 22"><rect fill="#FAECC8" height="24" rx="2.5" width="18" x="-1" y="-1"/><path d="M8,0.5 C8,0.5 0.5,3.5 0.5,3.5L0.5,10.5 C0.5,16 8,21.5 8,21.5 C8,21.5 15.5,16 15.5,10.5L15.5,3.5Z" fill="#1C1A17"/><path d="M8.5,4.5 L5,11 L7.5,11 L6,18.5 L12,9.5 L9,9.5 L11,4.5Z" fill="#FAECC8"/></svg>',
+    ks:     '<svg width="14" height="14" viewBox="0 0 16 22"><rect fill="#D0E4FF" height="24" rx="2.5" width="18" x="-1" y="-1"/><path d="M5.5,0 L10.5,0 L10.5,3 L5.5,3Z" fill="#1C1A17"/><path d="M3,3 C1,5 0,8 0,11L0,15 L3,15 L3,18 C3,20 5.5,21.5 8,21.5 C10.5,21.5 13,20 13,18L13,15 L16,15 L16,11 C16,8 15,5 13,3Z" fill="#1C1A17"/><rect fill="#D0E4FF" height="2" rx="0.5" width="7" x="4.5" y="10"/><rect fill="#D0E4FF" height="7" rx="0.5" width="2" x="7" y="10"/></svg>',
+    bs:     '<svg width="14" height="14" viewBox="0 0 16 22"><rect fill="#E8E5DF" height="24" rx="2.5" width="18" x="-1" y="-1"/><path d="M8,1 C8,1 1,4 1,4L1,11 C1,16.5 8,21 8,21 C8,21 15,16.5 15,11L15,4Z" fill="none" stroke="#1C1A17" stroke-width="1.5"/><line stroke="#1C1A17" stroke-linecap="round" stroke-width="1.2" x1="4" x2="12" y1="11" y2="11"/></svg>',
+    g:      '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="5" cy="8" r="2.5"/><circle cx="11" cy="8" r="2.5"/></svg>'
   };
 
   const STAT_META = {
