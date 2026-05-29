@@ -270,6 +270,22 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+}
+.topbar-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.5);
+  padding: 2px;
+  border-radius: var(--radius-sm);
+  transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
+}
+.topbar-back:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.12);
 }
 
 .topbar-actions {

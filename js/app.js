@@ -381,7 +381,7 @@ const App = (() => {
           currentFleet = fleets.find(f => f.id === param);
           if (currentFleet) {
             show('view-builder');
-            topContext.textContent = currentFleet.name;
+            topContext.innerHTML = `<a href="#fleets" class="topbar-back" onclick="App.navigate('fleets'); return false;"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> ${esc(currentFleet.name)}`;
             topActions.innerHTML = `
               <button class="btn btn-ghost btn-sm topbar-action-btn" onclick="App.shareFleet()" data-tooltip="Share">
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="8" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="12" cy="12" r="2"/><path d="M6 7l4-2M6 9l4 2"/></svg>
@@ -1205,7 +1205,7 @@ const App = (() => {
       if (val && val !== current) {
         currentFleet.name = val;
         saveFleets();
-        document.getElementById('topbar-context').textContent = val;
+        document.getElementById('topbar-context').innerHTML = `<a href="#fleets" class="topbar-back" onclick="App.navigate('fleets'); return false;"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> ${esc(val)}`;
         showToast('Fleet renamed');
       }
       nameEl.textContent = currentFleet.name;
