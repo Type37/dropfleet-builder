@@ -1658,6 +1658,17 @@ h1, h2, h3, h4, h5, h6 {
   height: 120px;
 }
 
+/* Compact view — smaller cards, no stat/weapon detail */
+.group-ship-entry.compact {
+  padding: var(--sp-md);
+  padding-left: calc(var(--sp-md) - 2px);
+  gap: var(--sp-md);
+}
+.group-ship-entry.compact .ship-card-image {
+  width: 64px;
+  height: 64px;
+}
+
 .group-ship-remove {
   position: absolute;
   top: var(--sp-sm);

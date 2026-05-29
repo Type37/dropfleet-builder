@@ -14,7 +14,7 @@ const App = (() => {
   let activeCategory = 'all';
   let activeFilters = new Set();  // 'launch', 'loadout', 'rare', 'unique'
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAuxiliaries: true };  // fleet builder settings
+  let settings = { showAuxiliaries: true, compactView: false, autoExpandLore: false };
 
   // Game sizes per rulebook Section 4.2. maxAdmiralLevel is the highest admiral
   // level permitted at this game size (not a cap on the number of admirals —
@@ -1158,14 +1158,17 @@ const App = (() => {
     const loreText = dbShip ? dbShip.lore : '';
     if (loreText) {
       const loreId = `lore-${ship.id}`;
-      loreHtml = `<details class="ship-lore no-print" id="${loreId}">
+      const openAttr = settings.autoExpandLore ? ' open' : '';
+      loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
         <div class="ship-lore-text">${esc(loreText)}</div>
       </details>`;
     }
 
+    const compact = settings.compactView;
+
     return `
-    <div class="group-ship-entry animate-in">
+    <div class="group-ship-entry animate-in${compact ? ' compact' : ''}">
       ${img ? `<div class="ship-card-image"><img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
       <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
         <div class="flex items-center justify-between">
@@ -1175,12 +1178,12 @@ const App = (() => {
           </div>
           <div class="ship-card-cost">${ship.points} pts</div>
         </div>
-        ${statsHtml}
-        ${weaponsHtml}
-        ${loadoutsHtml}
-        ${loadsHtml}
+        ${compact ? '' : statsHtml}
+        ${compact ? '' : weaponsHtml}
+        ${compact ? '' : loadoutsHtml}
+        ${compact ? '' : loadsHtml}
         ${rulesHtml}
-        ${loreHtml}
+        ${compact ? '' : loreHtml}
       </div>
       <button class="btn btn-ghost btn-icon btn-sm group-ship-remove" onclick="App.removeShip('${groupId}','${ship.id}')" data-tooltip="Remove ship">✕</button>
     </div>`;
@@ -1859,15 +1862,35 @@ const App = (() => {
           <span class="settings-toggle-switch"></span>
         </label>
       </div>
+      <div class="settings-group">
+        <div class="settings-group-title">Builder Display</div>
+        <label class="settings-toggle">
+          <span class="settings-toggle-label">
+            <span class="settings-toggle-name">Compact View</span>
+            <span class="settings-toggle-desc">Hide weapon tables and launch assets in the fleet builder for a denser overview</span>
+          </span>
+          <input type="checkbox" ${settings.compactView ? 'checked' : ''} onchange="App.toggleSetting('compactView', this.checked)">
+          <span class="settings-toggle-switch"></span>
+        </label>
+        <label class="settings-toggle">
+          <span class="settings-toggle-label">
+            <span class="settings-toggle-name">Auto-expand Lore</span>
+            <span class="settings-toggle-desc">Automatically show flavour text on ship cards instead of requiring a click</span>
+          </span>
+          <input type="checkbox" ${settings.autoExpandLore ? 'checked' : ''} onchange="App.toggleSetting('autoExpandLore', this.checked)">
+          <span class="settings-toggle-switch"></span>
+        </label>
+      </div>
     `;
     openModal('modal-settings');
   }
 
   function toggleSetting(key, value) {
     settings[key] = value;
-    // Persist to localStorage
     try { localStorage.setItem('dfc_settings', JSON.stringify(settings)); } catch(e) {}
     showToast(value ? 'Setting enabled' : 'Setting disabled');
+    // Re-render if display-affecting settings changed
+    if (key === 'compactView' || key === 'autoExpandLore') renderBuilder();
   }
 
   function loadSettings() {
