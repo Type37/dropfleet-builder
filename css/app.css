@@ -498,6 +498,32 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-sm);
 }
 
+.group-nav-reorder {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-left: auto;
+  margin-right: 4px;
+}
+.group-move-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+  border-radius: 2px;
+  transition: color var(--duration-fast), background var(--duration-fast);
+}
+.group-move-btn:hover:not(:disabled) {
+  color: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.1);
+}
+.group-move-btn:disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+
 /* ── 7. Buttons ──────────────────────────────────────────────── */
 .btn {
   display: inline-flex;

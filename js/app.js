@@ -1006,12 +1006,21 @@ const App = (() => {
       return;
     }
 
+    const total = currentFleet.battleGroups.length;
     nav.innerHTML = currentFleet.battleGroups.map((g, i) => {
       const shipCount = g.ships.length;
       const groupPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
+      const isActive = g.id === activeGroupId;
+      const reorderBtns = isActive && total > 1
+        ? `<span class="group-nav-reorder" onclick="event.stopPropagation()">
+            <button class="group-move-btn" onclick="App.moveGroup('${g.id}',-1)" ${i === 0 ? 'disabled' : ''} title="Move up"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10l4-4 4 4"/></svg></button>
+            <button class="group-move-btn" onclick="App.moveGroup('${g.id}',1)" ${i === total - 1 ? 'disabled' : ''} title="Move down"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg></button>
+           </span>`
+        : '';
       return `
-      <div class="group-nav-item ${g.id === activeGroupId ? 'active' : ''}" onclick="App.selectGroup('${g.id}')">
+      <div class="group-nav-item ${isActive ? 'active' : ''}" onclick="App.selectGroup('${g.id}')">
         <div class="group-nav-name">${esc(g.name)}</div>
+        ${reorderBtns}
         <span class="text-caption" style="white-space:nowrap">${groupPts}pts</span>
         <span class="group-nav-count">${shipCount}</span>
       </div>`;
@@ -1054,6 +1063,19 @@ const App = (() => {
       renderActiveGroup();
       updatePoints();
     });
+  }
+
+  function moveGroup(gid, direction) {
+    if (!currentFleet) return;
+    const groups = currentFleet.battleGroups;
+    const idx = groups.findIndex(g => g.id === gid);
+    if (idx < 0) return;
+    const newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= groups.length) return;
+    // Swap
+    [groups[idx], groups[newIdx]] = [groups[newIdx], groups[idx]];
+    saveFleets();
+    renderGroupsNav();
   }
 
   function editFleetName() {
@@ -2812,7 +2834,7 @@ const App = (() => {
   // ── Public API ──
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName,
-    loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup,
+    loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup, moveGroup,
     openShipSelectModal, filterCategory, toggleShipFilter, searchShips, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
     openAdmiralModal, addGenericAdmiral, addFamousAdmiral, removeAdmiral, toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, importSharedFleet,
