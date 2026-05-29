@@ -1952,10 +1952,16 @@ const App = (() => {
     // Collect all special rules used across the fleet for the rules glossary
     const rulesGlossary = {};
 
+    // Fleet composition summary
+    const totalShips = f.battleGroups.reduce((t, g) => t + g.ships.length, 0);
+    const totalGroups = f.battleGroups.length;
+    const admCount = (f.admirals || []).length;
+
     let html = `<div class="print-fleet">
       <div class="print-header">
         <div class="print-fleet-name">${esc(f.name)}</div>
         <div class="print-fleet-meta">${esc(fName)} — ${sizeInfo.label} — ${pts} pts</div>
+        <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''} · ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}</div>
       </div>`;
 
     // Admirals
@@ -2018,11 +2024,16 @@ const App = (() => {
           }
         });
 
-        // Loads
-        const loads = db.loads || [];
+        // Loads (base + selected loadout options)
+        const allLoads = [...(db.loads || [])];
+        (db.loadoutOptions || []).forEach((lo, loIdx) => {
+          const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
+          const selOpt = lo.options[selIdx];
+          if (selOpt && selOpt.loads) allLoads.push(...selOpt.loads);
+        });
         let loadsHtml = '';
-        if (loads.length > 0) {
-          loadsHtml = loads.map(l => {
+        if (allLoads.length > 0) {
+          loadsHtml = allLoads.map(l => {
             allLaunchAssetNames.add(l.name);
             return `<span class="print-load">${esc(l.name)} (Launch ${l.launch}${l.special && l.special !== '-' ? ', ' + l.special : ''})</span>`;
           }).join(' ');
