@@ -642,6 +642,94 @@ const App = (() => {
 
     f.updatedAt = Date.now();
     saveFleets();
+
+    // Run fleet validation and display warnings
+    renderFleetWarnings();
+  }
+
+  // ── Fleet Validation ──
+  // Returns an array of {type: 'error'|'warn', message} for display
+  function validateFleet(fleet) {
+    if (!fleet) return [];
+    const warnings = [];
+    const sizeInfo = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
+    const pts = calcFleetPoints(fleet);
+
+    // 1. Points range
+    if (pts > sizeInfo.max && sizeInfo.max !== 99999) {
+      warnings.push({ type: 'error', msg: `Over budget: ${pts}/${sizeInfo.max} pts` });
+    } else if (pts < sizeInfo.min && fleet.battleGroups.length > 0) {
+      warnings.push({ type: 'warn', msg: `Under minimum: ${pts}/${sizeInfo.min} pts` });
+    }
+
+    // 2. Group count
+    if (fleet.battleGroups.length > sizeInfo.groups) {
+      warnings.push({ type: 'error', msg: `Too many groups: ${fleet.battleGroups.length}/${sizeInfo.groups}` });
+    }
+
+    // 3. Colossal group limit
+    const colossalMax = sizeInfo.colossalMax ?? 99;
+    const colossalGroups = fleet.battleGroups.filter(g => {
+      if (g.ships.length === 0) return false;
+      const s = g.ships[0];
+      const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
+      return db && (db.category === 'colossal' || s.groupCategory === 'colossal');
+    });
+    if (colossalGroups.length > colossalMax) {
+      warnings.push({ type: 'error', msg: `Too many Colossal groups: ${colossalGroups.length}/${colossalMax}` });
+    }
+
+    // 4. Unique ship limit (max 1 group per unique ship)
+    // 5. Rare ship limit (scales with game size: skirmish 1, clash 2, battle 3, reconquest 4)
+    const rareMax = { skirmish: 1, clash: 2, battle: 3, reconquest: 4 }[fleet.gameSize] || 2;
+    const shipGroupCounts = {};
+    fleet.battleGroups.forEach(g => {
+      if (g.ships.length === 0) return;
+      const s = g.ships[0];
+      const key = `${s.groupCategory}:${s.shipKey}`;
+      if (!shipGroupCounts[key]) {
+        const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
+        shipGroupCounts[key] = { count: 0, name: db ? db.name : s.shipKey, isRare: db?.isRare, isUnique: db?.isUnique };
+      }
+      shipGroupCounts[key].count++;
+    });
+
+    Object.values(shipGroupCounts).forEach(info => {
+      if (info.isUnique && info.count > 1) {
+        warnings.push({ type: 'error', msg: `${info.name} is Unique — max 1 group` });
+      }
+      if (info.isRare && info.count > rareMax) {
+        warnings.push({ type: 'error', msg: `${info.name} is Rare — max ${rareMax} group${rareMax > 1 ? 's' : ''} at ${sizeInfo.label}` });
+      }
+    });
+
+    // 6. Admiral level check
+    if (fleet.admiral) {
+      const admLvl = fleet.admiral.level || 0;
+      // Level 5 Famous Admirals count as Level 4 for game-size restrictions
+      const effectiveLvl = admLvl >= 5 ? 4 : admLvl;
+      if (effectiveLvl > sizeInfo.maxAdmiralLevel) {
+        warnings.push({ type: 'error', msg: `Admiral Lv${admLvl} exceeds max Lv${sizeInfo.maxAdmiralLevel} for ${sizeInfo.label}` });
+      }
+    }
+
+    return warnings;
+  }
+
+  function renderFleetWarnings() {
+    const el = document.getElementById('fleet-warnings');
+    if (!el || !currentFleet) { if (el) el.innerHTML = ''; return; }
+
+    const warnings = validateFleet(currentFleet);
+    if (warnings.length === 0) {
+      el.innerHTML = '';
+      return;
+    }
+
+    el.innerHTML = warnings.map(w => {
+      const icon = w.type === 'error' ? '⚠' : 'ℹ';
+      return `<div class="fleet-warning fleet-warning-${w.type}">${icon} ${esc(w.msg)}</div>`;
+    }).join('');
   }
 
   function calcFleetPoints(fleet) {
@@ -1195,6 +1283,42 @@ const App = (() => {
       // Create a brand-new group with this ship and close the modal
       const dbShip = findShipInDB(currentFleet.faction, category, shipKey);
       if (!dbShip) return;
+      const sizeInfo = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
+
+      // Validate colossal limit
+      if (category === 'colossal') {
+        const colossalMax = sizeInfo.colossalMax ?? 0;
+        const existing = currentFleet.battleGroups.filter(g =>
+          g.ships.length > 0 && g.ships[0].groupCategory === 'colossal'
+        ).length;
+        if (existing >= colossalMax) {
+          showToast(`${sizeInfo.label} allows max ${colossalMax} Colossal group${colossalMax !== 1 ? 's' : ''}`);
+          return;
+        }
+      }
+
+      // Validate unique — only 1 group of this ship
+      if (dbShip.isUnique) {
+        const exists = currentFleet.battleGroups.some(g =>
+          g.ships.length > 0 && g.ships[0].shipKey === shipKey && g.ships[0].groupCategory === category
+        );
+        if (exists) {
+          showToast(`${dbShip.name} is Unique — only 1 group allowed`);
+          return;
+        }
+      }
+
+      // Validate rare — limit by game size
+      if (dbShip.isRare) {
+        const rareMax = { skirmish: 1, clash: 2, battle: 3, reconquest: 4 }[currentFleet.gameSize] || 2;
+        const existing = currentFleet.battleGroups.filter(g =>
+          g.ships.length > 0 && g.ships[0].shipKey === shipKey && g.ships[0].groupCategory === category
+        ).length;
+        if (existing >= rareMax) {
+          showToast(`${dbShip.name} is Rare — max ${rareMax} group${rareMax > 1 ? 's' : ''} at ${sizeInfo.label}`);
+          return;
+        }
+      }
 
       const group = { id: uuid(), name: dbShip.name, ships: [] };
       addShipToGroupInner(group, shipKey, category, dbShip);
