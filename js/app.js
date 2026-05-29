@@ -930,34 +930,72 @@ const App = (() => {
     }
   }
 
+  let activeFastplayFaction = null;
+
   function renderFastplayFleets() {
     const container = document.getElementById('fastplay-container');
     if (!container) return;
 
     const factionKeys = ['ucm','phr','scourge','shaltari','bioficer','resistance'];
-    const cards = factionKeys.map(fk => {
-      const meta = factionData[fk];
-      if (!meta) return '';
+    const tabs = factionKeys.map(fk => {
       const label = FACTION_LABELS[fk] || fk.toUpperCase();
       const fIcon = FACTION_ICONS[fk];
-      const spec = fastplaySpecs.find(s => s.faction === fk);
-      if (!spec) return '';
-      const shipList = spec.groups.map(([cat, name, qty]) => {
-        const qtyStr = qty > 1 ? `${qty}x ` : '';
-        return `<div class="fastplay-ship">${qtyStr}${esc(name)}</div>`;
-      }).join('');
-      return `<div class="fastplay-card">
-        <div class="fastplay-card-header">
-          ${fIcon ? `<img src="${fIcon}" alt="" style="width:20px;height:20px;object-fit:contain">` : ''}
-          <span class="fastplay-card-faction">${label}</span>
-          <span class="fastplay-card-size">Skirmish</span>
-        </div>
-        <div class="fastplay-card-ships">${shipList}</div>
-        <button class="btn btn-primary btn-sm" style="margin-top:var(--sp-sm);width:100%" onclick="App.loadSingleFastplay('${fk}')">Add to My Fleets</button>
-      </div>`;
+      const isActive = activeFastplayFaction === fk;
+      return `<button class="fastplay-faction-btn${isActive ? ' active' : ''}" onclick="App.loadFastplayFaction('${fk}')">
+        ${fIcon ? `<img src="${fIcon}" alt="" style="width:16px;height:16px;object-fit:contain">` : ''}
+        ${label}
+      </button>`;
     }).join('');
 
-    container.innerHTML = `<div class="fastplay-grid">${cards}</div>`;
+    let contentHtml = '';
+    if (activeFastplayFaction && shipDB[activeFastplayFaction]) {
+      const fk = activeFastplayFaction;
+      const spec = fastplaySpecs.find(s => s.faction === fk);
+      const factionShips = shipDB[fk];
+      if (spec && factionShips) {
+        const ships = [];
+        spec.groups.forEach(([cat, name]) => {
+          const found = findShipKey(fk, cat, name);
+          if (found) ships.push({ cat, db: found.ship, key: found.key });
+        });
+        const totalPts = ships.reduce((t, s) => t + (s.db.points || 0), 0);
+        contentHtml = `<div class="fastplay-fleet-header">
+          <span class="fastplay-fleet-total">${totalPts} pts</span>
+          <span class="text-caption">${ships.length} ships · Skirmish</span>
+        </div>`;
+        contentHtml += ships.map(s => {
+          const img = s.db.image ? `<div class="ship-card-image" style="width:100px;height:70px"><img src="${esc(s.db.image)}" alt="${esc(s.db.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : '';
+          const stats = renderStatGrid(s.db);
+          const wpns = (s.db.weapons || []).length > 0 ? '<div class="weapon-list">' + renderWeaponHeader() + s.db.weapons.map(renderWeaponRow).join('') + '</div>' : '';
+          const rules = (s.db.special_rules || []).length > 0 ? '<div class="special-rules">' + s.db.special_rules.map(r => `<span class="rule-chip">${esc(r)}</span>`).join('') + '</div>' : '';
+          return `<div class="fastplay-ship-card">
+            <div class="flex gap-md items-start">
+              ${img}
+              <div style="flex:1;min-width:0">
+                <div class="flex items-center justify-between">
+                  <div class="ship-card-name">${esc(s.db.name)}</div>
+                  <div class="ship-card-cost">${s.db.points} pts</div>
+                </div>
+                <div class="ship-tonnage-label ship-tonnage-${s.cat}">${esc(s.db.tonnage || CATEGORY_LABELS[s.cat] || s.cat)}</div>
+              </div>
+            </div>
+            ${stats}${wpns}${rules}
+          </div>`;
+        }).join('');
+      }
+    } else if (activeFastplayFaction) {
+      contentHtml = '<div class="text-caption" style="padding:var(--sp-lg);text-align:center">Loading...</div>';
+    } else {
+      contentHtml = '<div class="text-caption" style="padding:var(--sp-lg);text-align:center">Select a faction</div>';
+    }
+
+    container.innerHTML = `<div class="fastplay-tabs">${tabs}</div><div class="fastplay-content">${contentHtml}</div>`;
+  }
+
+  function loadFastplayFaction(fk) {
+    activeFastplayFaction = fk;
+    renderFastplayFleets();
+    ensureFactionLoaded(fk).then(() => renderFastplayFleets());
   }
 
   function loadSingleFastplay(factionKey) {
@@ -1013,50 +1051,46 @@ const App = (() => {
     return `<div class="fleet-card-comp">${thumbs}${overflow > 0 ? `<span class="fleet-card-thumb-more">+${overflow}</span>` : ''}</div>`;
   }
 
+  // ── Ship Lookup Helpers ──
+  function findShipKey(factionKey, category, namePart) {
+    const faction = shipDB[factionKey];
+    if (!faction || !faction.groups || !faction.groups[category]) return null;
+    const ships = faction.groups[category].ships;
+    const lc = namePart.toLowerCase();
+    let substringMatch = null;
+    for (const [key, ship] of Object.entries(ships)) {
+      const sn = ship.name.toLowerCase();
+      if (sn === lc || sn === lc + 's') return { key, ship };
+      if (!substringMatch && sn.startsWith(lc)) substringMatch = { key, ship };
+      if (!substringMatch && sn.includes(lc)) substringMatch = { key, ship };
+    }
+    return substringMatch;
+  }
+
+  function makeGroup(factionKey, groupName, category, namePart, qty) {
+    const found = findShipKey(factionKey, category, namePart);
+    if (!found) return null;
+    const { key, ship } = found;
+    const ships = [];
+    for (let i = 0; i < qty; i++) {
+      const loadouts = {};
+      let loadoutCost = 0;
+      if (ship.loadoutOptions && ship.loadoutOptions.length > 0) {
+        ship.loadoutOptions.forEach((lo, loIdx) => {
+          loadouts[loIdx] = 0;
+          loadoutCost += lo.options[0]?.cost || 0;
+        });
+      }
+      ships.push({ id: uuid(), shipKey: key, groupCategory: category, points: (ship.points || 0) + loadoutCost, loadouts });
+    }
+    return { id: uuid(), name: groupName || ship.name, ships };
+  }
+
   // ── Demo Fleets ──
-  // Each demo fleet is a legal Clash-size roster with proper group structure:
-  // one ship type per group, quantities within the ship's G stat range.
   function loadDemoFleets() {
     if (fleets.some(f => f.name.includes('Demo'))) {
       showToast('Demo fleets already loaded');
       return;
-    }
-
-    // Helper: find a ship key by name within a faction+category
-    // Prefers exact match, then starts-with, then substring
-    function findShipKey(factionKey, category, namePart) {
-      const faction = shipDB[factionKey];
-      if (!faction || !faction.groups || !faction.groups[category]) return null;
-      const ships = faction.groups[category].ships;
-      const lc = namePart.toLowerCase();
-      let substringMatch = null;
-      for (const [key, ship] of Object.entries(ships)) {
-        const sn = ship.name.toLowerCase();
-        if (sn === lc || sn === lc + 's') return { key, ship }; // exact (plural-tolerant)
-        if (!substringMatch && sn.startsWith(lc)) substringMatch = { key, ship };
-        if (!substringMatch && sn.includes(lc)) substringMatch = { key, ship };
-      }
-      return substringMatch;
-    }
-
-    // Helper: build N copies of the same ship for a group
-    function makeGroup(factionKey, groupName, category, namePart, qty) {
-      const found = findShipKey(factionKey, category, namePart);
-      if (!found) return null;
-      const { key, ship } = found;
-      const ships = [];
-      for (let i = 0; i < qty; i++) {
-        const loadouts = {};
-        let loadoutCost = 0;
-        if (ship.loadoutOptions && ship.loadoutOptions.length > 0) {
-          ship.loadoutOptions.forEach((lo, loIdx) => {
-            loadouts[loIdx] = 0;
-            loadoutCost += lo.options[0]?.cost || 0;
-          });
-        }
-        ships.push({ id: uuid(), shipKey: key, groupCategory: category, points: (ship.points || 0) + loadoutCost, loadouts });
-      }
-      return { id: uuid(), name: groupName || ship.name, ships };
     }
 
     const demoSpecs = fastplaySpecs;
@@ -1874,7 +1908,7 @@ const App = (() => {
     </div>`;
   }
 
-  const WEAPON_TYPE_LABELS = { K: 'Kinetic', E: 'Energy', C: 'Close Action' };
+  const WEAPON_TYPE_LABELS = { K: 'Kinetic', E: 'Energy', C: 'Core' };
 
   // Weapon type inline icons — 14px, used in weapon row type column
   const WEAPON_TYPE_ICONS = {
@@ -4424,7 +4458,7 @@ const App = (() => {
   // ── Public API ──
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
-    loadDemoFleets, showFleetTab, loadSingleFastplay, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup, moveGroup,
+    loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup, moveGroup,
     openShipSelectModal, filterCategory, toggleShipFilter, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral,
     openStationModal, selectStation, removeStation,
