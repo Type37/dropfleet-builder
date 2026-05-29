@@ -2458,12 +2458,23 @@ const App = (() => {
     // Print date
     const printDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
-    let html = `<div class="print-fleet">
+    const fIcon = FACTION_ICONS[f.faction];
+
+    let html = `<div class="print-fleet" data-fleet-name="${esc(f.name)}">
       <div class="print-header">
-        <div class="print-fleet-name">${esc(f.name)}</div>
-        <div class="print-fleet-meta">${esc(fName)} — ${sizeInfo.label} — ${pts}${sizeInfo.max !== 99999 ? '/' + sizeInfo.max : ''} pts</div>
+        <div class="print-header-top">
+          ${fIcon ? `<img src="${fIcon}" alt="" class="print-faction-icon">` : ''}
+          <div class="print-header-text">
+            <div class="print-fleet-name">${esc(f.name)}</div>
+            <div class="print-fleet-meta">${esc(fName)} — ${sizeInfo.label} — ${pts}${sizeInfo.max !== 99999 ? '/' + sizeInfo.max : ''} pts</div>
+          </div>
+          <div class="print-header-points">
+            <div class="print-points-big">${pts}</div>
+            <div class="print-points-cap">${sizeInfo.max !== 99999 ? '/ ' + sizeInfo.max : ''} pts</div>
+          </div>
+        </div>
         <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''} · ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? ` · ${esc(f.spaceStation.name)}` : ''}${compLine ? ` · ${compLine}` : ''}</div>
-        <div class="print-fleet-date">${printDate}</div>
+        <div class="print-fleet-date">Printed ${printDate}</div>
       </div>
       ${printWarnings}`;
 
@@ -2502,6 +2513,18 @@ const App = (() => {
       ].filter(([,v]) => v && v !== '-' && v !== '--');
       const ssStatLine = ssStatPairs.map(([l,v]) => `${l}: ${v}`).join(' · ');
       const ssRules = (ss.specialRules || []).map(r => esc(r.name || '')).filter(Boolean).join(', ');
+      // Station hull damage boxes
+      const ssHull = parseInt(ssStats.hull, 10);
+      let ssDmgHtml = '';
+      if (ssHull && ssHull > 0) {
+        const boxes = Array.from({length: ssHull}, () => '<span class="print-dmg-box"></span>').join('');
+        ssDmgHtml = `<div class="print-dmg-track"><span class="print-dmg-label">Hull</span>${boxes}</div>`;
+      }
+      // Station weapons
+      let ssWeaponsHtml = '';
+      if (ss.weapons && ss.weapons.length > 0) {
+        ssWeaponsHtml = '<div class="weapon-list">' + renderWeaponHeader() + ss.weapons.map(renderWeaponRow).join('') + '</div>';
+      }
       html += `<div class="print-section">
         <div class="print-section-title">Space Station</div>
         <div class="print-station">
@@ -2510,6 +2533,8 @@ const App = (() => {
             <span class="print-ship-pts">${ss.cost} pts</span>
           </div>
           <div class="print-station-stats">${ssStatLine}</div>
+          ${ssDmgHtml}
+          ${ssWeaponsHtml}
           ${ssRules ? `<div class="print-station-rules">Rules: ${ssRules}</div>` : ''}
         </div>
       </div>`;
@@ -2613,13 +2638,34 @@ const App = (() => {
 
         // Tonnage label
         const tonnageLabel = db.tonnage || CATEGORY_LABELS[ship.groupCategory] || '';
+        const artSrc = shipArtPath(db.name);
+
+        // Damage tracking boxes — hull boxes for marking damage during play
+        const hullVal = parseInt(db.hull, 10);
+        let dmgBoxesHtml = '';
+        if (hullVal && hullVal > 0) {
+          const boxes = Array.from({length: hullVal}, () => '<span class="print-dmg-box"></span>').join('');
+          dmgBoxesHtml = `<div class="print-dmg-track"><span class="print-dmg-label">Hull</span>${boxes}</div>`;
+        }
+
+        // Badge indicators
+        const badges = [];
+        if (db.isUnique) badges.push('<span class="print-badge print-badge-unique">Unique</span>');
+        else if (db.isRare) badges.push('<span class="print-badge print-badge-rare">Rare</span>');
+        const badgeHtml = badges.length > 0 ? ` ${badges.join(' ')}` : '';
 
         html += `<div class="print-ship">
-          <div class="print-ship-header">
-            <span class="print-ship-name">${esc(name)}${tonnageLabel ? ` <span class="print-ship-tonnage">${esc(tonnageLabel)}</span>` : ''}</span>
-            <span class="print-ship-pts">${ship.points} pts</span>
+          <div class="print-ship-top">
+            ${artSrc ? `<div class="print-ship-art"><img src="${artSrc}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
+            <div class="print-ship-content">
+              <div class="print-ship-header">
+                <span class="print-ship-name">${esc(name)}${tonnageLabel ? ` <span class="print-ship-tonnage">${esc(tonnageLabel)}</span>` : ''}${badgeHtml}</span>
+                <span class="print-ship-pts">${ship.points} pts</span>
+              </div>
+              ${statsHtml}
+              ${dmgBoxesHtml}
+            </div>
           </div>
-          ${statsHtml}
           ${wpnsHtml}
           ${loadoutWpnsHtml}
           ${loadsHtml}

@@ -2696,6 +2696,11 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── 26. Print ───────────────────────────────────────────────── */
 @media print {
+  @page {
+    size: A4;
+    margin: 12mm 10mm 14mm;
+  }
+
   /* Hide everything except the print container */
   body { background: white !important; color: black !important; font-size: 10pt; }
   body > *:not(#print-container) { display: none !important; }
@@ -2704,33 +2709,63 @@ h1, h2, h3, h4, h5, h6 {
   /* Stat grid — compact for print */
   .stat-grid { gap: 0; }
   .stat-cell {
-    border-color: #bbb;
+    border-color: #999;
     background: #f5f5f5;
     padding: 2px 4px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
   .stat-cell-label { font-size: 7pt; gap: 1px; }
   .stat-cell-label svg { width: 8px; height: 8px; opacity: 0.7; }
   .stat-cell-value { font-size: 11pt; }
-  .stat-cell-warn { background: #fff3e0; color: #b8560f; }
+  .stat-cell-warn { background: #fff3e0; color: #b8560f; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .stat-cell-good { color: #2e7d32; }
 
   /* Weapons — tight rows */
   .weapon-list { margin-top: 3px; }
-  .weapon-row { background: #fafafa; border-color: #ddd; padding: 1px 6px; min-height: auto; }
-  .weapon-header { background: #f0f0f0; padding: 1px 6px; }
+  .weapon-row { background: #fafafa; border-color: #bbb; padding: 1px 6px; min-height: auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .weapon-header { background: #eee; padding: 1px 6px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .weapon-col-type svg { opacity: 0.9; }
-  .weapon-special-chip { background: #eee; color: #333; border-color: #ccc; font-size: 7pt; padding: 0 4px; }
+  .weapon-special-chip { background: #eee; color: #333; border-color: #bbb; font-size: 7pt; padding: 0 4px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
   /* Launch ref */
-  .launch-ref { border-color: #ccc; break-inside: avoid; margin-top: 8px; }
-  .launch-ref-header { background: #f5f5f5; border-color: #ddd; font-size: 8pt; padding: 3px 8px; }
-  .launch-ref-row { border-color: #ddd; padding: 1px 6px; }
-  .launch-ref-row-header { background: #f5f5f5; }
+  .launch-ref { border-color: #999; break-inside: avoid; margin-top: 8px; }
+  .launch-ref-header { background: #f5f5f5; border-color: #bbb; font-size: 8pt; padding: 3px 8px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .launch-ref-row { border-color: #bbb; padding: 1px 6px; }
+  .launch-ref-row-header { background: #f5f5f5; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* Ship card print overrides */
+  .print-ship { border-color: #999; border-left-color: #1b3a5c; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-ship-art { border-color: #bbb; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-dmg-box { border-color: #777; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* Warnings */
+  .print-warnings { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-warning-error { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
   /* Page break hints */
   .print-group { break-inside: avoid; }
   .print-ship { break-inside: avoid; }
   .print-glossary { break-before: auto; }
+  .print-header { break-after: avoid; }
+  .print-group-header { break-after: avoid; }
+
+  /* Footer with fleet name on each page */
+  .print-fleet::after {
+    content: attr(data-fleet-name);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 7pt;
+    color: #ccc;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-bottom: 2mm;
+  }
 }
 
 /* Print layout classes (used by printFleet JS) */
@@ -2742,21 +2777,54 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .print-header {
-  text-align: center;
-  border-bottom: 2px solid #1b3a5c;
-  padding-bottom: 8px;
+  border-bottom: 3px double #1b3a5c;
+  padding-bottom: 10px;
   margin-bottom: 16px;
+}
+.print-header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.print-faction-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+.print-header-text {
+  flex: 1;
+}
+.print-header-points {
+  text-align: right;
+  flex-shrink: 0;
+}
+.print-points-big {
+  font-family: 'Roboto Slab', serif;
+  font-size: 22pt;
+  font-weight: 700;
+  color: #1b3a5c;
+  line-height: 1;
+}
+.print-points-cap {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 8pt;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 .print-fleet-name {
   font-family: 'Roboto Slab', serif;
-  font-size: 20pt;
+  font-size: 18pt;
   font-weight: 700;
   color: #1b3a5c;
+  line-height: 1.2;
 }
 .print-fleet-meta {
   font-size: 10pt;
-  color: #666;
-  margin-top: 4px;
+  color: #555;
+  margin-top: 2px;
 }
 .print-fleet-summary {
   font-family: 'Barlow Condensed', sans-serif;
@@ -2764,7 +2832,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #999;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 .print-fleet-date {
   font-family: 'Barlow Condensed', sans-serif;
@@ -2893,15 +2961,37 @@ h1, h2, h3, h4, h5, h6 {
 .print-ship {
   margin-bottom: 12px;
   padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid #ccc;
+  border-left: 3px solid #1b3a5c;
   break-inside: avoid;
+}
+.print-ship-top {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.print-ship-art {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border: 1px solid #ddd;
+  overflow: hidden;
+  background: #f8f8f8;
+}
+.print-ship-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.print-ship-content {
+  flex: 1;
+  min-width: 0;
 }
 .print-ship-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .print-ship-name {
   font-weight: 700;
@@ -2909,7 +2999,54 @@ h1, h2, h3, h4, h5, h6 {
 }
 .print-ship-pts {
   font-size: 10pt;
+  color: #555;
+  font-weight: 600;
+}
+.print-badge {
+  display: inline-block;
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0 4px;
+  border: 1px solid;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+.print-badge-unique {
+  color: #8a6d1e;
+  border-color: #d4b94e;
+  background: #fef9ea;
+}
+.print-badge-rare {
   color: #666;
+  border-color: #bbb;
+  background: #f5f5f5;
+}
+
+/* Damage tracking boxes for gameplay */
+.print-dmg-track {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 4px;
+}
+.print-dmg-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #888;
+  margin-right: 2px;
+}
+.print-dmg-box {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid #999;
+  background: #fff;
 }
 
 .print-loads {
@@ -2966,13 +3103,24 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 24px;
   page-break-before: auto;
   column-count: 2;
-  column-gap: 24px;
+  column-gap: 20px;
+  border-top: 3px double #1b3a5c;
+  padding-top: 12px;
+}
+.print-glossary .print-section-title {
+  column-span: all;
+  border-bottom: none;
+  font-size: 10pt;
+  color: #1b3a5c;
+  margin-bottom: 10px;
 }
 .print-glossary-entry {
   margin-bottom: 6px;
-  font-size: 9pt;
+  font-size: 8.5pt;
   line-height: 1.4;
   break-inside: avoid;
+  padding-bottom: 4px;
+  border-bottom: 1px dotted #ddd;
 }
 .print-glossary-name {
   font-weight: 700;
@@ -2981,12 +3129,14 @@ h1, h2, h3, h4, h5, h6 {
 .print-glossary-name::after { content: ': '; }
 .print-glossary-page {
   font-weight: 400;
-  font-size: 7.5pt;
+  font-size: 7pt;
   color: #888;
   font-style: italic;
 }
 .print-glossary-desc {
   color: #333;
+  font-family: 'Merriweather', serif;
+  font-size: 7.5pt;
 }
 
 /* ── 27. Ship Detail Modal ───────────────────────────────────── */
