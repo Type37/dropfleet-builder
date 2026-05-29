@@ -907,6 +907,9 @@ const App = (() => {
     f.updatedAt = Date.now();
     saveFleets();
 
+    // Composition breakdown
+    renderCompositionBar();
+
     // Run fleet validation and display warnings
     renderFleetWarnings();
   }
@@ -1028,6 +1031,53 @@ const App = (() => {
     });
     if (fleet.spaceStation) total += fleet.spaceStation.cost || 0;
     return total;
+  }
+
+  function renderCompositionBar() {
+    const container = document.getElementById('fleet-composition');
+    if (!container || !currentFleet) { if (container) container.innerHTML = ''; return; }
+    if (currentFleet.battleGroups.length === 0) { container.innerHTML = ''; return; }
+
+    const catCounts = {};
+    let totalPts = 0;
+    currentFleet.battleGroups.forEach(g => {
+      g.ships.forEach(s => {
+        const cat = s.groupCategory || 'medium';
+        if (!catCounts[cat]) catCounts[cat] = { pts: 0, ships: 0 };
+        catCounts[cat].pts += s.points || 0;
+        catCounts[cat].ships++;
+        totalPts += s.points || 0;
+      });
+    });
+
+    if (totalPts === 0) { container.innerHTML = ''; return; }
+
+    const catColors = {
+      light: '#5b9bd5', medium: '#3e9945', heavy: '#d98c1f',
+      colossal: '#c43c2f', payload: '#6a4c9c'
+    };
+    const catOrder = ['light', 'medium', 'heavy', 'colossal', 'payload'];
+
+    const bars = catOrder
+      .filter(cat => catCounts[cat])
+      .map(cat => {
+        const info = catCounts[cat];
+        const pct = (info.pts / totalPts) * 100;
+        const color = catColors[cat] || 'var(--ink-muted)';
+        return `<div class="comp-segment" style="width:${pct}%;background:${color}" title="${CATEGORY_LABELS[cat] || cat}: ${info.ships} ship${info.ships > 1 ? 's' : ''}, ${info.pts} pts (${Math.round(pct)}%)"></div>`;
+      }).join('');
+
+    const legend = catOrder
+      .filter(cat => catCounts[cat])
+      .map(cat => {
+        const info = catCounts[cat];
+        const color = catColors[cat] || 'var(--ink-muted)';
+        return `<span class="comp-legend-item"><span class="comp-legend-dot" style="background:${color}"></span>${CATEGORY_LABELS[cat] || cat} ${info.ships}</span>`;
+      }).join('');
+
+    container.innerHTML = `
+      <div class="comp-bar">${bars}</div>
+      <div class="comp-legend">${legend}</div>`;
   }
 
   // ── Groups ──

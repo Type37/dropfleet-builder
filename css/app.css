@@ -421,6 +421,43 @@ h1, h2, h3, h4, h5, h6 {
 .points-fill.over-budget { background: var(--error); }
 .points-fill.near-limit { background: var(--warning); }
 
+/* Fleet composition bar */
+#fleet-composition:empty { display: none; }
+#fleet-composition { margin-top: var(--sp-sm); }
+.comp-bar {
+  display: flex;
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+  gap: 1px;
+}
+.comp-segment {
+  min-width: 3px;
+  transition: width 0.3s ease;
+}
+.comp-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-xs) var(--sp-sm);
+  margin-top: 3px;
+}
+.comp-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--font-condensed);
+  font-size: 10px;
+  color: rgba(255,255,255,0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.comp-legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
 /* Fleet validation warnings */
 #fleet-warnings:empty { display: none; }
 .fleet-warning {
