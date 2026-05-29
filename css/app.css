@@ -1194,11 +1194,51 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--weight-bold);
 }
 
+.fleet-card-points-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: var(--sp-sm);
+  flex-wrap: wrap;
+  gap: var(--sp-xs);
+}
 .fleet-card-points {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
   font-weight: var(--weight-heavy);
   color: var(--navy);
+}
+.fleet-card-pts-label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-normal);
+  color: var(--ink-muted);
+}
+.fleet-card-bar {
+  height: 3px;
+  background: var(--stroke-light);
+  border-radius: 2px;
+  margin-top: var(--sp-xs);
+  overflow: hidden;
+}
+.fleet-card-bar-fill {
+  height: 100%;
+  background: var(--navy);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+.fleet-card-bar-near { background: var(--gold); }
+.fleet-card-bar-over { background: var(--danger, #c43c2f); }
+.badge-error {
+  background: #fef2f0;
+  color: #c43c2f;
+  border: 1px solid #f0c0b8;
+  font-size: 10px;
+}
+.badge-warn {
+  background: #fef9ea;
+  color: #8a6d1e;
+  border: 1px solid #e0c46c;
+  font-size: 10px;
 }
 
 .fleet-card-actions {

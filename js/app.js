@@ -735,18 +735,33 @@ const App = (() => {
       const fColor = FACTION_COLORS[f.faction] || 'var(--navy)';
       const updated = f.updatedAt ? new Date(f.updatedAt) : null;
       const timeAgo = updated ? formatTimeAgo(updated) : '';
+      const warnings = validateFleet(f);
+      const errorCount = warnings.filter(w => w.type === 'error').length;
+      const warnCount = warnings.filter(w => w.type === 'warn').length;
+      const limit = sizeInfo.max;
+      const pctFill = limit === 99999 ? 0 : Math.min((pts / limit) * 100, 100);
+      const barClass = pts > limit ? 'fleet-card-bar-over' : pctFill > 85 ? 'fleet-card-bar-near' : '';
+      const validationBadge = errorCount > 0
+        ? `<span class="badge badge-error">${errorCount} issue${errorCount > 1 ? 's' : ''}</span>`
+        : warnCount > 0
+        ? `<span class="badge badge-warn">${warnCount} note${warnCount > 1 ? 's' : ''}</span>`
+        : '';
       return `
       <div class="fleet-card card-deco" onclick="App.navigate('builder','${f.id}')" style="border-left:3px solid ${fColor}">
         <div class="flex items-center justify-between">
           <span class="badge badge-${f.faction}">${fName}</span>
-          <span class="badge badge-neutral">${sizeInfo.label}</span>
+          <div class="flex gap-xs items-center">
+            ${validationBadge}
+            <span class="badge badge-neutral">${sizeInfo.label}</span>
+          </div>
         </div>
         <div class="fleet-card-name">${esc(f.name)}</div>
         ${f.description ? `<div class="text-caption" style="line-height:1.4">${esc(f.description)}</div>` : ''}
-        <div class="flex items-center justify-between" style="margin-top:var(--sp-sm)">
-          <span class="fleet-card-points">${pts} pts</span>
-          <span class="text-caption">${f.battleGroups.length} group${f.battleGroups.length !== 1 ? 's' : ''} · ${shipCount} ship${shipCount !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} adm` : ''}</span>
+        <div class="fleet-card-points-row">
+          <span class="fleet-card-points">${pts} <span class="fleet-card-pts-label">/ ${limit === 99999 ? '∞' : limit} pts</span></span>
+          <span class="text-caption">${f.battleGroups.length} group${f.battleGroups.length !== 1 ? 's' : ''} · ${shipCount} ship${shipCount !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} adm` : ''}${f.spaceStation ? ` · ${esc(f.spaceStation.name).replace(' Space Station','')}` : ''}</span>
         </div>
+        <div class="fleet-card-bar"><div class="fleet-card-bar-fill ${barClass}" style="width:${pctFill}%"></div></div>
         <div class="fleet-card-actions" onclick="event.stopPropagation()">
           ${timeAgo ? `<span class="text-caption" style="margin-right:auto;font-size:var(--text-xs)">${timeAgo}</span>` : ''}
           <button class="btn btn-ghost btn-sm" onclick="App.duplicateFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1"/><path d="M2 11V3c0-.6.4-1 1-1h8"/></svg> Duplicate</button>
