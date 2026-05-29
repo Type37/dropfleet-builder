@@ -1103,18 +1103,8 @@ const App = (() => {
   }
 
   // ── Render Batching ──
-  let _pendingRenders = new Set();
-  let _renderRaf = 0;
   function scheduleRender(...fns) {
-    fns.forEach(fn => _pendingRenders.add(fn));
-    if (!_renderRaf) {
-      _renderRaf = requestAnimationFrame(() => {
-        _renderRaf = 0;
-        const batch = [..._pendingRenders];
-        _pendingRenders.clear();
-        batch.forEach(fn => fn());
-      });
-    }
+    fns.forEach(fn => { try { fn(); } catch(e) { console.error('Render error:', e); } });
   }
 
   // ── Builder View ──
@@ -1154,7 +1144,8 @@ const App = (() => {
     updatePoints();
     renderAdmiralSlot();
     renderStationSlot();
-    scheduleRender(renderGroupsNav, renderActiveGroup);
+    renderGroupsNav();
+    renderActiveGroup();
   }
 
   function updatePoints() {
@@ -1758,33 +1749,27 @@ const App = (() => {
 
   // ── Active Group View ──
   function renderActiveGroup() {
-    const emptyEl = document.getElementById('builder-empty');
-    const contentEl = document.getElementById('builder-content');
+    const overviewEl = document.getElementById('builder-overview');
+    const detailEl = document.getElementById('builder-detail');
 
-    if (!currentFleet || currentFleet.battleGroups.length === 0) {
-      emptyEl.classList.remove('hidden');
-      contentEl.classList.add('hidden');
-      return;
-    }
+    if (!currentFleet) return;
 
-    // Show fleet overview when no group is selected
+    // Overview always renders
+    overviewEl.innerHTML = renderFleetOverview();
+
+    // Detail panel: show when a group is selected
     if (!activeGroupId) {
-      emptyEl.classList.add('hidden');
-      contentEl.classList.remove('hidden');
-      contentEl.innerHTML = renderFleetOverview();
+      detailEl.classList.add('hidden');
       return;
     }
 
     const group = currentFleet.battleGroups.find(g => g.id === activeGroupId);
     if (!group) {
-      emptyEl.classList.add('hidden');
-      contentEl.classList.remove('hidden');
-      contentEl.innerHTML = renderFleetOverview();
+      detailEl.classList.add('hidden');
       return;
     }
 
-    emptyEl.classList.add('hidden');
-    contentEl.classList.remove('hidden');
+    detailEl.classList.remove('hidden');
 
     const groupPts = group.ships.reduce((t, s) => t + (s.points || 0), 0);
 
@@ -1872,7 +1857,7 @@ const App = (() => {
       </div>`;
     }
 
-    contentEl.innerHTML = html;
+    detailEl.innerHTML = html;
   }
 
   function renderWeaponHeader() {

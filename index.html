@@ -183,15 +183,15 @@
         </div>
       </aside>
 
-      <!-- Main Content -->
-      <main class="builder-main" id="builder-main">
-        <div class="empty-state" id="builder-empty">
-          <button class="btn btn-primary" onclick="App.addGroup()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> Add Group</button>
-        </div>
-        <div class="hidden" id="builder-content">
-          <!-- Group view rendered here -->
-        </div>
-      </main>
+      <!-- Overview Panel (always visible) -->
+      <div class="builder-overview" id="builder-overview">
+        <!-- Fleet overview rendered here by JS -->
+      </div>
+
+      <!-- Detail Panel (shows when group selected) -->
+      <div class="builder-detail hidden" id="builder-detail">
+        <!-- Group detail rendered here by JS -->
+      </div>
     </div>
   </section>
 
