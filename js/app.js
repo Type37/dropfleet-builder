@@ -16,7 +16,7 @@ const App = (() => {
   let activeFilters = new Set();  // 'launch', 'loadout', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAuxiliaries: true, compactView: false, autoExpandLore: false };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Game sizes per rulebook Section 4.2. maxAdmiralLevel is the highest admiral
@@ -230,7 +230,8 @@ const App = (() => {
         isRare: s.isRare, isUnique: s.isUnique,
         loadoutOptions: s.loadoutOptions || [],
         lore: s.lore || '',
-        image: shipArtPath(s.name)
+        image: shipArtPath(s.name),
+        variants: s.variants || []
       };
     });
 
@@ -2082,6 +2083,23 @@ const App = (() => {
       ).join('') + '</div>';
     }
 
+    // Variants / counts-as
+    let variantsHtml = '';
+    const variants = dbShip ? dbShip.variants : [];
+    if (variants.length > 0) {
+      const varNames = variants.map(v => esc(v.name)).join(', ');
+      const varDetails = variants.filter(v => v.lore).map(v =>
+        `<div style="margin-top:var(--sp-sm);padding:var(--sp-sm);background:var(--paper-alt);border-radius:var(--radius-sm)">
+          <div style="font-weight:var(--weight-semibold);font-size:var(--text-sm)">${esc(v.name)}</div>
+          <div class="ship-lore-text" style="border:none;padding:var(--sp-xs) 0 0;background:none;font-size:var(--text-xs)">${esc(v.lore)}</div>
+        </div>`
+      ).join('');
+      variantsHtml = `<details class="ship-lore no-print">
+        <summary class="ship-lore-toggle" style="font-size:var(--text-xs)">Also available as: ${varNames}</summary>
+        ${varDetails}
+      </details>`;
+    }
+
     // Lore / flavor text (collapsible, hidden in print)
     let loreHtml = '';
     const loreText = dbShip ? dbShip.lore : '';
@@ -2120,6 +2138,7 @@ const App = (() => {
         ${compact ? '' : loadoutsHtml}
         ${compact ? '' : loadsHtml}
         ${rulesHtml}
+        ${compact ? '' : variantsHtml}
         ${compact ? '' : loreHtml}
       </div>
       <button class="btn btn-ghost btn-icon btn-sm group-ship-remove" onclick="App.removeShip('${groupId}','${ship.id}')" data-tooltip="Remove ship"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
@@ -2242,7 +2261,7 @@ const App = (() => {
     });
 
     // Hide auxiliary/mercenary ships when setting is off
-    if (!settings.showAuxiliaries) {
+    if (!settings.showAdditionalShips) {
       ships = ships.filter(s => s.data.image);
     }
 
@@ -3675,10 +3694,10 @@ const App = (() => {
         <div class="settings-group-title">Ship Selection</div>
         <label class="settings-toggle">
           <span class="settings-toggle-label">
-            <span class="settings-toggle-name">Show Auxiliary Ships</span>
-            <span class="settings-toggle-desc">Display mercenary and auxiliary ships (transports, barges, etc.) in the ship selection grid</span>
+            <span class="settings-toggle-name">Additional Ships</span>
+            <span class="settings-toggle-desc">Mercenaries, cross-faction ships, and other optional units</span>
           </span>
-          <input type="checkbox" ${settings.showAuxiliaries ? 'checked' : ''} onchange="App.toggleSetting('showAuxiliaries', this.checked)">
+          <input type="checkbox" ${settings.showAdditionalShips ? 'checked' : ''} onchange="App.toggleSetting('showAdditionalShips', this.checked)">
           <span class="settings-toggle-switch"></span>
         </label>
       </div>
@@ -4025,6 +4044,19 @@ const App = (() => {
         }).join('') + '</div>';
     }
 
+    // Variants
+    let variantsHtml = '';
+    if (dbShip.variants && dbShip.variants.length > 0) {
+      variantsHtml = `<div class="detail-lore">
+        <div class="detail-section-label">Also available as</div>
+        ${dbShip.variants.map(v => `<div style="margin-bottom:var(--sp-sm)">
+          <span style="font-weight:var(--weight-semibold)">${esc(v.name)}</span>
+          <span class="text-muted" style="font-size:var(--text-sm)"> — ${esc(v.note)}</span>
+          ${v.lore ? `<p class="text-rules" style="margin-top:var(--sp-xs)">${esc(v.lore)}</p>` : ''}
+        </div>`).join('')}
+      </div>`;
+    }
+
     // Lore
     let loreHtml = '';
     if (dbShip.lore) {
@@ -4048,6 +4080,7 @@ const App = (() => {
       ${loadoutsHtml}
       ${loadsHtml}
       ${rulesHtml}
+      ${variantsHtml}
       ${loreHtml}
     `;
 
