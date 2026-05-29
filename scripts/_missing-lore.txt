@@ -1,0 +1,179 @@
+ucm :: Delhi Battleship
+ucm :: Hanoi Battleship
+ucm :: Tokyo Battleship
+ucm :: New York Battleship
+ucm :: Beijing Battleship
+ucm :: Milwaukee Pocket Battleship
+ucm :: Rotterdam Pocket Battleship
+ucm :: New Dubai Pocket Battleship
+ucm :: Hong Kong Pocket Battleship
+ucm :: Siam Battlecruiser
+ucm :: Venice Command Battlecruiser
+ucm :: Rome Battlecruiser
+ucm :: Perth Battlecruiser
+ucm :: Johannesburg Battlecruiser
+ucm :: Busan Supercruiser
+ucm :: Yokohama Supercruiser
+ucm :: Las Vegas Command Carrier
+ucm :: Edmonton Heavy Carrier
+ucm :: Vilnius Heavy Cruiser
+ucm :: Warsaw Heavy Cruiser
+ucm :: New Mombasa Vanguard Carrier
+ucm :: Geneva Command Cruiser
+ucm :: Glasgow Cruiser
+ucm :: Bucharest Cruiser
+ucm :: Ulaanbaatar Cruiser
+ucm :: Bruges Cruiser
+ucm :: Boston Light Cruiser
+ucm :: Caracas Heavy Destroyer
+ucm :: Oslo Cutter
+ucm :: Detroit Heavy Frigate
+ucm :: Sheffield Heavy Frigate
+ucm :: Pungari Thresher Hive Ship
+ucm :: Hyperyacht Aurorum
+ucm :: Palatine Command Barge
+ucm :: Centurion Grand Cruiser
+ucm :: Hyperyacht Somniferum
+ucm :: LKS Dredger
+ucm :: SLM-9 Resupply Hauler
+ucm :: T-Type Tugboat
+ucm :: DH-Type Penal Transport
+ucm :: Jah’tar Startrader
+ucm :: M-Type Barge
+ucm :: OBV-64 Oblivion Barge
+ucm :: Type-87 Terminus Harvester
+ucm :: VX-22 Flenser
+ucm :: PRK-91 Provenance Ark
+scourge :: Lucifer Battleship
+scourge :: Devil Battleship
+scourge :: Beelzebub Battleship
+scourge :: Dragon Battleship
+scourge :: Daemon Battleship
+scourge :: Apsasu Barge
+scourge :: Ebisu Tackling Cutter
+scourge :: Pungari Thresher Hive Ship
+scourge :: Hyperyacht Aurorum
+scourge :: Hyperyacht Somniferum
+scourge :: LKS Dredger
+scourge :: SLM-9 Resupply Hauler
+scourge :: T-Type Tugboat
+scourge :: DH-Type Penal Transport
+scourge :: M-Type Barge
+scourge :: OBV-64 Oblivion Barge
+scourge :: Type-87 Terminus Harvester
+scourge :: VX-22 Flenser
+scourge :: PRK-91 Provenance Ark
+phr :: Antony Pocket Battleship
+phr :: Leonnatus Supercruiser
+phr :: Seleucus Supercruiser
+phr :: Ptolemy Supercruiser
+phr :: Teucer Cruiser
+phr :: Otera Light Cruiser
+phr :: Meleager Blockade Runner
+phr :: Cadmus Destroyer
+phr :: Chrysaor Cutter
+phr :: Pungari Thresher Hive Ship
+phr :: Hyperyacht Aurorum
+phr :: Palatine Command Barge
+phr :: Centurion Grand Cruiser
+phr :: Hyperyacht Somniferum
+phr :: LKS Dredger
+phr :: SLM-9 Resupply Hauler
+phr :: T-Type Tugboat
+phr :: DH-Type Penal Transport
+phr :: Jah’tar Startrader
+phr :: M-Type Barge
+phr :: OBV-64 Oblivion Barge
+phr :: Type-87 Terminus Harvester
+phr :: VX-22 Flenser
+phr :: PRK-91 Provenance Ark
+shaltari :: Copper Battleship
+shaltari :: Bronze Battleship
+shaltari :: Silver Battleship
+shaltari :: Gold Supercarrier
+shaltari :: Platinum Supercarrier
+shaltari :: Diamond Battleship
+shaltari :: Scoria Heavy Cruiser
+shaltari :: Citrine Mothership
+shaltari :: Iridium Destroyer
+shaltari :: Strontium Monitor
+shaltari :: Pungari Thresher Hive Ship
+shaltari :: Hyperyacht Aurorum
+shaltari :: Hyperyacht Somniferum
+shaltari :: LKS Dredger
+shaltari :: SLM-9 Resupply Hauler
+shaltari :: T-Type Tugboat
+shaltari :: DH-Type Penal Transport
+shaltari :: Jah’tar Startrader
+shaltari :: M-Type Barge
+shaltari :: OBV-64 Oblivion Barge
+shaltari :: Type-87 Terminus Harvester
+shaltari :: VX-22 Flenser
+shaltari :: PRK-91 Provenance Ark
+resistance :: Kalium KNC-5 Line Cruiser
+resistance :: Kalium KNC-12 Line Cruiser
+resistance :: Pungari Thresher Hive Ship
+resistance :: Hyperyacht Aurorum
+resistance :: Palatine Command Barge
+resistance :: Hyperyacht Somniferum
+resistance :: LKS Dredger
+resistance :: SLM-9 Resupply Hauler
+resistance :: T-Type Tugboat
+resistance :: DH-Type Penal Transport
+resistance :: Jah’tar Startrader
+resistance :: M-Type Barge
+resistance :: OBV-64 Oblivion Barge
+resistance :: Type-87 Terminus Harvester
+resistance :: VX-22 Flenser
+resistance :: PRK-91 Provenance Ark
+bioficer :: Zenith Dreadnought
+bioficer :: Binder Super Battleship
+bioficer :: Bishop Super Battleship
+bioficer :: Binary Battleship
+bioficer :: Stature Battlecruiser
+bioficer :: Sanctum Battlecruiser
+bioficer :: Scion Battlecruiser
+bioficer :: Carronade Heavy Cruiser
+bioficer :: Catastrophe Heavy Cruiser
+bioficer :: Cacophony Heavy Cruiser
+bioficer :: Cataphract Heavy Cruiser
+bioficer :: Combine Cruiser
+bioficer :: Cavern Fleet Carrier
+bioficer :: Cosmic Cruiser
+bioficer :: Comet Cruiser
+bioficer :: Choral Cruiser
+bioficer :: Construct Cruiser
+bioficer :: Callous Cruiser
+bioficer :: Charger Light Cruiser
+bioficer :: Cipher Light Cruiser
+bioficer :: Cache Light Cruiser
+bioficer :: Disciple Destroyer
+bioficer :: Diode Destroyer
+bioficer :: Domain Destroyer
+bioficer :: Tine Cutter
+bioficer :: Torrent Cutter
+bioficer :: Matrix Monitor
+bioficer :: Monarch Monitor
+bioficer :: Mantle Monitor
+bioficer :: Fresco Frigate
+bioficer :: Fulcrum Frigate
+bioficer :: Foray Frigate
+bioficer :: Forestall Frigate
+bioficer :: Fugue Frigate
+bioficer :: Logic Lighter
+bioficer :: Vertex Corvette
+bioficer :: Torpedo Cell
+bioficer :: Lander Cell
+bioficer :: Invasion Cell
+bioficer :: Pungari Thresher Hive Ship
+bioficer :: Hyperyacht Aurorum
+bioficer :: Hyperyacht Somniferum
+bioficer :: LKS Dredger
+bioficer :: SLM-9 Resupply Hauler
+bioficer :: T-Type Tugboat
+bioficer :: DH-Type Penal Transport
+bioficer :: M-Type Barge
+bioficer :: OBV-64 Oblivion Barge
+bioficer :: Type-87 Terminus Harvester
+bioficer :: VX-22 Flenser
+bioficer :: PRK-91 Provenance Ark

@@ -2358,6 +2358,11 @@ h1, h2, h3, h4, h5, h6 {
 .sys-step-btn:hover:not(:disabled) { background: var(--navy); color: #fff; border-color: var(--navy); }
 .sys-step-btn:disabled { opacity: 0.35; cursor: default; }
 
+/* Keep wide tables from clipping on narrow screens — scroll instead of spill */
+.weapon-list, .launch-ref, .launch-ref-table { max-width: 100%; overflow-x: auto; }
+.sys-opt { flex-wrap: wrap; }
+.sys-opt-main { flex: 1 1 60%; }
+
 /* ── 16. Ship Cards (selection modal) ────────────────────────── */
 .ship-category-tabs {
   display: flex;
