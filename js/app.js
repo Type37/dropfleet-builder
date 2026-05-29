@@ -3049,16 +3049,20 @@ const App = (() => {
           if (r.description) rulesGlossary[r.name] = { description: r.description, page: r.page || '' };
         });
 
-        // Collect weapon special rules for glossary (prefer BSData descriptions)
+        // Collect weapon special rules for both glossary AND inline display
+        const shipWeaponSpecials = {};
         const collectWeaponSpecials = (weapons) => {
           (weapons || []).forEach(w => {
             if (!w.special || w.special === '-') return;
             w.special.split(',').forEach(s => {
               const trimmed = s.trim();
               if (!trimmed) return;
-              const baseKey = trimmed.replace(/-?\d+$/, '');
+              const baseKey = trimmed.replace(/-?\d+$/, '').replace(/\s+\d+$/, '').trim();
               const full = lookupRuleFull(trimmed);
-              if (full) rulesGlossary[baseKey || trimmed] = { description: full.description, page: full.page || '' };
+              if (full) {
+                rulesGlossary[baseKey || trimmed] = { description: full.description, page: full.page || '' };
+                shipWeaponSpecials[trimmed] = { description: full.description, page: full.page || '' };
+              }
             });
           });
         };
@@ -3076,6 +3080,7 @@ const App = (() => {
         let rulesInlineHtml = '';
         if (ruleDetails.length > 0) {
           rulesInlineHtml = `<div class="print-rules-inline">
+            <div class="print-rules-heading">Ship Rules</div>
             ${ruleDetails.map(r => {
               const pageRef = r.page ? ` <span class="print-glossary-page">p.${esc(r.page)}</span>` : '';
               return `<div class="print-rule-entry"><span class="print-rule-name">${esc(r.name)}${pageRef}</span>${r.description ? ` — ${esc(r.description)}` : ''}</div>`;
@@ -3083,6 +3088,19 @@ const App = (() => {
           </div>`;
         } else if (ruleNames) {
           rulesInlineHtml = `<div class="print-rules">Rules: ${ruleNames}</div>`;
+        }
+
+        // Weapon abilities — inline descriptions so players don't need the glossary
+        const wpnSpecEntries = Object.entries(shipWeaponSpecials);
+        let weaponAbilitiesHtml = '';
+        if (wpnSpecEntries.length > 0) {
+          weaponAbilitiesHtml = `<div class="print-rules-inline print-weapon-abilities">
+            <div class="print-rules-heading">Weapon Abilities</div>
+            ${wpnSpecEntries.map(([name, entry]) => {
+              const pageRef = entry.page ? ` <span class="print-glossary-page">p.${esc(entry.page)}</span>` : '';
+              return `<div class="print-rule-entry"><span class="print-rule-name">${esc(name)}${pageRef}</span> — ${esc(entry.description)}</div>`;
+            }).join('')}
+          </div>`;
         }
 
         // Tonnage label
@@ -3138,6 +3156,7 @@ const App = (() => {
           ${loadoutWpnsHtml}
           ${loadsHtml}
           ${rulesInlineHtml}
+          ${weaponAbilitiesHtml}
         </div>`;
       });
 
