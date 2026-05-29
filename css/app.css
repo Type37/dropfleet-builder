@@ -2140,13 +2140,16 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 768px) {
   .topbar { padding: 0 var(--sp-lg); }
   .topbar-context { display: none; }
+  .topbar-brand { font-size: var(--text-sm); }
 
   .landing { padding: var(--sp-2xl) var(--sp-lg); }
   .landing-grid { grid-template-columns: 1fr; }
+  .landing-logo { max-width: 280px; }
 
   .fleet-list { padding: var(--sp-2xl) var(--sp-lg); }
   .fleet-grid { grid-template-columns: 1fr; }
   .fleet-list-header { flex-direction: column; align-items: stretch; }
+  .fleet-list-header .btn { width: 100%; justify-content: center; }
 
   /* Sidebar becomes bottom sheet */
   .builder-layout { flex-direction: column; }
@@ -2183,6 +2186,18 @@ h1, h2, h3, h4, h5, h6 {
     background: rgba(255,255,255,0.25);
     border-radius: 2px;
   }
+  .sidebar-handle-summary {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 var(--sp-lg);
+    font-size: var(--text-xs);
+    color: rgba(255,255,255,0.55);
+    font-family: var(--font-condensed);
+    font-weight: var(--weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
 
   .builder-main {
     padding: var(--sp-lg);
@@ -2194,10 +2209,27 @@ h1, h2, h3, h4, h5, h6 {
   .modal-overlay { padding: 0; }
   .group-header-bar { flex-direction: column; align-items: stretch; }
 
+  /* Touch-friendly targets */
   .btn { min-height: 44px; }
   .btn-sm { min-height: 36px; }
-  .category-tab { min-height: 40px; }
+  .category-tab { min-height: 40px; padding: var(--sp-sm) var(--sp-md); font-size: var(--text-xs); }
   .group-nav-item { min-height: 44px; }
+  .filter-chip { min-height: 36px; padding: var(--sp-xs) var(--sp-md); }
+  .settings-toggle { padding: var(--sp-lg) 0; }
+
+  /* Ship entries */
+  .group-ship-entry { padding: var(--sp-lg); }
+  .group-ship-remove { width: 36px; height: 36px; font-size: 16px; }
+
+  /* Weapon table horizontal scroll at mid-widths */
+  .weapon-list { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .weapon-row { min-width: 400px; }
+
+  /* Category tabs: horizontal scroll instead of wrap */
+  .ship-category-tabs { flex-wrap: nowrap; }
+
+  /* Quantity bar */
+  .group-qty-btn { width: 36px; height: 36px; }
 }
 
 @media (min-width: 769px) {
@@ -2211,16 +2243,49 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 480px) {
   .landing-title { font-size: var(--text-2xl); }
-  .stat-grid { grid-template-columns: repeat(5, 1fr); }
+  .landing-subtitle { font-size: var(--text-sm); }
+
+  /* 4-column stat grid for even 4+4 wrap on 8-stat ships */
+  .stat-grid { grid-template-columns: repeat(4, 1fr); }
+  .stat-cell-label { font-size: 8px; }
+  .stat-cell-value { font-size: var(--text-sm); }
+
   .ship-card-top { flex-direction: column; }
-  .weapon-row { flex-wrap: wrap; }
+  .ship-card-image { width: 100%; height: 100px; border-radius: var(--radius-md); }
+  .ship-card-image img { object-position: center; }
+
+  /* Weapon rows stack on small screens — no horizontal scroll needed */
+  .weapon-list { overflow-x: visible; }
+  .weapon-row { flex-wrap: wrap; min-width: 0; }
   .weapon-col-name { flex-basis: 100%; padding-right: 0; }
-  .weapon-col-special { flex-basis: 100%; padding-left: 0; }
+  .weapon-col-special { flex-basis: 100%; padding-left: 0; margin-top: 2px; }
+
   .load-row { flex-direction: column; align-items: flex-start; }
   .loadout-selector { flex-direction: column; align-items: flex-start; }
   .launch-ref-row { flex-wrap: wrap; }
   .launch-ref-col-name { flex-basis: 100%; }
   .launch-ref-col-special { flex-basis: 100%; padding-left: 0; }
+
+  /* Tighter spacing */
+  .builder-main { padding: var(--sp-md); padding-bottom: 64px; }
+  .group-ship-entry { padding: var(--sp-md); }
+  .group-header-bar h2 { font-size: var(--text-xl); }
+  .fleet-card { padding: var(--sp-lg); }
+  .fleet-card-name { font-size: var(--text-md); }
+  .fleet-card-points { font-size: var(--text-xl); }
+
+  /* Ship cost repositioned for stacked layout */
+  .ship-card-cost { font-size: var(--text-md); }
+}
+
+@media (max-width: 360px) {
+  .stat-grid { grid-template-columns: repeat(4, 1fr); gap: 1px; }
+  .stat-cell { padding: 2px; }
+  .stat-cell-label { font-size: 7px; }
+  .stat-cell-value { font-size: var(--text-xs); }
+  .category-tab { padding: var(--sp-xs) var(--sp-sm); font-size: 10px; }
+  .topbar-brand { font-size: var(--text-xs); }
+  .topbar-logo { height: 18px; }
 }
 
 /* ── 28. Tooltip ─────────────────────────────────────────────── */
@@ -2244,3 +2309,18 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: var(--shadow-md);
 }
 [data-tooltip]:hover::after { opacity: 1; }
+
+/* Disable tooltips on touch — they require hover */
+@media (hover: none) {
+  [data-tooltip]::after { display: none; }
+}
+
+/* ── 29. Touch & Active States ──────────────────────────────── */
+@media (hover: none) {
+  .fleet-card:active { transform: scale(0.98); box-shadow: var(--shadow-sm); }
+  .group-ship-entry:active { background: var(--paper-alt); }
+  .group-nav-item:active { background: rgba(255,255,255,0.15); }
+  .btn:active { transform: scale(0.97); }
+  .category-tab:active { transform: scale(0.96); }
+  .ship-card:active { transform: scale(0.98); }
+}

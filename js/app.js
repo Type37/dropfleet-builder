@@ -651,6 +651,12 @@ const App = (() => {
     document.getElementById('groups-count').textContent = `${groupCount} group${groupCount !== 1 ? 's' : ''}`;
     document.getElementById('groups-limit').textContent = `/ ${sizeInfo.groups} max`;
 
+    // Update mobile sidebar peek summary
+    const peekPts = document.getElementById('sidebar-peek-points');
+    const peekGrp = document.getElementById('sidebar-peek-groups');
+    if (peekPts) peekPts.textContent = `${pts} / ${limit === 99999 ? '∞' : limit} pts`;
+    if (peekGrp) peekGrp.textContent = `${groupCount} group${groupCount !== 1 ? 's' : ''}`;
+
     f.updatedAt = Date.now();
     saveFleets();
 
