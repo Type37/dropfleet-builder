@@ -66,7 +66,7 @@
   /* Art Deco Gold (secondary accent) */
   --gold: #b8932e;
   --gold-light: #d4ad4a;
-  --gold-dark: #8a6d1e;
+  --gold-dark: #785e17;
   --gold-subtle: rgba(184, 147, 46, 0.10);
   --gold-line: rgba(184, 147, 46, 0.35);
 
@@ -77,6 +77,11 @@
   --faction-shaltari: #d98c1f;
   --faction-bioficer: #2a8c8c;
   --faction-resistance: #b04a2a;
+
+  /* Faction text colors (darkened for WCAG AA on white) */
+  --faction-ucm-text: #287030;
+  --faction-shaltari-text: #946010;
+  --faction-bioficer-text: #1f7070;
 
   /* Semantic */
   --success: #3e9945;
@@ -167,7 +172,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--ink-faint);
+  color: var(--ink-muted);
 }
 .text-rules {
   font-family: var(--font-reading);
@@ -608,7 +613,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--text-tertiary);
+  color: var(--ink-muted);
   border-bottom: 1px solid var(--stroke);
   padding-bottom: var(--sp-xs);
   margin-bottom: var(--sp-lg);
@@ -630,12 +635,12 @@ h1, h2, h3, h4, h5, h6 {
   display: block;
   font-weight: var(--weight-semibold);
   font-size: var(--text-sm);
-  color: var(--text-primary);
+  color: var(--ink);
 }
 .settings-toggle-desc {
   display: block;
   font-size: var(--text-xs);
-  color: var(--text-tertiary);
+  color: var(--ink-muted);
   margin-top: 2px;
   line-height: 1.4;
 }
@@ -832,11 +837,11 @@ h1, h2, h3, h4, h5, h6 {
 .badge-lg { padding: var(--sp-xs) var(--sp-md); font-size: var(--text-sm); }
 
 /* Faction badges */
-.badge-ucm { background: rgba(62,153,69,0.1); color: var(--faction-ucm); }
+.badge-ucm { background: rgba(62,153,69,0.1); color: var(--faction-ucm-text); }
 .badge-phr { background: rgba(106,76,156,0.1); color: var(--faction-phr); }
 .badge-scourge { background: rgba(196,60,47,0.1); color: var(--faction-scourge); }
-.badge-shaltari { background: rgba(217,140,31,0.1); color: var(--faction-shaltari); }
-.badge-bioficer { background: rgba(42,140,140,0.1); color: var(--faction-bioficer); }
+.badge-shaltari { background: rgba(217,140,31,0.1); color: var(--faction-shaltari-text); }
+.badge-bioficer { background: rgba(42,140,140,0.1); color: var(--faction-bioficer-text); }
 .badge-resistance { background: rgba(176,74,42,0.1); color: var(--faction-resistance); }
 
 /* ── 12. Landing Page ────────────────────────────────────────── */
@@ -1046,7 +1051,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: 9px;
   font-weight: var(--weight-semibold);
-  color: var(--ink-faint);
+  color: var(--ink-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   display: inline-flex;
@@ -1169,7 +1174,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--ink-faint);
+  color: var(--ink-muted);
   margin-top: var(--sp-xs);
 }
 
@@ -1205,7 +1210,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--ink-faint);
+  color: var(--ink-muted);
   padding: var(--sp-sm) var(--sp-md);
   background: var(--warm);
   border-bottom: 1px solid var(--stroke-light);
@@ -1239,7 +1244,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--ink-faint);
+  color: var(--ink-muted);
   background: var(--warm);
 }
 
@@ -1265,7 +1270,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--ink-faint);
+  color: var(--ink-muted);
   flex-shrink: 0;
 }
 
@@ -1675,7 +1680,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .group-quantity-limit {
   font-size: var(--text-xs);
-  color: var(--ink-faint);
+  color: var(--ink-muted);
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
@@ -1863,7 +1868,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .game-size-time {
   font-size: var(--text-xs);
-  color: var(--ink-faint);
+  color: var(--ink-muted);
   font-style: italic;
 }
 
@@ -1962,7 +1967,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: #888;
+  color: #767676;
   border-bottom: 1px solid #ddd;
   padding-bottom: 4px;
   margin-bottom: 8px;
@@ -2031,7 +2036,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #888;
+  color: #767676;
   margin-top: 4px;
   margin-bottom: 1px;
 }
