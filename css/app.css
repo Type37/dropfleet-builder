@@ -1413,24 +1413,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .fleet-card {
+  --fc: var(--navy);
   background: var(--paper);
   border: 1px solid var(--stroke);
+  border-left: 3px solid var(--fc);
   border-radius: var(--radius-lg);
-  padding: var(--sp-xl);
+  padding: 0;
   cursor: pointer;
   position: relative;
   transition: all var(--duration-normal) var(--ease-out);
   display: flex;
   flex-direction: column;
-  gap: var(--sp-md);
-  /* Left accent border set inline via style attr (faction color) */
-  border-left-width: 3px;
+  overflow: hidden;
 }
 .fleet-card:hover {
-  border-top-color: var(--navy);
-  border-right-color: var(--navy);
-  border-bottom-color: var(--navy);
-  box-shadow: var(--shadow-md);
+  border-color: color-mix(in srgb, var(--fc) 50%, var(--stroke));
+  border-left-color: var(--fc);
+  box-shadow: var(--shadow-md), 0 0 0 1px color-mix(in srgb, var(--fc) 12%, transparent);
   transform: translateY(-2px);
 }
 .fleet-card:active {
@@ -1438,17 +1437,41 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: var(--shadow-sm);
 }
 
+/* Card header with faction accent */
+.fleet-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-sm) var(--sp-lg);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--fc) 8%, var(--paper)) 0%, var(--paper) 70%);
+  border-bottom: 1px solid color-mix(in srgb, var(--fc) 10%, var(--stroke-light));
+}
+
+/* Card body content */
+.fleet-card-body {
+  padding: var(--sp-md) var(--sp-lg) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+  flex: 1;
+}
+
 .fleet-card-name {
   font-family: var(--font-display);
   font-size: var(--text-lg);
   font-weight: var(--weight-bold);
+  padding: var(--sp-sm) var(--sp-lg) 0;
+}
+
+.fleet-card > .text-caption {
+  padding: 0 var(--sp-lg);
 }
 
 .fleet-card-points-row {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-top: var(--sp-sm);
+  padding: 0 var(--sp-lg);
   flex-wrap: wrap;
   gap: var(--sp-xs);
 }
@@ -1456,7 +1479,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
   font-weight: var(--weight-heavy);
-  color: var(--navy);
+  color: var(--fc);
 }
 .fleet-card-pts-label {
   font-size: var(--text-sm);
@@ -1464,15 +1487,15 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-muted);
 }
 .fleet-card-bar {
-  height: 3px;
+  height: 4px;
   background: var(--stroke-light);
   border-radius: 2px;
-  margin-top: var(--sp-xs);
+  margin: var(--sp-xs) var(--sp-lg) 0;
   overflow: hidden;
 }
 .fleet-card-bar-fill {
   height: 100%;
-  background: var(--navy);
+  background: var(--fc);
   border-radius: 2px;
   transition: width 0.3s ease;
 }
@@ -1495,17 +1518,21 @@ h1, h2, h3, h4, h5, h6 {
 .fleet-card-comp {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin-top: var(--sp-xs);
+  gap: 6px;
+  padding: var(--sp-sm) var(--sp-lg);
 }
 .fleet-card-thumb {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: var(--radius-sm);
   overflow: hidden;
-  border: 2px solid #ccc;
+  border: 2px solid var(--stroke);
   background: var(--paper-alt);
   flex-shrink: 0;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.fleet-card:hover .fleet-card-thumb {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
 }
 .fleet-card-thumb img {
   width: 100%;
@@ -1525,18 +1552,20 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: var(--sp-sm);
   margin-top: auto;
-  padding-top: var(--sp-md);
+  padding: var(--sp-md) var(--sp-lg);
   border-top: 1px solid var(--stroke-light);
 }
 
 .fleet-card-new {
   border: 2px dashed var(--stroke);
+  border-left-width: 2px;
   background: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: var(--sp-md);
+  padding: var(--sp-xl);
   min-height: 180px;
   color: var(--ink-faint);
 }
@@ -4302,8 +4331,12 @@ h1, h2, h3, h4, h5, h6 {
   .builder-main { padding: var(--sp-md); padding-bottom: 64px; }
   .group-ship-entry { padding: var(--sp-md); }
   .group-header-bar h2 { font-size: var(--text-xl); }
-  .fleet-card { padding: var(--sp-lg); }
-  .fleet-card-name { font-size: var(--text-md); }
+  .fleet-card-header { padding: var(--sp-xs) var(--sp-md); }
+  .fleet-card-name { font-size: var(--text-md); padding-left: var(--sp-md); padding-right: var(--sp-md); }
+  .fleet-card-points-row { padding-left: var(--sp-md); padding-right: var(--sp-md); }
+  .fleet-card-bar { margin-left: var(--sp-md); margin-right: var(--sp-md); }
+  .fleet-card-comp { padding-left: var(--sp-md); padding-right: var(--sp-md); }
+  .fleet-card-actions { padding-left: var(--sp-md); padding-right: var(--sp-md); }
   .fleet-card-points { font-size: var(--text-xl); }
 
   /* Ship cost repositioned for stacked layout */

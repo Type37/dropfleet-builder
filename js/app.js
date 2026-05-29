@@ -840,8 +840,8 @@ const App = (() => {
         : '';
       const fIcon = FACTION_ICONS[f.faction];
       return `
-      <div class="fleet-card card-deco" onclick="App.navigate('builder','${f.id}')" style="border-left:3px solid ${fColor}">
-        <div class="flex items-center justify-between">
+      <div class="fleet-card card-deco" onclick="App.navigate('builder','${f.id}')" style="--fc:${fColor}">
+        <div class="fleet-card-header">
           <div class="flex items-center gap-xs">
             ${fIcon ? `<img src="${fIcon}" alt="" class="fleet-card-faction-icon">` : ''}
             <span class="badge badge-${f.faction}">${fName}</span>
