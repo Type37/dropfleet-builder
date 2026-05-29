@@ -814,7 +814,11 @@ const App = (() => {
     const sizeInfo = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
     const fName = (factionData[f.faction] || {}).name || f.faction.toUpperCase();
 
-    document.getElementById('builder-fleet-name').textContent = f.name;
+    const nameEl = document.getElementById('builder-fleet-name');
+    nameEl.textContent = f.name;
+    nameEl.title = 'Click to rename fleet';
+    nameEl.style.cursor = 'pointer';
+    nameEl.onclick = () => editFleetName();
     document.getElementById('builder-fleet-faction').textContent = fName;
     const sizeEl = document.getElementById('builder-fleet-size');
     sizeEl.textContent = sizeInfo.label;
@@ -1052,16 +1056,80 @@ const App = (() => {
     });
   }
 
+  function editFleetName() {
+    if (!currentFleet) return;
+    const nameEl = document.getElementById('builder-fleet-name');
+    const current = currentFleet.name;
+
+    // Replace the name display with an inline input
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = current;
+    input.className = 'fleet-name-input';
+    input.style.cssText = 'font:inherit;color:inherit;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:3px;padding:2px 6px;width:100%;outline:none;';
+    nameEl.textContent = '';
+    nameEl.appendChild(input);
+    nameEl.onclick = null;
+    input.focus();
+    input.select();
+
+    const commit = () => {
+      const val = input.value.trim();
+      if (val && val !== current) {
+        currentFleet.name = val;
+        saveFleets();
+        document.getElementById('topbar-context').textContent = val;
+        showToast('Fleet renamed');
+      }
+      nameEl.textContent = currentFleet.name;
+      nameEl.onclick = () => editFleetName();
+    };
+
+    input.addEventListener('blur', commit);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+      if (e.key === 'Escape') { input.value = current; input.blur(); }
+    });
+  }
+
   function renameGroup(gid) {
-    const g = currentFleet.battleGroups.find(g => g.id === gid);
+    const g = currentFleet.battleGroups.find(gg => gg.id === gid);
     if (!g) return;
-    const name = prompt('Group name:', g.name);
-    if (name && name.trim()) {
-      g.name = name.trim();
-      saveFleets();
+    // Find the group name element in the header bar
+    const headerName = document.querySelector('.group-header-bar h2');
+    if (!headerName) {
+      // Fallback to prompt if header not found
+      const name = prompt('Group name:', g.name);
+      if (name && name.trim()) { g.name = name.trim(); saveFleets(); renderGroupsNav(); renderActiveGroup(); }
+      return;
+    }
+    const current = g.name;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = current;
+    input.className = 'group-name-input';
+    input.style.cssText = 'font:inherit;color:inherit;background:var(--paper-warm);border:1px solid var(--stroke);border-radius:3px;padding:2px 8px;width:300px;max-width:100%;outline:none;';
+    headerName.textContent = '';
+    headerName.appendChild(input);
+    input.focus();
+    input.select();
+
+    const commit = () => {
+      const val = input.value.trim();
+      if (val && val !== current) {
+        g.name = val;
+        saveFleets();
+        showToast('Group renamed');
+      }
       renderGroupsNav();
       renderActiveGroup();
-    }
+    };
+
+    input.addEventListener('blur', commit);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+      if (e.key === 'Escape') { input.value = current; input.blur(); }
+    });
   }
 
   // ── Active Group View ──
@@ -2743,7 +2811,7 @@ const App = (() => {
 
   // ── Public API ──
   return {
-    navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet,
+    navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName,
     loadDemoFleets, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, renameGroup,
     openShipSelectModal, filterCategory, toggleShipFilter, searchShips, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout,
     openAdmiralModal, addGenericAdmiral, addFamousAdmiral, removeAdmiral, toggleSidebar, printFleet,
