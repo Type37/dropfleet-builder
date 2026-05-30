@@ -42,3 +42,8 @@ assets/logos/favicon_crop.png
 scripts/_pdftext/*.txt
 scripts/_fetched-missing-lore.json
 scripts/_missing-lore.txt
+
+# Local art-cutout review scaffolding (originals recoverable from git history;
+# delete once cutouts are curated)
+assets/_art_orig/
+art-review/
