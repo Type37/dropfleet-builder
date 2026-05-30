@@ -90,6 +90,7 @@ const App = (() => {
     loadSettings();
     loadFleets();
     setupRouting();
+    initBottomSheetGestures();
     window.dispatchEvent(new Event('hashchange'));
   }
 
@@ -4392,6 +4393,60 @@ const App = (() => {
   function toggleSidebar() {
     const sidebar = document.getElementById('builder-sidebar');
     sidebar.classList.toggle('expanded');
+  }
+
+  // iOS-style drag on the mobile bottom sheet. Attached once to the persistent
+  // sheet element, so swipe-to-collapse works in EVERY state (including while the
+  // ship picker is open, since the sheet floats above it). Swipe down collapses,
+  // swipe up expands; the sheet follows the finger and snaps on release.
+  function initBottomSheetGestures() {
+    const sheet = document.getElementById('builder-sidebar');
+    if (!sheet || sheet._gesturesInit) return;
+    sheet._gesturesInit = true;
+    const handle = () => sheet.querySelector('.sidebar-handle');
+    let startY = 0, lastY = 0, dragging = false, moved = false, baseExpanded = false, collapsedY = 0;
+
+    sheet.addEventListener('touchstart', e => {
+      if (e.touches.length !== 1) return;
+      if (getComputedStyle(sheet).position !== 'fixed') return;  // desktop: no-op
+      const t = e.touches[0];
+      startY = lastY = t.clientY;
+      baseExpanded = sheet.classList.contains('expanded');
+      const onHandle = handle() && handle().contains(e.target);
+      const atTop = sheet.scrollTop <= 0;
+      // Drag when grabbing the handle, when collapsed (peek), or when expanded &
+      // scrolled to the top (so content can still scroll otherwise).
+      dragging = !!onHandle || !baseExpanded || (baseExpanded && atTop);
+      moved = false;
+      collapsedY = sheet.offsetHeight - 48;
+    }, { passive: true });
+
+    sheet.addEventListener('touchmove', e => {
+      if (!dragging) return;
+      const dy = e.touches[0].clientY - startY;
+      lastY = e.touches[0].clientY;
+      if (Math.abs(dy) < 4) return;
+      if (baseExpanded && dy < 0) { dragging = false; return; }  // let content scroll up
+      moved = true;
+      const baseY = baseExpanded ? 0 : collapsedY;
+      const ty = Math.max(0, Math.min(collapsedY, baseY + dy));
+      sheet.style.transition = 'none';
+      sheet.style.transform = `translateY(${ty}px)`;
+      e.preventDefault();
+    }, { passive: false });
+
+    const end = () => {
+      if (!dragging) return;
+      dragging = false;
+      sheet.style.transition = '';
+      sheet.style.transform = '';
+      if (!moved) return;                         // a tap — let onclick toggle
+      const dy = lastY - startY;
+      if (dy > 50) sheet.classList.remove('expanded');       // swipe down → collapse
+      else if (dy < -50) sheet.classList.add('expanded');    // swipe up → expand
+    };
+    sheet.addEventListener('touchend', end, { passive: true });
+    sheet.addEventListener('touchcancel', end, { passive: true });
   }
 
   // ── Toast ──
