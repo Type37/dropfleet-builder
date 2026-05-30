@@ -405,6 +405,14 @@ h1, h2, h3, h4, h5, h6 {
   position: sticky;
   top: var(--topbar-h);
   border-left: 1px solid var(--stroke-light);
+  container-type: inline-size;   /* enables width-based container queries below */
+}
+/* Stack the ship card (art on top, full-width stats/weapons) whenever the detail
+   PANEL itself is narrow — independent of viewport — so weapon names and the
+   stat grid never get squeezed at any 3-panel width. */
+@container (max-width: 560px) {
+  .group-ship-entry { flex-direction: column; }
+  .group-ship-entry .ship-card-image { width: 100%; height: 130px; }
 }
 .builder-detail.hidden { display: none; }
 
@@ -4827,13 +4835,7 @@ h1, h2, h3, h4, h5, h6 {
   .mobile-only { display: none !important; }
 }
 
-/* When the three-panel detail column is narrow (tablet + narrow desktop up to
-   ~950px), stack its ship card — art on top, full-width stats/weapons below —
-   so weapon names and the stat grid aren't squeezed. */
-@media (max-width: 950px) {
-  .builder-detail .group-ship-entry { flex-direction: column; }
-  .builder-detail .ship-card-image { width: 100%; height: 120px; }
-}
+/* (Detail ship-card stacking is handled by the container query on .builder-detail.) */
 
 @media (max-width: 639px) {
   .desktop-only { display: none !important; }
