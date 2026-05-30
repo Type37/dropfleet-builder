@@ -638,7 +638,7 @@ const App = (() => {
         : `<span style="width:20px;height:20px;border-radius:2px;background:${FACTION_COLORS[key]};flex-shrink:0;display:block"></span>`;
       return `<button type="button" class="btn btn-outline faction-pick-btn" data-faction="${key}"
         onclick="App.selectFaction('${key}')"
-        style="flex:1;min-width:100px;border-color:${FACTION_COLORS[key]}33;position:relative;overflow:hidden">
+        style="flex:1;min-width:100px;position:relative;overflow:hidden">
         ${icon}
         <span>${name}</span>
       </button>`;
@@ -655,10 +655,10 @@ const App = (() => {
     });
     const btn = document.querySelector(`.faction-pick-btn[data-faction="${key}"]`);
     if (btn) {
+      // Clear, high-contrast selection — neutral navy, not the faction colour
+      // (which reads poorly for light factions). The icon carries faction identity.
       btn.classList.remove('btn-outline');
       btn.classList.add('btn-primary');
-      btn.style.background = FACTION_COLORS[key];
-      btn.style.color = '#fff';
       btn.dataset.selected = 'true';
     }
   }
