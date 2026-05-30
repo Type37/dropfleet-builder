@@ -1538,7 +1538,7 @@ const App = (() => {
   function addGroup() {
     if (!currentFleet) return;
     const sizeInfo = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
-    if (currentFleet.battleGroups.length >= sizeInfo.groups) {
+    if (countableGroups(currentFleet).length >= sizeInfo.groups) {
       showToast('Maximum groups reached for ' + sizeInfo.label);
       return;
     }
@@ -4896,7 +4896,7 @@ const App = (() => {
       if (firstShip.shipKey !== shipKey || firstShip.groupCategory !== category) {
         // Different ship — create a new group and add there
         const sizeInfo = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
-        if (currentFleet.battleGroups.length >= sizeInfo.groups) {
+        if (countableGroups(currentFleet).length >= sizeInfo.groups) {
           showToast('Maximum groups reached');
           return;
         }
