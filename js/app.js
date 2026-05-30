@@ -277,6 +277,7 @@ const App = (() => {
           type: 'Famous',
           special_abilities: a.abilities || [],
           ability_picks: a.abilityPicks || 1,
+          ship_name: fs?.name || null,
           className: fs?.className || null,
           scan: fs?.stats?.scan, sig: fs?.stats?.sig,
           thrust: fs?.stats?.thrust, hull: fs?.stats?.hull,
@@ -1190,7 +1191,7 @@ const App = (() => {
     fill.style.width = limit === 99999 ? '0%' : pct + '%';
     fill.className = 'points-fill' + (pts > limit ? ' over-budget' : pct > 85 ? ' near-limit' : '');
 
-    const groupCount = f.battleGroups.length;
+    const groupCount = countableGroups(f).length;
     document.getElementById('groups-count').textContent = `${groupCount} group${groupCount !== 1 ? 's' : ''}`;
     document.getElementById('groups-limit').textContent = `/ ${sizeInfo.groups} max`;
 
@@ -1216,6 +1217,20 @@ const App = (() => {
 
   // ── Fleet Validation ──
   // Returns an array of {type: 'error'|'warn', message} for display
+  // Payload groups (Bioficer Cells, deployed from carriers) are not independent
+  // battle groups — they don't count toward the game-size group limit.
+  function isPayloadGroup(fleet, g) {
+    if (!g || !g.ships || !g.ships.length) return false;
+    const s = g.ships[0];
+    if (s.groupCategory === 'payload') return true;
+    const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
+    const ton = (db && db.tonnage) || s.tonnage || '';
+    return ton === 'P';
+  }
+  function countableGroups(fleet) {
+    return (fleet.battleGroups || []).filter(g => !isPayloadGroup(fleet, g));
+  }
+
   function validateFleet(fleet) {
     if (!fleet) return [];
     const warnings = [];
@@ -1230,8 +1245,9 @@ const App = (() => {
     }
 
     // 2. Group count
-    if (fleet.battleGroups.length > sizeInfo.groups) {
-      warnings.push({ type: 'error', msg: `Too many groups: ${fleet.battleGroups.length}/${sizeInfo.groups}` });
+    const groupTally = countableGroups(fleet).length;
+    if (groupTally > sizeInfo.groups) {
+      warnings.push({ type: 'error', msg: `Too many groups: ${groupTally}/${sizeInfo.groups}` });
     }
 
     // 3. Colossal group limit
@@ -1970,7 +1986,9 @@ const App = (() => {
   };
 
   function renderStatGrid(ship) {
-    const keys = ['scan','sig','thrust','hull','es','ks','bs','g'];
+    // 'g' (group size) is shown as a range badge by the ship name / qty picker,
+    // not as a prominent stat-grid cell.
+    const keys = ['scan','sig','thrust','hull','es','ks','bs'];
     const cells = keys.map(k => {
       const v = ship[k];
       if (v === undefined || v === 0) return '';
@@ -3251,20 +3269,28 @@ const App = (() => {
         const factionShips = shipDB[currentFleet.faction];
         const admiralGroup = factionShips?.groups?.famous_admirals;
         const flagship = admiralGroup?.ships?.[a.shipKey];
-        if (flagship && flagship.weapons) {
-          const img = flagship.image ? `<img src="${esc(flagship.image)}" alt="" style="height:48px;width:auto;object-fit:contain;border-radius:var(--radius-sm)" loading="lazy" onerror="this.style.display='none'">` : '';
-          const statsKeys = ['scan','sig','thrust','hull','es','ks','bs','g'];
-          const statLine = statsKeys.map(k => flagship[k] !== undefined && flagship[k] !== 0 ? `${STAT_META[k].label}:${flagship[k]}` : '').filter(Boolean).join(' · ');
-          const wpnLine = flagship.weapons.map(w => `${esc(w.name)} (${w.arc} ${w.attack}A Lk${w.lock})`).join(', ');
-          flagshipHtml = `<div style="margin-top:var(--sp-sm);padding:var(--sp-sm);background:var(--surface);border:1px solid var(--stroke-light);border-radius:var(--radius-sm)">
-            <div class="flex gap-sm items-center">
+        if (flagship) {
+          const fsName = flagship.ship_name || flagship.className || (flagship.tonnage ? flagship.tonnage + ' Flagship' : 'Flagship');
+          const fsSub = [flagship.className && flagship.className !== fsName ? flagship.className : '', flagship.ship_cost ? flagship.ship_cost + ' pts' : ''].filter(Boolean).join(' · ');
+          const img = flagship.image ? `<img src="${esc(flagship.image)}" alt="" class="admiral-flagship-art" loading="lazy" onerror="this.style.display='none'">` : '';
+          const wpns = flagship.weapons || [];
+          const wpnHtml = wpns.length ? `<div class="weapon-list">${renderWeaponHeader()}${wpns.map(renderWeaponRow).join('')}</div>` : '';
+          const rulesHtml = (flagship.specialRuleDetails || []).length
+            ? `<div class="admiral-flagship-rules">${flagship.specialRuleDetails.map(r => r.description
+                ? `<span class="rule-chip rule-chip-sm has-tooltip" data-rule-desc="${esc(r.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(r.name)}</span>`
+                : `<span class="rule-chip rule-chip-sm">${esc(r.name)}</span>`).join('')}</div>`
+            : '';
+          flagshipHtml = `<div class="admiral-flagship">
+            <div class="admiral-flagship-head">
               ${img}
               <div style="min-width:0">
-                <div style="font-weight:var(--weight-semibold);font-size:var(--text-sm)">${esc(flagship.tonnage || '')} Flagship</div>
-                <div style="font-size:var(--text-xs);color:var(--ink-muted)">${statLine}</div>
-                <div style="font-size:var(--text-xs);color:var(--ink-muted);margin-top:2px">${wpnLine}</div>
+                <div class="admiral-flagship-name">${esc(fsName)}</div>
+                ${fsSub ? `<div class="admiral-flagship-sub">${esc(fsSub)}</div>` : ''}
               </div>
             </div>
+            ${renderStatGrid(flagship)}
+            ${wpnHtml}
+            ${rulesHtml}
           </div>`;
         }
       }
@@ -3530,11 +3556,27 @@ const App = (() => {
               abilitiesHtml += `<div class="print-admiral-abilities"><div class="print-admiral-ability-sublabel">Chosen Abilities</div>${chosen.map(abilityLine).join('')}</div>`;
             }
           }
+          // Famous admirals: print the flagship datasheet (stats + weapons).
+          let flagshipHtml = '';
+          if (a.type === 'Famous' && a.shipKey) {
+            const fsp = factionInfo?.groups?.famous_admirals?.ships?.[a.shipKey];
+            if (fsp) {
+              const fsName = fsp.ship_name || fsp.className || (fsp.tonnage ? fsp.tonnage + ' Flagship' : 'Flagship');
+              const wpns = fsp.weapons || [];
+              flagshipHtml = `<div class="print-admiral-flagship">
+                <div class="print-admiral-ability-sublabel">Flagship — ${esc(fsName)}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
+                ${renderStatGrid(fsp)}
+                ${wpns.length ? `<div class="weapon-list">${renderWeaponHeader()}${wpns.map(renderWeaponRow).join('')}</div>` : ''}
+                ${(fsp.specialRuleDetails || []).length ? `<div class="print-rules-list">${fsp.specialRuleDetails.map(r => `<span class="print-rule">${esc(r.name)}${r.description ? `: ${esc(r.description)}` : ''}</span>`).join('')}</div>` : ''}
+              </div>`;
+            }
+          }
           return `<div class="print-admiral-card">
             <div class="print-admiral-header">
               <span class="print-admiral-name">${esc(a.name)} — Level ${a.level || '?'}${a.type === 'Famous' ? ' (Famous)' : ''}</span>
               <span class="print-admiral-pts">${a.points} pts</span>
             </div>
+            ${flagshipHtml}
             ${abilitiesHtml}
           </div>`;
         }).join('')}

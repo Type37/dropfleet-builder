@@ -2848,6 +2848,20 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
 }
 
+/* Famous-admiral flagship datasheet (full stats + weapons) */
+.admiral-flagship {
+  margin-top: var(--sp-md);
+  padding: var(--sp-sm);
+  background: var(--surface, #f4f1ea);
+  border: 1px solid var(--stroke-light);
+  border-radius: var(--radius-md);
+}
+.admiral-flagship-head { display: flex; align-items: center; gap: var(--sp-sm); margin-bottom: var(--sp-sm); }
+.admiral-flagship-art { height: 56px; width: auto; max-width: 90px; object-fit: contain; }
+.admiral-flagship-name { font-family: var(--font-display); font-weight: var(--weight-bold); font-size: var(--text-sm); color: var(--navy); }
+.admiral-flagship-sub { font-size: var(--text-xs); color: var(--ink-muted); }
+.admiral-flagship-rules { display: flex; flex-wrap: wrap; gap: 4px; margin-top: var(--sp-sm); }
+
 /* ── 17b. Space Station ─────────────────────────────────────── */
 .station-card {
   background: var(--paper);
