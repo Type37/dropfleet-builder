@@ -4426,35 +4426,50 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* Primary action: Add Group floats as a pinned footer at the bottom of the
    overview (middle) panel — always reachable while the group list scrolls. */
-.overview-addgroup-bar {
-  position: sticky;
-  bottom: var(--sp-md);
-  margin-top: var(--sp-lg);
-  padding-top: var(--sp-sm);
-  z-index: 5;
-  pointer-events: none;   /* let scroll pass through the bar gutter; button re-enables */
-}
-.overview-add-group-btn {
-  pointer-events: auto;
+/* Battle Groups section header: label left, Add Group action right. Anchored
+   at the top of the list so it never scrolls off and never floats over content
+   (the old sticky bottom bar was persistently in the way). */
+.overview-section-head {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: var(--sp-sm);
-  width: 100%;
-  padding: var(--sp-md);
-  box-shadow: var(--shadow-lg);
+  margin-bottom: var(--sp-sm);
+}
+.overview-section-head .overview-section-label { margin-bottom: 0; }
+.overview-add-group-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
   font-family: var(--font-display);
-  font-size: var(--text-md);
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
   color: #fff;
   background: var(--navy);
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
+  white-space: nowrap;
   transition: background var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 .overview-add-group-btn:hover { background: var(--navy-deep, #142d47); }
-.overview-add-group-btn:active { transform: scale(0.99); }
+.overview-add-group-btn:active { transform: scale(0.97); }
+
+/* Empty state when a fleet has no groups yet */
+.overview-groups-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-md);
+  padding: var(--sp-xl) var(--sp-md);
+  text-align: center;
+  color: var(--ink-muted);
+  background: var(--paper-alt);
+  border: 1px dashed var(--stroke-light);
+  border-radius: var(--radius-lg, 10px);
+}
+.overview-groups-empty p { margin: 0; font-size: var(--text-sm); }
 /* Tonnage category section dividers in overview */
 .overview-cat-divider {
   display: flex;
@@ -4901,7 +4916,6 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 639px) {
   .desktop-only { display: none !important; }
   /* Float the Add Group button above the collapsed fleet-summary sheet peek. */
-  .overview-addgroup-bar { bottom: 56px; }
 
   /* Master→detail on phones: selecting a group shows the detail as a full-screen
      view over the overview (not appended off-screen below it). Back button returns. */

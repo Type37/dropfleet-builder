@@ -1325,7 +1325,7 @@ const App = (() => {
       if (g.ships.length === 0) return;
       const s = g.ships[0];
       const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
-      if (db && isFeatureCarrier(db) && !s.feature) {
+      if (db && featureRequired(db) && !s.feature) {
         warnings.push({ type: 'warn', msg: `${db.name} must choose a Deployable Feature` });
       }
     });
@@ -1773,17 +1773,21 @@ const App = (() => {
         </div>
         ${validHtml}
         <div class="overview-section">
-          <div class="overview-section-label">Battle Groups (${f.battleGroups.length})</div>
-          <div class="overview-groups">${groupCards}</div>
+          <div class="overview-section-head">
+            <div class="overview-section-label">Battle Groups (${f.battleGroups.length})</div>
+            <button class="overview-add-group-btn" onclick="App.addGroup()" aria-label="Add a battle group">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+              Add Group
+            </button>
+          </div>
+          <div class="overview-groups">${groupCards || `
+            <div class="overview-groups-empty">
+              <p>No battle groups yet — add one to start your fleet.</p>
+              <button class="btn btn-primary" onclick="App.addGroup()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> Add your first group</button>
+            </div>`}</div>
         </div>
         ${admHtml}
         ${stationHtml}
-        <div class="overview-addgroup-bar">
-          <button class="overview-add-group-btn" onclick="App.addGroup()">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
-            Add Group
-          </button>
-        </div>
       </div>`;
   }
 
@@ -2102,8 +2106,20 @@ const App = (() => {
   // [Faction] Deployable Features List").
   function isFeatureCarrier(dbShip) {
     if (!dbShip) return false;
-    const hay = (dbShip.rulesText || '') + ' ' + JSON.stringify(dbShip.specialRules || []);
-    return /Deployable Feature/i.test(hay);
+    // NB: the DB ship exposes special-rule NAMES as `special_rules` (not
+    // `specialRules`). A ship may carry a Deployable Feature if its rules say so
+    // OR if it has the Porter rule — Porters may take a Genitor Tower as a
+    // Payload S-1 (DFC: "assigned to a Ship with the Porter special rule").
+    const ruleNames = (dbShip.special_rules || []).join(' ');
+    const hay = (dbShip.rulesText || '') + ' ' + ruleNames;
+    return /Deployable Feature/i.test(hay) || /\bPorter\b/i.test(ruleNames);
+  }
+
+  // A genuine "choose one Deployable Feature" ship MUST take one; a Porter MAY.
+  function featureRequired(dbShip) {
+    if (!dbShip) return false;
+    const ruleNames = (dbShip.special_rules || []).join(' ');
+    return /Deployable Feature/i.test((dbShip.rulesText || '') + ' ' + ruleNames);
   }
 
   // A ship is "fully modular" when it has a Systems selection and NO base
@@ -2131,13 +2147,22 @@ const App = (() => {
     const faction = shipDB[currentFleet.faction];
     const feats = (faction && faction.deployableFeatures) || [];
     if (feats.length === 0) return '';
+    const required = featureRequired(dbShip);
     const chosen = ship.feature || '';
-    const opts = ['<option value="">— Choose a feature —</option>']
-      .concat(feats.map(f => `<option value="${esc(f.name)}" ${f.name === chosen ? 'selected' : ''}>${esc(f.name)}</option>`))
+    const opts = [`<option value="">— ${required ? 'Choose a feature' : 'No payload feature'} —</option>`]
+      .concat(feats.map(f => {
+        const costLabel = f.cost ? ` (+${f.cost} pts)` : '';
+        return `<option value="${esc(f.name)}" ${f.name === chosen ? 'selected' : ''}>${esc(f.name)}${costLabel}</option>`;
+      }))
       .join('');
     const chosenFeat = feats.find(f => f.name === chosen);
-    return `<div class="feature-carrier-block${chosen ? '' : ' feature-carrier-unset'}">
-      <div class="feature-carrier-label">Deployable Feature${chosen ? '' : ' — required'}</div>
+    // Porter ships take a feature as an OPTIONAL Payload S-1; only genuine
+    // "choose one" carriers are flagged as required.
+    const label = required
+      ? `Deployable Feature${chosen ? '' : ' — required'}`
+      : 'Payload feature — optional';
+    return `<div class="feature-carrier-block${(required && !chosen) ? ' feature-carrier-unset' : ''}">
+      <div class="feature-carrier-label">${label}</div>
       <select class="loadout-select" onchange="App.changeFeature('${groupId}','${ship.id}', this.value)">${opts}</select>
       ${renderFeatureStats(chosenFeat)}
     </div>`;
@@ -2748,11 +2773,12 @@ const App = (() => {
       currentFleet.battleGroups.push(group);
       activeGroupId = group.id;
 
-      pendingGroupCreation = false;
-      closeModal('modal-ship-select');
+      // Keep the picker open so several groups can be created back-to-back —
+      // the user dismisses it with the modal's Close (×) when done, instead of
+      // hunting for the Add Group button after every single add.
       saveFleets();
       scheduleRender(renderGroupsNav, renderActiveGroup, updatePoints);
-      showToast(`Created group: ${dbShip.name}`);
+      showToast(`Added group: ${dbShip.name} — pick another, or close when done`);
       return;
     }
     addShipToGroupEnforced(shipKey, category);
@@ -2802,9 +2828,13 @@ const App = (() => {
     if (!ship) return;
     // Every ship in a group must carry the same options — apply to all copies
     // of this ship type so the collapsed card stays consistent.
+    const dbShip = findShipInDB(currentFleet.faction, ship.groupCategory, ship.shipKey);
     group.ships
       .filter(s => s.shipKey === ship.shipKey && s.groupCategory === ship.groupCategory)
-      .forEach(s => { s.feature = featureName || undefined; });
+      .forEach(s => {
+        s.feature = featureName || undefined;
+        if (dbShip) s.points = recalcShipPoints(s, dbShip, currentFleet.faction);
+      });
     saveFleets();
     updatePoints();
     scheduleRender(renderGroupsNav, renderActiveGroup);
@@ -2823,6 +2853,12 @@ const App = (() => {
         const o = findSystemOption(list, n);
         if (o) total += o.cost || 0;
       });
+    }
+    // Deployable feature (e.g. a Porter's Genitor Tower) adds its own cost.
+    if (ship.feature) {
+      const feats = (shipDB[factionKey] && shipDB[factionKey].deployableFeatures) || [];
+      const f = feats.find(x => x.name === ship.feature);
+      if (f) total += f.cost || 0;
     }
     return total;
   }
