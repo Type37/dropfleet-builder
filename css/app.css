@@ -4355,15 +4355,25 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   gap: var(--sp-sm);
 }
-/* Primary action: Add Group lives in the overview (middle) panel. */
+/* Primary action: Add Group floats as a pinned footer at the bottom of the
+   overview (middle) panel — always reachable while the group list scrolls. */
+.overview-addgroup-bar {
+  position: sticky;
+  bottom: var(--sp-md);
+  margin-top: var(--sp-lg);
+  padding-top: var(--sp-sm);
+  z-index: 5;
+  pointer-events: none;   /* let scroll pass through the bar gutter; button re-enables */
+}
 .overview-add-group-btn {
+  pointer-events: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--sp-sm);
   width: 100%;
-  margin-top: var(--sp-md);
   padding: var(--sp-md);
+  box-shadow: var(--shadow-lg);
   font-family: var(--font-display);
   font-size: var(--text-md);
   font-weight: var(--weight-bold);
@@ -4819,6 +4829,8 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 639px) {
   .desktop-only { display: none !important; }
+  /* Float the Add Group button above the collapsed fleet-summary sheet peek. */
+  .overview-addgroup-bar { bottom: 56px; }
 }
 
 /* Tablets (Fluent "large" ≥640px, incl. iPad portrait at 768) get the full

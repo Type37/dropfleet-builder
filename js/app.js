@@ -1776,13 +1776,15 @@ const App = (() => {
         <div class="overview-section">
           <div class="overview-section-label">Battle Groups (${f.battleGroups.length})</div>
           <div class="overview-groups">${groupCards}</div>
+        </div>
+        ${admHtml}
+        ${stationHtml}
+        <div class="overview-addgroup-bar">
           <button class="overview-add-group-btn" onclick="App.addGroup()">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
             Add Group
           </button>
         </div>
-        ${admHtml}
-        ${stationHtml}
       </div>`;
   }
 
