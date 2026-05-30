@@ -1778,32 +1778,31 @@ h1, h2, h3, h4, h5, h6 {
 /* ── 14. Ship Stats Grid ─────────────────────────────────────── */
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
-  gap: 2px;
+  grid-template-columns: repeat(auto-fit, minmax(74px, 1fr));
+  gap: 3px;
 }
 
 .stat-cell {
   background: var(--paper-alt);
   border: 1px solid var(--stroke-light);
-  padding: var(--sp-xs) var(--sp-xs);
-  text-align: center;
+  border-radius: var(--radius-sm);
+  padding: 4px 7px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-align: left;
 }
-.stat-cell:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
-.stat-cell:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.stat-cell-icon { flex-shrink: 0; display: inline-flex; align-items: center; }
+.stat-cell-icon svg { width: 16px; height: 16px; opacity: 0.75; }
+.stat-cell-text { display: flex; flex-direction: column; line-height: 1.05; min-width: 0; }
 
 .stat-cell-label {
   font-family: var(--font-condensed);
   font-size: 9px;
   font-weight: var(--weight-semibold);
   color: var(--ink-muted);
-  text-transform: none;
   letter-spacing: 0.01em;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
 }
-.stat-cell-label svg { opacity: 0.6; flex-shrink: 0; }
 
 .stat-cell-value {
   font-family: var(--font-body);
@@ -4898,7 +4897,7 @@ h1, h2, h3, h4, h5, h6 {
   .overview-group-pts { font-size: var(--text-md); }
 
   /* 4-column stat grid for even 4+4 wrap on 8-stat ships */
-  .stat-grid { grid-template-columns: repeat(4, 1fr); }
+  .stat-grid { grid-template-columns: repeat(auto-fit, minmax(78px, 1fr)); }
   .stat-cell-label { font-size: 8px; }
   .stat-cell-value { font-size: var(--text-sm); }
 
@@ -4935,7 +4934,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 360px) {
-  .stat-grid { grid-template-columns: repeat(4, 1fr); gap: 1px; }
+  .stat-grid { grid-template-columns: repeat(auto-fit, minmax(72px, 1fr)); gap: 2px; }
   .stat-cell { padding: 2px; }
   .stat-cell-label { font-size: 7px; }
   .stat-cell-value { font-size: var(--text-xs); }

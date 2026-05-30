@@ -1992,9 +1992,14 @@ const App = (() => {
       // Gray out BS when it's "-"
       if (k === 'bs' && (v === '-' || v === '--')) cellClass = 'stat-cell-none';
       const icon = STAT_ICONS[k] || '';
+      // Icon as the left-anchored visual anchor; label + value read left→right
+      // (F-pattern, and per the stat-cell reference layout).
       return `<div class="stat-cell ${cellClass}" title="${meta.title}">
-        <div class="stat-cell-label">${icon} ${meta.label}</div>
-        <div class="stat-cell-value">${v}</div>
+        ${icon ? `<span class="stat-cell-icon">${icon}</span>` : ''}
+        <span class="stat-cell-text">
+          <span class="stat-cell-label">${meta.label}</span>
+          <span class="stat-cell-value">${v}</span>
+        </span>
       </div>`;
     }).filter(Boolean).join('');
     return cells ? `<div class="stat-grid">${cells}</div>` : '';
