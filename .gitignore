@@ -35,3 +35,10 @@ desktop.ini
 
 # Temp favicon source
 assets/logos/favicon_crop.png
+
+# Lore extraction scratch — raw PDF text dumps are regenerable via pdftotext;
+# the curated, verified lore-*.json files are kept. The paraphrased fetch file
+# is superseded by verbatim PDF extraction (merge-verbatim-lore.js).
+scripts/_pdftext/*.txt
+scripts/_fetched-missing-lore.json
+scripts/_missing-lore.txt

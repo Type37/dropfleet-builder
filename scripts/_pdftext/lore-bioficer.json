@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Zenith Dreadnought",
+    "lore": "In 2679, the Zenith class Bioficer dreadnought is the most dreaded close-action vessel in known space. In several early engagements with admirals who didn't appreciate what they were facing, a single example chewed through scores of capital ships and emerged victorious. The Zenith's primary prow armament is the Giga Lightvice. This weapon's fanged maw emits a biblical level of atomic destruction capable of rending a battleship in seconds. Like its cousin the Zodiac, the Zenith's prow-ventral hardpoint will accept any battleship primary armament, although on a dreadnought this is merely secondary. Tertiary armament is typically a quad array of Thermators—another weapon which does its killing up close. Completing the Zenith's offensive suite is a substantial, exposed spinal flight deck."
+  },
+  {
+    "name": "Binder Super Battleship",
+    "lore": "Consistent with the enemy's other super battleships, the Binder is effectively an up-gunned, slower derivative of the Bastion class. Its devastating, mixed armament is a primary threat to any vessel. Like other Bioficer super battleships, it features a greater offensive crew compliment to fill its boarding pods, making boarding actions against this leviathan a foolhardy endeavour."
+  },
+  {
+    "name": "Bishop Super Battleship",
+    "lore": "Much like the Blackbird is an up-gunned version of the Binary, the Bishop super battleship shares the primary armaments of the Brutal class. It sacrifices some thrust to add a Thermitor and boarding pods while retaining the option to add Genitor Torpedoes and a Supercell. Fully equipped and upgraded, this is a terrifying opponent at close quarters."
+  },
+  {
+    "name": "Binary Battleship",
+    "lore": "One of the first nightmarish Bioficer battleships encountered, the Binary is built around a colossal, spinal-mounted Grand Bisector. This weapon is already infamous for neatly slicing cruisers in half with a single, silent discharge. Like most Bioficer battleships, it can be upgraded with Genitor Torpedoes and can carry a single Supercell into battle."
+  },
+  { "name": "Stature Battlecruiser", "lore": null },
+  { "name": "Sanctum Battlecruiser", "lore": null },
+  { "name": "Scion Battlecruiser", "lore": null },
+  { "name": "Carronade Heavy Cruiser", "lore": null },
+  { "name": "Catastrophe Heavy Cruiser", "lore": null },
+  { "name": "Cacophony Heavy Cruiser", "lore": null },
+  { "name": "Cataphract Heavy Cruiser", "lore": null },
+  { "name": "Combine Cruiser", "lore": null },
+  { "name": "Cavern Fleet Carrier", "lore": null },
+  { "name": "Cosmic Cruiser", "lore": null },
+  { "name": "Comet Cruiser", "lore": null },
+  { "name": "Choral Cruiser", "lore": null },
+  { "name": "Construct Cruiser", "lore": null },
+  { "name": "Callous Cruiser", "lore": null },
+  { "name": "Charger Light Cruiser", "lore": null },
+  { "name": "Cipher Light Cruiser", "lore": null },
+  { "name": "Cache Light Cruiser", "lore": null },
+  { "name": "Disciple Destroyer", "lore": null },
+  { "name": "Diode Destroyer", "lore": null },
+  { "name": "Domain Destroyer", "lore": null },
+  { "name": "Tine Cutter", "lore": null },
+  { "name": "Torrent Cutter", "lore": null },
+  { "name": "Matrix Monitor", "lore": null },
+  { "name": "Monarch Monitor", "lore": null },
+  { "name": "Mantle Monitor", "lore": null },
+  { "name": "Fresco Frigate", "lore": null },
+  { "name": "Fulcrum Frigate", "lore": null },
+  { "name": "Foray Frigate", "lore": null },
+  { "name": "Forestall Frigate", "lore": null },
+  { "name": "Fugue Frigate", "lore": null },
+  { "name": "Logic Lighter", "lore": null },
+  { "name": "Vertex Corvette", "lore": null },
+  { "name": "Torpedo Cell", "lore": null },
+  { "name": "Lander Cell", "lore": null },
+  { "name": "Invasion Cell", "lore": null }
+]
