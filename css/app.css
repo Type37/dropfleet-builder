@@ -1808,7 +1808,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .weapon-row {
   display: grid;
-  grid-template-columns: minmax(120px, 1.5fr) 40px 32px 32px 40px minmax(80px, 1fr);
+  /* Compact column mins so the row fits the narrow detail panel (~309px content)
+     without clipping the SPECIAL column; the name & special columns expand via
+     fr on wider layouts (the picker modal). */
+  grid-template-columns: minmax(80px, 1.5fr) 38px 30px 30px 38px minmax(60px, 1.3fr);
   align-items: baseline;
   gap: 0;
   padding: 2px var(--sp-sm);
@@ -1822,6 +1825,20 @@ h1, h2, h3, h4, h5, h6 {
 .weapon-row:last-child {
   border-bottom: none;
 }
+
+/* In the narrow right detail panel, give the weapon name the full width and
+   wrap SPECIAL onto its own row beneath it (the wide picker modal keeps the
+   single-line 6-column layout). */
+#builder-detail .weapon-row {
+  grid-template-columns: 1fr 38px 30px 30px 38px;
+}
+#builder-detail .weapon-col-special {
+  grid-column: 1 / -1;
+  padding-left: 0;
+  margin-top: 2px;
+}
+#builder-detail .weapon-col-name { white-space: normal; }
+#builder-detail .weapon-row-header .weapon-col-special { display: none; }
 
 .weapon-col {
   white-space: nowrap;
