@@ -854,7 +854,6 @@ const App = (() => {
       const fName = (factionData[f.faction] || {}).name || f.faction.toUpperCase();
       const shipCount = f.battleGroups.reduce((t, g) => t + g.ships.length, 0);
       const admCount = (f.admirals || []).length;
-      const fColor = FACTION_COLORS[f.faction] || 'var(--navy)';
       const updated = f.updatedAt ? new Date(f.updatedAt) : null;
       const timeAgo = updated ? formatTimeAgo(updated) : '';
       const warnings = validateFleet(f);
@@ -872,7 +871,7 @@ const App = (() => {
         <div class="fleet-card-header">
           <div class="flex items-center gap-xs">
             ${fIcon ? `<img src="${fIcon}" alt="" class="fleet-card-faction-icon">` : ''}
-            <span class="badge badge-${f.faction}">${fName}</span>
+            <span class="badge badge-navy">${fName}</span>
           </div>
           <div class="flex gap-xs items-center">
             ${validationBadge}
