@@ -139,13 +139,8 @@
         <!-- Fleet Warnings -->
         <div id="fleet-warnings"></div>
 
-        <!-- Battle Groups navigation (Add Group lives in the overview panel) -->
-        <div class="sidebar-section" style="flex:1">
-          <div class="sidebar-section-title">Groups</div>
-          <div id="groups-nav" class="flex flex-col gap-xs">
-            <!-- Populated by JS -->
-          </div>
-        </div>
+        <!-- Battle Groups live in the overview (middle) panel, not the sidebar. -->
+        <div style="flex:1"></div>
 
         <!-- Admiral -->
         <div class="sidebar-section">
@@ -223,7 +218,7 @@
       <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-import')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body">
-      <p class="text-caption" style="margin-bottom:var(--sp-md)">Paste a share link or fleet code below, then tap Import.</p>
+      <p class="text-caption" style="margin-bottom:var(--sp-md)">Paste your share link or fleet code.</p>
       <textarea class="form-textarea" id="import-text" rows="5" placeholder="Paste your fleet share link or code here…" style="width:100%;font-family:var(--font-condensed);font-size:var(--text-sm)"></textarea>
     </div>
     <div class="modal-footer">
@@ -314,7 +309,7 @@
       <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-station')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body">
-      <p class="text-caption" style="margin-bottom:var(--sp-lg)">Select a space station for your fleet. Station cost is added to fleet total.</p>
+      <p class="text-caption" style="margin-bottom:var(--sp-lg)">Pick a station for your fleet — its cost counts toward your total.</p>
       <div id="station-options" class="flex flex-col gap-sm">
         <!-- Populated by JS -->
       </div>
@@ -330,7 +325,7 @@
       <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-admiral')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body">
-      <p class="text-caption" style="margin-bottom:var(--sp-lg)">Generic admirals can be placed on any ship. Famous admirals come with their own flagship.</p>
+      <p class="text-caption" style="margin-bottom:var(--sp-lg)">Place a generic admiral on any Capital ship, or pick a famous one — they bring their own flagship.</p>
       <div id="admiral-options" class="flex flex-col gap-md">
         <!-- Populated by JS -->
       </div>

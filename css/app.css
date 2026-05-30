@@ -200,7 +200,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-hero);
   font-weight: var(--weight-heavy);
   letter-spacing: 0.04em;
-  text-transform: uppercase;
+  text-transform: none;
 }
 .text-title-1 { font-size: var(--text-3xl); }
 .text-title-2 { font-size: var(--text-2xl); }
@@ -212,8 +212,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-body);
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-muted);
 }
 .text-rules {
@@ -296,8 +296,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-brand);
   font-weight: var(--weight-bold);
   font-size: var(--text-md);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   white-space: nowrap;
 }
 .topbar-brand svg { flex-shrink: 0; }
@@ -353,7 +353,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
 }
 
@@ -418,8 +418,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-body);
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: rgba(255,255,255,0.4);
   padding-bottom: var(--sp-xs);
   border-bottom: 1px solid rgba(255,255,255,0.08);
@@ -571,7 +571,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: 10px;
   color: rgba(255,255,255,0.55);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.03em;
 }
 .comp-legend-dot {
@@ -676,8 +676,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
 }
 
 /* Ship art thumbnail in nav */
@@ -733,8 +733,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: 9px;
   font-weight: var(--weight-medium);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: rgba(255,255,255,0.4);
 }
 .group-nav-pts {
@@ -908,8 +908,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-muted);
   border-bottom: 1px solid var(--stroke);
   padding-bottom: var(--sp-xs);
@@ -999,8 +999,8 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
   color: var(--ink-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  text-transform: none;
+  letter-spacing: 0.01em;
 }
 
 .form-input,
@@ -1127,7 +1127,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--weight-bold);
   letter-spacing: 0.04em;
   white-space: nowrap;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .badge-navy { background: var(--navy-subtle); color: var(--navy); }
@@ -1176,8 +1176,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-brand);
   font-size: clamp(var(--text-2xl), 5vw, var(--text-hero));
   font-weight: var(--weight-heavy);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   color: var(--navy-dark);
   margin-bottom: var(--sp-md);
 }
@@ -1249,8 +1249,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-sm);
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-muted);
 }
 .landing-stat {
@@ -1278,8 +1278,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-faint);
   text-align: center;
   margin-bottom: var(--sp-lg);
@@ -1386,7 +1386,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--ink);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
 }
 .faction-chip-count {
@@ -1416,8 +1416,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-faint);
   transition: color var(--duration-fast);
 }
@@ -1747,8 +1747,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: var(--weight-medium);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-muted);
   margin-right: var(--sp-xs);
 }
@@ -1795,8 +1795,8 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 9px;
   font-weight: var(--weight-semibold);
   color: var(--ink-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1921,7 +1921,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--navy-subtle);
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   color: var(--ink-muted);
   padding: 1px var(--sp-sm);
@@ -1947,8 +1947,8 @@ h1, h2, h3, h4, h5, h6 {
 .load-section-label {
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-muted);
   margin-top: var(--sp-xs);
 }
@@ -1998,8 +1998,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-header);
   font-size: var(--text-sm);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-muted);
   padding: var(--sp-sm) var(--sp-md);
   background: var(--warm);
@@ -2032,7 +2032,7 @@ h1, h2, h3, h4, h5, h6 {
 .launch-ref-row-header {
   font-weight: var(--weight-bold);
   font-size: var(--text-xs);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   color: var(--ink-muted);
   background: var(--warm);
@@ -2058,8 +2058,8 @@ h1, h2, h3, h4, h5, h6 {
 .loadout-label {
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-muted);
   flex-shrink: 0;
 }
@@ -2201,7 +2201,7 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   user-select: none;
   letter-spacing: 0.03em;
-  text-transform: uppercase;
+  text-transform: none;
   list-style: none;
 }
 
@@ -2267,8 +2267,8 @@ h1, h2, h3, h4, h5, h6 {
   display: block;
   font-style: normal;
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   font-size: 10px;
   color: var(--gold-dark, #7a6320);
   margin-bottom: 2px;
@@ -2288,8 +2288,8 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
   color: var(--navy);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
 }
 .ship-rules-block-text {
   padding: 0 var(--sp-md) var(--sp-sm);
@@ -2315,8 +2315,8 @@ h1, h2, h3, h4, h5, h6 {
 .feature-carrier-label {
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-muted);
   margin-bottom: var(--sp-xs);
 }
@@ -2343,8 +2343,8 @@ h1, h2, h3, h4, h5, h6 {
 .systems-picker-title {
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--navy);
 }
 .systems-picker-count {
@@ -2361,7 +2361,7 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: space-between;
   font-size: 10px;
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   color: var(--ink-muted);
   margin-bottom: 2px;
@@ -2497,8 +2497,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--navy);
 }
 .results-context {
@@ -2525,7 +2525,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-out);
@@ -2646,7 +2646,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: 600;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   padding: 1px 6px;
   border-radius: 3px;
@@ -2676,8 +2676,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-faint);
 }
 .ship-tonnage-light { color: #4a8dc7; }
@@ -2765,8 +2765,8 @@ h1, h2, h3, h4, h5, h6 {
 .admiral-abilities-label {
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--gold-dark);
   margin-bottom: var(--sp-xs);
 }
@@ -2824,8 +2824,8 @@ h1, h2, h3, h4, h5, h6 {
 .admiral-assign-label {
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--gold-dark);
   flex-shrink: 0;
 }
@@ -2975,7 +2975,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
 }
 .group-budget-label {
@@ -3007,8 +3007,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   padding: 2px 8px;
   border-radius: var(--radius-sm);
   border: 1px solid;
@@ -3035,7 +3035,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--error);
   padding: var(--sp-xxs) 0;
 }
-.group-warning-item::before { content: 'ILLEGAL: '; font-weight: var(--weight-bold); }
+.group-warning-item::before { content: 'Illegal — '; font-weight: var(--weight-semibold); }
 
 .group-ships-list {
   display: flex;
@@ -3447,7 +3447,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   color: var(--ink-faint);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
 }
 .shared-header-right {
@@ -3491,7 +3491,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   padding: 3px 10px;
   border-radius: var(--radius-sm);
@@ -3510,8 +3510,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-sm);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-muted);
   padding-bottom: var(--sp-sm);
   margin-bottom: var(--sp-md);
@@ -3549,7 +3549,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-xs);
   font-weight: var(--weight-medium);
   color: var(--ink-faint);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
 }
 .shared-admiral-pts {
@@ -3606,7 +3606,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: var(--weight-medium);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   color: var(--ink-faint);
 }
@@ -3751,8 +3751,8 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 7pt;
     color: #ccc;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    text-transform: none;
+    letter-spacing: 0.01em;
     padding-bottom: 2mm;
   }
 }
@@ -3800,7 +3800,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 8pt;
   color: #888;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
 }
 .print-fleet-name {
@@ -3819,8 +3819,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 8pt;
   color: #999;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   margin-top: 4px;
 }
 .print-fleet-date {
@@ -3862,8 +3862,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 9pt;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: #767676;
   border-bottom: 1px solid #ddd;
   padding-bottom: 4px;
@@ -3902,8 +3902,8 @@ h1, h2, h3, h4, h5, h6 {
 .print-admiral-ability-sublabel {
   font-size: 7.5pt;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: #8a6d1e;
   margin-top: 2pt;
 }
@@ -3970,8 +3970,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 8pt;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   padding: 1px 5px;
   border: 1px solid;
   vertical-align: middle;
@@ -4033,7 +4033,7 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-block;
   font-size: 7pt;
   font-weight: 700;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   padding: 0 4px;
   border: 1px solid;
@@ -4063,7 +4063,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 7pt;
   font-weight: 700;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   color: #888;
   margin-right: 2px;
@@ -4097,7 +4097,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 7pt;
   color: #c43c2f;
   font-weight: 600;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   margin-left: 6px;
 }
@@ -4113,8 +4113,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 8pt;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: #767676;
   margin-top: 4px;
   margin-bottom: 1px;
@@ -4124,7 +4124,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
   font-size: 9pt;
   color: #888;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
 }
 .print-ship-qty {
@@ -4155,8 +4155,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 7pt;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: #999;
   margin-bottom: 2px;
 }
@@ -4185,8 +4185,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 9pt;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: #1b3a5c;
   margin-bottom: 6px;
 }
@@ -4297,7 +4297,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-sm);
   color: var(--ink-muted);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
 }
 .overview-header-right {
@@ -4314,7 +4314,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   color: var(--ink-muted);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
 }
 .overview-section {
@@ -4324,8 +4324,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-muted);
   margin-bottom: var(--sp-md);
   padding-bottom: var(--sp-xs);
@@ -4371,8 +4371,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--cat-color, var(--ink-muted));
 }
 .overview-cat-count {
@@ -4446,7 +4446,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
   color: var(--error);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   margin-top: 2px;
 }
@@ -4496,11 +4496,11 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--error);
   font-weight: var(--weight-semibold);
 }
-.overview-valid-error::before { content: 'ILLEGAL: '; font-weight: var(--weight-bold); }
+.overview-valid-error::before { content: 'Illegal — '; font-weight: var(--weight-semibold); }
 .overview-valid-warn {
   color: var(--ink-soft);
 }
-.overview-valid-warn::before { content: 'NOTE: '; font-weight: var(--weight-semibold); color: var(--ink-muted); }
+
 
 .overview-desc {
   margin-bottom: var(--sp-lg);
@@ -4566,8 +4566,8 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  text-transform: none;
+  letter-spacing: 0.01em;
   color: var(--ink-muted);
   margin-top: var(--sp-xl);
   margin-bottom: var(--sp-sm);
@@ -4754,7 +4754,7 @@ h1, h2, h3, h4, h5, h6 {
     color: rgba(255,255,255,0.55);
     font-family: var(--font-condensed);
     font-weight: var(--weight-semibold);
-    text-transform: uppercase;
+    text-transform: none;
     letter-spacing: 0.04em;
   }
 

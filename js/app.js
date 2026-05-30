@@ -1453,7 +1453,7 @@ const App = (() => {
   // ── Groups ──
   function renderGroupsNav() {
     const nav = document.getElementById('groups-nav');
-    if (!currentFleet) return;
+    if (!nav || !currentFleet) return;  // groups nav lives in the overview panel now
 
     if (currentFleet.battleGroups.length === 0) {
       nav.innerHTML = '<div class="text-caption text-center" style="padding:var(--sp-md)">No groups yet</div>';
@@ -1640,6 +1640,7 @@ const App = (() => {
       Object.entries(shipCounts).forEach(([n, c]) => {
         shipNames.push(c > 1 ? `${c}× ${n}` : n);
       });
+      const shipsLine = shipNames.join(', ');
       const cat = g.ships.length > 0 ? (g.ships[0].groupCategory || 'medium') : 'medium';
       const catLabel = CATEGORY_LABELS[cat] || cat;
       const firstShip = g.ships[0];
@@ -1651,7 +1652,7 @@ const App = (() => {
       // Validation status for this group
       const gErrors = validateGroupSize(g, f);
       const gErrorDot = gErrors.length > 0
-        ? `<span class="overview-group-error" title="${esc(gErrors[0])}">ILLEGAL: ${esc(gErrors[0])}</span>`
+        ? `<span class="overview-group-error" title="${esc(gErrors[0])}">Illegal — ${esc(gErrors[0])}</span>`
         : '';
 
       // Count groups in this category for the section header
@@ -1682,7 +1683,7 @@ const App = (() => {
               <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size:10px;padding:1px 6px">${esc(catLabel)}</span>
               <span class="text-caption">${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
             </div>
-            <div class="overview-group-ships">${shipNames.map(n => esc(n)).join(', ')}</div>
+            ${shipsLine && shipsLine !== g.name ? `<div class="overview-group-ships">${esc(shipsLine)}</div>` : ''}
             ${gErrorDot}
           </div>
           <div class="overview-group-pts">${gPts} pts</div>
@@ -3463,7 +3464,7 @@ const App = (() => {
     const warnings = validateFleet(f);
     const printWarnings = warnings.length > 0
       ? `<div class="print-warnings">${warnings.map(w =>
-          `<div class="print-warning print-warning-${w.type}">${w.type === 'error' ? 'ILLEGAL' : 'NOTE'}: ${esc(w.msg)}</div>`
+          `<div class="print-warning print-warning-${w.type}">${w.type === 'error' ? 'Illegal — ' : ''}${esc(w.msg)}</div>`
         ).join('')}</div>`
       : '';
 
