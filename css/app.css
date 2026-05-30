@@ -1807,15 +1807,22 @@ h1, h2, h3, h4, h5, h6 {
 .stat-cell-label {
   font-family: var(--font-condensed);
   font-size: 11px;
+  /* Same weight as the value (700): the ONLY de-emphasis axis is SIZE, so the
+     label keeps enough presence to anchor its number (per Jet's hierarchy note). */
   font-weight: var(--weight-bold);
   color: var(--ink-soft);
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
+  text-transform: none;
 }
 
 .stat-cell-value {
   font-family: var(--font-body);
   font-size: var(--text-md);
-  font-weight: var(--weight-heavy);
+  /* Bold (700), NOT heavy (800): 800 closed up the apertures on 3 / 5 / 8 and
+     read as a blob at small sizes. Lining + tabular figures keep numerals open
+     and vertically aligned down each column. */
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums lining-nums;
   color: var(--ink);
 }
 
