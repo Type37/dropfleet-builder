@@ -2342,31 +2342,10 @@ const App = (() => {
       }).join('');
     }
 
-    // Base launch assets (loads)
-    let loadsHtml = '';
-    const loads = dbShip && Array.isArray(dbShip.loads) ? dbShip.loads : [];
-    if (loads.length > 0) {
-      loadsHtml = `<div class="load-list">
-        <div class="load-section-label">Launch Assets</div>
-        ${loads.map(l =>
-          `<div class="load-row">
-            <span class="load-row-name">${esc(l.name)}</span>
-            <div class="weapon-row-stats">
-              <span class="weapon-stat-chip">Launch ${l.launch}</span>
-              ${l.special && l.special !== '-' ? `<span class="weapon-stat-chip">${esc(l.special)}</span>` : ''}
-            </div>
-          </div>`
-        ).join('')}
-      </div>`;
-    }
-
-    // Launch Asset Reference — stat profiles for any assets this ship launches.
-    // Kept in the SAME block as the Launch loads above (the "shit with launch"),
-    // so the per-ship Launch values and the asset stat table read as one unit.
-    const shipLaunchAssets = dbShip ? collectShipLaunchAssets(currentFleet.faction, dbShip, ship) : [];
-    const launchRefHtml = shipLaunchAssets.length > 0 ? renderLaunchAssetReference(shipLaunchAssets) : '';
-    const launchBlockHtml = (loadsHtml || launchRefHtml)
-      ? `<div class="launch-block">${loadsHtml}${launchRefHtml}</div>`
+    // One combined Launch Assets table (Launch | Load | stats…) — see renderLaunchTable.
+    const launchTableHtml = dbShip ? renderLaunchTable(currentFleet.faction, dbShip, ship) : '';
+    const launchBlockHtml = launchTableHtml
+      ? `<div class="launch-block">${launchTableHtml}</div>`
       : '';
 
     let rulesHtml = '';
@@ -4557,6 +4536,60 @@ const App = (() => {
       });
     });
     return result;
+  }
+
+  // One combined launch table per unit: Launch | Load | Thrust | Att | Lock | Dmg
+  // | Special. The Launch count (from the ship's load) spans that load's
+  // component assets (e.g. "Fighters & Bombers 5" → one Launch-5 cell over the
+  // Bombers and Fighters rows), each shown with its own stat profile.
+  function renderLaunchTable(factionKey, dbShip, ship) {
+    const factionInfo = shipDB[factionKey];
+    if (!factionInfo || !dbShip) return '';
+    const assetsByName = {};
+    (factionInfo.launchAssets || []).forEach(a => { assetsByName[a.name.toLowerCase()] = a; });
+
+    const allLoads = [...(dbShip.loads || [])];
+    (dbShip.loadoutOptions || []).forEach((lo, loIdx) => {
+      const selIdx = (ship && ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
+      const selOpt = lo.options[selIdx];
+      if (selOpt && selOpt.loads) allLoads.push(...selOpt.loads);
+    });
+    if (!allLoads.length) return '';
+
+    let body = '';
+    allLoads.forEach(load => {
+      if (!load.name) return;
+      const parts = load.name.split(/\s*&\s*/).map(p => p.trim()).filter(Boolean);
+      const loadSpecial = (load.special && load.special !== '-') ? load.special : '';
+      const launchCell = `<td class="lt-launch" rowspan="${parts.length}">${esc(String(load.launch ?? '—'))}${loadSpecial ? `<span class="lt-launch-note">${esc(loadSpecial)}</span>` : ''}</td>`;
+      parts.forEach((part, i) => {
+        const a = assetsByName[part.toLowerCase()] || { name: part };
+        const hasStats = a.attack !== undefined;
+        const dmg = hasStats
+          ? `${esc(String(a.damage ?? ''))}${a.type ? `<span class="dmg-type dmg-type-${esc(a.type)}">${esc(a.type)}</span>` : ''}`
+          : '—';
+        let special = '—';
+        if (a.special && a.special !== '-') special = renderWeaponSpecialChips(a.special);
+        else if (a.ksReroll !== undefined) special = `Re-roll ${esc(String(a.ksReroll))} KS save${a.ksReroll > 1 ? 's' : ''} (Close Protection)`;
+        body += `<tr>
+          ${i === 0 ? launchCell : ''}
+          <td class="lt-load">${esc(part)}</td>
+          <td>${esc(String(a.thrust ?? '—'))}</td>
+          <td>${hasStats ? esc(String(a.attack)) : '—'}</td>
+          <td>${hasStats ? esc(String(a.lock)) : '—'}</td>
+          <td>${dmg}</td>
+          <td class="lt-special">${special}</td>
+        </tr>`;
+      });
+    });
+
+    return `<div class="launch-table-wrap">
+      <div class="load-section-label">Launch Assets</div>
+      <table class="launch-table">
+        <thead><tr><th>Launch</th><th>Load</th><th>Thrust</th><th>Att</th><th>Lock</th><th>Dmg</th><th>Special</th></tr></thead>
+        <tbody>${body}</tbody>
+      </table>
+    </div>`;
   }
 
   // Group-wide dedup across all ships (kept for callers that need it).
