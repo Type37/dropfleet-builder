@@ -57,6 +57,7 @@
   --radius-sm: 3px;
   --radius-md: 6px;
   --radius-lg: 8px;
+  --radius-xl: 12px;   /* dialogs / drawers (Fluent 2XL) */
 
   /* ── Light Theme Colors ── */
   --paper: #ffffff;
@@ -1047,7 +1048,7 @@ h1, h2, h3, h4, h5, h6 {
 .modal-panel {
   background: var(--paper);
   border: 1px solid var(--stroke);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-dialog);
   width: 100%;
   max-width: 560px;
@@ -4739,7 +4740,7 @@ h1, h2, h3, h4, h5, h6 {
     max-height: 60vh;
     z-index: var(--z-sheet);
     border-top: 1px solid rgba(255,255,255,0.15);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     box-shadow: var(--shadow-sheet);
     transform: translateY(calc(100% - 48px));
     transition: transform var(--duration-slow) var(--ease-out);
