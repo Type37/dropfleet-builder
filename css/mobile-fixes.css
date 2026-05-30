@@ -1,0 +1,26 @@
+/* ============================================================
+   Mobile fixes — loaded AFTER app.css so these win on the cascade.
+   Kept isolated from the large app.css to make mobile-specific
+   corrections easy to review and revert.
+   ============================================================ */
+
+@media (max-width: 768px) {
+  /* Ship-select / any modal: the mobile app.css override set the overlay to
+     `overflow:visible; align-items:flex-start` while the panel kept
+     `margin:auto`. Auto vertical margins on a flex item center it within the
+     container's (overflowing) content box, which floated the panel ~half a
+     screen DOWN and off-view — opening "Add Group" showed a near-empty screen.
+     Fix: overlay scrolls; panel pins to the top with fixed vertical margins
+     (horizontal auto keeps it centered) and may grow with the overlay scrolling. */
+  .modal-overlay {
+    align-items: flex-start;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: var(--sp-md);
+  }
+  .modal-overlay .modal-panel {
+    margin: var(--sp-md) auto;
+    max-height: none;        /* don't clip; the overlay scrolls instead */
+    width: 100%;
+  }
+}

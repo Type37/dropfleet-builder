@@ -3,11 +3,12 @@
 // populating the cache as resources are fetched.
 // Bump this on every deploy so existing clients purge the old cache on activate
 // (the app updates frequently — stale assets must not survive a new build).
-const CACHE = 'dfc-cache-v2';
+const CACHE = 'dfc-cache-v3';
 const CORE = [
   './',
   './index.html',
   './css/app.css',
+  './css/mobile-fixes.css',
   './js/app.js',
   './data/fleet-index.json',
   './assets/fonts/Arkhip.woff2',
