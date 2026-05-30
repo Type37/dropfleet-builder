@@ -3285,9 +3285,12 @@ h1, h2, h3, h4, h5, h6 {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Opacity-only: a transform here would make every view a containing block for
+   its position:fixed children (e.g. the mobile fleet-summary bottom sheet),
+   anchoring them to the tall view content instead of the viewport. */
 @keyframes viewEnter {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .animate-in { animation: slideUp var(--duration-slow) var(--ease-out) forwards; }
@@ -4632,6 +4635,12 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(0);
     overflow-y: auto;
   }
+
+  /* Picker/reference tension: while the ship picker is open, float the collapsed
+     fleet-summary sheet above it so running points & composition stay glanceable
+     (tap to expand over the picker). The picker body gains bottom room for it. */
+  body.picker-open .builder-sidebar { z-index: 1100; }
+  body.picker-open #modal-ship-select .modal-body { padding-bottom: 88px; }
 
   .sidebar-handle {
     display: flex;

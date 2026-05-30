@@ -4308,6 +4308,9 @@ const App = (() => {
       modal.offsetHeight;
       modal.classList.add('active');
       document.body.style.overflow = 'hidden';
+      // Ship picker keeps the collapsed fleet-summary sheet peeking above it on
+      // mobile, so running points/composition stay glanceable while browsing.
+      if (id === 'modal-ship-select') document.body.classList.add('picker-open');
     }
   }
 
@@ -4317,7 +4320,7 @@ const App = (() => {
       modal.classList.remove('active');
       document.body.style.overflow = '';
     }
-    if (id === 'modal-ship-select') pendingGroupCreation = false;
+    if (id === 'modal-ship-select') { pendingGroupCreation = false; document.body.classList.remove('picker-open'); }
   }
 
   function confirmAction(title, message, onConfirm) {
