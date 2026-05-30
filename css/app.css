@@ -4828,6 +4828,14 @@ h1, h2, h3, h4, h5, h6 {
   .mobile-only { display: none !important; }
 }
 
+/* When the three-panel detail column is narrow (tablet + narrow desktop up to
+   ~950px), stack its ship card — art on top, full-width stats/weapons below —
+   so weapon names and the stat grid aren't squeezed. */
+@media (max-width: 950px) {
+  .builder-detail .group-ship-entry { flex-direction: column; }
+  .builder-detail .ship-card-image { width: 100%; height: 120px; }
+}
+
 @media (max-width: 639px) {
   .desktop-only { display: none !important; }
   /* Float the Add Group button above the collapsed fleet-summary sheet peek. */
