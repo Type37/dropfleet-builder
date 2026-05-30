@@ -2082,13 +2082,15 @@ const App = (() => {
   function renderWeaponRow(w) {
     const special = w.special && w.special !== '-' ? w.special : '';
     const typeLabel = WEAPON_TYPE_LABELS[w.type] || w.type || '?';
-    const typeIcon = WEAPON_TYPE_ICONS[w.type] || '';
+    // Damage carries its type as a colour-coded letter (e.g. 1E, 2K, 1C) — the
+    // type is part of the damage, not a separate "special".
+    const typeTag = w.type ? `<span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : '';
     return `<div class="weapon-row">
       <span class="weapon-col weapon-col-name">${esc(w.name)}</span>
       <span class="weapon-col weapon-col-arc" title="${ARC_LABELS[w.arc] || 'Firing Arc: ' + (w.arc || '')}">${ARC_ICONS[w.arc] ? ARC_ICONS[w.arc] + '<span class="arc-label">' + esc(w.arc || '') + '</span>' : esc(w.arc || '')}</span>
       <span class="weapon-col weapon-col-att">${w.attack}</span>
       <span class="weapon-col weapon-col-lock">${w.lock}</span>
-      <span class="weapon-col weapon-col-dmg" title="${typeLabel}">${w.damage}${typeIcon}</span>
+      <span class="weapon-col weapon-col-dmg" title="${w.damage} ${typeLabel}">${w.damage}${typeTag}</span>
       ${special ? `<span class="weapon-col weapon-col-special">${renderWeaponSpecialChips(special)}</span>` : ''}
     </div>`;
   }

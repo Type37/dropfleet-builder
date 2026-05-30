@@ -1908,6 +1908,11 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-xs);
 }
 .weapon-col-dmg svg { flex-shrink: 0; }
+/* Damage type carried as a colour-coded letter on the damage value (1E/2K/1C). */
+.dmg-type { font-weight: var(--weight-bold); font-size: 0.85em; margin-left: 1px; }
+.dmg-type-K { color: #0057A3; }   /* Kinetic */
+.dmg-type-E { color: #92400E; }   /* Energy */
+.dmg-type-C { color: #c43c2f; }   /* Core */
 
 .weapon-col-special {
   min-width: 0;
