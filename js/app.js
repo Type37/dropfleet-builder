@@ -511,6 +511,7 @@ const App = (() => {
         if (adm.level) a.l = adm.level;
         if (adm.type) a.t = adm.type;
         if (adm.selectedAbilities && adm.selectedAbilities.length) a.sa = adm.selectedAbilities;
+        if (adm.assignedGroupId) a.ag = adm.assignedGroupId;
         return a;
       });
     }
@@ -576,7 +577,8 @@ const App = (() => {
           shipKey: a.k || null,
           level: a.l || 1,
           type: a.t || 'Generic',
-          selectedAbilities: a.sa || []
+          selectedAbilities: a.sa || [],
+          assignedGroupId: a.ag || null
         }));
       } else if (mini.a) {
         fleet.admirals = [{
@@ -1330,6 +1332,13 @@ const App = (() => {
         warnings.push({ type: 'error', msg: `${adm.name} (Lv${admLvl}) exceeds max Lv${sizeInfo.maxAdmiralLevel} for ${sizeInfo.label}` });
       }
       if (adm.type === 'Famous' || adm.type === 'Faction') namedCount++;
+      // Generic/Faction admirals must be assigned to a Capital ship (Section 4.2.1).
+      if (adm.type !== 'Famous') {
+        const caps = capitalShipGroups();
+        if (caps.length && !caps.some(g => g.id === adm.assignedGroupId)) {
+          warnings.push({ type: 'warn', msg: `${adm.name} is not assigned to a Capital ship` });
+        }
+      }
     });
     if (namedCount > 1) {
       warnings.push({ type: 'error', msg: `Only one Famous/Faction Admiral per fleet (you have ${namedCount})` });
@@ -3124,6 +3133,44 @@ const App = (() => {
     return null;
   }
 
+  // Capital-ship groups (Medium/Heavy/Colossal) an admiral may be assigned to.
+  function capitalShipGroups() {
+    if (!currentFleet) return [];
+    return (currentFleet.battleGroups || []).filter(g => g.ships && g.ships.length).map(g => {
+      const s = g.ships[0];
+      const db = findShipInDB(currentFleet.faction, s.groupCategory, s.shipKey);
+      const cat = db ? (db.category || s.groupCategory) : s.groupCategory;
+      return { id: g.id, name: g.name, cat };
+    }).filter(g => g.cat === 'medium' || g.cat === 'heavy' || g.cat === 'colossal');
+  }
+
+  // Assign a Generic/Faction admiral to one of the fleet's Capital ships.
+  function assignAdmiralShip(index, groupId) {
+    if (!currentFleet) return;
+    const a = (currentFleet.admirals || [])[index];
+    if (!a) return;
+    a.assignedGroupId = groupId || null;
+    saveFleets();
+    renderAdmiralSlot();
+  }
+
+  // Ship-assignment selector for Generic/Faction admirals (Famous fly their own
+  // flagship, so they are not assignable).
+  function renderAdmiralAssignment(a, i) {
+    if (a.type === 'Famous') return '';
+    const caps = capitalShipGroups();
+    if (!caps.length) {
+      return `<div class="admiral-assign admiral-assign-empty">Assign to a Capital ship — add a Medium/Heavy/Colossal group first.</div>`;
+    }
+    const valid = caps.some(g => g.id === a.assignedGroupId);
+    const opts = [`<option value=""${valid ? '' : ' selected'}>— Assign to a Capital ship —</option>`]
+      .concat(caps.map(g => `<option value="${g.id}"${a.assignedGroupId === g.id ? ' selected' : ''}>${esc(g.name)}</option>`)).join('');
+    return `<div class="admiral-assign">
+      <label class="admiral-assign-label">Aboard</label>
+      <select class="admiral-assign-select" onchange="App.assignAdmiralShip(${i}, this.value)">${opts}</select>
+    </div>`;
+  }
+
   // Toggle a chosen Abilities-Table pick for the admiral at `index`, respecting
   // its pick cap.
   function toggleAdmiralAbility(index, abilityName) {
@@ -3230,6 +3277,7 @@ const App = (() => {
           <span class="badge badge-gold">${a.points} pts</span>
         </div>
         ${flagshipHtml}
+        ${renderAdmiralAssignment(a, i)}
         ${renderAdmiralAbilities(a, i)}
         <div class="flex gap-xs" style="margin-top:var(--sp-sm)">
           <button class="btn btn-danger btn-sm" onclick="App.removeAdmiral(${i})"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
@@ -4892,7 +4940,7 @@ const App = (() => {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, moveGroup,
     openShipSelectModal, filterCategory, toggleShipFilter, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
-    openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral, toggleAdmiralAbility,
+    openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText,
