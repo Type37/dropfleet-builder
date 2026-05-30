@@ -275,12 +275,14 @@ const App = (() => {
           level: a.level,
           type: 'Famous',
           special_abilities: a.abilities || [],
+          ability_picks: a.abilityPicks || 1,
+          className: fs?.className || null,
           scan: fs?.stats?.scan, sig: fs?.stats?.sig,
           thrust: fs?.stats?.thrust, hull: fs?.stats?.hull,
           es: fs?.stats?.es, ks: fs?.stats?.ks,
           bs: fs?.stats?.bs, g: fs?.stats?.g,
           special: fs?.stats?.special,
-          tonnage: fs?.stats?.tonnage,
+          tonnage: fs?.tonnage || fs?.stats?.tonnage,
           weapons: fs?.weapons || [],
           loads: fs?.loads || [],
           special_rules: (fs?.specialRules || []).map(r => r.name),
@@ -311,7 +313,7 @@ const App = (() => {
       rules: df.rules || []
     }));
 
-    shipDB[factionKey] = { groups, admirals: faction.admirals || [], launchAssets, spaceStations, deployableFeatures, systemsLists: faction.systemsLists || {} };
+    shipDB[factionKey] = { groups, admirals: faction.admirals || [], abilitiesTable: faction.abilitiesTable || [], launchAssets, spaceStations, deployableFeatures, systemsLists: faction.systemsLists || {} };
   }
 
   // ── Landing Page Dynamic Content ──
@@ -508,6 +510,7 @@ const App = (() => {
         if (adm.shipKey) a.k = adm.shipKey;
         if (adm.level) a.l = adm.level;
         if (adm.type) a.t = adm.type;
+        if (adm.selectedAbilities && adm.selectedAbilities.length) a.sa = adm.selectedAbilities;
         return a;
       });
     }
@@ -572,7 +575,8 @@ const App = (() => {
           admiralId: a.i || null,
           shipKey: a.k || null,
           level: a.l || 1,
-          type: a.t || 'Generic'
+          type: a.t || 'Generic',
+          selectedAbilities: a.sa || []
         }));
       } else if (mini.a) {
         fleet.admirals = [{
@@ -1680,9 +1684,19 @@ const App = (() => {
     let admHtml = '';
     if (f.admirals && f.admirals.length > 0) {
       admHtml = f.admirals.map(a => {
+        const info = getAdmiralAbilityInfo(a);
+        let abHtml = '';
+        if (info) {
+          const names = [
+            ...info.innate.map(x => x.name),
+            ...((a.selectedAbilities || []).filter(n => info.table.some(t => t.name === n)))
+          ];
+          if (names.length) abHtml = `<div class="overview-admiral-abilities">${names.map(n => `<span class="overview-ability-chip">${esc(n)}</span>`).join('')}</div>`;
+        }
         return `<div class="overview-admiral">
           <span class="overview-admiral-name">${esc(a.name)}</span>
           <span class="text-caption">Lv${a.level || '?'}${a.type === 'Famous' ? ' (Famous)' : ''} — ${a.points} pts</span>
+          ${abHtml}
         </div>`;
       }).join('');
       admHtml = `<div class="overview-section">
@@ -2959,13 +2973,15 @@ const App = (() => {
       }
       factionAdmirals.forEach(adm => {
         const disabled = alreadyHasNamedAdmiral;
-        const abilities = (adm.abilities || []).slice(0, 3);
+        const abilities = adm.abilities || [];
+        const picks = adm.abilityPicks || 1;
         html += `
         <div class="admiral-card card-interactive${disabled ? ' disabled' : ''}" style="cursor:${disabled ? 'not-allowed' : 'pointer'};${disabled ? 'opacity:0.5;' : ''}" ${disabled ? '' : `onclick="App.addFactionAdmiral('${adm.id}')"`}>
           <div style="flex:1;min-width:0">
             <div class="admiral-name">${esc(adm.name)}</div>
             <div class="admiral-level">Level ${adm.level || '?'} · ${adm.cost} pts</div>
-            ${abilities.length > 0 ? `<div style="margin-top:var(--sp-sm);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${a.cost} AP)` : ''}${a.description ? ' — ' + esc(a.description) : ''}</div>`).join('')}</div>` : ''}
+            ${abilities.length > 0 ? `<div style="margin-top:var(--sp-sm);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${esc(a.cost)})` : ''}${a.effect ? ' — ' + esc(a.effect) : ''}</div>`).join('')}</div>` : ''}
+            <div class="admiral-modal-picks">+ choose ${picks} from the Abilities Table</div>
           </div>
         </div>`;
       });
@@ -2997,7 +3013,8 @@ const App = (() => {
               ${admiral.tonnage ? `<div style="margin-top:var(--sp-xs);font-size:var(--text-xs);color:var(--ink-muted)">Flagship: ${esc(admiral.tonnage)} tonnage</div>` : ''}
             </div>
           </div>
-          ${abilities.length > 0 ? `<div style="margin-top:var(--sp-md);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${a.cost} AP)` : ''}${a.description ? ' — ' + esc(a.description) : ''}</div>`).join('')}</div>` : ''}
+          ${abilities.length > 0 ? `<div style="margin-top:var(--sp-md);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${esc(a.cost)})` : ''}${a.effect ? ' — ' + esc(a.effect) : ''}</div>`).join('')}</div>` : ''}
+          <div class="admiral-modal-picks">+ choose ${admiral.ability_picks || 1} from the Abilities Table</div>
         </div>`;
       });
     }
@@ -3037,7 +3054,8 @@ const App = (() => {
       name: adm.name,
       points: adm.cost,
       level: adm.level,
-      type: 'Faction'
+      type: 'Faction',
+      selectedAbilities: []
     });
 
     saveFleets();
@@ -3061,7 +3079,8 @@ const App = (() => {
       name: admiral.name,
       points: admiral.points || 0,
       level: admiral.level,
-      type: 'Famous'
+      type: 'Famous',
+      selectedAbilities: []
     });
 
     saveFleets();
@@ -3076,6 +3095,87 @@ const App = (() => {
     saveFleets();
     renderAdmiralSlot();
     updatePoints();
+  }
+
+  // Resolve a fleet admiral entry's ability data from the faction DB.
+  // Returns { innate:[{name,cost,effect}], table:[...], picks:N } or null for
+  // generic (abstract) admirals, who do not draw from the Abilities Table.
+  function getAdmiralAbilityInfo(a) {
+    if (!a || a.type === 'Generic') return null;
+    const fdb = shipDB[currentFleet.faction];
+    if (!fdb) return null;
+    const table = fdb.abilitiesTable || [];
+    if (a.type === 'Famous' && a.shipKey) {
+      const adm = fdb.groups?.famous_admirals?.ships?.[a.shipKey];
+      if (!adm) return null;
+      return { innate: adm.special_abilities || [], table, picks: adm.ability_picks || 1 };
+    }
+    if (a.admiralId) {
+      const adm = (fdb.admirals || []).find(x => x.id === a.admiralId);
+      if (!adm) return null;
+      return { innate: adm.abilities || [], table, picks: adm.abilityPicks || 1 };
+    }
+    return null;
+  }
+
+  // Toggle a chosen Abilities-Table pick for the admiral at `index`, respecting
+  // its pick cap.
+  function toggleAdmiralAbility(index, abilityName) {
+    if (!currentFleet) return;
+    const a = (currentFleet.admirals || [])[index];
+    if (!a) return;
+    const info = getAdmiralAbilityInfo(a);
+    if (!info) return;
+    if (!Array.isArray(a.selectedAbilities)) a.selectedAbilities = [];
+    const pos = a.selectedAbilities.indexOf(abilityName);
+    if (pos >= 0) {
+      a.selectedAbilities.splice(pos, 1);
+    } else {
+      if (a.selectedAbilities.length >= info.picks) {
+        showToast(`This admiral may only choose ${info.picks} abilit${info.picks === 1 ? 'y' : 'ies'}.`);
+        return;
+      }
+      a.selectedAbilities.push(abilityName);
+    }
+    saveFleets();
+    renderAdmiralSlot();
+    renderOverviewPanel();
+  }
+
+  // Render an admiral's innate abilities (always expanded) + the Abilities-Table
+  // picker. Returns '' for generic admirals.
+  function renderAdmiralAbilities(a, index) {
+    const info = getAdmiralAbilityInfo(a);
+    if (!info) return '';
+    const abilityLine = ab => `<div class="admiral-ability">
+        <span class="admiral-ability-name">${esc(ab.name || '')}</span>${ab.cost ? ` <span class="admiral-ability-cost">${esc(ab.cost)}</span>` : ''}
+        ${ab.effect ? `<div class="admiral-ability-effect">${esc(ab.effect)}</div>` : ''}
+      </div>`;
+    let html = '';
+    if (info.innate.length) {
+      html += `<div class="admiral-abilities-block">
+        <div class="admiral-abilities-label">Ability</div>
+        ${info.innate.map(abilityLine).join('')}
+      </div>`;
+    }
+    if (info.table.length && info.picks > 0) {
+      const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
+      const remaining = info.picks - sel.length;
+      html += `<div class="admiral-abilities-block">
+        <div class="admiral-abilities-label">Abilities Table — choose ${info.picks} <span class="admiral-picks-remaining">${remaining > 0 ? `(${remaining} left)` : '(full)'}</span></div>
+        <div class="admiral-ability-picks">
+          ${info.table.map(ab => {
+            const on = sel.includes(ab.name);
+            const full = !on && remaining <= 0;
+            return `<button class="admiral-pick${on ? ' is-selected' : ''}${full ? ' is-locked' : ''}" onclick="App.toggleAdmiralAbility(${index}, ${JSON.stringify(ab.name).replace(/"/g, '&quot;')})">
+              <span class="admiral-pick-head"><span class="admiral-pick-check">${on ? '✓' : ''}</span><span class="admiral-ability-name">${esc(ab.name)}</span>${ab.cost ? ` <span class="admiral-ability-cost">${esc(ab.cost)}</span>` : ''}</span>
+              ${ab.effect ? `<span class="admiral-ability-effect">${esc(ab.effect)}</span>` : ''}
+            </button>`;
+          }).join('')}
+        </div>
+      </div>`;
+    }
+    return html;
   }
 
   function renderAdmiralSlot() {
@@ -3124,6 +3224,7 @@ const App = (() => {
           <span class="badge badge-gold">${a.points} pts</span>
         </div>
         ${flagshipHtml}
+        ${renderAdmiralAbilities(a, i)}
         <div class="flex gap-xs" style="margin-top:var(--sp-sm)">
           <button class="btn btn-danger btn-sm" onclick="App.removeAdmiral(${i})"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
         </div>
@@ -3361,13 +3462,18 @@ const App = (() => {
       html += `<div class="print-section">
         <div class="print-section-title">Admiral${f.admirals.length > 1 ? 's' : ''}</div>
         ${f.admirals.map(a => {
-          const fullAdm = a.admiralId ? factionAdmirals.find(fa => fa.id === a.admiralId) : null;
-          const abilities = fullAdm ? (fullAdm.abilities || []) : [];
+          const info = getAdmiralAbilityInfo(a);
+          const abilityLine = ab => `<div class="print-admiral-ability"><span class="print-ability-name">${esc(ab.name)}</span>${ab.cost ? ` <span class="print-ability-cost">${esc(ab.cost)}</span>` : ''}${ab.effect ? ` — ${esc(ab.effect)}` : ''}</div>`;
           let abilitiesHtml = '';
-          if (abilities.length > 0) {
-            abilitiesHtml = `<div class="print-admiral-abilities">
-              ${abilities.map(ab => `<div class="print-admiral-ability"><span class="print-ability-name">${esc(ab.name)}</span> <span class="print-ability-cost">${esc(ab.cost)}</span> — ${esc(ab.effect)}</div>`).join('')}
-            </div>`;
+          if (info) {
+            const chosen = (a.selectedAbilities || [])
+              .map(n => info.table.find(t => t.name === n)).filter(Boolean);
+            if (info.innate.length) {
+              abilitiesHtml += `<div class="print-admiral-abilities">${info.innate.map(abilityLine).join('')}</div>`;
+            }
+            if (chosen.length) {
+              abilitiesHtml += `<div class="print-admiral-abilities"><div class="print-admiral-ability-sublabel">Chosen Abilities</div>${chosen.map(abilityLine).join('')}</div>`;
+            }
           }
           return `<div class="print-admiral-card">
             <div class="print-admiral-header">
@@ -4777,7 +4883,7 @@ const App = (() => {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, moveGroup,
     openShipSelectModal, filterCategory, toggleShipFilter, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
-    openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral,
+    openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral, toggleAdmiralAbility,
     openStationModal, selectStation, removeStation,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText,
