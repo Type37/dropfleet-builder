@@ -1820,7 +1820,7 @@ const App = (() => {
     }
 
     const group = currentFleet.battleGroups.find(g => g.id === activeGroupId);
-    if (!group) {
+    if (!group || !group.ships || group.ships.length === 0) {
       detailEl.classList.add('hidden');
       return;
     }
@@ -1910,13 +1910,6 @@ const App = (() => {
       html += '</div>';
       // Quantity controls now live in the header's upper-right (group-qty-stepper).
       // (Launch Asset Reference renders inline on each ship card.)
-    } else {
-      // Empty group — shouldn't happen with new flow, but handle gracefully
-      html += `
-      <div class="add-ship-area" onclick="App.openShipSelectModal('${group.id}')" style="margin-top:var(--sp-lg)">
-        <span style="font-size:24px">+</span>
-        <span>Choose a ship for ${esc(group.name)}</span>
-      </div>`;
     }
 
     detailEl.innerHTML = html;
@@ -2897,6 +2890,11 @@ const App = (() => {
     const group = currentFleet.battleGroups.find(g => g.id === groupId);
     if (!group) return;
     group.ships = group.ships.filter(s => s.id !== shipId);
+    // A group always has a ship — removing the last one removes the group.
+    if (group.ships.length === 0) {
+      currentFleet.battleGroups = currentFleet.battleGroups.filter(g => g.id !== groupId);
+      if (activeGroupId === groupId) activeGroupId = null;
+    }
     saveFleets();
     updatePoints();
     scheduleRender(renderGroupsNav, renderActiveGroup);
