@@ -106,15 +106,26 @@
   --stroke-strong: #b8b2a8;
   --stroke-accent: rgba(27, 58, 92, 0.25);
 
-  /* Elevation */
-  --shadow-sm: 0 1px 3px rgba(28, 26, 23, 0.08);
-  --shadow-md: 0 2px 8px rgba(28, 26, 23, 0.10);
-  --shadow-lg: 0 4px 16px rgba(28, 26, 23, 0.12);
-  --shadow-xl: 0 8px 32px rgba(28, 26, 23, 0.14);
-  /* Fluent elevation ladder (warm-tinted): key + ambient. shadow28 → bottom
-     sheets / side nav; shadow64 → dialogs / modals. */
+  /* Elevation — a strict ladder (Fluent: ambient ring + directional key shadow),
+     warm-tinted to the theme. Each tier is unambiguously deeper than the last:
+     sm resting cards · md raised · lg dropdowns/bars · xl popovers/hover ·
+     sheet (28) bottom sheet/side nav · dialog (64) modals. */
+  --shadow-sm: 0 0 1px rgba(28, 26, 23, 0.10), 0 1px 2px rgba(28, 26, 23, 0.06);
+  --shadow-md: 0 0 2px rgba(28, 26, 23, 0.08), 0 2px 4px rgba(28, 26, 23, 0.10);
+  --shadow-lg: 0 0 2px rgba(28, 26, 23, 0.08), 0 4px 8px rgba(28, 26, 23, 0.12);
+  --shadow-xl: 0 0 2px rgba(28, 26, 23, 0.08), 0 8px 16px rgba(28, 26, 23, 0.14);
   --shadow-sheet: 0 0 8px rgba(28, 26, 23, 0.10), 0 -12px 28px rgba(28, 26, 23, 0.16);
   --shadow-dialog: 0 0 8px rgba(28, 26, 23, 0.12), 0 24px 56px rgba(28, 26, 23, 0.20);
+
+  /* Z-index scale (monotonic, no ad-hoc values): resting sheet < topbar <
+     dialog scrim < sheet-floating-over-picker < popovers/tooltips < toasts.
+     Transient popovers sit above dialogs so rule-tooltips work inside modals. */
+  --z-sheet: 800;
+  --z-topbar: 900;
+  --z-overlay: 1000;
+  --z-sheet-float: 1100;
+  --z-popover: 2000;
+  --z-toast: 3000;
 
   /* Motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -155,10 +166,17 @@ a:hover { color: var(--navy-light); }
 
 ::selection { background: var(--gold-light); color: var(--ink); }
 
-/* Global focus-visible ring for keyboard navigation */
+/* Global focus-visible ring — two-stroke (Fluent): a thin light halo tight to
+   the element + a navy ring just outside it. The light inner stroke keeps focus
+   visible on the dark navy sidebar; the navy stroke keeps it visible on light
+   cards. Works on any surface. */
 :focus-visible {
   outline: 2px solid var(--navy);
   outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--paper);
+}
+@media (forced-colors: active) {
+  :focus-visible { outline: 2px solid ButtonText; box-shadow: none; }
 }
 input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline-offset: -1px;
@@ -264,7 +282,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   padding: 0 var(--sp-xl);
-  z-index: 900;
+  z-index: var(--z-topbar);
   gap: var(--sp-md);
   box-shadow: 0 1px 0 rgba(255,255,255,0.06), 0 4px 12px rgba(15, 38, 64, 0.35);
 }
@@ -1015,7 +1033,7 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(28, 26, 23, 0.45);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  z-index: 1000;
+  z-index: var(--z-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2102,7 +2120,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Rule tooltip popup */
 .rule-tooltip-popup {
   position: fixed;
-  z-index: 2000;
+  z-index: var(--z-popover);
   background: var(--paper);
   border: 1px solid var(--stroke-strong);
   border-radius: var(--radius-lg);
@@ -3150,7 +3168,7 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--stroke-strong);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
-  z-index: 1500;
+  z-index: var(--z-popover);
   min-width: 220px;
   padding: var(--sp-xs);
   animation: fadeSlideIn 0.15s var(--ease-out);
@@ -3313,7 +3331,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-lg);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
-  z-index: 2000;
+  z-index: var(--z-toast);
   transition: transform 0.35s var(--ease-out), opacity 0.35s var(--ease-out);
   box-shadow: 0 4px 16px rgba(28, 26, 23, 0.12), 0 1px 3px rgba(28, 26, 23, 0.08);
   pointer-events: none;
@@ -4690,7 +4708,7 @@ h1, h2, h3, h4, h5, h6 {
     top: auto;
     height: auto;
     max-height: 60vh;
-    z-index: 800;
+    z-index: var(--z-sheet);
     border-top: 1px solid rgba(255,255,255,0.15);
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     box-shadow: var(--shadow-sheet);
@@ -4706,7 +4724,7 @@ h1, h2, h3, h4, h5, h6 {
   /* Picker/reference tension: while the ship picker is open, float the collapsed
      fleet-summary sheet above it so running points & composition stay glanceable
      (tap to expand over the picker). The picker body gains bottom room for it. */
-  body.picker-open .builder-sidebar { z-index: 1100; }
+  body.picker-open .builder-sidebar { z-index: var(--z-sheet-float); }
   body.picker-open #modal-ship-select .modal-body { padding-bottom: 88px; }
 
   .sidebar-handle {
