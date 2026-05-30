@@ -111,6 +111,10 @@
   --shadow-md: 0 2px 8px rgba(28, 26, 23, 0.10);
   --shadow-lg: 0 4px 16px rgba(28, 26, 23, 0.12);
   --shadow-xl: 0 8px 32px rgba(28, 26, 23, 0.14);
+  /* Fluent elevation ladder (warm-tinted): key + ambient. shadow28 → bottom
+     sheets / side nav; shadow64 → dialogs / modals. */
+  --shadow-sheet: 0 0 8px rgba(28, 26, 23, 0.10), 0 -12px 28px rgba(28, 26, 23, 0.16);
+  --shadow-dialog: 0 0 8px rgba(28, 26, 23, 0.12), 0 24px 56px rgba(28, 26, 23, 0.20);
 
   /* Motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -1026,9 +1030,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--paper);
   border: 1px solid var(--stroke);
   border-radius: var(--radius-lg);
-  box-shadow: 0 2px 4px rgba(28, 26, 23, 0.04),
-              0 8px 24px rgba(28, 26, 23, 0.10),
-              0 24px 48px rgba(28, 26, 23, 0.08);
+  box-shadow: var(--shadow-dialog);
   width: 100%;
   max-width: 560px;
   max-height: calc(100vh - var(--sp-3xl) * 2);
@@ -4691,7 +4693,7 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 800;
     border-top: 1px solid rgba(255,255,255,0.15);
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    box-shadow: 0 -4px 24px rgba(0,0,0,0.3);
+    box-shadow: var(--shadow-sheet);
     transform: translateY(calc(100% - 48px));
     transition: transform var(--duration-slow) var(--ease-out);
     overflow: hidden;
