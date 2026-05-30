@@ -1760,13 +1760,12 @@ const App = (() => {
           <div class="overview-header-left">
             ${fIcon ? `<img src="${fIcon}" alt="" class="overview-faction-icon">` : ''}
             <div>
-              <h2 class="overview-title">Fleet Overview</h2>
-              <div class="overview-subtitle">${esc(fName)} — ${sizeInfo.label}</div>
+              <div class="overview-pts-line"><span class="overview-pts-big">${pts}</span><span class="overview-pts-cap">${sizeInfo.max !== 99999 ? '/ ' + sizeInfo.max : ''} pts</span></div>
+              <div class="overview-subtitle">${esc(f.name)} · ${esc(fName)} · ${sizeInfo.label}</div>
             </div>
           </div>
           <div class="overview-header-right">
-            <div class="overview-pts-big">${pts}</div>
-            <div class="overview-pts-cap">${sizeInfo.max !== 99999 ? '/ ' + sizeInfo.max : ''} pts</div>
+            ${errors.length ? `<span class="overview-legal-pill is-illegal">${errors.length} issue${errors.length > 1 ? 's' : ''}</span>` : (sizeInfo.max !== 99999 ? `<span class="overview-legal-pill is-ok">${Math.max(0, sizeInfo.max - pts)} pts left</span>` : '')}
           </div>
         </div>
         <div class="overview-desc" onclick="this.querySelector('.overview-desc-input')?.focus()">
