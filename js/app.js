@@ -1750,6 +1750,10 @@ const App = (() => {
         <div class="overview-section">
           <div class="overview-section-label">Battle Groups (${f.battleGroups.length})</div>
           <div class="overview-groups">${groupCards}</div>
+          <button class="overview-add-group-btn" onclick="App.addGroup()">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+            Add Group
+          </button>
         </div>
         ${admHtml}
         ${stationHtml}
@@ -1823,6 +1827,26 @@ const App = (() => {
     const remaining = sizeInfo.max - fleetPts;
     const budgetClass = remaining < 0 ? 'budget-over' : remaining < 50 ? 'budget-tight' : '';
 
+    // Quantity stepper (shown in the header's upper-right, under Remove) — only
+    // when the ship's group size can actually vary.
+    let qtyStepper = '';
+    if (group.ships.length > 0) {
+      const firstShip = group.ships[0];
+      const dbFirst = findShipInDB(currentFleet.faction, firstShip.groupCategory, firstShip.shipKey);
+      const groupMax = dbFirst ? (dbFirst.groupMax || 12) : 12;
+      const groupMin = dbFirst ? (dbFirst.groupMin || 1) : 1;
+      if (groupMax > groupMin) {
+        const atMax = group.ships.length >= groupMax;
+        const atMin = group.ships.length <= groupMin;
+        qtyStepper = `
+        <div class="group-qty-stepper" title="${groupMin}–${groupMax} per group">
+          <button class="group-qty-btn" onclick="App.removeLastShip('${group.id}')" ${atMin ? 'disabled' : ''} aria-label="Remove one">−</button>
+          <span class="group-qty-num">×${group.ships.length}</span>
+          <button class="group-qty-btn" onclick="App.addSameShip('${group.id}')" ${atMax ? 'disabled' : ''} aria-label="Add one more">+</button>
+        </div>`;
+      }
+    }
+
     let html = `
     <div class="group-header-bar">
       <div class="flex items-center gap-md flex-wrap">
@@ -1831,8 +1855,9 @@ const App = (() => {
         <span class="badge badge-navy">${groupPts} pts</span>
         <span class="badge badge-neutral">${group.ships.length} ship${group.ships.length !== 1 ? 's' : ''}</span>
       </div>
-      <div class="flex gap-sm">
+      <div class="group-header-actions">
         <button class="btn btn-danger btn-sm" onclick="App.removeGroup('${group.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
+        ${qtyStepper}
       </div>
     </div>
     ${groupWarnings}`;
@@ -1855,29 +1880,8 @@ const App = (() => {
         html += renderGroupShipEntry(rep, dbShip, group.id, ships.length);
       });
       html += '</div>';
-
-      // Quantity controls — add/remove copies of the same ship type
-      const firstShip = group.ships[0];
-      const dbFirst = findShipInDB(currentFleet.faction, firstShip.groupCategory, firstShip.shipKey);
-      const shipName = dbFirst ? dbFirst.name : firstShip.shipKey;
-      const groupMax = dbFirst ? (dbFirst.groupMax || 12) : 12;
-      const groupMin = dbFirst ? (dbFirst.groupMin || 1) : 1;
-      const atMax = group.ships.length >= groupMax;
-      const atMin = group.ships.length <= groupMin;
-
-      html += `
-      <div class="group-quantity-bar">
-        <div class="group-quantity-info">
-          <span class="group-quantity-count">${group.ships.length} × ${esc(shipName)}</span>
-          <span class="group-quantity-limit">${groupMin}–${groupMax} per group</span>
-        </div>
-        <div class="group-quantity-controls">
-          <button class="btn btn-outline btn-sm group-qty-btn" onclick="App.removeLastShip('${group.id}')" ${atMin ? 'disabled' : ''} title="Remove one">−</button>
-          <span class="group-quantity-num">${group.ships.length}</span>
-          <button class="btn btn-primary btn-sm group-qty-btn" onclick="App.addSameShip('${group.id}')" ${atMax ? 'disabled' : ''} title="Add one more">+</button>
-        </div>
-      </div>`;
-      // (Launch Asset Reference now renders inline on each ship card.)
+      // Quantity controls now live in the header's upper-right (group-qty-stepper).
+      // (Launch Asset Reference renders inline on each ship card.)
     } else {
       // Empty group — shouldn't happen with new flow, but handle gracefully
       html += `

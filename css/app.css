@@ -2184,7 +2184,8 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--paper-alt);
   border-top: 1px solid var(--stroke-light);
 }
-.ship-lore-text p { margin: 0; }
+.ship-lore-text p { margin: 0 0 0.7em; }
+.ship-lore-text p:last-child { margin-bottom: 0; }
 .lore-famous-ships {
   margin-top: var(--sp-sm);
   font-family: var(--font-lore);
@@ -3038,64 +3039,52 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ── Group Quantity Bar ── */
-.group-quantity-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--sp-md) var(--sp-lg);
-  margin-top: var(--sp-lg);
-  background: var(--navy-wash);
-  border: 1px solid var(--stroke);
-  border-radius: var(--radius-md);
-  gap: var(--sp-md);
-}
-.group-quantity-info {
+/* Group header right column: Remove on top, qty stepper below it. */
+.group-header-actions {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-xxs);
+  align-items: flex-end;
+  gap: var(--sp-sm);
+  flex-shrink: 0;
 }
-.group-quantity-count {
+.group-qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--paper-alt);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-md);
+  padding: 2px;
+}
+.group-qty-num {
   font-family: var(--font-condensed);
   font-size: var(--text-md);
-  font-weight: var(--weight-semibold);
-  color: var(--ink);
-}
-.group-quantity-limit {
-  font-size: var(--text-xs);
-  color: var(--ink-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-.group-quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-sm);
-}
-.group-quantity-num {
-  font-family: var(--font-condensed);
-  font-size: var(--text-lg);
   font-weight: var(--weight-bold);
   color: var(--navy);
-  min-width: 24px;
+  min-width: 30px;
   text-align: center;
 }
 .group-qty-btn {
-  min-width: 36px;
-  min-height: 36px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: var(--paper);
+  border-radius: var(--radius-sm);
   font-size: var(--text-md);
   font-weight: var(--weight-bold);
-  padding: 0;
+  color: var(--navy);
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background var(--duration-fast) var(--ease-out);
 }
+.group-qty-btn:hover:not(:disabled) { background: var(--navy); color: #fff; }
 .group-qty-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
   pointer-events: none;
-  background: var(--paper-alt) !important;
-  border-color: var(--stroke-light) !important;
-  color: var(--ink-faint) !important;
+  color: var(--ink-faint);
 }
 
 /* ── Game Size Popover ── */
@@ -4272,6 +4261,27 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   gap: var(--sp-sm);
 }
+/* Primary action: Add Group lives in the overview (middle) panel. */
+.overview-add-group-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-sm);
+  width: 100%;
+  margin-top: var(--sp-md);
+  padding: var(--sp-md);
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  color: #fff;
+  background: var(--navy);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+}
+.overview-add-group-btn:hover { background: var(--navy-deep, #142d47); }
+.overview-add-group-btn:active { transform: scale(0.99); }
 /* Tonnage category section dividers in overview */
 .overview-cat-divider {
   display: flex;
