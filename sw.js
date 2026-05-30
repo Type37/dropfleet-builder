@@ -1,7 +1,9 @@
 // Service worker for offline support. Network-first for fresh content when
 // online (the app updates often), falling back to cache when offline, and
 // populating the cache as resources are fetched.
-const CACHE = 'dfc-cache-v1';
+// Bump this on every deploy so existing clients purge the old cache on activate
+// (the app updates frequently — stale assets must not survive a new build).
+const CACHE = 'dfc-cache-v2';
 const CORE = [
   './',
   './index.html',
