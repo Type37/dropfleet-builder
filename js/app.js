@@ -1876,6 +1876,9 @@ const App = (() => {
     }
 
     let html = `
+    <button class="detail-back mobile-only" onclick="App.selectGroup('${group.id}')">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg> Back to fleet
+    </button>
     <div class="group-header-bar">
       <div class="flex items-center gap-md flex-wrap">
         <h2 class="group-title">${esc(group.name)}</h2>

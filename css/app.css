@@ -1806,9 +1806,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .stat-cell-label {
   font-family: var(--font-condensed);
-  font-size: 9px;
-  font-weight: var(--weight-semibold);
-  color: var(--ink-muted);
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+  color: var(--ink-soft);
   letter-spacing: 0.01em;
 }
 
@@ -4841,6 +4841,33 @@ h1, h2, h3, h4, h5, h6 {
   .desktop-only { display: none !important; }
   /* Float the Add Group button above the collapsed fleet-summary sheet peek. */
   .overview-addgroup-bar { bottom: 56px; }
+
+  /* Master→detail on phones: selecting a group shows the detail as a full-screen
+     view over the overview (not appended off-screen below it). Back button returns. */
+  .builder-detail:not(.hidden) {
+    position: fixed;
+    inset: var(--topbar-h) 0 0 0;
+    z-index: var(--z-overlay);
+    height: auto;
+    max-height: none;
+    overflow-y: auto;
+    border-left: none;
+    padding: var(--sp-md);
+    padding-bottom: 88px;
+  }
+  .detail-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    padding: 4px 0 var(--sp-sm);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-bold);
+    color: var(--navy);
+    cursor: pointer;
+  }
 }
 
 /* Tablets (Fluent "large" ≥640px, incl. iPad portrait at 768) get the full
