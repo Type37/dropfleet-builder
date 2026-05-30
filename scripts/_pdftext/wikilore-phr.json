@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Antony Pocket Battleship",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Leonnatus Supercruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Antigonus Supercruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Seleucus Supercruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Ptolemy Supercruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Teucer Cruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Otera Light Cruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Meleager Blockade Runner",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Cadmus Destroyer",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Chrysaor Cutter",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Philonoe Torpedo Monitor",
+    "found": false,
+    "lore": ""
+  }
+]

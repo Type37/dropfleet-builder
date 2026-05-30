@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Copper Battleship",
+    "found": true,
+    "lore": "The Copper is a class of battleship designed and constructed by the [[Shaltari Tribes]]."
+  },
+  {
+    "name": "Scoria Heavy Cruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Citrine Mothership",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Iridium Destroyer",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Strontium Monitor",
+    "found": false,
+    "lore": ""
+  }
+]

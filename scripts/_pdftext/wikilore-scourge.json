@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Lucifer Battleship",
+    "found": true,
+    "lore": "The Lucifer is a class of battleship designed and constructed by the [[The Scourge|Scourge]]. Alongside two other battleship classes, Lucifers have begun appearing over contested [[Cradle Worlds]] and have been sighted in the Solar system, reinforcing existing Scourge assets in these theaters. Similarly to the well-known [[Dragon Battleship|Dragon]] and [[Daemon Battleship|Daemon]] battleships, all known Lucifers feature extensive hull scarring that implies they have a long service record and are therefore not newly-constructed. Why they are being deployed against humanity now is a question that has vexed the [[United Colonies of Mankind]], and which does not bode well for the future.\n\nThe Lucifer is on the more supportive end of these \"new\" Scourge battleships, featuring relatively light weaponry despite its class. Instead, the Lucifer is optimized for speed, allowing it to pounce on mispositioned enemy assets and make the most of its available firepower. This is aided by its extensive launch bays, which it can almost always be in position to deploy where they're needed."
+  },
+  {
+    "name": "Devil Battleship",
+    "found": true,
+    "lore": "The Devil is a class of battleship designed and constructed by the [[The Scourge|Scourge]]. Alongside [[Beelzebub Battleship|Beelzebub]]- and [[Lucifer Battleship|Lucifer]]-class battleships, Devil-class vessels have materialized over contested war zones throughout the [[The Reconquest|Reconquest]], seemingly from nowhere. As these ships are all of similar age to existing classes, the implication is that these are not new - leading to the more concerning question of why the Scourge did not see fit to deploy them against humanity until now.\n\nThe Devil shares the underslung mega plasma lance battery with the Beelzebub-class, but from there the two classes differ. Where the latter mounts banks of furnace cannons, the former instead features rack upon rack of voidcraft, allowing it to swarm the opposition with bombers at a moment's notice or throw up massive fighter screens."
+  },
+  {
+    "name": "Beelzebub Battleship",
+    "found": true,
+    "lore": "The Beelzebub is a class of battleship designed and constructed by the [[The Scourge|Scourge]]. Much to the concern of the UCM's [[United Colonies of Mankind Fleet|Office of Naval Intelligence]], the Beelzebub  - alongside several other never-before-seen classes of Scourge battleship - have begun to appear on the battlefields of the [[The Reconquest|Reconquest]]. As with the previously-encountered classes, the hulls of these ships are scarred and pitted from countless years of service. Why these classes are only being committed now is a question of great concern for the [[United Colonies of Mankind|UCM]] and its allies.\n\nThe Beelzebub differentiates itself from its contemporaries thanks to its furnace batteries - two collections of furnace cannons that can output enough firepower to melt through cruisers in a single salvo. As if that wasn't enough, the Beelzebub also packs an underslung mega plasma lance battery on a traversable mount to give it an edge against enemy battleships, as well as potent close action (as is the standard for Scourge vessels)."
+  },
+  {
+    "name": "Dragon Battleship",
+    "found": true,
+    "lore": "The Dragon is a class of battleship designed and constructed by the [[The Scourge|Scourge]]. As with its sister class, the [[Daemon Battleship|Daemon]], the Dragon is one of the oldest classes of warship still in service with the Scourge, and similarly is assumed to no longer be in production. Though some optimistic naval planners have postulated that the Scourge have lost the capacity to build more battleships, it's equally possible that the Scourge have simply shifted resources to building larger ships, such as their dreadnoughts.\n\nThough the Dragon's anti-ship armament is comparatively small, the class makes up for this with two cavernous hangars and a pair of Scourge torpedoes, giving it significantly more flexibility than its counterpart battleship. As a result, Dragons are generally found in the center of Scourge vanguard fleets, the better to support their allies or clear a path through their enemies."
+  },
+  {
+    "name": "Daemon Battleship",
+    "found": true,
+    "lore": "The Daemon is a class of battleship designed and constructed by the [[The Scourge|Scourge]]. Like its sister class, [[Dragon Battleship|the Dragon]], the Daemon is one of the oldest starship designs still in service with the Scourge, behind only the rarely-seen super-dreadnoughts.\n\nBased on the general aging and battle scars sighted on these battleships, the [[United Colonies of Mankind|UCM]]'s naval planners estimate they were constructed somewhere between 500 to 2000 years ago, making them truly ancient.\n\nNewer Daemons have never been sighted, leading some to speculate that the Scourge have lost the ability to construct new ones. Regardless of whether or not it's true, the Scourge have yet to replace any destroyed battleships and only deploy those they have at their disposal when the outcome is assured.\n\nRegardless of age, the Daemon possesses firepower beyond question. Its prow is laced with oculus weaponry and tipped with a pair of furnace fangs, making it one of the most potent vessels available to the Scourge."
+  },
+  {
+    "name": "Apsasu Barge",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Ebisu Tackling Cutter",
+    "found": false,
+    "lore": ""
+  }
+]

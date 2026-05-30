@@ -1,0 +1,157 @@
+[
+  {
+    "name": "Delhi Battleship",
+    "found": true,
+    "lore": "The Delhi is a class of battleship designed and constructed by the [[United Colonies of Mankind]]. Part of a new generation of battleships, the Delhi - alongside its sister class, the [[Hanoi Battleship|Hanoi]] - was designed with the most modern technologies the UCM has to offer, as well as the latest design principles. This mostly comes in the form of compact systems, which have greatly increased the size of internal spaces and allows the Delhi to carry out its primary mission: rapid troop deployment.\n\nWhile the Hanoi was designed to be a consummate ship-killer, the Delhi was instead developed as an answer for the grievances of [[United Colonial Army|UCMA]] commanders. Though troopships like the [[San Francisco Troopship|San Francisco]] have served the Colonies admirably throughout the [[The Reconquest|Reconquest]], their vulnerability makes them more likely to be destroyed en route to drop zones, costing thousands of human lives in the process. The Delhi resolves this issue by being a battleship-sized delivery system, complete with thick armour and the ability to engage most threats unsupported."
+  },
+  {
+    "name": "Hanoi Battleship",
+    "found": true,
+    "lore": "The Hanoi is a class of battleship designed and constructed by the [[United Colonies of Mankind]]. Along with its sister class, the [[Delhi Battleship|Delhi]], the Hanoi was designed to be a part of a new wave of battleships to help replace some of the UCM's more venerable designs, with the first of her class launched in 2673. Though old stalwarts like the [[Beijing Battleship|Beijing]] are still being constructed, such classes are nearing 90 years' worth of service and are starting to show their age. The Hanoi meanwhile was constructed with the latest technological advancements that the [[United Colonies of Mankind Fleet|UCMF]] has made, all in service of increased modernity, capabilities, and lethality.\n\nWhile the Delhi uses its battleship-sized bulk to ferry troops to landing points, the Hanoi was instead designed as a peerless ship-hunter. Central to this game plan are its two, overwhelmingly large UF-12000 mass drivers, attached in fixed mounts to the front of the ship. Such weapons pack enough ship-killing potential to match even the most devastating armaments of the other factions, giving the UCM a true shock-and-awe weapon to deploy in orbital combat. These weapons do come at the cost of requiring significant amount of next-gen capacitors and a fully-overhauled power core system to function - changes that could never have been made to one of the legacy battleships."
+  },
+  {
+    "name": "Tokyo Battleship",
+    "found": true,
+    "lore": "The Tokyo is a battleship constructed by the [[United Colonies of Mankind]]. A specialist vessel, the Tokyo was designed with one goal in mind: surface bombardment. It dispenses with the main mass driver battery of the [[Beijing Battleship|Beijing-class]] in favor of three UF-B-8000 turrets, making one of the largest orbital bombardment platforms in the [[The Reconquest|Reconquest]] (beaten only by the PHR's [[Remus Dreadnought|Remus-class dreadnought]], and it's larger cousin, the [[Byzantium Super Battleship|Byzantium]]-class super battleship ).\n\nWhile a battleship may seem like an odd choice of ship to commit to bombardment, the Tokyo is significantly more survivable when exposed to enemy firepower than its lighter cousin, the [[Madrid Cruiser|Madrid]]. Regardless of enemy anti-ship batteries on the surface or enemy warships in orbit, the Tokyo can withstand a sizeable amount of punishment, all while laying waste to ground targets below."
+  },
+  {
+    "name": "New York Battleship",
+    "found": true,
+    "lore": "The New York is a class of battleship constructed and employed by the [[United Colonies of Mankind]]. Due to its flexibility, the New York is one of the most in-demand classes of battleships in the UCMF - the class swaps out the UF-6400 mass drivers and Cobra laser mounted on [[Beijing Battleship|Beijing-class battleships]] for twelve separate voidcraft hangars, as well as torpedo tubes. This allows any New York battleship to bring more threats to bear than the Beijing at a lower power requirement, making it altogether a more well-rounded threat.\n\nThough the New York is in high demand, it is fairly uncommon as far as battleships go - there are only 19 total New Yorks on the roster, due not only to the complexity of constructing one but also due to the shortage of trained pilots. Though this would have been a difficult shortfall to make up in the best of scenarios, the losses sustained by the Fleet Air Arm over [[Olympus Prime|Olympus]] have further exacerbated the issue. As a result, the percentage of new battleships built as New Yorks has dramatically decreased."
+  },
+  {
+    "name": "Beijing Battleship",
+    "found": true,
+    "lore": "The Beijing is a class of battleship constructed by the [[United Colonies of Mankind]], and the oldest class still in service. The ''UCMS Beijing'' was completed in 2586 after a seven-year construction period, making her 85 years old by the time of her destruction during the first battle of [[Olympus Prime|Olympus]]; however, in that time period she proved to be a remarkably reliable and versatile ship, prompting the UCMF to commission more.\n\nBeijing-class battleships pack significant armament, making them highly effective at annihilating swathes of enemy ships. Many of these vessels are surrounded by legend, and tales of their exploits are known by the majority of colonial citizenry. As a result of their reputations - and in part due to their highly destructive capabilities - Beijings are highly preferred by UCMF admirals as command ships."
+  },
+  {
+    "name": "Milwaukee Pocket Battleship",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Rotterdam Pocket Battleship",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "New Dubai Pocket Battleship",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Hong Kong Pocket Battleship",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Siam Battlecruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Venice Command Battlecruiser",
+    "found": true,
+    "lore": "The Venice is a class of battlecruiser designed and constructed by the [[United Colonies of Mankind]]. While most UCM admirals take to the field in battleships or dreadnoughts, the need for a specialist command ship led to the eventual creation of the Venice. On top of being extremely durable - the better to protect its precious cargo - the Venice is equipped with a unique communications array that grants any officer mounted in the ship access to peerless battlespace awareness, crystal-clear comms, and advanced spatial mapping. That said, this comms array is highly expensive and extremely large, preventing it from being mounted on any other ship of a similar tonnage."
+  },
+  {
+    "name": "Rome Battlecruiser",
+    "found": true,
+    "lore": "The Rome is a class of battlecruiser designed and constructed by the [[United Colonies of Mankind]]. Despite being one of the largest vessels in the UCM's fleet, the Rome owes its existence to the actions of a much smaller - and much older - class of ship, the [[Havana Destroyer|Havana]]. Several well-publicised kills scored by aging Havanas put enough pressure on the UCM [[United Colonies of Mankind Fleet|Admiralty]] to finance the development of a new ship that primarily focused on torpedoes. Faced with these criteria, UCM naval designers came up with the Rome, opting for a battlecruiser hull in order to support double tubes.\n\nThe Rome is intended to be an aggressive ship killer, making use of its speed to get into the enemy's face before unloading its payload of two heavy torpedoes. To give it a modicum of protection for this somewhat risky maneuver, the Rome is equipped with 46 additional Aegis-V point defence lasers, all the better to sponge off return fire from the enemy vessel. This overabundance of defence also means the Rome can lend aid to nearby ships, giving it a secondary role to fill should its torpedoes be expended.\n\nThe Rome entered service on the second month of the [[battle for Earth]]. Two of these brand-new vessels - the ''Charlemagne'' and the ''Eden Victory'' - were destroyed as a Scourge dreadnought moved to engage [[Admiral \"Granite\" Halsey|Admiral Halsey]]'s flagship, but their torpedoes broke the enemy vessel in half shortly thereafter, cementing the Rome's place in the UCM navy."
+  },
+  {
+    "name": "Perth Battlecruiser",
+    "found": true,
+    "lore": "The Perth is a class of battlecruiser designed and constructed by the [[United Colonies of Mankind]]. Alongside the [[Johannesburg Battlecruiser|Johannesburg]], the Perth's design came out of the battlecruiser testbed program, building off the successes of the prototype vessel. While the Johannesburg is armed with a more conventional mass driver battery as its main armament, the Perth is instead built around the Viper superheavy laser - a truly massive weapon that stands as one of the largest the UCM has ever designed. Taking up almost half the ship's length, the Viper laser is more than capable of bisecting a cruiser, though its fixed mount makes firing it a test of skill for the captain.\n\nThe Perth entered production using an all-new battlecruiser hull that was designed for speed and firepower at the expense of survivability, and which could be more cheaply produced than the prototype version would allow. Despite this, the Perth currently cannot be built fast enough to satisfy demand, as its unique mission profile is well-suited to the hunter-killer operations of the [[The Reconquest|Reconquest]].\n\nAs a part of the battlecruiser testbed program, the UCMS ''Avalon'' was constructed to trial the Viper laser and the mission profile of battlecruisers as a whole. Similarly to the [[Johannesburg Battlecruiser|UCMS ''Atlantis'']], the ''Avalon'' was constructed using many of the same components that UCM cruisers do, allowing for an easy method of prototype testing without requiring a new hull design. However, upon the UCM's decision to design an all-new hull for their battlecruisers, the ''Avalon'' was left as the only vessel of her class. It is currently unknown if the ''Avalon'' is still in active service."
+  },
+  {
+    "name": "Johannesburg Battlecruiser",
+    "found": true,
+    "lore": "The Johannesburg is a class of battlecruiser designed and constructed by the [[United Colonies of Mankind]]. Primarily, Johannesburgs are intended for flanking and interdiction operations, chasing down lesser ships and destroying them. As a result, the class was designed to focus on maximizing firepower while maintaining cruiser-level speeds, at the expense of survivability. Though Johannesburgs can easily decimate their targets with their batteries of mass drivers, the class is also equipped with a small hangar, allowing it to crush fleeing vessels with bombers or inflict extra damage against warships with poor point defence.\n\nThe Johannesburg, alongside the [[Perth Battlecruiser|Perth]], was designed around an all-new hull created for the specific requirements of battlecruisers. This has the side benefit of making it significantly cheaper to produce than the Atlantis-class, allowing Johannesburgs to quickly eclipse the Atlantis in terms of numbers.\n\nThe UCMS ''Atlantis'' was the predecessor to the Johannesburg class. Originally concepted as a testbed for future warship development, the ''Atlantis'' was built off a cruiser hull and shares many of the same components. Her actions during the [[Wolfrum]] Penal Insurrection, as well as limited engagements with the [[Shaltari Tribes|Shaltari]], proved the battlecruiser concept sound, paving the way for future vessels of similar scope. However, the UCM's pivot to a new hull design resulted in the ''Atlantis'' becoming the first and only member of her class, as despite having equivalent firepower, her hull was significantly more expensive to produce and maintain. Regardless, the ''Atlantis'' is still in active service with the UCMF."
+  },
+  {
+    "name": "Busan Supercruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Yokohama Supercruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Las Vegas Command Carrier",
+    "found": true,
+    "lore": "The Las Vegas is a class of heavy cruiser designed and constructed by the [[United Colonies of Mankind]]. Essentially an upsized version of the [[Geneva Command Cruiser|Geneva]] command cruiser, the Las Vegas features the ventral communications array and weaponry of its smaller cousin, in addition to wing-mounted launch bays. As a result, the Las Vegas can coordinate a UCM battlegroup while simultaneously launching supporting wings of fighters and bombers."
+  },
+  {
+    "name": "Edmonton Heavy Carrier",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Vilnius Heavy Cruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Warsaw Heavy Cruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "New Mombasa Vanguard Carrier",
+    "found": true,
+    "lore": "The New Mombasa is a class of cruiser designed and constructed by the United Colonies of Mankind. An aggressively-minded class, the New Mombasa's typical combat doctrine involves rapidly closing with enemy vessels, swarming them with point-blank missile fire and bomber flights. The New Mombasa is also equipped with two light torpedoes to help soften up targets as it approaches."
+  },
+  {
+    "name": "Geneva Command Cruiser",
+    "found": true,
+    "lore": "The Geneva is a class of cruiser designed and constructed by the [[United Colonies of Mankind]]. In previous years, the communications array mounted on the [[Venice Command Battlecruiser|Venice]] was too large and unwieldy to be built into anything smaller than a battlecruiser. However, advances in technology have allowed the UCM to create a smaller version of the array, resulting in the creation of the Geneva - a dedicated command vessel of cruiser tonnage. From the bridge of a Geneva, UCM commanders are afforded a crystal-clear view of the battlefield, giving them the ability to coordinate battlegroups with ease. However, this comes at the cost of the Geneva's own armament, as a cruiser hull lacks the engine power to field both the comms array and heavy weapons."
+  },
+  {
+    "name": "Glasgow Cruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Bucharest Cruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Ulaanbaatar Cruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Bruges Cruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Boston Light Cruiser",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Caracas Heavy Destroyer",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Oslo Cutter",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Detroit Heavy Frigate",
+    "found": false,
+    "lore": ""
+  },
+  {
+    "name": "Sheffield Heavy Frigate",
+    "found": true,
+    "lore": "The Sheffield is a class of heavy frigate designed and constructed by the [[United Colonies of Mankind]]. Though in years previous the UCM shied away from the creation of heavy frigates due to their high cost and the strain of dual weapon systems on engine power, technological advances made during the 2670s made such designs possible."
+  }
+]
