@@ -3,7 +3,14 @@
 // populating the cache as resources are fetched.
 // Bump this on every deploy so existing clients purge the old cache on activate
 // (the app updates frequently — stale assets must not survive a new build).
-const CACHE = 'dfc-cache-v3';
+const CACHE = 'dfc-cache-v4';
+// Same-origin code/data that MUST be fresh when online. Network-first alone is
+// not enough: fetch() still consults the browser HTTP cache, so a client can
+// keep running a stale app.js for as long as GitHub Pages' cache headers allow.
+// For these we force a true network hit (cache:'no-store'), falling back to the
+// SW cache only when offline. Images/fonts keep normal caching (they're large
+// and rarely change).
+const FRESH_RE = /\.(?:html|js|css|json|webmanifest)(?:\?|$)/i;
 const CORE = [
   './',
   './index.html',
@@ -35,10 +42,15 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return; // let cross-origin (fonts CDN) pass through
 
+  // Navigations and code/data: bypass the HTTP cache so clients always run the
+  // latest build when online. Everything else: ordinary network-first.
+  const mustBeFresh = req.mode === 'navigate' || FRESH_RE.test(url.pathname);
+  const netFetch = mustBeFresh ? fetch(req, { cache: 'no-store' }) : fetch(req);
+
   e.respondWith(
-    fetch(req)
+    netFetch
       .then(res => {
-        // cache a copy of successful same-origin responses
+        // cache a copy of successful same-origin responses (offline fallback)
         if (res && res.status === 200 && res.type === 'basic') {
           const copy = res.clone();
           caches.open(CACHE).then(c => c.put(req, copy));
