@@ -1293,11 +1293,13 @@ const App = (() => {
       else if (cat === 'medium') mediumPts += groupPts;
       else if (cat === 'heavy') heavyPts += groupPts;
     });
-    if (heavyPts > mediumPts && mediumPts > 0) {
+    // Both are hard restrictions per Section 4.2: Heavy points may not exceed
+    // Medium points; Light points may not exceed Medium + Heavy points.
+    if (heavyPts > mediumPts) {
       warnings.push({ type: 'error', msg: `Heavy ships (${heavyPts}pts) cannot exceed Medium ships (${mediumPts}pts)` });
     }
-    if (lightPts > mediumPts + heavyPts && (mediumPts + heavyPts) > 0) {
-      warnings.push({ type: 'warn', msg: `Light ships (${lightPts}pts) exceed Medium+Heavy (${mediumPts + heavyPts}pts)` });
+    if (lightPts > mediumPts + heavyPts) {
+      warnings.push({ type: 'error', msg: `Light ships (${lightPts}pts) cannot exceed Medium + Heavy ships (${mediumPts + heavyPts}pts)` });
     }
 
     // 7b. Feature carriers must choose a Deployable Feature
