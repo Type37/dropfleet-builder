@@ -200,6 +200,10 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.7;
   color: var(--ink-soft);
 }
+/* Restore paragraph spacing (the global reset zeroes <p> margins) so multi-
+   paragraph lore in the detail modal / shared view reads as separate paragraphs. */
+.text-rules p { margin: 0 0 0.7em; }
+.text-rules p:last-child { margin-bottom: 0; }
 
 /* ── 4. Art Deco Decorative Elements ─────────────────────────── */
 .deco-rule {
