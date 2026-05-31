@@ -72,6 +72,71 @@
     return SHIP_ART.has(first) ? `../assets/art/${first}.webp` : null;
   }
 
+  /* ── Launch asset & weapon special helpers ─────────────── */
+  function getLaunchAssetMap(factionKey) {
+    const faction = findFactionByKey(factionKey);
+    if (!faction) return {};
+    const map = {};
+    (faction.launchAssets || []).forEach(group => {
+      (group.assets || []).forEach(a => { map[a.name.toLowerCase()] = a; });
+    });
+    return map;
+  }
+
+  function renderLaunchTable(factionKey, ship) {
+    const loads = ship.loads || [];
+    if (!loads.length) return '';
+    const assetMap = getLaunchAssetMap(factionKey);
+
+    let rows = '';
+    loads.forEach(load => {
+      if (!load.name) return;
+      const parts = load.name.split(/\s*&\s*/).map(p => p.trim()).filter(Boolean);
+      const loadSpecial = (load.special && load.special !== '-') ? ` <span style="color:var(--fg3);font-size:var(--text-caption2)">${load.special}</span>` : '';
+
+      parts.forEach((part, i) => {
+        const a = assetMap[part.toLowerCase()] || { name: part };
+        const hasStats = a.attack !== undefined && a.attack !== null;
+        const typeClass = a.type ? `weapon-type-${a.type.toLowerCase()}` : '';
+        const dmgCell = hasStats ? `${a.damage || '—'}${a.type ? `<span class="${typeClass}" style="margin-left:2px">${a.type}</span>` : ''}` : '—';
+        const special = (a.special && a.special !== '-') ? renderSpecialChips(a.special) : (a.ksReroll != null ? `<span class="weapon-special-chip">Close Protection (re-roll ${a.ksReroll} KS)</span>` : '—');
+
+        rows += `<div class="weapon-row ${typeClass}">
+          ${i === 0 ? `<div class="weapon-val" style="font-weight:700;grid-row:span ${parts.length}">${load.launch || '—'}${loadSpecial}</div>` : ''}
+          <div class="weapon-name">${part}</div>
+          <div class="weapon-val">${a.thrust || '—'}</div>
+          <div class="weapon-val">${hasStats ? a.attack : '—'}</div>
+          <div class="weapon-val">${hasStats ? a.lock : '—'}</div>
+          <div class="weapon-val">${dmgCell}</div>
+        </div>
+        ${special !== '—' ? `<div class="weapon-special">${special}</div>` : ''}`;
+      });
+    });
+
+    return `
+      <div class="weapon-table">
+        <div class="section-header" style="padding:0 0 var(--sp-s)">Launch Assets</div>
+        <div class="weapon-row weapon-row-header" style="grid-template-columns:36px 1fr 40px 32px 32px 40px">
+          <div class="weapon-val">Lch</div>
+          <div class="weapon-name" style="color:var(--fg3)">Load</div>
+          <div class="weapon-val">Thr</div>
+          <div class="weapon-val">At</div>
+          <div class="weapon-val">Lk</div>
+          <div class="weapon-val">Dm</div>
+        </div>
+        ${rows.replace(/class="weapon-row/g, 'class="weapon-row" style="grid-template-columns:36px 1fr 40px 32px 32px 40px')}
+      </div>`;
+  }
+
+  function renderSpecialChips(specialStr) {
+    if (!specialStr || specialStr === '-') return '';
+    return specialStr.split(',').map(s => {
+      const trimmed = s.trim();
+      if (!trimmed) return '';
+      return `<span class="weapon-special-chip">${trimmed}</span>`;
+    }).join(' ');
+  }
+
   function artImg(name, cls) {
     const src = shipArtPath(name);
     if (!src) return '';
@@ -532,30 +597,22 @@
           ${weapons.map(w => {
             const wtype = (w.type || '').toUpperCase();
             const typeClass = wtype === 'K' ? 'weapon-type-k' : wtype === 'E' ? 'weapon-type-e' : wtype === 'C' ? 'weapon-type-c' : '';
+            const dmgCell = `${w.damage || ''}${wtype ? `<span class="${typeClass}" style="margin-left:2px;font-size:9px">${wtype}</span>` : ''}`;
             return `
             <div class="weapon-row ${typeClass}">
               <div class="weapon-name">${w.name}</div>
               <div class="weapon-val">${w.lock || ''}</div>
               <div class="weapon-val">${w.attack || ''}</div>
-              <div class="weapon-val">${w.damage || ''}</div>
+              <div class="weapon-val">${dmgCell}</div>
               <div class="weapon-val">${w.arc || ''}</div>
             </div>
-            ${w.special && w.special !== '-' ? `<div class="weapon-special">${w.special}</div>` : ''}
+            ${w.special && w.special !== '-' ? `<div class="weapon-special">${renderSpecialChips(w.special)}</div>` : ''}
           `}).join('')}
         </div>
       ` : ''}
 
-      <!-- Launch assets -->
-      ${loads.length ? `
-        <div class="loadout-section">
-          <div class="section-header" style="padding:0 0 var(--sp-s)">Launch Assets</div>
-          <div class="launch-picker">
-            ${loads.map((l, i) => `
-              <button class="launch-option ${i === 0 ? 'active' : ''}" onclick="App.selectLaunch(${activeGroupIdx}, ${i})">${l.name}</button>
-            `).join('')}
-          </div>
-        </div>
-      ` : ''}
+      <!-- Launch assets table -->
+      ${loads.length ? renderLaunchTable(activeFleet.faction, ship) : ''}
 
       <!-- Loadout options -->
       ${loadoutOptions.length ? `

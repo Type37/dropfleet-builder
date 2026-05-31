@@ -457,11 +457,24 @@ input, textarea, select { font: inherit; }
 
 .weapon-special {
   grid-column: 1 / -1;
-  font-size: var(--text-caption2);
-  color: var(--fg3);
   padding-left: 0;
   margin-top: var(--sp-xxs);
-  font-style: italic;
+  margin-bottom: var(--sp-xs);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-xxs);
+}
+
+.weapon-special-chip {
+  display: inline-block;
+  padding: 1px var(--sp-s-nudge);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-medium);
+  background: var(--paper-alt);
+  color: var(--fg2);
+  border: 1px solid var(--stroke2);
+  white-space: nowrap;
 }
 
 
