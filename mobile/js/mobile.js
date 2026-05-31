@@ -195,59 +195,59 @@
     const current = document.querySelector('.screen.active');
     if (current && !opts?.replace) {
       history.push({ id: current.id, scroll: window.scrollY });
-      // Slide current out left, new in right
+    }
+
+    // Render FIRST (before animation) so content is ready
+    if (typeof data?.render === 'function') data.render();
+
+    // Then animate
+    if (current && !opts?.replace) {
       current.classList.remove('active');
       current.classList.add('slide-out-left');
-      current.addEventListener('animationend', () => {
+      setTimeout(() => {
         current.classList.remove('slide-out-left');
-        current.style.display = 'none';
-      }, { once: true });
+      }, 300);
     } else if (current) {
       current.classList.remove('active');
     }
+
     const target = document.getElementById(screenId);
     if (target) {
-      if (!opts?.replace && current) {
-        target.classList.add('slide-in-right');
-        target.addEventListener('animationend', () => {
-          target.classList.remove('slide-in-right');
-          target.classList.add('active');
-        }, { once: true });
-      } else {
-        target.classList.add('active');
-      }
+      target.classList.add('active', 'slide-in-right');
+      setTimeout(() => {
+        target.classList.remove('slide-in-right');
+      }, 300);
       window.scrollTo(0, 0);
     }
     updateAppBar(screenId, data);
-    if (typeof data?.render === 'function') data.render();
   }
 
   function goBack() {
     if (!history.length) return;
     const prev = history.pop();
-    const current = document.querySelector('.screen.active, .screen.slide-in-right');
-    if (current) {
-      current.classList.remove('active', 'slide-in-right');
-      current.classList.add('slide-out-right');
-      current.addEventListener('animationend', () => {
-        current.classList.remove('slide-out-right');
-        current.style.display = 'none';
-      }, { once: true });
-    }
-    const target = document.getElementById(prev.id);
-    if (target) {
-      target.style.display = '';
-      target.classList.add('slide-in-left');
-      target.addEventListener('animationend', () => {
-        target.classList.remove('slide-in-left');
-        target.classList.add('active');
-      }, { once: true });
-    }
-    window.scrollTo(0, prev.scroll || 0);
-    // Re-render if needed
+    const current = document.querySelector('.screen.active');
+
+    // Re-render destination FIRST
     if (prev.id === 'screen-fleet-list') renderFleetList();
     if (prev.id === 'screen-fleet-detail') renderFleetDetail();
     if (prev.id === 'screen-group-detail') renderGroupDetail();
+
+    if (current) {
+      current.classList.remove('active');
+      current.classList.add('slide-out-right');
+      setTimeout(() => {
+        current.classList.remove('slide-out-right');
+      }, 300);
+    }
+
+    const target = document.getElementById(prev.id);
+    if (target) {
+      target.classList.add('active', 'slide-in-left');
+      setTimeout(() => {
+        target.classList.remove('slide-in-left');
+      }, 300);
+    }
+    window.scrollTo(0, prev.scroll || 0);
     updateAppBar(prev.id);
   }
 
