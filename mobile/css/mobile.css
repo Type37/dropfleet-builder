@@ -1,0 +1,894 @@
+/* ═══════════════════════════════════════════════════════════
+   DFC Mobile — Fluent 2 Foundation + DFC Personality
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── 1. Design Tokens ──────────────────────────────────── */
+:root {
+  /* — Fluent 2 Spacing (4px grid) — */
+  --sp-xxs: 2px;
+  --sp-xs: 4px;
+  --sp-s-nudge: 6px;
+  --sp-s: 8px;
+  --sp-m-nudge: 10px;
+  --sp-m: 12px;
+  --sp-l: 16px;
+  --sp-xl: 20px;
+  --sp-xxl: 24px;
+  --sp-xxxl: 32px;
+
+  /* — Fluent 2 Type Ramp — */
+  --text-caption2: 10px;
+  --text-caption1: 12px;
+  --text-body1: 14px;
+  --text-subtitle2: 16px;
+  --text-subtitle1: 20px;
+  --text-title3: 24px;
+  --text-title2: 28px;
+
+  --lh-caption2: 14px;
+  --lh-caption1: 16px;
+  --lh-body1: 20px;
+  --lh-subtitle2: 22px;
+  --lh-subtitle1: 26px;
+  --lh-title3: 32px;
+
+  /* — Fluent 2 Weights — */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* — DFC Palette (warm, not pure Fluent grey) — */
+  --navy: #1b3a5c;
+  --navy-dark: #142d47;
+  --gold: #c9a84c;
+  --gold-dim: #a8903f;
+  --ink: #1c1a17;
+  --paper: #f5f3ef;
+  --paper-alt: #eae7e1;
+  --card-bg: #fafaf8;
+  --white: #ffffff;
+  --danger: #c44;
+  --danger-bg: #fef6f4;
+
+  /* — Neutral Foregrounds (Fluent-mapped to warm) — */
+  --fg1: #242220;       /* primary text */
+  --fg2: #4a4744;       /* secondary text */
+  --fg3: #6b6864;       /* tertiary / captions */
+  --fg4: #8a8784;       /* disabled / hints */
+  --fg-on-dark: #ffffff;
+  --fg-on-dark-dim: rgba(255,255,255,0.6);
+
+  /* — Strokes — */
+  --stroke1: #d6d3ce;
+  --stroke2: #e5e2dd;
+  --stroke3: #f0ede8;
+
+  /* — Fluent 2 Shapes — */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --radius-2xl: 12px;
+  --radius-pill: 10000px;
+
+  /* — Fluent 2 Shadows — */
+  --shadow2: 0 0 2px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.12);
+  --shadow4: 0 0 2px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.12);
+  --shadow8: 0 0 2px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.12);
+  --shadow16: 0 0 2px rgba(0,0,0,0.10), 0 8px 16px rgba(0,0,0,0.12);
+  --shadow28: 0 0 8px rgba(0,0,0,0.10), 0 14px 28px rgba(0,0,0,0.12);
+
+  /* — Fluent 2 Motion — */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-gentle: 250ms;
+  --duration-slow: 300ms;
+  --ease-decelerate: cubic-bezier(0, 0, 0, 1);
+  --ease-accelerate: cubic-bezier(1, 0, 1, 1);
+  --ease-standard: cubic-bezier(0.33, 0, 0.67, 1);
+
+  /* — Fonts (DFC personality) — */
+  --font-body: 'Jost', system-ui, -apple-system, sans-serif;
+  --font-display: 'Roboto Slab', serif;
+  --font-condensed: 'Barlow Condensed', sans-serif;
+  --font-lore: 'Cardo', 'Libre Baskerville', serif;
+
+  /* — Touch targets — */
+  --tap-min: 44px;
+
+  /* — Header height — */
+  --header-h: 48px;
+}
+
+
+/* ── 2. Reset & Base ───────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: var(--text-body1);
+  line-height: var(--lh-body1);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--fg1);
+  background: var(--paper);
+  overflow-x: hidden;
+  min-height: 100dvh;
+}
+
+img { display: block; max-width: 100%; }
+button { font: inherit; cursor: pointer; border: none; background: none; }
+input, textarea, select { font: inherit; }
+
+
+/* ── 3. App Bar (Dark header) ──────────────────────────── */
+.app-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--header-h);
+  padding: 0 var(--sp-l);
+  background: var(--navy);
+  color: var(--fg-on-dark);
+}
+
+.app-bar-back {
+  position: absolute;
+  left: var(--sp-m);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  color: var(--fg-on-dark);
+  font-size: var(--text-body1);
+  font-weight: var(--weight-medium);
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  padding: 0;
+}
+.app-bar-back svg { width: 16px; height: 16px; }
+
+.app-bar-title {
+  font-family: var(--font-condensed);
+  font-size: var(--text-body1);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.app-bar-menu {
+  position: absolute;
+  left: var(--sp-m);
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fg-on-dark);
+  font-size: var(--text-subtitle1);
+}
+
+.app-bar-overflow {
+  position: absolute;
+  right: var(--sp-m);
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fg-on-dark);
+  font-size: var(--text-subtitle2);
+  letter-spacing: 2px;
+}
+
+
+/* ── 4. Screens / Navigation ──────────────────────────── */
+.screen {
+  display: none;
+  min-height: calc(100dvh - var(--header-h));
+}
+.screen.active { display: block; }
+
+/* Bottom-padded for fixed bottom button */
+.screen-padded { padding-bottom: 72px; }
+
+
+/* ── 5. Fixed Bottom Action ───────────────────────────── */
+.bottom-action {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--sp-m) var(--sp-l);
+  padding-bottom: max(var(--sp-m), env(safe-area-inset-bottom));
+  background: linear-gradient(transparent, var(--paper) 40%);
+  z-index: 50;
+}
+
+
+/* ── 6. Buttons ────────────────────────────────────────── */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-s);
+  min-height: var(--tap-min);
+  padding: var(--sp-s) var(--sp-l);
+  border-radius: var(--radius-md);
+  font-family: var(--font-condensed);
+  font-size: var(--text-body1);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: background var(--duration-fast) var(--ease-standard),
+              transform var(--duration-fast) var(--ease-standard);
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: var(--navy);
+  color: var(--fg-on-dark);
+}
+.btn-primary:active { background: var(--navy-dark); }
+
+.btn-ghost {
+  background: transparent;
+  border: 1.5px solid var(--stroke1);
+  color: var(--fg2);
+}
+.btn-ghost:active { background: var(--paper-alt); }
+
+.btn-block { width: 100%; }
+
+
+/* ── 7. List Rows ──────────────────────────────────────── */
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-m);
+  padding: var(--sp-m) var(--sp-l);
+  background: var(--white);
+  border-bottom: 1px solid var(--stroke2);
+  min-height: var(--tap-min);
+  transition: background var(--duration-fast) var(--ease-standard);
+}
+.list-row:active { background: var(--paper); }
+
+.list-row-content { flex: 1; min-width: 0; }
+
+.list-row-title {
+  font-size: var(--text-body1);
+  font-weight: var(--weight-semibold);
+  line-height: var(--lh-body1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-row-sub {
+  font-size: var(--text-caption1);
+  line-height: var(--lh-caption1);
+  color: var(--fg3);
+  margin-top: var(--sp-xxs);
+}
+
+.list-row-pts {
+  font-family: var(--font-condensed);
+  font-size: var(--text-body1);
+  font-weight: var(--weight-bold);
+  color: var(--navy);
+  flex-shrink: 0;
+}
+
+
+/* ── 8. Ship Art Thumbnail ─────────────────────────────── */
+.ship-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--paper-alt);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.ship-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ship-thumb-lg {
+  width: 52px;
+  height: 52px;
+}
+
+
+/* ── 9. Section Headers ───────────────────────────────── */
+.section-header {
+  padding: var(--sp-m) var(--sp-l) var(--sp-s);
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg3);
+}
+
+
+/* ── 10. Points Badge (circle) ─────────────────────────── */
+.pts-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--fg-on-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.pts-badge-value {
+  font-family: var(--font-condensed);
+  font-size: var(--text-subtitle1);
+  font-weight: 800;
+  line-height: 1;
+}
+.pts-badge-label {
+  font-family: var(--font-condensed);
+  font-size: 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+
+/* ── 11. Stat Grid (3-col) ─────────────────────────────── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--sp-m-nudge) var(--sp-l);
+  padding: var(--sp-m) var(--sp-l);
+  background: var(--white);
+  border-bottom: 1px solid var(--stroke2);
+}
+
+.stat-label {
+  font-family: var(--font-condensed);
+  font-size: 9px;
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg3);
+}
+
+.stat-value {
+  font-family: var(--font-condensed);
+  font-size: 15px;
+  font-weight: var(--weight-bold);
+  color: var(--fg1);
+}
+
+
+/* ── 12. Weapon Table ──────────────────────────────────── */
+.weapon-table {
+  padding: var(--sp-m) var(--sp-l);
+  background: var(--white);
+  border-bottom: 1px solid var(--stroke2);
+}
+
+.weapon-row {
+  display: grid;
+  grid-template-columns: 1fr 32px 32px 32px 40px;
+  align-items: center;
+  padding: var(--sp-xs) 0;
+  border-bottom: 1px solid var(--stroke3);
+  font-size: var(--text-caption1);
+}
+.weapon-row:last-child { border-bottom: none; }
+
+.weapon-row-header {
+  font-weight: var(--weight-semibold);
+  color: var(--fg3);
+  border-bottom: 2px solid var(--stroke1);
+  padding-bottom: var(--sp-s);
+}
+
+.weapon-name {
+  font-weight: var(--weight-semibold);
+  color: var(--fg1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.weapon-val {
+  text-align: center;
+  color: var(--fg2);
+  font-family: var(--font-condensed);
+  font-weight: var(--weight-semibold);
+}
+
+.weapon-special {
+  grid-column: 1 / -1;
+  font-size: var(--text-caption2);
+  color: var(--fg3);
+  padding-left: 0;
+  margin-top: var(--sp-xxs);
+  font-style: italic;
+}
+
+
+/* ── 13. Chips / Toggles ──────────────────────────────── */
+.chip-row {
+  display: flex;
+  gap: var(--sp-xs);
+  padding: var(--sp-s) var(--sp-l);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  background: var(--white);
+  border-bottom: 1px solid var(--stroke2);
+}
+.chip-row::-webkit-scrollbar { display: none; }
+
+.chip {
+  flex-shrink: 0;
+  padding: var(--sp-s) var(--sp-m);
+  border-radius: var(--radius-md);
+  font-size: var(--text-caption1);
+  font-weight: var(--weight-semibold);
+  background: var(--paper);
+  color: var(--fg2);
+  border: 1px solid var(--stroke2);
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.chip.active {
+  background: var(--navy);
+  color: var(--fg-on-dark);
+  border-color: var(--navy);
+}
+
+
+/* ── 14. Rule/Keyword Cards ───────────────────────────── */
+.rule-card {
+  padding: var(--sp-m) var(--sp-l);
+  background: var(--paper);
+  border-bottom: 1px solid var(--stroke2);
+}
+
+.rule-card-name {
+  font-size: var(--text-body1);
+  font-weight: var(--weight-semibold);
+  color: var(--fg1);
+}
+
+.rule-card-text {
+  font-family: var(--font-lore);
+  font-size: var(--text-caption1);
+  line-height: 1.6;
+  color: var(--fg2);
+  margin-top: var(--sp-xs);
+}
+
+.rule-card-icon {
+  color: var(--fg4);
+  font-size: var(--text-body1);
+  flex-shrink: 0;
+  margin-left: var(--sp-s);
+}
+
+
+/* ── 15. Loadout Option Cards ─────────────────────────── */
+.loadout-section {
+  padding: var(--sp-m) var(--sp-l);
+  background: var(--white);
+  border-bottom: 1px solid var(--stroke2);
+}
+
+.loadout-option {
+  padding: var(--sp-m);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--stroke1);
+  background: var(--white);
+  margin-bottom: var(--sp-s);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+.loadout-option:last-child { margin-bottom: 0; }
+
+.loadout-option.selected {
+  border: 2px solid var(--navy);
+  background: var(--paper);
+}
+
+.loadout-option-name {
+  font-size: var(--text-caption1);
+  font-weight: var(--weight-semibold);
+}
+
+.loadout-option-cost {
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption1);
+  font-weight: var(--weight-bold);
+  color: var(--navy);
+}
+
+.loadout-option-desc {
+  font-size: var(--text-caption2);
+  color: var(--fg3);
+  margin-top: var(--sp-xxs);
+}
+
+
+/* ── 16. Points Summary Bar ───────────────────────────── */
+.points-bar {
+  padding: var(--sp-m-nudge) var(--sp-l);
+  background: var(--paper);
+  border-bottom: 1px solid var(--stroke1);
+}
+
+.points-bar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-caption1);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--sp-xs);
+}
+
+.points-track {
+  height: 4px;
+  background: var(--stroke2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.points-fill {
+  height: 100%;
+  background: var(--navy);
+  border-radius: 2px;
+  transition: width var(--duration-gentle) var(--ease-standard);
+}
+.points-fill.over { background: var(--danger); }
+
+
+/* ── 17. Validation Warnings ──────────────────────────── */
+.warning-bar {
+  padding: var(--sp-m-nudge) var(--sp-l);
+  background: var(--white);
+  border-bottom: 1px solid var(--stroke2);
+}
+
+.warning-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-s);
+  font-size: var(--text-caption1);
+  color: var(--danger);
+  line-height: 1.4;
+}
+.warning-item + .warning-item { margin-top: var(--sp-s-nudge); }
+
+.warning-icon {
+  font-size: var(--text-body1);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+
+/* ── 18. Fleet Header (on fleet detail) ────────────────── */
+.fleet-header {
+  padding: var(--sp-l);
+  background: var(--white);
+  border-bottom: 1px solid var(--stroke2);
+}
+
+.fleet-header-name {
+  font-family: var(--font-display);
+  font-size: var(--text-title3);
+  font-weight: var(--weight-bold);
+  line-height: var(--lh-title3);
+}
+
+.fleet-header-sub {
+  font-size: var(--text-caption1);
+  color: var(--fg3);
+  margin-top: var(--sp-xxs);
+}
+
+.fleet-header-actions {
+  display: flex;
+  gap: var(--sp-s);
+  margin-top: var(--sp-m);
+}
+
+
+/* ── 19. Group Size Counter ───────────────────────────── */
+.group-counter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-m) var(--sp-l);
+  background: var(--white);
+  border-bottom: 1px solid var(--stroke2);
+}
+
+.group-counter-label {
+  font-size: var(--text-body1);
+  font-weight: var(--weight-semibold);
+}
+
+.group-counter-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+}
+
+.group-counter-value {
+  font-family: var(--font-condensed);
+  font-size: var(--text-subtitle2);
+  font-weight: 800;
+  color: var(--navy);
+  min-width: 24px;
+  text-align: center;
+}
+
+.group-counter-range {
+  font-size: var(--text-caption2);
+  color: var(--fg3);
+}
+
+.counter-btn {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--stroke1);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-subtitle2);
+  color: var(--fg2);
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+.counter-btn:active { background: var(--paper-alt); }
+.counter-btn:disabled { opacity: 0.3; }
+
+
+/* ── 20. Badges ────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--sp-xxs) var(--sp-s);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-ghost {
+  border: 1px solid var(--stroke1);
+  color: var(--fg2);
+}
+
+.badge-navy {
+  background: var(--navy);
+  color: var(--fg-on-dark);
+}
+
+.badge-gold {
+  background: var(--gold);
+  color: var(--white);
+}
+
+
+/* ── 21. Search Input ──────────────────────────────────── */
+.search-bar {
+  padding: var(--sp-s) var(--sp-l);
+  background: var(--white);
+  border-bottom: 1px solid var(--stroke2);
+}
+
+.search-input {
+  width: 100%;
+  padding: var(--sp-m-nudge) var(--sp-m);
+  border: 1px solid var(--stroke1);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  font-size: var(--text-body1);
+  color: var(--fg1);
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+.search-input:focus { border-color: var(--navy); }
+.search-input::placeholder { color: var(--fg4); }
+
+
+/* ── 22. Ship Art (detail view) ────────────────────────── */
+.ship-art-block {
+  padding: var(--sp-l);
+  background: var(--white);
+  text-align: center;
+}
+.ship-art-block img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+}
+
+
+/* ── 23. Modal Overlay ─────────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.4);
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--sp-xxxl) var(--sp-l);
+}
+.modal-overlay.active { display: flex; }
+
+.modal-panel {
+  background: var(--white);
+  border-radius: var(--radius-2xl);
+  width: 100%;
+  max-width: 400px;
+  max-height: calc(100dvh - 64px);
+  overflow-y: auto;
+  box-shadow: var(--shadow28);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-l);
+  border-bottom: 1px solid var(--stroke2);
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: var(--text-subtitle1);
+  font-weight: var(--weight-bold);
+}
+
+.modal-close {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-subtitle1);
+  color: var(--fg3);
+  border-radius: var(--radius-md);
+}
+.modal-close:active { background: var(--paper); }
+
+.modal-body { padding: var(--sp-l); }
+
+.modal-footer {
+  padding: var(--sp-m) var(--sp-l) var(--sp-l);
+}
+
+
+/* ── 24. Form Elements ─────────────────────────────────── */
+.form-group { margin-bottom: var(--sp-l); }
+.form-group:last-child { margin-bottom: 0; }
+
+.form-label {
+  display: block;
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption1);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg3);
+  margin-bottom: var(--sp-xs);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: var(--sp-m-nudge) var(--sp-m);
+  border: 1px solid var(--stroke1);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  font-size: var(--text-body1);
+  color: var(--fg1);
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus { border-color: var(--navy); }
+
+.form-textarea { min-height: 80px; resize: vertical; }
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3' fill='none' stroke='%236b6864' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+
+/* ── 25. Launch Asset Picker ──────────────────────────── */
+.launch-picker {
+  display: flex;
+  gap: var(--sp-xs);
+}
+
+.launch-option {
+  flex: 1;
+  padding: var(--sp-m-nudge);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  font-size: var(--text-caption1);
+  font-weight: var(--weight-semibold);
+  border: 1px solid var(--stroke1);
+  background: var(--paper);
+  color: var(--fg2);
+  min-height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+.launch-option.active {
+  background: var(--navy);
+  color: var(--fg-on-dark);
+  border-color: var(--navy);
+}
+
+
+/* ── 26. Ship Detail Header ──────────────────────────── */
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--sp-l);
+  background: var(--white);
+  border-bottom: 1px solid var(--stroke2);
+}
+
+.detail-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: var(--weight-bold);
+  line-height: 1.2;
+}
+
+.detail-type {
+  font-size: var(--text-caption1);
+  color: var(--fg3);
+  margin-top: var(--sp-xxs);
+}
+
+
+/* ── 27. Invalid marker ──────────────────────────────── */
+.invalid-text { color: var(--danger); }
+
+
+/* ── 28. Utility ──────────────────────────────────────── */
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-xs { gap: var(--sp-xs); }
+.gap-s { gap: var(--sp-s); }
+.gap-m { gap: var(--sp-m); }
+.text-center { text-align: center; }
+.hidden { display: none !important; }
