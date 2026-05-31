@@ -187,6 +187,47 @@ input, textarea, select { font: inherit; }
   letter-spacing: 2px;
 }
 
+/* Points in app bar */
+.app-bar-pts {
+  position: absolute;
+  right: 52px;
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption1);
+  font-weight: var(--weight-bold);
+  color: rgba(255,255,255,0.7);
+  white-space: nowrap;
+}
+
+/* Floating Add Group button */
+.fab {
+  position: fixed;
+  bottom: max(20px, env(safe-area-inset-bottom, 20px));
+  right: 20px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+  padding: 0 var(--sp-l) 0 var(--sp-m);
+  height: 52px;
+  border-radius: 26px;
+  background: var(--navy);
+  color: var(--fg-on-dark);
+  border: none;
+  box-shadow: var(--shadow16);
+  font-family: var(--font-condensed);
+  font-size: var(--text-body1);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-standard),
+              box-shadow var(--duration-fast) var(--ease-standard);
+}
+.fab:active {
+  transform: scale(0.96);
+  box-shadow: var(--shadow8);
+}
+
 
 /* ── 4. Screens / Navigation + Slide Transitions ─────── */
 .screen-container {

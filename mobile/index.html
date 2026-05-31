@@ -21,6 +21,7 @@
     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
   </button>
   <span class="app-bar-title" id="app-bar-title">Fleet Builder</span>
+  <span class="app-bar-pts hidden" id="app-bar-pts"></span>
   <button class="app-bar-overflow hidden" id="app-bar-overflow" aria-label="More">&middot;&middot;&middot;</button>
 </header>
 
@@ -58,12 +59,14 @@
   <div class="warning-bar hidden" id="fleet-warnings">
     <!-- Populated by JS -->
   </div>
-  <div id="fleet-groups">
+  <div id="fleet-groups" style="padding-bottom:88px">
     <!-- Populated by JS -->
   </div>
-  <div class="bottom-action">
-    <button class="btn btn-primary btn-block" onclick="App.openAddGroup()">Add Group</button>
-  </div>
+  <!-- Floating Add Group button — always visible -->
+  <button class="fab" id="fab-add-group" onclick="App.openAddGroup()" aria-label="Add Group">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4v14M4 11h14"/></svg>
+    <span>Add Group</span>
+  </button>
 </main>
 
 <!-- Add Group (Ship Picker) -->

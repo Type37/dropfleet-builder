@@ -220,6 +220,9 @@
       window.scrollTo(0, 0);
     }
     updateAppBar(screenId, data);
+    // Show FAB only on fleet detail
+    const fab = document.getElementById('fab-add-group');
+    if (fab) fab.style.display = screenId === 'screen-fleet-detail' ? '' : 'none';
   }
 
   function goBack() {
@@ -249,6 +252,8 @@
     }
     window.scrollTo(0, prev.scroll || 0);
     updateAppBar(prev.id);
+    const fab = document.getElementById('fab-add-group');
+    if (fab) fab.style.display = prev.id === 'screen-fleet-detail' ? '' : 'none';
   }
 
   function updateAppBar(screenId, data) {
@@ -258,10 +263,14 @@
     const menu = document.getElementById('app-bar-menu');
     const overflow = document.getElementById('app-bar-overflow');
 
+    const ptsEl = document.getElementById('app-bar-pts');
+
     // Defaults
     backBtn.classList.add('hidden');
     menu.classList.add('hidden');
     overflow.classList.add('hidden');
+    ptsEl.classList.add('hidden');
+    ptsEl.textContent = '';
 
     switch (screenId) {
       case 'screen-fleet-list':
@@ -272,15 +281,33 @@
         backBtn.classList.remove('hidden');
         overflow.classList.remove('hidden');
         title.textContent = 'Fleet';
+        if (activeFleet) {
+          const pts = fleetPoints(activeFleet);
+          const target = activeFleet.targetPoints || 1500;
+          ptsEl.textContent = `${pts} / ${target}`;
+          ptsEl.classList.remove('hidden');
+        }
         break;
       case 'screen-add-group':
         backBtn.classList.remove('hidden');
         title.textContent = 'Add Group';
+        if (activeFleet) {
+          const pts = fleetPoints(activeFleet);
+          const target = activeFleet.targetPoints || 1500;
+          ptsEl.textContent = `${pts} / ${target}`;
+          ptsEl.classList.remove('hidden');
+        }
         break;
       case 'screen-group-detail':
         backBtn.classList.remove('hidden');
         overflow.classList.remove('hidden');
         title.textContent = 'Group';
+        if (activeFleet) {
+          const pts = fleetPoints(activeFleet);
+          const target = activeFleet.targetPoints || 1500;
+          ptsEl.textContent = `${pts} / ${target}`;
+          ptsEl.classList.remove('hidden');
+        }
         break;
       default:
         backBtn.classList.remove('hidden');
