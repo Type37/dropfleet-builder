@@ -188,12 +188,53 @@ input, textarea, select { font: inherit; }
 }
 
 
-/* ── 4. Screens / Navigation ──────────────────────────── */
+/* ── 4. Screens / Navigation + Slide Transitions ─────── */
+.screen-container {
+  position: relative;
+  overflow-x: hidden;
+}
+
 .screen {
   display: none;
   min-height: calc(100dvh - var(--header-h));
+  will-change: transform, opacity;
 }
 .screen.active { display: block; }
+
+/* iOS-style slide animations */
+.screen.slide-in-right {
+  display: block;
+  animation: slideInRight var(--duration-slow) var(--ease-decelerate) forwards;
+}
+.screen.slide-out-left {
+  display: block;
+  animation: slideOutLeft var(--duration-slow) var(--ease-accelerate) forwards;
+}
+.screen.slide-in-left {
+  display: block;
+  animation: slideInLeft var(--duration-slow) var(--ease-decelerate) forwards;
+}
+.screen.slide-out-right {
+  display: block;
+  animation: slideOutRight var(--duration-slow) var(--ease-accelerate) forwards;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(30%); opacity: 0.6; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOutLeft {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(-15%); opacity: 0; }
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-30%); opacity: 0.6; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(15%); opacity: 0; }
+}
 
 /* Bottom-padded for fixed bottom button */
 .screen-padded { padding-bottom: 72px; }
@@ -883,7 +924,108 @@ input, textarea, select { font: inherit; }
 .invalid-text { color: var(--danger); }
 
 
-/* ── 28. Utility ──────────────────────────────────────── */
+/* ── 28. Weapon Type Colors ────────────────────────────── */
+.weapon-type-k { color: var(--navy); font-weight: var(--weight-bold); }
+.weapon-type-e { color: #8b5e1a; font-weight: var(--weight-bold); }
+.weapon-type-c { color: var(--danger); font-weight: var(--weight-bold); }
+
+
+/* ── 29. Ship Art Hero (top of group detail) ──────────── */
+.ship-art-hero {
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(135deg, var(--navy) 0%, #2a5a8c 100%);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ship-art-hero img {
+  max-width: 90%;
+  max-height: 160px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+}
+
+
+/* ── 30. Points Badge (larger, gold accent) ───────────── */
+.pts-badge-lg {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--fg-on-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid var(--gold);
+  box-shadow: var(--shadow4);
+}
+.pts-badge-lg .pts-badge-value {
+  font-family: var(--font-condensed);
+  font-size: var(--text-title3);
+  font-weight: 800;
+  line-height: 1;
+}
+.pts-badge-lg .pts-badge-label {
+  font-family: var(--font-condensed);
+  font-size: 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+
+/* ── 31. Stat Icons (TAROT style) ─────────────────────── */
+.stat-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+}
+
+.stat-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--fg3);
+}
+.stat-icon svg { width: 16px; height: 16px; }
+
+.stat-icon-es svg { color: #8b5e1a; }
+.stat-icon-ks svg { color: var(--navy); }
+.stat-icon-bs svg { color: var(--fg3); }
+
+
+/* ── 32. Faction Icon (fleet list rows) ───────────────── */
+.faction-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.fleet-row-bar {
+  height: 3px;
+  background: var(--stroke2);
+  border-radius: 1.5px;
+  margin-top: var(--sp-s);
+  overflow: hidden;
+}
+.fleet-row-bar-fill {
+  height: 100%;
+  background: var(--navy);
+  border-radius: 1.5px;
+}
+.fleet-row-bar-fill.over { background: var(--danger); }
+
+
+/* ── 33. Utility ──────────────────────────────────────── */
 .flex { display: flex; }
 .items-center { align-items: center; }
 .justify-between { justify-content: space-between; }

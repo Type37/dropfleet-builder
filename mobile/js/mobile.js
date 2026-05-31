@@ -43,6 +43,26 @@
     'Hong Kong':'hong_kong','M-Type':'m-type','El Paso':'el_paso'
   };
 
+  const FACTION_ICONS = {
+    ucm: '../assets/factions/ucm.webp',
+    bioficer: '../assets/factions/bioficer.webp'
+  };
+
+  const STAT_ICONS = {
+    scan:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3,12 A9,9 0 0,1 21,12"/><path d="M7,12 A5,5 0 0,1 17,12"/><circle cx="12" cy="12" fill="currentColor" r="1.5" stroke="none"/></svg>',
+    sig:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="11"/></svg>',
+    thrust: '<svg viewBox="0 0 24 24"><polygon fill="currentColor" points="4,4 20,12 4,20 8,12"/></svg>',
+    hull:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/></svg>',
+    es:     '<svg viewBox="0 0 16 22"><path d="M8,0.5 C8,0.5 0.5,3.5 0.5,3.5L0.5,10.5 C0.5,16 8,21.5 8,21.5 C8,21.5 15.5,16 15.5,10.5L15.5,3.5Z" fill="#1C1A17"/><path d="M8.5,4.5 L5,11 L7.5,11 L6,18.5 L12,9.5 L9,9.5 L11,4.5Z" fill="#FAECC8"/></svg>',
+    ks:     '<svg viewBox="0 0 16 22"><path d="M5.5,0 L10.5,0 L10.5,3 L5.5,3Z" fill="#1C1A17"/><path d="M3,3 C1,5 0,8 0,11L0,15 L3,15 L3,18 C3,20 5.5,21.5 8,21.5 C10.5,21.5 13,20 13,18L13,15 L16,15 L16,11 C16,8 15,5 13,3Z" fill="#1C1A17"/><rect fill="#D0E4FF" height="2" rx="0.5" width="7" x="4.5" y="10"/><rect fill="#D0E4FF" height="7" rx="0.5" width="2" x="7" y="10"/></svg>',
+    bs:     '<svg viewBox="0 0 16 22"><path d="M8,1 C8,1 1,4 1,4L1,11 C1,16.5 8,21 8,21 C8,21 15,16.5 15,11L15,4Z" fill="none" stroke="#1C1A17" stroke-width="1.5"/><line stroke="#1C1A17" stroke-linecap="round" stroke-width="1.2" x1="4" x2="12" y1="11" y2="11"/></svg>',
+    pd:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="11"/></svg>'
+  };
+
+  function statIcon(key) {
+    return STAT_ICONS[key] ? `<span class="stat-icon stat-icon-${key}">${STAT_ICONS[key]}</span>` : '';
+  }
+
   function shipArtPath(name) {
     if (!name) return null;
     for (const [prefix, file] of Object.entries(SHIP_ART_SPECIAL)) {
@@ -110,11 +130,27 @@
     const current = document.querySelector('.screen.active');
     if (current && !opts?.replace) {
       history.push({ id: current.id, scroll: window.scrollY });
+      // Slide current out left, new in right
+      current.classList.remove('active');
+      current.classList.add('slide-out-left');
+      current.addEventListener('animationend', () => {
+        current.classList.remove('slide-out-left');
+        current.style.display = 'none';
+      }, { once: true });
+    } else if (current) {
+      current.classList.remove('active');
     }
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const target = document.getElementById(screenId);
     if (target) {
-      target.classList.add('active');
+      if (!opts?.replace && current) {
+        target.classList.add('slide-in-right');
+        target.addEventListener('animationend', () => {
+          target.classList.remove('slide-in-right');
+          target.classList.add('active');
+        }, { once: true });
+      } else {
+        target.classList.add('active');
+      }
       window.scrollTo(0, 0);
     }
     updateAppBar(screenId, data);
@@ -124,9 +160,24 @@
   function goBack() {
     if (!history.length) return;
     const prev = history.pop();
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const current = document.querySelector('.screen.active, .screen.slide-in-right');
+    if (current) {
+      current.classList.remove('active', 'slide-in-right');
+      current.classList.add('slide-out-right');
+      current.addEventListener('animationend', () => {
+        current.classList.remove('slide-out-right');
+        current.style.display = 'none';
+      }, { once: true });
+    }
     const target = document.getElementById(prev.id);
-    if (target) target.classList.add('active');
+    if (target) {
+      target.style.display = '';
+      target.classList.add('slide-in-left');
+      target.addEventListener('animationend', () => {
+        target.classList.remove('slide-in-left');
+        target.classList.add('active');
+      }, { once: true });
+    }
     window.scrollTo(0, prev.scroll || 0);
     // Re-render if needed
     if (prev.id === 'screen-fleet-list') renderFleetList();
@@ -189,11 +240,17 @@
       const groupCount = (f.groups || []).length;
       const faction = findFactionByKey(f.faction);
       const factionName = faction?.shortName || f.faction;
+      const factionIcon = FACTION_ICONS[f.faction] || FACTION_ICONS[factionName?.toLowerCase()];
+      const target = f.targetPoints || 1500;
+      const pct = Math.min(100, (pts / target) * 100);
+      const over = pts > target;
       return `
         <div class="list-row" onclick="App.openFleet(${i})">
+          ${factionIcon ? `<img src="${factionIcon}" alt="" class="faction-icon">` : ''}
           <div class="list-row-content">
             <div class="list-row-title">${f.name || 'Unnamed Fleet'}</div>
-            <div class="list-row-sub">${pts}pts, ${groupCount} group${groupCount !== 1 ? 's' : ''} · ${factionName}</div>
+            <div class="list-row-sub">${pts}/${target}pts, ${groupCount} group${groupCount !== 1 ? 's' : ''}</div>
+            <div class="fleet-row-bar"><div class="fleet-row-bar-fill ${over ? 'over' : ''}" style="width:${pct}%"></div></div>
           </div>
         </div>`;
     }).join('');
@@ -384,17 +441,17 @@
 
     // Build stat cells (exclude G — it's in the counter)
     const statEntries = [
-      { label: 'Scan', val: stats.scan },
-      { label: 'Sig', val: stats.sig },
-      { label: 'Thrust', val: stats.thrust },
-      { label: 'Hull', val: stats.hull },
-      { label: 'Armour', val: stats.es || stats.armour },
-      { label: 'PD', val: stats.pd || stats.ks },
+      { key: 'scan',   label: 'Scan',   val: stats.scan },
+      { key: 'sig',    label: 'Sig',    val: stats.sig },
+      { key: 'thrust', label: 'Thrust', val: stats.thrust },
+      { key: 'hull',   label: 'Hull',   val: stats.hull },
+      { key: 'es',     label: 'ES',     val: stats.es },
+      { key: 'ks',     label: 'KS',     val: stats.ks },
     ].filter(s => s.val != null && s.val !== '-' && s.val !== '');
 
-    // If there are additional stats like BS, include them
+    // Add BS if present
     if (stats.bs && stats.bs !== '-') {
-      statEntries.push({ label: 'BS', val: stats.bs });
+      statEntries.push({ key: 'bs', label: 'BS', val: stats.bs });
     }
 
     // Weapons
@@ -416,24 +473,34 @@
     const artSrc = shipArtPath(ship.name);
 
     el.innerHTML = `
+      <!-- Ship art hero at top -->
+      ${artSrc ? `
+        <div class="ship-art-hero">
+          <img src="${artSrc}" alt="${ship.name}">
+        </div>
+      ` : ''}
+
       <!-- Ship name + points circle -->
       <div class="detail-header">
         <div>
-          <div class="detail-name">${ship.name || 'Unknown'}</div>
+          <div class="detail-name">${ship.name || 'Unknown'}${qty > 1 ? ' x' + qty : ''}</div>
           <div class="detail-type">${ship.tonnage || CATEGORY_LABELS[g.category] || g.category || ''}</div>
         </div>
-        <div class="pts-badge">
+        <div class="pts-badge-lg">
           <div class="pts-badge-value">${cost}</div>
           <div class="pts-badge-label">Points</div>
         </div>
       </div>
 
-      <!-- Stats grid -->
+      <!-- Stats grid with TAROT icons -->
       <div class="stat-grid">
         ${statEntries.map(s => `
-          <div>
-            <div class="stat-label">${s.label}</div>
-            <div class="stat-value">${s.val}</div>
+          <div class="stat-cell">
+            ${statIcon(s.key)}
+            <div>
+              <div class="stat-label">${s.label}</div>
+              <div class="stat-value">${s.val}</div>
+            </div>
           </div>
         `).join('')}
       </div>
@@ -462,8 +529,11 @@
             <div class="weapon-val">Dm</div>
             <div class="weapon-val">Arc</div>
           </div>
-          ${weapons.map(w => `
-            <div class="weapon-row">
+          ${weapons.map(w => {
+            const wtype = (w.type || '').toUpperCase();
+            const typeClass = wtype === 'K' ? 'weapon-type-k' : wtype === 'E' ? 'weapon-type-e' : wtype === 'C' ? 'weapon-type-c' : '';
+            return `
+            <div class="weapon-row ${typeClass}">
               <div class="weapon-name">${w.name}</div>
               <div class="weapon-val">${w.lock || ''}</div>
               <div class="weapon-val">${w.attack || ''}</div>
@@ -471,7 +541,7 @@
               <div class="weapon-val">${w.arc || ''}</div>
             </div>
             ${w.special && w.special !== '-' ? `<div class="weapon-special">${w.special}</div>` : ''}
-          `).join('')}
+          `}).join('')}
         </div>
       ` : ''}
 
@@ -526,12 +596,7 @@
         </div>
       `).join('')}
 
-      <!-- Ship art -->
-      ${artSrc ? `
-        <div class="ship-art-block">
-          <img src="${artSrc}" alt="${ship.name}">
-        </div>
-      ` : ''}
+      <!-- (ship art is the hero at top) -->
     `;
   }
 
