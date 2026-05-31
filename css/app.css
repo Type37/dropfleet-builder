@@ -4554,6 +4554,50 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--navy);
   flex-shrink: 0;
 }
+
+/* Right column of a group card: points above, inline qty stepper below.
+   The stepper lets you set "×N of this ship" without opening the detail panel. */
+.overview-group-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-xs);
+  flex-shrink: 0;
+}
+.overview-group-stepper {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  cursor: default;
+}
+.ovg-step {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+  line-height: 1;
+  color: var(--navy);
+  background: var(--paper);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.ovg-step:hover:not(:disabled) { background: var(--navy); color: #fff; border-color: var(--navy); }
+.ovg-step:active:not(:disabled) { transform: scale(0.94); }
+.ovg-step:disabled { opacity: 0.35; cursor: default; }
+.ovg-qty {
+  min-width: 26px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: var(--weight-heavy);
+  font-size: var(--text-md);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
 .overview-group-error {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);

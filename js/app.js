@@ -1665,6 +1665,22 @@ const App = (() => {
       const artModularClass = isFullyModular(firstDbForArt) ? ' ship-img-modular' : '';
 
       const catColor = { light: '#4a8dc7', medium: '#3e8a45', heavy: '#c48820', colossal: '#b83828', payload: '#6a4c9c' }[cat] || 'var(--navy)';
+
+      // Inline quantity stepper — a group IS "×N of one ship", so editing the
+      // count must happen right here without opening the detail panel.
+      // stopPropagation keeps the card's selectGroup click from firing too.
+      const gMin = firstDbForArt ? (firstDbForArt.groupMin || 1) : 1;
+      const gMax = firstDbForArt ? (firstDbForArt.groupMax || 1) : 1;
+      const qty = g.ships.length;
+      const shipName = firstDbForArt ? firstDbForArt.name : g.name;
+      const stepperHtml = gMax > 1
+        ? `<div class="overview-group-stepper" onclick="event.stopPropagation()">
+            <button class="ovg-step" onclick="event.stopPropagation();App.removeLastShip('${g.id}')" ${qty <= gMin ? 'disabled' : ''} aria-label="Remove one ${esc(shipName)}">&minus;</button>
+            <span class="ovg-qty" aria-label="${qty} ${esc(shipName)} in group">${qty}</span>
+            <button class="ovg-step" onclick="event.stopPropagation();App.addSameShip('${g.id}')" ${qty >= gMax ? 'disabled' : ''} aria-label="Add one ${esc(shipName)}">+</button>
+          </div>`
+        : '';
+
       // Validation status for this group
       const gErrors = validateGroupSize(g, f);
       const gErrorDot = gErrors.length > 0
@@ -1702,7 +1718,10 @@ const App = (() => {
             ${shipsLine && shipsLine !== g.name ? `<div class="overview-group-ships">${esc(shipsLine)}</div>` : ''}
             ${gErrorDot}
           </div>
-          <div class="overview-group-pts">${gPts} pts</div>
+          <div class="overview-group-right">
+            <div class="overview-group-pts">${gPts} pts</div>
+            ${stepperHtml}
+          </div>
         </div>
       </div>`;
     }).join('');
