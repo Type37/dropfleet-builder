@@ -1088,3 +1088,120 @@ input, textarea, select { font: inherit; }
 .gap-m { gap: var(--sp-m); }
 .text-center { text-align: center; }
 .hidden { display: none !important; }
+
+
+/* ── 34. Tappable affordance ──────────────────────────── */
+.tappable {
+  cursor: pointer;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+.tappable:active { opacity: 0.6; }
+
+/* Tappable special chips get a subtle dotted underline cue */
+.weapon-special-chip.tappable {
+  border-color: var(--navy);
+  color: var(--navy);
+  background: rgba(27, 58, 92, 0.06);
+}
+.weapon-special-chip.tappable:active {
+  background: rgba(27, 58, 92, 0.16);
+}
+
+/* Tappable stat cells get a faint affordance */
+.stat-cell.tappable::after {
+  content: "";
+  position: absolute;
+  inset: -4px -6px;
+  border-radius: var(--radius-md);
+}
+.stat-cell.tappable:active { background: var(--paper-alt); border-radius: var(--radius-md); }
+
+
+/* ── 35. Rule Bottom Sheet ────────────────────────────── */
+.sheet-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 290;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-normal) var(--ease-standard);
+}
+body.sheet-open .sheet-scrim {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.rule-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 300;
+  background: var(--white);
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  box-shadow: var(--shadow28);
+  padding: var(--sp-s) var(--sp-l) calc(var(--sp-xl) + env(safe-area-inset-bottom, 0px));
+  transform: translateY(100%);
+  transition: transform var(--duration-gentle) var(--ease-decelerate);
+  max-height: 70dvh;
+  overflow-y: auto;
+}
+.rule-sheet.active { transform: translateY(0); }
+
+.rule-sheet-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--stroke1);
+  margin: var(--sp-s) auto var(--sp-m);
+  cursor: grab;
+}
+
+.rule-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-m);
+}
+
+.rule-sheet-title {
+  font-family: var(--font-display);
+  font-size: var(--text-subtitle1);
+  font-weight: var(--weight-bold);
+  color: var(--navy);
+}
+
+.rule-sheet-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-subtitle1);
+  color: var(--fg3);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+.rule-sheet-close:active { background: var(--paper); }
+
+.rule-sheet-body {
+  font-family: var(--font-lore);
+  font-size: var(--text-body1);
+  line-height: 1.65;
+  color: var(--fg1);
+}
+.rule-sheet-body p { margin: 0 0 var(--sp-s); }
+.rule-sheet-body p:last-child { margin-bottom: 0; }
+.rule-sheet-unknown { color: var(--fg3); font-style: italic; }
+
+.rule-sheet-page {
+  margin-top: var(--sp-m);
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption1);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg4);
+}

@@ -9,6 +9,7 @@
   const FACTIONS = {};         // keyed by faction id
   let FLEET_DATA = null;       // game system rules
   let SHIP_LORE = {};          // ship lore lookup
+  let RULES_DB = {};           // shared rules glossary (from fleet-index.json)
   let fleets = [];             // saved fleet roster array
   let activeFleet = null;      // currently open fleet object
   let activeGroupIdx = -1;     // index into activeFleet.groups
@@ -17,6 +18,99 @@
     ucm: '../data/faction-ucm.json',
     bioficer: '../data/faction-bioficer.json'
   };
+
+  /* ── Rules glossary ────────────────────────────────────── */
+  // Weapon special rules not in BSData (mirrors desktop WEAPON_SPECIAL_RULES)
+  const WEAPON_SPECIAL_RULES = {
+    'Air to Air':   'Can only target Launch Assets (fighters, bombers, etc.), not ships.',
+    'Alt':          'This weapon has an alternative fire mode. Choose one mode when attacking.',
+    'Anti Wing':    'Effective against Launch Assets. Hits against wings are resolved with bonus dice.',
+    'Arrest':       'Target’s Thrust is reduced by the Arrest value next turn.',
+    'Bloom':        'Firing this weapon increases the ship’s Signature by the Bloom value until the end of the turn.',
+    'Bombardment':  'Used for orbital bombardment of ground targets. Cannot target ships.',
+    'Burnthrough':  'For each critical hit, roll additional attack dice equal to the Burnthrough value.',
+    'Calibre-L':    'Can only target Light tonnage ships.',
+    'Calibre-L/M':  'Can only target Light or Medium tonnage ships.',
+    'Calibre-M':    'Can only target Medium tonnage ships.',
+    'Calibre-H':    'Can only target Heavy tonnage ships.',
+    'Calibre-H/C':  'Can only target Heavy or Colossal tonnage ships.',
+    'Calibre-M/H/C':'Can only target Medium, Heavy, or Colossal tonnage ships.',
+    'Close Action': 'Close Action weapons fire at targets within Scan range. Uses the Close Action combat sequence.',
+    'Crippling':    'When this weapon causes damage, the target also suffers a Crippling effect (roll on Crippling table).',
+    'Critical':     'Extra critical damage — each critical hit inflicts additional hits equal to the Critical value.',
+    'Escape Velocity':'Can only be fired if the ship has not turned this activation.',
+    'Flash':        'Reduces the target’s Scan value by the Flash value until end of turn.',
+    'Focused':      'All attack dice from this weapon must be allocated to the same target.',
+    'Fusillade':    'Gains additional attack dice equal to (Fusillade value × number of other ships in group firing this weapon).',
+    'High Power':   'Adds +1 to the Damage value of this weapon.',
+    'Impel':        'On hit, push the target directly away from the firing ship by the Impel value in inches.',
+    'Limited':      'This weapon can only fire a number of times per game equal to the Limited value.',
+    'Low Power':    'Reduces the Damage value of this weapon by 1 (minimum 1).',
+    'Mauler':       'If the target is within Scan range, this weapon gains +1 Damage.',
+    'Overcharge':   'May worsen Lock by 1 to gain +1 Damage for this attack.',
+    'Penetrator':   'Enemy armour saves (ES/KS) are worsened by 1 against this weapon.',
+    'Re-Entry':     'This weapon can target ground sectors for bombardment in addition to normal fire.',
+    'Reave':        'For each point of hull damage inflicted, the target loses additional hull points equal to the Reave value.',
+    'Scald':        'Reduces the target’s Point Defence by the Scald value for the rest of the turn.',
+    'Status':       'Applies a status effect to the target instead of dealing damage.',
+    'Sustained Fire':'If the ship did not use the Course Change order this activation, gain extra attack dice.',
+    'Volley':       'Roll additional attack dice equal to the Volley value, but at Lock worsened by 1.'
+  };
+
+  // Stat explanations — beginner-friendly, shown on tap
+  const STAT_META = {
+    scan:   { label: 'Scan',   desc: 'Scan range. The distance (in inches) at which this ship detects enemies and uses close-range weapons.' },
+    sig:    { label: 'Signature', desc: 'How visible this ship is. Enemies must be within their Scan range of your Signature to target you — a low Signature is harder to hit.' },
+    thrust: { label: 'Thrust', desc: 'Movement speed — how far (in inches) this ship moves each activation.' },
+    hull:   { label: 'Hull',   desc: 'Hull points. The ship’s structural integrity. It becomes Crippled at half, and is destroyed at zero.' },
+    es:     { label: 'Energy Shield', desc: 'Energy Save. When hit by an Energy (E) weapon, roll this number or higher on a d6 to avoid the damage.' },
+    ks:     { label: 'Kinetic Shield', desc: 'Kinetic Save. When hit by a Kinetic (K) weapon, roll this number or higher on a d6 to avoid the damage.' },
+    bs:     { label: 'Backup Save', desc: 'Backup Save. A last-resort save used when a ship has no relevant shield, or against certain weapons.' },
+    pd:     { label: 'Point Defence', desc: 'Point Defence. Dice rolled to shoot down incoming Close Action attacks and bombers.' },
+    g:      { label: 'Group size', desc: 'How many of this ship can form one battle group — shown as a range (min–max).' }
+  };
+
+  function lookupRule(name) {
+    if (!name) return null;
+    const base = name.replace(/-?\d+$/, '').replace(/\s+\d+$/, '').trim();
+    const xKey = base + '-X';
+    const entry = RULES_DB[name] || RULES_DB[base] || RULES_DB[xKey];
+    if (entry) return { name: name, description: entry.description, page: entry.page || '' };
+    const wpn = WEAPON_SPECIAL_RULES[name] || WEAPON_SPECIAL_RULES[base];
+    if (wpn) return { name: name, description: wpn, page: '' };
+    return { name: name, description: '', page: '' };
+  }
+
+  /* ── Rule bottom-sheet ─────────────────────────────────── */
+  function showSheet(title, body, pageRef) {
+    document.getElementById('rule-sheet-title').textContent = title;
+    document.getElementById('rule-sheet-body').innerHTML = body;
+    const pageEl = document.getElementById('rule-sheet-page');
+    if (pageRef) { pageEl.textContent = 'Core Rules p.' + pageRef; pageEl.style.display = ''; }
+    else { pageEl.style.display = 'none'; }
+    const sheet = document.getElementById('rule-sheet');
+    sheet.classList.add('active');
+    document.body.classList.add('sheet-open');
+  }
+
+  function openRule(name) {
+    const rule = lookupRule(name);
+    const body = rule.description
+      ? `<p>${rule.description.replace(/\n/g, '<br>')}</p>`
+      : `<p class="rule-sheet-unknown">No rules text on file for this keyword yet.</p>`;
+    showSheet(name, body, rule.page);
+  }
+
+  function openStat(key) {
+    const meta = STAT_META[key];
+    if (!meta) return;
+    showSheet(meta.label, `<p>${meta.desc}</p>`);
+  }
+
+  function closeRuleSheet() {
+    document.getElementById('rule-sheet').classList.remove('active');
+    document.body.classList.remove('sheet-open');
+  }
 
   /* ── Ship Art ──────────────────────────────────────────── */
   const SHIP_ART = new Set([
@@ -133,7 +227,12 @@
     return specialStr.split(',').map(s => {
       const trimmed = s.trim();
       if (!trimmed) return '';
-      return `<span class="weapon-special-chip">${trimmed}</span>`;
+      const rule = lookupRule(trimmed);
+      const known = rule && rule.description;
+      // Known rules become tappable; unknown stay inert
+      return known
+        ? `<span class="weapon-special-chip tappable" onclick="event.stopPropagation();App.openRule('${trimmed.replace(/'/g, "\\'")}')">${trimmed}</span>`
+        : `<span class="weapon-special-chip">${trimmed}</span>`;
     }).join(' ');
   }
 
@@ -592,10 +691,10 @@
         </div>
       </div>
 
-      <!-- Stats grid with TAROT icons -->
+      <!-- Stats grid with TAROT icons (tap to learn) -->
       <div class="stat-grid">
         ${statEntries.map(s => `
-          <div class="stat-cell">
+          <div class="stat-cell tappable" onclick="App.openStat('${s.key}')">
             ${statIcon(s.key)}
             <div>
               <div class="stat-label">${s.label}</div>
@@ -668,10 +767,8 @@
       <!-- Special abilities from stats.special -->
       ${specialText ? `
         <div class="rule-card">
-          <div class="flex justify-between items-center">
-            <div class="rule-card-name">Special</div>
-          </div>
-          <div class="rule-card-text">${specialText}</div>
+          <div class="rule-card-name" style="margin-bottom:var(--sp-s)">Special Rules</div>
+          <div class="weapon-special" style="margin:0">${renderSpecialChips(specialText)}</div>
         </div>
       ` : ''}
 
@@ -810,6 +907,17 @@
       fetch('../data/ship-lore.json').then(r => r.json()).then(d => SHIP_LORE = d).catch(() => {})
     );
 
+    // Load shared rules glossary (from the index)
+    loads.push(
+      fetch('../data/fleet-index.json').then(r => r.json()).then(idx => {
+        const sr = idx.sharedRules || {};
+        Object.entries(sr).forEach(([k, v]) => {
+          RULES_DB[k] = (typeof v === 'string') ? { description: v, page: '' }
+                                                 : { description: v.description || '', page: v.page || '' };
+        });
+      }).catch(() => {})
+    );
+
     await Promise.all(loads);
 
     // Load saved fleets
@@ -832,6 +940,9 @@
     init,
     goBack,
     viewDesktop,
+    openRule,
+    openStat,
+    closeRuleSheet,
     openFleet,
     openAddGroup,
     openGroup,

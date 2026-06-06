@@ -126,6 +126,18 @@
   </div>
 </div>
 
+<!-- ═══ Rule Bottom Sheet ═══ -->
+<div class="sheet-scrim" id="rule-sheet-scrim" onclick="App.closeRuleSheet()"></div>
+<div class="rule-sheet" id="rule-sheet" role="dialog" aria-modal="true">
+  <div class="rule-sheet-handle" onclick="App.closeRuleSheet()"></div>
+  <div class="rule-sheet-head">
+    <div class="rule-sheet-title" id="rule-sheet-title"></div>
+    <button class="rule-sheet-close" onclick="App.closeRuleSheet()" aria-label="Close">&times;</button>
+  </div>
+  <div class="rule-sheet-body" id="rule-sheet-body"></div>
+  <div class="rule-sheet-page" id="rule-sheet-page"></div>
+</div>
+
 <script src="js/mobile.js"></script>
 </body>
 </html>
