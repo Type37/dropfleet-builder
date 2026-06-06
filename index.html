@@ -3,6 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<script>
+  // Redirect phone-width viewports to the mobile app.
+  // Skip if: already on /mobile/, user has opted into desktop view, or tablet+.
+  (function () {
+    var onMobile = window.innerWidth < 640 || screen.width < 640;
+    var forcedDesktop = localStorage.getItem('dfc_force_desktop') === '1';
+    var alreadyMobile = location.pathname.indexOf('/mobile') !== -1;
+    if (onMobile && !forcedDesktop && !alreadyMobile) {
+      // Preserve the hash (e.g. shared fleet links) if present
+      var hash = location.hash || '';
+      location.replace(location.origin + location.pathname.replace(/\/?$/, '/') + 'mobile/' + hash);
+    }
+  })();
+</script>
 <meta name="theme-color" content="#1b3a5c">
 <meta property="og:title" content="Dropfleet Commander - Fleet Builder">
 <meta property="og:description" content="Build fleet rosters for Dropfleet Commander by TTCombat. All six factions, full ship stats, weapons, and special rules.">

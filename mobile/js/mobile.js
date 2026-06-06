@@ -148,15 +148,23 @@
     return 'xxxx-xxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16));
   }
 
+  // Same key as the desktop app — fleets are shared across both UIs
+  const STORAGE_KEY = 'dfc_fleets';
+
   function saveFleets() {
-    try { localStorage.setItem('dfc_mobile_fleets', JSON.stringify(fleets)); } catch (e) { /* quota */ }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(fleets)); } catch (e) { /* quota */ }
   }
 
   function loadFleets() {
     try {
-      const raw = localStorage.getItem('dfc_mobile_fleets');
+      const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) fleets = JSON.parse(raw);
     } catch (e) { fleets = []; }
+  }
+
+  function viewDesktop() {
+    localStorage.setItem('dfc_force_desktop', '1');
+    location.href = '../';
   }
 
   function findFactionByKey(key) {
@@ -823,6 +831,7 @@
   window.App = {
     init,
     goBack,
+    viewDesktop,
     openFleet,
     openAddGroup,
     openGroup,
