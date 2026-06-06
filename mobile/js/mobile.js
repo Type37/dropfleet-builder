@@ -1129,7 +1129,7 @@
     const m = location.hash.match(/#share\/(.+)$/) || location.hash.match(/#fleet=(.+)$/);
     if (!m) return false;
     const fleet = decodeFleet(m[1]);
-    history.replaceState(null, '', location.pathname); // clear hash
+    window.history.replaceState(null, '', location.pathname); // clear hash (local `history` is the nav stack)
     if (!fleet) return false;
     fleets.push(fleet);
     saveFleets();
