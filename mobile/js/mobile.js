@@ -17,6 +17,7 @@
   let fleets = [];
   let activeFleet = null;
   let activeGroupIdx = -1;     // index into activeFleet.battleGroups
+  let activeAdmiralIdx = -1;   // index into activeFleet.admirals
   let pickerFilter = 'all';
 
   const FACTION_FILES = {
@@ -325,6 +326,29 @@
     return (f.admirals || []).find(a => a.id === admiralId) || null;
   }
 
+  /* ── Deployable Features ───────────────────────────────── */
+  function shipRuleNames(ship) {
+    return (ship?.specialRules || []).map(r => r.name).join(' ');
+  }
+  function isFeatureCarrier(ship) {
+    if (!ship) return false;
+    const names = shipRuleNames(ship);
+    const hay = (ship.rulesText || '') + ' ' + names;
+    return /Deployable Feature/i.test(hay) || /\bPorter\b/i.test(names);
+  }
+  function featureRequired(ship) {
+    if (!ship) return false;
+    return /Deployable Feature/i.test((ship.rulesText || '') + ' ' + shipRuleNames(ship));
+  }
+  function factionFeatures(factionKey) {
+    return (FACTIONS[factionKey]?.deployableFeatures) || [];
+  }
+  function featureCost(factionKey, featureName) {
+    if (!featureName) return 0;
+    const f = factionFeatures(factionKey).find(x => x.name === featureName);
+    return f ? (f.cost || 0) : 0;
+  }
+
   function sizeForPoints(pts) {
     for (const [k, s] of Object.entries(GAME_SIZES)) {
       if (pts >= s.min && pts <= s.max) return k;
@@ -341,6 +365,10 @@
       extra += lo.options[sel]?.cost || 0;
     });
     return extra;
+  }
+  // Unified per-ship points: base + loadout options + chosen feature.
+  function recalcShipPoints(factionKey, shipDef, inst) {
+    return (shipDef?.cost || 0) + shipLoadoutCost(shipDef, inst.loadouts) + featureCost(factionKey, inst.feature);
   }
   function groupPoints(fleet, group) {
     return (group.ships || []).reduce((t, s) => t + (s.points || 0), 0);
@@ -418,6 +446,16 @@
     if (heavy > medium) w.push({ t: 'error', m: `Heavy (${heavy}pts) can’t exceed Medium (${medium}pts)` });
     if (light > medium + heavy) w.push({ t: 'error', m: `Light (${light}pts) can’t exceed Medium+Heavy (${medium + heavy}pts)` });
 
+    // Feature carriers must choose a Deployable Feature
+    fleet.battleGroups.forEach(g => {
+      const s = g.ships[0];
+      if (!s) return;
+      const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
+      if (db && featureRequired(db) && g.ships.some(x => !x.feature)) {
+        w.push({ t: 'warn', m: `${db.name} must choose a Deployable Feature` });
+      }
+    });
+
     return w;
   }
 
@@ -429,6 +467,7 @@
     'screen-add-group': renderShipPicker,
     'screen-group-detail': renderGroupDetail,
     'screen-admiral': renderAdmiralPicker,
+    'screen-admiral-detail': renderAdmiralDetail,
     'screen-station': renderStationPicker
   };
 
@@ -500,6 +539,7 @@
       case 'screen-add-group': back.classList.remove('hidden'); title.textContent = 'Add Group'; showPts(); break;
       case 'screen-group-detail': back.classList.remove('hidden'); overflow.classList.remove('hidden'); title.textContent = 'Group'; showPts(); break;
       case 'screen-admiral': back.classList.remove('hidden'); title.textContent = 'Add Admiral'; showPts(); break;
+      case 'screen-admiral-detail': back.classList.remove('hidden'); title.textContent = 'Admiral'; showPts(); break;
       case 'screen-station': back.classList.remove('hidden'); title.textContent = 'Space Station'; showPts(); break;
     }
   }
@@ -609,7 +649,7 @@
     if ((f.admirals || []).length) {
       html += f.admirals.map((a, i) => {
         const art = admiralArtPath(a.name);
-        return `<div class="list-row" onclick="App.removeAdmiralPrompt(${i})">
+        return `<div class="list-row" onclick="App.openAdmiralDetail(${i})">
           ${art ? `<div class="ship-thumb"><img src="${art}" alt=""></div>` : '<div class="ship-thumb"></div>'}
           <div class="list-row-content">
             <div class="list-row-title">${esc(a.name)}</div>
@@ -696,8 +736,9 @@
     const ship = findShip(factionKey, category, shipKey);
     const loadouts = {};
     (ship?.loadoutOptions || []).forEach((lo, i) => { loadouts[i] = 0; });
-    const cost = (ship?.cost || 0) + shipLoadoutCost(ship, loadouts);
-    return { id: uuid(), shipKey, groupCategory: category, points: cost, loadouts };
+    const inst = { id: uuid(), shipKey, groupCategory: category, points: 0, loadouts };
+    inst.points = recalcShipPoints(factionKey, ship, inst);
+    return inst;
   }
   function addShip(shipKey, category) {
     if (!activeFleet) return;
@@ -747,6 +788,10 @@
     const rules = ship.specialRules || [];
     const specialText = stats.special && stats.special !== '-' ? stats.special : '';
     const artSrc = shipArtPath(ship.name);
+    const carrier = isFeatureCarrier(ship);
+    const featReq = carrier && featureRequired(ship);
+    const features = carrier ? factionFeatures(f.faction) : [];
+    const chosenFeature = inst.feature || '';
 
     document.getElementById('group-detail-content').innerHTML = `
       ${artSrc ? `<div class="ship-art-hero"><img src="${artSrc}" alt="${esc(ship.name)}"></div>` : ''}
@@ -809,6 +854,30 @@
             </div>`;
           }).join('')}
         `).join('')}
+      </div>` : ''}
+
+      ${carrier && features.length ? `<div class="loadout-section">
+        <div class="section-header" style="padding:0 0 var(--sp-s)">
+          ${featReq ? 'Deployable Feature' + (chosenFeature ? '' : ' — required') : 'Payload Feature — optional'}
+        </div>
+        <div class="loadout-option ${!chosenFeature ? 'selected' : ''}" onclick="App.selectFeature('')">
+          <div class="flex justify-between items-center">
+            <span class="loadout-option-name">${featReq ? 'None (choose one)' : 'No feature'}</span>
+            <span class="loadout-option-cost">${featReq && !chosenFeature ? '⚠' : ''}</span>
+          </div>
+        </div>
+        ${features.map(ft => {
+          const sel = ft.name === chosenFeature;
+          const stat = (ft.features && ft.features[0]) ? ft.features[0] : null;
+          const detail = stat ? `ES ${stat.es || '-'} · KS ${stat.ks || '-'}${stat.special && stat.special !== '-' ? ' · ' + stat.special : ''}` : '';
+          return `<div class="loadout-option ${sel ? 'selected' : ''}" onclick="App.selectFeature('${ft.name.replace(/'/g, "\\'")}')">
+            <div class="flex justify-between items-center">
+              <span class="loadout-option-name">${esc(ft.name)}</span>
+              <span class="loadout-option-cost">${ft.cost ? '+' + ft.cost + 'pts' : 'Free'}</span>
+            </div>
+            ${detail ? `<div class="loadout-option-desc">${esc(detail)}</div>` : ''}
+          </div>`;
+        }).join('')}
       </div>` : ''}
 
       ${specialText ? `<div class="rule-card">
@@ -908,7 +977,23 @@
     group.ships.forEach(s => {
       s.loadouts = s.loadouts || {};
       s.loadouts[loIdx] = optIdx;
-      s.points = (ship?.cost || 0) + shipLoadoutCost(ship, s.loadouts);
+      s.points = recalcShipPoints(f.faction, ship, s);
+    });
+    f.updatedAt = Date.now();
+    saveFleets();
+    renderGroupDetail();
+    updateAppBar('screen-group-detail');
+  }
+
+  function selectFeature(featureName) {
+    const f = activeFleet;
+    if (!f || activeGroupIdx < 0) return;
+    const group = f.battleGroups[activeGroupIdx];
+    const inst0 = group.ships[0];
+    const ship = findShip(f.faction, inst0.groupCategory, inst0.shipKey);
+    group.ships.forEach(s => {
+      s.feature = featureName || undefined;
+      s.points = recalcShipPoints(f.faction, ship, s);
     });
     f.updatedAt = Date.now();
     saveFleets();
@@ -988,6 +1073,119 @@
       renderFleetDetail();
       updateAppBar('screen-fleet-detail');
     } }]);
+  }
+
+  /* ── Admiral detail (abilities + assignment) ───────────── */
+  function getAdmiralInfo(a) {
+    const faction = FACTIONS[activeFleet.faction];
+    if (!faction) return null;
+    const def = (faction.admirals || []).find(x => x.id === a.admiralId);
+    if (!def) return null;
+    return { innate: def.abilities || [], table: faction.abilitiesTable || [], picks: def.abilityPicks || 0 };
+  }
+  function capitalShipGroups() {
+    return (activeFleet.battleGroups || []).filter(g => {
+      const cat = g.ships[0]?.groupCategory;
+      return cat === 'medium' || cat === 'heavy' || cat === 'colossal';
+    }).map(g => {
+      const s = g.ships[0];
+      const db = findShip(activeFleet.faction, s.groupCategory, s.shipKey);
+      return { id: g.id, name: db?.name || g.name };
+    });
+  }
+  function openAdmiralDetail(i) { activeAdmiralIdx = i; navigate('screen-admiral-detail'); }
+  function renderAdmiralDetail() {
+    const f = activeFleet;
+    if (!f || activeAdmiralIdx < 0) return;
+    const a = f.admirals[activeAdmiralIdx];
+    if (!a) return;
+    const info = getAdmiralInfo(a);
+    const art = admiralArtPath(a.name);
+    const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
+
+    const abilityInfo = ab => `<div class="rule-card">
+      <div class="flex justify-between items-center">
+        <div class="rule-card-name">${esc(ab.name)}</div>
+        ${ab.cost ? `<span class="loadout-option-cost">${esc(ab.cost)}</span>` : ''}
+      </div>
+      ${ab.effect ? `<div class="rule-card-text">${esc(ab.effect)}</div>` : ''}
+    </div>`;
+
+    let abilitiesHtml = '';
+    if (info && info.innate.length) {
+      abilitiesHtml += `<div class="section-header">Ability</div>` + info.innate.map(abilityInfo).join('');
+    }
+    if (info && info.table.length && info.picks > 0) {
+      const remaining = info.picks - sel.length;
+      abilitiesHtml += `<div class="section-header">Abilities Table — choose ${info.picks} ${remaining > 0 ? `(${remaining} left)` : '(full)'}</div>`;
+      abilitiesHtml += info.table.map(ab => {
+        const on = sel.includes(ab.name);
+        const locked = !on && remaining <= 0;
+        return `<div class="loadout-option ${on ? 'selected' : ''} ${locked ? 'row-disabled' : ''}" onclick="${locked ? '' : `App.toggleAdmiralAbility('${ab.name.replace(/'/g, "\\'")}')`}">
+          <div class="flex justify-between items-center">
+            <span class="loadout-option-name">${on ? '✓ ' : ''}${esc(ab.name)}</span>
+            ${ab.cost ? `<span class="loadout-option-cost">${esc(ab.cost)}</span>` : ''}
+          </div>
+          ${ab.effect ? `<div class="loadout-option-desc">${esc(ab.effect)}</div>` : ''}
+        </div>`;
+      }).join('');
+    }
+
+    // Capital-ship assignment (admirals lead from a capital ship)
+    const caps = capitalShipGroups();
+    let assignHtml = `<div class="section-header">Assigned to</div>`;
+    if (caps.length) {
+      assignHtml += `<div class="loadout-section">` +
+        `<div class="loadout-option ${!a.assignedGroupId ? 'selected' : ''}" onclick="App.assignAdmiral('')">
+          <span class="loadout-option-name">Unassigned</span></div>` +
+        caps.map(c => `<div class="loadout-option ${a.assignedGroupId === c.id ? 'selected' : ''}" onclick="App.assignAdmiral('${c.id}')">
+          <span class="loadout-option-name">${esc(c.name)}</span></div>`).join('') +
+        `</div>`;
+    } else {
+      assignHtml += `<div class="empty-state-sm">No Capital ships (Medium+) to assign to yet.</div>`;
+    }
+
+    document.getElementById('admiral-detail-content').innerHTML = `
+      <div class="detail-header">
+        ${art ? `<div class="ship-thumb ship-thumb-lg"><img src="${art}" alt=""></div>` : ''}
+        <div style="flex:1;${art ? 'margin-left:var(--sp-m)' : ''}">
+          <div class="detail-name">${esc(a.name)}</div>
+          <div class="detail-type">Level ${a.level || '?'}${a.shipName ? ' · ' + esc(a.shipName) : ''}</div>
+        </div>
+        <div class="pts-badge-lg"><div class="pts-badge-value">${a.points}</div><div class="pts-badge-label">Points</div></div>
+      </div>
+      ${assignHtml}
+      ${abilitiesHtml}
+      <div style="padding:var(--sp-l)">
+        <button class="btn btn-ghost btn-block" onclick="App.removeActiveAdmiral()" style="color:var(--danger);border-color:var(--danger)">Remove Admiral</button>
+      </div>
+    `;
+  }
+  function toggleAdmiralAbility(name) {
+    const a = activeFleet.admirals[activeAdmiralIdx];
+    const info = getAdmiralInfo(a);
+    if (!info) return;
+    if (!Array.isArray(a.selectedAbilities)) a.selectedAbilities = [];
+    const pos = a.selectedAbilities.indexOf(name);
+    if (pos >= 0) a.selectedAbilities.splice(pos, 1);
+    else { if (a.selectedAbilities.length >= info.picks) return; a.selectedAbilities.push(name); }
+    activeFleet.updatedAt = Date.now();
+    saveFleets();
+    renderAdmiralDetail();
+  }
+  function assignAdmiral(groupId) {
+    const a = activeFleet.admirals[activeAdmiralIdx];
+    a.assignedGroupId = groupId || null;
+    activeFleet.updatedAt = Date.now();
+    saveFleets();
+    renderAdmiralDetail();
+  }
+  function removeActiveAdmiral() {
+    activeFleet.admirals.splice(activeAdmiralIdx, 1);
+    activeAdmiralIdx = -1;
+    activeFleet.updatedAt = Date.now();
+    saveFleets();
+    goBack();
   }
 
   /* ── Screen: Station Picker ────────────────────────────── */
@@ -1257,8 +1455,9 @@
     init, goBack, viewDesktop,
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet,
     openAddGroup, filterShips, addShip,
-    openGroup, changeQty, selectLoadout, removeGroup, groupOverflow,
+    openGroup, changeQty, selectLoadout, selectFeature, removeGroup, groupOverflow,
     openAdmiral, addAdmiral, removeAdmiralPrompt,
+    openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral,
     openStation, addStation, removeStationPrompt,
     overflow, fleetOverflow, deleteFleetPrompt, duplicateFleet, shareFleet,
     openRule, openStat, closeRuleSheet, closeActionSheet

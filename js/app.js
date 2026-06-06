@@ -40,6 +40,16 @@ const App = (() => {
     shaltari: 'Shaltari', bioficer: 'Bioficers', resistance: 'Resistance'
   };
 
+  // One-line beginner descriptors for the new-fleet faction picker.
+  const FACTION_DESC = {
+    ucm: 'Durable human navy. Forgiving, great for beginners.',
+    scourge: 'Aggressive energy weapons, fragile. High risk/reward.',
+    phr: 'Tough, elite, few ships. Slow but punishing.',
+    shaltari: 'Shielded glass cannons. Tricky, rewards skill.',
+    resistance: 'Scrappy human rebels. Flexible, unconventional.',
+    bioficer: 'Advanced bio-ships. Unusual rules — not for a first game.'
+  };
+
   const CATEGORY_LABELS = {
     colossal: 'Colossal',
     heavy: 'Heavy',
@@ -643,6 +653,15 @@ const App = (() => {
         <span>${name}</span>
       </button>`;
     }).join('');
+    // Descriptor line beneath the picker (new-recruit onboarding)
+    let desc = document.getElementById('faction-pick-desc');
+    if (!desc) {
+      desc = document.createElement('div');
+      desc.id = 'faction-pick-desc';
+      desc.className = 'faction-pick-desc';
+      container.insertAdjacentElement('afterend', desc);
+    }
+    desc.textContent = '';
   }
 
   function selectFaction(key) {
@@ -661,6 +680,8 @@ const App = (() => {
       btn.classList.add('btn-primary');
       btn.dataset.selected = 'true';
     }
+    const desc = document.getElementById('faction-pick-desc');
+    if (desc) desc.textContent = FACTION_DESC[key] || '';
   }
 
   function renderSizePicker() {
