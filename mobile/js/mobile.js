@@ -1045,6 +1045,7 @@
   /* ── Fleet overflow (delete / duplicate / share) ───────── */
   function fleetOverflow() {
     showActionSheet([
+      { label: 'Edit name & size', action: openEditFleet },
       { label: 'Share fleet', action: shareFleet },
       { label: 'Duplicate fleet', action: duplicateFleet },
       { label: 'Delete fleet', danger: true, action: deleteFleetPrompt }
@@ -1096,9 +1097,51 @@
     if (fleet.spaceStation) mini.ss = { n: fleet.spaceStation.name, c: fleet.spaceStation.cost, k: fleet.spaceStation.stationKey };
     return btoa(JSON.stringify(mini)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   }
+  function decodeFleet(encoded) {
+    try {
+      let b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      const mini = JSON.parse(atob(b64));
+      const size = GAME_SIZES[mini.s] || GAME_SIZES.clash;
+      const fleet = {
+        id: uuid(), name: mini.n || 'Shared Fleet', description: mini.d || '',
+        faction: mini.f, gameSize: mini.s || 'clash',
+        pointsLimit: size.max, maxGroups: size.groups,
+        admirals: [], spaceStation: null,
+        battleGroups: (mini.g || []).map(g => ({
+          id: uuid(), name: g.n || 'Group',
+          ships: (g.sh || []).map(s => ({
+            id: uuid(), groupCategory: s.c, shipKey: s.k, points: s.p, loadouts: s.l || {}
+          }))
+        })),
+        createdAt: Date.now(), updatedAt: Date.now()
+      };
+      if (mini.ss) fleet.spaceStation = { name: mini.ss.n, cost: mini.ss.c || 0, stationKey: mini.ss.k || null };
+      if (mini.as) fleet.admirals = mini.as.map(a => ({
+        name: a.n, points: a.p || 0, admiralId: a.i || null, level: a.l || 1, type: a.t || 'Generic',
+        shipName: null, selectedAbilities: a.sa || [], assignedGroupId: a.ag || null
+      }));
+      return fleet;
+    } catch (e) { console.warn('decode failed', e); return null; }
+  }
+
+  function importFromHash() {
+    const m = location.hash.match(/#share\/(.+)$/) || location.hash.match(/#fleet=(.+)$/);
+    if (!m) return false;
+    const fleet = decodeFleet(m[1]);
+    history.replaceState(null, '', location.pathname); // clear hash
+    if (!fleet) return false;
+    fleets.push(fleet);
+    saveFleets();
+    openFleet(fleets.length - 1);
+    return true;
+  }
+
   function shareFleet() {
     const code = encodeFleet(activeFleet);
-    const url = location.origin + location.pathname.replace(/mobile\/?$/, '') + '#fleet=' + code;
+    // Desktop-compatible share format (#share/<code>). Point at the root app so
+    // the link works on desktop too; mobile users get redirected back here.
+    const url = location.origin + location.pathname.replace(/mobile\/?$/, '') + '#share/' + code;
     const doToast = (msg) => showSheet('Share Fleet',
       `<p>${msg}</p><p style="word-break:break-all;font-family:var(--font-condensed);font-size:var(--text-caption1);color:var(--fg3);margin-top:var(--sp-s)">${esc(url)}</p>`);
     if (navigator.share) {
@@ -1110,22 +1153,39 @@
     }
   }
 
-  /* ── Create Fleet modal ────────────────────────────────── */
-  function openCreateFleet() {
-    document.getElementById('modal-create-fleet').classList.add('active');
-    document.getElementById('new-fleet-name').value = '';
-    document.getElementById('new-fleet-desc').value = '';
-
+  /* ── Create / Edit Fleet modal ─────────────────────────── */
+  let editingFleet = null;
+  function populateFleetForm(fleet) {
     const fp = document.getElementById('new-fleet-faction');
     const ordered = Object.keys(FACTIONS).sort((a, b) => (FACTION_INFO[a]?.order || 99) - (FACTION_INFO[b]?.order || 99));
     fp.innerHTML = ordered.map(k => `<option value="${k}">${FACTION_INFO[k]?.name || k}</option>`).join('');
-    fp.value = ordered.includes('ucm') ? 'ucm' : ordered[0];
-    updateFactionDesc();
-
     const sp = document.getElementById('new-fleet-size');
     sp.innerHTML = Object.entries(GAME_SIZES).map(([k, s]) =>
-      `<option value="${k}" ${k === 'skirmish' ? 'selected' : ''}>${s.label} · ${s.min}–${s.max === 99999 ? '∞' : s.max}pts · ${s.time}</option>`
+      `<option value="${k}">${s.label} · ${s.min}–${s.max === 99999 ? '∞' : s.max}pts · ${s.time}</option>`
     ).join('');
+    document.getElementById('new-fleet-name').value = fleet ? (fleet.name || '') : '';
+    document.getElementById('new-fleet-desc').value = fleet ? (fleet.description || '') : '';
+    fp.value = fleet ? fleet.faction : (ordered.includes('ucm') ? 'ucm' : ordered[0]);
+    sp.value = fleet ? fleet.gameSize : 'skirmish';
+    updateFactionDesc();
+  }
+  function openCreateFleet() {
+    editingFleet = null;
+    document.getElementById('modal-fleet-title').textContent = 'New Fleet';
+    document.getElementById('modal-fleet-submit').textContent = 'Create Fleet';
+    document.getElementById('new-fleet-faction').disabled = false;
+    populateFleetForm(null);
+    document.getElementById('modal-create-fleet').classList.add('active');
+  }
+  function openEditFleet() {
+    if (!activeFleet) return;
+    editingFleet = activeFleet;
+    document.getElementById('modal-fleet-title').textContent = 'Edit Fleet';
+    document.getElementById('modal-fleet-submit').textContent = 'Save Changes';
+    // Faction is locked once ships exist (ships are faction-specific)
+    document.getElementById('new-fleet-faction').disabled = (activeFleet.battleGroups || []).length > 0;
+    populateFleetForm(activeFleet);
+    document.getElementById('modal-create-fleet').classList.add('active');
   }
   function updateFactionDesc() {
     const k = document.getElementById('new-fleet-faction').value;
@@ -1139,6 +1199,21 @@
     const faction = document.getElementById('new-fleet-faction').value;
     const gameSize = document.getElementById('new-fleet-size').value;
     const size = GAME_SIZES[gameSize] || GAME_SIZES.clash;
+    if (editingFleet) {
+      editingFleet.name = name;
+      editingFleet.description = desc;
+      if (!document.getElementById('new-fleet-faction').disabled) editingFleet.faction = faction;
+      editingFleet.gameSize = gameSize;
+      editingFleet.pointsLimit = size.max;
+      editingFleet.maxGroups = size.groups;
+      editingFleet.updatedAt = Date.now();
+      saveFleets();
+      closeCreateFleet();
+      renderFleetDetail();
+      updateAppBar('screen-fleet-detail');
+      editingFleet = null;
+      return;
+    }
     const fleet = {
       id: uuid(), name, description: desc, faction, gameSize,
       pointsLimit: size.max, maxGroups: size.groups,
@@ -1166,6 +1241,8 @@
     await Promise.all(loads);
 
     loadFleets();
+    // If arriving via a #share/ link, import it and open it directly
+    if (importFromHash()) return;
     renderFleetList();
     navigate('screen-fleet-list', { replace: true });
 
@@ -1178,7 +1255,7 @@
   /* ── Public API ────────────────────────────────────────── */
   window.App = {
     init, goBack, viewDesktop,
-    openFleet, openCreateFleet, closeCreateFleet, doCreateFleet,
+    openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet,
     openAddGroup, filterShips, addShip,
     openGroup, changeQty, selectLoadout, removeGroup, groupOverflow,
     openAdmiral, addAdmiral, removeAdmiralPrompt,
