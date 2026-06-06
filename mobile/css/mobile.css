@@ -1205,3 +1205,125 @@ body.sheet-open .sheet-scrim {
   letter-spacing: 0.06em;
   color: var(--fg4);
 }
+
+
+/* ── 36. Action Sheet (overflow menus) ─────────────────── */
+.action-sheet {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 300;
+  background: var(--paper);
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  box-shadow: var(--shadow28);
+  padding: var(--sp-s) var(--sp-m) calc(var(--sp-m) + env(safe-area-inset-bottom, 0px));
+  transform: translateY(100%);
+  transition: transform var(--duration-gentle) var(--ease-decelerate);
+}
+.action-sheet.active { transform: translateY(0); }
+.action-sheet-item {
+  display: block;
+  width: 100%;
+  padding: var(--sp-l);
+  background: var(--white);
+  border: none;
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--sp-s);
+  font-size: var(--text-subtitle2);
+  font-weight: var(--weight-semibold);
+  color: var(--navy);
+  text-align: center;
+}
+.action-sheet-item:active { background: var(--paper-alt); }
+.action-sheet-item.danger { color: var(--danger); }
+.action-sheet-cancel {
+  display: block;
+  width: 100%;
+  padding: var(--sp-l);
+  background: var(--white);
+  border: none;
+  border-radius: var(--radius-lg);
+  margin-top: var(--sp-s);
+  font-size: var(--text-subtitle2);
+  font-weight: var(--weight-bold);
+  color: var(--fg2);
+}
+.action-sheet-cancel:active { background: var(--paper-alt); }
+
+/* ── 37. Add slot (admiral / station empty) ────────────── */
+.add-slot {
+  margin: var(--sp-s) var(--sp-l);
+  padding: var(--sp-l);
+  border: 1.5px dashed var(--stroke1);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  font-size: var(--text-body1);
+  font-weight: var(--weight-semibold);
+  color: var(--fg3);
+  background: transparent;
+}
+.add-slot:active { background: var(--paper-alt); }
+
+/* ── 38. Empty states ──────────────────────────────────── */
+.empty-state { padding: 56px 24px; text-align: center; }
+.empty-state-title { font-size: var(--text-subtitle2); font-weight: var(--weight-semibold); color: var(--fg2); margin-bottom: var(--sp-s); }
+.empty-state-sub { font-size: var(--text-caption1); color: var(--fg3); }
+.empty-state-sm { padding: 24px; text-align: center; font-size: var(--text-caption1); color: var(--fg3); }
+
+/* ── 39. Warnings (severity + actionable) ──────────────── */
+.warn-error .warning-icon { color: var(--danger); }
+.warn-error span:last-child { color: var(--danger); }
+.warn-soft .warning-icon { color: var(--gold-dim); }
+.warn-soft span:last-child { color: var(--gold-dim); }
+.warn-ok .warning-icon { color: #3e9945; }
+.warn-ok span:last-child { color: #3e9945; }
+.warn-fix {
+  font-weight: var(--weight-bold);
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+/* ── 40. List chevron + issue badge + ship tags ────────── */
+.list-chevron { color: var(--stroke1); font-size: var(--text-subtitle1); flex-shrink: 0; }
+.row-badge-issue {
+  display: inline-block;
+  margin-left: var(--sp-s);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-bold);
+  vertical-align: middle;
+}
+.ship-tag {
+  display: inline-block;
+  padding: 0 5px;
+  border-radius: var(--radius-sm);
+  background: var(--paper-alt);
+  color: var(--fg3);
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-semibold);
+  vertical-align: middle;
+}
+.row-disabled { opacity: 0.4; pointer-events: none; }
+
+/* ── 41. Form hint + loadout group label ───────────────── */
+.form-hint {
+  margin-top: var(--sp-xs);
+  font-size: var(--text-caption1);
+  color: var(--fg3);
+  font-style: italic;
+  line-height: 1.4;
+}
+.loadout-group-label {
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg4);
+  margin: var(--sp-s) 0 var(--sp-xs);
+}
+.loadout-group-label:first-child { margin-top: 0; }

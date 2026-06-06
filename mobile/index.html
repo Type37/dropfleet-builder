@@ -22,7 +22,7 @@
   </button>
   <span class="app-bar-title" id="app-bar-title">Fleet Builder</span>
   <span class="app-bar-pts hidden" id="app-bar-pts"></span>
-  <button class="app-bar-overflow hidden" id="app-bar-overflow" aria-label="More">&middot;&middot;&middot;</button>
+  <button class="app-bar-overflow hidden" id="app-bar-overflow" aria-label="More" onclick="App.overflow()">&middot;&middot;&middot;</button>
 </header>
 
 <!-- ═══ Screens ═══ -->
@@ -42,10 +42,6 @@
   <div class="fleet-header">
     <div class="fleet-header-name" id="fleet-detail-name">Fleet Name</div>
     <div class="fleet-header-sub" id="fleet-detail-sub">Faction</div>
-    <div class="fleet-header-actions">
-      <button class="badge badge-ghost">Share</button>
-      <button class="badge badge-ghost">Print</button>
-    </div>
   </div>
   <div class="points-bar">
     <div class="points-bar-row">
@@ -89,6 +85,20 @@
   </div>
 </main>
 
+<!-- Admiral Picker -->
+<main class="screen" id="screen-admiral">
+  <div id="admiral-list">
+    <!-- Populated by JS -->
+  </div>
+</main>
+
+<!-- Station Picker -->
+<main class="screen" id="screen-station">
+  <div id="station-list">
+    <!-- Populated by JS -->
+  </div>
+</main>
+
 <!-- ═══ Modals ═══ -->
 
 <!-- Create Fleet -->
@@ -104,6 +114,7 @@
         <select class="form-select" id="new-fleet-faction">
           <!-- Populated by JS -->
         </select>
+        <div class="form-hint" id="new-fleet-faction-desc"></div>
       </div>
       <div class="form-group">
         <label class="form-label">Name</label>
@@ -124,6 +135,14 @@
       <button class="btn btn-primary btn-block" onclick="App.doCreateFleet()">Create Fleet</button>
     </div>
   </div>
+</div>
+
+<!-- ═══ Action Sheet (overflow menus) ═══ -->
+<div class="sheet-scrim" id="action-sheet-scrim" onclick="App.closeActionSheet()"></div>
+<div class="action-sheet" id="action-sheet" role="menu">
+  <div class="rule-sheet-handle" onclick="App.closeActionSheet()"></div>
+  <div id="action-sheet-items"></div>
+  <button class="action-sheet-cancel" onclick="App.closeActionSheet()">Cancel</button>
 </div>
 
 <!-- ═══ Rule Bottom Sheet ═══ -->
