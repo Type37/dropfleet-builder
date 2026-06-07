@@ -349,6 +349,48 @@
     return f ? (f.cost || 0) : 0;
   }
 
+  /* ── Systems / Hardpoints (Resistance) ─────────────────── */
+  function systemsListFor(ship, factionKey) {
+    const seln = ship && ship.systemSelection;
+    if (!seln) return null;
+    const lists = (FACTIONS[factionKey]?.systemsLists) || {};
+    const list = lists[seln.listName];
+    return (list && Array.isArray(list.options) && list.options.length) ? list : null;
+  }
+  function findSystemOption(list, name) { return list.options.find(o => o.name === name) || null; }
+  function summariseSystems(inst, list, seln) {
+    const counts = {};
+    (inst.systems || []).forEach(n => { counts[n] = (counts[n] || 0) + 1; });
+    const total = (inst.systems || []).length;
+    const capUsage = {};
+    Object.keys(seln.categoryCaps || {}).forEach(k => { capUsage[k] = 0; });
+    (inst.systems || []).forEach(n => {
+      const o = findSystemOption(list, n);
+      if (!o) return;
+      Object.keys(capUsage).forEach(k => { if ((o.category || '').startsWith(k)) capUsage[k]++; });
+    });
+    return { counts, total, capUsage };
+  }
+  function canAddSystem(inst, ship, factionKey, optName) {
+    const seln = ship.systemSelection;
+    const list = systemsListFor(ship, factionKey);
+    if (!seln || !list) return false;
+    const opt = findSystemOption(list, optName);
+    if (!opt) return false;
+    const { counts, total, capUsage } = summariseSystems(inst, list, seln);
+    if (total >= seln.totalRequired) return false;
+    if (opt.oncePerShip && (counts[optName] || 0) >= 1) return false;
+    for (const [k, max] of Object.entries(seln.categoryCaps || {})) {
+      if ((opt.category || '').startsWith(k) && capUsage[k] >= max) return false;
+    }
+    return true;
+  }
+  function systemsCost(factionKey, ship, inst) {
+    const list = systemsListFor(ship, factionKey);
+    if (!list || !inst.systems) return 0;
+    return inst.systems.reduce((t, n) => t + (findSystemOption(list, n)?.cost || 0), 0);
+  }
+
   function sizeForPoints(pts) {
     for (const [k, s] of Object.entries(GAME_SIZES)) {
       if (pts >= s.min && pts <= s.max) return k;
@@ -366,9 +408,12 @@
     });
     return extra;
   }
-  // Unified per-ship points: base + loadout options + chosen feature.
+  // Unified per-ship points: base + loadout options + chosen feature + systems.
   function recalcShipPoints(factionKey, shipDef, inst) {
-    return (shipDef?.cost || 0) + shipLoadoutCost(shipDef, inst.loadouts) + featureCost(factionKey, inst.feature);
+    return (shipDef?.cost || 0)
+      + shipLoadoutCost(shipDef, inst.loadouts)
+      + featureCost(factionKey, inst.feature)
+      + systemsCost(factionKey, shipDef, inst);
   }
   function groupPoints(fleet, group) {
     return (group.ships || []).reduce((t, s) => t + (s.points || 0), 0);
@@ -453,6 +498,21 @@
       const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
       if (db && featureRequired(db) && g.ships.some(x => !x.feature)) {
         w.push({ t: 'warn', m: `${db.name} must choose a Deployable Feature` });
+      }
+      // Systems / Hardpoints validation
+      const list = db && systemsListFor(db, fleet.faction);
+      const seln = db && db.systemSelection;
+      if (list && seln) {
+        const { total, capUsage } = summariseSystems(s, list, seln);
+        if (seln.totalIsExact && total !== seln.totalRequired) {
+          w.push({ t: total < seln.totalRequired ? 'warn' : 'error',
+            m: `${db.name}: ${total < seln.totalRequired ? 'choose' : 'too many —'} ${seln.totalRequired} ${seln.listName} (has ${total})` });
+        } else if (!seln.totalIsExact && total > seln.totalRequired) {
+          w.push({ t: 'error', m: `${db.name}: max ${seln.totalRequired} ${seln.listName} (has ${total})` });
+        }
+        Object.entries(seln.categoryCaps || {}).forEach(([k, max]) => {
+          if (capUsage[k] > max) w.push({ t: 'error', m: `${db.name}: max ${max} from ${k} (has ${capUsage[k]})` });
+        });
       }
     });
 
@@ -792,6 +852,8 @@
     const featReq = carrier && featureRequired(ship);
     const features = carrier ? factionFeatures(f.faction) : [];
     const chosenFeature = inst.feature || '';
+    const sysList = systemsListFor(ship, f.faction);
+    const sysSel = ship.systemSelection;
 
     document.getElementById('group-detail-content').innerHTML = `
       ${artSrc ? `<div class="ship-art-hero"><img src="${artSrc}" alt="${esc(ship.name)}"></div>` : ''}
@@ -856,6 +918,8 @@
         `).join('')}
       </div>` : ''}
 
+      ${sysList && sysSel ? renderSystemsPicker(f.faction, ship, inst, sysList, sysSel) : ''}
+
       ${carrier && features.length ? `<div class="loadout-section">
         <div class="section-header" style="padding:0 0 var(--sp-s)">
           ${featReq ? 'Deployable Feature' + (chosenFeature ? '' : ' — required') : 'Payload Feature — optional'}
@@ -890,6 +954,58 @@
         ${r.description ? `<div class="rule-card-text">${esc(r.description).replace(/\n/g, '<br>')}</div>` : ''}
       </div>`).join('')}
     `;
+  }
+
+  function systemOptionDetail(opt) {
+    if (opt.weapons && opt.weapons.length) {
+      const w = opt.weapons[0];
+      const t = (w.type || '').toUpperCase();
+      return `${esc(w.arc || '')} · ${esc(w.attack || '')}/${esc(w.lock || '')}/${esc(w.damage || '')}${t}${w.special && w.special !== '-' ? ' · ' + esc(w.special) : ''}`;
+    }
+    if (opt.loads && opt.loads.length) return `Launch ${esc(opt.loads[0].launch || '')}`;
+    if (opt.effect) return esc(opt.effect);
+    return '';
+  }
+  function renderSystemsPicker(factionKey, ship, inst, list, seln) {
+    const { counts, total, capUsage } = summariseSystems(inst, list, seln);
+    const required = seln.totalRequired;
+    const complete = seln.totalIsExact ? total === required : total <= required;
+    // Category cap chips
+    const capChips = Object.entries(seln.categoryCaps || {})
+      .map(([k, max]) => `<span class="sys-cap-chip ${capUsage[k] >= max ? 'full' : ''}">${esc(k)} ${capUsage[k]}/${max}</span>`).join('');
+    // Group options by category
+    const byCat = {};
+    list.options.forEach(o => { (byCat[o.category] = byCat[o.category] || []).push(o); });
+    const optsHtml = Object.entries(byCat).map(([cat, opts]) => `
+      <div class="loadout-group-label">${esc(cat)}</div>
+      ${opts.map(o => {
+        const c = counts[o.name] || 0;
+        const canAdd = canAddSystem(inst, ship, factionKey, o.name);
+        const detail = systemOptionDetail(o);
+        return `<div class="sys-option ${c > 0 ? 'selected' : ''}">
+          <div class="sys-option-main">
+            <div class="flex justify-between items-center">
+              <span class="loadout-option-name">${esc(o.name)}${o.oncePerShip ? ' <span class="ship-tag">1×</span>' : ''}</span>
+              <span class="loadout-option-cost">${o.cost ? '+' + o.cost : '0'}pts</span>
+            </div>
+            ${detail ? `<div class="loadout-option-desc">${detail}</div>` : ''}
+          </div>
+          <div class="sys-option-controls">
+            <button class="counter-btn" onclick="App.removeSystem('${o.name.replace(/'/g, "\\'")}')" ${c <= 0 ? 'disabled' : ''}>−</button>
+            <span class="sys-option-count">${c}</span>
+            <button class="counter-btn" onclick="App.addSystem('${o.name.replace(/'/g, "\\'")}')" ${canAdd ? '' : 'disabled'}>+</button>
+          </div>
+        </div>`;
+      }).join('')}
+    `).join('');
+    return `<div class="loadout-section">
+      <div class="section-header" style="padding:0 0 var(--sp-xs)">
+        ${esc(seln.listName)} — ${seln.totalIsExact ? 'choose' : 'up to'} ${required}
+        <span class="sys-total ${complete ? 'ok' : 'incomplete'}">${total}/${required}</span>
+      </div>
+      ${capChips ? `<div class="sys-cap-row">${capChips}</div>` : ''}
+      ${optsHtml}
+    </div>`;
   }
 
   function renderSpecialChips(specialStr) {
@@ -993,6 +1109,41 @@
     const ship = findShip(f.faction, inst0.groupCategory, inst0.shipKey);
     group.ships.forEach(s => {
       s.feature = featureName || undefined;
+      s.points = recalcShipPoints(f.faction, ship, s);
+    });
+    f.updatedAt = Date.now();
+    saveFleets();
+    renderGroupDetail();
+    updateAppBar('screen-group-detail');
+  }
+
+  function addSystem(optName) {
+    const f = activeFleet;
+    if (!f || activeGroupIdx < 0) return;
+    const group = f.battleGroups[activeGroupIdx];
+    const inst0 = group.ships[0];
+    const ship = findShip(f.faction, inst0.groupCategory, inst0.shipKey);
+    if (!canAddSystem(inst0, ship, f.faction, optName)) return;
+    group.ships.forEach(s => {
+      if (!s.systems) s.systems = [];
+      s.systems.push(optName);
+      s.points = recalcShipPoints(f.faction, ship, s);
+    });
+    f.updatedAt = Date.now();
+    saveFleets();
+    renderGroupDetail();
+    updateAppBar('screen-group-detail');
+  }
+  function removeSystem(optName) {
+    const f = activeFleet;
+    if (!f || activeGroupIdx < 0) return;
+    const group = f.battleGroups[activeGroupIdx];
+    const inst0 = group.ships[0];
+    const ship = findShip(f.faction, inst0.groupCategory, inst0.shipKey);
+    group.ships.forEach(s => {
+      if (!s.systems) return;
+      const i = s.systems.lastIndexOf(optName);
+      if (i >= 0) s.systems.splice(i, 1);
       s.points = recalcShipPoints(f.faction, ship, s);
     });
     f.updatedAt = Date.now();
@@ -1455,7 +1606,7 @@
     init, goBack, viewDesktop,
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet,
     openAddGroup, filterShips, addShip,
-    openGroup, changeQty, selectLoadout, selectFeature, removeGroup, groupOverflow,
+    openGroup, changeQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow,
     openAdmiral, addAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral,
     openStation, addStation, removeStationPrompt,

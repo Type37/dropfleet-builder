@@ -1327,3 +1327,59 @@ body.sheet-open .sheet-scrim {
   margin: var(--sp-s) 0 var(--sp-xs);
 }
 .loadout-group-label:first-child { margin-top: 0; }
+
+
+/* ── 42. Systems / Hardpoints picker ───────────────────── */
+.sys-total {
+  margin-left: var(--sp-s);
+  font-family: var(--font-condensed);
+  font-weight: var(--weight-bold);
+  padding: 1px 7px;
+  border-radius: var(--radius-sm);
+}
+.sys-total.ok { background: #e3f0e4; color: #3e9945; }
+.sys-total.incomplete { background: var(--danger-bg); color: var(--danger); }
+
+.sys-cap-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-xs);
+  margin-bottom: var(--sp-s);
+}
+.sys-cap-chip {
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-semibold);
+  padding: 2px var(--sp-s);
+  border-radius: var(--radius-sm);
+  background: var(--paper-alt);
+  color: var(--fg2);
+}
+.sys-cap-chip.full { background: var(--navy); color: var(--fg-on-dark); }
+
+.sys-option {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+  padding: var(--sp-s) var(--sp-m);
+  border: 1px solid var(--stroke1);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  margin-bottom: var(--sp-s);
+}
+.sys-option.selected { border-color: var(--navy); background: var(--paper); }
+.sys-option-main { flex: 1; min-width: 0; }
+.sys-option-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+  flex-shrink: 0;
+}
+.sys-option-count {
+  font-family: var(--font-condensed);
+  font-size: var(--text-subtitle2);
+  font-weight: 800;
+  color: var(--navy);
+  min-width: 16px;
+  text-align: center;
+}
