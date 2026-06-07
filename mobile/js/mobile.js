@@ -56,6 +56,29 @@
   };
   const RARE_MAX = { skirmish: 1, clash: 2, battle: 3, reconquest: 4 };
 
+  // Starter-box fleets (mirrors desktop fastplaySpecs) — the "I have the starter set" path.
+  const STARTER_SPECS = [
+    { faction: 'ucm', name: 'UCM Starter Fleet', size: 'skirmish', groups: [
+      ['medium','Bruges',1],['medium','Edmonton',1],['medium','San Francisco',1],
+      ['light','Toulon',2],['light','New Orleans',2],['light','Lima',2]] },
+    { faction: 'scourge', name: 'Scourge Starter Fleet', size: 'skirmish', groups: [
+      ['medium','Sphinx',1],['medium','Hydra',1],['medium','Chimera',1],
+      ['light','Gargoyle',2],['light','Harpy',2]] },
+    { faction: 'phr', name: 'PHR Starter Fleet', size: 'skirmish', groups: [
+      ['medium','Theseus',1],['medium','Ikarus',1],['medium','Orpheus',1],
+      ['light','Pandora',2],['light','Medea',2]] },
+    { faction: 'shaltari', name: 'Shaltari Starter Fleet', size: 'skirmish', groups: [
+      ['medium','Obsidian',1],['medium','Basalt',1],['medium','Emerald',1],
+      ['light','Topaz',2],['light','Opal',2],['light','Voidgate',3]] },
+    { faction: 'bioficer', name: 'Bioficer Starter Fleet', size: 'skirmish', groups: [
+      ['medium','Comet',1],['medium','Cavern',1],['medium','Catastrophe',1],
+      ['payload','Prism Cell',1],['light','Fulcrum',2],['light','Foray',2],
+      ['payload','Invasion Cell',2],['payload','Lander Cell',2]] },
+    { faction: 'resistance', name: 'Resistance Starter Fleet', size: 'skirmish', groups: [
+      ['medium','Heavy Cruiser',1],['medium','Cruiser',1],['medium','Light Cruiser',1],
+      ['light','Strike Carrier',2],['light','Heavy Frigate',2]] }
+  ];
+
   /* ── Ship art ──────────────────────────────────────────── */
   const SHIP_ART = new Set([
     // PHR
@@ -324,6 +347,49 @@
     const f = FACTIONS[factionKey];
     if (!f) return null;
     return (f.admirals || []).find(a => a.id === admiralId) || null;
+  }
+
+  // Resolve a ship group entry by category + name fragment (for starter specs).
+  function findGroupByName(factionKey, category, namePart) {
+    const f = FACTIONS[factionKey];
+    if (!f) return null;
+    const lc = namePart.toLowerCase();
+    const inCat = (f.groups || []).filter(g => g.category === category);
+    let sub = null;
+    for (const g of inCat) {
+      const sn = (g.ship?.name || '').toLowerCase();
+      if (sn === lc || sn === lc + 's') return g;
+      if (!sub && (sn.startsWith(lc) || sn.includes(lc))) sub = g;
+    }
+    return sub;
+  }
+
+  function buildStarterFleet(spec) {
+    const size = GAME_SIZES[spec.size] || GAME_SIZES.skirmish;
+    const battleGroups = [];
+    spec.groups.forEach(([cat, name, qty]) => {
+      const g = findGroupByName(spec.faction, cat, name);
+      if (!g) return;
+      const ships = [];
+      for (let i = 0; i < qty; i++) ships.push(makeShipInstance(spec.faction, cat, g.id));
+      battleGroups.push({ id: uuid(), name: g.ship.name, ships });
+    });
+    if (!battleGroups.length) return;
+    const fleet = {
+      id: uuid(), name: spec.name, description: '', faction: spec.faction,
+      gameSize: spec.size, pointsLimit: size.max, maxGroups: size.groups,
+      admirals: [], battleGroups, spaceStation: null,
+      createdAt: Date.now(), updatedAt: Date.now()
+    };
+    fleets.push(fleet);
+    saveFleets();
+    openFleet(fleets.length - 1);
+  }
+  function openStarterFleets() {
+    showActionSheet(STARTER_SPECS.map(spec => ({
+      label: (FACTION_INFO[spec.faction]?.name || spec.faction) + ' — Starter Set',
+      action: () => buildStarterFleet(spec)
+    })));
   }
 
   /* ── Deployable Features ───────────────────────────────── */
@@ -610,7 +676,8 @@
     if (!fleets.length) {
       c.innerHTML = `<div class="empty-state">
         <div class="empty-state-title">No fleets yet</div>
-        <div class="empty-state-sub">Tap Create Fleet to start building.</div>
+        <div class="empty-state-sub">New to Dropfleet? Load the fleet from your starter box, or build one from scratch.</div>
+        <button class="btn btn-primary" style="margin-top:var(--sp-l)" onclick="App.openStarterFleets()">Load a Starter Set</button>
       </div>`;
       return;
     }
@@ -1604,7 +1671,7 @@
   /* ── Public API ────────────────────────────────────────── */
   window.App = {
     init, goBack, viewDesktop,
-    openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet,
+    openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, openStarterFleets,
     openAddGroup, filterShips, addShip,
     openGroup, changeQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow,
     openAdmiral, addAdmiral, removeAdmiralPrompt,

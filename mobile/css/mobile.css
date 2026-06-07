@@ -1383,3 +1383,19 @@ body.sheet-open .sheet-scrim {
   min-width: 16px;
   text-align: center;
 }
+
+
+/* ── 43. Text link (secondary action) ──────────────────── */
+.btn-textlink {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: var(--sp-s);
+  padding: var(--sp-s);
+  background: none;
+  border: none;
+  color: var(--navy);
+  font-size: var(--text-caption1);
+  font-weight: var(--weight-semibold);
+}
+.btn-textlink:active { opacity: 0.6; }
