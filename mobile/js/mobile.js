@@ -1226,7 +1226,7 @@
         const tc = t === 'K' ? 'weapon-type-k' : t === 'E' ? 'weapon-type-e' : t === 'C' ? 'weapon-type-c' : '';
         const dmg = has ? `${a.damage || '—'}${t ? `<span class="${tc}" style="margin-left:2px">${t}</span>` : ''}` : '—';
         const special = (a.special && a.special !== '-') ? renderSpecialChips(a.special) : (a.ksReroll != null ? `<span class="weapon-special-chip">Close Protection (re-roll ${a.ksReroll} KS)</span>` : '—');
-        rows += `<div class="weapon-row ${tc}" style="grid-template-columns:36px 1fr 40px 32px 32px 40px">
+        rows += `<div class="weapon-row ${tc}" style="grid-template-columns:52px 1fr 40px 32px 32px 40px">
           ${i === 0 ? `<div class="weapon-val" style="font-weight:700">${esc(load.launch || '—')}${ls}</div>` : '<div></div>'}
           <div class="weapon-name">${esc(part)}</div>
           <div class="weapon-val">${esc(a.thrust || '—')}</div>
@@ -1238,8 +1238,8 @@
     });
     return `<div class="weapon-table">
       <div class="section-header" style="padding:0 0 var(--sp-s)">Launch Assets</div>
-      <div class="weapon-row weapon-row-header" style="grid-template-columns:36px 1fr 40px 32px 32px 40px">
-        <div class="weapon-val">Lch</div><div class="weapon-name" style="color:var(--fg3)">Load</div>
+      <div class="weapon-row weapon-row-header" style="grid-template-columns:52px 1fr 40px 32px 32px 40px">
+        <div class="weapon-val">Launch</div><div class="weapon-name" style="color:var(--fg3)">Load</div>
         <div class="weapon-val">Thr</div><div class="weapon-val">At</div><div class="weapon-val">Lk</div><div class="weapon-val">Dm</div>
       </div>${rows}</div>`;
   }
