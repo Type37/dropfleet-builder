@@ -1032,7 +1032,28 @@
         <div class="rule-card-name">${esc(r.name)}</div>
         ${r.description ? `<div class="rule-card-text">${esc(r.description).replace(/\n/g, '<br>')}</div>` : ''}
       </div>`).join('')}
+
+      ${renderLore(ship)}
     `;
+  }
+
+  // Flavour lore — kept visually + structurally separate from rules (Cardo serif).
+  function renderLore(ship) {
+    const lore = (ship.lore || '').trim();
+    const namesake = (ship.namesake || '').trim();
+    const famous = ship.famousShips || [];
+    if (!lore && !namesake && !famous.length) return '';
+    const paras = lore ? lore.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('') : '';
+    const famousList = famous.length
+      ? `<div class="lore-famous"><span class="lore-famous-label">${esc(ship.famousShipsPrefix || 'Known ships of the class')}</span> ${famous.map(esc).join(' · ')}</div>`
+      : '';
+    const namesakeLine = namesake ? `<div class="lore-namesake">Namesake: ${esc(namesake)}</div>` : '';
+    return `<div class="lore-card">
+      <div class="lore-label">Lore</div>
+      ${namesakeLine}
+      <div class="lore-body">${paras}</div>
+      ${famousList}
+    </div>`;
   }
 
   function systemOptionDetail(opt) {

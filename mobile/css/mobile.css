@@ -1465,3 +1465,46 @@ body.sheet-open .sheet-scrim {
 
   @page { margin: 12mm; }
 }
+
+
+/* ── 46. Lore (flavour — separate from rules, Cardo serif) ─ */
+.lore-card {
+  padding: var(--sp-l);
+  background: var(--paper);
+  border-top: 1px solid var(--stroke2);
+}
+.lore-label {
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gold-dim);
+  margin-bottom: var(--sp-s);
+}
+.lore-namesake {
+  font-family: var(--font-lore);
+  font-size: var(--text-caption1);
+  font-style: italic;
+  color: var(--fg3);
+  margin-bottom: var(--sp-s);
+}
+.lore-body {
+  font-family: var(--font-lore);
+  font-size: var(--text-body1);
+  line-height: 1.7;
+  color: var(--fg2);
+}
+.lore-body p { margin: 0 0 var(--sp-s); }
+.lore-body p:last-child { margin-bottom: 0; }
+.lore-famous {
+  margin-top: var(--sp-m);
+  font-family: var(--font-lore);
+  font-size: var(--text-caption1);
+  line-height: 1.6;
+  color: var(--fg3);
+}
+.lore-famous-label {
+  font-style: italic;
+  color: var(--fg4);
+}
