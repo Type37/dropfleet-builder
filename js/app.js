@@ -891,9 +891,7 @@ const App = (() => {
       const limit = sizeInfo.max;
       const pctFill = limit === 99999 ? 0 : Math.min((pts / limit) * 100, 100);
       const barClass = pts > limit ? 'fleet-card-bar-over' : pctFill > 85 ? 'fleet-card-bar-near' : '';
-      const validationBadge = errorCount > 0
-        ? `<span class="badge badge-error">${errorCount} issue${errorCount > 1 ? 's' : ''}</span>`
-        : '';
+      const validationBadge = '';  // issue counts are not shown on fleet cards
       const fIcon = FACTION_ICONS[f.faction];
       return `
       <div class="fleet-card card-deco" onclick="App.navigate('builder','${f.id}')">
@@ -1812,7 +1810,7 @@ const App = (() => {
             </div>
           </div>
           <div class="overview-header-right">
-            ${errors.length ? `<span class="overview-legal-pill is-illegal">${errors.length} issue${errors.length > 1 ? 's' : ''}</span>` : (sizeInfo.max !== 99999 ? `<span class="overview-legal-pill is-ok">${Math.max(0, sizeInfo.max - pts)} pts left</span>` : '')}
+            ${sizeInfo.max !== 99999 ? (pts > sizeInfo.max ? `<span class="overview-legal-pill is-illegal">${pts - sizeInfo.max} pts over</span>` : `<span class="overview-legal-pill is-ok">${sizeInfo.max - pts} pts left</span>`) : ''}
           </div>
         </div>
         <div class="overview-desc" onclick="this.querySelector('.overview-desc-input')?.focus()">

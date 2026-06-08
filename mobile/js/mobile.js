@@ -709,11 +709,10 @@
       const info = FACTION_INFO[f.faction];
       const pct = Math.min(100, (pts / limit) * 100);
       const over = pts > limit;
-      const errs = validateFleet(f).filter(x => x.t === 'error').length;
       return `<div class="list-row" onclick="App.openFleet(${i})">
         ${icon ? `<img src="${icon}" alt="" class="faction-icon" loading="lazy">` : ''}
         <div class="list-row-content">
-          <div class="list-row-title">${esc(f.name || 'Unnamed Fleet')}${errs ? `<span class="row-badge-issue">${errs} issue${errs > 1 ? 's' : ''}</span>` : ''}</div>
+          <div class="list-row-title">${esc(f.name || 'Unnamed Fleet')}</div>
           <div class="list-row-sub">${pts}/${limit}pts · ${gc} group${gc !== 1 ? 's' : ''} · ${(GAME_SIZES[f.gameSize] || {}).label || ''}</div>
           <div class="fleet-row-bar"><div class="fleet-row-bar-fill ${over ? 'over' : ''}" style="width:${pct}%"></div></div>
         </div>
