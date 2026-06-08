@@ -3042,7 +3042,7 @@ const App = (() => {
     const alreadyHasNamedAdmiral = hasFamousAdmiral();
 
     const container = document.getElementById('admiral-options');
-    const sectionTitle = (text) => `<div style="margin-top:var(--sp-lg);margin-bottom:var(--sp-sm);font-weight:var(--weight-semibold);font-size:var(--text-sm);text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-muted)">${text}</div>`;
+    const sectionTitle = (text) => `<div style="margin-top:var(--sp-lg);margin-bottom:var(--sp-sm);font-weight:var(--weight-semibold);font-size:var(--text-sm);letter-spacing:0.05em;color:var(--ink-muted)">${text}</div>`;
 
     let html = '';
 
