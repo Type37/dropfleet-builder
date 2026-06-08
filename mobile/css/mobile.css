@@ -79,14 +79,18 @@
   --shadow16: 0 0 2px rgba(0,0,0,0.10), 0 8px 16px rgba(0,0,0,0.12);
   --shadow28: 0 0 8px rgba(0,0,0,0.10), 0 14px 28px rgba(0,0,0,0.12);
 
-  /* — Fluent 2 Motion — */
-  --duration-fast: 150ms;
-  --duration-normal: 200ms;
-  --duration-gentle: 250ms;
-  --duration-slow: 300ms;
-  --ease-decelerate: cubic-bezier(0, 0, 0, 1);
-  --ease-accelerate: cubic-bezier(1, 0, 1, 1);
-  --ease-standard: cubic-bezier(0.33, 0, 0.67, 1);
+  /* — Motion —
+     The old curves were extremes: decelerate (0,0,0,1) snapped to the end then
+     crawled; accelerate (1,0,1,1) hung then lurched away — both felt "off".
+     These are the Material 3 emphasized/standard curves: a gentle glide in,
+     a smooth fall-away out, and a balanced curve for taps. */
+  --duration-fast: 140ms;     /* taps / state changes — snappy */
+  --duration-normal: 200ms;   /* fades */
+  --duration-gentle: 240ms;   /* sheets / fills */
+  --duration-slow: 260ms;     /* screen navigation (JS cleanup waits 300ms) */
+  --ease-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);   /* enter — eases to rest */
+  --ease-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);   /* exit — eases away */
+  --ease-standard:   cubic-bezier(0.2, 0, 0, 1);        /* taps / UI micro-motion */
 
   /* — Fonts (DFC personality) — */
   --font-body: 'Jost', system-ui, -apple-system, sans-serif;
@@ -260,21 +264,24 @@ input, textarea, select { font: inherit; }
   animation: slideOutRight var(--duration-slow) var(--ease-accelerate) forwards;
 }
 
+/* Incoming screen carries most of the motion (slides + fades in fully);
+   the outgoing one drifts a short way and fades — a layered push, not a
+   whole-screen swap. Shorter travel + the new easing reads as a glide. */
 @keyframes slideInRight {
-  from { transform: translateX(30%); opacity: 0.6; }
+  from { transform: translateX(22%); opacity: 0; }
   to   { transform: translateX(0); opacity: 1; }
 }
 @keyframes slideOutLeft {
   from { transform: translateX(0); opacity: 1; }
-  to   { transform: translateX(-15%); opacity: 0; }
+  to   { transform: translateX(-8%); opacity: 0; }
 }
 @keyframes slideInLeft {
-  from { transform: translateX(-30%); opacity: 0.6; }
+  from { transform: translateX(-22%); opacity: 0; }
   to   { transform: translateX(0); opacity: 1; }
 }
 @keyframes slideOutRight {
   from { transform: translateX(0); opacity: 1; }
-  to   { transform: translateX(15%); opacity: 0; }
+  to   { transform: translateX(8%); opacity: 0; }
 }
 
 /* Bottom-padded for fixed bottom button */
@@ -545,7 +552,11 @@ input, textarea, select { font: inherit; }
   display: flex;
   align-items: center;
   white-space: nowrap;
-  transition: all var(--duration-fast) var(--ease-standard);
+  transition: background-color var(--duration-fast) var(--ease-standard),
+              border-color var(--duration-fast) var(--ease-standard),
+              color var(--duration-fast) var(--ease-standard),
+              transform var(--duration-fast) var(--ease-standard),
+              box-shadow var(--duration-fast) var(--ease-standard);
 }
 
 .chip.active {
@@ -752,7 +763,11 @@ input, textarea, select { font: inherit; }
   justify-content: center;
   font-size: var(--text-subtitle2);
   color: var(--fg2);
-  transition: all var(--duration-fast) var(--ease-standard);
+  transition: background-color var(--duration-fast) var(--ease-standard),
+              border-color var(--duration-fast) var(--ease-standard),
+              color var(--duration-fast) var(--ease-standard),
+              transform var(--duration-fast) var(--ease-standard),
+              box-shadow var(--duration-fast) var(--ease-standard);
 }
 .counter-btn:active { background: var(--paper-alt); }
 .counter-btn:disabled { opacity: 0.3; }
@@ -941,7 +956,11 @@ input, textarea, select { font: inherit; }
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--duration-fast) var(--ease-standard);
+  transition: background-color var(--duration-fast) var(--ease-standard),
+              border-color var(--duration-fast) var(--ease-standard),
+              color var(--duration-fast) var(--ease-standard),
+              transform var(--duration-fast) var(--ease-standard),
+              box-shadow var(--duration-fast) var(--ease-standard);
 }
 .launch-option.active {
   background: var(--navy);
@@ -1671,3 +1690,21 @@ body.sheet-open .sheet-scrim {
   letter-spacing: 0.04em;
   font-size: var(--text-caption2);
 }
+
+
+/* ── 51. Reduced motion ────────────────────────────────────
+   Respect the OS "reduce motion" setting: drop slides/transforms,
+   keep a near-instant cross-fade so the UI still feels responsive. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .screen.slide-in-right,
+  .screen.slide-in-left { animation: rmFade var(--duration-normal) ease both; }
+  .screen.slide-out-left,
+  .screen.slide-out-right { animation: none; opacity: 0; }
+}
+@keyframes rmFade { from { opacity: 0; } to { opacity: 1; } }
