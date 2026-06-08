@@ -1473,8 +1473,10 @@
   /* ── Fleet overflow (delete / duplicate / share) ───────── */
   function fleetOverflow() {
     showActionSheet([
+      { label: 'Copy as text', action: copyFleetText },
+      { label: 'Export PDF', action: exportPdf },
       { label: 'Edit name & size', action: openEditFleet },
-      { label: 'Share fleet', action: shareFleet },
+      { label: 'Share link', action: shareFleet },
       { label: 'Duplicate fleet', action: duplicateFleet },
       { label: 'Delete fleet', danger: true, action: deleteFleetPrompt }
     ]);
@@ -1564,6 +1566,139 @@
     saveFleets();
     openFleet(fleets.length - 1);
     return true;
+  }
+
+  /* ── Copy fleet as text (Discord-friendly) ─────────────── */
+  function fleetToText(fleet) {
+    const size = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
+    const limit = fleet.pointsLimit || size.max;
+    const pts = fleetPoints(fleet);
+    const info = FACTION_INFO[fleet.faction];
+    const lines = [];
+    lines.push(fleet.name || 'Unnamed Fleet');
+    lines.push(`${info?.name || fleet.faction} · ${size.label} · ${pts} / ${limit} pts`);
+
+    if ((fleet.battleGroups || []).length) {
+      lines.push('', 'GROUPS');
+      fleet.battleGroups.forEach(g => {
+        const inst = g.ships[0];
+        if (!inst) return;
+        const db = findShip(fleet.faction, inst.groupCategory, inst.shipKey);
+        const qty = g.ships.length;
+        lines.push(`${qty}× ${db?.name || 'Unknown'} — ${groupPoints(fleet, g)} pts`);
+        // Loadout
+        (db?.loadoutOptions || []).forEach((lo, i) => {
+          const selIdx = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
+          const opt = lo.options[selIdx];
+          if (opt && selIdx !== 0) lines.push(`   Loadout: ${opt.name}`);
+        });
+        // Feature
+        if (inst.feature) lines.push(`   Feature: ${inst.feature}`);
+        // Systems (with counts)
+        if (inst.systems && inst.systems.length) {
+          const counts = {};
+          inst.systems.forEach(n => { counts[n] = (counts[n] || 0) + 1; });
+          const sysStr = Object.entries(counts).map(([n, c]) => c > 1 ? `${n} ×${c}` : n).join(', ');
+          lines.push(`   Systems: ${sysStr}`);
+        }
+      });
+    }
+    if ((fleet.admirals || []).length) {
+      lines.push('', 'ADMIRAL');
+      fleet.admirals.forEach(a => {
+        lines.push(`${a.name} (Lv ${a.level || '?'}) — ${a.points} pts`);
+        if (a.selectedAbilities && a.selectedAbilities.length) lines.push(`   ${a.selectedAbilities.join(', ')}`);
+      });
+    }
+    if (fleet.spaceStation) {
+      lines.push('', 'SPACE STATION', `${fleet.spaceStation.name} — ${fleet.spaceStation.cost} pts`);
+    }
+    lines.push('', '— built with type37.github.io/dropfleet-builder');
+    return lines.join('\n');
+  }
+  function copyFleetText() {
+    const text = fleetToText(activeFleet);
+    const show = (msg) => showSheet('Copy List',
+      `<p>${msg}</p><pre class="copy-pre">${esc(text)}</pre>`);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => show('Copied to clipboard — paste it into Discord, etc.')).catch(() => show('Select and copy:'));
+    } else {
+      show('Select and copy:');
+    }
+  }
+
+  /* ── Export as PDF (printable view → browser "Save as PDF") ─ */
+  function exportPdf() {
+    const f = activeFleet;
+    const size = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
+    const limit = f.pointsLimit || size.max;
+    const pts = fleetPoints(f);
+    const info = FACTION_INFO[f.faction];
+    const usedRules = new Map();  // keyword -> description (for the glossary)
+
+    const collectRule = name => {
+      const r = lookupRule(name);
+      if (r.description && !usedRules.has(name)) usedRules.set(name, r.description);
+    };
+
+    const groupsHtml = (f.battleGroups || []).map(g => {
+      const inst = g.ships[0];
+      if (!inst) return '';
+      const db = findShip(f.faction, inst.groupCategory, inst.shipKey);
+      if (!db) return '';
+      const st = db.stats || {};
+      const qty = g.ships.length;
+      const statCells = [['Scan', st.scan], ['Sig', st.sig], ['Thrust', st.thrust], ['Hull', st.hull],
+        ['ES', st.es], ['KS', st.ks], ['BS', st.bs], ['PD', st.pd]]
+        .filter(([, v]) => v != null && v !== '-' && v !== '')
+        .map(([k, v]) => `<span class="pr-stat"><b>${k}</b> ${esc(v)}</span>`).join('');
+      const weapons = (db.weapons || []).map(w => {
+        if (w.special && w.special !== '-') w.special.split(',').forEach(s => collectRule(s.trim()));
+        return `<tr><td>${esc(w.name)}</td><td>${esc(w.lock || '')}</td><td>${esc(w.attack || '')}</td><td>${esc(w.damage || '')}${esc(w.type || '')}</td><td>${esc(w.arc || '')}</td><td>${esc(w.special && w.special !== '-' ? w.special : '')}</td></tr>`;
+      }).join('');
+      // ship special rules (full text inline)
+      (db.specialRules || []).forEach(r => { if (r.description && !usedRules.has(r.name)) usedRules.set(r.name, r.description); });
+      const rulesInline = (db.specialRules || []).map(r => esc(r.name)).join(', ');
+      const opts = [];
+      (db.loadoutOptions || []).forEach((lo, i) => {
+        const si = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
+        if (lo.options[si] && si !== 0) opts.push('Loadout: ' + lo.options[si].name);
+      });
+      if (inst.feature) opts.push('Feature: ' + inst.feature);
+      if (inst.systems && inst.systems.length) {
+        const c = {}; inst.systems.forEach(n => c[n] = (c[n] || 0) + 1);
+        opts.push('Systems: ' + Object.entries(c).map(([n, ct]) => ct > 1 ? `${n} ×${ct}` : n).join(', '));
+      }
+      return `<div class="pr-group">
+        <div class="pr-group-head"><span class="pr-group-name">${qty}× ${esc(db.name)}</span><span class="pr-group-pts">${groupPoints(f, g)} pts</span></div>
+        <div class="pr-stats">${statCells}</div>
+        ${weapons ? `<table class="pr-weapons"><thead><tr><th>Weapon</th><th>Lk</th><th>At</th><th>Dm</th><th>Arc</th><th>Special</th></tr></thead><tbody>${weapons}</tbody></table>` : ''}
+        ${rulesInline ? `<div class="pr-rules-line"><b>Special:</b> ${rulesInline}</div>` : ''}
+        ${opts.length ? `<div class="pr-opts">${opts.map(esc).join(' · ')}</div>` : ''}
+      </div>`;
+    }).join('');
+
+    const admiralsHtml = (f.admirals || []).map(a =>
+      `<div class="pr-line"><b>${esc(a.name)}</b> (Lv ${a.level || '?'}) — ${a.points} pts${a.selectedAbilities?.length ? ' · ' + esc(a.selectedAbilities.join(', ')) : ''}</div>`).join('');
+    const stationHtml = f.spaceStation ? `<div class="pr-line"><b>${esc(f.spaceStation.name)}</b> — ${f.spaceStation.cost} pts</div>` : '';
+
+    const glossary = [...usedRules.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([n, d]) => `<div class="pr-gloss"><b>${esc(n)}</b> — ${esc(d)}</div>`).join('');
+
+    document.getElementById('print-root').innerHTML = `
+      <div class="pr-header">
+        <div class="pr-title">${esc(f.name || 'Unnamed Fleet')}</div>
+        <div class="pr-sub">${info?.name || f.faction} · ${size.label} · ${pts} / ${limit} pts · ${(f.battleGroups || []).length} groups</div>
+      </div>
+      ${groupsHtml}
+      ${admiralsHtml ? `<div class="pr-section-title">Admiral</div>${admiralsHtml}` : ''}
+      ${stationHtml ? `<div class="pr-section-title">Space Station</div>${stationHtml}` : ''}
+      ${glossary ? `<div class="pr-section-title">Rules Glossary</div><div class="pr-glossary">${glossary}</div>` : ''}
+      <div class="pr-foot">type37.github.io/dropfleet-builder</div>
+    `;
+    document.body.classList.add('printing');
+    window.print();
+    setTimeout(() => document.body.classList.remove('printing'), 300);
   }
 
   function shareFleet() {
@@ -1695,7 +1830,7 @@
     openAdmiral, addAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral,
     openStation, addStation, removeStationPrompt,
-    overflow, fleetOverflow, deleteFleetPrompt, duplicateFleet, shareFleet,
+    overflow, fleetOverflow, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, exportPdf,
     openRule, openStat, closeRuleSheet, closeActionSheet
   };
 

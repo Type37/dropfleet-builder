@@ -1399,3 +1399,69 @@ body.sheet-open .sheet-scrim {
   font-weight: var(--weight-semibold);
 }
 .btn-textlink:active { opacity: 0.6; }
+
+
+/* ── 44. Copy-as-text preformatted block ───────────────── */
+.copy-pre {
+  margin-top: var(--sp-m);
+  padding: var(--sp-m);
+  background: var(--paper);
+  border: 1px solid var(--stroke2);
+  border-radius: var(--radius-md);
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption1);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 40dvh;
+  overflow-y: auto;
+  color: var(--fg1);
+  -webkit-user-select: all;
+  user-select: all;
+}
+
+/* ── 45. Print / PDF export ────────────────────────────── */
+#print-root { display: none; }
+
+@media print {
+  /* Hide the app shell; show only the print roster */
+  body > *:not(#print-root) { display: none !important; }
+  body.printing #print-root, #print-root { display: block; }
+  body { background: #fff; color: #000; }
+
+  #print-root {
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #1a1a1a;
+    padding: 0;
+    max-width: 100%;
+  }
+  .pr-header { border-bottom: 2px solid #1b3a5c; padding-bottom: 6px; margin-bottom: 10px; }
+  .pr-title { font-size: 20pt; font-weight: 700; color: #1b3a5c; }
+  .pr-sub { font-size: 10pt; color: #444; margin-top: 2px; }
+
+  .pr-group { border: 1px solid #ccc; border-radius: 4px; padding: 6px 8px; margin-bottom: 6px; break-inside: avoid; }
+  .pr-group-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .pr-group-name { font-size: 12pt; font-weight: 700; }
+  .pr-group-pts { font-size: 11pt; font-weight: 700; color: #1b3a5c; }
+  .pr-stats { font-size: 8.5pt; color: #333; margin: 3px 0; }
+  .pr-stat { display: inline-block; margin-right: 10px; }
+  .pr-stat b { color: #1b3a5c; }
+
+  .pr-weapons { width: 100%; border-collapse: collapse; font-size: 8pt; margin: 3px 0; }
+  .pr-weapons th { text-align: left; border-bottom: 1px solid #999; padding: 1px 4px; color: #555; }
+  .pr-weapons td { padding: 1px 4px; border-bottom: 1px solid #eee; }
+
+  .pr-rules-line, .pr-opts { font-size: 8.5pt; margin-top: 2px; }
+  .pr-opts { color: #444; font-style: italic; }
+
+  .pr-section-title { font-size: 12pt; font-weight: 700; color: #1b3a5c; margin: 10px 0 4px; border-bottom: 1px solid #ccc; }
+  .pr-line { font-size: 10pt; margin: 2px 0; }
+
+  .pr-glossary { columns: 2; column-gap: 16px; }
+  .pr-gloss { font-size: 7.5pt; line-height: 1.35; margin-bottom: 4px; break-inside: avoid; }
+  .pr-gloss b { color: #1b3a5c; }
+
+  .pr-foot { margin-top: 12px; font-size: 7.5pt; color: #888; text-align: center; }
+
+  @page { margin: 12mm; }
+}
