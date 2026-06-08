@@ -1419,6 +1419,20 @@ body.sheet-open .sheet-scrim {
   -webkit-user-select: all;
   user-select: all;
 }
+.import-textarea {
+  width: 100%;
+  margin-top: var(--sp-m);
+  padding: var(--sp-m);
+  background: var(--paper);
+  border: 1px solid var(--stroke2);
+  border-radius: var(--radius-md);
+  font-family: var(--font-condensed);
+  font-size: var(--text-body);
+  color: var(--fg1);
+  resize: vertical;
+  -webkit-appearance: none;
+}
+.import-textarea:focus { outline: none; border-color: var(--accent, var(--navy)); }
 
 /* ── 45. Print / PDF export ────────────────────────────── */
 #print-root { display: none; }

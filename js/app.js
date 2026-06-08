@@ -63,23 +63,23 @@ const App = (() => {
   let rawFleetData = null;
 
   const fastplaySpecs = [
-    { faction: 'ucm', name: 'UCM Starter Fleet', size: 'skirmish', groups: [
+    { faction: 'ucm', name: 'UCM Fast Play', size: 'skirmish', groups: [
       ['medium','Bruges',1],['medium','Edmonton',1],['medium','San Francisco',1],
       ['light','Toulon',2],['light','New Orleans',2],['light','Lima',2]] },
-    { faction: 'scourge', name: 'Scourge Starter Fleet', size: 'skirmish', groups: [
+    { faction: 'scourge', name: 'Scourge Fast Play', size: 'skirmish', groups: [
       ['medium','Sphinx',1],['medium','Hydra',1],['medium','Chimera',1],
       ['light','Gargoyle',2],['light','Harpy',2]] },
-    { faction: 'phr', name: 'PHR Starter Fleet', size: 'skirmish', groups: [
+    { faction: 'phr', name: 'PHR Fast Play', size: 'skirmish', groups: [
       ['medium','Theseus',1],['medium','Ikarus',1],['medium','Orpheus',1],
       ['light','Pandora',2],['light','Medea',2]] },
-    { faction: 'shaltari', name: 'Shaltari Starter Fleet', size: 'skirmish', groups: [
+    { faction: 'shaltari', name: 'Shaltari Fast Play', size: 'skirmish', groups: [
       ['medium','Obsidian',1],['medium','Basalt',1],['medium','Emerald',1],
       ['light','Topaz',2],['light','Opal',2],['light','Voidgate',3]] },
-    { faction: 'bioficer', name: 'Bioficer Starter Fleet', size: 'skirmish', groups: [
+    { faction: 'bioficer', name: 'Bioficer Fast Play', size: 'skirmish', groups: [
       ['medium','Comet',1],['medium','Cavern',1],['medium','Catastrophe',1],
       ['payload','Prism Cell',1],['light','Fulcrum',2],['light','Foray',2],
       ['payload','Invasion Cell',2],['payload','Lander Cell',2]] },
-    { faction: 'resistance', name: 'Resistance Starter Fleet', size: 'skirmish', groups: [
+    { faction: 'resistance', name: 'Resistance Fast Play', size: 'skirmish', groups: [
       ['medium','Heavy Cruiser',1],['medium','Cruiser',1],['medium','Light Cruiser',1],
       ['light','Strike Carrier',2],['light','Heavy Frigate',2]] }
   ];
@@ -1029,7 +1029,7 @@ const App = (() => {
       saveFleets();
       showFleetTab('my');
       renderFleetList();
-      showToast(`${FACTION_LABELS[factionKey]} starter fleet added`);
+      showToast(`${FACTION_LABELS[factionKey]} Fast Play fleet added`);
     });
   }
 

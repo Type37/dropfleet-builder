@@ -57,23 +57,23 @@
 
   // Starter-box fleets (mirrors desktop fastplaySpecs) — the "I have the starter set" path.
   const STARTER_SPECS = [
-    { faction: 'ucm', name: 'UCM Starter Fleet', size: 'skirmish', groups: [
+    { faction: 'ucm', name: 'UCM Fast Play', size: 'skirmish', groups: [
       ['medium','Bruges',1],['medium','Edmonton',1],['medium','San Francisco',1],
       ['light','Toulon',2],['light','New Orleans',2],['light','Lima',2]] },
-    { faction: 'scourge', name: 'Scourge Starter Fleet', size: 'skirmish', groups: [
+    { faction: 'scourge', name: 'Scourge Fast Play', size: 'skirmish', groups: [
       ['medium','Sphinx',1],['medium','Hydra',1],['medium','Chimera',1],
       ['light','Gargoyle',2],['light','Harpy',2]] },
-    { faction: 'phr', name: 'PHR Starter Fleet', size: 'skirmish', groups: [
+    { faction: 'phr', name: 'PHR Fast Play', size: 'skirmish', groups: [
       ['medium','Theseus',1],['medium','Ikarus',1],['medium','Orpheus',1],
       ['light','Pandora',2],['light','Medea',2]] },
-    { faction: 'shaltari', name: 'Shaltari Starter Fleet', size: 'skirmish', groups: [
+    { faction: 'shaltari', name: 'Shaltari Fast Play', size: 'skirmish', groups: [
       ['medium','Obsidian',1],['medium','Basalt',1],['medium','Emerald',1],
       ['light','Topaz',2],['light','Opal',2],['light','Voidgate',3]] },
-    { faction: 'bioficer', name: 'Bioficer Starter Fleet', size: 'skirmish', groups: [
+    { faction: 'bioficer', name: 'Bioficer Fast Play', size: 'skirmish', groups: [
       ['medium','Comet',1],['medium','Cavern',1],['medium','Catastrophe',1],
       ['payload','Prism Cell',1],['light','Fulcrum',2],['light','Foray',2],
       ['payload','Invasion Cell',2],['payload','Lander Cell',2]] },
-    { faction: 'resistance', name: 'Resistance Starter Fleet', size: 'skirmish', groups: [
+    { faction: 'resistance', name: 'Resistance Fast Play', size: 'skirmish', groups: [
       ['medium','Heavy Cruiser',1],['medium','Cruiser',1],['medium','Light Cruiser',1],
       ['light','Strike Carrier',2],['light','Heavy Frigate',2]] }
   ];
@@ -400,7 +400,7 @@
   }
   function openStarterFleets() {
     showActionSheet(STARTER_SPECS.map(spec => ({
-      label: (FACTION_INFO[spec.faction]?.name || spec.faction) + ' — Starter Set',
+      label: (FACTION_INFO[spec.faction]?.name || spec.faction) + ' — Fast Play Sheet',
       action: () => buildStarterFleet(spec)
     })));
   }
@@ -694,8 +694,8 @@
     if (!fleets.length) {
       c.innerHTML = `<div class="empty-state">
         <div class="empty-state-title">No fleets yet</div>
-        <div class="empty-state-sub">New to Dropfleet? Load the fleet from your starter box, or build one from scratch.</div>
-        <button class="btn btn-primary" style="margin-top:var(--sp-l)" onclick="App.openStarterFleets()">Load a Starter Set</button>
+        <div class="empty-state-sub">New to Dropfleet? Load one of the Fast Play Sheets, or build a fleet from scratch.</div>
+        <button class="btn btn-primary" style="margin-top:var(--sp-l)" onclick="App.openStarterFleets()">Load Fast Play Sheets</button>
       </div>`;
       return;
     }
@@ -1353,6 +1353,13 @@
   }
 
   /* ── Screen: Admiral Picker ────────────────────────────── */
+  // Generic admirals are bought purely by level (no faction/abilities) — mirrors
+  // the desktop GENERIC_ADMIRAL_LEVELS so both apps offer the same options.
+  const GENERIC_ADMIRAL_LEVELS = [
+    { level: 2, cost: 20 },
+    { level: 3, cost: 40 },
+    { level: 4, cost: 60 }
+  ];
   function openAdmiral() { if (activeFleet) navigate('screen-admiral'); }
   function renderAdmiralPicker() {
     const f = activeFleet;
@@ -1360,8 +1367,23 @@
     const faction = FACTIONS[f.faction];
     if (!faction) return;
     const size = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
+    const maxLevel = size.maxAdmiralLevel || 4;
+
+    // Generic admirals (level/cost only) — parity with desktop.
+    const genericRows = GENERIC_ADMIRAL_LEVELS.filter(l => l.level <= maxLevel).map(l =>
+      `<div class="list-row" onclick="App.addGenericAdmiral(${l.level}, ${l.cost})">
+        <div class="ship-thumb ship-thumb-admiral" aria-hidden="true">★</div>
+        <div class="list-row-content">
+          <div class="flex justify-between items-center">
+            <span class="list-row-title">Level ${l.level} Admiral</span>
+            <span class="list-row-pts">${l.cost}pts</span>
+          </div>
+          <div class="list-row-sub">Generic · no special abilities</div>
+        </div>
+      </div>`).join('');
+
     const admirals = (faction.admirals || []).slice().sort((a, b) => (a.level || 0) - (b.level || 0));
-    document.getElementById('admiral-list').innerHTML = admirals.map(a => {
+    const factionRows = admirals.map(a => {
       const fs = a.flagship;
       const total = fs ? (a.cost + fs.cost) : a.cost;
       const art = admiralArtPath(a.name) || (fs ? shipArtPath(fs.name) : null);
@@ -1377,6 +1399,28 @@
         </div>
       </div>`;
     }).join('');
+
+    document.getElementById('admiral-list').innerHTML =
+      `<div class="section-header">Generic admiral</div>${genericRows}` +
+      `<div class="section-header">Named admirals</div>${factionRows}`;
+  }
+  function addGenericAdmiral(level, cost) {
+    const f = activeFleet;
+    if (!f) return;
+    f.admirals = f.admirals || [];
+    f.admirals.push({
+      name: `Level ${level} Admiral`,
+      points: cost,
+      admiralId: null,
+      level,
+      type: 'Generic',
+      shipName: null,
+      selectedAbilities: [],
+      assignedGroupId: null
+    });
+    f.updatedAt = Date.now();
+    saveFleets();
+    goBack();
   }
   function addAdmiral(admiralId) {
     const f = activeFleet;
@@ -1428,6 +1472,53 @@
       return { id: g.id, name: db?.name || g.name };
     });
   }
+  // Famous admirals fly a named flagship; fetch its datasheet from the faction def.
+  function admiralFlagship(a) {
+    if (!a || !a.admiralId) return null;
+    const faction = FACTIONS[activeFleet.faction];
+    const def = (faction && faction.admirals || []).find(x => x.id === a.admiralId);
+    return (def && def.isFamous && def.flagship) ? def.flagship : null;
+  }
+  // Render a flagship's full datasheet (stat grid + weapons + rules), reusing the
+  // same components as the group ship detail so it matches desktop parity.
+  function flagshipDatasheet(fs) {
+    if (!fs) return '';
+    const stats = fs.stats || {};
+    const statEntries = [
+      { key: 'scan', label: 'Scan', val: stats.scan },
+      { key: 'sig', label: 'Sig', val: stats.sig },
+      { key: 'thrust', label: 'Thrust', val: stats.thrust },
+      { key: 'hull', label: 'Hull', val: stats.hull },
+      { key: 'es', label: 'ES', val: stats.es },
+      { key: 'ks', label: 'KS', val: stats.ks }
+    ].filter(s => s.val != null && s.val !== '-' && s.val !== '');
+    if (stats.bs && stats.bs !== '-') statEntries.push({ key: 'bs', label: 'BS', val: stats.bs });
+    const weapons = fs.weapons || [];
+    const rules = fs.specialRules || [];
+    const specialText = stats.special && stats.special !== '-' ? stats.special : '';
+    const artSrc = shipArtPath(fs.name);
+    return `<div class="section-header">Flagship — ${esc(fs.name)}${fs.cost ? ` · ${fs.cost}pts` : ''}</div>
+      ${artSrc ? `<div class="ship-art-hero"><img src="${artSrc}" alt="${esc(fs.name)}" loading="lazy"></div>` : ''}
+      <div class="stat-grid">
+        ${statEntries.map(s => `<div class="stat-cell">${statIcon(s.key)}<div><div class="stat-label">${s.label}</div><div class="stat-value">${esc(s.val)}</div></div></div>`).join('')}
+      </div>
+      ${weapons.length ? `<div class="weapon-table">
+        <div class="weapon-row weapon-row-header">
+          <div class="weapon-name">Weapon</div><div class="weapon-val">Lk</div><div class="weapon-val">At</div><div class="weapon-val">Dm</div><div class="weapon-val">Arc</div>
+        </div>
+        ${weapons.map(w => {
+          const t = (w.type || '').toUpperCase();
+          const tc = t === 'K' ? 'weapon-type-k' : t === 'E' ? 'weapon-type-e' : t === 'C' ? 'weapon-type-c' : '';
+          const dmg = `${w.damage || ''}${t ? `<span class="${tc}" style="margin-left:2px;font-size:9px">${t}</span>` : ''}`;
+          return `<div class="weapon-row ${tc}">
+            <div class="weapon-name">${esc(w.name)}</div><div class="weapon-val">${esc(w.lock || '')}</div>
+            <div class="weapon-val">${esc(w.attack || '')}</div><div class="weapon-val">${dmg}</div><div class="weapon-val">${esc(w.arc || '')}</div>
+          </div>${w.special && w.special !== '-' ? `<div class="weapon-special">${renderSpecialChips(w.special)}</div>` : ''}`;
+        }).join('')}
+      </div>` : ''}
+      ${specialText ? `<div class="rule-card"><div class="rule-card-text">${esc(specialText)}</div></div>` : ''}
+      ${rules.length ? rules.map(r => `<div class="rule-card"><div class="rule-card-name">${esc(r.name || r)}</div>${r.description ? `<div class="rule-card-text">${esc(r.description)}</div>` : ''}</div>`).join('') : ''}`;
+  }
   function openAdmiralDetail(i) { activeAdmiralIdx = i; navigate('screen-admiral-detail'); }
   function renderAdmiralDetail() {
     const f = activeFleet;
@@ -1466,18 +1557,25 @@
       }).join('');
     }
 
-    // Capital-ship assignment (admirals lead from a capital ship)
-    const caps = capitalShipGroups();
-    let assignHtml = `<div class="section-header">Assigned to</div>`;
-    if (caps.length) {
-      assignHtml += `<div class="loadout-section">` +
-        `<div class="loadout-option ${!a.assignedGroupId ? 'selected' : ''}" onclick="App.assignAdmiral('')">
-          <span class="loadout-option-name">Unassigned</span></div>` +
-        caps.map(c => `<div class="loadout-option ${a.assignedGroupId === c.id ? 'selected' : ''}" onclick="App.assignAdmiral('${c.id}')">
-          <span class="loadout-option-name">${esc(c.name)}</span></div>`).join('') +
-        `</div>`;
+    // Famous admirals fly their own flagship (shown as a datasheet); Generic and
+    // Faction admirals instead lead from one of the fleet's Capital ships.
+    const fs = admiralFlagship(a);
+    let assignHtml;
+    if (fs) {
+      assignHtml = flagshipDatasheet(fs);
     } else {
-      assignHtml += `<div class="empty-state-sm">No Capital ships (Medium+) to assign to yet.</div>`;
+      const caps = capitalShipGroups();
+      assignHtml = `<div class="section-header">Assigned to</div>`;
+      if (caps.length) {
+        assignHtml += `<div class="loadout-section">` +
+          `<div class="loadout-option ${!a.assignedGroupId ? 'selected' : ''}" onclick="App.assignAdmiral('')">
+            <span class="loadout-option-name">Unassigned</span></div>` +
+          caps.map(c => `<div class="loadout-option ${a.assignedGroupId === c.id ? 'selected' : ''}" onclick="App.assignAdmiral('${c.id}')">
+            <span class="loadout-option-name">${esc(c.name)}</span></div>`).join('') +
+          `</div>`;
+      } else {
+        assignHtml += `<div class="empty-state-sm">No Capital ships (Medium+) to assign to yet.</div>`;
+      }
     }
 
     document.getElementById('admiral-detail-content').innerHTML = `
@@ -1580,6 +1678,7 @@
     showActionSheet([
       { label: coachEnabled() ? 'Turn off guide' : 'Turn on guide', action: toggleCoach },
       { label: 'Copy as text', action: copyFleetText },
+      { label: 'Copy as JSON', action: copyFleetJSON },
       { label: 'Export PDF', action: exportPdf },
       { label: 'Edit name & size', action: openEditFleet },
       { label: 'Share link', action: shareFleet },
@@ -1628,6 +1727,7 @@
       if (a.admiralId) o.i = a.admiralId;
       if (a.level) o.l = a.level;
       if (a.type) o.t = a.type;
+      if (a.selectedAbilities?.length) o.sa = a.selectedAbilities;
       return o;
     });
     if (fleet.spaceStation) mini.ss = { n: fleet.spaceStation.name, c: fleet.spaceStation.cost, k: fleet.spaceStation.stationKey };
@@ -1731,6 +1831,48 @@
     } else {
       show('Select and copy:');
     }
+  }
+
+  /* ── Copy fleet as JSON (backup / power users) — desktop parity ─ */
+  function copyFleetJSON() {
+    const json = JSON.stringify(activeFleet, null, 2);
+    const show = (msg) => showSheet('Copy JSON', `<p>${msg}</p><pre class="copy-pre">${esc(json)}</pre>`);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(json).then(() => show('Copied JSON to clipboard.')).catch(() => show('Select and copy:'));
+    } else { show('Select and copy:'); }
+  }
+
+  /* ── Import a fleet from a pasted link / code / JSON — desktop parity ─ */
+  function importFleetPrompt() {
+    showSheet('Import a fleet',
+      `<p>Paste a share link, a share code, or fleet JSON — from desktop or another device.</p>
+       <textarea id="import-text" class="import-textarea" rows="5" placeholder="https://…#share/…   or   { fleet JSON }"></textarea>
+       <button class="btn btn-primary btn-block" style="margin-top:var(--sp-m)" onclick="App.doImportText()">Import fleet</button>`);
+  }
+  async function doImportText() {
+    const el = document.getElementById('import-text');
+    const raw = ((el && el.value) || '').trim();
+    if (!raw) return;
+    let fleet = null;
+    // 1) Share link or bare share code
+    const m = raw.match(/#(?:share\/|fleet=)(.+)$/);
+    const code = m ? m[1] : (/^[A-Za-z0-9\-_]+={0,2}$/.test(raw) ? raw : null);
+    if (code) fleet = decodeFleet(code);
+    // 2) Raw fleet JSON
+    if (!fleet) {
+      try {
+        const o = JSON.parse(raw);
+        if (o && o.faction && Array.isArray(o.battleGroups)) {
+          fleet = o; fleet.id = uuid(); fleet.createdAt = fleet.updatedAt = Date.now();
+        }
+      } catch (e) { /* not JSON */ }
+    }
+    if (!fleet) { showSheet('Import failed', `<p>That doesn’t look like a valid fleet link, code, or JSON.</p>`); return; }
+    closeRuleSheet();
+    await ensureFaction(fleet.faction);
+    fleets.push(fleet);
+    saveFleets();
+    openFleet(fleets.length - 1);
   }
 
   /* ── Export as PDF (printable view → browser "Save as PDF") ─ */
@@ -1939,10 +2081,11 @@
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, openStarterFleets,
     openAddGroup, filterShips, setSort, addShip,
     openGroup, changeQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow,
-    openAdmiral, addAdmiral, removeAdmiralPrompt,
+    openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral,
     openStation, addStation, removeStationPrompt,
-    overflow, fleetOverflow, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, exportPdf,
+    overflow, fleetOverflow, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
+    importFleetPrompt, doImportText,
     dismissCoach, toggleCoach,
     openRule, openStat, closeRuleSheet, closeActionSheet
   };
