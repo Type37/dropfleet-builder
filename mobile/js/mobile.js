@@ -1733,6 +1733,8 @@
         sh: g.ships.map(s => {
           const e = { c: s.groupCategory, k: s.shipKey, p: s.points };
           if (s.loadouts && Object.keys(s.loadouts).length) e.l = s.loadouts;
+          if (s.feature) e.ft = s.feature;                       // deployable feature / Genitor Tower
+          if (s.systems && s.systems.length) e.sy = s.systems;   // Resistance hardpoints
           return e;
         })
       }))
@@ -1741,9 +1743,11 @@
     if (fleet.admirals?.length) mini.as = fleet.admirals.map(a => {
       const o = { n: a.name, p: a.points };
       if (a.admiralId) o.i = a.admiralId;
+      if (a.shipKey) o.k = a.shipKey;
       if (a.level) o.l = a.level;
       if (a.type) o.t = a.type;
       if (a.selectedAbilities?.length) o.sa = a.selectedAbilities;
+      if (a.assignedGroupId) o.ag = a.assignedGroupId;
       return o;
     });
     if (fleet.spaceStation) mini.ss = { n: fleet.spaceStation.name, c: fleet.spaceStation.cost, k: fleet.spaceStation.stationKey };
@@ -1763,14 +1767,18 @@
         battleGroups: (mini.g || []).map(g => ({
           id: uuid(), name: g.n || 'Group',
           ships: (g.sh || []).map(s => ({
-            id: uuid(), groupCategory: s.c, shipKey: s.k, points: s.p, loadouts: s.l || {}
+            id: uuid(), groupCategory: s.c, shipKey: s.k, points: s.p, loadouts: s.l || {},
+            feature: s.ft || undefined, systems: s.sy || []
           }))
         })),
         createdAt: Date.now(), updatedAt: Date.now()
       };
       if (mini.ss) fleet.spaceStation = { name: mini.ss.n, cost: mini.ss.c || 0, stationKey: mini.ss.k || null };
       if (mini.as) fleet.admirals = mini.as.map(a => ({
-        name: a.n, points: a.p || 0, admiralId: a.i || null, level: a.l || 1, type: a.t || 'Generic',
+        // Famous admirals are keyed by id; desktop stores it as `k`, mobile as `i`
+        // — cross-fall-back so a fleet shared from either device resolves.
+        name: a.n, points: a.p || 0, admiralId: a.i || a.k || null, shipKey: a.k || a.i || null,
+        level: a.l || 1, type: a.t || 'Generic',
         shipName: null, selectedAbilities: a.sa || [], assignedGroupId: a.ag || null
       }));
       return fleet;

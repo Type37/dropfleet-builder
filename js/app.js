@@ -591,8 +591,9 @@ const App = (() => {
         fleet.admirals = mini.as.map(a => ({
           name: a.n,
           points: a.p || 0,
-          admiralId: a.i || null,
-          shipKey: a.k || null,
+          // Famous-admiral id: desktop stores `k`, mobile stores `i` — cross-fall-back.
+          admiralId: a.i || a.k || null,
+          shipKey: a.k || a.i || null,
           level: a.l || 1,
           type: a.t || 'Generic',
           selectedAbilities: a.sa || [],
