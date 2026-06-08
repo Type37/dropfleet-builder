@@ -1,6 +1,6 @@
 {
-  "name": "Dropfleet Fleet Builder",
-  "short_name": "Dropfleet",
+  "name": "Dropfleet Builder · Mobile",
+  "short_name": "DFC Mobile",
   "description": "Build Dropfleet Commander fleets on your phone — all six factions, full stats, rules and validation. Works offline at the table.",
   "start_url": "./",
   "scope": "./",
