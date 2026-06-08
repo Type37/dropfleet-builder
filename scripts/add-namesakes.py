@@ -146,18 +146,88 @@ NAMESAKES = {
 }
 
 
+# UCM hulls are named for Earth cities (and a few historical figures). These
+# definitions are the user's own hand-written write-ups, transcribed from the
+# UCM_ALL TAROT/cards PDF on their Neocities site. Keyed by the city phrase the
+# ship name starts with, so multi-word "New X" cities each resolve correctly.
+NAMESAKES["ucm"] = {
+    "Santiago": "Santiago de Chile was founded in 1541 by Spanish conquistador Pedro de Valdivia on the floodplain between the Mapocho and Maipo rivers; its full official name is Santiago de Nueva Extremadura.",
+    "Lysander": "Lysander of Sparta, ancient Greece, was the navarch who destroyed the Athenian fleet at Aegospotami in 405 BC, ending the Peloponnesian War and becoming the first Greek general to receive divine honours in his own lifetime.",
+    "Toulon": "Toulon is a port city on the Mediterranean coast of Provence in southern France, home to France's principal naval base since Louis XIV ordered its construction in the seventeenth century.",
+    "Taipei": "Taipei became the capital of Taiwan in 1949 when the Republic of China government retreated from the mainland, and today sits in a basin surrounded by volcanic highlands at the northern tip of the island.",
+    "Jakarta": "Jakarta served as the capital of Indonesia from independence in 1945 until 2024, when the government formally relocated to the new city of Nusantara on Borneo; Jakarta remains the country's largest city and commercial centre.",
+    "Lima": "Lima, Peru served as the seat of the Spanish Viceroyalty of Peru for nearly three centuries — the most powerful administrative centre on the Pacific coast of South America.",
+    "Detroit": "Detroit was founded by French explorer Antoine de la Mothe Cadillac in 1701 on the strait between Lakes Erie and Huron, and a century later became the manufacturing centre of the American automobile industry.",
+    "Sheffield": "Sheffield is an industrial city in South Yorkshire, England, that became synonymous with steel production during the nineteenth century industrial revolution and lent its name to Sheffield plate silverware worldwide.",
+    "New Orleans": "New Orleans was founded by French colonists in 1718 on a crescent of land between Lake Pontchartrain and the Mississippi River, and remained the most significant port in North America for much of the nineteenth century.",
+    "Reykjavik": "Reykjavik, Iceland takes its name from the Old Norse for 'Smoky Bay', after the geothermal steam the first Norse settlers observed rising from hot springs on the shore.",
+    "Vienna": "Vienna has served as the capital of Austria since the thirteenth century, and from 1558 to 1806 was the seat of the Holy Roman Emperors; the city's Ringstrasse boulevard was constructed in the 1860s to project imperial prestige.",
+    "Istanbul": "Istanbul, Turkey has been continuously inhabited for over two thousand years, serving successively as Byzantium, Constantinople, and its current name; it is the only city in the world that spans two continents.",
+    "Havana": "Havana, Cuba was established as a Spanish colonial port in 1519 and served for centuries as the principal assembly point for the treasure fleets carrying silver from the Americas back to Spain.",
+    "Oslo": "Oslo has been the capital of Norway since 1814, though the city was called Christiania from 1624 until 1925 after King Christian IV ordered its reconstruction following a fire; it sits at the head of the Oslofjord.",
+    "Nuuk": "Nuuk is the capital and largest city of Greenland, situated at the mouth of the Nuup Kangerlua fjord; with a population of under twenty thousand, it is one of the smallest capitals in the world.",
+    "Caracas": "Caracas, Venezuela sits in a narrow Andean valley some nine hundred metres above the Caribbean coast, shielded from the humid lowlands by a wall of mountains. The city takes its name from the indigenous Caracas people who inhabited the valley before Spanish contact.",
+    "Kyiv": "Kyiv is the capital and largest city of Ukraine, one of the oldest cities in Eastern Europe, founded on the high right bank of the Dnieper River; it served as the centre of the medieval Kievan Rus state from the ninth century.",
+    "Vancouver": "Vancouver, Canada was founded in 1886 as the western terminus of the Canadian Pacific Railway; it sits on a peninsula between Burrard Inlet and the Fraser River delta, with the Coast Mountains as its backdrop.",
+    "Boston": "Boston was founded by Puritan colonists in 1630 on the Shawmut Peninsula of Massachusetts Bay, and served as the intellectual and political centre of the American independence movement in the 1770s.",
+    "New Cairo": "New Cairo, Egypt is a planned city on the desert plateau east of historic Cairo, begun in the 1990s to relieve pressure on the ancient capital; the original Cairo was founded in 969 AD by the Fatimid caliphate beside the ruins of earlier Roman and Arab settlements.",
+    "Osaka": "Osaka has been Japan's commercial capital since the Edo period, when the city's merchant class accumulated enough wealth to produce a distinct urban culture; it sits at the eastern end of the Seto Inland Sea on the Kansai plain.",
+    "Madrid": "Madrid, Spain sits at nearly seven hundred metres above sea level on the Castilian Plateau, making it the highest capital city in the European Union. Philip II chose it as his seat of government in 1561 not for strategic or commercial reasons, but simply because it lay at the geographic centre of the Iberian Peninsula.",
+    "Berlin": "Berlin became the capital of a unified Germany in 1871, was divided between Allied occupation zones after 1945, and reunified only in 1990; the Brandenburg Gate stood in no-man's land between East and West for twenty-eight years.",
+    "Rio": "Rio de Janeiro, Brazil was founded by Portuguese colonists in 1565 on the southern shore of Guanabara Bay, served as the capital of Brazil until 1960, and is home to the largest urban forest in the world at Tijuca National Park.",
+    "Bucharest": "Bucharest became the capital of Wallachia in 1659, and of unified Romania in 1862; its early twentieth century Francophile architecture earned it the nickname Little Paris before large-scale demolition under Ceausescu's 1980s reconstruction programme.",
+    "Ulaanbaatar": "Ulaanbaatar is the capital of Mongolia and the coldest national capital on Earth by average annual temperature, founded in 1639 as a nomadic Buddhist monastic centre before being permanently settled in 1778 on the banks of the Tuul River; it holds roughly half of Mongolia's entire population.",
+    "Bruges": "Bruges, Belgium was medieval Europe's wealthiest trading city, the northern terminus of the Hanseatic League's commercial network in the fourteenth century; the silting of its harbour in the late fifteenth century ended its dominance overnight.",
+    "Geneva": "Geneva sits at the southwestern tip of Lake Geneva on the Swiss Plateau; it became the centre of Protestant reform under John Calvin in the sixteenth century and later the seat of the League of Nations.",
+    "Glasgow": "Glasgow grew from a small medieval cathedral town into Britain's second city during the eighteenth and nineteenth centuries, driven by transatlantic tobacco and cotton trading and then by shipbuilding on the Clyde.",
+    "Warsaw": "Warsaw became the capital of Poland in 1596, was systematically destroyed by Nazi forces in 1944 following the Warsaw Uprising, and was rebuilt almost stone by stone from historic records over the following decades.",
+    "New Mombasa": "Mombasa has been Kenya's principal port for over a millennium, occupied by Arab traders, Portuguese colonialists, and the British in succession before Kenyan independence in 1963; the island city is connected to the mainland by the Makupa Causeway. The name New Mombasa will be familiar to veterans of a certain twenty-sixth century war.",
+    "Seattle": "Seattle was incorporated in 1869 on a steep hillside above Puget Sound; the city was almost entirely rebuilt after a fire destroyed its wooden downtown in 1889, this time in brick and stone.",
+    "Las Vegas": "Las Vegas takes its name from the Spanish for 'The Meadows', a reference to artesian wells that once made it a rare source of water on desert crossings.",
+    "Edmonton": "Edmonton, Alberta was founded as a Hudson's Bay Company trading post in 1795 and later the staging point for the Klondike Gold Rush of 1897; it became Alberta's provincial capital in 1905 and is the northernmost major city in North America.",
+    "Vilnius": "Vilnius has been the capital of Lithuania since the fourteenth century, when Grand Duke Gediminas moved his court there; its remarkably intact baroque old town is among the largest in Europe.",
+    "Busan": "Busan is South Korea's second city and the country's primary seaport, situated on the southeastern tip of the peninsula where the Korea Strait narrows between Korea and Japan.",
+    "Yokohama": "Yokohama, Japan was a small fishing village until US Commodore Matthew Perry forced the country to open the port to foreign trade in 1854; it grew into Japan's largest port and the gateway for Western goods and ideas into the Meiji-era country.",
+    "Rome": "Rome, Italy was traditionally founded in 753 BC on seven hills beside the Tiber River, grew to govern an empire stretching from Scotland to Mesopotamia, and has been continuously inhabited longer than any other city in Western Europe.",
+    "Perth": "Perth was founded in 1829 on the Swan River in Western Australia as a free settlement; it is the most geographically isolated major city on Earth, closer to Singapore than to Sydney, and grew rapidly after gold was discovered in the hinterland in 1893.",
+    "Johannesburg": "Johannesburg, South Africa was established in 1886 as a mining camp after the discovery of the world's largest gold deposit on the Witwatersrand; it grew into sub-Saharan Africa's largest city within a generation.",
+    "San Francisco": "San Francisco occupies one of the most geographically dramatic sites on the Pacific coast, wrapped around a deep natural harbour on a narrow peninsula of steep hills. The city was largely destroyed by earthquake and fire in 1906 and rebuilt within a decade — its streetcars were running again within three years of the disaster.",
+    "Siam": "Siam was the name of the kingdom centred on the Chao Phraya River basin in Southeast Asia from the fourteenth century until 1939, when the government renamed the country Thailand; the historical name persisted in foreign usage for decades afterward.",
+    "Venice": "Venice, Italy is the only major city in the world built entirely on water — its 118 islands connected by roughly 400 bridges over 150 canals. The city has been slowly sinking into the Adriatic since its construction, and the threat of flooding has grown acute enough that a system of mobile floodgates now seals the lagoon during high-water events.",
+    "Milwaukee": "By the twenty-first century, Milwaukee had settled into being a fairly small city in Wisconsin — industrial heritage, good breweries, lake views. In 2025 it also became the home of Adepticon, the world's largest tabletop gaming convention.",
+    "Rotterdam": "Rotterdam, Netherlands handles more cargo tonnage than any other port in Europe, a position built on its location at the mouth of the Rhine-Meuse-Scheldt delta; much of the city was destroyed by German bombing in May 1940 and rebuilt in a modernist style.",
+    "New Dubai": "Dubai, United Arab Emirates was a small pearl-diving settlement at the mouth of a creek on the Persian Gulf until oil revenues in the 1960s funded the construction of a modern port; the city has since built the tallest building on Earth and islands visible from orbit.",
+    "Tokyo": "Tokyo, Japan was a small fishing village called Edo until 1603, when the Tokugawa shogunate established its seat of government there; it became the imperial capital in 1869 and is today the most populous metropolitan area on Earth.",
+    "New York": "New York was founded as New Amsterdam by the Dutch West India Company in 1626 on the southern tip of Manhattan Island, captured by the English in 1664, and grew into the most populous city in the Western world.",
+    "Beijing": "Beijing, China has been the seat of imperial power for most of the past seven centuries and is home to the Forbidden City, a palace complex covering 72 hectares and containing nearly a thousand individual buildings. The name translates as 'Northern Capital', distinguishing it from Nanjing, the Southern Capital, which held the seat of power during the intervening periods.",
+    "Hong Kong": "Hong Kong was a British Crown Colony from 1842 until 1997, when sovereignty transferred to China; the territory's deep natural harbour and low-tax trade policy made it one of the world's highest-density commercial centres.",
+    "Babylon": "Babylon stood on the Euphrates River in what is now central Iraq, was the largest city in the world under Nebuchadnezzar II in the sixth century BC, and gave its name to a civilisation; Alexander the Great died within its walls in 323 BC.",
+    "Delhi": "Delhi, India has served as the capital of successive empires on the Indo-Gangetic Plain for over a millennium; the city's layered history produced at least seven distinct urban centres, with New Delhi built by the British as an eighth from 1911.",
+    "Hanoi": "Hanoi has been the capital of Vietnam for most of the past thousand years, first founded as the Ly dynasty capital in 1010 on a bend of the Red River; the city's name means 'inside the river bend'.",
+    "Thebes": "Thebes was the most powerful city-state in Greece during the fourth century BC, home to the Sacred Band of Thebes; its earlier Egyptian namesake served as Egypt's capital for much of the New Kingdom period and is now known as Luxor.",
+    "Carthage": "Carthage was a Phoenician trading colony founded near modern Tunis, Tunisia around 814 BC, became Rome's most dangerous rival for control of the western Mediterranean, and was destroyed by Scipio Aemilianus in 146 BC after a three-year siege.",
+    "Byzantium": "Byzantium, on the European shore of the Bosphorus where the strait narrows to less than a kilometre, is one of the most strategically coveted sites in the ancient world. The settlement was renamed Constantinople by Constantine the Great in 330 AD, became Istanbul after the Ottoman conquest of 1453, and has never stopped being one of the most important cities on Earth under any of its names.",
+    "Washington": "Washington DC was designed from scratch as a purpose-built capital in 1790, sited on the Potomac River between Maryland and Virginia at the insistence of George Washington; the city was burned by British forces in 1814 and rebuilt within a year.",
+    "London": "London has been England's capital since the Romans founded Londinium in approximately 43 AD on the north bank of the Thames; it became the largest city in the world during the nineteenth century and remains the most visited city on Earth.",
+}
+
+
 def main():
     for faction, table in NAMESAKES.items():
         path = os.path.join(ROOT, f"faction-{faction}.json")
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
+        # Longest key first so "New Orleans" wins over any bare "New".
+        keys = sorted(table, key=len, reverse=True)
         added = 0
         for g in data.get("groups", []):
             ship = g.get("ship", {})
             name = ship.get("name", "")
-            key = name.split()[0] if name else ""
-            if key in table and not ship.get("namesake"):
-                ship["namesake"] = table[key]
+            if ship.get("namesake"):
+                continue
+            match = next((k for k in keys if name.startswith(k)), None)
+            if match:
+                ship["namesake"] = table[match]
                 added += 1
         with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
