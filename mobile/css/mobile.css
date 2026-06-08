@@ -1061,6 +1061,31 @@ input, textarea, select { font: inherit; }
   filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
 }
 
+/* Fully-modular ships (Resistance cruisers/frigates built entirely from chosen
+   systems): the art is just a base-hull placeholder, so desaturate it to
+   signal "blank until configured" — mirrors the desktop ship-img-modular. */
+.ship-thumb.ship-img-modular img {
+  filter: grayscale(1) opacity(0.5);
+}
+.ship-art-hero.ship-img-modular {
+  position: relative;
+}
+.ship-art-hero.ship-img-modular img {
+  filter: grayscale(1) opacity(0.5) drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+}
+.modular-art-note {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--sp-xs) var(--sp-m);
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: var(--text-caption2);
+  text-align: center;
+  z-index: 1;
+}
+
 
 /* ── 30. Points Badge (larger, gold accent) ───────────── */
 .pts-badge-lg {

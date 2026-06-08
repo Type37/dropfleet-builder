@@ -2158,11 +2158,16 @@ const App = (() => {
     return /Deployable Feature/i.test((dbShip.rulesText || '') + ' ' + ruleNames);
   }
 
-  // A ship is "fully modular" when it has a Systems selection and NO base
-  // weapons — its entire armament comes from chosen options, so the art is just
-  // a base-hull placeholder (we desaturate it to make that clear).
+  // A ship is "fully modular" when it has a Systems selection and NO fixed
+  // loadout at all — no base weapons AND no base launch loads. Its entire
+  // armament comes from chosen options, so the art is just a base-hull
+  // placeholder (we desaturate it to make that clear). Ships with a fixed load
+  // (e.g. the Strike Carrier's Dropships) or a fixed weapon (the Interstellar
+  // Dreadnoughts) are NOT fully modular.
   function isFullyModular(dbShip) {
-    return !!(dbShip && dbShip.systemSelection && (!dbShip.weapons || dbShip.weapons.length === 0));
+    return !!(dbShip && dbShip.systemSelection
+      && (!dbShip.weapons || dbShip.weapons.length === 0)
+      && (!dbShip.loads || dbShip.loads.length === 0));
   }
 
   function renderFeatureStats(feat) {

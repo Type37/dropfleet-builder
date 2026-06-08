@@ -429,6 +429,17 @@
   }
 
   /* ── Systems / Hardpoints (Resistance) ─────────────────── */
+  // A ship is "fully modular" when it has a Systems selection and NO fixed
+  // loadout at all — no base weapons AND no base launch loads. Its armament is
+  // built entirely from chosen systems, so the art is just a base-hull
+  // placeholder. We desaturate it to signal "blank until configured" (mirrors
+  // the desktop ship-img-modular treatment). Ships with a fixed load (e.g. the
+  // Strike Carrier's Dropships) are NOT fully modular.
+  function isFullyModular(ship) {
+    return !!(ship && ship.systemSelection
+      && (!ship.weapons || ship.weapons.length === 0)
+      && (!ship.loads || ship.loads.length === 0));
+  }
   function systemsListFor(ship, factionKey) {
     const seln = ship && ship.systemSelection;
     if (!seln) return null;
@@ -829,8 +840,9 @@
         const qty = g.ships.length;
         const gp = groupPoints(f, g);
         const art = shipArtPath(db?.name);
+        const modCls = isFullyModular(db) ? ' ship-img-modular' : '';
         return `<div class="list-row" onclick="App.openGroup(${i})">
-          ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
+          ${art ? `<div class="ship-thumb${modCls}"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
           <div class="list-row-content">
             <div class="list-row-title">${esc(db?.name || 'Unknown')}${qty > 1 ? ' ×' + qty : ''}</div>
             <div class="list-row-sub">${gp}pts · ${db?.tonnage || CATEGORY_LABELS[s.groupCategory] || ''}</div>
@@ -931,8 +943,10 @@
       const tags = [];
       if (ship.isUnique) tags.push('<span class="ship-tag">Unique</span>');
       if (ship.isRare) tags.push('<span class="ship-tag">Rare</span>');
+      if (isFullyModular(ship)) tags.push('<span class="ship-tag">Modular</span>');
+      const modCls = isFullyModular(ship) ? ' ship-img-modular' : '';
       return `<div class="list-row" onclick="App.addShip('${g.id}','${g.category}')">
-        ${art ? `<div class="ship-thumb ship-thumb-lg"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
+        ${art ? `<div class="ship-thumb ship-thumb-lg${modCls}"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
             <span class="list-row-title">${esc(ship.name)} ${tags.join('')}</span>
@@ -1018,7 +1032,7 @@
     const sysSel = ship.systemSelection;
 
     document.getElementById('group-detail-content').innerHTML = `
-      ${artSrc ? `<div class="ship-art-hero"><img src="${artSrc}" alt="${esc(ship.name)}" loading="lazy"></div>` : ''}
+      ${artSrc ? `<div class="ship-art-hero${isFullyModular(ship) ? ' ship-img-modular' : ''}">${isFullyModular(ship) ? '<div class="modular-art-note">Base hull shown — your ship’s look depends on the systems you choose</div>' : ''}<img src="${artSrc}" alt="${esc(ship.name)}" loading="lazy"></div>` : ''}
       <div class="detail-header">
         <div>
           <div class="detail-name">${esc(ship.name)}${qty > 1 ? ' ×' + qty : ''}</div>
