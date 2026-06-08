@@ -1635,3 +1635,25 @@ body.sheet-open .sheet-scrim {
   color: var(--fg4);
   margin-left: 1px;
 }
+
+
+/* ── 50. Site footer (uniform across WarLore builders) ─── */
+.m-footer {
+  padding: var(--sp-l) var(--sp-l) calc(72px + var(--sp-l));  /* clear the fixed Create button */
+  text-align: center;
+  font-size: var(--text-caption1);
+  line-height: 1.7;
+  color: var(--fg3);
+  border-top: 1px solid var(--stroke2);
+  margin-top: var(--sp-s);
+}
+.m-footer-title { font-family: var(--font-display); font-weight: var(--weight-bold); color: var(--fg2); }
+.m-footer a { color: var(--navy); text-decoration: none; }
+.m-footer a:active { text-decoration: underline; }
+.m-footer-credit {
+  margin-top: var(--sp-xs);
+  font-family: var(--font-condensed);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: var(--text-caption2);
+}

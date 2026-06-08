@@ -5152,3 +5152,35 @@ h1, h2, h3, h4, h5, h6 {
   .category-tab:active { transform: scale(0.96); }
   .ship-card:active { transform: scale(0.98); }
 }
+
+/* ── Site footer (uniform across WarLore builders, themed to DFC) ── */
+.game-info-footer {
+  border-top: 1px solid var(--stroke);
+  background: var(--paper-alt);
+  padding: var(--sp-md) var(--sp-lg);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+.gif-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-sm);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.gif-title { font-weight: var(--weight-bold); color: var(--ink-soft); font-family: var(--font-display); }
+.gif-sep { color: var(--ink-faint); }
+.game-info-footer a { color: var(--navy); text-decoration: none; }
+.game-info-footer a:hover { text-decoration: underline; }
+.gif-builder { margin-left: auto; }
+.gif-builder a {
+  font-family: var(--font-condensed);
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+@media (max-width: 600px) {
+  .gif-inner { justify-content: center; gap: 4px var(--sp-sm); }
+  .gif-builder { margin-left: 0; flex-basis: 100%; text-align: center; margin-top: var(--sp-xs); }
+}

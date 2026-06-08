@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="css/mobile.css">
 <!-- Privacy-friendly, cookieless analytics (no personal data). Page load auto-counts; screen changes counted in mobile.js. -->
 <script data-goatcounter="https://warlore.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+        async src="../js/count.js"></script>
 </head>
 <body>
 
@@ -43,6 +43,10 @@
   <div id="fleet-list-rows">
     <!-- Populated by JS -->
   </div>
+  <footer class="m-footer">
+    <div><span class="m-footer-title">Dropfleet Commander</span> · by <a href="https://www.ttcombat.com/games/dropfleet-commander" target="_blank" rel="noopener">TTCombat</a></div>
+    <div class="m-footer-credit">Fleet builder by <a href="https://jetwong.neocities.org/" target="_blank" rel="noopener">WarLore</a> · <a href="https://github.com/Type37/dropfleet-builder" target="_blank" rel="noopener">Source on GitHub</a></div>
+  </footer>
   <div class="bottom-action">
     <button class="btn btn-primary btn-block" onclick="App.openCreateFleet()">Create Fleet</button>
     <button class="btn-textlink" onclick="App.openStarterFleets()">or load a Starter Set</button>
