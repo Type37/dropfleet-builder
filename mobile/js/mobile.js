@@ -39,12 +39,12 @@
 
   // One-line beginner descriptors + ordering (beginner-friendly first)
   const FACTION_INFO = {
-    ucm:        { name: 'UCM', desc: 'Durable human navy. Forgiving, great for beginners.', order: 1 },
-    scourge:    { name: 'Scourge', desc: 'Aggressive energy weapons, fragile. High risk/reward.', order: 2 },
-    phr:        { name: 'PHR', desc: 'Tough, elite, few ships. Slow but punishing.', order: 3 },
-    shaltari:   { name: 'Shaltari', desc: 'Shielded glass cannons. Tricky, rewards skill.', order: 4 },
-    resistance: { name: 'Resistance', desc: 'Scrappy human rebels. Flexible, unconventional.', order: 5 },
-    bioficer:   { name: 'Bioficers', desc: 'Advanced bio-ships. Unusual rules — not for a first game.', order: 6 }
+    ucm:        { name: 'UCM', order: 1 },
+    scourge:    { name: 'Scourge', order: 2 },
+    phr:        { name: 'PHR', order: 3 },
+    shaltari:   { name: 'Shaltari', order: 4 },
+    resistance: { name: 'Resistance', order: 5 },
+    bioficer:   { name: 'Bioficers', order: 6 }
   };
 
   const GAME_SIZES = {
