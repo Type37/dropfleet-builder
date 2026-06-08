@@ -862,7 +862,10 @@ input, textarea, select { font: inherit; }
 
 /* ── 23. Modal Overlay ─────────────────────────────────── */
 .modal-overlay {
-  display: none;
+  /* Always laid out (display:flex) but hidden via opacity/visibility so the
+     backdrop can FADE and the panel can RISE on open AND close — display
+     toggling can't transition, which made modals snap. */
+  display: flex;
   position: fixed;
   inset: 0;
   z-index: 200;
@@ -870,8 +873,14 @@ input, textarea, select { font: inherit; }
   align-items: flex-start;
   justify-content: center;
   padding: var(--sp-xxxl) var(--sp-l);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-normal) var(--ease-standard);
 }
-.modal-overlay.active { display: flex; }
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
 
 .modal-panel {
   background: var(--white);
@@ -881,7 +890,12 @@ input, textarea, select { font: inherit; }
   max-height: calc(100dvh - 64px);
   overflow-y: auto;
   box-shadow: var(--shadow28);
+  transform: translateY(14px) scale(0.98);
+  opacity: 0;
+  transition: transform var(--duration-gentle) var(--ease-decelerate),
+              opacity var(--duration-gentle) var(--ease-decelerate);
 }
+.modal-overlay.active .modal-panel { transform: none; opacity: 1; }
 
 .modal-header {
   display: flex;
