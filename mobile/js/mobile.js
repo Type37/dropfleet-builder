@@ -1369,7 +1369,8 @@
     const size = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
     const maxLevel = size.maxAdmiralLevel || 4;
 
-    // Generic admirals (level/cost only) — parity with desktop.
+    // Generic admirals — the rulebook's L2/L3/L4 table (any number; no special
+    // abilities, so we DON'T list an abilities line). Not fabricated.
     const genericRows = GENERIC_ADMIRAL_LEVELS.filter(l => l.level <= maxLevel).map(l =>
       `<div class="list-row" onclick="App.addGenericAdmiral(${l.level}, ${l.cost})">
         <div class="ship-thumb ship-thumb-admiral" aria-hidden="true">★</div>
@@ -1378,16 +1379,23 @@
             <span class="list-row-title">Level ${l.level} Admiral</span>
             <span class="list-row-pts">${l.cost}pts</span>
           </div>
-          <div class="list-row-sub">Generic · no special abilities</div>
+          <div class="list-row-sub">Take any number · adds Level for AP &amp; initiative</div>
         </div>
       </div>`).join('');
 
-    const admirals = (faction.admirals || []).slice().sort((a, b) => (a.level || 0) - (b.level || 0));
-    const factionRows = admirals.map(a => {
+    // One row for a Faction or Famous admiral, showing innate abilities (#2),
+    // how many extra they pick from the faction table (#3), and — for famous —
+    // their flagship's name + size class (#4).
+    const admRow = (a) => {
       const fs = a.flagship;
       const total = fs ? (a.cost + fs.cost) : a.cost;
       const art = admiralArtPath(a.name) || (fs ? shipArtPath(fs.name) : null);
       const overLevel = a.level > size.maxAdmiralLevel;
+      const sizeClass = (fs && fs.category) ? (CATEGORY_LABELS[fs.category] || '') : '';
+      const flagshipStr = fs ? ` · ${esc(fs.name)}${sizeClass ? ' · ' + sizeClass : ''}` : '';
+      const innate = (a.abilities || []).map(x => x.name).filter(Boolean);
+      const picks = a.abilityPicks || 0;
+      const sub = `Level ${a.level}${a.isFamous ? ' · Famous' : ''}${flagshipStr}${overLevel ? ` · exceeds ${size.label} cap` : ''}`;
       return `<div class="list-row ${overLevel ? 'row-disabled' : ''}" onclick="${overLevel ? '' : `App.addAdmiral('${a.id}')`}">
         ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
@@ -1395,14 +1403,21 @@
             <span class="list-row-title">${esc(a.name)}</span>
             <span class="list-row-pts">${total}pts</span>
           </div>
-          <div class="list-row-sub">Level ${a.level}${a.isFamous ? ' · Famous' : ''}${fs ? ' · ' + esc(fs.name) : ''}${overLevel ? ` · exceeds ${size.label} cap` : ''}</div>
+          <div class="list-row-sub">${sub}</div>
+          ${innate.length ? `<div class="list-row-abilities">${innate.map(n => `<span class="ability-tag">${esc(n)}</span>`).join('')}</div>` : ''}
+          ${picks > 0 ? `<div class="list-row-picks">+ ${picks} ability pick${picks > 1 ? 's' : ''} from the ${esc(faction.name || 'faction')} table</div>` : ''}
         </div>
       </div>`;
-    }).join('');
+    };
+
+    const sorted = (faction.admirals || []).slice().sort((a, b) => (a.level || 0) - (b.level || 0));
+    const factionRows = sorted.filter(a => !a.isFamous).map(admRow).join('');
+    const famousRows = sorted.filter(a => a.isFamous).map(admRow).join('');
 
     document.getElementById('admiral-list').innerHTML =
-      `<div class="section-header">Generic admiral</div>${genericRows}` +
-      `<div class="section-header">Named admirals</div>${factionRows}`;
+      `<div class="section-header">Generic admirals</div>${genericRows}` +
+      (factionRows ? `<div class="section-header">Faction admirals · choose one Faction or Famous</div>${factionRows}` : '') +
+      (famousRows ? `<div class="section-header">Famous admirals · choose one Faction or Famous</div>${famousRows}` : '');
   }
   function addGenericAdmiral(level, cost) {
     const f = activeFleet;
@@ -1497,7 +1512,8 @@
     const rules = fs.specialRules || [];
     const specialText = stats.special && stats.special !== '-' ? stats.special : '';
     const artSrc = shipArtPath(fs.name);
-    return `<div class="section-header">Flagship — ${esc(fs.name)}${fs.cost ? ` · ${fs.cost}pts` : ''}</div>
+    const sizeClass = fs.category ? (CATEGORY_LABELS[fs.category] || '') : '';
+    return `<div class="section-header">Flagship — ${esc(fs.name)}${sizeClass ? ' · ' + sizeClass : ''}${fs.cost ? ` · ${fs.cost}pts` : ''}</div>
       ${artSrc ? `<div class="ship-art-hero"><img src="${artSrc}" alt="${esc(fs.name)}" loading="lazy"></div>` : ''}
       <div class="stat-grid">
         ${statEntries.map(s => `<div class="stat-cell">${statIcon(s.key)}<div><div class="stat-label">${s.label}</div><div class="stat-value">${esc(s.val)}</div></div></div>`).join('')}

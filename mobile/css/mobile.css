@@ -1451,6 +1451,30 @@ body.sheet-open .sheet-scrim {
   -webkit-user-select: all;
   user-select: all;
 }
+/* Admiral picker — innate abilities + table-pick count */
+.list-row-abilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 5px;
+}
+.ability-tag {
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.02em;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--navy-subtle, rgba(27,58,92,0.10));
+  color: var(--navy, #1b3a5c);
+  white-space: nowrap;
+}
+.list-row-picks {
+  margin-top: 4px;
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption2);
+  color: var(--gold-dark, #8a6d1f);
+}
 .import-textarea {
   width: 100%;
   margin-top: var(--sp-m);

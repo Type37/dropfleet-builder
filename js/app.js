@@ -289,6 +289,7 @@ const App = (() => {
           ability_picks: a.abilityPicks || 1,
           ship_name: fs?.name || null,
           className: fs?.className || null,
+          shipCategory: fs?.category || null,
           scan: fs?.stats?.scan, sig: fs?.stats?.sig,
           thrust: fs?.stats?.thrust, hull: fs?.stats?.hull,
           es: fs?.stats?.es, ks: fs?.stats?.ks,
@@ -3113,7 +3114,7 @@ const App = (() => {
                 <span class="badge badge-gold">${admiral.points} pts</span>
                 ${admiral.ship_cost ? `<span class="badge badge-neutral">Ship: ${admiral.ship_cost} pts</span>` : ''}
               </div>
-              ${admiral.tonnage ? `<div style="margin-top:var(--sp-xs);font-size:var(--text-xs);color:var(--ink-muted)">Flagship: ${esc(admiral.tonnage)} tonnage</div>` : ''}
+              ${admiral.ship_name ? `<div style="margin-top:var(--sp-xs);font-size:var(--text-xs);color:var(--ink-muted)">Flagship: ${esc(admiral.ship_name)}${admiral.shipCategory ? ' · ' + (CATEGORY_LABELS[admiral.shipCategory] || '') : ''}</div>` : ''}
             </div>
           </div>
           ${abilities.length > 0 ? `<div style="margin-top:var(--sp-md);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${esc(a.cost)})` : ''}${a.effect ? ' — ' + esc(a.effect) : ''}</div>`).join('')}</div>` : ''}
@@ -3340,7 +3341,8 @@ const App = (() => {
         const flagship = admiralGroup?.ships?.[a.shipKey];
         if (flagship) {
           const fsName = flagship.ship_name || flagship.className || (flagship.tonnage ? flagship.tonnage + ' Flagship' : 'Flagship');
-          const fsSub = [flagship.className && flagship.className !== fsName ? flagship.className : '', flagship.ship_cost ? flagship.ship_cost + ' pts' : ''].filter(Boolean).join(' · ');
+          const fsSize = flagship.shipCategory ? (CATEGORY_LABELS[flagship.shipCategory] || '') : '';
+          const fsSub = [fsSize, flagship.className && flagship.className !== fsName ? flagship.className : '', flagship.ship_cost ? flagship.ship_cost + ' pts' : ''].filter(Boolean).join(' · ');
           const img = flagship.image ? `<img src="${esc(flagship.image)}" alt="" class="admiral-flagship-art" loading="lazy" onerror="this.style.display='none'">` : '';
           const wpns = flagship.weapons || [];
           const wpnHtml = wpns.length ? `<div class="weapon-list">${renderWeaponHeader()}${wpns.map(renderWeaponRow).join('')}</div>` : '';
@@ -3631,9 +3633,10 @@ const App = (() => {
             const fsp = factionInfo?.groups?.famous_admirals?.ships?.[a.shipKey];
             if (fsp) {
               const fsName = fsp.ship_name || fsp.className || (fsp.tonnage ? fsp.tonnage + ' Flagship' : 'Flagship');
+              const fsSize = fsp.shipCategory ? (CATEGORY_LABELS[fsp.shipCategory] || '') : '';
               const wpns = fsp.weapons || [];
               flagshipHtml = `<div class="print-admiral-flagship">
-                <div class="print-admiral-ability-sublabel">Flagship — ${esc(fsName)}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
+                <div class="print-admiral-ability-sublabel">Flagship — ${esc(fsName)}${fsSize ? ' · ' + fsSize : ''}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
                 ${renderStatGrid(fsp)}
                 ${wpns.length ? `<div class="weapon-list">${renderWeaponHeader()}${wpns.map(renderWeaponRow).join('')}</div>` : ''}
                 ${(fsp.specialRuleDetails || []).length ? `<div class="print-rules-list">${fsp.specialRuleDetails.map(r => `<span class="print-rule">${esc(r.name)}${r.description ? `: ${esc(r.description)}` : ''}</span>`).join('')}</div>` : ''}
