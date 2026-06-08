@@ -3,7 +3,7 @@
 // populating the cache as resources are fetched.
 // Bump this on every deploy so existing clients purge the old cache on activate
 // (the app updates frequently — stale assets must not survive a new build).
-const CACHE = 'dfc-cache-v6';
+const CACHE = 'dfc-cache-v7';
 // Same-origin code/data that MUST be fresh when online. Network-first alone is
 // not enough: fetch() still consults the browser HTTP cache, so a client can
 // keep running a stale app.js for as long as GitHub Pages' cache headers allow.
@@ -21,7 +21,13 @@ const CORE = [
   './assets/fonts/Arkhip.woff2',
   './assets/logos/dfc_logo.webp',
   './assets/logos/dfc_logo_text.webp',
-  './manifest.webmanifest'
+  './manifest.webmanifest',
+  // Mobile sub-app shell (so /mobile/ works offline too)
+  './mobile/',
+  './mobile/index.html',
+  './mobile/css/mobile.css',
+  './mobile/js/mobile.js',
+  './mobile/manifest.webmanifest'
 ];
 
 self.addEventListener('install', (e) => {
@@ -41,7 +47,12 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return; // let cross-origin (fonts CDN) pass through
-  if (url.pathname.includes('/mobile/')) return; // mobile sub-app manages itself
+
+  // The root SW controls the whole origin — desktop AND the /mobile/ sub-app.
+  // Both use the same strategy: network-first for fresh content when online,
+  // falling back to cache when offline (so each works at the table with no signal).
+  const isMobile = url.pathname.includes('/mobile/');
+  const offlineShell = isMobile ? './mobile/index.html' : './index.html';
 
   // Navigations and code/data: bypass the HTTP cache so clients always run the
   // latest build when online. Everything else: ordinary network-first.
@@ -58,6 +69,6 @@ self.addEventListener('fetch', (e) => {
         }
         return res;
       })
-      .catch(() => caches.match(req).then(hit => hit || caches.match('./index.html')))
+      .catch(() => caches.match(req).then(hit => hit || caches.match(offlineShell)))
   );
 });

@@ -1893,6 +1893,12 @@
     if (search) search.addEventListener('input', () => renderShipPicker());
     const fp = document.getElementById('new-fleet-faction');
     if (fp) fp.addEventListener('change', updateFactionDesc);
+
+    // Register the root service worker (it controls the whole origin, including
+    // /data/ and /assets/ which sit above /mobile/) so the app works offline.
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../sw.js').catch(() => {});
+    }
   }
 
   /* ── Public API ────────────────────────────────────────── */
