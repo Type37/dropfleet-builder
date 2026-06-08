@@ -1508,3 +1508,61 @@ body.sheet-open .sheet-scrim {
   font-style: italic;
   color: var(--fg4);
 }
+
+
+/* ── 47. Guided coach banner ───────────────────────────── */
+.coach {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-s);
+  padding: var(--sp-m) var(--sp-l);
+  background: #fbf6e9;                 /* warm gold tint */
+  border-bottom: 1px solid #efe4c4;
+}
+.coach-icon {
+  font-size: var(--text-subtitle2);
+  font-weight: var(--weight-bold);
+  color: var(--gold-dim);
+  line-height: 1.3;
+  flex-shrink: 0;
+}
+.coach-body { flex: 1; min-width: 0; }
+.coach-msg {
+  font-size: var(--text-body1);
+  line-height: 1.45;
+  color: var(--fg1);
+}
+.coach-btn {
+  margin-top: var(--sp-s);
+  padding: var(--sp-s) var(--sp-l);
+  border-radius: var(--radius-md);
+  background: var(--navy);
+  color: var(--fg-on-dark);
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption1);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  min-height: 36px;
+}
+.coach-btn:active { background: var(--navy-dark); }
+.coach-dismiss {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-subtitle2);
+  color: var(--fg4);
+  border-radius: var(--radius-sm);
+}
+.coach-dismiss:active { background: rgba(0,0,0,0.05); }
+
+.coach-done {
+  background: #e9f3ea;                 /* soft green */
+  border-bottom-color: #d3e7d4;
+  align-items: center;
+}
+.coach-done .coach-icon { color: #3e9945; }
+.coach-done .coach-msg { font-weight: var(--weight-semibold); color: #2f7a36; }
