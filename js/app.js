@@ -4615,6 +4615,18 @@ const App = (() => {
   // | Special. The Launch count (from the ship's load) spans that load's
   // component assets (e.g. "Fighters & Bombers 5" → one Launch-5 cell over the
   // Bombers and Fighters rows), each shown with its own stat profile.
+  // Deployment range for Battalion/Feature-deploying Assets. Not stored in the
+  // ship data — these are fixed rulebook constants (Rulebook 2.3.1 §7.4).
+  // Combat assets (torpedoes/bombers/mines/fighters) use the universal 6"
+  // launch placement and are intentionally omitted. Some ships carry a special
+  // rule overriding these (e.g. UCM "launch Dropships/Drop Pods at 6\"").
+  const DEPLOY_RANGE = {
+    'bulk landers': '6"', 'bulk lander': '6"',
+    'dropships': '3"', 'dropship': '3"',
+    'boarding pods': '3"', 'boarding pod': '3"',
+    'drop pods': '3"', 'drop pod': '3"'
+  };
+
   function renderLaunchTable(factionKey, dbShip, ship) {
     const factionInfo = shipDB[factionKey];
     if (!factionInfo || !dbShip) return '';
@@ -4642,8 +4654,10 @@ const App = (() => {
           ? `${esc(String(a.damage ?? ''))}${a.type ? `<span class="dmg-type dmg-type-${esc(a.type)}">${esc(a.type)}</span>` : ''}`
           : '—';
         let special = '—';
+        const dr = DEPLOY_RANGE[part.toLowerCase()];
         if (a.special && a.special !== '-') special = renderWeaponSpecialChips(a.special);
         else if (a.ksReroll !== undefined) special = `Re-roll ${esc(String(a.ksReroll))} KS save${a.ksReroll > 1 ? 's' : ''} (Close Protection)`;
+        else if (dr) special = `Deploys within ${dr} of carrier`;
         body += `<tr>
           ${i === 0 ? launchCell : ''}
           <td class="lt-load">${esc(part)}</td>

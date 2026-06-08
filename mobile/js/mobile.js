@@ -1203,6 +1203,18 @@
     }).join(' ');
   }
 
+  // Deployment range for Battalion/Feature-deploying Assets. Not in the ship
+  // data — these are fixed rulebook constants (Rulebook 2.3.1 §7.4). Combat
+  // assets (torpedoes, bombers, mines, fighters) use the universal 6" launch
+  // placement and so are not listed here. Some ships carry a special rule that
+  // overrides these (e.g. UCM "launch Dropships/Drop Pods at 6\"").
+  const DEPLOY_RANGE = {
+    'bulk landers': '6"', 'bulk lander': '6"',
+    'dropships': '3"', 'dropship': '3"',
+    'boarding pods': '3"', 'boarding pod': '3"',
+    'drop pods': '3"', 'drop pod': '3"'
+  };
+
   function getLaunchAssetMap(factionKey) {
     const f = FACTIONS[factionKey];
     if (!f) return {};
@@ -1225,7 +1237,11 @@
         const t = (a.type || '').toUpperCase();
         const tc = t === 'K' ? 'weapon-type-k' : t === 'E' ? 'weapon-type-e' : t === 'C' ? 'weapon-type-c' : '';
         const dmg = has ? `${a.damage || '—'}${t ? `<span class="${tc}" style="margin-left:2px">${t}</span>` : ''}` : '—';
-        const special = (a.special && a.special !== '-') ? renderSpecialChips(a.special) : (a.ksReroll != null ? `<span class="weapon-special-chip">Close Protection (re-roll ${a.ksReroll} KS)</span>` : '—');
+        const dr = DEPLOY_RANGE[part.toLowerCase()];
+        const special = (a.special && a.special !== '-') ? renderSpecialChips(a.special)
+          : a.ksReroll != null ? `<span class="weapon-special-chip">Close Protection (re-roll ${a.ksReroll} KS)</span>`
+          : dr ? `<span class="weapon-special-chip">Deploys within ${dr} of carrier</span>`
+          : '—';
         rows += `<div class="weapon-row ${tc}" style="grid-template-columns:52px 1fr 40px 32px 32px 40px">
           ${i === 0 ? `<div class="weapon-val" style="font-weight:700">${esc(load.launch || '—')}${ls}</div>` : '<div></div>'}
           <div class="weapon-name">${esc(part)}</div>
