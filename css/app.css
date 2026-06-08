@@ -13,9 +13,20 @@
   font-display: swap;
 }
 
+/* Terminal Grotesque Open — Velvetyne / Studio Triple (OFL). Used only for the
+   WarLore wordmark in the footer credit. */
+@font-face {
+  font-family: "Terminal Grotesque Open";
+  src: url("../assets/fonts/terminal-grotesque-open.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── 1. Theme Tokens ─────────────────────────────────────────── */
 :root {
   /* Typography */
+  --font-wordmark: "Terminal Grotesque Open", "Roboto Slab", serif;
   --font-body: "Jost", "Segoe UI", -apple-system, sans-serif;
   --font-display: "Roboto Slab", Georgia, serif;
   --font-brand: "Arkhip", "Roboto Slab", serif;
@@ -5175,10 +5186,9 @@ h1, h2, h3, h4, h5, h6 {
 .game-info-footer a:hover { text-decoration: underline; }
 .gif-builder { margin-left: auto; }
 .gif-builder a {
-  font-family: var(--font-condensed);
-  font-size: var(--text-sm);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-family: var(--font-wordmark), var(--font-condensed);
+  font-size: var(--text-md);
+  letter-spacing: 0.01em;
 }
 @media (max-width: 600px) {
   .gif-inner { justify-content: center; gap: 4px var(--sp-sm); }

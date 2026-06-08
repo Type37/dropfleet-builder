@@ -12,8 +12,18 @@
   font-display: swap;
 }
 
+/* Terminal Grotesque Open — Velvetyne / Studio Triple (OFL). WarLore wordmark. */
+@font-face {
+  font-family: "Terminal Grotesque Open";
+  src: url("../../assets/fonts/terminal-grotesque-open.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── 1. Design Tokens ──────────────────────────────────── */
 :root {
+  --font-wordmark: "Terminal Grotesque Open", "Roboto Slab", serif;
   /* — Fluent 2 Spacing (4px grid) — */
   --sp-xxs: 2px;
   --sp-xs: 4px;
@@ -175,7 +185,7 @@ input, textarea, select { font: inherit; }
   font-family: var(--font-condensed);
   font-size: var(--text-body1);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.06em;
 }
 
@@ -234,7 +244,7 @@ input, textarea, select { font: inherit; }
   font-family: var(--font-condensed);
   font-size: var(--text-body1);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   cursor: pointer;
   transition: transform var(--duration-fast) var(--ease-standard),
@@ -326,7 +336,7 @@ input, textarea, select { font: inherit; }
   font-family: var(--font-condensed);
   font-size: var(--text-body1);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   transition: background var(--duration-fast) var(--ease-standard),
               transform var(--duration-fast) var(--ease-standard);
@@ -416,7 +426,7 @@ input, textarea, select { font: inherit; }
   font-family: var(--font-condensed);
   font-size: var(--text-caption2);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.08em;
   color: var(--fg3);
 }
@@ -444,7 +454,7 @@ input, textarea, select { font: inherit; }
 .pts-badge-label {
   font-family: var(--font-condensed);
   font-size: 7px;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.08em;
   opacity: 0.7;
 }
@@ -464,7 +474,7 @@ input, textarea, select { font: inherit; }
   font-family: var(--font-condensed);
   font-size: 9px;
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.06em;
   color: var(--fg3);
 }
@@ -795,7 +805,7 @@ input, textarea, select { font: inherit; }
   font-family: var(--font-condensed);
   font-size: var(--text-caption2);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
 }
 
@@ -915,7 +925,7 @@ input, textarea, select { font: inherit; }
   font-family: var(--font-condensed);
   font-size: var(--text-caption1);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.06em;
   color: var(--fg3);
   margin-bottom: var(--sp-xs);
@@ -1058,7 +1068,7 @@ input, textarea, select { font: inherit; }
 .pts-badge-lg .pts-badge-label {
   font-family: var(--font-condensed);
   font-size: 7px;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.08em;
   opacity: 0.7;
 }
@@ -1233,7 +1243,7 @@ body.sheet-open .sheet-scrim {
   font-family: var(--font-condensed);
   font-size: var(--text-caption1);
   font-weight: var(--weight-semibold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.06em;
   color: var(--fg4);
 }
@@ -1353,7 +1363,7 @@ body.sheet-open .sheet-scrim {
   font-family: var(--font-condensed);
   font-size: var(--text-caption2);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.06em;
   color: var(--fg4);
   margin: var(--sp-s) 0 var(--sp-xs);
@@ -1547,7 +1557,7 @@ body.sheet-open .sheet-scrim {
   font-family: var(--font-condensed);
   font-size: var(--text-caption2);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.12em;
   color: var(--gold-dim);
   margin-bottom: var(--sp-s);
@@ -1611,7 +1621,7 @@ body.sheet-open .sheet-scrim {
   font-family: var(--font-condensed);
   font-size: var(--text-caption1);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   min-height: 36px;
 }
@@ -1651,7 +1661,7 @@ body.sheet-open .sheet-scrim {
   font-family: var(--font-condensed);
   font-size: var(--text-caption2);
   font-weight: var(--weight-bold);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.08em;
   color: var(--fg4);
 }
@@ -1723,9 +1733,15 @@ body.sheet-open .sheet-scrim {
 .m-footer-credit {
   margin-top: var(--sp-xs);
   font-family: var(--font-condensed);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: 0.04em;
   font-size: var(--text-caption2);
+}
+/* WarLore wordmark — Terminal Grotesque Open */
+.wl-brand {
+  font-family: var(--font-wordmark);
+  font-size: var(--text-body);
+  letter-spacing: 0.01em;
 }
 
 

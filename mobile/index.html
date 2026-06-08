@@ -13,9 +13,10 @@
 <meta name="apple-mobile-web-app-title" content="Dropfleet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Only the weights actually used; loaded non-render-blocking (display=swap shows text immediately) -->
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Roboto+Slab:wght@700&family=Barlow+Condensed:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Roboto+Slab:wght@700&family=Barlow+Condensed:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"></noscript>
+<!-- Plain stylesheet link (matches desktop). display=swap shows text immediately;
+     the preload+onload-swap pattern previously here failed to apply the fonts on
+     some mobile browsers, so the system fallback was silently winning. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Roboto+Slab:wght@700&family=Barlow+Condensed:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap">
 <link rel="stylesheet" href="css/mobile.css">
 <!-- Privacy-friendly, cookieless analytics (no personal data). Page load auto-counts; screen changes counted in mobile.js. -->
 <script data-goatcounter="https://warlore.goatcounter.com/count"
@@ -45,7 +46,7 @@
   </div>
   <footer class="m-footer">
     <div><span class="m-footer-title">Dropfleet Commander</span> · by <a href="https://www.ttcombat.com/games/dropfleet-commander" target="_blank" rel="noopener">TTCombat</a></div>
-    <div class="m-footer-credit">Fleet builder by <a href="https://jetwong.neocities.org/" target="_blank" rel="noopener">WarLore</a> · <a href="https://github.com/Type37/dropfleet-builder" target="_blank" rel="noopener">Source on GitHub</a></div>
+    <div class="m-footer-credit">Fleet builder by <a class="wl-brand" href="https://jetwong.neocities.org/" target="_blank" rel="noopener">WarLore</a> · <a href="https://github.com/Type37/dropfleet-builder" target="_blank" rel="noopener">Source on GitHub</a></div>
   </footer>
   <div class="bottom-action">
     <button class="btn btn-primary btn-block" onclick="App.openCreateFleet()">Create Fleet</button>
