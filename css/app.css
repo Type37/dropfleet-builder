@@ -1786,7 +1786,8 @@ h1, h2, h3, h4, h5, h6 {
 /* ── 14. Ship Stats Grid ─────────────────────────────────────── */
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(74px, 1fr));
+  /* Smaller min so more stats sit on one row (flatter / more horizontal) */
+  grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
   gap: 3px;
 }
 
@@ -2318,8 +2319,6 @@ h1, h2, h3, h4, h5, h6 {
   list-style: disc;
   padding-left: var(--sp-lg);
   margin: 0;
-  columns: 2;
-  column-gap: var(--sp-lg);
 }
 .lore-famous-ships li {
   font-style: italic;
