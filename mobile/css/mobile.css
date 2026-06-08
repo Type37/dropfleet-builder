@@ -1235,14 +1235,27 @@ body.sheet-open .sheet-scrim {
 }
 .rule-sheet.active { transform: translateY(0); }
 
+/* The grabber is a clear, finger-sized swipe target. The bar itself is small,
+   but the surrounding padding gives a ~24px tall hit/drag zone so a downward
+   swipe anywhere near the top of the sheet dismisses it. */
 .rule-sheet-handle {
-  width: 40px;
-  height: 4px;
-  border-radius: 2px;
-  background: var(--stroke1);
-  margin: var(--sp-s) auto var(--sp-m);
+  width: 100%;
+  padding: var(--sp-s) 0 var(--sp-m);
+  margin: 0;
   cursor: grab;
+  touch-action: none;
+  display: flex;
+  justify-content: center;
 }
+.rule-sheet-handle::before {
+  content: "";
+  width: 48px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--fg3);
+  opacity: 0.55;
+}
+.rule-sheet-handle:active::before { opacity: 0.85; }
 
 .rule-sheet-head {
   display: flex;

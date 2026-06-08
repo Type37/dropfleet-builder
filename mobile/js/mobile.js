@@ -287,6 +287,52 @@
     }
   }
 
+  // Swipe-down-to-dismiss for bottom sheets. Drag is allowed from the handle/
+  // header at any time, and from the scrollable body only when it's scrolled to
+  // the top — so a downward swipe always dismisses without fighting body scroll.
+  // The sheet follows the finger; releasing past a distance/velocity threshold
+  // closes it, otherwise it snaps back.
+  function makeSheetSwipeable(sheetEl, closeFn, scrollEl) {
+    if (!sheetEl) return;
+    let startY = 0, lastY = 0, startT = 0, dragging = false;
+    const onStart = (e) => {
+      const t = e.touches[0];
+      const fromGrab = !scrollEl || !scrollEl.contains(e.target) || scrollEl.scrollTop <= 0;
+      if (!fromGrab) { dragging = false; return; }
+      startY = lastY = t.clientY; startT = Date.now(); dragging = true;
+      sheetEl.style.transition = 'none';
+    };
+    const onMove = (e) => {
+      if (!dragging) return;
+      const dy = e.touches[0].clientY - startY;
+      if (dy <= 0) { sheetEl.style.transform = 'translateY(0)'; lastY = e.touches[0].clientY; return; }
+      // Actively pulling the sheet down — suppress body scroll/overscroll.
+      if (e.cancelable) e.preventDefault();
+      lastY = e.touches[0].clientY;
+      sheetEl.style.transform = `translateY(${dy}px)`;
+    };
+    const onEnd = () => {
+      if (!dragging) return;
+      dragging = false;
+      const dy = lastY - startY;
+      const velocity = dy / Math.max(Date.now() - startT, 1);
+      sheetEl.style.transition = '';
+      sheetEl.style.transform = '';
+      if (dy > 110 || velocity > 0.5) closeFn();
+    };
+    sheetEl.addEventListener('touchstart', onStart, { passive: true });
+    sheetEl.addEventListener('touchmove', onMove, { passive: false });
+    sheetEl.addEventListener('touchend', onEnd);
+    sheetEl.addEventListener('touchcancel', onEnd);
+  }
+
+  function setupSheetGestures() {
+    makeSheetSwipeable(document.getElementById('rule-sheet'), closeRuleSheet,
+      document.getElementById('rule-sheet-body'));
+    makeSheetSwipeable(document.getElementById('action-sheet'), closeActionSheet,
+      document.getElementById('action-sheet-items'));
+  }
+
   /* ── Helpers ───────────────────────────────────────────── */
   function uuid() { return 'xxxx-xxxx-xxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16)); }
   function esc(s) { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
@@ -2104,6 +2150,10 @@
     }).catch(() => {});
 
     loadFleets();
+
+    // Bottom-sheet swipe gestures — wire early so they work even on the
+    // share-link path below (which returns before the rest of init runs).
+    setupSheetGestures();
 
     // If arriving via a #share/ link, import it and open it directly.
     if (await importFromHash()) return;
