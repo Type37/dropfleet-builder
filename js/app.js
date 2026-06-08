@@ -16,7 +16,7 @@ const App = (() => {
   let activeFilters = new Set();  // 'launch', 'loadout', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Game sizes per rulebook Section 4.2. maxAdmiralLevel is the highest admiral
@@ -2503,10 +2503,30 @@ const App = (() => {
       ? `<div class="ship-card-cost">${ship.points * count} pts<span class="ship-card-cost-each">${count} × ${ship.points}</span></div>`
       : `<div class="ship-card-cost">${ship.points} pts</div>`;
 
+    // Experimental alt layout (item: 2×4 stat grid): image on top, then the
+    // stat grid (forced to 2 columns) sitting beside the special-rules block.
+    // Weapons/loadouts/launch flow below as usual. Off by default; toggled in
+    // Settings. Suppressed in compact view (which hides stats anyway).
+    const useAlt = settings.altStatBlock && !compact;
+    const midSection = useAlt
+      ? `<div class="alt-statblock-row">
+          <div class="alt-stats">${statsHtml}</div>
+          <div class="alt-rules">${rulesHtml}${rulesTextHtml}</div>
+        </div>
+        ${weaponsHtml}
+        ${loadoutsHtml}
+        ${launchBlockHtml}`
+      : `${compact ? '' : statsHtml}
+        ${compact ? '' : weaponsHtml}
+        ${compact ? '' : loadoutsHtml}
+        ${compact ? '' : launchBlockHtml}
+        ${rulesHtml}
+        ${rulesTextHtml}`;
+
     return `
-    <div class="group-ship-entry${compact ? ' compact' : ''}">
+    <div class="group-ship-entry${compact ? ' compact' : ''}${useAlt ? ' alt2x4' : ''}">
       ${img ? `<div class="ship-card-image${isFullyModular(dbShip) ? ' ship-img-modular' : ''}"${isFullyModular(dbShip) ? ' title="Base hull shown — your ship\'s actual look depends on the systems you choose"' : ''}>${qtyBadge}<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
-      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
+      <div class="ship-card-body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
         <div class="flex items-center justify-between">
           <div>
             <div class="ship-card-name ship-card-name-link" onclick="event.stopPropagation(); App.openShipDetail('${currentFleet.faction}','${ship.groupCategory}','${ship.shipKey}')">${esc(name)}${count > 1 ? ` <span class="ship-name-qty">×${count}</span>` : ''}${badges ? ` ${badges}` : ''}</div>
@@ -2514,12 +2534,7 @@ const App = (() => {
           </div>
           ${costHtml}
         </div>
-        ${compact ? '' : statsHtml}
-        ${compact ? '' : weaponsHtml}
-        ${compact ? '' : loadoutsHtml}
-        ${compact ? '' : launchBlockHtml}
-        ${rulesHtml}
-        ${rulesTextHtml}
+        ${midSection}
         ${renderSystemsPicker(ship, dbShip, groupId, currentFleet.faction)}
         ${renderFeatureCarrierBlock(ship, dbShip, groupId)}
         ${compact ? '' : loreHtml}
@@ -4410,6 +4425,14 @@ const App = (() => {
           <input type="checkbox" ${settings.autoExpandLore ? 'checked' : ''} onchange="App.toggleSetting('autoExpandLore', this.checked)">
           <span class="settings-toggle-switch"></span>
         </label>
+        <label class="settings-toggle">
+          <span class="settings-toggle-label">
+            <span class="settings-toggle-name">2×4 stat layout <span class="settings-toggle-tag">experimental</span></span>
+            <span class="settings-toggle-desc">Ship art on top, stats in a two-column grid beside the special rules</span>
+          </span>
+          <input type="checkbox" ${settings.altStatBlock ? 'checked' : ''} onchange="App.toggleSetting('altStatBlock', this.checked)">
+          <span class="settings-toggle-switch"></span>
+        </label>
       </div>
       <div class="settings-group">
         <div class="settings-group-title">Data</div>
@@ -4450,7 +4473,7 @@ const App = (() => {
     try { localStorage.setItem('dfc_settings', JSON.stringify(settings)); } catch(e) {}
     showToast(value ? 'Setting enabled' : 'Setting disabled');
     // Re-render if display-affecting settings changed
-    if (key === 'compactView' || key === 'autoExpandLore') renderBuilder();
+    if (key === 'compactView' || key === 'autoExpandLore' || key === 'altStatBlock') renderBuilder();
   }
 
   function loadSettings() {
