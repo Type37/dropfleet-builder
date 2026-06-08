@@ -2839,6 +2839,10 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--gold-dark);
 }
 
+/* Rank insignia (shared js/rank-insignia.js) */
+.rank-insignia { vertical-align: -0.28em; margin-right: 6px; flex: 0 0 auto; }
+.admiral-flagship-name .rank-insignia { vertical-align: -0.2em; }
+
 .admiral-level {
   font-size: var(--text-sm);
   color: var(--ink-muted);

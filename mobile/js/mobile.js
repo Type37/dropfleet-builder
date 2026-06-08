@@ -848,7 +848,7 @@
         return `<div class="list-row" onclick="App.openAdmiralDetail(${i})">
           ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
           <div class="list-row-content">
-            <div class="list-row-title">${esc(a.name)}</div>
+            <div class="list-row-title">${window.RankInsignia ? RankInsignia(f.faction, a.level) : ''}${esc(a.name)}</div>
             <div class="list-row-sub">${a.points}pts · Level ${a.level || '?'}${a.shipName ? ' · ' + esc(a.shipName) : ''}</div>
           </div>
           <span class="list-chevron">›</span>
@@ -1375,7 +1375,7 @@
         <div class="ship-thumb ship-thumb-admiral" aria-hidden="true">★</div>
         <div class="list-row-content">
           <div class="flex justify-between items-center">
-            <span class="list-row-title">Level ${l.level} Admiral</span>
+            <span class="list-row-title">${window.RankInsignia ? RankInsignia(f.faction, l.level) : ''}Level ${l.level} Admiral</span>
             <span class="list-row-pts">${l.cost}pts</span>
           </div>
           <div class="list-row-sub">Take any number · adds Level for AP &amp; initiative</div>
@@ -1399,7 +1399,7 @@
         ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
-            <span class="list-row-title">${esc(a.name)}</span>
+            <span class="list-row-title">${window.RankInsignia ? RankInsignia(f.faction, a.level) : ''}${esc(a.name)}</span>
             <span class="list-row-pts">${total}pts</span>
           </div>
           <div class="list-row-sub">${sub}</div>
@@ -1597,7 +1597,7 @@
       <div class="detail-header">
         ${art ? `<div class="ship-thumb ship-thumb-lg"><img src="${art}" alt="" loading="lazy"></div>` : ''}
         <div style="flex:1;${art ? 'margin-left:var(--sp-m)' : ''}">
-          <div class="detail-name">${esc(a.name)}</div>
+          <div class="detail-name">${window.RankInsignia ? RankInsignia(f.faction, a.level) : ''}${esc(a.name)}</div>
           <div class="detail-type">Level ${a.level || '?'}${a.shipName ? ' · ' + esc(a.shipName) : ''}</div>
         </div>
         <div class="pts-badge-lg"><div class="pts-badge-value">${a.points}</div><div class="pts-badge-label">Points</div></div>
