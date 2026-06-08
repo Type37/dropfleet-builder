@@ -11,8 +11,6 @@
 
   /* ── State ─────────────────────────────────────────────── */
   const FACTIONS = {};         // raw faction JSON keyed by faction key
-  let FLEET_DATA = null;       // game system data
-  let SHIP_LORE = {};
   let RULES_DB = {};           // shared rules glossary
   let fleets = [];
   let activeFleet = null;
@@ -337,6 +335,19 @@
 
   /* ── Lookups ───────────────────────────────────────────── */
   function findFaction(key) { return FACTIONS[key] || null; }
+
+  // Lazy faction loading — fetch a faction file only when needed, cache the promise.
+  const factionLoading = {};
+  function ensureFaction(key) {
+    if (!key) return Promise.resolve(null);
+    if (FACTIONS[key]) return Promise.resolve(FACTIONS[key]);
+    if (factionLoading[key]) return factionLoading[key];
+    const url = FACTION_FILES[key];
+    if (!url) return Promise.resolve(null);
+    factionLoading[key] = fetch(url).then(r => r.json()).then(d => { FACTIONS[key] = d; return d; })
+      .catch(e => { console.warn('load faction', key, e); return null; });
+    return factionLoading[key];
+  }
   function findShip(factionKey, category, shipKey) {
     const f = FACTIONS[factionKey];
     if (!f) return null;
@@ -364,7 +375,8 @@
     return sub;
   }
 
-  function buildStarterFleet(spec) {
+  async function buildStarterFleet(spec) {
+    await ensureFaction(spec.faction);   // starter ships need the faction data loaded
     const size = GAME_SIZES[spec.size] || GAME_SIZES.skirmish;
     const battleGroups = [];
     spec.groups.forEach(([cat, name, qty]) => {
@@ -693,7 +705,7 @@
       const over = pts > limit;
       const errs = validateFleet(f).filter(x => x.t === 'error').length;
       return `<div class="list-row" onclick="App.openFleet(${i})">
-        ${icon ? `<img src="${icon}" alt="" class="faction-icon">` : ''}
+        ${icon ? `<img src="${icon}" alt="" class="faction-icon" loading="lazy">` : ''}
         <div class="list-row-content">
           <div class="list-row-title">${esc(f.name || 'Unnamed Fleet')}${errs ? `<span class="row-badge-issue">${errs} issue${errs > 1 ? 's' : ''}</span>` : ''}</div>
           <div class="list-row-sub">${pts}/${limit}pts · ${gc} group${gc !== 1 ? 's' : ''} · ${(GAME_SIZES[f.gameSize] || {}).label || ''}</div>
@@ -761,7 +773,7 @@
         const gp = groupPoints(f, g);
         const art = shipArtPath(db?.name);
         return `<div class="list-row" onclick="App.openGroup(${i})">
-          ${art ? `<div class="ship-thumb"><img src="${art}" alt=""></div>` : '<div class="ship-thumb"></div>'}
+          ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
           <div class="list-row-content">
             <div class="list-row-title">${esc(db?.name || 'Unknown')}${qty > 1 ? ' ×' + qty : ''}</div>
             <div class="list-row-sub">${gp}pts · ${db?.tonnage || CATEGORY_LABELS[s.groupCategory] || ''}</div>
@@ -777,7 +789,7 @@
       html += f.admirals.map((a, i) => {
         const art = admiralArtPath(a.name);
         return `<div class="list-row" onclick="App.openAdmiralDetail(${i})">
-          ${art ? `<div class="ship-thumb"><img src="${art}" alt=""></div>` : '<div class="ship-thumb"></div>'}
+          ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
           <div class="list-row-content">
             <div class="list-row-title">${esc(a.name)}</div>
             <div class="list-row-sub">${a.points}pts · Level ${a.level || '?'}${a.shipName ? ' · ' + esc(a.shipName) : ''}</div>
@@ -846,7 +858,7 @@
       if (ship.isUnique) tags.push('<span class="ship-tag">Unique</span>');
       if (ship.isRare) tags.push('<span class="ship-tag">Rare</span>');
       return `<div class="list-row" onclick="App.addShip('${g.id}','${g.category}')">
-        ${art ? `<div class="ship-thumb ship-thumb-lg"><img src="${art}" alt=""></div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
+        ${art ? `<div class="ship-thumb ship-thumb-lg"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
             <span class="list-row-title">${esc(ship.name)} ${tags.join('')}</span>
@@ -923,7 +935,7 @@
     const sysSel = ship.systemSelection;
 
     document.getElementById('group-detail-content').innerHTML = `
-      ${artSrc ? `<div class="ship-art-hero"><img src="${artSrc}" alt="${esc(ship.name)}"></div>` : ''}
+      ${artSrc ? `<div class="ship-art-hero"><img src="${artSrc}" alt="${esc(ship.name)}" loading="lazy"></div>` : ''}
       <div class="detail-header">
         <div>
           <div class="detail-name">${esc(ship.name)}${qty > 1 ? ' ×' + qty : ''}</div>
@@ -1250,7 +1262,7 @@
       const art = admiralArtPath(a.name) || (fs ? shipArtPath(fs.name) : null);
       const overLevel = a.level > size.maxAdmiralLevel;
       return `<div class="list-row ${overLevel ? 'row-disabled' : ''}" onclick="${overLevel ? '' : `App.addAdmiral('${a.id}')`}">
-        ${art ? `<div class="ship-thumb"><img src="${art}" alt=""></div>` : '<div class="ship-thumb"></div>'}
+        ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
             <span class="list-row-title">${esc(a.name)}</span>
@@ -1365,7 +1377,7 @@
 
     document.getElementById('admiral-detail-content').innerHTML = `
       <div class="detail-header">
-        ${art ? `<div class="ship-thumb ship-thumb-lg"><img src="${art}" alt=""></div>` : ''}
+        ${art ? `<div class="ship-thumb ship-thumb-lg"><img src="${art}" alt="" loading="lazy"></div>` : ''}
         <div style="flex:1;${art ? 'margin-left:var(--sp-m)' : ''}">
           <div class="detail-name">${esc(a.name)}</div>
           <div class="detail-type">Level ${a.level || '?'}${a.shipName ? ' · ' + esc(a.shipName) : ''}</div>
@@ -1541,12 +1553,13 @@
     } catch (e) { console.warn('decode failed', e); return null; }
   }
 
-  function importFromHash() {
+  async function importFromHash() {
     const m = location.hash.match(/#share\/(.+)$/) || location.hash.match(/#fleet=(.+)$/);
     if (!m) return false;
     const fleet = decodeFleet(m[1]);
     window.history.replaceState(null, '', location.pathname); // clear hash (local `history` is the nav stack)
     if (!fleet) return false;
+    await ensureFaction(fleet.faction);   // shared fleet may be a faction we haven't loaded
     fleets.push(fleet);
     saveFleets();
     openFleet(fleets.length - 1);
@@ -1573,7 +1586,7 @@
   let editingFleet = null;
   function populateFleetForm(fleet) {
     const fp = document.getElementById('new-fleet-faction');
-    const ordered = Object.keys(FACTIONS).sort((a, b) => (FACTION_INFO[a]?.order || 99) - (FACTION_INFO[b]?.order || 99));
+    const ordered = Object.keys(FACTION_FILES).sort((a, b) => (FACTION_INFO[a]?.order || 99) - (FACTION_INFO[b]?.order || 99));
     fp.innerHTML = ordered.map(k => `<option value="${k}">${FACTION_INFO[k]?.name || k}</option>`).join('');
     const sp = document.getElementById('new-fleet-size');
     sp.innerHTML = Object.entries(GAME_SIZES).map(([k, s]) =>
@@ -1609,12 +1622,13 @@
     if (el) el.textContent = FACTION_INFO[k]?.desc || '';
   }
   function closeCreateFleet() { document.getElementById('modal-create-fleet').classList.remove('active'); }
-  function doCreateFleet() {
+  async function doCreateFleet() {
     const name = document.getElementById('new-fleet-name').value.trim() || 'Unnamed Fleet';
     const desc = document.getElementById('new-fleet-desc').value.trim();
     const faction = document.getElementById('new-fleet-faction').value;
     const gameSize = document.getElementById('new-fleet-size').value;
     const size = GAME_SIZES[gameSize] || GAME_SIZES.clash;
+    await ensureFaction(faction);   // make sure the chosen faction's data is loaded
     if (editingFleet) {
       editingFleet.name = name;
       editingFleet.description = desc;
@@ -1644,21 +1658,25 @@
 
   /* ── Init ──────────────────────────────────────────────── */
   async function init() {
-    const loads = Object.entries(FACTION_FILES).map(([key, url]) =>
-      fetch(url).then(r => r.json()).then(d => { FACTIONS[key] = d; }).catch(e => console.warn('load', key, e))
-    );
-    loads.push(fetch('../data/fleet-data.json').then(r => r.json()).then(d => FLEET_DATA = d).catch(() => {}));
-    loads.push(fetch('../data/ship-lore.json').then(r => r.json()).then(d => SHIP_LORE = d).catch(() => {}));
-    loads.push(fetch('../data/fleet-index.json').then(r => r.json()).then(idx => {
+    // Cold load fetches ONLY the rules glossary (~20K). Faction files (~150K each)
+    // load on demand — we never need all six at once. fleet-data.json (1MB) and
+    // ship-lore.json (216K) were unused dead weight and are no longer fetched.
+    await fetch('../data/fleet-index.json').then(r => r.json()).then(idx => {
       Object.entries(idx.sharedRules || {}).forEach(([k, v]) => {
         RULES_DB[k] = (typeof v === 'string') ? { description: v, page: '' } : { description: v.description || '', page: v.page || '' };
       });
-    }).catch(() => {}));
-    await Promise.all(loads);
+    }).catch(() => {});
 
     loadFleets();
-    // If arriving via a #share/ link, import it and open it directly
-    if (importFromHash()) return;
+
+    // If arriving via a #share/ link, import it and open it directly.
+    if (await importFromHash()) return;
+
+    // Preload only the factions referenced by saved fleets (the list needs their
+    // data to compute points/validation). Usually 0–2 files, not 6.
+    const used = [...new Set(fleets.map(f => f.faction).filter(Boolean))];
+    await Promise.all(used.map(ensureFaction));
+
     renderFleetList();
     navigate('screen-fleet-list', { replace: true });
 
