@@ -1,6 +1,6 @@
 # Dropfleet Commander Fleet Builder
 
-A fleet builder for [Dropfleet Commander](https://www.ttcombat.com/games/dropfleet-commander) by TTCombat. Runs entirely in the browser — no backend, no accounts, no telemetry. Your fleets live in localStorage.
+A fleet builder for [Dropfleet Commander](https://www.ttcombat.com/games/dropfleet-commander) by TTCombat. Runs entirely in the browser — no backend, no accounts. Your fleets live in localStorage. The only analytics are [GoatCounter](https://www.goatcounter.com/): cookieless, no personal data, just aggregate page/screen counts.
 
 **[Live site](https://type37.github.io/dropfleet-builder/)** (GitHub Pages)
 

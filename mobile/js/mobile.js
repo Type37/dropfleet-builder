@@ -654,6 +654,11 @@
     updateAppBar(screenId);
     const fab = document.getElementById('fab-add-group');
     if (fab) fab.style.display = screenId === 'screen-fleet-detail' ? '' : 'none';
+    // Privacy-friendly analytics: count each screen as a virtual pageview.
+    if (window.goatcounter && window.goatcounter.count) {
+      const p = '/mobile/' + screenId.replace('screen-', '');
+      window.goatcounter.count({ path: p, title: screenId, event: false });
+    }
   }
 
   function updateAppBar(screenId) {

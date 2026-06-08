@@ -411,6 +411,11 @@ const App = (() => {
   }
 
   function showView(view, param) {
+    // Privacy-friendly analytics: count each view as a virtual pageview (the SPA
+    // never reloads, so onload alone would only ever register one visit).
+    if (window.goatcounter && window.goatcounter.count) {
+      window.goatcounter.count({ path: '/' + (view || 'landing'), title: view || 'landing', event: false });
+    }
     document.querySelectorAll('#app > section').forEach(s => s.classList.add('hidden'));
     const topActions = document.getElementById('topbar-actions');
     const topContext = document.getElementById('topbar-context');
