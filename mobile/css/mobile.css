@@ -2,6 +2,16 @@
    DFC Mobile — Fluent 2 Foundation + DFC Personality
    ═══════════════════════════════════════════════════════════ */
 
+/* Arkhip — geometric display face, used via --font-brand for the very
+   largest headings only. Mirrors css/app.css (path is ../../ from mobile/css). */
+@font-face {
+  font-family: "Arkhip";
+  src: url("../../assets/fonts/Arkhip.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── 1. Design Tokens ──────────────────────────────────── */
 :root {
   /* — Fluent 2 Spacing (4px grid) — */
@@ -92,11 +102,14 @@
   --ease-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);   /* exit — eases away */
   --ease-standard:   cubic-bezier(0.2, 0, 0, 1);        /* taps / UI micro-motion */
 
-  /* — Fonts (DFC personality) — */
-  --font-body: 'Jost', system-ui, -apple-system, sans-serif;
-  --font-display: 'Roboto Slab', serif;
-  --font-condensed: 'Barlow Condensed', sans-serif;
-  --font-lore: 'Cardo', 'Libre Baskerville', serif;
+  /* — Fonts (DFC personality) — kept in lockstep with css/app.css :root — */
+  --font-body: "Jost", "Segoe UI", -apple-system, sans-serif;
+  --font-display: "Roboto Slab", Georgia, serif;
+  --font-brand: "Arkhip", "Roboto Slab", serif;
+  --font-reading: var(--font-lore);
+  --font-condensed: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-lore: "Libre Baskerville", Georgia, serif;
+  --font-mono: Consolas, "Courier New", monospace;
 
   /* — Touch targets — */
   --tap-min: 44px;
