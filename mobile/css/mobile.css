@@ -1566,3 +1566,72 @@ body.sheet-open .sheet-scrim {
 }
 .coach-done .coach-icon { color: #3e9945; }
 .coach-done .coach-msg { font-weight: var(--weight-semibold); color: #2f7a36; }
+
+
+/* ── 48. Picker sort row ───────────────────────────────── */
+.sort-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+  padding: var(--sp-s) var(--sp-l);
+  background: var(--white);
+  border-bottom: 1px solid var(--stroke2);
+}
+.sort-label {
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg4);
+}
+.sort-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: var(--sp-xs) var(--sp-m);
+  border-radius: var(--radius-md);
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption1);
+  font-weight: var(--weight-semibold);
+  color: var(--fg2);
+  background: transparent;
+  border: 1px solid var(--stroke2);
+  min-height: 32px;
+}
+.sort-chip.active {
+  background: var(--navy);
+  color: var(--fg-on-dark);
+  border-color: var(--navy);
+}
+.sort-arrow { font-size: var(--text-body1); line-height: 1; }
+
+/* ── 49. Tonnage badges (visual weight cue) ────────────── */
+.ton-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-right: var(--sp-s);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-condensed);
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  color: #fff;
+  vertical-align: -2px;
+}
+.ton-light    { background: #8aa0b5; }   /* light slate — visually lightest */
+.ton-medium   { background: var(--navy); }
+.ton-heavy    { background: var(--ink); }
+.ton-colossal { background: var(--gold); color: #2a2410; }
+.ton-payload  { background: var(--fg4); }
+
+/* Points: de-emphasise the "pts" unit so the number reads first */
+.pts-unit {
+  font-family: var(--font-body);
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-regular);
+  color: var(--fg4);
+  margin-left: 1px;
+}

@@ -17,6 +17,7 @@
   let activeGroupIdx = -1;     // index into activeFleet.battleGroups
   let activeAdmiralIdx = -1;   // index into activeFleet.admirals
   let pickerFilter = 'all';
+  let pickerSort = { key: 'points', dir: 'asc' };  // default: cheapest first
 
   const FACTION_FILES = {
     ucm: '../data/faction-ucm.json',
@@ -891,14 +892,31 @@
     chipEl.innerHTML = `<button class="chip ${pickerFilter === 'all' ? 'active' : ''}" onclick="App.filterShips('all')">All</button>` +
       cats.map(c => `<button class="chip ${pickerFilter === c ? 'active' : ''}" onclick="App.filterShips('${c}')">${CATEGORY_LABELS[c] || c}</button>`).join('');
 
+    // Sort chips — tap to sort, tap the active one to flip direction.
+    const sortKeys = [['points', 'Points'], ['name', 'Name'], ['tonnage', 'Tonnage']];
+    document.getElementById('picker-sort').innerHTML =
+      `<span class="sort-label">Sort</span>` +
+      sortKeys.map(([k, lbl]) => {
+        const on = pickerSort.key === k;
+        const arrow = on ? `<span class="sort-arrow">${pickerSort.dir === 'asc' ? '↑' : '↓'}</span>` : '';
+        return `<button class="sort-chip ${on ? 'active' : ''}" onclick="App.setSort('${k}')">${lbl}${arrow}</button>`;
+      }).join('');
+
     const search = (document.getElementById('picker-search')?.value || '').toLowerCase();
     let list = groups.filter(g => {
       if (pickerFilter !== 'all' && g.category !== pickerFilter) return false;
       if (search && !(g.ship?.name || g.name).toLowerCase().includes(search)) return false;
       return true;
     });
-    // Beginner-friendly: cheapest first within the list (not scariest-first)
-    list = list.slice().sort((a, b) => (a.ship?.cost || 0) - (b.ship?.cost || 0));
+
+    const cmp = {
+      points:  (a, b) => (a.ship?.cost || 0) - (b.ship?.cost || 0),
+      name:    (a, b) => (a.ship?.name || '').localeCompare(b.ship?.name || ''),
+      tonnage: (a, b) => CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category)
+                         || (a.ship?.cost || 0) - (b.ship?.cost || 0),
+    }[pickerSort.key];
+    list = list.slice().sort(cmp);
+    if (pickerSort.dir === 'desc') list.reverse();
 
     document.getElementById('picker-list').innerHTML = list.map(g => {
       const ship = g.ship || {};
@@ -914,14 +932,23 @@
         <div class="list-row-content">
           <div class="flex justify-between items-center">
             <span class="list-row-title">${esc(ship.name)} ${tags.join('')}</span>
-            <span class="list-row-pts">${cost}pts</span>
+            <span class="list-row-pts">${cost}<span class="pts-unit">pts</span></span>
           </div>
-          <div class="list-row-sub">${tonnage} · Group ${gMin}${gMax > gMin ? '–' + gMax : ''}</div>
+          <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)} · Group ${gMin}${gMax > gMin ? '–' + gMax : ''}</div>
         </div>
       </div>`;
     }).join('');
   }
   function filterShips(cat) { pickerFilter = cat; renderShipPicker(); }
+  function setSort(key) {
+    if (pickerSort.key === key) pickerSort.dir = pickerSort.dir === 'asc' ? 'desc' : 'asc';
+    else pickerSort = { key, dir: 'asc' };
+    renderShipPicker();
+  }
+  function tonnageBadge(category) {
+    const letter = { light: 'L', medium: 'M', heavy: 'H', colossal: 'C', payload: 'P' }[category] || '?';
+    return `<span class="ton-badge ton-${category}">${letter}</span>`;
+  }
 
   function makeShipInstance(factionKey, category, shipKey) {
     const ship = findShip(factionKey, category, shipKey);
@@ -1905,7 +1932,7 @@
   window.App = {
     init, goBack, viewDesktop,
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, openStarterFleets,
-    openAddGroup, filterShips, addShip,
+    openAddGroup, filterShips, setSort, addShip,
     openGroup, changeQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow,
     openAdmiral, addAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral,
