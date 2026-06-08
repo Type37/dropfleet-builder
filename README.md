@@ -18,12 +18,12 @@ A fleet builder for [Dropfleet Commander](https://www.ttcombat.com/games/dropfle
 
 ## Mobile app
 
-Phones are auto-redirected to **[`/mobile/`](https://type37.github.io/dropfleet-builder/mobile/)** — a separate, phone-first builder (Hobgoblin-style linear navigation) that **shares the same `dfc_fleets` storage and fleet schema** as the desktop app, so a fleet built on one shows up on the other. It has the full builder feature set (all six factions, groups, admirals with ability picks, stations, deployable features, Systems/Hardpoints, loadouts, validation, tap-to-learn rules), plus **copy-as-text** (Discord-friendly roster), **export-as-PDF**, share links, and one-tap **starter-box fleets** for new players. A hamburger "view desktop" escape hatch is always available.
+Phones are auto-redirected to **[`/mobile/`](https://type37.github.io/dropfleet-builder/mobile/)** — a separate, phone-first builder (Hobgoblin-style linear navigation) that **shares the same `dfc_fleets` storage and fleet schema** as the desktop app, so a fleet built on one shows up on the other. It has the full builder feature set (all six factions, groups, admirals with ability picks, stations, deployable features, Systems/Hardpoints, loadouts, validation, tap-to-learn rules, ship lore), plus **copy-as-text** (Discord-friendly roster), **export-as-PDF**, share links, one-tap **starter-box fleets**, and an optional **guided coach** for new players. It's an installable **PWA that works offline** (the root `sw.js` caches the shell, data and art) — build and reference fleets at a venue with no signal. A hamburger "view desktop" escape hatch is always available.
 
 ## What it doesn't do (yet)
 
-- Offline / PWA support (the mobile app is online-only — a service worker for `/mobile/` is the next infra step)
 - Systems/Hardpoint lists for factions other than Resistance (other factions use loadout refits, which are supported)
+- Transparent-background ship art (current art is on solid backgrounds)
 
 ## Data
 
