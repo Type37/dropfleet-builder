@@ -2867,6 +2867,16 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Admiral abilities — innate (always shown) + Abilities-Table picker */
 .admiral-abilities-block { margin-top: var(--sp-md); }
+/* Draw attention to the picker while the admiral still has ability picks to
+   make — adding an admiral should prompt you to choose its abilities. */
+.admiral-abilities-block.admiral-abilities-unset {
+  border: 1px solid var(--gold-line);
+  border-left: 3px solid var(--gold);
+  background: var(--gold-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--sp-sm) var(--sp-md);
+}
+.admiral-abilities-block.admiral-abilities-unset .admiral-picks-remaining { color: var(--gold-dark); font-weight: var(--weight-bold); }
 .admiral-abilities-label {
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);

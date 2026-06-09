@@ -1574,7 +1574,15 @@
     });
     f.updatedAt = Date.now();
     saveFleets();
-    goBack();
+    // If this admiral picks abilities from the faction table, land straight on
+    // their detail (the picker) so the choice isn't missed. Replace the picker
+    // screen so Back returns to the fleet, not the admiral list.
+    if ((a.abilityPicks || 0) > 0) {
+      activeAdmiralIdx = f.admirals.length - 1;
+      navigate('screen-admiral-detail', { replace: true });
+    } else {
+      goBack();
+    }
   }
   function removeAdmiralPrompt(i) {
     const a = activeFleet.admirals[i];

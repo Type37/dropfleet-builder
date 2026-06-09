@@ -3327,7 +3327,7 @@ const App = (() => {
     if (info.table.length && info.picks > 0) {
       const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
       const remaining = info.picks - sel.length;
-      html += `<div class="admiral-abilities-block">
+      html += `<div class="admiral-abilities-block${remaining > 0 ? ' admiral-abilities-unset' : ''}">
         <div class="admiral-abilities-label">Abilities Table — choose ${info.picks} <span class="admiral-picks-remaining">${remaining > 0 ? `(${remaining} left)` : '(full)'}</span></div>
         <div class="admiral-ability-picks">
           ${info.table.map(ab => {
