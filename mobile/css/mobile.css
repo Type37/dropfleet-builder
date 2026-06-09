@@ -840,14 +840,14 @@ input, textarea, select { font: inherit; }
 }
 
 .counter-btn {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border: 1.5px solid var(--stroke1);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--text-subtitle2);
+  font-size: var(--text-subtitle1);
   color: var(--fg2);
   transition: background-color var(--duration-fast) var(--ease-standard),
               border-color var(--duration-fast) var(--ease-standard),
