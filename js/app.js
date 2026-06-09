@@ -1838,7 +1838,6 @@ const App = (() => {
             ${fIcon ? `<img src="${fIcon}" alt="" class="overview-faction-icon">` : ''}
             <div>
               <div class="overview-pts-line"><span class="overview-pts-big">${pts}</span><span class="overview-pts-cap">${sizeInfo.max !== 99999 ? '/ ' + sizeInfo.max : ''} pts</span></div>
-              <div class="overview-subtitle">${esc(f.name)} · ${esc(fName)} · ${sizeInfo.label}</div>
             </div>
           </div>
           <div class="overview-header-right">
