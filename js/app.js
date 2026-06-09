@@ -2161,46 +2161,6 @@ const App = (() => {
   }
 
   // Weapon special rules — descriptions from the rulebook
-  const WEAPON_SPECIAL_RULES = {
-    'Air to Air':       'Can only target Launch Assets (fighters, bombers, etc.), not ships.',
-    'Alt':              'This weapon has an alternative fire mode. Choose one mode when attacking.',
-    'Anti Wing':        'Effective against Launch Assets. Hits against wings are resolved with bonus dice.',
-    'Arrest':           'Target\'s Thrust is reduced by the Arrest value next turn.',
-    'Bloom':            'Firing this weapon increases the ship\'s Signature by the Bloom value until the end of the turn.',
-    'Bombardment':      'Used for orbital bombardment of ground targets. Cannot target ships.',
-    'Burnthrough':      'For each critical hit, roll additional attack dice equal to the Burnthrough value.',
-    'Calibre-L':        'Can only target Light tonnage ships.',
-    'Calibre-L/M':      'Can only target Light or Medium tonnage ships.',
-    'Calibre-M':        'Can only target Medium tonnage ships.',
-    'Calibre-H':        'Can only target Heavy tonnage ships.',
-    'Calibre-H/C':      'Can only target Heavy or Colossal tonnage ships.',
-    'Calibre-M/H/C':    'Can only target Medium, Heavy, or Colossal tonnage ships.',
-    'Close Action':     'Close Action weapons fire at targets within Scan range. Uses the Close Action combat sequence.',
-    'Crippling':        'When this weapon causes damage, the target also suffers a Crippling effect (roll on Crippling table).',
-    'Crippling-Fire':           'When this weapon causes damage, the target suffers the Fire crippling effect.',
-    'Crippling-2xFire':         'When this weapon causes damage, the target suffers two Fire crippling effects.',
-    'Crippling-Navigation Offline': 'When this weapon causes damage, the target suffers Navigation Offline.',
-    'Crippling-Weapons Offline':    'When this weapon causes damage, the target suffers Weapons Offline.',
-    'Critical':         'Extra critical damage — each critical hit inflicts additional hits equal to the Critical value.',
-    'Escape Velocity':  'Can only be fired if the ship has not turned this activation.',
-    'Flash':            'Reduces the target\'s Scan value by the Flash value until end of turn.',
-    'Focused':          'All attack dice from this weapon must be allocated to the same target.',
-    'Fusillade':        'Gains additional attack dice equal to (Fusillade value × number of other ships in group firing this weapon).',
-    'High Power':       'Adds +1 to the Damage value of this weapon.',
-    'Impel':            'On hit, push the target directly away from the firing ship by the Impel value in inches.',
-    'Limited':          'This weapon can only fire a number of times per game equal to the Limited value.',
-    'Low Power':        'Reduces the Damage value of this weapon by 1 (minimum 1).',
-    'Mauler':           'If the target is within Scan range, this weapon gains +1 Damage.',
-    'Overcharge':       'May worsen Lock by 1 to gain +1 Damage for this attack.',
-    'Penetrator':       'Enemy armour saves (ES/KS) are worsened by 1 against this weapon.',
-    'Re-Entry':         'This weapon can target ground sectors for bombardment in addition to normal fire.',
-    'Reave':            'For each point of hull damage inflicted, the target loses additional hull points equal to the Reave value.',
-    'Scald':            'Reduces the target\'s Point Defence by the Scald value for the rest of the turn.',
-    'Status':           'Applies a status effect to the target instead of dealing damage.',
-    'Sustained Fire':   'If the ship did not use the Course Change order this activation, gain extra attack dice.',
-    'Volley':           'Roll additional attack dice equal to the Volley value, but at Lock worsened by 1.'
-  };
-
   function lookupRule(name) {
     // Shared rules lookup: try exact, then base keyword (strip numeric suffix),
     // then base-X form (BSData uses e.g. "Crippling-X" for parameterized rules)
@@ -2210,13 +2170,20 @@ const App = (() => {
   }
 
   function lookupRuleFull(name) {
-    // Returns {description, page} or null
-    const baseKey = name.replace(/-?\d+$/, '').replace(/\s+\d+$/, '').trim();
-    const xKey = baseKey + '-X';
-    const entry = sharedRulesDB[name] || sharedRulesDB[baseKey] || sharedRulesDB[xKey];
-    if (entry) return entry;
-    const wpnDesc = WEAPON_SPECIAL_RULES[name] || WEAPON_SPECIAL_RULES[baseKey];
-    if (wpnDesc) return { description: wpnDesc, page: '' };
+    // Returns {description, page} or null. Single source of truth: the shared
+    // rules glossary (data/fleet-index.json). Resolve parameterized keywords to
+    // their base "-X" entry — numeric suffixes ("Reave 2") and letter/word
+    // suffixes alike ("Calibre-H", "Crippling-Fire" -> "Calibre-X"/"Crippling-X").
+    if (sharedRulesDB[name]) return sharedRulesDB[name];
+    const numBase = name.replace(/[-\s]?\d+$/, '').trim();
+    if (sharedRulesDB[numBase]) return sharedRulesDB[numBase];
+    if (sharedRulesDB[numBase + '-X']) return sharedRulesDB[numBase + '-X'];
+    const hi = name.lastIndexOf('-');
+    if (hi > 0) {
+      const pb = name.slice(0, hi).trim();
+      if (sharedRulesDB[pb]) return sharedRulesDB[pb];
+      if (sharedRulesDB[pb + '-X']) return sharedRulesDB[pb + '-X'];
+    }
     return null;
   }
 
@@ -2226,7 +2193,7 @@ const App = (() => {
   function keywordRegex() {
     if (_kwRe) return _kwRe;
     const bases = new Set();
-    [...Object.keys(sharedRulesDB || {}), ...Object.keys(WEAPON_SPECIAL_RULES)].forEach(k => {
+    Object.keys(sharedRulesDB || {}).forEach(k => {
       const b = k.replace(/-X$/, '').trim();
       if (b.length >= 3) bases.add(b);
     });
