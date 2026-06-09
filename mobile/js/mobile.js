@@ -887,12 +887,23 @@
         const gp = groupPoints(f, g);
         const art = shipArtPath(db?.name);
         const modCls = isFullyModular(db) ? ' ship-img-modular' : '';
+        const { gMin, gMax } = groupQtyBounds(db);
+        // A variable-size group gets an inline ×N stepper so you set the count
+        // right here, no panel-hop. Fixed groups (gMin===gMax) just show ×N.
+        const canVary = gMax > gMin;
+        const titleQty = (!canVary && qty > 1) ? ' ×' + qty : '';
+        const stepper = canVary ? `<div class="row-qty" onclick="event.stopPropagation()">
+            <button class="counter-btn counter-btn-sm" onclick="event.stopPropagation();App.changeGroupQty(${i},-1)" ${qty <= gMin ? 'disabled' : ''} aria-label="Remove one">−</button>
+            <span class="row-qty-num">×${qty}</span>
+            <button class="counter-btn counter-btn-sm" onclick="event.stopPropagation();App.changeGroupQty(${i},1)" ${qty >= gMax ? 'disabled' : ''} aria-label="Add one">+</button>
+          </div>` : '';
         return `<div class="list-row" onclick="App.openGroup(${i})">
           ${art ? `<div class="ship-thumb${modCls}"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
           <div class="list-row-content">
-            <div class="list-row-title">${esc(db?.name || 'Unknown')}${qty > 1 ? ' ×' + qty : ''}</div>
+            <div class="list-row-title">${esc(db?.name || 'Unknown')}${titleQty}</div>
             <div class="list-row-sub">${gp}pts · ${db?.tonnage || CATEGORY_LABELS[s.groupCategory] || ''}</div>
           </div>
+          ${stepper}
           <span class="list-chevron">›</span>
         </div>`;
       }).join('');
@@ -1320,26 +1331,47 @@
       </div>${rows}</div>`;
   }
 
-  function changeQty(delta) {
-    const f = activeFleet;
-    if (!f || activeGroupIdx < 0) return;
-    const group = f.battleGroups[activeGroupIdx];
-    const inst = group.ships[0];
-    const ship = findShip(f.faction, inst.groupCategory, inst.shipKey);
+  // A group is "×N of one ship". Resolve the allowed N range (groupMin/Max,
+  // overridable by the 'g' stat range like "1-3").
+  function groupQtyBounds(ship) {
     let gMin = ship?.groupMin || 1, gMax = ship?.groupMax || 1;
     const gStat = ship?.stats?.g || '';
     if (gStat.includes('-')) { const p = gStat.split('-'); gMin = parseInt(p[0]) || gMin; gMax = parseInt(p[1]) || gMax; }
+    return { gMin, gMax };
+  }
+
+  // Add/remove one ship from a group, honouring its size range. Used by both
+  // the group-detail stepper and the inline stepper on the fleet-list rows.
+  function stepGroupQty(group, delta) {
+    if (!group) return false;
+    const f = activeFleet;
+    const inst = group.ships[0];
+    const ship = findShip(f.faction, inst.groupCategory, inst.shipKey);
+    const { gMin, gMax } = groupQtyBounds(ship);
     const newQty = group.ships.length + delta;
-    if (newQty < gMin || newQty > gMax) return;
-    if (delta > 0) {
-      group.ships.push(makeShipInstance(f.faction, inst.groupCategory, inst.shipKey));
-    } else {
-      group.ships.pop();
-    }
+    if (newQty < gMin || newQty > gMax) return false;
+    if (delta > 0) group.ships.push(makeShipInstance(f.faction, inst.groupCategory, inst.shipKey));
+    else group.ships.pop();
     f.updatedAt = Date.now();
     saveFleets();
+    return true;
+  }
+
+  function changeQty(delta) {
+    const f = activeFleet;
+    if (!f || activeGroupIdx < 0) return;
+    if (!stepGroupQty(f.battleGroups[activeGroupIdx], delta)) return;
     renderGroupDetail();
     updateAppBar('screen-group-detail');
+  }
+
+  // Inline stepper on the fleet-list group rows — set "how many of this ship"
+  // without opening the group-detail panel (the #1 post-add edit).
+  function changeGroupQty(groupIdx, delta) {
+    const f = activeFleet;
+    if (!f) return;
+    if (!stepGroupQty(f.battleGroups[groupIdx], delta)) return;
+    renderFleetDetail();
   }
 
   function selectLoadout(loIdx, optIdx) {
@@ -2183,7 +2215,7 @@
     init, goBack, viewDesktop,
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, openStarterFleets,
     openAddGroup, filterShips, setSort, addShip,
-    openGroup, changeQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow,
+    openGroup, changeQty, changeGroupQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow,
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral,
     openStation, addStation, removeStationPrompt,

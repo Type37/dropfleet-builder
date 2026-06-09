@@ -799,6 +799,29 @@ input, textarea, select { font: inherit; }
 .counter-btn:active { background: var(--paper-alt); }
 .counter-btn:disabled { opacity: 0.3; }
 
+/* Compact stepper used inline on fleet-list group rows (set ×N without opening
+   the group). 32px keeps a comfortable tap target while fitting the row. */
+.counter-btn-sm {
+  width: 32px;
+  height: 32px;
+  font-size: var(--text-body1);
+}
+.row-qty {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  flex-shrink: 0;
+  margin-right: var(--sp-xs);
+}
+.row-qty-num {
+  font-family: var(--font-condensed);
+  font-size: var(--text-subtitle2);
+  font-weight: 800;
+  color: var(--navy);
+  min-width: 28px;
+  text-align: center;
+}
+
 
 /* ── 20. Badges ────────────────────────────────────────── */
 .badge {
