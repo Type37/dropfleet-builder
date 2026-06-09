@@ -1229,9 +1229,8 @@ const App = (() => {
 
     // Composition breakdown
     renderCompositionBar();
-
-    // Run fleet validation and display warnings
-    renderFleetWarnings();
+    // Validation warnings live in the centre overview panel only (the sidebar
+    // copy was a duplicate).
   }
 
   // ── Fleet Validation ──
@@ -1408,24 +1407,6 @@ const App = (() => {
       }
     }
     return errors;
-  }
-
-  function renderFleetWarnings() {
-    const el = document.getElementById('fleet-warnings');
-    if (!el || !currentFleet) { if (el) el.innerHTML = ''; return; }
-
-    const warnings = validateFleet(currentFleet);
-    if (warnings.length === 0) {
-      el.innerHTML = '';
-      return;
-    }
-
-    el.innerHTML = warnings.map(w => {
-      const icon = w.type === 'error'
-        ? '<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1L1 14h14L8 1zm0 4.5v4m0 1.5v1"/><path d="M7.25 5.5h1.5v4h-1.5zm0 5.5h1.5v1.5h-1.5z"/></svg>'
-        : '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 7v4M8 5v.5"/></svg>';
-      return `<div class="fleet-warning fleet-warning-${w.type}">${icon} ${esc(w.msg)}</div>`;
-    }).join('');
   }
 
   function calcFleetPoints(fleet) {
