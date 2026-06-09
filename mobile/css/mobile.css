@@ -989,7 +989,8 @@ input, textarea, select { font: inherit; }
   60%  { transform: scale(1.03); opacity: 1; }
   100% { transform: scale(1);    opacity: 1; }
 }
-#modal-abilities.active .modal-panel-pop {
+#modal-abilities.active .modal-panel-pop,
+#modal-secondary.active .modal-panel-pop {
   animation: mobile-modal-pop 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 .ability-lite { display: flex; justify-content: space-between; align-items: baseline; padding: var(--sp-xs) var(--sp-l); font-weight: var(--weight-semibold); color: var(--fg1); }

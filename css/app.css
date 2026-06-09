@@ -1115,11 +1115,27 @@ h1, h2, h3, h4, h5, h6 {
   60%  { transform: scale(1.03); opacity: 1; }
   100% { transform: scale(1);    opacity: 1; }
 }
-#modal-admiral-abilities.active .modal-panel {
+#modal-admiral-abilities.active .modal-panel,
+#modal-secondary.active .modal-panel {
   animation: modal-pop 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 @media (prefers-reduced-motion: reduce) {
-  #modal-admiral-abilities.active .modal-panel { animation: none; }
+  #modal-admiral-abilities.active .modal-panel,
+  #modal-secondary.active .modal-panel { animation: none; }
+}
+
+/* Chosen secondary objectives shown as chips in the overview slot */
+.overview-secondary-chosen { display: flex; flex-wrap: wrap; gap: var(--sp-xs); }
+.secondary-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--gold-dark);
+  background: var(--gold-subtle);
+  border: 1px solid var(--gold-line);
+  border-radius: var(--radius-md);
+  padding: 3px var(--sp-sm);
 }
 
 .modal-panel--lg { max-width: 800px; }

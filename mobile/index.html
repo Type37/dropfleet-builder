@@ -179,6 +179,23 @@
   </div>
 </div>
 
+<!-- ═══ Secondary Objectives picker (pop-up) ═══ -->
+<div class="modal-overlay" id="modal-secondary">
+  <div class="modal-panel modal-panel-pop">
+    <div class="modal-header">
+      <div class="modal-title">Secondary Objectives</div>
+      <button class="modal-close" onclick="App.closeSecondaryModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="form-hint" id="secondary-modal-sub" style="margin-bottom:var(--sp-m)"></p>
+      <div id="secondary-modal-body"><!-- Populated by JS --></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary btn-block" onclick="App.closeSecondaryModal()">Done</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ Action Sheet (overflow menus) ═══ -->
 <div class="sheet-scrim" id="action-sheet-scrim" onclick="App.closeActionSheet()"></div>
 <div class="action-sheet" id="action-sheet" role="menu">

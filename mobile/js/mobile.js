@@ -936,18 +936,19 @@
     // game system). Stored on the fleet so they travel with it (and share).
     if (SECONDARY_OBJECTIVES.length) {
       const sel = f.secondaryObjectives || [];
-      html += `<div class="section-header">Secondary Objectives <span class="section-header-note">${sel.length}/2 chosen</span></div>`;
-      html += `<div class="secondary-list">` + SECONDARY_OBJECTIVES.map((o, i) => {
-        const on = sel.includes(o.name);
-        const locked = !on && sel.length >= 2;
-        return `<div class="secondary-item${on ? ' selected' : ''}${locked ? ' locked' : ''}" onclick="App.toggleSecondary(${i})">
-          <span class="secondary-check">${on ? '✓' : ''}</span>
-          <div class="secondary-body">
-            <div class="secondary-name">${esc(o.name)}</div>
-            <div class="secondary-desc">${esc(o.description)}</div>
+      const chosen = SECONDARY_OBJECTIVES.filter(o => sel.includes(o.name));
+      html += `<div class="section-header">Secondary Objectives</div>`;
+      if (chosen.length) {
+        html += `<div class="list-row" onclick="App.openSecondaryModal()">
+          <div class="list-row-content">
+            <div class="list-row-title">${chosen.map(o => esc(o.name)).join(' · ')}</div>
+            <div class="list-row-sub">${sel.length}/2 chosen · tap to edit</div>
           </div>
+          <span class="list-chevron">›</span>
         </div>`;
-      }).join('') + `</div>`;
+      } else {
+        html += `<div class="add-slot" onclick="App.openSecondaryModal()">+ Choose secondary objectives</div>`;
+      }
     }
 
     groupsEl.innerHTML = html;
@@ -965,6 +966,36 @@
     f.updatedAt = Date.now();
     saveFleets();
     renderFleetDetail();
+    if (document.getElementById('modal-secondary').classList.contains('active')) renderSecondaryModalBody();
+  }
+
+  // Secondary objectives picked in a pop-up modal (like the ability picker).
+  function renderSecondaryModalBody() {
+    const f = activeFleet;
+    if (!f) return;
+    const sel = f.secondaryObjectives || [];
+    const sub = document.getElementById('secondary-modal-sub');
+    if (sub) sub.textContent = sel.length >= 2 ? 'Both chosen — tap a selected objective to swap it.' : `Pick ${2 - sel.length} more.`;
+    const body = document.getElementById('secondary-modal-body');
+    if (body) body.innerHTML = `<div class="secondary-list">` + SECONDARY_OBJECTIVES.map((o, i) => {
+      const on = sel.includes(o.name);
+      const locked = !on && sel.length >= 2;
+      return `<div class="secondary-item${on ? ' selected' : ''}${locked ? ' locked' : ''}" onclick="App.toggleSecondary(${i})">
+        <span class="secondary-check">${on ? '✓' : ''}</span>
+        <div class="secondary-body">
+          <div class="secondary-name">${esc(o.name)}</div>
+          <div class="secondary-desc">${esc(o.description)}</div>
+        </div>
+      </div>`;
+    }).join('') + `</div>`;
+  }
+  function openSecondaryModal() {
+    if (!activeFleet) return;
+    renderSecondaryModalBody();
+    document.getElementById('modal-secondary').classList.add('active');
+  }
+  function closeSecondaryModal() {
+    document.getElementById('modal-secondary').classList.remove('active');
   }
 
   /* ── Screen: Ship Picker ───────────────────────────────── */
@@ -2312,7 +2343,7 @@
     init, goBack, viewDesktop,
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, openStarterFleets,
     openAddGroup, filterShips, toggleAttr, clearFilters, setSort, addShip,
-    openGroup, changeQty, changeGroupQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow, toggleSecondary,
+    openGroup, changeQty, changeGroupQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow, toggleSecondary, openSecondaryModal, closeSecondaryModal,
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral, closeAbilityModal,
     openStation, addStation, removeStationPrompt,

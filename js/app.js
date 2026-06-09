@@ -1817,30 +1817,21 @@ const App = (() => {
       </div>`;
     }
 
-    // Secondary Objectives — pick 2 for your game (rules data from the BSData
-    // game system; stored on the fleet so they travel with it / share).
+    // Secondary Objectives — pick 2 for your game (picked in a modal, like
+    // admiral/station). The overview shows just the chosen ones + an edit button.
     let secondaryHtml = '';
     const secObjs = (rawFleetData && rawFleetData.secondaryObjectives) || [];
     if (secObjs.length) {
       const sel = f.secondaryObjectives || [];
+      const chosen = secObjs.filter(o => sel.includes(o.name));
       secondaryHtml = `<div class="overview-section">
         <div class="overview-section-head">
           <div class="overview-section-label">Secondary Objectives</div>
-          <span class="overview-section-note">${sel.length}/2 chosen</span>
+          <button class="overview-add-group-btn" onclick="App.openSecondaryModal()">${sel.length ? 'Edit' : 'Choose 2'} ›</button>
         </div>
-        <div class="secondary-list">
-          ${secObjs.map((o, i) => {
-            const on = sel.includes(o.name);
-            const locked = !on && sel.length >= 2;
-            return `<div class="secondary-item${on ? ' selected' : ''}${locked ? ' locked' : ''}" onclick="App.toggleSecondaryObjective(${i})" role="button" tabindex="0" aria-pressed="${on}">
-              <span class="secondary-check">${on ? '✓' : ''}</span>
-              <div class="secondary-body">
-                <div class="secondary-name">${esc(o.name)}</div>
-                <div class="secondary-desc">${esc(o.description)}</div>
-              </div>
-            </div>`;
-          }).join('')}
-        </div>
+        ${chosen.length
+          ? `<div class="overview-secondary-chosen">${chosen.map(o => `<span class="secondary-chip">${esc(o.name)}</span>`).join('')}</div>`
+          : `<div class="add-ship-area" onclick="App.openSecondaryModal()" style="padding:var(--sp-md);cursor:pointer"><span class="text-caption">Choose 2 secondary objectives for your game</span></div>`}
       </div>`;
     }
 
@@ -1903,6 +1894,34 @@ const App = (() => {
     else { if (currentFleet.secondaryObjectives.length >= 2) return; currentFleet.secondaryObjectives.push(obj.name); }
     saveFleets();
     renderOverviewPanel();
+    const modal = document.getElementById('modal-secondary');
+    if (modal && modal.classList.contains('active')) renderSecondaryModalBody();
+  }
+
+  function renderSecondaryModalBody() {
+    if (!currentFleet) return;
+    const secObjs = (rawFleetData && rawFleetData.secondaryObjectives) || [];
+    const sel = currentFleet.secondaryObjectives || [];
+    const sub = document.getElementById('secondary-modal-sub');
+    if (sub) sub.textContent = sel.length >= 2 ? 'Both chosen — tap a selected objective to swap it.' : `Pick ${2 - sel.length} more — choose 2 for your game.`;
+    const body = document.getElementById('secondary-modal-body');
+    if (body) body.innerHTML = `<div class="secondary-list">${secObjs.map((o, i) => {
+      const on = sel.includes(o.name);
+      const locked = !on && sel.length >= 2;
+      return `<div class="secondary-item${on ? ' selected' : ''}${locked ? ' locked' : ''}" onclick="App.toggleSecondaryObjective(${i})" role="button" tabindex="0" aria-pressed="${on}">
+        <span class="secondary-check">${on ? '✓' : ''}</span>
+        <div class="secondary-body">
+          <div class="secondary-name">${esc(o.name)}</div>
+          <div class="secondary-desc">${esc(o.description)}</div>
+        </div>
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  function openSecondaryModal() {
+    if (!currentFleet) return;
+    renderSecondaryModalBody();
+    openModal('modal-secondary');
   }
 
   // ── Active Group View ──
@@ -5339,6 +5358,6 @@ const App = (() => {
     openStationModal, selectStation, removeStation,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText,
-    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail, saveFleetDesc, toggleSecondaryObjective, openAdmiralAbilityModal
+    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
   };
 })();
