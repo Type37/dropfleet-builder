@@ -3155,7 +3155,7 @@ const App = (() => {
     // ── Generic Admirals: pick a level ──
     html += sectionTitle('Generic Admiral');
     const levelBtns = GENERIC_ADMIRAL_LEVELS.filter(l => l.level <= maxLevel).map(l =>
-      `<div class="admiral-card card-interactive" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-md)" onclick="App.addGenericAdmiral(null, ${l.level}, ${l.cost})">
+      `<div class="admiral-card" style="display:flex;align-items:center;justify-content:space-between;gap:var(--sp-md)">
         <div class="flex items-center gap-md" style="min-width:0">
           ${admiralThumb(l.level, null)}
           <div>
@@ -3163,7 +3163,7 @@ const App = (() => {
             <div class="admiral-level">${l.cost} pts · Assign to any Capital Ship</div>
           </div>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addGenericAdmiral(null, ${l.level}, ${l.cost})">Add</button>
+        <button class="btn btn-primary btn-sm" onclick="App.addGenericAdmiral(null, ${l.level}, ${l.cost})">Add</button>
       </div>`
     ).join('');
     html += levelBtns;
@@ -3179,13 +3179,14 @@ const App = (() => {
         const abilities = adm.abilities || [];
         const picks = adm.abilityPicks || 1;
         html += `
-        <div class="admiral-card card-interactive${disabled ? ' disabled' : ''}" style="cursor:${disabled ? 'not-allowed' : 'pointer'};${disabled ? 'opacity:0.5;' : ''};display:flex;gap:var(--sp-md);align-items:flex-start" ${disabled ? '' : `onclick="App.addFactionAdmiral('${adm.id}')"`}>
+        <div class="admiral-card${disabled ? ' disabled' : ''}" style="${disabled ? 'opacity:0.5;' : ''};display:flex;gap:var(--sp-md);align-items:flex-start">
           ${admiralThumb(adm.level, null)}
           <div style="flex:1;min-width:0">
             <div class="admiral-name">${esc(adm.name)}</div>
             <div class="admiral-level">Level ${adm.level || '?'} · ${adm.cost} pts</div>
             ${abilities.length > 0 ? `<div style="margin-top:var(--sp-sm);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${esc(a.cost)})` : ''}${a.effect ? ' — ' + esc(a.effect) : ''}</div>`).join('')}</div>` : ''}
             <div class="admiral-modal-picks">+ choose ${picks} from the Abilities Table</div>
+            ${disabled ? '' : `<button class="btn btn-primary btn-sm" style="margin-top:var(--sp-sm)" onclick="App.addFactionAdmiral('${adm.id}')">Add to fleet</button>`}
           </div>
         </div>`;
       });
@@ -3204,7 +3205,7 @@ const App = (() => {
         const tooHighLevel = levelForSize > maxLevel;
         const isDisabled = disabled || tooHighLevel;
         html += `
-        <div class="admiral-card card-interactive${isDisabled ? ' disabled' : ''}" ${isDisabled ? '' : `onclick="App.addFamousAdmiral('${key}')"`} style="cursor:${isDisabled ? 'not-allowed' : 'pointer'};${isDisabled ? 'opacity:0.5;' : ''}">
+        <div class="admiral-card${isDisabled ? ' disabled' : ''}" style="${isDisabled ? 'opacity:0.5;' : ''}">
           <div class="flex gap-md items-start">
             ${admiral.image ? `<div class="ship-card-image"><img src="${esc(admiral.image)}" alt="${esc(admiral.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : admiralThumb(admiral.level, null)}
             <div style="flex:1;min-width:0">
@@ -3219,6 +3220,7 @@ const App = (() => {
           </div>
           ${abilities.length > 0 ? `<div style="margin-top:var(--sp-md);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${esc(a.cost)})` : ''}${a.effect ? ' — ' + esc(a.effect) : ''}</div>`).join('')}</div>` : ''}
           <div class="admiral-modal-picks">+ choose ${admiral.ability_picks || 1} from the Abilities Table</div>
+          ${isDisabled ? `<div class="text-caption" style="margin-top:var(--sp-sm)">${tooHighLevel ? `Requires ${sizeInfo.label}+` : 'One named admiral per fleet'}</div>` : `<button class="btn btn-primary btn-sm" style="margin-top:var(--sp-md)" onclick="App.addFamousAdmiral('${key}')">Add to fleet — brings ${esc(admiral.ship_name || 'flagship')}</button>`}
         </div>`;
       });
     }
