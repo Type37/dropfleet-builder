@@ -2198,6 +2198,33 @@ const App = (() => {
     return null;
   }
 
+  // Wrap known glossary keywords found in prose (e.g. an ability's effect) in a
+  // hover/tap tooltip. Case-sensitive (keywords are Title Case in the text).
+  let _kwRe = null;
+  function keywordRegex() {
+    if (_kwRe) return _kwRe;
+    const bases = new Set();
+    [...Object.keys(sharedRulesDB || {}), ...Object.keys(WEAPON_SPECIAL_RULES)].forEach(k => {
+      const b = k.replace(/-X$/, '').trim();
+      if (b.length >= 3) bases.add(b);
+    });
+    const terms = [...bases].sort((a, b) => b.length - a.length)
+      .map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    _kwRe = new RegExp('\\b(' + terms.join('|') + ')(-\\d+)?\\b', 'g');
+    return _kwRe;
+  }
+  function linkKeywords(text) {
+    if (!text) return '';
+    return esc(text).replace(keywordRegex(), m => {
+      const full = lookupRuleFull(m);
+      if (full && full.description) {
+        const pageAttr = full.page ? ` data-rule-page="${esc(full.page)}"` : '';
+        return `<span class="kw-link has-tooltip" data-rule-desc="${esc(full.description)}"${pageAttr} onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${m}</span>`;
+      }
+      return m;
+    });
+  }
+
   function renderWeaponSpecialChips(specialStr) {
     if (!specialStr || specialStr === '-') return '';
     return specialStr.split(',').map(s => {
@@ -3476,10 +3503,13 @@ const App = (() => {
       ${info.table.map(ab => {
         const on = sel.includes(ab.name);
         const full = !on && remaining <= 0;
-        return `<button class="admiral-pick${on ? ' is-selected' : ''}${full ? ' is-locked' : ''}" onclick="App.toggleAdmiralAbility(${index}, ${JSON.stringify(ab.name).replace(/"/g, '&quot;')})">
-          <span class="admiral-pick-head"><span class="admiral-pick-check">${on ? '✓' : ''}</span><span class="admiral-ability-name">${esc(ab.name)}</span>${ab.cost ? ` <span class="admiral-ability-cost">${esc(ab.cost)}</span>` : ''}</span>
-          ${ab.effect ? `<span class="admiral-ability-effect">${esc(ab.effect)}</span>` : ''}
-        </button>`;
+        return `<div class="admiral-pick${on ? ' is-selected' : ''}${full ? ' is-locked' : ''}" role="button" tabindex="0" ${full ? '' : `onclick="App.toggleAdmiralAbility(${index}, ${JSON.stringify(ab.name).replace(/"/g, '&quot;')})"`}>
+          <span class="admiral-pick-radio"></span>
+          <div class="admiral-pick-text">
+            <span class="admiral-pick-head"><span class="admiral-ability-name">${esc(ab.name)}</span>${ab.cost ? ` <span class="admiral-ability-cost">${esc(ab.cost)}</span>` : ''}</span>
+            ${ab.effect ? `<span class="admiral-ability-effect">${linkKeywords(ab.effect)}</span>` : ''}
+          </div>
+        </div>`;
       }).join('')}
     </div>`;
   }

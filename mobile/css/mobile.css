@@ -1463,6 +1463,45 @@ body.sheet-open .sheet-scrim {
 }
 .add-slot:active { background: var(--paper-alt); }
 
+/* Admiral ability picker rows (radio-style) + tappable keyword links */
+.ability-row {
+  padding: var(--sp-m) var(--sp-l);
+  border-bottom: 1px solid var(--stroke2);
+}
+.ability-row-innate { background: var(--paper-alt); }
+.ability-pick { display: flex; gap: var(--sp-m); cursor: pointer; }
+.ability-pick.locked { opacity: 0.45; cursor: default; }
+.ability-pick:active:not(.locked) { background: var(--paper-alt); }
+.ability-radio {
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--stroke1);
+  margin-top: 2px;
+  position: relative;
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+.ability-pick.selected .ability-radio { border-color: var(--navy); }
+.ability-pick.selected .ability-radio::after {
+  content: ''; position: absolute; inset: 3px; border-radius: 50%; background: var(--navy);
+}
+.ability-pick-body { flex: 1; min-width: 0; }
+.ability-pick-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; }
+.ability-pick-name { font-weight: var(--weight-bold); color: var(--fg1); }
+.ability-pick-cost {
+  font-family: var(--font-condensed); font-size: var(--text-caption2);
+  font-weight: var(--weight-bold); color: var(--navy);
+  background: var(--paper-alt); border-radius: var(--radius-sm); padding: 0 5px;
+}
+.ability-always {
+  font-size: var(--text-caption2); font-weight: var(--weight-bold);
+  color: var(--gold-dim); background: rgba(201,168,76,0.14);
+  border-radius: var(--radius-sm); padding: 0 5px;
+}
+.ability-pick-effect { font-size: var(--text-caption1); color: var(--fg2); line-height: 1.5; margin-top: 3px; }
+.kw-link { color: var(--navy); border-bottom: 1px dotted var(--navy); font-weight: var(--weight-semibold); }
+.kw-link:active { background: rgba(27,58,92,0.1); }
+
 /* Secondary Objectives picker (choose 2) */
 .section-header-note { font-weight: var(--weight-semibold); color: var(--fg3); font-size: var(--text-caption2); }
 .secondary-list { padding: 0 var(--sp-l) var(--sp-s); display: flex; flex-direction: column; gap: var(--sp-s); }

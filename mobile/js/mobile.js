@@ -255,6 +255,28 @@
     return { name, description: '', page: '' };
   }
 
+  // Wrap any known glossary keyword found in prose (e.g. an ability's effect)
+  // in a tappable span that opens its rule. Case-sensitive (keywords are Title
+  // Case in the text) to avoid linking generic lowercase words.
+  let _kwRe = null;
+  function keywordRegex() {
+    if (_kwRe) return _kwRe;
+    const bases = new Set();
+    [...Object.keys(RULES_DB), ...Object.keys(WEAPON_SPECIAL_RULES)].forEach(k => {
+      const b = k.replace(/-X$/, '').trim();
+      if (b.length >= 3) bases.add(b);
+    });
+    const terms = [...bases].sort((a, b) => b.length - a.length)
+      .map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    _kwRe = new RegExp('\\b(' + terms.join('|') + ')(-\\d+)?\\b', 'g');
+    return _kwRe;
+  }
+  function linkKeywords(text) {
+    if (!text) return '';
+    return esc(text).replace(keywordRegex(), m =>
+      `<span class="kw-link" onclick="event.stopPropagation();App.openRule('${m.replace(/'/g, "\\'")}')">${m}</span>`);
+  }
+
   /* ── Bottom sheet ──────────────────────────────────────── */
   function showSheet(title, body, pageRef) {
     document.getElementById('rule-sheet-title').textContent = title;
@@ -1763,7 +1785,7 @@
         <div class="rule-card-name">${esc(ab.name)}</div>
         ${ab.cost ? `<span class="loadout-option-cost">${esc(ab.cost)}</span>` : ''}
       </div>
-      ${ab.effect ? `<div class="rule-card-text">${esc(ab.effect)}</div>` : ''}
+      ${ab.effect ? `<div class="rule-card-text">${linkKeywords(ab.effect)}</div>` : ''}
     </div>`;
 
     let abilitiesHtml = '';
@@ -1781,7 +1803,7 @@
             <span class="loadout-option-name">${on ? '✓ ' : ''}${esc(ab.name)}</span>
             ${ab.cost ? `<span class="loadout-option-cost">${esc(ab.cost)}</span>` : ''}
           </div>
-          ${ab.effect ? `<div class="loadout-option-desc">${esc(ab.effect)}</div>` : ''}
+          ${ab.effect ? `<div class="loadout-option-desc">${linkKeywords(ab.effect)}</div>` : ''}
         </div>`;
       }).join('');
     }
@@ -1847,21 +1869,25 @@
     const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
     const remaining = info.picks - sel.length;
     document.getElementById('abilities-modal-title').textContent = `${a.name} — choose ${info.picks}`;
+    const head = (ab, extra) => `<div class="ability-pick-head"><span class="ability-pick-name">${esc(ab.name)}</span>${extra}${ab.cost ? `<span class="ability-pick-cost">${esc(ab.cost)}</span>` : ''}</div>`;
     let html = '';
+    // Innate abilities — always on, so no radio; an "Always" tag instead.
     if (info.innate && info.innate.length) {
-      html += `<div class="section-header" style="padding-top:0">Innate</div>`;
-      html += info.innate.map(ab => `<div class="ability-lite"><span class="loadout-option-name">${esc(ab.name)}</span>${ab.cost ? `<span class="loadout-option-cost">${esc(ab.cost)}</span>` : ''}</div>`).join('');
+      html += info.innate.map(ab => `<div class="ability-row ability-row-innate">
+        ${head(ab, '<span class="ability-always">Always</span>')}
+        ${ab.effect ? `<div class="ability-pick-effect">${linkKeywords(ab.effect)}</div>` : ''}
+      </div>`).join('');
     }
-    html += `<div class="section-header">Abilities Table — ${remaining > 0 ? `${remaining} left` : 'all chosen'}</div>`;
+    // The choosable table — radio-style rows. Keywords in the effect are tappable.
     html += info.table.map(ab => {
       const on = sel.includes(ab.name);
       const locked = !on && remaining <= 0;
-      return `<div class="loadout-option ${on ? 'selected' : ''} ${locked ? 'row-disabled' : ''}" onclick="${locked ? '' : `App.toggleAdmiralAbility('${ab.name.replace(/'/g, "\\'")}')`}">
-        <div class="flex justify-between items-center">
-          <span class="loadout-option-name">${on ? '✓ ' : ''}${esc(ab.name)}</span>
-          ${ab.cost ? `<span class="loadout-option-cost">${esc(ab.cost)}</span>` : ''}
+      return `<div class="ability-row ability-pick ${on ? 'selected' : ''} ${locked ? 'locked' : ''}" onclick="${locked ? '' : `App.toggleAdmiralAbility('${ab.name.replace(/'/g, "\\'")}')`}">
+        <span class="ability-radio"></span>
+        <div class="ability-pick-body">
+          ${head(ab, '')}
+          ${ab.effect ? `<div class="ability-pick-effect">${linkKeywords(ab.effect)}</div>` : ''}
         </div>
-        ${ab.effect ? `<div class="loadout-option-desc">${esc(ab.effect)}</div>` : ''}
       </div>`;
     }).join('');
     document.getElementById('abilities-modal-body').innerHTML = html;
