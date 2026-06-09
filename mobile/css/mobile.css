@@ -512,11 +512,27 @@ input, textarea, select { font: inherit; }
 
 .weapon-row {
   display: grid;
-  grid-template-columns: 1fr 32px 32px 32px 40px;
+  grid-template-columns: 1fr 32px 32px 32px 44px;
   align-items: center;
   padding: var(--sp-xs) 0;
   border-bottom: 1px solid var(--stroke3);
   font-size: var(--text-caption1);
+}
+/* Firing-arc cell: compact SVG sector over its short code, so it never clips. */
+.weapon-arc .arc-ico {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  line-height: 1;
+  color: var(--fg2);
+}
+.weapon-arc .arc-ico svg { display: block; }
+.weapon-arc .arc-label {
+  font-size: 9px;
+  font-family: var(--font-condensed);
+  font-weight: var(--weight-semibold);
+  color: var(--fg3);
 }
 .weapon-row:last-child { border-bottom: none; }
 
