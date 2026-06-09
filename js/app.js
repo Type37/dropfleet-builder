@@ -3865,7 +3865,7 @@ const App = (() => {
                 <div class="print-admiral-ability-sublabel">Flagship — ${esc(fsName)}${fsSize ? ', ' + fsSize : ''}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
                 ${renderStatGrid(fsp)}
                 ${wpns.length ? `<div class="weapon-list">${renderWeaponHeader()}${wpns.map(renderWeaponRow).join('')}</div>` : ''}
-                ${(fsp.specialRuleDetails || []).length ? `<div class="print-rules-list">${fsp.specialRuleDetails.map(r => `<span class="print-rule">${esc(r.name)}${r.description ? `: ${esc(r.description)}` : ''}</span>`).join('')}</div>` : ''}
+                ${(fsp.specialRuleDetails || []).length ? `<div class="print-rules-list">${fsp.specialRuleDetails.map(r => `<span class="print-rule">${esc(r.name)}${r.description ? `: ${ruleHtml(r.description)}` : ''}</span>`).join('')}</div>` : ''}
               </div>`;
             }
           }
@@ -4063,7 +4063,7 @@ const App = (() => {
             <div class="print-rules-heading">Ship Rules</div>
             ${ruleDetails.map(r => {
               const pageRef = r.page ? ` <span class="print-glossary-page">p.${esc(r.page)}</span>` : '';
-              return `<div class="print-rule-entry"><span class="print-rule-name">${esc(r.name)}${pageRef}</span>${r.description ? ` — ${esc(r.description)}` : ''}</div>`;
+              return `<div class="print-rule-entry"><span class="print-rule-name">${esc(r.name)}${pageRef}</span>${r.description ? `: ${ruleHtml(r.description)}` : ''}</div>`;
             }).join('')}
           </div>`;
         } else if (ruleNames) {
@@ -4900,7 +4900,7 @@ const App = (() => {
         let special = '—';
         const dr = DEPLOY_RANGE[part.toLowerCase()];
         if (a.special && a.special !== '-') special = renderWeaponSpecialChips(a.special);
-        else if (a.ksReroll !== undefined) special = `Re-roll ${esc(String(a.ksReroll))} KS save${a.ksReroll > 1 ? 's' : ''} (Close Protection)`;
+        else if (a.ksReroll !== undefined) special = closeProtectionChip(a.ksReroll);
         else if (dr) special = `Deploys within ${dr} of carrier`;
         body += `<tr>
           ${i === 0 ? launchCell : ''}
@@ -4985,13 +4985,13 @@ const App = (() => {
         <div class="launch-ref-row launch-ref-row-header">
           <span class="launch-ref-col launch-ref-col-name">Asset</span>
           <span class="launch-ref-col launch-ref-col-thrust">Thrust</span>
-          <span class="launch-ref-col launch-ref-col-special">Kinetic Save Reroll</span>
+          <span class="launch-ref-col launch-ref-col-special">Close Protection</span>
         </div>`;
       defensive.forEach(a => {
         html += `<div class="launch-ref-row">
           <span class="launch-ref-col launch-ref-col-name">${esc(a.name)}</span>
           <span class="launch-ref-col launch-ref-col-thrust">${esc(a.thrust)}</span>
-          <span class="launch-ref-col launch-ref-col-special">Reroll ${a.ksReroll} KS die per Fighter token</span>
+          <span class="launch-ref-col launch-ref-col-special">${closeProtectionChip(a.ksReroll)}</span>
         </div>`;
       });
       html += '</div>';
@@ -5015,6 +5015,18 @@ const App = (() => {
     const div = document.createElement('div');
     div.textContent = String(str);
     return div.innerHTML;
+  }
+
+  // Rule/description text: escape everything, then re-allow our own <b> emphasis
+  // (rules text stores verbatim bold via <b> tags) and turn newlines into breaks.
+  function ruleHtml(str) { return esc(str).replace(/&lt;(\/?)b&gt;/g, '<$1b>').replace(/\n/g, '<br>'); }
+
+  // Fighters' defensive value is the Close Protection re-roll count (per faction).
+  // Render it as a tooltip chip carrying the verbatim §8.3.3.1 rule. Note: the
+  // re-rolls apply to Kinetic OR Energy saves, so the label deliberately omits "KS".
+  function closeProtectionChip(rerolls) {
+    const cp = lookupRuleFull('Close Protection') || { description: '', page: '' };
+    return `<span class="rule-chip rule-chip-sm has-tooltip" data-rule-desc="${esc(cp.description)}" data-rule-page="${esc(cp.page || '')}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">Close Protection (re-roll ${esc(String(rerolls))})</span>`;
   }
 
   function formatLore(loreText, famousShipsPrefix, famousShips) {
@@ -5116,7 +5128,7 @@ const App = (() => {
           const page = r.page ? ` <span class="detail-rule-page">p.${esc(r.page)}</span>` : '';
           return `<div class="detail-rule-entry">
             <span class="detail-rule-name">${esc(r.name)}${page}</span>
-            ${r.description ? `<span class="detail-rule-desc">${esc(r.description)}</span>` : ''}
+            ${r.description ? `<span class="detail-rule-desc">${ruleHtml(r.description)}</span>` : ''}
           </div>`;
         }).join('') + '</div>';
     }
@@ -5185,7 +5197,7 @@ const App = (() => {
     tooltip.className = 'rule-tooltip-popup';
     const page = el.getAttribute('data-rule-page');
     const pageHtml = page ? `<span class="rule-tooltip-page">Rulebook p.${esc(page)}</span>` : '';
-    tooltip.innerHTML = `<div class="rule-tooltip-title">${el.textContent}${pageHtml}</div><div class="rule-tooltip-body">${esc(desc).replace(/\n/g, '<br>')}</div>`;
+    tooltip.innerHTML = `<div class="rule-tooltip-title">${el.textContent}${pageHtml}</div><div class="rule-tooltip-body">${ruleHtml(desc)}</div>`;
     document.body.appendChild(tooltip);
 
     // Position near the chip

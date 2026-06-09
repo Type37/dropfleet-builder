@@ -214,6 +214,10 @@
       "description": "This Weapon may only be fired at targets within Scan range and on the same Orbital Layer as the attacking Ship.",
       "page": "38"
     },
+    "Close Protection": {
+      "description": "<b>After rolling Kinetic or Energy saves</b> against Close Action and Bomber (of any type) attacks, you may declare the use of any number of Fighters. Each Fighter used confers its re-rolls to a defending friendly Group within its Thrust range. The <b>defending player assigns all re-rolls</b> from each Fighter against specific weapons, dividing up Fighters as they choose. Shield and Backup saves cannot be re-rolled this way.\n<b>Once a Fighter has been used in this way, remove it.</b>",
+      "page": "22"
+    },
     "Corruptor-X": {
       "description": "When this Weapon successfully inflicts damage, place X Battalions on the target.",
       "page": "38"

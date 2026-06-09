@@ -330,7 +330,7 @@
   function openRule(name) {
     const rule = lookupRule(name);
     const body = rule.description
-      ? `<p>${esc(rule.description).replace(/\n/g, '<br>')}</p>`
+      ? `<p>${ruleHtml(rule.description)}</p>`
       : `<p class="rule-sheet-unknown">No rules text on file for this keyword yet.</p>`;
     showSheet(name, body, rule.page);
   }
@@ -411,6 +411,9 @@
   /* ── Helpers ───────────────────────────────────────────── */
   function uuid() { return 'xxxx-xxxx-xxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16)); }
   function esc(s) { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+  // Rule/description text: escape everything, then re-allow our own <b> emphasis
+  // (rules text stores verbatim bold via <b> tags) and turn newlines into breaks.
+  function ruleHtml(s) { return esc(s).replace(/&lt;(\/?)b&gt;/g, '<$1b>').replace(/\n/g, '<br>'); }
 
   const CATEGORY_ORDER = ['light', 'medium', 'heavy', 'colossal', 'payload'];
   const CATEGORY_LABELS = { light: 'Light', medium: 'Medium', heavy: 'Heavy', colossal: 'Colossal', payload: 'Payload' };
@@ -1327,7 +1330,7 @@
 
       ${rules.map(r => `<div class="rule-card">
         <div class="rule-card-name">${esc(r.name)}</div>
-        ${r.description ? `<div class="rule-card-text">${esc(r.description).replace(/\n/g, '<br>')}</div>` : ''}
+        ${r.description ? `<div class="rule-card-text">${ruleHtml(r.description)}</div>` : ''}
       </div>`).join('')}
 
       ${renderLore(ship)}
@@ -1458,7 +1461,7 @@
         const dmg = has ? `${a.damage || '—'}${t ? `<span class="${tc}" style="margin-left:2px">${t}</span>` : ''}` : '—';
         const dr = DEPLOY_RANGE[part.toLowerCase()];
         const special = (a.special && a.special !== '-') ? renderSpecialChips(a.special)
-          : a.ksReroll != null ? `<span class="weapon-special-chip">Close Protection (re-roll ${a.ksReroll} KS)</span>`
+          : a.ksReroll != null ? `<span class="weapon-special-chip tappable" onclick="event.stopPropagation();App.openRule('Close Protection')">Close Protection (re-roll ${a.ksReroll})</span>`
           : dr ? `<span class="weapon-special-chip">Deploys within ${dr} of carrier</span>`
           : '—';
         rows += `<div class="weapon-row ${tc}" style="grid-template-columns:52px 1fr 40px 32px 32px 40px">
@@ -1812,7 +1815,7 @@
         }).join('')}
       </div>` : ''}
       ${specialText ? `<div class="rule-card"><div class="rule-card-text">${esc(specialText)}</div></div>` : ''}
-      ${rules.length ? rules.map(r => `<div class="rule-card"><div class="rule-card-name">${esc(r.name || r)}</div>${r.description ? `<div class="rule-card-text">${esc(r.description)}</div>` : ''}</div>`).join('') : ''}`;
+      ${rules.length ? rules.map(r => `<div class="rule-card"><div class="rule-card-name">${esc(r.name || r)}</div>${r.description ? `<div class="rule-card-text">${ruleHtml(r.description)}</div>` : ''}</div>`).join('') : ''}`;
   }
   function openAdmiralDetail(i) { activeAdmiralIdx = i; navigate('screen-admiral-detail'); }
   function renderAdmiralDetail() {
@@ -2237,7 +2240,7 @@
         const t = (a.type || '').toUpperCase();
         const dr = DEPLOY_RANGE[part.toLowerCase()];
         const special = (a.special && a.special !== '-') ? a.special
-          : a.ksReroll != null ? `Close Protection (re-roll ${a.ksReroll} KS)`
+          : a.ksReroll != null ? `Close Protection (re-roll ${a.ksReroll})`
           : dr ? `Deploys within ${dr} of carrier`
           : '';
         rows += `<tr>
@@ -2321,7 +2324,7 @@
     const stationHtml = f.spaceStation ? `<div class="pr-line"><b>${esc(f.spaceStation.name)}</b> — ${f.spaceStation.cost} pts</div>` : '';
 
     const glossary = [...usedRules.entries()].sort((a, b) => a[0].localeCompare(b[0]))
-      .map(([n, d]) => `<div class="pr-gloss"><b>${esc(n)}</b> — ${esc(d)}</div>`).join('');
+      .map(([n, d]) => `<div class="pr-gloss"><b>${esc(n)}</b>: ${ruleHtml(d)}</div>`).join('');
 
     document.getElementById('print-root').innerHTML = `
       <div class="pr-header">
