@@ -897,7 +897,7 @@
       return `<div class="list-row flagship-row" onclick="App.openAdmiralDetail(${ai})">
         ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
-          <div class="list-row-title">${esc(fs.name)} <span class="flagship-tag">Flagship</span></div>
+          <div class="list-row-title">${esc(fs.name)}</div>
           <div class="list-row-sub">${sizeClass ? esc(sizeClass) + ' · ' : ''}flies with ${esc(a.name)}</div>
         </div>
         <span class="list-chevron">›</span>
@@ -1768,7 +1768,7 @@
     const specialText = stats.special && stats.special !== '-' ? stats.special : '';
     const artSrc = shipArtPath(fs.name);
     const sizeClass = fs.category ? (CATEGORY_LABELS[fs.category] || '') : '';
-    return `<div class="section-header">Flagship — ${esc(fs.name)}${sizeClass ? ', ' + sizeClass : ''}${fs.cost ? `, ${fs.cost}pts` : ''}</div>
+    return `<div class="section-header">${esc(fs.name)}${sizeClass ? ', ' + sizeClass : ''}${fs.cost ? `, ${fs.cost}pts` : ''}</div>
       ${artSrc ? `<div class="ship-art-hero">${shopLinkImg(fs.name, `<img src="${artSrc}" alt="${esc(fs.name)}" loading="lazy">`, fs)}</div>` : ''}
       <div class="stat-grid">
         ${statEntries.map(s => `<div class="stat-cell">${statIcon(s.key)}<div><div class="stat-label">${s.label}</div><div class="stat-value">${esc(s.val)}</div></div></div>`).join('')}

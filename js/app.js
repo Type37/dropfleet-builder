@@ -1779,16 +1779,16 @@ const App = (() => {
       if (a.type !== 'Famous' || !a.shipKey) return '';
       const fs = shipDB[f.faction]?.groups?.famous_admirals?.ships?.[a.shipKey];
       if (!fs) return '';
-      const name = fs.ship_name || fs.className || 'Flagship';
+      const name = fs.ship_name || fs.className || 'Ship';
       const cat = fs.shipCategory || 'medium';
       const catLabel = CATEGORY_LABELS[cat] || cat;
       const catColor = flagshipCatColor[cat] || 'var(--navy)';
       const artSrc = fs.image || null;
-      return `<div class="overview-group-card card-deco overview-flagship-card" style="border-left-color:${catColor}" title="Flagship of ${esc(a.name)} — its cost is counted with the admiral">
+      return `<div class="overview-group-card card-deco overview-flagship-card" style="border-left-color:${catColor}" title="Carries ${esc(a.name)}; its cost is counted with the admiral">
         <div class="overview-group-top">
           ${artSrc ? `<div class="overview-group-art"><img src="${esc(artSrc)}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
           <div class="overview-group-info">
-            <div class="overview-group-name">${esc(name)} <span class="flagship-tag">Flagship</span></div>
+            <div class="overview-group-name">${esc(name)}</div>
             <div class="overview-group-meta">
               <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size:10px;padding:1px 6px">${esc(catLabel)}</span>
               <span class="text-caption">flies with ${esc(a.name)}</span>
@@ -3263,12 +3263,12 @@ const App = (() => {
                 <span class="badge badge-gold">${admiral.points} pts</span>
                 ${admiral.ship_cost ? `<span class="badge badge-neutral">Ship: ${admiral.ship_cost} pts</span>` : ''}
               </div>
-              ${admiral.ship_name ? `<div style="margin-top:var(--sp-xs);font-size:var(--text-xs);color:var(--ink-muted)">Flagship: ${esc(admiral.ship_name)}${admiral.shipCategory ? ', ' + (CATEGORY_LABELS[admiral.shipCategory] || '') : ''}</div>` : ''}
+              ${admiral.ship_name ? `<div style="margin-top:var(--sp-xs);font-size:var(--text-xs);color:var(--ink-muted)">Ship: ${esc(admiral.ship_name)}${admiral.shipCategory ? ', ' + (CATEGORY_LABELS[admiral.shipCategory] || '') : ''}</div>` : ''}
             </div>
           </div>
           ${abilities.length > 0 ? `<div style="margin-top:var(--sp-md);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${esc(a.cost)})` : ''}${a.effect ? ' — ' + esc(a.effect) : ''}</div>`).join('')}</div>` : ''}
           <div class="admiral-modal-picks">+ choose ${admiral.ability_picks || 1} from the Abilities Table</div>
-          ${isDisabled ? `<div class="text-caption" style="margin-top:var(--sp-sm)">${tooHighLevel ? `Requires ${sizeInfo.label}+` : 'One named admiral per fleet'}</div>` : `<button class="btn btn-primary btn-sm" style="margin-top:var(--sp-md)" onclick="App.addFamousAdmiral('${key}')">Add to fleet — brings ${esc(admiral.ship_name || 'flagship')}</button>`}
+          ${isDisabled ? `<div class="text-caption" style="margin-top:var(--sp-sm)">${tooHighLevel ? `Requires ${sizeInfo.label}+` : 'One named admiral per fleet'}</div>` : `<button class="btn btn-primary btn-sm" style="margin-top:var(--sp-md)" onclick="App.addFamousAdmiral('${key}')">Add to fleet: brings ${esc(admiral.ship_name || 'their ship')}</button>`}
         </div>`;
       });
     }
@@ -3548,7 +3548,7 @@ const App = (() => {
         const flagship = admiralGroup?.ships?.[a.shipKey];
         if (flagship) {
           admiralImgUrl = flagship.image || null;
-          const fsName = flagship.ship_name || flagship.className || (flagship.tonnage ? flagship.tonnage + ' Flagship' : 'Flagship');
+          const fsName = flagship.ship_name || flagship.className || (flagship.tonnage ? flagship.tonnage + ' Ship' : 'Ship');
           const fsSize = flagship.shipCategory ? (CATEGORY_LABELS[flagship.shipCategory] || '') : '';
           const fsSub = [fsSize, flagship.className && flagship.className !== fsName ? flagship.className : '', flagship.ship_cost ? flagship.ship_cost + ' pts' : ''].filter(Boolean).join(', ');
           const img = flagship.image ? `<img src="${esc(flagship.image)}" alt="" class="admiral-flagship-art" loading="lazy" onerror="this.style.display='none'">` : '';
@@ -3825,11 +3825,11 @@ const App = (() => {
           if (a.type === 'Famous' && a.shipKey) {
             const fsp = factionInfo?.groups?.famous_admirals?.ships?.[a.shipKey];
             if (fsp) {
-              const fsName = fsp.ship_name || fsp.className || (fsp.tonnage ? fsp.tonnage + ' Flagship' : 'Flagship');
+              const fsName = fsp.ship_name || fsp.className || (fsp.tonnage ? fsp.tonnage + ' Ship' : 'Ship');
               const fsSize = fsp.shipCategory ? (CATEGORY_LABELS[fsp.shipCategory] || '') : '';
               const wpns = fsp.weapons || [];
               flagshipHtml = `<div class="print-admiral-flagship">
-                <div class="print-admiral-ability-sublabel">Flagship — ${esc(fsName)}${fsSize ? ', ' + fsSize : ''}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
+                <div class="print-admiral-ability-sublabel">${esc(fsName)}${fsSize ? ', ' + fsSize : ''}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
                 ${renderStatGrid(fsp)}
                 ${wpns.length ? `<div class="weapon-list">${renderWeaponHeader()}${wpns.map(renderWeaponRow).join('')}</div>` : ''}
                 ${(fsp.specialRuleDetails || []).length ? `<div class="print-rules-list">${fsp.specialRuleDetails.map(r => `<span class="print-rule">${esc(r.name)}${r.description ? `: ${ruleHtml(r.description)}` : ''}</span>`).join('')}</div>` : ''}
