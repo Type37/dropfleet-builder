@@ -165,6 +165,20 @@
   </div>
 </div>
 
+<!-- ═══ Admiral abilities picker (pops up on add) ═══ -->
+<div class="modal-overlay" id="modal-abilities">
+  <div class="modal-panel modal-panel-pop">
+    <div class="modal-header">
+      <div class="modal-title" id="abilities-modal-title">Choose Abilities</div>
+      <button class="modal-close" onclick="App.closeAbilityModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="abilities-modal-body"><!-- Populated by JS --></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary btn-block" onclick="App.closeAbilityModal()">Done</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ Action Sheet (overflow menus) ═══ -->
 <div class="sheet-scrim" id="action-sheet-scrim" onclick="App.closeActionSheet()"></div>
 <div class="action-sheet" id="action-sheet" role="menu">

@@ -1582,14 +1582,11 @@
     });
     f.updatedAt = Date.now();
     saveFleets();
-    // If this admiral picks abilities from the faction table, land straight on
-    // their detail (the picker) so the choice isn't missed. Replace the picker
-    // screen so Back returns to the fleet, not the admiral list.
+    // If this admiral picks abilities from the faction table, return to the
+    // fleet and pop the ability picker modal so the choice isn't missed.
+    goBack();
     if ((a.abilityPicks || 0) > 0) {
-      activeAdmiralIdx = f.admirals.length - 1;
-      navigate('screen-admiral-detail', { replace: true });
-    } else {
-      goBack();
+      setTimeout(() => openAbilityModal(f.admirals.length - 1), 180);
     }
   }
   function removeAdmiralPrompt(i) {
@@ -1754,7 +1751,46 @@
     else { if (a.selectedAbilities.length >= info.picks) return; a.selectedAbilities.push(name); }
     activeFleet.updatedAt = Date.now();
     saveFleets();
-    renderAdmiralDetail();
+    // Re-render whichever surface is showing the picker.
+    if (document.getElementById('modal-abilities').classList.contains('active')) renderAbilityModalBody(activeAdmiralIdx);
+    else renderAdmiralDetail();
+  }
+
+  // Ability picker that pops up when you add an admiral (mirrors desktop).
+  function renderAbilityModalBody(idx) {
+    const a = activeFleet.admirals[idx];
+    if (!a) return;
+    const info = getAdmiralInfo(a);
+    if (!info) return;
+    const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
+    const remaining = info.picks - sel.length;
+    document.getElementById('abilities-modal-title').textContent = `${a.name} — choose ${info.picks}`;
+    let html = '';
+    if (info.innate && info.innate.length) {
+      html += `<div class="section-header" style="padding-top:0">Innate</div>`;
+      html += info.innate.map(ab => `<div class="ability-lite"><span class="loadout-option-name">${esc(ab.name)}</span>${ab.cost ? `<span class="loadout-option-cost">${esc(ab.cost)}</span>` : ''}</div>`).join('');
+    }
+    html += `<div class="section-header">Abilities Table — ${remaining > 0 ? `${remaining} left` : 'all chosen'}</div>`;
+    html += info.table.map(ab => {
+      const on = sel.includes(ab.name);
+      const locked = !on && remaining <= 0;
+      return `<div class="loadout-option ${on ? 'selected' : ''} ${locked ? 'row-disabled' : ''}" onclick="${locked ? '' : `App.toggleAdmiralAbility('${ab.name.replace(/'/g, "\\'")}')`}">
+        <div class="flex justify-between items-center">
+          <span class="loadout-option-name">${on ? '✓ ' : ''}${esc(ab.name)}</span>
+          ${ab.cost ? `<span class="loadout-option-cost">${esc(ab.cost)}</span>` : ''}
+        </div>
+        ${ab.effect ? `<div class="loadout-option-desc">${esc(ab.effect)}</div>` : ''}
+      </div>`;
+    }).join('');
+    document.getElementById('abilities-modal-body').innerHTML = html;
+  }
+  function openAbilityModal(idx) {
+    activeAdmiralIdx = idx;
+    renderAbilityModalBody(idx);
+    document.getElementById('modal-abilities').classList.add('active');
+  }
+  function closeAbilityModal() {
+    document.getElementById('modal-abilities').classList.remove('active');
   }
   function assignAdmiral(groupId) {
     const a = activeFleet.admirals[activeAdmiralIdx];
@@ -2246,7 +2282,7 @@
     openAddGroup, filterShips, setSort, addShip,
     openGroup, changeQty, changeGroupQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow, toggleSecondary,
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
-    openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral,
+    openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral, closeAbilityModal,
     openStation, addStation, removeStationPrompt,
     overflow, fleetOverflow, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
     importFleetPrompt, doImportText,
