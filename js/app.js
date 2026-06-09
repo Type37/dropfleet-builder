@@ -1878,11 +1878,7 @@ const App = (() => {
               Add Group
             </button>
           </div>
-          <div class="overview-groups">${(groupCards + flagshipCards) || `
-            <div class="overview-groups-empty">
-              <p>No battle groups yet — add one to start your fleet.</p>
-              <button class="btn btn-primary" onclick="App.addGroup()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> Add your first group</button>
-            </div>`}</div>
+          <div class="overview-groups">${groupCards + flagshipCards}</div>
         </div>
         ${admHtml}
         ${stationHtml}

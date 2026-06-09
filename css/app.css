@@ -5109,6 +5109,9 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(0);
     overflow-y: auto;
   }
+  /* The collapsed sidebar sits as a fixed 48px bottom peek here — give the
+     footer room so the peek floats above it instead of covering it. */
+  .game-info-footer { padding-bottom: calc(48px + var(--sp-lg) + env(safe-area-inset-bottom, 0px)); }
 
   /* Picker/reference tension: while the ship picker is open, float the collapsed
      fleet-summary sheet above it so running points & composition stay glanceable

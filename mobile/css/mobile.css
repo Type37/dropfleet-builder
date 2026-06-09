@@ -1871,7 +1871,9 @@ body.sheet-open .sheet-scrim {
 
 /* ── 50. Site footer (uniform across WarLore builders) ─── */
 .m-footer {
-  padding: var(--sp-l) var(--sp-l) calc(72px + var(--sp-l));  /* clear the fixed Create button */
+  /* Clear the fixed bottom-action (Create + 2 text links ≈ 156px) so the
+     attribution isn't hidden behind it. */
+  padding: var(--sp-l) var(--sp-l) calc(160px + env(safe-area-inset-bottom, 0px));
   text-align: center;
   font-size: var(--text-caption1);
   line-height: 1.7;

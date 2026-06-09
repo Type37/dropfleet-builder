@@ -819,7 +819,9 @@
     const pct = Math.min(100, (pts / limit) * 100);
     const over = pts > limit;
     document.getElementById('fleet-pts-current').textContent = `${pts} / ${limit} pts`;
-    document.getElementById('fleet-pts-remaining').textContent = over ? `${pts - limit} over` : `${limit - pts} left`;
+    // Only surface the over-budget delta (the "X left" was redundant with the
+    // "N / max pts" line above).
+    document.getElementById('fleet-pts-remaining').textContent = over ? `${pts - limit} over` : '';
     const fill = document.getElementById('fleet-pts-fill');
     fill.style.width = pct + '%';
     fill.classList.toggle('over', over);
@@ -862,9 +864,9 @@
         <span class="list-chevron">›</span>
       </div>`;
     }).join('');
-    if (!(f.battleGroups || []).length && !flagshipCards) {
-      html += `<div class="empty-state-sm">No groups yet. Tap “Add Group”.</div>`;
-    } else {
+    // No empty-state block when there are no groups — the section header's
+    // "Add Group" button (and the FAB) are the affordance; show nothing.
+    if ((f.battleGroups || []).length) {
       html += (f.battleGroups || []).map((g, i) => {
         const s = g.ships[0];
         if (!s) return '';
