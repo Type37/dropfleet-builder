@@ -432,8 +432,8 @@ input, textarea, select { font: inherit; }
   background: var(--paper-alt);
 }
 .rank-thumb svg {
-  width: 82%;
-  height: 82%;
+  width: 92%;
+  height: 92%;
 }
 
 

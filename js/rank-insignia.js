@@ -28,25 +28,30 @@
     shaltari: 'Shaltari', bioficer: 'Bioficer', resistance: 'Resistance'
   };
 
-  // Centre-aligned y positions for n marks (i=0 is the bottom mark).
+  // Centre-aligned y positions for n marks (i=0 is the bottom mark). The marks
+  // spread to fill most of the box height so the insignia reads big and bold.
   function rows(n) {
-    const step = 4, cy = 12, ys = [];
+    // Wider spacing for fewer marks so a low rank still fills the box; tighter
+    // as marks stack up (cap the total span ~18 units of the 24 viewBox).
+    const span = 18, cy = 12, ys = [];
+    const step = n > 1 ? Math.min(5, span / (n - 1)) : 0;
     for (let i = 0; i < n; i++) ys.push(cy + ((n - 1) / 2 - i) * step);
     return ys;
   }
 
-  // Per-faction mark drawn around centre (12, y). (y, i, n, color) -> svg.
+  // Per-faction mark drawn around centre (12, y) — bold, near-full-width so the
+  // motif fills the thumbnail. (y, i, n, color) -> svg.
   const MARK = {
-    ucm: (y, i, n, c) => `<rect x="4" y="${y - 1.4}" width="16" height="2.8" rx="0.6" fill="${c}"/>`,
+    ucm: (y, i, n, c) => `<rect x="2.5" y="${y - 1.9}" width="19" height="3.8" rx="0.9" fill="${c}"/>`,
     resistance: (y, i, n, c) =>
-      `<rect x="4" y="${y - 1.3}" width="16" height="2.6" rx="0.6" fill="${c}"/>` +
-      (i === n - 1 ? `<circle cx="6" cy="${y}" r="2.4" fill="none" stroke="${c}" stroke-width="1.3"/>` : ''),
+      `<rect x="2.5" y="${y - 1.8}" width="19" height="3.6" rx="0.9" fill="${c}"/>` +
+      (i === n - 1 ? `<circle cx="5.2" cy="${y}" r="2.9" fill="none" stroke="${c}" stroke-width="1.7"/>` : ''),
     phr: (y, i, n, c) =>
-      `<path d="M5 ${y + 2.2} L12 ${y - 2.2} L19 ${y + 2.2}" fill="none" stroke="${c}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`,
+      `<path d="M3 ${y + 2.8} L12 ${y - 2.8} L21 ${y + 2.8}" fill="none" stroke="${c}" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>`,
     scourge: (y, i, n, c) =>
-      `<path d="M4 ${y} q3.5 -3 7 0 t7 0" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round"/>`,
+      `<path d="M2.5 ${y} q4.875 -4 9.5 0 t9.5 0" fill="none" stroke="${c}" stroke-width="2.9" stroke-linecap="round"/>`,
     shaltari: (y, i, n, c) =>
-      `<path d="M12 ${y - 2.7} L15.6 ${y} L12 ${y + 2.7} L8.4 ${y} Z" fill="${c}"/>`
+      `<path d="M12 ${y - 3.6} L16.6 ${y} L12 ${y + 3.6} L7.4 ${y} Z" fill="${c}"/>`
     // bioficer is special-cased (a growing tessellation, not stacked rows) —
     // see bioficerInsignia() below.
   };
@@ -74,7 +79,7 @@
     };
     // Edge-adjacent reveal order (index = level - 1).
     const order = [up(1, 0), dn(2, 0), up(2, 0), up(2, 1), dn(3, 0)];
-    const inset = 0.09;
+    const inset = 0.05;
     return order.slice(0, n).map(pts => {
       const gx = (pts[0][0] + pts[1][0] + pts[2][0]) / 3;
       const gy = (pts[0][1] + pts[1][1] + pts[2][1]) / 3;
