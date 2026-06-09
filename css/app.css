@@ -2839,6 +2839,23 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--gold-dark);
 }
 
+/* Portrait-thumbnail slot beside an admiral's name: the portrait when one
+   exists (famous), else the rank insignia fills the square (generic/faction).
+   The insignia lives here now, not inline with the name text. */
+.admiral-thumb {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: var(--paper-alt);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.admiral-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.admiral-thumb svg { width: 82%; height: 82%; }
+
 /* Rank insignia (shared js/rank-insignia.js) */
 .rank-insignia { vertical-align: -0.28em; margin-right: 6px; flex: 0 0 auto; }
 .admiral-flagship-name .rank-insignia { vertical-align: -0.2em; }

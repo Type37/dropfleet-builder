@@ -423,6 +423,19 @@ input, textarea, select { font: inherit; }
   height: 52px;
 }
 
+/* Rank insignia filling the portrait slot (admirals with no portrait). The SVG
+   is centred and fills most of the square. */
+.rank-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper-alt);
+}
+.rank-thumb svg {
+  width: 82%;
+  height: 82%;
+}
+
 
 /* ── 9. Section Headers ───────────────────────────────── */
 .section-header {

@@ -3050,6 +3050,16 @@ const App = (() => {
     { level: 4, cost: 60 }
   ];
 
+  // The portrait-thumbnail slot for an admiral: the portrait when one exists
+  // (famous admirals), otherwise the rank insignia fills the whole square
+  // (generic/faction admirals have no portrait). The insignia lives here now,
+  // not inline with the name.
+  function admiralThumb(level, imgUrl) {
+    if (imgUrl) return `<div class="admiral-thumb"><img src="${esc(imgUrl)}" alt="" loading="lazy" onerror="this.style.display='none'"></div>`;
+    const ins = window.RankInsignia ? RankInsignia(currentFleet.faction, level, 52) : '';
+    return `<div class="admiral-thumb rank-thumb">${ins}</div>`;
+  }
+
   function openAdmiralModal() {
     if (!currentFleet) return;
     const factionShips = shipDB[currentFleet.faction];
@@ -3069,10 +3079,13 @@ const App = (() => {
     // ── Generic Admirals: pick a level ──
     html += sectionTitle('Generic Admiral');
     const levelBtns = GENERIC_ADMIRAL_LEVELS.filter(l => l.level <= maxLevel).map(l =>
-      `<div class="admiral-card card-interactive" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between" onclick="App.addGenericAdmiral(null, ${l.level}, ${l.cost})">
-        <div>
-          <div class="admiral-name">${window.RankInsignia ? RankInsignia(currentFleet.faction, l.level) : ''}Level ${l.level} Admiral</div>
-          <div class="admiral-level">${l.cost} pts · Assign to any Capital Ship</div>
+      `<div class="admiral-card card-interactive" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-md)" onclick="App.addGenericAdmiral(null, ${l.level}, ${l.cost})">
+        <div class="flex items-center gap-md" style="min-width:0">
+          ${admiralThumb(l.level, null)}
+          <div>
+            <div class="admiral-name">Level ${l.level} Admiral</div>
+            <div class="admiral-level">${l.cost} pts · Assign to any Capital Ship</div>
+          </div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addGenericAdmiral(null, ${l.level}, ${l.cost})">Add</button>
       </div>`
@@ -3090,9 +3103,10 @@ const App = (() => {
         const abilities = adm.abilities || [];
         const picks = adm.abilityPicks || 1;
         html += `
-        <div class="admiral-card card-interactive${disabled ? ' disabled' : ''}" style="cursor:${disabled ? 'not-allowed' : 'pointer'};${disabled ? 'opacity:0.5;' : ''}" ${disabled ? '' : `onclick="App.addFactionAdmiral('${adm.id}')"`}>
+        <div class="admiral-card card-interactive${disabled ? ' disabled' : ''}" style="cursor:${disabled ? 'not-allowed' : 'pointer'};${disabled ? 'opacity:0.5;' : ''};display:flex;gap:var(--sp-md);align-items:flex-start" ${disabled ? '' : `onclick="App.addFactionAdmiral('${adm.id}')"`}>
+          ${admiralThumb(adm.level, null)}
           <div style="flex:1;min-width:0">
-            <div class="admiral-name">${window.RankInsignia ? RankInsignia(currentFleet.faction, adm.level) : ''}${esc(adm.name)}</div>
+            <div class="admiral-name">${esc(adm.name)}</div>
             <div class="admiral-level">Level ${adm.level || '?'} · ${adm.cost} pts</div>
             ${abilities.length > 0 ? `<div style="margin-top:var(--sp-sm);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${esc(a.cost)})` : ''}${a.effect ? ' — ' + esc(a.effect) : ''}</div>`).join('')}</div>` : ''}
             <div class="admiral-modal-picks">+ choose ${picks} from the Abilities Table</div>
@@ -3116,9 +3130,9 @@ const App = (() => {
         html += `
         <div class="admiral-card card-interactive${isDisabled ? ' disabled' : ''}" ${isDisabled ? '' : `onclick="App.addFamousAdmiral('${key}')"`} style="cursor:${isDisabled ? 'not-allowed' : 'pointer'};${isDisabled ? 'opacity:0.5;' : ''}">
           <div class="flex gap-md items-start">
-            ${admiral.image ? `<div class="ship-card-image"><img src="${esc(admiral.image)}" alt="${esc(admiral.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+            ${admiral.image ? `<div class="ship-card-image"><img src="${esc(admiral.image)}" alt="${esc(admiral.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : admiralThumb(admiral.level, null)}
             <div style="flex:1;min-width:0">
-              <div class="admiral-name">${window.RankInsignia ? RankInsignia(currentFleet.faction, admiral.level) : ''}${esc(admiral.name)}</div>
+              <div class="admiral-name">${esc(admiral.name)}</div>
               <div class="admiral-level">Level ${admiral.level || '?'} · Famous${tooHighLevel ? ` · Requires ${sizeInfo.label}+` : ''}</div>
               <div class="flex gap-sm flex-wrap" style="margin-top:var(--sp-xs)">
                 <span class="badge badge-gold">${admiral.points} pts</span>
@@ -3345,11 +3359,13 @@ const App = (() => {
 
     let html = admirals.map((a, i) => {
       let flagshipHtml = '';
+      let admiralImgUrl = null;
       if (a.type === 'Famous' && a.shipKey) {
         const factionShips = shipDB[currentFleet.faction];
         const admiralGroup = factionShips?.groups?.famous_admirals;
         const flagship = admiralGroup?.ships?.[a.shipKey];
         if (flagship) {
+          admiralImgUrl = flagship.image || null;
           const fsName = flagship.ship_name || flagship.className || (flagship.tonnage ? flagship.tonnage + ' Flagship' : 'Flagship');
           const fsSize = flagship.shipCategory ? (CATEGORY_LABELS[flagship.shipCategory] || '') : '';
           const fsSub = [fsSize, flagship.className && flagship.className !== fsName ? flagship.className : '', flagship.ship_cost ? flagship.ship_cost + ' pts' : ''].filter(Boolean).join(' · ');
@@ -3378,9 +3394,12 @@ const App = (() => {
       return `
       <div class="admiral-card" style="margin-bottom:var(--sp-sm)">
         <div class="flex items-center justify-between">
-          <div>
-            <div class="admiral-name">${window.RankInsignia ? RankInsignia(currentFleet.faction, a.level) : ''}${esc(a.name)}</div>
-            <div class="admiral-level">Level ${a.level || '?'}${a.type !== 'Generic' ? ' · ' + a.type : ''}</div>
+          <div class="flex items-center gap-md" style="min-width:0">
+            ${admiralThumb(a.level, admiralImgUrl)}
+            <div style="min-width:0">
+              <div class="admiral-name">${esc(a.name)}</div>
+              <div class="admiral-level">Level ${a.level || '?'}${a.type !== 'Generic' ? ' · ' + a.type : ''}</div>
+            </div>
           </div>
           <span class="badge badge-gold">${a.points} pts</span>
         </div>

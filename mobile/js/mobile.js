@@ -169,6 +169,17 @@
     return null;
   }
 
+  // The portrait-thumbnail slot for an admiral row: the ship/admiral portrait
+  // when one exists (famous admirals), otherwise the rank insignia fills the
+  // whole square (generic/faction admirals have no portrait). `lg` for the
+  // larger detail-header box.
+  function admiralThumb(factionKey, level, art, lg) {
+    const cls = 'ship-thumb' + (lg ? ' ship-thumb-lg' : '');
+    if (art) return `<div class="${cls}"><img src="${art}" alt="" loading="lazy"></div>`;
+    const ins = window.RankInsignia ? RankInsignia(factionKey, level, lg ? 56 : 40) : '';
+    return `<div class="${cls} rank-thumb">${ins}</div>`;
+  }
+
   /* ── Rules glossary ────────────────────────────────────── */
   const WEAPON_SPECIAL_RULES = {
     'Air to Air':'Can only target Launch Assets (fighters, bombers, etc.), not ships.',
@@ -915,9 +926,9 @@
       html += f.admirals.map((a, i) => {
         const art = admiralArtPath(a.name);
         return `<div class="list-row" onclick="App.openAdmiralDetail(${i})">
-          ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
+          ${admiralThumb(f.faction, a.level, art)}
           <div class="list-row-content">
-            <div class="list-row-title">${window.RankInsignia ? RankInsignia(f.faction, a.level) : ''}${esc(a.name)}</div>
+            <div class="list-row-title">${esc(a.name)}</div>
             <div class="list-row-sub">${a.points}pts · Level ${a.level || '?'}${a.shipName ? ' · ' + esc(a.shipName) : ''}</div>
           </div>
           <span class="list-chevron">›</span>
@@ -1480,10 +1491,10 @@
     // abilities, so we DON'T list an abilities line). Not fabricated.
     const genericRows = GENERIC_ADMIRAL_LEVELS.filter(l => l.level <= maxLevel).map(l =>
       `<div class="list-row" onclick="App.addGenericAdmiral(${l.level}, ${l.cost})">
-        <div class="ship-thumb ship-thumb-admiral" aria-hidden="true">★</div>
+        ${admiralThumb(f.faction, l.level, null)}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
-            <span class="list-row-title">${window.RankInsignia ? RankInsignia(f.faction, l.level) : ''}Level ${l.level} Admiral</span>
+            <span class="list-row-title">Level ${l.level} Admiral</span>
             <span class="list-row-pts">${l.cost}pts</span>
           </div>
           <div class="list-row-sub">Take any number · adds Level for AP &amp; initiative</div>
@@ -1504,10 +1515,10 @@
       const picks = a.abilityPicks || 0;
       const sub = `Level ${a.level}${a.isFamous ? ' · Famous' : ''}${flagshipStr}${overLevel ? ` · exceeds ${size.label} cap` : ''}`;
       return `<div class="list-row ${overLevel ? 'row-disabled' : ''}" onclick="${overLevel ? '' : `App.addAdmiral('${a.id}')`}">
-        ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
+        ${admiralThumb(f.faction, a.level, art)}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
-            <span class="list-row-title">${window.RankInsignia ? RankInsignia(f.faction, a.level) : ''}${esc(a.name)}</span>
+            <span class="list-row-title">${esc(a.name)}</span>
             <span class="list-row-pts">${total}pts</span>
           </div>
           <div class="list-row-sub">${sub}</div>
@@ -1703,9 +1714,9 @@
 
     document.getElementById('admiral-detail-content').innerHTML = `
       <div class="detail-header">
-        ${art ? `<div class="ship-thumb ship-thumb-lg"><img src="${art}" alt="" loading="lazy"></div>` : ''}
-        <div style="flex:1;${art ? 'margin-left:var(--sp-m)' : ''}">
-          <div class="detail-name">${window.RankInsignia ? RankInsignia(f.faction, a.level) : ''}${esc(a.name)}</div>
+        ${admiralThumb(f.faction, a.level, art, true)}
+        <div style="flex:1;margin-left:var(--sp-m)">
+          <div class="detail-name">${esc(a.name)}</div>
           <div class="detail-type">Level ${a.level || '?'}${a.shipName ? ' · ' + esc(a.shipName) : ''}</div>
         </div>
         <div class="pts-badge-lg"><div class="pts-badge-value">${a.points}</div><div class="pts-badge-label">Points</div></div>
