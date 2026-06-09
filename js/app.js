@@ -5066,7 +5066,7 @@ const App = (() => {
     const wpns = dbShip.weapons || [];
     let weaponsHtml = '';
     if (wpns.length > 0) {
-      weaponsHtml = '<div class="detail-section-label">Weapons</div><div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
+      weaponsHtml = '<div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
     }
 
     // Loadout options

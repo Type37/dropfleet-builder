@@ -1261,7 +1261,6 @@
       </div>
 
       ${weapons.length ? `<div class="weapon-table">
-        <div class="section-header" style="padding:0 0 var(--sp-s)">Weapons</div>
         <div class="weapon-row weapon-row-header">
           <div class="weapon-name">Weapon</div><div class="weapon-val">Lk</div><div class="weapon-val">At</div><div class="weapon-val">Dm</div><div class="weapon-val">Arc</div>
         </div>
