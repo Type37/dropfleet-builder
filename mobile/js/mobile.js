@@ -2223,6 +2223,39 @@
     openFleet(fleets.length - 1);
   }
 
+  // Launch-asset table for the printed sheet. Mirrors the on-screen launch
+  // table (same data + deploy ranges) so printed docs carry full launch info.
+  function printLaunchTable(map, db) {
+    const loads = db.loads || [];
+    if (!loads.length) return '';
+    let rows = '';
+    loads.forEach(load => {
+      if (!load.name) return;
+      const parts = load.name.split(/\s*&\s*/).map(p => p.trim()).filter(Boolean);
+      parts.forEach((part, i) => {
+        const a = map[part.toLowerCase()] || { name: part };
+        const has = a.attack != null;
+        const t = (a.type || '').toUpperCase();
+        const dr = DEPLOY_RANGE[part.toLowerCase()];
+        const special = (a.special && a.special !== '-') ? a.special
+          : a.ksReroll != null ? `Close Protection (re-roll ${a.ksReroll} KS)`
+          : dr ? `Deploys within ${dr} of carrier`
+          : '';
+        rows += `<tr>
+          <td>${i === 0 ? esc(load.launch || '—') : ''}</td>
+          <td>${esc(part)}</td>
+          <td>${esc(a.thrust || '—')}</td>
+          <td>${has ? esc(a.attack) : '—'}</td>
+          <td>${has ? esc(a.lock) : '—'}</td>
+          <td>${has ? `${esc(a.damage)}${t}` : '—'}</td>
+          <td>${esc(special)}</td>
+        </tr>`;
+      });
+    });
+    return `<div class="pr-launch-label">Launch Assets</div>
+      <table class="pr-weapons pr-launch"><thead><tr><th>Launch</th><th>Load</th><th>Thr</th><th>At</th><th>Lk</th><th>Dm</th><th>Special</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+
   /* ── Export as PDF (printable view → browser "Save as PDF") ─ */
   function exportPdf() {
     const f = activeFleet;
@@ -2236,6 +2269,7 @@
       const r = lookupRule(name);
       if (r.description && !usedRules.has(name)) usedRules.set(name, r.description);
     };
+    const laMap = getLaunchAssetMap(f.faction);
 
     const groupsHtml = (f.battleGroups || []).map(g => {
       const inst = g.ships[0];
@@ -2252,6 +2286,14 @@
         if (w.special && w.special !== '-') w.special.split(',').forEach(s => collectRule(s.trim()));
         return `<tr><td>${esc(w.name)}</td><td>${esc(w.lock || '')}</td><td>${esc(w.attack || '')}</td><td>${esc(w.damage || '')}${esc(w.type || '')}</td><td>${esc(w.arc || '')}</td><td>${esc(w.special && w.special !== '-' ? w.special : '')}</td></tr>`;
       }).join('');
+      // launch-asset special keywords also feed the glossary
+      (db.loads || []).forEach(load => {
+        if (!load.name) return;
+        load.name.split(/\s*&\s*/).forEach(part => {
+          const a = laMap[part.trim().toLowerCase()];
+          if (a && a.special && a.special !== '-') a.special.split(',').forEach(s => collectRule(s.trim()));
+        });
+      });
       // ship special rules (full text inline)
       (db.specialRules || []).forEach(r => { if (r.description && !usedRules.has(r.name)) usedRules.set(r.name, r.description); });
       const rulesInline = (db.specialRules || []).map(r => esc(r.name)).join(', ');
@@ -2269,6 +2311,7 @@
         <div class="pr-group-head"><span class="pr-group-name">${qty}× ${esc(db.name)}</span><span class="pr-group-pts">${groupPoints(f, g)} pts</span></div>
         <div class="pr-stats">${statCells}</div>
         ${weapons ? `<table class="pr-weapons"><thead><tr><th>Weapon</th><th>Lk</th><th>At</th><th>Dm</th><th>Arc</th><th>Special</th></tr></thead><tbody>${weapons}</tbody></table>` : ''}
+        ${printLaunchTable(laMap, db)}
         ${rulesInline ? `<div class="pr-rules-line"><b>Special:</b> ${rulesInline}</div>` : ''}
         ${opts.length ? `<div class="pr-opts">${opts.map(esc).join(' · ')}</div>` : ''}
       </div>`;

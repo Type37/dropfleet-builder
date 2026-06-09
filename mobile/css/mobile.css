@@ -1829,6 +1829,7 @@ body.sheet-open .sheet-scrim {
   .pr-weapons { width: 100%; border-collapse: collapse; font-size: 8pt; margin: 3px 0; }
   .pr-weapons th { text-align: left; border-bottom: 1px solid #999; padding: 1px 4px; color: #555; }
   .pr-weapons td { padding: 1px 4px; border-bottom: 1px solid #eee; }
+  .pr-launch-label { font-size: 8pt; font-weight: 700; color: #555; margin-top: 3px; }
 
   .pr-rules-line, .pr-opts { font-size: 8.5pt; margin-top: 2px; }
   .pr-opts { color: #444; font-style: italic; }
