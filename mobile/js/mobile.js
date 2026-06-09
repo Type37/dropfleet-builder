@@ -17,7 +17,8 @@
   let activeFleet = null;
   let activeGroupIdx = -1;     // index into activeFleet.battleGroups
   let activeAdmiralIdx = -1;   // index into activeFleet.admirals
-  let pickerFilter = 'all';
+  let pickerFilter = 'all';            // tonnage filter — pick ONE (radio)
+  let pickerAttrs = new Set();         // attribute filters — multi-select (AND)
   let pickerSort = { key: 'points', dir: 'asc' };  // default: cheapest first
 
   const FACTION_FILES = {
@@ -970,6 +971,7 @@
   function openAddGroup() {
     if (!activeFleet) return;
     pickerFilter = 'all';
+    pickerAttrs.clear();
     const s = document.getElementById('picker-search');
     if (s) s.value = '';
     navigate('screen-add-group');
@@ -981,10 +983,43 @@
     if (!faction) return;
     const groups = faction.groups || [];
 
-    const chipEl = document.getElementById('picker-chips');
+    // Attribute filters — multi-select toggles (AND). Only the ones that exist
+    // in this faction are shown.
+    const attrDefs = [
+      { key: 'launch',  label: 'Launch',  test: s => (s.loads && s.loads.length) || (s.loadoutOptions || []).some(lo => (lo.options || []).some(o => o.loads && o.loads.length)) },
+      { key: 'modular', label: 'Modular', test: s => isFullyModular(s) },
+      { key: 'rare',    label: 'Rare',    test: s => s.isRare },
+      { key: 'unique',  label: 'Unique',  test: s => s.isUnique }
+    ];
+    const presentAttrs = attrDefs.filter(a => groups.some(g => a.test(g.ship || {})));
+
+    // Apply all filters first so the live count is accurate.
+    const search = (document.getElementById('picker-search')?.value || '').toLowerCase();
+    let list = groups.filter(g => {
+      const s = g.ship || {};
+      if (pickerFilter !== 'all' && g.category !== pickerFilter) return false;
+      if (search && !(s.name || g.name).toLowerCase().includes(search)) return false;
+      for (const k of pickerAttrs) { const d = attrDefs.find(a => a.key === k); if (d && !d.test(s)) return false; }
+      return true;
+    });
+
+    // Filter chips: Tonnage = pick ONE (radio); attributes = multi-select.
     const cats = [...new Set(groups.map(g => g.category))].sort((a, b) => CATEGORY_ORDER.indexOf(a) - CATEGORY_ORDER.indexOf(b));
-    chipEl.innerHTML = `<button class="chip ${pickerFilter === 'all' ? 'active' : ''}" onclick="App.filterShips('all')">All</button>` +
-      cats.map(c => `<button class="chip ${pickerFilter === c ? 'active' : ''}" onclick="App.filterShips('${c}')">${CATEGORY_LABELS[c] || c}</button>`).join('');
+    const anyActive = pickerFilter !== 'all' || pickerAttrs.size > 0;
+    document.getElementById('picker-chips').innerHTML = `
+      <div class="filter-row">
+        <span class="filter-label">Tonnage</span>
+        <button class="chip ${pickerFilter === 'all' ? 'active' : ''}" onclick="App.filterShips('all')">All</button>
+        ${cats.map(c => `<button class="chip ${pickerFilter === c ? 'active' : ''}" onclick="App.filterShips('${c}')">${CATEGORY_LABELS[c] || c}</button>`).join('')}
+      </div>
+      ${presentAttrs.length ? `<div class="filter-row">
+        <span class="filter-label">Filter</span>
+        ${presentAttrs.map(a => `<button class="chip chip-toggle ${pickerAttrs.has(a.key) ? 'active' : ''}" onclick="App.toggleAttr('${a.key}')">${pickerAttrs.has(a.key) ? '✓ ' : ''}${a.label}</button>`).join('')}
+      </div>` : ''}
+      <div class="filter-meta">
+        <span class="filter-count">${list.length} ship${list.length !== 1 ? 's' : ''}</span>
+        ${anyActive ? `<button class="filter-clear" onclick="App.clearFilters()">Clear ×</button>` : ''}
+      </div>`;
 
     // Sort chips — tap to sort, tap the active one to flip direction.
     const sortKeys = [['points', 'Points'], ['name', 'Name'], ['tonnage', 'Tonnage']];
@@ -995,13 +1030,6 @@
         const arrow = on ? `<span class="sort-arrow">${pickerSort.dir === 'asc' ? '↑' : '↓'}</span>` : '';
         return `<button class="sort-chip ${on ? 'active' : ''}" onclick="App.setSort('${k}')">${lbl}${arrow}</button>`;
       }).join('');
-
-    const search = (document.getElementById('picker-search')?.value || '').toLowerCase();
-    let list = groups.filter(g => {
-      if (pickerFilter !== 'all' && g.category !== pickerFilter) return false;
-      if (search && !(g.ship?.name || g.name).toLowerCase().includes(search)) return false;
-      return true;
-    });
 
     const cmp = {
       points:  (a, b) => (a.ship?.cost || 0) - (b.ship?.cost || 0),
@@ -1036,6 +1064,8 @@
     }).join('');
   }
   function filterShips(cat) { pickerFilter = cat; renderShipPicker(); }
+  function toggleAttr(key) { if (pickerAttrs.has(key)) pickerAttrs.delete(key); else pickerAttrs.add(key); renderShipPicker(); }
+  function clearFilters() { pickerFilter = 'all'; pickerAttrs.clear(); renderShipPicker(); }
   function setSort(key) {
     if (pickerSort.key === key) pickerSort.dir = pickerSort.dir === 'asc' ? 'desc' : 'asc';
     else pickerSort = { key, dir: 'asc' };
@@ -2281,7 +2311,7 @@
   window.App = {
     init, goBack, viewDesktop,
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, openStarterFleets,
-    openAddGroup, filterShips, setSort, addShip,
+    openAddGroup, filterShips, toggleAttr, clearFilters, setSort, addShip,
     openGroup, changeQty, changeGroupQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow, toggleSecondary,
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral, closeAbilityModal,

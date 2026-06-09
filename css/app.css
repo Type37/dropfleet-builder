@@ -2662,6 +2662,17 @@ h1, h2, h3, h4, h5, h6 {
   border-bottom: 1px solid var(--stroke-light);
 }
 .ship-results-bar.hidden { display: none; }
+.results-clear {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: var(--navy);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+.results-clear:hover { text-decoration: underline; }
 .results-count {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);

@@ -2696,6 +2696,18 @@ const App = (() => {
     }
   }
 
+  function clearShipFilters() {
+    activeCategory = 'all';
+    activeFilters.clear();
+    shipSearchQuery = '';
+    const si = document.getElementById('ship-search-input'); if (si) si.value = '';
+    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+    const allTab = document.querySelector('.category-tab'); if (allTab) allTab.classList.add('active');
+    renderShipFilters();
+    const factionShips = shipDB[currentFleet.faction];
+    if (factionShips && factionShips.groups) renderShipSelectGrid(factionShips.groups, 'all');
+  }
+
   let _searchTimer = 0;
   function searchShips(query) {
     shipSearchQuery = (query || '').trim().toLowerCase();
@@ -2770,7 +2782,7 @@ const App = (() => {
         let ctx = [];
         if (shipSearchQuery) ctx.push(`"${esc(shipSearchQuery)}"`);
         if (activeFilters.size > 0) ctx.push([...activeFilters].join(', '));
-        resultsBar.innerHTML = `<span class="results-count">${ships.length} ship${ships.length !== 1 ? 's' : ''}</span>${ctx.length ? ` <span class="results-context">matching ${ctx.join(' + ')}</span>` : ''}`;
+        resultsBar.innerHTML = `<span class="results-count">${ships.length} ship${ships.length !== 1 ? 's' : ''}</span>${ctx.length ? ` <span class="results-context">matching ${ctx.join(' + ')}</span>` : ''}<button class="results-clear" onclick="App.clearShipFilters()">Clear ×</button>`;
         resultsBar.classList.remove('hidden');
       } else {
         resultsBar.classList.add('hidden');
@@ -5322,7 +5334,7 @@ const App = (() => {
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, moveGroup, toggleFleetCardMenu,
-    openShipSelectModal, filterCategory, toggleShipFilter, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
+    openShipSelectModal, filterCategory, toggleShipFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation,
     toggleSidebar, printFleet,

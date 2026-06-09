@@ -603,6 +603,53 @@ input, textarea, select { font: inherit; }
   color: var(--fg-on-dark);
   border-color: var(--navy);
 }
+/* Attribute toggles (multi-select) read as filled gold when on, distinct from
+   the navy radio Tonnage chips. */
+.chip-toggle.active {
+  background: var(--gold);
+  color: var(--navy-dark);
+  border-color: var(--gold);
+}
+
+/* Picker filter layout: stacked rows (Tonnage radio, then attribute toggles),
+   each horizontally scrollable, with a live count + Clear. */
+#picker-chips {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--sp-xs);
+  overflow-x: visible;
+}
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.filter-row::-webkit-scrollbar { display: none; }
+.filter-label {
+  flex-shrink: 0;
+  width: 58px;
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-bold);
+  color: var(--fg3);
+}
+.filter-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2px;
+}
+.filter-count { font-size: var(--text-caption2); color: var(--fg3); font-weight: var(--weight-semibold); }
+.filter-clear {
+  font-size: var(--text-caption1);
+  font-weight: var(--weight-bold);
+  color: var(--navy);
+  background: none;
+  border: none;
+  padding: 2px 6px;
+}
+.filter-clear:active { opacity: 0.6; }
 
 
 /* ── 14. Rule/Keyword Cards ───────────────────────────── */
