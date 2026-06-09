@@ -150,6 +150,14 @@ body {
 img { display: block; max-width: 100%; }
 button { font: inherit; cursor: pointer; border: none; background: none; }
 input, textarea, select { font: inherit; }
+/* iOS Safari zooms the viewport when a focused form control's text is under
+   16px. Force every control to >=16px so focusing never triggers an auto-zoom.
+   (This rule wins over the smaller per-field sizes that follow.) */
+input, textarea, select { font-size: 16px; }
+/* Kill the 300ms tap delay and double-tap zoom on interactive targets. */
+button, a, input, select, textarea,
+.btn, .counter-btn, .ovg-step, .list-row, .pill, .chip,
+[onclick], [role="button"] { touch-action: manipulation; }
 
 
 /* ── 3. App Bar (Dark header) ──────────────────────────── */
@@ -945,7 +953,7 @@ input, textarea, select { font: inherit; }
   border: 1px solid var(--stroke1);
   border-radius: var(--radius-md);
   background: var(--paper);
-  font-size: var(--text-body1);
+  font-size: 16px; /* >=16px so iOS doesn't auto-zoom on focus */
   color: var(--fg1);
   outline: none;
   transition: border-color var(--duration-fast) var(--ease-standard);
@@ -1075,7 +1083,7 @@ input, textarea, select { font: inherit; }
   border: 1px solid var(--stroke1);
   border-radius: var(--radius-md);
   background: var(--white);
-  font-size: var(--text-body1);
+  font-size: 16px; /* >=16px so iOS doesn't auto-zoom on focus */
   color: var(--fg1);
   outline: none;
   transition: border-color var(--duration-fast) var(--ease-standard);
@@ -1792,7 +1800,7 @@ body.sheet-open .sheet-scrim {
   border: 1px solid var(--stroke2);
   border-radius: var(--radius-md);
   font-family: var(--font-condensed);
-  font-size: var(--text-body);
+  font-size: 16px; /* >=16px so iOS doesn't auto-zoom on focus */
   color: var(--fg1);
   resize: vertical;
   -webkit-appearance: none;
