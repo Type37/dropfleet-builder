@@ -2607,7 +2607,7 @@ const App = (() => {
       const loreId = `lore-${ship.id}`;
       const openAttr = settings.autoExpandLore ? ' open' : '';
       const namesakeHtml = dbShip.namesake
-        ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake</span>${esc(dbShip.namesake)}</div>`
+        ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${esc(dbShip.namesake)}</div>`
         : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
@@ -2619,7 +2619,7 @@ const App = (() => {
       const openAttr = settings.autoExpandLore ? ' open' : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
-        <div class="ship-lore-text"><div class="lore-namesake"><span class="lore-namesake-label">Namesake</span>${esc(dbShip.namesake)}</div></div>
+        <div class="ship-lore-text"><div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${esc(dbShip.namesake)}</div></div>
       </details>`;
     }
 
@@ -5136,10 +5136,13 @@ const App = (() => {
 
     // Lore
     let loreHtml = '';
-    if (dbShip.lore) {
+    const detailNamesake = dbShip.namesake
+      ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${esc(dbShip.namesake)}</div>`
+      : '';
+    if (dbShip.lore || dbShip.namesake) {
       loreHtml = `<div class="detail-lore">
         <div class="detail-section-label">Lore</div>
-        <div class="text-rules">${formatLore(dbShip.lore, dbShip.famousShipsPrefix, dbShip.famousShips)}</div>
+        <div class="text-rules">${formatLore(dbShip.lore, dbShip.famousShipsPrefix, dbShip.famousShips)}${detailNamesake}</div>
       </div>`;
     }
 

@@ -1845,13 +1845,6 @@ body.sheet-open .sheet-scrim {
   color: var(--gold-dim);
   margin-bottom: var(--sp-s);
 }
-.lore-namesake {
-  font-family: var(--font-lore);
-  font-size: var(--text-caption1);
-  font-style: italic;
-  color: var(--fg3);
-  margin-bottom: var(--sp-s);
-}
 .lore-body {
   font-family: var(--font-lore);
   font-size: var(--text-body1);
@@ -1868,8 +1861,37 @@ body.sheet-open .sheet-scrim {
   color: var(--fg3);
 }
 .lore-famous-label {
+  display: block;
+  font-weight: var(--weight-bold);
+  font-style: normal;
+  color: var(--fg2);
+  margin-bottom: 4px;
+}
+.lore-famous ul {
+  list-style: disc;
+  padding-left: var(--sp-l);
+  margin: 0;
+}
+.lore-famous li {
   font-style: italic;
-  color: var(--fg4);
+  color: var(--fg3);
+  margin-bottom: 2px;
+}
+/* Namesake sits last, divided from the ship list; label bold, text upright. */
+.lore-namesake {
+  margin-top: var(--sp-m);
+  padding-top: var(--sp-m);
+  border-top: 1px dashed var(--stroke2);
+  font-family: var(--font-lore);
+  font-size: var(--text-caption1);
+  font-style: normal;
+  line-height: 1.6;
+  color: var(--fg3);
+}
+.lore-namesake-label {
+  font-weight: var(--weight-bold);
+  font-style: normal;
+  color: var(--gold-dim);
 }
 
 

@@ -1317,15 +1317,16 @@
     const famous = ship.famousShips || [];
     if (!lore && !namesake && !famous.length) return '';
     const paras = lore ? lore.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('') : '';
+    // Order matches desktop: lore → famous ships (bold header, italic bullets) → Namesake.
     const famousList = famous.length
-      ? `<div class="lore-famous"><span class="lore-famous-label">${esc(ship.famousShipsPrefix || 'Known ships of the class')}</span> ${famous.map(esc).join(' · ')}</div>`
+      ? `<div class="lore-famous"><span class="lore-famous-label">${esc(ship.famousShipsPrefix || 'Known ships of the class:')}</span><ul>${famous.map(n => `<li>${esc(n)}</li>`).join('')}</ul></div>`
       : '';
-    const namesakeLine = namesake ? `<div class="lore-namesake">Namesake: ${esc(namesake)}</div>` : '';
+    const namesakeLine = namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${esc(namesake)}</div>` : '';
     return `<div class="lore-card">
       <div class="lore-label">Lore</div>
-      ${namesakeLine}
       <div class="lore-body">${paras}</div>
       ${famousList}
+      ${namesakeLine}
     </div>`;
   }
 
