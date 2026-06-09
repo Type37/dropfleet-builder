@@ -1714,13 +1714,16 @@ const App = (() => {
       const gMax = firstDbForArt ? (firstDbForArt.groupMax || 1) : 1;
       const qty = g.ships.length;
       const shipName = firstDbForArt ? firstDbForArt.name : g.name;
-      const stepperHtml = gMax > 1
+      // A group's size is adjustable only when the ship's min and max differ.
+      // Fixed-size groups (gMin === gMax) get no stepper — just a static ×N when
+      // they hold more than one (removal is via the group's Remove button).
+      const stepperHtml = gMax > gMin
         ? `<div class="overview-group-stepper" onclick="event.stopPropagation()">
             <button class="ovg-step${qty <= gMin ? ' ovg-step-remove' : ''}" onclick="event.stopPropagation();App.removeLastShip('${g.id}')" aria-label="${qty <= gMin ? 'Remove group' : 'Remove one ' + esc(shipName)}">&minus;</button>
             <span class="ovg-qty" aria-label="${qty} ${esc(shipName)} in group">${qty}</span>
             <button class="ovg-step" onclick="event.stopPropagation();App.addSameShip('${g.id}')" ${qty >= gMax ? 'disabled' : ''} aria-label="Add one ${esc(shipName)}">+</button>
           </div>`
-        : '';
+        : (qty > 1 ? `<div class="overview-group-stepper overview-group-stepper-static"><span class="ovg-qty">×${qty}</span></div>` : '');
 
       // Validation status for this group
       const gErrors = validateGroupSize(g, f);

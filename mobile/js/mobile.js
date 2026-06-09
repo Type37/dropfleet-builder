@@ -1228,11 +1228,11 @@
           <div class="group-counter-label">Group size</div>
           ${gMax > gMin ? `<div class="group-counter-range">${gMin}–${gMax} allowed</div>` : `<div class="group-counter-range">Fixed at ${gMin}</div>`}
         </div>
-        <div class="group-counter-controls">
+        ${gMax > gMin ? `<div class="group-counter-controls">
           <button class="counter-btn${qty <= gMin ? ' counter-btn-remove' : ''}" onclick="App.changeQty(-1)" aria-label="${qty <= gMin ? 'Remove group' : 'Remove one'}">−</button>
           <div class="group-counter-value">${qty}</div>
           <button class="counter-btn" onclick="App.changeQty(1)" ${qty >= gMax ? 'disabled' : ''}>+</button>
-        </div>
+        </div>` : (qty > 1 ? `<div class="group-counter-value group-counter-value-static">×${qty}</div>` : '')}
       </div>
 
       ${weapons.length ? `<div class="weapon-table">
@@ -1307,6 +1307,10 @@
       </div>`).join('')}
 
       ${renderLore(ship)}
+
+      <div style="padding:var(--sp-l)">
+        <button class="btn btn-ghost btn-block" onclick="App.removeGroup()" style="color:var(--danger);border-color:var(--danger)">Remove Group</button>
+      </div>
     `;
   }
 
