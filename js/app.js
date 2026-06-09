@@ -822,6 +822,23 @@ const App = (() => {
     navigate('builder', fleet.id);
   }
 
+  // Fleet-card overflow (⋮) menu — toggle the inline options menu, closing on
+  // outside click. Duplicate/Delete re-render the list so the menu clears.
+  function toggleFleetCardMenu(ev, btn) {
+    ev.stopPropagation();
+    const wrap = btn.closest('.fleet-card-menu-wrap');
+    if (!wrap) return;
+    const isOpen = wrap.classList.contains('open');
+    document.querySelectorAll('.fleet-card-menu-wrap.open').forEach(w => w.classList.remove('open'));
+    if (!isOpen) {
+      wrap.classList.add('open');
+      const close = (e) => {
+        if (!wrap.contains(e.target)) { wrap.classList.remove('open'); document.removeEventListener('click', close, true); }
+      };
+      setTimeout(() => document.addEventListener('click', close, true), 0);
+    }
+  }
+
   function deleteFleet(id) {
     const fleet = fleets.find(f => f.id === id);
     if (!fleet) return;
@@ -898,24 +915,23 @@ const App = (() => {
             ${fIcon ? `<img src="${fIcon}" alt="" class="fleet-card-faction-icon">` : ''}
             <span class="badge badge-navy">${fName}</span>
           </div>
-          <div class="flex gap-xs items-center">
-            ${validationBadge}
-            <span class="badge badge-neutral">${sizeInfo.label}</span>
+          <div class="fleet-card-menu-wrap" onclick="event.stopPropagation()">
+            <button class="fleet-card-menu-btn" aria-label="Fleet options" aria-haspopup="true" onclick="App.toggleFleetCardMenu(event, this)"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="3" r="1.4"/><circle cx="8" cy="8" r="1.4"/><circle cx="8" cy="13" r="1.4"/></svg></button>
+            <div class="fleet-card-menu" role="menu">
+              <button role="menuitem" onclick="App.duplicateFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1"/><path d="M2 11V3c0-.6.4-1 1-1h8"/></svg> Duplicate</button>
+              <button role="menuitem" class="danger" onclick="App.deleteFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Delete</button>
+            </div>
           </div>
         </div>
         <div class="fleet-card-name">${esc(f.name)}</div>
         ${f.description ? `<div class="text-caption" style="line-height:1.4">${esc(f.description)}</div>` : ''}
         <div class="fleet-card-points-row">
           <span class="fleet-card-points">${pts} <span class="fleet-card-pts-label">/ ${limit === 99999 ? '∞' : limit} pts</span></span>
-          <span class="text-caption">${f.battleGroups.length} group${f.battleGroups.length !== 1 ? 's' : ''} · ${shipCount} ship${shipCount !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} adm` : ''}${f.spaceStation ? ` · ${esc(f.spaceStation.name).replace(' Space Station','')}` : ''}</span>
+          <span class="text-caption">${sizeInfo.label} · ${f.battleGroups.length} group${f.battleGroups.length !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? ` · ${esc(f.spaceStation.name).replace(' Space Station','')}` : ''}</span>
         </div>
         <div class="fleet-card-bar"><div class="fleet-card-bar-fill ${barClass}" style="width:${pctFill}%"></div></div>
         ${renderFleetCardComp(f)}
-        <div class="fleet-card-actions" onclick="event.stopPropagation()">
-          ${timeAgo ? `<span class="text-caption" style="margin-right:auto;font-size:var(--text-xs)">${timeAgo}</span>` : ''}
-          <button class="btn btn-ghost btn-sm" onclick="App.duplicateFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1"/><path d="M2 11V3c0-.6.4-1 1-1h8"/></svg> Duplicate</button>
-          <button class="btn btn-danger btn-sm" onclick="App.deleteFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Delete</button>
-        </div>
+        ${timeAgo ? `<div class="fleet-card-time text-caption">${timeAgo}</div>` : ''}
       </div>`;
     }).join('');
 
@@ -5293,7 +5309,7 @@ const App = (() => {
   // ── Public API ──
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
-    loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, moveGroup,
+    loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, moveGroup, toggleFleetCardMenu,
     openShipSelectModal, filterCategory, toggleShipFilter, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation,
