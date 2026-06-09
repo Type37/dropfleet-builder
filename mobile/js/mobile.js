@@ -789,54 +789,9 @@
     }).join('');
   }
 
-  /* ── Guided coach (optional next-step helper) ──────────── */
-  function coachEnabled() { return localStorage.getItem('dfc_coach') !== 'off'; }
-  function setCoach(on) { localStorage.setItem('dfc_coach', on ? 'on' : 'off'); }
-  function coachNextStep(fleet) {
-    const size = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
-    const pts = fleetPoints(fleet);
-    const groups = fleet.battleGroups || [];
-    if (!groups.length)
-      return { msg: 'Start with your backbone — add a couple of Cruisers. They’re durable and flexible.', label: 'Add a group', fn: 'openAddGroup' };
-    if (pts < size.min)
-      return { msg: `You’re at ${pts} of ${size.min} pts. Add more ships to field a legal ${size.label} fleet.`, label: 'Add a group', fn: 'openAddGroup' };
-    if (!(fleet.admirals || []).length)
-      return { msg: 'Every fleet needs an Admiral to lead it. Pick one to command your flagship.', label: 'Add Admiral', fn: 'openAdmiral' };
-    const warns = validateFleet(fleet);
-    const optWarn = warns.find(w => /Deployable Feature|Systems|choose/i.test(w.m));
-    if (optWarn) return { msg: `Finish your ship options — ${optWarn.m}.`, label: null, fn: null };
-    const err = warns.find(w => w.t === 'error');
-    if (err) return { msg: err.m, label: null, fn: null };
-    return { legal: true, msg: 'Legal fleet — you’re ready to play!' };
-  }
-  function renderCoach(fleet) {
-    if (!coachEnabled()) return '';
-    const step = coachNextStep(fleet);
-    if (!step) return '';
-    if (step.legal) {
-      return `<div class="coach coach-done">
-        <span class="coach-icon">✓</span>
-        <span class="coach-msg">${esc(step.msg)}</span>
-        <button class="coach-dismiss" onclick="App.dismissCoach()" aria-label="Turn off guide">×</button>
-      </div>`;
-    }
-    return `<div class="coach">
-      <span class="coach-icon">›</span>
-      <div class="coach-body">
-        <div class="coach-msg">${esc(step.msg)}</div>
-        ${step.label && step.fn ? `<button class="coach-btn" onclick="App.${step.fn}()">${esc(step.label)}</button>` : ''}
-      </div>
-      <button class="coach-dismiss" onclick="App.dismissCoach()" aria-label="Turn off guide">×</button>
-    </div>`;
-  }
-  function dismissCoach() {
-    setCoach(false);
-    renderFleetDetail();
-  }
-  function toggleCoach() {
-    setCoach(!coachEnabled());
-    renderFleetDetail();
-  }
+  /* The "guided coach" banner was removed — it editorialised with AI-written
+     filler copy and duplicated the legality warnings. The warnings + empty
+     states already tell you the next step. */
 
   /* ── Screen: Fleet Detail ──────────────────────────────── */
   function openFleet(index) {
@@ -864,9 +819,6 @@
     const fill = document.getElementById('fleet-pts-fill');
     fill.style.width = pct + '%';
     fill.classList.toggle('over', over);
-
-    // Guided coach (optional friendly next-step)
-    document.getElementById('fleet-coach').innerHTML = renderCoach(f);
 
     // Warnings — tappable when they have a fix
     const warns = validateFleet(f);
@@ -1870,7 +1822,6 @@
   /* ── Fleet overflow (delete / duplicate / share) ───────── */
   function fleetOverflow() {
     showActionSheet([
-      { label: coachEnabled() ? 'Turn off guide' : 'Turn on guide', action: toggleCoach },
       { label: 'Copy as text', action: copyFleetText },
       { label: 'Copy as JSON', action: copyFleetJSON },
       { label: 'Export PDF', action: exportPdf },
@@ -2295,7 +2246,6 @@
     openStation, addStation, removeStationPrompt,
     overflow, fleetOverflow, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
     importFleetPrompt, doImportText,
-    dismissCoach, toggleCoach,
     openRule, openStat, closeRuleSheet, closeActionSheet
   };
 
