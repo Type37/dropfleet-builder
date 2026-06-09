@@ -3650,23 +3650,6 @@ const App = (() => {
         ).join('')}</div>`
       : '';
 
-    // Fleet composition by tonnage for print
-    const printCatCounts = {};
-    f.battleGroups.forEach(g => {
-      g.ships.forEach(s => {
-        const cat = s.groupCategory || 'medium';
-        if (!printCatCounts[cat]) printCatCounts[cat] = 0;
-        printCatCounts[cat]++;
-      });
-    });
-    const compParts = CATEGORY_ORDER
-      .filter(c => printCatCounts[c])
-      .map(c => `${printCatCounts[c]} ${CATEGORY_LABELS[c]}`);
-    const compLine = compParts.length > 0 ? compParts.join(' · ') : '';
-
-    // Print date
-    const printDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-
     const fIcon = FACTION_ICONS[f.faction];
 
     // Fleet description
@@ -3680,15 +3663,14 @@ const App = (() => {
           ${fIcon ? `<img src="${fIcon}" alt="" class="print-faction-icon">` : ''}
           <div class="print-header-text">
             <div class="print-fleet-name">${esc(f.name)}</div>
-            <div class="print-fleet-meta">${esc(fName)} — ${sizeInfo.label} — ${pts}${sizeInfo.max !== 99999 ? '/' + sizeInfo.max : ''} pts</div>
+            <div class="print-fleet-meta">${esc(fName)} — ${sizeInfo.label}</div>
           </div>
           <div class="print-header-points">
             <div class="print-points-big">${pts}</div>
             <div class="print-points-cap">${sizeInfo.max !== 99999 ? '/ ' + sizeInfo.max : ''} pts</div>
           </div>
         </div>
-        <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''} · ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? ` · ${esc(f.spaceStation.name)}` : ''}${compLine ? ` · ${compLine}` : ''}</div>
-        <div class="print-fleet-date">Printed ${printDate}</div>
+        <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''} · ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? ` · ${esc(f.spaceStation.name)}` : ''}</div>
       </div>
       ${descHtml}
       ${printWarnings}`;
