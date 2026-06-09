@@ -4905,11 +4905,17 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  transition: transform 140ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 110ms ease, color 110ms ease, border-color 110ms ease;
 }
 .ovg-step:hover:not(:disabled) { background: var(--navy); color: #fff; border-color: var(--navy); }
-/* Obvious press feedback — scale down + fill so the click clearly registers. */
-.ovg-step:active:not(:disabled) { transform: scale(0.82); background: var(--navy); color: #fff; border-color: var(--navy); }
+/* Press feedback: gentle scale-down + fill on press, spring-back on release. */
+.ovg-step:active:not(:disabled) { transform: scale(0.92); background: var(--navy); color: #fff; border-color: var(--navy); }
 .ovg-step:disabled { opacity: 0.35; cursor: default; }
+@media (prefers-reduced-motion: reduce) {
+  .ovg-step { transition: background-color 110ms ease, color 110ms ease, border-color 110ms ease; }
+  .ovg-step:active:not(:disabled) { transform: none; }
+}
 /* At the minimum, − removes the whole group — hint with a danger tint. */
 .ovg-step-remove { color: var(--danger, #c43c2f); border-color: rgba(196, 60, 47, 0.4); }
 .ovg-step-remove:hover { background: var(--danger, #c43c2f) !important; color: #fff !important; border-color: var(--danger, #c43c2f) !important; }

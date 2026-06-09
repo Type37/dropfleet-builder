@@ -111,6 +111,7 @@
   --ease-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);   /* enter — eases to rest */
   --ease-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);   /* exit — eases away */
   --ease-standard:   cubic-bezier(0.2, 0, 0, 1);        /* taps / UI micro-motion */
+  --ease-spring:     cubic-bezier(0.34, 1.56, 0.64, 1); /* press → spring-back overshoot */
 
   /* — Fonts (DFC personality) — kept in lockstep with css/app.css :root — */
   --font-body: "Jost", "Segoe UI", -apple-system, sans-serif;
@@ -873,16 +874,20 @@ button, a, input, select, textarea,
   justify-content: center;
   font-size: var(--text-subtitle1);
   color: var(--fg2);
-  transition: background-color var(--duration-fast) var(--ease-standard),
-              border-color var(--duration-fast) var(--ease-standard),
-              color var(--duration-fast) var(--ease-standard),
-              transform var(--duration-fast) var(--ease-standard),
+  transition: background-color 110ms var(--ease-standard),
+              border-color 110ms var(--ease-standard),
+              color 110ms var(--ease-standard),
+              transform var(--duration-fast) var(--ease-spring),
               box-shadow var(--duration-fast) var(--ease-standard);
 }
-/* Clear press feedback — the button scales down and fills so the tap reads as
-   received (the value updates right after). */
-.counter-btn:active { transform: scale(0.84); background: var(--navy); color: var(--white); border-color: var(--navy); }
+/* Press feedback: a gentle scale-down + colour fill flashes on tap, then the
+   spring easing lets it pop back on release so the press clearly registers. */
+.counter-btn:active { transform: scale(0.92); background: var(--navy); color: var(--white); border-color: var(--navy); }
 .counter-btn:disabled { opacity: 0.3; }
+@media (prefers-reduced-motion: reduce) {
+  .counter-btn { transition: background-color 110ms linear, color 110ms linear, border-color 110ms linear; }
+  .counter-btn:active { transform: none; }
+}
 /* At the minimum, − removes the whole group — hint with a danger tint. */
 .counter-btn-remove { color: var(--danger); border-color: var(--danger); }
 .counter-btn-remove:active { background: var(--danger); border-color: var(--danger); color: var(--white); }
