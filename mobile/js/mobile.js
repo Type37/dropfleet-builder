@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   DFC Mobile — App Logic
+   DFC Mobile, App Logic
    Hobgoblin-style linear stack navigation.
    Uses the SAME fleet schema as the desktop app (dfc_fleets):
      fleet.battleGroups[].ships[] storing { shipKey, groupCategory, points, loadouts }
@@ -12,13 +12,13 @@
   /* ── State ─────────────────────────────────────────────── */
   const FACTIONS = {};         // raw faction JSON keyed by faction key
   let RULES_DB = {};           // shared rules glossary
-  let SECONDARY_OBJECTIVES = []; // [{name, description}] — pick 2 per game
+  let SECONDARY_OBJECTIVES = []; // [{name, description}], pick 2 per game
   let fleets = [];
   let activeFleet = null;
   let activeGroupIdx = -1;     // index into activeFleet.battleGroups
   let activeAdmiralIdx = -1;   // index into activeFleet.admirals
-  let pickerFilter = 'all';            // tonnage filter — pick ONE (radio)
-  let pickerAttrs = new Set();         // attribute filters — multi-select (AND)
+  let pickerFilter = 'all';            // tonnage filter, pick ONE (radio)
+  let pickerAttrs = new Set();         // attribute filters, multi-select (AND)
   let pickerSort = { key: 'points', dir: 'asc' };  // default: cheapest first
 
   const FACTION_FILES = {
@@ -225,14 +225,14 @@
   /* ── Rules glossary ────────────────────────────────────── */
   const STAT_META = {
     scan:   { label: 'Scan',   desc: 'Scan range. The distance (in inches) at which this ship detects enemies and uses close-range weapons.' },
-    sig:    { label: 'Signature', desc: 'How visible this ship is. Enemies must be within their Scan range of your Signature to target you — a low Signature is harder to hit.' },
-    thrust: { label: 'Thrust', desc: 'Movement speed — how far (in inches) this ship moves each activation.' },
+    sig:    { label: 'Signature', desc: 'How visible this ship is. Enemies must be within their Scan range of your Signature to target you, a low Signature is harder to hit.' },
+    thrust: { label: 'Thrust', desc: 'Movement speed, how far (in inches) this ship moves each activation.' },
     hull:   { label: 'Hull',   desc: 'Hull points. The ship’s structural integrity. It becomes Crippled at half, and is destroyed at zero.' },
     es:     { label: 'Energy Shield', desc: 'Energy Save. When hit by an Energy (E) weapon, roll this number or higher on a d6 to avoid the damage.' },
     ks:     { label: 'Kinetic Shield', desc: 'Kinetic Save. When hit by a Kinetic (K) weapon, roll this number or higher on a d6 to avoid the damage.' },
     bs:     { label: 'Backup Save', desc: 'Backup Save. A last-resort save used when a ship has no relevant shield, or against certain weapons.' },
     pd:     { label: 'Point Defence', desc: 'Point Defence. Dice rolled to shoot down incoming Close Action attacks and bombers.' },
-    g:      { label: 'Group size', desc: 'How many of this ship can form one battle group — shown as a range (min–max).' }
+    g:      { label: 'Group size', desc: 'How many of this ship can form one battle group, shown as a range (min–max).' }
   };
 
   const STAT_ICONS = {
@@ -501,7 +501,7 @@
   }
   function openStarterFleets() {
     showActionSheet(STARTER_SPECS.map(spec => ({
-      label: (FACTION_INFO[spec.faction]?.name || spec.faction) + ' — Fast Play Sheet',
+      label: (FACTION_INFO[spec.faction]?.name || spec.faction) + ', Fast Play Sheet',
       action: () => buildStarterFleet(spec)
     })));
   }
@@ -627,7 +627,7 @@
     const size = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
     const pts = fleetPoints(fleet);
     if (pts > size.max && size.max !== 99999) w.push({ t: 'error', m: `Over budget: ${pts}/${size.max} pts` });
-    else if (fleet.battleGroups.length && pts < size.min) w.push({ t: 'warn', m: `Below ${size.label} minimum of ${size.min} pts (you have ${pts}) — a ${size.label} game is ${size.min}–${size.max === 99999 ? '+' : size.max} pts` });
+    else if (fleet.battleGroups.length && pts < size.min) w.push({ t: 'warn', m: `Below ${size.label} minimum of ${size.min} pts (you have ${pts}), a ${size.label} game is ${size.min}–${size.max === 99999 ? '+' : size.max} pts` });
 
     const gc = countableGroups(fleet).length;
     if (gc > size.groups) w.push({ t: 'error', m: `Too many groups: ${gc}/${size.groups}` });
@@ -668,8 +668,8 @@
     });
     const rareMax = RARE_MAX[fleet.gameSize] || 2;
     Object.values(counts).forEach(i => {
-      if (i.uniq && i.c > 1) w.push({ t: 'error', m: `${i.n} is Unique — max 1 group` });
-      if (i.rare && i.c > rareMax) w.push({ t: 'error', m: `${i.n} is Rare — max ${rareMax} at ${size.label}` });
+      if (i.uniq && i.c > 1) w.push({ t: 'error', m: `${i.n} is Unique, max 1 group` });
+      if (i.rare && i.c > rareMax) w.push({ t: 'error', m: `${i.n} is Rare, max ${rareMax} at ${size.label}` });
     });
 
     // Tonnage restrictions
@@ -679,7 +679,7 @@
       const p = groupPoints(fleet, g);
       if (cat === 'light') light += p; else if (cat === 'medium') medium += p; else if (cat === 'heavy') heavy += p;
     });
-    if (heavy > medium) w.push({ t: 'error', m: `Heavy points (${heavy}) can’t exceed Medium points (${medium}) — Medium ships are your backbone and unlock Heavy (rulebook 4.2)` });
+    if (heavy > medium) w.push({ t: 'error', m: `Heavy points (${heavy}) can’t exceed Medium points (${medium}), Medium ships are your backbone and unlock Heavy (rulebook 4.2)` });
     if (light > medium + heavy) w.push({ t: 'error', m: `Light points (${light}) can’t exceed Medium + Heavy points (${medium + heavy}) (rulebook 4.2)` });
 
     // Feature carriers must choose a Deployable Feature
@@ -697,7 +697,7 @@
         const { total, capUsage } = summariseSystems(s, list, seln);
         if (seln.totalIsExact && total !== seln.totalRequired) {
           w.push({ t: total < seln.totalRequired ? 'warn' : 'error',
-            m: `${db.name}: ${total < seln.totalRequired ? 'choose' : 'too many —'} ${seln.totalRequired} ${seln.listName} (has ${total})` });
+            m: `${db.name}: ${total < seln.totalRequired ? 'choose' : 'too many, max'} ${seln.totalRequired} ${seln.listName} (has ${total})` });
         } else if (!seln.totalIsExact && total > seln.totalRequired) {
           w.push({ t: 'error', m: `${db.name}: max ${seln.totalRequired} ${seln.listName} (has ${total})` });
         }
@@ -879,7 +879,7 @@
       }).join('');
     } else {
       warnEl.classList.remove('hidden');
-      warnEl.innerHTML = `<div class="warning-item warn-ok"><span class="warning-icon">✓</span><span>Legal fleet — ready to play</span></div>`;
+      warnEl.innerHTML = `<div class="warning-item warn-ok"><span class="warning-icon">✓</span><span>Legal fleet, ready to play</span></div>`;
     }
 
     // Groups
@@ -1013,7 +1013,7 @@
     if (!f) return;
     const sel = f.secondaryObjectives || [];
     const sub = document.getElementById('secondary-modal-sub');
-    if (sub) sub.textContent = sel.length >= 2 ? 'Both chosen — tap a selected objective to swap it.' : `Pick ${2 - sel.length} more.`;
+    if (sub) sub.textContent = sel.length >= 2 ? 'Both chosen, tap a selected objective to swap it.' : `Pick ${2 - sel.length} more.`;
     const body = document.getElementById('secondary-modal-body');
     if (body) body.innerHTML = `<div class="secondary-list">` + SECONDARY_OBJECTIVES.map((o, i) => {
       const on = sel.includes(o.name);
@@ -1209,7 +1209,7 @@
     const sysSel = ship.systemSelection;
 
     document.getElementById('group-detail-content').innerHTML = `
-      ${artSrc ? `<div class="ship-art-hero${isFullyModular(ship) ? ' ship-img-modular' : ''}">${isFullyModular(ship) ? '<div class="modular-art-note">Base hull shown — your ship’s look depends on the systems you choose</div>' : ''}${shopLinkImg(ship.name, `<img src="${artSrc}" alt="${esc(ship.name)}" loading="lazy">`, ship)}</div>` : ''}
+      ${artSrc ? `<div class="ship-art-hero${isFullyModular(ship) ? ' ship-img-modular' : ''}">${isFullyModular(ship) ? '<div class="modular-art-note">Base hull shown, your ship’s look depends on the systems you choose</div>' : ''}${shopLinkImg(ship.name, `<img src="${artSrc}" alt="${esc(ship.name)}" loading="lazy">`, ship)}</div>` : ''}
       <div class="detail-header">
         <div>
           <div class="detail-name">${esc(ship.name)}${qty > 1 ? ' ×' + qty : ''}</div>
@@ -1274,7 +1274,7 @@
 
       ${carrier && features.length ? `<div class="loadout-section">
         <div class="section-header" style="padding:0 0 var(--sp-s)">
-          ${featReq ? 'Deployable Feature' + (chosenFeature ? '' : ' — required') : 'Payload Feature — optional'}
+          ${featReq ? 'Deployable Feature' + (chosenFeature ? '' : ', required') : 'Payload Feature, optional'}
         </div>
         <div class="loadout-option ${!chosenFeature ? 'selected' : ''}" onclick="App.selectFeature('')">
           <div class="flex justify-between items-center">
@@ -1378,7 +1378,7 @@
     `).join('');
     return `<div class="loadout-section">
       <div class="section-header" style="padding:0 0 var(--sp-xs)">
-        ${esc(seln.listName)} — ${seln.totalIsExact ? 'choose' : 'up to'} ${required}
+        ${esc(seln.listName)}, ${seln.totalIsExact ? 'choose' : 'up to'} ${required}
         <span class="sys-total ${complete ? 'ok' : 'incomplete'}">${total}/${required}</span>
       </div>
       ${capChips ? `<div class="sys-cap-row">${capChips}</div>` : ''}
@@ -1431,20 +1431,20 @@
         const has = a.attack != null;
         const t = (a.type || '').toUpperCase();
         const tc = t === 'K' ? 'weapon-type-k' : t === 'E' ? 'weapon-type-e' : t === 'C' ? 'weapon-type-c' : '';
-        const dmg = has ? `${a.damage || '—'}${t ? `<span class="${tc}" style="margin-left:2px">${t}</span>` : ''}` : '—';
+        const dmg = has ? `${a.damage || '-'}${t ? `<span class="${tc}" style="margin-left:2px">${t}</span>` : ''}` : '-';
         const dr = DEPLOY_RANGE[part.toLowerCase()];
         const special = (a.special && a.special !== '-') ? renderSpecialChips(a.special)
           : a.ksReroll != null ? `<span class="weapon-special-chip tappable" onclick="event.stopPropagation();App.openRule('Close Protection')">Close Protection (re-roll ${a.ksReroll})</span>`
           : dr ? `<span class="weapon-special-chip">Deploys within ${dr} of carrier</span>`
-          : '—';
+          : '-';
         rows += `<div class="weapon-row ${tc}" style="grid-template-columns:52px 1fr 40px 32px 32px 40px">
-          ${i === 0 ? `<div class="weapon-val" style="font-weight:700">${esc(load.launch || '—')}${ls}</div>` : '<div></div>'}
+          ${i === 0 ? `<div class="weapon-val" style="font-weight:700">${esc(load.launch || '-')}${ls}</div>` : '<div></div>'}
           <div class="weapon-name">${esc(part)}</div>
-          <div class="weapon-val">${esc(a.thrust || '—')}</div>
-          <div class="weapon-val">${has ? esc(a.attack) : '—'}</div>
-          <div class="weapon-val">${has ? esc(a.lock) : '—'}</div>
+          <div class="weapon-val">${esc(a.thrust || '-')}</div>
+          <div class="weapon-val">${has ? esc(a.attack) : '-'}</div>
+          <div class="weapon-val">${has ? esc(a.lock) : '-'}</div>
           <div class="weapon-val">${dmg}</div>
-        </div>${special !== '—' ? `<div class="weapon-special">${special}</div>` : ''}`;
+        </div>${special !== '-' ? `<div class="weapon-special">${special}</div>` : ''}`;
       });
     });
     return `<div class="weapon-table">
@@ -1645,7 +1645,7 @@
       const flagshipStr = fs ? `, ${esc(fs.name)}${sizeClass ? ', ' + sizeClass : ''}` : '';
       const innate = (a.abilities || []).map(x => x.name).filter(Boolean);
       const picks = a.abilityPicks || 0;
-      const sub = `Level ${a.level}${a.isFamous ? ' Famous' : ''}${flagshipStr}${overLevel ? ` — exceeds ${size.label} cap` : ''}`;
+      const sub = `Level ${a.level}${a.isFamous ? ' Famous' : ''}${flagshipStr}${overLevel ? `, exceeds ${size.label} cap` : ''}`;
       return `<div class="list-row ${overLevel ? 'row-disabled' : ''}" onclick="${overLevel ? '' : `App.addAdmiral('${a.id}')`}">
         ${admiralThumb(f.faction, a.level, art)}
         <div class="list-row-content">
@@ -1666,8 +1666,8 @@
 
     document.getElementById('admiral-list').innerHTML =
       `<div class="section-header">Generic admirals</div>${genericRows}` +
-      (factionRows ? `<div class="section-header">Faction admirals — choose one Faction or Famous</div>${factionRows}` : '') +
-      (famousRows ? `<div class="section-header">Famous admirals — choose one Faction or Famous</div>${famousRows}` : '');
+      (factionRows ? `<div class="section-header">Faction admirals, choose one Faction or Famous</div>${factionRows}` : '') +
+      (famousRows ? `<div class="section-header">Famous admirals, choose one Faction or Famous</div>${famousRows}` : '');
   }
   function addGenericAdmiral(level, cost) {
     const f = activeFleet;
@@ -1814,7 +1814,7 @@
     }
     if (info && info.table.length && info.picks > 0) {
       const remaining = info.picks - sel.length;
-      abilitiesHtml += `<div class="section-header">Abilities Table — choose ${info.picks} ${remaining > 0 ? `(${remaining} left)` : '(full)'}</div>`;
+      abilitiesHtml += `<div class="section-header">Abilities Table, choose ${info.picks} ${remaining > 0 ? `(${remaining} left)` : '(full)'}</div>`;
       abilitiesHtml += info.table.map(ab => {
         const on = sel.includes(ab.name);
         const locked = !on && remaining <= 0;
@@ -1888,7 +1888,7 @@
     if (!info) return;
     const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
     const remaining = info.picks - sel.length;
-    document.getElementById('abilities-modal-title').textContent = `${a.name} — choose ${info.picks}`;
+    document.getElementById('abilities-modal-title').textContent = `${a.name}, choose ${info.picks}`;
     const head = (ab, extra) => `<div class="ability-pick-head"><span class="ability-pick-name">${esc(ab.name)}</span>${extra}${ab.cost ? `<span class="ability-pick-cost">${esc(ab.cost)}</span>` : ''}</div>`;
     let html = '';
     // Innate abilities — always on, so no radio; an "Always" tag instead.
@@ -2114,7 +2114,7 @@
         if (!inst) return;
         const db = findShip(fleet.faction, inst.groupCategory, inst.shipKey);
         const qty = g.ships.length;
-        lines.push(`${qty}× ${db?.name || 'Unknown'} — ${groupPoints(fleet, g)} pts`);
+        lines.push(`${qty}× ${db?.name || 'Unknown'}, ${groupPoints(fleet, g)} pts`);
         // Loadout
         (db?.loadoutOptions || []).forEach((lo, i) => {
           const selIdx = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
@@ -2135,14 +2135,14 @@
     if ((fleet.admirals || []).length) {
       lines.push('', 'ADMIRAL');
       fleet.admirals.forEach(a => {
-        lines.push(`${a.name} (Lv ${a.level || '?'}) — ${a.points} pts`);
+        lines.push(`${a.name} (Lv ${a.level || '?'}), ${a.points} pts`);
         if (a.selectedAbilities && a.selectedAbilities.length) lines.push(`   ${a.selectedAbilities.join(', ')}`);
       });
     }
     if (fleet.spaceStation) {
-      lines.push('', 'SPACE STATION', `${fleet.spaceStation.name} — ${fleet.spaceStation.cost} pts`);
+      lines.push('', 'SPACE STATION', `${fleet.spaceStation.name}, ${fleet.spaceStation.cost} pts`);
     }
-    lines.push('', '— built with type37.github.io/dropfleet-builder');
+    lines.push('', 'Built with type37.github.io/dropfleet-builder');
     return lines.join('\n');
   }
   function copyFleetText() {
@@ -2150,7 +2150,7 @@
     const show = (msg) => showSheet('Copy List',
       `<p>${msg}</p><pre class="copy-pre">${esc(text)}</pre>`);
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(text).then(() => show('Copied to clipboard — paste it into Discord, etc.')).catch(() => show('Select and copy:'));
+      navigator.clipboard.writeText(text).then(() => show('Copied to clipboard, paste it into Discord, etc.')).catch(() => show('Select and copy:'));
     } else {
       show('Select and copy:');
     }
@@ -2168,7 +2168,7 @@
   /* ── Import a fleet from a pasted link / code / JSON — desktop parity ─ */
   function importFleetPrompt() {
     showSheet('Import a fleet',
-      `<p>Paste a share link, a share code, or fleet JSON — from desktop or another device.</p>
+      `<p>Paste a share link, a share code, or fleet JSON, from desktop or another device.</p>
        <textarea id="import-text" class="import-textarea" rows="5" placeholder="https://…#share/…   or   { fleet JSON }"></textarea>
        <button class="btn btn-primary btn-block" style="margin-top:var(--sp-m)" onclick="App.doImportText()">Import fleet</button>`);
   }
@@ -2217,12 +2217,12 @@
           : dr ? `Deploys within ${dr} of carrier`
           : '';
         rows += `<tr>
-          <td>${i === 0 ? esc(load.launch || '—') : ''}</td>
+          <td>${i === 0 ? esc(load.launch || '-') : ''}</td>
           <td>${esc(part)}</td>
-          <td>${esc(a.thrust || '—')}</td>
-          <td>${has ? esc(a.attack) : '—'}</td>
-          <td>${has ? esc(a.lock) : '—'}</td>
-          <td>${has ? `${esc(a.damage)}${t}` : '—'}</td>
+          <td>${esc(a.thrust || '-')}</td>
+          <td>${has ? esc(a.attack) : '-'}</td>
+          <td>${has ? esc(a.lock) : '-'}</td>
+          <td>${has ? `${esc(a.damage)}${t}` : '-'}</td>
           <td>${esc(special)}</td>
         </tr>`;
       });
@@ -2293,8 +2293,8 @@
     }).join('');
 
     const admiralsHtml = (f.admirals || []).map(a =>
-      `<div class="pr-line"><b>${esc(a.name)}</b> (Lv ${a.level || '?'}) — ${a.points} pts${a.selectedAbilities?.length ? ' · ' + esc(a.selectedAbilities.join(', ')) : ''}</div>`).join('');
-    const stationHtml = f.spaceStation ? `<div class="pr-line"><b>${esc(f.spaceStation.name)}</b> — ${f.spaceStation.cost} pts</div>` : '';
+      `<div class="pr-line"><b>${esc(a.name)}</b> (Lv ${a.level || '?'}), ${a.points} pts${a.selectedAbilities?.length ? ' · ' + esc(a.selectedAbilities.join(', ')) : ''}</div>`).join('');
+    const stationHtml = f.spaceStation ? `<div class="pr-line"><b>${esc(f.spaceStation.name)}</b>, ${f.spaceStation.cost} pts</div>` : '';
 
     const glossary = [...usedRules.entries()].sort((a, b) => a[0].localeCompare(b[0]))
       .map(([n, d]) => `<div class="pr-gloss"><b>${esc(n)}</b>: ${ruleHtml(d)}</div>`).join('');
