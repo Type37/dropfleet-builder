@@ -3268,6 +3268,18 @@ const App = (() => {
     closeModal('modal-admiral');
     renderAdmiralSlot();
     updatePoints();
+    promptAdmiralAbilities(currentFleet.admirals.length - 1);
+  }
+
+  // After adding an admiral that picks from the Abilities Table, pop the picker
+  // modal so you're prompted to choose (after the add-admiral modal closes).
+  function promptAdmiralAbilities(index) {
+    const a = (currentFleet && currentFleet.admirals || [])[index];
+    if (!a) return;
+    const info = getAdmiralAbilityInfo(a);
+    if (info && info.table.length && info.picks > 0) {
+      setTimeout(() => openAdmiralAbilityModal(index), 200);
+    }
   }
 
   function addFamousAdmiral(shipKey) {
@@ -3294,6 +3306,7 @@ const App = (() => {
     renderAdmiralSlot();
     renderOverviewPanel();   // the flagship now shows among the groups
     updatePoints();
+    promptAdmiralAbilities(currentFleet.admirals.length - 1);
   }
 
   function removeAdmiral(index) {

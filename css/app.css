@@ -1108,6 +1108,20 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1;
 }
 
+/* The admiral-abilities modal pops in (scale-up with a little overshoot) when
+   it auto-opens after you add an admiral. */
+@keyframes modal-pop {
+  0%   { transform: scale(0.82); opacity: 0; }
+  60%  { transform: scale(1.03); opacity: 1; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+#modal-admiral-abilities.active .modal-panel {
+  animation: modal-pop 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  #modal-admiral-abilities.active .modal-panel { animation: none; }
+}
+
 .modal-panel--lg { max-width: 800px; }
 .modal-panel--xl { max-width: 1100px; }
 
