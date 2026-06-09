@@ -1743,6 +1743,37 @@ const App = (() => {
       </div>`;
     }).join('');
 
+    // Famous admirals fly their own flagship — a ship on the table, so it shows
+    // among the groups. Sourced from the admiral; its cost is already in the
+    // admiral's points (no separate pts here → no double-count). Read-only —
+    // managed via the admiral slot.
+    const flagshipCatColor = { light: '#4a8dc7', medium: '#3e8a45', heavy: '#c48820', colossal: '#b83828', payload: '#6a4c9c' };
+    const flagshipCards = (f.admirals || []).map(a => {
+      if (a.type !== 'Famous' || !a.shipKey) return '';
+      const fs = shipDB[f.faction]?.groups?.famous_admirals?.ships?.[a.shipKey];
+      if (!fs) return '';
+      const name = fs.ship_name || fs.className || 'Flagship';
+      const cat = fs.shipCategory || 'medium';
+      const catLabel = CATEGORY_LABELS[cat] || cat;
+      const catColor = flagshipCatColor[cat] || 'var(--navy)';
+      const artSrc = fs.image || null;
+      return `<div class="overview-group-card card-deco overview-flagship-card" style="border-left-color:${catColor}" title="Flagship of ${esc(a.name)} — its cost is counted with the admiral">
+        <div class="overview-group-top">
+          ${artSrc ? `<div class="overview-group-art"><img src="${esc(artSrc)}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
+          <div class="overview-group-info">
+            <div class="overview-group-name">${esc(name)} <span class="flagship-tag">Flagship</span></div>
+            <div class="overview-group-meta">
+              <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size:10px;padding:1px 6px">${esc(catLabel)}</span>
+              <span class="text-caption">flies with ${esc(a.name)}</span>
+            </div>
+          </div>
+          <div class="overview-group-right">
+            <div class="overview-group-pts overview-flagship-pts">incl.</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
     // Admirals summary
     const factionInfo = shipDB[f.faction];
     let admHtml = '';
@@ -1816,7 +1847,7 @@ const App = (() => {
               Add Group
             </button>
           </div>
-          <div class="overview-groups">${groupCards || `
+          <div class="overview-groups">${(groupCards + flagshipCards) || `
             <div class="overview-groups-empty">
               <p>No battle groups yet — add one to start your fleet.</p>
               <button class="btn btn-primary" onclick="App.addGroup()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> Add your first group</button>
@@ -3214,6 +3245,7 @@ const App = (() => {
     saveFleets();
     closeModal('modal-admiral');
     renderAdmiralSlot();
+    renderOverviewPanel();   // the flagship now shows among the groups
     updatePoints();
   }
 
@@ -3222,6 +3254,7 @@ const App = (() => {
     currentFleet.admirals.splice(index, 1);
     saveFleets();
     renderAdmiralSlot();
+    renderOverviewPanel();   // drop the flagship from the groups list
     updatePoints();
   }
 

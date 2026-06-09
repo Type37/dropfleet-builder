@@ -887,10 +887,28 @@
     // Groups
     const groupsEl = document.getElementById('fleet-groups');
     let html = '';
-    if (!(f.battleGroups || []).length) {
+    // Famous admirals fly their own flagship — it's a ship on the table, so it
+    // shows here among the groups (sourced from the admiral; its cost is already
+    // counted in the admiral's points, so no separate pts here to avoid
+    // double-counting). Tapping it opens the admiral.
+    const flagshipCards = (f.admirals || []).map((a, ai) => {
+      const fs = admiralFlagship(a);
+      if (!fs) return '';
+      const art = shipArtPath(fs.name);
+      const sizeClass = fs.category ? (CATEGORY_LABELS[fs.category] || '') : (fs.tonnage || '');
+      return `<div class="list-row flagship-row" onclick="App.openAdmiralDetail(${ai})">
+        ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
+        <div class="list-row-content">
+          <div class="list-row-title">${esc(fs.name)} <span class="flagship-tag">Flagship</span></div>
+          <div class="list-row-sub">${sizeClass ? esc(sizeClass) + ' · ' : ''}flies with ${esc(a.name)}</div>
+        </div>
+        <span class="list-chevron">›</span>
+      </div>`;
+    }).join('');
+    if (!(f.battleGroups || []).length && !flagshipCards) {
       html += `<div class="empty-state-sm">No groups yet. Tap “Add Group”.</div>`;
     } else {
-      html += f.battleGroups.map((g, i) => {
+      html += (f.battleGroups || []).map((g, i) => {
         const s = g.ships[0];
         if (!s) return '';
         const db = findShip(f.faction, s.groupCategory, s.shipKey);
@@ -919,6 +937,7 @@
         </div>`;
       }).join('');
     }
+    html += flagshipCards;
 
     // Admiral slot(s)
     html += `<div class="section-header">Admiral</div>`;

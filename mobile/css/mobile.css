@@ -1397,6 +1397,21 @@ body.sheet-open .sheet-scrim {
 }
 .add-slot:active { background: var(--paper-alt); }
 
+/* A famous admiral's flagship, shown among the groups (its cost lives with the
+   admiral, so no pts on this row). Gold accent marks it as the flagship. */
+.flagship-row { border-left: 3px solid var(--gold); }
+.flagship-tag {
+  display: inline-block;
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-bold);
+  color: var(--gold-dim);
+  background: rgba(201, 168, 76, 0.14);
+  border-radius: var(--radius-sm);
+  padding: 0 5px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
 /* ── 38. Empty states ──────────────────────────────────── */
 .empty-state { padding: 56px 24px; text-align: center; }
 .empty-state-title { font-size: var(--text-subtitle2); font-weight: var(--weight-semibold); color: var(--fg2); margin-bottom: var(--sp-s); }
