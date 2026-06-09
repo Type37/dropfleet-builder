@@ -20,6 +20,9 @@
   let pickerFilter = 'all';            // tonnage filter, pick ONE (radio)
   let pickerAttrs = new Set();         // attribute filters, multi-select (AND)
   let pickerSort = { key: 'points', dir: 'asc' };  // default: cheapest first
+  // Mirrors the desktop "Additional Ships" setting: mercenaries / cross-faction /
+  // optional units have no ship art, so they're hidden until this is toggled on.
+  let pickerShowExtra = localStorage.getItem('dfc_show_extra') === '1';
 
   const FACTION_FILES = {
     ucm: '../data/faction-ucm.json',
@@ -1061,11 +1064,14 @@
       { key: 'unique',  label: 'Unique',  test: s => s.isUnique }
     ];
     const presentAttrs = attrDefs.filter(a => groups.some(g => a.test(g.ship || {})));
+    // "Additional" ships (mercenaries, cross-faction, optional units) have no art.
+    const hasExtra = groups.some(g => !shipArtPath((g.ship || {}).name));
 
     // Apply all filters first so the live count is accurate.
     const search = (document.getElementById('picker-search')?.value || '').toLowerCase();
     let list = groups.filter(g => {
       const s = g.ship || {};
+      if (!pickerShowExtra && !shipArtPath(s.name)) return false;
       if (pickerFilter !== 'all' && g.category !== pickerFilter) return false;
       if (search && !(s.name || g.name).toLowerCase().includes(search)) return false;
       for (const k of pickerAttrs) { const d = attrDefs.find(a => a.key === k); if (d && !d.test(s)) return false; }
@@ -1081,9 +1087,10 @@
         <button class="chip ${pickerFilter === 'all' ? 'active' : ''}" onclick="App.filterShips('all')">All</button>
         ${cats.map(c => `<button class="chip ${pickerFilter === c ? 'active' : ''}" onclick="App.filterShips('${c}')">${CATEGORY_LABELS[c] || c}</button>`).join('')}
       </div>
-      ${presentAttrs.length ? `<div class="filter-row">
+      ${presentAttrs.length || hasExtra ? `<div class="filter-row">
         <span class="filter-label">Filter</span>
         ${presentAttrs.map(a => `<button class="chip chip-toggle ${pickerAttrs.has(a.key) ? 'active' : ''}" onclick="App.toggleAttr('${a.key}')">${pickerAttrs.has(a.key) ? '✓ ' : ''}${a.label}</button>`).join('')}
+        ${hasExtra ? `<button class="chip chip-toggle ${pickerShowExtra ? 'active' : ''}" onclick="App.toggleExtra()">${pickerShowExtra ? '✓ ' : ''}Mercenaries</button>` : ''}
       </div>` : ''}
       <div class="filter-meta">
         <span class="filter-count">${list.length} ship${list.length !== 1 ? 's' : ''}</span>
@@ -1134,6 +1141,9 @@
   }
   function filterShips(cat) { pickerFilter = cat; renderShipPicker(); }
   function toggleAttr(key) { if (pickerAttrs.has(key)) pickerAttrs.delete(key); else pickerAttrs.add(key); renderShipPicker(); }
+  // Persisted preference (mirrors desktop's "Additional Ships" setting), so it is
+  // deliberately NOT reset by Clear.
+  function toggleExtra() { pickerShowExtra = !pickerShowExtra; localStorage.setItem('dfc_show_extra', pickerShowExtra ? '1' : '0'); renderShipPicker(); }
   function clearFilters() { pickerFilter = 'all'; pickerAttrs.clear(); renderShipPicker(); }
   function setSort(key) {
     if (pickerSort.key === key) pickerSort.dir = pickerSort.dir === 'asc' ? 'desc' : 'asc';
@@ -2450,7 +2460,7 @@
   window.App = {
     init, goBack, viewDesktop,
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, openStarterFleets,
-    openAddGroup, filterShips, toggleAttr, clearFilters, setSort, addShip,
+    openAddGroup, filterShips, toggleAttr, toggleExtra, clearFilters, setSort, addShip,
     openGroup, changeQty, changeGroupQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow, toggleSecondary, openSecondaryModal, closeSecondaryModal,
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral, closeAbilityModal,
