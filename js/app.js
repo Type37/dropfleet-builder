@@ -699,15 +699,15 @@ const App = (() => {
     };
     container.innerHTML = Object.entries(GAME_SIZES).map(([key, size]) => {
       const bars = barProfiles[key].map(h => `<div class="game-size-bar" style="height:${h}px"></div>`).join('');
-      const colossalText = size.colossalMax > 0 ? ` · ${size.colossalMax} Colossal` : '';
+      const colossalLabel = size.colossalMax > 0 ? `${size.colossalMax} Colossal` : 'No Colossal';
       return `
       <div class="game-size-option ${key === 'clash' ? 'selected' : ''}" data-size="${key}" onclick="App.selectGameSize('${key}')">
         <input type="radio" name="game-size" value="${key}" style="display:none" ${key === 'clash' ? 'checked' : ''}>
         <div class="game-size-visual">${bars}</div>
         <div class="game-size-info">
           <div class="game-size-name">${size.label}</div>
-          <div class="game-size-details">${size.desc} · ${size.groups} groups max</div>
-          <div class="game-size-time">~${size.time} · Admiral Lv${size.maxAdmiralLevel} max${colossalText}</div>
+          <div class="game-size-details">${colossalLabel} · Admiral to Lv${size.maxAdmiralLevel} · ~${size.time}</div>
+          <div class="game-size-time">${size.desc} · ${size.groups} groups max</div>
         </div>
       </div>`;
     }).join('');
@@ -1192,7 +1192,8 @@ const App = (() => {
     const sizeDetail = document.getElementById('game-size-detail');
     if (sizeDetail) {
       const colText = sizeInfo.colossalMax > 0 ? `${sizeInfo.colossalMax} Colossal` : 'No Colossal';
-      sizeDetail.innerHTML = `<span>${sizeInfo.desc}</span><span>${sizeInfo.groups} groups max</span><span>Admiral Lv${sizeInfo.maxAdmiralLevel} max</span><span>${colText}</span><span>~${sizeInfo.time}</span>`;
+      // Order by importance (Jet): Colossals → Admiral level → time, then the basics.
+      sizeDetail.innerHTML = `<span>${colText}</span><span>Admiral to Lv${sizeInfo.maxAdmiralLevel}</span><span>~${sizeInfo.time}</span><span>${sizeInfo.desc}</span><span>${sizeInfo.groups} groups</span>`;
     }
 
     const panel = document.getElementById('fleet-info-panel');
