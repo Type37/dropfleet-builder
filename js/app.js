@@ -51,6 +51,11 @@ const App = (() => {
 
   const CATEGORY_ORDER = ['light','medium','heavy','colossal','payload'];
 
+  // Spell out the single-letter tonnage code for display (L = Light, not Large).
+  // Stored values stay single-letter (rules/sorting depend on them) — display only.
+  const TON_WORDS = { L: 'Light', M: 'Medium', H: 'Heavy', C: 'Colossal', P: 'Payload' };
+  function tonLabel(t) { return TON_WORDS[t] || t || ''; }
+
   let rawFleetData = null;
 
   const fastplaySpecs = [
@@ -1929,7 +1934,7 @@ const App = (() => {
       const ton = firstDb ? (firstDb.tonnage || '') : '';
       if (ton) {
         const tonClass = ton.toLowerCase().replace(/\s+/g, '-');
-        tonnageBadge = `<span class="badge badge-tonnage badge-tonnage-${tonClass}">${ton}</span>`;
+        tonnageBadge = `<span class="badge badge-tonnage badge-tonnage-${tonClass}">${esc(tonLabel(ton))}</span>`;
       }
     }
 
@@ -2398,7 +2403,7 @@ const App = (() => {
   function renderGroupShipEntry(ship, dbShip, groupId, count = 1) {
     const name = dbShip ? dbShip.name : ship.shipKey;
     const img = dbShip ? dbShip.image : '';
-    const tonnage = dbShip ? dbShip.tonnage : '';
+    const tonnage = dbShip ? tonLabel(dbShip.tonnage) : '';
     const specialRules = dbShip && dbShip.special_rules ? dbShip.special_rules : [];
 
     const statsHtml = dbShip ? renderStatGrid(dbShip) : '';
@@ -2812,7 +2817,7 @@ const App = (() => {
         ${data.image ? `<div class="ship-card-image"><img src="${esc(data.image)}" alt="${esc(data.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
         <div class="ship-card-info">
           <div class="ship-card-name">${esc(data.name)}${selectBadges ? ` ${selectBadges}` : ''}</div>
-          <div class="ship-card-type">${esc(data.tonnage || catLabel)}</div>
+          <div class="ship-card-type">${esc(tonLabel(data.tonnage) || catLabel)}</div>
         </div>
         <div class="ship-card-cost">${data.points || 0}<span style="font-size:var(--text-sm);font-weight:var(--weight-regular)"> pts</span></div>
       </div>
@@ -3925,7 +3930,7 @@ const App = (() => {
         }
 
         // Tonnage label
-        const tonnageLabel = db.tonnage || CATEGORY_LABELS[ship.groupCategory] || '';
+        const tonnageLabel = tonLabel(db.tonnage) || CATEGORY_LABELS[ship.groupCategory] || '';
         const artSrc = shipArtPath(db.name);
 
         // Damage tracking boxes — hull boxes with cripple point marker
@@ -4167,7 +4172,7 @@ const App = (() => {
       Object.values(profiles).forEach(({ ship, count }) => {
         const dbShip = findShipInDB(fleet.faction, ship.groupCategory, ship.shipKey);
         const name = dbShip ? dbShip.name : ship.shipKey;
-        const tonnage = dbShip ? dbShip.tonnage : '';
+        const tonnage = dbShip ? tonLabel(dbShip.tonnage) : '';
         const cat = CATEGORY_LABELS[ship.groupCategory] || ship.groupCategory;
         const img = shipArtPath(name);
 
@@ -4895,7 +4900,7 @@ const App = (() => {
     const body = document.getElementById('detail-ship-body');
 
     const img = dbShip.image;
-    const tonnage = dbShip.tonnage || CATEGORY_LABELS[category] || category;
+    const tonnage = tonLabel(dbShip.tonnage) || CATEGORY_LABELS[category] || category;
     const badges = [];
     if (dbShip.isUnique) badges.push('<span class="ship-badge ship-badge-unique">Unique</span>');
     else if (dbShip.isRare) badges.push('<span class="ship-badge ship-badge-rare">Rare</span>');

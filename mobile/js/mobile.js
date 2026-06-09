@@ -351,6 +351,10 @@
 
   const CATEGORY_ORDER = ['light', 'medium', 'heavy', 'colossal', 'payload'];
   const CATEGORY_LABELS = { light: 'Light', medium: 'Medium', heavy: 'Heavy', colossal: 'Colossal', payload: 'Payload' };
+  // Spell out the single-letter tonnage code for display (L = Light, not Large).
+  // Stored values stay single-letter — this is display only.
+  const TON_WORDS = { L: 'Light', M: 'Medium', H: 'Heavy', C: 'Colossal', P: 'Payload' };
+  function tonLabel(t) { return TON_WORDS[t] || t || ''; }
 
   /* ── Persistence (shared dfc_fleets) ───────────────────── */
   const STORAGE_KEY = 'dfc_fleets';
@@ -848,7 +852,7 @@
       const fs = admiralFlagship(a);
       if (!fs) return '';
       const art = shipArtPath(fs.name);
-      const sizeClass = fs.category ? (CATEGORY_LABELS[fs.category] || '') : (fs.tonnage || '');
+      const sizeClass = fs.category ? (CATEGORY_LABELS[fs.category] || '') : tonLabel(fs.tonnage);
       return `<div class="list-row flagship-row" onclick="App.openAdmiralDetail(${ai})">
         ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
@@ -883,7 +887,7 @@
           ${art ? `<div class="ship-thumb${modCls}"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
           <div class="list-row-content">
             <div class="list-row-title">${esc(db?.name || 'Unknown')}${titleQty}</div>
-            <div class="list-row-sub">${gp}pts · ${db?.tonnage || CATEGORY_LABELS[s.groupCategory] || ''}</div>
+            <div class="list-row-sub">${gp}pts · ${tonLabel(db?.tonnage) || CATEGORY_LABELS[s.groupCategory] || ''}</div>
           </div>
           ${stepper}
           <span class="list-chevron">›</span>
@@ -1011,7 +1015,7 @@
       const cost = ship.cost || 0;
       const gMin = ship.groupMin || 1, gMax = ship.groupMax || gMin;
       const art = shipArtPath(ship.name);
-      const tonnage = ship.tonnage || CATEGORY_LABELS[g.category] || g.category;
+      const tonnage = tonLabel(ship.tonnage) || CATEGORY_LABELS[g.category] || g.category;
       const tags = [];
       if (ship.isUnique) tags.push('<span class="ship-tag">Unique</span>');
       if (ship.isRare) tags.push('<span class="ship-tag">Rare</span>');
@@ -1108,7 +1112,7 @@
       <div class="detail-header">
         <div>
           <div class="detail-name">${esc(ship.name)}${qty > 1 ? ' ×' + qty : ''}</div>
-          <div class="detail-type">${ship.tonnage || CATEGORY_LABELS[inst.groupCategory] || ''}</div>
+          <div class="detail-type">${tonLabel(ship.tonnage) || CATEGORY_LABELS[inst.groupCategory] || ''}</div>
         </div>
         <div class="pts-badge-lg"><div class="pts-badge-value">${gp}</div><div class="pts-badge-label">Points</div></div>
       </div>
