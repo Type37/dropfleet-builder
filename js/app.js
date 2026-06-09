@@ -528,6 +528,7 @@ const App = (() => {
       mini.ss = { n: fleet.spaceStation.name, c: fleet.spaceStation.cost };
       if (fleet.spaceStation.stationKey) mini.ss.k = fleet.spaceStation.stationKey;
     }
+    if (fleet.secondaryObjectives && fleet.secondaryObjectives.length) mini.so = fleet.secondaryObjectives;
     const json = JSON.stringify(mini);
     // base64url encode (no padding, URL-safe chars)
     return btoa(json).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -564,6 +565,7 @@ const App = (() => {
           }))
         })),
         spaceStation: null,
+        secondaryObjectives: mini.so || [],
         createdAt: Date.now(),
         updatedAt: Date.now()
       };
@@ -1812,6 +1814,33 @@ const App = (() => {
       </div>`;
     }
 
+    // Secondary Objectives — pick 2 for your game (rules data from the BSData
+    // game system; stored on the fleet so they travel with it / share).
+    let secondaryHtml = '';
+    const secObjs = (rawFleetData && rawFleetData.secondaryObjectives) || [];
+    if (secObjs.length) {
+      const sel = f.secondaryObjectives || [];
+      secondaryHtml = `<div class="overview-section">
+        <div class="overview-section-head">
+          <div class="overview-section-label">Secondary Objectives</div>
+          <span class="overview-section-note">${sel.length}/2 chosen</span>
+        </div>
+        <div class="secondary-list">
+          ${secObjs.map((o, i) => {
+            const on = sel.includes(o.name);
+            const locked = !on && sel.length >= 2;
+            return `<div class="secondary-item${on ? ' selected' : ''}${locked ? ' locked' : ''}" onclick="App.toggleSecondaryObjective(${i})" role="button" tabindex="0" aria-pressed="${on}">
+              <span class="secondary-check">${on ? '✓' : ''}</span>
+              <div class="secondary-body">
+                <div class="secondary-name">${esc(o.name)}</div>
+                <div class="secondary-desc">${esc(o.description)}</div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    }
+
     // Validation summary
     let validHtml = '';
     if (warnings.length > 0) {
@@ -1855,6 +1884,7 @@ const App = (() => {
         </div>
         ${admHtml}
         ${stationHtml}
+        ${secondaryHtml}
       </div>`;
   }
 
@@ -1862,6 +1892,19 @@ const App = (() => {
     if (!currentFleet) return;
     currentFleet.description = val.trim();
     saveFleets();
+  }
+
+  function toggleSecondaryObjective(idx) {
+    if (!currentFleet) return;
+    const objs = (rawFleetData && rawFleetData.secondaryObjectives) || [];
+    const obj = objs[idx];
+    if (!obj) return;
+    currentFleet.secondaryObjectives = currentFleet.secondaryObjectives || [];
+    const i = currentFleet.secondaryObjectives.indexOf(obj.name);
+    if (i >= 0) currentFleet.secondaryObjectives.splice(i, 1);
+    else { if (currentFleet.secondaryObjectives.length >= 2) return; currentFleet.secondaryObjectives.push(obj.name); }
+    saveFleets();
+    renderOverviewPanel();
   }
 
   // ── Active Group View ──
@@ -5251,6 +5294,6 @@ const App = (() => {
     openStationModal, selectStation, removeStation,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText,
-    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail, saveFleetDesc
+    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail, saveFleetDesc, toggleSecondaryObjective
   };
 })();

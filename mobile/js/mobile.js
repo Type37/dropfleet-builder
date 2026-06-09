@@ -12,6 +12,7 @@
   /* ── State ─────────────────────────────────────────────── */
   const FACTIONS = {};         // raw faction JSON keyed by faction key
   let RULES_DB = {};           // shared rules glossary
+  let SECONDARY_OBJECTIVES = []; // [{name, description}] — pick 2 per game
   let fleets = [];
   let activeFleet = null;
   let activeGroupIdx = -1;     // index into activeFleet.battleGroups
@@ -972,7 +973,39 @@
       html += `<div class="add-slot" onclick="App.openStation()">+ Choose Station</div>`;
     }
 
+    // Secondary Objectives — pick 2 for your game (rules data from the BSData
+    // game system). Stored on the fleet so they travel with it (and share).
+    if (SECONDARY_OBJECTIVES.length) {
+      const sel = f.secondaryObjectives || [];
+      html += `<div class="section-header">Secondary Objectives <span class="section-header-note">${sel.length}/2 chosen</span></div>`;
+      html += `<div class="secondary-list">` + SECONDARY_OBJECTIVES.map((o, i) => {
+        const on = sel.includes(o.name);
+        const locked = !on && sel.length >= 2;
+        return `<div class="secondary-item${on ? ' selected' : ''}${locked ? ' locked' : ''}" onclick="App.toggleSecondary(${i})">
+          <span class="secondary-check">${on ? '✓' : ''}</span>
+          <div class="secondary-body">
+            <div class="secondary-name">${esc(o.name)}</div>
+            <div class="secondary-desc">${esc(o.description)}</div>
+          </div>
+        </div>`;
+      }).join('') + `</div>`;
+    }
+
     groupsEl.innerHTML = html;
+  }
+
+  function toggleSecondary(idx) {
+    const f = activeFleet;
+    if (!f) return;
+    const obj = SECONDARY_OBJECTIVES[idx];
+    if (!obj) return;
+    f.secondaryObjectives = f.secondaryObjectives || [];
+    const i = f.secondaryObjectives.indexOf(obj.name);
+    if (i >= 0) f.secondaryObjectives.splice(i, 1);
+    else { if (f.secondaryObjectives.length >= 2) return; f.secondaryObjectives.push(obj.name); }
+    f.updatedAt = Date.now();
+    saveFleets();
+    renderFleetDetail();
   }
 
   /* ── Screen: Ship Picker ───────────────────────────────── */
@@ -1896,6 +1929,7 @@
       return o;
     });
     if (fleet.spaceStation) mini.ss = { n: fleet.spaceStation.name, c: fleet.spaceStation.cost, k: fleet.spaceStation.stationKey };
+    if (fleet.secondaryObjectives?.length) mini.so = fleet.secondaryObjectives;
     return btoa(JSON.stringify(mini)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   }
   function decodeFleet(encoded) {
@@ -1916,6 +1950,7 @@
             feature: s.ft || undefined, systems: s.sy || []
           }))
         })),
+        secondaryObjectives: mini.so || [],
         createdAt: Date.now(), updatedAt: Date.now()
       };
       if (mini.ss) fleet.spaceStation = { name: mini.ss.n, cost: mini.ss.c || 0, stationKey: mini.ss.k || null };
@@ -2217,6 +2252,7 @@
       Object.entries(idx.sharedRules || {}).forEach(([k, v]) => {
         RULES_DB[k] = (typeof v === 'string') ? { description: v, page: '' } : { description: v.description || '', page: v.page || '' };
       });
+      SECONDARY_OBJECTIVES = idx.secondaryObjectives || [];
     }).catch(() => {});
 
     loadFleets();
@@ -2253,7 +2289,7 @@
     init, goBack, viewDesktop,
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, openStarterFleets,
     openAddGroup, filterShips, setSort, addShip,
-    openGroup, changeQty, changeGroupQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow,
+    openGroup, changeQty, changeGroupQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow, toggleSecondary,
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral,
     openStation, addStation, removeStationPrompt,

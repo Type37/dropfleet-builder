@@ -1397,6 +1397,38 @@ body.sheet-open .sheet-scrim {
 }
 .add-slot:active { background: var(--paper-alt); }
 
+/* Secondary Objectives picker (choose 2) */
+.section-header-note { font-weight: var(--weight-semibold); color: var(--fg3); font-size: var(--text-caption2); }
+.secondary-list { padding: 0 var(--sp-l) var(--sp-s); display: flex; flex-direction: column; gap: var(--sp-s); }
+.secondary-item {
+  display: flex;
+  gap: var(--sp-m);
+  padding: var(--sp-m);
+  background: var(--white);
+  border: 1px solid var(--stroke2);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+}
+.secondary-item:active { background: var(--paper-alt); }
+.secondary-item.selected { border-color: var(--gold); background: rgba(201, 168, 76, 0.08); }
+.secondary-item.locked { opacity: 0.5; }
+.secondary-check {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--stroke1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-caption1);
+  color: var(--white);
+  margin-top: 1px;
+}
+.secondary-item.selected .secondary-check { background: var(--gold); border-color: var(--gold); }
+.secondary-name { font-weight: var(--weight-bold); color: var(--navy); margin-bottom: 2px; }
+.secondary-desc { font-size: var(--text-caption1); color: var(--fg2); line-height: 1.5; }
+
 /* A famous admiral's flagship, shown among the groups (its cost lives with the
    admiral, so no pts on this row). Gold accent marks it as the flagship. */
 .flagship-row { border-left: 3px solid var(--gold); }
