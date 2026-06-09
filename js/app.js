@@ -3367,42 +3367,80 @@ const App = (() => {
     saveFleets();
     renderAdmiralSlot();
     renderOverviewPanel();
+    // Keep the modal picker in sync when it's the one being used.
+    const modal = document.getElementById('modal-admiral-abilities');
+    if (modal && modal.classList.contains('active')) renderAdmiralAbilityModalBody(index);
   }
 
   // Render an admiral's innate abilities (always expanded) + the Abilities-Table
   // picker. Returns '' for generic admirals.
+  // Sidebar admiral slot: a compact, READ-ONLY list of abilities (innate +
+  // chosen) so it stays scannable in the narrow column. Picking from the table
+  // happens in a roomy modal (openAdmiralAbilityModal), not inline.
   function renderAdmiralAbilities(a, index) {
     const info = getAdmiralAbilityInfo(a);
     if (!info) return '';
-    const abilityLine = ab => `<div class="admiral-ability">
+    const liteLine = ab => `<div class="admiral-ability-lite">
         <span class="admiral-ability-name">${esc(ab.name || '')}</span>${ab.cost ? ` <span class="admiral-ability-cost">${esc(ab.cost)}</span>` : ''}
-        ${ab.effect ? `<div class="admiral-ability-effect">${esc(ab.effect)}</div>` : ''}
       </div>`;
     let html = '';
     if (info.innate.length) {
       html += `<div class="admiral-abilities-block">
-        <div class="admiral-abilities-label">Ability</div>
-        ${info.innate.map(abilityLine).join('')}
+        <div class="admiral-abilities-label">Innate Abilit${info.innate.length === 1 ? 'y' : 'ies'}</div>
+        ${info.innate.map(liteLine).join('')}
       </div>`;
     }
     if (info.table.length && info.picks > 0) {
       const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
       const remaining = info.picks - sel.length;
+      const chosen = info.table.filter(ab => sel.includes(ab.name));
       html += `<div class="admiral-abilities-block${remaining > 0 ? ' admiral-abilities-unset' : ''}">
-        <div class="admiral-abilities-label">Abilities Table — choose ${info.picks} <span class="admiral-picks-remaining">${remaining > 0 ? `(${remaining} left)` : '(full)'}</span></div>
-        <div class="admiral-ability-picks">
-          ${info.table.map(ab => {
-            const on = sel.includes(ab.name);
-            const full = !on && remaining <= 0;
-            return `<button class="admiral-pick${on ? ' is-selected' : ''}${full ? ' is-locked' : ''}" onclick="App.toggleAdmiralAbility(${index}, ${JSON.stringify(ab.name).replace(/"/g, '&quot;')})">
-              <span class="admiral-pick-head"><span class="admiral-pick-check">${on ? '✓' : ''}</span><span class="admiral-ability-name">${esc(ab.name)}</span>${ab.cost ? ` <span class="admiral-ability-cost">${esc(ab.cost)}</span>` : ''}</span>
-              ${ab.effect ? `<span class="admiral-ability-effect">${esc(ab.effect)}</span>` : ''}
-            </button>`;
-          }).join('')}
-        </div>
+        <div class="admiral-abilities-label">Chosen Abilities <span class="admiral-picks-remaining">${sel.length}/${info.picks}</span></div>
+        ${chosen.length ? chosen.map(liteLine).join('') : '<div class="admiral-ability-none">None chosen yet</div>'}
+        <button class="btn btn-outline btn-sm admiral-choose-btn" onclick="App.openAdmiralAbilityModal(${index})">${remaining > 0 ? `Choose ${remaining} abilit${remaining === 1 ? 'y' : 'ies'} ›` : 'Edit abilities ›'}</button>
       </div>`;
     }
     return html;
+  }
+
+  // The interactive Abilities-Table picker (buttons + full effect text). Shown
+  // in the modal where there's room to read.
+  function renderAbilityPicker(a, index, info) {
+    const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
+    const remaining = info.picks - sel.length;
+    return `<div class="admiral-ability-picks admiral-ability-picks-modal">
+      ${info.table.map(ab => {
+        const on = sel.includes(ab.name);
+        const full = !on && remaining <= 0;
+        return `<button class="admiral-pick${on ? ' is-selected' : ''}${full ? ' is-locked' : ''}" onclick="App.toggleAdmiralAbility(${index}, ${JSON.stringify(ab.name).replace(/"/g, '&quot;')})">
+          <span class="admiral-pick-head"><span class="admiral-pick-check">${on ? '✓' : ''}</span><span class="admiral-ability-name">${esc(ab.name)}</span>${ab.cost ? ` <span class="admiral-ability-cost">${esc(ab.cost)}</span>` : ''}</span>
+          ${ab.effect ? `<span class="admiral-ability-effect">${esc(ab.effect)}</span>` : ''}
+        </button>`;
+      }).join('')}
+    </div>`;
+  }
+
+  function renderAdmiralAbilityModalBody(index) {
+    const a = (currentFleet && currentFleet.admirals || [])[index];
+    if (!a) return;
+    const info = getAdmiralAbilityInfo(a);
+    if (!info) return;
+    const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
+    const remaining = info.picks - sel.length;
+    const titleEl = document.getElementById('admiral-abilities-modal-title');
+    if (titleEl) titleEl.textContent = `${a.name} — choose ${info.picks} abilit${info.picks === 1 ? 'y' : 'ies'}`;
+    const subEl = document.getElementById('admiral-abilities-modal-sub');
+    if (subEl) subEl.textContent = remaining > 0 ? `${remaining} pick${remaining === 1 ? '' : 's'} remaining — tap to select.` : 'All picks made — tap a selected ability to swap it.';
+    const body = document.getElementById('admiral-abilities-modal-body');
+    if (body) body.innerHTML = renderAbilityPicker(a, index, info);
+  }
+
+  function openAdmiralAbilityModal(index) {
+    const a = (currentFleet && currentFleet.admirals || [])[index];
+    if (!a) return;
+    if (!getAdmiralAbilityInfo(a)) return;
+    renderAdmiralAbilityModalBody(index);
+    openModal('modal-admiral-abilities');
   }
 
   function renderAdmiralSlot() {
@@ -5261,6 +5299,6 @@ const App = (() => {
     openStationModal, selectStation, removeStation,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText,
-    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail, saveFleetDesc, toggleSecondaryObjective
+    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail, saveFleetDesc, toggleSecondaryObjective, openAdmiralAbilityModal
   };
 })();

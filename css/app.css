@@ -2921,6 +2921,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 .admiral-ability-effect { display: block; color: var(--ink-muted); font-size: var(--text-sm); margin-top: 2px; }
 .admiral-ability-picks { display: flex; flex-direction: column; gap: var(--sp-xs); }
+/* Compact read-only ability lines in the sidebar slot */
+.admiral-ability-lite {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 2px 0;
+  font-size: var(--text-sm);
+  color: var(--ink);
+}
+.admiral-ability-lite .admiral-ability-name { font-weight: var(--weight-semibold); }
+.admiral-ability-none { font-size: var(--text-sm); color: var(--ink-faint); font-style: italic; padding: 2px 0; }
+.admiral-choose-btn { margin-top: var(--sp-sm); width: 100%; justify-content: center; }
+/* Roomy two-column picker inside the modal (full effects readable) */
+.admiral-ability-picks-modal { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-sm); }
+@media (max-width: 640px) { .admiral-ability-picks-modal { grid-template-columns: 1fr; } }
 .admiral-pick {
   display: block;
   width: 100%;
