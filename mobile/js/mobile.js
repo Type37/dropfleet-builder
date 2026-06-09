@@ -787,7 +787,7 @@
         ${icon ? `<img src="${icon}" alt="" class="faction-icon" loading="lazy">` : ''}
         <div class="list-row-content">
           <div class="list-row-title">${esc(f.name || 'Unnamed Fleet')}</div>
-          <div class="list-row-sub">${pts}/${limit}pts · ${gc} group${gc !== 1 ? 's' : ''} · ${(GAME_SIZES[f.gameSize] || {}).label || ''}</div>
+          <div class="list-row-sub">${pts}/${limit}pts · ${gc} group${gc !== 1 ? 's' : ''}, ${(GAME_SIZES[f.gameSize] || {}).label || ''}</div>
           <div class="fleet-row-bar"><div class="fleet-row-bar-fill ${over ? 'over' : ''}" style="width:${pct}%"></div></div>
         </div>
       </div>`;
@@ -815,7 +815,7 @@
 
     document.getElementById('fleet-detail-name').textContent = f.name || 'Unnamed Fleet';
     document.getElementById('fleet-detail-sub').textContent =
-      `${info?.name || f.faction} · ${size.label} · ${(f.battleGroups || []).length} group${(f.battleGroups || []).length !== 1 ? 's' : ''}`;
+      `${info?.name || f.faction} · ${size.label}, ${(f.battleGroups || []).length} group${(f.battleGroups || []).length !== 1 ? 's' : ''}`;
 
     const pct = Math.min(100, (pts / limit) * 100);
     const over = pts > limit;
@@ -908,7 +908,7 @@
           ${admiralThumb(f.faction, a.level, art)}
           <div class="list-row-content">
             <div class="list-row-title">${esc(a.name)}</div>
-            <div class="list-row-sub">${a.points}pts · Level ${a.level || '?'}${a.shipName ? ' · ' + esc(a.shipName) : ''}</div>
+            <div class="list-row-sub">${a.points}pts · Level ${a.level || '?'}${a.shipName ? ', ' + esc(a.shipName) : ''}</div>
           </div>
           <span class="list-chevron">›</span>
         </div>`;
@@ -1581,10 +1581,10 @@
       const art = admiralArtPath(a.name) || (fs ? shipArtPath(fs.name) : null);
       const overLevel = a.level > size.maxAdmiralLevel;
       const sizeClass = (fs && fs.category) ? (CATEGORY_LABELS[fs.category] || '') : '';
-      const flagshipStr = fs ? ` · ${esc(fs.name)}${sizeClass ? ' · ' + sizeClass : ''}` : '';
+      const flagshipStr = fs ? `, ${esc(fs.name)}${sizeClass ? ', ' + sizeClass : ''}` : '';
       const innate = (a.abilities || []).map(x => x.name).filter(Boolean);
       const picks = a.abilityPicks || 0;
-      const sub = `Level ${a.level}${a.isFamous ? ' · Famous' : ''}${flagshipStr}${overLevel ? ` · exceeds ${size.label} cap` : ''}`;
+      const sub = `Level ${a.level}${a.isFamous ? ' Famous' : ''}${flagshipStr}${overLevel ? ` — exceeds ${size.label} cap` : ''}`;
       return `<div class="list-row ${overLevel ? 'row-disabled' : ''}" onclick="${overLevel ? '' : `App.addAdmiral('${a.id}')`}">
         ${admiralThumb(f.faction, a.level, art)}
         <div class="list-row-content">
@@ -1605,8 +1605,8 @@
 
     document.getElementById('admiral-list').innerHTML =
       `<div class="section-header">Generic admirals</div>${genericRows}` +
-      (factionRows ? `<div class="section-header">Faction admirals · choose one Faction or Famous</div>${factionRows}` : '') +
-      (famousRows ? `<div class="section-header">Famous admirals · choose one Faction or Famous</div>${famousRows}` : '');
+      (factionRows ? `<div class="section-header">Faction admirals — choose one Faction or Famous</div>${factionRows}` : '') +
+      (famousRows ? `<div class="section-header">Famous admirals — choose one Faction or Famous</div>${famousRows}` : '');
   }
   function addGenericAdmiral(level, cost) {
     const f = activeFleet;
@@ -1707,7 +1707,7 @@
     const specialText = stats.special && stats.special !== '-' ? stats.special : '';
     const artSrc = shipArtPath(fs.name);
     const sizeClass = fs.category ? (CATEGORY_LABELS[fs.category] || '') : '';
-    return `<div class="section-header">Flagship — ${esc(fs.name)}${sizeClass ? ' · ' + sizeClass : ''}${fs.cost ? ` · ${fs.cost}pts` : ''}</div>
+    return `<div class="section-header">Flagship — ${esc(fs.name)}${sizeClass ? ', ' + sizeClass : ''}${fs.cost ? `, ${fs.cost}pts` : ''}</div>
       ${artSrc ? `<div class="ship-art-hero"><img src="${artSrc}" alt="${esc(fs.name)}" loading="lazy"></div>` : ''}
       <div class="stat-grid">
         ${statEntries.map(s => `<div class="stat-cell">${statIcon(s.key)}<div><div class="stat-label">${s.label}</div><div class="stat-value">${esc(s.val)}</div></div></div>`).join('')}
@@ -2194,7 +2194,7 @@
     document.getElementById('print-root').innerHTML = `
       <div class="pr-header">
         <div class="pr-title">${esc(f.name || 'Unnamed Fleet')}</div>
-        <div class="pr-sub">${info?.name || f.faction} · ${size.label} · ${pts} / ${limit} pts · ${(f.battleGroups || []).length} groups</div>
+        <div class="pr-sub">${info?.name || f.faction} · ${size.label} · ${pts} / ${limit} pts, ${(f.battleGroups || []).length} groups</div>
       </div>
       ${groupsHtml}
       ${admiralsHtml ? `<div class="pr-section-title">Admiral</div>${admiralsHtml}` : ''}

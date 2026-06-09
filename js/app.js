@@ -706,8 +706,8 @@ const App = (() => {
         <div class="game-size-visual">${bars}</div>
         <div class="game-size-info">
           <div class="game-size-name">${size.label}</div>
-          <div class="game-size-details">${colossalLabel} · Admiral to Lv${size.maxAdmiralLevel} · ~${size.time}</div>
-          <div class="game-size-time">${size.desc} · ${size.groups} groups max</div>
+          <div class="game-size-details">${colossalLabel}, Admiral to Lv${size.maxAdmiralLevel}, ~${size.time}</div>
+          <div class="game-size-time">${size.desc}, ${size.groups} groups max</div>
         </div>
       </div>`;
     }).join('');
@@ -744,13 +744,13 @@ const App = (() => {
     };
     popover.innerHTML = Object.entries(GAME_SIZES).map(([key, size]) => {
       const active = key === currentFleet.gameSize ? ' active' : '';
-      const colText = size.colossalMax > 0 ? ` · ${size.colossalMax} Colossal` : '';
+      const colText = size.colossalMax > 0 ? `, ${size.colossalMax} Colossal` : '';
       const bars = barProfiles[key].map(h => `<div class="game-size-bar" style="height:${h}px"></div>`).join('');
       return `<button class="game-size-popover-item${active}" onclick="App.applyGameSize('${key}')">
         <div class="game-size-visual">${bars}</div>
         <div>
           <span class="game-size-popover-name">${size.label}</span>
-          <span class="game-size-popover-desc">${size.desc} · ~${size.time} · ${size.groups} groups${colText}</span>
+          <span class="game-size-popover-desc">${size.desc}, ~${size.time}, ${size.groups} groups${colText}</span>
         </div>
       </button>`;
     }).join('');
@@ -927,7 +927,7 @@ const App = (() => {
         ${f.description ? `<div class="text-caption" style="line-height:1.4">${esc(f.description)}</div>` : ''}
         <div class="fleet-card-points-row">
           <span class="fleet-card-points">${pts} <span class="fleet-card-pts-label">/ ${limit === 99999 ? '∞' : limit} pts</span></span>
-          <span class="text-caption">${sizeInfo.label} · ${f.battleGroups.length} group${f.battleGroups.length !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? ` · ${esc(f.spaceStation.name).replace(' Space Station','')}` : ''}</span>
+          <span class="text-caption">${sizeInfo.label} · ${f.battleGroups.length} group${f.battleGroups.length !== 1 ? 's' : ''}${admCount > 0 ? `, ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? `, ${esc(f.spaceStation.name).replace(' Space Station','')}` : ''}</span>
         </div>
         <div class="fleet-card-bar"><div class="fleet-card-bar-fill ${barClass}" style="width:${pctFill}%"></div></div>
         ${renderFleetCardComp(f)}
@@ -1723,7 +1723,7 @@ const App = (() => {
       const sectionDivider = cat !== lastCat
         ? `<div class="overview-cat-divider" style="--cat-color:${catColor}">
             <span class="overview-cat-label">${esc(catLabel)}</span>
-            <span class="overview-cat-count">${catCount} group${catCount !== 1 ? 's' : ''} · ${catSectionPts} pts</span>
+            <span class="overview-cat-count">${catCount} group${catCount !== 1 ? 's' : ''}, ${catSectionPts} pts</span>
           </div>`
         : '';
       lastCat = cat;
@@ -3187,7 +3187,7 @@ const App = (() => {
           ${admiralThumb(l.level, null)}
           <div>
             <div class="admiral-name">Level ${l.level} Admiral</div>
-            <div class="admiral-level">${l.cost} pts · Assign to any Capital Ship</div>
+            <div class="admiral-level">${l.cost} pts — assign to any Capital Ship</div>
           </div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="App.addGenericAdmiral(null, ${l.level}, ${l.cost})">Add</button>
@@ -3237,12 +3237,12 @@ const App = (() => {
             ${admiral.image ? `<div class="ship-card-image"><img src="${esc(admiral.image)}" alt="${esc(admiral.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : admiralThumb(admiral.level, null)}
             <div style="flex:1;min-width:0">
               <div class="admiral-name">${esc(admiral.name)}</div>
-              <div class="admiral-level">Level ${admiral.level || '?'} · Famous${tooHighLevel ? ` · Requires ${sizeInfo.label}+` : ''}</div>
+              <div class="admiral-level">Level ${admiral.level || '?'} Famous${tooHighLevel ? ` — requires ${sizeInfo.label}+` : ''}</div>
               <div class="flex gap-sm flex-wrap" style="margin-top:var(--sp-xs)">
                 <span class="badge badge-gold">${admiral.points} pts</span>
                 ${admiral.ship_cost ? `<span class="badge badge-neutral">Ship: ${admiral.ship_cost} pts</span>` : ''}
               </div>
-              ${admiral.ship_name ? `<div style="margin-top:var(--sp-xs);font-size:var(--text-xs);color:var(--ink-muted)">Flagship: ${esc(admiral.ship_name)}${admiral.shipCategory ? ' · ' + (CATEGORY_LABELS[admiral.shipCategory] || '') : ''}</div>` : ''}
+              ${admiral.ship_name ? `<div style="margin-top:var(--sp-xs);font-size:var(--text-xs);color:var(--ink-muted)">Flagship: ${esc(admiral.ship_name)}${admiral.shipCategory ? ', ' + (CATEGORY_LABELS[admiral.shipCategory] || '') : ''}</div>` : ''}
             </div>
           </div>
           ${abilities.length > 0 ? `<div style="margin-top:var(--sp-md);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${esc(a.cost)})` : ''}${a.effect ? ' — ' + esc(a.effect) : ''}</div>`).join('')}</div>` : ''}
@@ -3526,7 +3526,7 @@ const App = (() => {
           admiralImgUrl = flagship.image || null;
           const fsName = flagship.ship_name || flagship.className || (flagship.tonnage ? flagship.tonnage + ' Flagship' : 'Flagship');
           const fsSize = flagship.shipCategory ? (CATEGORY_LABELS[flagship.shipCategory] || '') : '';
-          const fsSub = [fsSize, flagship.className && flagship.className !== fsName ? flagship.className : '', flagship.ship_cost ? flagship.ship_cost + ' pts' : ''].filter(Boolean).join(' · ');
+          const fsSub = [fsSize, flagship.className && flagship.className !== fsName ? flagship.className : '', flagship.ship_cost ? flagship.ship_cost + ' pts' : ''].filter(Boolean).join(', ');
           const img = flagship.image ? `<img src="${esc(flagship.image)}" alt="" class="admiral-flagship-art" loading="lazy" onerror="this.style.display='none'">` : '';
           const wpns = flagship.weapons || [];
           const wpnHtml = wpns.length ? `<div class="weapon-list">${renderWeaponHeader()}${wpns.map(renderWeaponRow).join('')}</div>` : '';
@@ -3772,7 +3772,7 @@ const App = (() => {
             <div class="print-points-cap">${sizeInfo.max !== 99999 ? '/ ' + sizeInfo.max : ''} pts</div>
           </div>
         </div>
-        <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''} · ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? ` · ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? ` · ${esc(f.spaceStation.name)}` : ''}</div>
+        <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''}, ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? `, ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? `, ${esc(f.spaceStation.name)}` : ''}</div>
       </div>
       ${descHtml}
       ${printWarnings}`;
@@ -3805,7 +3805,7 @@ const App = (() => {
               const fsSize = fsp.shipCategory ? (CATEGORY_LABELS[fsp.shipCategory] || '') : '';
               const wpns = fsp.weapons || [];
               flagshipHtml = `<div class="print-admiral-flagship">
-                <div class="print-admiral-ability-sublabel">Flagship — ${esc(fsName)}${fsSize ? ' · ' + fsSize : ''}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
+                <div class="print-admiral-ability-sublabel">Flagship — ${esc(fsName)}${fsSize ? ', ' + fsSize : ''}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
                 ${renderStatGrid(fsp)}
                 ${wpns.length ? `<div class="weapon-list">${renderWeaponHeader()}${wpns.map(renderWeaponRow).join('')}</div>` : ''}
                 ${(fsp.specialRuleDetails || []).length ? `<div class="print-rules-list">${fsp.specialRuleDetails.map(r => `<span class="print-rule">${esc(r.name)}${r.description ? `: ${esc(r.description)}` : ''}</span>`).join('')}</div>` : ''}
@@ -4255,7 +4255,7 @@ const App = (() => {
       const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
       const shipCount = g.ships.length;
       html += `<div class="shared-section">
-        <div class="shared-section-title">${esc(g.name)} <span class="text-caption">${shipCount} ship${shipCount !== 1 ? 's' : ''} · ${gPts} pts</span></div>
+        <div class="shared-section-title">${esc(g.name)} <span class="text-caption">${shipCount} ship${shipCount !== 1 ? 's' : ''}, ${gPts} pts</span></div>
         <div class="shared-group-ships">`;
 
       // Group ships by profile
