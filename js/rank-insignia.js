@@ -12,8 +12,11 @@
      phr        post-human geometric up-chevrons
      scourge    organic spine / growth-ripple lines
      shaltari   crystalline diamond pips
-     bioficer   cold data-dot rows  (Jet's "Directorate" brief — the 6th
-                faction in this builder is Bioficer; dots double as bio cells)
+     bioficer   triangular tessellation that GROWS with rank — L1 = 1 triangle,
+                each level adds one more, tiling edge-to-edge into a larger
+                subdivided triangle (a fractal Sierpinski-style growth). Reads
+                as a self-assembling Directorate sigil. (Bioficer admirals top
+                out at L4 = the complete side-2 triangle of 4 sub-triangles.)
    ───────────────────────────────────────────────────────────────────────── */
 (function () {
   const COLOR = {
@@ -43,17 +46,52 @@
     scourge: (y, i, n, c) =>
       `<path d="M4 ${y} q3.5 -3 7 0 t7 0" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round"/>`,
     shaltari: (y, i, n, c) =>
-      `<path d="M12 ${y - 2.7} L15.6 ${y} L12 ${y + 2.7} L8.4 ${y} Z" fill="${c}"/>`,
-    bioficer: (y, i, n, c) =>
-      `<circle cx="7" cy="${y}" r="1.5" fill="${c}"/><circle cx="12" cy="${y}" r="1.5" fill="${c}"/><circle cx="17" cy="${y}" r="1.5" fill="${c}"/>`
+      `<path d="M12 ${y - 2.7} L15.6 ${y} L12 ${y + 2.7} L8.4 ${y} Z" fill="${c}"/>`
+    // bioficer is special-cased (a growing tessellation, not stacked rows) —
+    // see bioficerInsignia() below.
   };
+
+  // ── Bioficer: triangular tessellation that grows by level ──────────────
+  // A larger upward triangle is subdivided into unit triangles; we reveal one
+  // more each level in an edge-adjacent build order, so the sigil assembles
+  // itself: L1 apex → L2 rhombus → L3/L4 complete the bigger triangle → L5
+  // starts the next row. Each unit triangle is inset toward its centroid so the
+  // tile gaps read on any background.
+  function bioficerInsignia(n, c) {
+    const ub = 6, uh = 5.196, apexY = 5.2, cx = 12;
+    // Upward unit triangle at (row r, slot k): apex on the row's top line,
+    // base on its bottom line.
+    const up = (r, k) => {
+      const yT = apexY + (r - 1) * uh, yB = apexY + r * uh;
+      const xtL = cx - (r - 1) * ub / 2, xbL = cx - r * ub / 2;
+      return [[xtL + k * ub, yT], [xbL + k * ub, yB], [xbL + (k + 1) * ub, yB]];
+    };
+    // Downward (inverted) unit triangle at (row r, slot k).
+    const dn = (r, k) => {
+      const yT = apexY + (r - 1) * uh, yB = apexY + r * uh;
+      const xtL = cx - (r - 1) * ub / 2;
+      return [[xtL + k * ub, yT], [xtL + (k + 1) * ub, yT], [xtL + k * ub + ub / 2, yB]];
+    };
+    // Edge-adjacent reveal order (index = level - 1).
+    const order = [up(1, 0), dn(2, 0), up(2, 0), up(2, 1), dn(3, 0)];
+    const inset = 0.09;
+    return order.slice(0, n).map(pts => {
+      const gx = (pts[0][0] + pts[1][0] + pts[2][0]) / 3;
+      const gy = (pts[0][1] + pts[1][1] + pts[2][1]) / 3;
+      const p = pts.map(([x, y]) =>
+        `${(gx + (x - gx) * (1 - inset)).toFixed(2)},${(gy + (y - gy) * (1 - inset)).toFixed(2)}`).join(' ');
+      return `<polygon points="${p}" fill="${c}"/>`;
+    }).join('');
+  }
 
   function rankInsignia(faction, level, sizePx) {
     const c = COLOR[faction] || '#777';
     const mark = MARK[faction] || MARK.ucm;
     const n = Math.max(1, Math.min(5, parseInt(level, 10) || 1));
     const s = sizePx || 20;
-    const marks = rows(n).map((y, i) => mark(y, i, n, c)).join('');
+    const marks = faction === 'bioficer'
+      ? bioficerInsignia(n, c)
+      : rows(n).map((y, i) => mark(y, i, n, c)).join('');
     return `<svg class="rank-insignia rank-${faction}" viewBox="0 0 24 24" width="${s}" height="${s}" ` +
       `role="img" aria-label="${LABEL[faction] || faction} rank — Level ${n}" ` +
       `xmlns="http://www.w3.org/2000/svg">${marks}</svg>`;
