@@ -226,6 +226,22 @@
       "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains the stated X Crippling Effect regardless of Tonnage. If no effect is listed, roll 2D6 and apply the corresponding Crippling Effect (from the Crippling Effect table).\nCrippling Effects caused by Crippling Weapons are in addition to those caused by 7.3.6 Roll for Crippling Effects.\nExcept for Fire, a Ship can only have one of each type of Crippling Effect token at a time (Spikes are not a Crippling Effect), even when placed from different sources or at different times. Any duplicate effects are ignored and discarded.",
       "page": "38"
     },
+    "Crippling-Fire": {
+      "description": "Gain a Fire Token. At the start of the End Phase, before the Repair step, this ship suffers a point of damage for each Fire Token it has. Repairable.",
+      "page": "19"
+    },
+    "Crippling-2xFire": {
+      "description": "Place two Fire Tokens. At the start of the End Phase, before the Repair step, this ship suffers a point of damage for each Fire Token it has. Repairable.",
+      "page": "19"
+    },
+    "Crippling-Navigation Offline": {
+      "description": "Gain a Navigation Offline token, reducing this Ship’s total movement to 2” (regardless of Thrust) and preventing it from turning or changing Orbital Layer. Repairable.",
+      "page": "19"
+    },
+    "Crippling-Weapons Offline": {
+      "description": "Gain a Weapons Offline token, preventing this Ship from using Weapons or launching Assets. Repairable.",
+      "page": "19"
+    },
     "Critical-X": {
       "description": "Each of this Weapon’s criticals increases the damage of that hit by X.",
       "page": "38"
