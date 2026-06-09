@@ -5251,22 +5251,31 @@ const App = (() => {
   }
 
   function addShipToGroupInner(group, shipKey, category, dbShip) {
-    const loadouts = {};
-    let loadoutCost = 0;
-    if (dbShip.loadoutOptions && dbShip.loadoutOptions.length > 0) {
-      dbShip.loadoutOptions.forEach((lo, loIdx) => {
-        loadouts[loIdx] = 0;
-        loadoutCost += lo.options[0]?.cost || 0;
-      });
+    // A group is "×N of one identically-equipped ship". When a matching ship is
+    // already in the group, clone its full config (loadouts/systems/feature/points)
+    // so added copies inherit it instead of resetting to a bare base hull.
+    const existing = group.ships.find(s => s.shipKey === shipKey && s.groupCategory === category);
+    let entry;
+    if (existing) {
+      entry = { ...existing, id: uuid(), loadouts: { ...(existing.loadouts || {}) } };
+      if (existing.systems) entry.systems = [...existing.systems];
+    } else {
+      const loadouts = {};
+      let loadoutCost = 0;
+      if (dbShip.loadoutOptions && dbShip.loadoutOptions.length > 0) {
+        dbShip.loadoutOptions.forEach((lo, loIdx) => {
+          loadouts[loIdx] = 0;
+          loadoutCost += lo.options[0]?.cost || 0;
+        });
+      }
+      entry = {
+        id: uuid(),
+        shipKey,
+        groupCategory: category,
+        points: (dbShip.points || 0) + loadoutCost,
+        loadouts
+      };
     }
-
-    const entry = {
-      id: uuid(),
-      shipKey,
-      groupCategory: category,
-      points: (dbShip.points || 0) + loadoutCost,
-      loadouts
-    };
 
     group.ships.push(entry);
 

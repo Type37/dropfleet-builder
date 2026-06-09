@@ -1163,6 +1163,13 @@
     inst.points = recalcShipPoints(factionKey, ship, inst);
     return inst;
   }
+  // A group is "×N of one identically-equipped ship", so a new copy must inherit
+  // the existing ship's loadouts/systems/feature/points, not reset to base.
+  function cloneShipInstance(src) {
+    const c = { ...src, id: uuid(), loadouts: { ...(src.loadouts || {}) } };
+    if (src.systems) c.systems = [...src.systems];
+    return c;
+  }
   function addShip(shipKey, category) {
     if (!activeFleet) return;
     const ship = findShip(activeFleet.faction, category, shipKey);
@@ -1484,7 +1491,7 @@
     const { gMin, gMax } = groupQtyBounds(ship);
     const newQty = group.ships.length + delta;
     if (newQty < gMin || newQty > gMax) return false;
-    if (delta > 0) group.ships.push(makeShipInstance(f.faction, inst.groupCategory, inst.shipKey));
+    if (delta > 0) group.ships.push(cloneShipInstance(inst));
     else group.ships.pop();
     f.updatedAt = Date.now();
     saveFleets();
