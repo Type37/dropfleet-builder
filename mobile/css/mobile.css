@@ -855,8 +855,13 @@ input, textarea, select { font: inherit; }
               transform var(--duration-fast) var(--ease-standard),
               box-shadow var(--duration-fast) var(--ease-standard);
 }
-.counter-btn:active { background: var(--paper-alt); }
+/* Clear press feedback — the button scales down and fills so the tap reads as
+   received (the value updates right after). */
+.counter-btn:active { transform: scale(0.84); background: var(--navy); color: var(--white); border-color: var(--navy); }
 .counter-btn:disabled { opacity: 0.3; }
+/* At the minimum, − removes the whole group — hint with a danger tint. */
+.counter-btn-remove { color: var(--danger); border-color: var(--danger); }
+.counter-btn-remove:active { background: var(--danger); border-color: var(--danger); color: var(--white); }
 
 /* Compact stepper used inline on fleet-list group rows (set ×N without opening
    the group). 32px keeps a comfortable tap target while fitting the row. */

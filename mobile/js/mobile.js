@@ -882,7 +882,7 @@
         const canVary = gMax > gMin;
         const titleQty = (!canVary && qty > 1) ? ' ×' + qty : '';
         const stepper = canVary ? `<div class="row-qty" onclick="event.stopPropagation()">
-            <button class="counter-btn counter-btn-sm" onclick="event.stopPropagation();App.changeGroupQty(${i},-1)" ${qty <= gMin ? 'disabled' : ''} aria-label="Remove one">−</button>
+            <button class="counter-btn counter-btn-sm${qty <= gMin ? ' counter-btn-remove' : ''}" onclick="event.stopPropagation();App.changeGroupQty(${i},-1)" aria-label="${qty <= gMin ? 'Remove group' : 'Remove one'}">−</button>
             <span class="row-qty-num">×${qty}</span>
             <button class="counter-btn counter-btn-sm" onclick="event.stopPropagation();App.changeGroupQty(${i},1)" ${qty >= gMax ? 'disabled' : ''} aria-label="Add one">+</button>
           </div>` : '';
@@ -1192,7 +1192,7 @@
           ${gMax > gMin ? `<div class="group-counter-range">${gMin}–${gMax} allowed</div>` : `<div class="group-counter-range">Fixed at ${gMin}</div>`}
         </div>
         <div class="group-counter-controls">
-          <button class="counter-btn" onclick="App.changeQty(-1)" ${qty <= gMin ? 'disabled' : ''}>−</button>
+          <button class="counter-btn${qty <= gMin ? ' counter-btn-remove' : ''}" onclick="App.changeQty(-1)" aria-label="${qty <= gMin ? 'Remove group' : 'Remove one'}">−</button>
           <div class="group-counter-value">${qty}</div>
           <button class="counter-btn" onclick="App.changeQty(1)" ${qty >= gMax ? 'disabled' : ''}>+</button>
         </div>
@@ -1439,10 +1439,21 @@
     return true;
   }
 
+  // True when the group is already at its minimum size — the next − removes it.
+  function isAtGroupMin(group) {
+    if (!group || !group.ships.length) return false;
+    const inst = group.ships[0];
+    const ship = findShip(activeFleet.faction, inst.groupCategory, inst.shipKey);
+    return group.ships.length <= groupQtyBounds(ship).gMin;
+  }
+
   function changeQty(delta) {
     const f = activeFleet;
     if (!f || activeGroupIdx < 0) return;
-    if (!stepGroupQty(f.battleGroups[activeGroupIdx], delta)) return;
+    const group = f.battleGroups[activeGroupIdx];
+    // Pressing − at the minimum removes the whole group (and returns to fleet).
+    if (delta < 0 && isAtGroupMin(group)) { removeGroup(); return; }
+    if (!stepGroupQty(group, delta)) return;
     renderGroupDetail();
     updateAppBar('screen-group-detail');
   }
@@ -1452,7 +1463,15 @@
   function changeGroupQty(groupIdx, delta) {
     const f = activeFleet;
     if (!f) return;
-    if (!stepGroupQty(f.battleGroups[groupIdx], delta)) return;
+    const group = f.battleGroups[groupIdx];
+    if (delta < 0 && isAtGroupMin(group)) {
+      f.battleGroups.splice(groupIdx, 1);
+      f.updatedAt = Date.now();
+      saveFleets();
+      renderFleetDetail();
+      return;
+    }
+    if (!stepGroupQty(group, delta)) return;
     renderFleetDetail();
   }
 

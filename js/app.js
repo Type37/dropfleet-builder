@@ -1697,7 +1697,7 @@ const App = (() => {
       const shipName = firstDbForArt ? firstDbForArt.name : g.name;
       const stepperHtml = gMax > 1
         ? `<div class="overview-group-stepper" onclick="event.stopPropagation()">
-            <button class="ovg-step" onclick="event.stopPropagation();App.removeLastShip('${g.id}')" ${qty <= gMin ? 'disabled' : ''} aria-label="Remove one ${esc(shipName)}">&minus;</button>
+            <button class="ovg-step${qty <= gMin ? ' ovg-step-remove' : ''}" onclick="event.stopPropagation();App.removeLastShip('${g.id}')" aria-label="${qty <= gMin ? 'Remove group' : 'Remove one ' + esc(shipName)}">&minus;</button>
             <span class="ovg-qty" aria-label="${qty} ${esc(shipName)} in group">${qty}</span>
             <button class="ovg-step" onclick="event.stopPropagation();App.addSameShip('${g.id}')" ${qty >= gMax ? 'disabled' : ''} aria-label="Add one ${esc(shipName)}">+</button>
           </div>`
@@ -3112,7 +3112,12 @@ const App = (() => {
     const groupMin = dbShip ? (dbShip.groupMin || 1) : 1;
 
     if (group.ships.length <= groupMin) {
-      showToast(`Minimum ${groupMin} ship${groupMin > 1 ? 's' : ''} per group`);
+      // At the minimum, − removes the whole group (subtract past the floor).
+      currentFleet.battleGroups = currentFleet.battleGroups.filter(g => g.id !== groupId);
+      if (activeGroupId === groupId) activeGroupId = currentFleet.battleGroups[0] ? currentFleet.battleGroups[0].id : null;
+      saveFleets();
+      updatePoints();
+      scheduleRender(renderGroupsNav, renderActiveGroup);
       return;
     }
 

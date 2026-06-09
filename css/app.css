@@ -4846,8 +4846,13 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-tap-highlight-color: transparent;
 }
 .ovg-step:hover:not(:disabled) { background: var(--navy); color: #fff; border-color: var(--navy); }
-.ovg-step:active:not(:disabled) { transform: scale(0.94); }
+/* Obvious press feedback — scale down + fill so the click clearly registers. */
+.ovg-step:active:not(:disabled) { transform: scale(0.82); background: var(--navy); color: #fff; border-color: var(--navy); }
 .ovg-step:disabled { opacity: 0.35; cursor: default; }
+/* At the minimum, − removes the whole group — hint with a danger tint. */
+.ovg-step-remove { color: var(--danger, #c43c2f); border-color: rgba(196, 60, 47, 0.4); }
+.ovg-step-remove:hover { background: var(--danger, #c43c2f) !important; color: #fff !important; border-color: var(--danger, #c43c2f) !important; }
+.ovg-step-remove:active:not(:disabled) { background: var(--danger, #c43c2f) !important; border-color: var(--danger, #c43c2f) !important; }
 .ovg-qty {
   min-width: 26px;
   text-align: center;
