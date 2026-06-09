@@ -1281,7 +1281,7 @@ const App = (() => {
     if (pts > sizeInfo.max && sizeInfo.max !== 99999) {
       warnings.push({ type: 'error', msg: `Over budget: ${pts}/${sizeInfo.max} pts` });
     } else if (pts < sizeInfo.min && fleet.battleGroups.length > 0) {
-      warnings.push({ type: 'warn', msg: `Under minimum: ${pts}/${sizeInfo.min} pts` });
+      warnings.push({ type: 'warn', msg: `Below ${sizeInfo.label} minimum of ${sizeInfo.min} pts (you have ${pts}) — a ${sizeInfo.label} game is ${sizeInfo.min}–${sizeInfo.max === 99999 ? '+' : sizeInfo.max} pts` });
     }
 
     // 2. Group count
@@ -1354,10 +1354,10 @@ const App = (() => {
     // Both are hard restrictions per Section 4.2: Heavy points may not exceed
     // Medium points; Light points may not exceed Medium + Heavy points.
     if (heavyPts > mediumPts) {
-      warnings.push({ type: 'error', msg: `Heavy ships (${heavyPts}pts) cannot exceed Medium ships (${mediumPts}pts)` });
+      warnings.push({ type: 'error', msg: `Heavy points (${heavyPts}) can't exceed Medium points (${mediumPts}) — Medium ships are your backbone and unlock Heavy (rulebook 4.2)` });
     }
     if (lightPts > mediumPts + heavyPts) {
-      warnings.push({ type: 'error', msg: `Light ships (${lightPts}pts) cannot exceed Medium + Heavy ships (${mediumPts + heavyPts}pts)` });
+      warnings.push({ type: 'error', msg: `Light points (${lightPts}) can't exceed Medium + Heavy points (${mediumPts + heavyPts}) (rulebook 4.2)` });
     }
 
     // 7b. Feature carriers must choose a Deployable Feature

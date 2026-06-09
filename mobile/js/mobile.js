@@ -588,7 +588,7 @@
     const size = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
     const pts = fleetPoints(fleet);
     if (pts > size.max && size.max !== 99999) w.push({ t: 'error', m: `Over budget: ${pts}/${size.max} pts` });
-    else if (fleet.battleGroups.length && pts < size.min) w.push({ t: 'warn', m: `Under minimum: ${pts}/${size.min} pts` });
+    else if (fleet.battleGroups.length && pts < size.min) w.push({ t: 'warn', m: `Below ${size.label} minimum of ${size.min} pts (you have ${pts}) — a ${size.label} game is ${size.min}–${size.max === 99999 ? '+' : size.max} pts` });
 
     const gc = countableGroups(fleet).length;
     if (gc > size.groups) w.push({ t: 'error', m: `Too many groups: ${gc}/${size.groups}` });
@@ -640,8 +640,8 @@
       const p = groupPoints(fleet, g);
       if (cat === 'light') light += p; else if (cat === 'medium') medium += p; else if (cat === 'heavy') heavy += p;
     });
-    if (heavy > medium) w.push({ t: 'error', m: `Heavy (${heavy}pts) can’t exceed Medium (${medium}pts)` });
-    if (light > medium + heavy) w.push({ t: 'error', m: `Light (${light}pts) can’t exceed Medium+Heavy (${medium + heavy}pts)` });
+    if (heavy > medium) w.push({ t: 'error', m: `Heavy points (${heavy}) can’t exceed Medium points (${medium}) — Medium ships are your backbone and unlock Heavy (rulebook 4.2)` });
+    if (light > medium + heavy) w.push({ t: 'error', m: `Light points (${light}) can’t exceed Medium + Heavy points (${medium + heavy}) (rulebook 4.2)` });
 
     // Feature carriers must choose a Deployable Feature
     fleet.battleGroups.forEach(g => {
