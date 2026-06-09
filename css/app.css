@@ -2942,8 +2942,8 @@ h1, h2, h3, h4, h5, h6 {
 .admiral-thumb svg { width: 100%; height: 100%; }
 
 /* Rank insignia (shared js/rank-insignia.js) */
-.rank-insignia { vertical-align: -0.28em; margin-right: 6px; flex: 0 0 auto; }
-.admiral-flagship-name .rank-insignia { vertical-align: -0.2em; }
+/* Rank insignia only renders inside the centred .admiral-thumb box now — no
+   inline margin/baseline tweaks (they shoved the box svg off-centre). */
 
 .admiral-level {
   font-size: var(--text-sm);

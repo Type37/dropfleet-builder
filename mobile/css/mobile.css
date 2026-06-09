@@ -384,8 +384,7 @@ input, textarea, select { font: inherit; }
 }
 
 /* Rank insignia (shared ../js/rank-insignia.js) */
-.rank-insignia { vertical-align: -0.28em; margin-right: 5px; flex: 0 0 auto; }
-.detail-name .rank-insignia { vertical-align: -0.24em; }
+/* Rank insignia only renders inside the centred .rank-thumb box now. */
 
 .list-row-sub {
   font-size: var(--text-caption1);
