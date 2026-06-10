@@ -60,6 +60,14 @@
   };
   const RARE_MAX = { skirmish: 1, clash: 2, battle: 3, reconquest: 4 };
 
+  // Haptics (Android web only; iOS Safari + unsupported browsers no-op silently).
+  // Distinct patterns so actions feel different: a confident bump to add, a
+  // double-tick to remove, a light tick for tweaks, a warning pulse when you tip
+  // over the points limit.
+  const HAPTIC = { tick: 8, add: 22, remove: [12, 35, 12], over: [0, 35, 45, 35] };
+  function haptic(p) { if (navigator.vibrate) { try { navigator.vibrate(p); } catch (e) {} } }
+  let _wasOverBudget = false;
+
   // 4 blocks that fill clockwise (TL, TR, BR, BL) as the game escalates.
   const GAME_SIZE_LEVEL = { skirmish: 1, clash: 2, battle: 3, reconquest: 4 };
   function gameSizeBlocks(key) {
@@ -814,8 +822,12 @@
         txt += ` · ${rem >= 0 ? rem + ' left' : Math.abs(rem) + ' over'}`;
       }
       ptsEl.textContent = txt;
-      ptsEl.classList.toggle('pts-over', limit !== 99999 && pts > limit);
+      const over = limit !== 99999 && pts > limit;
+      ptsEl.classList.toggle('pts-over', over);
       ptsEl.classList.remove('hidden');
+      // Warning pulse only on the moment you cross into over-budget, not while over.
+      if (over && !_wasOverBudget) haptic(HAPTIC.over);
+      _wasOverBudget = over;
     };
 
     switch (screenId) {
@@ -1254,6 +1266,7 @@
     activeFleet.battleGroups.push({ id: uuid(), name: ship?.name || 'Group', ships });
     activeFleet.updatedAt = Date.now();
     saveFleets();
+    haptic(HAPTIC.add);
     goBack();
   }
 
@@ -1574,6 +1587,7 @@
     else group.ships.pop();
     f.updatedAt = Date.now();
     saveFleets();
+    haptic(HAPTIC.tick);
     return true;
   }
 
@@ -1606,6 +1620,7 @@
       f.battleGroups.splice(groupIdx, 1);
       f.updatedAt = Date.now();
       saveFleets();
+      haptic(HAPTIC.remove);
       renderFleetDetail();
       return;
     }
@@ -1627,6 +1642,7 @@
     });
     f.updatedAt = Date.now();
     saveFleets();
+    haptic(HAPTIC.tick);
     renderGroupDetail();
     updateAppBar('screen-group-detail');
   }
@@ -1643,6 +1659,7 @@
     });
     f.updatedAt = Date.now();
     saveFleets();
+    haptic(HAPTIC.tick);
     renderGroupDetail();
     updateAppBar('screen-group-detail');
   }
@@ -1661,6 +1678,7 @@
     });
     f.updatedAt = Date.now();
     saveFleets();
+    haptic(HAPTIC.tick);
     renderGroupDetail();
     updateAppBar('screen-group-detail');
   }
@@ -1678,6 +1696,7 @@
     });
     f.updatedAt = Date.now();
     saveFleets();
+    haptic(HAPTIC.tick);
     renderGroupDetail();
     updateAppBar('screen-group-detail');
   }
@@ -1689,6 +1708,7 @@
     activeGroupIdx = -1;
     f.updatedAt = Date.now();
     saveFleets();
+    haptic(HAPTIC.remove);
     goBack();
   }
 
