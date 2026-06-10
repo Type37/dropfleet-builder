@@ -758,7 +758,7 @@
     if (current && !opts?.replace) {
       current.classList.remove('active');
       current.classList.add('slide-out-left');
-      setTimeout(() => current.classList.remove('slide-out-left'), 300);
+      setTimeout(() => current.classList.remove('slide-out-left'), 220);
     } else if (current) {
       current.classList.remove('active');
     }
@@ -767,7 +767,7 @@
       target.classList.add('active');
       if (current && !opts?.replace) {
         target.classList.add('slide-in-right');
-        setTimeout(() => target.classList.remove('slide-in-right'), 300);
+        setTimeout(() => target.classList.remove('slide-in-right'), 220);
       }
       window.scrollTo(0, 0);
     }
@@ -781,12 +781,12 @@
     if (current) {
       current.classList.remove('active');
       current.classList.add('slide-out-right');
-      setTimeout(() => current.classList.remove('slide-out-right'), 300);
+      setTimeout(() => current.classList.remove('slide-out-right'), 220);
     }
     const target = document.getElementById(prev.id);
     if (target) {
       target.classList.add('active', 'slide-in-left');
-      setTimeout(() => target.classList.remove('slide-in-left'), 300);
+      setTimeout(() => target.classList.remove('slide-in-left'), 220);
     }
     window.scrollTo(0, prev.scroll || 0);
     afterNav(prev.id);

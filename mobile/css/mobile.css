@@ -107,7 +107,7 @@
   --duration-fast: 140ms;     /* taps / state changes — snappy */
   --duration-normal: 200ms;   /* fades */
   --duration-gentle: 240ms;   /* sheets / fills */
-  --duration-slow: 260ms;     /* screen navigation (JS cleanup waits 300ms) */
+  --duration-slow: 200ms;     /* screen navigation, iOS-snappy (JS cleanup waits 220ms) */
   --ease-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);   /* enter — eases to rest */
   --ease-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);   /* exit — eases away */
   --ease-standard:   cubic-bezier(0.2, 0, 0, 1);        /* taps / UI micro-motion */
@@ -248,15 +248,16 @@ button, a, input, select, textarea,
 /* Floating Add Group button */
 .fab {
   position: fixed;
-  bottom: max(20px, env(safe-area-inset-bottom, 20px));
-  right: 20px;
+  bottom: max(14px, env(safe-area-inset-bottom, 14px));
+  left: 16px;
+  right: 16px;
   z-index: 60;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--sp-s);
-  padding: 0 var(--sp-l) 0 var(--sp-m);
   height: 52px;
-  border-radius: 26px;
+  border-radius: 14px;
   background: var(--navy);
   color: var(--fg-on-dark);
   border: none;
