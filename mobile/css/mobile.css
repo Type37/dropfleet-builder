@@ -930,6 +930,10 @@ button, a, input, select, textarea,
 /* At the minimum, − removes the whole group — hint with a danger tint. */
 .counter-btn-remove { color: var(--danger); border-color: var(--danger); }
 .counter-btn-remove:active { background: var(--danger); border-color: var(--danger); color: var(--white); }
+/* "Remove the whole group" state: a quiet × instead of an alarming red − (the
+   glyph carries the meaning, so no danger colour). */
+.counter-btn-x { color: var(--fg2, var(--fg3)); }
+.counter-btn-x:active { background: var(--fg3); border-color: var(--fg3); color: var(--white); }
 
 /* Compact stepper used inline on fleet-list group rows (set ×N without opening
    the group). 32px keeps a comfortable tap target while fitting the row. */

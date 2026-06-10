@@ -961,7 +961,7 @@
         const canVary = gMax > gMin;
         const titleQty = (!canVary && qty > 1) ? ' ×' + qty : '';
         const stepper = canVary ? `<div class="row-qty" onclick="event.stopPropagation()">
-            <button class="counter-btn counter-btn-sm${qty <= gMin ? ' counter-btn-remove' : ''}" onclick="event.stopPropagation();App.changeGroupQty(${i},-1)" aria-label="${qty <= gMin ? 'Remove group' : 'Remove one'}">−</button>
+            <button class="counter-btn counter-btn-sm${qty <= gMin ? ' counter-btn-x' : ''}" onclick="event.stopPropagation();App.changeGroupQty(${i},-1)" aria-label="${qty <= gMin ? 'Remove group' : 'Remove one'}">${qty <= gMin ? '×' : '−'}</button>
             <span class="row-qty-num">×${qty}</span>
             <button class="counter-btn counter-btn-sm" onclick="event.stopPropagation();App.changeGroupQty(${i},1)" ${qty >= gMax ? 'disabled' : ''} aria-label="Add one">+</button>
           </div>` : '';
@@ -1334,7 +1334,7 @@
           ${gMax > gMin ? `<div class="group-counter-range">${gMin}–${gMax} allowed</div>` : `<div class="group-counter-range">Fixed at ${gMin}</div>`}
         </div>
         ${gMax > gMin ? `<div class="group-counter-controls">
-          <button class="counter-btn${qty <= gMin ? ' counter-btn-remove' : ''}" onclick="App.changeQty(-1)" aria-label="${qty <= gMin ? 'Remove group' : 'Remove one'}">−</button>
+          <button class="counter-btn${qty <= gMin ? ' counter-btn-x' : ''}" onclick="App.changeQty(-1)" aria-label="${qty <= gMin ? 'Remove group' : 'Remove one'}">${qty <= gMin ? '×' : '−'}</button>
           <div class="group-counter-value">${qty}</div>
           <button class="counter-btn" onclick="App.changeQty(1)" ${qty >= gMax ? 'disabled' : ''}>+</button>
         </div>` : (qty > 1 ? `<div class="group-counter-value group-counter-value-static">×${qty}</div>` : '')}
