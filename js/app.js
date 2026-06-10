@@ -2084,7 +2084,8 @@ const App = (() => {
   const WEAPON_TYPE_LABELS = { K: 'Kinetic', E: 'Energy', C: 'Core' };
 
   const WEAPON_TYPE_ICONS = {
-    K: '<svg width="14" height="14" viewBox="0 0 16 16" fill="#0057A3"><path d="M8 1l1.5 5H15l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5.5z"/></svg>',
+    // Kinetic is shown as a "K" glyph, never a star (matches the mobile weapon-type-k letter).
+    K: '<span style="display:inline-block;width:14px;text-align:center;font-weight:800;color:var(--navy);font-family:var(--font-display)">K</span>',
     E: '<svg width="14" height="14" viewBox="0 0 16 16" fill="#92400E"><path d="M9 1L4 8h4l-1 7 6-8H9l1-6z"/></svg>',
     C: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#c43c2f" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>'
   };
