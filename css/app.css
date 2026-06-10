@@ -2508,6 +2508,27 @@ h1, h2, h3, h4, h5, h6 {
 }
 .feature-carrier-block .loadout-select { width: 100%; }
 
+/* Deployable Feature radio list: every option shows its full rules inline. */
+.feature-radio-list { display: flex; flex-direction: column; gap: var(--sp-xs); margin-top: var(--sp-xs); }
+.feature-radio {
+  display: flex;
+  gap: var(--sp-sm);
+  padding: var(--sp-sm);
+  border: 1px solid var(--stroke-light);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: var(--paper);
+  transition: border-color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
+}
+.feature-radio:hover { border-color: var(--stroke-strong); }
+.feature-radio.selected { border-color: var(--navy); background: var(--navy-wash); box-shadow: inset 2px 0 0 var(--navy); }
+.feature-radio input { margin-top: 3px; flex-shrink: 0; accent-color: var(--navy); }
+.feature-radio-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.feature-radio-name { font-weight: var(--weight-bold); color: var(--ink); }
+.feature-radio-cost { font-weight: var(--weight-bold); color: var(--gold-dark); font-size: var(--text-xs); }
+.feature-rule { font-size: var(--text-xs); color: var(--ink-soft); line-height: 1.4; margin-top: 2px; }
+.feature-rule b { color: var(--ink); }
+
 /* Systems / Hardpoint picker (Resistance Cruiser/Frigate/Dreadnought Systems) */
 .systems-picker {
   margin-top: var(--sp-xs);

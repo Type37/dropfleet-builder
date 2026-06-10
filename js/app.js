@@ -2299,23 +2299,41 @@ const App = (() => {
     if (feats.length === 0) return '';
     const required = featureRequired(dbShip);
     const chosen = ship.feature || '';
-    const opts = [`<option value="">${required ? 'Choose a feature' : 'No payload feature'}</option>`]
-      .concat(feats.map(f => {
-        const costLabel = f.cost ? ` (+${f.cost} pts)` : '';
-        return `<option value="${esc(f.name)}" ${f.name === chosen ? 'selected' : ''}>${esc(f.name)}${costLabel}</option>`;
-      }))
-      .join('');
-    const chosenFeat = feats.find(f => f.name === chosen);
     // Porter ships take a feature as an OPTIONAL Payload S-1; only genuine
     // "choose one" carriers are flagged as required.
     const label = required
       ? `Deployable Feature${chosen ? '' : ', required'}`
       : 'Payload feature, optional';
+    // Radio list (not a dropdown) so every option's full rules are visible while
+    // choosing, rather than hidden until selected.
+    const row = (value, name, cost, feat, isChosen) => {
+      const costLabel = cost ? ` <span class="feature-radio-cost">+${cost} pts</span>` : '';
+      return `<label class="feature-radio${isChosen ? ' selected' : ''}">
+        <input type="radio" name="feat-${ship.id}"${isChosen ? ' checked' : ''} onchange="App.changeFeature('${groupId}','${ship.id}','${value.replace(/'/g, "\\'")}')">
+        <span class="feature-radio-main">
+          <span class="feature-radio-name">${esc(name)}${costLabel}</span>
+          ${feat ? renderFeatureFullRules(feat) : ''}
+        </span>
+      </label>`;
+    };
+    const noneRow = required ? '' : row('', 'No feature', 0, null, chosen === '');
+    const featRows = feats.map(f => row(f.name, f.name, f.cost, f, f.name === chosen)).join('');
     return `<div class="feature-carrier-block${(required && !chosen) ? ' feature-carrier-unset' : ''}">
       <div class="feature-carrier-label">${label}</div>
-      <select class="loadout-select" onchange="App.changeFeature('${groupId}','${ship.id}', this.value)">${opts}</select>
-      ${renderFeatureStats(chosenFeat)}
+      <div class="feature-radio-list">${noneRow}${featRows}</div>
     </div>`;
+  }
+
+  // Full inline rules for one Deployable Feature: stat line + every rule's verbatim
+  // text (so options can be compared before picking).
+  function renderFeatureFullRules(feat) {
+    const statLine = (feat.features || []).map(f =>
+      `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.special && f.special !== '-' ? ` · ${esc(f.special)}` : ''}</span>`
+    ).join('');
+    const rules = (feat.rules || []).map(r =>
+      `<div class="feature-rule">${r.description ? `<b>${esc(r.name)}:</b> ${ruleHtml(r.description)}` : `<b>${esc(r.name)}</b>`}</div>`
+    ).join('');
+    return `${statLine ? `<div class="station-stats" style="margin-top:2px">${statLine}</div>` : ''}${rules}`;
   }
 
   // ── Systems / Hardpoint selection (Resistance Cruiser/Frigate/Dreadnought) ──

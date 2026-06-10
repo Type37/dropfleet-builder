@@ -750,6 +750,13 @@ button, a, input, select, textarea,
   color: var(--fg3);
   margin-top: var(--sp-xxs);
 }
+.feature-rule {
+  font-size: var(--text-caption2);
+  color: var(--fg2, var(--fg3));
+  line-height: 1.4;
+  margin-top: var(--sp-xxs);
+}
+.feature-rule b { color: var(--fg1); }
 
 
 /* ── 16. Points Summary Bar ───────────────────────────── */

@@ -1313,12 +1313,17 @@
           const sel = ft.name === chosenFeature;
           const stat = (ft.features && ft.features[0]) ? ft.features[0] : null;
           const detail = stat ? `ES ${stat.es || '-'} · KS ${stat.ks || '-'}${stat.special && stat.special !== '-' ? ' · ' + stat.special : ''}` : '';
+          // Show every option's full rules inline so they can be compared before picking.
+          const rulesHtml = (ft.rules || []).map(r =>
+            `<div class="feature-rule">${r.description ? `<b>${esc(r.name)}:</b> ${ruleHtml(r.description)}` : `<b>${esc(r.name)}</b>`}</div>`
+          ).join('');
           return `<div class="loadout-option ${sel ? 'selected' : ''}" onclick="App.selectFeature('${ft.name.replace(/'/g, "\\'")}')">
             <div class="flex justify-between items-center">
               <span class="loadout-option-name">${esc(ft.name)}</span>
               <span class="loadout-option-cost">${ft.cost ? '+' + ft.cost + 'pts' : 'Free'}</span>
             </div>
             ${detail ? `<div class="loadout-option-desc">${esc(detail)}</div>` : ''}
+            ${rulesHtml}
           </div>`;
         }).join('')}
       </div>` : ''}
