@@ -544,6 +544,14 @@
       && (!ship.weapons || ship.weapons.length === 0)
       && (!ship.loads || ship.loads.length === 0));
   }
+  // True if this ship can deliver Battalions to the ground (Bulk Lander / Dropship
+  // / Drop Pod loads), directly or via a loadout option. Boarding Pods are for
+  // boarding actions, not ground drop, so they don't count.
+  function shipHasDrop(ship) {
+    const re = /bulk lander|dropship|drop pod/i;
+    const has = arr => (arr || []).some(l => re.test((l && l.name) || ''));
+    return has(ship && ship.loads) || ((ship && ship.loadoutOptions) || []).some(lo => (lo.options || []).some(o => has(o.loads)));
+  }
   function systemsListFor(ship, factionKey) {
     const seln = ship && ship.systemSelection;
     if (!seln) return null;
@@ -1059,6 +1067,8 @@
     // in this faction are shown.
     const attrDefs = [
       { key: 'launch',  label: 'Launch',  test: s => (s.loads && s.loads.length) || (s.loadoutOptions || []).some(lo => (lo.options || []).some(o => o.loads && o.loads.length)) },
+      // "Drop" = can deliver Battalions to the ground (Bulk Lander / Dropship / Drop Pod).
+      { key: 'drop',    label: 'Drop',    test: s => shipHasDrop(s) },
       { key: 'modular', label: 'Modular', test: s => isFullyModular(s) },
       { key: 'rare',    label: 'Rare',    test: s => s.isRare },
       { key: 'unique',  label: 'Unique',  test: s => s.isUnique }
