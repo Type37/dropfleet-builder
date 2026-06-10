@@ -972,14 +972,17 @@
             <span class="row-qty-num">×${qty}</span>
             <button class="counter-btn counter-btn-sm" onclick="event.stopPropagation();App.changeGroupQty(${i},1)" ${qty >= gMax ? 'disabled' : ''} aria-label="Add one">+</button>
           </div>` : '';
-        return `<div class="list-row" onclick="App.openGroup(${i})">
-          ${art ? `<div class="ship-thumb${modCls}">${shopLinkImg(db?.name, `<img src="${art}" alt="" loading="lazy">`, db)}</div>` : '<div class="ship-thumb"></div>'}
-          <div class="list-row-content">
-            <div class="list-row-title">${esc(db?.name || 'Unknown')}${titleQty}</div>
-            <div class="list-row-sub">${gp} pts · ${tonLabel(db?.tonnage) || CATEGORY_LABELS[s.groupCategory] || ''}</div>
+        return `<div class="swipe-row">
+          <button class="swipe-del" onclick="event.stopPropagation();App.swipeDeleteGroup(${i})" aria-label="Remove group">Remove</button>
+          <div class="list-row swipe-fg" onclick="App.openGroup(${i})">
+            ${art ? `<div class="ship-thumb${modCls}">${shopLinkImg(db?.name, `<img src="${art}" alt="" loading="lazy">`, db)}</div>` : '<div class="ship-thumb"></div>'}
+            <div class="list-row-content">
+              <div class="list-row-title">${esc(db?.name || 'Unknown')}${titleQty}</div>
+              <div class="list-row-sub">${gp} pts · ${tonLabel(db?.tonnage) || CATEGORY_LABELS[s.groupCategory] || ''}</div>
+            </div>
+            ${stepper}
+            <span class="list-chevron">›</span>
           </div>
-          ${stepper}
-          <span class="list-chevron">›</span>
         </div>`;
       }).join('');
     }
@@ -1038,6 +1041,63 @@
     }
 
     groupsEl.innerHTML = html;
+    setupGroupSwipe();
+  }
+
+  // Swipe a group row left to reveal a Remove action (the stepper × stays as the
+  // visible fallback, per NN/g). Bound once; ignores the qty stepper and art thumb,
+  // and only hijacks horizontal drags so vertical scrolling still works.
+  function setupGroupSwipe() {
+    const c = document.getElementById('fleet-groups');
+    if (!c || c._swBound) return;
+    c._swBound = true;
+    let fg = null, sx = 0, sy = 0, dx = 0, dir = null, openFg = null, swiped = false;
+    const closeOpen = () => { if (openFg) { openFg.style.transform = ''; openFg.classList.remove('swipe-open'); openFg = null; } };
+    c.addEventListener('pointerdown', e => {
+      if (e.target.closest('.row-qty') || e.target.closest('.ship-thumb') || e.target.closest('.swipe-del')) return;
+      const el = e.target.closest('.swipe-fg');
+      if (el !== openFg) closeOpen();
+      fg = el; sx = e.clientX; sy = e.clientY; dx = 0; dir = null; swiped = false;
+    });
+    c.addEventListener('pointermove', e => {
+      if (!fg) return;
+      const mx = e.clientX - sx, my = e.clientY - sy;
+      if (dir === null) {
+        if (Math.abs(mx) < 6 && Math.abs(my) < 6) return;
+        dir = Math.abs(mx) > Math.abs(my) ? 'h' : 'v';
+      }
+      if (dir !== 'h') { fg = null; return; }
+      e.preventDefault(); swiped = true;
+      dx = Math.max(-92, Math.min(0, (fg === openFg ? -88 : 0) + mx));
+      fg.style.transform = `translateX(${dx}px)`;
+    });
+    const end = () => {
+      if (!fg) return;
+      if (dx < -46) { fg.style.transform = 'translateX(-88px)'; fg.classList.add('swipe-open'); openFg = fg; }
+      else { fg.style.transform = ''; fg.classList.remove('swipe-open'); if (openFg === fg) openFg = null; }
+      fg = null;
+    };
+    c.addEventListener('pointerup', end);
+    c.addEventListener('pointercancel', end);
+    c.addEventListener('click', e => {
+      const el = e.target.closest('.swipe-fg');
+      // Only a tap ON the row foreground gets swallowed (after a swipe, or to close
+      // an open row). A tap on the revealed Remove button must pass through.
+      if (el && (swiped || el === openFg)) {
+        e.stopPropagation(); e.preventDefault();
+        if (el === openFg) closeOpen();
+      }
+      swiped = false;
+    }, true);
+  }
+  function swipeDeleteGroup(i) {
+    const f = activeFleet;
+    if (!f || !f.battleGroups[i]) return;
+    f.battleGroups.splice(i, 1);
+    f.updatedAt = Date.now();
+    saveFleets();
+    haptic(HAPTIC.remove);
+    renderFleetDetail();
   }
 
   function toggleSecondary(idx) {
@@ -2590,7 +2650,7 @@
     init, goBack, viewDesktop,
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, selectFleetSize, openStarterFleets,
     openAddGroup, filterShips, toggleAttr, toggleExtra, clearFilters, setSort, addShip,
-    openGroup, changeQty, changeGroupQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow, toggleSecondary, openSecondaryModal, closeSecondaryModal,
+    openGroup, changeQty, changeGroupQty, swipeDeleteGroup, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow, toggleSecondary, openSecondaryModal, closeSecondaryModal,
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral, closeAbilityModal,
     openStation, addStation, removeStationPrompt,

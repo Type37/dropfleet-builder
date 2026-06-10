@@ -762,6 +762,20 @@ button, a, input, select, textarea,
 .feature-rule b { color: var(--fg1); }
 .feature-opt-art { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
 
+/* Swipe-left group row → reveal Remove (the qty stepper × is the visible fallback) */
+.swipe-row { position: relative; overflow: hidden; }
+.swipe-del {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 88px; border: none;
+  background: var(--danger); color: #fff; cursor: pointer;
+  font-family: var(--font-condensed); font-weight: var(--weight-bold);
+  font-size: var(--text-body2, 14px); letter-spacing: .03em;
+}
+.swipe-fg {
+  position: relative; background: var(--paper);
+  transition: transform .18s var(--ease-standard); will-change: transform;
+  touch-action: pan-y;
+}
+
 /* Visible game-size card picker (mobile New Fleet) */
 .size-card-list { display: flex; flex-direction: column; gap: var(--sp-xs); }
 .size-card {
