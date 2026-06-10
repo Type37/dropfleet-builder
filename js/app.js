@@ -770,7 +770,7 @@ const App = (() => {
         <div class="game-size-visual">${bars}</div>
         <div>
           <span class="game-size-popover-name">${size.label}</span>
-          <span class="game-size-popover-desc">${size.desc}, ~${size.time}, ${size.groups} groups${colText}</span>
+          <span class="game-size-popover-desc">${size.desc}, ${size.groups} groups${colText}</span>
         </div>
       </button>`;
     }).join('');
@@ -1213,7 +1213,7 @@ const App = (() => {
     if (sizeDetail) {
       const colText = sizeInfo.colossalMax > 0 ? `${sizeInfo.colossalMax} Colossal` : 'No Colossal';
       // Order by importance (Jet): Colossals → Admiral level → time, then the basics.
-      sizeDetail.innerHTML = `<span>${colText}</span><span>Admiral to Lv${sizeInfo.maxAdmiralLevel}</span><span>~${sizeInfo.time}</span><span>${sizeInfo.desc}</span><span>${sizeInfo.groups} groups</span>`;
+      sizeDetail.innerHTML = `<span>${colText}</span><span>Admiral to Lv${sizeInfo.maxAdmiralLevel}</span><span>${sizeInfo.desc}</span><span>${sizeInfo.groups} groups</span>`;
     }
 
     const panel = document.getElementById('fleet-info-panel');
