@@ -67,7 +67,7 @@
   --ink: #1c1a17;
   --ink-soft: #3a3834;
   --ink-muted: #6b6660;
-  --ink-faint: #9e9890;
+  --ink-faint: #7e7870;   /* WCAG: 4.1:1 on paper (was #9e9890 = 2.7:1, failed) */
 
   /* Navy (primary accent) */
   --navy: #1b3a5c;
@@ -520,7 +520,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
   font-weight: var(--weight-heavy);
-  color: var(--gold-light);
+  color: var(--gold-dark);   /* WCAG: 5.8:1 (gold-light was 2.1:1, failed) */
 }
 
 .points-limit {
@@ -863,7 +863,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-gold {
   background: var(--gold);
-  color: #fff;
+  color: var(--navy-dark);   /* WCAG: dark text on bright gold = 5.3:1 (white was 2.9:1) */
   border-color: var(--gold);
 }
 .btn-gold:hover { background: var(--gold-light); border-color: var(--gold-light); }
@@ -2876,7 +2876,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .ship-badge-unique {
   background: var(--gold);
-  color: white;
+  color: var(--navy-dark);   /* WCAG: dark on gold = 5.3:1 (white was 2.9:1) */
 }
 .ship-badge-rare {
   background: var(--navy-light);

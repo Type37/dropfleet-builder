@@ -66,7 +66,7 @@
   --fg1: #1c1a17;       /* primary text (= desktop --ink) */
   --fg2: #3a3834;       /* secondary text */
   --fg3: #6b6660;       /* tertiary / captions */
-  --fg4: #9e9890;       /* disabled / hints */
+  --fg4: #7e7870;       /* disabled / hints — WCAG 4.1:1 (was #9e9890 = 2.7:1) */
   --fg-on-dark: #ffffff;
   --fg-on-dark-dim: rgba(255,255,255,0.6);
 
@@ -994,7 +994,7 @@ button, a, input, select, textarea,
 
 .badge-gold {
   background: var(--gold);
-  color: var(--white);
+  color: var(--navy-dark);   /* WCAG: dark on bright gold = 5.3:1 (white was 2.9:1) */
 }
 
 
