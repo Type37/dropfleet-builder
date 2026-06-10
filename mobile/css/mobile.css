@@ -758,6 +758,22 @@ button, a, input, select, textarea,
 }
 .feature-rule b { color: var(--fg1); }
 
+/* Visible game-size card picker (mobile New Fleet) */
+.size-card-list { display: flex; flex-direction: column; gap: var(--sp-xs); }
+.size-card {
+  display: flex; align-items: center; gap: var(--sp-s); width: 100%;
+  padding: var(--sp-s) var(--sp-m); text-align: left;
+  border: 1px solid var(--stroke, #d8d2c8); border-radius: var(--radius-md);
+  background: var(--paper, #fff); cursor: pointer;
+}
+.size-card.selected { border-color: var(--navy); background: var(--navy-wash, rgba(27,58,92,0.06)); box-shadow: inset 3px 0 0 var(--navy); }
+.size-card-info { display: flex; flex-direction: column; min-width: 0; }
+.size-card-name { font-family: var(--font-display); font-weight: var(--weight-bold); color: var(--fg1); }
+.size-card-sub { font-size: var(--text-caption2); color: var(--fg3); }
+.gs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; width: 20px; flex-shrink: 0; }
+.gs-block { aspect-ratio: 1; border: 1.5px solid var(--fg3, #9e988f); border-radius: 1px; box-sizing: border-box; }
+.gs-block.filled { background: var(--navy); border-color: var(--navy); }
+
 
 /* ── 16. Points Summary Bar ───────────────────────────── */
 .points-bar {

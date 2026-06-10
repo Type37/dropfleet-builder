@@ -60,6 +60,16 @@
   };
   const RARE_MAX = { skirmish: 1, clash: 2, battle: 3, reconquest: 4 };
 
+  // 4 blocks that fill clockwise (TL, TR, BR, BL) as the game escalates.
+  const GAME_SIZE_LEVEL = { skirmish: 1, clash: 2, battle: 3, reconquest: 4 };
+  function gameSizeBlocks(key) {
+    const lvl = GAME_SIZE_LEVEL[key] || 1;
+    const clockwise = [0, 1, 3, 2];
+    let html = '';
+    for (let p = 0; p < 4; p++) html += `<span class="gs-block${clockwise.indexOf(p) < lvl ? ' filled' : ''}"></span>`;
+    return `<span class="gs-grid">${html}</span>`;
+  }
+
   // Starter-box fleets (mirrors desktop fastplaySpecs) — the "I have the starter set" path.
   const STARTER_SPECS = [
     { faction: 'ucm', name: 'UCM Fast Play', size: 'skirmish', groups: [
@@ -2369,15 +2379,29 @@
     const fp = document.getElementById('new-fleet-faction');
     const ordered = Object.keys(FACTION_FILES).sort((a, b) => (FACTION_INFO[a]?.order || 99) - (FACTION_INFO[b]?.order || 99));
     fp.innerHTML = ordered.map(k => `<option value="${k}">${FACTION_INFO[k]?.name || k}</option>`).join('');
-    const sp = document.getElementById('new-fleet-size');
-    sp.innerHTML = Object.entries(GAME_SIZES).map(([k, s]) =>
-      `<option value="${k}">${s.label} · ${s.min}–${s.max === 99999 ? '∞' : s.max}pts · ${s.time}</option>`
-    ).join('');
     document.getElementById('new-fleet-name').value = fleet ? (fleet.name || '') : '';
     document.getElementById('new-fleet-desc').value = fleet ? (fleet.description || '') : '';
     fp.value = fleet ? fleet.faction : (ordered.includes('ucm') ? 'ucm' : ordered[0]);
-    sp.value = fleet ? fleet.gameSize : 'skirmish';
+    selectFleetSize(fleet ? fleet.gameSize : 'skirmish');
     updateFactionDesc();
+  }
+
+  // Visible game-size picker (cards, not a dropdown) so all sizes show at once.
+  function selectFleetSize(key) {
+    const sp = document.getElementById('new-fleet-size');
+    if (sp) sp.value = key;
+    const c = document.getElementById('new-fleet-size-cards');
+    if (!c) return;
+    c.innerHTML = Object.entries(GAME_SIZES).map(([k, s]) => {
+      const col = s.colossalMax > 0 ? `${s.colossalMax} Colossal` : 'No Colossal';
+      return `<button type="button" class="size-card${k === key ? ' selected' : ''}" onclick="App.selectFleetSize('${k}')">
+        ${gameSizeBlocks(k)}
+        <span class="size-card-info">
+          <span class="size-card-name">${s.label}</span>
+          <span class="size-card-sub">${s.min}–${s.max === 99999 ? '∞' : s.max}pts · ${s.time} · ${col}, Lv${s.maxAdmiralLevel}</span>
+        </span>
+      </button>`;
+    }).join('');
   }
   function openCreateFleet() {
     editingFleet = null;
@@ -2481,7 +2505,7 @@
   /* ── Public API ────────────────────────────────────────── */
   window.App = {
     init, goBack, viewDesktop,
-    openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, openStarterFleets,
+    openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, selectFleetSize, openStarterFleets,
     openAddGroup, filterShips, toggleAttr, toggleExtra, clearFilters, setSort, addShip,
     openGroup, changeQty, changeGroupQty, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow, toggleSecondary, openSecondaryModal, closeSecondaryModal,
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
