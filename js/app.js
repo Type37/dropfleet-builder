@@ -368,7 +368,10 @@ const App = (() => {
       cost: ss.cost || 0,
       stats: ss.stats || {},
       specialRules: ss.specialRules || [],
-      special: ss.stats?.special || '-'
+      special: ss.stats?.special || '-',
+      weapons: ss.weapons || [],
+      loads: ss.loads || [],
+      stationRules: ss.stationRules || []
     }));
     const deployableFeatures = (faction.deployableFeatures || []).map(df => ({
       id: df.id,
@@ -587,7 +590,9 @@ const App = (() => {
     }
     if (fleet.spaceStation) {
       mini.ss = { n: fleet.spaceStation.name, c: fleet.spaceStation.cost };
-      if (fleet.spaceStation.stationKey) mini.ss.k = fleet.spaceStation.stationKey;
+      const sk = fleet.spaceStation.id || fleet.spaceStation.stationKey;
+      if (sk) mini.ss.k = sk;
+      if (fleet.spaceStation.systems && fleet.spaceStation.systems.length) mini.ss.sy = fleet.spaceStation.systems;
     }
     if (fleet.secondaryObjectives && fleet.secondaryObjectives.length) mini.so = fleet.secondaryObjectives;
     const json = JSON.stringify(mini);
@@ -634,9 +639,11 @@ const App = (() => {
       // Decode space station
       if (mini.ss) {
         fleet.spaceStation = {
+          id: mini.ss.k || null,
           name: mini.ss.n,
           cost: mini.ss.c || 0,
-          stationKey: mini.ss.k || null
+          stationKey: mini.ss.k || null,
+          systems: mini.ss.sy || []
         };
       }
 
@@ -1444,6 +1451,17 @@ const App = (() => {
     });
     if (namedCount > 1) {
       warnings.push({ type: 'error', msg: `Only one Famous/Faction Admiral per fleet (you have ${namedCount})` });
+    }
+
+    // Generic space station needs its required armaments (soft nudge).
+    if (fleet.spaceStation) {
+      const spec = stationArmamentSpec(fleet.spaceStation);
+      if (spec) {
+        const { armTotal } = summariseStation(fleet.spaceStation);
+        if (armTotal < spec.required) {
+          warnings.push({ type: 'warn', msg: `${fleet.spaceStation.name}: choose ${spec.required} armament${spec.required > 1 ? 's' : ''} (has ${armTotal})` });
+        }
+      }
     }
 
     return warnings;
@@ -3683,7 +3701,9 @@ const App = (() => {
 
     // Show station stats inline
     const ss = station;
-    const stats = ss.stats || {};
+    recalcStationCost(ss);   // keep cost fresh + set baseCost for migrated stations
+    const def = stationDefFor(ss);
+    const stats = ss.stats || (def && def.stats) || {};
     const statPairs = [
       ['Hull', stats.hull], ['ES', stats.es], ['KS', stats.ks],
       ['Scan', stats.scan], ['Sig', stats.sig]
@@ -3694,6 +3714,23 @@ const App = (() => {
     const rulesLine = specialRules.length > 0
       ? `<div class="station-rules">${specialRules.map(r => `<span class="rule-chip rule-chip-sm">${esc(r)}</span>`).join('')}</div>`
       : '';
+
+    // Fixed weapons / launch loads / station rules (faction-specific stations)
+    const weapons = (def && def.weapons) || [];
+    const weaponSheet = weapons.length
+      ? `<div class="weapon-list" style="margin-top:var(--sp-sm)">${renderWeaponHeader()}${weapons.map(renderWeaponRow).join('')}</div>`
+      : '';
+    const loads = (def && def.loads) || [];
+    const loadsLine = loads.length
+      ? `<div class="station-rules" style="margin-top:var(--sp-xs)">${loads.map(l => `<span class="badge badge-neutral">Launch ${esc(l.name)} ×${esc(l.launch)}${l.special && l.special !== '-' ? ', ' + esc(l.special) : ''}</span>`).join('')}</div>`
+      : '';
+    const stationRules = (def && def.stationRules) || [];
+    const stationRulesHtml = stationRules.length
+      ? `<div style="margin-top:var(--sp-sm)">${stationRules.map(r => `<div class="text-caption" style="margin-bottom:var(--sp-xs)"><strong>${esc(r.name)}</strong> ${linkKeywords(r.effect || '')}</div>`).join('')}</div>`
+      : '';
+    // Armament picker for the generic Small/Medium/Large stations
+    const spec = stationArmamentSpec(ss);
+    const pickerHtml = spec ? renderStationArmamentPicker(ss, spec) : '';
 
     const stationArt = stationArtPath(currentFleet.faction, ss);
     slot.innerHTML = `
@@ -3707,6 +3744,10 @@ const App = (() => {
         <span class="badge badge-gold">${ss.cost} pts</span>
       </div>
       ${rulesLine}
+      ${weaponSheet}
+      ${loadsLine}
+      ${stationRulesHtml}
+      ${pickerHtml}
       <div class="flex gap-xs" style="margin-top:var(--sp-sm)">
         <button class="btn btn-outline btn-sm" onclick="App.openStationModal()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 1l4 4-9 9H2v-4L11 1z"/></svg> Change</button>
         <button class="btn btn-danger btn-sm" onclick="App.removeStation()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
@@ -3797,9 +3838,11 @@ const App = (() => {
     currentFleet.spaceStation = {
       id: station.id,
       name: station.name,
+      baseCost: station.cost,
       cost: station.cost,
       stats: station.stats,
-      specialRules: station.specialRules
+      specialRules: station.specialRules,
+      systems: []
     };
 
     saveFleets();
@@ -3807,6 +3850,98 @@ const App = (() => {
     renderStationSlot();
     updatePoints();
     showToast(`${station.name} selected`);
+  }
+
+  /* ── Station hardpoints (generic Small/Medium/Large) ───────
+     Mirror of the mobile logic: generic stations draw from the universal
+     stationArmaments (Weapon Systems + Structures fill the 1/2/3 count;
+     Upgrades are extra, cap 1/1/2). Faction-specific stations are fixed. */
+  function stationArmamentSpec(station) {
+    const SA = rawFleetData && rawFleetData.stationArmaments;
+    if (!SA || !SA.requiredBySize) return null;
+    const required = SA.requiredBySize[station.name];
+    if (required == null) return null;
+    return { required, upgradeCap: (SA.upgradeCapBySize || {})[station.name] || 0, options: SA.options || [] };
+  }
+  function stationOpt(name) {
+    const SA = rawFleetData && rawFleetData.stationArmaments;
+    return (SA && SA.options || []).find(o => o.name === name) || null;
+  }
+  function stationDefFor(station) {
+    const fdb = shipDB[currentFleet && currentFleet.faction];
+    return (fdb && fdb.spaceStations || []).find(x => x.id === station.id || x.name === station.name) || null;
+  }
+  function recalcStationCost(station) {
+    const def = stationDefFor(station);
+    const base = def ? def.cost : (station.baseCost != null ? station.baseCost : station.cost || 0);
+    station.baseCost = base;
+    station.cost = base + (station.systems || []).reduce((t, n) => t + (stationOpt(n)?.cost || 0), 0);
+  }
+  function summariseStation(station) {
+    const counts = {}; let armTotal = 0, upgTotal = 0;
+    (station.systems || []).forEach(n => {
+      counts[n] = (counts[n] || 0) + 1;
+      const o = stationOpt(n);
+      if (o) { if (o.category === 'Upgrades') upgTotal++; else armTotal++; }
+    });
+    return { counts, armTotal, upgTotal };
+  }
+  function canAddStationOption(station, opt, spec) {
+    const { counts, armTotal, upgTotal } = summariseStation(station);
+    if (opt.category === 'Upgrades') return upgTotal < spec.upgradeCap;
+    if (opt.oncePerStation && (counts[opt.name] || 0) >= 1) return false;
+    return armTotal < spec.required;
+  }
+  function addStationSystem(name) {
+    if (!currentFleet || !currentFleet.spaceStation) return;
+    const st = currentFleet.spaceStation;
+    const spec = stationArmamentSpec(st); const opt = stationOpt(name);
+    if (!spec || !opt || !canAddStationOption(st, opt, spec)) return;
+    st.systems = st.systems || []; st.systems.push(name);
+    recalcStationCost(st); saveFleets(); renderStationSlot(); updatePoints();
+  }
+  function removeStationSystem(name) {
+    if (!currentFleet || !currentFleet.spaceStation) return;
+    const st = currentFleet.spaceStation;
+    const i = (st.systems || []).lastIndexOf(name); if (i < 0) return;
+    st.systems.splice(i, 1);
+    recalcStationCost(st); saveFleets(); renderStationSlot(); updatePoints();
+  }
+  function renderStationArmamentPicker(station, spec) {
+    const { counts, armTotal } = summariseStation(station);
+    const complete = armTotal === spec.required;
+    const byCat = {};
+    spec.options.forEach(o => { (byCat[o.category] = byCat[o.category] || []).push(o); });
+    const body = Object.keys(byCat).map(cat => {
+      const rows = byCat[cat].map(o => {
+        const c = counts[o.name] || 0;
+        const canAdd = canAddStationOption(station, o, spec);
+        const isWeapon = o.weapons && o.weapons.length;
+        const summary = isWeapon ? '' : (o.effect ? `<span class="sys-opt-detail">${esc(o.effect)}</span>` : '');
+        const sheet = isWeapon
+          ? `<div class="weapon-list sys-opt-sheet">${renderWeaponHeader()}${o.weapons.map(renderWeaponRow).join('')}</div>`
+          : '';
+        const star = o.oncePerStation ? '<span class="sys-opt-star" title="Max one">*</span>' : '';
+        return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}">
+          <div class="sys-opt-main"><span class="sys-opt-name">${esc(o.name)}${star}</span>${summary}</div>
+          <span class="sys-opt-cost">${o.cost > 0 ? '+' + o.cost : o.cost} pts</span>
+          <div class="sys-opt-step">
+            <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeStationSystem('${esc(o.name).replace(/'/g, "\\'")}')">−</button>
+            <span class="sys-opt-count">${c}</span>
+            <button class="sys-step-btn" aria-label="Add one ${esc(o.name)}" ${canAdd ? '' : 'disabled'} onclick="App.addStationSystem('${esc(o.name).replace(/'/g, "\\'")}')">+</button>
+          </div>
+          ${sheet}
+        </div>`;
+      }).join('');
+      return `<div class="sys-cat"><div class="sys-cat-head">${esc(cat)}</div>${rows}</div>`;
+    }).join('');
+    return `<div class="systems-picker${complete ? '' : ' systems-picker-incomplete'}">
+      <div class="systems-picker-head">
+        <span class="systems-picker-title">Armaments, choose ${spec.required}</span>
+        <span class="systems-picker-count">${armTotal} / ${spec.required}</span>
+      </div>
+      ${body}
+    </div>`;
   }
 
   function removeStation() {
@@ -3864,7 +3999,7 @@ const App = (() => {
             <div class="print-points-cap">${sizeInfo.max !== 99999 ? '/ ' + sizeInfo.max : ''} pts</div>
           </div>
         </div>
-        <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''}, ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? `, ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? `, ${esc(f.spaceStation.name)}` : ''}</div>
+        <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''}, ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? `, ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? `, ${esc(f.spaceStation.name)}${(f.spaceStation.systems && f.spaceStation.systems.length) ? ' (' + f.spaceStation.systems.map(esc).join(', ') + ')' : ''}` : ''}</div>
       </div>
       ${descHtml}
       ${printWarnings}`;
@@ -4594,6 +4729,7 @@ const App = (() => {
 
     if (fleet.spaceStation) {
       text += `\nSTATION: ${fleet.spaceStation.name} (${fleet.spaceStation.cost} pts)\n`;
+      (fleet.spaceStation.systems || []).forEach(n => { text += `  + ${n}\n`; });
     }
 
     fleet.battleGroups.forEach(g => {
@@ -5471,7 +5607,7 @@ const App = (() => {
     loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, moveGroup, toggleFleetCardMenu,
     openShipSelectModal, filterCategory, toggleShipFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
-    openStationModal, selectStation, removeStation,
+    openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText,
     openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
