@@ -675,7 +675,9 @@ const App = (() => {
 
   function renderFactionPicker() {
     const container = document.getElementById('faction-picker');
-    const factions = ['ucm','phr','scourge','shaltari','bioficer','resistance'];
+    // 2x3 grid, column order UCM/PHR/RES then SCOURGE/SHALTARI/BIOFICER, so it
+    // reads: UCM·SCOURGE / PHR·SHALTARI / RES·BIOFICERS (row-major fill).
+    const factions = ['ucm','scourge','phr','shaltari','resistance','bioficer'];
     container.innerHTML = factions.map(key => {
       const name = FACTION_LABELS[key] || (factionData[key] || {}).name || key.toUpperCase();
       const icon = FACTION_ICONS[key]
@@ -683,7 +685,7 @@ const App = (() => {
         : `<span style="width:20px;height:20px;border-radius:2px;background:${FACTION_COLORS[key]};flex-shrink:0;display:block"></span>`;
       return `<button type="button" class="btn btn-outline faction-pick-btn" data-faction="${key}"
         onclick="App.selectFaction('${key}')"
-        style="flex:1;min-width:100px;position:relative;overflow:hidden">
+        style="position:relative;overflow:hidden">
         ${icon}
         <span>${name}</span>
       </button>`;
