@@ -1745,7 +1745,8 @@ body.sheet-open .sheet-scrim {
 
 .sys-option {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: var(--sp-s);
   padding: var(--sp-s) var(--sp-m);
   border: 1px solid var(--stroke1);
@@ -1754,7 +1755,14 @@ body.sheet-open .sheet-scrim {
   margin-bottom: var(--sp-s);
 }
 .sys-option.selected { border-color: var(--navy); background: var(--paper); }
+.sys-option-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+}
 .sys-option-main { flex: 1; min-width: 0; }
+/* The option's mini datasheet sits full-width under the name/cost/controls. */
+.opt-weapon-table { margin-top: 2px; }
 .sys-option-controls {
   display: flex;
   align-items: center;

@@ -2471,10 +2471,17 @@ const App = (() => {
         const c = counts[o.name] || 0;
         const canAdd = canAddSystem(ship, dbShip, factionKey, o.name);
         const star = o.oncePerShip ? '<span class="sys-opt-star" title="Max one per ship">*</span>' : '';
+        // Weapon options get the full mini weapon-datasheet (same table as the
+        // ship's own weapons); non-weapon options keep the terse summary line.
+        const isWeapon = o.weapons && o.weapons.length;
+        const summary = isWeapon ? '' : systemOptionSummary(o);
+        const sheet = isWeapon
+          ? `<div class="weapon-list sys-opt-sheet">${renderWeaponHeader()}${o.weapons.map(renderWeaponRow).join('')}</div>`
+          : '';
         return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}">
           <div class="sys-opt-main">
             <span class="sys-opt-name">${esc(o.name)}${star}</span>
-            ${systemOptionSummary(o)}
+            ${summary}
           </div>
           <span class="sys-opt-cost">${o.cost > 0 ? '+' + o.cost : o.cost} pts</span>
           <div class="sys-opt-step">
@@ -2482,6 +2489,7 @@ const App = (() => {
             <span class="sys-opt-count" aria-label="${c} selected">${c}</span>
             <button class="sys-step-btn" aria-label="Add one ${esc(o.name)}" ${canAdd ? '' : 'disabled'} onclick="App.addSystem('${groupId}','${ship.id}','${esc(o.name).replace(/'/g, "\\'")}')">+</button>
           </div>
+          ${sheet}
         </div>`;
       }).join('');
       return `<div class="sys-cat"><div class="sys-cat-head">${esc(cat)}${capNote}</div>${rows}</div>`;

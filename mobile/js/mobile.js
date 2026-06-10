@@ -238,6 +238,9 @@
   // inherits the row's state colour (danger / gold / green).
   const STATUS_ICON = {
     error: '<svg class="status-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8"/><line x1="10" y1="5.6" x2="10" y2="10.6"/><circle cx="10" cy="13.9" r="0.95" fill="currentColor" stroke="none"/></svg>',
+    // eos-icons "organization" (org chart) — a command-hierarchy mark for the
+    // admiral-required row (inlined; the app ships with no build step).
+    admiral: '<svg class="status-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.01 10.99h-7v-2h-2v2H3.47v4h2v-2h5.54v2h2v-2h5.5v2h2v-4z"/><circle cx="12.01" cy="4.51" r="2.5"/><circle cx="4.47" cy="19.49" r="2.5"/><circle cx="12.01" cy="19.49" r="2.5"/><circle cx="19.51" cy="19.49" r="2.5"/></svg>',
     warn: '<svg class="status-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3.2 18.2 16.6 1.8 16.6Z"/><line x1="10" y1="8.2" x2="10" y2="11.8"/><circle cx="10" cy="14.4" r="0.9" fill="currentColor" stroke="none"/></svg>',
     ok: '<svg class="status-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8"/><path d="M6.3 10.3 8.8 12.8 13.7 7.2"/></svg>'
   };
@@ -947,7 +950,7 @@
     if (warns.length) {
       warnEl.classList.remove('hidden');
       warnEl.innerHTML = warns.map(w => {
-        const icon = w.t === 'error' ? STATUS_ICON.error : STATUS_ICON.warn;
+        const icon = w.fix === 'admiral' ? STATUS_ICON.admiral : (w.t === 'error' ? STATUS_ICON.error : STATUS_ICON.warn);
         const cls = w.t === 'error' ? 'warn-error' : 'warn-soft';
         const onclick = w.fix === 'admiral' ? ` onclick="App.openAdmiral()" style="cursor:pointer"` : '';
         const arrow = w.fix ? ' <span class="warn-fix">Fix ›</span>' : '';
@@ -1541,15 +1544,31 @@
     </div>`;
   }
 
+  // Non-weapon detail line (launch loads / passive effect). Weapon options get
+  // the full datasheet via optionWeaponSheet instead.
   function systemOptionDetail(opt) {
-    if (opt.weapons && opt.weapons.length) {
-      const w = opt.weapons[0];
-      const t = (w.type || '').toUpperCase();
-      return `${esc(w.arc || '')} · ${esc(w.attack || '')}/${esc(w.lock || '')}/${esc(w.damage || '')}${t}${w.special && w.special !== '-' ? ' · ' + esc(w.special) : ''}`;
-    }
     if (opt.loads && opt.loads.length) return `Launch ${esc(opt.loads[0].launch || '')}`;
     if (opt.effect) return esc(opt.effect);
     return '';
+  }
+  // Full mini weapon-datasheet for a hardpoint option that bears weapons — the
+  // same table the ship's own weapons use, so an option reads like a real
+  // datasheet (arc diagram, Lock, Attack, Damage, tappable special rules).
+  function optionWeaponSheet(weapons) {
+    if (!weapons || !weapons.length) return '';
+    const rows = weapons.map(w => {
+      const t = (w.type || '').toUpperCase();
+      const tc = t === 'K' ? 'weapon-type-k' : t === 'E' ? 'weapon-type-e' : t === 'C' ? 'weapon-type-c' : '';
+      const dmg = `${w.damage || ''}${t ? `<span class="${tc}" style="margin-left:2px;font-size:9px">${t}</span>` : ''}`;
+      return `<div class="weapon-row ${tc}">
+        <div class="weapon-name">${esc(w.name)}</div><div class="weapon-val">${esc(w.lock || '')}</div>
+        <div class="weapon-val">${esc(w.attack || '')}</div><div class="weapon-val">${dmg}</div><div class="weapon-val weapon-arc">${arcCell(w.arc)}</div>
+      </div>${w.special && w.special !== '-' ? `<div class="weapon-special">${renderSpecialChips(w.special)}</div>` : ''}`;
+    }).join('');
+    return `<div class="weapon-table opt-weapon-table">
+      <div class="weapon-row weapon-row-header">
+        <div class="weapon-name">Weapon</div><div class="weapon-val">Lk</div><div class="weapon-val">At</div><div class="weapon-val">Dm</div><div class="weapon-val">Arc</div>
+      </div>${rows}</div>`;
   }
   function renderSystemsPicker(factionKey, ship, inst, list, seln) {
     const { counts, total, capUsage } = summariseSystems(inst, list, seln);
@@ -1567,19 +1586,24 @@
         const c = counts[o.name] || 0;
         const canAdd = canAddSystem(inst, ship, factionKey, o.name);
         const detail = systemOptionDetail(o);
+        const sheet = (o.weapons && o.weapons.length)
+          ? optionWeaponSheet(o.weapons)
+          : (detail ? `<div class="loadout-option-desc">${detail}</div>` : '');
         return `<div class="sys-option ${c > 0 ? 'selected' : ''}">
-          <div class="sys-option-main">
-            <div class="flex justify-between items-center">
-              <span class="loadout-option-name">${esc(o.name)}${o.oncePerShip ? ' <span class="ship-tag">1×</span>' : ''}</span>
-              <span class="loadout-option-cost">${o.cost ? '+' + o.cost : '0'} pts</span>
+          <div class="sys-option-row">
+            <div class="sys-option-main">
+              <div class="flex justify-between items-center">
+                <span class="loadout-option-name">${esc(o.name)}${o.oncePerShip ? ' <span class="ship-tag">1×</span>' : ''}</span>
+                <span class="loadout-option-cost">${o.cost ? '+' + o.cost : '0'} pts</span>
+              </div>
             </div>
-            ${detail ? `<div class="loadout-option-desc">${detail}</div>` : ''}
+            <div class="sys-option-controls">
+              <button class="counter-btn" onclick="App.removeSystem('${o.name.replace(/'/g, "\\'")}')" ${c <= 0 ? 'disabled' : ''}>−</button>
+              <span class="sys-option-count">${c}</span>
+              <button class="counter-btn" onclick="App.addSystem('${o.name.replace(/'/g, "\\'")}')" ${canAdd ? '' : 'disabled'}>+</button>
+            </div>
           </div>
-          <div class="sys-option-controls">
-            <button class="counter-btn" onclick="App.removeSystem('${o.name.replace(/'/g, "\\'")}')" ${c <= 0 ? 'disabled' : ''}>−</button>
-            <span class="sys-option-count">${c}</span>
-            <button class="counter-btn" onclick="App.addSystem('${o.name.replace(/'/g, "\\'")}')" ${canAdd ? '' : 'disabled'}>+</button>
-          </div>
+          ${sheet}
         </div>`;
       }).join('')}
     `).join('');

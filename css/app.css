@@ -2602,6 +2602,8 @@ h1, h2, h3, h4, h5, h6 {
 .weapon-list, .launch-ref, .launch-ref-table { max-width: 100%; overflow-x: auto; }
 .sys-opt { flex-wrap: wrap; }
 .sys-opt-main { flex: 1 1 60%; }
+/* Full-width mini weapon-datasheet under a weapon hardpoint option. */
+.sys-opt-sheet { flex-basis: 100%; width: 100%; margin: 2px 0 4px; }
 
 /* ── 16. Ship Cards (selection modal) ────────────────────────── */
 .ship-category-tabs {
