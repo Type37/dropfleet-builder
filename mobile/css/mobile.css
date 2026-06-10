@@ -233,6 +233,7 @@ button, a, input, select, textarea,
   color: rgba(255,255,255,0.7);
   white-space: nowrap;
 }
+.app-bar-pts.pts-over { color: #ff8a7a; }
 
 /* Floating Add Group button */
 .fab {

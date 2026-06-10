@@ -806,7 +806,15 @@
     const showPts = () => {
       if (!activeFleet) return;
       const pts = fleetPoints(activeFleet);
-      ptsEl.textContent = `${pts} / ${activeFleet.pointsLimit || (GAME_SIZES[activeFleet.gameSize] || GAME_SIZES.clash).max}`;
+      const limit = activeFleet.pointsLimit || (GAME_SIZES[activeFleet.gameSize] || GAME_SIZES.clash).max;
+      // Match desktop format: "X / limit pts" + "Y left / over" with over-budget styling.
+      let txt = `${pts} / ${limit === 99999 ? '∞' : limit} pts`;
+      if (limit !== 99999) {
+        const rem = limit - pts;
+        txt += ` · ${rem >= 0 ? rem + ' left' : Math.abs(rem) + ' over'}`;
+      }
+      ptsEl.textContent = txt;
+      ptsEl.classList.toggle('pts-over', limit !== 99999 && pts > limit);
       ptsEl.classList.remove('hidden');
     };
 
@@ -846,7 +854,7 @@
         ${icon ? `<img src="${icon}" alt="" class="faction-icon" loading="lazy">` : ''}
         <div class="list-row-content">
           <div class="list-row-title">${esc(f.name || 'Unnamed Fleet')}</div>
-          <div class="list-row-sub">${pts}/${limit}pts · ${gc} group${gc !== 1 ? 's' : ''}, ${(GAME_SIZES[f.gameSize] || {}).label || ''}</div>
+          <div class="list-row-sub">${pts} / ${limit} pts · ${gc} group${gc !== 1 ? 's' : ''}, ${(GAME_SIZES[f.gameSize] || {}).label || ''}</div>
           <div class="fleet-row-bar"><div class="fleet-row-bar-fill ${over ? 'over' : ''}" style="width:${pct}%"></div></div>
         </div>
       </div>`;
@@ -949,7 +957,7 @@
           ${art ? `<div class="ship-thumb${modCls}">${shopLinkImg(db?.name, `<img src="${art}" alt="" loading="lazy">`, db)}</div>` : '<div class="ship-thumb"></div>'}
           <div class="list-row-content">
             <div class="list-row-title">${esc(db?.name || 'Unknown')}${titleQty}</div>
-            <div class="list-row-sub">${gp}pts · ${tonLabel(db?.tonnage) || CATEGORY_LABELS[s.groupCategory] || ''}</div>
+            <div class="list-row-sub">${gp} pts · ${tonLabel(db?.tonnage) || CATEGORY_LABELS[s.groupCategory] || ''}</div>
           </div>
           ${stepper}
           <span class="list-chevron">›</span>
@@ -967,7 +975,7 @@
           ${admiralThumb(f.faction, a.level, art)}
           <div class="list-row-content">
             <div class="list-row-title">${esc(a.name)}</div>
-            <div class="list-row-sub">${a.points}pts · Level ${a.level || '?'}${a.shipName ? ', ' + esc(a.shipName) : ''}</div>
+            <div class="list-row-sub">${a.points} pts · Level ${a.level || '?'}${a.shipName ? ', ' + esc(a.shipName) : ''}</div>
           </div>
           <span class="list-chevron">›</span>
         </div>`;
@@ -983,7 +991,7 @@
         <div class="ship-thumb"></div>
         <div class="list-row-content">
           <div class="list-row-title">${esc(f.spaceStation.name)}</div>
-          <div class="list-row-sub">${f.spaceStation.cost}pts</div>
+          <div class="list-row-sub">${f.spaceStation.cost} pts</div>
         </div>
         <span class="list-chevron">›</span>
       </div>`;
@@ -1406,7 +1414,7 @@
           <div class="sys-option-main">
             <div class="flex justify-between items-center">
               <span class="loadout-option-name">${esc(o.name)}${o.oncePerShip ? ' <span class="ship-tag">1×</span>' : ''}</span>
-              <span class="loadout-option-cost">${o.cost ? '+' + o.cost : '0'}pts</span>
+              <span class="loadout-option-cost">${o.cost ? '+' + o.cost : '0'} pts</span>
             </div>
             ${detail ? `<div class="loadout-option-desc">${detail}</div>` : ''}
           </div>
@@ -1669,7 +1677,7 @@
         <div class="list-row-content">
           <div class="flex justify-between items-center">
             <span class="list-row-title">Level ${l.level} Admiral</span>
-            <span class="list-row-pts">${l.cost}pts</span>
+            <span class="list-row-pts">${l.cost} pts</span>
           </div>
           <div class="list-row-sub">Take any number · adds Level for AP &amp; initiative</div>
         </div>
@@ -1693,7 +1701,7 @@
         <div class="list-row-content">
           <div class="flex justify-between items-center">
             <span class="list-row-title">${esc(a.name)}</span>
-            <span class="list-row-pts">${total}pts</span>
+            <span class="list-row-pts">${total} pts</span>
           </div>
           <div class="list-row-sub">${sub}</div>
           ${innate.length ? `<div class="list-row-abilities">${innate.map(n => `<span class="ability-tag">${esc(n)}</span>`).join('')}</div>` : ''}
@@ -1810,7 +1818,7 @@
     const specialText = stats.special && stats.special !== '-' ? stats.special : '';
     const artSrc = shipArtPath(fs.name);
     const sizeClass = fs.category ? (CATEGORY_LABELS[fs.category] || '') : '';
-    return `<div class="section-header">${esc(fs.name)}${sizeClass ? ', ' + sizeClass : ''}${fs.cost ? `, ${fs.cost}pts` : ''}</div>
+    return `<div class="section-header">${esc(fs.name)}${sizeClass ? ', ' + sizeClass : ''}${fs.cost ? `, ${fs.cost} pts` : ''}</div>
       ${artSrc ? `<div class="ship-art-hero">${shopLinkImg(fs.name, `<img src="${artSrc}" alt="${esc(fs.name)}" loading="lazy">`, fs)}</div>` : ''}
       <div class="stat-grid">
         ${statEntries.map(s => `<div class="stat-cell">${statIcon(s.key)}<span class="stat-cell-text"><span class="stat-value">${esc(s.val)}</span><span class="stat-label">${s.label}</span></span></div>`).join('')}
@@ -1995,7 +2003,7 @@
         <div class="list-row-content">
           <div class="flex justify-between items-center">
             <span class="list-row-title">${esc(s.name)}</span>
-            <span class="list-row-pts">${s.cost}pts</span>
+            <span class="list-row-pts">${s.cost} pts</span>
           </div>
           <div class="list-row-sub">Hull ${st.hull || '?'} · ES ${st.es || '-'} · KS ${st.ks || '-'}</div>
         </div>
@@ -2398,7 +2406,7 @@
         ${gameSizeBlocks(k)}
         <span class="size-card-info">
           <span class="size-card-name">${s.label}</span>
-          <span class="size-card-sub">${s.min}–${s.max === 99999 ? '∞' : s.max}pts · ${s.time} · ${col}, Lv${s.maxAdmiralLevel}</span>
+          <span class="size-card-sub">${s.min}–${s.max === 99999 ? '∞' : s.max} pts · ${s.time} · ${col}, Lv${s.maxAdmiralLevel}</span>
         </span>
       </button>`;
     }).join('');
