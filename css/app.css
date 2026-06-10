@@ -3,16 +3,6 @@
    Light Theme · Warm Off-White + Navy · Art Deco Gold Accents
    ═══════════════════════════════════════════════════════════════ */
 
-/* Arkhip — geometric display face, used via --font-brand for the very
-   largest headings only (landing title / hero display text). */
-@font-face {
-  font-family: "Arkhip";
-  src: url("../assets/fonts/Arkhip.woff2") format("woff2");
-  font-weight: 400 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* Terminal Grotesque Open — Velvetyne / Studio Triple (OFL). Used only for the
    WarLore wordmark in the footer credit. */
 @font-face {
@@ -29,7 +19,7 @@
   --font-wordmark: "Terminal Grotesque Open", "Roboto Slab", serif;
   --font-body: "Jost", "Segoe UI", -apple-system, sans-serif;
   --font-display: "Roboto Slab", Georgia, serif;
-  --font-brand: "Arkhip", "Roboto Slab", serif;
+  --font-brand: "Roboto Slab", Georgia, serif;
   --font-reading: var(--font-lore);
   --font-condensed: "Barlow Condensed", "Arial Narrow", sans-serif;
   --font-lore: "Libre Baskerville", "Georgia", serif;

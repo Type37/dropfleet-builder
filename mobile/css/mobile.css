@@ -2,16 +2,6 @@
    DFC Mobile — Fluent 2 Foundation + DFC Personality
    ═══════════════════════════════════════════════════════════ */
 
-/* Arkhip — geometric display face, used via --font-brand for the very
-   largest headings only. Mirrors css/app.css (path is ../../ from mobile/css). */
-@font-face {
-  font-family: "Arkhip";
-  src: url("../../assets/fonts/Arkhip.woff2") format("woff2");
-  font-weight: 400 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* Terminal Grotesque Open — Velvetyne / Studio Triple (OFL). WarLore wordmark. */
 @font-face {
   font-family: "Terminal Grotesque Open";
@@ -58,31 +48,32 @@
   --weight-semibold: 600;
   --weight-bold: 700;
 
-  /* — DFC Palette (warm, not pure Fluent grey) — */
+  /* — DFC Palette — unified with the desktop app (the more accessible set:
+     darker gold + text, lighter paper = higher contrast). — */
   --navy: #1b3a5c;
-  --navy-dark: #142d47;
-  --gold: #c9a84c;
-  --gold-dim: #a8903f;
+  --navy-dark: #0f2640;
+  --gold: #b8932e;
+  --gold-dim: #785e17;
   --ink: #1c1a17;
-  --paper: #f5f3ef;
-  --paper-alt: #eae7e1;
-  --card-bg: #fafaf8;
+  --paper: #faf8f5;
+  --paper-alt: #f3f1ec;
+  --card-bg: #ffffff;
   --white: #ffffff;
-  --danger: #c44;
+  --danger: #c43c2f;
   --danger-bg: #fef6f4;
 
   /* — Neutral Foregrounds (Fluent-mapped to warm) — */
-  --fg1: #242220;       /* primary text */
-  --fg2: #4a4744;       /* secondary text */
-  --fg3: #6b6864;       /* tertiary / captions */
-  --fg4: #8a8784;       /* disabled / hints */
+  --fg1: #1c1a17;       /* primary text (= desktop --ink) */
+  --fg2: #3a3834;       /* secondary text */
+  --fg3: #6b6660;       /* tertiary / captions */
+  --fg4: #9e9890;       /* disabled / hints */
   --fg-on-dark: #ffffff;
   --fg-on-dark-dim: rgba(255,255,255,0.6);
 
   /* — Strokes — */
-  --stroke1: #d6d3ce;
-  --stroke2: #e5e2dd;
-  --stroke3: #f0ede8;
+  --stroke1: #d8d4cc;
+  --stroke2: #e8e5df;
+  --stroke3: #f3f1ec;
 
   /* — Fluent 2 Shapes — */
   --radius-sm: 2px;
@@ -116,7 +107,7 @@
   /* — Fonts (DFC personality) — kept in lockstep with css/app.css :root — */
   --font-body: "Jost", "Segoe UI", -apple-system, sans-serif;
   --font-display: "Roboto Slab", Georgia, serif;
-  --font-brand: "Arkhip", "Roboto Slab", serif;
+  --font-brand: "Roboto Slab", Georgia, serif;
   --font-reading: var(--font-lore);
   --font-condensed: "Barlow Condensed", "Arial Narrow", sans-serif;
   --font-lore: "Libre Baskerville", Georgia, serif;
