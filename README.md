@@ -1,64 +1,39 @@
 # Dropfleet Commander Fleet Builder
 
-A fleet builder for [Dropfleet Commander](https://www.ttcombat.com/games/dropfleet-commander) by TTCombat. Runs entirely in the browser — no backend, no accounts. Your fleets live in localStorage. The only analytics are [GoatCounter](https://www.goatcounter.com/): cookieless, no personal data, just aggregate page/screen counts.
+A browser fleet builder for [Dropfleet Commander](https://www.ttcombat.com/games/dropfleet-commander). No backend, no accounts — fleets save to your browser. The only analytics are [GoatCounter](https://www.goatcounter.com/) (cookieless, aggregate page counts).
 
-**[Live site](https://type37.github.io/dropfleet-builder/)** (GitHub Pages)
+**[Open the builder →](https://type37.github.io/dropfleet-builder/)**
 
-## What it does
+## Features
 
-- Build fleet rosters for all six factions (UCM, PHR, Scourge, Shaltari, Resistance, Bioficers)
-- Full ship stats, weapons tables, and special rules text pulled from the game data
-- Generic and famous admiral selection with level-based costing
-- Game size presets (Skirmish / Clash / Battle / Reconquest) with appropriate group and admiral caps
-- Ship art for ~230 profiles, converted from TTCombat's own renders
-- Systems/Hardpoint selection for Resistance cruisers, frigates and dreadnoughts (choose-N with category caps), Feature Carriers, and per-ship loadout refits
-- Fleet construction validation (tonnage limits, group/colossal caps, unique/rare, admiral limits, required Systems/Features)
-- Ship lore plus "Namesake" flavour, a print view with full reference cards, and fleet sharing via URL/clipboard
-- A dedicated phone-first app at **`/mobile/`** (see below)
+- All six factions (UCM, PHR, Scourge, Shaltari, Resistance, Bioficers)
+- Full stats, weapons, and verbatim rules text
+- Generic and famous admirals with level-based costing
+- Game sizes (Skirmish → Reconquest) with the right group, colossal, and admiral caps
+- Resistance Systems/Hardpoints (choose-N with category caps), Feature Carriers, and per-ship loadout refits
+- Build validation — tonnage limits, caps, unique/rare, required systems
+- Ship lore, a print view with full reference cards, and share-by-link
+- Transparent-cutout ship art for 400+ profiles
 
-## Mobile app
+## Mobile
 
-Phones are auto-redirected to **[`/mobile/`](https://type37.github.io/dropfleet-builder/mobile/)** — a separate, phone-first builder (Hobgoblin-style linear navigation) that **shares the same `dfc_fleets` storage and fleet schema** as the desktop app, so a fleet built on one shows up on the other. It has the full builder feature set (all six factions, groups, admirals with ability picks, stations, deployable features, Systems/Hardpoints, loadouts, validation, tap-to-learn rules, ship lore), plus **copy-as-text** (Discord-friendly roster), **export-as-PDF**, share links, one-tap **starter-box fleets**, and an optional **guided coach** for new players. It's an installable **PWA that works offline** (the root `sw.js` caches the shell, data and art) — build and reference fleets at a venue with no signal. A hamburger "view desktop" escape hatch is always available.
+Phones redirect to [`/mobile/`](https://type37.github.io/dropfleet-builder/mobile/) — a phone-first builder (Hobgoblin-style) that shares the same `dfc_fleets` storage as desktop, so a fleet built on one appears on the other. Full feature set, plus copy-as-text, export-as-PDF, one-tap starter fleets, and a guided coach for new players. Installable PWA, works offline.
 
-## What it doesn't do (yet)
+## Links
 
-- Systems/Hardpoint lists for factions other than Resistance (other factions use loadout refits, which are supported)
-- Transparent-background ship art (current art is on solid backgrounds)
+- **WarLore** — [site](https://jetwong.neocities.org/) · [Linktree](https://linktr.ee/warlore) · [YouTube](https://www.youtube.com/@WarLore)
+- [Source on GitHub](https://github.com/Type37/dropfleet-builder)
 
-## Data
+## Data & art
 
-Ship stats and admiral data come from the [BSData BattleScribe repository](https://github.com/BSData/dropfleet-commander), converted to JSON via the scripts in `tools/`. The app loads a small **`data/fleet-index.json`** (game sizes, shared rules glossary, faction metadata) on startup, then **lazy-loads one `data/faction-<key>.json` per faction** as needed. (`data/fleet-data.json` is a legacy monolithic converter output kept for tooling; the app no longer loads it.) Source XML isn't included.
-
-Ship art is sourced from TTCombat's web assets and converted to WebP. They're included in this repo because the app is useless without them, but they belong to TTCombat.
-
-## Project layout
-
-```
-index.html, css/app.css, js/app.js   Desktop app (single-page, three-panel builder)
-mobile/                              Phone-first app (own index.html / css / js, shares dfc_fleets)
-data/                                fleet-index.json + faction-<key>.json (lazy-loaded)
-assets/art/                          Ship art (WebP)
-tools/                               BSData → JSON converters
-scripts/                            One-off data-patching scripts (lore, systems, fixes)
-sw.js                                Service worker (desktop; bump CACHE on each deploy)
-```
-
-Both apps are independent vanilla-JS bundles that read the same `data/` and the same `localStorage` key (`dfc_fleets`), so fleets are interoperable. The desktop app lazy-loads factions via `ensureFactionLoaded`; the mobile app via `ensureFaction`. Deploys go straight to `master` (trunk-based) → GitHub Pages.
+Stats come from the [BSData repo](https://github.com/BSData/dropfleet-commander), converted to JSON: a small `data/fleet-index.json` (game sizes, shared rules, faction metadata) loads on startup, then one `data/faction-<key>.json` lazy-loads per faction. Ship art is TTCombat's own renders, converted to WebP — bundled because the app needs it, but it belongs to TTCombat.
 
 ## Tech
 
-Static HTML/CSS/JS. No framework, no build step, no dependencies. Open `index.html` or serve it with anything.
+Static HTML/CSS/JS — no framework, no build step, no dependencies. Open `index.html`, or `npx serve .`.
 
-Fonts: [Jost](https://fonts.google.com/specimen/Jost) (body), [Roboto Slab](https://fonts.google.com/specimen/Roboto+Slab) (headings), [Barlow Condensed](https://fonts.google.com/specimen/Barlow+Condensed) (stat blocks). Loaded from Google Fonts.
-
-## Running locally
-
-```
-npx serve .
-```
-
-Or just open `index.html` in a browser. CORS isn't an issue since the data is loaded via relative paths.
+Fonts: [Jost](https://fonts.google.com/specimen/Jost) (body), [Roboto Slab](https://fonts.google.com/specimen/Roboto+Slab) (display/numbers), [Barlow Condensed](https://fonts.google.com/specimen/Barlow+Condensed) (stat labels).
 
 ## License
 
-The code is MIT. Ship art and game data are property of TTCombat / Hawk Wargames. This is a fan project — not affiliated with or endorsed by TTCombat.
+Code is MIT. Ship art and game data belong to TTCombat / Hawk Wargames. A fan project — not affiliated with or endorsed by TTCombat.
