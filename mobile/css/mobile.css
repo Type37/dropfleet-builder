@@ -235,6 +235,16 @@ button, a, input, select, textarea,
 }
 .app-bar-pts.pts-over { color: #ff8a7a; }
 
+/* Long-press ship datasheet (in the rule bottom sheet) + picker hint */
+.filter-hint { font-size: var(--text-caption2); color: var(--fg3); opacity: 0.8; }
+.ss-stats { display: flex; flex-wrap: wrap; gap: var(--sp-s); margin-bottom: var(--sp-s); }
+.ss-stat { font-size: var(--text-caption1); color: var(--fg2, var(--fg3)); }
+.ss-stat b { font-family: var(--font-display); color: var(--fg1); }
+.ss-weapon { padding: var(--sp-xs) 0; border-top: 1px solid var(--stroke2, #eee); }
+.ss-wname { font-weight: var(--weight-bold); color: var(--fg1); }
+.ss-wline { font-size: var(--text-caption1); color: var(--fg3); margin: 2px 0; }
+.ss-rules { margin-top: var(--sp-s); }
+
 /* Floating Add Group button */
 .fab {
   position: fixed;

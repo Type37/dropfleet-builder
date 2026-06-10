@@ -1122,6 +1122,7 @@
       </div>` : ''}
       <div class="filter-meta">
         <span class="filter-count">${list.length} ship${list.length !== 1 ? 's' : ''}</span>
+        <span class="filter-hint">Hold for datasheet</span>
         ${anyActive ? `<button class="filter-clear" onclick="App.clearFilters()">Clear ×</button>` : ''}
       </div>`;
 
@@ -1155,7 +1156,7 @@
       if (ship.isRare) tags.push('<span class="ship-tag">Rare</span>');
       if (isFullyModular(ship)) tags.push('<span class="ship-tag">Modular</span>');
       const modCls = isFullyModular(ship) ? ' ship-img-modular' : '';
-      return `<div class="list-row" onclick="App.addShip('${g.id}','${g.category}')">
+      return `<div class="list-row" data-gid="${g.id}" onclick="App.addShip('${g.id}','${g.category}')">
         ${art ? `<div class="ship-thumb ship-thumb-lg${modCls}">${shopLinkImg(ship.name, `<img src="${art}" alt="" loading="lazy">`, ship)}</div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
@@ -1166,7 +1167,52 @@
         </div>
       </div>`;
     }).join('');
+    setupPickerLongPress();
   }
+
+  // Long-press a ship row to preview its datasheet (without adding it). Reuses
+  // the rule bottom-sheet. Bound once via delegation on the persistent list.
+  function setupPickerLongPress() {
+    const list = document.getElementById('picker-list');
+    if (!list || list._lpBound) return;
+    list._lpBound = true;
+    let timer = null, fired = false, sx = 0, sy = 0, row = null;
+    const cancel = () => { clearTimeout(timer); timer = null; };
+    list.addEventListener('pointerdown', e => {
+      row = e.target.closest('.list-row');
+      if (!row) return;
+      fired = false; sx = e.clientX; sy = e.clientY;
+      timer = setTimeout(() => {
+        fired = true;
+        if (navigator.vibrate) navigator.vibrate(15);  // Android only; iOS web no-ops
+        const fac = activeFleet && FACTIONS[activeFleet.faction];
+        const g = ((fac && fac.groups) || []).find(x => x.id === row.dataset.gid);
+        if (g && g.ship) showShipSheet(g.ship);
+      }, 450);
+    });
+    list.addEventListener('pointermove', e => { if (Math.abs(e.clientX - sx) > 10 || Math.abs(e.clientY - sy) > 10) cancel(); });
+    list.addEventListener('pointerup', cancel);
+    list.addEventListener('pointercancel', cancel);
+    // Swallow the click (add) that a long-press would otherwise trigger.
+    list.addEventListener('click', e => { if (fired) { e.stopPropagation(); e.preventDefault(); fired = false; } }, true);
+  }
+
+  // Compact ship datasheet rendered into the rule bottom sheet.
+  function showShipSheet(ship) {
+    const s = ship.stats || {};
+    const stat = [['SCAN', s.scan], ['SIG', s.sig], ['THR', s.thrust], ['HULL', s.hull], ['ES', s.es], ['KS', s.ks], ['BS', s.bs]]
+      .filter(([, v]) => v != null && v !== '-' && v !== '')
+      .map(([l, v]) => `<span class="ss-stat"><b>${esc(String(v))}</b> ${l}</span>`).join('');
+    const weapons = (ship.weapons || []).map(w => `<div class="ss-weapon">
+      <div class="ss-wname">${esc(w.name)}</div>
+      <div class="ss-wline">${w.arc ? arcCell(w.arc) + ' ' : ''}Lock ${esc(String(w.lock || '-'))} · ${esc(String(w.attack || '-'))} Att · ${esc(String(w.damage || '-'))}${w.type ? ' ' + esc(w.type) : ''}</div>
+      ${renderSpecialChips(w.special)}
+    </div>`).join('');
+    const ruleNames = (ship.specialRules || []).map(r => r.name).filter(Boolean).join(', ');
+    const rules = ruleNames ? `<div class="ss-rules">${renderSpecialChips(ruleNames)}</div>` : '';
+    showSheet(ship.name, `<div class="ss-stats">${stat}</div>${weapons}${rules}`);
+  }
+
   function filterShips(cat) { pickerFilter = cat; renderShipPicker(); }
   function toggleAttr(key) { if (pickerAttrs.has(key)) pickerAttrs.delete(key); else pickerAttrs.add(key); renderShipPicker(); }
   // Persisted preference (mirrors desktop's "Additional Ships" setting), so it is
