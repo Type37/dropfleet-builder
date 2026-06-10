@@ -203,15 +203,17 @@
   // ship.storeUrl when present, else fall back to a Shopify search for the
   // ship name (returns the matching faction box). Tapping the art opens the
   // store; stopPropagation keeps a tap off the enclosing nav row.
-  const SHOP_SVG = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 5h9l-.6 7.2a1.3 1.3 0 0 1-1.3 1.2H5.4a1.3 1.3 0 0 1-1.3-1.2L3.5 5z"/><path d="M5.8 5V4.2a2.2 2.2 0 0 1 4.4 0V5"/></svg>';
   function shipStoreUrl(name, ship) {
     if (ship && ship.storeUrl) return ship.storeUrl;
     return 'https://ttcombat.com/search?q=' + encodeURIComponent((name || '').trim());
   }
+  // Wrap a ship <img> in a TTCombat store link (no icon overlay; the art itself
+  // is the link). Used only on single-ship hero art (group detail + datasheet
+  // sheet), not in list/picker thumbnails.
   function shopLinkImg(name, imgTag, ship) {
     if (!imgTag) return '';
     const url = shipStoreUrl(name, ship);
-    return `<a class="shop-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="View ${esc(name || 'this ship')} on the TTCombat store" onclick="event.stopPropagation()">${imgTag}<span class="shop-badge">${SHOP_SVG}</span></a>`;
+    return `<a class="shop-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="View ${esc(name || 'this ship')} on the TTCombat store" onclick="event.stopPropagation()">${imgTag}</a>`;
   }
 
   // Firing-arc diagrams (ported from desktop). Raw arc text like "F/S/R" clips
@@ -975,7 +977,7 @@
         return `<div class="swipe-row">
           <button class="swipe-del" onclick="event.stopPropagation();App.swipeDeleteGroup(${i})" aria-label="Remove group">Remove</button>
           <div class="list-row swipe-fg" onclick="App.openGroup(${i})">
-            ${art ? `<div class="ship-thumb${modCls}">${shopLinkImg(db?.name, `<img src="${art}" alt="" loading="lazy">`, db)}</div>` : '<div class="ship-thumb"></div>'}
+            ${art ? `<div class="ship-thumb${modCls}"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
             <div class="list-row-content">
               <div class="list-row-title">${esc(db?.name || 'Unknown')}${titleQty}</div>
               <div class="list-row-sub">${gp} pts · ${tonLabel(db?.tonnage) || CATEGORY_LABELS[s.groupCategory] || ''}</div>
@@ -1236,7 +1238,7 @@
       if (isFullyModular(ship)) tags.push('<span class="ship-tag">Modular</span>');
       const modCls = isFullyModular(ship) ? ' ship-img-modular' : '';
       return `<div class="list-row" data-gid="${g.id}" onclick="App.addShip('${g.id}','${g.category}')">
-        ${art ? `<div class="ship-thumb ship-thumb-lg${modCls}">${shopLinkImg(ship.name, `<img src="${art}" alt="" loading="lazy">`, ship)}</div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
+        ${art ? `<div class="ship-thumb ship-thumb-lg${modCls}"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
             <span class="list-row-title">${esc(ship.name)} ${tags.join('')}</span>

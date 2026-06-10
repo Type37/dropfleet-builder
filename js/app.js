@@ -234,18 +234,18 @@ const App = (() => {
   // exist. Honour an explicit storeUrl on the ship when present; otherwise
   // fall back to a Shopify search for the ship name (returns the matching
   // faction box). encodeURIComponent keeps names with spaces/punctuation safe.
-  const SHOP_SVG = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 5h9l-.6 7.2a1.3 1.3 0 0 1-1.3 1.2H5.4a1.3 1.3 0 0 1-1.3-1.2L3.5 5z"/><path d="M5.8 5V4.2a2.2 2.2 0 0 1 4.4 0V5"/></svg>';
   function shipStoreUrl(name, ship) {
     if (ship && ship.storeUrl) return ship.storeUrl;
     return 'https://ttcombat.com/search?q=' + encodeURIComponent((name || '').trim());
   }
-  // Wrap a ship <img> string in a TTCombat store link with a shop-icon overlay.
-  // stopPropagation so tapping the art opens the store without also triggering
-  // a clickable parent card (ship picker / group nav).
+  // Wrap a ship <img> string in a TTCombat store link (no icon overlay; the art
+  // itself is the link). Used only on the unit-detail hero image so the store
+  // link doesn't clutter the fleet menu or picker. stopPropagation so tapping the
+  // art opens the store without triggering a clickable parent card.
   function shopLinkImg(name, imgTag, ship) {
     if (!imgTag) return '';
     const url = shipStoreUrl(name, ship);
-    return `<a class="shop-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="View ${esc(name || 'this ship')} on the TTCombat store" onclick="event.stopPropagation()">${imgTag}<span class="shop-badge">${SHOP_SVG}</span></a>`;
+    return `<a class="shop-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="View ${esc(name || 'this ship')} on the TTCombat store" onclick="event.stopPropagation()">${imgTag}</a>`;
   }
 
   function admiralArtPath(admiralName) {
@@ -1762,7 +1762,7 @@ const App = (() => {
 
       return `${sectionDivider}<div class="overview-group-card card-deco" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-label="${esc(g.name)}, ${esc(catLabel)}, ${gPts} points" style="cursor:pointer;border-left-color:${catColor}">
         <div class="overview-group-top">
-          ${artSrc ? `<div class="overview-group-art${artModularClass}">${shopLinkImg(firstDbForArt && firstDbForArt.name, `<img src="${artSrc}" alt="" onerror="this.closest('.overview-group-art').remove()">`, firstDbForArt)}</div>` : ''}
+          ${artSrc ? `<div class="overview-group-art${artModularClass}"><img src="${artSrc}" alt="" onerror="this.closest('.overview-group-art').remove()"></div>` : ''}
           <div class="overview-group-info">
             <div class="overview-group-name">${esc(g.name)}</div>
             <div class="overview-group-meta">
@@ -2663,7 +2663,7 @@ const App = (() => {
 
     return `
     <div class="group-ship-entry${compact ? ' compact' : ''}${useAlt ? ' alt2x4' : ''}">
-      ${img ? `<div class="ship-card-image${isFullyModular(dbShip) ? ' ship-img-modular' : ''}"${isFullyModular(dbShip) ? ' title="Base hull shown, your ship\'s actual look depends on the systems you choose"' : ''}>${qtyBadge}${shopLinkImg(name, `<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'">`, dbShip)}</div>` : ''}
+      ${img ? `<div class="ship-card-image${isFullyModular(dbShip) ? ' ship-img-modular' : ''}"${isFullyModular(dbShip) ? ' title="Base hull shown, your ship\'s actual look depends on the systems you choose"' : ''}>${qtyBadge}<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
       <div class="ship-card-body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
         <div class="flex items-center justify-between">
           <div>
@@ -2914,7 +2914,7 @@ const App = (() => {
     return `
     <div class="ship-card" onclick="App.addShipToGroup('${key}','${category}')">
       <div class="ship-card-top">
-        ${data.image ? `<div class="ship-card-image">${shopLinkImg(data.name, `<img src="${esc(data.image)}" alt="${esc(data.name)}" loading="lazy" onerror="this.style.display='none'">`, data)}</div>` : ''}
+        ${data.image ? `<div class="ship-card-image"><img src="${esc(data.image)}" alt="${esc(data.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
         <div class="ship-card-info">
           <div class="ship-card-name">${esc(data.name)}${selectBadges ? ` ${selectBadges}` : ''}</div>
           <div class="ship-card-type">${esc(tonLabel(data.tonnage) || catLabel)}</div>
@@ -4129,7 +4129,7 @@ const App = (() => {
 
         html += `<div class="print-ship">
           <div class="print-ship-top">
-            ${artSrc ? `<div class="print-ship-art">${shopLinkImg(db && db.name, `<img src="${artSrc}" alt="" onerror="this.closest('.print-ship-art').remove()">`, db)}</div>` : ''}
+            ${artSrc ? `<div class="print-ship-art"><img src="${artSrc}" alt="" onerror="this.closest('.print-ship-art').remove()"></div>` : ''}
             <div class="print-ship-content">
               <div class="print-ship-header">
                 <span class="print-ship-name">${qtyPrefix}${esc(name)}${tonnageLabel ? ` <span class="print-ship-tonnage">${esc(tonnageLabel)}</span>` : ''}${badgeHtml}</span>

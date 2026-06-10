@@ -1259,27 +1259,6 @@ button, a, input, select, textarea,
   align-items: center;
   justify-content: center;
 }
-.shop-badge {
-  position: absolute;
-  right: 6px;
-  bottom: 6px;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--paper, #fff);
-  color: var(--navy, #1b3a5c);
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.22);
-  opacity: 0.85;
-}
-.shop-badge svg { width: 13px; height: 13px; }
-/* Small list thumbnails get a proportionally smaller badge. */
-.ship-thumb .shop-badge { width: 16px; height: 16px; right: 2px; bottom: 2px; }
-.ship-thumb .shop-badge svg { width: 9px; height: 9px; }
-@media print { .shop-badge { display: none; } }
 
 /* Fully-modular ships (Resistance cruisers/frigates built entirely from chosen
    systems): the art is just a base-hull placeholder, so desaturate it to

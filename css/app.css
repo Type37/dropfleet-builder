@@ -2805,9 +2805,8 @@ h1, h2, h3, h4, h5, h6 {
 .overview-group-art.ship-img-modular img {
   filter: grayscale(1) opacity(0.5);
 }
-/* TTCombat store link wrapping ship art — fills the art box so layout/img
-   sizing is unchanged; a small shop-bag badge fades in on hover (desktop) and
-   sits faintly visible on touch devices. */
+/* TTCombat store link wrapping the unit-detail ship art — fills the art box so
+   layout/img sizing is unchanged. The art itself is the link (no badge icon). */
 .shop-link {
   display: block;
   position: relative;
@@ -2815,38 +2814,6 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
   cursor: pointer;
   text-decoration: none;
-}
-.shop-badge {
-  position: absolute;
-  right: 5px;
-  bottom: 5px;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--paper, #fff);
-  color: var(--navy, #1b3a5c);
-  border: 1px solid var(--stroke-light, #e4ded2);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
-  opacity: 0;
-  transform: translateY(2px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
-  pointer-events: none;
-}
-.shop-badge svg { width: 13px; height: 13px; }
-@media (hover: hover) {
-  .shop-link:hover .shop-badge { opacity: 1; transform: translateY(0); }
-}
-@media (hover: none) {
-  .shop-badge { opacity: 0.82; transform: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .shop-badge { transition: none; }
-}
-@media print {
-  .shop-badge { display: none; }
 }
 /* ×N multiplier on collapsed identical-ship cards */
 .ship-qty-badge {
