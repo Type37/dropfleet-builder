@@ -4897,7 +4897,7 @@ const App = (() => {
         const dr = DEPLOY_RANGE[part.toLowerCase()];
         if (a.special && a.special !== '-') special = renderWeaponSpecialChips(a.special);
         else if (a.ksReroll !== undefined) special = closeProtectionChip(a.ksReroll);
-        else if (dr) special = `Deploys within ${dr} of carrier`;
+        else if (dr) special = `<span title="Deploys within ${dr} of a friendly carrier">Deploy ${dr}</span>`;
         body += `<tr>
           ${i === 0 ? launchCell : ''}
           <td class="lt-load">${esc(part)}</td>

@@ -1544,7 +1544,7 @@
         const dr = DEPLOY_RANGE[part.toLowerCase()];
         const special = (a.special && a.special !== '-') ? renderSpecialChips(a.special)
           : a.ksReroll != null ? `<span class="weapon-special-chip tappable" onclick="event.stopPropagation();App.openRule('Close Protection')">Close Protection (re-roll ${a.ksReroll})</span>`
-          : dr ? `<span class="weapon-special-chip">Deploys within ${dr} of carrier</span>`
+          : dr ? `<span class="weapon-special-chip" title="Deploys within ${dr} of a friendly carrier">Deploy ${dr}</span>`
           : '-';
         rows += `<div class="weapon-row ${tc}" style="grid-template-columns:52px 1fr 40px 32px 32px 40px">
           ${i === 0 ? `<div class="weapon-val" style="font-weight:700">${esc(load.launch || '-')}${ls}</div>` : '<div></div>'}
@@ -2330,7 +2330,7 @@
         const dr = DEPLOY_RANGE[part.toLowerCase()];
         const special = (a.special && a.special !== '-') ? a.special
           : a.ksReroll != null ? `Close Protection (re-roll ${a.ksReroll})`
-          : dr ? `Deploys within ${dr} of carrier`
+          : dr ? `Deploy ${dr} of carrier`
           : '';
         rows += `<tr>
           <td>${i === 0 ? esc(load.launch || '-') : ''}</td>
