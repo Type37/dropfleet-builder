@@ -3170,9 +3170,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .station-add-optional:hover { border-color: var(--navy); color: var(--navy); }
 .station-add-optional .opt-tag {
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 11px;
   opacity: 0.6;
 }
 .station-card {

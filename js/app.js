@@ -1898,7 +1898,7 @@ const App = (() => {
         </div>
         ${chosen.length
           ? `<div class="overview-secondary-chosen">${chosen.map(o => `<span class="secondary-chip">${esc(o.name)}</span>`).join('')}</div>`
-          : `<div class="add-ship-area" onclick="App.openSecondaryModal()" style="padding:var(--sp-md);cursor:pointer"><span class="text-caption">Choose 2 secondary objectives for your game</span></div>`}
+          : ''}
       </div>`;
     }
 
@@ -2301,14 +2301,14 @@ const App = (() => {
     // Payload S-1 (DFC: "assigned to a Ship with the Porter special rule").
     const ruleNames = (dbShip.special_rules || []).join(' ');
     const hay = (dbShip.rulesText || '') + ' ' + ruleNames;
-    return /Deployable Feature/i.test(hay) || /\bPorter\b/i.test(ruleNames);
+    return /Deployable Feature|Feature Carrier/i.test(hay) || /\bPorter\b/i.test(ruleNames);
   }
 
   // A genuine "choose one Deployable Feature" ship MUST take one; a Porter MAY.
   function featureRequired(dbShip) {
     if (!dbShip) return false;
     const ruleNames = (dbShip.special_rules || []).join(' ');
-    return /Deployable Feature/i.test((dbShip.rulesText || '') + ' ' + ruleNames);
+    return /Deployable Feature|Feature Carrier/i.test((dbShip.rulesText || '') + ' ' + ruleNames);
   }
 
   // A ship is "fully modular" when it has a Systems selection and NO fixed
@@ -3695,7 +3695,7 @@ const App = (() => {
       slot.innerHTML = `
       <button class="station-add-optional" onclick="App.openStationModal()">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1l6 3.5v7L8 15l-6-3.5v-7L8 1z"/><path d="M8 8v7M2 4.5L8 8l6-3.5"/></svg>
-        Add Space Station <span class="opt-tag">optional</span>
+        <span class="opt-tag">(Optional)</span> Add Space Station
       </button>`;
       return;
     }

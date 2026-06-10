@@ -574,11 +574,11 @@
     if (!ship) return false;
     const names = shipRuleNames(ship);
     const hay = (ship.rulesText || '') + ' ' + names;
-    return /Deployable Feature/i.test(hay) || /\bPorter\b/i.test(names);
+    return /Deployable Feature|Feature Carrier/i.test(hay) || /\bPorter\b/i.test(names);
   }
   function featureRequired(ship) {
     if (!ship) return false;
-    return /Deployable Feature/i.test((ship.rulesText || '') + ' ' + shipRuleNames(ship));
+    return /Deployable Feature|Feature Carrier/i.test((ship.rulesText || '') + ' ' + shipRuleNames(ship));
   }
   function factionFeatures(factionKey) {
     return (FACTIONS[factionKey]?.deployableFeatures) || [];
@@ -1068,7 +1068,7 @@
         <span class="list-chevron">›</span>
       </div>`;
     } else {
-      html += `<div class="add-slot add-slot-optional" onclick="App.openStation()">+ Space Station <span class="add-slot-opt">optional</span></div>`;
+      html += `<div class="add-slot add-slot-optional" onclick="App.openStation()"><span class="add-slot-opt">(Optional)</span> Add Space Station</div>`;
     }
 
     // Secondary Objectives — pick 2 for your game (rules data from the BSData
