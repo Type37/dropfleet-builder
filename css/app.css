@@ -3398,9 +3398,14 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-lg);
   padding: var(--sp-lg);
   padding-left: calc(var(--sp-lg) - 2px);
+  /* Image on top, content in a capped reading column (matches mobile's
+     ship-art-hero). The detail panel is wide; an uncapped row stretched stats,
+     weapon tables and lore into hard-to-read full-width lines. */
   display: flex;
-  align-items: flex-start;
-  gap: var(--sp-lg);
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--sp-md);
+  max-width: 720px;
   position: relative;
   transition: all var(--duration-normal) var(--ease-out);
 }
@@ -3419,8 +3424,9 @@ h1, h2, h3, h4, h5, h6 {
 [data-faction="resistance"] .group-ship-entry:hover { border-left-color: var(--faction-resistance); }
 
 .group-ship-entry .ship-card-image {
-  width: 160px;
-  height: 160px;
+  width: 100%;
+  height: 150px;
+  align-self: stretch;
 }
 
 /* Compact view — smaller cards, no stat/weapon detail */
