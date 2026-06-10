@@ -2147,13 +2147,16 @@ const App = (() => {
       // Gray out BS when it's "-"
       if (k === 'bs' && (v === '-' || v === '--')) cellClass = 'stat-cell-none';
       const icon = STAT_ICONS[k] || '';
-      // Icon as the left-anchored visual anchor; label + value read left→right
-      // (F-pattern, and per the stat-cell reference layout).
+      // Hero-number layout (variant B): icon landmark, big value, abbreviation to
+      // the right. The cell label is a short code so it fits a narrow grid cell;
+      // the full name stays in the tooltip / stat sheet. ("Thrust" is the only
+      // one too long for the column at 3-up.)
+      const cellLabel = { thrust: 'THR' }[k] || meta.label;
       return `<div class="stat-cell ${cellClass}" title="${meta.title}">
         ${icon ? `<span class="stat-cell-icon">${icon}</span>` : ''}
         <span class="stat-cell-text">
-          <span class="stat-cell-label">${meta.label}</span>
           <span class="stat-cell-value">${v}</span>
+          <span class="stat-cell-label">${cellLabel}</span>
         </span>
       </div>`;
     }).filter(Boolean).join('');

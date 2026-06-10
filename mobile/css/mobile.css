@@ -495,19 +495,24 @@ button, a, input, select, textarea,
   border-bottom: 1px solid var(--stroke2);
 }
 
+/* Variant B: value (hero) then label, baseline-aligned on one line. */
+.stat-cell-text { display: flex; align-items: baseline; gap: 4px; min-width: 0; }
+
 .stat-label {
   font-family: var(--font-condensed);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: var(--weight-bold);
-  text-transform: none;
-  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--fg3);
 }
 
 .stat-value {
-  font-family: var(--font-condensed);
-  font-size: 15px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  line-height: 1;
   font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums lining-nums;
   color: var(--fg1);
 }
 

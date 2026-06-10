@@ -1206,7 +1206,7 @@
     const statEntries = [
       { key: 'scan', label: 'Scan', val: stats.scan },
       { key: 'sig', label: 'Sig', val: stats.sig },
-      { key: 'thrust', label: 'Thrust', val: stats.thrust },
+      { key: 'thrust', label: 'THR', val: stats.thrust },
       { key: 'hull', label: 'Hull', val: stats.hull },
       { key: 'es', label: 'ES', val: stats.es },
       { key: 'ks', label: 'KS', val: stats.ks }
@@ -1237,7 +1237,7 @@
 
       <div class="stat-grid">
         ${statEntries.map(s => `<div class="stat-cell tappable" onclick="App.openStat('${s.key}')">
-          ${statIcon(s.key)}<div><div class="stat-label">${s.label}</div><div class="stat-value">${esc(s.val)}</div></div>
+          ${statIcon(s.key)}<span class="stat-cell-text"><span class="stat-value">${esc(s.val)}</span><span class="stat-label">${s.label}</span></span>
         </div>`).join('')}
       </div>
 
@@ -1774,7 +1774,7 @@
     const statEntries = [
       { key: 'scan', label: 'Scan', val: stats.scan },
       { key: 'sig', label: 'Sig', val: stats.sig },
-      { key: 'thrust', label: 'Thrust', val: stats.thrust },
+      { key: 'thrust', label: 'THR', val: stats.thrust },
       { key: 'hull', label: 'Hull', val: stats.hull },
       { key: 'es', label: 'ES', val: stats.es },
       { key: 'ks', label: 'KS', val: stats.ks }
@@ -1788,7 +1788,7 @@
     return `<div class="section-header">${esc(fs.name)}${sizeClass ? ', ' + sizeClass : ''}${fs.cost ? `, ${fs.cost}pts` : ''}</div>
       ${artSrc ? `<div class="ship-art-hero">${shopLinkImg(fs.name, `<img src="${artSrc}" alt="${esc(fs.name)}" loading="lazy">`, fs)}</div>` : ''}
       <div class="stat-grid">
-        ${statEntries.map(s => `<div class="stat-cell">${statIcon(s.key)}<div><div class="stat-label">${s.label}</div><div class="stat-value">${esc(s.val)}</div></div></div>`).join('')}
+        ${statEntries.map(s => `<div class="stat-cell">${statIcon(s.key)}<span class="stat-cell-text"><span class="stat-value">${esc(s.val)}</span><span class="stat-label">${s.label}</span></span></div>`).join('')}
       </div>
       ${weapons.length ? `<div class="weapon-table">
         <div class="weapon-row weapon-row-header">

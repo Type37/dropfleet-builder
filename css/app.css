@@ -1898,8 +1898,9 @@ h1, h2, h3, h4, h5, h6 {
 /* ── 14. Ship Stats Grid ─────────────────────────────────────── */
 .stat-grid {
   display: grid;
-  /* Smaller min so more stats sit on one row (flatter / more horizontal) */
-  grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
+  /* Hero-number cells (variant B) need a touch more width for the value + label
+     to sit side by side. */
+  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
   gap: 3px;
 }
 
@@ -1907,33 +1908,35 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--paper-alt);
   border: 1px solid var(--stroke-light);
   border-radius: var(--radius-sm);
-  padding: 4px 7px;
+  padding: 4px 6px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   text-align: left;
+  overflow: hidden;
 }
 .stat-cell-icon { flex-shrink: 0; display: inline-flex; align-items: center; }
-.stat-cell-icon svg { width: 16px; height: 16px; opacity: 0.75; }
-.stat-cell-text { display: flex; flex-direction: column; line-height: 1.05; min-width: 0; }
+.stat-cell-icon svg { width: 15px; height: 15px; opacity: 0.75; }
+/* Variant B: value (hero) then label, baseline-aligned on one line. */
+.stat-cell-text { display: flex; flex-direction: row; align-items: baseline; gap: 3px; min-width: 0; white-space: nowrap; }
 
 .stat-cell-label {
   font-family: var(--font-condensed);
-  font-size: 11px;
-  /* Same weight as the value (700): the ONLY de-emphasis axis is SIZE, so the
-     label keeps enough presence to anchor its number (per Jet's hierarchy note). */
+  font-size: 9px;
   font-weight: var(--weight-bold);
-  color: var(--ink-soft);
+  /* Size is the de-emphasis axis (per Jet's hierarchy note): the label drops to
+     a quiet reading-size cap beside the hero number. */
+  color: var(--ink-muted);
   letter-spacing: 0.02em;
-  text-transform: none;
+  text-transform: uppercase;
 }
 
 .stat-cell-value {
-  font-family: var(--font-body);
-  font-size: var(--text-md);
+  font-family: var(--font-display);
+  font-size: 19px;
+  line-height: 1;
   /* Bold (700), NOT heavy (800): 800 closed up the apertures on 3 / 5 / 8 and
-     read as a blob at small sizes. Lining + tabular figures keep numerals open
-     and vertically aligned down each column. */
+     read as a blob. Lining + tabular figures keep numerals open and aligned. */
   font-weight: var(--weight-bold);
   font-variant-numeric: tabular-nums lining-nums;
   color: var(--ink);
@@ -5378,10 +5381,10 @@ h1, h2, h3, h4, h5, h6 {
   .overview-group-name { font-size: var(--text-sm); }
   .overview-group-pts { font-size: var(--text-md); }
 
-  /* 4-column stat grid for even 4+4 wrap on 8-stat ships */
-  .stat-grid { grid-template-columns: repeat(auto-fit, minmax(78px, 1fr)); }
-  .stat-cell-label { font-size: 8px; }
-  .stat-cell-value { font-size: var(--text-sm); }
+  /* Keep the hero number prominent on narrow widths (variant B). */
+  .stat-grid { grid-template-columns: repeat(auto-fit, minmax(76px, 1fr)); }
+  .stat-cell-label { font-size: 9px; }
+  .stat-cell-value { font-size: 18px; }
 
   .ship-card-top { flex-direction: column; }
   .ship-card-image { width: 100%; height: 120px; border-radius: var(--radius-md); }
