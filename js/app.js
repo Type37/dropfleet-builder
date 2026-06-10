@@ -228,6 +228,10 @@ const App = (() => {
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     return FEATURE_ART.has(slug) ? `assets/art/feat-${slug}.webp` : null;
   }
+  // Small-display variant of an art URL for picker cards, overview/list thumbs
+  // and admiral thumbs (source art is ~1100-1500px, shown at ~96-140px). The
+  // unit-detail hero and print keep full resolution. Thumbs: assets/art/thumb/.
+  function thumbUrl(url) { return url ? url.replace('/art/', '/art/thumb/') : url; }
   // Space-station art. The three generic stations (Small/Medium/Large) share a
   // model, so they reuse one faction image; faction-specific stations match by
   // name. Only high-confidence matches return art — the rest show no picture
@@ -1797,7 +1801,7 @@ const App = (() => {
 
       return `${sectionDivider}<div class="overview-group-card card-deco" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-label="${esc(g.name)}, ${esc(catLabel)}, ${gPts} points" style="cursor:pointer;border-left-color:${catColor}">
         <div class="overview-group-top">
-          ${artSrc ? `<div class="overview-group-art${artModularClass}"><img src="${artSrc}" alt="" onerror="this.closest('.overview-group-art').remove()"></div>` : ''}
+          ${artSrc ? `<div class="overview-group-art${artModularClass}"><img src="${thumbUrl(artSrc)}" alt="" onerror="this.closest('.overview-group-art').remove()"></div>` : ''}
           <div class="overview-group-info">
             <div class="overview-group-name">${esc(g.name)}</div>
             <div class="overview-group-meta">
@@ -1831,7 +1835,7 @@ const App = (() => {
       const artSrc = fs.image || null;
       return `<div class="overview-group-card card-deco overview-flagship-card" style="border-left-color:${catColor}" title="Carries ${esc(a.name)}; its cost is counted with the admiral">
         <div class="overview-group-top">
-          ${artSrc ? `<div class="overview-group-art"><img src="${esc(artSrc)}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
+          ${artSrc ? `<div class="overview-group-art"><img src="${esc(thumbUrl(artSrc))}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
           <div class="overview-group-info">
             <div class="overview-group-name">${esc(name)}</div>
             <div class="overview-group-meta">
@@ -2706,7 +2710,7 @@ const App = (() => {
 
     return `
     <div class="group-ship-entry${compact ? ' compact' : ''}${useAlt ? ' alt2x4' : ''}">
-      ${img ? `<div class="ship-card-image${isFullyModular(dbShip) ? ' ship-img-modular' : ''}"${isFullyModular(dbShip) ? ' title="Base hull shown, your ship\'s actual look depends on the systems you choose"' : ''}>${qtyBadge}<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+      ${img ? `<div class="ship-card-image${isFullyModular(dbShip) ? ' ship-img-modular' : ''}"${isFullyModular(dbShip) ? ' title="Base hull shown, your ship\'s actual look depends on the systems you choose"' : ''}>${qtyBadge}<img src="${esc(thumbUrl(img))}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
       <div class="ship-card-body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
         <div class="flex items-center justify-between">
           <div>
@@ -2957,7 +2961,7 @@ const App = (() => {
     return `
     <div class="ship-card" onclick="App.addShipToGroup('${key}','${category}')">
       <div class="ship-card-top">
-        ${data.image ? `<div class="ship-card-image"><img src="${esc(data.image)}" alt="${esc(data.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+        ${data.image ? `<div class="ship-card-image"><img src="${esc(thumbUrl(data.image))}" alt="${esc(data.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
         <div class="ship-card-info">
           <div class="ship-card-name">${esc(data.name)}${selectBadges ? ` ${selectBadges}` : ''}</div>
           <div class="ship-card-type">${esc(tonLabel(data.tonnage) || catLabel)}</div>
@@ -3262,7 +3266,7 @@ const App = (() => {
   // (generic/faction admirals have no portrait). The insignia lives here now,
   // not inline with the name.
   function admiralThumb(level, imgUrl) {
-    if (imgUrl) return `<div class="admiral-thumb"><img src="${esc(imgUrl)}" alt="" loading="lazy" onerror="this.style.display='none'"></div>`;
+    if (imgUrl) return `<div class="admiral-thumb"><img src="${esc(thumbUrl(imgUrl))}" alt="" loading="lazy" onerror="this.style.display='none'"></div>`;
     const ins = window.RankInsignia ? RankInsignia(currentFleet.faction, level, 52) : '';
     return `<div class="admiral-thumb rank-thumb">${ins}</div>`;
   }
@@ -3338,7 +3342,7 @@ const App = (() => {
         html += `
         <div class="admiral-card${isDisabled ? ' disabled' : ''}" style="${isDisabled ? 'opacity:0.5;' : ''}">
           <div class="flex gap-md items-start">
-            ${admiral.image ? `<div class="ship-card-image"><img src="${esc(admiral.image)}" alt="${esc(admiral.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : admiralThumb(admiral.level, null)}
+            ${admiral.image ? `<div class="ship-card-image"><img src="${esc(thumbUrl(admiral.image))}" alt="${esc(admiral.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : admiralThumb(admiral.level, null)}
             <div style="flex:1;min-width:0">
               <div class="admiral-name">${esc(admiral.name)}</div>
               <div class="admiral-level">Level ${admiral.level || '?'} Famous${tooHighLevel ? `, requires ${sizeInfo.label}+` : ''}</div>
@@ -3793,7 +3797,7 @@ const App = (() => {
       const optArt = stationArtPath(currentFleet.faction, ss);
       return `<div class="station-option${isCurrent ? ' station-option-active' : ''}" onclick="App.selectStation('${ss.id}')">
         <div class="flex items-center justify-between" style="margin-bottom:var(--sp-xs)">
-          <span class="station-option-name">${optArt ? `<span class="station-option-thumb"><img src="${optArt}" alt="" loading="lazy" onerror="this.closest('.station-option-thumb').remove()"></span>` : ''}${esc(ss.name)}${isCurrent ? ' <span class="badge badge-navy" style="font-size:9px">Current</span>' : ''}</span>
+          <span class="station-option-name">${optArt ? `<span class="station-option-thumb"><img src="${thumbUrl(optArt)}" alt="" loading="lazy" onerror="this.closest('.station-option-thumb').remove()"></span>` : ''}${esc(ss.name)}${isCurrent ? ' <span class="badge badge-navy" style="font-size:9px">Current</span>' : ''}</span>
           <span class="badge badge-gold">${ss.cost} pts</span>
         </div>
         <div class="station-stats">${statLine}</div>
@@ -4503,7 +4507,7 @@ const App = (() => {
 
         html += `<div class="shared-ship-card">`;
         html += `<div class="shared-ship-top">`;
-        if (img) html += `<div class="shared-ship-art"><img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>`;
+        if (img) html += `<div class="shared-ship-art"><img src="${esc(thumbUrl(img))}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>`;
         html += `<div class="shared-ship-info">
             <div class="shared-ship-name">${count > 1 ? count + '× ' : ''}${esc(name)}</div>
             <div class="shared-ship-type">${esc(tonnage)} · ${cat}</div>

@@ -184,6 +184,10 @@
     const first = name.split(/\s+/)[0].toLowerCase();
     return SHIP_ART.has(first) ? `../assets/art/${first}.webp` : null;
   }
+  // Small-display variant of an art URL for picker cards and list-row thumbs
+  // (the source art is ~1100-1500px but shown at 52-96px). Heroes and print keep
+  // the full image. Thumbs are 200px webps in assets/art/thumb/.
+  function thumbUrl(url) { return url ? url.replace('/art/', '/art/thumb/') : url; }
   // Deployable-feature art (a subset have cutouts): assets/art/feat-<slug>.webp.
   const FEATURE_ART = new Set(['aegis-platform', 'comms-platform', 'torpedo-platform']);
   function featureArtPath(name) {
@@ -277,7 +281,7 @@
   // larger detail-header box.
   function admiralThumb(factionKey, level, art, lg) {
     const cls = 'ship-thumb' + (lg ? ' ship-thumb-lg' : '');
-    if (art) return `<div class="${cls}"><img src="${art}" alt="" loading="lazy"></div>`;
+    if (art) return `<div class="${cls}"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>`;
     const ins = window.RankInsignia ? RankInsignia(factionKey, level, lg ? 56 : 40) : '';
     return `<div class="${cls} rank-thumb">${ins}</div>`;
   }
@@ -990,7 +994,7 @@
       const art = shipArtPath(fs.name);
       const sizeClass = fs.category ? (CATEGORY_LABELS[fs.category] || '') : tonLabel(fs.tonnage);
       return `<div class="list-row flagship-row" onclick="App.openAdmiralDetail(${ai})">
-        ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
+        ${art ? `<div class="ship-thumb"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
           <div class="list-row-title">${esc(fs.name)}</div>
           <div class="list-row-sub">${sizeClass ? esc(sizeClass) + ' · ' : ''}flies with ${esc(a.name)}</div>
@@ -1022,7 +1026,7 @@
         return `<div class="swipe-row">
           <button class="swipe-del" onclick="event.stopPropagation();App.swipeDeleteGroup(${i})" aria-label="Remove group">Remove</button>
           <div class="list-row swipe-fg" onclick="App.openGroup(${i})">
-            ${art ? `<div class="ship-thumb${modCls}"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
+            ${art ? `<div class="ship-thumb${modCls}"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
             <div class="list-row-content">
               <div class="list-row-title">${esc(db?.name || 'Unknown')}${titleQty}</div>
               <div class="list-row-sub">${gp} pts · ${tonLabel(db?.tonnage) || CATEGORY_LABELS[s.groupCategory] || ''}</div>
@@ -1060,7 +1064,7 @@
       const stSpec = stationArmamentSpec(f.spaceStation);
       const stSub = stSpec ? `${f.spaceStation.cost} pts · ${summariseStation(f.spaceStation).armTotal}/${stSpec.required} armaments` : `${f.spaceStation.cost} pts`;
       html += `<div class="list-row" onclick="App.openStationDetail()">
-        ${stArt ? `<div class="ship-thumb"><img src="${stArt}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
+        ${stArt ? `<div class="ship-thumb"><img src="${thumbUrl(stArt)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
           <div class="list-row-title">${esc(f.spaceStation.name)}</div>
           <div class="list-row-sub">${stSub}</div>
@@ -1286,7 +1290,7 @@
       if (isFullyModular(ship)) tags.push('<span class="ship-tag">Modular</span>');
       const modCls = isFullyModular(ship) ? ' ship-img-modular' : '';
       return `<div class="list-row" data-gid="${g.id}" onclick="App.addShip('${g.id}','${g.category}')">
-        ${art ? `<div class="ship-thumb ship-thumb-lg${modCls}"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
+        ${art ? `<div class="ship-thumb ship-thumb-lg${modCls}"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
             <span class="list-row-title">${esc(ship.name)} ${tags.join('')}</span>
@@ -2206,7 +2210,7 @@
       const st = s.stats || {};
       const art = stationArtPath(f.faction, s);
       return `<div class="list-row" onclick="App.addStation('${s.id}')">
-        ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
+        ${art ? `<div class="ship-thumb"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
             <span class="list-row-title">${esc(s.name)}</span>
