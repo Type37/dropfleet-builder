@@ -228,6 +228,23 @@ const App = (() => {
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     return FEATURE_ART.has(slug) ? `assets/art/feat-${slug}.webp` : null;
   }
+  // Space-station art. The three generic stations (Small/Medium/Large) share a
+  // model, so they reuse one faction image; faction-specific stations match by
+  // name. Only high-confidence matches return art — the rest show no picture
+  // rather than a wrong one.
+  const STATION_GENERIC_ART = { ucm: 'ucm_space_station_1', scourge: 'scourge_space_station_1', resistance: 'resistance_space_station' };
+  const STATION_NAME_ART = { 'Gatestation': 'voidgate' };
+  const GENERIC_STATIONS = new Set(['Small Space Station', 'Medium Space Station', 'Large Space Station']);
+  function stationArtPath(factionKey, station) {
+    if (!station || !station.name) return null;
+    const byName = STATION_NAME_ART[station.name];
+    if (byName) return `assets/art/${byName}.webp`;
+    if (GENERIC_STATIONS.has(station.name)) {
+      const g = STATION_GENERIC_ART[factionKey];
+      if (g) return `assets/art/${g}.webp`;
+    }
+    return null;
+  }
 
   // ── TTCombat store links ───────────────────────────────────────────────
   // Ships are sold in boxed sets, so per-ship product pages mostly don't
@@ -3670,8 +3687,10 @@ const App = (() => {
       ? `<div class="station-rules">${specialRules.map(r => `<span class="rule-chip rule-chip-sm">${esc(r)}</span>`).join('')}</div>`
       : '';
 
+    const stationArt = stationArtPath(currentFleet.faction, ss);
     slot.innerHTML = `
     <div class="station-card">
+      ${stationArt ? `<div class="station-card-art"><img src="${stationArt}" alt="${esc(ss.name)}" loading="lazy" onerror="this.closest('.station-card-art').remove()"></div>` : ''}
       <div class="flex items-center justify-between">
         <div>
           <div class="station-name">${esc(ss.name)}</div>
@@ -3721,9 +3740,10 @@ const App = (() => {
           : '';
 
       const isCurrent = ss.id === currentId;
+      const optArt = stationArtPath(currentFleet.faction, ss);
       return `<div class="station-option${isCurrent ? ' station-option-active' : ''}" onclick="App.selectStation('${ss.id}')">
         <div class="flex items-center justify-between" style="margin-bottom:var(--sp-xs)">
-          <span class="station-option-name">${esc(ss.name)}${isCurrent ? ' <span class="badge badge-navy" style="font-size:9px">Current</span>' : ''}</span>
+          <span class="station-option-name">${optArt ? `<span class="station-option-thumb"><img src="${optArt}" alt="" loading="lazy" onerror="this.closest('.station-option-thumb').remove()"></span>` : ''}${esc(ss.name)}${isCurrent ? ' <span class="badge badge-navy" style="font-size:9px">Current</span>' : ''}</span>
           <span class="badge badge-gold">${ss.cost} pts</span>
         </div>
         <div class="station-stats">${statLine}</div>

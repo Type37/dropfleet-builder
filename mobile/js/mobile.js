@@ -190,6 +190,23 @@
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     return FEATURE_ART.has(slug) ? `../assets/art/feat-${slug}.webp` : null;
   }
+  // Space-station art. The three generic stations (Small/Medium/Large) share a
+  // model, so they reuse one faction image; faction-specific stations match by
+  // name. Only high-confidence matches return art — the rest keep the blank
+  // thumb rather than show a wrong picture.
+  const STATION_GENERIC_ART = { ucm: 'ucm_space_station_1', scourge: 'scourge_space_station_1', resistance: 'resistance_space_station' };
+  const STATION_NAME_ART = { 'Gatestation': 'voidgate' };
+  const GENERIC_STATIONS = new Set(['Small Space Station', 'Medium Space Station', 'Large Space Station']);
+  function stationArtPath(factionKey, station) {
+    if (!station) return null;
+    const byName = STATION_NAME_ART[station.name];
+    if (byName) return `../assets/art/${byName}.webp`;
+    if (GENERIC_STATIONS.has(station.name)) {
+      const g = STATION_GENERIC_ART[factionKey];
+      if (g) return `../assets/art/${g}.webp`;
+    }
+    return null;
+  }
   function admiralArtPath(name) {
     if (!name) return null;
     const lower = name.toLowerCase();
@@ -1020,8 +1037,9 @@
     // Station slot
     html += `<div class="section-header">Space Station</div>`;
     if (f.spaceStation) {
+      const stArt = stationArtPath(f.faction, f.spaceStation);
       html += `<div class="list-row" onclick="App.removeStationPrompt()">
-        <div class="ship-thumb"></div>
+        ${stArt ? `<div class="ship-thumb"><img src="${stArt}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
           <div class="list-row-title">${esc(f.spaceStation.name)}</div>
           <div class="list-row-sub">${f.spaceStation.cost} pts</div>
@@ -2144,8 +2162,9 @@
     }
     el.innerHTML = stations.map(s => {
       const st = s.stats || {};
+      const art = stationArtPath(f.faction, s);
       return `<div class="list-row" onclick="App.addStation('${s.id}')">
-        <div class="ship-thumb"></div>
+        ${art ? `<div class="ship-thumb"><img src="${art}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
             <span class="list-row-title">${esc(s.name)}</span>
