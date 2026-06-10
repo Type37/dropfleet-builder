@@ -2270,6 +2270,39 @@ h1, h2, h3, h4, h5, h6 {
   outline-offset: 1px;
 }
 
+/* Either/or loadout (e.g. Laser Refit): radio cards, each with its datasheet. */
+.loadout-picker { margin-top: var(--sp-sm); }
+.loadout-radio {
+  display: flex;
+  gap: var(--sp-sm);
+  align-items: flex-start;
+  padding: var(--sp-sm) var(--sp-md);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--sp-xs);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
+}
+.loadout-radio:hover { border-color: var(--stroke-strong); }
+.loadout-radio.selected { border-color: var(--navy); background: var(--navy-subtle); }
+.loadout-radio-input { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+.loadout-radio-dot {
+  flex-shrink: 0;
+  width: 16px; height: 16px;
+  border: 2px solid var(--stroke-strong);
+  border-radius: 50%;
+  margin-top: 2px;
+  position: relative;
+}
+.loadout-radio.selected .loadout-radio-dot { border-color: var(--navy); }
+.loadout-radio.selected .loadout-radio-dot::after {
+  content: ''; position: absolute; inset: 2px; border-radius: 50%; background: var(--navy);
+}
+.loadout-radio-main { flex: 1; min-width: 0; }
+.loadout-radio-head { display: flex; justify-content: space-between; align-items: center; gap: var(--sp-sm); margin-bottom: 4px; }
+.loadout-radio-name { font-weight: var(--weight-semibold); font-size: var(--text-sm); color: var(--ink); }
+.loadout-radio-cost { font-weight: var(--weight-bold); font-size: var(--text-xs); color: var(--navy); white-space: nowrap; }
+
 .loadout-weapons {
   border-left: 3px solid var(--gold);
   padding-left: var(--sp-xs);

@@ -2541,54 +2541,39 @@ const App = (() => {
       weaponsHtml = '<div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
     }
 
-    // Loadout options — render selected option's weapons + selector
+    // Loadout options — an either/or weapon swap (e.g. UCM Laser Refit). Present
+    // BOTH options as radio cards, each with its full weapon datasheet, and pick
+    // one (replaces the old dropdown so you can compare the guns before choosing).
     let loadoutsHtml = '';
     const loadoutOpts = dbShip && Array.isArray(dbShip.loadoutOptions) ? dbShip.loadoutOptions : [];
+    const optSheet = (opt) => {
+      let h = '';
+      if (opt.weapons && opt.weapons.length) h += '<div class="weapon-list loadout-weapons">' + renderWeaponHeader() + opt.weapons.map(renderWeaponRow).join('') + '</div>';
+      if (opt.loads && opt.loads.length) h += '<div class="load-list">' + opt.loads.map(l =>
+        `<div class="load-row"><span class="load-row-name">${esc(l.name)}</span><div class="weapon-row-stats"><span class="weapon-stat-chip">Launch ${l.launch}</span>${l.special && l.special !== '-' ? `<span class="weapon-stat-chip">${esc(l.special)}</span>` : ''}</div></div>`
+      ).join('') + '</div>';
+      return h;
+    };
     if (loadoutOpts.length > 0) {
       loadoutsHtml = loadoutOpts.map((lo, loIdx) => {
         const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
-        const selOpt = lo.options[selIdx];
-        const selWeapons = selOpt && selOpt.weapons ? selOpt.weapons : [];
-        const selLoads = selOpt && selOpt.loads ? selOpt.loads : [];
-
-        // Selector (only if multiple choices)
-        let selectorHtml = '';
         if (lo.options.length > 1) {
-          const opts = lo.options.map((opt, oi) => {
-            const costLabel = opt.cost > 0 ? ` (+${opt.cost} pts)` : opt.cost < 0 ? ` (${opt.cost} pts)` : '';
-            return `<option value="${oi}" ${oi === selIdx ? 'selected' : ''}>${esc(opt.name)}${costLabel}</option>`;
-          }).join('');
-          selectorHtml = `<div class="loadout-selector">
-            <label class="loadout-label">${esc(lo.name)}</label>
-            <select class="loadout-select" onchange="App.changeLoadout('${groupId}','${ship.id}',${loIdx},parseInt(this.value))">
-              ${opts}
-            </select>
-          </div>`;
-        } else {
-          selectorHtml = '';
-        }
-
-        // Render selected option's weapons
-        let optWpnsHtml = '';
-        if (selWeapons.length > 0) {
-          optWpnsHtml = '<div class="weapon-list loadout-weapons">' + renderWeaponHeader() + selWeapons.map(renderWeaponRow).join('') + '</div>';
-        }
-
-        // Render selected option's loads
-        let optLoadsHtml = '';
-        if (selLoads.length > 0) {
-          optLoadsHtml = '<div class="load-list">' + selLoads.map(l =>
-            `<div class="load-row">
-              <span class="load-row-name">${esc(l.name)}</span>
-              <div class="weapon-row-stats">
-                <span class="weapon-stat-chip">Launch ${l.launch}</span>
-                ${l.special && l.special !== '-' ? `<span class="weapon-stat-chip">${esc(l.special)}</span>` : ''}
+          const cards = lo.options.map((opt, oi) => {
+            const on = oi === selIdx;
+            const costLabel = opt.cost > 0 ? `+${opt.cost} pts` : opt.cost < 0 ? `${opt.cost} pts` : 'Included';
+            return `<label class="loadout-radio${on ? ' selected' : ''}">
+              <input type="radio" class="loadout-radio-input" name="lo-${ship.id}-${loIdx}" ${on ? 'checked' : ''} onchange="App.changeLoadout('${groupId}','${ship.id}',${loIdx},${oi})">
+              <span class="loadout-radio-dot" aria-hidden="true"></span>
+              <div class="loadout-radio-main">
+                <div class="loadout-radio-head"><span class="loadout-radio-name">${esc(opt.name)}</span><span class="loadout-radio-cost">${costLabel}</span></div>
+                ${optSheet(opt)}
               </div>
-            </div>`
-          ).join('') + '</div>';
+            </label>`;
+          }).join('');
+          return `<div class="loadout-picker"><div class="detail-section-label">${esc(lo.name || 'Loadout')}</div>${cards}</div>`;
         }
-
-        return selectorHtml + optWpnsHtml + optLoadsHtml;
+        // Single fixed option — just show its datasheet.
+        return optSheet(lo.options[selIdx] || lo.options[0] || {});
       }).join('');
     }
 

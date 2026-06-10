@@ -1484,12 +1484,16 @@
           <div class="loadout-group-label">${esc(lo.name || 'Option')}</div>
           ${lo.options.map((opt, oi) => {
             const sel = inst.loadouts && inst.loadouts[loIdx] != null ? inst.loadouts[loIdx] : 0;
-            return `<div class="loadout-option ${oi === sel ? 'selected' : ''}" onclick="App.selectLoadout(${loIdx}, ${oi})">
-              <div class="flex justify-between items-center">
+            const on = oi === sel;
+            const sheet = opt.weapons?.length ? optionWeaponSheet(opt.weapons)
+              : (opt.loads?.length ? `<div class="loadout-option-desc">Launch ${esc(opt.loads[0].launch || '')}</div>` : '');
+            return `<div class="loadout-option loadout-radio-opt ${on ? 'selected' : ''}" onclick="App.selectLoadout(${loIdx}, ${oi})">
+              <div class="loadout-radio-row">
+                <span class="loadout-radio-dot"></span>
                 <span class="loadout-option-name">${esc(opt.name)}</span>
                 <span class="loadout-option-cost">${opt.cost ? '+' + opt.cost + 'pts' : 'Free'}</span>
               </div>
-              ${opt.weapons?.length ? `<div class="loadout-option-desc">${opt.weapons.map(w => esc(w.name)).join(', ')}</div>` : ''}
+              ${sheet}
             </div>`;
           }).join('')}
         `).join('')}

@@ -735,6 +735,20 @@ button, a, input, select, textarea,
   border: 2px solid var(--navy);
   background: var(--paper);
 }
+/* Either/or loadout: a radio dot + the option's full datasheet below. */
+.loadout-radio-row { display: flex; align-items: center; gap: var(--sp-s); }
+.loadout-radio-row .loadout-option-name { flex: 1; min-width: 0; }
+.loadout-radio-dot {
+  flex-shrink: 0;
+  width: 16px; height: 16px;
+  border: 2px solid var(--stroke1);
+  border-radius: 50%;
+  position: relative;
+}
+.loadout-option.selected .loadout-radio-dot { border-color: var(--navy); }
+.loadout-option.selected .loadout-radio-dot::after {
+  content: ''; position: absolute; inset: 2px; border-radius: 50%; background: var(--navy);
+}
 
 .loadout-option-name {
   font-size: var(--text-caption1);
