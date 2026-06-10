@@ -760,6 +760,7 @@ button, a, input, select, textarea,
   margin-top: var(--sp-xxs);
 }
 .feature-rule b { color: var(--fg1); }
+.feature-opt-art { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
 
 /* Visible game-size card picker (mobile New Fleet) */
 .size-card-list { display: flex; flex-direction: column; gap: var(--sp-xs); }

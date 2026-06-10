@@ -2513,6 +2513,7 @@ h1, h2, h3, h4, h5, h6 {
 .feature-radio:hover { border-color: var(--stroke-strong); }
 .feature-radio.selected { border-color: var(--navy); background: var(--navy-wash); box-shadow: inset 2px 0 0 var(--navy); }
 .feature-radio input { margin-top: 3px; flex-shrink: 0; accent-color: var(--navy); }
+.feature-radio-art { width: 52px; height: 52px; object-fit: contain; flex-shrink: 0; }
 .feature-radio-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .feature-radio-name { font-weight: var(--weight-bold); color: var(--ink); }
 .feature-radio-cost { font-weight: var(--weight-bold); color: var(--gold-dark); font-size: var(--text-xs); }

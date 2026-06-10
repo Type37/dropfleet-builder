@@ -183,6 +183,13 @@
     const first = name.split(/\s+/)[0].toLowerCase();
     return SHIP_ART.has(first) ? `../assets/art/${first}.webp` : null;
   }
+  // Deployable-feature art (a subset have cutouts): assets/art/feat-<slug>.webp.
+  const FEATURE_ART = new Set(['aegis-platform', 'comms-platform', 'torpedo-platform']);
+  function featureArtPath(name) {
+    if (!name) return null;
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    return FEATURE_ART.has(slug) ? `../assets/art/feat-${slug}.webp` : null;
+  }
   function admiralArtPath(name) {
     if (!name) return null;
     const lower = name.toLowerCase();
@@ -1394,9 +1401,11 @@
           const rulesHtml = (ft.rules || []).map(r =>
             `<div class="feature-rule">${r.description ? `<b>${esc(r.name)}:</b> ${ruleHtml(r.description)}` : `<b>${esc(r.name)}</b>`}</div>`
           ).join('');
+          const art = featureArtPath(ft.name);
           return `<div class="loadout-option ${sel ? 'selected' : ''}" onclick="App.selectFeature('${ft.name.replace(/'/g, "\\'")}')">
-            <div class="flex justify-between items-center">
-              <span class="loadout-option-name">${esc(ft.name)}</span>
+            <div class="flex items-center" style="gap:var(--sp-s)">
+              ${art ? `<img class="feature-opt-art" src="${art}" alt="" loading="lazy" onerror="this.remove()">` : ''}
+              <span class="loadout-option-name" style="flex:1">${esc(ft.name)}</span>
               <span class="loadout-option-cost">${ft.cost ? '+' + ft.cost + 'pts' : 'Free'}</span>
             </div>
             ${detail ? `<div class="loadout-option-desc">${esc(detail)}</div>` : ''}

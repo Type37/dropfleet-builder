@@ -220,6 +220,15 @@ const App = (() => {
     return SHIP_ART.has(first) ? `assets/art/${first}.webp` : null;
   }
 
+  // Deployable-feature art (a subset have transparent cutouts). Keyed by the
+  // feature name slugified; files live at assets/art/feat-<slug>.webp.
+  const FEATURE_ART = new Set(['aegis-platform', 'comms-platform', 'torpedo-platform']);
+  function featureArtPath(name) {
+    if (!name) return null;
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    return FEATURE_ART.has(slug) ? `assets/art/feat-${slug}.webp` : null;
+  }
+
   // ── TTCombat store links ───────────────────────────────────────────────
   // Ships are sold in boxed sets, so per-ship product pages mostly don't
   // exist. Honour an explicit storeUrl on the ship when present; otherwise
@@ -2308,8 +2317,10 @@ const App = (() => {
     // choosing, rather than hidden until selected.
     const row = (value, name, cost, feat, isChosen) => {
       const costLabel = cost ? ` <span class="feature-radio-cost">+${cost} pts</span>` : '';
+      const art = feat ? featureArtPath(feat.name) : null;
       return `<label class="feature-radio${isChosen ? ' selected' : ''}">
         <input type="radio" name="feat-${ship.id}"${isChosen ? ' checked' : ''} onchange="App.changeFeature('${groupId}','${ship.id}','${value.replace(/'/g, "\\'")}')">
+        ${art ? `<img class="feature-radio-art" src="${art}" alt="" loading="lazy" onerror="this.remove()">` : ''}
         <span class="feature-radio-main">
           <span class="feature-radio-name">${esc(name)}${costLabel}</span>
           ${feat ? renderFeatureFullRules(feat) : ''}
