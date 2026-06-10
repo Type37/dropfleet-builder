@@ -434,5 +434,144 @@
       "name": "Objectives Beyond",
       "description": "Nominate one of your Ships of Tonnage M or higher. You may permanently fly that Ship off the board in any opponent's Deployment Zone. If you do and that ship is not Crippled, gain 1VP. If that ship was H or C tonnage, gain 2VP instead."
     }
-  ]
+  ],
+  "stationArmaments": {
+    "note": "Universal armaments/upgrades for the generic Small/Medium/Large Fleet Space Stations. Verbatim from Fleet_Space_Stations_250818.pdf.",
+    "requiredBySize": {
+      "Small Space Station": 1,
+      "Medium Space Station": 2,
+      "Large Space Station": 3
+    },
+    "upgradeCapBySize": {
+      "Small Space Station": 1,
+      "Medium Space Station": 1,
+      "Large Space Station": 2
+    },
+    "options": [
+      {
+        "name": "Laser Armament",
+        "category": "Weapon Systems",
+        "cost": 15,
+        "weapons": [
+          {
+            "name": "Laser Armament",
+            "arc": "F/S/R",
+            "attack": "2",
+            "lock": "3+",
+            "damage": "1",
+            "type": "E",
+            "special": "Burnthrough-1, Flash-1"
+          }
+        ]
+      },
+      {
+        "name": "Mass Driver Armament",
+        "category": "Weapon Systems",
+        "cost": 10,
+        "weapons": [
+          {
+            "name": "Mass Driver Armament",
+            "arc": "F/S/R",
+            "attack": "3",
+            "lock": "3+",
+            "damage": "1",
+            "type": "K",
+            "special": "-"
+          }
+        ]
+      },
+      {
+        "name": "Missile Armament",
+        "category": "Weapon Systems",
+        "cost": 5,
+        "weapons": [
+          {
+            "name": "Missile Armament",
+            "arc": "F/S/R",
+            "attack": "4",
+            "lock": "3+",
+            "damage": "1",
+            "type": "K",
+            "special": "Close Action"
+          }
+        ]
+      },
+      {
+        "name": "Deep Space Tracking",
+        "category": "Structures",
+        "cost": 10,
+        "oncePerStation": true,
+        "effect": "When this Space Station targets enemy ships, Spikes on those ships have double their normal effect. So a Spike would increase the target's Signature by 6\" instead of 3\"."
+      },
+      {
+        "name": "Scanner Uplink",
+        "category": "Structures",
+        "cost": 15,
+        "oncePerStation": true,
+        "effect": "This Space Station's Scan range is increased by 3\". In addition, friendly ships within 3\" of one or more Space Stations with this special rule increase their Scan range by 3\". This special rule ceases to function while this Space Station is controlled by an enemy player."
+      },
+      {
+        "name": "Astrobotanical Lab",
+        "category": "Upgrades",
+        "cost": 30,
+        "isUpgrade": true,
+        "subtitle": "Exo-Greenhouse",
+        "effect": "Signature Bloom: Friendly Ships within this Space Station's unmodified Signature are Hidden within its Bloom. Enemy Ships targeting a Hidden Ship's Group ignore a Spike for each Hidden Ship in that Group. This rule has no effect while this Space Station is controlled by an enemy player."
+      },
+      {
+        "name": "Defence Grid",
+        "category": "Upgrades",
+        "cost": 80,
+        "isUpgrade": true,
+        "subtitle": "Military Space Station",
+        "weapons": [
+          {
+            "name": "35-KL Quad Mass Driver",
+            "arc": "F/S/R",
+            "attack": "4",
+            "lock": "3+",
+            "damage": "2",
+            "type": "C",
+            "special": "Bloom-4, Focused"
+          },
+          {
+            "name": "9K-S Mass Driver",
+            "arc": "F/S/R",
+            "attack": "4",
+            "lock": "2+",
+            "damage": "1",
+            "type": "K",
+            "special": "-"
+          },
+          {
+            "name": "9K-S Mass Driver",
+            "arc": "F/S/R",
+            "attack": "4",
+            "lock": "2+",
+            "damage": "1",
+            "type": "K",
+            "special": "-"
+          },
+          {
+            "name": "NC-16 Missiles",
+            "arc": "F/S/R",
+            "attack": "6",
+            "lock": "3+",
+            "damage": "1",
+            "type": "K",
+            "special": "Close Action"
+          },
+          {
+            "name": "NC-16 Missiles",
+            "arc": "F/S/R",
+            "attack": "6",
+            "lock": "3+",
+            "damage": "1",
+            "type": "K",
+            "special": "Close Action"
+          }
+        ]
+      }
+    ]
+  }
 }
