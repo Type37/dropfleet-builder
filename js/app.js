@@ -30,6 +30,17 @@ const App = (() => {
     reconquest: { label: 'Reconquest', min: 3001, max: 99999, groups: 28, maxAdmiralLevel: 5, colossalMax: 3, time: '4+ hrs',    desc: '3001+ pts' }
   };
 
+  // Escalating game-size indicator: 4 blocks that fill clockwise (TL, TR, BR, BL)
+  // as the game grows, like a clock filling up. Skirmish 1 -> Reconquest 4.
+  const GAME_SIZE_LEVEL = { skirmish: 1, clash: 2, battle: 3, reconquest: 4 };
+  function gameSizeBlocks(key) {
+    const lvl = GAME_SIZE_LEVEL[key] || 1;
+    const clockwise = [0, 1, 3, 2]; // grid cell order: top-left, top-right, bottom-right, bottom-left
+    let html = '';
+    for (let p = 0; p < 4; p++) html += `<span class="gs-block${clockwise.indexOf(p) < lvl ? ' filled' : ''}"></span>`;
+    return html;
+  }
+
   const FACTION_COLORS = {
     ucm: '#3e9945', phr: '#B8952F', scourge: '#c43c2f',
     shaltari: '#d98c1f', bioficer: '#2a8c8c', resistance: '#2a6099'
@@ -710,14 +721,8 @@ const App = (() => {
 
   function renderSizePicker() {
     const container = document.getElementById('size-picker');
-    const barProfiles = {
-      skirmish:   [8, 12, 6, 4],
-      clash:      [10, 16, 12, 8],
-      battle:     [14, 22, 18, 12],
-      reconquest: [16, 28, 24, 18]
-    };
     container.innerHTML = Object.entries(GAME_SIZES).map(([key, size]) => {
-      const bars = barProfiles[key].map(h => `<div class="game-size-bar" style="height:${h}px"></div>`).join('');
+      const bars = gameSizeBlocks(key);
       const colossalLabel = size.colossalMax > 0 ? `${size.colossalMax} Colossal` : 'No Colossal';
       return `
       <div class="game-size-option ${key === 'clash' ? 'selected' : ''}" data-size="${key}" onclick="App.selectGameSize('${key}')">
@@ -755,16 +760,10 @@ const App = (() => {
     const popover = document.createElement('div');
     popover.id = 'game-size-popover';
     popover.className = 'game-size-popover';
-    const barProfiles = {
-      skirmish:   [8, 12, 6, 4],
-      clash:      [10, 16, 12, 8],
-      battle:     [14, 22, 18, 12],
-      reconquest: [16, 28, 24, 18]
-    };
     popover.innerHTML = Object.entries(GAME_SIZES).map(([key, size]) => {
       const active = key === currentFleet.gameSize ? ' active' : '';
       const colText = size.colossalMax > 0 ? `, ${size.colossalMax} Colossal` : '';
-      const bars = barProfiles[key].map(h => `<div class="game-size-bar" style="height:${h}px"></div>`).join('');
+      const bars = gameSizeBlocks(key);
       return `<button class="game-size-popover-item${active}" onclick="App.applyGameSize('${key}')">
         <div class="game-size-visual">${bars}</div>
         <div>

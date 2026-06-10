@@ -3642,8 +3642,8 @@ h1, h2, h3, h4, h5, h6 {
 .game-size-option {
   display: flex;
   align-items: center;
-  gap: var(--sp-lg);
-  padding: var(--sp-lg);
+  gap: var(--sp-md);
+  padding: var(--sp-sm) var(--sp-md);
   border: 1px solid var(--stroke);
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -3658,17 +3658,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .game-size-visual {
-  display: flex;
-  gap: 3px;
-  align-items: flex-end;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  width: 22px;
+  flex-shrink: 0;
 }
-.game-size-bar {
-  width: 4px;
-  background: var(--stroke);
-  border-radius: 2px;
+.gs-block {
+  aspect-ratio: 1;
+  border: 1.5px solid var(--stroke-strong);
+  border-radius: 1px;
+  box-sizing: border-box;
   transition: background var(--duration-fast) var(--ease-out);
 }
-.selected .game-size-bar { background: var(--navy); }
+.gs-block.filled { background: var(--navy); border-color: var(--navy); }
 
 .game-size-info { flex: 1; }
 .game-size-name {
@@ -5143,17 +5146,8 @@ h1, h2, h3, h4, h5, h6 {
 .game-size-popover .game-size-visual {
   flex-shrink: 0;
 }
-.game-size-popover .game-size-bar {
-  width: 4px;
-  background: var(--stroke);
-  border-radius: 2px;
-}
-.game-size-popover-item.active .game-size-bar {
-  background: #fff;
-}
-.game-size-popover-item:not(.active):hover .game-size-bar {
-  background: var(--navy-light);
-}
+.game-size-popover-item.active .gs-block { border-color: rgba(255, 255, 255, 0.5); }
+.game-size-popover-item.active .gs-block.filled { background: #fff; border-color: #fff; }
 
 /* ── 28. Responsive ──────────────────────────────────────────── */
 @media (max-width: 1024px) {
