@@ -1917,15 +1917,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 .stat-cell-icon { flex-shrink: 0; display: inline-flex; align-items: center; }
 .stat-cell-icon svg { width: 15px; height: 15px; opacity: 0.75; }
-/* Variant B: value (hero) then label, baseline-aligned on one line. */
-.stat-cell-text { display: flex; flex-direction: row; align-items: baseline; gap: 3px; min-width: 0; white-space: nowrap; }
+/* Stacked: hero number on top, abbreviation on its own line beneath. */
+.stat-cell-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.02; min-width: 0; }
 
 .stat-cell-label {
   font-family: var(--font-condensed);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: var(--weight-bold);
   /* Size is the de-emphasis axis (per Jet's hierarchy note): the label drops to
-     a quiet reading-size cap beside the hero number. */
+     a quiet reading-size cap under the hero number. */
   color: var(--ink-muted);
   letter-spacing: 0.02em;
   text-transform: uppercase;

@@ -1206,7 +1206,7 @@
     const statEntries = [
       { key: 'scan', label: 'Scan', val: stats.scan },
       { key: 'sig', label: 'Sig', val: stats.sig },
-      { key: 'thrust', label: 'THR', val: stats.thrust },
+      { key: 'thrust', label: 'Thrust', val: stats.thrust },
       { key: 'hull', label: 'Hull', val: stats.hull },
       { key: 'es', label: 'ES', val: stats.es },
       { key: 'ks', label: 'KS', val: stats.ks }
@@ -1774,7 +1774,7 @@
     const statEntries = [
       { key: 'scan', label: 'Scan', val: stats.scan },
       { key: 'sig', label: 'Sig', val: stats.sig },
-      { key: 'thrust', label: 'THR', val: stats.thrust },
+      { key: 'thrust', label: 'Thrust', val: stats.thrust },
       { key: 'hull', label: 'Hull', val: stats.hull },
       { key: 'es', label: 'ES', val: stats.es },
       { key: 'ks', label: 'KS', val: stats.ks }

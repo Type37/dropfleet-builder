@@ -495,8 +495,8 @@ button, a, input, select, textarea,
   border-bottom: 1px solid var(--stroke2);
 }
 
-/* Variant B: value (hero) then label, baseline-aligned on one line. */
-.stat-cell-text { display: flex; align-items: baseline; gap: 4px; min-width: 0; }
+/* Stacked: hero number on top, abbreviation on its own line beneath. */
+.stat-cell-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.02; min-width: 0; }
 
 .stat-label {
   font-family: var(--font-condensed);

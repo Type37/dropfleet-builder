@@ -2147,16 +2147,13 @@ const App = (() => {
       // Gray out BS when it's "-"
       if (k === 'bs' && (v === '-' || v === '--')) cellClass = 'stat-cell-none';
       const icon = STAT_ICONS[k] || '';
-      // Hero-number layout (variant B): icon landmark, big value, abbreviation to
-      // the right. The cell label is a short code so it fits a narrow grid cell;
-      // the full name stays in the tooltip / stat sheet. ("Thrust" is the only
-      // one too long for the column at 3-up.)
-      const cellLabel = { thrust: 'THR' }[k] || meta.label;
+      // Stacked layout: icon landmark on the left, then the hero number with its
+      // abbreviation stacked beneath it (label gets its own line, so full names fit).
       return `<div class="stat-cell ${cellClass}" title="${meta.title}">
         ${icon ? `<span class="stat-cell-icon">${icon}</span>` : ''}
         <span class="stat-cell-text">
           <span class="stat-cell-value">${v}</span>
-          <span class="stat-cell-label">${cellLabel}</span>
+          <span class="stat-cell-label">${meta.label}</span>
         </span>
       </div>`;
     }).filter(Boolean).join('');
