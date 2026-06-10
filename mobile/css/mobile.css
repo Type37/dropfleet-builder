@@ -1561,6 +1561,23 @@ body.sheet-open .sheet-scrim {
   color: var(--fg3);
   background: transparent;
 }
+/* Optional slots (e.g. Space Station) read quieter than required ones so they
+   don't compete with the Add Admiral / Add Group calls to action. */
+.add-slot-optional {
+  padding: var(--sp-s) var(--sp-m);
+  border-style: dotted;
+  font-size: var(--text-caption1);
+  font-weight: 500;
+  opacity: 0.85;
+}
+.add-slot-opt {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--fg3);
+  opacity: 0.7;
+  margin-left: 4px;
+}
 .add-slot:active { background: var(--paper-alt); }
 
 /* Admiral ability picker rows (radio-style) + tappable keyword links */

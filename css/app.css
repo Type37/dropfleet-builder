@@ -3150,6 +3150,31 @@ h1, h2, h3, h4, h5, h6 {
 .admiral-flagship-rules { display: flex; flex-wrap: wrap; gap: 4px; margin-top: var(--sp-sm); }
 
 /* ── 17b. Space Station ─────────────────────────────────────── */
+/* The empty "Add Space Station" call is deliberately quiet: a station is
+   optional, so it must not compete with the required Add Ship / Admiral areas. */
+.station-add-optional {
+  width: 100%;
+  padding: var(--sp-sm) var(--sp-md);
+  border: 1px dashed var(--stroke);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+.station-add-optional:hover { border-color: var(--navy); color: var(--navy); }
+.station-add-optional .opt-tag {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+}
 .station-card {
   background: var(--paper);
   border: 1px solid var(--stroke);

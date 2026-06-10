@@ -750,13 +750,13 @@
     if (heavy > medium) w.push({ t: 'error', m: `Heavy points (${heavy}) can’t exceed Medium points (${medium}), Medium ships are your backbone and unlock Heavy (rulebook 4.2)` });
     if (light > medium + heavy) w.push({ t: 'error', m: `Light points (${light}) can’t exceed Medium + Heavy points (${medium + heavy}) (rulebook 4.2)` });
 
-    // Feature carriers must choose a Deployable Feature
-    fleet.battleGroups.forEach(g => {
+    // Feature carriers MUST choose a Deployable Feature (required, not optional)
+    fleet.battleGroups.forEach((g, gi) => {
       const s = g.ships[0];
       if (!s) return;
       const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
       if (db && featureRequired(db) && g.ships.some(x => !x.feature)) {
-        w.push({ t: 'warn', m: `${db.name} must choose a Deployable Feature` });
+        w.push({ t: 'error', m: `${db.name}: choose a Deployable Feature`, fix: 'group', gi });
       }
       // Systems / Hardpoints validation
       const list = db && systemsListFor(db, fleet.faction);
@@ -967,7 +967,8 @@
         const icon = w.fix === 'admiral' ? STATUS_ICON.admiral : (w.t === 'error' ? STATUS_ICON.error : STATUS_ICON.warn);
         const cls = w.t === 'error' ? 'warn-error' : 'warn-soft';
         const onclick = w.fix === 'admiral' ? ` onclick="App.openAdmiral()" style="cursor:pointer"`
-          : w.fix === 'station' ? ` onclick="App.openStationDetail()" style="cursor:pointer"` : '';
+          : w.fix === 'station' ? ` onclick="App.openStationDetail()" style="cursor:pointer"`
+          : w.fix === 'group' ? ` onclick="App.openGroup(${w.gi})" style="cursor:pointer"` : '';
         const arrow = w.fix ? ' <span class="warn-fix">Fix ›</span>' : '';
         return `<div class="warning-item ${cls}"${onclick}><span class="warning-icon">${icon}</span><span>${esc(w.m)}${arrow}</span></div>`;
       }).join('');
@@ -1067,7 +1068,7 @@
         <span class="list-chevron">›</span>
       </div>`;
     } else {
-      html += `<div class="add-slot" onclick="App.openStation()">+ Choose Station</div>`;
+      html += `<div class="add-slot add-slot-optional" onclick="App.openStation()">+ Space Station <span class="add-slot-opt">optional</span></div>`;
     }
 
     // Secondary Objectives — pick 2 for your game (rules data from the BSData

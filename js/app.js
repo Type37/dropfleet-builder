@@ -1413,13 +1413,13 @@ const App = (() => {
       warnings.push({ type: 'error', msg: `Light points (${lightPts}) can't exceed Medium + Heavy points (${mediumPts + heavyPts}) (rulebook 4.2)` });
     }
 
-    // 7b. Feature carriers must choose a Deployable Feature
+    // 7b. Feature carriers MUST choose a Deployable Feature (required, not optional)
     fleet.battleGroups.forEach(g => {
       if (g.ships.length === 0) return;
       const s = g.ships[0];
       const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
-      if (db && featureRequired(db) && !s.feature) {
-        warnings.push({ type: 'warn', msg: `${db.name} must choose a Deployable Feature` });
+      if (db && featureRequired(db) && g.ships.some(x => !x.feature)) {
+        warnings.push({ type: 'error', msg: `${db.name}: choose a Deployable Feature` });
       }
     });
 
@@ -3693,9 +3693,10 @@ const App = (() => {
 
     if (!station) {
       slot.innerHTML = `
-      <div class="add-ship-area" onclick="App.openStationModal()" style="padding:var(--sp-lg);min-height:60px">
-        <span style="font-size:var(--text-sm)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M8 1l6 3.5v7L8 15l-6-3.5v-7L8 1z"/><path d="M8 8v7M2 4.5L8 8l6-3.5"/></svg> Choose Station</span>
-      </div>`;
+      <button class="station-add-optional" onclick="App.openStationModal()">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1l6 3.5v7L8 15l-6-3.5v-7L8 1z"/><path d="M8 8v7M2 4.5L8 8l6-3.5"/></svg>
+        Add Space Station <span class="opt-tag">optional</span>
+      </button>`;
       return;
     }
 
