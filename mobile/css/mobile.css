@@ -846,6 +846,9 @@ button, a, input, select, textarea,
   flex-shrink: 0;
   line-height: 1;
 }
+.status-svg { width: 16px; height: 16px; display: block; }
+.warning-icon .status-svg { margin-top: 1px; }
+.loadout-req-flag .status-svg { width: 14px; height: 14px; color: var(--gold-dim); }
 
 
 /* ── 18. Fleet Header (on fleet detail) ────────────────── */

@@ -216,6 +216,15 @@
     return `<a class="shop-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="View ${esc(name || 'this ship')} on the TTCombat store" onclick="event.stopPropagation()">${imgTag}</a>`;
   }
 
+  // Status glyphs for validation rows — clean line icons, no emoji (a skull read
+  // as "your fleet is dead" for what is really "add an admiral"). currentColor
+  // inherits the row's state colour (danger / gold / green).
+  const STATUS_ICON = {
+    error: '<svg class="status-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8"/><line x1="10" y1="5.6" x2="10" y2="10.6"/><circle cx="10" cy="13.9" r="0.95" fill="currentColor" stroke="none"/></svg>',
+    warn: '<svg class="status-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3.2 18.2 16.6 1.8 16.6Z"/><line x1="10" y1="8.2" x2="10" y2="11.8"/><circle cx="10" cy="14.4" r="0.9" fill="currentColor" stroke="none"/></svg>',
+    ok: '<svg class="status-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8"/><path d="M6.3 10.3 8.8 12.8 13.7 7.2"/></svg>'
+  };
+
   // Firing-arc diagrams (ported from desktop). Raw arc text like "F/S/R" clips
   // in the narrow mobile weapon column, so render a compact SVG sector instead,
   // with the short code beneath it. Falls back to text for unmapped codes.
@@ -921,7 +930,7 @@
     if (warns.length) {
       warnEl.classList.remove('hidden');
       warnEl.innerHTML = warns.map(w => {
-        const icon = w.t === 'error' ? '☠' : '⚠';
+        const icon = w.t === 'error' ? STATUS_ICON.error : STATUS_ICON.warn;
         const cls = w.t === 'error' ? 'warn-error' : 'warn-soft';
         const onclick = w.fix === 'admiral' ? ` onclick="App.openAdmiral()" style="cursor:pointer"` : '';
         const arrow = w.fix ? ' <span class="warn-fix">Fix ›</span>' : '';
@@ -929,7 +938,7 @@
       }).join('');
     } else {
       warnEl.classList.remove('hidden');
-      warnEl.innerHTML = `<div class="warning-item warn-ok"><span class="warning-icon">✓</span><span>Legal fleet, ready to play</span></div>`;
+      warnEl.innerHTML = `<div class="warning-item warn-ok"><span class="warning-icon">${STATUS_ICON.ok}</span><span>Legal fleet, ready to play</span></div>`;
     }
 
     // Groups
@@ -1452,7 +1461,7 @@
         <div class="loadout-option ${!chosenFeature ? 'selected' : ''}" onclick="App.selectFeature('')">
           <div class="flex justify-between items-center">
             <span class="loadout-option-name">${featReq ? 'None (choose one)' : 'No feature'}</span>
-            <span class="loadout-option-cost">${featReq && !chosenFeature ? '⚠' : ''}</span>
+            <span class="loadout-option-cost loadout-req-flag">${featReq && !chosenFeature ? STATUS_ICON.warn : ''}</span>
           </div>
         </div>
         ${features.map(ft => {
