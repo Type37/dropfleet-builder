@@ -3649,6 +3649,15 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: var(--sp-sm);
 }
+.sort-label {
+  font-family: var(--font-condensed);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.sort-arrow { font-weight: var(--weight-heavy); }
 
 .sort-btn {
   padding: var(--sp-xs) var(--sp-md);

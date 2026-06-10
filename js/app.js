@@ -11,7 +11,7 @@ const App = (() => {
   let fleets = [];
   let currentFleet = null;
   let activeGroupId = null;
-  let shipSortMode = 'name';
+  let shipSort = { key: 'points', dir: 'asc' };  // picker sort (parity w/ mobile: default cheapest-first)
   let activeCategory = 'all';
   let activeFilters = new Set();  // 'launch', 'loadout', 'rare', 'unique'
   let shipSearchQuery = '';
@@ -2745,6 +2745,7 @@ const App = (() => {
 
     renderCategoryTabs(factionShips.groups);
     renderShipFilters();
+    syncSortButtons();
     renderShipSelectGrid(factionShips.groups, 'all');
     openModal('modal-ship-select');
     if (searchInput) setTimeout(() => searchInput.focus(), 200);
@@ -2890,10 +2891,11 @@ const App = (() => {
       });
     }
 
-    if (shipSortMode === 'cost') {
-      ships.sort((a, b) => (a.data.points || 0) - (b.data.points || 0));
+    const sortDir = shipSort.dir === 'desc' ? -1 : 1;
+    if (shipSort.key === 'points') {
+      ships.sort((a, b) => ((a.data.points || 0) - (b.data.points || 0)) * sortDir);
     } else {
-      ships.sort((a, b) => (a.data.name || '').localeCompare(b.data.name || ''));
+      ships.sort((a, b) => (a.data.name || '').localeCompare(b.data.name || '') * sortDir);
     }
 
     // Update results bar
@@ -3231,12 +3233,23 @@ const App = (() => {
   }
 
   function sortShips(mode) {
-    shipSortMode = mode;
-    document.querySelectorAll('.sort-btn').forEach(b => b.classList.toggle('active', b.dataset.sort === mode));
+    // Tap a new key → sort ascending by it; tap the active key → flip direction
+    // (mirrors the mobile picker's sort chips).
+    if (shipSort.key === mode) shipSort.dir = shipSort.dir === 'asc' ? 'desc' : 'asc';
+    else { shipSort.key = mode; shipSort.dir = 'asc'; }
+    syncSortButtons();
     const factionShips = shipDB[currentFleet.faction];
     if (factionShips && factionShips.groups) {
       renderShipSelectGrid(factionShips.groups, activeCategory);
     }
+  }
+  function syncSortButtons() {
+    document.querySelectorAll('.sort-btn').forEach(b => {
+      const on = b.dataset.sort === shipSort.key;
+      b.classList.toggle('active', on);
+      const lbl = b.dataset.sort === 'points' ? 'Points' : 'Name';
+      b.innerHTML = on ? `${lbl} <span class="sort-arrow">${shipSort.dir === 'asc' ? '↑' : '↓'}</span>` : lbl;
+    });
   }
 
   // ── Admirals ──
