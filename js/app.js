@@ -1942,8 +1942,18 @@ const App = (() => {
           </div>
           <div class="overview-groups">${groupCards + flagshipCards}</div>
         </div>
-        ${admHtml}
-        ${stationHtml}
+        <div class="overview-section">
+          <div class="overview-section-head">
+            <div class="overview-section-label">Admiral</div>
+          </div>
+          <div id="admiral-slot"></div>
+        </div>
+        <div class="overview-section">
+          <div class="overview-section-head">
+            <div class="overview-section-label">Space Station</div>
+          </div>
+          <div id="station-slot"></div>
+        </div>
         ${secondaryHtml}
       </div>`;
   }
@@ -2007,7 +2017,13 @@ const App = (() => {
   function renderOverviewPanel() {
     if (!currentFleet) return;
     const overviewEl = document.getElementById('builder-overview');
-    if (overviewEl) overviewEl.innerHTML = renderFleetOverview();
+    if (overviewEl) {
+      overviewEl.innerHTML = renderFleetOverview();
+      // Admiral + Station now live in the overview (moved out of the sidebar);
+      // their slot containers are recreated by the innerHTML above, so fill them.
+      renderAdmiralSlot();
+      renderStationSlot();
+    }
   }
 
   function renderDetailPanel() {
@@ -3613,7 +3629,7 @@ const App = (() => {
 
   function renderAdmiralSlot() {
     const slot = document.getElementById('admiral-slot');
-    if (!currentFleet) return;
+    if (!currentFleet || !slot) return;   // slot now lives in the overview, created lazily
     const admirals = currentFleet.admirals || [];
 
     if (admirals.length === 0) {
