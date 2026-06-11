@@ -2901,18 +2901,13 @@ const App = (() => {
 
     // Compact weapon summary for ship select cards
     const wpns = data.weapons || [];
-    const loadoutCount = (data.loadoutOptions || []).length;
     const hasLoads = (data.loads && data.loads.length > 0) || (data.loadoutOptions || []).some(lo => lo.options.some(o => o.loads && o.loads.length > 0));
     let weaponSummary = '';
-    if (wpns.length > 0 || loadoutCount > 0) {
-      const parts = [];
-      wpns.forEach(w => {
+    if (wpns.length > 0) {
+      const parts = wpns.map(w => {
         const typeIcon = WEAPON_TYPE_ICONS[w.type] || '';
-        parts.push(`<span class="weapon-mini" title="${esc(w.name)}: ${w.attack}A Lk${w.lock} D${w.damage} ${w.arc || ''}">${typeIcon} ${esc(w.name)}</span>`);
+        return `<span class="weapon-mini" title="${esc(w.name)}: ${w.attack}A Lk${w.lock} D${w.damage} ${w.arc || ''}">${typeIcon} ${esc(w.name)}</span>`;
       });
-      if (loadoutCount > 0) {
-        parts.push(`<span class="weapon-mini weapon-mini-loadout" title="${loadoutCount} loadout option${loadoutCount > 1 ? 's' : ''}">+ ${loadoutCount} loadout</span>`);
-      }
       weaponSummary = `<div class="weapon-summary">${parts.join('')}</div>`;
     }
 
