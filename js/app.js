@@ -1850,43 +1850,8 @@ const App = (() => {
       </div>`;
     }).join('');
 
-    // Admirals summary
-    const factionInfo = shipDB[f.faction];
-    let admHtml = '';
-    if (f.admirals && f.admirals.length > 0) {
-      admHtml = f.admirals.map(a => {
-        const info = getAdmiralAbilityInfo(a);
-        let abHtml = '';
-        if (info) {
-          const names = [
-            ...info.innate.map(x => x.name),
-            ...((a.selectedAbilities || []).filter(n => info.table.some(t => t.name === n)))
-          ];
-          if (names.length) abHtml = `<div class="overview-admiral-abilities">${names.map(n => `<span class="overview-ability-chip">${esc(n)}</span>`).join('')}</div>`;
-        }
-        return `<div class="overview-admiral">
-          <span class="overview-admiral-name">${esc(a.name)}</span>
-          <span class="text-caption">Lv${a.level || '?'}${a.type === 'Famous' ? ' (Famous)' : ''}, ${a.points} pts</span>
-          ${abHtml}
-        </div>`;
-      }).join('');
-      admHtml = `<div class="overview-section">
-        <div class="overview-section-label">Admirals</div>
-        ${admHtml}
-      </div>`;
-    }
-
-    // Station summary
-    let stationHtml = '';
-    if (f.spaceStation) {
-      stationHtml = `<div class="overview-section">
-        <div class="overview-section-label">Space Station</div>
-        <div class="overview-admiral">
-          <span class="overview-admiral-name">${esc(f.spaceStation.name)}</span>
-          <span class="text-caption">${f.spaceStation.cost} pts</span>
-        </div>
-      </div>`;
-    }
+    // Admirals + Station now render via renderAdmiralSlot / renderStationSlot
+    // into the #admiral-slot / #station-slot containers in the sections below.
 
     // Secondary Objectives — pick 2 for your game (picked in a modal, like
     // admiral/station). The overview shows just the chosen ones + an edit button.
