@@ -1047,7 +1047,7 @@
             ${art ? `<div class="ship-thumb${modCls}"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
             <div class="list-row-content">
               <div class="list-row-title">${esc(db?.name || 'Unknown')}${titleQty}</div>
-              <div class="list-row-sub">${gp} pts · ${tonLabel(db?.tonnage) || CATEGORY_LABELS[s.groupCategory] || ''}</div>
+              <div class="list-row-sub">${gp} pts, ${tonLabel(db?.tonnage) || CATEGORY_LABELS[s.groupCategory] || ''}</div>
             </div>
             ${stepper}
             <span class="list-chevron">›</span>
@@ -1066,7 +1066,7 @@
           ${admiralThumb(f.faction, a.level, art)}
           <div class="list-row-content">
             <div class="list-row-title">${esc(a.name)}</div>
-            <div class="list-row-sub">${a.points} pts · Level ${a.level || '?'}${a.shipName ? ', ' + esc(a.shipName) : ''}</div>
+            <div class="list-row-sub">${a.points} pts, Level ${a.level || '?'}${a.shipName ? ', ' + esc(a.shipName) : ''}</div>
           </div>
           <span class="list-chevron">›</span>
         </div>`;
@@ -1080,7 +1080,7 @@
     if (f.spaceStation) {
       const stArt = stationArtPath(f.faction, f.spaceStation);
       const stSpec = stationArmamentSpec(f.spaceStation);
-      const stSub = stSpec ? `${f.spaceStation.cost} pts · ${summariseStation(f.spaceStation).armTotal}/${stSpec.required} armaments` : `${f.spaceStation.cost} pts`;
+      const stSub = stSpec ? `${f.spaceStation.cost} pts, ${summariseStation(f.spaceStation).armTotal}/${stSpec.required} armaments` : `${f.spaceStation.cost} pts`;
       html += `<div class="list-row" onclick="App.openStationDetail()">
         ${stArt ? `<div class="ship-thumb"><img src="${thumbUrl(stArt)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
@@ -2132,7 +2132,7 @@
         ${admiralThumb(f.faction, a.level, art, true)}
         <div style="flex:1;margin-left:var(--sp-m)">
           <div class="detail-name">${esc(a.name)}</div>
-          <div class="detail-type">Level ${a.level || '?'}${a.shipName ? ' · ' + esc(a.shipName) : ''}</div>
+          <div class="detail-type">Level ${a.level || '?'}${a.shipName ? ', ' + esc(a.shipName) : ''}</div>
         </div>
         <div class="pts-badge-lg"><div class="pts-badge-value">${a.points}</div><div class="pts-badge-label">Points</div></div>
       </div>
@@ -2234,7 +2234,7 @@
             <span class="list-row-title">${esc(s.name)}</span>
             <span class="list-row-pts">${s.cost} pts</span>
           </div>
-          <div class="list-row-sub">Hull ${st.hull || '?'} · ES ${st.es || '-'} · KS ${st.ks || '-'}</div>
+          <div class="list-row-sub">Hull ${st.hull || '?'}, ES ${st.es || '-'}, KS ${st.ks || '-'}</div>
         </div>
       </div>`;
     }).join('');
@@ -2390,7 +2390,7 @@
     const picker = spec ? renderStationArmamentPicker(st, spec) : '';
 
     el.innerHTML = `
-      <div class="section-header">${esc(st.name)} · ${st.cost} pts</div>
+      <div class="section-header">${esc(st.name)}, ${st.cost} pts</div>
       ${art ? `<div class="ship-art-hero">${shopLinkImg(st.name, `<img src="${art}" alt="${esc(st.name)}" loading="lazy">`, def)}</div>` : ''}
       ${statGrid}
       ${weaponSheet}

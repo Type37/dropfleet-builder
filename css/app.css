@@ -490,15 +490,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .game-size-detail {
   margin-top: var(--sp-xs);
-  font-size: 10px;
-  color: rgba(255,255,255,0.35);
-  line-height: 1.6;
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.5;
 }
-.game-size-detail span {
+.game-size-detail div {
   white-space: nowrap;
-}
-.game-size-detail span + span::before {
-  content: ' · ';
 }
 
 /* Points bar (in sidebar) */
@@ -1886,47 +1883,46 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ── 14. Ship Stats Grid ─────────────────────────────────────── */
+/* Stat block: stats STACKED one per row (a vertical datasheet list), NOT all
+   across a single row. Each row: icon + stat name on the left, value on the
+   right. Scans straight down. */
 .stat-grid {
-  display: grid;
-  /* Hero-number cells (variant B) need a touch more width for the value + label
-     to sit side by side. */
-  grid-template-columns: repeat(auto-fit, minmax(58px, 1fr));
-  gap: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .stat-cell {
   background: var(--paper-alt);
   border: 1px solid var(--stroke-light);
   border-radius: var(--radius-sm);
-  padding: 5px 4px;
-  /* Stacked vertically (icon → value → label) and centered, so a row of cells
-     reads as evenly-spaced columns that scan at a glance. */
+  padding: 6px 12px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 2px;
-  text-align: center;
+  gap: 10px;
+  text-align: left;
   overflow: hidden;
 }
 .stat-cell-icon { flex-shrink: 0; display: inline-flex; align-items: center; }
-.stat-cell-icon svg { width: 15px; height: 15px; opacity: 0.75; }
-/* Stacked: hero number on top, abbreviation on its own line beneath. */
-.stat-cell-text { display: flex; flex-direction: column; align-items: center; line-height: 1.02; min-width: 0; }
+.stat-cell-icon svg { width: 16px; height: 16px; opacity: 0.8; }
+.stat-cell-text { display: flex; flex-direction: row; align-items: baseline; gap: 8px; flex: 1; min-width: 0; }
 
 .stat-cell-label {
+  order: 0;
   font-family: var(--font-condensed);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: var(--weight-bold);
-  /* Size is the de-emphasis axis (per Jet's hierarchy note): the label drops to
-     a quiet reading-size cap under the hero number. */
   color: var(--ink-muted);
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
 .stat-cell-value {
+  order: 1;
+  margin-left: auto;
   font-family: var(--font-display);
-  font-size: 19px;
+  font-size: 18px;
   line-height: 1;
   /* Bold (700), NOT heavy (800): 800 closed up the apertures on 3 / 5 / 8 and
      read as a blob. Lining + tabular figures keep numerals open and aligned. */
@@ -4982,6 +4978,19 @@ h1, h2, h3, h4, h5, h6 {
   gap: var(--sp-xs);
   flex-shrink: 0;
 }
+.overview-group-remove {
+  order: -1;
+  background: none;
+  border: none;
+  padding: 2px;
+  color: var(--ink-faint);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  line-height: 0;
+  transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
+}
+.overview-group-remove:hover { color: #c43c2f; background: var(--paper-alt); }
 .overview-group-stepper {
   display: flex;
   align-items: center;
@@ -5466,10 +5475,8 @@ h1, h2, h3, h4, h5, h6 {
   .overview-group-name { font-size: var(--text-sm); }
   .overview-group-pts { font-size: var(--text-md); }
 
-  /* Keep the hero number prominent on narrow widths (variant B). */
-  .stat-grid { grid-template-columns: repeat(auto-fit, minmax(76px, 1fr)); }
-  .stat-cell-label { font-size: 9px; }
-  .stat-cell-value { font-size: 18px; }
+  /* Stats stay a vertical stack on narrow widths too. */
+  .stat-cell-value { font-size: 17px; }
 
   .ship-card-top { flex-direction: column; }
   .ship-card-image { width: 100%; height: 120px; border-radius: var(--radius-md); }

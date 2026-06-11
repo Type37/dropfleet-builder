@@ -997,7 +997,7 @@ const App = (() => {
         ${f.description ? `<div class="text-caption" style="line-height:1.4">${esc(f.description)}</div>` : ''}
         <div class="fleet-card-points-row">
           <span class="fleet-card-points">${pts} <span class="fleet-card-pts-label">/ ${limit === 99999 ? '∞' : limit} pts</span></span>
-          <span class="text-caption">${sizeInfo.label} · ${f.battleGroups.length} group${f.battleGroups.length !== 1 ? 's' : ''}${admCount > 0 ? `, ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? `, ${esc(f.spaceStation.name).replace(' Space Station','')}` : ''}</span>
+          <span class="text-caption">${sizeInfo.label}, ${f.battleGroups.length} group${f.battleGroups.length !== 1 ? 's' : ''}${admCount > 0 ? `, ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? `, ${esc(f.spaceStation.name).replace(' Space Station','')}` : ''}</span>
         </div>
         <div class="fleet-card-bar"><div class="fleet-card-bar-fill ${barClass}" style="width:${pctFill}%"></div></div>
         ${renderFleetCardComp(f)}
@@ -1261,9 +1261,10 @@ const App = (() => {
     // Game size summary beneath the badge
     const sizeDetail = document.getElementById('game-size-detail');
     if (sizeDetail) {
-      const colText = sizeInfo.colossalMax > 0 ? `${sizeInfo.colossalMax} Colossal` : 'No Colossal';
-      // Order by importance (Jet): Colossals → Admiral level → time, then the basics.
-      sizeDetail.innerHTML = `<span>${colText}</span><span>Admiral to Lv${sizeInfo.maxAdmiralLevel}</span><span>${sizeInfo.desc}</span><span>${sizeInfo.groups} groups</span>`;
+      // One line per rule (rulebook Section 4.2), stacked.
+      const ptsLine = sizeInfo.max === 99999 ? `${sizeInfo.min}+ points` : `${sizeInfo.min} – ${sizeInfo.max} points`;
+      const colLine = `${sizeInfo.colossalMax} Colossal group${sizeInfo.colossalMax === 1 ? '' : 's'}`;
+      sizeDetail.innerHTML = `<div>${ptsLine}, ${sizeInfo.groups} Groups max</div><div>${colLine}</div><div>Admiral Level ${sizeInfo.maxAdmiralLevel}</div>`;
     }
 
     const panel = document.getElementById('fleet-info-panel');
@@ -1818,13 +1819,14 @@ const App = (() => {
           <div class="overview-group-info">
             <div class="overview-group-name">${esc(g.name)}</div>
             <div class="overview-group-meta">
-              <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size:10px;padding:1px 6px">${esc(catLabel)}</span>
+              <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size:11px;padding:1px 6px">${esc(catLabel)}</span>
               <span class="text-caption">${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
             </div>
             ${shipsLine && shipsLine !== g.name ? `<div class="overview-group-ships">${esc(shipsLine)}</div>` : ''}
             ${gErrorDot}
           </div>
           <div class="overview-group-right">
+            <button class="overview-group-remove" onclick="event.stopPropagation(); App.removeGroup('${g.id}')" aria-label="Remove ${esc(g.name)}" title="Remove group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
             <div class="overview-group-pts">${gPts} pts</div>
             ${stepperHtml}
           </div>
@@ -1852,7 +1854,7 @@ const App = (() => {
           <div class="overview-group-info">
             <div class="overview-group-name">${esc(name)}</div>
             <div class="overview-group-meta">
-              <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size:10px;padding:1px 6px">${esc(catLabel)}</span>
+              <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size:11px;padding:1px 6px">${esc(catLabel)}</span>
               <span class="text-caption">flies with ${esc(a.name)}</span>
             </div>
           </div>
@@ -3305,7 +3307,7 @@ const App = (() => {
           ${admiralThumb(adm.level, null)}
           <div style="flex:1;min-width:0">
             <div class="admiral-name">${esc(adm.name)}</div>
-            <div class="admiral-level">Level ${adm.level || '?'} · ${adm.cost} pts</div>
+            <div class="admiral-level">Level ${adm.level || '?'}, ${adm.cost} pts</div>
             ${abilities.length > 0 ? `<div style="margin-top:var(--sp-sm);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${esc(a.cost)})` : ''}${a.effect ? ', ' + esc(a.effect) : ''}</div>`).join('')}</div>` : ''}
             <div class="admiral-modal-picks">+ choose ${picks} from the Abilities Table</div>
             ${disabled ? '' : `<button class="btn btn-primary btn-sm" style="margin-top:var(--sp-sm)" onclick="App.addFactionAdmiral('${adm.id}')">Add to fleet</button>`}
@@ -3654,7 +3656,7 @@ const App = (() => {
             ${admiralThumb(a.level, admiralImgUrl)}
             <div style="min-width:0">
               <div class="admiral-name">${esc(a.name)}</div>
-              <div class="admiral-level">Level ${a.level || '?'}${a.type !== 'Generic' ? ' · ' + a.type : ''}</div>
+              <div class="admiral-level">Level ${a.level || '?'}${a.type !== 'Generic' ? ', ' + a.type : ''}</div>
             </div>
           </div>
           <span class="badge badge-gold">${a.points} pts</span>
@@ -3706,10 +3708,9 @@ const App = (() => {
     const weaponSheet = weapons.length
       ? `<div class="weapon-list" style="margin-top:var(--sp-sm)">${renderWeaponHeader()}${weapons.map(renderWeaponRow).join('')}</div>`
       : '';
-    const loads = (def && def.loads) || [];
-    const loadsLine = loads.length
-      ? `<div class="station-rules" style="margin-top:var(--sp-xs)">${loads.map(l => `<span class="badge badge-neutral">Launch ${esc(l.name)} ×${esc(l.launch)}${l.special && l.special !== '-' ? ', ' + esc(l.special) : ''}</span>`).join('')}</div>`
-      : '';
+    // Launch assets rendered as the full ship-style table (Launch/Load/Thrust/
+    // Att/Lock/Dmg/Special), not a flat badge.
+    const loadsLine = def ? renderLaunchTable(currentFleet.faction, def, ss) : '';
     const stationRules = (def && def.stationRules) || [];
     const stationRulesHtml = stationRules.length
       ? `<div style="margin-top:var(--sp-sm)">${stationRules.map(r => `<div class="text-caption" style="margin-bottom:var(--sp-xs)"><strong>${esc(r.name)}</strong> ${linkKeywords(r.effect || '')}</div>`).join('')}</div>`
@@ -4460,7 +4461,7 @@ const App = (() => {
         if (img) html += `<div class="shared-ship-art"><img src="${esc(thumbUrl(img))}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>`;
         html += `<div class="shared-ship-info">
             <div class="shared-ship-name">${count > 1 ? count + '× ' : ''}${esc(name)}</div>
-            <div class="shared-ship-type">${esc(tonnage)} · ${cat}</div>
+            <div class="shared-ship-type">${esc(tonnage)}, ${cat}</div>
           </div>
           <div class="shared-ship-pts">${ship.points * count}<span class="shared-ship-pts-label"> pts</span></div>
         </div>`;
