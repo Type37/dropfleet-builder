@@ -1437,7 +1437,9 @@
 
     const weapons = ship.weapons || [];
     const loadoutOptions = ship.loadoutOptions || [];
-    const rules = ship.specialRules || [];
+    // Rare/Unique show as a badge by the name, so drop them from the rule cards
+    // (parity with desktop; don't print the keyword twice).
+    const rules = (ship.specialRules || []).filter(r => !/^(rare|unique)$/i.test(r.name || ''));
     const specialText = stats.special && stats.special !== '-' ? stats.special : '';
     const artSrc = shipArtPath(ship.name);
     const carrier = isFeatureCarrier(ship);
@@ -1451,7 +1453,7 @@
       ${artSrc ? `<div class="ship-art-hero${isFullyModular(ship) ? ' ship-img-modular' : ''}">${isFullyModular(ship) ? '<div class="modular-art-note">Base hull shown, your ship’s look depends on the systems you choose</div>' : ''}${shopLinkImg(ship.name, `<img src="${artSrc}" alt="${esc(ship.name)}" loading="lazy">`, ship)}</div>` : ''}
       <div class="detail-header">
         <div>
-          <div class="detail-name">${esc(ship.name)}${qty > 1 ? ' ×' + qty : ''}</div>
+          <div class="detail-name">${esc(ship.name)}${qty > 1 ? ' ×' + qty : ''}${ship.isUnique ? ' <span class="ship-tag ship-tag-unique">Unique</span>' : ship.isRare ? ' <span class="ship-tag ship-tag-rare">Rare</span>' : ''}</div>
           <div class="detail-type">${tonLabel(ship.tonnage) || CATEGORY_LABELS[inst.groupCategory] || ''}</div>
         </div>
         <div class="pts-badge-lg"><div class="pts-badge-value">${gp}</div><div class="pts-badge-label">Points</div></div>
@@ -2383,8 +2385,8 @@
 
     const weapons = (def && def.weapons) || [];
     const weaponSheet = weapons.length ? optionWeaponSheet(weapons) : '';
-    const loads = (def && def.loads) || [];
-    const loadsHtml = loads.length ? `<div class="loadout-section"><div class="section-header" style="padding:0 0 var(--sp-xs)">Launch</div>${loads.map(l => `<div class="list-row-sub" style="padding:2px 0">${esc(l.name)} ×${esc(l.launch)}${l.special && l.special !== '-' ? ' · ' + esc(l.special) : ''}</div>`).join('')}</div>` : '';
+    // Launch assets as the full ship-style table (parity with desktop + ships).
+    const loadsHtml = def ? renderLaunchTable(f.faction, def) : '';
     const rules = (def && def.stationRules) || [];
     const rulesHtml = rules.length ? `<div class="loadout-section"><div class="section-header" style="padding:0 0 var(--sp-xs)">Station Rules</div>${rules.map(r => `<div class="rule-card"><div class="rule-card-name">${esc(r.name)}</div><div class="rule-card-text">${linkKeywords(r.effect || '')}</div></div>`).join('')}</div>` : '';
     const picker = spec ? renderStationArmamentPicker(st, spec) : '';

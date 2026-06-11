@@ -1729,6 +1729,8 @@ body.sheet-open .sheet-scrim {
   font-weight: var(--weight-semibold);
   vertical-align: middle;
 }
+.ship-tag-rare { background: var(--navy); color: #fff; }
+.ship-tag-unique { background: var(--gold); color: var(--navy-dark, #0f2640); }
 .row-disabled { opacity: 0.4; pointer-events: none; }
 
 /* ── 41. Form hint + loadout group label ───────────────── */
