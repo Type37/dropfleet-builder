@@ -13,7 +13,7 @@ const App = (() => {
   let activeGroupId = null;
   let shipSort = { key: 'points', dir: 'asc' };  // picker sort (parity w/ mobile: default cheapest-first)
   let activeCategory = 'all';
-  let activeFilters = new Set();  // 'launch', 'loadout', 'rare', 'unique'
+  let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
   let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false };
@@ -2759,7 +2759,6 @@ const App = (() => {
   const SHIP_FILTERS = [
     { key: 'launch',  label: 'Has Launch',   test: s => (s.loads && s.loads.length > 0) || (s.loadoutOptions || []).some(lo => lo.options.some(o => o.loads && o.loads.length > 0)) },
     { key: 'drop',    label: 'Has Drop',     test: shipHasDrop },
-    { key: 'loadout', label: 'Has Loadout',  test: s => s.loadoutOptions && s.loadoutOptions.length > 0 },
     { key: 'rare',    label: 'Rare',         test: s => s.isRare },
     { key: 'unique',  label: 'Unique',       test: s => s.isUnique }
   ];
