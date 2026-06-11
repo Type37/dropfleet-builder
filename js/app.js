@@ -1767,7 +1767,7 @@ const App = (() => {
       const artSrc = firstDbForArt ? shipArtPath(firstDbForArt.name) : null;
       const artModularClass = isFullyModular(firstDbForArt) ? ' ship-img-modular' : '';
 
-      const catColor = { light: '#4a8dc7', medium: '#3e8a45', heavy: '#c48820', colossal: '#b83828', payload: '#6a4c9c' }[cat] || 'var(--navy)';
+      const catColor = { light: '#2f6ba0', medium: '#2f7a3a', heavy: '#8a5e10', colossal: '#b83828', payload: '#6a4c9c' }[cat] || 'var(--navy)';
 
       // Inline quantity stepper — a group IS "×N of one ship", so editing the
       // count must happen right here without opening the detail panel.
@@ -1836,7 +1836,7 @@ const App = (() => {
     // among the groups. Sourced from the admiral; its cost is already in the
     // admiral's points (no separate pts here → no double-count). Read-only —
     // managed via the admiral slot.
-    const flagshipCatColor = { light: '#4a8dc7', medium: '#3e8a45', heavy: '#c48820', colossal: '#b83828', payload: '#6a4c9c' };
+    const flagshipCatColor = { light: '#2f6ba0', medium: '#2f7a3a', heavy: '#8a5e10', colossal: '#b83828', payload: '#6a4c9c' };
     const flagshipCards = (f.admirals || []).map(a => {
       if (a.type !== 'Famous' || !a.shipKey) return '';
       const fs = shipDB[f.faction]?.groups?.famous_admirals?.ships?.[a.shipKey];
@@ -2689,7 +2689,7 @@ const App = (() => {
 
     return `
     <div class="group-ship-entry${compact ? ' compact' : ''}${useAlt ? ' alt2x4' : ''}">
-      ${img ? `<div class="ship-card-image${isFullyModular(dbShip) ? ' ship-img-modular' : ''}"${isFullyModular(dbShip) ? ' title="Base hull shown, your ship\'s actual look depends on the systems you choose"' : ''}>${qtyBadge}<img src="${esc(thumbUrl(img))}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+      ${img ? `<div class="ship-card-image${isFullyModular(dbShip) ? ' ship-img-modular' : ''}"${isFullyModular(dbShip) ? ' title="Base hull shown, your ship\'s actual look depends on the systems you choose"' : ''}>${qtyBadge}<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
       <div class="ship-card-body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
         <div class="flex items-center justify-between">
           <div>

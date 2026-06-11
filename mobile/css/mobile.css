@@ -66,7 +66,7 @@
   --fg1: #1c1a17;       /* primary text (= desktop --ink) */
   --fg2: #3a3834;       /* secondary text */
   --fg3: #6b6660;       /* tertiary / captions */
-  --fg4: #7e7870;       /* disabled / hints — WCAG 4.1:1 (was #9e9890 = 2.7:1) */
+  --fg4: #66615a;       /* disabled / hints — WCAG AA 5.4:1 on beige (was #7e7870 = 3.9:1, failed) */
   --fg-on-dark: #ffffff;
   --fg-on-dark-dim: rgba(255,255,255,0.6);
 
@@ -499,7 +499,7 @@ button, a, input, select, textarea,
 }
 
 /* Stacked: hero number on top, abbreviation on its own line beneath. */
-.stat-cell-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.02; min-width: 0; }
+.stat-cell-text { display: flex; flex-direction: column; align-items: center; line-height: 1.02; min-width: 0; }
 
 .stat-label {
   font-family: var(--font-condensed);
@@ -1336,9 +1336,12 @@ button, a, input, select, textarea,
 
 /* ── 31. Stat Icons (TAROT style) ─────────────────────── */
 .stat-cell {
+  /* Stacked vertically (icon → value → label), centered — scans as columns. */
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--sp-s);
+  gap: 2px;
+  text-align: center;
 }
 
 .stat-icon {
@@ -1699,7 +1702,7 @@ body.sheet-open .sheet-scrim {
 }
 
 /* ── 40. List chevron + issue badge + ship tags ────────── */
-.list-chevron { color: var(--stroke1); font-size: var(--text-subtitle1); flex-shrink: 0; }
+.list-chevron { color: #736d64; font-size: var(--text-subtitle1); flex-shrink: 0; }
 .row-badge-issue {
   display: inline-block;
   margin-left: var(--sp-s);
