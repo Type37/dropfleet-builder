@@ -2579,7 +2579,11 @@ const App = (() => {
       : '';
 
     let rulesHtml = '';
-    const ruleDetails = dbShip && dbShip.specialRuleDetails ? dbShip.specialRuleDetails : [];
+    // Rare/Unique already show as the prominent badge by the ship name, so drop
+    // them from the special-rule chips (don't print the keyword twice).
+    const isBadgeRule = r => /^(rare|unique)$/i.test(typeof r === 'string' ? r : (r.name || ''));
+    const ruleDetails = (dbShip && dbShip.specialRuleDetails ? dbShip.specialRuleDetails : []).filter(r => !isBadgeRule(r));
+    const ruleChips = specialRules.filter(r => !isBadgeRule(r));
     if (ruleDetails.length > 0) {
       rulesHtml = '<div class="special-rules">' + ruleDetails.map(r => {
         const desc = r.description || '';
@@ -2589,8 +2593,8 @@ const App = (() => {
         }
         return `<span class="rule-chip">${esc(r.name)}</span>`;
       }).join('') + '</div>';
-    } else if (specialRules.length > 0) {
-      rulesHtml = '<div class="special-rules">' + specialRules.map(r =>
+    } else if (ruleChips.length > 0) {
+      rulesHtml = '<div class="special-rules">' + ruleChips.map(r =>
         `<span class="rule-chip">${esc(r)}</span>`
       ).join('') + '</div>';
     }
@@ -3009,7 +3013,10 @@ const App = (() => {
       }
 
       const group = { id: uuid(), name: dbShip.name, ships: [] };
-      addShipToGroupInner(group, shipKey, category, dbShip);
+      // Seed the group at its minimum size (parity with mobile): a ship whose
+      // group is 2-4 starts as ×2, not ×1.
+      const startQty = Math.max(1, dbShip.groupMin || 1);
+      for (let i = 0; i < startQty; i++) addShipToGroupInner(group, shipKey, category, dbShip);
       currentFleet.battleGroups.push(group);
       activeGroupId = group.id;
 
@@ -5378,7 +5385,8 @@ const App = (() => {
         const newGroup = { id: uuid(), name: dbShip.name, ships: [] };
         currentFleet.battleGroups.push(newGroup);
         activeGroupId = newGroup.id;
-        addShipToGroupInner(newGroup, shipKey, category, dbShip);
+        const startQty = Math.max(1, dbShip.groupMin || 1);
+        for (let i = 0; i < startQty; i++) addShipToGroupInner(newGroup, shipKey, category, dbShip);
         saveFleets();
         renderGroupsNav();
         renderActiveGroup();

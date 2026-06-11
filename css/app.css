@@ -3689,6 +3689,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ── 20. Sort Controls ───────────────────────────────────────── */
+.ship-list-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-md);
+  flex-wrap: wrap;
+  margin-top: var(--sp-sm);
+}
+.ship-list-toolbar .ship-results-bar { margin: 0; }
 .sort-controls {
   display: flex;
   align-items: center;

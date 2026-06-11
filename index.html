@@ -269,15 +269,7 @@
   <div class="modal-panel modal-panel--xl">
     <div class="modal-header">
       <h2 class="modal-title" id="ship-select-title">Add Unit</h2>
-      <div class="flex items-center gap-md">
-        <div class="sort-controls">
-          <span class="sort-label">Sort</span>
-          <button class="sort-btn active" onclick="App.sortShips('points')" data-sort="points">Points</button>
-          <button class="sort-btn" onclick="App.sortShips('name')" data-sort="name">Name</button>
-          <button class="sort-btn" onclick="App.sortShips('tonnage')" data-sort="tonnage">Tonnage</button>
-        </div>
-        <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-ship-select')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
-      </div>
+      <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-ship-select')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
     <div class="modal-body">
       <div class="ship-search-bar">
@@ -291,8 +283,14 @@
       <div class="ship-select-filters" id="ship-select-filters">
         <!-- Populated by JS -->
       </div>
-      <div class="ship-results-bar" id="ship-results-bar">
-        <!-- Populated by JS -->
+      <div class="ship-list-toolbar">
+        <div class="ship-results-bar" id="ship-results-bar"><!-- Populated by JS --></div>
+        <div class="sort-controls">
+          <span class="sort-label">Sort</span>
+          <button class="sort-btn active" onclick="App.sortShips('points')" data-sort="points">Points</button>
+          <button class="sort-btn" onclick="App.sortShips('name')" data-sort="name">Name</button>
+          <button class="sort-btn" onclick="App.sortShips('tonnage')" data-sort="tonnage">Tonnage</button>
+        </div>
       </div>
       <div class="ship-grid" id="ship-select-grid">
         <!-- Populated by JS -->
