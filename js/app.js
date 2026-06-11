@@ -1915,6 +1915,7 @@ const App = (() => {
         <div class="overview-section">
           <div class="overview-section-head">
             <div class="overview-section-label">Battle Groups (${f.battleGroups.length})</div>
+            <button class="overview-add-group-btn" onclick="App.addGroup()" aria-label="Add a battle group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> Add Group</button>
           </div>
           <div class="overview-groups">${groupCards + flagshipCards}</div>
           <div class="add-ship-area add-group-cta" onclick="App.addGroup()" role="button" tabindex="0" aria-label="Add a battle group" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();App.addGroup()}">
