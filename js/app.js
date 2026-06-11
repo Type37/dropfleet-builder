@@ -19,6 +19,11 @@ const App = (() => {
   let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
+  // Filled check used for selected/active toggle states (replaces the old "✓"
+  // text glyph, which rendered as an emoji on some platforms). Inherits colour
+  // from the host control via currentColor.
+  const CHECK_SVG = '<svg class="check-icon" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-6.5"/></svg>';
+
   // Game sizes per rulebook Section 4.2. maxAdmiralLevel is the highest admiral
   // level permitted at this game size (not a cap on the number of admirals —
   // you may take any number of admirals per Section 4.2.1).
@@ -232,22 +237,30 @@ const App = (() => {
   // and admiral thumbs (source art is ~1100-1500px, shown at ~96-140px). The
   // unit-detail hero and print keep full resolution. Thumbs: assets/art/thumb/.
   function thumbUrl(url) { return url ? url.replace('/art/', '/art/thumb/') : url; }
-  // Space-station art. The three generic stations (Small/Medium/Large) share a
-  // model, so they reuse one faction image; faction-specific stations match by
-  // name. Only high-confidence matches return art — the rest show no picture
-  // rather than a wrong one.
-  const STATION_GENERIC_ART = { ucm: 'ucm_space_station_1', scourge: 'scourge_space_station_1', resistance: 'resistance_space_station' };
-  const STATION_NAME_ART = { 'Gatestation': 'voidgate' };
-  const GENERIC_STATIONS = new Set(['Small Space Station', 'Medium Space Station', 'Large Space Station']);
+  // Faction-specific stations → their transparent renders in assets/art/stations/.
+  // Names are unique across factions, so a flat name→file map is unambiguous. The
+  // generic Small/Medium/Large Space Stations have no dedicated art (kept blank
+  // rather than showing the wrong faction's model).
+  const STATION_NAME_ART = {
+    'Defence Halo': 'phr-defence-halo', 'Orbital Picket': 'phr-orbital-picket',
+    'Orbital Outpost': 'phr-orbital-outpost', 'Orbital Spire': 'phr-orbital-spire',
+    'Grand Station': 'resistance-grand-station', 'Astrobotanical Outpost': 'resistance-astrobotanical-outpost',
+    'Ephyra': 'scourge-ephyra', 'Nematocyst': 'scourge-nematocyst',
+    'Gatestation': 'shaltari-gatestation', 'Grav Hook': 'shaltari-grav-hook',
+    'Anchor': 'shaltari-anchor', 'Shuriken': 'shaltari-shuriken',
+    'Defence Hangar': 'ucm-defence-hangar', 'Munitions Platform': 'ucm-munitions-platform',
+  };
   function stationArtPath(factionKey, station) {
     if (!station || !station.name) return null;
-    const byName = STATION_NAME_ART[station.name];
-    if (byName) return `assets/art/${byName}.webp`;
-    if (GENERIC_STATIONS.has(station.name)) {
-      const g = STATION_GENERIC_ART[factionKey];
-      if (g) return `assets/art/${g}.webp`;
-    }
-    return null;
+    const f = STATION_NAME_ART[station.name];
+    return f ? `assets/art/stations/${f}.webp` : null;
+  }
+  // Two universal station upgrades have their own art; shown as a small thumb on
+  // the upgrade row in the armament picker.
+  const STATION_UPGRADE_ART = { 'Astrobotanical Lab': 'astrobotanical-lab', 'Defence Grid': 'defence-grid' };
+  function stationOptThumb(name) {
+    const f = STATION_UPGRADE_ART[name];
+    return f ? `<img class="sys-opt-art" src="${thumbUrl('assets/art/stations/' + f + '.webp')}" alt="" loading="lazy" onerror="this.remove()">` : '';
   }
 
   // ── TTCombat store links ───────────────────────────────────────────────
@@ -1334,11 +1347,11 @@ const App = (() => {
     const sizeInfo = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
     const pts = calcFleetPoints(fleet);
 
-    // 1. Points range
+    // 1. Points range. Only the over-budget case is flagged: the live points
+    // total (e.g. "715 / 2001") already shows progress toward the minimum, so a
+    // separate "below minimum" warning is just noise the whole time you build.
     if (pts > sizeInfo.max && sizeInfo.max !== 99999) {
       warnings.push({ type: 'error', msg: `Over budget: ${pts}/${sizeInfo.max} pts` });
-    } else if (pts < sizeInfo.min && fleet.battleGroups.length > 0) {
-      warnings.push({ type: 'warn', msg: `Below ${sizeInfo.label} minimum of ${sizeInfo.min} pts (you have ${pts}), a ${sizeInfo.label} game is ${sizeInfo.min}–${sizeInfo.max === 99999 ? '+' : sizeInfo.max} pts` });
     }
 
     // 2. Group count
@@ -1411,7 +1424,7 @@ const App = (() => {
     // Both are hard restrictions per Section 4.2: Heavy points may not exceed
     // Medium points; Light points may not exceed Medium + Heavy points.
     if (heavyPts > mediumPts) {
-      warnings.push({ type: 'error', msg: `Heavy points (${heavyPts}) can't exceed Medium points (${mediumPts}), Medium ships are your backbone and unlock Heavy (rulebook 4.2)` });
+      warnings.push({ type: 'error', msg: `Heavy points (${heavyPts}) can't exceed Medium points (${mediumPts}) (rulebook 4.2)` });
     }
     if (lightPts > mediumPts + heavyPts) {
       warnings.push({ type: 'error', msg: `Light points (${lightPts}) can't exceed Medium + Heavy points (${mediumPts + heavyPts}) (rulebook 4.2)` });
@@ -1955,7 +1968,7 @@ const App = (() => {
       const on = sel.includes(o.name);
       const locked = !on && sel.length >= 2;
       return `<div class="secondary-item${on ? ' selected' : ''}${locked ? ' locked' : ''}" onclick="App.toggleSecondaryObjective(${i})" role="button" tabindex="0" aria-pressed="${on}">
-        <span class="secondary-check">${on ? '✓' : ''}</span>
+        <span class="secondary-check">${on ? CHECK_SVG : ''}</span>
         <div class="secondary-body">
           <div class="secondary-name">${esc(o.name)}</div>
           <div class="secondary-desc">${esc(o.description)}</div>
@@ -2767,7 +2780,7 @@ const App = (() => {
     const container = document.getElementById('ship-select-filters');
     if (!container) return;
     container.innerHTML = SHIP_FILTERS.map(f =>
-      `<button class="filter-chip ${activeFilters.has(f.key) ? 'active' : ''}" onclick="App.toggleShipFilter('${f.key}')">${f.label}</button>`
+      `<button class="filter-chip ${activeFilters.has(f.key) ? 'active' : ''}" onclick="App.toggleShipFilter('${f.key}')">${activeFilters.has(f.key) ? CHECK_SVG : ''}${f.label}</button>`
     ).join('');
   }
 
@@ -2857,11 +2870,13 @@ const App = (() => {
     }
 
     const sortDir = shipSort.dir === 'desc' ? -1 : 1;
-    if (shipSort.key === 'points') {
-      ships.sort((a, b) => ((a.data.points || 0) - (b.data.points || 0)) * sortDir);
-    } else {
-      ships.sort((a, b) => (a.data.name || '').localeCompare(b.data.name || '') * sortDir);
-    }
+    const shipCmp = {
+      points:  (a, b) => (a.data.points || 0) - (b.data.points || 0),
+      name:    (a, b) => (a.data.name || '').localeCompare(b.data.name || ''),
+      tonnage: (a, b) => (CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category))
+                         || ((a.data.points || 0) - (b.data.points || 0)),
+    }[shipSort.key] || ((a, b) => (a.data.points || 0) - (b.data.points || 0));
+    ships.sort((a, b) => shipCmp(a, b) * sortDir);
 
     // Update results bar
     const resultsBar = document.getElementById('ship-results-bar');
@@ -3207,7 +3222,7 @@ const App = (() => {
     document.querySelectorAll('.sort-btn').forEach(b => {
       const on = b.dataset.sort === shipSort.key;
       b.classList.toggle('active', on);
-      const lbl = b.dataset.sort === 'points' ? 'Points' : 'Name';
+      const lbl = { points: 'Points', name: 'Name', tonnage: 'Tonnage' }[b.dataset.sort] || b.dataset.sort;
       b.innerHTML = on ? `${lbl} <span class="sort-arrow">${shipSort.dir === 'asc' ? '↑' : '↓'}</span>` : lbl;
     });
   }
@@ -3901,7 +3916,7 @@ const App = (() => {
           : '';
         const star = o.oncePerStation ? '<span class="sys-opt-star" title="Max one">*</span>' : '';
         return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}">
-          <div class="sys-opt-main"><span class="sys-opt-name">${esc(o.name)}${star}</span>${summary}</div>
+          ${stationOptThumb(o.name)}<div class="sys-opt-main"><span class="sys-opt-name">${esc(o.name)}${star}</span>${summary}</div>
           <span class="sys-opt-cost">${o.cost > 0 ? '+' + o.cost : o.cost} pts</span>
           <div class="sys-opt-step">
             <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeStationSystem('${esc(o.name).replace(/'/g, "\\'")}')">−</button>

@@ -623,6 +623,7 @@ button, a, input, select, textarea,
   min-height: 36px;
   display: flex;
   align-items: center;
+  gap: 5px;
   white-space: nowrap;
   transition: background-color var(--duration-fast) var(--ease-standard),
               border-color var(--duration-fast) var(--ease-standard),
@@ -1789,6 +1790,7 @@ body.sheet-open .sheet-scrim {
   align-items: center;
   gap: var(--sp-s);
 }
+.sys-option-art { width: 46px; height: 46px; object-fit: contain; flex-shrink: 0; }
 .sys-option-main { flex: 1; min-width: 0; }
 /* The option's mini datasheet sits full-width under the name/cost/controls. */
 .opt-weapon-table { margin-top: 2px; }

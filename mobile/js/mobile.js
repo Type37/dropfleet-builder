@@ -25,6 +25,11 @@
   // optional units have no ship art, so they're hidden until this is toggled on.
   let pickerShowExtra = localStorage.getItem('dfc_show_extra') === '1';
 
+  // Filled check for selected/active toggle states (replaces the old "✓" text
+  // glyph, which rendered as an emoji on some platforms). Inherits colour from
+  // the host control via currentColor.
+  const CHECK_SVG = '<svg class="check-icon" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-6.5"/></svg>';
+
   const FACTION_FILES = {
     ucm: '../data/faction-ucm.json',
     phr: '../data/faction-phr.json',
@@ -199,18 +204,30 @@
   // model, so they reuse one faction image; faction-specific stations match by
   // name. Only high-confidence matches return art — the rest keep the blank
   // thumb rather than show a wrong picture.
-  const STATION_GENERIC_ART = { ucm: 'ucm_space_station_1', scourge: 'scourge_space_station_1', resistance: 'resistance_space_station' };
-  const STATION_NAME_ART = { 'Gatestation': 'voidgate' };
-  const GENERIC_STATIONS = new Set(['Small Space Station', 'Medium Space Station', 'Large Space Station']);
+  // Faction-specific stations → their transparent renders in assets/art/stations/.
+  // Names are unique across factions, so a flat name→file map is unambiguous. The
+  // generic Small/Medium/Large Space Stations have no dedicated art (kept blank
+  // rather than showing the wrong faction's model). Mirrors desktop js/app.js.
+  const STATION_NAME_ART = {
+    'Defence Halo': 'phr-defence-halo', 'Orbital Picket': 'phr-orbital-picket',
+    'Orbital Outpost': 'phr-orbital-outpost', 'Orbital Spire': 'phr-orbital-spire',
+    'Grand Station': 'resistance-grand-station', 'Astrobotanical Outpost': 'resistance-astrobotanical-outpost',
+    'Ephyra': 'scourge-ephyra', 'Nematocyst': 'scourge-nematocyst',
+    'Gatestation': 'shaltari-gatestation', 'Grav Hook': 'shaltari-grav-hook',
+    'Anchor': 'shaltari-anchor', 'Shuriken': 'shaltari-shuriken',
+    'Defence Hangar': 'ucm-defence-hangar', 'Munitions Platform': 'ucm-munitions-platform',
+  };
   function stationArtPath(factionKey, station) {
     if (!station) return null;
-    const byName = STATION_NAME_ART[station.name];
-    if (byName) return `../assets/art/${byName}.webp`;
-    if (GENERIC_STATIONS.has(station.name)) {
-      const g = STATION_GENERIC_ART[factionKey];
-      if (g) return `../assets/art/${g}.webp`;
-    }
-    return null;
+    const f = STATION_NAME_ART[station.name];
+    return f ? `../assets/art/stations/${f}.webp` : null;
+  }
+  // Two universal station upgrades have their own art; shown as a small thumb on
+  // the upgrade row in the armament picker. Mirrors desktop js/app.js.
+  const STATION_UPGRADE_ART = { 'Astrobotanical Lab': 'astrobotanical-lab', 'Defence Grid': 'defence-grid' };
+  function stationOptThumb(name) {
+    const f = STATION_UPGRADE_ART[name];
+    return f ? `<img class="sys-option-art" src="../assets/art/thumb/stations/${f}.webp" alt="" loading="lazy" onerror="this.remove()">` : '';
   }
   function admiralArtPath(name) {
     if (!name) return null;
@@ -698,8 +715,9 @@
     if (!fleet) return w;
     const size = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
     const pts = fleetPoints(fleet);
+    // Only over-budget is flagged; the live points total already shows progress
+    // toward the minimum, so a "below minimum" warning is just constant noise.
     if (pts > size.max && size.max !== 99999) w.push({ t: 'error', m: `Over budget: ${pts}/${size.max} pts` });
-    else if (fleet.battleGroups.length && pts < size.min) w.push({ t: 'warn', m: `Below ${size.label} minimum of ${size.min} pts (you have ${pts}), a ${size.label} game is ${size.min}–${size.max === 99999 ? '+' : size.max} pts` });
 
     const gc = countableGroups(fleet).length;
     if (gc > size.groups) w.push({ t: 'error', m: `Too many groups: ${gc}/${size.groups}` });
@@ -751,7 +769,7 @@
       const p = groupPoints(fleet, g);
       if (cat === 'light') light += p; else if (cat === 'medium') medium += p; else if (cat === 'heavy') heavy += p;
     });
-    if (heavy > medium) w.push({ t: 'error', m: `Heavy points (${heavy}) can’t exceed Medium points (${medium}), Medium ships are your backbone and unlock Heavy (rulebook 4.2)` });
+    if (heavy > medium) w.push({ t: 'error', m: `Heavy points (${heavy}) can’t exceed Medium points (${medium}) (rulebook 4.2)` });
     if (light > medium + heavy) w.push({ t: 'error', m: `Light points (${light}) can’t exceed Medium + Heavy points (${medium + heavy}) (rulebook 4.2)` });
 
     // Feature carriers MUST choose a Deployable Feature (required, not optional)
@@ -1181,7 +1199,7 @@
       const on = sel.includes(o.name);
       const locked = !on && sel.length >= 2;
       return `<div class="secondary-item${on ? ' selected' : ''}${locked ? ' locked' : ''}" onclick="App.toggleSecondary(${i})">
-        <span class="secondary-check">${on ? '✓' : ''}</span>
+        <span class="secondary-check">${on ? CHECK_SVG : ''}</span>
         <div class="secondary-body">
           <div class="secondary-name">${esc(o.name)}</div>
           <div class="secondary-desc">${esc(o.description)}</div>
@@ -1225,8 +1243,6 @@
       { key: 'unique',  label: 'Unique',  test: s => s.isUnique }
     ];
     const presentAttrs = attrDefs.filter(a => groups.some(g => a.test(g.ship || {})));
-    // "Additional" ships (mercenaries, cross-faction, optional units) have no art.
-    const hasExtra = groups.some(g => !shipArtPath((g.ship || {}).name));
 
     // Apply all filters first so the live count is accurate.
     const search = (document.getElementById('picker-search')?.value || '').toLowerCase();
@@ -1248,14 +1264,12 @@
         <button class="chip ${pickerFilter === 'all' ? 'active' : ''}" onclick="App.filterShips('all')">All</button>
         ${cats.map(c => `<button class="chip ${pickerFilter === c ? 'active' : ''}" onclick="App.filterShips('${c}')">${CATEGORY_LABELS[c] || c}</button>`).join('')}
       </div>
-      ${presentAttrs.length || hasExtra ? `<div class="filter-row">
+      ${presentAttrs.length ? `<div class="filter-row">
         <span class="filter-label">Filter</span>
-        ${presentAttrs.map(a => `<button class="chip chip-toggle ${pickerAttrs.has(a.key) ? 'active' : ''}" onclick="App.toggleAttr('${a.key}')">${pickerAttrs.has(a.key) ? '✓ ' : ''}${a.label}</button>`).join('')}
-        ${hasExtra ? `<button class="chip chip-toggle ${pickerShowExtra ? 'active' : ''}" onclick="App.toggleExtra()">${pickerShowExtra ? '✓ ' : ''}Mercenaries</button>` : ''}
+        ${presentAttrs.map(a => `<button class="chip chip-toggle ${pickerAttrs.has(a.key) ? 'active' : ''}" onclick="App.toggleAttr('${a.key}')">${pickerAttrs.has(a.key) ? CHECK_SVG : ''}${a.label}</button>`).join('')}
       </div>` : ''}
       <div class="filter-meta">
         <span class="filter-count">${list.length} ship${list.length !== 1 ? 's' : ''}</span>
-        <span class="filter-hint">Hold for datasheet</span>
         ${anyActive ? `<button class="filter-clear" onclick="App.clearFilters()">Clear ×</button>` : ''}
       </div>`;
 
@@ -2319,6 +2333,7 @@
           : (o.effect ? `<div class="loadout-option-desc">${linkKeywords(o.effect)}</div>` : '');
         return `<div class="sys-option ${c > 0 ? 'selected' : ''}">
           <div class="sys-option-row">
+            ${stationOptThumb(o.name)}
             <div class="sys-option-main">
               <div class="flex justify-between items-center">
                 <span class="loadout-option-name">${esc(o.name)}${o.oncePerStation ? ' <span class="ship-tag">1×</span>' : ''}</span>
