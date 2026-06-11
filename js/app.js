@@ -3779,6 +3779,15 @@ const App = (() => {
 
       const isCurrent = ss.id === currentId;
       const optArt = stationArtPath(currentFleet.faction, ss);
+      // Show the station's guns in the picker so you can compare before choosing.
+      const wpns = ss.weapons || [];
+      const wpnHtml = wpns.length
+        ? `<div class="weapon-list" style="margin-top:var(--sp-xs)">${renderWeaponHeader()}${wpns.map(renderWeaponRow).join('')}</div>`
+        : '';
+      const launchHtml = renderLaunchTable(currentFleet.faction, ss, ss);
+      const genericNote = (!wpns.length && !launchHtml)
+        ? `<div class="text-caption" style="margin-top:var(--sp-xs)">Choose its armaments after adding it.</div>`
+        : '';
       return `<div class="station-option${isCurrent ? ' station-option-active' : ''}" onclick="App.selectStation('${ss.id}')">
         <div class="flex items-center justify-between" style="margin-bottom:var(--sp-xs)">
           <span class="station-option-name">${optArt ? `<span class="station-option-thumb"><img src="${thumbUrl(optArt)}" alt="" loading="lazy" onerror="this.closest('.station-option-thumb').remove()"></span>` : ''}${esc(ss.name)}${isCurrent ? ' <span class="badge badge-navy" style="font-size:9px">Current</span>' : ''}</span>
@@ -3786,6 +3795,9 @@ const App = (() => {
         </div>
         ${renderStatGrid(stats)}
         ${rulesLine}
+        ${wpnHtml}
+        ${launchHtml}
+        ${genericNote}
       </div>`;
     }).join('');
 

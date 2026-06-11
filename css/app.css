@@ -1886,49 +1886,50 @@ h1, h2, h3, h4, h5, h6 {
 /* Stat block: stats STACKED one per row (a vertical datasheet list), NOT all
    across a single row. Each row: icon + stat name on the left, value on the
    right. Scans straight down. */
+/* Compact grid (~2-3 columns), each cell groups icon + value + label tightly
+   so the eye doesn't travel a full row width. Capped so it never spreads into
+   one long row. */
 .stat-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 4px;
+  max-width: 320px;
 }
 
 .stat-cell {
   background: var(--paper-alt);
   border: 1px solid var(--stroke-light);
   border-radius: var(--radius-sm);
-  padding: 6px 12px;
+  padding: 5px 8px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   text-align: left;
   overflow: hidden;
 }
 .stat-cell-icon { flex-shrink: 0; display: inline-flex; align-items: center; }
-.stat-cell-icon svg { width: 16px; height: 16px; opacity: 0.8; }
-.stat-cell-text { display: flex; flex-direction: row; align-items: baseline; gap: 8px; flex: 1; min-width: 0; }
-
-.stat-cell-label {
-  order: 0;
-  font-family: var(--font-condensed);
-  font-size: 13px;
-  font-weight: var(--weight-bold);
-  color: var(--ink-muted);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
+.stat-cell-icon svg { width: 15px; height: 15px; opacity: 0.8; }
+.stat-cell-text { display: flex; flex-direction: row; align-items: baseline; gap: 4px; min-width: 0; }
 
 .stat-cell-value {
-  order: 1;
-  margin-left: auto;
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1;
   /* Bold (700), NOT heavy (800): 800 closed up the apertures on 3 / 5 / 8 and
      read as a blob. Lining + tabular figures keep numerals open and aligned. */
   font-weight: var(--weight-bold);
   font-variant-numeric: tabular-nums lining-nums;
   color: var(--ink);
+}
+
+.stat-cell-label {
+  font-family: var(--font-condensed);
+  font-size: 12px;
+  font-weight: var(--weight-bold);
+  color: var(--ink-muted);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 /* Color-coded stat cells */

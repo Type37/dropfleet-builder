@@ -490,37 +490,34 @@ button, a, input, select, textarea,
 
 /* ── 11. Stat Grid (3-col) ─────────────────────────────── */
 .stat-grid {
-  /* Stats stacked one per row (vertical datasheet list), not across one row. */
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  /* Compact 2-3 column grid; cells group icon+value+label tightly. */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  gap: 4px;
   padding: var(--sp-m) var(--sp-l);
   background: var(--white);
   border-bottom: 1px solid var(--stroke2);
 }
 
 /* Stacked: hero number on top, abbreviation on its own line beneath. */
-.stat-cell-text { display: flex; flex-direction: row; align-items: baseline; gap: 8px; flex: 1; min-width: 0; line-height: 1.02; }
-
-.stat-label {
-  order: 0;
-  font-family: var(--font-condensed);
-  font-size: 13px;
-  font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--fg3);
-}
+.stat-cell-text { display: flex; flex-direction: row; align-items: baseline; gap: 4px; min-width: 0; line-height: 1.02; }
 
 .stat-value {
-  order: 1;
-  margin-left: auto;
   font-family: var(--font-display);
-  font-size: 19px;
+  font-size: 17px;
   line-height: 1;
   font-weight: var(--weight-bold);
   font-variant-numeric: tabular-nums lining-nums;
   color: var(--fg1);
+}
+
+.stat-label {
+  font-family: var(--font-condensed);
+  font-size: 12px;
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--fg3);
 }
 
 
@@ -1343,8 +1340,10 @@ button, a, input, select, textarea,
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: var(--sp-s);
-  padding: 5px 0;
+  gap: 6px;
+  padding: 5px 8px;
+  background: var(--paper-alt);
+  border-radius: var(--radius-sm);
 }
 
 .stat-icon {
