@@ -3697,12 +3697,6 @@ const App = (() => {
     recalcStationCost(ss);   // keep cost fresh + set baseCost for migrated stations
     const def = stationDefFor(ss);
     const stats = ss.stats || (def && def.stats) || {};
-    const statPairs = [
-      ['Hull', stats.hull], ['ES', stats.es], ['KS', stats.ks],
-      ['Scan', stats.scan], ['Sig', stats.sig]
-    ].filter(([,v]) => v && v !== '-' && v !== '--');
-    const statLine = statPairs.map(([l,v]) => `<span class="station-stat">${l} ${v}</span>`).join('');
-
     const specialRules = (ss.specialRules || []).map(r => r.name || '').filter(Boolean);
     const rulesLine = specialRules.length > 0
       ? `<div class="station-rules">${specialRules.map(r => `<span class="rule-chip rule-chip-sm">${esc(r)}</span>`).join('')}</div>`
@@ -3732,10 +3726,10 @@ const App = (() => {
       <div class="flex items-center justify-between">
         <div>
           <div class="station-name">${esc(ss.name)}</div>
-          <div class="station-stats">${statLine}</div>
         </div>
         <span class="badge badge-gold">${ss.cost} pts</span>
       </div>
+      ${renderStatGrid(stats)}
       ${rulesLine}
       ${weaponSheet}
       ${loadsLine}
@@ -3761,12 +3755,6 @@ const App = (() => {
 
     container.innerHTML = stations.map(ss => {
       const stats = ss.stats || {};
-      const statPairs = [
-        ['Hull', stats.hull], ['ES', stats.es], ['KS', stats.ks],
-        ['Scan', stats.scan], ['Sig', stats.sig]
-      ].filter(([,v]) => v && v !== '-' && v !== '--');
-      const statLine = statPairs.map(([l,v]) => `<span class="station-stat">${l} ${v}</span>`).join('');
-
       const specialRules = (ss.specialRules || []).map(r => r.name || '').filter(Boolean);
       const specialStr = ss.special && ss.special !== '-' ? ss.special : '';
       const rulesLine = specialRules.length > 0
@@ -3788,35 +3776,10 @@ const App = (() => {
           <span class="station-option-name">${optArt ? `<span class="station-option-thumb"><img src="${thumbUrl(optArt)}" alt="" loading="lazy" onerror="this.closest('.station-option-thumb').remove()"></span>` : ''}${esc(ss.name)}${isCurrent ? ' <span class="badge badge-navy" style="font-size:9px">Current</span>' : ''}</span>
           <span class="badge badge-gold">${ss.cost} pts</span>
         </div>
-        <div class="station-stats">${statLine}</div>
+        ${renderStatGrid(stats)}
         ${rulesLine}
       </div>`;
     }).join('');
-
-    // Add deployable features reference if faction has them
-    const features = factionInfo.deployableFeatures || [];
-    if (features.length > 0) {
-      container.innerHTML += `
-      <div style="border-top:1px solid var(--stroke);padding-top:var(--sp-md);margin-top:var(--sp-sm)">
-        <div class="text-overline" style="margin-bottom:var(--sp-sm)">Deployable Sector Features</div>
-        <p class="text-caption" style="margin-bottom:var(--sp-sm)">These features are deployed to dropsites during the game. Cost is 0 pts, they are included with your faction.</p>
-        ${features.map(df => {
-          const featureStats = (df.features || []).map(f =>
-            `<span class="station-stat">${esc(f.name)}${f.es ? ` ES:${f.es}` : ''}${f.ks ? ` KS:${f.ks}` : ''}</span>`
-          ).join('');
-          const featureRules = (df.rules || []).map(r =>
-            r.description
-              ? `<span class="rule-chip rule-chip-sm has-tooltip" data-rule-desc="${esc(r.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(r.name)}</span>`
-              : `<span class="rule-chip rule-chip-sm">${esc(r.name)}</span>`
-          ).join('');
-          return `<div class="feature-ref-card">
-            <div class="feature-ref-name">${esc(df.name)}</div>
-            ${featureStats ? `<div class="station-stats">${featureStats}</div>` : ''}
-            ${featureRules ? `<div style="margin-top:var(--sp-xs)">${featureRules}</div>` : ''}
-          </div>`;
-        }).join('')}
-      </div>`;
-    }
 
     openModal('modal-station');
   }
