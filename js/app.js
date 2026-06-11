@@ -3723,9 +3723,22 @@ const App = (() => {
     const stationRulesHtml = stationRules.length
       ? `<div style="margin-top:var(--sp-sm)">${stationRules.map(r => `<div class="text-caption" style="margin-bottom:var(--sp-xs)"><strong>${esc(r.name)}</strong> ${linkKeywords(r.effect || '')}</div>`).join('')}</div>`
       : '';
-    // Armament picker for the generic Small/Medium/Large stations
+    // Generic Small/Medium/Large stations choose modules in a modal (Hobgoblin
+    // style). The card shows the chosen modules + a button to open the picker.
     const spec = stationArmamentSpec(ss);
-    const pickerHtml = spec ? renderStationArmamentPicker(ss, spec) : '';
+    let pickerHtml = '';
+    if (spec) {
+      const sum = summariseStation(ss);
+      const chosen = (ss.systems && ss.systems.length)
+        ? `<div class="station-rules" style="margin-top:var(--sp-xs)">${ss.systems.map(n => `<span class="badge badge-neutral">${esc(n)}</span>`).join('')}</div>`
+        : '';
+      const done = sum.armTotal === spec.required;
+      pickerHtml = `${chosen}
+        <button class="btn ${done ? 'btn-outline' : 'btn-primary'} btn-sm" onclick="App.openStationArmaments()" style="margin-top:var(--sp-sm)">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.5 1.5M11.5 11.5L13 13M13 3l-1.5 1.5M4.5 11.5L3 13"/></svg>
+          ${ss.systems && ss.systems.length ? 'Edit modules' : 'Choose modules'} (${sum.armTotal}/${spec.required})
+        </button>`;
+    }
 
     const stationArt = stationArtPath(currentFleet.faction, ss);
     slot.innerHTML = `
@@ -3874,14 +3887,14 @@ const App = (() => {
     const spec = stationArmamentSpec(st); const opt = stationOpt(name);
     if (!spec || !opt || !canAddStationOption(st, opt, spec)) return;
     st.systems = st.systems || []; st.systems.push(name);
-    recalcStationCost(st); saveFleets(); renderStationSlot(); updatePoints();
+    recalcStationCost(st); saveFleets(); renderStationSlot(); renderStationArmamentsModal(); updatePoints();
   }
   function removeStationSystem(name) {
     if (!currentFleet || !currentFleet.spaceStation) return;
     const st = currentFleet.spaceStation;
     const i = (st.systems || []).lastIndexOf(name); if (i < 0) return;
     st.systems.splice(i, 1);
-    recalcStationCost(st); saveFleets(); renderStationSlot(); updatePoints();
+    recalcStationCost(st); saveFleets(); renderStationSlot(); renderStationArmamentsModal(); updatePoints();
   }
   function renderStationArmamentPicker(station, spec) {
     const { counts, armTotal } = summariseStation(station);
@@ -3918,6 +3931,23 @@ const App = (() => {
       </div>
       ${body}
     </div>`;
+  }
+
+  // Module picker as a modal (Hobgoblin-style) for the generic stations.
+  function openStationArmaments() {
+    if (!currentFleet || !currentFleet.spaceStation) return;
+    if (!stationArmamentSpec(currentFleet.spaceStation)) return;
+    renderStationArmamentsModal();
+    openModal('modal-station-armaments');
+  }
+  function renderStationArmamentsModal() {
+    const body = document.getElementById('station-armaments-body');
+    const st = currentFleet && currentFleet.spaceStation;
+    if (!body || !st) return;
+    const spec = stationArmamentSpec(st);
+    body.innerHTML = spec ? renderStationArmamentPicker(st, spec) : '';
+    const title = document.getElementById('station-armaments-title');
+    if (title) title.textContent = `${st.name} Modules`;
   }
 
   function removeStation() {
@@ -5584,7 +5614,7 @@ const App = (() => {
     loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, moveGroup, toggleFleetCardMenu,
     openShipSelectModal, filterCategory, toggleShipFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
-    openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem,
+    openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText,
     openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
