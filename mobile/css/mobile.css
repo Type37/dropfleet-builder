@@ -27,16 +27,16 @@
   --sp-xxxl: 32px;
 
   /* — Fluent 2 Type Ramp — */
-  --text-caption2: 10px;
-  --text-caption1: 12px;
+  --text-caption2: 11px;
+  --text-caption1: 13px;
   --text-body1: 14px;
   --text-subtitle2: 16px;
   --text-subtitle1: 20px;
   --text-title3: 24px;
   --text-title2: 28px;
 
-  --lh-caption2: 14px;
-  --lh-caption1: 16px;
+  --lh-caption2: 15px;
+  --lh-caption1: 17px;
   --lh-body1: 20px;
   --lh-subtitle2: 22px;
   --lh-subtitle1: 26px;
@@ -503,7 +503,7 @@ button, a, input, select, textarea,
 
 .stat-label {
   font-family: var(--font-condensed);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: var(--weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.04em;

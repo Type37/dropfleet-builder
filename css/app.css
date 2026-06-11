@@ -26,7 +26,7 @@
   --font-mono: Consolas, "Courier New", monospace;
 
   /* Font Sizes */
-  --text-xs: 12px;
+  --text-xs: 13px;
   --text-sm: 14px;
   --text-base: 15px;
   --text-md: 17px;
@@ -1915,7 +1915,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .stat-cell-label {
   font-family: var(--font-condensed);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: var(--weight-bold);
   /* Size is the de-emphasis axis (per Jet's hierarchy note): the label drops to
      a quiet reading-size cap under the hero number. */
@@ -3423,7 +3423,6 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--error);
   padding: var(--sp-xxs) 0;
 }
-.group-warning-item::before { content: 'Illegal — '; font-weight: var(--weight-semibold); }
 
 .group-ships-list {
   display: flex;
@@ -3555,6 +3554,16 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--navy-wash);
   color: var(--navy);
 }
+/* Add Group sits below the group list (like Add Admiral) but reads as the
+   primary blue action: navy by default, filled navy on hover. */
+.add-group-cta {
+  border-color: var(--navy);
+  color: var(--navy);
+  padding: var(--sp-md);
+  min-height: 0;
+  margin-top: var(--sp-sm);
+}
+.add-group-cta:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
 
 /* ── Group Quantity Bar ── */
 /* Group header right column: Remove on top, qty stepper below it. */
@@ -5073,7 +5082,6 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--error);
   font-weight: var(--weight-semibold);
 }
-.overview-valid-error::before { content: 'Illegal — '; font-weight: var(--weight-semibold); }
 .overview-valid-warn {
   color: var(--ink-soft);
 }

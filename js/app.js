@@ -1790,7 +1790,7 @@ const App = (() => {
       // Validation status for this group
       const gErrors = validateGroupSize(g, f);
       const gErrorDot = gErrors.length > 0
-        ? `<span class="overview-group-error" title="${esc(gErrors[0])}">Illegal, ${esc(gErrors[0])}</span>`
+        ? `<span class="overview-group-error" title="${esc(gErrors[0])}">${esc(gErrors[0])}</span>`
         : '';
 
       // Count groups in this category for the section header
@@ -1913,12 +1913,11 @@ const App = (() => {
         <div class="overview-section">
           <div class="overview-section-head">
             <div class="overview-section-label">Battle Groups (${f.battleGroups.length})</div>
-            <button class="overview-add-group-btn" onclick="App.addGroup()" aria-label="Add a battle group">
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
-              Add Group
-            </button>
           </div>
           <div class="overview-groups">${groupCards + flagshipCards}</div>
+          <div class="add-ship-area add-group-cta" onclick="App.addGroup()" role="button" tabindex="0" aria-label="Add a battle group" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();App.addGroup()}">
+            <span style="font-size:var(--text-sm);font-weight:var(--weight-semibold)"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px"><path d="M8 3v10M3 8h10"/></svg> Add Group</span>
+          </div>
         </div>
         <div class="overview-section">
           <div class="overview-section-head">
@@ -3931,7 +3930,7 @@ const App = (() => {
     const warnings = validateFleet(f);
     const printWarnings = warnings.length > 0
       ? `<div class="print-warnings">${warnings.map(w =>
-          `<div class="print-warning print-warning-${w.type}">${w.type === 'error' ? 'Illegal, ' : ''}${esc(w.msg)}</div>`
+          `<div class="print-warning print-warning-${w.type}">${esc(w.msg)}</div>`
         ).join('')}</div>`
       : '';
 
