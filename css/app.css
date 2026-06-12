@@ -1898,6 +1898,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 .stat-cell-wide { grid-column: 1 / -1; }
 .stat-cell-wide .stat-cell-value { font-size: 20px; }
+/* Stats on the left, the weapon table in the empty space to their right.
+   Wraps the gun table below the stats when the panel is too narrow. */
+.stat-weapon-row { display: flex; gap: var(--sp-md); align-items: flex-start; flex-wrap: wrap; }
+.stat-weapon-row .sw-stats { flex: 0 0 auto; }
+.stat-weapon-row .sw-weapons { flex: 1 1 300px; min-width: 0; }
+.stat-weapon-row .sw-weapons .weapon-list { margin: 0; }
 
 .stat-cell {
   background: var(--paper-alt);

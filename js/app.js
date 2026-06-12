@@ -2695,8 +2695,7 @@ const App = (() => {
         ${weaponsHtml}
         ${loadoutsHtml}
         ${launchBlockHtml}`
-      : `${compact ? '' : statsHtml}
-        ${compact ? '' : weaponsHtml}
+      : `${compact ? '' : `<div class="stat-weapon-row"><div class="sw-stats">${statsHtml}</div>${weaponsHtml ? `<div class="sw-weapons">${weaponsHtml}</div>` : ''}</div>`}
         ${compact ? '' : loadoutsHtml}
         ${compact ? '' : launchBlockHtml}
         ${rulesHtml}
