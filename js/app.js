@@ -2413,12 +2413,17 @@ const App = (() => {
     // Cap usage: a cap key matches an option category by prefix (startsWith).
     const capUsage = {};
     Object.keys(sel.categoryCaps || {}).forEach(k => { capUsage[k] = 0; });
+    // catCounts: exact per-category tallies, keyed by full category name. Drives
+    // the per-tier hardpoint model (categoryReq) where each tier has its own count.
+    const catCounts = {};
     (ship.systems || []).forEach(n => {
       const o = findSystemOption(list, n);
       if (!o) return;
       Object.keys(capUsage).forEach(k => { if ((o.category || '').startsWith(k)) capUsage[k]++; });
+      const cat = o.category || '';
+      catCounts[cat] = (catCounts[cat] || 0) + 1;
     });
-    return { counts, total, capUsage };
+    return { counts, total, capUsage, catCounts };
   }
 
   function validateSystems(ship, dbShip, factionKey) {
@@ -2426,7 +2431,18 @@ const App = (() => {
     const list = systemsListFor(dbShip, factionKey);
     if (!sel || !list) return [];
     const errors = [];
-    const { total, capUsage } = summariseSystems(ship, list, sel);
+    const { total, capUsage, catCounts } = summariseSystems(ship, list, sel);
+    if (sel.categoryReq) {
+      // Per-tier hardpoint requirements (Bioficer dreadnoughts: exactly 1
+      // Secondary, exactly 2 Tertiary, up to 1 Launch). Each tier owns its count.
+      Object.entries(sel.categoryReq).forEach(([cat, req]) => {
+        const c = catCounts[cat] || 0;
+        const min = req.min || 0, max = req.max != null ? req.max : Infinity;
+        if (c < min) errors.push(`${dbShip.name}: choose ${min === max ? min : min + '+'} from ${cat} (has ${c})`);
+        else if (c > max) errors.push(`${dbShip.name}: max ${max} from ${cat} (has ${c})`);
+      });
+      return errors;
+    }
     if (sel.totalIsExact && total !== sel.totalRequired) {
       errors.push(total < sel.totalRequired
         ? `${dbShip.name}: choose ${sel.totalRequired} ${sel.listName} (has ${total})`
@@ -2447,9 +2463,14 @@ const App = (() => {
     if (!sel || !list) return false;
     const opt = findSystemOption(list, optName);
     if (!opt) return false;
-    const { counts, total, capUsage } = summariseSystems(ship, list, sel);
-    if (total >= sel.totalRequired) return false;            // at the total cap
+    const { counts, total, capUsage, catCounts } = summariseSystems(ship, list, sel);
     if (opt.oncePerShip && (counts[optName] || 0) >= 1) return false;
+    if (sel.categoryReq) {                                   // per-tier: block at this tier's max
+      const req = sel.categoryReq[opt.category || ''];
+      const max = (req && req.max != null) ? req.max : 0;
+      return (catCounts[opt.category || ''] || 0) < max;
+    }
+    if (total >= sel.totalRequired) return false;            // at the total cap
     for (const [k, max] of Object.entries(sel.categoryCaps || {})) {
       if ((opt.category || '').startsWith(k) && capUsage[k] >= max) return false;
     }
@@ -2476,11 +2497,18 @@ const App = (() => {
     const list = systemsListFor(dbShip, factionKey);
     if (!list) return '';   // option table not loaded yet, Ship Rules text still explains it
 
-    const { counts, total, capUsage } = summariseSystems(ship, list, sel);
+    const { counts, total, capUsage, catCounts } = summariseSystems(ship, list, sel);
     const required = sel.totalRequired;
-    const complete = sel.totalIsExact ? total === required : total <= required;
+    const req = sel.categoryReq;
+    const sumMin = req ? Object.values(req).reduce((a, r) => a + (r.min || 0), 0) : 0;
+    const sumMax = req ? Object.values(req).reduce((a, r) => a + (r.max != null ? r.max : 0), 0) : 0;
+    const complete = req
+      ? Object.entries(req).every(([cat, r]) => { const c = catCounts[cat] || 0; return c >= (r.min || 0) && c <= (r.max != null ? r.max : Infinity); })
+      : (sel.totalIsExact ? total === required : total <= required);
     const headerClass = complete ? '' : ' systems-picker-incomplete';
-    const reqLabel = sel.totalIsExact ? `${total} / ${required}` : `${total} / up to ${required}`;
+    const reqLabel = req
+      ? `${total} / ${sumMin === sumMax ? sumMax : sumMin + '-' + sumMax}`
+      : (sel.totalIsExact ? `${total} / ${required}` : `${total} / up to ${required}`);
 
     const cats = list.categories && list.categories.length
       ? list.categories
@@ -2489,11 +2517,21 @@ const App = (() => {
     const body = cats.map(cat => {
       const opts = list.options.filter(o => o.category === cat);
       if (!opts.length) return '';
-      // cap label for this category (match by prefix)
+      // cap label for this category. Per-tier model shows count/need and flags
+      // tiers not yet satisfied; legacy cap model shows usage against the max.
       let capNote = '';
-      Object.entries(sel.categoryCaps || {}).forEach(([k, max]) => {
-        if (cat.startsWith(k)) capNote = `<span class="sys-cat-cap">${capUsage[k]}/${max}</span>`;
-      });
+      if (req && req[cat]) {
+        const r = req[cat];
+        const c = catCounts[cat] || 0;
+        const lo = r.min || 0, hi = r.max != null ? r.max : Infinity;
+        const need = lo === hi ? `${hi}` : `${lo}-${hi === Infinity ? '∞' : hi}`;
+        const ok = c >= lo && c <= hi;
+        capNote = `<span class="sys-cat-cap${ok ? '' : ' sys-cat-cap-need'}">${c}/${need}</span>`;
+      } else {
+        Object.entries(sel.categoryCaps || {}).forEach(([k, max]) => {
+          if (cat.startsWith(k)) capNote = `<span class="sys-cat-cap">${capUsage[k]}/${max}</span>`;
+        });
+      }
       const rows = opts.map(o => {
         const c = counts[o.name] || 0;
         const canAdd = canAddSystem(ship, dbShip, factionKey, o.name);

@@ -663,12 +663,16 @@
     const total = (inst.systems || []).length;
     const capUsage = {};
     Object.keys(seln.categoryCaps || {}).forEach(k => { capUsage[k] = 0; });
+    // catCounts: exact per-category tallies, drives the per-tier hardpoint model.
+    const catCounts = {};
     (inst.systems || []).forEach(n => {
       const o = findSystemOption(list, n);
       if (!o) return;
       Object.keys(capUsage).forEach(k => { if ((o.category || '').startsWith(k)) capUsage[k]++; });
+      const cat = o.category || '';
+      catCounts[cat] = (catCounts[cat] || 0) + 1;
     });
-    return { counts, total, capUsage };
+    return { counts, total, capUsage, catCounts };
   }
   function canAddSystem(inst, ship, factionKey, optName) {
     const seln = ship.systemSelection;
@@ -676,9 +680,14 @@
     if (!seln || !list) return false;
     const opt = findSystemOption(list, optName);
     if (!opt) return false;
-    const { counts, total, capUsage } = summariseSystems(inst, list, seln);
-    if (total >= seln.totalRequired) return false;
+    const { counts, total, capUsage, catCounts } = summariseSystems(inst, list, seln);
     if (opt.oncePerShip && (counts[optName] || 0) >= 1) return false;
+    if (seln.categoryReq) {                                  // per-tier: block at this tier's max
+      const req = seln.categoryReq[opt.category || ''];
+      const max = (req && req.max != null) ? req.max : 0;
+      return (catCounts[opt.category || ''] || 0) < max;
+    }
+    if (total >= seln.totalRequired) return false;
     for (const [k, max] of Object.entries(seln.categoryCaps || {})) {
       if ((opt.category || '').startsWith(k) && capUsage[k] >= max) return false;
     }
@@ -803,8 +812,16 @@
       const list = db && systemsListFor(db, fleet.faction);
       const seln = db && db.systemSelection;
       if (list && seln) {
-        const { total, capUsage } = summariseSystems(s, list, seln);
-        if (seln.totalIsExact && total !== seln.totalRequired) {
+        const { total, capUsage, catCounts } = summariseSystems(s, list, seln);
+        if (seln.categoryReq) {
+          // Per-tier hardpoint requirements (Bioficer dreadnoughts).
+          Object.entries(seln.categoryReq).forEach(([cat, req]) => {
+            const c = catCounts[cat] || 0;
+            const min = req.min || 0, max = req.max != null ? req.max : Infinity;
+            if (c < min) w.push({ t: 'warn', m: `${db.name}: choose ${min === max ? min : min + '+'} from ${cat} (has ${c})` });
+            else if (c > max) w.push({ t: 'error', m: `${db.name}: max ${max} from ${cat} (has ${c})` });
+          });
+        } else if (seln.totalIsExact && total !== seln.totalRequired) {
           w.push({ t: total < seln.totalRequired ? 'warn' : 'error',
             m: `${db.name}: ${total < seln.totalRequired ? 'choose' : 'too many, max'} ${seln.totalRequired} ${seln.listName} (has ${total})` });
         } else if (!seln.totalIsExact && total > seln.totalRequired) {
@@ -1632,12 +1649,25 @@
       </div>${rows}</div>`;
   }
   function renderSystemsPicker(factionKey, ship, inst, list, seln) {
-    const { counts, total, capUsage } = summariseSystems(inst, list, seln);
+    const { counts, total, capUsage, catCounts } = summariseSystems(inst, list, seln);
     const required = seln.totalRequired;
-    const complete = seln.totalIsExact ? total === required : total <= required;
-    // Category cap chips
-    const capChips = Object.entries(seln.categoryCaps || {})
-      .map(([k, max]) => `<span class="sys-cap-chip ${capUsage[k] >= max ? 'full' : ''}">${esc(k)} ${capUsage[k]}/${max}</span>`).join('');
+    const req = seln.categoryReq;
+    const sumMin = req ? Object.values(req).reduce((a, r) => a + (r.min || 0), 0) : 0;
+    const sumMax = req ? Object.values(req).reduce((a, r) => a + (r.max != null ? r.max : 0), 0) : 0;
+    const complete = req
+      ? Object.entries(req).every(([cat, r]) => { const c = catCounts[cat] || 0; return c >= (r.min || 0) && c <= (r.max != null ? r.max : Infinity); })
+      : (seln.totalIsExact ? total === required : total <= required);
+    // Category requirement / cap chips
+    const capChips = req
+      ? Object.entries(req).map(([cat, r]) => {
+          const c = catCounts[cat] || 0;
+          const lo = r.min || 0, hi = r.max != null ? r.max : Infinity;
+          const need = lo === hi ? `${hi}` : `${lo}-${hi === Infinity ? '∞' : hi}`;
+          const ok = c >= lo && c <= hi;
+          return `<span class="sys-cap-chip ${ok ? 'full' : ''}">${esc(cat)} ${c}/${need}</span>`;
+        }).join('')
+      : Object.entries(seln.categoryCaps || {})
+          .map(([k, max]) => `<span class="sys-cap-chip ${capUsage[k] >= max ? 'full' : ''}">${esc(k)} ${capUsage[k]}/${max}</span>`).join('');
     // Group options by category
     const byCat = {};
     list.options.forEach(o => { (byCat[o.category] = byCat[o.category] || []).push(o); });
@@ -1670,8 +1700,8 @@
     `).join('');
     return `<div class="loadout-section">
       <div class="section-header" style="padding:0 0 var(--sp-xs)">
-        ${esc(seln.listName)}, ${seln.totalIsExact ? 'choose' : 'up to'} ${required}
-        <span class="sys-total ${complete ? 'ok' : 'incomplete'}">${total}/${required}</span>
+        ${esc(seln.listName)}, ${req ? 'choose ' + (sumMin === sumMax ? sumMax : sumMin + '-' + sumMax) : (seln.totalIsExact ? 'choose ' + required : 'up to ' + required)}
+        <span class="sys-total ${complete ? 'ok' : 'incomplete'}">${total}/${req ? (sumMin === sumMax ? sumMax : sumMin + '-' + sumMax) : required}</span>
       </div>
       ${capChips ? `<div class="sys-cap-row">${capChips}</div>` : ''}
       ${optsHtml}

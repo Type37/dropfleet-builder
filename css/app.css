@@ -2608,6 +2608,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 2px;
 }
 .sys-cat-cap { color: var(--navy); font-family: var(--font-condensed); }
+.sys-cat-cap-need { color: var(--warning); font-weight: var(--weight-bold); }
 .sys-opt {
   display: flex;
   align-items: center;
