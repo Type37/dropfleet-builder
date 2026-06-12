@@ -329,22 +329,22 @@
     return STAT_ICONS[key] ? `<span class="stat-icon stat-icon-${key}">${STAT_ICONS[key]}</span>` : '';
   }
   // Shared stat grid: Scan|Sig, Thrust|Saves, then Hull full-width. ES/KS/BS
-  // combine into one Saves cell. entries: [{key,label,val}]. (Mirrors desktop.)
+  // 2-col grid: Scan|KS, Sig|ES, Thrust|BS, Hull(full). Each save its own cell.
   function statGridMobile(entries, tappable) {
     const byKey = {}; entries.forEach(e => { byKey[e.key] = e; });
     const cell = (k, cls = '') => {
       const e = byKey[k]; if (!e || e.val == null || e.val === '') return '';
+      let extra = (k === 'es' || k === 'ks' || k === 'bs') ? 'stat-cell-' + k : '';
+      if (k === 'bs' && (e.val === '-' || e.val === '--')) extra = 'stat-cell-none';
       const tap = tappable ? ` tappable" onclick="App.openStat('${k}')` : '';
-      return `<div class="stat-cell ${cls}${tap}">${statIcon(k)}<span class="stat-cell-text"><span class="stat-value">${esc(e.val)}</span><span class="stat-label">${e.label}</span></span></div>`;
+      return `<div class="stat-cell ${extra} ${cls}${tap}">${statIcon(k)}<span class="stat-cell-text"><span class="stat-value">${esc(e.val)}</span><span class="stat-label">${e.label}</span></span></div>`;
     };
-    const saveItem = k => {
-      const e = byKey[k]; if (!e || e.val == null || e.val === '') return '';
-      const none = (e.val === '-' || e.val === '--');
-      return `<span class="save-item save-${k}${none ? ' save-none' : ''}"${tappable ? ` onclick="App.openStat('${k}')"` : ''}><span class="save-lbl">${e.label}</span><span class="save-val">${esc(e.val)}</span></span>`;
-    };
-    const saves = [saveItem('es'), saveItem('ks'), saveItem('bs')].filter(Boolean).join('');
-    const savesCell = saves ? `<div class="stat-cell stat-cell-saves"><span class="saves-readout">${saves}</span></div>` : '';
-    const cells = [cell('scan'), cell('sig'), cell('thrust'), cell('hull', 'stat-cell-wide'), savesCell].filter(Boolean).join('');
+    const cells = [
+      cell('scan'), cell('ks'),
+      cell('sig'),  cell('es'),
+      cell('thrust'), cell('bs'),
+      cell('hull', 'stat-cell-wide')
+    ].filter(Boolean).join('');
     return `<div class="stat-grid">${cells}</div>`;
   }
 

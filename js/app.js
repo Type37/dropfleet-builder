@@ -1439,6 +1439,9 @@ const App = (() => {
 
     // 8. Admiral checks
     const admirals = fleet.admirals || [];
+    if (admirals.length === 0 && fleet.battleGroups.length > 0) {
+      warnings.push({ type: 'error', msg: 'Fleet must contain an Admiral' });
+    }
     let namedCount = 0;
     admirals.forEach(adm => {
       const admLvl = adm.level || 0;
@@ -2185,14 +2188,17 @@ const App = (() => {
   };
 
   function renderStatGrid(ship) {
-    // 3-col grid: Scan | Sig | Thrust on top; Hull (spans 2) + a vertical Saves
-    // column (ES/KS/BS stacked) on the bottom row.
+    // 2-col grid, each main stat paired with a save on its row, Hull full-width:
+    //   Scan | KS,  Sig | ES,  Thrust | BS,  Hull (spans both).
+    // Each save is its own cell (not a combined column).
     const cell = (k, cls = '') => {
       const v = ship[k];
       if (v === undefined || v === 0) return '';
       const meta = STAT_META[k];
+      let extra = meta.cssClass || '';
+      if (k === 'bs' && (v === '-' || v === '--')) extra = 'stat-cell-none';
       const icon = STAT_ICONS[k] || '';
-      return `<div class="stat-cell ${cls}" title="${meta.title}">
+      return `<div class="stat-cell ${extra} ${cls}" title="${meta.title}">
         ${icon ? `<span class="stat-cell-icon">${icon}</span>` : ''}
         <span class="stat-cell-text">
           <span class="stat-cell-value">${v}</span>
@@ -2200,17 +2206,12 @@ const App = (() => {
         </span>
       </div>`;
     };
-    const saveItem = (k) => {
-      const v = ship[k];
-      if (v === undefined || v === '' || v === 0) return '';
-      const none = (v === '-' || v === '--');
-      return `<span class="save-item save-${k}${none ? ' save-none' : ''}"><span class="save-lbl">${STAT_META[k].label}</span><span class="save-val">${v}</span></span>`;
-    };
-    const saves = [saveItem('es'), saveItem('ks'), saveItem('bs')].filter(Boolean).join('');
-    const savesCell = saves
-      ? `<div class="stat-cell stat-cell-saves" title="Saves: Energy / Kinetic / Backup"><span class="saves-readout">${saves}</span></div>`
-      : '';
-    const cells = [cell('scan'), cell('sig'), cell('thrust'), cell('hull', 'stat-cell-wide'), savesCell].filter(Boolean).join('');
+    const cells = [
+      cell('scan'), cell('ks'),
+      cell('sig'),  cell('es'),
+      cell('thrust'), cell('bs'),
+      cell('hull', 'stat-cell-wide')
+    ].filter(Boolean).join('');
     return cells ? `<div class="stat-grid">${cells}</div>` : '';
   }
 

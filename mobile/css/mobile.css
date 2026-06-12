@@ -490,25 +490,23 @@ button, a, input, select, textarea,
 
 /* ── 11. Stat Grid (3-col) ─────────────────────────────── */
 .stat-grid {
-  /* 3-col: Scan|Sig|Thrust; Hull(span2) + vertical Saves column. */
+  /* 2-col: Scan|KS, Sig|ES, Thrust|BS, Hull(full). Each save its own cell. */
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 4px;
   padding: var(--sp-m) var(--sp-l);
   background: var(--white);
   border-bottom: 1px solid var(--stroke2);
 }
-.stat-cell-wide { grid-column: span 2; }
+.stat-cell-wide { grid-column: 1 / -1; }
 .stat-cell-wide .stat-value { font-size: 20px; }
-.stat-cell-saves { align-items: stretch; }
-.saves-readout { display: flex; flex-direction: column; gap: 2px; min-width: 0; width: 100%; }
-.save-item { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
-.save-lbl { font-family: var(--font-condensed); font-size: 11px; font-weight: var(--weight-bold); color: var(--fg3); text-transform: uppercase; }
-.save-val { font-family: var(--font-display); font-size: 15px; line-height: 1.1; font-weight: var(--weight-bold); font-variant-numeric: tabular-nums lining-nums; color: var(--fg1); }
-.save-es .save-val { color: #8b5e1a; }
-.save-ks .save-val { color: var(--navy); }
-.save-bs .save-val { color: #8a5e10; }
-.save-none .save-val { color: var(--fg4); opacity: 0.5; }
+.stat-cell-es { border-bottom: 2px solid #8b5e1a; }
+.stat-cell-es .stat-value { color: #8b5e1a; }
+.stat-cell-ks { border-bottom: 2px solid var(--navy); }
+.stat-cell-ks .stat-value { color: var(--navy); }
+.stat-cell-bs { border-bottom: 2px solid #8a5e10; }
+.stat-cell-bs .stat-value { color: #8a5e10; }
+.stat-cell-none .stat-value { color: var(--fg4); opacity: 0.5; }
 
 /* Stacked: hero number on top, abbreviation on its own line beneath. */
 .stat-cell-text { display: flex; flex-direction: row; align-items: baseline; gap: 4px; min-width: 0; line-height: 1.02; }

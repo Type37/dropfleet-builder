@@ -1886,26 +1886,16 @@ h1, h2, h3, h4, h5, h6 {
 /* Stat block: stats STACKED one per row (a vertical datasheet list), NOT all
    across a single row. Each row: icon + stat name on the left, value on the
    right. Scans straight down. */
-/* 3-col grid: Scan | Sig | Thrust on top; Hull (spans 2) + a vertical Saves
-   column (ES/KS/BS stacked) on the bottom row. */
+/* 2-col grid: each main stat paired with a save on its row (Scan|KS, Sig|ES,
+   Thrust|BS); Hull spans the full width on the last row. */
 .stat-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 4px;
-  max-width: 360px;
+  max-width: 320px;
 }
-.stat-cell-wide { grid-column: span 2; }
+.stat-cell-wide { grid-column: 1 / -1; }
 .stat-cell-wide .stat-cell-value { font-size: 20px; }
-/* Saves cell: ES / KS / BS stacked as a small vertical column. */
-.stat-cell-saves { align-items: stretch; }
-.saves-readout { display: flex; flex-direction: column; gap: 2px; min-width: 0; width: 100%; }
-.save-item { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
-.save-lbl { font-family: var(--font-condensed); font-size: 11px; font-weight: var(--weight-bold); color: var(--ink-muted); text-transform: uppercase; }
-.save-val { font-family: var(--font-display); font-size: 15px; line-height: 1.1; font-weight: var(--weight-bold); font-variant-numeric: tabular-nums lining-nums; }
-.save-es .save-val { color: #8b5e1a; }
-.save-ks .save-val { color: var(--navy); }
-.save-bs .save-val { color: var(--gold-dark); }
-.save-none .save-val { color: var(--ink-faint); opacity: 0.5; }
 
 .stat-cell {
   background: var(--paper-alt);
