@@ -2326,7 +2326,7 @@ const App = (() => {
   function renderFeatureStats(feat) {
     if (!feat) return '';
     const statLine = (feat.features || []).map(f =>
-      `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.special && f.special !== '-' ? ` · ${esc(f.special)}` : ''}</span>`
+      `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.special && f.special !== '-' ? `, ${esc(f.special)}` : ''}</span>`
     ).join('');
     const ruleChips = (feat.rules || []).map(r =>
       r.description
@@ -2374,7 +2374,7 @@ const App = (() => {
   // text (so options can be compared before picking).
   function renderFeatureFullRules(feat) {
     const statLine = (feat.features || []).map(f =>
-      `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.special && f.special !== '-' ? ` · ${esc(f.special)}` : ''}</span>`
+      `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.special && f.special !== '-' ? `, ${esc(f.special)}` : ''}</span>`
     ).join('');
     const rules = (feat.rules || []).map(r =>
       `<div class="feature-rule">${r.description ? `<b>${esc(r.name)}:</b> ${ruleHtml(r.description)}` : `<b>${esc(r.name)}</b>`}</div>`
@@ -2455,7 +2455,7 @@ const App = (() => {
     }
     if (opt.loads && opt.loads.length) {
       const l = opt.loads[0];
-      return `<span class="sys-opt-detail">Launch ${esc(l.launch || '')}${l.special && l.special !== '-' ? ' · ' + esc(l.special) : ''}</span>`;
+      return `<span class="sys-opt-detail">Launch ${esc(l.launch || '')}${l.special && l.special !== '-' ? ', ' + esc(l.special) : ''}</span>`;
     }
     if (opt.effect) return `<span class="sys-opt-detail">${esc(opt.effect)}</span>`;
     return '';
