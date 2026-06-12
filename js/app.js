@@ -442,22 +442,10 @@ const App = (() => {
     }
 
     // Objectives reference
+    // Secondary objectives reference removed from the landing (it lives in the
+    // builder's Secondary Objectives picker where it's actually used).
     const objEl = document.getElementById('landing-objectives');
-    const objectives = raw?.gameSystem?.objectives || [];
-    if (objEl && objectives.length > 0) {
-      const cards = objectives.map(o =>
-        `<div class="objective-card">
-          <div class="objective-card-name">${esc(o.name)}</div>
-          <div class="objective-card-desc">${esc(o.description)}</div>
-        </div>`
-      ).join('');
-      objEl.innerHTML = `
-        <div class="objectives-header" onclick="this.parentElement.classList.toggle('objectives-list-expanded')">
-          <span class="objectives-title">Secondary Objectives Reference</span>
-          <span class="objectives-toggle">Show <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg></span>
-        </div>
-        <div class="objectives-grid">${cards}</div>`;
-    }
+    if (objEl) { objEl.innerHTML = ''; objEl.style.display = 'none'; }
   }
 
   // Quick start: create a new fleet for the chosen faction
@@ -2029,14 +2017,26 @@ const App = (() => {
 
     const groupPts = group.ships.reduce((t, s) => t + (s.points || 0), 0);
 
-    // Determine tonnage category from first ship
+    // First-ship facts for the header (a group is one ship profile, so the
+    // header is the single authoritative title — name/tonnage/badges live here,
+    // not repeated on the card body below).
     let tonnageBadge = '';
+    let headerBadges = '';
+    let titleHtml = `<h2 class="group-title">${esc(group.name)}</h2>`;
     if (group.ships.length > 0) {
-      const firstDb = findShipInDB(currentFleet.faction, group.ships[0].groupCategory, group.ships[0].shipKey);
+      const fs0 = group.ships[0];
+      const firstDb = findShipInDB(currentFleet.faction, fs0.groupCategory, fs0.shipKey);
       const ton = firstDb ? (firstDb.tonnage || '') : '';
       if (ton) {
         const tonClass = ton.toLowerCase().replace(/\s+/g, '-');
         tonnageBadge = `<span class="badge badge-tonnage badge-tonnage-${tonClass}">${esc(tonLabel(ton))}</span>`;
+      }
+      if (firstDb) {
+        if (firstDb.isUnique) headerBadges += '<span class="ship-badge ship-badge-unique">Unique</span>';
+        else if (firstDb.isRare) headerBadges += '<span class="ship-badge ship-badge-rare">Rare</span>';
+        const gmin = firstDb.groupMin || 1, gmax = firstDb.groupMax || 1;
+        if (gmax > 1) headerBadges += `<span class="ship-badge ship-badge-group">${gmin}–${gmax}</span>`;
+        titleHtml = `<h2 class="group-title ship-card-name-link" onclick="App.openShipDetail('${currentFleet.faction}','${fs0.groupCategory}','${fs0.shipKey}')">${esc(group.name)}</h2>`;
       }
     }
 
@@ -2081,7 +2081,8 @@ const App = (() => {
     </button>
     <div class="group-header-bar">
       <div class="flex items-center gap-md flex-wrap">
-        <h2 class="group-title">${esc(group.name)}</h2>
+        ${titleHtml}
+        ${headerBadges}
         ${tonnageBadge}
         <span class="badge badge-navy">${groupPts} pts</span>
       </div>
@@ -2184,8 +2185,8 @@ const App = (() => {
   };
 
   function renderStatGrid(ship) {
-    // 2-col grid: Scan|Sig, Thrust|Saves, then Hull as its own full-width row.
-    // The three saves (ES/KS/BS) are combined into a single Saves cell.
+    // 3-col grid: Scan | Sig | Thrust on top; Hull (spans 2) + a vertical Saves
+    // column (ES/KS/BS stacked) on the bottom row.
     const cell = (k, cls = '') => {
       const v = ship[k];
       if (v === undefined || v === 0) return '';
@@ -2209,9 +2210,7 @@ const App = (() => {
     const savesCell = saves
       ? `<div class="stat-cell stat-cell-saves" title="Saves: Energy / Kinetic / Backup"><span class="saves-readout">${saves}</span></div>`
       : '';
-    const top = [cell('scan'), cell('sig'), cell('thrust'), savesCell].filter(Boolean).join('');
-    const hull = cell('hull', 'stat-cell-wide');
-    const cells = top + hull;
+    const cells = [cell('scan'), cell('sig'), cell('thrust'), cell('hull', 'stat-cell-wide'), savesCell].filter(Boolean).join('');
     return cells ? `<div class="stat-grid">${cells}</div>` : '';
   }
 
@@ -2706,20 +2705,13 @@ const App = (() => {
     <div class="group-ship-entry${compact ? ' compact' : ''}${useAlt ? ' alt2x4' : ''}">
       ${img ? `<div class="ship-card-image${isFullyModular(dbShip) ? ' ship-img-modular' : ''}"${isFullyModular(dbShip) ? ' title="Base hull shown, your ship\'s actual look depends on the systems you choose"' : ''}>${qtyBadge}<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
       <div class="ship-card-body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="ship-card-name ship-card-name-link" onclick="event.stopPropagation(); App.openShipDetail('${currentFleet.faction}','${ship.groupCategory}','${ship.shipKey}')">${esc(name)}${badges ? ` ${badges}` : ''}</div>
-            <div class="ship-tonnage-label ship-tonnage-${ship.groupCategory || 'medium'}">${esc(tonnage)}</div>
-          </div>
-          ${costHtml}
-        </div>
         ${midSection}
         ${renderSystemsPicker(ship, dbShip, groupId, currentFleet.faction)}
         ${renderFeatureCarrierBlock(ship, dbShip, groupId)}
         ${compact ? '' : loreHtml}
         ${compact ? '' : variantsHtml}
       </div>
-      <button class="btn btn-ghost btn-icon btn-sm group-ship-remove" onclick="App.removeShip('${groupId}','${ship.id}')" data-tooltip="Remove ship"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+      <button class="btn btn-ghost btn-icon btn-sm group-ship-remove" onclick="App.removeShip('${groupId}','${ship.id}')" aria-label="Remove ship"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>`;
   }
 

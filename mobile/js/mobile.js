@@ -344,8 +344,8 @@
     };
     const saves = [saveItem('es'), saveItem('ks'), saveItem('bs')].filter(Boolean).join('');
     const savesCell = saves ? `<div class="stat-cell stat-cell-saves"><span class="saves-readout">${saves}</span></div>` : '';
-    const top = [cell('scan'), cell('sig'), cell('thrust'), savesCell].filter(Boolean).join('');
-    return `<div class="stat-grid">${top}${cell('hull', 'stat-cell-wide')}</div>`;
+    const cells = [cell('scan'), cell('sig'), cell('thrust'), cell('hull', 'stat-cell-wide'), savesCell].filter(Boolean).join('');
+    return `<div class="stat-grid">${cells}</div>`;
   }
 
   function lookupRule(name) {

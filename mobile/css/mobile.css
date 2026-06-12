@@ -490,20 +490,21 @@ button, a, input, select, textarea,
 
 /* ── 11. Stat Grid (3-col) ─────────────────────────────── */
 .stat-grid {
-  /* 2-col: Scan|Sig, Thrust|Saves, Hull full-width. ES/KS/BS combine. */
+  /* 3-col: Scan|Sig|Thrust; Hull(span2) + vertical Saves column. */
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 4px;
   padding: var(--sp-m) var(--sp-l);
   background: var(--white);
   border-bottom: 1px solid var(--stroke2);
 }
-.stat-cell-wide { grid-column: 1 / -1; justify-content: center; gap: 8px; }
+.stat-cell-wide { grid-column: span 2; }
 .stat-cell-wide .stat-value { font-size: 20px; }
-.saves-readout { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; min-width: 0; }
-.save-item { display: inline-flex; align-items: baseline; gap: 3px; }
+.stat-cell-saves { align-items: stretch; }
+.saves-readout { display: flex; flex-direction: column; gap: 2px; min-width: 0; width: 100%; }
+.save-item { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
 .save-lbl { font-family: var(--font-condensed); font-size: 11px; font-weight: var(--weight-bold); color: var(--fg3); text-transform: uppercase; }
-.save-val { font-family: var(--font-display); font-size: 15px; font-weight: var(--weight-bold); font-variant-numeric: tabular-nums lining-nums; color: var(--fg1); }
+.save-val { font-family: var(--font-display); font-size: 15px; line-height: 1.1; font-weight: var(--weight-bold); font-variant-numeric: tabular-nums lining-nums; color: var(--fg1); }
 .save-es .save-val { color: #8b5e1a; }
 .save-ks .save-val { color: var(--navy); }
 .save-bs .save-val { color: #8a5e10; }
@@ -1738,8 +1739,9 @@ body.sheet-open .sheet-scrim {
   font-weight: var(--weight-semibold);
   vertical-align: middle;
 }
-.ship-tag-rare { background: var(--navy); color: #fff; }
-.ship-tag-unique { background: var(--gold); color: var(--navy-dark, #0f2640); }
+.ship-tag-rare, .ship-tag-unique { background: none; padding: 0; border-radius: 0; text-transform: uppercase; font-size: 10px; letter-spacing: 0.06em; }
+.ship-tag-rare { color: var(--navy); }
+.ship-tag-unique { color: #8a5e10; }
 .row-disabled { opacity: 0.4; pointer-events: none; }
 .fleet-legal-check { display: inline-flex; vertical-align: -2px; color: #2f7a3a; }
 .fleet-legal-check .status-svg { width: 17px; height: 17px; }
