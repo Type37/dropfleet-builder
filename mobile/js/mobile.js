@@ -904,7 +904,7 @@
     };
 
     switch (screenId) {
-      case 'screen-fleet-list': menu.classList.remove('hidden'); title.textContent = 'Fleet Builder · Mobile'; break;
+      case 'screen-fleet-list': menu.classList.remove('hidden'); title.textContent = 'Fleet Builder'; break;
       case 'screen-fleet-detail': back.classList.remove('hidden'); overflow.classList.remove('hidden'); title.textContent = 'Fleet'; showPts(); break;
       case 'screen-add-group': back.classList.remove('hidden'); title.textContent = 'Add Group'; showPts(); break;
       case 'screen-group-detail': back.classList.remove('hidden'); overflow.classList.remove('hidden'); title.textContent = 'Group'; showPts(); break;
@@ -1015,7 +1015,7 @@
         ${art ? `<div class="ship-thumb"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
           <div class="list-row-title">${esc(fs.name)}</div>
-          <div class="list-row-sub">${sizeClass ? esc(sizeClass) + ' · ' : ''}flies with ${esc(a.name)}</div>
+          <div class="list-row-sub">${sizeClass ? esc(sizeClass) + ', ' : ''}flies with ${esc(a.name)}</div>
         </div>
         <span class="list-chevron">›</span>
       </div>`;
@@ -1103,7 +1103,7 @@
         html += `<div class="list-row" onclick="App.openSecondaryModal()">
           <div class="list-row-content">
             <div class="list-row-title">${chosen.map(o => esc(o.name)).join(' · ')}</div>
-            <div class="list-row-sub">${sel.length}/2 chosen · tap to edit</div>
+            <div class="list-row-sub">${sel.length}/2 chosen, tap to edit</div>
           </div>
           <span class="list-chevron">›</span>
         </div>`;
@@ -1310,7 +1310,7 @@
             <span class="list-row-title">${esc(ship.name)} ${tags.join('')}</span>
             <span class="list-row-pts">${cost}<span class="pts-unit">pts</span></span>
           </div>
-          <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)} · Group ${gMin}${gMax > gMin ? '–' + gMax : ''}</div>
+          <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)}, Group ${gMin}${gMax > gMin ? '–' + gMax : ''}</div>
         </div>
       </div>`;
     }).join('');
@@ -1909,7 +1909,7 @@
             <span class="list-row-title">Level ${l.level} Admiral</span>
             <span class="list-row-pts">${l.cost} pts</span>
           </div>
-          <div class="list-row-sub">Take any number · adds Level for AP &amp; initiative</div>
+          <div class="list-row-sub">Take any number, adds Level for AP &amp; initiative</div>
         </div>
       </div>`).join('');
 
@@ -2715,12 +2715,12 @@
         ${weapons ? `<table class="pr-weapons"><thead><tr><th>Weapon</th><th>Lk</th><th>At</th><th>Dm</th><th>Arc</th><th>Special</th></tr></thead><tbody>${weapons}</tbody></table>` : ''}
         ${printLaunchTable(laMap, db)}
         ${rulesInline ? `<div class="pr-rules-line"><b>Special:</b> ${rulesInline}</div>` : ''}
-        ${opts.length ? `<div class="pr-opts">${opts.map(esc).join(' · ')}</div>` : ''}
+        ${opts.length ? `<div class="pr-opts">${opts.map(esc).join(', ')}</div>` : ''}
       </div>`;
     }).join('');
 
     const admiralsHtml = (f.admirals || []).map(a =>
-      `<div class="pr-line"><b>${esc(a.name)}</b> (Lv ${a.level || '?'}), ${a.points} pts${a.selectedAbilities?.length ? ' · ' + esc(a.selectedAbilities.join(', ')) : ''}</div>`).join('');
+      `<div class="pr-line"><b>${esc(a.name)}</b> (Lv ${a.level || '?'}), ${a.points} pts${a.selectedAbilities?.length ? ', ' + esc(a.selectedAbilities.join(', ')) : ''}</div>`).join('');
     const stationHtml = f.spaceStation ? `<div class="pr-line"><b>${esc(f.spaceStation.name)}</b>, ${f.spaceStation.cost} pts${(f.spaceStation.systems && f.spaceStation.systems.length) ? ' (' + f.spaceStation.systems.map(esc).join(', ') + ')' : ''}</div>` : '';
 
     const glossary = [...usedRules.entries()].sort((a, b) => a[0].localeCompare(b[0]))

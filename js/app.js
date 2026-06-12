@@ -2962,7 +2962,7 @@ const App = (() => {
         return `<span class="rule-chip">${esc(r)}</span>`;
       }).join('')}${specialRules.length > 4 ? `<span class="rule-chip" style="background:rgba(255,255,255,0.06);color:var(--ink-faint)">+${specialRules.length - 4}</span>` : ''}</div>` : ''}
       <div class="flex items-center justify-between" style="margin-top:auto">
-        <span class="text-caption">${data.g ? `Group: ${data.g}` : ''}${launchIndicator ? (data.g ? ' · ' : '') + launchIndicator : ''}</span>
+        <span class="text-caption">${data.g ? `Group: ${data.g}` : ''}${launchIndicator ? (data.g ? ', ' : '') + launchIndicator : ''}</span>
         <div class="flex gap-xs">
           <button class="btn btn-ghost btn-sm btn-icon" onclick="event.stopPropagation(); App.openShipDetail('${currentFleet.faction}','${category}','${key}')" title="View details"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7v4M8 5v.5"/></svg></button>
           <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addShipToGroup('${key}','${category}')">+ Add</button>
@@ -3839,6 +3839,11 @@ const App = (() => {
     renderStationSlot();
     updatePoints();
     showToast(`${station.name} selected`);
+
+    // If the station has required modules (generic Small/Med/Large), pop the
+    // modules modal straight away so the player fills them in.
+    const spec = stationArmamentSpec(currentFleet.spaceStation);
+    if (spec && spec.required > 0) openStationArmaments();
   }
 
   /* ── Station hardpoints (generic Small/Medium/Large) ───────
@@ -4065,7 +4070,7 @@ const App = (() => {
         ['Hull', ssStats.hull], ['ES', ssStats.es], ['KS', ssStats.ks],
         ['Scan', ssStats.scan], ['Sig', ssStats.sig]
       ].filter(([,v]) => v && v !== '-' && v !== '--');
-      const ssStatLine = ssStatPairs.map(([l,v]) => `${l}: ${v}`).join(' · ');
+      const ssStatLine = ssStatPairs.map(([l,v]) => `${l}: ${v}`).join(', ');
       const ssRules = (ss.specialRules || []).map(r => esc(r.name || '')).filter(Boolean).join(', ');
       // Station hull damage boxes with cripple marker
       const ssHull = parseInt(ssStats.hull, 10);
@@ -4225,7 +4230,7 @@ const App = (() => {
         let featurePrintHtml = '';
         if (ship.feature) {
           const feat = ((shipDB[f.faction] || {}).deployableFeatures || []).find(df => df.name === ship.feature);
-          const fStat = feat ? (feat.features || []).map(x => `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? ` · ${x.special}` : ''}`).join('; ') : '';
+          const fStat = feat ? (feat.features || []).map(x => `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`).join('; ') : '';
           featurePrintHtml = `<div class="print-rules-inline"><div class="print-rules-heading">Deployable Feature</div><div class="print-rule-entry"><span class="print-rule-name">${esc(ship.feature)}</span>${fStat ? `, ${esc(fStat)}` : ''}</div></div>`;
         }
 
