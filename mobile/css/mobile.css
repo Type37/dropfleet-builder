@@ -490,14 +490,24 @@ button, a, input, select, textarea,
 
 /* ── 11. Stat Grid (3-col) ─────────────────────────────── */
 .stat-grid {
-  /* Compact 2-3 column grid; cells group icon+value+label tightly. */
+  /* 2-col: Scan|Sig, Thrust|Saves, Hull full-width. ES/KS/BS combine. */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: 4px;
   padding: var(--sp-m) var(--sp-l);
   background: var(--white);
   border-bottom: 1px solid var(--stroke2);
 }
+.stat-cell-wide { grid-column: 1 / -1; justify-content: center; gap: 8px; }
+.stat-cell-wide .stat-value { font-size: 20px; }
+.saves-readout { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; min-width: 0; }
+.save-item { display: inline-flex; align-items: baseline; gap: 3px; }
+.save-lbl { font-family: var(--font-condensed); font-size: 11px; font-weight: var(--weight-bold); color: var(--fg3); text-transform: uppercase; }
+.save-val { font-family: var(--font-display); font-size: 15px; font-weight: var(--weight-bold); font-variant-numeric: tabular-nums lining-nums; color: var(--fg1); }
+.save-es .save-val { color: #8b5e1a; }
+.save-ks .save-val { color: var(--navy); }
+.save-bs .save-val { color: #8a5e10; }
+.save-none .save-val { color: var(--fg4); opacity: 0.5; }
 
 /* Stacked: hero number on top, abbreviation on its own line beneath. */
 .stat-cell-text { display: flex; flex-direction: row; align-items: baseline; gap: 4px; min-width: 0; line-height: 1.02; }
@@ -547,7 +557,7 @@ button, a, input, select, textarea,
 }
 .weapon-arc .arc-ico svg { display: block; }
 .weapon-arc .arc-label {
-  font-size: 9px;
+  font-size: 10px;
   font-family: var(--font-condensed);
   font-weight: var(--weight-semibold);
   color: var(--fg3);

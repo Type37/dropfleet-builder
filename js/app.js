@@ -1965,6 +1965,8 @@ const App = (() => {
     const sel = currentFleet.secondaryObjectives || [];
     const sub = document.getElementById('secondary-modal-sub');
     if (sub) sub.textContent = sel.length >= 2 ? 'Both chosen, tap a selected objective to swap it.' : `Pick ${2 - sel.length} more, choose 2 for your game.`;
+    const doneBtn = document.getElementById('secondary-done-btn');
+    if (doneBtn) doneBtn.textContent = `Done (${Math.min(sel.length, 2)}/2)`;
     const body = document.getElementById('secondary-modal-body');
     if (body) body.innerHTML = `<div class="secondary-list">${secObjs.map((o, i) => {
       const on = sel.includes(o.name);
@@ -2182,27 +2184,34 @@ const App = (() => {
   };
 
   function renderStatGrid(ship) {
-    // 'g' (group size) is shown as a range badge by the ship name / qty picker,
-    // not as a prominent stat-grid cell.
-    const keys = ['scan','sig','thrust','hull','es','ks','bs'];
-    const cells = keys.map(k => {
+    // 2-col grid: Scan|Sig, Thrust|Saves, then Hull as its own full-width row.
+    // The three saves (ES/KS/BS) are combined into a single Saves cell.
+    const cell = (k, cls = '') => {
       const v = ship[k];
       if (v === undefined || v === 0) return '';
       const meta = STAT_META[k];
-      let cellClass = meta.cssClass || '';
-      // Gray out BS when it's "-"
-      if (k === 'bs' && (v === '-' || v === '--')) cellClass = 'stat-cell-none';
       const icon = STAT_ICONS[k] || '';
-      // Stacked layout: icon landmark on the left, then the hero number with its
-      // abbreviation stacked beneath it (label gets its own line, so full names fit).
-      return `<div class="stat-cell ${cellClass}" title="${meta.title}">
+      return `<div class="stat-cell ${cls}" title="${meta.title}">
         ${icon ? `<span class="stat-cell-icon">${icon}</span>` : ''}
         <span class="stat-cell-text">
           <span class="stat-cell-value">${v}</span>
           <span class="stat-cell-label">${meta.label}</span>
         </span>
       </div>`;
-    }).filter(Boolean).join('');
+    };
+    const saveItem = (k) => {
+      const v = ship[k];
+      if (v === undefined || v === '' || v === 0) return '';
+      const none = (v === '-' || v === '--');
+      return `<span class="save-item save-${k}${none ? ' save-none' : ''}"><span class="save-lbl">${STAT_META[k].label}</span><span class="save-val">${v}</span></span>`;
+    };
+    const saves = [saveItem('es'), saveItem('ks'), saveItem('bs')].filter(Boolean).join('');
+    const savesCell = saves
+      ? `<div class="stat-cell stat-cell-saves" title="Saves: Energy / Kinetic / Backup"><span class="saves-readout">${saves}</span></div>`
+      : '';
+    const top = [cell('scan'), cell('sig'), cell('thrust'), savesCell].filter(Boolean).join('');
+    const hull = cell('hull', 'stat-cell-wide');
+    const cells = top + hull;
     return cells ? `<div class="stat-grid">${cells}</div>` : '';
   }
 

@@ -1886,15 +1886,25 @@ h1, h2, h3, h4, h5, h6 {
 /* Stat block: stats STACKED one per row (a vertical datasheet list), NOT all
    across a single row. Each row: icon + stat name on the left, value on the
    right. Scans straight down. */
-/* Compact grid (~2-3 columns), each cell groups icon + value + label tightly
-   so the eye doesn't travel a full row width. Capped so it never spreads into
-   one long row. */
+/* 2-col grid: Scan|Sig, Thrust|Saves, then Hull as its own full-width row.
+   ES/KS/BS combine into one Saves cell. */
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: 4px;
-  max-width: 320px;
+  max-width: 300px;
 }
+.stat-cell-wide { grid-column: 1 / -1; justify-content: center; gap: 8px; }
+.stat-cell-wide .stat-cell-value { font-size: 20px; }
+/* Combined Saves cell: ES / KS / BS values in one readout. */
+.saves-readout { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; min-width: 0; }
+.save-item { display: inline-flex; align-items: baseline; gap: 3px; }
+.save-lbl { font-family: var(--font-condensed); font-size: 11px; font-weight: var(--weight-bold); color: var(--ink-muted); text-transform: uppercase; }
+.save-val { font-family: var(--font-display); font-size: 15px; font-weight: var(--weight-bold); font-variant-numeric: tabular-nums lining-nums; }
+.save-es .save-val { color: #8b5e1a; }
+.save-ks .save-val { color: var(--navy); }
+.save-bs .save-val { color: var(--gold-dark); }
+.save-none .save-val { color: var(--ink-faint); opacity: 0.5; }
 
 .stat-cell {
   background: var(--paper-alt);
@@ -2009,7 +2019,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .weapon-col-arc svg { flex-shrink: 0; }
 .arc-label {
-  font-size: 8px;
+  font-size: 10px;
   line-height: 1;
   letter-spacing: 0.02em;
   color: var(--ink-muted);

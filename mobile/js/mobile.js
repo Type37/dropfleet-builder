@@ -328,6 +328,25 @@
   function statIcon(key) {
     return STAT_ICONS[key] ? `<span class="stat-icon stat-icon-${key}">${STAT_ICONS[key]}</span>` : '';
   }
+  // Shared stat grid: Scan|Sig, Thrust|Saves, then Hull full-width. ES/KS/BS
+  // combine into one Saves cell. entries: [{key,label,val}]. (Mirrors desktop.)
+  function statGridMobile(entries, tappable) {
+    const byKey = {}; entries.forEach(e => { byKey[e.key] = e; });
+    const cell = (k, cls = '') => {
+      const e = byKey[k]; if (!e || e.val == null || e.val === '') return '';
+      const tap = tappable ? ` tappable" onclick="App.openStat('${k}')` : '';
+      return `<div class="stat-cell ${cls}${tap}">${statIcon(k)}<span class="stat-cell-text"><span class="stat-value">${esc(e.val)}</span><span class="stat-label">${e.label}</span></span></div>`;
+    };
+    const saveItem = k => {
+      const e = byKey[k]; if (!e || e.val == null || e.val === '') return '';
+      const none = (e.val === '-' || e.val === '--');
+      return `<span class="save-item save-${k}${none ? ' save-none' : ''}"${tappable ? ` onclick="App.openStat('${k}')"` : ''}><span class="save-lbl">${e.label}</span><span class="save-val">${esc(e.val)}</span></span>`;
+    };
+    const saves = [saveItem('es'), saveItem('ks'), saveItem('bs')].filter(Boolean).join('');
+    const savesCell = saves ? `<div class="stat-cell stat-cell-saves"><span class="saves-readout">${saves}</span></div>` : '';
+    const top = [cell('scan'), cell('sig'), cell('thrust'), savesCell].filter(Boolean).join('');
+    return `<div class="stat-grid">${top}${cell('hull', 'stat-cell-wide')}</div>`;
+  }
 
   function lookupRule(name) {
     // Single source of truth: the shared rules glossary (RULES_DB, from
@@ -1459,11 +1478,7 @@
         <div class="pts-badge-lg"><div class="pts-badge-value">${gp}</div><div class="pts-badge-label">Points</div></div>
       </div>
 
-      <div class="stat-grid">
-        ${statEntries.map(s => `<div class="stat-cell tappable" onclick="App.openStat('${s.key}')">
-          ${statIcon(s.key)}<span class="stat-cell-text"><span class="stat-value">${esc(s.val)}</span><span class="stat-label">${s.label}</span></span>
-        </div>`).join('')}
-      </div>
+      ${statGridMobile(statEntries, true)}
 
       <div class="group-counter">
         <div>
@@ -2050,9 +2065,7 @@
     const sizeClass = fs.category ? (CATEGORY_LABELS[fs.category] || '') : '';
     return `<div class="section-header">${esc(fs.name)}${sizeClass ? ', ' + sizeClass : ''}${fs.cost ? `, ${fs.cost} pts` : ''}</div>
       ${artSrc ? `<div class="ship-art-hero">${shopLinkImg(fs.name, `<img src="${artSrc}" alt="${esc(fs.name)}" loading="lazy">`, fs)}</div>` : ''}
-      <div class="stat-grid">
-        ${statEntries.map(s => `<div class="stat-cell">${statIcon(s.key)}<span class="stat-cell-text"><span class="stat-value">${esc(s.val)}</span><span class="stat-label">${s.label}</span></span></div>`).join('')}
-      </div>
+      ${statGridMobile(statEntries, false)}
       ${weapons.length ? `<div class="weapon-table">
         <div class="weapon-row weapon-row-header">
           <div class="weapon-name">Weapon</div><div class="weapon-val">Lk</div><div class="weapon-val">At</div><div class="weapon-val">Dm</div><div class="weapon-val">Arc</div>
@@ -2379,9 +2392,7 @@
       { key: 'es', label: 'ES', val: stats.es },
       { key: 'ks', label: 'KS', val: stats.ks }
     ].filter(s => s.val != null && s.val !== '-' && s.val !== '');
-    const statGrid = statDefs.length ? `<div class="stat-grid">
-      ${statDefs.map(s => `<div class="stat-cell">${statIcon(s.key)}<span class="stat-cell-text"><span class="stat-value">${esc(s.val)}</span><span class="stat-label">${s.label}</span></span></div>`).join('')}
-    </div>` : '';
+    const statGrid = statDefs.length ? statGridMobile(statDefs, false) : '';
 
     const weapons = (def && def.weapons) || [];
     const weaponSheet = weapons.length ? optionWeaponSheet(weapons) : '';
