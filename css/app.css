@@ -4791,7 +4791,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 .overview-header-right {
   text-align: right;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-sm);
 }
+.overview-legal-check { display: inline-flex; align-items: center; color: #2f7a3a; }
 .overview-pts-big {
   font-family: var(--font-display);
   font-size: var(--text-3xl);

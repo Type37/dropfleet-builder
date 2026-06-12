@@ -1014,8 +1014,11 @@
         return `<div class="warning-item ${cls}"${onclick}><span class="warning-icon">${icon}</span><span>${esc(w.m)}${arrow}</span></div>`;
       }).join('');
     } else {
-      warnEl.classList.remove('hidden');
-      warnEl.innerHTML = `<div class="warning-item warn-ok"><span class="warning-icon">${STATUS_ICON.ok}</span><span>Legal fleet, ready to play</span></div>`;
+      // Legal: no bar, just a small check by the fleet name.
+      warnEl.classList.add('hidden');
+      warnEl.innerHTML = '';
+      const nm = document.getElementById('fleet-detail-name');
+      if (nm) nm.innerHTML = `${esc(f.name || 'Unnamed Fleet')} <span class="fleet-legal-check" title="Legal fleet, ready to play">${STATUS_ICON.ok}</span>`;
     }
 
     // Groups
@@ -1472,7 +1475,7 @@
       ${artSrc ? `<div class="ship-art-hero${isFullyModular(ship) ? ' ship-img-modular' : ''}">${isFullyModular(ship) ? '<div class="modular-art-note">Base hull shown, your ship’s look depends on the systems you choose</div>' : ''}${shopLinkImg(ship.name, `<img src="${artSrc}" alt="${esc(ship.name)}" loading="lazy">`, ship)}</div>` : ''}
       <div class="detail-header">
         <div>
-          <div class="detail-name">${esc(ship.name)}${qty > 1 ? ' ×' + qty : ''}${ship.isUnique ? ' <span class="ship-tag ship-tag-unique">Unique</span>' : ship.isRare ? ' <span class="ship-tag ship-tag-rare">Rare</span>' : ''}</div>
+          <div class="detail-name">${esc(ship.name)}${ship.isUnique ? ' <span class="ship-tag ship-tag-unique">Unique</span>' : ship.isRare ? ' <span class="ship-tag ship-tag-rare">Rare</span>' : ''}</div>
           <div class="detail-type">${tonLabel(ship.tonnage) || CATEGORY_LABELS[inst.groupCategory] || ''}</div>
         </div>
         <div class="pts-badge-lg"><div class="pts-badge-value">${gp}</div><div class="pts-badge-label">Points</div></div>
@@ -1736,7 +1739,6 @@
       });
     });
     return `<div class="weapon-table">
-      <div class="section-header" style="padding:0 0 var(--sp-s)">Launch Assets</div>
       <div class="weapon-row weapon-row-header" style="grid-template-columns:52px 1fr 40px 32px 32px 40px">
         <div class="weapon-val">Launch</div><div class="weapon-name" style="color:var(--fg3)">Load</div>
         <div class="weapon-val">Thr</div><div class="weapon-val">At</div><div class="weapon-val">Lk</div><div class="weapon-val">Dm</div>

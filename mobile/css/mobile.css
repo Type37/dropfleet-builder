@@ -1741,6 +1741,8 @@ body.sheet-open .sheet-scrim {
 .ship-tag-rare { background: var(--navy); color: #fff; }
 .ship-tag-unique { background: var(--gold); color: var(--navy-dark, #0f2640); }
 .row-disabled { opacity: 0.4; pointer-events: none; }
+.fleet-legal-check { display: inline-flex; vertical-align: -2px; color: #2f7a3a; }
+.fleet-legal-check .status-svg { width: 17px; height: 17px; }
 
 /* ── 41. Form hint + loadout group label ───────────────── */
 .form-hint {

@@ -1905,6 +1905,7 @@ const App = (() => {
             </div>
           </div>
           <div class="overview-header-right">
+            ${warnings.length === 0 ? `<span class="overview-legal-check" title="Legal fleet, ready to play"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M6.3 10.3 8.8 12.8 13.7 7.2"/></svg></span>` : ''}
             ${sizeInfo.max !== 99999 ? (pts > sizeInfo.max ? `<span class="overview-legal-pill is-illegal">${pts - sizeInfo.max} pts over</span>` : `<span class="overview-legal-pill is-ok">${sizeInfo.max - pts} pts left</span>`) : ''}
           </div>
         </div>
@@ -2083,7 +2084,6 @@ const App = (() => {
         <h2 class="group-title">${esc(group.name)}</h2>
         ${tonnageBadge}
         <span class="badge badge-navy">${groupPts} pts</span>
-        <span class="badge badge-neutral">${group.ships.length} ship${group.ships.length !== 1 ? 's' : ''}</span>
       </div>
       <div class="group-header-actions">
         <button class="btn btn-danger btn-sm" onclick="App.removeGroup('${group.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
@@ -2575,7 +2575,7 @@ const App = (() => {
               </div>
             </label>`;
           }).join('');
-          return `<div class="loadout-picker"><div class="detail-section-label">${esc(lo.name || 'Loadout')}</div>${cards}</div>`;
+          return `<div class="loadout-picker">${cards}</div>`;
         }
         // Single fixed option — just show its datasheet.
         return optSheet(lo.options[selIdx] || lo.options[0] || {});
@@ -2677,7 +2677,7 @@ const App = (() => {
 
     // When several identical ships are collapsed into one card, show a ×N
     // multiplier and the combined cost (per-ship cost shown alongside).
-    const qtyBadge = count > 1 ? `<span class="ship-qty-badge">×${count}</span>` : '';
+    const qtyBadge = '';  // quantity lives on the stepper, not repeated on the art
     const costHtml = count > 1
       ? `<div class="ship-card-cost">${ship.points * count} pts<span class="ship-card-cost-each">${count} × ${ship.points}</span></div>`
       : `<div class="ship-card-cost">${ship.points} pts</div>`;
@@ -2708,7 +2708,7 @@ const App = (() => {
       <div class="ship-card-body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
         <div class="flex items-center justify-between">
           <div>
-            <div class="ship-card-name ship-card-name-link" onclick="event.stopPropagation(); App.openShipDetail('${currentFleet.faction}','${ship.groupCategory}','${ship.shipKey}')">${esc(name)}${count > 1 ? ` <span class="ship-name-qty">×${count}</span>` : ''}${badges ? ` ${badges}` : ''}</div>
+            <div class="ship-card-name ship-card-name-link" onclick="event.stopPropagation(); App.openShipDetail('${currentFleet.faction}','${ship.groupCategory}','${ship.shipKey}')">${esc(name)}${badges ? ` ${badges}` : ''}</div>
             <div class="ship-tonnage-label ship-tonnage-${ship.groupCategory || 'medium'}">${esc(tonnage)}</div>
           </div>
           ${costHtml}
@@ -5106,7 +5106,6 @@ const App = (() => {
     });
 
     return `<div class="launch-table-wrap">
-      <div class="load-section-label">Launch Assets</div>
       <table class="launch-table">
         <thead><tr><th>Launch</th><th>Load</th><th>Thrust</th><th>Att</th><th>Lock</th><th>Dmg</th><th>Special</th></tr></thead>
         <tbody>${body}</tbody>
@@ -5301,8 +5300,7 @@ const App = (() => {
     const loads = dbShip.loads || [];
     let loadsHtml = '';
     if (loads.length > 0) {
-      loadsHtml = '<div class="detail-section-label">Launch Assets</div>' +
-        loads.map(l =>
+      loadsHtml = loads.map(l =>
           `<div class="load-row"><span class="load-row-name">${esc(l.name)}</span>
           <div class="weapon-row-stats"><span class="weapon-stat-chip">Launch ${l.launch}</span>
           ${l.special && l.special !== '-' ? `<span class="weapon-stat-chip">${esc(l.special)}</span>` : ''}
