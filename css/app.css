@@ -1904,6 +1904,7 @@ h1, h2, h3, h4, h5, h6 {
 .stat-weapon-row .sw-stats { flex: 0 0 auto; }
 .stat-weapon-row .sw-weapons { flex: 1 1 300px; min-width: 0; }
 .stat-weapon-row .sw-weapons .weapon-list { margin: 0; }
+.ship-rules-glossary { margin-top: var(--sp-sm); }
 
 .stat-cell {
   background: var(--paper-alt);

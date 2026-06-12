@@ -2531,6 +2531,37 @@ const App = (() => {
     </div>`;
   }
 
+  // Every special rule the ship actually uses (its own + all weapon specials,
+  // base and selected loadout), spelled out in full once, deduped. So the rules
+  // are readable on the detail page without tapping a single chip.
+  function renderShipRulesGlossary(dbShip, ship) {
+    if (!dbShip) return '';
+    const seen = new Map(); // name -> {description, page}
+    const add = (name) => {
+      const n = (name || '').trim();
+      if (!n || n === '-' || n === '--' || /^(rare|unique)$/i.test(n) || seen.has(n)) return;
+      const full = lookupRuleFull(n);
+      if (full && full.description) seen.set(n, full);
+    };
+    (dbShip.specialRuleDetails || []).forEach(r => {
+      if (!r || !r.name) return;
+      if (r.description && !seen.has(r.name)) seen.set(r.name, { description: r.description, page: r.page || '' });
+      else add(r.name);
+    });
+    const weapons = [...(dbShip.weapons || [])];
+    (dbShip.loadoutOptions || []).forEach((lo, i) => {
+      const sel = (ship && ship.loadouts && ship.loadouts[i] !== undefined) ? ship.loadouts[i] : 0;
+      const opt = lo.options && lo.options[sel];
+      if (opt && opt.weapons) weapons.push(...opt.weapons);
+    });
+    weapons.forEach(w => { if (w && w.special) w.special.split(',').forEach(add); });
+    if (!seen.size) return '';
+    const entries = [...seen.entries()].map(([name, full]) =>
+      `<div class="detail-rule-entry"><span class="detail-rule-name">${esc(name)}${full.page ? ` <span class="detail-rule-page">p.${esc(full.page)}</span>` : ''}</span><span class="detail-rule-desc">${ruleHtml(full.description)}</span></div>`
+    ).join('');
+    return `<div class="ship-rules-glossary"><div class="ship-rules-block-label">Rules</div><div class="detail-rules-list">${entries}</div></div>`;
+  }
+
   function renderGroupShipEntry(ship, dbShip, groupId, count = 1) {
     const name = dbShip ? dbShip.name : ship.shipKey;
     const img = dbShip ? dbShip.image : '';
@@ -2708,6 +2739,7 @@ const App = (() => {
         ${midSection}
         ${renderSystemsPicker(ship, dbShip, groupId, currentFleet.faction)}
         ${renderFeatureCarrierBlock(ship, dbShip, groupId)}
+        ${compact ? '' : renderShipRulesGlossary(dbShip, ship)}
         ${compact ? '' : loreHtml}
         ${compact ? '' : variantsHtml}
       </div>
