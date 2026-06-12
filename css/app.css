@@ -1060,9 +1060,10 @@ h1, h2, h3, h4, h5, h6 {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(28, 26, 23, 0.45);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  /* Plain dark scrim, NO backdrop blur: blur(4px) + transition:all forced the
+     browser to animate and recompute a full-screen blur every frame, which
+     tanked the popup framerate. A slightly darker flat scrim reads the same. */
+  background: rgba(28, 26, 23, 0.55);
   z-index: var(--z-overlay);
   display: flex;
   align-items: center;
@@ -1070,7 +1071,8 @@ h1, h2, h3, h4, h5, h6 {
   padding: var(--sp-lg);
   opacity: 0;
   visibility: hidden;
-  transition: all var(--duration-normal) var(--ease-out);
+  transition: opacity var(--duration-normal) var(--ease-out),
+              visibility var(--duration-normal) var(--ease-out);
 }
 .modal-overlay.active { opacity: 1; visibility: visible; }
 
