@@ -1081,7 +1081,8 @@
 
     // Admiral slot(s)
     html += `<div class="section-header">Admiral</div>`;
-    if ((f.admirals || []).length) {
+    const admiralCount = (f.admirals || []).length;
+    if (admiralCount) {
       html += f.admirals.map((a, i) => {
         const art = admiralArtPath(a.name);
         return `<div class="list-row" onclick="App.openAdmiralDetail(${i})">
@@ -1093,9 +1094,9 @@
           <span class="list-chevron">›</span>
         </div>`;
       }).join('');
-    } else {
-      html += `<div class="add-slot" onclick="App.openAdmiral()">+ Add Admiral</div>`;
     }
+    // Always allow adding (more) admirals — rules permit any number.
+    html += `<div class="add-slot" onclick="App.openAdmiral()">+ Add ${admiralCount ? 'Another ' : ''}Admiral</div>`;
 
     // Station slot
     html += `<div class="section-header">Space Station</div>`;
@@ -2897,7 +2898,16 @@
     // Register the root service worker (it controls the whole origin, including
     // /data/ and /assets/ which sit above /mobile/) so the app works offline.
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('../sw.js').catch(() => {});
+      // Self-update a live tab: reload when a new build takes over + poll while open.
+      if (navigator.serviceWorker.controller) {
+        let reloading = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (reloading) return; reloading = true; window.location.reload();
+        });
+      }
+      navigator.serviceWorker.register('../sw.js').then(reg => {
+        setInterval(() => reg.update().catch(() => {}), 60000);
+      }).catch(() => {});
     }
   }
 

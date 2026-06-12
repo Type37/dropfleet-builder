@@ -435,7 +435,19 @@
 <script src="js/app.js"></script>
 <script>
   if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+    // Auto-reload an already-controlled tab when a new build takes over, and poll
+    // for new versions while open — so a live tab self-updates (no hard refresh).
+    if (navigator.serviceWorker.controller) {
+      let reloading = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (reloading) return; reloading = true; window.location.reload();
+      });
+    }
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').then(reg => {
+        setInterval(() => reg.update().catch(() => {}), 60000);
+      }).catch(() => {});
+    });
   }
 </script>
 </body>
