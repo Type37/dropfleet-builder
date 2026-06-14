@@ -5028,6 +5028,19 @@ h1, h2, h3, h4, h5, h6 {
   transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
 }
 .overview-group-remove:hover { color: #c43c2f; background: var(--paper-alt); }
+.overview-group-copy {
+  order: -2;
+  background: none;
+  border: none;
+  padding: 2px;
+  color: var(--ink-faint);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  line-height: 0;
+  transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
+}
+.overview-group-copy:hover { color: var(--navy); background: var(--paper-alt); }
 .overview-group-stepper {
   display: flex;
   align-items: center;
@@ -5168,6 +5181,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: var(--sp-xl);
 }
 .detail-hero-image {
+  position: relative;
   width: 180px;
   height: 180px;
   border-radius: var(--radius-md);
@@ -5181,6 +5195,27 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
   object-fit: cover;
 }
+/* Hero art carousel: prev/next arrows (hover) + label & dots over the image. */
+.hero-art-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 24px; height: 34px; border: none; cursor: pointer; padding: 0;
+  background: rgba(15, 38, 64, 0.55); color: #fff; font-size: 19px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.12s; z-index: 2;
+}
+.detail-hero-image.has-alts:hover .hero-art-arrow { opacity: 1; }
+.hero-art-prev { left: 0; border-radius: 0 4px 4px 0; }
+.hero-art-next { right: 0; border-radius: 4px 0 0 4px; }
+.hero-art-arrow:hover { background: rgba(15, 38, 64, 0.85); }
+.hero-art-meta {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+  display: flex; align-items: center; justify-content: space-between; gap: 4px;
+  padding: 8px 6px 3px; background: linear-gradient(transparent, rgba(15, 38, 64, 0.72));
+}
+.hero-art-label { color: #fff; font-size: 10px; font-family: var(--font-condensed); font-weight: var(--weight-semibold); letter-spacing: 0.03em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hero-art-dots { display: flex; gap: 3px; flex-shrink: 0; }
+.hero-art-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, 0.45); }
+.hero-art-dot.active { background: #fff; }
 .detail-hero-info {
   display: flex;
   flex-direction: column;

@@ -556,6 +556,20 @@
       if (f.targetPoints && !f.gameSize) { f.gameSize = sizeForPoints(f.targetPoints); migrated = true; }
       if (!f.gameSize) { f.gameSize = 'clash'; migrated = true; }
       if (!f.pointsLimit) { f.pointsLimit = (GAME_SIZES[f.gameSize] || GAME_SIZES.clash).max; }
+      // Merge legacy duplicate payload groups (Bioficer Cells) into one group each —
+      // older fleets spawned a separate 1-ship group per copy, spamming the list.
+      if (Array.isArray(f.battleGroups)) {
+        const firstByKey = {}, kept = [];
+        f.battleGroups.forEach(g => {
+          const s = g.ships && g.ships[0];
+          if (s && s.groupCategory === 'payload') {
+            if (firstByKey[s.shipKey]) { firstByKey[s.shipKey].ships.push(...g.ships); migrated = true; return; }
+            firstByKey[s.shipKey] = g;
+          }
+          kept.push(g);
+        });
+        f.battleGroups = kept;
+      }
     });
     if (migrated) saveFleets();
   }
@@ -1134,7 +1148,7 @@
         const gp = groupPoints(f, g);
         const art = shipArtPath(db?.name);
         const modCls = isFullyModular(db) ? ' ship-img-modular' : '';
-        const { gMin, gMax } = groupQtyBounds(db);
+        const { gMin, gMax } = groupQtyBounds(db, s.groupCategory);
         // A variable-size group gets an inline ×N stepper so you set the count
         // right here, no panel-hop. Fixed groups (gMin===gMax) just show ×N.
         const canVary = gMax > gMin;
@@ -1497,10 +1511,25 @@
   function addShip(shipKey, category) {
     if (!activeFleet) return;
     const ship = findShip(activeFleet.faction, category, shipKey);
+    activeFleet.battleGroups = activeFleet.battleGroups || [];
+    // Payloads (Bioficer Cells) have no group size — fold a repeat add into the
+    // existing payload group of the same ship so the list isn't spammed with
+    // identical 1-ship groups.
+    if (category === 'payload') {
+      const existing = activeFleet.battleGroups.find(g =>
+        g.ships.length > 0 && g.ships[0].groupCategory === 'payload' && g.ships[0].shipKey === shipKey);
+      if (existing) {
+        existing.ships.push(makeShipInstance(activeFleet.faction, category, shipKey));
+        activeFleet.updatedAt = Date.now();
+        saveFleets();
+        haptic(HAPTIC.add);
+        goBack();
+        return;
+      }
+    }
     const minQty = ship?.groupMin || 1;
     const ships = [];
     for (let i = 0; i < minQty; i++) ships.push(makeShipInstance(activeFleet.faction, category, shipKey));
-    activeFleet.battleGroups = activeFleet.battleGroups || [];
     activeFleet.battleGroups.push({ id: uuid(), name: ship?.name || 'Group', ships });
     activeFleet.updatedAt = Date.now();
     saveFleets();
@@ -1518,6 +1547,34 @@
 
   function openGroup(index) { activeGroupIdx = index; navigate('screen-group-detail'); }
 
+  // Hero art carousel (primary + resin sculpt + counts-as variant art). Tap the
+  // arrows/dots or swipe the image to switch; state resets when the screen renders.
+  let heroArtsM = [];
+  let heroIdxM = 0;
+  function setHeroArt(i) {
+    if (heroArtsM.length < 2) return;
+    heroIdxM = (i + heroArtsM.length) % heroArtsM.length;
+    const cur = heroArtsM[heroIdxM];
+    const wrap = document.querySelector('#group-detail-content .ship-art-hero');
+    if (!wrap) return;
+    const img = wrap.querySelector('img'); if (img) { img.src = cur.src; img.alt = cur.label; }
+    const label = wrap.querySelector('.hero-art-label'); if (label) label.textContent = cur.label;
+    wrap.querySelectorAll('.hero-art-dot').forEach((d, j) => d.classList.toggle('active', j === heroIdxM));
+  }
+  function cycleShipArt(delta) { setHeroArt(heroIdxM + delta); }
+  function bindHeroSwipe() {
+    const wrap = document.querySelector('#group-detail-content .ship-art-hero');
+    if (!wrap || wrap._swipeBound || heroArtsM.length < 2) return;
+    wrap._swipeBound = true;
+    let x0 = null;
+    wrap.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+    wrap.addEventListener('touchend', e => {
+      if (x0 == null) return;
+      const dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) cycleShipArt(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }
+
   function renderGroupDetail() {
     const f = activeFleet;
     if (!f || activeGroupIdx < 0) return;
@@ -1534,6 +1591,9 @@
     let gMin = ship.groupMin || 1, gMax = ship.groupMax || 1;
     const gStat = stats.g || '';
     if (gStat.includes('-')) { const p = gStat.split('-'); gMin = parseInt(p[0]) || gMin; gMax = parseInt(p[1]) || gMax; }
+    // Payloads (Bioficer Cells) have no group size — take as many as you like.
+    const isPayloadGrp = inst.groupCategory === 'payload';
+    if (isPayloadGrp) gMax = Infinity;
 
     const statEntries = [
       { key: 'scan', label: 'Scan', val: stats.scan },
@@ -1564,8 +1624,16 @@
     const sysList = systemsListFor(ship, f.faction);
     const sysSel = ship.systemSelection;
 
+    // Hero art carousel: primary + resin sculpt + counts-as variant art.
+    heroArtsM = [];
+    if (artSrc) heroArtsM.push({ src: artSrc, label: 'Standard sculpt' });
+    shipAltArt(ship.name).forEach(a => heroArtsM.push({ src: a, label: 'Resin sculpt' }));
+    (ship.variants || []).forEach(v => { if (v.image) heroArtsM.push({ src: v.image.startsWith('assets/') ? '../' + v.image : v.image, label: v.name }); });
+    heroIdxM = 0;
+    const multiArtM = heroArtsM.length > 1;
+
     document.getElementById('group-detail-content').innerHTML = `
-      ${artSrc ? `<div class="ship-art-hero${isFullyModular(ship) ? ' ship-img-modular' : ''}">${isFullyModular(ship) ? '<div class="modular-art-note">Base hull shown, your ship’s look depends on the systems you choose</div>' : ''}${shopLinkImg(ship.name, `<img src="${artSrc}" alt="${esc(ship.name)}" loading="lazy">`, ship)}</div>` : ''}
+      ${artSrc ? `<div class="ship-art-hero${isFullyModular(ship) ? ' ship-img-modular' : ''}${multiArtM ? ' has-alts' : ''}">${isFullyModular(ship) ? '<div class="modular-art-note">Base hull shown, your ship’s look depends on the systems you choose</div>' : ''}${shopLinkImg(ship.name, `<img src="${artSrc}" alt="${esc(ship.name)}" loading="lazy">`, ship)}${multiArtM ? `<button class="hero-art-arrow hero-art-prev" onclick="event.preventDefault();event.stopPropagation();App.cycleShipArt(-1)" aria-label="Previous sculpt">‹</button><button class="hero-art-arrow hero-art-next" onclick="event.preventDefault();event.stopPropagation();App.cycleShipArt(1)" aria-label="Next sculpt">›</button><div class="hero-art-meta"><span class="hero-art-label">${esc(heroArtsM[0].label)}</span><span class="hero-art-dots">${heroArtsM.map((_, i) => `<span class="hero-art-dot${i === 0 ? ' active' : ''}"></span>`).join('')}</span></div>` : ''}</div>` : ''}
       <div class="detail-header">
         <div>
           <div class="detail-name">${esc(ship.name)}${ship.isUnique ? ' <span class="ship-tag ship-tag-unique">Unique</span>' : ship.isRare ? ' <span class="ship-tag ship-tag-rare">Rare</span>' : ''}</div>
@@ -1577,7 +1645,7 @@
       <div class="group-counter">
         <div>
           <div class="group-counter-label">Group size</div>
-          ${gMax > gMin ? `<div class="group-counter-range">${gMin}–${gMax} allowed</div>` : `<div class="group-counter-range">Fixed at ${gMin}</div>`}
+          ${isPayloadGrp ? `<div class="group-counter-range">No limit</div>` : (gMax > gMin ? `<div class="group-counter-range">${gMin}–${gMax} allowed</div>` : `<div class="group-counter-range">Fixed at ${gMin}</div>`)}
         </div>
         ${gMax > gMin ? `<div class="group-counter-controls">
           <button class="counter-btn${qty <= gMin ? ' counter-btn-x' : ''}" onclick="App.changeQty(-1)" aria-label="${qty <= gMin ? 'Remove group' : 'Remove one'}">${qty <= gMin ? '×' : '−'}</button>
@@ -1671,14 +1739,14 @@
         ${r.description ? `<div class="rule-card-text">${ruleHtml(r.description)}</div>` : ''}
       </div>`).join('')}
 
-      ${(() => { const a = shipAltArt(ship.name); return a.length ? `<div class="loadout-section"><div class="section-header" style="padding:0 0 var(--sp-xs)">Alternate sculpt</div>${a.map(p => `<div class="ship-art-hero"><img src="${p}" alt="${esc(ship.name)} alternate sculpt" loading="lazy"></div>`).join('')}</div>` : ''; })()}
-
       ${renderLore(ship)}
 
       <div style="padding:var(--sp-l)">
+        <button class="btn btn-ghost btn-block" onclick="App.copyGroup()" style="margin-bottom:var(--sp-m)">Duplicate Group</button>
         <button class="btn btn-ghost btn-block" onclick="App.removeGroup()" style="color:var(--danger);border-color:var(--danger)">Remove Group</button>
       </div>
     `;
+    bindHeroSwipe();
   }
 
   // Flavour lore — kept visually + structurally separate from rules (Cardo serif).
@@ -1857,10 +1925,12 @@
 
   // A group is "×N of one ship". Resolve the allowed N range (groupMin/Max,
   // overridable by the 'g' stat range like "1-3").
-  function groupQtyBounds(ship) {
+  function groupQtyBounds(ship, category) {
     let gMin = ship?.groupMin || 1, gMax = ship?.groupMax || 1;
     const gStat = ship?.stats?.g || '';
     if (gStat.includes('-')) { const p = gStat.split('-'); gMin = parseInt(p[0]) || gMin; gMax = parseInt(p[1]) || gMax; }
+    // Payloads (Bioficer Cells) have no group size — take as many as you like.
+    if (category === 'payload') gMax = Infinity;
     return { gMin, gMax };
   }
 
@@ -1871,7 +1941,7 @@
     const f = activeFleet;
     const inst = group.ships[0];
     const ship = findShip(f.faction, inst.groupCategory, inst.shipKey);
-    const { gMin, gMax } = groupQtyBounds(ship);
+    const { gMin, gMax } = groupQtyBounds(ship, inst.groupCategory);
     const newQty = group.ships.length + delta;
     if (newQty < gMin || newQty > gMax) return false;
     if (delta > 0) group.ships.push(cloneShipInstance(inst));
@@ -1887,7 +1957,7 @@
     if (!group || !group.ships.length) return false;
     const inst = group.ships[0];
     const ship = findShip(activeFleet.faction, inst.groupCategory, inst.shipKey);
-    return group.ships.length <= groupQtyBounds(ship).gMin;
+    return group.ships.length <= groupQtyBounds(ship, inst.groupCategory).gMin;
   }
 
   function changeQty(delta) {
@@ -2001,6 +2071,27 @@
     saveFleets();
     haptic(HAPTIC.remove);
     goBack();
+  }
+
+  // Duplicate the whole group — ships, loadouts, systems, features and quantity —
+  // right after the original. Permissive like add (Unique/Rare/group-count limits
+  // surface as fleet warnings rather than blocking the copy).
+  function copyGroup() {
+    const f = activeFleet;
+    if (!f || activeGroupIdx < 0) return;
+    const g = f.battleGroups[activeGroupIdx];
+    if (!g || !g.ships.length) return;
+    const clone = JSON.parse(JSON.stringify(g));
+    clone.id = uuid();
+    clone.ships = clone.ships.map(sh => ({ ...sh, id: uuid() }));
+    clone.name = `${g.name} (copy)`;
+    f.battleGroups.splice(activeGroupIdx + 1, 0, clone);
+    activeGroupIdx += 1;
+    f.updatedAt = Date.now();
+    saveFleets();
+    haptic(HAPTIC.add);
+    renderGroupDetail();
+    updateAppBar('screen-group-detail');
   }
 
   function groupOverflow() {
@@ -3045,7 +3136,7 @@
     init, goBack, viewDesktop,
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, selectFleetSize, openStarterFleets,
     openAddGroup, filterShips, toggleAttr, toggleExtra, clearFilters, setSort, addShip,
-    openGroup, toggleWarnings, changeQty, changeGroupQty, swipeDeleteGroup, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow, toggleSecondary, openSecondaryModal, closeSecondaryModal,
+    openGroup, toggleWarnings, cycleShipArt, changeQty, changeGroupQty, swipeDeleteGroup, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, copyGroup, groupOverflow, toggleSecondary, openSecondaryModal, closeSecondaryModal,
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral, closeAbilityModal,
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,

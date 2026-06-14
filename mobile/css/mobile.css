@@ -1255,6 +1255,7 @@ button, a, input, select, textarea,
 
 /* ── 29. Ship Art Hero (top of group detail) ──────────── */
 .ship-art-hero {
+  position: relative;
   width: 100%;
   height: 180px;
   background: linear-gradient(135deg, var(--navy) 0%, #2a5a8c 100%);
@@ -1263,6 +1264,24 @@ button, a, input, select, textarea,
   align-items: center;
   justify-content: center;
 }
+/* Hero art carousel (resin/variant sculpts): tappable arrows + label & dots. */
+.ship-art-hero .hero-art-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 34px; height: 46px; border: none; padding: 0;
+  background: rgba(15, 38, 64, 0.5); color: #fff; font-size: 24px; line-height: 1;
+  display: flex; align-items: center; justify-content: center; z-index: 2;
+}
+.ship-art-hero .hero-art-prev { left: 0; border-radius: 0 6px 6px 0; }
+.ship-art-hero .hero-art-next { right: 0; border-radius: 6px 0 0 6px; }
+.ship-art-hero .hero-art-meta {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+  display: flex; align-items: center; justify-content: space-between; gap: 6px;
+  padding: 16px 10px 6px; background: linear-gradient(transparent, rgba(15, 38, 64, 0.62));
+}
+.ship-art-hero .hero-art-label { color: #fff; font-size: 11px; font-weight: var(--weight-semibold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ship-art-hero .hero-art-dots { display: flex; gap: 4px; flex-shrink: 0; }
+.ship-art-hero .hero-art-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, 0.5); }
+.ship-art-hero .hero-art-dot.active { background: #fff; }
 .ship-art-hero img {
   max-width: 90%;
   max-height: 160px;

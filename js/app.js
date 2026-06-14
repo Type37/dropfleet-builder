@@ -585,6 +585,29 @@ const App = (() => {
         migrated = true;
       }
     });
+
+    // Merge legacy duplicate payload groups (Bioficer Cells) into one group each.
+    // Older fleets spawned a separate 1-ship group per copy, which spammed the
+    // printout with identical cells; consolidate same-ship payloads into one.
+    fleets.forEach(f => {
+      if (!Array.isArray(f.battleGroups)) return;
+      const firstByKey = {};
+      const kept = [];
+      f.battleGroups.forEach(g => {
+        const s = g.ships && g.ships[0];
+        if (s && s.groupCategory === 'payload') {
+          if (firstByKey[s.shipKey]) {
+            firstByKey[s.shipKey].ships.push(...g.ships);
+            migrated = true;
+            return; // drop this duplicate group
+          }
+          firstByKey[s.shipKey] = g;
+        }
+        kept.push(g);
+      });
+      f.battleGroups = kept;
+    });
+
     if (migrated) saveFleets();
   }
 
@@ -1728,6 +1751,60 @@ const App = (() => {
     });
   }
 
+  // Duplicate a whole group — ships, loadouts, systems, features and quantity —
+  // as a fresh group right after the original. A big time-saver for repeated
+  // builds (especially Payload-heavy Resistance lists). Honours the same
+  // Unique/Rare/Colossal/group-count limits as creating a group from scratch.
+  function copyGroup(gid) {
+    if (!currentFleet) return;
+    const idx = currentFleet.battleGroups.findIndex(g => g.id === gid);
+    if (idx < 0) return;
+    const g = currentFleet.battleGroups[idx];
+    const s = g.ships[0];
+    if (!s) return;
+    const dbShip = findShipInDB(currentFleet.faction, s.groupCategory, s.shipKey);
+    const sizeInfo = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
+    const isPayload = s.groupCategory === 'payload';
+
+    // Group-count limit (payloads don't count toward it).
+    if (!isPayload && countableGroups(currentFleet).length >= sizeInfo.groups) {
+      showToast('Maximum groups reached for ' + sizeInfo.label);
+      return;
+    }
+    if (dbShip && dbShip.isUnique) {
+      showToast(`${dbShip.name} is Unique, only 1 group allowed`);
+      return;
+    }
+    if (dbShip && dbShip.isRare) {
+      const rareMax = { skirmish: 1, clash: 2, battle: 3, reconquest: 4 }[currentFleet.gameSize] || 2;
+      const existing = currentFleet.battleGroups.filter(x =>
+        x.ships.length > 0 && x.ships[0].shipKey === s.shipKey && x.ships[0].groupCategory === s.groupCategory).length;
+      if (existing >= rareMax) {
+        showToast(`${dbShip.name} is Rare, max ${rareMax} group${rareMax > 1 ? 's' : ''} at ${sizeInfo.label}`);
+        return;
+      }
+    }
+    if (s.groupCategory === 'colossal') {
+      const colossalMax = sizeInfo.colossalMax ?? 0;
+      const existing = currentFleet.battleGroups.filter(x =>
+        x.ships.length > 0 && x.ships[0].groupCategory === 'colossal').length;
+      if (existing >= colossalMax) {
+        showToast(`${sizeInfo.label} allows max ${colossalMax} Colossal group${colossalMax !== 1 ? 's' : ''}`);
+        return;
+      }
+    }
+
+    const clone = JSON.parse(JSON.stringify(g));
+    clone.id = uuid();
+    clone.ships = clone.ships.map(sh => ({ ...sh, id: uuid() }));
+    clone.name = `${g.name} (copy)`;
+    currentFleet.battleGroups.splice(idx + 1, 0, clone);
+    activeGroupId = clone.id;
+    saveFleets();
+    scheduleRender(renderGroupsNav, renderActiveGroup, updatePoints);
+    showToast(`Copied ${g.name}`);
+  }
+
   function moveGroup(gid, direction) {
     if (!currentFleet) return;
     const groups = currentFleet.battleGroups;
@@ -1822,7 +1899,11 @@ const App = (() => {
       // count must happen right here without opening the detail panel.
       // stopPropagation keeps the card's selectGroup click from firing too.
       const gMin = firstDbForArt ? (firstDbForArt.groupMin || 1) : 1;
-      const gMax = firstDbForArt ? (firstDbForArt.groupMax || 1) : 1;
+      // Payloads (Bioficer Cells) have no group size — you take as many as you
+      // like, so they get a stepper that grows without limit instead of spamming
+      // the list with identical 1-ship groups.
+      const isPayloadCat = cat === 'payload';
+      const gMax = isPayloadCat ? Infinity : (firstDbForArt ? (firstDbForArt.groupMax || 1) : 1);
       const qty = g.ships.length;
       const shipName = firstDbForArt ? firstDbForArt.name : g.name;
       // A group's size is adjustable only when the ship's min and max differ.
@@ -1874,6 +1955,7 @@ const App = (() => {
             ${gErrorDot}
           </div>
           <div class="overview-group-right">
+            <button class="overview-group-copy" onclick="event.stopPropagation(); App.copyGroup('${g.id}')" aria-label="Copy ${esc(g.name)}" title="Copy group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><rect x="5.5" y="5.5" width="8" height="8" rx="1.2"/><path d="M3 10.2h-.5v-7.7h7.7v.5"/></svg></button>
             <button class="overview-group-remove" onclick="event.stopPropagation(); App.removeGroup('${g.id}')" aria-label="Remove ${esc(g.name)}" title="Remove group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
             <div class="overview-group-pts">${gPts} pts</div>
             ${stepperHtml}
@@ -3113,6 +3195,26 @@ const App = (() => {
   }
 
   function addShipToGroup(shipKey, category) {
+    // Payloads (Bioficer Cells) have no group size and no tonnage limit. Rather
+    // than spawn a fresh 1-ship group for every copy (which spams the printout
+    // with identical cells), fold a repeat add into the existing payload group of
+    // the same ship as a quantity bump.
+    if (category === 'payload' && currentFleet) {
+      const existing = currentFleet.battleGroups.find(g =>
+        g.ships.length > 0 && g.ships[0].groupCategory === 'payload' && g.ships[0].shipKey === shipKey);
+      if (existing) {
+        const dbShip = findShipInDB(currentFleet.faction, category, shipKey);
+        if (dbShip) {
+          addShipToGroupInner(existing, shipKey, category, dbShip);
+          activeGroupId = existing.id;
+          saveFleets();
+          updatePoints();
+          scheduleRender(renderGroupsNav, renderActiveGroup);
+          showToast(`Added ${dbShip.name} (×${existing.ships.length})`);
+          return;
+        }
+      }
+    }
     if (pendingGroupCreation) {
       // Create a brand-new group with this ship and close the modal
       const dbShip = findShipInDB(currentFleet.faction, category, shipKey);
@@ -3320,7 +3422,8 @@ const App = (() => {
     const dbShip = findShipInDB(currentFleet.faction, firstShip.groupCategory, firstShip.shipKey);
     if (!dbShip) return;
 
-    const groupMax = dbShip.groupMax || 12;
+    // Payloads have no group-size cap; everything else honours groupMax.
+    const groupMax = firstShip.groupCategory === 'payload' ? Infinity : (dbShip.groupMax || 12);
     if (group.ships.length >= groupMax) {
       showToast(`Maximum ${groupMax} ships per group`);
       return;
@@ -5378,6 +5481,22 @@ const App = (() => {
   }
 
   // ── Ship Detail Modal ──
+  // Hero art carousel: primary art + alternate resin sculpt(s) + counts-as variant
+  // art, switchable from the top of the detail (arrows on desktop, swipe/dots on
+  // mobile). State is reset each time the detail opens.
+  let detailHeroArts = [];
+  let detailHeroIdx = 0;
+  function cycleShipArt(delta) {
+    if (detailHeroArts.length < 2) return;
+    detailHeroIdx = (detailHeroIdx + delta + detailHeroArts.length) % detailHeroArts.length;
+    const cur = detailHeroArts[detailHeroIdx];
+    const wrap = document.querySelector('#detail-ship-body .detail-hero-image');
+    if (!wrap) return;
+    const img = wrap.querySelector('img'); if (img) { img.src = cur.src; img.alt = cur.label; }
+    const label = wrap.querySelector('.hero-art-label'); if (label) label.textContent = cur.label;
+    wrap.querySelectorAll('.hero-art-dot').forEach((d, i) => d.classList.toggle('active', i === detailHeroIdx));
+  }
+
   function openShipDetail(faction, category, shipKey, addable) {
     const dbShip = findShipInDB(faction, category, shipKey);
     if (!dbShip) return;
@@ -5480,16 +5599,22 @@ const App = (() => {
       </div>`;
     }
 
-    // Alternate resin sculpt (same ship, different physical model) at the bottom.
+    // Hero art = primary + alternate resin sculpt(s) + counts-as variant art,
+    // switchable from the top (this toggle replaces the old static bottom image).
     const altArt = shipAltArt(dbShip.name);
-    const altSculptHtml = altArt.length ? `<div class="detail-lore">
-      <div class="detail-section-label">Alternate sculpt</div>
-      ${altArt.map(a => `<img src="${esc(a)}" alt="${esc(dbShip.name)} alternate sculpt" loading="lazy" style="width:100%;height:auto;border-radius:var(--radius-sm);display:block" onerror="this.style.display='none'">`).join('')}
-    </div>` : '';
+    detailHeroArts = [];
+    if (img) detailHeroArts.push({ src: img, label: 'Standard sculpt' });
+    altArt.forEach(a => detailHeroArts.push({ src: a, label: 'Resin sculpt' }));
+    (dbShip.variants || []).forEach(v => { if (v.image) detailHeroArts.push({ src: v.image, label: v.name }); });
+    detailHeroIdx = 0;
+    const multiArt = detailHeroArts.length > 1;
 
     body.innerHTML = `
       <div class="detail-hero">
-        ${img ? `<div class="detail-hero-image">${shopLinkImg(dbShip.name, `<img src="${esc(img)}" alt="${esc(dbShip.name)}" loading="lazy" onerror="this.style.display='none'">`, dbShip)}</div>` : ''}
+        ${img ? `<div class="detail-hero-image${multiArt ? ' has-alts' : ''}">
+          ${shopLinkImg(dbShip.name, `<img src="${esc(img)}" alt="${esc(dbShip.name)}" loading="lazy" onerror="this.style.display='none'">`, dbShip)}
+          ${multiArt ? `<button class="hero-art-arrow hero-art-prev" onclick="event.preventDefault();event.stopPropagation();App.cycleShipArt(-1)" aria-label="Previous sculpt">‹</button><button class="hero-art-arrow hero-art-next" onclick="event.preventDefault();event.stopPropagation();App.cycleShipArt(1)" aria-label="Next sculpt">›</button><div class="hero-art-meta"><span class="hero-art-label">${esc(detailHeroArts[0].label)}</span><span class="hero-art-dots">${detailHeroArts.map((_, i) => `<span class="hero-art-dot${i === 0 ? ' active' : ''}"></span>`).join('')}</span></div>` : ''}
+        </div>` : ''}
         <div class="detail-hero-info">
           <div class="detail-hero-tonnage ship-tonnage-label ship-tonnage-${category}">${esc(tonnage)}</div>
           <div class="detail-hero-cost">${dbShip.points} pts</div>
@@ -5504,7 +5629,6 @@ const App = (() => {
       ${rulesHtml}
       ${loreHtml}
       ${variantsHtml}
-      ${altSculptHtml}
     `;
 
     openModal('modal-ship-detail');
@@ -5762,12 +5886,12 @@ const App = (() => {
   // ── Public API ──
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
-    loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, moveGroup, toggleFleetCardMenu,
+    loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, copyGroup, moveGroup, toggleFleetCardMenu,
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText,
-    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
+    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail, cycleShipArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
   };
 })();
