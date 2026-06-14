@@ -1741,8 +1741,18 @@ body.sheet-open .sheet-scrim {
 .ship-tag-rare { color: var(--navy); }
 .ship-tag-unique { color: #8a5e10; }
 .row-disabled { opacity: 0.4; pointer-events: none; }
-.fleet-legal-check { display: inline-flex; vertical-align: -2px; color: #2f7a3a; }
-.fleet-legal-check.legal-bad { color: var(--error, #c43c2f); }
+.fleet-legal-check { display: inline-flex; align-items: center; vertical-align: -2px; color: #2f7a3a; }
+/* Illegal: a tappable red pill (icon + caret) that visibly invites a tap to
+   reveal the alerts, since a hover title is useless on touch. */
+.fleet-legal-check.legal-bad {
+  color: var(--error, #c43c2f);
+  background: rgba(196, 60, 47, 0.12);
+  border-radius: 999px;
+  padding: 1px 5px 1px 3px;
+  cursor: pointer;
+}
+.fleet-legal-check.legal-bad:active { background: rgba(196, 60, 47, 0.22); }
+.legal-bad-caret { font-size: 9px; line-height: 1; margin-left: 1px; }
 .fleet-legal-check .status-svg { width: 17px; height: 17px; }
 
 /* ── 41. Form hint + loadout group label ───────────────── */

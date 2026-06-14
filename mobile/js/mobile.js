@@ -1024,9 +1024,12 @@
     // ready, red mark when not. No separate "Legal fleet" line either way.
     // Tapping the red mark reveals the alerts (declutter: no standalone lines).
     const warnTitle = legal ? 'Legal fleet, ready to play' : warns.map(w => w.m).join('\n');
-    const tap = legal ? '' : ' onclick="App.toggleWarnings()" role="button" tabindex="0" style="cursor:pointer"';
+    const tap = legal ? '' : ' onclick="App.toggleWarnings()" role="button" tabindex="0" aria-label="Tap to see why the fleet is not ready"';
+    // Illegal mark is a tappable pill (icon + caret) so it clearly invites a tap;
+    // iOS won't show the title tooltip on tap, so the caret is the real affordance.
+    const markInner = legal ? STATUS_ICON.ok : `${STATUS_ICON.error}<span class="legal-bad-caret">▾</span>`;
     const nm = document.getElementById('fleet-detail-name');
-    if (nm) nm.innerHTML = `${esc(f.name || 'Unnamed Fleet')} <span class="fleet-legal-check ${legal ? '' : 'legal-bad'}"${tap} title="${esc(warnTitle)}">${legal ? STATUS_ICON.ok : STATUS_ICON.error}</span>`;
+    if (nm) nm.innerHTML = `${esc(f.name || 'Unnamed Fleet')} <span class="fleet-legal-check ${legal ? '' : 'legal-bad'}"${tap} title="${esc(warnTitle)}">${markInner}</span>`;
     if (warns.length) {
       warnEl.classList.add('hidden');   // collapsed; tap the red mark up top to reveal
       warnEl.innerHTML = warns.map(w => {
@@ -1514,8 +1517,6 @@
         <div class="pts-badge-lg"><div class="pts-badge-value">${gp}</div><div class="pts-badge-label">Points</div></div>
       </div>
 
-      ${statGridMobile(statEntries, true)}
-
       <div class="group-counter">
         <div>
           <div class="group-counter-label">Group size</div>
@@ -1527,6 +1528,8 @@
           <button class="counter-btn" onclick="App.changeQty(1)" ${qty >= gMax ? 'disabled' : ''}>+</button>
         </div>` : (qty > 1 ? `<div class="group-counter-value group-counter-value-static">×${qty}</div>` : '')}
       </div>
+
+      ${statGridMobile(statEntries, true)}
 
       ${weapons.length ? `<div class="weapon-table">
         <div class="weapon-row weapon-row-header">
