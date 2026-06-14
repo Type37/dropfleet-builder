@@ -357,6 +357,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--weight-semibold);
   text-transform: none;
   letter-spacing: 0.04em;
+  color: #c4bfb5;   /* WCAG: 7:1 on the navy topbar (inherited ink-muted was 2.7:1) */
 }
 
 .app-shell {
@@ -517,8 +518,15 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
   font-weight: var(--weight-heavy);
-  color: var(--gold-dark);   /* WCAG: 5.8:1 (gold-light was 2.1:1, failed) */
+  color: var(--gold-light);   /* WCAG: 7.3:1 on the navy sidebar (gold-dark was 2.5:1, failed) */
 }
+/* Navy chrome (points sidebar + topbar): secondary/muted text must be light to
+   pass WCAG on the dark bg — the beige-tuned dark grays fail there (~2.7:1). */
+.builder-sidebar .text-overline,
+.builder-sidebar .text-caption,
+.builder-sidebar .points-limit,
+.topbar .text-overline,
+.topbar .text-caption { color: #c4bfb5; }
 
 .points-limit {
   font-size: var(--text-sm);
