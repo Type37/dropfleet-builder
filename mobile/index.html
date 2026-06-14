@@ -232,5 +232,27 @@
 
 <script src="../js/rank-insignia.js"></script>
 <script src="js/mobile.js"></script>
+<script>
+  // The /mobile/ app needs its OWN service-worker registration: home-screen PWA
+  // users never load the desktop index.html, so without this they'd freeze on a
+  // stale cache forever. Registers the root sw.js (scope covers /mobile/).
+  if ('serviceWorker' in navigator) {
+    if (navigator.serviceWorker.controller) {
+      let reloading = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (reloading) return; reloading = true; window.location.reload();
+      });
+    }
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('../sw.js').then(reg => {
+        const check = () => reg.update().catch(() => {});
+        setInterval(check, 60000);
+        // iOS throttles background timers, so also check whenever the app
+        // regains focus (returning to the home-screen PWA / Safari tab).
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });
+      }).catch(() => {});
+    });
+  }
+</script>
 </body>
 </html>
