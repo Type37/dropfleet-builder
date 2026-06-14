@@ -88,6 +88,24 @@
       "damage": "2",
       "type": "E",
       "special": "Overcharge, Volley-2"
+     },
+     {
+      "name": "Energy Glaive Battery",
+      "arc": "B",
+      "attack": "6",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Overcharge, Volley-2"
+     },
+     {
+      "name": "Energy Glaive Battery",
+      "arc": "B",
+      "attack": "6",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Overcharge, Volley-2"
      }
     ],
     "loads": [],
@@ -265,6 +283,15 @@
       "damage": "3",
       "type": "K",
       "special": "Calibre-H, Penetrator, Volley-2"
+     },
+     {
+      "name": "Heavy Calibre Broadside",
+      "arc": "B",
+      "attack": "1",
+      "lock": "3+",
+      "damage": "3",
+      "type": "K",
+      "special": "Calibre-H, Penetrator, Volley-2"
      }
     ],
     "loads": [
@@ -328,6 +355,15 @@
       "damage": "2",
       "type": "C",
       "special": "Bombardment, Overcharge"
+     },
+     {
+      "name": "Energy Glaive Battery",
+      "arc": "B",
+      "attack": "6",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Overcharge, Volley-2"
      },
      {
       "name": "Energy Glaive Battery",
@@ -403,6 +439,24 @@
       "damage": "3",
       "type": "C",
       "special": "Critical-1, Focused"
+     },
+     {
+      "name": "Energy Glaive Battery",
+      "arc": "B",
+      "attack": "6",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Overcharge, Volley-2"
+     },
+     {
+      "name": "Energy Glaive Battery",
+      "arc": "B",
+      "attack": "6",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Overcharge, Volley-2"
      },
      {
       "name": "Energy Glaive Battery",
@@ -589,6 +643,15 @@
      "special": "Regenerate-2"
     },
     "weapons": [
+     {
+      "name": "Energy Glaives",
+      "arc": "B",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Overcharge, Volley-2"
+     },
      {
       "name": "Energy Glaives",
       "arc": "B",
@@ -1419,6 +1482,15 @@
       "damage": "1",
       "type": "K",
       "special": "Calibre-L, Volley-2, Re-Entry"
+     },
+     {
+      "name": "Light Calibre Broadside",
+      "arc": "B",
+      "attack": "6",
+      "lock": "5+",
+      "damage": "1",
+      "type": "K",
+      "special": "Calibre-L, Volley-2, Re-Entry"
      }
     ],
     "loads": [
@@ -1477,6 +1549,24 @@
       "damage": "1",
       "type": "K",
       "special": "Calibre-L, Volley-2, Re-Entry"
+     },
+     {
+      "name": "Light Calibre Broadside",
+      "arc": "B",
+      "attack": "6",
+      "lock": "5+",
+      "damage": "1",
+      "type": "K",
+      "special": "Calibre-L, Volley-2, Re-Entry"
+     },
+     {
+      "name": "Medium Calibre Broadside",
+      "arc": "B",
+      "attack": "3",
+      "lock": "4+",
+      "damage": "2",
+      "type": "K",
+      "special": "Volley-2, Fusillade-1"
      },
      {
       "name": "Medium Calibre Broadside",
@@ -1633,6 +1723,15 @@
      "special": "Feature Carrier"
     },
     "weapons": [
+     {
+      "name": "Light Calibre Double Broadside",
+      "arc": "B",
+      "attack": "12",
+      "lock": "5+",
+      "damage": "1",
+      "type": "K",
+      "special": "Calibre-L, Re-Entry, Volley-2"
+     },
      {
       "name": "Light Calibre Double Broadside",
       "arc": "B",
@@ -1812,6 +1911,15 @@
       "special": "Calibre-L, Volley-2, Re-Entry"
      },
      {
+      "name": "Light Calibre Broadside",
+      "arc": "B",
+      "attack": "6",
+      "lock": "5+",
+      "damage": "1",
+      "type": "K",
+      "special": "Calibre-L, Volley-2, Re-Entry"
+     },
+     {
       "name": "Supernova Laser",
       "arc": "FN",
       "attack": "3",
@@ -1942,6 +2050,15 @@
       "special": "Volley-2, Fusillade-1"
      },
      {
+      "name": "Medium Calibre Broadside",
+      "arc": "B",
+      "attack": "3",
+      "lock": "4+",
+      "damage": "2",
+      "type": "K",
+      "special": "Volley-2, Fusillade-1"
+     },
+     {
       "name": "Twin Supernova Laser",
       "arc": "FN",
       "attack": "3",
@@ -2047,6 +2164,15 @@
      "special": "-"
     },
     "weapons": [
+     {
+      "name": "Heavy Calibre Broadside",
+      "arc": "B",
+      "attack": "1",
+      "lock": "3+",
+      "damage": "3",
+      "type": "K",
+      "special": "Calibre-H, Penetrator, Volley-2"
+     },
      {
       "name": "Heavy Calibre Broadside",
       "arc": "B",
@@ -2248,6 +2374,15 @@
       "special": "Volley-2, Fusillade-1"
      },
      {
+      "name": "Medium Calibre Broadside",
+      "arc": "B",
+      "attack": "3",
+      "lock": "4+",
+      "damage": "2",
+      "type": "K",
+      "special": "Volley-2, Fusillade-1"
+     },
+     {
       "name": "Medium Calibre Turret",
       "arc": "F",
       "attack": "1",
@@ -2357,6 +2492,15 @@
      "special": "-"
     },
     "weapons": [
+     {
+      "name": "Light Calibre Broadside",
+      "arc": "B",
+      "attack": "6",
+      "lock": "5+",
+      "damage": "1",
+      "type": "K",
+      "special": "Calibre-L, Volley-2, Re-Entry"
+     },
      {
       "name": "Light Calibre Broadside",
       "arc": "B",
@@ -2784,6 +2928,15 @@
      "special": "-"
     },
     "weapons": [
+     {
+      "name": "Twin Heavy Calibres",
+      "arc": "F",
+      "attack": "1",
+      "lock": "4+",
+      "damage": "3",
+      "type": "K",
+      "special": "Calibre-H/C, Penetrator"
+     },
      {
       "name": "Twin Heavy Calibres",
       "arc": "F",
