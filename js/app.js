@@ -47,6 +47,13 @@ const App = (() => {
     reconquest: { label: 'Reconquest', min: 3001, max: 99999, groups: 28, maxAdmiralLevel: 5, colossalMax: 3, time: '4+ hrs',    desc: '3001+ pts' }
   };
 
+  // Three-line size summary (rulebook 4.2): points range / group caps / admiral range.
+  function gameSizeLines(s) {
+    const pts = s.max >= 99999 ? `${s.min}+ points` : `${s.min} – ${s.max} points`;
+    const groups = `≤ ${s.groups} Groups${s.colossalMax > 0 ? `, ≤ ${s.colossalMax} Colossal Group${s.colossalMax === 1 ? '' : 's'}` : ''}`;
+    return [pts, groups, `Admiral Level 1-${s.maxAdmiralLevel}`];
+  }
+
   // Escalating game-size indicator: 4 blocks that fill clockwise (TL, TR, BR, BL)
   // as the game grows, like a clock filling up. Skirmish 1 -> Reconquest 4.
   const GAME_SIZE_LEVEL = { skirmish: 1, clash: 2, battle: 3, reconquest: 4 };
@@ -790,15 +797,16 @@ const App = (() => {
     const container = document.getElementById('size-picker');
     container.innerHTML = Object.entries(GAME_SIZES).map(([key, size]) => {
       const bars = gameSizeBlocks(key);
-      const colossalLabel = size.colossalMax > 0 ? `${size.colossalMax} Colossal` : 'No Colossal';
+      const lines = gameSizeLines(size);
       return `
       <div class="game-size-option ${key === 'clash' ? 'selected' : ''}" data-size="${key}" onclick="App.selectGameSize('${key}')">
         <input type="radio" name="game-size" value="${key}" style="display:none" ${key === 'clash' ? 'checked' : ''}>
         <div class="game-size-visual">${bars}</div>
         <div class="game-size-info">
           <div class="game-size-name">${size.label}</div>
-          <div class="game-size-details">${colossalLabel}, Admiral to Lv${size.maxAdmiralLevel}, ~${size.time}</div>
-          <div class="game-size-time">${size.desc}, ${size.groups} groups max</div>
+          <div class="game-size-details">${lines[0]}</div>
+          <div class="game-size-details">${lines[1]}</div>
+          <div class="game-size-time">${lines[2]} · ~${size.time}</div>
         </div>
       </div>`;
     }).join('');
@@ -829,13 +837,13 @@ const App = (() => {
     popover.className = 'game-size-popover';
     popover.innerHTML = Object.entries(GAME_SIZES).map(([key, size]) => {
       const active = key === currentFleet.gameSize ? ' active' : '';
-      const colText = size.colossalMax > 0 ? `, ${size.colossalMax} Colossal` : '';
+      const lines = gameSizeLines(size);
       const bars = gameSizeBlocks(key);
       return `<button class="game-size-popover-item${active}" onclick="App.applyGameSize('${key}')">
         <div class="game-size-visual">${bars}</div>
         <div>
           <span class="game-size-popover-name">${size.label}</span>
-          <span class="game-size-popover-desc">${size.desc}, ${size.groups} groups${colText}</span>
+          <span class="game-size-popover-desc">${lines[0]} · ${lines[1]}</span>
         </div>
       </button>`;
     }).join('');
@@ -1277,9 +1285,7 @@ const App = (() => {
     const sizeDetail = document.getElementById('game-size-detail');
     if (sizeDetail) {
       // One line per rule (rulebook Section 4.2), stacked.
-      const ptsLine = sizeInfo.max === 99999 ? `${sizeInfo.min}+ points` : `${sizeInfo.min} – ${sizeInfo.max} points`;
-      const colLine = `${sizeInfo.colossalMax} Colossal group${sizeInfo.colossalMax === 1 ? '' : 's'}`;
-      sizeDetail.innerHTML = `<div>${ptsLine}, ${sizeInfo.groups} Groups max</div><div>${colLine}</div><div>Admiral Level ${sizeInfo.maxAdmiralLevel}</div>`;
+      sizeDetail.innerHTML = gameSizeLines(sizeInfo).map(l => `<div>${l}</div>`).join('');
     }
 
     const panel = document.getElementById('fleet-info-panel');
@@ -1462,6 +1468,30 @@ const App = (() => {
       const s = g.ships[0];
       const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
       validateSystems(s, db, fleet.faction).forEach(msg => warnings.push({ type: 'warn', msg }));
+    });
+
+    // 7d. Payload capacity — Payload Ships "take up X of a Porter Ship's capacity"
+    // and must be assigned to a Porter of the same size letter (S or L). Soft
+    // warning when the fleet's total Payload of a letter exceeds its total Porter
+    // capacity of that letter. Fleet-wide aggregate, not per-Porter assignment.
+    const porterCap = {};      // { S: n, L: n } — capacity from Porter stat strings
+    const payloadDemand = {};  // { S: n, L: n } — capacity consumed by Payload Ships
+    fleet.battleGroups.forEach(g => {
+      g.ships.forEach(s => {
+        const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
+        const special = (db && db.special) || '';
+        let m;
+        const pRe = /Porter\s*([SL])-(\d+)/gi;
+        while ((m = pRe.exec(special))) { const L = m[1].toUpperCase(); porterCap[L] = (porterCap[L] || 0) + parseInt(m[2], 10); }
+        const dRe = /Payload\s*([SL])-(\d+)/gi;
+        while ((m = dRe.exec(special))) { const L = m[1].toUpperCase(); payloadDemand[L] = (payloadDemand[L] || 0) + parseInt(m[2], 10); }
+      });
+    });
+    ['S', 'L'].forEach(letter => {
+      const demand = payloadDemand[letter] || 0;
+      if (demand > (porterCap[letter] || 0)) {
+        warnings.push({ type: 'warn', msg: `Payload ${letter}: ${demand} assigned, fleet Porter ${letter} capacity ${porterCap[letter] || 0}` });
+      }
     });
 
     // 8. Admiral checks
@@ -2335,9 +2365,13 @@ const App = (() => {
     // `specialRules`). A ship may carry a Deployable Feature if its rules say so
     // OR if it has the Porter rule — Porters may take a Genitor Tower as a
     // Payload S-1 (DFC: "assigned to a Ship with the Porter special rule").
+    // The Genitor Tower is specifically a Payload S-1, so only Porter S ships
+    // qualify — a Porter L can't carry a size-S payload. (Hard-codes size S; the
+    // only Bioficer deployable feature today is the Tower.) The porter size lives
+    // in the capacity stat string `special` (e.g. "Porter S-1" / "Porter L-1").
     const ruleNames = (dbShip.special_rules || []).join(' ');
     const hay = (dbShip.rulesText || '') + ' ' + ruleNames;
-    return /Deployable Feature|Feature Carrier/i.test(hay) || /\bPorter\b/i.test(ruleNames);
+    return /Deployable Feature|Feature Carrier/i.test(hay) || /Porter\s*S\b/i.test(dbShip.special || '');
   }
 
   // A genuine "choose one Deployable Feature" ship MUST take one; a Porter MAY.

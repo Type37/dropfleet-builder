@@ -74,6 +74,13 @@
     battle:     { label: 'Battle',     min: 2001, max: 3000,  groups: 24, maxAdmiralLevel: 4, colossalMax: 2, time: '3–4 hrs' },
     reconquest: { label: 'Reconquest', min: 3001, max: 99999, groups: 28, maxAdmiralLevel: 5, colossalMax: 3, time: '4+ hrs' }
   };
+
+  // Three-line size summary (rulebook 4.2): points range / group caps / admiral range.
+  function gameSizeLines(s) {
+    const pts = s.max >= 99999 ? `${s.min}+ points` : `${s.min} – ${s.max} points`;
+    const groups = `≤ ${s.groups} Groups${s.colossalMax > 0 ? `, ≤ ${s.colossalMax} Colossal Group${s.colossalMax === 1 ? '' : 's'}` : ''}`;
+    return [pts, groups, `Admiral Level 1-${s.maxAdmiralLevel}`];
+  }
   const RARE_MAX = { skirmish: 1, clash: 2, battle: 3, reconquest: 4 };
 
   // Haptics (Android web only; iOS Safari + unsupported browsers no-op silently).
@@ -636,7 +643,12 @@
     if (!ship) return false;
     const names = shipRuleNames(ship);
     const hay = (ship.rulesText || '') + ' ' + names;
-    return /Deployable Feature|Feature Carrier/i.test(hay) || /\bPorter\b/i.test(names);
+    // The Genitor Tower is a Payload S-1, so only Porter S ships may carry it (a
+    // Porter L can't take a size-S payload). The porter size lives in the
+    // capacity stat string `stats.special` (e.g. "Porter S-1" / "Porter L-1"),
+    // not the generic "Porter S/L-X" rule name. Hard-codes size S (the only
+    // Bioficer deployable feature today).
+    return /Deployable Feature|Feature Carrier/i.test(hay) || /Porter\s*S\b/i.test(ship.stats?.special || '');
   }
   function featureRequired(ship) {
     if (!ship) return false;
@@ -821,6 +833,28 @@
     });
     if (heavy > medium) w.push({ t: 'error', m: `Heavy points (${heavy}) can’t exceed Medium points (${medium}) (rulebook 4.2)` });
     if (light > medium + heavy) w.push({ t: 'error', m: `Light points (${light}) can’t exceed Medium + Heavy points (${medium + heavy}) (rulebook 4.2)` });
+
+    // Payload capacity — Payload Ships "take up X of a Porter Ship's capacity" and
+    // must be assigned to a Porter of the same size letter (S or L). Soft warning
+    // when total Payload of a letter exceeds total Porter capacity of that letter.
+    const porterCap = {}, payloadDemand = {};
+    fleet.battleGroups.forEach(g => {
+      g.ships.forEach(s => {
+        const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
+        const special = (db && db.stats && db.stats.special) || '';
+        let m;
+        const pRe = /Porter\s*([SL])-(\d+)/gi;
+        while ((m = pRe.exec(special))) { const L = m[1].toUpperCase(); porterCap[L] = (porterCap[L] || 0) + parseInt(m[2], 10); }
+        const dRe = /Payload\s*([SL])-(\d+)/gi;
+        while ((m = dRe.exec(special))) { const L = m[1].toUpperCase(); payloadDemand[L] = (payloadDemand[L] || 0) + parseInt(m[2], 10); }
+      });
+    });
+    ['S', 'L'].forEach(letter => {
+      const demand = payloadDemand[letter] || 0;
+      if (demand > (porterCap[letter] || 0)) {
+        w.push({ t: 'warn', m: `Payload ${letter}: ${demand} assigned, fleet Porter ${letter} capacity ${porterCap[letter] || 0}` });
+      }
+    });
 
     // Feature carriers MUST choose a Deployable Feature (required, not optional)
     fleet.battleGroups.forEach((g, gi) => {
@@ -2885,12 +2919,14 @@
     const c = document.getElementById('new-fleet-size-cards');
     if (!c) return;
     c.innerHTML = Object.entries(GAME_SIZES).map(([k, s]) => {
-      const col = s.colossalMax > 0 ? `${s.colossalMax} Colossal` : 'No Colossal';
+      const lines = gameSizeLines(s);
       return `<button type="button" class="size-card${k === key ? ' selected' : ''}" onclick="App.selectFleetSize('${k}')">
         ${gameSizeBlocks(k)}
         <span class="size-card-info">
           <span class="size-card-name">${s.label}</span>
-          <span class="size-card-sub">${s.min}–${s.max === 99999 ? '∞' : s.max} pts · ${s.time} · ${col}, Lv${s.maxAdmiralLevel}</span>
+          <span class="size-card-sub">${lines[0]}</span>
+          <span class="size-card-sub">${lines[1]}</span>
+          <span class="size-card-sub">${lines[2]} · ${s.time}</span>
         </span>
       </button>`;
     }).join('');
