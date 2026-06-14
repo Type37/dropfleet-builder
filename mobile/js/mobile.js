@@ -10,6 +10,16 @@
   'use strict';
 
   /* ── State ─────────────────────────────────────────────── */
+  // Feedback emails the maker directly, prefilled with guided questions.
+  const FEEDBACK_HREF = 'mailto:warlore1@outlook.com?subject=' +
+    encodeURIComponent('Dropfleet Builder feedback') + '&body=' +
+    encodeURIComponent(
+      'Thanks for helping improve the Dropfleet Commander Fleet Builder.\n\n' +
+      '1. What were you trying to do, and could you finish it?\n\n' +
+      '2. Did anything look wrong (a points cost, a stat, a rule)?\n\n' +
+      '3. What would make you use it for your next game?\n\n' +
+      '4. How long have you played DFC?\n'
+    );
   const FACTIONS = {};         // raw faction JSON keyed by faction key
   let RULES_DB = {};           // shared rules glossary
   let SECONDARY_OBJECTIVES = []; // [{name, description}], pick 2 per game
@@ -2488,6 +2498,7 @@
       { label: 'Edit name & size', action: openEditFleet },
       { label: 'Share link', action: shareFleet },
       { label: 'Duplicate fleet', action: duplicateFleet },
+      { label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
       { label: 'Delete fleet', danger: true, action: deleteFleetPrompt }
     ]);
   }

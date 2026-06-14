@@ -10,6 +10,18 @@ const App = (() => {
   let sharedRulesDB = {};  // Global rules lookup from BSData (ship + weapon rules)
   let fleets = [];
   let currentFleet = null;
+
+  // Feedback goes straight to the maker's inbox via the user's mail app. Body is
+  // prefilled with guided questions so responses are useful, not just "looks cool".
+  const FEEDBACK_HREF = 'mailto:warlore1@outlook.com?subject=' +
+    encodeURIComponent('Dropfleet Builder feedback') + '&body=' +
+    encodeURIComponent(
+      'Thanks for helping improve the Dropfleet Commander Fleet Builder.\n\n' +
+      '1. What were you trying to do, and could you finish it?\n\n' +
+      '2. Did anything look wrong (a points cost, a stat, a rule)?\n\n' +
+      '3. What would make you use it for your next game?\n\n' +
+      '4. How long have you played DFC?\n'
+    );
   let activeGroupId = null;
   let shipSort = { key: 'points', dir: 'asc' };  // picker sort (parity w/ mobile: default cheapest-first)
   let activeCategory = 'all';
@@ -113,6 +125,8 @@ const App = (() => {
     loadFleets();
     setupRouting();
     initBottomSheetGestures();
+    const fb = document.getElementById('footer-feedback');
+    if (fb) fb.href = FEEDBACK_HREF;   // upgrade the plain mailto to the guided one
     window.dispatchEvent(new Event('hashchange'));
   }
 
@@ -4908,6 +4922,13 @@ const App = (() => {
           <button class="btn btn-outline btn-sm" onclick="App.exportAllFleets()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg> Export All Fleets</button>
         </div>
         <p class="text-caption" style="margin-top:var(--sp-sm)">Download all your fleet data as a JSON backup file.</p>
+      </div>
+      <div class="settings-group">
+        <div class="settings-group-title">Feedback</div>
+        <div class="flex gap-sm">
+          <a class="btn btn-outline btn-sm" href="${FEEDBACK_HREF}"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12v8H2zM2 4l6 5 6-5"/></svg> Send Feedback</a>
+        </div>
+        <p class="text-caption" style="margin-top:var(--sp-sm)">Found a wrong cost or rule, or have an idea? It emails the builder's maker directly.</p>
       </div>
     `;
     openModal('modal-settings');
