@@ -1019,6 +1019,11 @@
     // Warnings — tappable when they have a fix
     const warns = validateFleet(f);
     const warnEl = document.getElementById('fleet-warnings');
+    const legal = warns.length === 0;
+    // Play-ready status lives up top next to the fleet name: green check when
+    // ready, red mark when not. No separate "Legal fleet" line either way.
+    const nm = document.getElementById('fleet-detail-name');
+    if (nm) nm.innerHTML = `${esc(f.name || 'Unnamed Fleet')} <span class="fleet-legal-check ${legal ? '' : 'legal-bad'}" title="${legal ? 'Legal fleet, ready to play' : 'Not legal yet, see warnings'}">${legal ? STATUS_ICON.ok : STATUS_ICON.error}</span>`;
     if (warns.length) {
       warnEl.classList.remove('hidden');
       warnEl.innerHTML = warns.map(w => {
@@ -1031,11 +1036,8 @@
         return `<div class="warning-item ${cls}"${onclick}><span class="warning-icon">${icon}</span><span>${esc(w.m)}${arrow}</span></div>`;
       }).join('');
     } else {
-      // Legal: no bar, just a small check by the fleet name.
       warnEl.classList.add('hidden');
       warnEl.innerHTML = '';
-      const nm = document.getElementById('fleet-detail-name');
-      if (nm) nm.innerHTML = `${esc(f.name || 'Unnamed Fleet')} <span class="fleet-legal-check" title="Legal fleet, ready to play">${STATUS_ICON.ok}</span>`;
     }
 
     // Groups
@@ -1305,15 +1307,12 @@
         ${cats.map(c => `<button class="chip ${pickerFilter === c ? 'active' : ''}" onclick="App.filterShips('${c}')">${CATEGORY_LABELS[c] || c}</button>`).join('')}
       </div>
       ${presentAttrs.length ? `<div class="filter-row">
-        <span class="filter-label">Filter</span>
+        <span class="filter-label"></span>
         ${presentAttrs.map(a => `<button class="chip chip-toggle ${pickerAttrs.has(a.key) ? 'active' : ''}" onclick="App.toggleAttr('${a.key}')">${pickerAttrs.has(a.key) ? CHECK_SVG : ''}${a.label}</button>`).join('')}
-      </div>` : ''}
-      <div class="filter-meta">
-        <span class="filter-count">${list.length} ship${list.length !== 1 ? 's' : ''}</span>
-        ${anyActive ? `<button class="filter-clear" onclick="App.clearFilters()">Clear ×</button>` : ''}
-      </div>`;
+      </div>` : ''}`;
 
-    // Sort chips — tap to sort, tap the active one to flip direction.
+    // Sort chips — tap to sort, tap the active one to flip direction. The live
+    // ship count + Clear ride on the right of this row (no separate count line).
     const sortKeys = [['points', 'Points'], ['name', 'Name'], ['tonnage', 'Tonnage']];
     document.getElementById('picker-sort').innerHTML =
       `<span class="sort-label">Sort</span>` +
@@ -1321,7 +1320,8 @@
         const on = pickerSort.key === k;
         const arrow = on ? `<span class="sort-arrow">${pickerSort.dir === 'asc' ? '↑' : '↓'}</span>` : '';
         return `<button class="sort-chip ${on ? 'active' : ''}" onclick="App.setSort('${k}')">${lbl}${arrow}</button>`;
-      }).join('');
+      }).join('') +
+      `<span class="picker-meta"><span class="filter-count">${list.length} ship${list.length !== 1 ? 's' : ''}</span>${anyActive ? `<button class="filter-clear" onclick="App.clearFilters()">Clear ×</button>` : ''}</span>`;
 
     const cmp = {
       points:  (a, b) => (a.ship?.cost || 0) - (b.ship?.cost || 0),
@@ -1557,8 +1557,9 @@
         <div class="section-header" style="padding:0 0 var(--sp-s)">
           ${featReq ? 'Deployable Feature' + (chosenFeature ? '' : ', required') : 'Payload Feature, optional'}
         </div>
-        <div class="loadout-option ${!chosenFeature ? 'selected' : ''}" onclick="App.selectFeature('')">
-          <div class="flex justify-between items-center">
+        <div class="loadout-option loadout-radio-opt ${!chosenFeature ? 'selected' : ''}" onclick="App.selectFeature('')">
+          <div class="loadout-radio-row">
+            <span class="loadout-radio-dot"></span>
             <span class="loadout-option-name">${featReq ? 'None (choose one)' : 'No feature'}</span>
             <span class="loadout-option-cost loadout-req-flag">${featReq && !chosenFeature ? STATUS_ICON.warn : ''}</span>
           </div>
@@ -1572,8 +1573,9 @@
             `<div class="feature-rule">${r.description ? `<b>${esc(r.name)}:</b> ${ruleHtml(r.description)}` : `<b>${esc(r.name)}</b>`}</div>`
           ).join('');
           const art = featureArtPath(ft.name);
-          return `<div class="loadout-option ${sel ? 'selected' : ''}" onclick="App.selectFeature('${ft.name.replace(/'/g, "\\'")}')">
-            <div class="flex items-center" style="gap:var(--sp-s)">
+          return `<div class="loadout-option loadout-radio-opt ${sel ? 'selected' : ''}" onclick="App.selectFeature('${ft.name.replace(/'/g, "\\'")}')">
+            <div class="loadout-radio-row">
+              <span class="loadout-radio-dot"></span>
               ${art ? `<img class="feature-opt-art" src="${art}" alt="" loading="lazy" onerror="this.remove()">` : ''}
               <span class="loadout-option-name" style="flex:1">${esc(ft.name)}</span>
               <span class="loadout-option-cost">${ft.cost ? '+' + ft.cost + 'pts' : 'Free'}</span>
@@ -2141,14 +2143,18 @@
     if (info && info.table.length && info.picks > 0) {
       const remaining = info.picks - sel.length;
       abilitiesHtml += `<div class="section-header">Abilities Table, choose ${info.picks} ${remaining > 0 ? `(${remaining} left)` : '(full)'}</div>`;
+      // Choose-1 is a radio group (tap any to switch); choose-many stays a
+      // multi-select checklist that locks once full.
+      const single = info.picks === 1;
       abilitiesHtml += info.table.map(ab => {
         const on = sel.includes(ab.name);
-        const locked = !on && remaining <= 0;
-        return `<div class="loadout-option ${on ? 'selected' : ''} ${locked ? 'row-disabled' : ''}" onclick="${locked ? '' : `App.toggleAdmiralAbility('${ab.name.replace(/'/g, "\\'")}')`}">
-          <div class="flex justify-between items-center">
-            <span class="loadout-option-name">${on ? '✓ ' : ''}${esc(ab.name)}</span>
-            ${ab.cost ? `<span class="loadout-option-cost">${esc(ab.cost)}</span>` : ''}
-          </div>
+        const locked = !single && !on && remaining <= 0;
+        const click = locked ? '' : `App.toggleAdmiralAbility('${ab.name.replace(/'/g, "\\'")}')`;
+        const head = single
+          ? `<div class="loadout-radio-row"><span class="loadout-radio-dot"></span><span class="loadout-option-name">${esc(ab.name)}</span>${ab.cost ? `<span class="loadout-option-cost">${esc(ab.cost)}</span>` : ''}</div>`
+          : `<div class="flex justify-between items-center"><span class="loadout-option-name">${on ? '✓ ' : ''}${esc(ab.name)}</span>${ab.cost ? `<span class="loadout-option-cost">${esc(ab.cost)}</span>` : ''}</div>`;
+        return `<div class="loadout-option ${single ? 'loadout-radio-opt' : ''} ${on ? 'selected' : ''} ${locked ? 'row-disabled' : ''}" onclick="${click}">
+          ${head}
           ${ab.effect ? `<div class="loadout-option-desc">${linkKeywords(ab.effect)}</div>` : ''}
         </div>`;
       }).join('');
@@ -2165,10 +2171,10 @@
       assignHtml = `<div class="section-header">Assigned to</div>`;
       if (caps.length) {
         assignHtml += `<div class="loadout-section">` +
-          `<div class="loadout-option ${!a.assignedGroupId ? 'selected' : ''}" onclick="App.assignAdmiral('')">
-            <span class="loadout-option-name">Unassigned</span></div>` +
-          caps.map(c => `<div class="loadout-option ${a.assignedGroupId === c.id ? 'selected' : ''}" onclick="App.assignAdmiral('${c.id}')">
-            <span class="loadout-option-name">${esc(c.name)}</span></div>`).join('') +
+          `<div class="loadout-option loadout-radio-opt ${!a.assignedGroupId ? 'selected' : ''}" onclick="App.assignAdmiral('')">
+            <div class="loadout-radio-row"><span class="loadout-radio-dot"></span><span class="loadout-option-name">Unassigned</span></div></div>` +
+          caps.map(c => `<div class="loadout-option loadout-radio-opt ${a.assignedGroupId === c.id ? 'selected' : ''}" onclick="App.assignAdmiral('${c.id}')">
+            <div class="loadout-radio-row"><span class="loadout-radio-dot"></span><span class="loadout-option-name">${esc(c.name)}</span></div></div>`).join('') +
           `</div>`;
       } else {
         assignHtml += `<div class="empty-state-sm">No Capital ships (Medium+) to assign to yet.</div>`;
@@ -2198,6 +2204,7 @@
     if (!Array.isArray(a.selectedAbilities)) a.selectedAbilities = [];
     const pos = a.selectedAbilities.indexOf(name);
     if (pos >= 0) a.selectedAbilities.splice(pos, 1);
+    else if (info.picks === 1) a.selectedAbilities = [name];   // radio: tap switches
     else { if (a.selectedAbilities.length >= info.picks) return; a.selectedAbilities.push(name); }
     activeFleet.updatedAt = Date.now();
     saveFleets();

@@ -1896,7 +1896,9 @@ const App = (() => {
             </div>
           </div>
           <div class="overview-header-right">
-            ${warnings.length === 0 ? `<span class="overview-legal-check" title="Legal fleet, ready to play"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M6.3 10.3 8.8 12.8 13.7 7.2"/></svg></span>` : ''}
+            ${warnings.length === 0
+              ? `<span class="overview-legal-check" title="Legal fleet, ready to play"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M6.3 10.3 8.8 12.8 13.7 7.2"/></svg></span>`
+              : `<span class="overview-legal-check is-illegal" title="Not legal yet, see warnings"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><line x1="10" y1="5.6" x2="10" y2="10.6"/><circle cx="10" cy="13.9" r="0.95" fill="currentColor" stroke="none"/></svg></span>`}
             ${sizeInfo.max !== 99999 ? (pts > sizeInfo.max ? `<span class="overview-legal-pill is-illegal">${pts - sizeInfo.max} pts over</span>` : `<span class="overview-legal-pill is-ok">${sizeInfo.max - pts} pts left</span>`) : ''}
           </div>
         </div>

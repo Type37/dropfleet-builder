@@ -1742,6 +1742,7 @@ body.sheet-open .sheet-scrim {
 .ship-tag-unique { color: #8a5e10; }
 .row-disabled { opacity: 0.4; pointer-events: none; }
 .fleet-legal-check { display: inline-flex; vertical-align: -2px; color: #2f7a3a; }
+.fleet-legal-check.legal-bad { color: var(--error, #c43c2f); }
 .fleet-legal-check .status-svg { width: 17px; height: 17px; }
 
 /* ── 41. Form hint + loadout group label ───────────────── */
@@ -2090,6 +2091,8 @@ body.sheet-open .sheet-scrim {
   letter-spacing: 0.08em;
   color: var(--fg4);
 }
+/* Ship count + Clear sit at the far right of the sort row (not their own line). */
+.picker-meta { margin-left: auto; display: inline-flex; align-items: center; gap: var(--sp-xs); flex-shrink: 0; }
 .sort-chip {
   display: inline-flex;
   align-items: center;
