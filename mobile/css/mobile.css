@@ -1792,6 +1792,21 @@ body.sheet-open .sheet-scrim {
   margin: var(--sp-s) 0 var(--sp-xs);
 }
 .loadout-group-label:first-child { margin-top: 0; }
+/* Hardpoint category divider (Broadside / Turret / Structures) — an obvious
+   full-width band so the groups are easy to tell apart while building. */
+.sys-cat-label {
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--navy, var(--fg1));
+  background: var(--surface-2, rgba(0,0,0,0.05));
+  border-top: 2px solid var(--border, rgba(0,0,0,0.15));
+  padding: 6px var(--sp-s);
+  margin: var(--sp-s) calc(-1 * var(--sp-s)) var(--sp-xs);
+}
+.sys-cat-label:first-child { margin-top: 0; border-top: none; }
 
 
 /* ── 42. Systems / Hardpoints picker ───────────────────── */

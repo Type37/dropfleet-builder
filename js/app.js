@@ -206,6 +206,10 @@ const App = (() => {
     'Hong Kong':'hong_kong','Nuuk':'nuuk',
     'Heavy Cruiser':'heavy_cruiser','Heavy Frigate':'heavy_frigate',
     'Light Cruiser':'light_cruiser','Strike Carrier':'strike_carrier',
+    // Regular Resistance Cruiser hull — checked after Heavy/Light Cruiser above so
+    // those keep their own art (startsWith). Without this it had no art and was
+    // hidden whenever the "Additional ships" toggle was off.
+    'Cruiser':'cruiser',
     'The Hated':'the_hated',
     'Summoner Cell':'summoner_cell','Prism Cell':'prism_cell',
     'Torpedo Cell':'torpedo_cell','Lander Cell':'lander_cell',

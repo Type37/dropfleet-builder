@@ -2603,18 +2603,24 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink);
 }
 .systems-picker-incomplete .systems-picker-count { color: #c43c2f; }
-.sys-cat { padding: var(--sp-xs) var(--sp-sm); }
-.sys-cat + .sys-cat { border-top: 1px dashed var(--stroke-light); }
+.sys-cat { padding: 0 var(--sp-sm) var(--sp-xs); }
+/* Each hardpoint category (Broadside / Turret / Structures) gets an obvious
+   full-width banded header so the groups are easy to tell apart at a glance. */
 .sys-cat-head {
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
+  align-items: center;
+  font-size: 11px;
   font-weight: var(--weight-bold);
-  text-transform: none;
-  letter-spacing: 0.04em;
-  color: var(--ink-muted);
-  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--navy);
+  background: var(--paper-alt);
+  border-top: 2px solid var(--stroke);
+  padding: 5px var(--sp-sm);
+  margin: 0 calc(-1 * var(--sp-sm)) var(--sp-xs);
 }
+.sys-cat:first-child .sys-cat-head { border-top: none; }
 .sys-cat-cap { color: var(--navy); font-family: var(--font-condensed); }
 .sys-cat-cap-need { color: var(--warning); font-weight: var(--weight-bold); }
 .sys-opt {

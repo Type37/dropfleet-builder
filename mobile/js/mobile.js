@@ -179,6 +179,10 @@
     'Hong Kong':'hong_kong','Nuuk':'nuuk',
     'Heavy Cruiser':'heavy_cruiser','Heavy Frigate':'heavy_frigate',
     'Light Cruiser':'light_cruiser','Strike Carrier':'strike_carrier',
+    // Regular Resistance Cruiser hull — checked after Heavy/Light Cruiser above so
+    // those keep their own art (startsWith). Without this it had no art and was
+    // hidden whenever the "Additional ships" toggle was off.
+    'Cruiser':'cruiser',
     'The Hated':'the_hated',
     'Summoner Cell':'summoner_cell','Prism Cell':'prism_cell',
     'Torpedo Cell':'torpedo_cell','Lander Cell':'lander_cell',
@@ -1820,7 +1824,7 @@
     const byCat = {};
     list.options.forEach(o => { (byCat[o.category] = byCat[o.category] || []).push(o); });
     const optsHtml = Object.entries(byCat).map(([cat, opts]) => `
-      <div class="loadout-group-label">${esc(cat)}</div>
+      <div class="sys-cat-label">${esc(cat)}</div>
       ${opts.map(o => {
         const c = counts[o.name] || 0;
         const canAdd = canAddSystem(inst, ship, factionKey, o.name);
@@ -2548,7 +2552,7 @@
     spec.options.forEach(o => { (byCat[o.category] = byCat[o.category] || []).push(o); });
     const cats = Object.keys(byCat);
     const optsHtml = cats.map(cat => `
-      <div class="loadout-group-label">${esc(cat)}</div>
+      <div class="sys-cat-label">${esc(cat)}</div>
       ${byCat[cat].map(o => {
         const c = counts[o.name] || 0;
         const canAdd = canAddStationOption(station, o, spec);
