@@ -2947,6 +2947,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 .ship-badge-unique { color: var(--gold-dark); }
 .ship-badge-rare { color: var(--navy); }
+/* Famous admiral entries in the ship picker read as a small filled pill so they
+   stand out from regular hulls. */
+.ship-badge-admiral {
+  background: var(--gold-dark);
+  color: var(--paper);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
 .ship-badge-group {
   background: var(--paper-alt);
   color: var(--ink-muted);

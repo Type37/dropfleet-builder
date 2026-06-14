@@ -3082,9 +3082,22 @@ const App = (() => {
       }
     });
 
-    // Hide auxiliary/mercenary ships when setting is off
+    // Famous admirals fly a flagship that's a ship on the table — surface them in
+    // the picker too (not just the Admiral menu, where they sit below the fold).
+    // Picking one adds the admiral together with their flagship. They sort in by
+    // the flagship's tonnage category.
+    const famGroup = groups.famous_admirals;
+    if (famGroup && famGroup.ships) {
+      Object.entries(famGroup.ships).forEach(([k, adm]) => {
+        const fcat = adm.shipCategory || 'medium';
+        if (category === 'all' || category === fcat) ships.push({ key: k, data: adm, category: fcat });
+      });
+    }
+
+    // Hide auxiliary/mercenary ships when setting is off (famous admirals always
+    // show — they're a deliberate pick, not auxiliary clutter).
     if (!settings.showAdditionalShips) {
-      ships = ships.filter(s => s.data.image);
+      ships = ships.filter(s => s.data.image || s.data.type === 'Famous');
     }
 
     // Apply search filter
@@ -3148,8 +3161,11 @@ const App = (() => {
   function renderShipSelectCard({ key, data, category }) {
     const catLabel = CATEGORY_LABELS[category] || category;
     const specialRules = data.special_rules || [];
+    // Famous admiral entry: the card represents the admiral + their flagship.
+    const isFamous = data.type === 'Famous';
     let selectBadges = '';
-    if (data.isUnique) selectBadges += '<span class="ship-badge ship-badge-unique">Unique</span>';
+    if (isFamous) selectBadges += '<span class="ship-badge ship-badge-admiral">Admiral</span>';
+    else if (data.isUnique) selectBadges += '<span class="ship-badge ship-badge-unique">Unique</span>';
     else if (data.isRare) selectBadges += '<span class="ship-badge ship-badge-rare">Rare</span>';
 
     // Compact weapon summary for ship select cards
@@ -3173,13 +3189,26 @@ const App = (() => {
         : '';
     }
 
+    // Famous admirals open no datasheet (handled via the Admiral slot) and use
+    // the admiral add-flow; the type line names their flagship.
+    const sizeInfoSel = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
+    const famBlocked = isFamous && (hasFamousAdmiral() || (data.level && data.level > (sizeInfoSel.maxAdmiralLevel || 4)));
+    const famReason = !isFamous ? '' : (hasFamousAdmiral() ? 'One named admiral per fleet' : (data.level > (sizeInfoSel.maxAdmiralLevel || 4) ? `Requires ${sizeInfoSel.label}+` : ''));
+    const cardOnclick = isFamous ? '' : ` onclick="App.openShipDetail('${currentFleet.faction}','${category}','${key}',true)"`;
+    const typeLine = isFamous
+      ? `${esc(data.ship_name || data.className || 'Flagship')} &middot; ${esc(tonLabel(data.tonnage) || catLabel)}`
+      : `${esc(tonLabel(data.tonnage) || catLabel)}`;
+    const addBtn = isFamous
+      ? `<button class="btn btn-primary btn-sm"${famBlocked ? ` disabled title="${esc(famReason)}"` : ''} onclick="event.stopPropagation(); App.addFamousAdmiralFromPicker('${key}')">+ Add Admiral</button>`
+      : `<button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addShipToGroup('${key}','${category}')">+ Add</button>`;
+
     return `
-    <div class="ship-card" onclick="App.openShipDetail('${currentFleet.faction}','${category}','${key}',true)" title="View full datasheet">
+    <div class="ship-card${isFamous ? ' ship-card-admiral' : ''}"${cardOnclick} title="${isFamous ? esc(data.name) : 'View full datasheet'}">
       <div class="ship-card-top">
         ${data.image ? `<div class="ship-card-image"><img src="${esc(thumbUrl(data.image))}" alt="${esc(data.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
         <div class="ship-card-info">
           <div class="ship-card-name">${esc(data.name)}${selectBadges ? ` ${selectBadges}` : ''}</div>
-          <div class="ship-card-type">${esc(tonLabel(data.tonnage) || catLabel)}</div>
+          <div class="ship-card-type">${typeLine}</div>
         </div>
         <div class="ship-card-cost">${data.points || 0}<span style="font-size:var(--text-sm);font-weight:var(--weight-regular)"> pts</span></div>
       </div>
@@ -3196,7 +3225,7 @@ const App = (() => {
       <div class="flex items-center justify-between" style="margin-top:auto">
         <span class="text-caption">${data.g ? `Group: ${data.g}` : ''}${launchIndicator ? (data.g ? ', ' : '') + launchIndicator : ''}</span>
         <div class="flex gap-xs">
-          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addShipToGroup('${key}','${category}')">+ Add</button>
+          ${addBtn}
         </div>
       </div>
     </div>`;
@@ -3693,6 +3722,16 @@ const App = (() => {
     promptAdmiralAbilities(currentFleet.admirals.length - 1);
   }
 
+  // Add a famous admiral picked from the ship-selection grid (not the Admiral
+  // menu). addFamousAdmiral does the work + pops the ability picker; we just
+  // close the ship picker first so the modals don't stack.
+  function addFamousAdmiralFromPicker(shipKey) {
+    if (!currentFleet) return;
+    if (hasFamousAdmiral()) { showToast('One named admiral per fleet'); return; }
+    closeModal('modal-ship-select');
+    addFamousAdmiral(shipKey);
+  }
+
   function removeAdmiral(index) {
     if (!currentFleet || !currentFleet.admirals) return;
     currentFleet.admirals.splice(index, 1);
@@ -3973,7 +4012,7 @@ const App = (() => {
     const loadsLine = def ? renderLaunchTable(currentFleet.faction, def, ss) : '';
     const stationRules = (def && def.stationRules) || [];
     const stationRulesHtml = stationRules.length
-      ? `<div style="margin-top:var(--sp-sm)">${stationRules.map(r => `<div class="text-caption" style="margin-bottom:var(--sp-xs)"><strong>${esc(r.name)}</strong> ${linkKeywords(r.effect || '')}</div>`).join('')}</div>`
+      ? `<div style="margin-top:var(--sp-sm)">${stationRules.map(r => `<div style="margin-bottom:var(--sp-sm);font-size:var(--text-sm);line-height:1.45"><strong>${esc(r.name)}:</strong> ${linkKeywords(r.effect || '')}</div>`).join('')}</div>`
       : '';
     // Generic Small/Medium/Large stations choose modules in a modal (Hobgoblin
     // style). The card shows the chosen modules + a button to open the picker.
@@ -5907,7 +5946,7 @@ const App = (() => {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, copyGroup, moveGroup, toggleFleetCardMenu,
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
-    openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
+    openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText,
