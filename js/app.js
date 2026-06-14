@@ -3013,7 +3013,7 @@ const App = (() => {
     }
 
     return `
-    <div class="ship-card" onclick="App.addShipToGroup('${key}','${category}')">
+    <div class="ship-card" onclick="App.openShipDetail('${currentFleet.faction}','${category}','${key}',true)" title="View full datasheet">
       <div class="ship-card-top">
         ${data.image ? `<div class="ship-card-image"><img src="${esc(thumbUrl(data.image))}" alt="${esc(data.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
         <div class="ship-card-info">
@@ -3035,7 +3035,6 @@ const App = (() => {
       <div class="flex items-center justify-between" style="margin-top:auto">
         <span class="text-caption">${data.g ? `Group: ${data.g}` : ''}${launchIndicator ? (data.g ? ', ' : '') + launchIndicator : ''}</span>
         <div class="flex gap-xs">
-          <button class="btn btn-ghost btn-sm btn-icon" onclick="event.stopPropagation(); App.openShipDetail('${currentFleet.faction}','${category}','${key}')" title="View details"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7v4M8 5v.5"/></svg></button>
           <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addShipToGroup('${key}','${category}')">+ Add</button>
         </div>
       </div>
@@ -5310,7 +5309,7 @@ const App = (() => {
   }
 
   // ── Ship Detail Modal ──
-  function openShipDetail(faction, category, shipKey) {
+  function openShipDetail(faction, category, shipKey, addable) {
     const dbShip = findShipInDB(faction, category, shipKey);
     if (!dbShip) return;
 
@@ -5419,6 +5418,7 @@ const App = (() => {
           <div class="detail-hero-tonnage ship-tonnage-label ship-tonnage-${category}">${esc(tonnage)}</div>
           <div class="detail-hero-cost">${dbShip.points} pts</div>
           ${badges.length > 0 ? `<div class="flex gap-xs" style="margin-top:var(--sp-sm)">${badges.join('')}</div>` : ''}
+          ${addable ? `<button class="btn btn-primary" style="margin-top:var(--sp-md)" onclick="App.addShipToGroup('${shipKey}','${category}'); App.closeModal('modal-ship-detail')">+ Add to fleet</button>` : ''}
         </div>
       </div>
       ${statsHtml}
