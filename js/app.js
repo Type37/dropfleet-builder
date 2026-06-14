@@ -28,7 +28,7 @@ const App = (() => {
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: false };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -1441,10 +1441,12 @@ const App = (() => {
       }
     });
 
-    // 6. Group size validation (ships per group within min-max)
+    // 6. Group size validation (ships per group within min-max). Payloads
+    // (Bioficer Cells) have no group size, so they're exempt from this check.
     fleet.battleGroups.forEach(g => {
       if (g.ships.length === 0) return;
       const s = g.ships[0];
+      if (s.groupCategory === 'payload') return;
       const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
       if (!db) return;
       const min = db.groupMin || 1;
@@ -1563,12 +1565,14 @@ const App = (() => {
     const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
     if (!db) return [];
 
+    // Payloads (Bioficer Cells) have no group size — skip the min/max check.
+    const isPayload = s.groupCategory === 'payload';
     const min = db.groupMin || 1;
-    const max = db.groupMax || 1;
+    const max = isPayload ? Infinity : (db.groupMax || 1);
     if (group.ships.length > max) {
       errors.push(`max ${max} ${db.name} (has ${group.ships.length})`);
     }
-    if (group.ships.length < min) {
+    if (!isPayload && group.ships.length < min) {
       errors.push(`needs at least ${min} ${db.name} (has ${group.ships.length})`);
     }
     if (db.isUnique) {
@@ -4241,7 +4245,7 @@ const App = (() => {
       ? `<div class="print-desc">${esc(f.description)}</div>`
       : '';
 
-    let html = `<div class="print-fleet" data-fleet-name="${esc(f.name)}">
+    let html = `<div class="print-fleet${settings.print2col ? ' print-2col' : ''}" data-fleet-name="${esc(f.name)}">
       <div class="print-header">
         <div class="print-header-top">
           ${fIcon ? `<img src="${fIcon}" alt="" class="print-faction-icon">` : ''}
@@ -5065,6 +5069,17 @@ const App = (() => {
             <span class="settings-toggle-desc">Automatically show flavour text on ship cards instead of requiring a click</span>
           </span>
           <input type="checkbox" ${settings.autoExpandLore ? 'checked' : ''} onchange="App.toggleSetting('autoExpandLore', this.checked)">
+          <span class="settings-toggle-switch"></span>
+        </label>
+      </div>
+      <div class="settings-group">
+        <div class="settings-group-title">Print</div>
+        <label class="settings-toggle">
+          <span class="settings-toggle-label">
+            <span class="settings-toggle-name">Two-column units</span>
+            <span class="settings-toggle-desc">Pack units two per row when printing (about four per page) to save paper</span>
+          </span>
+          <input type="checkbox" ${settings.print2col ? 'checked' : ''} onchange="App.toggleSetting('print2col', this.checked)">
           <span class="settings-toggle-switch"></span>
         </label>
       </div>

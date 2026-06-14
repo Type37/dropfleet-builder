@@ -825,7 +825,8 @@
       const s = g.ships[0];
       const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
       if (!db) return;
-      const min = db.groupMin || 1, max = db.groupMax || 1;
+      // Payloads (Bioficer Cells) have no group size — exempt from min/max.
+      const min = db.groupMin || 1, max = s.groupCategory === 'payload' ? Infinity : (db.groupMax || 1);
       if (g.ships.length < min) w.push({ t: 'warn', m: `${db.name}: needs ${min} (has ${g.ships.length})` });
       if (g.ships.length > max) w.push({ t: 'error', m: `${db.name}: max ${max} (has ${g.ships.length})` });
       const key = s.shipKey;
@@ -2637,6 +2638,8 @@
     showActionSheet([
       { label: `Additional ships  ${pickerShowExtra ? '✓ On' : 'Off'}`,
         action: () => { pickerShowExtra = !pickerShowExtra; localStorage.setItem('dfc_show_extra', pickerShowExtra ? '1' : '0'); haptic(HAPTIC.tick); openSettingsSheet(); } },
+      { label: `Two-column print  ${localStorage.getItem('dfc_print2col') === '1' ? '✓ On' : 'Off'}`,
+        action: () => { localStorage.setItem('dfc_print2col', localStorage.getItem('dfc_print2col') === '1' ? '0' : '1'); haptic(HAPTIC.tick); openSettingsSheet(); } },
       { label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
       { label: 'Switch to desktop view', action: viewDesktop }
     ]);
@@ -2963,7 +2966,7 @@
         <div class="pr-title">${esc(f.name || 'Unnamed Fleet')}</div>
         <div class="pr-sub">${info?.name || f.faction} · ${size.label} · ${pts} / ${limit} pts, ${(f.battleGroups || []).length} groups</div>
       </div>
-      ${groupsHtml}
+      <div class="pr-units${localStorage.getItem('dfc_print2col') === '1' ? ' pr-2col' : ''}">${groupsHtml}</div>
       ${admiralsHtml ? `<div class="pr-section-title">Admiral</div>${admiralsHtml}` : ''}
       ${stationHtml ? `<div class="pr-section-title">Space Station</div>${stationHtml}` : ''}
       ${glossary ? `<div class="pr-section-title">Rules Glossary</div><div class="pr-glossary">${glossary}</div>` : ''}

@@ -4241,6 +4241,14 @@ h1, h2, h3, h4, h5, h6 {
   .print-header { break-after: avoid; }
   .print-group-header { break-after: avoid; }
 
+  /* Two-column units layout (Settings toggle) — packs ~4 units per page. The
+     group header spans both columns; ships flow into two columns; tall groups
+     may break across pages (they can't fit one column). Weapon rows tighten. */
+  .print-2col .print-group { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; align-items: start; break-inside: auto; }
+  .print-2col .print-group-header { grid-column: 1 / -1; }
+  .print-2col .print-ship { break-inside: avoid; }
+  .print-2col .print-ship .weapon-row { grid-template-columns: minmax(64px, 1.2fr) 26px 22px 22px 28px minmax(50px, 1.5fr); font-size: 7.5pt; }
+
   /* Footer with fleet name on each page */
   .print-fleet::after {
     content: attr(data-fleet-name);
