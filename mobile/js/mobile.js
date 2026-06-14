@@ -1487,10 +1487,15 @@
 
     const weapons = ship.weapons || [];
     const loadoutOptions = ship.loadoutOptions || [];
-    // Rare/Unique show as a badge by the name, so drop them from the rule cards
-    // (parity with desktop; don't print the keyword twice).
-    const rules = (ship.specialRules || []).filter(r => !/^(rare|unique)$/i.test(r.name || ''));
-    const specialText = stats.special && stats.special !== '-' ? stats.special : '';
+    // Show every ship special rule as a full text card (incl. Rare/Unique — the
+    // user wants the rule spelled out, not just a chip). The compact Rare/Unique
+    // tag by the name still carries the at-a-glance flag.
+    const rules = (ship.specialRules || []);
+    const ruleNames = new Set(rules.map(r => (r.name || '').toLowerCase()));
+    // The special-stat chip row must not repeat anything already shown as a full
+    // card below (e.g. "Rare" lives in both stats.special and specialRules).
+    const specialText = (stats.special && stats.special !== '-' ? stats.special : '')
+      .split(',').map(s => s.trim()).filter(t => t && !ruleNames.has(t.toLowerCase())).join(', ');
     const artSrc = shipArtPath(ship.name);
     const carrier = isFeatureCarrier(ship);
     const featReq = carrier && featureRequired(ship);
