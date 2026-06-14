@@ -1367,11 +1367,22 @@
     ];
     const presentAttrs = attrDefs.filter(a => groups.some(g => a.test(g.ship || {})));
 
+    // Famous admirals fly a flagship that's a ship on the table — surface them in
+    // the picker too (not just the Admiral screen, where they sit below the fold).
+    // Picking one adds the admiral + flagship. Modelled as pseudo-groups sorted by
+    // the flagship's tonnage; they always show (never hidden by the Misc toggle).
+    const famousPseudo = (faction.admirals || []).filter(a => a.isFamous && a.flagship).map(a => ({
+      id: a.id, category: a.flagship.category || 'medium', _famous: true,
+      _art: admiralArtPath(a.name) || shipArtPath(a.flagship.name),
+      _flagship: a.flagship.name, _level: a.level,
+      ship: Object.assign({}, a.flagship, { name: a.name, cost: a.cost + a.flagship.cost })
+    }));
+
     // Apply all filters first so the live count is accurate.
     const search = (document.getElementById('picker-search')?.value || '').toLowerCase();
-    let list = groups.filter(g => {
+    let list = groups.concat(famousPseudo).filter(g => {
       const s = g.ship || {};
-      if (!pickerShowExtra && !shipArtPath(s.name)) return false;
+      if (!pickerShowExtra && !shipArtPath(s.name) && !g._famous) return false;
       if (pickerFilter !== 'all' && g.category !== pickerFilter) return false;
       if (search && !(s.name || g.name).toLowerCase().includes(search)) return false;
       for (const k of pickerAttrs) { const d = attrDefs.find(a => a.key === k); if (d && !d.test(s)) return false; }
@@ -1414,17 +1425,33 @@
     list = list.slice().sort(cmp);
     if (pickerSort.dir === 'desc') list.reverse();
 
+    const sizeSel = GAME_SIZES[activeFleet.gameSize] || GAME_SIZES.clash;
+    const namedTaken = (activeFleet.admirals || []).some(a => a.type === 'Famous' || a.type === 'Faction' || a.admiralId);
     document.getElementById('picker-list').innerHTML = list.map(g => {
       const ship = g.ship || {};
       const cost = ship.cost || 0;
       const gMin = ship.groupMin || 1, gMax = ship.groupMax || gMin;
-      const art = shipArtPath(ship.name);
       const tonnage = tonLabel(ship.tonnage) || CATEGORY_LABELS[g.category] || g.category;
+      const modCls = isFullyModular(ship) ? ' ship-img-modular' : '';
+      if (g._famous) {
+        const blocked = namedTaken || (g._level && g._level > (sizeSel.maxAdmiralLevel || 4));
+        const reason = namedTaken ? 'One named Admiral per fleet' : (g._level > (sizeSel.maxAdmiralLevel || 4) ? `Exceeds ${sizeSel.label} cap` : '');
+        return `<div class="list-row${blocked ? ' row-disabled' : ''}" onclick="${blocked ? '' : `App.addAdmiral('${g.id}')`}">
+          ${g._art ? `<div class="ship-thumb ship-thumb-lg"><img src="${thumbUrl(g._art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
+          <div class="list-row-content">
+            <div class="flex justify-between items-center">
+              <span class="list-row-title">${esc(ship.name)} <span class="ship-tag">Admiral</span></span>
+              <span class="list-row-pts">${cost}<span class="pts-unit">pts</span></span>
+            </div>
+            <div class="list-row-sub">${tonnageBadge(g.category)}Flies ${esc(g._flagship || 'flagship')}${blocked && reason ? `, ${esc(reason)}` : ''}</div>
+          </div>
+        </div>`;
+      }
+      const art = shipArtPath(ship.name);
       const tags = [];
       if (ship.isUnique) tags.push('<span class="ship-tag">Unique</span>');
       if (ship.isRare) tags.push('<span class="ship-tag">Rare</span>');
       if (isFullyModular(ship)) tags.push('<span class="ship-tag">Modular</span>');
-      const modCls = isFullyModular(ship) ? ' ship-img-modular' : '';
       return `<div class="list-row" data-gid="${g.id}" onclick="App.addShip('${g.id}','${g.category}')">
         ${art ? `<div class="ship-thumb ship-thumb-lg${modCls}"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
         <div class="list-row-content">
