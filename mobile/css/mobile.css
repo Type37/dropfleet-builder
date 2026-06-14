@@ -539,11 +539,11 @@ button, a, input, select, textarea,
 
 .weapon-row {
   display: grid;
-  grid-template-columns: 1fr 32px 32px 32px 44px;
+  grid-template-columns: 1fr 34px 34px 34px 44px;
   align-items: center;
   padding: var(--sp-xs) 0;
   border-bottom: 1px solid var(--stroke3);
-  font-size: var(--text-caption1);
+  font-size: 15px;   /* weapons are key game info — bigger than the old 13px (print unaffected) */
 }
 /* Firing-arc cell: compact SVG sector over its short code, so it never clips. */
 .weapon-arc .arc-ico {

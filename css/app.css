@@ -1973,7 +1973,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--paper-alt);
   border-bottom: 1px solid var(--stroke-light);
   font-family: var(--font-condensed);
-  font-size: var(--text-sm);
+  font-size: 16px;   /* weapons are key game info — bigger than the old 14px (print unaffected) */
   line-height: 1.4;
 }
 
@@ -2028,7 +2028,7 @@ h1, h2, h3, h4, h5, h6 {
 .weapon-col-lock {
   text-align: center;
   font-weight: var(--weight-semibold);
-  font-size: var(--text-xs);
+  font-size: 15px;
 }
 .weapon-col-dmg {
   display: flex;
@@ -2036,7 +2036,7 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   gap: 2px;
   font-weight: var(--weight-bold);
-  font-size: var(--text-xs);
+  font-size: 15px;
 }
 .weapon-col-dmg svg { flex-shrink: 0; }
 /* Damage type carried as a colour-coded letter on the damage value (1E/2K/1C). */
