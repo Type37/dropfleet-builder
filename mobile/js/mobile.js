@@ -1022,10 +1022,13 @@
     const legal = warns.length === 0;
     // Play-ready status lives up top next to the fleet name: green check when
     // ready, red mark when not. No separate "Legal fleet" line either way.
+    // Tapping the red mark reveals the alerts (declutter: no standalone lines).
+    const warnTitle = legal ? 'Legal fleet, ready to play' : warns.map(w => w.m).join('\n');
+    const tap = legal ? '' : ' onclick="App.toggleWarnings()" role="button" tabindex="0" style="cursor:pointer"';
     const nm = document.getElementById('fleet-detail-name');
-    if (nm) nm.innerHTML = `${esc(f.name || 'Unnamed Fleet')} <span class="fleet-legal-check ${legal ? '' : 'legal-bad'}" title="${legal ? 'Legal fleet, ready to play' : 'Not legal yet, see warnings'}">${legal ? STATUS_ICON.ok : STATUS_ICON.error}</span>`;
+    if (nm) nm.innerHTML = `${esc(f.name || 'Unnamed Fleet')} <span class="fleet-legal-check ${legal ? '' : 'legal-bad'}"${tap} title="${esc(warnTitle)}">${legal ? STATUS_ICON.ok : STATUS_ICON.error}</span>`;
     if (warns.length) {
-      warnEl.classList.remove('hidden');
+      warnEl.classList.add('hidden');   // collapsed; tap the red mark up top to reveal
       warnEl.innerHTML = warns.map(w => {
         const icon = w.fix === 'admiral' ? STATUS_ICON.admiral : (w.t === 'error' ? STATUS_ICON.error : STATUS_ICON.warn);
         const cls = w.t === 'error' ? 'warn-error' : 'warn-soft';
@@ -1446,6 +1449,13 @@
   }
 
   /* ── Screen: Group Detail ──────────────────────────────── */
+  // Tap the red status mark to reveal/hide the alert list (kept collapsed so the
+  // fleet stays uncluttered; the warnings retain their tap-to-fix shortcuts).
+  function toggleWarnings() {
+    const el = document.getElementById('fleet-warnings');
+    if (el) el.classList.toggle('hidden');
+  }
+
   function openGroup(index) { activeGroupIdx = index; navigate('screen-group-detail'); }
 
   function renderGroupDetail() {
@@ -2953,7 +2963,7 @@
     init, goBack, viewDesktop,
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, selectFleetSize, openStarterFleets,
     openAddGroup, filterShips, toggleAttr, toggleExtra, clearFilters, setSort, addShip,
-    openGroup, changeQty, changeGroupQty, swipeDeleteGroup, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow, toggleSecondary, openSecondaryModal, closeSecondaryModal,
+    openGroup, toggleWarnings, changeQty, changeGroupQty, swipeDeleteGroup, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, groupOverflow, toggleSecondary, openSecondaryModal, closeSecondaryModal,
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral, closeAbilityModal,
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,
