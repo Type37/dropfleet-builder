@@ -2504,6 +2504,18 @@
   }
 
   /* ── Fleet overflow (delete / duplicate / share) ───────── */
+  // Settings/options sheet (the gear in the app bar) — mobile equivalent of the
+  // desktop Settings modal: the Additional-ships toggle, feedback, desktop switch.
+  // Tapping the toggle re-opens the sheet so its new on/off state is visible.
+  function openSettingsSheet() {
+    showActionSheet([
+      { label: `Additional ships  ${pickerShowExtra ? '✓ On' : 'Off'}`,
+        action: () => { pickerShowExtra = !pickerShowExtra; localStorage.setItem('dfc_show_extra', pickerShowExtra ? '1' : '0'); haptic(HAPTIC.tick); openSettingsSheet(); } },
+      { label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
+      { label: 'Switch to desktop view', action: viewDesktop }
+    ]);
+  }
+
   function fleetOverflow() {
     showActionSheet([
       { label: 'Copy as text', action: copyFleetText },
@@ -3000,7 +3012,7 @@
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral, closeAbilityModal,
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,
-    overflow, fleetOverflow, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
+    overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
     importFleetPrompt, doImportText,
     openRule, openStat, closeRuleSheet, closeActionSheet
   };
