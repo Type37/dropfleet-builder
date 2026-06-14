@@ -2885,7 +2885,17 @@ const App = (() => {
     if (!container) return;
     container.innerHTML = SHIP_FILTERS.map(f =>
       `<button class="filter-chip ${activeFilters.has(f.key) ? 'active' : ''}" onclick="App.toggleShipFilter('${f.key}')">${activeFilters.has(f.key) ? CHECK_SVG : ''}${f.label}</button>`
-    ).join('');
+    ).join('') +
+      `<button class="filter-chip ${settings.showAdditionalShips ? 'active' : ''}" onclick="App.toggleMiscShips()" title="Mercenaries, cross-faction and other optional ships">${settings.showAdditionalShips ? CHECK_SVG : ''}Misc Ships</button>`;
+  }
+
+  // The "Misc Ships" picker chip mirrors the Settings "Additional Ships" toggle:
+  // reveals mercenaries / cross-faction / other optional units right in the picker.
+  function toggleMiscShips() {
+    toggleSetting('showAdditionalShips', !settings.showAdditionalShips);
+    renderShipFilters();
+    const factionShips = shipDB[currentFleet.faction];
+    if (factionShips && factionShips.groups) renderShipSelectGrid(factionShips.groups, activeCategory);
   }
 
   function toggleShipFilter(key) {
@@ -5719,7 +5729,7 @@ const App = (() => {
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, moveGroup, toggleFleetCardMenu,
-    openShipSelectModal, filterCategory, toggleShipFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
+    openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
     toggleSidebar, printFleet,

@@ -1334,10 +1334,11 @@
         <button class="chip ${pickerFilter === 'all' ? 'active' : ''}" onclick="App.filterShips('all')">All</button>
         ${cats.map(c => `<button class="chip ${pickerFilter === c ? 'active' : ''}" onclick="App.filterShips('${c}')">${CATEGORY_LABELS[c] || c}</button>`).join('')}
       </div>
-      ${presentAttrs.length ? `<div class="filter-row">
+      <div class="filter-row">
         <span class="filter-label"></span>
         ${presentAttrs.map(a => `<button class="chip chip-toggle ${pickerAttrs.has(a.key) ? 'active' : ''}" onclick="App.toggleAttr('${a.key}')">${pickerAttrs.has(a.key) ? CHECK_SVG : ''}${a.label}</button>`).join('')}
-      </div>` : ''}`;
+        <button class="chip chip-toggle ${pickerShowExtra ? 'active' : ''}" onclick="App.toggleExtra()" title="Mercenaries, cross-faction and other optional ships">${pickerShowExtra ? CHECK_SVG : ''}Misc Ships</button>
+      </div>`;
 
     // Sort chips — tap to sort, tap the active one to flip direction. The live
     // ship count + Clear ride on the right of this row (no separate count line).
