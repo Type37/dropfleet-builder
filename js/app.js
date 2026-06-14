@@ -239,6 +239,19 @@ const App = (() => {
     return SHIP_ART.has(first) ? `assets/art/${first}.webp` : null;
   }
 
+  // Ships with an alternate resin sculpt at assets/art/<slug>_resin.webp — the same
+  // ship, a different physical model, offered as alternate hero art (top toggle).
+  const SHIP_ALT = new Set(['rhadamanthus','beelzebub','beijing','bronze','daemon','delhi','devil','diamond','dragon','gold','hanoi','heracles','kairos','lucifer','minos','new_york','platinum','sarpedon','silver','tokyo']);
+  function shipAltArt(shipName) {
+    if (!shipName) return [];
+    let slug = null;
+    for (const [prefix, file] of Object.entries(SHIP_ART_SPECIAL)) {
+      if (shipName.startsWith(prefix)) { slug = file; break; }
+    }
+    if (!slug) slug = shipName.split(/\s+/)[0].toLowerCase();
+    return SHIP_ALT.has(slug) ? [`assets/art/${slug}_resin.webp`] : [];
+  }
+
   // Deployable-feature art (a subset have transparent cutouts). Keyed by the
   // feature name slugified; files live at assets/art/feat-<slug>.webp.
   const FEATURE_ART = new Set(['aegis-platform', 'comms-platform', 'torpedo-platform']);
@@ -5432,6 +5445,13 @@ const App = (() => {
       </div>`;
     }
 
+    // Alternate resin sculpt (same ship, different physical model) at the bottom.
+    const altArt = shipAltArt(dbShip.name);
+    const altSculptHtml = altArt.length ? `<div class="detail-lore">
+      <div class="detail-section-label">Alternate sculpt</div>
+      ${altArt.map(a => `<img src="${esc(a)}" alt="${esc(dbShip.name)} alternate sculpt" loading="lazy" style="width:100%;height:auto;border-radius:var(--radius-sm);display:block" onerror="this.style.display='none'">`).join('')}
+    </div>` : '';
+
     body.innerHTML = `
       <div class="detail-hero">
         ${img ? `<div class="detail-hero-image">${shopLinkImg(dbShip.name, `<img src="${esc(img)}" alt="${esc(dbShip.name)}" loading="lazy" onerror="this.style.display='none'">`, dbShip)}</div>` : ''}
@@ -5449,6 +5469,7 @@ const App = (() => {
       ${rulesHtml}
       ${loreHtml}
       ${variantsHtml}
+      ${altSculptHtml}
     `;
 
     openModal('modal-ship-detail');

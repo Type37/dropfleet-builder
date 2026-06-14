@@ -199,6 +199,18 @@
     const first = name.split(/\s+/)[0].toLowerCase();
     return SHIP_ART.has(first) ? `../assets/art/${first}.webp` : null;
   }
+  // Ships with an alternate resin sculpt at ../assets/art/<slug>_resin.webp — the
+  // same ship, a different physical model, offered as alternate hero art.
+  const SHIP_ALT = new Set(['rhadamanthus','beelzebub','beijing','bronze','daemon','delhi','devil','diamond','dragon','gold','hanoi','heracles','kairos','lucifer','minos','new_york','platinum','sarpedon','silver','tokyo']);
+  function shipAltArt(name) {
+    if (!name) return [];
+    let slug = null;
+    for (const [prefix, file] of Object.entries(SHIP_ART_SPECIAL)) {
+      if (name.startsWith(prefix)) { slug = file; break; }
+    }
+    if (!slug) slug = name.split(/\s+/)[0].toLowerCase();
+    return SHIP_ALT.has(slug) ? [`../assets/art/${slug}_resin.webp`] : [];
+  }
   // Small-display variant of an art URL for picker cards and list-row thumbs
   // (the source art is ~1100-1500px but shown at 52-96px). Heroes and print keep
   // the full image. Thumbs are 200px webps in assets/art/thumb/.
@@ -1623,6 +1635,8 @@
         <div class="rule-card-name">${esc(r.name)}</div>
         ${r.description ? `<div class="rule-card-text">${ruleHtml(r.description)}</div>` : ''}
       </div>`).join('')}
+
+      ${(() => { const a = shipAltArt(ship.name); return a.length ? `<div class="loadout-section"><div class="section-header" style="padding:0 0 var(--sp-xs)">Alternate sculpt</div>${a.map(p => `<div class="ship-art-hero"><img src="${p}" alt="${esc(ship.name)} alternate sculpt" loading="lazy"></div>`).join('')}</div>` : ''; })()}
 
       ${renderLore(ship)}
 
