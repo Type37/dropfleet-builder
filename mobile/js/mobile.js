@@ -1751,10 +1751,12 @@
             const on = oi === sel;
             const sheet = opt.weapons?.length ? optionWeaponSheet(opt.weapons)
               : (opt.loads?.length ? `<div class="loadout-option-desc">Launch ${esc(opt.loads[0].launch || '')}</div>` : '');
+            // Don't repeat the option name when the weapon datasheet already shows it.
+            const redundant = opt.weapons?.length && opt.weapons.every(w => w.name === opt.name);
             return `<div class="loadout-option loadout-radio-opt ${on ? 'selected' : ''}" onclick="App.selectLoadout(${loIdx}, ${oi})">
               <div class="loadout-radio-row">
                 <span class="loadout-radio-dot"></span>
-                <span class="loadout-option-name">${esc(opt.name)}</span>
+                <span class="loadout-option-name">${redundant ? '' : esc(opt.name)}</span>
                 <span class="loadout-option-cost">${opt.cost ? '+' + opt.cost + 'pts' : 'Free'}</span>
               </div>
               ${sheet}

@@ -2850,11 +2850,19 @@ const App = (() => {
           const cards = lo.options.map((opt, oi) => {
             const on = oi === selIdx;
             const costLabel = opt.cost > 0 ? `+${opt.cost} pts` : opt.cost < 0 ? `${opt.cost} pts` : 'Included';
+            // Don't repeat the option name when its weapon datasheet already shows
+            // it (e.g. option "Cobra Heavy Laser Pair" over a Cobra Heavy Laser Pair
+            // weapon row). Keep the name only when it adds info (loads-only / no-op
+            // options like "No Torpedo", "Drive Refit").
+            const redundant = opt.weapons && opt.weapons.length && opt.weapons.every(w => w.name === opt.name);
+            const head = redundant
+              ? `<div class="loadout-radio-head loadout-radio-head-costonly"><span class="loadout-radio-cost">${costLabel}</span></div>`
+              : `<div class="loadout-radio-head"><span class="loadout-radio-name">${esc(opt.name)}</span><span class="loadout-radio-cost">${costLabel}</span></div>`;
             return `<label class="loadout-radio${on ? ' selected' : ''}">
               <input type="radio" class="loadout-radio-input" name="lo-${ship.id}-${loIdx}" ${on ? 'checked' : ''} onchange="App.changeLoadout('${groupId}','${ship.id}',${loIdx},${oi})">
               <span class="loadout-radio-dot" aria-hidden="true"></span>
               <div class="loadout-radio-main">
-                <div class="loadout-radio-head"><span class="loadout-radio-name">${esc(opt.name)}</span><span class="loadout-radio-cost">${costLabel}</span></div>
+                ${head}
                 ${optSheet(opt)}
               </div>
             </label>`;
@@ -5699,8 +5707,9 @@ const App = (() => {
           if (optWpns.length > 0) {
             wpnDetail = '<div class="weapon-list" style="margin-top:var(--sp-xs)">' + renderWeaponHeader() + optWpns.map(renderWeaponRow).join('') + '</div>';
           }
+          const redundant = optWpns.length && optWpns.every(w => w.name === opt.name);
           return `<div class="detail-loadout-option">
-            <div class="detail-loadout-name">${esc(opt.name)}${costLabel}</div>
+            <div class="detail-loadout-name">${redundant ? costLabel.replace(/^ \(|\)$/g, '').trim() || 'Included' : esc(opt.name) + costLabel}</div>
             ${wpnDetail}
           </div>`;
         }).join('');

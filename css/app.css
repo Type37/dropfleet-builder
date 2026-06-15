@@ -173,14 +173,12 @@ a:hover { color: var(--navy-light); }
 .warlore-mark {
   display: inline-block;
   font-family: 'Terminal Grotesque', 'Barlow Condensed', sans-serif;
-  font-size: 28px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 30px;
+  line-height: 1;
   text-decoration: none;
   color: var(--gold);
   background: #000;
-  padding: 4px 16px;
-  border-radius: 2px;
+  padding: 2px 8px;
   margin-bottom: var(--sp-md);
   transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
 }
