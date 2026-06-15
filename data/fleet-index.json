@@ -180,7 +180,7 @@
       "page": "37"
     },
     "Alt-X": {
-      "description": "Only one Weapon or Load with the same Alt value on the same Ship may be used by that Ship each round.\nAll Alt Weapons with the same number count as the same Weapon when determining how many Weapons a Ship has.",
+      "description": "Only one Weapon or Load with the same Alt value on the same Ship may be used by that Ship each round.\nAll Alt Weapons with the same value count as the same Weapon when determining how many Weapons a Ship has.",
       "page": "37"
     },
     "Alt Launch": {

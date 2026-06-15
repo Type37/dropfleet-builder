@@ -2489,7 +2489,7 @@ const App = (() => {
       const md = mods && mods[k];
       if (md) extra += ' stat-cell-modified';
       const icon = STAT_ICONS[k] || '';
-      const title = md ? `${meta.title} — upgraded ${md > 0 ? '+' + md : md}` : meta.title;
+      const title = md ? `${meta.title} (upgraded ${md > 0 ? '+' + md : md})` : meta.title;
       return `<div class="stat-cell ${extra} ${cls}" title="${title}">
         ${icon ? `<span class="stat-cell-icon">${icon}</span>` : ''}
         <span class="stat-cell-text">
@@ -4942,7 +4942,7 @@ const App = (() => {
     const admRows = (f.admirals || []).map(a => `<div class="sp-row sp-adm"><span class="sp-name">${esc(a.name)}${a.level ? ` (Lv ${a.level})` : ''}</span><span class="sp-pts">${a.points || 0}</span></div>`).join('');
     const station = f.spaceStation ? `<div class="sp-row sp-adm"><span class="sp-name">${esc(f.spaceStation.name)}</span><span class="sp-pts">${f.spaceStation.cost || 0}</span></div>` : '';
     return `<div class="print-fleet print-simple" data-fleet-name="${esc(f.name)}">
-      <div class="sp-head"><strong>${esc(f.name)}</strong> — ${esc(fName)} · ${esc(sizeInfo.label)} · <strong>${pts}${cap !== 99999 ? ' / ' + cap : ''} pts</strong></div>
+      <div class="sp-head"><strong>${esc(f.name)}</strong> · ${esc(fName)} · ${esc(sizeInfo.label)} · <strong>${pts}${cap !== 99999 ? ' / ' + cap : ''} pts</strong></div>
       ${admRows || station ? `<div class="sp-section">${admRows}${station}</div>` : ''}
       <div class="sp-section">${groupRows}</div>
     </div>`;
