@@ -244,3 +244,48 @@ opening a shared link in a new tab.)
 - Generic station art bg-removal - the source JPGs (DFC-Art-Assets/generic-station-art/)
   aren't in the repo anymore; drop them back and I'll rembg + wire them.
 - Mobile picker tap-model (align to desktop's tap=datasheet / Add button?) - your call.
+
+---
+
+# Full feedback re-verification pass (2026-06-15, v192)
+
+Jet pasted ALL accumulated feedback and asked "did we ever fix all this?". Verified
+each against live code/data. Result: nearly everything was already shipped across
+prior sessions; ONE genuine bug remained and was fixed.
+
+## Fixed this pass
+- **Bioficer battleship Torpedo rules text** dangled ("...gaining the following
+  Launch Asset:" with nothing after). Completed all 6 to "...: Torpedo (Launch 2,
+  Limited-4)." (v192). The Torpedo Upgrade itself was already a +20 loadout option.
+
+## Verified ALREADY DONE (with evidence)
+- Genitor tower only on Porter S (Foray=Porter S-1 gets it; battleships=Porter L
+  excluded via isFeatureCarrier /Porter\s*S\b/). Foray "just one" solved via copy group.
+- Battleship Torpedo IS a selectable +20 loadout option (No Torpedo / Torpedo Upgrade).
+- Payload > Porter capacity warning (validateFleet 7d, per S/L/F letter).
+- Payload consolidation + group-size stepper (no printout spam).
+- Copy/Duplicate group button (both apps); names "<name> (copy)".
+- Resistance hardpoint dividers (.sys-cat-head per Broadside/Turret/Structures).
+- Light Cruiser Structures cap = 2 is CORRECT per PDF (Resistance_..._260327 lines
+  513-515: "up to two options...from the Structures category"). Regular Cruiser
+  EXISTS (60pts, 4-option modular, matches PDF line 535).
+- Famous admirals selectable in the ship picker.
+- Custom points limit (X/1500) via the editable cap input + setCustomMax.
+- Print preview (Simple + 2-column toggles).
+- Delhi (and other UCM battleships) HAVE Drive Refit (+3" Thrust, +45) AND Laser Refit.
+- PHR duplicate-weapon errors (Amphion/Augustus/Electra/Hector/Ajax/Achilles/Seleucus/
+  Agamemnon/Priam/Romulus 3/Remus 2) ALL correct in data now (v144/v145 audit + fixes).
+- Admiral assign re-validates immediately (assignAdmiralShip -> renderOverviewPanel).
+- Feature-carrier "no feature" is a soft WARN, not a hard error (can pick pre-game).
+- Admiral-ability-not-picked IS a warning ("choose N Abilities").
+- Forced-group price: picker shows the GROUP total + per-each for groupMin>1.
+- List error notification = overview-alerts panel ("N issues to fix" + red dot + list).
+
+## Debatable / your call (not changed)
+- Duplicate naming "(copy)" - conventional; leave or change to "Copy of X"/numbered?
+- Carrier indicator in the LIST (#29): you first wanted a launch tag, later said
+  remove the LAUNCH badge. Currently a star by group size. Want a clearer carrier
+  tag in the list, or leave the star?
+- Deep weapon-multiplicity re-audit of ALL ships (you asked to "check other fleets"):
+  the 11 named ships verify correct; a 6-agent full re-audit hit the session limit
+  (resets 2:40pm ET). Can re-run it then.
