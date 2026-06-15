@@ -252,8 +252,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Vanguard-X",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to X” away from your Deployment Zone."
+      "name": "Vanguard-6\"",
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1141,8 +1141,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Vanguard-6",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to X” away from your Deployment Zone."
+      "name": "Vanguard-6\"",
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1199,8 +1199,8 @@
     ],
     "specialRules": [
      {
-      "name": "Vanguard-X",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to X” away from your Deployment Zone."
+      "name": "Vanguard-6\"",
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1242,8 +1242,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Vanguard-X",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to X” away from your Deployment Zone."
+      "name": "Vanguard-6\"",
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
