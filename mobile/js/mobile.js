@@ -407,16 +407,25 @@
     // entry — numeric suffixes ("Reave 2") and letter/word suffixes alike
     // ("Calibre-H", "Crippling-Fire" -> "Calibre-X"/"Crippling-X").
     if (!name) return { name, description: '', page: '' };
-    const wrap = e => ({ name, description: e.description, page: e.page || '' });
+    // Substitute the value (2, H, …) into the resolved "-X" description so
+    // "Reave-2" reads "...by 2" instead of "...by X".
+    const wrap = (e, val) => {
+      let desc = e.description || '';
+      if (val && /\bX\b/.test(desc)) desc = desc.replace(/\bX\b/g, val);
+      return { name, description: desc, page: e.page || '' };
+    };
     if (RULES_DB[name]) return wrap(RULES_DB[name]);
-    const numBase = name.replace(/[-\s]?\d+$/, '').trim();
-    if (RULES_DB[numBase]) return wrap(RULES_DB[numBase]);
-    if (RULES_DB[numBase + '-X']) return wrap(RULES_DB[numBase + '-X']);
+    const numM = name.match(/^(.*?)[-\s]?(\d+)$/);
+    if (numM) {
+      const base = numM[1].trim(), val = numM[2];
+      const hit = RULES_DB[base] || RULES_DB[base + '-X'];
+      if (hit) return wrap(hit, val);
+    }
     const hi = name.lastIndexOf('-');
     if (hi > 0) {
-      const pb = name.slice(0, hi).trim();
-      if (RULES_DB[pb]) return wrap(RULES_DB[pb]);
-      if (RULES_DB[pb + '-X']) return wrap(RULES_DB[pb + '-X']);
+      const pb = name.slice(0, hi).trim(), val = name.slice(hi + 1).trim();
+      const hit = RULES_DB[pb] || RULES_DB[pb + '-X'];
+      if (hit) return wrap(hit, val);
     }
     return { name, description: '', page: '' };
   }

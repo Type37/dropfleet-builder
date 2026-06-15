@@ -2418,20 +2418,30 @@ const App = (() => {
     return full ? full.description : '';
   }
 
+  // Substitute the actual parameter value into a resolved "-X" rule so e.g.
+  // "Reave-2" reads "...reduce ... by 2" instead of "...by X".
+  function ruleWithValue(rule, val) {
+    if (!rule || !val || !/\bX\b/.test(rule.description || '')) return rule;
+    return { description: rule.description.replace(/\bX\b/g, val), page: rule.page };
+  }
   function lookupRuleFull(name) {
     // Returns {description, page} or null. Single source of truth: the shared
     // rules glossary (data/fleet-index.json). Resolve parameterized keywords to
     // their base "-X" entry — numeric suffixes ("Reave 2") and letter/word
-    // suffixes alike ("Calibre-H", "Crippling-Fire" -> "Calibre-X"/"Crippling-X").
+    // suffixes alike ("Calibre-H", "Crippling-Fire" -> "Calibre-X"/"Crippling-X")
+    // — and substitute the value (2, H, …) into the description's X placeholders.
     if (sharedRulesDB[name]) return sharedRulesDB[name];
-    const numBase = name.replace(/[-\s]?\d+$/, '').trim();
-    if (sharedRulesDB[numBase]) return sharedRulesDB[numBase];
-    if (sharedRulesDB[numBase + '-X']) return sharedRulesDB[numBase + '-X'];
+    const numM = name.match(/^(.*?)[-\s]?(\d+)$/);
+    if (numM) {
+      const base = numM[1].trim(), val = numM[2];
+      const hit = sharedRulesDB[base] || sharedRulesDB[base + '-X'];
+      if (hit) return ruleWithValue(hit, val);
+    }
     const hi = name.lastIndexOf('-');
     if (hi > 0) {
-      const pb = name.slice(0, hi).trim();
-      if (sharedRulesDB[pb]) return sharedRulesDB[pb];
-      if (sharedRulesDB[pb + '-X']) return sharedRulesDB[pb + '-X'];
+      const pb = name.slice(0, hi).trim(), val = name.slice(hi + 1).trim();
+      const hit = sharedRulesDB[pb] || sharedRulesDB[pb + '-X'];
+      if (hit) return ruleWithValue(hit, val);
     }
     return null;
   }
