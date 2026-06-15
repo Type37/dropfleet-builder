@@ -7,15 +7,16 @@ Format: **Question** → *my guess* → why / how to change.
 
 ---
 
-## 1. Em-dash sweep of lore text
-**Q:** You hate em-dashes as AI-slop. Lore (61) + namesake (8) flavour fields
-still contain them, but some lore is your hand-written prose.
-**My guess (NOT yet applied):** Replace `—` with a comma in lore/namesake
-(appositive em-dashes read fine as commas), leaving the 13 rule-description
-em-dashes alone (those are the rulebook's own dash = verbatim).
-**Change it by:** telling me a different replacement (spaced hyphen ` - `? colon?)
-or "leave my hand-written lore alone, only touch the auto-generated stuff."
-Holding because mangling your writing felt worse than waiting.
+## 1. Em-dash sweep of lore text — DONE (per "make guesses, proceed")
+**What I did:** replaced `—` with a comma in all 41 `lore`/`namesake` fields
+across the 6 faction files (appositive/parenthetical em-dashes, which read
+correctly as commas; spot-checked, reads natural). Left the 13 rule-description
+em-dashes ALONE — those are the rulebook's own dash (verbatim rules win).
+**Reversible:** it's one isolated commit; `git revert` it if you hate the commas.
+**Change it by:** if you'd rather a spaced hyphen or want to restore specific
+hand-written lines, point me at them. Some of these are your hand-written lore
+(Aaru, Parasite, etc.) — I assumed you want them em-dash-free too since you hate
+the character; say if any specific line should keep its original punctuation.
 
 ## 2. Other Dropfleet projects to link on the landing page
 **Q:** "link to my other dropfleet shit." I know of: Mission Maker (already named
