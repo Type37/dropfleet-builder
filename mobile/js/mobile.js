@@ -2880,11 +2880,11 @@
 
   function fleetOverflow() {
     showActionSheet([
-      { label: 'Copy as text', action: copyFleetText },
+      { label: 'Copy army list', action: copyFleetText },
       { label: 'Copy as JSON', action: copyFleetJSON },
       { label: 'Export PDF', action: exportPdf },
       { label: 'Edit name & size', action: openEditFleet },
-      { label: 'Share link', action: shareFleet },
+      { label: 'Share', action: shareFleet },
       { label: 'Duplicate fleet', action: duplicateFleet },
       { label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
       { label: 'Delete fleet', danger: true, action: deleteFleetPrompt }
@@ -2993,56 +2993,68 @@
     return true;
   }
 
-  /* ── Copy fleet as text (Discord-friendly) ─────────────── */
+  /* ── Fleet as plain-text army list (New-Recruit style, Discord-friendly) ── */
+  // Mirrors the desktop generateFleetText: header + total, then Famous Admirals
+  // (split into admiral + flagship), then groups by tonnage Colossal→Light, then
+  // Space Station. Multi-ship groups read "• Nx Name [per-ship pts]".
   function fleetToText(fleet) {
-    const size = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
-    const limit = fleet.pointsLimit || size.max;
-    const pts = fleetPoints(fleet);
-    const info = FACTION_INFO[fleet.faction];
-    const lines = [];
-    lines.push(fleet.name || 'Unnamed Fleet');
-    lines.push(`${info?.name || fleet.faction} · ${size.label} · ${pts} / ${limit} pts`);
+    const total = fleetPoints(fleet);
+    const name = fleet.name || 'Fleet';
+    const faction = FACTIONS[fleet.faction] || {};
+    let out = `# ++ ${name} ++ [${total} pts]\n`;
 
-    if ((fleet.battleGroups || []).length) {
-      lines.push('', 'GROUPS');
-      fleet.battleGroups.forEach(g => {
-        const inst = g.ships[0];
-        if (!inst) return;
-        const db = findShip(fleet.faction, inst.groupCategory, inst.shipKey);
-        const qty = g.ships.length;
-        const cls = db?.name || 'Unknown';
-        const label = (g.name && g.name !== cls) ? `${g.name} (${qty}× ${cls})` : `${qty}× ${cls}`;
-        lines.push(`${label}, ${groupPoints(fleet, g)} pts`);
-        // Loadout
-        (db?.loadoutOptions || []).forEach((lo, i) => {
-          const selIdx = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
-          const opt = lo.options[selIdx];
-          if (opt && selIdx !== 0) lines.push(`   Loadout: ${opt.name}`);
-        });
-        // Feature
-        if (inst.feature) lines.push(`   Feature: ${inst.feature}`);
-        // Systems (with counts)
-        if (inst.systems && inst.systems.length) {
-          const counts = {};
-          inst.systems.forEach(n => { counts[n] = (counts[n] || 0) + 1; });
-          const sysStr = Object.entries(counts).map(([n, c]) => c > 1 ? `${n} ×${c}` : n).join(', ');
-          lines.push(`   Systems: ${sysStr}`);
+    const admirals = fleet.admirals || [];
+    if (admirals.length) {
+      const admPts = admirals.reduce((t, a) => t + (a.points || 0), 0);
+      const anyFamous = admirals.some(a => a.type === 'Famous' || a.type === 'Faction');
+      out += `\n## ${anyFamous ? 'Famous Admirals' : 'Admirals'} [${admPts} pts]\n`;
+      admirals.forEach(a => {
+        const src = (faction.admirals || []).find(x => x.id === a.admiralId);
+        const flagCost = (src && src.flagship && src.flagship.cost) || 0;
+        const flagName = a.shipName || (src && src.flagship && src.flagship.name);
+        if (flagName && flagCost) {
+          out += `• 1x ${a.name} [${(a.points || 0) - flagCost} pts]\n`;
+          out += `• 1x ${flagName} [${flagCost} pts]\n`;
+        } else {
+          out += `• 1x ${a.name} [${a.points || 0} pts]\n`;
         }
       });
     }
-    if ((fleet.admirals || []).length) {
-      lines.push('', 'ADMIRAL');
-      fleet.admirals.forEach(a => {
-        lines.push(`${a.name} (Lv ${a.level || '?'}), ${a.points} pts`);
-        if (a.selectedAbilities && a.selectedAbilities.length) lines.push(`   ${a.selectedAbilities.join(', ')}`);
+
+    const TONNAGE = [['colossal', 'Colossal'], ['heavy', 'Heavy'], ['medium', 'Medium'], ['light', 'Light'], ['payload', 'Payload']];
+    TONNAGE.forEach(([cat, label]) => {
+      const groups = (fleet.battleGroups || []).filter(g => g.ships.length && (g.ships[0].groupCategory || 'medium') === cat);
+      if (!groups.length) return;
+      const secPts = groups.reduce((t, g) => t + groupPoints(fleet, g), 0);
+      out += `\n## ${label} Groups [${secPts} pts]\n`;
+      groups.forEach(g => {
+        const profs = [];
+        g.ships.forEach(s => {
+          const key = s.shipKey + ':' + JSON.stringify(s.loadouts || {}) + ':' + JSON.stringify(s.systems || []) + ':' + (s.feature || '');
+          let p = profs.find(x => x.key === key);
+          if (!p) { p = { key, s, count: 0 }; profs.push(p); }
+          p.count++;
+        });
+        profs.forEach(({ s, count }) => {
+          const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
+          const nm = db ? db.name : s.shipKey;
+          out += count > 1 ? `• ${count}x ${nm} [${s.points} pts]\n` : `${nm} [${s.points} pts]\n`;
+          const notes = [];
+          (db && db.loadoutOptions || []).forEach((lo, i) => { const o = lo.options[(s.loadouts && s.loadouts[i]) || 0]; if (o && o.cost) notes.push(o.name); });
+          if (s.systems && s.systems.length) { const c = {}; s.systems.forEach(n => c[n] = (c[n] || 0) + 1); notes.push(...Object.entries(c).map(([n, k]) => k > 1 ? `${k}x ${n}` : n)); }
+          if (s.feature) notes.push(s.feature);
+          notes.forEach(n => { out += `    - ${n}\n`; });
+        });
       });
-    }
+    });
+
     if (fleet.spaceStation) {
-      lines.push('', 'SPACE STATION', `${fleet.spaceStation.name}, ${fleet.spaceStation.cost} pts`);
-      (fleet.spaceStation.systems || []).forEach(n => lines.push(`  + ${n}`));
+      out += `\n## Space Station [${fleet.spaceStation.cost || 0} pts]\n`;
+      out += `${fleet.spaceStation.name} [${fleet.spaceStation.cost || 0} pts]\n`;
+      (fleet.spaceStation.systems || []).forEach(n => { out += `    - ${n}\n`; });
     }
-    lines.push('', 'Built with type37.github.io/dropfleet-builder');
-    return lines.join('\n');
+
+    return out.trimEnd();
   }
   function copyFleetText() {
     const text = fleetToText(activeFleet);
@@ -3250,18 +3262,20 @@
   }
 
   function shareFleet() {
+    // Default share = the simple army list (New Recruit style text). The import link
+    // rides along in the share payload / shown below for anyone who wants the exact
+    // fleet with loadouts.
+    const text = fleetToText(activeFleet);
     const code = encodeFleet(activeFleet);
-    // Desktop-compatible share format (#share/<code>). Point at the root app so
-    // the link works on desktop too; mobile users get redirected back here.
     const url = location.origin + location.pathname.replace(/mobile\/?$/, '') + '#share/' + code;
-    const doToast = (msg) => showSheet('Share Fleet',
-      `<p>${msg}</p><p style="word-break:break-all;font-family:var(--font-condensed);font-size:var(--text-caption1);color:var(--fg3);margin-top:var(--sp-s)">${esc(url)}</p>`);
+    const sheet = (msg) => showSheet('Share Fleet',
+      `${msg ? `<p>${msg}</p>` : ''}<pre class="copy-pre">${esc(text)}</pre><p style="word-break:break-all;font-family:var(--font-condensed);font-size:var(--text-caption1);color:var(--fg3);margin-top:var(--sp-s)">Import link: ${esc(url)}</p>`);
     if (navigator.share) {
-      navigator.share({ title: activeFleet.name, url }).catch(() => {});
+      navigator.share({ title: activeFleet.name, text, url }).catch(() => {});
     } else if (navigator.clipboard) {
-      navigator.clipboard.writeText(url).then(() => doToast('Link copied to clipboard.')).catch(() => doToast('Copy this link:'));
+      navigator.clipboard.writeText(text).then(() => sheet('Army list copied to clipboard.')).catch(() => sheet(''));
     } else {
-      doToast('Copy this link:');
+      sheet('');
     }
   }
 

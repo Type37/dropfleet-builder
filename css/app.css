@@ -3985,6 +3985,21 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
 }
 
+/* New Fleet modal — compact so the whole thing fits with no scroll. */
+.new-fleet-row { display: flex; gap: var(--sp-md); flex-wrap: wrap; }
+.new-fleet-row .form-group { min-width: 180px; }
+.size-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-sm); }
+.size-grid .game-size-option { padding: var(--sp-sm) var(--sp-md); }
+.size-grid .game-size-name { font-size: var(--text-sm); }
+.size-grid .game-size-details { font-size: var(--text-xs); line-height: 1.35; }
+.game-size-sub { opacity: 0.85; }
+.new-fleet-points-row {
+  display: flex; align-items: center; gap: var(--sp-sm);
+  margin-top: var(--sp-sm); flex-wrap: wrap;
+}
+.new-fleet-points-row #new-fleet-points { max-width: 150px; }
+.new-fleet-points-hint { font-size: var(--text-xs); color: var(--ink-muted); }
+
 .faction-pick-desc {
   margin-top: var(--sp-sm);
   font-size: var(--text-sm);
@@ -4454,6 +4469,16 @@ h1, h2, h3, h4, h5, h6 {
 .print-preview-title { font-weight: var(--weight-bold); font-size: var(--text-md); }
 .print-preview-opt { display: flex; align-items: center; gap: 5px; font-size: var(--text-sm); cursor: pointer; }
 .print-preview-spacer { flex: 1; }
+/* On the navy bar the buttons need their own colours: Close = white outline,
+   Print = gold fill, so they read clearly and are visibly different. */
+.print-preview-bar .pp-close-btn {
+  background: transparent; border: 1.5px solid rgba(255, 255, 255, 0.65); color: #fff;
+}
+.print-preview-bar .pp-close-btn:hover { background: rgba(255, 255, 255, 0.16); border-color: #fff; }
+.print-preview-bar #pp-print {
+  background: #ffcc00; border-color: #ffcc00; color: #1b2a3a; font-weight: var(--weight-bold);
+}
+.print-preview-bar #pp-print:hover { background: #ffd633; border-color: #ffd633; }
 .print-preview-scroll { flex: 1; overflow: auto; padding: var(--sp-lg); display: flex; justify-content: center; }
 .print-preview-surface {
   background: #fff; width: 210mm; max-width: 100%;
@@ -4469,6 +4494,16 @@ h1, h2, h3, h4, h5, h6 {
 .print-simple .sp-note { color: #555; font-size: 9.5pt; }
 .print-simple .sp-pts { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 700; }
 .print-simple .sp-adm .sp-name { font-style: italic; }
+/* Simple Print View renders the plain-text army list in a clean readable block. */
+.print-simple-text {
+  font-family: 'Jost', 'Segoe UI', sans-serif;
+  font-size: 11pt;
+  line-height: 1.5;
+  color: #1c1a17;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
 
 /* Print layout classes (used by printFleet JS) */
 .print-fleet {

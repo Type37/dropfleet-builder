@@ -237,26 +237,33 @@
       <h2 class="modal-title">New Fleet</h2>
       <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-new-fleet')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>
-    <div class="modal-body">
-      <div class="flex flex-col gap-xl">
-        <div class="form-group">
-          <label class="form-label">Fleet Name</label>
-          <input class="form-input" id="new-fleet-name" type="text" placeholder="Name your fleet (optional)">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Description</label>
-          <textarea class="form-textarea" id="new-fleet-desc" placeholder="Fleet notes..."></textarea>
+    <div class="modal-body new-fleet-body">
+      <div class="flex flex-col gap-md">
+        <div class="new-fleet-row">
+          <div class="form-group" style="flex:1">
+            <label class="form-label">Fleet Name</label>
+            <input class="form-input" id="new-fleet-name" type="text" placeholder="Name your fleet (optional)">
+          </div>
+          <div class="form-group" style="flex:1">
+            <label class="form-label">Description</label>
+            <input class="form-input" id="new-fleet-desc" type="text" placeholder="Fleet notes (optional)">
+          </div>
         </div>
         <div class="form-group">
           <label class="form-label">Faction</label>
-          <div class="gap-sm" id="faction-picker" style="display:grid;grid-template-columns:repeat(2,1fr)">
+          <div class="gap-sm" id="faction-picker" style="display:grid;grid-template-columns:repeat(3,1fr)">
             <!-- Populated by JS -->
           </div>
         </div>
         <div class="form-group">
           <label class="form-label">Game Size</label>
-          <div class="flex flex-col gap-xs" id="size-picker">
+          <div class="size-grid" id="size-picker">
             <!-- Populated by JS -->
+          </div>
+          <div class="new-fleet-points-row">
+            <label class="form-label" for="new-fleet-points" style="margin:0">Points limit</label>
+            <input class="form-input" id="new-fleet-points" type="number" min="0" step="50" placeholder="bracket max">
+            <span class="new-fleet-points-hint">leave blank for the bracket maximum</span>
           </div>
         </div>
       </div>

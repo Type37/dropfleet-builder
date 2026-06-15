@@ -572,9 +572,9 @@ const App = (() => {
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="8" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="12" cy="12" r="2"/><path d="M6 7l4-2M6 9l4 2"/></svg>
                 <span class="topbar-action-label">Share</span>
               </button>
-              <button class="btn btn-ghost btn-sm topbar-action-btn" onclick="App.printFleet()" data-tooltip="Print">
+              <button class="btn btn-ghost btn-sm topbar-action-btn" onclick="App.printFleet()" data-tooltip="Print preview">
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6V2h8v4M4 12H2V7h12v5h-2"/><rect x="4" y="10" width="8" height="4"/></svg>
-                <span class="topbar-action-label">Print</span>
+                <span class="topbar-action-label">Print preview</span>
               </button>
               <button class="btn btn-ghost btn-sm topbar-action-btn" onclick="App.openSettings()" data-tooltip="Settings">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path opacity=".55" d="M13.765 2.152C13.398 2 12.932 2 12 2s-1.398 0-1.765.152a2 2 0 0 0-1.083 1.083c-.092.223-.129.484-.143.863a1.62 1.62 0 0 1-.79 1.353a1.62 1.62 0 0 1-1.567.008c-.336-.178-.579-.276-.82-.308a2 2 0 0 0-1.478.396C4.04 5.79 3.806 6.193 3.34 7s-.7 1.21-.751 1.605a2 2 0 0 0 .396 1.479c.148.192.355.353.676.555c.473.297.777.803.777 1.361s-.304 1.064-.777 1.36c-.321.203-.529.364-.676.556a2 2 0 0 0-.396 1.479c.052.394.285.798.75 1.605c.467.807.7 1.21 1.015 1.453a2 2 0 0 0 1.479.396c.24-.032.483-.13.819-.308a1.62 1.62 0 0 1 1.567.008c.483.28.77.795.79 1.353c.014.38.05.64.143.863a2 2 0 0 0 1.083 1.083C10.602 22 11.068 22 12 22s1.398 0 1.765-.152a2 2 0 0 0 1.083-1.083c.092-.223.129-.483.143-.863c.02-.558.307-1.074.79-1.353a1.62 1.62 0 0 1 1.567-.008c.336.178.579.276.819.308a2 2 0 0 0 1.479-.396c.315-.242.548-.646 1.014-1.453s.7-1.21.751-1.605a2 2 0 0 0-.396-1.479c-.148-.192-.355-.353-.676-.555A1.62 1.62 0 0 1 19.562 12c0-.558.304-1.064.777-1.36c.321-.203.529-.364.676-.556a2 2 0 0 0 .396-1.479c-.052-.394-.285-.798-.75-1.605c-.467-.807-.7-1.21-1.015-1.453a2 2 0 0 0-1.479-.396c-.24.032-.483.13-.82.308a1.62 1.62 0 0 1-1.566-.008a1.62 1.62 0 0 1-.79-1.353c-.014-.38-.05-.64-.143-.863a2 2 0 0 0-1.083-1.083Z"/></svg>
@@ -786,6 +786,8 @@ const App = (() => {
   function openNewFleetModal() {
     document.getElementById('new-fleet-name').value = '';
     document.getElementById('new-fleet-desc').value = '';
+    const ptsInput = document.getElementById('new-fleet-points');
+    if (ptsInput) { ptsInput.value = ''; ptsInput.placeholder = `${(GAME_SIZES.clash || {}).max || ''} (bracket max)`; }
     renderFactionPicker();
     renderSizePicker();
     openModal('modal-new-fleet');
@@ -856,18 +858,16 @@ const App = (() => {
 
   function renderSizePicker() {
     const container = document.getElementById('size-picker');
+    // Compact cards in a 2x2 grid so the whole New Fleet modal fits with no scroll.
     container.innerHTML = Object.entries(GAME_SIZES).map(([key, size]) => {
-      const bars = gameSizeBlocks(key);
       const lines = gameSizeLines(size);
       return `
       <div class="game-size-option ${key === 'clash' ? 'selected' : ''}" data-size="${key}" onclick="App.selectGameSize('${key}')">
         <input type="radio" name="game-size" value="${key}" style="display:none" ${key === 'clash' ? 'checked' : ''}>
-        <div class="game-size-visual">${bars}</div>
         <div class="game-size-info">
           <div class="game-size-name">${size.label}</div>
           <div class="game-size-details">${lines[0]}</div>
-          <div class="game-size-details">${lines[1]}</div>
-          <div class="game-size-time">${lines[2]} · ~${size.time}</div>
+          <div class="game-size-details game-size-sub">${lines[1]} · ${lines[2]}</div>
         </div>
       </div>`;
     }).join('');
@@ -885,6 +885,10 @@ const App = (() => {
       const radio = selected.querySelector('input[type="radio"]');
       if (radio) radio.checked = true;
     }
+    // Reflect the new bracket maximum in the custom points-limit placeholder.
+    const ptsInput = document.getElementById('new-fleet-points');
+    const max = (GAME_SIZES[key] || {}).max;
+    if (ptsInput && max) ptsInput.placeholder = `${max} (bracket max)`;
   }
 
   function openGameSizeChanger() {
@@ -956,13 +960,18 @@ const App = (() => {
     const fLabel = FACTION_LABELS[faction] || faction.toUpperCase();
     const name = rawName || `${fLabel} ${sizeInfo.label} Fleet`;
 
+    // Optional custom points limit (e.g. a 1500-pt Clash). Blank = bracket max.
+    const ptsRaw = (document.getElementById('new-fleet-points') || {}).value;
+    const customPts = ptsRaw ? parseInt(ptsRaw, 10) : NaN;
+    const pointsLimit = (!isNaN(customPts) && customPts > 0) ? customPts : sizeInfo.max;
+
     const fleet = {
       id: uuid(),
       name,
       description: document.getElementById('new-fleet-desc').value.trim(),
       faction,
       gameSize,
-      pointsLimit: sizeInfo.max,
+      pointsLimit,
       maxGroups: sizeInfo.groups,
       admirals: [],
       battleGroups: [],
@@ -4892,46 +4901,13 @@ const App = (() => {
     return html;
   }
 
-  // Minimal "Simple Print View" — a compact, New-Recruit-style roster: just names,
-  // counts, loadout notes and points. No datasheets, art, or rules glossary.
+  // "Simple Print View" = the plain-text army list (the same New-Recruit-style export
+  // as Share), rendered in a clean monospace block so it prints dense and readable.
   function buildSimplePrintHTML(f) {
-    const fName = (factionData[f.faction] || {}).name || f.faction.toUpperCase();
-    const pts = calcFleetPoints(f);
-    const sizeInfo = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
-    const cap = effMax(f);
-    const catOrder = { colossal: 0, heavy: 1, medium: 2, light: 3, payload: 4 };
-    const groups = [...(f.battleGroups || [])].sort((a, b) => {
-      const ac = a.ships[0]?.groupCategory || 'medium', bc = b.ships[0]?.groupCategory || 'medium';
-      return (catOrder[ac] ?? 5) - (catOrder[bc] ?? 5);
-    });
-    const groupRows = groups.map(g => {
-      if (!g.ships.length) return '';
-      const s = g.ships[0];
-      const db = findShipInDB(f.faction, s.groupCategory, s.shipKey);
-      const name = db ? db.name : s.shipKey;
-      const n = g.ships.length;
-      const gPts = g.ships.reduce((t, x) => t + (x.points || 0), 0);
-      // loadout/system notes from the first ship (group shares config)
-      const notes = [];
-      (db && db.loadoutOptions || []).forEach((lo, i) => {
-        const opt = lo.options[(s.loadouts && s.loadouts[i]) || 0];
-        if (opt && opt.cost) notes.push(opt.name);
-      });
-      if (s.systems && s.systems.length) notes.push(...s.systems);
-      if (s.feature) notes.push(s.feature);
-      const noteStr = notes.length ? ` <span class="sp-note">(${esc(notes.join(', '))})</span>` : '';
-      return `<div class="sp-row"><span class="sp-qty">${n}×</span> <span class="sp-name">${esc(name)}</span>${noteStr}<span class="sp-pts">${gPts}</span></div>`;
-    }).join('');
-    const admRows = (f.admirals || []).map(a => `<div class="sp-row sp-adm"><span class="sp-name">${esc(a.name)}${a.level ? ` (Lv ${a.level})` : ''}</span><span class="sp-pts">${a.points || 0}</span></div>`).join('');
-    const station = f.spaceStation ? `<div class="sp-row sp-adm"><span class="sp-name">${esc(f.spaceStation.name)}</span><span class="sp-pts">${f.spaceStation.cost || 0}</span></div>` : '';
     const secObjs = (f.secondaryObjectives || []);
-    const objLine = secObjs.length ? `<div class="sp-row sp-obj"><span class="sp-name">Secondary: ${esc(secObjs.join(', '))}</span></div>` : '';
-    return `<div class="print-fleet print-simple" data-fleet-name="${esc(f.name)}">
-      <div class="sp-head"><strong>${esc(f.name)}</strong> · ${esc(fName)} · ${esc(sizeInfo.label)} · <strong>${pts}${cap !== 99999 ? ' / ' + cap : ''} pts</strong></div>
-      ${admRows || station ? `<div class="sp-section">${admRows}${station}</div>` : ''}
-      <div class="sp-section">${groupRows}</div>
-      ${objLine ? `<div class="sp-section">${objLine}</div>` : ''}
-    </div>`;
+    let txt = generateFleetText(f);
+    if (secObjs.length) txt += `\n\n## Secondary Objectives\n${secObjs.map(o => '• ' + o).join('\n')}`;
+    return `<div class="print-fleet print-simple" data-fleet-name="${esc(f.name)}"><pre class="print-simple-text">${esc(txt)}</pre></div>`;
   }
 
   function fleetPrintHTML(f) {
@@ -4967,19 +4943,24 @@ const App = (() => {
     ov.innerHTML = `
       <div class="print-preview-bar">
         <span class="print-preview-title">Print preview</span>
+        <span class="print-preview-spacer"></span>
         <label class="print-preview-opt"><input type="checkbox" id="pp-simple" ${settings.printSimple ? 'checked' : ''}> Simple Print View</label>
         <label class="print-preview-opt"><input type="checkbox" id="pp-2col" ${settings.print2col ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> 2 columns</label>
-        <span class="print-preview-spacer"></span>
-        <button class="btn btn-ghost btn-sm" id="pp-close">Close</button>
-        <button class="btn btn-primary btn-sm" id="pp-print">Print</button>
+        <button class="btn btn-outline btn-sm pp-close-btn" id="pp-close" type="button">Close</button>
+        <button class="btn btn-primary btn-sm" id="pp-print" type="button">Print</button>
       </div>
       <div class="print-preview-scroll"><div class="print-preview-surface" id="pp-surface">${fleetPrintHTML(currentFleet)}</div></div>`;
     document.body.appendChild(ov);
+    const closePreview = () => { ov.remove(); document.removeEventListener('keydown', onKey); };
+    const onKey = (e) => { if (e.key === 'Escape') closePreview(); };
+    document.addEventListener('keydown', onKey);
     const refresh = () => { const s = document.getElementById('pp-surface'); if (s) s.innerHTML = fleetPrintHTML(currentFleet); };
     ov.querySelector('#pp-simple').onchange = (e) => { settings.printSimple = e.target.checked; saveSettings(); const c = ov.querySelector('#pp-2col'); if (c) c.disabled = e.target.checked; refresh(); };
     ov.querySelector('#pp-2col').onchange = (e) => { settings.print2col = e.target.checked; saveSettings(); refresh(); };
-    ov.querySelector('#pp-close').onclick = () => ov.remove();
-    ov.querySelector('#pp-print').onclick = () => doPrintNow();
+    ov.querySelector('#pp-close').addEventListener('click', closePreview);
+    ov.querySelector('#pp-print').addEventListener('click', doPrintNow);
+    // Click on the dark backdrop (outside the page surface) also closes.
+    ov.querySelector('.print-preview-scroll').addEventListener('click', (e) => { if (e.target === e.currentTarget) closePreview(); });
   }
 
   // ── Shared Fleet Viewer ──
@@ -5172,19 +5153,20 @@ const App = (() => {
     const text = generateFleetText(currentFleet);
 
     const body = document.getElementById('share-body');
+    // Default share = the simple army list (New Recruit style), so it leads here.
     body.innerHTML = `
+      <div class="settings-group">
+        <div class="settings-group-title">Army List</div>
+        <textarea class="share-text-export" readonly onclick="this.select()">${esc(text)}</textarea>
+        <button class="btn btn-primary btn-sm" style="margin-top:var(--sp-sm)" onclick="App.copyShareText()">Copy army list</button>
+      </div>
       <div class="settings-group">
         <div class="settings-group-title">Share Link</div>
         <div class="share-url-row">
           <input type="text" class="share-url-input" value="${esc(url)}" readonly id="share-url-input" onclick="this.select()">
-          <button class="btn btn-primary btn-sm" onclick="App.copyShareURL()">Copy</button>
+          <button class="btn btn-outline btn-sm" onclick="App.copyShareURL()">Copy</button>
         </div>
-        <p class="text-caption" style="margin-top:var(--sp-sm)">Anyone with this link can view and import your fleet.</p>
-      </div>
-      <div class="settings-group">
-        <div class="settings-group-title">Text Export</div>
-        <textarea class="share-text-export" readonly onclick="this.select()">${esc(text)}</textarea>
-        <button class="btn btn-outline btn-sm" style="margin-top:var(--sp-sm)" onclick="App.copyShareText()">Copy Text</button>
+        <p class="text-caption" style="margin-top:var(--sp-sm)">A link anyone can open to view and import the exact fleet (loadouts included).</p>
       </div>
       <div class="settings-group">
         <div class="settings-group-title">JSON Export</div>
@@ -5304,57 +5286,69 @@ const App = (() => {
     }
   }
 
+  // New-Recruit-style plain-text army list (the "simple army list"): a header with
+  // the total, then sections (Famous Admirals, then groups by tonnage Colossal→Light,
+  // then Space Station), each with its points subtotal. Multi-ship groups read
+  // "• Nx Name [per-ship pts]"; single ships read "Name [pts]". Loadout/system/feature
+  // picks are indented sub-lines only when present.
   function generateFleetText(fleet) {
-    const fName = (factionData[fleet.faction] || {}).name || fleet.faction.toUpperCase();
-    const pts = calcFleetPoints(fleet);
-    const sizeInfo = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
-    let text = `${fleet.name}\n${fName} - ${sizeInfo.label} (${pts} pts)\n`;
-    text += '═'.repeat(40) + '\n';
+    const total = calcFleetPoints(fleet);
+    const name = fleet.name || 'Fleet';
+    const factionInfo = shipDB[fleet.faction];
+    let out = `# ++ ${name} ++ [${total} pts]\n`;
 
-    if (fleet.admirals && fleet.admirals.length > 0) {
-      fleet.admirals.forEach(a => {
-        text += `\nADMIRAL: ${a.name}, Lv${a.level || '?'}${a.type === 'Famous' ? ' (Famous)' : ''} (${a.points} pts)\n`;
-      });
-    }
-
-    if (fleet.spaceStation) {
-      text += `\nSTATION: ${fleet.spaceStation.name} (${fleet.spaceStation.cost} pts)\n`;
-      (fleet.spaceStation.systems || []).forEach(n => { text += `  + ${n}\n`; });
-    }
-
-    fleet.battleGroups.forEach(g => {
-      const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
-      text += `\n── ${g.name} (${gPts} pts, ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}) ──\n`;
-      // Group ships by profile to show quantity
-      const profiles = {};
-      g.ships.forEach(s => {
-        const key = s.groupCategory + '/' + s.shipKey + '/' + JSON.stringify(s.loadouts || []);
-        if (!profiles[key]) profiles[key] = { ship: s, count: 0 };
-        profiles[key].count++;
-      });
-      Object.values(profiles).forEach(({ ship: s, count }) => {
-        const dbShip = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
-        const name = dbShip ? dbShip.name : s.shipKey;
-        const prefix = count > 1 ? `${count}× ` : '';
-        let loadoutInfo = '';
-        if (dbShip && dbShip.loadoutOptions) {
-          const parts = [];
-          dbShip.loadoutOptions.forEach((lo, loIdx) => {
-            if (lo.options.length > 1) {
-              const selIdx = (s.loadouts && s.loadouts[loIdx] !== undefined) ? s.loadouts[loIdx] : 0;
-              const selOpt = lo.options[selIdx];
-              if (selOpt) parts.push(selOpt.name);
-            }
-          });
-          if (parts.length > 0) loadoutInfo = ` [${parts.join(', ')}]`;
+    const admirals = fleet.admirals || [];
+    if (admirals.length) {
+      const admPts = admirals.reduce((t, a) => t + (a.points || 0), 0);
+      const anyFamous = admirals.some(a => a.type === 'Famous' || a.type === 'Faction');
+      out += `\n## ${anyFamous ? 'Famous Admirals' : 'Admirals'} [${admPts} pts]\n`;
+      admirals.forEach(a => {
+        const fsp = (a.shipKey && factionInfo && factionInfo.groups && factionInfo.groups.famous_admirals && factionInfo.groups.famous_admirals.ships[a.shipKey]) || null;
+        if (fsp) {
+          const flagName = fsp.ship_name || fsp.className || 'Flagship';
+          const flagCost = fsp.ship_cost || 0;
+          out += `• 1x ${a.name} [${(a.points || 0) - flagCost} pts]\n`;
+          out += `• 1x ${flagName} [${flagCost} pts]\n`;
+        } else {
+          out += `• 1x ${a.name} [${a.points || 0} pts]\n`;
         }
-        text += `  • ${prefix}${name}${loadoutInfo}, ${s.points * count} pts\n`;
+      });
+    }
+
+    const TONNAGE = [['colossal', 'Colossal'], ['heavy', 'Heavy'], ['medium', 'Medium'], ['light', 'Light'], ['payload', 'Payload']];
+    TONNAGE.forEach(([cat, label]) => {
+      const groups = (fleet.battleGroups || []).filter(g => g.ships.length && (g.ships[0].groupCategory || 'medium') === cat);
+      if (!groups.length) return;
+      const secPts = groups.reduce((t, g) => t + g.ships.reduce((tt, s) => tt + (s.points || 0), 0), 0);
+      out += `\n## ${label} Groups [${secPts} pts]\n`;
+      groups.forEach(g => {
+        const profs = [];
+        g.ships.forEach(s => {
+          const key = s.shipKey + ':' + JSON.stringify(s.loadouts || {}) + ':' + JSON.stringify(s.systems || []) + ':' + (s.feature || '');
+          let p = profs.find(x => x.key === key);
+          if (!p) { p = { key, s, count: 0 }; profs.push(p); }
+          p.count++;
+        });
+        profs.forEach(({ s, count }) => {
+          const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
+          const nm = db ? db.name : s.shipKey;
+          out += count > 1 ? `• ${count}x ${nm} [${s.points} pts]\n` : `${nm} [${s.points} pts]\n`;
+          const notes = [];
+          (db && db.loadoutOptions || []).forEach((lo, i) => { const o = lo.options[(s.loadouts && s.loadouts[i]) || 0]; if (o && o.cost) notes.push(o.name); });
+          if (s.systems && s.systems.length) { const c = {}; s.systems.forEach(n => c[n] = (c[n] || 0) + 1); notes.push(...Object.entries(c).map(([n, k]) => k > 1 ? `${k}x ${n}` : n)); }
+          if (s.feature) notes.push(s.feature);
+          notes.forEach(n => { out += `    - ${n}\n`; });
+        });
       });
     });
 
-    text += '\n' + '═'.repeat(40);
-    text += `\nTotal: ${pts}/${effMax(fleet) !== 99999 ? effMax(fleet) : '∞'} pts`;
-    return text;
+    if (fleet.spaceStation) {
+      out += `\n## Space Station [${fleet.spaceStation.cost || 0} pts]\n`;
+      out += `${fleet.spaceStation.name} [${fleet.spaceStation.cost || 0} pts]\n`;
+      (fleet.spaceStation.systems || []).forEach(n => { out += `    - ${n}\n`; });
+    }
+
+    return out.trimEnd();
   }
 
   // ── Settings ──
