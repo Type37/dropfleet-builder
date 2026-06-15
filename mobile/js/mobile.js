@@ -836,10 +836,17 @@
     if (!fleet.admirals || fleet.admirals.length === 0) {
       w.push({ t: 'error', m: 'Fleet must contain an Admiral', fix: 'admiral' });
     }
-    // Admiral level cap
+    // Admiral level cap + un-picked abilities (soft)
+    const facAdmirals = (FACTIONS[fleet.faction]?.admirals) || [];
     (fleet.admirals || []).forEach(a => {
       if (a.level && a.level > size.maxAdmiralLevel) {
         w.push({ t: 'error', m: `${a.name} (Lv${a.level}) exceeds max Lv${size.maxAdmiralLevel} for ${size.label}` });
+      }
+      const def = facAdmirals.find(x => x.id === a.admiralId);
+      const picks = def ? (def.abilityPicks || 0) : 0;
+      const chosen = (a.selectedAbilities || []).length;
+      if (picks > 0 && chosen < picks) {
+        w.push({ t: 'warn', m: `${a.name}: choose ${picks} Abilit${picks > 1 ? 'ies' : 'y'} (${chosen}/${picks})` });
       }
     });
     // One famous/named admiral max

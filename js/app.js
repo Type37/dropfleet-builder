@@ -1434,6 +1434,16 @@ const App = (() => {
     scheduleRender(renderGroupsNav, renderActiveGroup, updatePoints);
   }
 
+  // How many Abilities-Table picks an admiral is supposed to make (0 = none, e.g.
+  // generic level admirals). Famous/faction admirals carry their own pick count.
+  function admiralRequiredPicks(fleet, adm) {
+    const fs = shipDB[fleet && fleet.faction];
+    if (!fs || !adm) return 0;
+    if (adm.shipKey) { const a = fs.groups?.famous_admirals?.ships?.[adm.shipKey]; return a ? (a.ability_picks || 0) : 0; }
+    if (adm.admiralId) { const a = (fs.admirals || []).find(x => x.id === adm.admiralId); return a ? (a.abilityPicks || 0) : 0; }
+    return 0;
+  }
+
   function validateFleet(fleet) {
     if (!fleet) return [];
     const warnings = [];
@@ -1589,6 +1599,12 @@ const App = (() => {
         if (caps.length && !caps.some(g => g.id === adm.assignedGroupId)) {
           warnings.push({ type: 'warn', msg: `${adm.name} is not assigned to a Capital ship` });
         }
+      }
+      // Admiral hasn't picked all its Abilities Table choices yet (soft nudge).
+      const picks = admiralRequiredPicks(fleet, adm);
+      const chosen = (adm.selectedAbilities || []).length;
+      if (picks > 0 && chosen < picks) {
+        warnings.push({ type: 'warn', msg: `${adm.name}: choose ${picks} Abilit${picks > 1 ? 'ies' : 'y'} (${chosen}/${picks})` });
       }
     });
     if (namedCount > 1) {
