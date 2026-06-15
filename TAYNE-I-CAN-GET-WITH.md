@@ -191,3 +191,23 @@ real in-app screenshot)? Say so and I'll regen.
 Not sure which item - tell me which and I'll confirm. (Recent shipped: print
 rebuild, AP/Command Ship, Centurion-not-rare, Kalium/Aldrin text, Overcharge->High
 Power, two-column recorded ships, link preview, objective swap.)
+
+---
+
+# Batch (2026-06-15, v189) - link preview is now a real builder screenshot
+
+## 17. og:image = actual builder screenshot + DROPFLEET COMMANDER title
+You wanted the preview to be the army builder with Dropfleet Commander over it. Done:
+og-preview.png is now a real headless screenshot of a builder datasheet (ship art,
+stat cells, weapon table) under a navy band carrying the chrome DROPFLEET COMMANDER
+wordmark + gold FLEET BUILDER. Rebuild it any time with: python scripts/gen-og-image.py
+(it composites from a __ogcap_raw.png capture). Want a different fleet/faction or a
+busier multi-ship shot? Tell me which fleet and I'll recapture.
+NOTE: Discord/Twitter cache previews hard - they'll show the OLD image until their
+cache expires; force a refresh via the platform's card validator/debugger if needed.
+
+## 18. Fixed: cold-opened share links showed raw ship keys
+Found while capturing: opening a #share/<code> link fresh rendered the shared fleet
+before its faction JSON loaded, so it listed ship KEYS instead of names/stats/art.
+The share route now awaits ensureFactionLoaded first. (Real bug, affected anyone
+opening a shared link in a new tab.)
