@@ -2076,7 +2076,14 @@ const App = (() => {
     const warnTitle = warnings.length
       ? [...errors, ...notes].map(w => w.msg).join('\n')
       : 'Legal fleet, ready to play';
-    const validHtml = '';
+    // Visible alert panel (not just the legal-mark tooltip) — errors were too easy
+    // to miss. Errors (red) first, then soft notes (amber); each on its own line.
+    const validHtml = warnings.length
+      ? `<div class="overview-alerts ${errors.length ? 'has-errors' : 'has-warns'}">
+          <div class="overview-alerts-head">${errors.length ? `<span class="overview-alerts-dot err"></span>${errors.length} issue${errors.length !== 1 ? 's' : ''} to fix` : `<span class="overview-alerts-dot warn"></span>${notes.length} note${notes.length !== 1 ? 's' : ''}`}</div>
+          <ul class="overview-alerts-list">${[...errors, ...notes].map(w => `<li class="oa-${w.type}">${esc(w.msg)}</li>`).join('')}</ul>
+        </div>`
+      : '';
 
     return `
       <div class="fleet-overview">

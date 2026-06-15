@@ -4892,6 +4892,22 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-sm); padding: 0 2px; line-height: 1;
 }
 .overview-pts-reset:hover { color: var(--navy); }
+/* Visible validation panel — errors were too easy to miss in the legal-mark tooltip. */
+.overview-alerts {
+  margin: var(--sp-sm) 0;
+  border-radius: var(--radius-sm);
+  padding: var(--sp-sm) var(--sp-md);
+  border-left: 3px solid var(--stroke);
+}
+.overview-alerts.has-errors { border-left-color: #c43c2f; background: rgba(196,60,47,0.06); }
+.overview-alerts.has-warns { border-left-color: var(--gold-dark); background: rgba(180,140,30,0.06); }
+.overview-alerts-head { font-weight: var(--weight-bold); font-size: var(--text-sm); display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.overview-alerts-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.overview-alerts-dot.err { background: #c43c2f; }
+.overview-alerts-dot.warn { background: var(--gold-dark); }
+.overview-alerts-list { margin: 0; padding-left: 18px; font-size: var(--text-sm); line-height: 1.5; }
+.overview-alerts-list .oa-error { color: #c43c2f; }
+.overview-alerts-list .oa-warn { color: var(--ink-muted); }
 .overview-section {
   margin-bottom: var(--sp-xl);
 }
