@@ -3510,6 +3510,42 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--navy-dark);
 }
 
+/* ── Battlegroup inline rename ───────────────────────────────── */
+/* Click-to-rename names show a dotted underline on hover so the affordance is
+   discoverable without cluttering the layout. */
+.group-name-editable { cursor: pointer; }
+.group-name-editable:hover {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--navy);
+}
+.group-name-input {
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--navy);
+  border-radius: var(--radius-sm);
+  padding: 1px 6px;
+  max-width: 100%;
+  outline: none;
+}
+.group-name-input:focus { box-shadow: 0 0 0 3px var(--navy-subtle); }
+/* Pencil button beside the detail-panel group title. */
+.group-rename-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--stroke-light);
+  border-radius: var(--radius-sm);
+  background: var(--paper-alt);
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+.group-rename-btn:hover { color: var(--navy); border-color: var(--navy); background: var(--navy-subtle); }
+
 .badge-tonnage {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);

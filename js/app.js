@@ -1767,7 +1767,7 @@ const App = (() => {
         ${artThumb}
         <div class="group-nav-body">
           <div class="group-nav-top">
-            <span class="group-nav-name">${esc(g.name)}</span>
+            <span class="group-nav-name group-name-editable" onclick="event.stopPropagation(); App.editGroupName('${g.id}', this)" title="Click to rename battlegroup">${esc(g.name)}</span>
             ${statusDot}
             ${reorderBtns}
           </div>
@@ -1925,6 +1925,45 @@ const App = (() => {
     });
   }
 
+  // Inline-rename a battlegroup. `el` is the name element clicked (overview card,
+  // sidebar nav, or detail header title); it's swapped for an input and the whole
+  // builder re-renders on commit so the new name shows everywhere it appears.
+  function editGroupName(groupId, el) {
+    if (!currentFleet || !el) return;
+    const group = (currentFleet.battleGroups || []).find(g => g.id === groupId);
+    if (!group) return;
+    const current = group.name || '';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = current;
+    input.maxLength = 40;
+    input.className = 'group-name-input';
+    input.setAttribute('aria-label', 'Battlegroup name');
+    el.textContent = '';
+    el.appendChild(input);
+    input.focus();
+    input.select();
+    let handled = false;
+    const finish = (save) => {
+      if (handled) return;
+      handled = true;
+      const val = input.value.trim();
+      if (save && val && val !== current) {
+        group.name = val;
+        saveFleets();
+        showToast('Battlegroup renamed');
+      }
+      renderBuilder();
+    };
+    input.addEventListener('blur', () => finish(true));
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); finish(true); }
+      else if (e.key === 'Escape') { e.preventDefault(); finish(false); }
+      e.stopPropagation();
+    });
+    input.addEventListener('click', e => e.stopPropagation());
+  }
+
   // ── Fleet Overview ──
   function renderFleetOverview() {
     const f = currentFleet;
@@ -2017,7 +2056,7 @@ const App = (() => {
         <div class="overview-group-top">
           ${artSrc ? `<div class="overview-group-art${artModularClass}"><img src="${thumbUrl(artSrc)}" alt="" onerror="this.closest('.overview-group-art').remove()"></div>` : ''}
           <div class="overview-group-info">
-            <div class="overview-group-name">${esc(g.name)}</div>
+            <div class="overview-group-name group-name-editable" onclick="event.stopPropagation(); App.editGroupName('${g.id}', this)" role="button" tabindex="0" title="Click to rename battlegroup">${esc(g.name)}</div>
             <div class="overview-group-meta">
               <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size:11px;padding:1px 6px">${esc(catLabel)}</span>
               <span class="text-caption">${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
@@ -2242,7 +2281,7 @@ const App = (() => {
     // not repeated on the card body below).
     let tonnageBadge = '';
     let headerBadges = '';
-    let titleHtml = `<h2 class="group-title">${esc(group.name)}</h2>`;
+    let titleHtml = `<h2 class="group-title" id="detail-group-title">${esc(group.name)}</h2>`;
     if (group.ships.length > 0) {
       const fs0 = group.ships[0];
       const firstDb = findShipInDB(currentFleet.faction, fs0.groupCategory, fs0.shipKey);
@@ -2256,7 +2295,7 @@ const App = (() => {
         else if (firstDb.isRare) headerBadges += '<span class="ship-badge ship-badge-rare">Rare</span>';
         const gmin = firstDb.groupMin || 1, gmax = firstDb.groupMax || 1;
         if (gmax > 1) headerBadges += `<span class="ship-badge ship-badge-group">${gmin}–${gmax}</span>`;
-        titleHtml = `<h2 class="group-title ship-card-name-link" onclick="App.openShipDetail('${currentFleet.faction}','${fs0.groupCategory}','${fs0.shipKey}')">${esc(group.name)}</h2>`;
+        titleHtml = `<h2 class="group-title ship-card-name-link" id="detail-group-title" onclick="App.openShipDetail('${currentFleet.faction}','${fs0.groupCategory}','${fs0.shipKey}')">${esc(group.name)}</h2>`;
       }
     }
 
@@ -2302,6 +2341,7 @@ const App = (() => {
     <div class="group-header-bar">
       <div class="flex items-center gap-md flex-wrap">
         ${titleHtml}
+        <button class="group-rename-btn" onclick="App.editGroupName('${group.id}', document.getElementById('detail-group-title'))" title="Rename battlegroup" aria-label="Rename battlegroup"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 2.5l2 2L6 12l-2.5.5L4 10z"/></svg></button>
         ${headerBadges}
         ${tonnageBadge}
         <span class="badge badge-navy">${groupPts} pts</span>
@@ -6212,7 +6252,7 @@ const App = (() => {
   // ── Public API ──
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
-    loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, copyGroup, moveGroup, toggleFleetCardMenu,
+    loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, copyGroup, moveGroup, editGroupName, toggleFleetCardMenu,
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,

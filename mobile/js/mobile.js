@@ -1093,7 +1093,7 @@
       case 'screen-fleet-list': menu.classList.remove('hidden'); title.textContent = 'Fleet Builder'; break;
       case 'screen-fleet-detail': back.classList.remove('hidden'); overflow.classList.remove('hidden'); title.textContent = 'Fleet'; showPts(); break;
       case 'screen-add-group': back.classList.remove('hidden'); title.textContent = 'Add Group'; showPts(); break;
-      case 'screen-group-detail': back.classList.remove('hidden'); overflow.classList.remove('hidden'); title.textContent = 'Group'; showPts(); break;
+      case 'screen-group-detail': { back.classList.remove('hidden'); overflow.classList.remove('hidden'); const _ag = (activeFleet && activeGroupIdx >= 0) ? activeFleet.battleGroups[activeGroupIdx] : null; title.textContent = (_ag && _ag.name) ? _ag.name : 'Group'; showPts(); break; }
       case 'screen-admiral': back.classList.remove('hidden'); title.textContent = 'Add Admiral'; showPts(); break;
       case 'screen-admiral-detail': back.classList.remove('hidden'); title.textContent = 'Admiral'; showPts(); break;
       case 'screen-station': back.classList.remove('hidden'); title.textContent = 'Space Station'; showPts(); break;
@@ -1243,8 +1243,8 @@
           <div class="list-row swipe-fg" onclick="App.openGroup(${i})">
             ${art ? `<div class="ship-thumb${modCls}"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
             <div class="list-row-content">
-              <div class="list-row-title">${esc(db?.name || 'Unknown')}${titleQty}</div>
-              <div class="list-row-sub">${gp} pts, ${tonLabel(db?.tonnage) || CATEGORY_LABELS[s.groupCategory] || ''}</div>
+              <div class="list-row-title">${esc((g.name && g.name !== (db?.name || 'Unknown')) ? g.name : (db?.name || 'Unknown'))}${titleQty}</div>
+              <div class="list-row-sub">${gp} pts, ${(g.name && g.name !== (db?.name || 'Unknown')) ? esc(qty + '× ' + (db?.name || 'Unknown')) : (tonLabel(db?.tonnage) || CATEGORY_LABELS[s.groupCategory] || '')}</div>
             </div>
             ${stepper}
             <span class="list-chevron">›</span>
@@ -1739,8 +1739,8 @@
       ${artSrc ? `<div class="ship-art-hero${isFullyModular(ship) ? ' ship-img-modular' : ''}${multiArtM ? ' has-alts' : ''}">${isFullyModular(ship) ? '<div class="modular-art-note">Base hull shown, your ship’s look depends on the systems you choose</div>' : ''}${shopLinkImg(ship.name, `<img src="${artSrc}" alt="${esc(ship.name)}" loading="lazy">`, ship)}${multiArtM ? `<button class="hero-art-arrow hero-art-prev" onclick="event.preventDefault();event.stopPropagation();App.cycleShipArt(-1)" aria-label="Previous sculpt">‹</button><button class="hero-art-arrow hero-art-next" onclick="event.preventDefault();event.stopPropagation();App.cycleShipArt(1)" aria-label="Next sculpt">›</button><div class="hero-art-meta"><span class="hero-art-label">${esc(heroArtsM[0].label)}</span><span class="hero-art-dots">${heroArtsM.map((_, i) => `<span class="hero-art-dot${i === 0 ? ' active' : ''}"></span>`).join('')}</span></div>` : ''}</div>` : ''}
       <div class="detail-header">
         <div>
-          <div class="detail-name">${esc(ship.name)}${ship.isUnique ? ' <span class="ship-tag ship-tag-unique">Unique</span>' : ship.isRare ? ' <span class="ship-tag ship-tag-rare">Rare</span>' : ''}</div>
-          <div class="detail-type">${tonLabel(ship.tonnage) || CATEGORY_LABELS[inst.groupCategory] || ''}</div>
+          <div class="detail-name detail-name-editable" onclick="App.editGroupName()" title="Rename battlegroup">${esc((group.name && group.name !== ship.name) ? group.name : ship.name)}${ship.isUnique ? ' <span class="ship-tag ship-tag-unique">Unique</span>' : ship.isRare ? ' <span class="ship-tag ship-tag-rare">Rare</span>' : ''}</div>
+          <div class="detail-type">${(group.name && group.name !== ship.name) ? esc(ship.name) + ' · ' : ''}${tonLabel(ship.tonnage) || CATEGORY_LABELS[inst.groupCategory] || ''}</div>
         </div>
         <div class="pts-badge-lg"><div class="pts-badge-value">${gp}</div><div class="pts-badge-label">Points</div></div>
       </div>
@@ -2201,8 +2201,46 @@
 
   function groupOverflow() {
     showActionSheet([
+      { label: 'Rename battlegroup', action: editGroupName },
       { label: 'Remove this group', danger: true, action: removeGroup }
     ]);
+  }
+
+  // Inline-rename the active battlegroup: swap the detail-name for an input,
+  // commit to group.name and re-render. Mirrors the desktop feature; group.name
+  // already round-trips through save, share and print.
+  function editGroupName() {
+    const f = activeFleet;
+    if (!f || activeGroupIdx < 0) return;
+    const group = f.battleGroups[activeGroupIdx];
+    if (!group) return;
+    const el = document.querySelector('#group-detail-content .detail-name');
+    if (!el) return;
+    const current = group.name || '';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = current;
+    input.maxLength = 40;
+    input.className = 'gname-input';
+    input.setAttribute('aria-label', 'Battlegroup name');
+    el.innerHTML = '';
+    el.appendChild(input);
+    input.focus();
+    input.select();
+    let handled = false;
+    const finish = (save) => {
+      if (handled) return;
+      handled = true;
+      const val = input.value.trim();
+      if (save && val && val !== current) { group.name = val; saveFleets(); }
+      renderGroupDetail();
+      updateAppBar('screen-group-detail');
+    };
+    input.addEventListener('blur', () => finish(true));
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); finish(true); }
+      else if (e.key === 'Escape') { e.preventDefault(); finish(false); }
+    });
   }
 
   /* ── Screen: Admiral Picker ────────────────────────────── */
@@ -2881,7 +2919,9 @@
         if (!inst) return;
         const db = findShip(fleet.faction, inst.groupCategory, inst.shipKey);
         const qty = g.ships.length;
-        lines.push(`${qty}× ${db?.name || 'Unknown'}, ${groupPoints(fleet, g)} pts`);
+        const cls = db?.name || 'Unknown';
+        const label = (g.name && g.name !== cls) ? `${g.name} (${qty}× ${cls})` : `${qty}× ${cls}`;
+        lines.push(`${label}, ${groupPoints(fleet, g)} pts`);
         // Loadout
         (db?.loadoutOptions || []).forEach((lo, i) => {
           const selIdx = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
@@ -3051,8 +3091,9 @@
         const c = {}; inst.systems.forEach(n => c[n] = (c[n] || 0) + 1);
         opts.push('Systems: ' + Object.entries(c).map(([n, ct]) => ct > 1 ? `${n} ×${ct}` : n).join(', '));
       }
+      const prLabel = (g.name && g.name !== db.name) ? `${esc(g.name)} <span class="pr-group-class">(${qty}× ${esc(db.name)})</span>` : `${qty}× ${esc(db.name)}`;
       return `<div class="pr-group">
-        <div class="pr-group-head"><span class="pr-group-name">${qty}× ${esc(db.name)}</span><span class="pr-group-pts">${groupPoints(f, g)} pts</span></div>
+        <div class="pr-group-head"><span class="pr-group-name">${prLabel}</span><span class="pr-group-pts">${groupPoints(f, g)} pts</span></div>
         <div class="pr-stats">${statCells}</div>
         ${weapons ? `<table class="pr-weapons"><thead><tr><th>Weapon</th><th>Lk</th><th>At</th><th>Dm</th><th>Arc</th><th>Special</th></tr></thead><tbody>${weapons}</tbody></table>` : ''}
         ${printLaunchTable(laMap, db)}
@@ -3255,7 +3296,7 @@
     init, goBack, viewDesktop,
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, selectFleetSize, openStarterFleets,
     openAddGroup, filterShips, toggleAttr, toggleExtra, clearFilters, setSort, addShip,
-    openGroup, toggleWarnings, cycleShipArt, changeQty, changeGroupQty, swipeDeleteGroup, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, copyGroup, groupOverflow, toggleSecondary, openSecondaryModal, closeSecondaryModal,
+    openGroup, toggleWarnings, cycleShipArt, changeQty, changeGroupQty, swipeDeleteGroup, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, copyGroup, groupOverflow, editGroupName, toggleSecondary, openSecondaryModal, closeSecondaryModal,
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral, closeAbilityModal,
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,

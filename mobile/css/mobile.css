@@ -1249,6 +1249,19 @@ button, a, input, select, textarea,
   font-weight: var(--weight-bold);
   line-height: 1.2;
 }
+/* Tap the battlegroup name to rename it; dotted underline hints the affordance. */
+.detail-name-editable { cursor: pointer; }
+.detail-name-editable:active { opacity: 0.6; }
+.gname-input {
+  font: inherit;
+  color: var(--fg1);
+  background: var(--white);
+  border: 1px solid var(--navy);
+  border-radius: var(--radius-s, 6px);
+  padding: 1px 6px;
+  max-width: 100%;
+  outline: none;
+}
 
 .detail-type {
   font-size: var(--text-caption1);
@@ -1993,6 +2006,8 @@ body.sheet-open .sheet-scrim {
   .pr-stat b { color: #1b3a5c; }
   /* Stat changed by a selected upgrade (e.g. Drive Refit +3" Thrust). */
   .pr-stat-mod, .pr-stat-mod b { color: #2e7d32; font-weight: 700; }
+  /* Ship class shown in lighter weight after a custom battlegroup name. */
+  .pr-group-class { font-weight: 400; color: #555; }
 
   .pr-weapons { width: 100%; border-collapse: collapse; font-size: 8pt; margin: 3px 0; }
   .pr-weapons th { text-align: left; border-bottom: 1px solid #999; padding: 1px 4px; color: #555; }
