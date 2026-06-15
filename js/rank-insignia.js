@@ -7,7 +7,8 @@
    One motif per faction, `level` (1–5) marks stacked centre-aligned (more
    marks = higher rank, like real insignia). Single faction-accent colour so it
    reads on light and dark. Faction → motif:
-     ucm        military down-pointing chevrons
+     ucm        top stripes (one per tier) + a diamond device that elaborates
+                with rank (plain → octagon ring → half-burst → full sunburst)
      resistance Royal-Navy stripes + a looped executive curl above the top bar
      phr        post-human geometric up-chevrons
      scourge    organic spine / growth-ripple lines
@@ -42,11 +43,7 @@
   // Per-faction mark drawn around centre (12, y) — bold, near-full-width so the
   // motif fills the thumbnail. (y, i, n, color) -> svg.
   const MARK = {
-    // UCM: military down-pointing chevrons (distinct from PHR's up-chevrons).
-    ucm: (y, i, n, c) =>
-      `<path d="M3 ${(y - 2.7).toFixed(1)} L12 ${(y + 2.7).toFixed(1)} L21 ${(y - 2.7).toFixed(1)}" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>`,
-    // resistance is special-cased (bars + an executive curl loop) — see
-    // resistanceInsignia() below.
+    // ucm + resistance + bioficer are special-cased below (not simple stacked rows).
     phr: (y, i, n, c) =>
       `<path d="M3 ${y + 2.8} L12 ${y - 2.8} L21 ${y + 2.8}" fill="none" stroke="${c}" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>`,
     scourge: (y, i, n, c) =>
@@ -108,16 +105,46 @@
     return bars + curl;
   }
 
+  // ── UCM: top stripes (one per tier) + a diamond device that elaborates with
+  // rank — plain (Captain) → octagon ring (Commodore) → upper half-burst (Rear
+  // Admiral) → full sunburst (Admiral).
+  function ucmInsignia(n, c) {
+    const sH = 1.3, sGap = 1.0, sTop = 2.4;
+    let stripes = '';
+    for (let i = 0; i < n; i++) stripes += `<rect x="3" y="${(sTop + i * (sH + sGap)).toFixed(2)}" width="18" height="${sH}" rx="0.5" fill="${c}"/>`;
+    const cy = 16.5, cX = 12; // device centre (lower area)
+    const dh = 3.0, dw = 2.3;
+    const diamond = `<path d="M${cX} ${cy - dh} L${cX + dw} ${cy} L${cX} ${cy + dh} L${cX - dw} ${cy} Z" fill="${c}"/>`;
+    let adorn = '';
+    if (n === 2) {
+      const r = 4.9, pts = [];
+      for (let k = 0; k < 8; k++) { const a = Math.PI / 8 + k * Math.PI / 4; pts.push(`${(cX + r * Math.cos(a)).toFixed(2)},${(cy + r * Math.sin(a)).toFixed(2)}`); }
+      adorn = `<polygon points="${pts.join(' ')}" fill="none" stroke="${c}" stroke-width="1.1"/>`;
+    } else if (n >= 3) {
+      const r1 = 4.0, r2 = 6.0;
+      const angles = n === 3
+        ? [-90, -55, -125, -20, -160]
+        : [-90, -60, -30, 0, 30, 60, 90, 120, 150, 180, -150, -120];
+      adorn = angles.map(deg => {
+        const a = deg * Math.PI / 180;
+        return `<line x1="${(cX + r1 * Math.cos(a)).toFixed(2)}" y1="${(cy + r1 * Math.sin(a)).toFixed(2)}" x2="${(cX + r2 * Math.cos(a)).toFixed(2)}" y2="${(cy + r2 * Math.sin(a)).toFixed(2)}" stroke="${c}" stroke-width="1" stroke-linecap="round"/>`;
+      }).join('');
+    }
+    return stripes + adorn + diamond;
+  }
+
   function rankInsignia(faction, level, sizePx) {
     const c = COLOR[faction] || '#777';
-    const mark = MARK[faction] || MARK.ucm;
+    const mark = MARK[faction] || MARK.shaltari;
     const n = Math.max(1, Math.min(5, parseInt(level, 10) || 1));
     const s = sizePx || 20;
     const marks = faction === 'bioficer'
       ? bioficerInsignia(n, c)
       : faction === 'resistance'
         ? resistanceInsignia(n, c)
-        : rows(n).map((y, i) => mark(y, i, n, c)).join('');
+        : faction === 'ucm'
+          ? ucmInsignia(n, c)
+          : rows(n).map((y, i) => mark(y, i, n, c)).join('');
     return `<svg class="rank-insignia rank-${faction}" viewBox="0 0 24 24" width="${s}" height="${s}" ` +
       `role="img" aria-label="${LABEL[faction] || faction} rank — Level ${n}" ` +
       `xmlns="http://www.w3.org/2000/svg">${marks}</svg>`;
