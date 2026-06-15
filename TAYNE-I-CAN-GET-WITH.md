@@ -289,3 +289,24 @@ prior sessions; ONE genuine bug remained and was fixed.
 - Deep weapon-multiplicity re-audit of ALL ships (you asked to "check other fleets"):
   the 11 named ships verify correct; a 6-agent full re-audit hit the session limit
   (resets 2:40pm ET). Can re-run it then.
+
+---
+
+# Batch (2026-06-15, v193) - New Fleet modal, print-preview polish, army-list export
+
+- **New Fleet modal** rebuilt to fit on ONE page (no scroll): Name+Description on one
+  row, faction in a 3-wide grid, game-size as a compact 2x2 grid, plus a **custom
+  Points limit** field (blank = bracket max; e.g. 1500 in a Clash). createFleet honours it.
+- **Print preview bar**: Simple/2-column toggles moved to the right next to the
+  buttons; **Print = gold**, **Close = white-outline** (both visible on the navy bar
+  and clearly different colours). **Fixed Close** (was a near-invisible ghost button
+  on navy) + added Escape / backdrop close. Topbar **"Print" -> "Print preview"**.
+  "Simple Print View" now renders the plain-text army list.
+- **Army list / Share**: generateFleetText (desktop) + fleetToText (mobile) rewritten
+  to your New Recruit format: `# ++ Name ++ [pts]`, `## <Tonnage> Groups [pts]`,
+  `• Nx Ship [per-ship pts]` (single ships plain, no bullet), Famous Admirals split
+  into admiral + flagship lines. **Share now defaults to this army list** (desktop
+  Share modal leads with it + "Copy army list"; mobile Share sends the text, import
+  link rides along). "Simple Print View" + the simple list are the same text now.
+- Verified on desktop: modal no-scroll + 1500-pt custom fleet created; army-list text
+  format; print Close works; gold/white-outline buttons; topbar relabelled.
