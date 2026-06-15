@@ -3186,13 +3186,20 @@ const App = (() => {
     { key: 'drop',    label: 'Has Drop',     test: shipHasDrop },
     { key: 'rare',    label: 'Rare',         test: s => s.isRare },
     { key: 'unique',  label: 'Unique',       test: s => s.isUnique },
-    { key: 'famous',  label: 'Famous',       test: s => s.type === 'Famous' }
+    { key: 'famous',  label: 'Famous',       test: s => s.type === 'Famous' },
+    { key: 'modular', label: 'Modular',      test: s => isFullyModular(s) }
   ];
 
   function renderShipFilters() {
     const container = document.getElementById('ship-select-filters');
     if (!container) return;
-    container.innerHTML = SHIP_FILTERS.map(f =>
+    // Only show a chip if the current faction actually has a ship matching it
+    // (so "Modular" appears for Resistance, "Drop" only where drops exist, etc.).
+    const pool = [];
+    const fgroups = (shipDB[currentFleet && currentFleet.faction] || {}).groups || {};
+    Object.values(fgroups).forEach(cat => { if (cat && cat.ships) Object.values(cat.ships).forEach(d => pool.push(d)); });
+    const chips = SHIP_FILTERS.filter(f => activeFilters.has(f.key) || pool.some(d => { try { return f.test(d); } catch (e) { return false; } }));
+    container.innerHTML = chips.map(f =>
       `<button class="filter-chip ${activeFilters.has(f.key) ? 'active' : ''}" onclick="App.toggleShipFilter('${f.key}')">${activeFilters.has(f.key) ? CHECK_SVG : ''}${f.label}</button>`
     ).join('') +
       // Misc Ships is a distinct vertical toggle switch (not a filter chip) — it
@@ -5499,6 +5506,13 @@ const App = (() => {
     try {
       const saved = localStorage.getItem('dfc_settings');
       if (saved) Object.assign(settings, JSON.parse(saved));
+      // One-time reset: misc/additional ships default OFF. Clears any stale "on"
+      // left from earlier testing; future toggles still persist normally.
+      if (localStorage.getItem('dfc_misc_off_v1') !== '1') {
+        settings.showAdditionalShips = false;
+        localStorage.setItem('dfc_misc_off_v1', '1');
+        localStorage.setItem('dfc_settings', JSON.stringify(settings));
+      }
     } catch(e) {}
   }
 

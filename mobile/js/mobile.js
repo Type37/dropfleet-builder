@@ -34,6 +34,8 @@
   // Mirrors the desktop "Additional Ships" setting: mercenaries / cross-faction /
   // optional units have no ship art, so they're hidden until this is toggled on.
   let pickerShowExtra = localStorage.getItem('dfc_show_extra') === '1';
+  // One-time reset: misc ships default OFF (clears any stale "on" from testing).
+  try { if (localStorage.getItem('dfc_misc_off_v1') !== '1') { pickerShowExtra = false; localStorage.setItem('dfc_show_extra', '0'); localStorage.setItem('dfc_misc_off_v1', '1'); } } catch (e) {}
 
   // Filled check for selected/active toggle states (replaces the old "✓" text
   // glyph, which rendered as an emoji on some platforms). Inherits colour from
