@@ -3263,7 +3263,9 @@ const App = (() => {
     const sizeInfoSel = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
     const famBlocked = isFamous && (hasFamousAdmiral() || (data.level && data.level > (sizeInfoSel.maxAdmiralLevel || 4)));
     const famReason = !isFamous ? '' : (hasFamousAdmiral() ? 'One named admiral per fleet' : (data.level > (sizeInfoSel.maxAdmiralLevel || 4) ? `Requires ${sizeInfoSel.label}+` : ''));
-    const cardOnclick = isFamous ? '' : ` onclick="App.openShipDetail('${currentFleet.faction}','${category}','${key}',true)"`;
+    // Famous admirals live under the famous_admirals group — open their datasheet
+    // with that category so the "click for info" works for them too.
+    const cardOnclick = ` onclick="App.openShipDetail('${currentFleet.faction}','${isFamous ? 'famous_admirals' : category}','${key}',true)"`;
     const typeLine = isFamous
       ? `${esc(data.ship_name || data.className || 'Flagship')} &middot; ${esc(tonLabel(data.tonnage) || catLabel)}`
       : `${esc(tonLabel(data.tonnage) || catLabel)}`;
@@ -5782,7 +5784,9 @@ const App = (() => {
           <div class="detail-hero-tonnage ship-tonnage-label ship-tonnage-${category}">${esc(tonnage)}</div>
           <div class="detail-hero-cost">${dbShip.points} pts</div>
           ${badges.length > 0 ? `<div class="flex gap-xs" style="margin-top:var(--sp-sm)">${badges.join('')}</div>` : ''}
-          ${addable ? `<button class="btn btn-primary" style="margin-top:var(--sp-md)" onclick="App.addShipToGroup('${shipKey}','${category}'); App.closeModal('modal-ship-detail')">+ Add to fleet</button>` : ''}
+          ${addable ? (category === 'famous_admirals'
+            ? `<button class="btn btn-primary" style="margin-top:var(--sp-md)" onclick="App.closeModal('modal-ship-detail'); App.addFamousAdmiralFromPicker('${shipKey}')">+ Add Admiral</button>`
+            : `<button class="btn btn-primary" style="margin-top:var(--sp-md)" onclick="App.addShipToGroup('${shipKey}','${category}'); App.closeModal('modal-ship-detail')">+ Add to fleet</button>`) : ''}
         </div>
       </div>
       ${statsHtml}

@@ -168,6 +168,24 @@ a:hover { color: var(--navy-light); }
 
 ::selection { background: var(--gold-light); color: var(--ink); }
 
+/* WarLore wordmark — Terminal Grotesque, gold-on-black, inverts on hover.
+   Standing brand rule (see memory: reference-warlore-brand). */
+.warlore-mark {
+  display: inline-block;
+  font-family: 'Terminal Grotesque', 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--gold);
+  background: #000;
+  padding: 4px 16px;
+  border-radius: 2px;
+  margin-bottom: var(--sp-md);
+  transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
+}
+.warlore-mark:hover { color: #000; background: var(--gold); }
+
 /* Global focus-visible ring — two-stroke (Fluent): a thin light halo tight to
    the element + a navy ring just outside it. The light inner stroke keeps focus
    visible on the dark navy sidebar; the navy stroke keeps it visible on light

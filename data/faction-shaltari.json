@@ -2384,7 +2384,8 @@
      {
       "name": "Aaru Emerald",
       "note": "Aaru Emerald counts as Emerald",
-      "image": "assets/art/aaru_emerald.webp"
+      "image": "assets/art/aaru_emerald.webp",
+      "lore": "Despite their technological supremacy, it was inevitable that the Shaltari would incur losses during their constant interference in the Reconquest. The fleet stationed above Aaru contains patterns similar to the ancient Shaltari battleships, albeit at a cruiser tonnage.\n\nSeen primarily above Aaru is a variant of the Emerald Mothership. Equally as old a design as the Aaru Basalt and just as rare. The tribes must be getting thin on ships if they’re using ancient designs to hold a planet."
      }
     ],
     "famousShipsPrefix": "Encountered ships of the class:",
@@ -2477,7 +2478,8 @@
      {
       "name": "Aaru Basalt",
       "note": "Aaru Basalt counts as Basalt",
-      "image": "assets/art/aaru_basalt.webp"
+      "image": "assets/art/aaru_basalt.webp",
+      "lore": "Despite their technological supremacy, it was inevitable that the Shaltari would incur losses during their constant interference in the Reconquest. The fleet stationed above Aaru contains patterns similar to the ancient Shaltari battleships, albeit at a cruiser tonnage.\n\nThe Aaru Basalt is a carrier of ancient design, though no less potent than its contemporary counterpart. Primarily seen above Aaru, these have been given the name as a way of differentiating ships of comparable role and performance."
      }
     ],
     "famousShipsPrefix": "Encountered ships of the class:",
