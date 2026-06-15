@@ -183,6 +183,26 @@
     // those keep their own art (startsWith). Without this it had no art and was
     // hidden whenever the "Additional ships" toggle was off.
     'Cruiser':'cruiser',
+    // Civilian / industrial / mercenary ships (cross-faction "Misc Ships") — wire
+    // their transparent art so they show with art instead of being hidden/blank.
+    'Anode':'anode_the_melter',
+    'DH-Type Penal Transport':'dh_type_penal_transport',
+    'Frigate':'frigate',
+    'Hyperyacht Aurorum':'hyperyacht_aurorum',
+    'Hyperyacht Somniferum':'hyperyacht_somniferum',
+    'Jah':'jahetar_startrader',
+    'Kalium KNC-12':'kalium_knc12',
+    'Kalium KNC-5':'kalium_knc5',
+    'LKS Dredger':'lks_dredger',
+    'M-Type Barge':'m_type_barge',
+    'OBV-64':'obv_64_oblivion_barge',
+    'PRK-91':'prk_91_provenance_ark',
+    'Palatine Command Barge':'palatine',
+    'Pungari Thresher':'pungari_thresher',
+    'SLM-9':'slm_9_resupply_hauler',
+    'T-Type Tugboat':'t_type_tugboat',
+    'Type-87':'type_87_terminus_harvester',
+    'VX-22 Flenser':'vx_22_flenser',
     'The Hated':'the_hated',
     'Summoner Cell':'summoner_cell','Prism Cell':'prism_cell',
     'Torpedo Cell':'torpedo_cell','Lander Cell':'lander_cell',
