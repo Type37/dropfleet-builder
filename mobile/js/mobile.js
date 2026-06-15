@@ -389,6 +389,7 @@
       const e = byKey[k]; if (!e || e.val == null || e.val === '') return '';
       let extra = (k === 'es' || k === 'ks' || k === 'bs') ? 'stat-cell-' + k : '';
       if (k === 'bs' && (e.val === '-' || e.val === '--')) extra = 'stat-cell-none';
+      if (e.mod) extra += ' stat-cell-modified';
       const tap = tappable ? ` tappable" onclick="App.openStat('${k}')` : '';
       return `<div class="stat-cell ${extra} ${cls}${tap}">${statIcon(k)}<span class="stat-cell-text"><span class="stat-value">${esc(e.val)}</span><span class="stat-label">${e.label}</span></span></div>`;
     };
@@ -399,6 +400,41 @@
       cell('hull', 'stat-cell-wide')
     ].filter(Boolean).join('');
     return `<div class="stat-grid">${cells}</div>`;
+  }
+
+  // Adjust the numeric part of a stat value by a signed delta, keeping its suffix
+  // (so "8\"" + 3 -> "11\"", a save "4+" - 1 -> "3+", "12" + 2 -> "14").
+  function adjustStatVal(v, delta) {
+    if (v == null) return v;
+    const s = String(v); const m = s.match(/-?\d+/);
+    if (!m) return v;
+    return s.slice(0, m.index) + (parseInt(m[0], 10) + delta) + s.slice(m.index + m[0].length);
+  }
+  // Total stat deltas from a built ship's selected loadout options (e.g. a Drive
+  // Refit's +3" Thrust). Returns { key: delta }.
+  function loadoutStatMods(ship, inst) {
+    const mods = {};
+    (ship.loadoutOptions || []).forEach((lo, i) => {
+      const sel = inst && inst.loadouts ? inst.loadouts[i] : undefined;
+      const opt = lo.options && lo.options[sel];
+      if (opt && opt.statMods) Object.entries(opt.statMods).forEach(([k, d]) => { mods[k] = (mods[k] || 0) + d; });
+    });
+    return mods;
+  }
+  // Build the stat-grid entries for a built ship, applying any loadout statMods
+  // and tagging changed entries so the grid colours them.
+  function shipStatEntries(stats, mods) {
+    const sv = k => (mods && mods[k]) ? adjustStatVal(stats[k], mods[k]) : stats[k];
+    const list = [
+      { key: 'scan', label: 'Scan', val: sv('scan'), mod: mods && mods.scan },
+      { key: 'sig', label: 'Sig', val: sv('sig'), mod: mods && mods.sig },
+      { key: 'thrust', label: 'Thrust', val: sv('thrust'), mod: mods && mods.thrust },
+      { key: 'hull', label: 'Hull', val: sv('hull'), mod: mods && mods.hull },
+      { key: 'es', label: 'ES', val: sv('es'), mod: mods && mods.es },
+      { key: 'ks', label: 'KS', val: sv('ks'), mod: mods && mods.ks }
+    ].filter(s => s.val != null && s.val !== '-' && s.val !== '');
+    if (stats.bs && stats.bs !== '-') list.push({ key: 'bs', label: 'BS', val: sv('bs'), mod: mods && mods.bs });
+    return list;
   }
 
   function lookupRule(name) {
@@ -1670,15 +1706,7 @@
     const isPayloadGrp = inst.groupCategory === 'payload';
     if (isPayloadGrp) gMax = Infinity;
 
-    const statEntries = [
-      { key: 'scan', label: 'Scan', val: stats.scan },
-      { key: 'sig', label: 'Sig', val: stats.sig },
-      { key: 'thrust', label: 'Thrust', val: stats.thrust },
-      { key: 'hull', label: 'Hull', val: stats.hull },
-      { key: 'es', label: 'ES', val: stats.es },
-      { key: 'ks', label: 'KS', val: stats.ks }
-    ].filter(s => s.val != null && s.val !== '-' && s.val !== '');
-    if (stats.bs && stats.bs !== '-') statEntries.push({ key: 'bs', label: 'BS', val: stats.bs });
+    const statEntries = shipStatEntries(stats, loadoutStatMods(ship, inst));
 
     const weapons = ship.weapons || [];
     const loadoutOptions = ship.loadoutOptions || [];
@@ -2993,10 +3021,11 @@
       if (!db) return '';
       const st = db.stats || {};
       const qty = g.ships.length;
-      const statCells = [['Scan', st.scan], ['Sig', st.sig], ['Thrust', st.thrust], ['Hull', st.hull],
-        ['ES', st.es], ['KS', st.ks], ['BS', st.bs], ['PD', st.pd]]
-        .filter(([, v]) => v != null && v !== '-' && v !== '')
-        .map(([k, v]) => `<span class="pr-stat"><b>${k}</b> ${esc(v)}</span>`).join('');
+      const mods = loadoutStatMods(db, inst);
+      const statCells = [['Scan', 'scan', st.scan], ['Sig', 'sig', st.sig], ['Thrust', 'thrust', st.thrust], ['Hull', 'hull', st.hull],
+        ['ES', 'es', st.es], ['KS', 'ks', st.ks], ['BS', 'bs', st.bs], ['PD', 'pd', st.pd]]
+        .filter(([, , v]) => v != null && v !== '-' && v !== '')
+        .map(([lab, key, v]) => `<span class="pr-stat${mods[key] ? ' pr-stat-mod' : ''}"><b>${lab}</b> ${esc(mods[key] ? adjustStatVal(v, mods[key]) : v)}</span>`).join('');
       const weapons = (db.weapons || []).map(w => {
         if (w.special && w.special !== '-') w.special.split(',').forEach(s => collectRule(s.trim()));
         return `<tr><td>${esc(w.name)}</td><td>${esc(w.lock || '')}</td><td>${esc(w.attack || '')}</td><td>${esc(w.damage || '')}${esc(w.type || '')}</td><td>${esc(w.arc || '')}</td><td>${esc(w.special && w.special !== '-' ? w.special : '')}</td></tr>`;

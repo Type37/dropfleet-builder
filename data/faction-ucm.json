@@ -1151,7 +1151,10 @@
         "name": "Drive Refit (+3\" Thrust)",
         "cost": 45,
         "weapons": [],
-        "loads": []
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
        }
       ]
      },
@@ -1262,7 +1265,10 @@
         "name": "Drive Refit (+3\" Thrust)",
         "cost": 45,
         "weapons": [],
-        "loads": []
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
        }
       ]
      },
@@ -1382,7 +1388,10 @@
         "name": "Drive Refit (+3\" Thrust)",
         "cost": 45,
         "weapons": [],
-        "loads": []
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
        }
       ]
      },
@@ -1494,7 +1503,10 @@
         "name": "Drive Refit (+3\" Thrust)",
         "cost": 45,
         "weapons": [],
-        "loads": []
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
        }
       ]
      },
@@ -1614,7 +1626,10 @@
         "name": "Drive Refit (+3\" Thrust)",
         "cost": 45,
         "weapons": [],
-        "loads": []
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
        }
       ]
      },

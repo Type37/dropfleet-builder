@@ -2404,18 +2404,53 @@ const App = (() => {
     g:      { label: 'G',      title: 'Group size, ships per battle group' }
   };
 
-  function renderStatGrid(ship) {
+  // Adjust the numeric part of a stat value by a signed delta, keeping its suffix
+  // (so "8\"" + 3 -> "11\"", a save "4+" - 1 -> "3+", "12" + 2 -> "14").
+  function adjustStatValue(v, delta) {
+    if (v == null) return v;
+    const s = String(v);
+    const m = s.match(/-?\d+/);
+    if (!m) return v;
+    return s.slice(0, m.index) + (parseInt(m[0], 10) + delta) + s.slice(m.index + m[0].length);
+  }
+
+  // Effective stats for a built ship: apply any selected loadout option's
+  // statMods (e.g. a Drive Refit's +3" Thrust) onto the base stats. Returns
+  // { stats, mods } where mods maps stat-key -> total delta, so the grid can
+  // colour the cells the upgrade changed.
+  function effectiveStats(dbShip, ship) {
+    const stats = Object.assign({}, dbShip);
+    const mods = {};
+    const opts = dbShip && Array.isArray(dbShip.loadoutOptions) ? dbShip.loadoutOptions : [];
+    opts.forEach((lo, i) => {
+      const sel = ship && ship.loadouts ? ship.loadouts[i] : undefined;
+      const opt = lo.options && lo.options[sel];
+      if (opt && opt.statMods) {
+        Object.entries(opt.statMods).forEach(([k, delta]) => {
+          stats[k] = adjustStatValue(stats[k], delta);
+          mods[k] = (mods[k] || 0) + delta;
+        });
+      }
+    });
+    return { stats, mods };
+  }
+
+  function renderStatGrid(ship, mods) {
     // 2-col grid, each main stat paired with a save on its row, Hull full-width:
     //   Scan | KS,  Sig | ES,  Thrust | BS,  Hull (spans both).
-    // Each save is its own cell (not a combined column).
+    // Each save is its own cell (not a combined column). `mods` (optional) marks
+    // stats changed by a selected upgrade so the cell reads in the upgrade colour.
     const cell = (k, cls = '') => {
       const v = ship[k];
       if (v === undefined || v === 0) return '';
       const meta = STAT_META[k];
       let extra = meta.cssClass || '';
       if (k === 'bs' && (v === '-' || v === '--')) extra = 'stat-cell-none';
+      const md = mods && mods[k];
+      if (md) extra += ' stat-cell-modified';
       const icon = STAT_ICONS[k] || '';
-      return `<div class="stat-cell ${extra} ${cls}" title="${meta.title}">
+      const title = md ? `${meta.title} — upgraded ${md > 0 ? '+' + md : md}` : meta.title;
+      return `<div class="stat-cell ${extra} ${cls}" title="${title}">
         ${icon ? `<span class="stat-cell-icon">${icon}</span>` : ''}
         <span class="stat-cell-text">
           <span class="stat-cell-value">${v}</span>
@@ -2841,7 +2876,8 @@ const App = (() => {
     const tonnage = dbShip ? tonLabel(dbShip.tonnage) : '';
     const specialRules = dbShip && dbShip.special_rules ? dbShip.special_rules : [];
 
-    const statsHtml = dbShip ? renderStatGrid(dbShip) : '';
+    const eff = dbShip ? effectiveStats(dbShip, ship) : null;
+    const statsHtml = dbShip ? renderStatGrid(eff.stats, eff.mods) : '';
 
     // Base weapons
     let weaponsHtml = '';
@@ -4572,7 +4608,8 @@ const App = (() => {
         const db = findShipInDB(f.faction, ship.groupCategory, ship.shipKey);
         if (!db) return;
         const name = db.name;
-        const statsHtml = renderStatGrid(db);
+        const eff = effectiveStats(db, ship);
+        const statsHtml = renderStatGrid(eff.stats, eff.mods);
 
         // Weapons
         let wpnsHtml = '';
@@ -5038,7 +5075,8 @@ const App = (() => {
 
         // Show stats if available
         if (dbShip) {
-          html += renderStatGrid(dbShip);
+          const eff = effectiveStats(dbShip, ship);
+          html += renderStatGrid(eff.stats, eff.mods);
 
           // Loadout info
           if (ship.loadout && dbShip.loadoutOptions) {

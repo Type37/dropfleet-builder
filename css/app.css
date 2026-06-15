@@ -1976,6 +1976,18 @@ h1, h2, h3, h4, h5, h6 {
 .stat-cell-bs .stat-cell-value { color: var(--gold-dark); }
 .stat-cell-none .stat-cell-value { color: var(--ink-faint); opacity: 0.4; }
 
+/* A stat changed by a selected upgrade (e.g. a Drive Refit's +3" Thrust) reads
+   in the upgrade colour so the boosted value is unmistakable. Placed after the
+   save-colour rules so it wins when a save itself is upgraded. */
+.stat-cell-modified {
+  border-color: #2e7d32;
+  background: rgba(46, 125, 50, 0.09);
+  box-shadow: inset 3px 0 0 #2e7d32;
+}
+.stat-cell-modified .stat-cell-value,
+.stat-cell-modified .stat-cell-label { color: #2e7d32; }
+.stat-cell-modified .stat-cell-icon svg { opacity: 1; }
+
 /* ── 15. Weapon Table ────────────────────────────────────────── */
 .weapon-list {
   display: flex;

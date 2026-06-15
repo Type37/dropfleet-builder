@@ -508,6 +508,16 @@ button, a, input, select, textarea,
 .stat-cell-bs .stat-value { color: #8a5e10; }
 .stat-cell-none .stat-value { color: var(--fg4); opacity: 0.5; }
 
+/* A stat changed by a selected upgrade (e.g. a Drive Refit's +3" Thrust) reads
+   in the upgrade colour so the boosted value is unmistakable. */
+.stat-cell-modified {
+  border-color: #2e7d32;
+  background: rgba(46, 125, 50, 0.10);
+  box-shadow: inset 3px 0 0 #2e7d32;
+}
+.stat-cell-modified .stat-value,
+.stat-cell-modified .stat-label { color: #2e7d32; }
+
 /* Stacked: hero number on top, abbreviation on its own line beneath. */
 .stat-cell-text { display: flex; flex-direction: row; align-items: baseline; gap: 4px; min-width: 0; line-height: 1.02; }
 
@@ -1981,6 +1991,8 @@ body.sheet-open .sheet-scrim {
   .pr-stats { font-size: 8.5pt; color: #333; margin: 3px 0; }
   .pr-stat { display: inline-block; margin-right: 10px; }
   .pr-stat b { color: #1b3a5c; }
+  /* Stat changed by a selected upgrade (e.g. Drive Refit +3" Thrust). */
+  .pr-stat-mod, .pr-stat-mod b { color: #2e7d32; font-weight: 700; }
 
   .pr-weapons { width: 100%; border-collapse: collapse; font-size: 8pt; margin: 3px 0; }
   .pr-weapons th { text-align: left; border-bottom: 1px solid #999; padding: 1px 4px; color: #555; }
