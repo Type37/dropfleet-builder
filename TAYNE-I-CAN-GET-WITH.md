@@ -211,3 +211,36 @@ Found while capturing: opening a #share/<code> link fresh rendered the shared fl
 before its faction JSON loaded, so it listed ship KEYS instead of names/stats/art.
 The share route now awaits ensureFactionLoaded first. (Real bug, affected anyone
 opening a shared link in a new tab.)
+
+---
+
+# Backlog pass (2026-06-15, v190-v191) + audit results
+
+## 19. Shipped
+- **Secondary objectives now print/export** (v190): they were saved + shared but
+  never shown on paper. Added a "Secondary Objectives" section (name + full rules
+  text) to desktop full print + mobile PDF, and a compact line to simple print.
+- **Print contrast AA** (v191): points-cap / fleet-summary / group-totals were
+  #888-#999 on white (~3:1, below AA). Darkened to #5f5f5f (~6:1). Runtime audit of
+  the print preview now 0 fails.
+
+## 20. Audited and found ALREADY CLEAN (no change needed)
+- **Em-dashes**: the only ones left are code comments (invisible) and verbatim
+  rulebook rule text (you said keep those). UI copy + lore/namesake are clean.
+- **Placeholder rule text** ("...covered in the core rules"): only in the DEAD
+  data/fleet-data.json (not loaded by either app). Live faction data is clean.
+- **Ship art coverage**: 266 ships wired, 0 missing, 0 broken, 0 unwired-but-on-disk.
+- **Mandatory Resistance systems (#12)**: validateSystems already flags incomplete
+  ("Light Cruiser: choose 3 Cruiser Systems (has 1)") in fleet alerts + print.
+- **"Alt-1"**: its glossary text is clear + shown on tap and in the spelled-out
+  rules. Renaming it would break the verbatim-rules rule, so left as-is.
+
+## 21. Backlog now BLOCKED on you (can't do without your input/assets):
+- Stat-cell redesign (#1) - stat-cell-mock.html awaiting your approval.
+- Deploy-range as its own column (#11) - it's inline in Special now; a dedicated
+  column needs your call on layout + the universal-6"/override values.
+- ~75-87 ships with no lore - need your writing (I won't fabricate).
+- 101 orphan art webp (unwired-art.html) - need you to say which ship each maps to.
+- Generic station art bg-removal - the source JPGs (DFC-Art-Assets/generic-station-art/)
+  aren't in the repo anymore; drop them back and I'll rembg + wire them.
+- Mobile picker tap-model (align to desktop's tap=datasheet / Add button?) - your call.
