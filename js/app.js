@@ -81,7 +81,8 @@ const App = (() => {
     heavy: 'Heavy',
     medium: 'Medium',
     light: 'Light',
-    payload: 'Payload'
+    payload: 'Payload',
+    famous_admirals: 'Famous Admiral'
   };
 
   const CATEGORY_ORDER = ['light','medium','heavy','colossal','payload'];
@@ -4084,16 +4085,14 @@ const App = (() => {
     if (!Array.isArray(a.selectedAbilities)) a.selectedAbilities = [];
     const pos = a.selectedAbilities.indexOf(abilityName);
     if (pos >= 0) {
-      a.selectedAbilities.splice(pos, 1);
+      a.selectedAbilities.splice(pos, 1);   // tap a checked one to uncheck it
+    } else if (a.selectedAbilities.length >= info.picks) {
+      // At the cap: ticking another one swaps out the oldest, so you never have to
+      // uncheck first (no "click off then on").
+      if (info.picks === 1) a.selectedAbilities = [abilityName];
+      else { a.selectedAbilities.shift(); a.selectedAbilities.push(abilityName); }
     } else {
-      if (a.selectedAbilities.length >= info.picks) {
-        // Single-pick admirals act like a radio: clicking another ability just
-        // swaps the selection (no need to deselect the old one first).
-        if (info.picks === 1) { a.selectedAbilities = [abilityName]; }
-        else { showToast(`This admiral may only choose ${info.picks} abilities. Tap a chosen one to swap it.`); return; }
-      } else {
-        a.selectedAbilities.push(abilityName);
-      }
+      a.selectedAbilities.push(abilityName);
     }
     saveFleets();
     renderAdmiralSlot();
@@ -4142,11 +4141,10 @@ const App = (() => {
     return `<div class="admiral-ability-picks admiral-ability-picks-modal">
       ${info.table.map(ab => {
         const on = sel.includes(ab.name);
-        // Single-pick = radio: never lock the others (clicking swaps). Multi-pick
-        // locks the rest once the cap is reached.
-        const full = !on && remaining <= 0 && info.picks > 1;
-        return `<div class="admiral-pick${on ? ' is-selected' : ''}${full ? ' is-locked' : ''}" role="button" tabindex="0" ${full ? '' : `onclick="App.toggleAdmiralAbility(${index}, ${JSON.stringify(ab.name).replace(/"/g, '&quot;')})"`}>
-          <span class="admiral-pick-radio"></span>
+        // Visible checkboxes — tick to select, tick another at the cap to swap the
+        // oldest. Nothing is ever locked, so there's no "click off then on".
+        return `<div class="admiral-pick${on ? ' is-selected' : ''}" role="button" tabindex="0" onclick="App.toggleAdmiralAbility(${index}, ${JSON.stringify(ab.name).replace(/"/g, '&quot;')})">
+          <span class="admiral-pick-check">${on ? '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.5 3.5L13 4.5"/></svg>' : ''}</span>
           <div class="admiral-pick-text">
             <span class="admiral-pick-head"><span class="admiral-ability-name">${esc(ab.name)}</span>${ab.cost ? ` <span class="admiral-ability-cost">${esc(ab.cost)}</span>` : ''}</span>
             ${ab.effect ? `<span class="admiral-ability-effect">${linkKeywords(ab.effect)}</span>` : ''}
@@ -4166,7 +4164,7 @@ const App = (() => {
     const titleEl = document.getElementById('admiral-abilities-modal-title');
     if (titleEl) titleEl.textContent = `${a.name}, choose ${info.picks} abilit${info.picks === 1 ? 'y' : 'ies'}`;
     const subEl = document.getElementById('admiral-abilities-modal-sub');
-    if (subEl) subEl.textContent = remaining > 0 ? `${remaining} pick${remaining === 1 ? '' : 's'} remaining, tap to select.` : 'All picks made, tap a selected ability to swap it.';
+    if (subEl) subEl.textContent = remaining > 0 ? `${remaining} pick${remaining === 1 ? '' : 's'} remaining` : 'All picks made';
     const body = document.getElementById('admiral-abilities-modal-body');
     if (body) body.innerHTML = renderAbilityPicker(a, index, info);
   }
@@ -5196,7 +5194,7 @@ const App = (() => {
           <input type="text" class="share-url-input" value="${esc(url)}" readonly id="share-url-input" onclick="this.select()">
           <button class="btn btn-outline btn-sm" onclick="App.copyShareURL()">Copy</button>
         </div>
-        <p class="text-caption" style="margin-top:var(--sp-sm)">A link anyone can open to view and import the exact fleet (loadouts included).</p>
+        <p class="text-caption" style="margin-top:var(--sp-sm)">A link anyone can open to view and import the exact fleet.</p>
       </div>
       <div class="settings-group">
         <div class="settings-group-title">JSON Export</div>

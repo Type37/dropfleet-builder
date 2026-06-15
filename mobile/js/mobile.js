@@ -601,7 +601,7 @@
   function ruleHtml(s) { return esc(s).replace(/&lt;(\/?)b&gt;/g, '<$1b>').replace(/\n/g, '<br>'); }
 
   const CATEGORY_ORDER = ['light', 'medium', 'heavy', 'colossal', 'payload'];
-  const CATEGORY_LABELS = { light: 'Light', medium: 'Medium', heavy: 'Heavy', colossal: 'Colossal', payload: 'Payload' };
+  const CATEGORY_LABELS = { light: 'Light', medium: 'Medium', heavy: 'Heavy', colossal: 'Colossal', payload: 'Payload', famous_admirals: 'Famous Admiral' };
   // Spell out the single-letter tonnage code for display (L = Light, not Large).
   // Stored values stay single-letter — this is display only.
   const TON_WORDS = { L: 'Light', M: 'Medium', H: 'Heavy', C: 'Colossal', P: 'Payload' };
@@ -2635,9 +2635,10 @@
     if (!info) return;
     if (!Array.isArray(a.selectedAbilities)) a.selectedAbilities = [];
     const pos = a.selectedAbilities.indexOf(name);
-    if (pos >= 0) a.selectedAbilities.splice(pos, 1);
-    else if (info.picks === 1) a.selectedAbilities = [name];   // radio: tap switches
-    else { if (a.selectedAbilities.length >= info.picks) return; a.selectedAbilities.push(name); }
+    if (pos >= 0) a.selectedAbilities.splice(pos, 1);   // tap a checked one to uncheck
+    else if (info.picks === 1) a.selectedAbilities = [name];   // tap switches
+    else if (a.selectedAbilities.length >= info.picks) { a.selectedAbilities.shift(); a.selectedAbilities.push(name); } // swap oldest at cap
+    else a.selectedAbilities.push(name);
     activeFleet.updatedAt = Date.now();
     saveFleets();
     // Re-render whichever surface is showing the picker.
@@ -2666,9 +2667,8 @@
     // The choosable table — radio-style rows. Keywords in the effect are tappable.
     html += info.table.map(ab => {
       const on = sel.includes(ab.name);
-      const locked = !on && remaining <= 0;
-      return `<div class="ability-row ability-pick ${on ? 'selected' : ''} ${locked ? 'locked' : ''}" onclick="${locked ? '' : `App.toggleAdmiralAbility('${ab.name.replace(/'/g, "\\'")}')`}">
-        <span class="ability-radio"></span>
+      return `<div class="ability-row ability-pick ${on ? 'selected' : ''}" onclick="App.toggleAdmiralAbility('${ab.name.replace(/'/g, "\\'")}')">
+        <span class="ability-check">${on ? CHECK_SVG : ''}</span>
         <div class="ability-pick-body">
           ${head(ab, '')}
           ${ab.effect ? `<div class="ability-pick-effect">${linkKeywords(ab.effect)}</div>` : ''}

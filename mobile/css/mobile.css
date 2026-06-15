@@ -1682,6 +1682,18 @@ body.sheet-open .sheet-scrim {
 .ability-pick.selected .ability-radio::after {
   content: ''; position: absolute; inset: 3px; border-radius: 50%; background: var(--navy);
 }
+/* Ability picker uses visible checkboxes (tick to select, no click-on/off). */
+.ability-check {
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--stroke1);
+  margin-top: 2px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff;
+  transition: background var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+.ability-pick.selected .ability-check { background: var(--navy); border-color: var(--navy); }
 .ability-pick-body { flex: 1; min-width: 0; }
 .ability-pick-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; }
 .ability-pick-name { font-weight: var(--weight-bold); color: var(--fg1); }

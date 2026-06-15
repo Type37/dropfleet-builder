@@ -3299,6 +3299,20 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 50%;
   background: var(--gold);
 }
+/* Ability picker uses visible checkboxes (tick to select, no click-on/off). */
+.admiral-pick-check {
+  flex-shrink: 0;
+  width: 20px; height: 20px;
+  margin-top: 1px;
+  border: 2px solid var(--gold-line);
+  border-radius: 5px;
+  background: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff;
+}
+.admiral-pick.is-selected .admiral-pick-check {
+  background: var(--gold); border-color: var(--gold); color: #1c1a17;
+}
 .kw-link {
   color: var(--navy, #1d3a5f);
   border-bottom: 1px dotted var(--navy, #1d3a5f);
