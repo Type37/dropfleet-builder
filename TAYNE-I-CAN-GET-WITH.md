@@ -56,6 +56,21 @@ tooltip), or (b) one small footnote under each launch table: "Launch within 6\"
 of the carrier unless stated." 
 **Change it by:** tell me "column", "footnote", or "leave it" and I'll do it.
 
+## 7. Shop link (click ship art) — box ambiguity
+**Problem you raised:** most frigates are only in the Battlefleet/Core box, and
+some ships are in more than one box, so a per-ship product link is wrong/missing.
+**What I found:** the old behaviour searched the ship name, which returns
+CROSS-FACTION noise (e.g. "Sheffield Heavy Frigate" -> every faction's frigate
+sprue). TTCombat has clean faction collection pages:
+`ttcombat.com/collections/dropfleet-commander/faction_<ucm|phr|scourge|shaltari|resistance|bioficers>`.
+**What I did (guess, applied):** click-art now lands on the ship's FACTION
+collection page (always the right faction, never a dead end), unless the ship has
+an explicit `storeUrl`. Per-ship `storeUrl` still wins.
+**Change it by:** if you want specific ships to deep-link to their exact product
+or box, give me the box mapping (or even just "frigates -> the faction battlefleet
+box at /products/<faction>-battlefleet") and I'll set per-ship `storeUrl`s. The
+faction-collection default is the safe interim.
+
 ## 6. Per-ship (individual hull) naming
 **Q:** You confirmed single-ship-group naming is good. Naming individual hulls
 inside a multi-ship squadron is still not done (it fights the collapse model +

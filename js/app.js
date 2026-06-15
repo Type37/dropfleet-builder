@@ -322,12 +322,20 @@ const App = (() => {
   }
 
   // ── TTCombat store links ───────────────────────────────────────────────
-  // Ships are sold in boxed sets, so per-ship product pages mostly don't
-  // exist. Honour an explicit storeUrl on the ship when present; otherwise
-  // fall back to a Shopify search for the ship name (returns the matching
-  // faction box). encodeURIComponent keeps names with spaces/punctuation safe.
+  // Ships are sold in boxed sets (battlefleets, sprues), so per-ship product
+  // pages mostly don't exist and a name search returns cross-faction noise
+  // (e.g. "Sheffield Heavy Frigate" -> every faction's frigate sprue). So:
+  // honour an explicit storeUrl when set; else land on the ship's FACTION
+  // collection page (always the right faction, never a dead end); else a name
+  // search as a last resort.
+  const TTC_FACTION_TAG = {
+    ucm: 'ucm', phr: 'phr', scourge: 'scourge', shaltari: 'shaltari',
+    resistance: 'resistance', bioficer: 'bioficers'
+  };
   function shipStoreUrl(name, ship) {
     if (ship && ship.storeUrl) return ship.storeUrl;
+    const tag = TTC_FACTION_TAG[currentFleet && currentFleet.faction];
+    if (tag) return 'https://ttcombat.com/collections/dropfleet-commander/faction_' + tag;
     return 'https://ttcombat.com/search?q=' + encodeURIComponent((name || '').trim());
   }
   // Wrap a ship <img> string in a TTCombat store link (no icon overlay; the art
@@ -337,7 +345,7 @@ const App = (() => {
   function shopLinkImg(name, imgTag, ship) {
     if (!imgTag) return '';
     const url = shipStoreUrl(name, ship);
-    return `<a class="shop-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="View ${esc(name || 'this ship')} on the TTCombat store" onclick="event.stopPropagation()">${imgTag}</a>`;
+    return `<a class="shop-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="Find ${esc(name || 'this ship')} on the TTCombat store" onclick="event.stopPropagation()">${imgTag}</a>`;
   }
 
   function admiralArtPath(admiralName) {

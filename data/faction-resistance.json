@@ -554,7 +554,7 @@
      "Spear of Onyx",
      "Decapitator"
     ],
-    "namesake": "Isoroku Yamamoto (1884-1943), the Japanese admiral who conceived and directed the attack on Pearl Harbor."
+    "namesake": "[Isoroku Yamamoto](https://en.wikipedia.org/wiki/Isoroku_Yamamoto) (1884-1943), the Japanese admiral who conceived and directed the attack on Pearl Harbor. He studied at Harvard University and served two postings in the United States, leaving him wary of provoking a war he believed Japan could not ultimately win. An early champion of naval aviation, he steered the Imperial Japanese Navy away from battleships toward aircraft carriers. He was killed in 1943 when American fighters intercepted his aircraft over the Solomon Islands."
    }
   },
   {
@@ -617,7 +617,7 @@
      "Volcanic",
      "Your Fate (Kalium)"
     ],
-    "namesake": "Fleet Admiral Chester Nimitz (1885-1966), commander of US naval forces across the Pacific in the Second World War."
+    "namesake": "Fleet Admiral [Chester Nimitz](https://en.wikipedia.org/wiki/Chester_W._Nimitz) (1885-1966), commander of US naval forces across the Pacific in the Second World War. He began his career as a submariner and helped pioneer the U.S. Navy's early diesel submarine force. He was promoted to the five-star rank of Fleet Admiral in December 1944 and signed the Japanese surrender for the United States aboard the USS Missouri. The supercarrier USS Nimitz was later named in his honour."
    }
   },
   {
@@ -699,7 +699,7 @@
      "Soul Reaver",
      "Executioner (Kalium)"
     ],
-    "namesake": "Sir Francis Drake (c.1540-1596), the English privateer and explorer, second to circumnavigate the globe and scourge of Spain."
+    "namesake": "[Sir Francis Drake](https://en.wikipedia.org/wiki/Francis_Drake) (c.1540-1596), the English privateer and explorer, second to circumnavigate the globe and scourge of Spain. He served as vice admiral of the English fleet that repelled the Spanish Armada in 1588, commanding the galleon Revenge. He was elected Mayor of Plymouth and twice sat in Parliament."
    }
   },
   {
@@ -769,7 +769,7 @@
      "Hammer of Reason",
      "Subjugator"
     ],
-    "namesake": "David Farragut (1801-1870), the first admiral of the US Navy, remembered for 'Damn the torpedoes, full speed ahead.'"
+    "namesake": "[David Farragut](https://en.wikipedia.org/wiki/David_Farragut) (1801-1870), the first admiral of the US Navy, remembered for 'Damn the torpedoes, full speed ahead.'. He entered the navy as a midshipman at the age of nine and captured New Orleans for the Union in 1862. Congress created the ranks of rear admiral and later full admiral expressly to honour his service."
    }
   },
   {
@@ -853,7 +853,7 @@
      "Our Gaze",
      "Illuminator (Kalium)"
     ],
-    "namesake": "Hayreddin Barbarossa (c.1478-1546), the corsair who became grand admiral of the Ottoman fleet and ruled the Mediterranean."
+    "namesake": "[Hayreddin Barbarossa](https://en.wikipedia.org/wiki/Hayreddin_Barbarossa) (c.1478-1546), the corsair who became grand admiral of the Ottoman fleet and ruled the Mediterranean. Born on the island of Lesbos, he inherited the name Barbarossa from his elder brother Oruc. His decisive victory at the Battle of Preveza in 1538 secured Ottoman naval dominance over the Mediterranean for decades."
    }
   },
   {
@@ -938,7 +938,7 @@
     "famousShips": [
      "My Masterpiece"
     ],
-    "namesake": "Yi Sun-sin (1545-1598), the Korean admiral whose armoured 'turtle ships' crushed far larger Japanese fleets without a single defeat."
+    "namesake": "[Yi Sun-sin](https://en.wikipedia.org/wiki/Yi_Sun-sin) (1545-1598), the Korean admiral whose armoured 'turtle ships' crushed far larger Japanese fleets without a single defeat. At the Battle of Myeongnyang in 1597 he is said to have routed a vastly larger Japanese fleet with only a handful of ships. He was killed by a stray bullet at the Battle of Noryang in 1598 and ordered his death kept secret so the fight could go on."
    }
   },
   {
@@ -1016,7 +1016,7 @@
      "Trafalgar (Independents)",
      "Might of Kalium"
     ],
-    "namesake": "Admiral Horatio Nelson (1758-1805), who shattered the Franco-Spanish fleet at Trafalgar and died in the hour of victory."
+    "namesake": "[Admiral Horatio Nelson](https://en.wikipedia.org/wiki/Horatio_Nelson,_1st_Viscount_Nelson) (1758-1805), who shattered the Franco-Spanish fleet at Trafalgar and died in the hour of victory. He lost the sight in his right eye at Corsica and his right arm at Tenerife. His destruction of the French fleet at the Battle of the Nile in 1798 stranded Napoleon's army in Egypt."
    }
   },
   {
@@ -1793,7 +1793,7 @@
     "isUnique": true,
     "tonnage": "L",
     "lore": "Guy Fawkes (clearly not his real name) is infamous for one thing, blowing battleships to smithereens with massive fire ships. His small, eager crew of plastique-happy privateers are backed by a personal deep-space shipyard kitted out for packing ships with explosives and armouring them enough to survive a one-way charge towards any enemy of any sufficiently flush benefactor. Fawkes prefers old colony ships as candidates, given their cavernous holds. To their creaking frames his engineers affix laughably thick frontal armour plates, having freed up mass by tearing out crew quarters, weapons, spares and anything needed for long-term operations. In combat, Fawkes flies his ship-sized munition personally alongside an insanely loyal, or just insane, skeleton crew. They all jump ship in escape pods at the last possible moment, coordinating with a nearby friendly vessel to collect them so they might do it all again another day. He's currently on Parliament XIII, with no indication he might retire for the quiet life among his explosively gotten gains.",
-    "namesake": "Guy Fawkes (1570-1606), the conspirator caught beneath Parliament with the gunpowder meant to blow it sky-high in 1605."
+    "namesake": "[Guy Fawkes](https://en.wikipedia.org/wiki/Guy_Fawkes) (1570-1606), the conspirator caught beneath Parliament with the gunpowder meant to blow it sky-high in 1605. A convert to Catholicism, he fought for Catholic Spain in the Eighty Years' War before joining the plot, in which he was tasked with guarding the gunpowder and lighting the fuse. He avoided the full horror of his execution by hanging, drawing and quartering by breaking his neck in a fall from the gallows. His effigy is still burnt across Britain each year on Bonfire Night."
    }
   },
   {
@@ -1840,7 +1840,7 @@
     "isUnique": false,
     "tonnage": "L",
     "lore": "The Collins is a class of ship designed to serve as part of humanity's exploration fleets over three hundred years ago. These fleets prized self-sufficiency and endurance above all else, two traits the Collins provided by repairing and refuelling the fleet's shuttles and escorts. Following the Scourge's arrival, the Collins swiftly became an important part of Independent Resistance fleets due to its supply of tough fuel haulers and engineering wings. A single Collins can keep entire squadrons of fighters in the air long after they would otherwise have had to return to their motherships, maintaining the fighter screen for both defensive and scouting purposes.",
-    "namesake": "Michael Collins (1930-2021), the Apollo 11 command-module pilot who orbited the Moon alone while his crewmates landed."
+    "namesake": "[Michael Collins](https://en.wikipedia.org/wiki/Michael_Collins_(astronaut)) (1930-2021), the Apollo 11 command-module pilot who orbited the Moon alone while his crewmates landed. A United States Air Force test pilot before joining NASA, he first flew in space on Gemini 10 in 1966, becoming the first person to make two spacewalks on a single mission. After leaving NASA he served as the first director of the National Air and Space Museum in Washington."
    }
   },
   {
@@ -1889,7 +1889,7 @@
      "Odyssey In many cases"
     ],
     "famousShipsPrefix": "Recorded ships of the class:",
-    "namesake": "Buzz Aldrin (born 1930), the Apollo 11 lunar-module pilot and the second human to walk on the Moon."
+    "namesake": "[Buzz Aldrin](https://en.wikipedia.org/wiki/Buzz_Aldrin) (born 1930), the Apollo 11 lunar-module pilot and the second human to walk on the Moon. Born Edwin Eugene Aldrin Jr., he flew 66 combat missions in F-86 Sabres during the Korean War and earned a doctorate in astronautics from MIT for his work on orbital rendezvous. He had already flown in space on Gemini 12 before the Apollo 11 mission."
    }
   },
   {
@@ -1946,7 +1946,7 @@
      "Tranquility",
      "Saturn"
     ],
-    "namesake": "Neil Armstrong (1930-2012), commander of Apollo 11 and the first human to set foot on the Moon, in 1969."
+    "namesake": "[Neil Armstrong](https://en.wikipedia.org/wiki/Neil_Armstrong) (1930-2012), commander of Apollo 11 and the first human to set foot on the Moon, in 1969. A naval aviator and test pilot, he flew the X-15 rocket plane before joining NASA and commanded the Gemini 8 mission in 1966. His words on stepping onto the lunar surface, \"that's one small step for man, one giant leap for mankind\", became among the most famous ever spoken."
    }
   },
   {
@@ -2003,7 +2003,7 @@
      "Sender of Will (Kalium)"
     ],
     "famousShipsPrefix": "Recorded ships of the class:",
-    "namesake": "The Balearic Islands, whose slingers were prized as deadly skirmishers in the armies of Carthage and Rome."
+    "namesake": "[The Balearic Islands](https://en.wikipedia.org/wiki/Balearic_Islands), whose slingers were prized as deadly skirmishers in the armies of Carthage and Rome. Today the archipelago forms an autonomous community and province of Spain, made up chiefly of Mallorca, Menorca, Ibiza and Formentera. Its capital is Palma, and both Catalan and Spanish are official languages."
    }
   },
   {
@@ -2126,7 +2126,7 @@
      "Lens of Truth",
      "Nightpiercer (Kalium)"
     ],
-    "namesake": "Galileo Galilei (1564-1642), the Italian astronomer whose telescope revealed Jupiter's moons and remade our view of the heavens."
+    "namesake": "[Galileo Galilei](https://en.wikipedia.org/wiki/Galileo_Galilei) (1564-1642), the Italian astronomer whose telescope revealed Jupiter's moons and remade our view of the heavens. Often called the father of modern science, he made pioneering studies of motion and free fall by combining experiment with mathematics. His public defence of the Copernican view that the Earth orbits the Sun led the Roman Inquisition to try him in 1633, after which he spent his last years under house arrest."
    }
   },
   {
@@ -2182,7 +2182,7 @@
      "His Apple",
      "Principia"
     ],
-    "namesake": "Sir Isaac Newton (1642-1727), who set down the laws of motion and gravitation that govern every ship's course."
+    "namesake": "[Sir Isaac Newton](https://en.wikipedia.org/wiki/Isaac_Newton) (1642-1727), who set down the laws of motion and gravitation that govern every ship's course. His Philosophiae Naturalis Principia Mathematica, published in 1687, is among the most important works in the history of science. He also built the first reflecting telescope, showed that white light is a mixture of colours, and shares credit with Leibniz for the development of calculus. In later life he served as Master of the Royal Mint and President of the Royal Society."
    }
   },
   {
@@ -2390,7 +2390,7 @@
      "DS-1",
      "DS-2 etc (Kalium)"
     ],
-    "namesake": "Seneca the Younger (c.4 BC-AD 65), the Roman Stoic philosopher and statesman, tutor to Nero and forced to take his own life."
+    "namesake": "[Seneca the Younger](https://en.wikipedia.org/wiki/Seneca_the_Younger) (c.4 BC-AD 65), the Roman Stoic philosopher and statesman, tutor to Nero and forced to take his own life. Born in Corduba in Roman Spain, he was one of the foremost writers of Stoic philosophy, best known for his moral essays and his Letters to Lucilius. He also wrote nine tragedies, including Medea and Thyestes, which strongly influenced Renaissance and Elizabethan drama."
    }
   },
   {
@@ -2735,7 +2735,7 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "Pre-war System Admirals had unconscionable budgets and could procure ships for their battlefleet with little oversight from Earth. When it came to their personal ship, this created the conditions for a strange offering from the naval yards: opulence. Trident Industrial met this need lavishly with the Palatine Class Command Barge. An unusual ship of battlecruiser tonnage, it shares the typical style on the outside, but inside, no expense was spared. Marble, ebony and craftsmanship are terms you don't hear in military circles. Indeed, a single Palatine cost more than three Grand Battleships to build. The class features twelve overlarge lifeboats of unique design, the Magellan, each closer to an armoured yacht than an escape craft. Even the ship's guns use expensive, low-observable shells to reduce the ship's signature in combat. To offset this fabulous cost, Trident Industrial offered vessels to the private sector; owners included planetary governors, corporate titans and infamous syndicate heads.\n\nThough rare, a high proportion survived the Scourge invasion and the hard centuries that followed due to quality, their excessive point defences, and the fact that owners weren't generally the sorts to go down fighting. Since everything on the Palatine was overbuilt to the highest standards, survivors are still prized, capable ships. Their bygone splendour and the hand-ground perfection of their optics even make them worthwhile to the Republic's Grand Fleet, which operates several, mostly the former property of prophesy-spooked CEOs. Kalium possesses two which the UCM is aware of, although apparently their more opulent spaces have been painted grey, they're still Shangrilanian inlay underneath. The UCM has five on their lists, including River Queen, which is reserved for Presidential use. Such ships could be built today, but the cost would make no military sense, it never did.",
-    "namesake": "The Palatine, the Roman hill at the heart of the city where the emperors raised their palaces - the root of the word itself.",
+    "namesake": "[The Palatine](https://en.wikipedia.org/wiki/Palatine_Hill), the Roman hill at the heart of the city where the emperors raised their palaces - the root of the word itself. Excavations show people have lived on the hill since at least the 10th century BC, with Iron Age huts marking the era of Rome's traditional founding. Roman legend placed the Lupercal cave here, where the she-wolf was said to have suckled Romulus and Remus.",
     "additional": true
    }
   },

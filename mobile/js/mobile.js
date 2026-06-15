@@ -291,12 +291,17 @@
     return null;
   }
 
-  // TTCombat store links. Ships ship in boxed sets, so honour an explicit
-  // ship.storeUrl when present, else fall back to a Shopify search for the
-  // ship name (returns the matching faction box). Tapping the art opens the
-  // store; stopPropagation keeps a tap off the enclosing nav row.
+  // TTCombat store links. Ships sell in boxed sets, so a name search returns
+  // cross-faction noise. Honour an explicit ship.storeUrl; else land on the
+  // ship's FACTION collection page (always the right faction); else name search.
+  const TTC_FACTION_TAG = {
+    ucm: 'ucm', phr: 'phr', scourge: 'scourge', shaltari: 'shaltari',
+    resistance: 'resistance', bioficer: 'bioficers'
+  };
   function shipStoreUrl(name, ship) {
     if (ship && ship.storeUrl) return ship.storeUrl;
+    const tag = TTC_FACTION_TAG[activeFleet && activeFleet.faction];
+    if (tag) return 'https://ttcombat.com/collections/dropfleet-commander/faction_' + tag;
     return 'https://ttcombat.com/search?q=' + encodeURIComponent((name || '').trim());
   }
   // Wrap a ship <img> in a TTCombat store link (no icon overlay; the art itself
@@ -305,7 +310,7 @@
   function shopLinkImg(name, imgTag, ship) {
     if (!imgTag) return '';
     const url = shipStoreUrl(name, ship);
-    return `<a class="shop-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="View ${esc(name || 'this ship')} on the TTCombat store" onclick="event.stopPropagation()">${imgTag}</a>`;
+    return `<a class="shop-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="Find ${esc(name || 'this ship')} on the TTCombat store" onclick="event.stopPropagation()">${imgTag}</a>`;
   }
 
   // Status glyphs for validation rows — clean line icons, no emoji (a skull read
