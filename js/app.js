@@ -2338,9 +2338,9 @@ const App = (() => {
     detailEl.innerHTML = html;
   }
 
-  function renderWeaponHeader() {
+  function renderWeaponHeader(omitName) {
     return `<div class="weapon-row weapon-row-header">
-      <span class="weapon-col weapon-col-name">Weapon</span>
+      ${omitName ? '' : '<span class="weapon-col weapon-col-name">Weapon</span>'}
       <span class="weapon-col weapon-col-arc">Arc</span>
       <span class="weapon-col weapon-col-att">Att</span>
       <span class="weapon-col weapon-col-lock">Lk</span>
@@ -2510,14 +2510,14 @@ const App = (() => {
     }).join('');
   }
 
-  function renderWeaponRow(w) {
+  function renderWeaponRow(w, omitName) {
     const special = w.special && w.special !== '-' ? w.special : '';
     const typeLabel = WEAPON_TYPE_LABELS[w.type] || w.type || '?';
     // Damage carries its type as a colour-coded letter (e.g. 1E, 2K, 1C) — the
     // type is part of the damage, not a separate "special".
     const typeTag = w.type ? `<span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : '';
     return `<div class="weapon-row">
-      <span class="weapon-col weapon-col-name">${esc(w.name)}</span>
+      ${omitName ? '' : `<span class="weapon-col weapon-col-name">${esc(w.name)}</span>`}
       <span class="weapon-col weapon-col-arc" title="${ARC_LABELS[w.arc] || 'Firing Arc: ' + (w.arc || '')}">${ARC_ICONS[w.arc] ? ARC_ICONS[w.arc] + '<span class="arc-label">' + esc(w.arc || '') + '</span>' : esc(w.arc || '')}</span>
       <span class="weapon-col weapon-col-att">${w.attack}</span>
       <span class="weapon-col weapon-col-lock">${w.lock}</span>
@@ -2770,9 +2770,13 @@ const App = (() => {
         // Weapon options get the full mini weapon-datasheet (same table as the
         // ship's own weapons); non-weapon options keep the terse summary line.
         const isWeapon = o.weapons && o.weapons.length;
+        // The option name already heads the card, so a single-weapon datasheet
+        // drops its redundant name column (and the "Weapon" header). Multi-weapon
+        // options keep names so each row is identifiable.
+        const omitName = isWeapon && o.weapons.length === 1;
         const summary = isWeapon ? '' : systemOptionSummary(o);
         const sheet = isWeapon
-          ? `<div class="weapon-list sys-opt-sheet">${renderWeaponHeader()}${o.weapons.map(renderWeaponRow).join('')}</div>`
+          ? `<div class="weapon-list sys-opt-sheet${omitName ? ' weapon-list-noname' : ''}">${renderWeaponHeader(omitName)}${o.weapons.map(w => renderWeaponRow(w, omitName)).join('')}</div>`
           : '';
         return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}">
           <div class="sys-opt-main">
@@ -3262,10 +3266,8 @@ const App = (() => {
     if (isFamous) selectBadges += '<span class="ship-badge ship-badge-admiral">Admiral</span>';
     else if (data.isUnique) selectBadges += '<span class="ship-badge ship-badge-unique">Unique</span>';
     else if (data.isRare) selectBadges += '<span class="ship-badge ship-badge-rare">Rare</span>';
-    // Carrier tag (clearer than the old star): "Drop" if it lands Battalions,
-    // else "Launch" for fighters/bombers/mines/torpedoes.
-    const _launchLoads = [...(data.loads || []), ...((data.loadoutOptions || []).flatMap(lo => (lo.options || []).flatMap(o => o.loads || [])))];
-    if (_launchLoads.length) selectBadges += `<span class="ship-badge ship-badge-launch">${_launchLoads.some(l => /drop|lander|pod/i.test(l.name || '')) ? 'Drop' : 'Launch'}</span>`;
+    // (No Launch/Drop badge next to the name — launch capability already reads
+    // from the launch-capacity indicator, the weapon summary and the loads.)
 
     // Compact weapon summary for ship select cards
     const wpns = data.weapons || [];

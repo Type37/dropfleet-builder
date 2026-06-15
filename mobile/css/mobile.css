@@ -563,6 +563,10 @@ button, a, input, select, textarea,
 }
 .weapon-row:last-child { border-bottom: none; }
 
+/* Name-less option datasheet: the option's bold name already heads the card, so
+   the picker drops the repeated name column (and the "Weapon" header). */
+.weapon-table-noname .weapon-row { grid-template-columns: 34px 34px 34px 44px; }
+
 .weapon-row-header {
   font-weight: var(--weight-semibold);
   color: var(--fg3);

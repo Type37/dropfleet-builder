@@ -1493,9 +1493,8 @@
       if (ship.isUnique) tags.push('<span class="ship-tag">Unique</span>');
       if (ship.isRare) tags.push('<span class="ship-tag">Rare</span>');
       if (isFullyModular(ship)) tags.push('<span class="ship-tag">Modular</span>');
-      // Carrier tag: "Drop" if it lands Battalions, else "Launch".
-      const _ll = [...(ship.loads || []), ...((ship.loadoutOptions || []).flatMap(lo => (lo.options || []).flatMap(o => o.loads || [])))];
-      if (_ll.length) tags.push(`<span class="ship-tag ship-tag-launch">${_ll.some(l => /drop|lander|pod/i.test(l.name || '')) ? 'Drop' : 'Launch'}</span>`);
+      // (No Launch/Drop tag next to the name — it reads from the launch filter
+      // chip and the ship's loads/launch table; an inline tag is just noise.)
       return `<div class="list-row" data-gid="${g.id}" onclick="App.addShip('${g.id}','${g.category}')">
         ${art ? `<div class="ship-thumb ship-thumb-lg${modCls}"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
         <div class="list-row-content">
@@ -1857,20 +1856,20 @@
   // Full mini weapon-datasheet for a hardpoint option that bears weapons — the
   // same table the ship's own weapons use, so an option reads like a real
   // datasheet (arc diagram, Lock, Attack, Damage, tappable special rules).
-  function optionWeaponSheet(weapons) {
+  function optionWeaponSheet(weapons, omitName) {
     if (!weapons || !weapons.length) return '';
     const rows = weapons.map(w => {
       const t = (w.type || '').toUpperCase();
       const tc = t === 'K' ? 'weapon-type-k' : t === 'E' ? 'weapon-type-e' : t === 'C' ? 'weapon-type-c' : '';
       const dmg = `${w.damage || ''}${t ? `<span class="${tc}" style="margin-left:2px;font-size:9px">${t}</span>` : ''}`;
       return `<div class="weapon-row ${tc}">
-        <div class="weapon-name">${esc(w.name)}</div><div class="weapon-val">${esc(w.lock || '')}</div>
+        ${omitName ? '' : `<div class="weapon-name">${esc(w.name)}</div>`}<div class="weapon-val">${esc(w.lock || '')}</div>
         <div class="weapon-val">${esc(w.attack || '')}</div><div class="weapon-val">${dmg}</div><div class="weapon-val weapon-arc">${arcCell(w.arc)}</div>
       </div>${w.special && w.special !== '-' ? `<div class="weapon-special">${renderSpecialChips(w.special)}</div>` : ''}`;
     }).join('');
-    return `<div class="weapon-table opt-weapon-table">
+    return `<div class="weapon-table opt-weapon-table${omitName ? ' weapon-table-noname' : ''}">
       <div class="weapon-row weapon-row-header">
-        <div class="weapon-name">Weapon</div><div class="weapon-val">Lk</div><div class="weapon-val">At</div><div class="weapon-val">Dm</div><div class="weapon-val">Arc</div>
+        ${omitName ? '' : '<div class="weapon-name">Weapon</div>'}<div class="weapon-val">Lk</div><div class="weapon-val">At</div><div class="weapon-val">Dm</div><div class="weapon-val">Arc</div>
       </div>${rows}</div>`;
   }
   function renderSystemsPicker(factionKey, ship, inst, list, seln) {
@@ -1903,7 +1902,7 @@
         const canAdd = canAddSystem(inst, ship, factionKey, o.name);
         const detail = systemOptionDetail(o);
         const sheet = (o.weapons && o.weapons.length)
-          ? optionWeaponSheet(o.weapons)
+          ? optionWeaponSheet(o.weapons, o.weapons.length === 1)
           : (detail ? `<div class="loadout-option-desc">${detail}</div>` : '');
         return `<div class="sys-option ${c > 0 ? 'selected' : ''}">
           <div class="sys-option-row">

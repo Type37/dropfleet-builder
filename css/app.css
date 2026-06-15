@@ -2036,6 +2036,16 @@ h1, h2, h3, h4, h5, h6 {
 #builder-detail .weapon-col-name { white-space: normal; }
 #builder-detail .weapon-row-header .weapon-col-special { display: none; }
 
+/* Name-less datasheet: used in the systems picker where the option's bold name
+   already heads the card, so repeating it (and the "Weapon" column) is just
+   noise. Drop the first column. */
+.weapon-list-noname .weapon-row {
+  grid-template-columns: 38px 30px 30px 38px minmax(60px, 1.3fr);
+}
+#builder-detail .weapon-list-noname .weapon-row {
+  grid-template-columns: 38px 30px 30px 38px;
+}
+
 .weapon-col {
   white-space: nowrap;
   color: var(--ink-soft);
