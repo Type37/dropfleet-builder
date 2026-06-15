@@ -2229,7 +2229,12 @@ const App = (() => {
     currentFleet.secondaryObjectives = currentFleet.secondaryObjectives || [];
     const i = currentFleet.secondaryObjectives.indexOf(obj.name);
     if (i >= 0) currentFleet.secondaryObjectives.splice(i, 1);
-    else { if (currentFleet.secondaryObjectives.length >= 2) return; currentFleet.secondaryObjectives.push(obj.name); }
+    else {
+      // Pick up to 2. When two are already chosen, swap out the oldest rather than
+      // forcing the player to deselect one first (no "click off then on" dance).
+      if (currentFleet.secondaryObjectives.length >= 2) currentFleet.secondaryObjectives.shift();
+      currentFleet.secondaryObjectives.push(obj.name);
+    }
     saveFleets();
     renderOverviewPanel();
     const modal = document.getElementById('modal-secondary');
@@ -2241,7 +2246,7 @@ const App = (() => {
     const secObjs = (rawFleetData && rawFleetData.secondaryObjectives) || [];
     const sel = currentFleet.secondaryObjectives || [];
     const sub = document.getElementById('secondary-modal-sub');
-    if (sub) sub.textContent = sel.length >= 2 ? 'Both chosen, tap a selected objective to swap it.' : `Pick ${2 - sel.length} more, choose 2 for your game.`;
+    if (sub) sub.textContent = sel.length >= 2 ? 'Both chosen. Tap another to swap it in, or tap a chosen one to drop it.' : `Pick ${2 - sel.length} more, choose 2 for your game.`;
     const doneBtn = document.getElementById('secondary-done-btn');
     if (doneBtn) doneBtn.textContent = `Done (${Math.min(sel.length, 2)}/2)`;
     const body = document.getElementById('secondary-modal-body');

@@ -164,3 +164,30 @@ weapon makes it High Power.)
   which and what you'd prefer (e.g. single-tap select, no accidental deselect).
 - **"did you ever get to the thing from the user's feedback?"** - which item? Point
   me at it and I'll confirm/do it.
+
+---
+
+# Batch (2026-06-15, v188) - link preview + click-on/off (you clarified)
+
+## 14. Link preview image (your "better preview screenshot when I link the builder")
+Made a real 1200x630 PNG card (assets/logos/og-preview.png, gen by
+scripts/gen-og-image.py): chrome DROPFLEET COMMANDER wordmark + gold FLEET BUILDER
++ faction line + WarLore/url, gold Art-Deco rules. Pointed og:image + twitter:image
+at it (was the tiny WebP logo; WebP also isn't reliable for scrapers). Now Discord/
+Twitter/iMessage show a proper card. Want a different look (faction art montage, a
+real in-app screenshot)? Say so and I'll regen.
+
+## 15. "Don't like always click on/off stuff" (you said: ships, objectives, loadouts)
+- **Secondary objectives**: FIXED the real friction - at 2 chosen, tapping another
+  now swaps out the oldest (no "click off then on"). Both apps.
+- **Loadout cards**: already pure single-pick radio (clicking an option just selects
+  it; no on/off toggle). Left as-is - tell me if you meant something else here.
+- **Ships**: I couldn't find a ship on/off TOGGLE - the picker uses an explicit
+  "+ Add" button and the builder uses a +/- quantity stepper (neither toggles a
+  ship on/off). Point me at the exact spot (or a screenshot) that feels like an
+  on/off click and I'll change it.
+
+## 16. "Did you ever get to the thing from the user's feedback?"
+Not sure which item - tell me which and I'll confirm. (Recent shipped: print
+rebuild, AP/Command Ship, Centurion-not-rare, Kalium/Aldrin text, Overcharge->High
+Power, two-column recorded ships, link preview, objective swap.)

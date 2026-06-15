@@ -1392,7 +1392,11 @@
     f.secondaryObjectives = f.secondaryObjectives || [];
     const i = f.secondaryObjectives.indexOf(obj.name);
     if (i >= 0) f.secondaryObjectives.splice(i, 1);
-    else { if (f.secondaryObjectives.length >= 2) return; f.secondaryObjectives.push(obj.name); }
+    else {
+      // Pick up to 2; at two, swap out the oldest instead of forcing a deselect first.
+      if (f.secondaryObjectives.length >= 2) f.secondaryObjectives.shift();
+      f.secondaryObjectives.push(obj.name);
+    }
     f.updatedAt = Date.now();
     saveFleets();
     renderFleetDetail();
@@ -1405,11 +1409,11 @@
     if (!f) return;
     const sel = f.secondaryObjectives || [];
     const sub = document.getElementById('secondary-modal-sub');
-    if (sub) sub.textContent = sel.length >= 2 ? 'Both chosen, tap a selected objective to swap it.' : `Pick ${2 - sel.length} more.`;
+    if (sub) sub.textContent = sel.length >= 2 ? 'Both chosen. Tap another to swap it in, or tap a chosen one to drop it.' : `Pick ${2 - sel.length} more.`;
     const body = document.getElementById('secondary-modal-body');
     if (body) body.innerHTML = `<div class="secondary-list">` + SECONDARY_OBJECTIVES.map((o, i) => {
       const on = sel.includes(o.name);
-      const locked = !on && sel.length >= 2;
+      const locked = false; // tapping a new one swaps out the oldest, so nothing is locked
       return `<div class="secondary-item${on ? ' selected' : ''}${locked ? ' locked' : ''}" onclick="App.toggleSecondary(${i})">
         <span class="secondary-check">${on ? CHECK_SVG : ''}</span>
         <div class="secondary-body">
