@@ -2380,7 +2380,7 @@ const App = (() => {
 
   function renderWeaponHeader(omitName) {
     return `<div class="weapon-row weapon-row-header">
-      ${omitName ? '' : '<span class="weapon-col weapon-col-name">Weapon</span>'}
+      ${omitName === true ? '' : '<span class="weapon-col weapon-col-name">Weapon</span>'}
       <span class="weapon-col weapon-col-arc">Arc</span>
       <span class="weapon-col weapon-col-att">Att</span>
       <span class="weapon-col weapon-col-lock">Lk</span>
@@ -2592,7 +2592,7 @@ const App = (() => {
     // type is part of the damage, not a separate "special".
     const typeTag = w.type ? `<span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : '';
     return `<div class="weapon-row">
-      ${omitName ? '' : `<span class="weapon-col weapon-col-name">${esc(w.name)}</span>`}
+      ${omitName === true ? '' : `<span class="weapon-col weapon-col-name">${esc(w.name)}</span>`}
       <span class="weapon-col weapon-col-arc" title="${ARC_LABELS[w.arc] || 'Firing Arc: ' + (w.arc || '')}">${ARC_ICONS[w.arc] ? ARC_ICONS[w.arc] + '<span class="arc-label">' + esc(w.arc || '') + '</span>' : esc(w.arc || '')}</span>
       <span class="weapon-col weapon-col-att">${w.attack}</span>
       <span class="weapon-col weapon-col-lock">${w.lock}</span>
