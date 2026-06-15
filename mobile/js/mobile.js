@@ -1816,7 +1816,7 @@
             const sel = inst.loadouts && inst.loadouts[loIdx] != null ? inst.loadouts[loIdx] : 0;
             const on = oi === sel;
             const sheet = opt.weapons?.length ? optionWeaponSheet(opt.weapons)
-              : (opt.loads?.length ? `<div class="loadout-option-desc">Launch ${esc(opt.loads[0].launch || '')}</div>` : '');
+              : (opt.loads?.length ? buildLaunchTable(f.faction, opt.loads) : '');
             // Don't repeat the option name when the weapon datasheet already shows it.
             const redundant = opt.weapons?.length && opt.weapons.every(w => w.name === opt.name);
             return `<div class="loadout-option loadout-radio-opt ${on ? 'selected' : ''}" onclick="App.selectLoadout(${loIdx}, ${oi})">
@@ -2008,10 +2008,11 @@
       ${opts.map(o => {
         const c = counts[o.name] || 0;
         const canAdd = canAddSystem(inst, ship, factionKey, o.name);
-        const detail = systemOptionDetail(o);
+        const isLaunch = o.loads && o.loads.length;
         const sheet = (o.weapons && o.weapons.length)
           ? optionWeaponSheet(o.weapons, o.weapons.length === 1)
-          : (detail ? `<div class="loadout-option-desc">${detail}</div>` : '');
+          : isLaunch ? buildLaunchTable(factionKey, o.loads)
+          : (o.effect ? `<div class="loadout-option-desc">${esc(o.effect)}</div>` : '');
         return `<div class="sys-option ${c > 0 ? 'selected' : ''}">
           <div class="sys-option-row">
             <div class="sys-option-main">
@@ -2071,20 +2072,10 @@
     (f.launchAssets || []).forEach(grp => (grp.assets || []).forEach(a => { map[a.name.toLowerCase()] = a; }));
     return map;
   }
-  function renderLaunchTable(factionKey, ship, inst) {
-    const loads = [...(ship.loads || [])];
-    // Selected loadout options and systems/hardpoints can grant launch (Resistance
-    // modular ships build their launch entirely from chosen options).
-    (ship.loadoutOptions || []).forEach((lo, i) => {
-      const sel = inst && inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
-      const opt = lo.options && lo.options[sel];
-      if (opt && opt.loads) loads.push(...opt.loads);
-    });
-    if (inst && Array.isArray(inst.systems) && inst.systems.length) {
-      const list = systemsListFor(ship, factionKey);
-      if (list) inst.systems.forEach(n => { const o = findSystemOption(list, n); if (o && o.loads) loads.push(...o.loads); });
-    }
-    if (!loads.length) return '';
+  // Build a launch-asset stat table from a list of loads. Reused by the ship launch
+  // table AND by the modular pickers so every launch option shows its full statblock.
+  function buildLaunchTable(factionKey, loads) {
+    if (!loads || !loads.length) return '';
     const map = getLaunchAssetMap(factionKey);
     let rows = '';
     loads.forEach(load => {
@@ -2117,6 +2108,22 @@
         <div class="weapon-val">Launch</div><div class="weapon-name" style="color:var(--fg3)">Load</div>
         <div class="weapon-val">Thr</div><div class="weapon-val">At</div><div class="weapon-val">Lk</div><div class="weapon-val">Dm</div>
       </div>${rows}</div>`;
+  }
+
+  function renderLaunchTable(factionKey, ship, inst) {
+    const loads = [...(ship.loads || [])];
+    // Selected loadout options and systems/hardpoints can grant launch (Resistance
+    // modular ships build their launch entirely from chosen options).
+    (ship.loadoutOptions || []).forEach((lo, i) => {
+      const sel = inst && inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
+      const opt = lo.options && lo.options[sel];
+      if (opt && opt.loads) loads.push(...opt.loads);
+    });
+    if (inst && Array.isArray(inst.systems) && inst.systems.length) {
+      const list = systemsListFor(ship, factionKey);
+      if (list) inst.systems.forEach(n => { const o = findSystemOption(list, n); if (o && o.loads) loads.push(...o.loads); });
+    }
+    return buildLaunchTable(factionKey, loads);
   }
 
   // A group is "×N of one ship". Resolve the allowed N range (groupMin/Max,
@@ -2787,6 +2794,7 @@
         const canAdd = canAddStationOption(station, o, spec);
         const sheet = (o.weapons && o.weapons.length)
           ? optionWeaponSheet(o.weapons)
+          : (o.loads && o.loads.length) ? buildLaunchTable(activeFleet.faction, o.loads)
           : (o.effect ? `<div class="loadout-option-desc">${linkKeywords(o.effect)}</div>` : '');
         return `<div class="sys-option ${c > 0 ? 'selected' : ''}">
           <div class="sys-option-row">

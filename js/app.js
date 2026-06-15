@@ -49,7 +49,7 @@ const App = (() => {
 
   // Three-line size summary (rulebook 4.2): points range / group caps / admiral range.
   function gameSizeLines(s) {
-    const pts = s.max >= 99999 ? `${s.min}+ points` : `${s.min} – ${s.max} points`;
+    const pts = s.max >= 99999 ? `${s.min}+ points` : `${s.min}-${s.max} points`;
     const groups = `≤ ${s.groups} Groups${s.colossalMax > 0 ? `, ≤ ${s.colossalMax} Colossal Group${s.colossalMax === 1 ? '' : 's'}` : ''}`;
     return [pts, groups, `Admiral Level 1-${s.maxAdmiralLevel}`];
   }
@@ -1409,8 +1409,10 @@ const App = (() => {
     fill.className = 'points-fill' + (pts > limit ? ' over-budget' : pct > 85 ? ' near-limit' : '');
 
     const groupCount = countableGroups(f).length;
-    document.getElementById('groups-count').textContent = `${groupCount} group${groupCount !== 1 ? 's' : ''}`;
-    document.getElementById('groups-limit').textContent = `/ ${sizeInfo.groups} max`;
+    const gcEl = document.getElementById('groups-count');
+    if (gcEl) gcEl.textContent = `${groupCount} / ${sizeInfo.groups} groups`;
+    const glEl = document.getElementById('groups-limit');
+    if (glEl) glEl.textContent = '';
 
     // AP/turn = the admiral's Level. A "Command Ship-X" ship raises the Level of the
     // Admiral assigned to it by X, so the admiral placed on the best Command Ship in
@@ -1730,26 +1732,19 @@ const App = (() => {
     };
     const catOrder = ['light', 'medium', 'heavy', 'colossal', 'payload'];
 
-    const bars = catOrder
-      .filter(cat => catCounts[cat])
-      .map(cat => {
-        const info = catCounts[cat];
-        const pct = (info.pts / totalPts) * 100;
-        const color = catColors[cat] || 'var(--ink-muted)';
-        return `<div class="comp-segment" style="width:${pct}%;background:${color}" title="${CATEGORY_LABELS[cat] || cat}: ${info.ships} ship${info.ships > 1 ? 's' : ''}, ${info.pts} pts (${Math.round(pct)}%)"></div>`;
-      }).join('');
-
-    const legend = catOrder
-      .filter(cat => catCounts[cat])
-      .map(cat => {
-        const info = catCounts[cat];
-        const color = catColors[cat] || 'var(--ink-muted)';
-        return `<span class="comp-legend-item"><span class="comp-legend-dot" style="background:${color}"></span>${CATEGORY_LABELS[cat] || cat} ${info.ships}</span>`;
-      }).join('');
-
-    container.innerHTML = `
-      <div class="comp-bar">${bars}</div>
-      <div class="comp-legend">${legend}</div>`;
+    const present = catOrder.filter(cat => catCounts[cat]);
+    const bars = present.map(cat => {
+      const info = catCounts[cat];
+      const pct = (info.pts / totalPts) * 100;
+      const color = catColors[cat] || 'var(--ink-muted)';
+      return `<div class="comp-segment" style="width:${pct}%;background:${color}"></div>`;
+    }).join('');
+    // No colour-key legend — one hover tooltip explains the whole (thicker) bar.
+    const explain = present.map(cat => {
+      const i = catCounts[cat];
+      return `${CATEGORY_LABELS[cat] || cat}: ${i.ships} ship${i.ships > 1 ? 's' : ''}, ${i.pts} pts (${Math.round((i.pts / totalPts) * 100)}%)`;
+    }).join('\n');
+    container.innerHTML = `<div class="comp-bar comp-bar-thick" title="${esc(explain)}">${bars}</div>`;
   }
 
   // ── Groups ──
@@ -2895,17 +2890,20 @@ const App = (() => {
         const c = counts[o.name] || 0;
         const canAdd = canAddSystem(ship, dbShip, factionKey, o.name);
         const star = o.oncePerShip ? '<span class="sys-opt-star" title="Max one per ship">*</span>' : '';
-        // Weapon options get the full mini weapon-datasheet (same table as the
-        // ship's own weapons); non-weapon options keep the terse summary line.
+        // Every modular option shows its FULL statblock: weapon options get the
+        // weapon datasheet, launch options get the launch-asset datasheet (Fighters/
+        // Bombers/Mines/Fire Ships stats), and stat-modifier/effect options keep the
+        // short effect line (e.g. "Scan +4").
         const isWeapon = o.weapons && o.weapons.length;
+        const isLaunch = !isWeapon && o.loads && o.loads.length;
         // The option name already heads the card, so a single-weapon datasheet
         // drops its redundant name column (and the "Weapon" header). Multi-weapon
         // options keep names so each row is identifiable.
         const omitName = isWeapon && o.weapons.length === 1;
-        const summary = isWeapon ? '' : systemOptionSummary(o);
+        const summary = (isWeapon || isLaunch) ? '' : systemOptionSummary(o);
         const sheet = isWeapon
           ? `<div class="weapon-list sys-opt-sheet${omitName ? ' weapon-list-noname' : ''}">${renderWeaponHeader(omitName)}${o.weapons.map(w => renderWeaponRow(w, omitName)).join('')}</div>`
-          : '';
+          : (isLaunch ? buildLaunchTable(factionKey, o.loads, true) : '');
         return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}">
           <div class="sys-opt-main">
             <span class="sys-opt-name">${esc(o.name)}${star}</span>
@@ -2996,9 +2994,8 @@ const App = (() => {
     const optSheet = (opt) => {
       let h = '';
       if (opt.weapons && opt.weapons.length) h += '<div class="weapon-list loadout-weapons">' + renderWeaponHeader() + opt.weapons.map(renderWeaponRow).join('') + '</div>';
-      if (opt.loads && opt.loads.length) h += '<div class="load-list">' + opt.loads.map(l =>
-        `<div class="load-row"><span class="load-row-name">${esc(l.name)}</span><div class="weapon-row-stats"><span class="weapon-stat-chip">Launch ${l.launch}</span>${l.special && l.special !== '-' ? `<span class="weapon-stat-chip">${esc(l.special)}</span>` : ''}</div></div>`
-      ).join('') + '</div>';
+      // Launch loadout options show their full launch-asset statblock too.
+      if (opt.loads && opt.loads.length) h += buildLaunchTable(currentFleet && currentFleet.faction, opt.loads, true);
       return h;
     };
     if (loadoutOpts.length > 0) {
@@ -4411,7 +4408,9 @@ const App = (() => {
   }
   function stationDefFor(station) {
     const fdb = shipDB[currentFleet && currentFleet.faction];
-    return (fdb && fdb.spaceStations || []).find(x => x.id === station.id || x.name === station.name) || null;
+    // Match on id, the mobile/shared `stationKey`, or name — so a station that came
+    // from a share link or mobile (which store no inline stats) still resolves.
+    return (fdb && fdb.spaceStations || []).find(x => x.id === station.id || x.id === station.stationKey || x.name === station.name) || null;
   }
   function recalcStationCost(station) {
     const def = stationDefFor(station);
@@ -4497,16 +4496,20 @@ const App = (() => {
         // already labels it (the "Weapon Systems" heading was redundant).
         return `<div class="sys-cat"><div class="weapon-list station-arm-list">${head}${wrows}</div></div>`;
       }
-      // Structures / Upgrades: keep the row+effect layout (no weapon stats).
+      // Launch modules show their full launch-asset statblock; Structures/Upgrades
+      // keep the row+effect layout (no weapon stats).
       const rows = opts.map(o => {
         const c = counts[o.name] || 0;
         const canAdd = canAddStationOption(station, o, spec);
-        const summary = o.effect ? `<span class="sys-opt-detail">${esc(o.effect)}</span>` : '';
+        const isLaunch = o.loads && o.loads.length;
+        const summary = (!isLaunch && o.effect) ? `<span class="sys-opt-detail">${esc(o.effect)}</span>` : '';
+        const sheet = isLaunch ? buildLaunchTable(currentFleet.faction, o.loads, true) : '';
         const star = o.oncePerStation ? '<span class="sys-opt-star" title="Max one">*</span>' : '';
         return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}">
           ${stationOptThumb(o.name)}<div class="sys-opt-main"><span class="sys-opt-name">${esc(o.name)}${star}</span>${summary}</div>
           <span class="sys-opt-cost">${o.cost > 0 ? '+' + o.cost : o.cost} pts</span>
           ${stepper(o, c, canAdd)}
+          ${sheet}
         </div>`;
       }).join('');
       return `<div class="sys-cat"><div class="sys-cat-head">${esc(cat)}</div>${rows}</div>`;
@@ -4679,9 +4682,12 @@ const App = (() => {
     // Space Station
     if (f.spaceStation) {
       const ss = f.spaceStation;
-      const ssStats = ss.stats || {};
-      const ssRules = (ss.specialRules || []).map(r => esc(r.name || '')).filter(Boolean).join(', ');
-      const ssWeaponsHtml = (ss.weapons && ss.weapons.length) ? dpWeaponTable(ss.weapons.map(w => ({ ...w }))) : '';
+      // Shared/mobile stations store no inline stats/weapons — fall back to the def.
+      const ssDef = stationDefFor(ss);
+      const ssStats = ss.stats || (ssDef && ssDef.stats) || {};
+      const ssRules = ((ss.specialRules && ss.specialRules.length ? ss.specialRules : (ssDef && ssDef.specialRules) || [])).map(r => esc(r.name || '')).filter(Boolean).join(', ');
+      const ssWeaponsList = (ss.weapons && ss.weapons.length) ? ss.weapons : ((ssDef && ssDef.weapons) || []);
+      const ssWeaponsHtml = ssWeaponsList.length ? dpWeaponTable(ssWeaponsList.map(w => ({ ...w }))) : '';
       html += `<div class="print-section">
         <div class="print-section-title">Space Station</div>
         <div class="dp-ship">
@@ -5645,26 +5651,16 @@ const App = (() => {
     'drop pods': '3"', 'drop pod': '3"'
   };
 
-  function renderLaunchTable(factionKey, dbShip, ship) {
+  // Build a launch-asset stat table for a list of loads (each load = {name, launch,
+  // special}; the name may be "A & B" → one row per sub-asset). Resolves each asset's
+  // full stats (Thrust/Att/Lock/Dmg/Special) from the faction's launchAssets. Reused
+  // by the ship launch table AND by modular pickers so every launch option shows its
+  // full statblock. `compact` tightens it for an inline option sheet.
+  function buildLaunchTable(factionKey, allLoads, compact) {
     const factionInfo = shipDB[factionKey];
-    if (!factionInfo || !dbShip) return '';
+    if (!factionInfo || !allLoads || !allLoads.length) return '';
     const assetsByName = {};
     (factionInfo.launchAssets || []).forEach(a => { assetsByName[a.name.toLowerCase()] = a; });
-
-    const allLoads = [...(dbShip.loads || [])];
-    (dbShip.loadoutOptions || []).forEach((lo, loIdx) => {
-      const selIdx = (ship && ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
-      const selOpt = lo.options[selIdx];
-      if (selOpt && selOpt.loads) allLoads.push(...selOpt.loads);
-    });
-    // Launch from selected systems/hardpoints (Resistance modular ships build their
-    // launch entirely from chosen options), so those assets show their stats too.
-    if (ship && Array.isArray(ship.systems) && ship.systems.length) {
-      const list = systemsListFor(dbShip, factionKey);
-      if (list) ship.systems.forEach(name => { const o = findSystemOption(list, name); if (o && o.loads) allLoads.push(...o.loads); });
-    }
-    if (!allLoads.length) return '';
-
     let body = '';
     allLoads.forEach(load => {
       if (!load.name) return;
@@ -5693,13 +5689,30 @@ const App = (() => {
         </tr>`;
       });
     });
-
-    return `<div class="launch-table-wrap">
+    return `<div class="launch-table-wrap${compact ? ' sys-opt-sheet' : ''}">
       <table class="launch-table">
         <thead><tr><th>Launch</th><th>Load</th><th>Thrust</th><th>Att</th><th>Lock</th><th>Dmg</th><th>Special</th></tr></thead>
         <tbody>${body}</tbody>
       </table>
     </div>`;
+  }
+
+  function renderLaunchTable(factionKey, dbShip, ship) {
+    const factionInfo = shipDB[factionKey];
+    if (!factionInfo || !dbShip) return '';
+    const allLoads = [...(dbShip.loads || [])];
+    (dbShip.loadoutOptions || []).forEach((lo, loIdx) => {
+      const selIdx = (ship && ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
+      const selOpt = lo.options[selIdx];
+      if (selOpt && selOpt.loads) allLoads.push(...selOpt.loads);
+    });
+    // Launch from selected systems/hardpoints (Resistance modular ships build their
+    // launch entirely from chosen options), so those assets show their stats too.
+    if (ship && Array.isArray(ship.systems) && ship.systems.length) {
+      const list = systemsListFor(dbShip, factionKey);
+      if (list) ship.systems.forEach(name => { const o = findSystemOption(list, name); if (o && o.loads) allLoads.push(...o.loads); });
+    }
+    return buildLaunchTable(factionKey, allLoads);
   }
 
   // Group-wide dedup across all ships (kept for callers that need it).

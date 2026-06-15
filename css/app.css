@@ -604,6 +604,12 @@ h1, h2, h3, h4, h5, h6 {
   min-width: 3px;
   transition: width 0.3s ease;
 }
+/* Groups composition bar in the sidebar card: 50% thicker, hover for the breakdown
+   (the colour-key legend is gone). */
+.comp-bar-thick { height: 6px; border-radius: 3px; cursor: help; }
+.groups-line { margin-top: var(--sp-sm); }
+.ap-line { display: block; margin-top: var(--sp-xs); }
+.ap-line:empty { display: none; }
 .comp-legend {
   display: flex;
   flex-wrap: wrap;
