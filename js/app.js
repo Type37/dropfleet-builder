@@ -4197,25 +4197,57 @@ const App = (() => {
     const complete = armTotal === spec.required;
     const byCat = {};
     spec.options.forEach(o => { (byCat[o.category] = byCat[o.category] || []).push(o); });
+    const stepper = (o, c, canAdd) => `<div class="sys-opt-step">
+            <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeStationSystem('${esc(o.name).replace(/'/g, "\\'")}')">−</button>
+            <span class="sys-opt-count">${c}</span>
+            <button class="sys-step-btn" aria-label="Add one ${esc(o.name)}" ${canAdd ? '' : 'disabled'} onclick="App.addStationSystem('${esc(o.name).replace(/'/g, "\\'")}')">+</button>
+          </div>`;
     const body = Object.keys(byCat).map(cat => {
-      const rows = byCat[cat].map(o => {
+      const opts = byCat[cat];
+      // Weapon armaments share ONE table (single header), each weapon a row with
+      // its stats + cost + the +/- stepper inline — no repeated per-weapon table.
+      const isWeaponCat = opts.every(o => o.weapons && o.weapons.length);
+      if (isWeaponCat) {
+        const head = `<div class="weapon-row weapon-row-header station-arm-row">
+          <span class="weapon-col weapon-col-name">Weapon</span>
+          <span class="weapon-col weapon-col-arc">Arc</span>
+          <span class="weapon-col weapon-col-att">Att</span>
+          <span class="weapon-col weapon-col-lock">Lk</span>
+          <span class="weapon-col weapon-col-dmg">Dmg</span>
+          <span class="weapon-col weapon-col-special">Special</span>
+          <span class="weapon-col station-arm-pts">Pts</span>
+          <span class="weapon-col station-arm-qty"></span>
+        </div>`;
+        const wrows = opts.map(o => {
+          const c = counts[o.name] || 0;
+          const canAdd = canAddStationOption(station, o, spec);
+          const w = o.weapons[0];
+          const star = o.oncePerStation ? '<span class="sys-opt-star" title="Max one">*</span>' : '';
+          const typeTag = w.type ? `<span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : '';
+          const arcCell = ARC_ICONS[w.arc] ? ARC_ICONS[w.arc] + '<span class="arc-label">' + esc(w.arc || '') + '</span>' : esc(w.arc || '');
+          return `<div class="weapon-row station-arm-row${c > 0 ? ' sys-opt-active' : ''}">
+            <span class="weapon-col weapon-col-name">${esc(o.name)}${star}</span>
+            <span class="weapon-col weapon-col-arc" title="${ARC_LABELS[w.arc] || w.arc || ''}">${arcCell}</span>
+            <span class="weapon-col weapon-col-att">${w.attack}</span>
+            <span class="weapon-col weapon-col-lock">${w.lock}</span>
+            <span class="weapon-col weapon-col-dmg">${w.damage}${typeTag}</span>
+            <span class="weapon-col weapon-col-special">${w.special && w.special !== '-' ? renderWeaponSpecialChips(w.special) : ''}</span>
+            <span class="weapon-col station-arm-pts">${o.cost > 0 ? '+' + o.cost : o.cost}</span>
+            <span class="weapon-col station-arm-qty">${stepper(o, c, canAdd)}</span>
+          </div>`;
+        }).join('');
+        return `<div class="sys-cat"><div class="sys-cat-head">${esc(cat)}</div><div class="weapon-list station-arm-list">${head}${wrows}</div></div>`;
+      }
+      // Structures / Upgrades: keep the row+effect layout (no weapon stats).
+      const rows = opts.map(o => {
         const c = counts[o.name] || 0;
         const canAdd = canAddStationOption(station, o, spec);
-        const isWeapon = o.weapons && o.weapons.length;
-        const summary = isWeapon ? '' : (o.effect ? `<span class="sys-opt-detail">${esc(o.effect)}</span>` : '');
-        const sheet = isWeapon
-          ? `<div class="weapon-list sys-opt-sheet">${renderWeaponHeader()}${o.weapons.map(renderWeaponRow).join('')}</div>`
-          : '';
+        const summary = o.effect ? `<span class="sys-opt-detail">${esc(o.effect)}</span>` : '';
         const star = o.oncePerStation ? '<span class="sys-opt-star" title="Max one">*</span>' : '';
         return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}">
           ${stationOptThumb(o.name)}<div class="sys-opt-main"><span class="sys-opt-name">${esc(o.name)}${star}</span>${summary}</div>
           <span class="sys-opt-cost">${o.cost > 0 ? '+' + o.cost : o.cost} pts</span>
-          <div class="sys-opt-step">
-            <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeStationSystem('${esc(o.name).replace(/'/g, "\\'")}')">−</button>
-            <span class="sys-opt-count">${c}</span>
-            <button class="sys-step-btn" aria-label="Add one ${esc(o.name)}" ${canAdd ? '' : 'disabled'} onclick="App.addStationSystem('${esc(o.name).replace(/'/g, "\\'")}')">+</button>
-          </div>
-          ${sheet}
+          ${stepper(o, c, canAdd)}
         </div>`;
       }).join('');
       return `<div class="sys-cat"><div class="sys-cat-head">${esc(cat)}</div>${rows}</div>`;

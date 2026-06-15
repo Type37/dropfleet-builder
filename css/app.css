@@ -1989,6 +1989,22 @@ h1, h2, h3, h4, h5, h6 {
   border-bottom: none;
 }
 
+/* Station armaments: one combined weapons table with cost + a +/- stepper on
+   each row (two extra columns past the standard 6-column weapon grid). */
+.station-arm-list .weapon-row.station-arm-row {
+  grid-template-columns: minmax(90px, 1.4fr) 42px 30px 30px 40px minmax(60px, 1.1fr) 46px 94px;
+  align-items: center;
+}
+.station-arm-row .station-arm-pts {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--navy);
+  font-weight: var(--weight-semibold);
+}
+.station-arm-row .station-arm-qty { display: flex; justify-content: flex-end; }
+.station-arm-row .sys-opt-step { margin: 0; }
+.station-arm-row.sys-opt-active { background: var(--paper); box-shadow: inset 2px 0 0 var(--navy); }
+
 /* In the narrow right detail panel, give the weapon name the full width and
    wrap SPECIAL onto its own row beneath it (the wide picker modal keeps the
    single-line 6-column layout). */

@@ -2444,8 +2444,19 @@
       "name": "Minelayer",
       "minSelections": 1,
       "maxSelections": 1,
-      "defaultId": "a7d7-445a-8b57-df38",
       "options": [
+       {
+        "name": "Fighters & Bombers",
+        "cost": 0,
+        "weapons": [],
+        "loads": [
+         {
+          "name": "Fighters & Bombers",
+          "launch": "2",
+          "special": "-"
+         }
+        ]
+       },
        {
         "name": "Mines",
         "cost": 10,
