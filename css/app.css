@@ -634,12 +634,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 .fleet-warning-error {
   background: rgba(180, 50, 50, 0.12);
-  color: #c44;
+  color: #a8342a;   /* AA: 5.8:1 on the tint (was #c44 = 3.7:1) */
   border: 1px solid rgba(180, 50, 50, 0.25);
 }
 .fleet-warning-warn {
   background: rgba(180, 140, 30, 0.12);
-  color: #996b00;
+  color: #8a5810;   /* AA: 5.3:1 on the tint (was #996b00 = 4.0:1) */
   border: 1px solid rgba(180, 140, 30, 0.25);
 }
 
@@ -1227,9 +1227,11 @@ h1, h2, h3, h4, h5, h6 {
 .badge-navy { background: var(--navy-subtle); color: var(--navy); }
 .badge-gold { background: var(--gold-subtle); color: var(--gold-dark); }
 .badge-neutral { background: var(--paper-alt); color: var(--ink-muted); border: 1px solid var(--stroke-light); }
-.badge-success { background: rgba(62,153,69,0.1); color: var(--success); }
-.badge-warning { background: rgba(217,140,31,0.1); color: var(--warning); }
-.badge-error { background: rgba(196,60,47,0.1); color: var(--error); }
+/* Status badges: darker text so the colour passes WCAG AA on its own light tint
+   (the bright --success/--warning/--error hues only hit ~2.3-3.1:1 here). */
+.badge-success { background: rgba(62,153,69,0.1); color: #287030; }
+.badge-warning { background: rgba(217,140,31,0.1); color: #8a5810; }
+.badge-error { background: rgba(196,60,47,0.1); color: #a8342a; }
 .badge-lg { padding: var(--sp-xs) var(--sp-md); font-size: var(--text-sm); }
 
 /* Faction badges */
@@ -4344,7 +4346,7 @@ h1, h2, h3, h4, h5, h6 {
   .stat-cell-label { font-size: 7pt; gap: 1px; }
   .stat-cell-label svg { width: 8px; height: 8px; opacity: 0.7; }
   .stat-cell-value { font-size: 11pt; }
-  .stat-cell-warn { background: #fff3e0; color: #b8560f; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .stat-cell-warn { background: #fff3e0; color: #8a5810; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .stat-cell-good { color: #2e7d32; }
 
   /* Weapons — tight rows */

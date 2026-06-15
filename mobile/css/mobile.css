@@ -1352,7 +1352,7 @@ button, a, input, select, textarea,
   right: 0;
   bottom: 0;
   padding: var(--sp-xs) var(--sp-m);
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.62);   /* darker scrim so white text stays legible over art */
   color: #fff;
   font-size: var(--text-caption2);
   text-align: center;
@@ -1792,7 +1792,7 @@ body.sheet-open .sheet-scrim {
 /* Illegal: a tappable red pill (icon + caret) that visibly invites a tap to
    reveal the alerts, since a hover title is useless on touch. */
 .fleet-legal-check.legal-bad {
-  color: var(--error, #c43c2f);
+  color: #a8342a;   /* AA on the light-red tint (was --error #c43c2f = 4.1:1) */
   background: rgba(196, 60, 47, 0.12);
   border-radius: 999px;
   padding: 1px 5px 1px 3px;
@@ -1845,7 +1845,7 @@ body.sheet-open .sheet-scrim {
   padding: 1px 7px;
   border-radius: var(--radius-sm);
 }
-.sys-total.ok { background: #e3f0e4; color: #3e9945; }
+.sys-total.ok { background: #e3f0e4; color: #287030; }
 .sys-total.incomplete { background: var(--danger-bg); color: var(--danger); }
 
 .sys-cap-row {
