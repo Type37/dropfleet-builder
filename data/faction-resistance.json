@@ -3815,7 +3815,10 @@
      "oncePerShip": true,
      "weapons": [],
      "loads": [],
-     "effect": "Scan +4\""
+     "effect": "Scan +4\"",
+     "statMods": {
+      "scan": 4
+     }
     },
     {
      "name": "Ablative Armour",
@@ -3824,7 +3827,11 @@
      "oncePerShip": true,
      "weapons": [],
      "loads": [],
-     "effect": "Gain Reinforced Armour; Kinetic & Energy save +1"
+     "effect": "Gain Reinforced Armour; Kinetic & Energy save +1",
+     "statMods": {
+      "es": -1,
+      "ks": -1
+     }
     },
     {
      "name": "Drive Refit",
@@ -3833,7 +3840,10 @@
      "oncePerShip": true,
      "weapons": [],
      "loads": [],
-     "effect": "Thrust +3\""
+     "effect": "Thrust +3\"",
+     "statMods": {
+      "thrust": 3
+     }
     }
    ]
   },
@@ -4047,7 +4057,10 @@
      "oncePerShip": true,
      "weapons": [],
      "loads": [],
-     "effect": "Scan +4\""
+     "effect": "Scan +4\"",
+     "statMods": {
+      "scan": 4
+     }
     },
     {
      "name": "Drive Refit",
@@ -4056,7 +4069,10 @@
      "oncePerShip": true,
      "weapons": [],
      "loads": [],
-     "effect": "Thrust +3\""
+     "effect": "Thrust +3\"",
+     "statMods": {
+      "thrust": 3
+     }
     }
    ]
   }

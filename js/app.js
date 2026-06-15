@@ -2458,20 +2458,28 @@ const App = (() => {
   // statMods (e.g. a Drive Refit's +3" Thrust) onto the base stats. Returns
   // { stats, mods } where mods maps stat-key -> total delta, so the grid can
   // colour the cells the upgrade changed.
-  function effectiveStats(dbShip, ship) {
+  function effectiveStats(dbShip, ship, factionKey) {
     const stats = Object.assign({}, dbShip);
     const mods = {};
+    const apply = (sm) => {
+      if (!sm) return;
+      Object.entries(sm).forEach(([k, delta]) => {
+        stats[k] = adjustStatValue(stats[k], delta);
+        mods[k] = (mods[k] || 0) + delta;
+      });
+    };
+    // Loadout options (either/or refits, e.g. UCM Drive Refit).
     const opts = dbShip && Array.isArray(dbShip.loadoutOptions) ? dbShip.loadoutOptions : [];
     opts.forEach((lo, i) => {
       const sel = ship && ship.loadouts ? ship.loadouts[i] : undefined;
       const opt = lo.options && lo.options[sel];
-      if (opt && opt.statMods) {
-        Object.entries(opt.statMods).forEach(([k, delta]) => {
-          stats[k] = adjustStatValue(stats[k], delta);
-          mods[k] = (mods[k] || 0) + delta;
-        });
-      }
+      if (opt) apply(opt.statMods);
     });
+    // Selected system/hardpoint options (e.g. Resistance Scanner Array Scan +4").
+    if (factionKey && ship && Array.isArray(ship.systems) && ship.systems.length) {
+      const list = systemsListFor(dbShip, factionKey);
+      if (list) ship.systems.forEach(name => { const o = findSystemOption(list, name); if (o) apply(o.statMods); });
+    }
     return { stats, mods };
   }
 
@@ -2916,7 +2924,7 @@ const App = (() => {
     const tonnage = dbShip ? tonLabel(dbShip.tonnage) : '';
     const specialRules = dbShip && dbShip.special_rules ? dbShip.special_rules : [];
 
-    const eff = dbShip ? effectiveStats(dbShip, ship) : null;
+    const eff = dbShip ? effectiveStats(dbShip, ship, currentFleet && currentFleet.faction) : null;
     const statsHtml = dbShip ? renderStatGrid(eff.stats, eff.mods) : '';
 
     // Base weapons
@@ -4648,7 +4656,7 @@ const App = (() => {
         const db = findShipInDB(f.faction, ship.groupCategory, ship.shipKey);
         if (!db) return;
         const name = db.name;
-        const eff = effectiveStats(db, ship);
+        const eff = effectiveStats(db, ship, f.faction);
         const statsHtml = renderStatGrid(eff.stats, eff.mods);
 
         // Weapons
@@ -5115,7 +5123,7 @@ const App = (() => {
 
         // Show stats if available
         if (dbShip) {
-          const eff = effectiveStats(dbShip, ship);
+          const eff = effectiveStats(dbShip, ship, fleet.faction);
           html += renderStatGrid(eff.stats, eff.mods);
 
           // Loadout info

@@ -411,14 +411,20 @@
     return s.slice(0, m.index) + (parseInt(m[0], 10) + delta) + s.slice(m.index + m[0].length);
   }
   // Total stat deltas from a built ship's selected loadout options (e.g. a Drive
-  // Refit's +3" Thrust). Returns { key: delta }.
-  function loadoutStatMods(ship, inst) {
+  // Refit's +3" Thrust) AND selected system/hardpoint options (e.g. Resistance
+  // Scanner Array Scan +4"). Returns { key: delta }.
+  function loadoutStatMods(ship, inst, factionKey) {
     const mods = {};
+    const add = (sm) => { if (sm) Object.entries(sm).forEach(([k, d]) => { mods[k] = (mods[k] || 0) + d; }); };
     (ship.loadoutOptions || []).forEach((lo, i) => {
       const sel = inst && inst.loadouts ? inst.loadouts[i] : undefined;
       const opt = lo.options && lo.options[sel];
-      if (opt && opt.statMods) Object.entries(opt.statMods).forEach(([k, d]) => { mods[k] = (mods[k] || 0) + d; });
+      if (opt) add(opt.statMods);
     });
+    if (factionKey && inst && Array.isArray(inst.systems) && inst.systems.length) {
+      const list = systemsListFor(ship, factionKey);
+      if (list) inst.systems.forEach(name => { const o = findSystemOption(list, name); if (o) add(o.statMods); });
+    }
     return mods;
   }
   // Build the stat-grid entries for a built ship, applying any loadout statMods
@@ -1706,7 +1712,7 @@
     const isPayloadGrp = inst.groupCategory === 'payload';
     if (isPayloadGrp) gMax = Infinity;
 
-    const statEntries = shipStatEntries(stats, loadoutStatMods(ship, inst));
+    const statEntries = shipStatEntries(stats, loadoutStatMods(ship, inst, f.faction));
 
     const weapons = ship.weapons || [];
     const loadoutOptions = ship.loadoutOptions || [];
@@ -3061,7 +3067,7 @@
       if (!db) return '';
       const st = db.stats || {};
       const qty = g.ships.length;
-      const mods = loadoutStatMods(db, inst);
+      const mods = loadoutStatMods(db, inst, f.faction);
       const statCells = [['Scan', 'scan', st.scan], ['Sig', 'sig', st.sig], ['Thrust', 'thrust', st.thrust], ['Hull', 'hull', st.hull],
         ['ES', 'es', st.es], ['KS', 'ks', st.ks], ['BS', 'bs', st.bs], ['PD', 'pd', st.pd]]
         .filter(([, , v]) => v != null && v !== '-' && v !== '')
