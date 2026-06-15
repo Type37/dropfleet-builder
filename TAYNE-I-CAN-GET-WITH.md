@@ -44,3 +44,21 @@ fleet warning/error messages, mobile systems "complete" pill, mobile "illegal
 fleet" pill, and darkened the modular-art note scrim. All now ≥4.5:1.
 **Change it by:** if there's still a specific gray-on-blue spot, screenshot it and
 I'll nuke it.
+
+## 5. Deploy range as its own column (old backlog #11)
+**Q:** You wanted launch "deploy range" more visible. I dug the rulebook: it's
+universal — "place those Assets up to their Launch Value within **6\"** of their
+Carrier, unless otherwise stated" (§ launching assets). So nearly every asset is
+6\"; a dedicated column would just say "6\"" on every row.
+**My guess (NOT applied — didn't want to add clutter you'd hate):** instead of a
+repetitive column, either (a) leave as-is (range already lives in the Launch rule
+tooltip), or (b) one small footnote under each launch table: "Launch within 6\"
+of the carrier unless stated." 
+**Change it by:** tell me "column", "footnote", or "leave it" and I'll do it.
+
+## 6. Per-ship (individual hull) naming
+**Q:** You confirmed single-ship-group naming is good. Naming individual hulls
+inside a multi-ship squadron is still not done (it fights the collapse model +
+mobile's one-datasheet-per-group view).
+**My guess:** leave it unless you specifically want to name hulls in a squadron.
+**Change it by:** say "yes, per-hull names" and I'll wire it (sig + share + print).
