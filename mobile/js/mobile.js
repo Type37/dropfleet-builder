@@ -962,16 +962,12 @@
       }
     });
 
-    // Feature carriers MUST choose a Deployable Feature (required, not optional)
+    // Deployable Features are always OPTIONAL now — never flagged for an empty slot
+    // (a carrier can pick/swap one right before the game).
     fleet.battleGroups.forEach((g, gi) => {
       const s = g.ships[0];
       if (!s) return;
       const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
-      if (db && featureRequired(db) && g.ships.some(x => !x.feature)) {
-        // Soft nudge, not a hard error — a feature carrier can pick/swap its
-        // Deployable Feature right before the game, so an empty slot is legal.
-        w.push({ t: 'warn', m: `${db.name}: choose a Deployable Feature`, fix: 'group', gi });
-      }
       // Systems / Hardpoints validation
       const list = db && systemsListFor(db, fleet.faction);
       const seln = db && db.systemSelection;
@@ -1441,6 +1437,32 @@
     if (s) s.value = '';
     navigate('screen-add-group');
   }
+  // Launch-capability icons for picker rows (fighters / fire ships / mines /
+  // dropships / torpedoes / other), detected from the ship's loads.
+  const LAUNCH_TYPE_DEFS = [
+    { re: /fighter|bomber/i, label: 'Fighters / Bombers', icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l5.5 13L8 11l-5.5 3z"/></svg>' },
+    { re: /fire\s*ship/i, label: 'Fire Ships', icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5c.5 2.5 3.5 3.5 3.5 7a3.5 3.5 0 0 1-7 0c0-1.4.6-2.3 1.3-3 .1 1 .7 1.4 1.4 1 0-1.9-.8-3.3.8-5z"/></svg>' },
+    { re: /\bmine/i, label: 'Mines', icon: '<svg width="13" height="13" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M8 1.6v2.3M8 12.1v2.3M1.6 8h2.3M12.1 8h2.3M3.4 3.4l1.6 1.6M11 11l1.6 1.6M12.6 3.4 11 5M5 11l-1.6 1.6"/></g></svg>' },
+    { re: /dropship|drop\s*pod|bulk\s*lander/i, label: 'Dropships / Landers', icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1.5v8M4.5 6.5L8 10l3.5-3.5M2.5 14h11"/></svg>' },
+    { re: /torpedo|boarding\s*pod/i, label: 'Torpedoes / Boarding Pods', icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><rect x="1.5" y="6" width="9" height="4" rx="2"/><path d="M10.5 8l4-2.2v4.4z"/></svg>' },
+  ];
+  const LAUNCH_TYPE_OTHER = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1.6v2M8 12.4v2M1.6 8h2M12.4 8h2" stroke-linecap="round"/></svg>';
+  function shipLaunchIcons(ship, factionKey) {
+    if (!ship) return '';
+    const names = new Set();
+    const add = loads => (loads || []).forEach(l => { if (l && l.name) String(l.name).split(/\s*&\s*/).forEach(p => names.add(p.trim().toLowerCase())); });
+    add(ship.loads);
+    (ship.loadoutOptions || []).forEach(lo => (lo.options || []).forEach(o => add(o.loads)));
+    const list = systemsListFor(ship, factionKey);
+    if (list) (list.options || []).forEach(o => add(o.loads));
+    if (!names.size) return '';
+    const arr = [...names];
+    const icons = [];
+    LAUNCH_TYPE_DEFS.forEach(t => { if (arr.some(n => t.re.test(n))) icons.push(`<span class="launch-type-icon" title="${esc(t.label)}">${t.icon}</span>`); });
+    if (arr.some(n => !LAUNCH_TYPE_DEFS.some(t => t.re.test(n)))) icons.push(`<span class="launch-type-icon" title="Other launch asset">${LAUNCH_TYPE_OTHER}</span>`);
+    return icons.length ? `<div class="ship-card-launch">${icons.join('')}</div>` : '';
+  }
+
   function renderShipPicker() {
     const f = activeFleet;
     if (!f) return;
@@ -1557,6 +1579,7 @@
             <span class="list-row-pts">${gMin > 1 ? cost * gMin : cost}<span class="pts-unit">pts</span></span>
           </div>
           <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)}, Group ${gMin}${gMax > gMin ? '–' + gMax : ''}${gMin > 1 ? ` · ${gMin}× ${cost}` : ''}</div>
+          ${shipLaunchIcons(ship, activeFleet.faction)}
         </div>
       </div>`;
     }).join('');
@@ -1739,7 +1762,7 @@
       .split(',').map(s => s.trim()).filter(t => t && !ruleNames.has(t.toLowerCase())).join(', ');
     const artSrc = shipArtPath(ship.name);
     const carrier = isFeatureCarrier(ship);
-    const featReq = carrier && featureRequired(ship);
+    const featReq = false; // Deployable Features are always optional now
     const features = carrier ? factionFeatures(f.faction) : [];
     const chosenFeature = inst.feature || '';
     const sysList = systemsListFor(ship, f.faction);
@@ -1835,7 +1858,7 @@
 
       ${carrier && features.length ? `<div class="loadout-section">
         <div class="section-header" style="padding:0 0 var(--sp-s)">
-          ${featReq ? 'Deployable Feature' + (chosenFeature ? '' : ', required') : 'Payload Feature, optional'}
+          ${featReq ? 'Deployable Feature' + (chosenFeature ? '' : ', required') : 'Deployable Feature, optional'}
         </div>
         <div class="loadout-option loadout-radio-opt ${!chosenFeature ? 'selected' : ''}" onclick="App.selectFeature('')">
           <div class="loadout-radio-row">
@@ -1884,7 +1907,7 @@
       ${renderLore(ship)}
 
       <div style="padding:var(--sp-l)">
-        <button class="btn btn-ghost btn-block" onclick="App.copyGroup()" style="margin-bottom:var(--sp-m)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><rect x="2.5" y="2.5" width="8" height="8" rx="1.6"/><rect x="5.5" y="5.5" width="8" height="8" rx="1.6" fill="var(--card-bg)"/></svg>Duplicate Group</button>
+        <button class="btn btn-ghost btn-block" onclick="App.copyGroup()" style="margin-bottom:var(--sp-m)"><svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:-3px;margin-right:6px"><g fill="currentColor"><path d="M4 9a3 3 0 0 0 3 3h4v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h1z"/><path d="M13 1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zM9 5H7v2h2v2h2V7h2V5h-2V3H9z"/></g></svg>Duplicate Group</button>
         <button class="btn btn-ghost btn-block" onclick="App.removeGroup()" style="color:var(--danger);border-color:var(--danger)">Remove Group</button>
       </div>
     `;

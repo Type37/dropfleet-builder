@@ -1081,7 +1081,7 @@ const App = (() => {
           <div class="fleet-card-menu-wrap" onclick="event.stopPropagation()">
             <button class="fleet-card-menu-btn" aria-label="Fleet options" aria-haspopup="true" onclick="App.toggleFleetCardMenu(event, this)"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="3" r="1.4"/><circle cx="8" cy="8" r="1.4"/><circle cx="8" cy="13" r="1.4"/></svg></button>
             <div class="fleet-card-menu" role="menu">
-              <button role="menuitem" onclick="App.duplicateFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="2.5" y="2.5" width="8" height="8" rx="1.6"/><rect x="5.5" y="5.5" width="8" height="8" rx="1.6" fill="var(--paper)"/></svg> Duplicate</button>
+              <button role="menuitem" onclick="App.duplicateFleet('${f.id}')"><svg width="14" height="14" viewBox="0 0 16 16"><g fill="currentColor"><path d="M4 9a3 3 0 0 0 3 3h4v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h1z"/><path d="M13 1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zM9 5H7v2h2v2h2V7h2V5h-2V3H9z"/></g></svg> Duplicate</button>
               <button role="menuitem" class="danger" onclick="App.deleteFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Delete</button>
             </div>
           </div>
@@ -1578,17 +1578,8 @@ const App = (() => {
       warnings.push({ type: 'error', msg: `Light points (${lightPts}) can't exceed Medium + Heavy points (${mediumPts + heavyPts}) (rulebook 4.2)` });
     }
 
-    // 7b. Feature carriers MUST choose a Deployable Feature (required, not optional)
-    fleet.battleGroups.forEach(g => {
-      if (g.ships.length === 0) return;
-      const s = g.ships[0];
-      const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
-      if (db && featureRequired(db) && g.ships.some(x => !x.feature)) {
-        // Soft nudge, not a hard error — a feature carrier can pick/swap its
-        // Deployable Feature right before the game, so an empty slot is legal.
-        warnings.push({ type: 'warn', msg: `${db.name}: choose a Deployable Feature` });
-      }
-    });
+    // 7b. Deployable Features are always OPTIONAL now — a carrier can pick/swap one
+    // right before the game, so an empty slot is never flagged.
 
     // 7c. Systems/Hardpoint selections must satisfy their list rules
     fleet.battleGroups.forEach(g => {
@@ -2100,8 +2091,10 @@ const App = (() => {
             ${gErrorDot}
           </div>
           <div class="overview-group-right">
-            <button class="overview-group-copy" onclick="event.stopPropagation(); App.copyGroup('${g.id}')" aria-label="Duplicate ${esc(g.name)}" title="Duplicate group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="2.5" y="2.5" width="8" height="8" rx="1.6"/><rect x="5.5" y="5.5" width="8" height="8" rx="1.6" fill="var(--paper)"/></svg></button>
-            <button class="overview-group-remove" onclick="event.stopPropagation(); App.removeGroup('${g.id}')" aria-label="Remove ${esc(g.name)}" title="Remove group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+            <div class="overview-group-actions">
+              <button class="overview-group-copy" onclick="event.stopPropagation(); App.copyGroup('${g.id}')" aria-label="Duplicate ${esc(g.name)}" title="Duplicate group"><svg width="19" height="19" viewBox="0 0 16 16"><g fill="currentColor"><path d="M4 9a3 3 0 0 0 3 3h4v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h1z"/><path d="M13 1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zM9 5H7v2h2v2h2V7h2V5h-2V3H9z"/></g></svg></button>
+              <button class="overview-group-remove" onclick="event.stopPropagation(); App.removeGroup('${g.id}')" aria-label="Remove ${esc(g.name)}" title="Remove group"><svg width="19" height="19" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+            </div>
             <div class="overview-group-pts">${gPts} pts</div>
             ${stepperHtml}
           </div>
@@ -2438,6 +2431,39 @@ const App = (() => {
     C: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#c43c2f" stroke-width="1.5"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/></svg>'
   };
 
+  // Launch-asset TYPE icons for the picker cards, so you can tell at a glance what a
+  // ship can launch (fighters, fire ships, mines, dropships/landers, torpedoes, or
+  // something else). Detection is by the load name.
+  const LAUNCH_TYPE_DEFS = [
+    { key: 'fighters', re: /fighter|bomber/i, label: 'Fighters / Bombers',
+      icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l5.5 13L8 11l-5.5 3z"/></svg>' },
+    { key: 'fireships', re: /fire\s*ship/i, label: 'Fire Ships',
+      icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5c.5 2.5 3.5 3.5 3.5 7a3.5 3.5 0 0 1-7 0c0-1.4.6-2.3 1.3-3 .1 1 .7 1.4 1.4 1 0-1.9-.8-3.3.8-5z"/></svg>' },
+    { key: 'mines', re: /\bmine/i, label: 'Mines',
+      icon: '<svg width="14" height="14" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M8 1.6v2.3M8 12.1v2.3M1.6 8h2.3M12.1 8h2.3M3.4 3.4l1.6 1.6M11 11l1.6 1.6M12.6 3.4 11 5M5 11l-1.6 1.6"/></g></svg>' },
+    { key: 'dropships', re: /dropship|drop\s*pod|bulk\s*lander/i, label: 'Dropships / Landers',
+      icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1.5v8M4.5 6.5L8 10l3.5-3.5M2.5 14h11"/></svg>' },
+    { key: 'torpedoes', re: /torpedo|boarding\s*pod/i, label: 'Torpedoes / Boarding Pods',
+      icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect x="1.5" y="6" width="9" height="4" rx="2"/><path d="M10.5 8l4-2.2v4.4z"/></svg>' },
+  ];
+  const LAUNCH_TYPE_OTHER = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1.6v2M8 12.4v2M1.6 8h2M12.4 8h2" stroke-linecap="round"/></svg>';
+
+  function shipLaunchIcons(dbShip, factionKey) {
+    if (!dbShip) return '';
+    const names = new Set();
+    const add = loads => (loads || []).forEach(l => { if (l && l.name) String(l.name).split(/\s*&\s*/).forEach(p => names.add(p.trim().toLowerCase())); });
+    add(dbShip.loads);
+    (dbShip.loadoutOptions || []).forEach(lo => (lo.options || []).forEach(o => add(o.loads)));
+    const list = systemsListFor(dbShip, factionKey);
+    if (list) (list.options || []).forEach(o => add(o.loads));
+    if (!names.size) return '';
+    const arr = [...names];
+    const icons = [];
+    LAUNCH_TYPE_DEFS.forEach(t => { if (arr.some(n => t.re.test(n))) icons.push(`<span class="launch-type-icon" title="${esc(t.label)}">${t.icon}</span>`); });
+    if (arr.some(n => !LAUNCH_TYPE_DEFS.some(t => t.re.test(n)))) icons.push(`<span class="launch-type-icon" title="Other launch asset">${LAUNCH_TYPE_OTHER}</span>`);
+    return icons.length ? `<div class="ship-card-launch" title="Launch capability">${icons.join('')}</div>` : '';
+  }
+
   const ARC_LABELS = {
     'B': 'Broadside (Port & Starboard)',
     'F': 'Front',
@@ -2704,13 +2730,10 @@ const App = (() => {
     const faction = shipDB[currentFleet.faction];
     const feats = (faction && faction.deployableFeatures) || [];
     if (feats.length === 0) return '';
-    const required = featureRequired(dbShip);
     const chosen = ship.feature || '';
-    // Porter ships take a feature as an OPTIONAL Payload S-1; only genuine
-    // "choose one" carriers are flagged as required.
-    const label = required
-      ? `Deployable Feature${chosen ? '' : ', required'}`
-      : 'Payload feature, optional';
+    // Deployable Features are always optional (you can pick/swap one right before
+    // the game), so the picker never marks them required.
+    const label = 'Deployable Feature, optional';
     // Radio list (not a dropdown) so every option's full rules are visible while
     // choosing, rather than hidden until selected.
     const row = (value, name, cost, feat, isChosen) => {
@@ -3459,6 +3482,7 @@ const App = (() => {
       </div>
       ${renderStatGrid(data)}
       ${weaponSummary}
+      ${isFamous ? '' : shipLaunchIcons(data, currentFleet.faction)}
       ${specialRules.length > 0 ? `<div class="special-rules">${specialRules.slice(0, 4).map(r => {
         const detail = (data.specialRuleDetails || []).find(d => d.name === r);
         if (detail && detail.description) {
