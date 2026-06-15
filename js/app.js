@@ -388,6 +388,7 @@ const App = (() => {
         specialRuleDetails: s.specialRules || [],
         groupMin: s.groupMin, groupMax: s.groupMax,
         isRare: s.isRare, isUnique: s.isUnique,
+        additional: !!s.additional,
         loadoutOptions: s.loadoutOptions || [],
         lore: s.lore || '',
         rulesText: s.rulesText || '',
@@ -3140,10 +3141,11 @@ const App = (() => {
       });
     }
 
-    // Hide auxiliary/mercenary ships when setting is off (famous admirals always
-    // show — they're a deliberate pick, not auxiliary clutter).
+    // Hide auxiliary/mercenary/civilian ships (cross-faction "additional" ships,
+    // flagged in the data) when the setting is off. Famous admirals always show —
+    // they're a deliberate pick, not auxiliary clutter.
     if (!settings.showAdditionalShips) {
-      ships = ships.filter(s => s.data.image || s.data.type === 'Famous');
+      ships = ships.filter(s => s.data.type === 'Famous' || !s.data.additional);
     }
 
     // Apply search filter

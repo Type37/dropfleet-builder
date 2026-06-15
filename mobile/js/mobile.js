@@ -1405,7 +1405,7 @@
     const search = (document.getElementById('picker-search')?.value || '').toLowerCase();
     let list = groups.concat(famousPseudo).filter(g => {
       const s = g.ship || {};
-      if (!pickerShowExtra && !shipArtPath(s.name) && !g._famous) return false;
+      if (!pickerShowExtra && s.additional && !g._famous) return false;
       if (pickerFilter !== 'all' && g.category !== pickerFilter) return false;
       if (search && !(s.name || g.name).toLowerCase().includes(search)) return false;
       for (const k of pickerAttrs) { const d = attrDefs.find(a => a.key === k); if (d && !d.test(s)) return false; }
