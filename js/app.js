@@ -3065,7 +3065,8 @@ const App = (() => {
     { key: 'launch',  label: 'Has Launch',   test: s => (s.loads && s.loads.length > 0) || (s.loadoutOptions || []).some(lo => lo.options.some(o => o.loads && o.loads.length > 0)) },
     { key: 'drop',    label: 'Has Drop',     test: shipHasDrop },
     { key: 'rare',    label: 'Rare',         test: s => s.isRare },
-    { key: 'unique',  label: 'Unique',       test: s => s.isUnique }
+    { key: 'unique',  label: 'Unique',       test: s => s.isUnique },
+    { key: 'famous',  label: 'Famous',       test: s => s.type === 'Famous' }
   ];
 
   function renderShipFilters() {

@@ -1395,9 +1395,11 @@
       { key: 'drop',    label: 'Drop',    test: s => shipHasDrop(s) },
       { key: 'modular', label: 'Modular', test: s => isFullyModular(s) },
       { key: 'rare',    label: 'Rare',    test: s => s.isRare },
-      { key: 'unique',  label: 'Unique',  test: s => s.isUnique }
+      { key: 'unique',  label: 'Unique',  test: s => s.isUnique },
+      { key: 'famous',  label: 'Famous',  test: s => !!s._famous }
     ];
-    const presentAttrs = attrDefs.filter(a => groups.some(g => a.test(g.ship || {})));
+    const _hasFamous = (faction.admirals || []).some(a => a.isFamous && a.flagship);
+    const presentAttrs = attrDefs.filter(a => a.key === 'famous' ? _hasFamous : groups.some(g => a.test(g.ship || {})));
 
     // Famous admirals fly a flagship that's a ship on the table — surface them in
     // the picker too (not just the Admiral screen, where they sit below the fold).
@@ -1407,7 +1409,7 @@
       id: a.id, category: a.flagship.category || 'medium', _famous: true,
       _art: admiralArtPath(a.name) || shipArtPath(a.flagship.name),
       _flagship: a.flagship.name, _level: a.level,
-      ship: Object.assign({}, a.flagship, { name: a.name, cost: a.cost + a.flagship.cost })
+      ship: Object.assign({}, a.flagship, { name: a.name, cost: a.cost + a.flagship.cost, _famous: true })
     }));
 
     // Apply all filters first so the live count is accurate.
