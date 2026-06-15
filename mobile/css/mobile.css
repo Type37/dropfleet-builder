@@ -1757,6 +1757,7 @@ body.sheet-open .sheet-scrim {
   vertical-align: middle;
 }
 .ship-tag-rare, .ship-tag-unique { background: none; padding: 0; border-radius: 0; text-transform: uppercase; font-size: 10px; letter-spacing: 0.06em; }
+.ship-tag-launch { background: var(--navy); color: var(--paper); text-transform: uppercase; font-size: 10px; letter-spacing: 0.06em; }
 .ship-tag-rare { color: var(--navy); }
 .ship-tag-unique { color: #8a5e10; }
 .row-disabled { opacity: 0.4; pointer-events: none; }

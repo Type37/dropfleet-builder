@@ -2972,6 +2972,14 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 10px;
   letter-spacing: 0.06em;
 }
+/* Carrier tag — "Launch"/"Drop" so carriers read at a glance (replaces the star). */
+.ship-badge-launch {
+  background: var(--navy);
+  color: var(--paper);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
 .ship-badge-group {
   background: var(--paper-alt);
   color: var(--ink-muted);

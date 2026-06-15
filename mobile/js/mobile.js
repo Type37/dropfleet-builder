@@ -902,7 +902,9 @@
       if (!s) return;
       const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
       if (db && featureRequired(db) && g.ships.some(x => !x.feature)) {
-        w.push({ t: 'error', m: `${db.name}: choose a Deployable Feature`, fix: 'group', gi });
+        // Soft nudge, not a hard error — a feature carrier can pick/swap its
+        // Deployable Feature right before the game, so an empty slot is legal.
+        w.push({ t: 'warn', m: `${db.name}: choose a Deployable Feature`, fix: 'group', gi });
       }
       // Systems / Hardpoints validation
       const list = db && systemsListFor(db, fleet.faction);
@@ -1473,14 +1475,17 @@
       if (ship.isUnique) tags.push('<span class="ship-tag">Unique</span>');
       if (ship.isRare) tags.push('<span class="ship-tag">Rare</span>');
       if (isFullyModular(ship)) tags.push('<span class="ship-tag">Modular</span>');
+      // Carrier tag: "Drop" if it lands Battalions, else "Launch".
+      const _ll = [...(ship.loads || []), ...((ship.loadoutOptions || []).flatMap(lo => (lo.options || []).flatMap(o => o.loads || [])))];
+      if (_ll.length) tags.push(`<span class="ship-tag ship-tag-launch">${_ll.some(l => /drop|lander|pod/i.test(l.name || '')) ? 'Drop' : 'Launch'}</span>`);
       return `<div class="list-row" data-gid="${g.id}" onclick="App.addShip('${g.id}','${g.category}')">
         ${art ? `<div class="ship-thumb ship-thumb-lg${modCls}"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
             <span class="list-row-title">${esc(ship.name)} ${tags.join('')}</span>
-            <span class="list-row-pts">${cost}<span class="pts-unit">pts</span></span>
+            <span class="list-row-pts">${gMin > 1 ? cost * gMin : cost}<span class="pts-unit">pts</span></span>
           </div>
-          <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)}, Group ${gMin}${gMax > gMin ? '–' + gMax : ''}</div>
+          <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)}, Group ${gMin}${gMax > gMin ? '–' + gMax : ''}${gMin > 1 ? ` · ${gMin}× ${cost}` : ''}</div>
         </div>
       </div>`;
     }).join('');

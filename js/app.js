@@ -1531,7 +1531,9 @@ const App = (() => {
       const s = g.ships[0];
       const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
       if (db && featureRequired(db) && g.ships.some(x => !x.feature)) {
-        warnings.push({ type: 'error', msg: `${db.name}: choose a Deployable Feature` });
+        // Soft nudge, not a hard error — a feature carrier can pick/swap its
+        // Deployable Feature right before the game, so an empty slot is legal.
+        warnings.push({ type: 'warn', msg: `${db.name}: choose a Deployable Feature` });
       }
     });
 
@@ -3211,6 +3213,10 @@ const App = (() => {
     if (isFamous) selectBadges += '<span class="ship-badge ship-badge-admiral">Admiral</span>';
     else if (data.isUnique) selectBadges += '<span class="ship-badge ship-badge-unique">Unique</span>';
     else if (data.isRare) selectBadges += '<span class="ship-badge ship-badge-rare">Rare</span>';
+    // Carrier tag (clearer than the old star): "Drop" if it lands Battalions,
+    // else "Launch" for fighters/bombers/mines/torpedoes.
+    const _launchLoads = [...(data.loads || []), ...((data.loadoutOptions || []).flatMap(lo => (lo.options || []).flatMap(o => o.loads || [])))];
+    if (_launchLoads.length) selectBadges += `<span class="ship-badge ship-badge-launch">${_launchLoads.some(l => /drop|lander|pod/i.test(l.name || '')) ? 'Drop' : 'Launch'}</span>`;
 
     // Compact weapon summary for ship select cards
     const wpns = data.weapons || [];
@@ -3254,7 +3260,7 @@ const App = (() => {
           <div class="ship-card-name">${esc(data.name)}${selectBadges ? ` ${selectBadges}` : ''}</div>
           <div class="ship-card-type">${typeLine}</div>
         </div>
-        <div class="ship-card-cost">${data.points || 0}<span style="font-size:var(--text-sm);font-weight:var(--weight-regular)"> pts</span></div>
+        <div class="ship-card-cost">${(data.groupMin > 1 && !isFamous) ? (data.points || 0) * data.groupMin : (data.points || 0)}<span style="font-size:var(--text-sm);font-weight:var(--weight-regular)"> pts</span>${(data.groupMin > 1 && !isFamous) ? `<span class="ship-card-cost-each">${data.groupMin}× ${data.points}</span>` : ''}</div>
       </div>
       ${renderStatGrid(data)}
       ${weaponSummary}
@@ -3267,7 +3273,7 @@ const App = (() => {
         return `<span class="rule-chip">${esc(r)}</span>`;
       }).join('')}${specialRules.length > 4 ? `<span class="rule-chip" style="background:rgba(255,255,255,0.06);color:var(--ink-faint)">+${specialRules.length - 4}</span>` : ''}</div>` : ''}
       <div class="flex items-center justify-between" style="margin-top:auto">
-        <span class="text-caption">${data.g ? `Group: ${data.g}` : ''}${launchIndicator ? (data.g ? ', ' : '') + launchIndicator : ''}</span>
+        <span class="text-caption">${data.g ? `Group: ${data.g}` : ''}</span>
         <div class="flex gap-xs">
           ${addBtn}
         </div>
@@ -3824,7 +3830,11 @@ const App = (() => {
     if (!a) return;
     a.assignedGroupId = groupId || null;
     saveFleets();
-    renderAdmiralSlot();
+    // Re-render the whole overview (not just the admiral slot) so the validation
+    // marks recheck immediately — assigning to a Capital ship clears the
+    // "not assigned to a Capital ship" warning without needing another action.
+    renderOverviewPanel();
+    updatePoints();
   }
 
   // Ship-assignment selector for Generic/Faction admirals (Famous fly their own
