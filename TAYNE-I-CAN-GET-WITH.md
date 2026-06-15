@@ -7,6 +7,20 @@ Format: **Question** → *my guess* → why / how to change.
 
 ---
 
+## 0. Namesake lore expansion + links — DONE (skim for taste/accuracy)
+**What I did:** added 1-3 factual sentences to all 83 real-people / real-city
+namesakes and linked the first mention (cities -> official tourism board or city
+gov; people/ancient/regions -> Wikipedia). Web-researched + URL-verified by a
+9-agent workflow; I spot-checked ~6 tourism/gov URLs (all official) and 5 lore
+blurbs (all factual, no em-dashes). Scourge (myth) + Shaltari (minerals) left
+alone as not people/places.
+**Worth your eye:** it's machine-researched, so skim a handful for voice/accuracy.
+Reversible as one commit. Agrippa's namesake didn't contain his name, so I
+prepended "[Agrippa](wiki) won the Battle of Actium...". Mombasa/New Cairo/Havana/
+Lima used Wikipedia (only national, not city-specific, tourism boards exist - tell
+me if you want those pointed at the national tourism site instead). Oslo I
+upgraded to visitoslo.com.
+
 ## 1. Em-dash sweep of lore text — DONE (per "make guesses, proceed")
 **What I did:** replaced `—` with a comma in all 41 `lore`/`namesake` fields
 across the 6 faction files (appositive/parenthetical em-dashes, which read
