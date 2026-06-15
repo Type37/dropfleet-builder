@@ -589,7 +589,9 @@ const App = (() => {
         if (param) {
           const shared = decodeFleet(param);
           if (shared) {
-            showSharedFleet(shared);
+            // Load the fleet's faction first, else a cold-opened share link renders
+            // raw ship keys instead of names/stats/art (shipDB isn't populated yet).
+            ensureFactionLoaded(shared.faction).then(() => showSharedFleet(shared));
             return;
           } else {
             showToast('Invalid share link');
