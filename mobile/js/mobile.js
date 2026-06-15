@@ -862,13 +862,13 @@
         const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
         const special = (db && db.stats && db.stats.special) || '';
         let m;
-        const pRe = /Porter\s*([SL])-(\d+)/gi;
+        const pRe = /Porter\s*([SLF])-(\d+)/gi;
         while ((m = pRe.exec(special))) { const L = m[1].toUpperCase(); porterCap[L] = (porterCap[L] || 0) + parseInt(m[2], 10); }
-        const dRe = /Payload\s*([SL])-(\d+)/gi;
+        const dRe = /Payload\s*([SLF])-(\d+)/gi;
         while ((m = dRe.exec(special))) { const L = m[1].toUpperCase(); payloadDemand[L] = (payloadDemand[L] || 0) + parseInt(m[2], 10); }
       });
     });
-    ['S', 'L'].forEach(letter => {
+    ['S', 'L', 'F'].forEach(letter => {
       const demand = payloadDemand[letter] || 0;
       if (demand > (porterCap[letter] || 0)) {
         w.push({ t: 'warn', m: `Payload ${letter}: ${demand} assigned, fleet Porter ${letter} capacity ${porterCap[letter] || 0}` });
