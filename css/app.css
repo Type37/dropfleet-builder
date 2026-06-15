@@ -244,12 +244,17 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-lore);
   font-size: var(--text-sm);
   line-height: 1.7;
-  color: var(--ink-soft);
+  color: var(--ink-muted);   /* grayed to match the namesake (AA: 5:1+) */
 }
 /* Restore paragraph spacing (the global reset zeroes <p> margins) so multi-
    paragraph lore in the detail modal / shared view reads as separate paragraphs. */
 .text-rules p { margin: 0 0 0.7em; }
 .text-rules p:last-child { margin-bottom: 0; }
+
+/* Links inside lore / namesake (Wikipedia, tourism boards, etc.). Underlined so
+   they read as links against the grayed lore text; navy, gold on hover. */
+.lore-link { color: var(--navy); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+.lore-link:hover { color: var(--gold-dark); }
 
 /* ── 4. Art Deco Decorative Elements ─────────────────────────── */
 .deco-rule {
@@ -2522,7 +2527,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-lore);
   font-size: var(--text-sm);
   line-height: 1.7;
-  color: var(--ink-soft);
+  color: var(--ink-muted);   /* grayed to match the namesake (AA: 5:1+) */
   background: var(--paper-alt);
   border-top: 1px solid var(--stroke-light);
 }

@@ -3045,7 +3045,7 @@ const App = (() => {
       const loreId = `lore-${ship.id}`;
       const openAttr = settings.autoExpandLore ? ' open' : '';
       const namesakeHtml = dbShip.namesake
-        ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${esc(dbShip.namesake)}</div>`
+        ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(dbShip.namesake)}</div>`
         : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
@@ -3057,7 +3057,7 @@ const App = (() => {
       const openAttr = settings.autoExpandLore ? ' open' : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
-        <div class="ship-lore-text"><div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${esc(dbShip.namesake)}</div></div>
+        <div class="ship-lore-text"><div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(dbShip.namesake)}</div></div>
       </details>`;
     }
 
@@ -5823,11 +5823,26 @@ const App = (() => {
     return `<span class="rule-chip rule-chip-sm has-tooltip" data-rule-desc="${esc(cp.description)}" data-rule-page="${esc(cp.page || '')}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">Close Protection (re-roll ${esc(String(rerolls))})</span>`;
   }
 
+  // Lore/namesake text may carry markdown links: [label](https://...). Convert
+  // those to safe new-tab links; everything else is escaped (XSS-safe — only
+  // http(s) URLs are turned into links, all other text is escaped).
+  function loreLinks(text) {
+    if (!text) return '';
+    const re = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
+    let out = '', last = 0, m;
+    while ((m = re.exec(text)) !== null) {
+      out += esc(text.slice(last, m.index));
+      out += `<a href="${esc(m[2])}" target="_blank" rel="noopener" class="lore-link">${esc(m[1])}</a>`;
+      last = m.index + m[0].length;
+    }
+    return out + esc(text.slice(last));
+  }
+
   function formatLore(loreText, famousShipsPrefix, famousShips) {
     if (!loreText && (!famousShips || famousShips.length === 0)) return '';
     let html = '';
     if (loreText) {
-      html += loreText.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('');
+      html += loreText.split(/\n\n+/).map(p => `<p>${loreLinks(p.trim())}</p>`).join('');
     }
     if (famousShips && famousShips.length > 0) {
       const shipList = famousShips.map(s => `<li>${esc(s)}</li>`).join('');
@@ -5962,7 +5977,7 @@ const App = (() => {
     // Lore
     let loreHtml = '';
     const detailNamesake = dbShip.namesake
-      ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${esc(dbShip.namesake)}</div>`
+      ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(dbShip.namesake)}</div>`
       : '';
     if (dbShip.lore || dbShip.namesake) {
       loreHtml = `<div class="detail-lore">

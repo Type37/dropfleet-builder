@@ -1860,18 +1860,32 @@
     bindHeroSwipe();
   }
 
+  // Lore/namesake text may carry markdown links: [label](https://...). Convert to
+  // safe new-tab links; everything else escaped (only http(s) URLs become links).
+  function loreLinks(text) {
+    if (!text) return '';
+    const re = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
+    let out = '', last = 0, m;
+    while ((m = re.exec(text)) !== null) {
+      out += esc(text.slice(last, m.index));
+      out += `<a href="${esc(m[2])}" target="_blank" rel="noopener" class="lore-link">${esc(m[1])}</a>`;
+      last = m.index + m[0].length;
+    }
+    return out + esc(text.slice(last));
+  }
+
   // Flavour lore — kept visually + structurally separate from rules (Cardo serif).
   function renderLore(ship) {
     const lore = (ship.lore || '').trim();
     const namesake = (ship.namesake || '').trim();
     const famous = ship.famousShips || [];
     if (!lore && !namesake && !famous.length) return '';
-    const paras = lore ? lore.split(/\n\n+/).map(p => `<p>${esc(p.trim())}</p>`).join('') : '';
+    const paras = lore ? lore.split(/\n\n+/).map(p => `<p>${loreLinks(p.trim())}</p>`).join('') : '';
     // Order matches desktop: lore → famous ships (bold header, italic bullets) → Namesake.
     const famousList = famous.length
       ? `<div class="lore-famous"><span class="lore-famous-label">${esc(ship.famousShipsPrefix || 'Known ships of the class:')}</span><ul>${famous.map(n => `<li>${esc(n)}</li>`).join('')}</ul></div>`
       : '';
-    const namesakeLine = namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${esc(namesake)}</div>` : '';
+    const namesakeLine = namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(namesake)}</div>` : '';
     return `<div class="lore-card">
       <div class="lore-label">Lore</div>
       <div class="lore-body">${paras}</div>

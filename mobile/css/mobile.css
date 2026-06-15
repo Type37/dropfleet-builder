@@ -2051,10 +2051,13 @@ body.sheet-open .sheet-scrim {
   font-family: var(--font-lore);
   font-size: var(--text-body1);
   line-height: 1.7;
-  color: var(--fg2);
+  color: var(--fg3);   /* grayed to match the namesake (AA: 5:1+) */
 }
 .lore-body p { margin: 0 0 var(--sp-s); }
 .lore-body p:last-child { margin-bottom: 0; }
+/* Links inside lore / namesake (Wikipedia, tourism boards, etc.). */
+.lore-link { color: var(--navy); text-decoration: underline; text-underline-offset: 2px; }
+.lore-link:active { color: var(--gold-dim); }
 .lore-famous {
   margin-top: var(--sp-m);
   font-family: var(--font-lore);
