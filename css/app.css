@@ -4862,6 +4862,28 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: none;
   letter-spacing: 0.04em;
 }
+/* Editable points limit — looks like text until focused, so "/ 1500 pts" can be
+   overridden to any custom cap (e.g. a 1500-pt game in the Clash bracket). */
+.overview-pts-cap-input {
+  width: 4.5ch;
+  font: inherit;
+  color: var(--navy);
+  font-weight: var(--weight-semibold);
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed var(--stroke);
+  padding: 0 1px;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+.overview-pts-cap-input::-webkit-outer-spin-button,
+.overview-pts-cap-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.overview-pts-cap-input:focus { outline: none; border-bottom-color: var(--navy); background: var(--paper-alt); }
+.overview-pts-reset {
+  background: none; border: none; cursor: pointer; color: var(--ink-faint);
+  font-size: var(--text-sm); padding: 0 2px; line-height: 1;
+}
+.overview-pts-reset:hover { color: var(--navy); }
 .overview-section {
   margin-bottom: var(--sp-xl);
 }

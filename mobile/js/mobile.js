@@ -797,7 +797,8 @@
     const pts = fleetPoints(fleet);
     // Only over-budget is flagged; the live points total already shows progress
     // toward the minimum, so a "below minimum" warning is just constant noise.
-    if (pts > size.max && size.max !== 99999) w.push({ t: 'error', m: `Over budget: ${pts}/${size.max} pts` });
+    const limit = fleet.pointsLimit || size.max;   // custom cap (shared w/ desktop) overrides bracket
+    if (pts > limit && limit !== 99999) w.push({ t: 'error', m: `Over budget: ${pts}/${limit} pts` });
 
     const gc = countableGroups(fleet).length;
     if (gc > size.groups) w.push({ t: 'error', m: `Too many groups: ${gc}/${size.groups}` });
@@ -2712,8 +2713,10 @@
 
   /* ── Share (URL encode, desktop-compatible) ────────────── */
   function encodeFleet(fleet) {
+    const _sz = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
     const mini = {
       n: fleet.name, f: fleet.faction, s: fleet.gameSize,
+      pl: (fleet.pointsLimit && fleet.pointsLimit !== _sz.max) ? fleet.pointsLimit : undefined,
       g: (fleet.battleGroups || []).map(g => ({
         n: g.name,
         sh: g.ships.map(s => {
@@ -2752,7 +2755,7 @@
       const fleet = {
         id: uuid(), name: mini.n || 'Shared Fleet', description: mini.d || '',
         faction: mini.f, gameSize: mini.s || 'clash',
-        pointsLimit: size.max, maxGroups: size.groups,
+        pointsLimit: mini.pl != null ? mini.pl : size.max, maxGroups: size.groups,
         admirals: [], spaceStation: null,
         battleGroups: (mini.g || []).map(g => ({
           id: uuid(), name: g.n || 'Group',
@@ -3034,6 +3037,12 @@
     document.getElementById('new-fleet-desc').value = fleet ? (fleet.description || '') : '';
     fp.value = fleet ? fleet.faction : (ordered.includes('ucm') ? 'ucm' : ordered[0]);
     selectFleetSize(fleet ? fleet.gameSize : 'skirmish');
+    // Points limit: show the custom value if one is set, else blank (= bracket max).
+    const pl = document.getElementById('new-fleet-points');
+    if (pl) {
+      const sz = GAME_SIZES[fleet ? fleet.gameSize : 'skirmish'] || GAME_SIZES.clash;
+      pl.value = (fleet && fleet.pointsLimit && fleet.pointsLimit !== sz.max) ? fleet.pointsLimit : '';
+    }
     updateFactionDesc();
   }
 
@@ -3086,13 +3095,16 @@
     const faction = document.getElementById('new-fleet-faction').value;
     const gameSize = document.getElementById('new-fleet-size').value;
     const size = GAME_SIZES[gameSize] || GAME_SIZES.clash;
+    // Custom points limit: blank/invalid → bracket max (shared field with desktop).
+    const plRaw = parseInt(document.getElementById('new-fleet-points').value, 10);
+    const pointsLimit = (isNaN(plRaw) || plRaw <= 0) ? size.max : plRaw;
     await ensureFaction(faction);   // make sure the chosen faction's data is loaded
     if (editingFleet) {
       editingFleet.name = name;
       editingFleet.description = desc;
       if (!document.getElementById('new-fleet-faction').disabled) editingFleet.faction = faction;
       editingFleet.gameSize = gameSize;
-      editingFleet.pointsLimit = size.max;
+      editingFleet.pointsLimit = pointsLimit;
       editingFleet.maxGroups = size.groups;
       editingFleet.updatedAt = Date.now();
       saveFleets();
@@ -3104,7 +3116,7 @@
     }
     const fleet = {
       id: uuid(), name, description: desc, faction, gameSize,
-      pointsLimit: size.max, maxGroups: size.groups,
+      pointsLimit, maxGroups: size.groups,
       admirals: [], battleGroups: [], spaceStation: null,
       createdAt: Date.now(), updatedAt: Date.now()
     };

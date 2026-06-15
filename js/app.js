@@ -630,6 +630,7 @@ const App = (() => {
       n: fleet.name,
       f: fleet.faction,
       s: fleet.gameSize,
+      pl: isCustomMax(fleet) ? fleet.pointsLimit : undefined,
       g: fleet.battleGroups.map(g => ({
         n: g.name,
         sh: g.ships.map(s => {
@@ -680,7 +681,7 @@ const App = (() => {
         description: mini.d || '',
         faction: mini.f,
         gameSize: mini.s || 'clash',
-        pointsLimit: (GAME_SIZES[mini.s] || GAME_SIZES.clash).max,
+        pointsLimit: mini.pl != null ? mini.pl : (GAME_SIZES[mini.s] || GAME_SIZES.clash).max,
         maxGroups: (GAME_SIZES[mini.s] || GAME_SIZES.clash).groups,
         admirals: [],
         battleGroups: (mini.g || []).map(g => ({
@@ -1023,7 +1024,7 @@ const App = (() => {
       const warnings = validateFleet(f);
       const errorCount = warnings.filter(w => w.type === 'error').length;
       const warnCount = warnings.filter(w => w.type === 'warn').length;
-      const limit = sizeInfo.max;
+      const limit = effMax(f);
       const pctFill = limit === 99999 ? 0 : Math.min((pts / limit) * 100, 100);
       const barClass = pts > limit ? 'fleet-card-bar-over' : pctFill > 85 ? 'fleet-card-bar-near' : '';
       const validationBadge = '';  // issue counts are not shown on fleet cards
@@ -1335,7 +1336,7 @@ const App = (() => {
     if (!f) return;
     const pts = calcFleetPoints(f);
     const sizeInfo = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
-    const limit = sizeInfo.max;
+    const limit = effMax(f);
     const pct = Math.min((pts / limit) * 100, 100);
 
     document.getElementById('points-current').textContent = pts;
@@ -1390,6 +1391,28 @@ const App = (() => {
     return (fleet.battleGroups || []).filter(g => !isPayloadGroup(fleet, g));
   }
 
+  // Effective points cap for a fleet. `pointsLimit` (shared with the mobile app)
+  // holds the live cap; it defaults to the game size's max but can be overridden
+  // to any custom value (e.g. a 1500-pt game in the Clash bracket). 99999 = open.
+  function bracketMax(fleet) {
+    return (GAME_SIZES[fleet && fleet.gameSize] || GAME_SIZES.clash).max;
+  }
+  function effMax(fleet) {
+    return (fleet && fleet.pointsLimit) ? fleet.pointsLimit : bracketMax(fleet);
+  }
+  function isCustomMax(fleet) {
+    return !!(fleet && fleet.pointsLimit && fleet.pointsLimit !== bracketMax(fleet));
+  }
+
+  // Set/clear the fleet's points limit (empty/invalid → revert to bracket default).
+  function setCustomMax(val) {
+    if (!currentFleet) return;
+    const n = parseInt(val, 10);
+    currentFleet.pointsLimit = (val === '' || val == null || isNaN(n) || n <= 0) ? bracketMax(currentFleet) : n;
+    saveFleets();
+    scheduleRender(renderGroupsNav, renderActiveGroup, updatePoints);
+  }
+
   function validateFleet(fleet) {
     if (!fleet) return [];
     const warnings = [];
@@ -1399,8 +1422,9 @@ const App = (() => {
     // 1. Points range. Only the over-budget case is flagged: the live points
     // total (e.g. "715 / 2001") already shows progress toward the minimum, so a
     // separate "below minimum" warning is just noise the whole time you build.
-    if (pts > sizeInfo.max && sizeInfo.max !== 99999) {
-      warnings.push({ type: 'error', msg: `Over budget: ${pts}/${sizeInfo.max} pts` });
+    const maxPts = effMax(fleet);
+    if (pts > maxPts && maxPts !== 99999) {
+      warnings.push({ type: 'error', msg: `Over budget: ${pts}/${maxPts} pts` });
     }
 
     // 2. Group count
@@ -2037,14 +2061,14 @@ const App = (() => {
           <div class="overview-header-left">
             ${fIcon ? `<img src="${fIcon}" alt="" class="overview-faction-icon">` : ''}
             <div>
-              <div class="overview-pts-line"><span class="overview-pts-big">${pts}</span><span class="overview-pts-cap">${sizeInfo.max !== 99999 ? '/ ' + sizeInfo.max : ''} pts</span></div>
+              <div class="overview-pts-line"><span class="overview-pts-big">${pts}</span><span class="overview-pts-cap">/ <input class="overview-pts-cap-input" type="number" min="0" step="50" value="${effMax(f) !== 99999 ? effMax(f) : ''}" placeholder="∞" title="Set a custom points limit" aria-label="Points limit" onclick="event.stopPropagation()" onchange="App.setCustomMax(this.value)"> pts${isCustomMax(f) ? ` <button class="overview-pts-reset" title="Reset to ${esc(sizeInfo.label)} default (${sizeInfo.max})" onclick="App.setCustomMax('')">&#8635;</button>` : ''}</span></div>
             </div>
           </div>
           <div class="overview-header-right">
             ${warnings.length === 0
               ? `<span class="overview-legal-check" title="${esc(warnTitle)}"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M6.3 10.3 8.8 12.8 13.7 7.2"/></svg></span>`
               : `<span class="overview-legal-check is-illegal" title="${esc(warnTitle)}"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><line x1="10" y1="5.6" x2="10" y2="10.6"/><circle cx="10" cy="13.9" r="0.95" fill="currentColor" stroke="none"/></svg></span>`}
-            ${sizeInfo.max !== 99999 ? (pts > sizeInfo.max ? `<span class="overview-legal-pill is-illegal">${pts - sizeInfo.max} pts over</span>` : `<span class="overview-legal-pill is-ok">${sizeInfo.max - pts} pts left</span>`) : ''}
+            ${effMax(f) !== 99999 ? (pts > effMax(f) ? `<span class="overview-legal-pill is-illegal">${pts - effMax(f)} pts over</span>` : `<span class="overview-legal-pill is-ok">${effMax(f) - pts} pts left</span>`) : ''}
           </div>
         </div>
         <div class="overview-desc" onclick="this.querySelector('.overview-desc-input')?.focus()">
@@ -2202,7 +2226,7 @@ const App = (() => {
     // Fleet budget context
     const fleetPts = calcFleetPoints(currentFleet);
     const sizeInfo = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
-    const remaining = sizeInfo.max - fleetPts;
+    const remaining = effMax(currentFleet) - fleetPts;
     const budgetClass = remaining < 0 ? 'budget-over' : remaining < 50 ? 'budget-tight' : '';
 
     // Quantity stepper (shown in the header's upper-right, under Remove) — only
@@ -4330,7 +4354,7 @@ const App = (() => {
           </div>
           <div class="print-header-points">
             <div class="print-points-big">${pts}</div>
-            <div class="print-points-cap">${sizeInfo.max !== 99999 ? '/ ' + sizeInfo.max : ''} pts</div>
+            <div class="print-points-cap">${effMax(f) !== 99999 ? '/ ' + effMax(f) : ''} pts</div>
           </div>
         </div>
         <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''}, ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? `, ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? `, ${esc(f.spaceStation.name)}${(f.spaceStation.systems && f.spaceStation.systems.length) ? ' (' + f.spaceStation.systems.map(esc).join(', ') + ')' : ''}` : ''}</div>
@@ -4693,7 +4717,7 @@ const App = (() => {
         </div>` : ''}
         <div class="print-totals-row print-totals-total">
           <span class="print-totals-label">Total</span>
-          <span class="print-totals-value">${pts}${sizeInfo.max !== 99999 ? ' / ' + sizeInfo.max : ''} pts</span>
+          <span class="print-totals-value">${pts}${effMax(f) !== 99999 ? ' / ' + effMax(f) : ''} pts</span>
         </div>
       </div>
       <div class="print-totals-breakdown">${groupPtsList}</div>
@@ -4755,7 +4779,7 @@ const App = (() => {
           </div>
         </div>
         <div class="shared-header-right">
-          <div class="shared-fleet-points">${pts}<span class="shared-fleet-pts-label"> / ${sizeInfo.max} pts</span></div>
+          <div class="shared-fleet-points">${pts}<span class="shared-fleet-pts-label"> / ${effMax(fleet)} pts</span></div>
           <div class="shared-fleet-actions">
             <button class="btn btn-primary" onclick="App.importSharedFleet()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg> Import to My Fleets</button>
             <button class="btn btn-outline" onclick="location.hash='fleets'">My Fleets</button>
@@ -5097,7 +5121,7 @@ const App = (() => {
     });
 
     text += '\n' + '═'.repeat(40);
-    text += `\nTotal: ${pts}/${sizeInfo.max !== 99999 ? sizeInfo.max : '∞'} pts`;
+    text += `\nTotal: ${pts}/${effMax(fleet) !== 99999 ? effMax(fleet) : '∞'} pts`;
     return text;
   }
 
@@ -5982,6 +6006,6 @@ const App = (() => {
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText,
-    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, openShipDetail, cycleShipArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
+    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, cycleShipArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
   };
 })();
