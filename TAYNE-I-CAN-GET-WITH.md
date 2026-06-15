@@ -7,6 +7,18 @@ Format: **Question** → *my guess* → why / how to change.
 
 ---
 
+## !!! "Can't add New York Battleships" — I could NOT reproduce it
+**Status:** investigated hard, works for me on desktop. Verified: New York shows in
+the picker with a working "+ Add"; adding it creates the group; its detail and the
+fleet overview render; no console errors; its data is complete (gun comes from the
+Laser Refit, with Medium Torpedo + Fighters & Bombers loads, which is correct per
+the rulebook/BSData, so empty BASE weapons is normal for it).
+**Most likely cause:** a stale build cached on your device after ~20 rapid deploys
+tonight. Try a hard refresh (Ctrl/Cmd+Shift+R) or clear site data; on mobile,
+close and reopen the tab.
+**If it persists, tell me:** desktop or mobile? what happens exactly (button does
+nothing / error / blank screen)? That'll let me repro and fix it.
+
 ## 0. Namesake lore expansion + links — DONE (skim for taste/accuracy)
 **What I did:** added 1-3 factual sentences to all 83 real-people / real-city
 namesakes and linked the first mention (cities -> official tourism board or city

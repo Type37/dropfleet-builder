@@ -138,7 +138,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "C",
-    "category": "colossal"
+    "category": "colossal",
+    "namesake": "Nosferatu, the archaic name for a vampire, made famous by the 1922 silent film of the same name."
    },
    "abilityPicks": 2
   },
@@ -213,7 +214,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "",
-    "category": "heavy"
+    "category": "heavy",
+    "namesake": "From the Greek 'daimon', a spirit standing between gods and mortals; in later lore, a demon outright."
    },
    "abilityPicks": 2
   },
@@ -306,7 +308,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "category": "heavy"
+    "category": "heavy",
+    "namesake": "A [shadow](https://en.wikipedia.org/wiki/Shadow) is the dark region cast on a surface when an opaque object blocks a source of light. The word carries connotations of concealment and stealth."
    },
    "abilityPicks": 1
   },
@@ -387,7 +390,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "",
-    "category": "medium"
+    "category": "medium",
+    "namesake": "A beast of lightning in Japanese myth, a creature of fire and storm that leaps with the thunderbolt."
    },
    "abilityPicks": 2
   }
@@ -1451,7 +1455,8 @@
      "Thunderhead",
      "Lasher",
      "Irwin’s Nemesis"
-    ]
+    ],
+    "namesake": "A [shadow](https://en.wikipedia.org/wiki/Shadow) is the dark region cast on a surface when an opaque object blocks a source of light. The word carries connotations of concealment and stealth."
    }
   },
   {
@@ -2449,7 +2454,8 @@
     "isRare": false,
     "isUnique": true,
     "tonnage": "L",
-    "lore": "Thankfully, this vessel’s main weapon is unique to it. The Anharmonic Resonator is marked by two distinctive emanation banks along the ship’s midsection and is one of the most despised weapons any captain might face, hence the moniker given to whatever captain this ship has: The Hated. This individual throws its ship into combat with little regard for personal safely, unfortunate, since the weapon’s effects are limited to close victims. The Resonator throws pulsing waves of penetrating subatomic particles and exotic radiations into the target, causing a range of unpredictable internal effects, crew deaths, widespread vomiting, and systems failures. Given the necessity of being near the target, Little Chaos is equipped with one of the best stealth suites yet observed on any Scourge vessel. It is speculated that this ship was exceedingly difficult for the enemy to build or is challenging to maintain since they have produced no other known examples despite its horrible effectiveness. There are even suggestions that its entire crew might die of radiation poisoning after an engagement, although the captain’s consistent behaviour suggests that it, at least, fights from a heavily shielded bridge."
+    "lore": "Thankfully, this vessel’s main weapon is unique to it. The Anharmonic Resonator is marked by two distinctive emanation banks along the ship’s midsection and is one of the most despised weapons any captain might face, hence the moniker given to whatever captain this ship has: The Hated. This individual throws its ship into combat with little regard for personal safely, unfortunate, since the weapon’s effects are limited to close victims. The Resonator throws pulsing waves of penetrating subatomic particles and exotic radiations into the target, causing a range of unpredictable internal effects, crew deaths, widespread vomiting, and systems failures. Given the necessity of being near the target, Little Chaos is equipped with one of the best stealth suites yet observed on any Scourge vessel. It is speculated that this ship was exceedingly difficult for the enemy to build or is challenging to maintain since they have produced no other known examples despite its horrible effectiveness. There are even suggestions that its entire crew might die of radiation poisoning after an engagement, although the captain’s consistent behaviour suggests that it, at least, fights from a heavily shielded bridge.",
+    "namesake": "[Chaos](https://en.wikipedia.org/wiki/Chaos_(cosmogony)) was the primordial void in Greek cosmogony, the formless gap that existed before all else. In Hesiod's Theogony it is the first being to come into existence, from which Erebus and Nyx were born."
    }
   },
   {
@@ -2724,7 +2730,8 @@
      "Vampiric",
      "Darkshield",
      "Swift Death"
-    ]
+    ],
+    "namesake": "A [parasite](https://en.wikipedia.org/wiki/Parasitism) is an organism that lives on or inside a host of another species, deriving nourishment at the host's expense and causing it harm. Blood-feeding leeches are a classic example."
    }
   },
   {
@@ -2840,7 +2847,8 @@
     "groupMax": 3,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "[Apsu](https://en.wikipedia.org/wiki/Abzu), also spelled Abzu, was the Mesopotamian personification of the primordial freshwater ocean believed to lie beneath the earth. In the Babylonian creation epic Enuma Elish he is the consort of the saltwater goddess Tiamat and a source of all creation."
    }
   },
   {
@@ -4253,7 +4261,8 @@
      "type": "E",
      "special": "Close Action, Scald-1"
     }
-   ]
+   ],
+   "namesake": "An ephyra is the free-swimming larval stage of a scyphozoan jellyfish, which later matures into the bell-shaped adult medusa. The term is borrowed from [Ephyra](https://en.wikipedia.org/wiki/Ephyra_(mythology)), an Oceanid water-nymph of Greek myth, a daughter of the Titans Oceanus and Tethys."
   },
   {
    "id": "fec6-51a8-6e61-26f1",
@@ -4280,7 +4289,8 @@
      "type": "E",
      "special": "Bloom-1, Burnthrough-1, Flash-1"
     }
-   ]
+   ],
+   "namesake": "A [nematocyst](https://en.wikipedia.org/wiki/Cnidocyte) is the venomous stinging organelle housed within the cnidocyte cells of jellyfish, sea anemones, and other cnidarians. It fires a coiled, barbed thread to inject toxin into prey, in one of the fastest mechanical processes in nature."
   }
  ],
  "deployableFeatures": [],

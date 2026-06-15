@@ -134,7 +134,8 @@
       }
      }
     },
-    "rulesText": "This Ship must take a total of one option from the Dreadnought Systems Secondary Hardpoint category. This Ship must take a total of two options from the Dreadnought Systems Tertiary Hardpoint category. This Ship may take one option from the Dreadnought Systems Launch Hardpoint category."
+    "rulesText": "This Ship must take a total of one option from the Dreadnought Systems Secondary Hardpoint category. This Ship must take a total of two options from the Dreadnought Systems Tertiary Hardpoint category. This Ship may take one option from the Dreadnought Systems Launch Hardpoint category.",
+    "namesake": "In astronomy the [zenith](https://en.wikipedia.org/wiki/Zenith) is the point on the celestial sphere directly overhead an observer, opposite the nadir. The word is used figuratively for the highest point or peak of anything."
    },
    "abilityPicks": 2
   },
@@ -206,7 +207,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "",
-    "category": "heavy"
+    "category": "heavy",
+    "namesake": "A [bastion](https://en.wikipedia.org/wiki/Bastion) is an angular structure projecting outward from the wall of a fortification, allowing defenders to cover the adjacent walls with crossfire. The term is also used broadly for any stronghold or institution that protects something."
    },
    "abilityPicks": 1
   },
@@ -261,7 +263,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "",
-    "category": "heavy"
+    "category": "heavy",
+    "namesake": "A scion is a descendant or heir, especially of a wealthy or aristocratic family. The word originally meant a young shoot or twig of a plant used in grafting."
    },
    "abilityPicks": 1
   },
@@ -327,7 +330,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "M",
-    "category": "medium"
+    "category": "medium",
+    "namesake": "A catastrophe is a sudden and widespread disaster causing great loss or destruction. The word comes from the Greek katastrophe, meaning an overturning or sudden end."
    },
    "abilityPicks": 1
   }
@@ -415,7 +419,8 @@
        "max": 1
       }
      }
-    }
+    },
+    "namesake": "In astronomy the [zenith](https://en.wikipedia.org/wiki/Zenith) is the point on the celestial sphere directly overhead an observer, opposite the nadir. The word is used figuratively for the highest point or peak of anything."
    }
   },
   {
@@ -500,7 +505,8 @@
        "max": 1
       }
      }
-    }
+    },
+    "namesake": "The [zodiac](https://en.wikipedia.org/wiki/Zodiac) is the belt of constellations along the ecliptic, the apparent path of the Sun across the sky over a year. Babylonian astronomers divided it into twelve equal signs in the 1st millennium BC."
    }
   },
   {
@@ -735,7 +741,8 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "Much like the Blackbird is an up-gunned version of the Binary, the Bishop super battleship shares the primary armaments of the Brutal class. It sacrifices some thrust to add a Thermitor and boarding pods while retaining the option to add Genitor Torpedoes and a Supercell. Fully equipped and upgraded, this is a terrifying opponent at close quarters.",
-    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:"
+    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:",
+    "namesake": "A [bishop](https://en.wikipedia.org/wiki/Bishop) is a senior member of the Christian clergy, ranking above a priest and usually overseeing a diocese. The word derives from the Greek episkopos, meaning overseer."
    }
   },
   {
@@ -839,7 +846,8 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "The Blackbird is one of the new enemy's most awesome, maxed-out vessels. The extreme and frankly insulting effects of the Grand Bisector are already, regrettably, well known, but once augmented with multiple other weapons this vessel becomes a top-tier threat. Its Scythes, Thermator and boarding pods are bad enough on their own; it can be further upgraded with Genitor Torpedoes.",
-    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:"
+    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:",
+    "namesake": "The [common blackbird](https://en.wikipedia.org/wiki/Common_blackbird) (Turdus merula) is a true thrush of Europe, western Asia, and North Africa. The male has glossy black plumage with a bright orange-yellow bill and eye ring."
    }
   },
   {
@@ -922,7 +930,8 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "The Bastion class battleship is built around the massive Gravitic Hyperlance. This weapon projects a thin tunnel of massively undulating gravity, pulling and shaking a cylinder of hull to pieces while arresting the target for further abuse, should it survive at all. A Thermitor battery augments this ship’s already awesome destructive power.",
-    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:"
+    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:",
+    "namesake": "A [bastion](https://en.wikipedia.org/wiki/Bastion) is an angular structure projecting outward from the wall of a fortification, allowing defenders to cover the adjacent walls with crossfire. The term is also used broadly for any stronghold or institution that protects something."
    }
   },
   {
@@ -1106,7 +1115,8 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "One of the first nightmarish Bioficer battleships encountered, the Binary is built around a colossal, spinal-mounted Grand Bisector. This weapon is already infamous for neatly slicing cruisers in half with a single, silent discharge. Like most Bioficer battleships, it can be upgraded with Genitor Torpedoes and can carry a single Supercell into battle.",
-    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:"
+    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:",
+    "namesake": "Binary means consisting of or relating to two parts or components. The term names the base-2 number system used by computers and, in astronomy, a binary system of two stars orbiting a common centre of mass."
    }
   },
   {
@@ -1158,7 +1168,8 @@
       "famousShips": "Styx",
       "lore": "Although all Bioficer sightings are rare, if increasing, certain ship classes have only been observed once. The sole record of the fearsome Styx class comes from the mangled tertiary flight recorder of the battleship UCMS Bellaque. She was lost with all hands in the Eden system, and only an atomic cloud and cored-out hull fragments remained – the work of the fearsome Decon Annihilator, the Styx’s colossal primary weapon.\n\nThe Styx seems to have similar capabilities to the Stature class, but utilises an enlarged, novel hull more closely related to Bioficer cruisers. Some believe this vessel was unique, casting further doubt on the old notion that the Bioficers lack individuality."
      }
-    ]
+    ],
+    "namesake": "[Stature](https://en.wikipedia.org/wiki/Stature) is a person's natural height when standing. By extension it means the level of respect or importance someone holds through their achievements."
    }
   },
   {
@@ -1207,7 +1218,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "H"
+    "tonnage": "H",
+    "namesake": "A [sanctum](https://en.wikipedia.org/wiki/Sanctum_sanctorum) is a sacred or holy place, especially the innermost shrine of a temple. The Latin sanctum sanctorum, or Holy of Holies, was the most sacred inner room of the Temple in Jerusalem."
    }
   },
   {
@@ -1250,7 +1262,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "H"
+    "tonnage": "H",
+    "namesake": "A scion is a descendant or heir, especially of a wealthy or aristocratic family. The word originally meant a young shoot or twig of a plant used in grafting."
    }
   },
   {
@@ -1304,7 +1317,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "A [carronade](https://en.wikipedia.org/wiki/Carronade) was a short, smoothbore cast-iron naval cannon first produced by the Carron Company in Scotland and used by the Royal Navy from the 1770s. Though short-ranged, it threw a heavy ship-wrecking shot and was devastating at close quarters."
    }
   },
   {
@@ -1358,7 +1372,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "A catastrophe is a sudden and widespread disaster causing great loss or destruction. The word comes from the Greek katastrophe, meaning an overturning or sudden end."
    }
   },
   {
@@ -1412,7 +1427,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "Cacophony is a harsh, discordant mixture of sounds. The word derives from the Greek kakos, meaning bad, and phone, meaning sound or voice."
    }
   },
   {
@@ -1466,7 +1482,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "A [cataphract](https://en.wikipedia.org/wiki/Cataphract) was a form of heavily armoured cavalry in which both rider and horse were almost completely covered in scale or mail armour. Originating in Persia, cataphracts were fielded as shock cavalry by the Parthian, Sassanid, late Roman, and Byzantine empires."
    }
   },
   {
@@ -1511,7 +1528,8 @@
     "groupMax": 2,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "To combine is to join or merge separate things into a single whole. As a noun, a combine is also an association of people or bodies formed to further their common interests."
    }
   },
   {
@@ -1591,7 +1609,8 @@
      }
     ],
     "lore": "",
-    "rulesText": "This ship may replace its Fighters & Bombers with Mines for +10 pts."
+    "rulesText": "This ship may replace its Fighters & Bombers with Mines for +10 pts.",
+    "namesake": "A cavern is a large [cave](https://en.wikipedia.org/wiki/Cave), a natural underground cavity in rock big enough for a person to enter. Caverns are typically formed by groundwater dissolving soluble rock such as limestone over long periods."
    }
   },
   {
@@ -1645,7 +1664,8 @@
     "groupMax": 2,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "Cosmic means relating to the cosmos, the universe regarded as an ordered whole. The word comes from the Greek kosmos, meaning order or world."
    }
   },
   {
@@ -1699,7 +1719,8 @@
     "groupMax": 2,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "A [comet](https://en.wikipedia.org/wiki/Comet) is an icy small body of the Solar System that warms and releases gas and dust as it nears the Sun, forming a glowing coma and often a long tail. Comets are primitive remnants left over from the formation of the Solar System."
    }
   },
   {
@@ -1750,7 +1771,8 @@
     "groupMax": 2,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "Choral means relating to or sung by a choir or chorus. The word derives from chorus, a body of singers performing together."
    }
   },
   {
@@ -1800,7 +1822,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "M",
-    "lore": ""
+    "lore": "",
+    "namesake": "A conqueror is one who overcomes and takes control of a people, territory, or place by force. The title has historically been attached to victorious rulers and generals."
    }
   },
   {
@@ -1862,7 +1885,8 @@
       "image": "assets/art/the_anomaly.webp",
       "lore": "The Anomaly is an anomalous starship sighted on the battlefields of the Reconquest, with almost nothing known of its allegiances, specifications, or capabilities. The ship is said to be capable of moving at beyond-relativistic speeds while in realspace. No life signs were detected aboard by UCM scans, yet the presence of unusually homogeneous organic matter has been revealed through spectral analysis. Though the Anomaly's hull is substantially different from that of known Bioficer vessels, it carries the same armament as a Construct-class cruiser, hinting that it may be an alternative form of that ship."
      }
-    ]
+    ],
+    "namesake": "A construct is something built or assembled from parts, or an idea or model formed by combining concepts. The word comes from the Latin construere, meaning to build together."
    }
   },
   {
@@ -1916,7 +1940,8 @@
     "groupMax": 2,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "Callous means hardened and unfeeling, showing a cruel disregard for others. The word derives from the Latin callosus, meaning thick-skinned or hardened."
    }
   },
   {
@@ -1961,7 +1986,8 @@
     "groupMax": 3,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "A [charger](https://en.wikipedia.org/wiki/Charger_(horse)) was a strong, swift horse ridden into battle, a general term for the medieval warhorse used by cavalry to charge enemy formations."
    }
   },
   {
@@ -2006,7 +2032,8 @@
     "groupMax": 3,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "A [cipher](https://en.wikipedia.org/wiki/Cipher) is an algorithm for performing encryption or decryption, a series of well-defined steps that transform a message to conceal its meaning. The word also denotes the encoded result, and more loosely a zero or a person of no consequence."
    }
   },
   {
@@ -2051,7 +2078,8 @@
     "groupMax": 3,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "A [cache](https://en.wikipedia.org/wiki/Cache_(computing)) is a hardware or software component that stores data so that future requests for it can be served faster. The word more generally means a hidden store of provisions, weapons, or valuables."
    }
   },
   {
@@ -2102,7 +2130,8 @@
     "isRare": false,
     "isUnique": true,
     "tonnage": "L",
-    "lore": "Nicknamed by lucky survivors, The Melter became a feared lone wolf among Bioficer raiding parties. Its favoured victims were larger foes who didn’t feel as threatened by a vessel of its modest size as they should. No other ship was known in this configuration, so the Admiralty assigned its guiding Intelligence the designation Anode. This individual was entirely unsubtle and clearly had access to superior technology over its peers. It featured an enhanced superstructure and power matrix, upping it to heavy destroyer tonnage. All this supported a single, prow weapons system: the Themator Cage. Quite different in form to regular thermators, this was as devastating as most battleship primary armaments, albeit only at close range. This led to the vessel’s destruction at the hands of the UCMS Gaugamela over Olympus in early 2679. However, reports of an identical vessel and characteristic behaviours followed weeks later, forcing the Admiralty to conclude that this Intelligence had successfully transferred out and potentially has several of these unusual vessels at its disposal."
+    "lore": "Nicknamed by lucky survivors, The Melter became a feared lone wolf among Bioficer raiding parties. Its favoured victims were larger foes who didn’t feel as threatened by a vessel of its modest size as they should. No other ship was known in this configuration, so the Admiralty assigned its guiding Intelligence the designation Anode. This individual was entirely unsubtle and clearly had access to superior technology over its peers. It featured an enhanced superstructure and power matrix, upping it to heavy destroyer tonnage. All this supported a single, prow weapons system: the Themator Cage. Quite different in form to regular thermators, this was as devastating as most battleship primary armaments, albeit only at close range. This led to the vessel’s destruction at the hands of the UCMS Gaugamela over Olympus in early 2679. However, reports of an identical vessel and characteristic behaviours followed weeks later, forcing the Admiralty to conclude that this Intelligence had successfully transferred out and potentially has several of these unusual vessels at its disposal.",
+    "namesake": "An [anode](https://en.wikipedia.org/wiki/Anode) is the electrode of an electrochemical cell at which oxidation occurs and through which conventional current enters the device. The term was coined by Michael Faraday in 1834 from the Greek for \"the way up.\""
    }
   },
   {
@@ -2147,7 +2176,8 @@
     "groupMax": 3,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "A [disciple](https://en.wikipedia.org/wiki/Disciple_(Christianity)) is a follower or student of a teacher, leader, or philosophy. In a religious context the word most often refers to a devoted adherent who learns from and propagates the teachings of a master."
    }
   },
   {
@@ -2185,7 +2215,8 @@
     "groupMax": 3,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "A [diode](https://en.wikipedia.org/wiki/Diode) is a two-terminal electronic component that conducts current primarily in one direction. It is commonly used to convert alternating current to direct current, a process called rectification."
    }
   },
   {
@@ -2223,7 +2254,8 @@
     "groupMax": 3,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "A [domain](https://en.wikipedia.org/wiki/Domain) is a territory or sphere of activity, knowledge, or control. The word carries related meanings in fields from law and computing to mathematics, where it denotes a defined range or realm."
    }
   },
   {
@@ -2273,7 +2305,8 @@
     "isRare": true,
     "isUnique": false,
     "tonnage": "L",
-    "lore": ""
+    "lore": "",
+    "namesake": "A [tally](https://en.wikipedia.org/wiki/Tally_marks) is a running count or record kept by making marks, traditionally notches cut into a stick or strokes grouped in fives. Tally marks are among the oldest systems for recording numbers."
    }
   },
   {
@@ -2311,7 +2344,8 @@
     "groupMax": 3,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "A [tine](https://en.wikipedia.org/wiki/Tine_(structural)) is a sharp pointed projection or prong, such as those on a fork, a pitchfork, or a deer's antler. The word is used for any slender, tapering spike that forms part of a larger implement."
    }
   },
   {
@@ -2349,7 +2383,8 @@
     "groupMax": 3,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "A [torrent](https://en.wikipedia.org/wiki/Torrent) is a violent, fast-flowing stream of water, especially one rushing down a steep channel. By extension the word describes any overwhelming or uncontrollable flow."
    }
   },
   {
@@ -2400,7 +2435,8 @@
     "groupMax": 2,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "A [matrix](https://en.wikipedia.org/wiki/Matrix) is an enclosing mass or structure within which something originates, develops, or is contained. The term recurs across disciplines, denoting a rectangular array of numbers in mathematics and the surrounding material in biology and geology."
    }
   },
   {
@@ -2451,7 +2487,8 @@
     "groupMax": 2,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "A [monarch](https://en.wikipedia.org/wiki/Monarch) is the sovereign head of a monarchy, such as a king, queen, or emperor, who typically reigns for life or until abdication. The word also names the monarch butterfly, noted for its long annual migrations."
    }
   },
   {
@@ -2502,7 +2539,8 @@
     "groupMax": 2,
     "isRare": true,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "The [mantle](https://en.wikipedia.org/wiki/Mantle_(geology)) is the thick layer of silicate rock between Earth's crust and its core, making up the bulk of the planet's volume. The word also denotes a loose sleeveless cloak and, figuratively, a position of responsibility passed from one holder to the next."
    }
   },
   {
@@ -2540,7 +2578,8 @@
     "groupMax": 6,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "A [fresco](https://en.wikipedia.org/wiki/Fresco) is a mural painting technique in which pigment is applied onto freshly laid wet lime plaster, so the colour becomes a permanent part of the wall as the plaster sets. The method has been used since antiquity and is closely associated with Italian Renaissance painting."
    }
   },
   {
@@ -2578,7 +2617,8 @@
     "groupMax": 6,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "A [fulcrum](https://en.wikipedia.org/wiki/Fulcrum) is the fixed point or support about which a lever pivots. Its position relative to the load and the applied effort determines the lever's mechanical advantage."
    }
   },
   {
@@ -2623,7 +2663,8 @@
     "groupMax": 2,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "A foray is a sudden raid or incursion into enemy territory, typically made to seize plunder or to harass an opponent before withdrawing. In figurative use it describes a brief venture into an unfamiliar field or activity."
    }
   },
   {
@@ -2661,7 +2702,8 @@
     "groupMax": 6,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "To forestall is to prevent or thwart something by taking action in advance, getting ahead of an event so as to stop or interrupt it before it occurs. The word derives from the Old English foresteall, meaning an ambush."
    }
   },
   {
@@ -2699,7 +2741,8 @@
     "groupMax": 6,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "A [fugue](https://en.wikipedia.org/wiki/Fugue) is a contrapuntal compositional technique in which a short melodic theme, the subject, is introduced and then imitated successively in two or more interweaving voices. It is regarded as the most fully developed form of imitative counterpoint."
    }
   },
   {
@@ -2750,7 +2793,8 @@
     "groupMax": 4,
     "isRare": true,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "[Logic](https://en.wikipedia.org/wiki/Logic) is the study of correct reasoning, concerned with distinguishing valid inferences from fallacious ones. It is a branch of both philosophy and mathematics, divided broadly into formal and informal logic."
    }
   },
   {
@@ -2795,7 +2839,8 @@
     "groupMax": 3,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "In geometry, a [vertex](https://en.wikipedia.org/wiki/Vertex_(geometry)) is a point where two or more edges, lines, or curves meet, such as the corner of a polygon or the apex of an angle. The word comes from the Latin for a turning point or summit."
    }
   },
   {
@@ -2847,7 +2892,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "P",
-    "lore": ""
+    "lore": "",
+    "namesake": "A [summoner](https://en.wikipedia.org/wiki/Summoner) was an officer of a medieval ecclesiastical court who served citations ordering people to appear before it. Such officers were widely condemned for extortion and were satirised by Chaucer in The Canterbury Tales."
    }
   },
   {
@@ -2909,7 +2955,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "P",
-    "lore": ""
+    "lore": "",
+    "namesake": "A [supercell](https://en.wikipedia.org/wiki/Supercell) is a thunderstorm defined by a deep, persistently rotating updraft called a mesocyclone. The rarest and often most severe storm type, supercells can produce large hail, damaging winds, and tornadoes."
    }
   },
   {
@@ -2971,7 +3018,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "P",
-    "lore": ""
+    "lore": "",
+    "namesake": "A [prism](https://en.wikipedia.org/wiki/Prism) is a transparent optical element with flat polished faces that refracts light. A triangular prism disperses white light into its constituent colours because the deviation differs for each wavelength."
    }
   },
   {
@@ -3012,7 +3060,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "P"
+    "tonnage": "P",
+    "namesake": "A [torpedo](https://en.wikipedia.org/wiki/Torpedo) is a self-propelled underwater weapon carrying an explosive warhead, launched from a submarine, surface ship, or aircraft to detonate on or near a target's hull. The modern self-propelled torpedo was developed by Robert Whitehead in 1866."
    }
   },
   {
@@ -3059,7 +3108,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "P"
+    "tonnage": "P",
+    "namesake": "A [lander](https://en.wikipedia.org/wiki/Lander_(spacecraft)) is a spacecraft that descends to and comes to rest on the surface of an astronomical body, making a soft landing so that it remains functional. The Soviet Luna 9 achieved the first lunar soft landing in 1966."
    }
   },
   {

@@ -145,7 +145,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "C",
-    "category": "colossal"
+    "category": "colossal",
+    "namesake": "The heavy, radioactive metal whose splitting atoms power reactors and the most destructive of weapons."
    },
    "abilityPicks": 2
   },
@@ -225,7 +226,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "category": "heavy"
+    "category": "heavy",
+    "namesake": "The hardest natural material known, a crystal of pure carbon forged under immense heat and pressure."
    },
    "abilityPicks": 1
   },
@@ -304,7 +306,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "category": "heavy"
+    "category": "heavy",
+    "namesake": "The blue variety of corundum, second only to diamond in hardness among gems."
    },
    "abilityPicks": 1
   },
@@ -370,7 +373,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "M",
-    "category": "medium"
+    "category": "medium",
+    "namesake": "Fossilised tree resin, warm and golden, that sometimes preserves insects trapped within it millions of years ago."
    },
    "abilityPicks": 2
   }
@@ -4794,7 +4798,8 @@
      "name": "Voidspace Anchor",
      "effect": "When an enemy Group within 6\" of this Space Station activates, that Group may only move up to half of its Thrust this activation regardless of selected Order."
     }
-   ]
+   ],
+   "namesake": "An [anchor](https://en.wikipedia.org/wiki/Anchor) is a heavy metal device lowered from a ship on a chain or cable to hold it in place against wind and current. It grips the seabed either by its weight or by flukes that dig into the bottom."
   },
   {
    "id": "8cf6-6559-ba2d-64a2",
@@ -4834,7 +4839,8 @@
      "name": "Disintegrator Bank",
      "effect": "Instead of the normal Arcs, Shaltari Shurikens have their own Arcs. A Shuriken has 5 Arcs, each 72 degrees. The easiest way to define these Arcs is to follow the lines of adjacent vertical vanes, measured from the flight stand as normal. Follow these arcs when attacking instead of the normal rules for Arcs. When you assign targets to this weapon, you may only use each Arc once."
     }
-   ]
+   ],
+   "namesake": "A [shuriken](https://en.wikipedia.org/wiki/Shuriken) is a concealed Japanese throwing weapon associated with the samurai and ninja, often a sharpened flat plate or spike of metal. The popular star-shaped form is also known as a throwing star or ninja star."
   }
  ],
  "deployableFeatures": [

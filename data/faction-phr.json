@@ -128,7 +128,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "C",
-    "category": "colossal"
+    "category": "colossal",
+    "namesake": "[Romulus](https://en.wikipedia.org/wiki/Romulus_and_Remus) was, with his twin brother Remus, the legendary founder of Rome. Raised by a she-wolf, he killed Remus in a quarrel and became the city's first king."
    },
    "abilityPicks": 2
   },
@@ -187,7 +188,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "category": "heavy"
+    "category": "heavy",
+    "namesake": "The greatest hero of Greek mythology, son of Zeus and the mortal Alcmene. Killed his own family in a divine madness sent by Hera, then spent the rest of his life earning absolution through the Twelve Labors, slaying the Nemean Lion, capturing Cerberus, diverting rivers. Worshipped across the ancient world as the patron of strength and the destroyer of monsters."
    },
    "abilityPicks": 2
   },
@@ -242,7 +244,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "",
-    "category": "heavy"
+    "category": "heavy",
+    "namesake": "[Gnaeus Pompeius Magnus](https://en.wikipedia.org/wiki/Pompey) (Pompey the Great) was the Roman general who conquered the eastern Mediterranean, cleared the sea of pirates in forty days, and formed the First Triumvirate with Caesar and Crassus before civil war made them enemies. He earned the cognomen Magnus, meaning the Great, early in his career under the dictator Sulla. In Rome he dedicated the city's first permanent stone theatre, an immense complex that bore his name."
    },
    "abilityPicks": 1
   },
@@ -322,7 +325,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "M",
-    "category": "medium"
+    "category": "medium",
+    "namesake": "[Achilles](https://en.wikipedia.org/wiki/Achilles) was the greatest Greek warrior of the Trojan War and the central hero of Homer's Iliad. He was famously invulnerable except at his heel, where he was eventually slain."
    },
    "abilityPicks": 1
   }
@@ -409,7 +413,8 @@
      "Deliverance",
      "Heaven’s Judgement",
      "Queen of Ends"
-    ]
+    ],
+    "namesake": "[Remus](https://en.wikipedia.org/wiki/Romulus_and_Remus) was, with his twin brother Romulus, one of the legendary founders of Rome. Suckled by a she-wolf as an infant, he was killed by Romulus in a dispute over the new city."
    }
   },
   {
@@ -487,7 +492,8 @@
      "Hammer of Purpose",
      "Deus Ex Machina",
      "Forgefire"
-    ]
+    ],
+    "namesake": "[Romulus](https://en.wikipedia.org/wiki/Romulus_and_Remus) was, with his twin brother Remus, the legendary founder of Rome. Raised by a she-wolf, he killed Remus in a quarrel and became the city's first king."
    }
   },
   {
@@ -1646,7 +1652,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "[Leonnatus](https://en.wikipedia.org/wiki/Leonnatus) was a Macedonian general and bodyguard of Alexander the Great who became one of the Diadochi. Made satrap of Hellespontine Phrygia, he was killed in 322 BC during the Lamian War."
    }
   },
   {
@@ -1701,7 +1708,8 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "",
-    "rulesText": "Feature Carrier At the start of the game, before players deploy, choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+    "rulesText": "Feature Carrier At the start of the game, before players deploy, choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
+    "namesake": "[Antigonus](https://en.wikipedia.org/wiki/Antigonus_I_Monophthalmus) I Monophthalmus was a Macedonian general under Alexander the Great and one of the Diadochi who contested his empire. He ruled much of Asia Minor before being killed at the Battle of Ipsus in 301 BC."
    }
   },
   {
@@ -1755,7 +1763,8 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "",
-    "rulesText": "At the start of the game, before players deploy choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+    "rulesText": "At the start of the game, before players deploy choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
+    "namesake": "[Seleucus](https://en.wikipedia.org/wiki/Seleucus_I_Nicator) I Nicator was a general of Alexander the Great and one of the Diadochi. He founded the Seleucid Empire, which ruled much of the Near East after Alexander's death."
    }
   },
   {
@@ -1809,7 +1818,8 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "",
-    "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+    "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
+    "namesake": "[Ptolemy](https://en.wikipedia.org/wiki/Ptolemy_I_Soter) I Soter was a Macedonian general and companion of Alexander the Great who became one of the Diadochi. He took control of Egypt and founded the Ptolemaic dynasty that ruled it for three centuries."
    }
   },
   {
@@ -1879,7 +1889,8 @@
      "Great Library",
      "Copernicus",
      "Judgement of Zeus"
-    ]
+    ],
+    "namesake": "[Ganymede](https://en.wikipedia.org/wiki/Ganymede_(mythology)) was a beautiful Trojan prince in Greek myth who was abducted by Zeus, often in the form of an eagle. He was granted immortality and made cupbearer to the gods on Mount Olympus."
    }
   },
   {
@@ -1957,7 +1968,8 @@
      "Marie Curie",
      "Actium",
      "Newton’s Apple"
-    ]
+    ],
+    "namesake": "[Orpheus](https://en.wikipedia.org/wiki/Orpheus) was a legendary musician and poet of Greek myth whose playing could charm all living things. He descended into the underworld to recover his wife Eurydice but lost her by looking back before they reached the surface."
    }
   },
   {
@@ -2018,7 +2030,8 @@
      "Ephyra’s Fist",
      "Hubris"
     ],
-    "famousShipsPrefix": "Known ships of the class:"
+    "famousShipsPrefix": "Known ships of the class:",
+    "namesake": "[Sisyphus](https://en.wikipedia.org/wiki/Sisyphus) was a cunning king of Greek myth who twice cheated death. As punishment he was condemned in the underworld to roll a boulder uphill forever, only for it to roll back down each time."
    }
   },
   {
@@ -2082,7 +2095,8 @@
      "Odyssey",
      "Am Become Death",
      "Cicero"
-    ]
+    ],
+    "namesake": "[Hector](https://en.wikipedia.org/wiki/Hector) was the greatest warrior of Troy and a leading figure in Homer's Iliad. The eldest son of King Priam, he was slain in single combat by Achilles, who then dragged his body around the city walls."
    }
   },
   {
@@ -2142,7 +2156,8 @@
      "Socrates",
      "Fireheart",
      "Salamis"
-    ]
+    ],
+    "namesake": "[Bellerophon](https://en.wikipedia.org/wiki/Bellerophon) was a hero of Greek myth who tamed the winged horse Pegasus and slew the fire-breathing Chimera. His later pride led him to attempt to fly to Mount Olympus, and Zeus cast him down for the affront."
    }
   },
   {
@@ -2203,7 +2218,8 @@
      "Iliad",
      "Unheeled",
      "Titan’s Ire"
-    ]
+    ],
+    "namesake": "[Achilles](https://en.wikipedia.org/wiki/Achilles) was the greatest Greek warrior of the Trojan War and the central hero of Homer's Iliad. He was famously invulnerable except at his heel, where he was eventually slain."
    }
   },
   {
@@ -2259,7 +2275,8 @@
     "groupMax": 2,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "[Teucer](https://en.wikipedia.org/wiki/Teucer) was the finest archer among the Greeks at Troy in Greek myth, son of Telamon and half-brother of Ajax the Great, often shooting from behind Ajax's great shield. After the war he was exiled and founded a new city of Salamis on Cyprus."
    }
   },
   {
@@ -2353,7 +2370,8 @@
      "Tower of Knowledge",
      "Dark Prince"
     ],
-    "rulesText": "This ship may replace its Fighters & Bombers with Mines for +10 pts."
+    "rulesText": "This ship may replace its Fighters & Bombers with Mines for +10 pts.",
+    "namesake": "[Icarus](https://en.wikipedia.org/wiki/Icarus) was a figure of Greek myth, son of the craftsman Daedalus, who escaped Crete on wings of feathers and wax. Ignoring his father's warning, he flew too near the sun, the wax melted, and he fell into the sea and drowned."
    }
   },
   {
@@ -2417,7 +2435,8 @@
      "Aristotle",
      "Marathon",
      "Journeyman"
-    ]
+    ],
+    "namesake": "[Orion](https://en.wikipedia.org/wiki/Orion_(mythology)) was a giant huntsman of Greek myth. After his death he was placed among the stars as the constellation that still bears his name."
    }
   },
   {
@@ -2481,7 +2500,8 @@
      "Nikola Tesla",
      "Hoplite’s Helm",
      "Trident of Neptune"
-    ]
+    ],
+    "namesake": "[Perseus](https://en.wikipedia.org/wiki/Perseus) was a hero of Greek myth, son of Zeus and Danae, who beheaded the Gorgon Medusa and rescued the princess Andromeda. He was the legendary founder of Mycenae."
    }
   },
   {
@@ -2545,7 +2565,8 @@
      "Archimedes",
      "Fatal",
      "Turing’s Cipher"
-    ]
+    ],
+    "namesake": "[Ajax the Great](https://en.wikipedia.org/wiki/Ajax_the_Great) was a hero of Greek myth and, after Achilles, the mightiest Greek warrior at Troy. Renowned for his enormous size and strength, he was famed for fighting behind a great tower-like shield."
    }
   },
   {
@@ -2592,7 +2613,8 @@
     "groupMax": 3,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "[Otrera](https://en.wikipedia.org/wiki/Otrera) was the queen of the Amazons in Greek myth, daughter and consort of the war god Ares. She was credited as founder of the first race of Amazon warriors."
    }
   },
   {
@@ -2647,7 +2669,8 @@
      "Phaeton",
      "Voltaire",
      "Bright Mind"
-    ]
+    ],
+    "namesake": "[Theseus](https://en.wikipedia.org/wiki/Theseus) was the legendary king and founding hero of Athens in Greek myth, best known for slaying the Minotaur in the Labyrinth of Crete and escaping with the aid of Ariadne's thread."
    }
   },
   {
@@ -2701,7 +2724,8 @@
     "groupMax": 3,
     "isRare": true,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "[Meleager](https://en.wikipedia.org/wiki/Meleager) was a hero of Greek myth and an Argonaut who led the Calydonian boar hunt and slew the great beast. He awarded its hide to the huntress Atalanta, and the ensuing quarrel led to his death."
    }
   },
   {
@@ -2759,7 +2783,8 @@
      "Neil Armstrong",
      "Yuri Gagarin",
      "Pathfinder"
-    ]
+    ],
+    "namesake": "[Odysseus](https://en.wikipedia.org/wiki/Odysseus) was the king of Ithaca and a Greek hero of the Trojan War, famed for his cunning and for devising the Trojan Horse. His ten-year journey home is the subject of Homer's Odyssey."
    }
   },
   {
@@ -2819,7 +2844,8 @@
     "famousShips": [
      "Ghost Warrior",
      "Longship"
-    ]
+    ],
+    "namesake": "[Jason](https://en.wikipedia.org/wiki/Jason) was a hero of Greek myth who led the Argonauts aboard the ship Argo on a quest to recover the Golden Fleece. He succeeded with the help of the sorceress Medea of Colchis."
    }
   },
   {
@@ -2866,7 +2892,8 @@
     "groupMax": 3,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "[Cadmus](https://en.wikipedia.org/wiki/Cadmus) was a hero of Greek myth and the legendary founder of Thebes. He slew a dragon and sowed its teeth, from which sprang a race of armed warriors called the Spartoi."
    }
   },
   {
@@ -2917,7 +2944,8 @@
      "Strikehome",
      "Myrmidon",
      "Known Purpose"
-    ]
+    ],
+    "namesake": "[Ariadne](https://en.wikipedia.org/wiki/Ariadne) was a Cretan princess in Greek myth, daughter of King Minos and Pasiphae. She gave the hero Theseus a thread to find his way out of the Labyrinth after he slew the Minotaur."
    }
   },
   {
@@ -2971,7 +2999,8 @@
      "Trident of Poseidon",
      "Harpe",
      "Sword"
-    ]
+    ],
+    "namesake": "[Electra](https://en.wikipedia.org/wiki/Electra) was a princess of Mycenae in Greek myth, daughter of Agamemnon and Clytemnestra. She helped her brother Orestes avenge their father by killing their mother and her lover Aegisthus."
    }
   },
   {
@@ -3009,7 +3038,8 @@
     "groupMax": 3,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "L"
+    "tonnage": "L",
+    "namesake": "[Chrysaor](https://en.wikipedia.org/wiki/Chrysaor) was a figure of Greek myth, the son of Poseidon and the Gorgon Medusa, who sprang from her severed neck alongside the winged horse Pegasus. His name means he who has a golden sword."
    }
   },
   {
@@ -3056,7 +3086,8 @@
      "Ornithes Areioi",
      "Nightsun",
      "Fargaze"
-    ]
+    ],
+    "namesake": "[Ourania](https://en.wikipedia.org/wiki/Urania) was the Muse of astronomy in Greek myth, one of the nine daughters of Zeus and Mnemosyne. She was depicted with a celestial globe and a pointing rod, and her name means heavenly."
    }
   },
   {
@@ -3109,7 +3140,8 @@
      "Righteous Blade",
      "Huntress",
      "Mercury"
-    ]
+    ],
+    "namesake": "[Pegasus](https://en.wikipedia.org/wiki/Pegasus) was the immortal winged horse of Greek myth, born from the blood of the slain Gorgon Medusa. He was tamed by the hero Bellerophon and later set among the stars as a constellation."
    }
   },
   {
@@ -3165,7 +3197,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "L",
-    "lore": ""
+    "lore": "",
+    "namesake": "[Philonoe](https://en.wikipedia.org/wiki/Philonoe) was a princess of Lycia in Greek myth, daughter of King Iobates. She was given in marriage to the hero Bellerophon after he completed the tasks set against him."
    }
   },
   {
@@ -3231,7 +3264,8 @@
     "famousShips": [
      "Conferred Divinity",
      "Halo Nine"
-    ]
+    ],
+    "namesake": "[Pollux](https://en.wikipedia.org/wiki/Castor_and_Pollux) was the immortal twin son of Zeus and Leda in Greek myth, brother of the mortal Castor. Together known as the Dioscuri, the twins were renowned as protectors of sailors, and Pollux was famed as an undefeated boxer."
    }
   },
   {
@@ -3282,7 +3316,8 @@
     "famousShips": [
      "Cogent Reason",
      "Bedrock"
-    ]
+    ],
+    "namesake": "[Castor](https://en.wikipedia.org/wiki/Castor_and_Pollux) was the mortal twin son of Tyndareus and Leda in Greek myth, brother of the immortal Pollux. Together known as the Dioscuri, the twins were patrons of sailors and horsemanship, and Castor was celebrated as a tamer of horses."
    }
   },
   {
@@ -3341,7 +3376,8 @@
      "Homeshell",
      "Hellbringer",
      "Alesia"
-    ]
+    ],
+    "namesake": "[Medea](https://en.wikipedia.org/wiki/Medea) was a sorceress of Greek myth, daughter of King Aeetes of Colchis and a granddaughter of the sun god Helios. She used her magic to help the hero Jason win the Golden Fleece, and later took terrible revenge when he abandoned her."
    }
   },
   {
@@ -3400,7 +3436,8 @@
      "Columbus",
      "Wright Flyer",
      "Shoal Princess"
-    ]
+    ],
+    "namesake": "[Andromeda](https://en.wikipedia.org/wiki/Andromeda_(mythology)) was a princess of Aethiopia in Greek myth, daughter of King Cepheus and Queen Cassiopeia. Chained to a rock as a sacrifice to a sea monster, she was rescued by the hero Perseus, who took her as his wife."
    }
   },
   {
@@ -3457,7 +3494,8 @@
      "Deep Blue",
      "Waves of Lamarr",
      "Inviolate"
-    ]
+    ],
+    "namesake": "[Calypso](https://en.wikipedia.org/wiki/Calypso_(mythology)) was a nymph of Greek myth, daughter of the Titan Atlas, who dwelt on the island of Ogygia. She detained the shipwrecked hero Odysseus there for seven years before the gods compelled her to release him."
    }
   },
   {
@@ -3503,7 +3541,8 @@
      "Brightflame",
      "Lance of Athena",
      "Illuminator"
-    ]
+    ],
+    "namesake": "[Pandora](https://en.wikipedia.org/wiki/Pandora) was the first woman in Greek myth, fashioned by the gods on the orders of Zeus. She opened a jar that released all the evils into the world, leaving only hope trapped inside."
    }
   },
   {
@@ -3549,7 +3588,8 @@
      "Countenance of Janus",
      "Open Future",
      "Cold Warrior"
-    ]
+    ],
+    "namesake": "[Europa](https://en.wikipedia.org/wiki/Europa_(consort_of_Zeus)) was a Phoenician princess in Greek myth, abducted by Zeus in the form of a white bull and carried to Crete, where she bore him Minos, Rhadamanthus, and Sarpedon. The continent of Europe takes its name from her."
    }
   },
   {
@@ -3602,7 +3642,8 @@
      "2 and 3",
      "Retiaritus"
     ],
-    "famousShipsPrefix": "Known ships of the class:"
+    "famousShipsPrefix": "Known ships of the class:",
+    "namesake": "[Harpocrates](https://en.wikipedia.org/wiki/Harpocrates) was the Greco-Egyptian god of silence and secrecy, a Hellenization of the Egyptian Horus the Child. He was depicted as a boy with a finger held to his lips, a childhood gesture the Greeks read as a call for silence."
    }
   },
   {
@@ -3670,7 +3711,8 @@
      "Isolator",
      "Cloudhunter",
      "Mist Cleaver"
-    ]
+    ],
+    "namesake": "[Echo](https://en.wikipedia.org/wiki/Echo_(mythology)) was a mountain nymph in Greek myth, cursed by Hera to repeat only the last words spoken to her. Spurned by Narcissus, she wasted away until nothing remained but her voice."
    }
   },
   {
@@ -3869,7 +3911,8 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "Pre-war System Admirals had unconscionable budgets and could procure ships for their battlefleet with little oversight from Earth. When it came to their personal ship, this created the conditions for a strange offering from the naval yards: opulence. Trident Industrial met this need lavishly with the Palatine Class Command Barge. An unusual ship of battlecruiser tonnage, it shares the typical style on the outside, but inside, no expense was spared. Marble, ebony and craftsmanship are terms you don't hear in military circles. Indeed, a single Palatine cost more than three Grand Battleships to build. The class features twelve overlarge lifeboats of unique design, the Magellan, each closer to an armoured yacht than an escape craft. Even the ship's guns use expensive, low-observable shells to reduce the ship's signature in combat. To offset this fabulous cost, Trident Industrial offered vessels to the private sector; owners included planetary governors, corporate titans and infamous syndicate heads.\n\nThough rare, a high proportion survived the Scourge invasion and the hard centuries that followed due to quality, their excessive point defences, and the fact that owners weren't generally the sorts to go down fighting. Since everything on the Palatine was overbuilt to the highest standards, survivors are still prized, capable ships. Their bygone splendour and the hand-ground perfection of their optics even make them worthwhile to the Republic's Grand Fleet, which operates several, mostly the former property of prophesy-spooked CEOs. Kalium possesses two which the UCM is aware of, although apparently their more opulent spaces have been painted grey, they're still Shangrilanian inlay underneath. The UCM has five on their lists, including River Queen, which is reserved for Presidential use. Such ships could be built today, but the cost would make no military sense, it never did.",
-    "additional": true
+    "additional": true,
+    "namesake": "[The Palatine](https://en.wikipedia.org/wiki/Palatine_Hill), the Roman hill at the heart of the city where the emperors raised their palaces - the root of the word itself. Excavations show people have lived on the hill since at least the 10th century BC, with Iron Age huts marking the era of Rome's traditional founding. Roman legend placed the Lupercal cave here, where the she-wolf was said to have suckled Romulus and Remus."
    }
   },
   {
@@ -3924,7 +3967,8 @@
     "isRare": true,
     "isUnique": false,
     "tonnage": "M",
-    "lore": "The Centurion was the most common standardised vessel of cruiser tonnage in the pre-war EAA Terran Grand Fleet. In those days the definition of Cruiser was somewhat broader; today, such a bulky vessel is designated as a Grand Cruiser, a classification not really in use with the UCMF. In bulk (though not in firepower), it is more akin to a modern Heavy Cruiser. It has truly excellent ceramic armour plating that outclasses all but defence monitors in the modern UCMF. The Centurion also features many of the typical advantages and disadvantages of vintage naval architecture. Originally manufactured by Trident Industrial over Olympus Prime, the design was soon licensed to Earth-based Equatorial Yards Inc. Only the licensed Earth pattern is still built today, by Kalium, though it also operates legacy Olympus Centurions.\n\nIts simple but effective all-gun primary armament provides an excellent blend of destructive power and reliability. The class requires low weapon maintenance - a welcome factor that certainly isn't the case with some of the more esoteric and experimental armaments in mankind's pre-war arsenal.\n\nIts primary armament is broadsides of transition mass drivers, alongside an oversized twin pure mass driver turret, more in keeping with modern UCMF gunnery, albeit with much heavier projectiles."
+    "lore": "The Centurion was the most common standardised vessel of cruiser tonnage in the pre-war EAA Terran Grand Fleet. In those days the definition of Cruiser was somewhat broader; today, such a bulky vessel is designated as a Grand Cruiser, a classification not really in use with the UCMF. In bulk (though not in firepower), it is more akin to a modern Heavy Cruiser. It has truly excellent ceramic armour plating that outclasses all but defence monitors in the modern UCMF. The Centurion also features many of the typical advantages and disadvantages of vintage naval architecture. Originally manufactured by Trident Industrial over Olympus Prime, the design was soon licensed to Earth-based Equatorial Yards Inc. Only the licensed Earth pattern is still built today, by Kalium, though it also operates legacy Olympus Centurions.\n\nIts simple but effective all-gun primary armament provides an excellent blend of destructive power and reliability. The class requires low weapon maintenance - a welcome factor that certainly isn't the case with some of the more esoteric and experimental armaments in mankind's pre-war arsenal.\n\nIts primary armament is broadsides of transition mass drivers, alongside an oversized twin pure mass driver turret, more in keeping with modern UCMF gunnery, albeit with much heavier projectiles.",
+    "namesake": "A centurion, the hardened professional officer who commanded a century of some eighty legionaries in the Roman army."
    }
   },
   {

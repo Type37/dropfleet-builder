@@ -156,7 +156,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "C",
-    "category": "colossal"
+    "category": "colossal",
+    "namesake": "[Washington DC](https://washington.org/) was designed from scratch as a purpose-built capital in 1790, sited on the Potomac River between Maryland and Virginia at the insistence of George Washington; the city was burned by British forces in 1814 and rebuilt within a year. The city is named after George Washington, the first president of the United States, while the District of Columbia honours Christopher Columbus. Its layout was planned by the French-born engineer Pierre Charles L'Enfant, whose design of broad diagonal avenues overlaid on a grid still shapes the modern city."
    },
    "abilityPicks": 2
   },
@@ -254,7 +255,8 @@
       ]
      }
     ],
-    "category": "heavy"
+    "category": "heavy",
+    "namesake": "[New York](https://www.nyctourism.com/) was founded as New Amsterdam by the Dutch West India Company in 1626 on the southern tip of Manhattan Island, captured by the English in 1664, and grew into the most populous city in the Western world. It was renamed New York in honour of the Duke of York, the future King James II of England. The city briefly served as the first capital of the United States, and George Washington was inaugurated as president there in 1789."
    },
    "abilityPicks": 1
   },
@@ -331,7 +333,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "category": "heavy"
+    "category": "heavy",
+    "namesake": "[Perth](https://visitperth.com/) was founded in 1829 on the Swan River in Western Australia as a free settlement; it is the most geographically isolated major city on Earth, closer to Singapore than to Sydney, and grew rapidly after gold was discovered in the hinterland in 1893. It is the capital and largest city of Western Australia, the state that covers roughly a third of the continent. Its Mediterranean climate gives it some of the sunniest weather of any major Australian city."
    },
    "abilityPicks": 1
   },
@@ -395,7 +398,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "M",
-    "category": "medium"
+    "category": "medium",
+    "namesake": "[Warsaw](https://go2warsaw.pl/en/) became the capital of Poland in 1596, was systematically destroyed by Nazi forces in 1944 following the Warsaw Uprising, and was rebuilt almost stone by stone from historic records over the following decades. The city sits on the Vistula River, which divides it into a larger left bank and the right-bank district of Praga. Its reconstructed Old Town was inscribed on the UNESCO World Heritage List in 1980 as an example of near-total restoration of a historic centre."
    },
    "abilityPicks": 1
   }
@@ -4695,7 +4699,8 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "Pre-war System Admirals had unconscionable budgets and could procure ships for their battlefleet with little oversight from Earth. When it came to their personal ship, this created the conditions for a strange offering from the naval yards: opulence. Trident Industrial met this need lavishly with the Palatine Class Command Barge. An unusual ship of battlecruiser tonnage, it shares the typical style on the outside, but inside, no expense was spared. Marble, ebony and craftsmanship are terms you don't hear in military circles. Indeed, a single Palatine cost more than three Grand Battleships to build. The class features twelve overlarge lifeboats of unique design, the Magellan, each closer to an armoured yacht than an escape craft. Even the ship's guns use expensive, low-observable shells to reduce the ship's signature in combat. To offset this fabulous cost, Trident Industrial offered vessels to the private sector; owners included planetary governors, corporate titans and infamous syndicate heads.\n\nThough rare, a high proportion survived the Scourge invasion and the hard centuries that followed due to quality, their excessive point defences, and the fact that owners weren't generally the sorts to go down fighting. Since everything on the Palatine was overbuilt to the highest standards, survivors are still prized, capable ships. Their bygone splendour and the hand-ground perfection of their optics even make them worthwhile to the Republic's Grand Fleet, which operates several, mostly the former property of prophesy-spooked CEOs. Kalium possesses two which the UCM is aware of, although apparently their more opulent spaces have been painted grey, they're still Shangrilanian inlay underneath. The UCM has five on their lists, including River Queen, which is reserved for Presidential use. Such ships could be built today, but the cost would make no military sense, it never did.",
-    "additional": true
+    "additional": true,
+    "namesake": "[The Palatine](https://en.wikipedia.org/wiki/Palatine_Hill), the Roman hill at the heart of the city where the emperors raised their palaces - the root of the word itself. Excavations show people have lived on the hill since at least the 10th century BC, with Iron Age huts marking the era of Rome's traditional founding. Roman legend placed the Lupercal cave here, where the she-wolf was said to have suckled Romulus and Remus."
    }
   },
   {
@@ -4750,7 +4755,8 @@
     "isRare": true,
     "isUnique": false,
     "tonnage": "M",
-    "lore": "The Centurion was the most common standardised vessel of cruiser tonnage in the pre-war EAA Terran Grand Fleet. In those days the definition of Cruiser was somewhat broader; today, such a bulky vessel is designated as a Grand Cruiser, a classification not really in use with the UCMF. In bulk (though not in firepower), it is more akin to a modern Heavy Cruiser. It has truly excellent ceramic armour plating that outclasses all but defence monitors in the modern UCMF. The Centurion also features many of the typical advantages and disadvantages of vintage naval architecture. Originally manufactured by Trident Industrial over Olympus Prime, the design was soon licensed to Earth-based Equatorial Yards Inc. Only the licensed Earth pattern is still built today, by Kalium, though it also operates legacy Olympus Centurions.\n\nIts simple but effective all-gun primary armament provides an excellent blend of destructive power and reliability. The class requires low weapon maintenance - a welcome factor that certainly isn't the case with some of the more esoteric and experimental armaments in mankind's pre-war arsenal.\n\nIts primary armament is broadsides of transition mass drivers, alongside an oversized twin pure mass driver turret, more in keeping with modern UCMF gunnery, albeit with much heavier projectiles."
+    "lore": "The Centurion was the most common standardised vessel of cruiser tonnage in the pre-war EAA Terran Grand Fleet. In those days the definition of Cruiser was somewhat broader; today, such a bulky vessel is designated as a Grand Cruiser, a classification not really in use with the UCMF. In bulk (though not in firepower), it is more akin to a modern Heavy Cruiser. It has truly excellent ceramic armour plating that outclasses all but defence monitors in the modern UCMF. The Centurion also features many of the typical advantages and disadvantages of vintage naval architecture. Originally manufactured by Trident Industrial over Olympus Prime, the design was soon licensed to Earth-based Equatorial Yards Inc. Only the licensed Earth pattern is still built today, by Kalium, though it also operates legacy Olympus Centurions.\n\nIts simple but effective all-gun primary armament provides an excellent blend of destructive power and reliability. The class requires low weapon maintenance - a welcome factor that certainly isn't the case with some of the more esoteric and experimental armaments in mankind's pre-war arsenal.\n\nIts primary armament is broadsides of transition mass drivers, alongside an oversized twin pure mass driver turret, more in keeping with modern UCMF gunnery, albeit with much heavier projectiles.",
+    "namesake": "A centurion, the hardened professional officer who commanded a century of some eighty legionaries in the Roman army."
    }
   },
   {

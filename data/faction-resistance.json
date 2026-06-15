@@ -164,7 +164,8 @@
     "groupMin": 1,
     "groupMax": 1,
     "tonnage": "H",
-    "category": "heavy"
+    "category": "heavy",
+    "namesake": "[Mount Olympus](https://en.wikipedia.org/wiki/Mount_Olympus) is the highest mountain in Greece and, in Greek myth, the home of the twelve Olympian gods. Its cloud-wreathed peak was held to be the seat of Zeus and the council of the gods."
    },
    "abilityPicks": 1
   },
@@ -248,7 +249,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "",
-    "category": "heavy"
+    "category": "heavy",
+    "namesake": "A tribune, a senior Roman officer of the legions, or the people's elected champion against the power of the Senate."
    },
    "abilityPicks": 1
   },
@@ -2491,7 +2493,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "M",
-    "lore": "Generally, Kalium's ruling Kabal prefers to replicate proven pre-war designs than to innovate, with a focus on numbers. However, after Kalium's first major blooding in the opening stages of the Battle for Earth, deficiencies became apparent. Visitors to UCM vessels brought back memories (and hushed whispers) that their ships might not be as advanced as their Kabal proclaimed. While combat performance was solid, helped by the iron discipline of their career-sailors, the lack of modern `dressings' in crew areas verged on embarrassing. Clunky 2D viewscreens, general lack of lighting and spartan comforts were more visible than inefficient drives and un-optimised construction.\n\nKaluim's latest vessels, while essentially the same underneath, have a more modern, distinct appearance as well as countless internal refinements. Kalium still does not favour colourful class names, though. A `KNC-5' (Kalium Navy Cruiser, Type 5) is one of their most common, new line cruisers, armed with a pair of vent cannon turrets and a potent close action missile array."
+    "lore": "Generally, Kalium's ruling Kabal prefers to replicate proven pre-war designs than to innovate, with a focus on numbers. However, after Kalium's first major blooding in the opening stages of the Battle for Earth, deficiencies became apparent. Visitors to UCM vessels brought back memories (and hushed whispers) that their ships might not be as advanced as their Kabal proclaimed. While combat performance was solid, helped by the iron discipline of their career-sailors, the lack of modern `dressings' in crew areas verged on embarrassing. Clunky 2D viewscreens, general lack of lighting and spartan comforts were more visible than inefficient drives and un-optimised construction.\n\nKaluim's latest vessels, while essentially the same underneath, have a more modern, distinct appearance as well as countless internal refinements. Kalium still does not favour colourful class names, though. A `KNC-5' (Kalium Navy Cruiser, Type 5) is one of their most common, new line cruisers, armed with a pair of vent cannon turrets and a potent close action missile array.",
+    "namesake": "[Kalium](https://en.wikipedia.org/wiki/Potassium) is the Latin name for potassium, the source of the element's chemical symbol K. It derives from the Arabic al-qaliy, meaning the calcined ashes from which the substance was first obtained."
    }
   },
   {
@@ -2536,7 +2539,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "M",
-    "lore": "Kalium's newest vessels' unique aesthetic suggests a deliberate attempt by the Kabal to `brand' their forces, or at least to make them distinct from the old, tired ships of Resistance fleets. Certainly, the brutalist design speaks of utility, strength and a total distain for beauty - not that the UCM cares much for those either, but at least they don't seem to revel in them. The KNC-12 Fleet Carrier is one of the more common, offering excellent, cost-efficient utility to any admiral by way of a potent (if unsafe) vent cannon turret and a double set of launch bays. Unlike the Shaltari, Kalium has no shortage of pilots.\n\nThe increasing percentage of these newest vessels in recent engagements speaks of the extreme speed at which the Kabal can build ships - helped, no doubt, by the multitudes under the whip of penal servitude. Their manufacturing capacity is also fearsome, as scattered reports of the class operating under the flag of several Resistance fleets now exist, suggesting that Kalium's resupply arrangements, as the only manufacturer of old military hardware, have expanded greatly in recent months."
+    "lore": "Kalium's newest vessels' unique aesthetic suggests a deliberate attempt by the Kabal to `brand' their forces, or at least to make them distinct from the old, tired ships of Resistance fleets. Certainly, the brutalist design speaks of utility, strength and a total distain for beauty - not that the UCM cares much for those either, but at least they don't seem to revel in them. The KNC-12 Fleet Carrier is one of the more common, offering excellent, cost-efficient utility to any admiral by way of a potent (if unsafe) vent cannon turret and a double set of launch bays. Unlike the Shaltari, Kalium has no shortage of pilots.\n\nThe increasing percentage of these newest vessels in recent engagements speaks of the extreme speed at which the Kabal can build ships - helped, no doubt, by the multitudes under the whip of penal servitude. Their manufacturing capacity is also fearsome, as scattered reports of the class operating under the flag of several Resistance fleets now exist, suggesting that Kalium's resupply arrangements, as the only manufacturer of old military hardware, have expanded greatly in recent months.",
+    "namesake": "[Kalium](https://en.wikipedia.org/wiki/Potassium) is the Latin name for potassium, the source of the element's chemical symbol K. It derives from the Arabic al-qaliy, meaning the calcined ashes from which the substance was first obtained."
    }
   },
   {
