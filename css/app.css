@@ -2558,6 +2558,23 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-muted);
   break-inside: avoid;
 }
+/* Sub-faction split (e.g. Independents / Kalium) — separate underlined columns. */
+.lore-famous-cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-xs) var(--sp-xl);
+}
+.lore-famous-col {
+  min-width: 7rem;
+}
+.lore-famous-subhead {
+  display: block;
+  font-style: normal;
+  font-weight: var(--weight-bold);
+  color: var(--ink-soft);
+  text-decoration: underline;
+  margin-bottom: 2px;
+}
 /* Tarot "Namesake" etymology flavour */
 .lore-namesake {
   margin-top: var(--sp-sm);
@@ -4957,6 +4974,85 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-lore);
   font-size: 7.5pt;
 }
+
+/* ── Dense print datasheet (.dp-*) ──────────────────────────────
+   Compact, self-contained print markup that renders IDENTICALLY on screen (in the
+   preview) and on paper, so the preview is WYSIWYG and a whole fleet fits onto a few
+   readable pages (Army-App / Hobgoblin style). Backgrounds force colour in print. */
+.dp-groups { margin-top: 10px; }
+.dp-groups.dp-2col { column-count: 2; column-gap: 14px; }
+.dp-group { margin-bottom: 8px; break-inside: avoid-column; }
+.dp-2col .dp-group { break-inside: auto; }
+.dp-group-head {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+  border-bottom: 1.5px solid #1b3a5c; padding-bottom: 2px; margin-bottom: 4px;
+  break-after: avoid; break-inside: avoid;
+}
+.dp-group-name { font-weight: 700; font-size: 10.5pt; color: #1b3a5c; }
+.dp-group-cat {
+  font-weight: 600; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.04em;
+  border: 1px solid currentColor; border-radius: 3px; padding: 0 3px; margin-left: 4px;
+}
+.dp-group-cat-light { color: #2f6ba0; }
+.dp-group-cat-medium { color: #2f7a3a; }
+.dp-group-cat-heavy { color: #8a5e10; }
+.dp-group-cat-colossal { color: #b83828; }
+.dp-group-cat-payload { color: #6a4c9c; }
+.dp-group-pts { font-size: 8.5pt; color: #555; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.dp-ship {
+  break-inside: avoid; border: 1px solid #bbb; border-left: 3px solid #1b3a5c;
+  border-radius: 3px; padding: 4px 7px; margin-bottom: 6px; background: #fff;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.dp-ship-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.dp-name { font-weight: 700; font-size: 9.5pt; color: #1c1a17; }
+.dp-ton { font-weight: 600; font-size: 7.5pt; color: #777; text-transform: uppercase; letter-spacing: 0.03em; }
+.dp-badge {
+  font-size: 7pt; font-weight: 700; text-transform: uppercase; border: 1px solid #b83828;
+  color: #b83828; border-radius: 3px; padding: 0 3px; margin-left: 3px;
+}
+.dp-pts { font-size: 8.5pt; font-weight: 700; color: #1b3a5c; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.dp-each { font-weight: 400; color: #777; font-size: 7.5pt; }
+
+.dp-statline { display: flex; flex-wrap: wrap; gap: 1px 10px; margin: 3px 0; font-size: 8.7pt; color: #1c1a17; }
+.dp-stat b { font-weight: 700; color: #666; font-size: 7.3pt; text-transform: uppercase; letter-spacing: 0.02em; }
+.dp-stat-mod, .dp-stat-mod b { color: #2e7d32; font-weight: 700; }
+
+.dp-weapons { width: 100%; border-collapse: collapse; margin: 3px 0; font-size: 8pt; }
+.dp-weapons th {
+  text-align: center; background: #1b3a5c; color: #fff; font-weight: 600; padding: 1px 4px;
+  font-size: 7pt; text-transform: uppercase; letter-spacing: 0.02em;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.dp-weapons td { text-align: center; padding: 1px 4px; border-bottom: 1px solid #e2ddd4; }
+.dp-weapons tr:nth-child(even) td { background: #f6f4ef; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.dp-w-name { text-align: left !important; font-weight: 600; }
+.dp-w-spec { text-align: left !important; color: #555; }
+
+.dp-loads, .dp-systems { font-size: 8pt; margin: 2px 0; color: #1c1a17; line-height: 1.35; }
+.dp-loads b, .dp-systems b { color: #1b3a5c; }
+.dp-rules { font-size: 7.8pt; margin-top: 3px; color: #333; line-height: 1.35; }
+.dp-rule { display: block; margin-bottom: 1px; }
+.dp-rule b { color: #1b3a5c; }
+
+.dp-hull { display: flex; align-items: center; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+.dp-hull-lab { font-size: 7pt; font-weight: 700; text-transform: uppercase; color: #777; }
+.dp-hull-boxes { display: inline-flex; flex-wrap: wrap; gap: 1.5px; }
+.dp-box {
+  width: 9px; height: 9px; border: 1px solid #777; border-radius: 1px; display: inline-block;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.dp-box-crip {
+  border-color: #c43c2f; border-width: 1.5px;
+  background: repeating-linear-gradient(45deg, transparent, transparent 2px, #f3c0bb 2px, #f3c0bb 3px);
+}
+
+.dp-flagship {
+  margin-top: 4px; padding: 3px 7px; border: 1px dashed #b8932e; border-radius: 3px;
+  background: #faf8f5; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.dp-flagship-name { font-weight: 700; font-size: 8.5pt; color: #1b3a5c; margin-bottom: 2px; }
 
 /* ── Fleet Overview (no group selected) ──────────────────────── */
 .fleet-overview {

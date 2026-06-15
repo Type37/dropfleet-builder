@@ -1070,7 +1070,7 @@ const App = (() => {
           <div class="fleet-card-menu-wrap" onclick="event.stopPropagation()">
             <button class="fleet-card-menu-btn" aria-label="Fleet options" aria-haspopup="true" onclick="App.toggleFleetCardMenu(event, this)"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="3" r="1.4"/><circle cx="8" cy="8" r="1.4"/><circle cx="8" cy="13" r="1.4"/></svg></button>
             <div class="fleet-card-menu" role="menu">
-              <button role="menuitem" onclick="App.duplicateFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="1"/><path d="M2 11V3c0-.6.4-1 1-1h8"/></svg> Duplicate</button>
+              <button role="menuitem" onclick="App.duplicateFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="2.5" y="2.5" width="8" height="8" rx="1.6"/><rect x="5.5" y="5.5" width="8" height="8" rx="1.6" fill="var(--paper)"/></svg> Duplicate</button>
               <button role="menuitem" class="danger" onclick="App.deleteFleet('${f.id}')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Delete</button>
             </div>
           </div>
@@ -1362,6 +1362,20 @@ const App = (() => {
     renderActiveGroup();
   }
 
+  // Best "Command Ship-X" value among the fleet's ships. An Admiral assigned to a
+  // Command Ship has their Level (and thus AP/turn) raised by X; a player puts their
+  // admiral on the strongest one, so we surface that single best bonus.
+  function fleetCommandShipBonus(f) {
+    let best = 0;
+    (f.battleGroups || []).forEach(g => (g.ships || []).forEach(s => {
+      const db = findShipInDB(f.faction, s.groupCategory, s.shipKey);
+      const sp = db ? (db.special || '') : '';
+      const m = String(sp).match(/Command Ship-(\d+)/i);
+      if (m) best = Math.max(best, parseInt(m[1], 10));
+    }));
+    return best;
+  }
+
   function updatePoints() {
     const f = currentFleet;
     if (!f) return;
@@ -1387,7 +1401,12 @@ const App = (() => {
     document.getElementById('groups-count').textContent = `${groupCount} group${groupCount !== 1 ? 's' : ''}`;
     document.getElementById('groups-limit').textContent = `/ ${sizeInfo.groups} max`;
 
-    const totalAP = (f.admirals || []).reduce((t, a) => t + (a.level || 0), 0);
+    // AP/turn = the admiral's Level. A "Command Ship-X" ship raises the Level of the
+    // Admiral assigned to it by X, so the admiral placed on the best Command Ship in
+    // the fleet gets that bonus (e.g. Las Vegas Command Carrier = +1).
+    const baseAP = (f.admirals || []).reduce((t, a) => t + (a.level || 0), 0);
+    const cmdBonus = (f.admirals && f.admirals.length) ? fleetCommandShipBonus(f) : 0;
+    const totalAP = baseAP + cmdBonus;
     const apEl = document.getElementById('fleet-ap-per-turn');
     if (apEl) apEl.textContent = totalAP > 0 ? `${totalAP} AP/turn` : '';
 
@@ -2075,7 +2094,7 @@ const App = (() => {
             ${gErrorDot}
           </div>
           <div class="overview-group-right">
-            <button class="overview-group-copy" onclick="event.stopPropagation(); App.copyGroup('${g.id}')" aria-label="Duplicate ${esc(g.name)}" title="Duplicate group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="1.4"/><path d="M10.5 5.5V3A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h2.5"/></svg></button>
+            <button class="overview-group-copy" onclick="event.stopPropagation(); App.copyGroup('${g.id}')" aria-label="Duplicate ${esc(g.name)}" title="Duplicate group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="2.5" y="2.5" width="8" height="8" rx="1.6"/><rect x="5.5" y="5.5" width="8" height="8" rx="1.6" fill="var(--paper)"/></svg></button>
             <button class="overview-group-remove" onclick="event.stopPropagation(); App.removeGroup('${g.id}')" aria-label="Remove ${esc(g.name)}" title="Remove group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
             <div class="overview-group-pts">${gPts} pts</div>
             ${stepperHtml}
@@ -2920,7 +2939,16 @@ const App = (() => {
       const opt = lo.options && lo.options[sel];
       if (opt && opt.weapons) weapons.push(...opt.weapons);
     });
-    weapons.forEach(w => { if (w && w.special) w.special.split(',').forEach(add); });
+    // Selected systems/hardpoints carry their own weapons (e.g. Vent Cannon Turret).
+    const glossarySysList = systemsListFor(dbShip, currentFleet && currentFleet.faction);
+    if (glossarySysList && ship && Array.isArray(ship.systems)) {
+      ship.systems.forEach(nm => { const o = findSystemOption(glossarySysList, nm); if (o && o.weapons) weapons.push(...o.weapons); });
+    }
+    let hasOvercharge = false;
+    weapons.forEach(w => { if (w && w.special) { if (/\bOvercharge\b/i.test(w.special)) hasOvercharge = true; w.special.split(',').forEach(add); } });
+    // Overcharging a Weapon turns it into a High Power Weapon, so spell that rule
+    // out too (it is never shown as its own weapon chip).
+    if (hasOvercharge) add('High Power');
     if (!seen.size) return '';
     const entries = [...seen.entries()].map(([name, full]) =>
       `<div class="detail-rule-entry"><span class="detail-rule-name">${esc(name)}${full.page ? ` <span class="detail-rule-page">p.${esc(full.page)}</span>` : ''}</span><span class="detail-rule-desc">${ruleHtml(full.description)}</span></div>`
@@ -4504,6 +4532,40 @@ const App = (() => {
   }
 
   // ── Print / Share ──
+  // Dense print helpers. These emit compact, self-contained markup styled the SAME
+  // on screen (in the preview) as on paper — so the preview is WYSIWYG and a fleet
+  // fits onto a few readable pages (Army-App / Hobgoblin style), instead of reusing
+  // the big on-screen stat cells whose compact form only existed inside @media print.
+  const DP_STAT_ORDER = [['scan', 'Scan'], ['sig', 'Sig'], ['thrust', 'Thr'], ['hull', 'Hull'], ['es', 'ES'], ['ks', 'KS'], ['bs', 'BS']];
+  function dpStatLine(stats, mods) {
+    const cells = DP_STAT_ORDER.map(([k, lab]) => {
+      const v = stats[k];
+      if (v === undefined || v === 0 || v === '-' || v === '--') return '';
+      const mod = mods && mods[k] ? ' dp-stat-mod' : '';
+      return `<span class="dp-stat${mod}"><b>${lab}</b> ${esc(String(v))}</span>`;
+    }).filter(Boolean).join('');
+    return cells ? `<div class="dp-statline">${cells}</div>` : '';
+  }
+  // weapons: array of {name, arc, attack, lock, damage, type, special, qty?}
+  function dpWeaponTable(weapons) {
+    if (!weapons.length) return '';
+    const body = weapons.map(w => {
+      const dmg = `${esc(w.damage || '')}${w.type ? ' ' + esc(w.type) : ''}`;
+      const special = (w.special && w.special !== '-') ? esc(w.special) : '';
+      const nm = `${w.qty > 1 ? w.qty + '× ' : ''}${esc(w.name || '')}`;
+      return `<tr><td class="dp-w-name">${nm}</td><td>${esc(w.arc || '')}</td><td>${esc(w.attack || '')}</td><td>${esc(w.lock || '')}</td><td>${dmg}</td><td class="dp-w-spec">${special}</td></tr>`;
+    }).join('');
+    return `<table class="dp-weapons"><thead><tr><th class="dp-w-name">Weapon</th><th>Arc</th><th>Att</th><th>Lk</th><th>Dmg</th><th class="dp-w-spec">Special</th></tr></thead><tbody>${body}</tbody></table>`;
+  }
+  function dpHullTrack(hull, count) {
+    const h = parseInt(hull, 10);
+    if (!h || h <= 0) return '';
+    const crip = Math.ceil(h / 2);
+    const track = (label) => `<div class="dp-hull"><span class="dp-hull-lab">${esc(label)}</span><span class="dp-hull-boxes">${Array.from({ length: h }, (_, i) => `<span class="dp-box${i + 1 === crip ? ' dp-box-crip' : ''}"></span>`).join('')}</span></div>`;
+    if (count <= 1) return track('Hull');
+    return Array.from({ length: count }, (_, i) => track('#' + (i + 1))).join('');
+  }
+
   function buildFullPrintHTML(f) {
     const fName = (factionData[f.faction] || {}).name || f.faction.toUpperCase();
     const pts = calcFleetPoints(f);
@@ -4578,11 +4640,11 @@ const App = (() => {
               const fsName = fsp.ship_name || fsp.className || (fsp.tonnage ? fsp.tonnage + ' Ship' : 'Ship');
               const fsSize = fsp.shipCategory ? (CATEGORY_LABELS[fsp.shipCategory] || '') : '';
               const wpns = fsp.weapons || [];
-              flagshipHtml = `<div class="print-admiral-flagship">
-                <div class="print-admiral-ability-sublabel">${esc(fsName)}${fsSize ? ', ' + fsSize : ''}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
-                ${renderStatGrid(fsp)}
-                ${wpns.length ? `<div class="weapon-list">${renderWeaponHeader()}${wpns.map(renderWeaponRow).join('')}</div>` : ''}
-                ${(fsp.specialRuleDetails || []).length ? `<div class="print-rules-list">${fsp.specialRuleDetails.map(r => `<span class="print-rule">${esc(r.name)}${r.description ? `: ${ruleHtml(r.description)}` : ''}</span>`).join('')}</div>` : ''}
+              flagshipHtml = `<div class="dp-flagship">
+                <div class="dp-flagship-name">${esc(fsName)}${fsSize ? ', ' + fsSize : ''}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
+                ${dpStatLine(fsp, null)}
+                ${dpWeaponTable((wpns || []).map(w => ({ ...w })))}
+                ${(fsp.specialRuleDetails || []).filter(r => r.description).length ? `<div class="dp-rules">${fsp.specialRuleDetails.filter(r => r.description).map(r => `<span class="dp-rule"><b>${esc(r.name)}:</b> ${ruleHtml(r.description)}</span>`).join('')}</div>` : ''}
               </div>`;
             }
           }
@@ -4602,39 +4664,19 @@ const App = (() => {
     if (f.spaceStation) {
       const ss = f.spaceStation;
       const ssStats = ss.stats || {};
-      const ssStatPairs = [
-        ['Hull', ssStats.hull], ['ES', ssStats.es], ['KS', ssStats.ks],
-        ['Scan', ssStats.scan], ['Sig', ssStats.sig]
-      ].filter(([,v]) => v && v !== '-' && v !== '--');
-      const ssStatLine = ssStatPairs.map(([l,v]) => `${l}: ${v}`).join(', ');
       const ssRules = (ss.specialRules || []).map(r => esc(r.name || '')).filter(Boolean).join(', ');
-      // Station hull damage boxes with cripple marker
-      const ssHull = parseInt(ssStats.hull, 10);
-      let ssDmgHtml = '';
-      if (ssHull && ssHull > 0) {
-        const ssCripple = Math.ceil(ssHull / 2);
-        const boxes = Array.from({length: ssHull}, (_, i) => {
-          const isCripple = (i + 1) === ssCripple;
-          return `<span class="print-dmg-box${isCripple ? ' print-dmg-cripple' : ''}"></span>`;
-        }).join('');
-        ssDmgHtml = `<div class="print-dmg-track"><span class="print-dmg-label">Hull</span>${boxes}</div>`;
-      }
-      // Station weapons
-      let ssWeaponsHtml = '';
-      if (ss.weapons && ss.weapons.length > 0) {
-        ssWeaponsHtml = '<div class="weapon-list">' + renderWeaponHeader() + ss.weapons.map(renderWeaponRow).join('') + '</div>';
-      }
+      const ssWeaponsHtml = (ss.weapons && ss.weapons.length) ? dpWeaponTable(ss.weapons.map(w => ({ ...w }))) : '';
       html += `<div class="print-section">
         <div class="print-section-title">Space Station</div>
-        <div class="print-station">
-          <div class="print-ship-header">
-            <span class="print-ship-name">${esc(ss.name)}</span>
-            <span class="print-ship-pts">${ss.cost} pts</span>
+        <div class="dp-ship">
+          <div class="dp-ship-head">
+            <span class="dp-name">${esc(ss.name)}</span>
+            <span class="dp-pts">${ss.cost} pts</span>
           </div>
-          <div class="print-station-stats">${ssStatLine}</div>
-          ${ssDmgHtml}
+          ${dpStatLine(ssStats, null)}
           ${ssWeaponsHtml}
-          ${ssRules ? `<div class="print-station-rules">Rules: ${ssRules}</div>` : ''}
+          ${ssRules ? `<div class="dp-systems"><b>Rules:</b> ${ssRules}</div>` : ''}
+          ${dpHullTrack(ssStats.hull, 1)}
         </div>
       </div>`;
       // Collect station rules for glossary
@@ -4643,29 +4685,26 @@ const App = (() => {
       });
     }
 
-    // Groups
+    // Groups — dense, self-contained datasheets that read the same on screen (in the
+    // preview) as on paper. System/loadout weapons merge into the weapon table.
     const allLaunchAssetNames = new Set();
+    let groupsHtml = '';
     f.battleGroups.forEach(g => {
       const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
       const gCat = g.ships.length > 0 ? (g.ships[0].groupCategory || 'medium') : 'medium';
       const gCatLabel = CATEGORY_LABELS[gCat] || gCat;
-      html += `<div class="print-group">
-        <div class="print-group-header">
-          <span class="print-group-name">${esc(g.name)} <span class="print-group-cat print-group-cat-${gCat}">${gCatLabel}</span></span>
-          <span class="print-group-pts">${gPts} pts, ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
+      groupsHtml += `<div class="dp-group">
+        <div class="dp-group-head">
+          <span class="dp-group-name">${esc(g.name)} <span class="dp-group-cat dp-group-cat-${gCat}">${gCatLabel}</span></span>
+          <span class="dp-group-pts">${gPts} pts · ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
         </div>`;
 
-      // Collapse identical ships: group by shipKey + loadout config
-      // so stats/weapons print once, with N damage tracks
+      // Collapse identical ships (same loadout/systems/feature) into one card with N hull tracks.
       const shipBuckets = [];
       g.ships.forEach(ship => {
-        const loadoutKey = JSON.stringify(ship.loadouts || {});
-        const bucketKey = `${ship.shipKey}:${ship.groupCategory}:${loadoutKey}`;
+        const bucketKey = `${ship.shipKey}:${ship.groupCategory}:${JSON.stringify(ship.loadouts || {})}:${JSON.stringify(ship.systems || [])}:${ship.feature || ''}`;
         let bucket = shipBuckets.find(b => b.key === bucketKey);
-        if (!bucket) {
-          bucket = { key: bucketKey, ship, count: 0 };
-          shipBuckets.push(bucket);
-        }
+        if (!bucket) { bucket = { key: bucketKey, ship, count: 0 }; shipBuckets.push(bucket); }
         bucket.count++;
       });
 
@@ -4674,194 +4713,108 @@ const App = (() => {
         if (!db) return;
         const name = db.name;
         const eff = effectiveStats(db, ship, f.faction);
-        const statsHtml = renderStatGrid(eff.stats, eff.mods);
 
-        // Weapons
-        let wpnsHtml = '';
-        const wpns = db.weapons || [];
-        if (wpns.length > 0) {
-          wpnsHtml = '<div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
-        }
-
-        // Loadout weapons
-        let loadoutWpnsHtml = '';
+        // Weapons: base + selected loadout + selected system/hardpoint weapons, all
+        // merged into one table (so "systems that are weapons" read as weapon rows).
+        const weaponRows = (db.weapons || []).map(w => ({ ...w }));
         (db.loadoutOptions || []).forEach((lo, loIdx) => {
           const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
           const selOpt = lo.options[selIdx];
-          if (selOpt && selOpt.weapons && selOpt.weapons.length > 0) {
-            const loLabel = lo.name || 'Loadout';
-            loadoutWpnsHtml += `<div class="print-loadout-label">${esc(loLabel)}: ${esc(selOpt.name || selOpt.weapons[0].name)}</div>`;
-            loadoutWpnsHtml += '<div class="weapon-list">' + renderWeaponHeader() + selOpt.weapons.map(renderWeaponRow).join('') + '</div>';
-          }
+          if (selOpt && selOpt.weapons) selOpt.weapons.forEach(w => weaponRows.push({ ...w }));
         });
-
-        // Loads (base + selected loadout options)
+        // Loads: base + selected loadout.
         const allLoads = [...(db.loads || [])];
         (db.loadoutOptions || []).forEach((lo, loIdx) => {
           const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
           const selOpt = lo.options[selIdx];
           if (selOpt && selOpt.loads) allLoads.push(...selOpt.loads);
         });
-        let loadsHtml = '';
-        if (allLoads.length > 0) {
-          loadsHtml = allLoads.map(l => {
-            allLaunchAssetNames.add(l.name);
-            return `<span class="print-load">${esc(l.name)} (Launch ${l.launch}${l.special && l.special !== '-' ? ', ' + l.special : ''})</span>`;
-          }).join(' ');
-          loadsHtml = `<div class="print-loads">Launch: ${loadsHtml}</div>`;
-        }
-
-        // Collect special rules for glossary
-        (db.specialRuleDetails || []).forEach(r => {
-          if (r.description) rulesGlossary[r.name] = { description: r.description, page: r.page || '' };
-        });
-
-        // Collect weapon special rules for both glossary AND inline display
-        const shipWeaponSpecials = {};
-        const collectWeaponSpecials = (weapons) => {
-          (weapons || []).forEach(w => {
-            if (!w.special || w.special === '-') return;
-            w.special.split(',').forEach(s => {
-              const trimmed = s.trim();
-              if (!trimmed) return;
-              const baseKey = trimmed.replace(/-?\d+$/, '').replace(/\s+\d+$/, '').trim();
-              const full = lookupRuleFull(trimmed);
-              if (full) {
-                rulesGlossary[baseKey || trimmed] = { description: full.description, page: full.page || '' };
-                shipWeaponSpecials[trimmed] = { description: full.description, page: full.page || '' };
-              }
-            });
-          });
-        };
-        collectWeaponSpecials(wpns);
-        (db.loadoutOptions || []).forEach((lo, loIdx) => {
-          const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
-          const selOpt = lo.options[selIdx];
-          if (selOpt && selOpt.weapons) collectWeaponSpecials(selOpt.weapons);
-        });
-
-        // Chosen Systems / Hardpoint options (Resistance) — these carry the
-        // ship's actual weapons/loads, so they MUST print.
-        let systemsPrintHtml = '';
+        // Selected systems: weapon options → the weapon table, load options → launch,
+        // everything else → a short note line.
+        const nonWeaponSystems = [];
         const sysList = systemsListFor(db, f.faction);
         if (sysList && ship.systems && ship.systems.length) {
           const counts = {};
           ship.systems.forEach(n => { counts[n] = (counts[n] || 0) + 1; });
-          const sysWeapons = [];
-          const rows = Object.entries(counts).map(([nm, c]) => {
+          Object.entries(counts).forEach(([nm, c]) => {
             const o = findSystemOption(sysList, nm);
-            if (!o) return '';
-            (o.weapons || []).forEach(w => sysWeapons.push(w));
-            const w = (o.weapons || [])[0];
-            const l = (o.loads || [])[0];
-            const detail = w ? `${w.arc} · ${w.attack}/${w.lock}/${w.damage}${w.special && w.special !== '-' ? ' · ' + w.special : ''}`
-              : l ? `Launch ${l.launch}${l.special && l.special !== '-' ? ', ' + l.special : ''}`
-              : (o.effect || '');
-            return `<div class="print-rule-entry"><span class="print-rule-name">${c > 1 ? c + 'x ' : ''}${esc(nm)}</span>${detail ? `, ${esc(detail)}` : ''}</div>`;
-          }).join('');
-          collectWeaponSpecials(sysWeapons);
-          systemsPrintHtml = `<div class="print-rules-inline"><div class="print-rules-heading">${esc(db.systemSelection.listName)}</div>${rows}</div>`;
+            if (!o) return;
+            if (o.weapons && o.weapons.length) o.weapons.forEach(w => weaponRows.push({ ...w, name: w.name || nm, qty: c }));
+            else if (o.loads && o.loads.length) o.loads.forEach(l => allLoads.push({ ...l, name: (c > 1 ? c + '× ' : '') + l.name }));
+            else nonWeaponSystems.push(`${c > 1 ? c + '× ' : ''}${nm}${o.effect ? ', ' + o.effect : ''}`);
+          });
         }
 
-        // Chosen Deployable Feature (Feature Carriers)
-        let featurePrintHtml = '';
+        // Glossary + spelled-out rules. Ship rules + every weapon special (incl.
+        // system weapons); plus High Power whenever a weapon carries Overcharge.
+        (db.specialRuleDetails || []).forEach(r => { if (r.description) rulesGlossary[r.name] = { description: r.description, page: r.page || '' }; });
+        const weaponSpecials = {};
+        let hasOvercharge = false;
+        weaponRows.forEach(w => {
+          if (!w.special || w.special === '-') return;
+          if (/\bOvercharge\b/i.test(w.special)) hasOvercharge = true;
+          w.special.split(',').forEach(s => {
+            const t = s.trim(); if (!t) return;
+            const full = lookupRuleFull(t);
+            if (full) {
+              const baseKey = t.replace(/-?\d+$/, '').replace(/\s+\d+$/, '').trim() || t;
+              rulesGlossary[baseKey] = { description: full.description, page: full.page || '' };
+              weaponSpecials[t] = { description: full.description, page: full.page || '' };
+            }
+          });
+        });
+        if (hasOvercharge) {
+          const hp = lookupRuleFull('High Power');
+          if (hp && hp.description) { rulesGlossary['High Power'] = { description: hp.description, page: hp.page || '' }; weaponSpecials['High Power'] = { description: hp.description, page: hp.page || '' }; }
+        }
+
+        // Launch line + feed the fleet launch-asset reference.
+        let loadsHtml = '';
+        if (allLoads.length) {
+          loadsHtml = `<div class="dp-loads"><b>Launch:</b> ${allLoads.map(l => {
+            allLaunchAssetNames.add(String(l.name).replace(/^\d+×\s*/, ''));
+            return `${esc(String(l.name))} (${esc(String(l.launch))}${l.special && l.special !== '-' ? ', ' + esc(l.special) : ''})`;
+          }).join('; ')}</div>`;
+        }
+        const sysHtml = nonWeaponSystems.length
+          ? `<div class="dp-systems"><b>${esc(db.systemSelection ? db.systemSelection.listName : 'Systems')}:</b> ${esc(nonWeaponSystems.join('; '))}</div>` : '';
+        let featHtml = '';
         if (ship.feature) {
           const feat = ((shipDB[f.faction] || {}).deployableFeatures || []).find(df => df.name === ship.feature);
           const fStat = feat ? (feat.features || []).map(x => `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`).join('; ') : '';
-          featurePrintHtml = `<div class="print-rules-inline"><div class="print-rules-heading">Deployable Feature</div><div class="print-rule-entry"><span class="print-rule-name">${esc(ship.feature)}</span>${fStat ? `, ${esc(fStat)}` : ''}</div></div>`;
+          featHtml = `<div class="dp-systems"><b>Deployable Feature:</b> ${esc(ship.feature)}${fStat ? ', ' + esc(fStat) : ''}</div>`;
         }
 
-        // Rules — inline with full descriptions for print
-        const ruleDetails = db.specialRuleDetails || [];
-        const ruleNames = ruleDetails.map(r => esc(r.name)).join(', ') ||
-                          (db.special_rules || []).map(r => esc(r)).join(', ');
-        let rulesInlineHtml = '';
-        if (ruleDetails.length > 0) {
-          rulesInlineHtml = `<div class="print-rules-inline">
-            <div class="print-rules-heading">Ship Rules</div>
-            ${ruleDetails.map(r => {
-              const pageRef = r.page ? ` <span class="print-glossary-page">p.${esc(r.page)}</span>` : '';
-              return `<div class="print-rule-entry"><span class="print-rule-name">${esc(r.name)}${pageRef}</span>${r.description ? `: ${ruleHtml(r.description)}` : ''}</div>`;
-            }).join('')}
-          </div>`;
-        } else if (ruleNames) {
-          rulesInlineHtml = `<div class="print-rules">Rules: ${ruleNames}</div>`;
-        }
+        // Spelled-out rules: ship rules first, then weapon abilities (incl. High Power).
+        const ruleEntries = [];
+        (db.specialRuleDetails || []).forEach(r => { if (r.description) ruleEntries.push([r.name, r.description, r.page || '']); });
+        Object.entries(weaponSpecials).forEach(([n, e]) => { if (!ruleEntries.some(([rn]) => rn === n)) ruleEntries.push([n, e.description, e.page || '']); });
+        const rulesHtml = ruleEntries.length
+          ? `<div class="dp-rules">${ruleEntries.map(([n, d, p]) => `<span class="dp-rule"><b>${esc(n)}${p ? ` p.${esc(p)}` : ''}:</b> ${ruleHtml(d)}</span>`).join('')}</div>` : '';
 
-        // Weapon abilities — inline descriptions so players don't need the glossary
-        const wpnSpecEntries = Object.entries(shipWeaponSpecials);
-        let weaponAbilitiesHtml = '';
-        if (wpnSpecEntries.length > 0) {
-          weaponAbilitiesHtml = `<div class="print-rules-inline print-weapon-abilities">
-            <div class="print-rules-heading">Weapon Abilities</div>
-            ${wpnSpecEntries.map(([name, entry]) => {
-              const pageRef = entry.page ? ` <span class="print-glossary-page">p.${esc(entry.page)}</span>` : '';
-              return `<div class="print-rule-entry"><span class="print-rule-name">${esc(name)}${pageRef}</span>, ${esc(entry.description)}</div>`;
-            }).join('')}
-          </div>`;
-        }
-
-        // Tonnage label
         const tonnageLabel = tonLabel(db.tonnage) || CATEGORY_LABELS[ship.groupCategory] || '';
-        const artSrc = shipArtPath(db.name);
-
-        // Damage tracking boxes — hull boxes with cripple point marker
-        // Show N rows of damage tracks when count > 1
-        const hullVal = parseInt(db.hull, 10);
-        let dmgBoxesHtml = '';
-        if (hullVal && hullVal > 0) {
-          const crippleAt = Math.ceil(hullVal / 2);
-          const makeTrack = (label) => {
-            const boxes = Array.from({length: hullVal}, (_, i) => {
-              const isCripple = (i + 1) === crippleAt;
-              return `<span class="print-dmg-box${isCripple ? ' print-dmg-cripple' : ''}"></span>`;
-            }).join('');
-            return `<div class="print-dmg-track"><span class="print-dmg-label">${label}</span>${boxes}</div>`;
-          };
-          if (count === 1) {
-            dmgBoxesHtml = makeTrack('Hull');
-          } else {
-            // One damage track per ship for easy tabletop use
-            dmgBoxesHtml = Array.from({length: count}, (_, i) =>
-              makeTrack(`#${i + 1}`)
-            ).join('');
-          }
-        }
-
-        // Badge indicators
-        const badges = [];
-        if (db.isUnique) badges.push('<span class="print-badge print-badge-unique">Unique</span>');
-        else if (db.isRare) badges.push('<span class="print-badge print-badge-rare">Rare</span>');
-        const badgeHtml = badges.length > 0 ? ` ${badges.join(' ')}` : '';
-
-        // Quantity prefix for collapsed ships
-        const qtyPrefix = count > 1 ? `<span class="print-ship-qty">${count}x</span> ` : '';
+        const badge = db.isUnique ? ' <span class="dp-badge">Unique</span>' : db.isRare ? ' <span class="dp-badge">Rare</span>' : '';
+        const qtyPrefix = count > 1 ? `${count}× ` : '';
         const totalPts = ship.points * count;
 
-        html += `<div class="print-ship">
-          <div class="print-ship-top">
-            ${artSrc ? `<div class="print-ship-art"><img src="${artSrc}" alt="" onerror="this.closest('.print-ship-art').remove()"></div>` : ''}
-            <div class="print-ship-content">
-              <div class="print-ship-header">
-                <span class="print-ship-name">${qtyPrefix}${esc(name)}${tonnageLabel ? ` <span class="print-ship-tonnage">${esc(tonnageLabel)}</span>` : ''}${badgeHtml}</span>
-                <span class="print-ship-pts">${count > 1 ? `${totalPts} pts <span class="print-ship-each">(${ship.points} ea)</span>` : `${ship.points} pts`}</span>
-              </div>
-              ${statsHtml}
-              ${dmgBoxesHtml}
-            </div>
+        groupsHtml += `<div class="dp-ship">
+          <div class="dp-ship-head">
+            <span class="dp-name">${esc(qtyPrefix)}${esc(name)}${tonnageLabel ? ` <span class="dp-ton">${esc(tonnageLabel)}</span>` : ''}${badge}</span>
+            <span class="dp-pts">${count > 1 ? `${totalPts} pts <span class="dp-each">(${ship.points} ea)</span>` : `${ship.points} pts`}</span>
           </div>
-          ${wpnsHtml}
-          ${loadoutWpnsHtml}
-          ${systemsPrintHtml}
-          ${featurePrintHtml}
+          ${dpStatLine(eff.stats, eff.mods)}
+          ${dpWeaponTable(weaponRows)}
           ${loadsHtml}
-          ${rulesInlineHtml}
-          ${weaponAbilitiesHtml}
+          ${sysHtml}
+          ${featHtml}
+          ${rulesHtml}
+          ${dpHullTrack(db.hull, count)}
         </div>`;
       });
 
-      html += '</div>';
+      groupsHtml += '</div>';
     });
+    html += `<div class="dp-groups${settings.print2col ? ' dp-2col' : ''}">${groupsHtml}</div>`;
 
     // Launch asset reference for the whole fleet
     if (factionInfo && factionInfo.launchAssets && allLaunchAssetNames.size > 0) {
@@ -4913,22 +4866,9 @@ const App = (() => {
       <div class="print-totals-breakdown">${groupPtsList}</div>
     </div>`;
 
-    // Rules glossary — full text for every rule used, with page references
-    const glossaryEntries = Object.entries(rulesGlossary).sort((a, b) => a[0].localeCompare(b[0]));
-    if (glossaryEntries.length > 0) {
-      html += `<div class="print-section print-glossary">
-        <div class="print-section-title">Rules Reference</div>
-        ${glossaryEntries.map(([name, entry]) => {
-          const desc = typeof entry === 'string' ? entry : (entry.description || '');
-          const page = typeof entry === 'object' ? (entry.page || '') : '';
-          const pageRef = page ? ` <span class="print-glossary-page">p.${esc(page)}</span>` : '';
-          return `<div class="print-glossary-entry">
-            <span class="print-glossary-name">${esc(name)}${pageRef}</span>
-            <span class="print-glossary-desc">${esc(desc).replace(/\n/g, '<br>')}</span>
-          </div>`;
-        }).join('')}
-      </div>`;
-    }
+    // No separate rules glossary: every rule is already spelled out on each ship card
+    // above, so the player reads it in place (no page-flipping) and the sheet stays
+    // to a few pages. `rulesGlossary` is still collected for potential future use.
 
     html += '</div>';
     return html;
@@ -5868,16 +5808,45 @@ const App = (() => {
     return out + esc(text.slice(last));
   }
 
+  // Render the "Recorded ships of the class" list. Entries may carry a trailing
+  // sub-faction tag, e.g. "Equatorial (Independents)" / "Purgatory (Kalium)". When
+  // present, the tag marks the end of that sub-faction's run, so the flat list is
+  // split into separate underlined-header columns instead of one mixed list.
+  function renderFamousShips(prefix, famousShips) {
+    if (!famousShips || famousShips.length === 0) return '';
+    const groups = [];
+    let cur = [], tagged = false;
+    famousShips.forEach(s => {
+      const txt = String(s);
+      const m = txt.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+      if (m) {
+        tagged = true;
+        if (m[1].trim()) cur.push(m[1].trim());
+        groups.push({ label: m[2].trim(), ships: cur });
+        cur = [];
+      } else if (txt.trim()) {
+        cur.push(txt.trim());
+      }
+    });
+    if (cur.length) groups.push({ label: '', ships: cur });
+    const head = `<strong>${esc(prefix || 'Known ships of the class:')}</strong>`;
+    if (!tagged || groups.length < 2) {
+      const flat = (groups.length ? groups.flatMap(g => g.ships) : famousShips.map(String));
+      return `<div class="lore-famous-ships">${head}<ul>${flat.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>`;
+    }
+    const cols = groups.map(g =>
+      `<div class="lore-famous-col">${g.label ? `<span class="lore-famous-subhead">${esc(g.label)}</span>` : ''}<ul>${g.ships.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>`
+    ).join('');
+    return `<div class="lore-famous-ships">${head}<div class="lore-famous-cols">${cols}</div></div>`;
+  }
+
   function formatLore(loreText, famousShipsPrefix, famousShips) {
     if (!loreText && (!famousShips || famousShips.length === 0)) return '';
     let html = '';
     if (loreText) {
       html += loreText.split(/\n\n+/).map(p => `<p>${loreLinks(p.trim())}</p>`).join('');
     }
-    if (famousShips && famousShips.length > 0) {
-      const shipList = famousShips.map(s => `<li>${esc(s)}</li>`).join('');
-      html += `<div class="lore-famous-ships"><strong>${esc(famousShipsPrefix || 'Known ships of the class:')}</strong><ul>${shipList}</ul></div>`;
-    }
+    html += renderFamousShips(famousShipsPrefix, famousShips);
     return html;
   }
 
@@ -5976,14 +5945,26 @@ const App = (() => {
 
     // Special rules with full descriptions
     const ruleDetails = dbShip.specialRuleDetails || [];
+    const ruleRows = ruleDetails.map(r => ({ name: r.name, page: r.page, desc: r.description }));
+    // Overcharging a Weapon turns it into a High Power Weapon, so if any of this ship's
+    // weapons (base, loadout option, or system option) has Overcharge, list High Power
+    // too (it is never shown as its own weapon chip).
+    const detailWeapons = [...(dbShip.weapons || [])];
+    (dbShip.loadoutOptions || []).forEach(lo => (lo.options || []).forEach(o => { if (o.weapons) detailWeapons.push(...o.weapons); }));
+    const detailSysList = systemsListFor(dbShip, faction);
+    if (detailSysList) (detailSysList.options || []).forEach(o => { if (o.weapons) detailWeapons.push(...o.weapons); });
+    if (detailWeapons.some(w => w.special && /\bOvercharge\b/i.test(w.special)) && !ruleRows.some(r => /^High Power$/i.test(r.name))) {
+      const hp = lookupRuleFull('High Power');
+      if (hp && hp.description) ruleRows.push({ name: 'High Power', page: hp.page, desc: hp.description });
+    }
     let rulesHtml = '';
-    if (ruleDetails.length > 0) {
+    if (ruleRows.length > 0) {
       rulesHtml = '<div class="detail-section-label">Special Rules</div><div class="detail-rules-list">' +
-        ruleDetails.map(r => {
+        ruleRows.map(r => {
           const page = r.page ? ` <span class="detail-rule-page">p.${esc(r.page)}</span>` : '';
           return `<div class="detail-rule-entry">
             <span class="detail-rule-name">${esc(r.name)}${page}</span>
-            ${r.description ? `<span class="detail-rule-desc">${ruleHtml(r.description)}</span>` : ''}
+            ${r.desc ? `<span class="detail-rule-desc">${ruleHtml(r.desc)}</span>` : ''}
           </div>`;
         }).join('') + '</div>';
     }

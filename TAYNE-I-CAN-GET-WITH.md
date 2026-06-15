@@ -103,3 +103,64 @@ inside a multi-ship squadron is still not done (it fights the collapse model +
 mobile's one-datasheet-per-group view).
 **My guess:** leave it unless you specifically want to name hulls in a squadron.
 **Change it by:** say "yes, per-hull names" and I'll wire it (sig + share + print).
+
+---
+
+# Batch (2026-06-15, v187) - print overhaul + AP + Centurion + Kalium + Aldrin
+
+## 7. PRINT MODE - rebuilt dense (your "totally doesn't work / looks bad / 2-col doesn't work")
+**What was wrong:** the print PREVIEW reused the big on-screen stat cells +
+weapon rows, but their COMPACT styling only existed inside `@media print`, so the
+preview rendered huge (and the "2 columns" toggle changed nothing on screen, so it
+felt broken).
+**What I did (applied):** rebuilt the full-print datasheet with its own dense,
+self-contained markup (`.dp-*`) that looks IDENTICAL on screen and on paper - so
+the preview is now WYSIWYG. Per ship: a one-line stat strip (Scan/Sig/Thr/Hull/
+ES/KS/BS, upgrades in green), a compact weapon table, a Launch line, spelled-out
+rules, and a hull damage track for play. **Systems that are weapons now render as
+weapon-table rows** (your frigate-systems point); non-weapon systems are a short
+note. **2 columns now actually reflows** (CSS column-count, works on screen + in
+print). **Dropped the ship art** in print (space) and **dropped the end "Rules
+Reference" glossary** (every rule is already spelled out on each ship card, so no
+page-flipping and fewer pages). Mobile print also now merges loadout/system
+weapons into its weapon table.
+**Decisions you can flip:** (a) bring ship art back in print; (b) re-add the end
+glossary; (c) make 2-column the DEFAULT. Say the word.
+
+## 8. AP / turn now counts Command Ships (your Las Vegas point)
+**What was wrong:** AP/turn = sum of admiral Levels only; it ignored "Command
+Ship-X" (Las Vegas = Command Ship-1, which raises the assigned admiral's Level by
+1).
+**What I did:** AP/turn now adds the best Command Ship-X in the fleet (the admiral
+sits on it). Verified: Level-2 admiral + Las Vegas = 3 AP/turn. (Desktop sidebar;
+mobile has no AP total to fix.) Edge case not modelled: a Famous admiral flies
+their OWN flagship, so a separate Las Vegas in the same list wouldn't really boost
+them - rare, left simple.
+
+## 9. Centurion Grand Cruiser - not Rare in Resistance (you said twice)
+Resistance copy: removed the Rare rule + the "may be used in UCM/PHR... gain Rare"
+note (it's a home-faction ship there). UCM/PHR copies keep Rare + count as cross-
+faction. Done in data, so it's correct in builder/detail/print/share automatically.
+
+## 10. Two-column "Recorded ships of the class"
+When the list is tagged by sub-faction (e.g. "Equatorial (Independents)" /
+"Purgatory (Kalium)") it now splits into underlined-header columns. Both apps.
+
+## 11. Kalium counts-as text + Aldrin lore
+KNC-5 / KNC-12 counts-as text set verbatim. Aldrin: moved "In many cases" to the
+start of the lore and fixed the recorded ships (Endeavour, Endurance, Odyssey).
+
+## 12. Overcharge -> High Power
+Any ship with an Overcharge weapon now lists the "High Power" rule in its rules
+(detail, builder, print, both apps) but NEVER as a weapon chip. (Overcharging a
+weapon makes it High Power.)
+
+## 13. STILL NEED YOUR STEER (couldn't safely guess):
+- **"add screenshots for when i post shit"** - do you mean a "save fleet as image"
+  button (renders the fleet card to a PNG you can drop into Discord/forums)? That's
+  what I'll build unless you meant something else.
+- **"I don't like that you're always click on/off stuff"** - which toggles? (loadout
+  cards? secondary-objective toggles? the systems +/- steppers? settings?) Tell me
+  which and what you'd prefer (e.g. single-tap select, no accidental deselect).
+- **"did you ever get to the thing from the user's feedback?"** - which item? Point
+  me at it and I'll confirm/do it.

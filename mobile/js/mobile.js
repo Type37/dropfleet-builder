@@ -1741,6 +1741,20 @@
     const sysList = systemsListFor(ship, f.faction);
     const sysSel = ship.systemSelection;
 
+    // Overcharging a Weapon turns it into a High Power Weapon, so when any equipped
+    // weapon has Overcharge, spell out High Power in the rules (never as a chip).
+    const ocWeapons = [...weapons];
+    loadoutOptions.forEach((lo, i) => {
+      const sel = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
+      const opt = lo.options && lo.options[sel];
+      if (opt && opt.weapons) ocWeapons.push(...opt.weapons);
+    });
+    if (sysList && Array.isArray(inst.systems)) {
+      inst.systems.forEach(nm => { const o = findSystemOption(sysList, nm); if (o && o.weapons) ocWeapons.push(...o.weapons); });
+    }
+    const highPowerRule = ocWeapons.some(w => w && w.special && /\bOvercharge\b/i.test(w.special))
+      ? lookupRule('High Power') : null;
+
     // Hero art carousel: primary + resin sculpt + counts-as variant art.
     heroArtsM = [];
     if (artSrc) heroArtsM.push({ src: artSrc, label: 'Standard sculpt' });
@@ -1858,10 +1872,15 @@
         ${r.description ? `<div class="rule-card-text">${ruleHtml(r.description)}</div>` : ''}
       </div>`).join('')}
 
+      ${highPowerRule && highPowerRule.description ? `<div class="rule-card">
+        <div class="rule-card-name">High Power</div>
+        <div class="rule-card-text">${ruleHtml(highPowerRule.description)}</div>
+      </div>` : ''}
+
       ${renderLore(ship)}
 
       <div style="padding:var(--sp-l)">
-        <button class="btn btn-ghost btn-block" onclick="App.copyGroup()" style="margin-bottom:var(--sp-m)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="vertical-align:-2px;margin-right:6px"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="1.4"/><path d="M10.5 5.5V3A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h2.5"/></svg>Duplicate Group</button>
+        <button class="btn btn-ghost btn-block" onclick="App.copyGroup()" style="margin-bottom:var(--sp-m)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><rect x="2.5" y="2.5" width="8" height="8" rx="1.6"/><rect x="5.5" y="5.5" width="8" height="8" rx="1.6" fill="var(--card-bg)"/></svg>Duplicate Group</button>
         <button class="btn btn-ghost btn-block" onclick="App.removeGroup()" style="color:var(--danger);border-color:var(--danger)">Remove Group</button>
       </div>
     `;
@@ -1883,6 +1902,37 @@
   }
 
   // Flavour lore — kept visually + structurally separate from rules (Cardo serif).
+  // Recorded ships list. Entries may carry a trailing sub-faction tag like
+  // "Equatorial (Independents)" / "Purgatory (Kalium)"; when present the tag marks
+  // the end of that run, so the list splits into separate underlined columns.
+  function renderFamousShips(prefix, famousShips) {
+    if (!famousShips || !famousShips.length) return '';
+    const groups = [];
+    let cur = [], tagged = false;
+    famousShips.forEach(s => {
+      const txt = String(s);
+      const m = txt.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+      if (m) {
+        tagged = true;
+        if (m[1].trim()) cur.push(m[1].trim());
+        groups.push({ label: m[2].trim(), ships: cur });
+        cur = [];
+      } else if (txt.trim()) {
+        cur.push(txt.trim());
+      }
+    });
+    if (cur.length) groups.push({ label: '', ships: cur });
+    const head = `<span class="lore-famous-label">${esc(prefix || 'Known ships of the class:')}</span>`;
+    if (!tagged || groups.length < 2) {
+      const flat = groups.length ? groups.flatMap(g => g.ships) : famousShips.map(String);
+      return `<div class="lore-famous">${head}<ul>${flat.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>`;
+    }
+    const cols = groups.map(g =>
+      `<div class="lore-famous-col">${g.label ? `<span class="lore-famous-subhead">${esc(g.label)}</span>` : ''}<ul>${g.ships.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>`
+    ).join('');
+    return `<div class="lore-famous">${head}<div class="lore-famous-cols">${cols}</div></div>`;
+  }
+
   function renderLore(ship) {
     const lore = (ship.lore || '').trim();
     const namesake = (ship.namesake || '').trim();
@@ -1890,9 +1940,7 @@
     if (!lore && !namesake && !famous.length) return '';
     const paras = lore ? lore.split(/\n\n+/).map(p => `<p>${loreLinks(p.trim())}</p>`).join('') : '';
     // Order matches desktop: lore → famous ships (bold header, italic bullets) → Namesake.
-    const famousList = famous.length
-      ? `<div class="lore-famous"><span class="lore-famous-label">${esc(ship.famousShipsPrefix || 'Known ships of the class:')}</span><ul>${famous.map(n => `<li>${esc(n)}</li>`).join('')}</ul></div>`
-      : '';
+    const famousList = renderFamousShips(ship.famousShipsPrefix, famous);
     const namesakeLine = namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(namesake)}</div>` : '';
     return `<div class="lore-card">
       <div class="lore-label">Lore</div>
@@ -3086,8 +3134,10 @@
     const pts = fleetPoints(f);
     const info = FACTION_INFO[f.faction];
     const usedRules = new Map();  // keyword -> description (for the glossary)
+    let hasOvercharge = false;
 
     const collectRule = name => {
+      if (/\bOvercharge\b/i.test(name)) hasOvercharge = true;
       const r = lookupRule(name);
       if (r.description && !usedRules.has(name)) usedRules.set(name, r.description);
     };
@@ -3105,7 +3155,20 @@
         ['ES', 'es', st.es], ['KS', 'ks', st.ks], ['BS', 'bs', st.bs], ['PD', 'pd', st.pd]]
         .filter(([, , v]) => v != null && v !== '-' && v !== '')
         .map(([lab, key, v]) => `<span class="pr-stat${mods[key] ? ' pr-stat-mod' : ''}"><b>${lab}</b> ${esc(mods[key] ? adjustStatVal(v, mods[key]) : v)}</span>`).join('');
-      const weapons = (db.weapons || []).map(w => {
+      // Merge base + selected loadout + selected system/hardpoint weapons into one
+      // table, so "systems that are weapons" read as weapon rows on the print sheet.
+      const wlist = (db.weapons || []).map(w => ({ ...w }));
+      (db.loadoutOptions || []).forEach((lo, i) => {
+        const si = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
+        const o = lo.options[si];
+        if (o && o.weapons) o.weapons.forEach(w => wlist.push({ ...w }));
+      });
+      const sysListW = systemsListFor(db, f.faction);
+      if (sysListW && inst.systems) {
+        const cnts = {}; inst.systems.forEach(n => cnts[n] = (cnts[n] || 0) + 1);
+        Object.entries(cnts).forEach(([nm, c]) => { const o = findSystemOption(sysListW, nm); if (o && o.weapons) o.weapons.forEach(w => wlist.push({ ...w, name: (c > 1 ? c + '× ' : '') + (w.name || nm) })); });
+      }
+      const weapons = wlist.map(w => {
         if (w.special && w.special !== '-') w.special.split(',').forEach(s => collectRule(s.trim()));
         return `<tr><td>${esc(w.name)}</td><td>${esc(w.lock || '')}</td><td>${esc(w.attack || '')}</td><td>${esc(w.damage || '')}${esc(w.type || '')}</td><td>${esc(w.arc || '')}</td><td>${esc(w.special && w.special !== '-' ? w.special : '')}</td></tr>`;
       }).join('');
@@ -3130,6 +3193,14 @@
         const c = {}; inst.systems.forEach(n => c[n] = (c[n] || 0) + 1);
         opts.push('Systems: ' + Object.entries(c).map(([n, ct]) => ct > 1 ? `${n} ×${ct}` : n).join(', '));
       }
+      // Overcharge can ride on a selected loadout or system weapon too — flag it so
+      // High Power is added to the glossary below.
+      (db.loadoutOptions || []).forEach((lo, i) => {
+        const si = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
+        (lo.options[si]?.weapons || []).forEach(w => { if (w.special && /\bOvercharge\b/i.test(w.special)) hasOvercharge = true; });
+      });
+      const sysL = systemsListFor(db, f.faction);
+      if (sysL && inst.systems) inst.systems.forEach(nm => { const o = findSystemOption(sysL, nm); (o?.weapons || []).forEach(w => { if (w.special && /\bOvercharge\b/i.test(w.special)) hasOvercharge = true; }); });
       const prLabel = (g.name && g.name !== db.name) ? `${esc(g.name)} <span class="pr-group-class">(${qty}× ${esc(db.name)})</span>` : `${qty}× ${esc(db.name)}`;
       return `<div class="pr-group">
         <div class="pr-group-head"><span class="pr-group-name">${prLabel}</span><span class="pr-group-pts">${groupPoints(f, g)} pts</span></div>
@@ -3140,6 +3211,9 @@
         ${opts.length ? `<div class="pr-opts">${opts.map(esc).join(', ')}</div>` : ''}
       </div>`;
     }).join('');
+
+    // Overcharging a Weapon makes it a High Power Weapon — list that rule too.
+    if (hasOvercharge) collectRule('High Power');
 
     const admiralsHtml = (f.admirals || []).map(a =>
       `<div class="pr-line"><b>${esc(a.name)}</b> (Lv ${a.level || '?'}), ${a.points} pts${a.selectedAbilities?.length ? ', ' + esc(a.selectedAbilities.join(', ')) : ''}</div>`).join('');

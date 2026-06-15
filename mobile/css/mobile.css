@@ -2082,6 +2082,23 @@ body.sheet-open .sheet-scrim {
   color: var(--fg3);
   margin-bottom: 2px;
 }
+/* Sub-faction split (e.g. Independents / Kalium) — separate underlined columns. */
+.lore-famous-cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-xs, 4px) var(--sp-l);
+}
+.lore-famous-col {
+  min-width: 7rem;
+}
+.lore-famous-subhead {
+  display: block;
+  font-style: normal;
+  font-weight: var(--weight-bold);
+  color: var(--fg2);
+  text-decoration: underline;
+  margin-bottom: 2px;
+}
 /* Namesake sits last, divided from the ship list; label bold, text upright. */
 .lore-namesake {
   margin-top: var(--sp-m);
