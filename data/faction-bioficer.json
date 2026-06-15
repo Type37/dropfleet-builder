@@ -637,7 +637,7 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "Consistent with the enemy's other super battleships, the Binder is effectively an up-gunned, slower derivative of the Bastion class. Its devastating, mixed armament is a primary threat to any vessel. Like other Bioficer super battleships, it features a greater offensive crew compliment to fill its boarding pods, making boarding actions against this leviathan a foolhardy endeavour.",
-    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:"
+    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset: Torpedo (Launch 2, Limited-4)."
    }
   },
   {
@@ -741,7 +741,7 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "Much like the Blackbird is an up-gunned version of the Binary, the Bishop super battleship shares the primary armaments of the Brutal class. It sacrifices some thrust to add a Thermitor and boarding pods while retaining the option to add Genitor Torpedoes and a Supercell. Fully equipped and upgraded, this is a terrifying opponent at close quarters.",
-    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:",
+    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset: Torpedo (Launch 2, Limited-4).",
     "namesake": "A [bishop](https://en.wikipedia.org/wiki/Bishop) is a senior member of the Christian clergy, ranking above a priest and usually overseeing a diocese. The word derives from the Greek episkopos, meaning overseer."
    }
   },
@@ -846,7 +846,7 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "The Blackbird is one of the new enemy's most awesome, maxed-out vessels. The extreme and frankly insulting effects of the Grand Bisector are already, regrettably, well known, but once augmented with multiple other weapons this vessel becomes a top-tier threat. Its Scythes, Thermator and boarding pods are bad enough on their own; it can be further upgraded with Genitor Torpedoes.",
-    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:",
+    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset: Torpedo (Launch 2, Limited-4).",
     "namesake": "The [common blackbird](https://en.wikipedia.org/wiki/Common_blackbird) (Turdus merula) is a true thrush of Europe, western Asia, and North Africa. The male has glossy black plumage with a bright orange-yellow bill and eye ring."
    }
   },
@@ -930,7 +930,7 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "The Bastion class battleship is built around the massive Gravitic Hyperlance. This weapon projects a thin tunnel of massively undulating gravity, pulling and shaking a cylinder of hull to pieces while arresting the target for further abuse, should it survive at all. A Thermitor battery augments this ship’s already awesome destructive power.",
-    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:",
+    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset: Torpedo (Launch 2, Limited-4).",
     "namesake": "A [bastion](https://en.wikipedia.org/wiki/Bastion) is an angular structure projecting outward from the wall of a fortification, allowing defenders to cover the adjacent walls with crossfire. The term is also used broadly for any stronghold or institution that protects something."
    }
   },
@@ -1023,7 +1023,7 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "The Brutal class battleship is built around the terrifying Giga-Winnower, a weapon of awesome, indiscriminate lethality. When unleashed at full force it projects coruscating tsunamis of molecular deconstructive power, reducing multiple targets to random chunks. Like all Winnowers, its weakness is its short range, making extreme aggression an enjoyed necessity for the intelligences that direct this massive ship.",
-    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:"
+    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset: Torpedo (Launch 2, Limited-4)."
    }
   },
   {
@@ -1115,7 +1115,7 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "One of the first nightmarish Bioficer battleships encountered, the Binary is built around a colossal, spinal-mounted Grand Bisector. This weapon is already infamous for neatly slicing cruisers in half with a single, silent discharge. Like most Bioficer battleships, it can be upgraded with Genitor Torpedoes and can carry a single Supercell into battle.",
-    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset:",
+    "rulesText": "This Ship may take a Torpedo Upgrade for +20 points, gaining the following Launch Asset: Torpedo (Launch 2, Limited-4).",
     "namesake": "Binary means consisting of or relating to two parts or components. The term names the base-2 number system used by computers and, in astronomy, a binary system of two stars orbiting a common centre of mass."
    }
   },
