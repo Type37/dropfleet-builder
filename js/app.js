@@ -3099,7 +3099,12 @@ const App = (() => {
     container.innerHTML = SHIP_FILTERS.map(f =>
       `<button class="filter-chip ${activeFilters.has(f.key) ? 'active' : ''}" onclick="App.toggleShipFilter('${f.key}')">${activeFilters.has(f.key) ? CHECK_SVG : ''}${f.label}</button>`
     ).join('') +
-      `<button class="filter-chip ${settings.showAdditionalShips ? 'active' : ''}" onclick="App.toggleMiscShips()" title="Mercenaries, cross-faction and other optional ships">${settings.showAdditionalShips ? CHECK_SVG : ''}Misc Ships</button>`;
+      // Misc Ships is a distinct vertical toggle switch (not a filter chip) — it
+      // changes WHICH ships exist in the list, not just narrows them.
+      `<button class="misc-vtoggle ${settings.showAdditionalShips ? 'on' : ''}" role="switch" aria-checked="${settings.showAdditionalShips}" onclick="App.toggleMiscShips()" title="Show mercenaries, cross-faction and other optional ships">
+        <span class="misc-vtoggle-track"><span class="misc-vtoggle-knob"></span></span>
+        <span class="misc-vtoggle-label">Misc<br>Ships</span>
+      </button>`;
   }
 
   // The "Misc Ships" picker chip mirrors the Settings "Additional Ships" toggle:
