@@ -310,3 +310,33 @@ prior sessions; ONE genuine bug remained and was fixed.
   link rides along). "Simple Print View" + the simple list are the same text now.
 - Verified on desktop: modal no-scroll + 1500-pt custom fleet created; army-list text
   format; print Close works; gold/white-outline buttons; topbar relabelled.
+
+---
+
+# Batch (2026-06-15, v194) - modular statblocks everywhere + sidebar rework
+
+## Modular options show their FULL statblock (your hand-drawn ask)
+"Anything modular shows the full shit." Done in BOTH apps, everywhere there's a
+picker (systems/hardpoints, loadout options, station armaments):
+- Weapon options already showed the weapon datasheet (Arc/Att/Lk/Dmg/Special).
+- LAUNCH options (Fighters, Bombers, Mines, Fire Ships, Bulk Landers) now show the
+  full launch-asset statblock (Thrust/Att/Lock/Dmg/Special) instead of just "Launch
+  N". Verified: Fighters = Thrust 16"/Close Protection 3; Mines = 5/4+/1K; etc.
+- Extracted buildLaunchTable() (desktop + mobile) so all pickers share it.
+
+## Stat modifiers factored in (verified)
+Every modular option that changes a stat applies + shows green. Verified Ablative
+Armour (ES 4+->3+, KS 5+->4+ = "save +1"), Scanner Array (Scan +4"), Drive Refit
+(Thrust +3"). Audited all 6 factions: the only stat-implying option without statMods
+is "Sensor Dome" which grants the Detector RULE (not a stat), so correctly none.
+
+## Space station defence grid no longer blank
+Root cause: shared/mobile-created stations store no inline stats, and print used
+ss.stats only. Fixed: stationDefFor matches the mobile/shared `stationKey` too, and
+the print station falls back to the station def's stats + weapons.
+
+## Landing / sidebar
+- "501-1000 points" now a hyphen, not an en-dash (gameSizeLines).
+- Left sidebar: groups read "N / max groups" on their own line; the composition bar
+  is now the groups bar (colour-coded, 50% thicker, hover tooltip with the per-tonnage
+  breakdown, colour-key legend removed); AP/turn moved to its own line below it.
