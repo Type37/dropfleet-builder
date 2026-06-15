@@ -3223,6 +3223,12 @@
       `<div class="pr-line"><b>${esc(a.name)}</b> (Lv ${a.level || '?'}), ${a.points} pts${a.selectedAbilities?.length ? ', ' + esc(a.selectedAbilities.join(', ')) : ''}</div>`).join('');
     const stationHtml = f.spaceStation ? `<div class="pr-line"><b>${esc(f.spaceStation.name)}</b>, ${f.spaceStation.cost} pts${(f.spaceStation.systems && f.spaceStation.systems.length) ? ' (' + f.spaceStation.systems.map(esc).join(', ') + ')' : ''}</div>` : '';
 
+    // Secondary objectives (the two chosen for the game), spelled out.
+    const secObjsHtml = (f.secondaryObjectives || []).map(n => {
+      const o = (SECONDARY_OBJECTIVES || []).find(x => x.name === n) || { name: n, description: '' };
+      return `<div class="pr-gloss"><b>${esc(o.name)}</b>${o.description ? ': ' + ruleHtml(o.description) : ''}</div>`;
+    }).join('');
+
     const glossary = [...usedRules.entries()].sort((a, b) => a[0].localeCompare(b[0]))
       .map(([n, d]) => `<div class="pr-gloss"><b>${esc(n)}</b>: ${ruleHtml(d)}</div>`).join('');
 
@@ -3234,6 +3240,7 @@
       <div class="pr-units${localStorage.getItem('dfc_print2col') === '1' ? ' pr-2col' : ''}">${groupsHtml}</div>
       ${admiralsHtml ? `<div class="pr-section-title">Admiral</div>${admiralsHtml}` : ''}
       ${stationHtml ? `<div class="pr-section-title">Space Station</div>${stationHtml}` : ''}
+      ${secObjsHtml ? `<div class="pr-section-title">Secondary Objectives</div><div class="pr-glossary">${secObjsHtml}</div>` : ''}
       ${glossary ? `<div class="pr-section-title">Rules Glossary</div><div class="pr-glossary">${glossary}</div>` : ''}
       <div class="pr-foot">type37.github.io/dropfleet-builder</div>
     `;

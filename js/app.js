@@ -4877,6 +4877,17 @@ const App = (() => {
     // above, so the player reads it in place (no page-flipping) and the sheet stays
     // to a few pages. `rulesGlossary` is still collected for potential future use.
 
+    // Secondary objectives (the two chosen for the game), spelled out for the table.
+    const secObjList = (f.secondaryObjectives || []).map(n =>
+      ((rawFleetData && rawFleetData.secondaryObjectives) || []).find(x => x.name === n) || { name: n, description: '' }
+    );
+    if (secObjList.length) {
+      html += `<div class="print-section">
+        <div class="print-section-title">Secondary Objectives</div>
+        <div class="dp-rules">${secObjList.map(o => `<span class="dp-rule"><b>${esc(o.name)}:</b> ${o.description ? ruleHtml(o.description) : ''}</span>`).join('')}</div>
+      </div>`;
+    }
+
     html += '</div>';
     return html;
   }
@@ -4913,10 +4924,13 @@ const App = (() => {
     }).join('');
     const admRows = (f.admirals || []).map(a => `<div class="sp-row sp-adm"><span class="sp-name">${esc(a.name)}${a.level ? ` (Lv ${a.level})` : ''}</span><span class="sp-pts">${a.points || 0}</span></div>`).join('');
     const station = f.spaceStation ? `<div class="sp-row sp-adm"><span class="sp-name">${esc(f.spaceStation.name)}</span><span class="sp-pts">${f.spaceStation.cost || 0}</span></div>` : '';
+    const secObjs = (f.secondaryObjectives || []);
+    const objLine = secObjs.length ? `<div class="sp-row sp-obj"><span class="sp-name">Secondary: ${esc(secObjs.join(', '))}</span></div>` : '';
     return `<div class="print-fleet print-simple" data-fleet-name="${esc(f.name)}">
       <div class="sp-head"><strong>${esc(f.name)}</strong> · ${esc(fName)} · ${esc(sizeInfo.label)} · <strong>${pts}${cap !== 99999 ? ' / ' + cap : ''} pts</strong></div>
       ${admRows || station ? `<div class="sp-section">${admRows}${station}</div>` : ''}
       <div class="sp-section">${groupRows}</div>
+      ${objLine ? `<div class="sp-section">${objLine}</div>` : ''}
     </div>`;
   }
 
