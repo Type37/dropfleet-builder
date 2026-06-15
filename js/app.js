@@ -4346,7 +4346,9 @@ const App = (() => {
             <span class="weapon-col station-arm-qty">${stepper(o, c, canAdd)}</span>
           </div>`;
         }).join('');
-        return `<div class="sys-cat"><div class="sys-cat-head">${esc(cat)}</div><div class="weapon-list station-arm-list">${head}${wrows}</div></div>`;
+        // No category header for weapons — the table's "Weapon" column header
+        // already labels it (the "Weapon Systems" heading was redundant).
+        return `<div class="sys-cat"><div class="weapon-list station-arm-list">${head}${wrows}</div></div>`;
       }
       // Structures / Upgrades: keep the row+effect layout (no weapon stats).
       const rows = opts.map(o => {
