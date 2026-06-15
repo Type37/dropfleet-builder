@@ -96,7 +96,7 @@
     "specialRules": [
      {
       "name": "Marines-1",
-      "description": "Remove X enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
+      "description": "Remove 1 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -195,8 +195,8 @@
     ],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter L-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -316,8 +316,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -377,7 +377,7 @@
     "specialRules": [
      {
       "name": "Marines-1",
-      "description": "Remove X enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
+      "description": "Remove 1 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -462,7 +462,7 @@
     "specialRules": [
      {
       "name": "Marines-1",
-      "description": "Remove X enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
+      "description": "Remove 1 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -614,13 +614,13 @@
     "specialRules": [
      {
       "name": "Marines-1",
-      "description": "Remove X enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
+      "description": "Remove 1 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter L-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -718,13 +718,13 @@
     "specialRules": [
      {
       "name": "Marines-1",
-      "description": "Remove X enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
+      "description": "Remove 1 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter L-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -822,13 +822,13 @@
     "specialRules": [
      {
       "name": "Marines-1",
-      "description": "Remove X enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
+      "description": "Remove 1 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter L-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -910,8 +910,8 @@
     ],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter L-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1002,8 +1002,8 @@
     ],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter L-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1094,8 +1094,8 @@
     ],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter L-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1294,8 +1294,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1348,8 +1348,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1402,8 +1402,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1456,8 +1456,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1501,8 +1501,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-2",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 2.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1546,8 +1546,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1635,8 +1635,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1689,8 +1689,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1740,8 +1740,8 @@
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1785,8 +1785,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -1844,8 +1844,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1906,8 +1906,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1951,8 +1951,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1996,8 +1996,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2041,8 +2041,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2137,8 +2137,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter L-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2613,8 +2613,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter S-1",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 1.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2826,8 +2826,8 @@
     ],
     "specialRules": [
      {
-      "name": "Payload S/L-X",
-      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up X of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
+      "name": "Payload L-1",
+      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up 1 of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -2883,13 +2883,13 @@
     "specialRules": [
      {
       "name": "Aegis-3",
-      "description": "All Ships with this rule in a Group combine their X values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 3 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
-      "name": "Payload S/L-X",
-      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up X of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
+      "name": "Payload L-1",
+      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up 1 of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -2945,13 +2945,13 @@
     "specialRules": [
      {
       "name": "Aegis-1",
-      "description": "All Ships with this rule in a Group combine their X values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 1 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
-      "name": "Payload S/L-X",
-      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up X of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
+      "name": "Payload S-1",
+      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up 1 of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3002,8 +3002,8 @@
     ],
     "specialRules": [
      {
-      "name": "Payload S/L-X",
-      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up X of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
+      "name": "Payload S-1",
+      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up 1 of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3043,8 +3043,8 @@
     ],
     "specialRules": [
      {
-      "name": "Payload S/L-X",
-      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up X of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
+      "name": "Payload S-1",
+      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up 1 of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3100,8 +3100,8 @@
     ],
     "specialRules": [
      {
-      "name": "Payload S/L-X",
-      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up X of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
+      "name": "Payload S-1",
+      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up 1 of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3175,12 +3175,6 @@
       "description": "You may only take one Group of this Ship in a Skirmish-sized game, two in a Clash, three in a Battle, and four in a Reconquest.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
-     },
-     {
-      "name": "Shield-X",
-      "description": "This Group has a Shield Save of X+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
-      "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
     "groupMin": 1,
@@ -3231,7 +3225,7 @@
     "specialRules": [
      {
       "name": "Marines-2",
-      "description": "Remove X enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
+      "description": "Remove 2 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3511,7 +3505,7 @@
     "specialRules": [
      {
       "name": "Marines-1",
-      "description": "Remove X enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
+      "description": "Remove 1 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3677,8 +3671,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Porter S/L-X",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
+      "name": "Porter F-2",
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 2.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3738,8 +3732,8 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Payload S/L-X",
-      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up X of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
+      "name": "Payload F-1",
+      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up 1 of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
