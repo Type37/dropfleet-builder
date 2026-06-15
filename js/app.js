@@ -257,7 +257,9 @@ const App = (() => {
     'agency': 'agency_bastion',
     'atom': 'atom_scion',
     'atlas': 'atlas_catastrophe',
-    'genitor': 'genitor'
+    'genitor': 'genitor',
+    // Resistance
+    'nguen': 'nguen_olympus'
   };
 
   function shipArtPath(shipName) {
@@ -5700,6 +5702,12 @@ const App = (() => {
       const selOpt = lo.options[selIdx];
       if (selOpt && selOpt.loads) allLoads.push(...selOpt.loads);
     });
+    // Launch from selected systems/hardpoints (Resistance modular ships build their
+    // launch entirely from chosen options), so those assets show their stats too.
+    if (ship && Array.isArray(ship.systems) && ship.systems.length) {
+      const list = systemsListFor(dbShip, factionKey);
+      if (list) ship.systems.forEach(name => { const o = findSystemOption(list, name); if (o && o.loads) allLoads.push(...o.loads); });
+    }
     if (!allLoads.length) return '';
 
     let body = '';

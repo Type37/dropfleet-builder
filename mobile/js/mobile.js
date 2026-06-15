@@ -221,7 +221,8 @@
     'claudia rhee':'claudia_rhee','gaius chau':'gaius_chau','javelin':'director_javelin',
     'helena of asgard':'helena_of_asgard','halsey':'halsey','havelock':'havelock',
     'weaver':'weaver','tayne':'tayne','ascendant':'ascendant_zenith',
-    'agency':'agency_bastion','atom':'atom_scion','atlas':'atlas_catastrophe','genitor':'genitor'
+    'agency':'agency_bastion','atom':'atom_scion','atlas':'atlas_catastrophe','genitor':'genitor',
+    'nguen':'nguen_olympus'
   };
 
   function shipArtPath(name) {
@@ -1787,7 +1788,7 @@
         }).join('')}
       </div>` : ''}
 
-      ${renderLaunchTable(f.faction, ship)}
+      ${renderLaunchTable(f.faction, ship, inst)}
 
       ${loadoutOptions.length ? `<div class="loadout-section">
         <div class="section-header" style="padding:0 0 var(--sp-s)">Loadout</div>
@@ -2018,8 +2019,19 @@
     (f.launchAssets || []).forEach(grp => (grp.assets || []).forEach(a => { map[a.name.toLowerCase()] = a; }));
     return map;
   }
-  function renderLaunchTable(factionKey, ship) {
-    const loads = ship.loads || [];
+  function renderLaunchTable(factionKey, ship, inst) {
+    const loads = [...(ship.loads || [])];
+    // Selected loadout options and systems/hardpoints can grant launch (Resistance
+    // modular ships build their launch entirely from chosen options).
+    (ship.loadoutOptions || []).forEach((lo, i) => {
+      const sel = inst && inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
+      const opt = lo.options && lo.options[sel];
+      if (opt && opt.loads) loads.push(...opt.loads);
+    });
+    if (inst && Array.isArray(inst.systems) && inst.systems.length) {
+      const list = systemsListFor(ship, factionKey);
+      if (list) inst.systems.forEach(n => { const o = findSystemOption(list, n); if (o && o.loads) loads.push(...o.loads); });
+    }
     if (!loads.length) return '';
     const map = getLaunchAssetMap(factionKey);
     let rows = '';
