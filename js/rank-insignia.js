@@ -7,8 +7,8 @@
    One motif per faction, `level` (1–5) marks stacked centre-aligned (more
    marks = higher rank, like real insignia). Single faction-accent colour so it
    reads on light and dark. Faction → motif:
-     ucm        US-Navy gold bars
-     resistance Royal-Navy bars + executive curl on the top bar
+     ucm        military down-pointing chevrons
+     resistance Royal-Navy stripes + a looped executive curl above the top bar
      phr        post-human geometric up-chevrons
      scourge    organic spine / growth-ripple lines
      shaltari   crystalline diamond pips
@@ -42,10 +42,11 @@
   // Per-faction mark drawn around centre (12, y) — bold, near-full-width so the
   // motif fills the thumbnail. (y, i, n, color) -> svg.
   const MARK = {
-    ucm: (y, i, n, c) => `<rect x="2.5" y="${y - 1.9}" width="19" height="3.8" rx="0.9" fill="${c}"/>`,
-    resistance: (y, i, n, c) =>
-      `<rect x="2.5" y="${y - 1.8}" width="19" height="3.6" rx="0.9" fill="${c}"/>` +
-      (i === n - 1 ? `<circle cx="5.2" cy="${y}" r="2.9" fill="none" stroke="${c}" stroke-width="1.7"/>` : ''),
+    // UCM: military down-pointing chevrons (distinct from PHR's up-chevrons).
+    ucm: (y, i, n, c) =>
+      `<path d="M3 ${(y - 2.7).toFixed(1)} L12 ${(y + 2.7).toFixed(1)} L21 ${(y - 2.7).toFixed(1)}" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>`,
+    // resistance is special-cased (bars + an executive curl loop) — see
+    // resistanceInsignia() below.
     phr: (y, i, n, c) =>
       `<path d="M3 ${y + 2.8} L12 ${y - 2.8} L21 ${y + 2.8}" fill="none" stroke="${c}" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>`,
     scourge: (y, i, n, c) =>
@@ -89,6 +90,24 @@
     }).join('');
   }
 
+  // ── Resistance: Royal-Navy stripes with an executive "curl" loop on top ────
+  // n bars packed into the lower band, with a looped curl rising above the top
+  // bar (the loopy loop), like a naval officer's rank lace.
+  function resistanceInsignia(n, c) {
+    const bandTop = 11, bandBottom = 21;
+    const ys = [];
+    if (n === 1) ys.push(16.5);
+    else { const step = (bandBottom - bandTop) / (n - 1); for (let i = 0; i < n; i++) ys.push(bandBottom - i * step); }
+    const bars = ys.map(y => `<rect x="3" y="${(y - 1.6).toFixed(1)}" width="18" height="3.2" rx="0.8" fill="${c}"/>`).join('');
+    const topY = Math.min(...ys);
+    // The curl: a loop centred above the top bar with a short tail joining it —
+    // reads as the Royal-Navy executive curl.
+    const cyL = topY - 5.2;
+    const curl = `<circle cx="12" cy="${cyL.toFixed(1)}" r="3" fill="none" stroke="${c}" stroke-width="2"/>` +
+      `<path d="M12 ${(cyL + 3).toFixed(1)} L12 ${(topY - 1.6).toFixed(1)}" stroke="${c}" stroke-width="2" stroke-linecap="round"/>`;
+    return bars + curl;
+  }
+
   function rankInsignia(faction, level, sizePx) {
     const c = COLOR[faction] || '#777';
     const mark = MARK[faction] || MARK.ucm;
@@ -96,7 +115,9 @@
     const s = sizePx || 20;
     const marks = faction === 'bioficer'
       ? bioficerInsignia(n, c)
-      : rows(n).map((y, i) => mark(y, i, n, c)).join('');
+      : faction === 'resistance'
+        ? resistanceInsignia(n, c)
+        : rows(n).map((y, i) => mark(y, i, n, c)).join('');
     return `<svg class="rank-insignia rank-${faction}" viewBox="0 0 24 24" width="${s}" height="${s}" ` +
       `role="img" aria-label="${LABEL[faction] || faction} rank — Level ${n}" ` +
       `xmlns="http://www.w3.org/2000/svg">${marks}</svg>`;
