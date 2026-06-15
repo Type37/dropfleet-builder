@@ -2615,7 +2615,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "M",
-    "namesake": "Vilnius has been the capital of Lithuania since the fourteenth century, when Grand Duke Gediminas moved his court there; its remarkably intact baroque old town is among the largest in Europe."
+    "namesake": "Vilnius has been the capital of Lithuania since the fourteenth century, when Grand Duke Gediminas moved his court there; its remarkably intact baroque old town is among the largest in Europe.",
+    "lore": "The Vilnius class was formerly designated the Moscow."
    }
   },
   {
@@ -2663,7 +2664,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "M",
-    "namesake": "Warsaw became the capital of Poland in 1596, was systematically destroyed by Nazi forces in 1944 following the Warsaw Uprising, and was rebuilt almost stone by stone from historic records over the following decades."
+    "namesake": "Warsaw became the capital of Poland in 1596, was systematically destroyed by Nazi forces in 1944 following the Warsaw Uprising, and was rebuilt almost stone by stone from historic records over the following decades.",
+    "lore": "The Warsaw class was formerly designated the St Petersburg."
    }
   },
   {

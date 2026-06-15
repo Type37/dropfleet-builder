@@ -202,7 +202,7 @@ const App = (() => {
   const SHIP_ART_SPECIAL = {
     'New York':'new_york','New Cairo':'new_cairo','New Mombasa':'new_mombasa',
     'New Orleans':'new_orleans','New Dubai':'new_dubai','Las Vegas':'las_vegas',
-    'San Francisco':'san_francisco','St Petersburg':'st_petersburg',
+    'San Francisco':'san_francisco','Vilnius':'vilnius','Warsaw':'warsaw',
     'Hong Kong':'hong_kong','Nuuk':'nuuk',
     'Heavy Cruiser':'heavy_cruiser','Heavy Frigate':'heavy_frigate',
     'Light Cruiser':'light_cruiser','Strike Carrier':'strike_carrier',
@@ -3914,10 +3914,13 @@ const App = (() => {
       a.selectedAbilities.splice(pos, 1);
     } else {
       if (a.selectedAbilities.length >= info.picks) {
-        showToast(`This admiral may only choose ${info.picks} abilit${info.picks === 1 ? 'y' : 'ies'}.`);
-        return;
+        // Single-pick admirals act like a radio: clicking another ability just
+        // swaps the selection (no need to deselect the old one first).
+        if (info.picks === 1) { a.selectedAbilities = [abilityName]; }
+        else { showToast(`This admiral may only choose ${info.picks} abilities. Tap a chosen one to swap it.`); return; }
+      } else {
+        a.selectedAbilities.push(abilityName);
       }
-      a.selectedAbilities.push(abilityName);
     }
     saveFleets();
     renderAdmiralSlot();
@@ -3966,7 +3969,9 @@ const App = (() => {
     return `<div class="admiral-ability-picks admiral-ability-picks-modal">
       ${info.table.map(ab => {
         const on = sel.includes(ab.name);
-        const full = !on && remaining <= 0;
+        // Single-pick = radio: never lock the others (clicking swaps). Multi-pick
+        // locks the rest once the cap is reached.
+        const full = !on && remaining <= 0 && info.picks > 1;
         return `<div class="admiral-pick${on ? ' is-selected' : ''}${full ? ' is-locked' : ''}" role="button" tabindex="0" ${full ? '' : `onclick="App.toggleAdmiralAbility(${index}, ${JSON.stringify(ab.name).replace(/"/g, '&quot;')})"`}>
           <span class="admiral-pick-radio"></span>
           <div class="admiral-pick-text">

@@ -175,7 +175,7 @@
   const SHIP_ART_SPECIAL = {
     'New York':'new_york','New Cairo':'new_cairo','New Mombasa':'new_mombasa',
     'New Orleans':'new_orleans','New Dubai':'new_dubai','Las Vegas':'las_vegas',
-    'San Francisco':'san_francisco','St Petersburg':'st_petersburg',
+    'San Francisco':'san_francisco','Vilnius':'vilnius','Warsaw':'warsaw',
     'Hong Kong':'hong_kong','Nuuk':'nuuk',
     'Heavy Cruiser':'heavy_cruiser','Heavy Frigate':'heavy_frigate',
     'Light Cruiser':'light_cruiser','Strike Carrier':'strike_carrier',

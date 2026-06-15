@@ -176,13 +176,14 @@ a:hover { color: var(--navy-light); }
   font-size: 30px;
   line-height: 1;
   text-decoration: none;
-  color: var(--gold);
+  color: #FFCC00;
   background: #000;
-  padding: 2px 8px;
+  padding: 2px 10px;
   margin-bottom: var(--sp-md);
   transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
 }
-.warlore-mark:hover { color: #000; background: var(--gold); }
+.warlore-mark .wl-lore { font-family: 'Roboto Slab', serif; font-size: 1.35em; font-weight: 800; }
+.warlore-mark:hover { color: #000; background: #FFCC00; }
 
 /* Global focus-visible ring — two-stroke (Fluent): a thin light halo tight to
    the element + a navy ring just outside it. The light inner stroke keeps focus
