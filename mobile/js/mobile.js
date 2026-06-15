@@ -1847,7 +1847,7 @@
       ${renderLore(ship)}
 
       <div style="padding:var(--sp-l)">
-        <button class="btn btn-ghost btn-block" onclick="App.copyGroup()" style="margin-bottom:var(--sp-m)">Duplicate Group</button>
+        <button class="btn btn-ghost btn-block" onclick="App.copyGroup()" style="margin-bottom:var(--sp-m)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="vertical-align:-2px;margin-right:6px"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="1.4"/><path d="M10.5 5.5V3A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h2.5"/></svg>Duplicate Group</button>
         <button class="btn btn-ghost btn-block" onclick="App.removeGroup()" style="color:var(--danger);border-color:var(--danger)">Remove Group</button>
       </div>
     `;

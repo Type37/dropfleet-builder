@@ -2065,7 +2065,7 @@ const App = (() => {
             ${gErrorDot}
           </div>
           <div class="overview-group-right">
-            <button class="overview-group-copy" onclick="event.stopPropagation(); App.copyGroup('${g.id}')" aria-label="Copy ${esc(g.name)}" title="Copy group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><rect x="5.5" y="5.5" width="8" height="8" rx="1.2"/><path d="M3 10.2h-.5v-7.7h7.7v.5"/></svg></button>
+            <button class="overview-group-copy" onclick="event.stopPropagation(); App.copyGroup('${g.id}')" aria-label="Duplicate ${esc(g.name)}" title="Duplicate group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="1.4"/><path d="M10.5 5.5V3A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h2.5"/></svg></button>
             <button class="overview-group-remove" onclick="event.stopPropagation(); App.removeGroup('${g.id}')" aria-label="Remove ${esc(g.name)}" title="Remove group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
             <div class="overview-group-pts">${gPts} pts</div>
             ${stepperHtml}

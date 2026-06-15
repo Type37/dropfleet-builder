@@ -2037,11 +2037,13 @@ body.sheet-open .sheet-scrim {
   border-top: 1px solid var(--stroke2);
 }
 .lore-label {
-  font-family: var(--font-condensed);
-  font-size: var(--text-caption2);
+  /* Roboto Slab, a touch bigger, no wide tracking — matches the desktop card
+     lore heading. */
+  font-family: var(--font-display);
+  font-size: var(--text-body2, 14px);
   font-weight: var(--weight-bold);
   text-transform: none;
-  letter-spacing: 0.12em;
+  letter-spacing: 0;
   color: var(--gold-dim);
   margin-bottom: var(--sp-s);
 }
