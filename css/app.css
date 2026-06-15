@@ -4321,6 +4321,35 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Print Preview overlay — pick options + see the output before the print dialog. */
+.print-preview-overlay {
+  position: fixed; inset: 0; z-index: 4000;
+  background: #5a5a5a; display: flex; flex-direction: column;
+}
+.print-preview-bar {
+  display: flex; align-items: center; gap: var(--sp-md);
+  padding: var(--sp-sm) var(--sp-md);
+  background: var(--navy); color: #fff; flex-wrap: wrap;
+}
+.print-preview-title { font-weight: var(--weight-bold); font-size: var(--text-md); }
+.print-preview-opt { display: flex; align-items: center; gap: 5px; font-size: var(--text-sm); cursor: pointer; }
+.print-preview-spacer { flex: 1; }
+.print-preview-scroll { flex: 1; overflow: auto; padding: var(--sp-lg); display: flex; justify-content: center; }
+.print-preview-surface {
+  background: #fff; width: 210mm; max-width: 100%;
+  padding: 14mm; box-shadow: 0 4px 24px rgba(0,0,0,0.4); border-radius: 2px;
+}
+/* Simple Print View — compact roster list (screen + print). */
+.print-simple { font-family: 'Jost', sans-serif; color: #1c1a17; font-size: 11pt; }
+.print-simple .sp-head { font-size: 13pt; border-bottom: 2px solid #1c1a17; padding-bottom: 4px; margin-bottom: 8px; }
+.print-simple .sp-section { margin-bottom: 10px; }
+.print-simple .sp-row { display: flex; align-items: baseline; gap: 6px; padding: 2px 0; border-bottom: 1px dotted #bbb; }
+.print-simple .sp-qty { font-weight: 700; min-width: 26px; }
+.print-simple .sp-name { font-weight: 600; }
+.print-simple .sp-note { color: #555; font-size: 9.5pt; }
+.print-simple .sp-pts { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 700; }
+.print-simple .sp-adm .sp-name { font-style: italic; }
+
 /* Print layout classes (used by printFleet JS) */
 .print-fleet {
   font-family: 'Jost', sans-serif;

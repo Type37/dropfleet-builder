@@ -28,7 +28,7 @@ const App = (() => {
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: false };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: false, printSimple: false };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -4373,9 +4373,7 @@ const App = (() => {
   }
 
   // ── Print / Share ──
-  function printFleet() {
-    if (!currentFleet) return;
-    const f = currentFleet;
+  function buildFullPrintHTML(f) {
     const fName = (factionData[f.faction] || {}).name || f.faction.toUpperCase();
     const pts = calcFleetPoints(f);
     const sizeInfo = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
@@ -4801,14 +4799,94 @@ const App = (() => {
     }
 
     html += '</div>';
+    return html;
+  }
 
-    // Create print container, print, then remove
+  // Minimal "Simple Print View" — a compact, New-Recruit-style roster: just names,
+  // counts, loadout notes and points. No datasheets, art, or rules glossary.
+  function buildSimplePrintHTML(f) {
+    const fName = (factionData[f.faction] || {}).name || f.faction.toUpperCase();
+    const pts = calcFleetPoints(f);
+    const sizeInfo = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
+    const cap = effMax(f);
+    const catOrder = { colossal: 0, heavy: 1, medium: 2, light: 3, payload: 4 };
+    const groups = [...(f.battleGroups || [])].sort((a, b) => {
+      const ac = a.ships[0]?.groupCategory || 'medium', bc = b.ships[0]?.groupCategory || 'medium';
+      return (catOrder[ac] ?? 5) - (catOrder[bc] ?? 5);
+    });
+    const groupRows = groups.map(g => {
+      if (!g.ships.length) return '';
+      const s = g.ships[0];
+      const db = findShipInDB(f.faction, s.groupCategory, s.shipKey);
+      const name = db ? db.name : s.shipKey;
+      const n = g.ships.length;
+      const gPts = g.ships.reduce((t, x) => t + (x.points || 0), 0);
+      // loadout/system notes from the first ship (group shares config)
+      const notes = [];
+      (db && db.loadoutOptions || []).forEach((lo, i) => {
+        const opt = lo.options[(s.loadouts && s.loadouts[i]) || 0];
+        if (opt && opt.cost) notes.push(opt.name);
+      });
+      if (s.systems && s.systems.length) notes.push(...s.systems);
+      if (s.feature) notes.push(s.feature);
+      const noteStr = notes.length ? ` <span class="sp-note">(${esc(notes.join(', '))})</span>` : '';
+      return `<div class="sp-row"><span class="sp-qty">${n}×</span> <span class="sp-name">${esc(name)}</span>${noteStr}<span class="sp-pts">${gPts}</span></div>`;
+    }).join('');
+    const admRows = (f.admirals || []).map(a => `<div class="sp-row sp-adm"><span class="sp-name">${esc(a.name)}${a.level ? ` (Lv ${a.level})` : ''}</span><span class="sp-pts">${a.points || 0}</span></div>`).join('');
+    const station = f.spaceStation ? `<div class="sp-row sp-adm"><span class="sp-name">${esc(f.spaceStation.name)}</span><span class="sp-pts">${f.spaceStation.cost || 0}</span></div>` : '';
+    return `<div class="print-fleet print-simple" data-fleet-name="${esc(f.name)}">
+      <div class="sp-head"><strong>${esc(f.name)}</strong> — ${esc(fName)} · ${esc(sizeInfo.label)} · <strong>${pts}${cap !== 99999 ? ' / ' + cap : ''} pts</strong></div>
+      ${admRows || station ? `<div class="sp-section">${admRows}${station}</div>` : ''}
+      <div class="sp-section">${groupRows}</div>
+    </div>`;
+  }
+
+  function fleetPrintHTML(f) {
+    return settings.printSimple ? buildSimplePrintHTML(f) : buildFullPrintHTML(f);
+  }
+
+  // Print uses a #print-container the @media print CSS targets.
+  function doPrintNow() {
+    if (!currentFleet) return;
+    // @media print hides everything except #print-container, so the preview
+    // overlay can stay open underneath.
+    document.getElementById('print-container')?.remove();
     const printDiv = document.createElement('div');
     printDiv.id = 'print-container';
-    printDiv.innerHTML = html;
+    printDiv.innerHTML = fleetPrintHTML(currentFleet);
     document.body.appendChild(printDiv);
     window.print();
     printDiv.remove();
+  }
+
+  // Print Preview: choose options (Simple / 2-column) and see the output before
+  // sending it to the browser's print dialog.
+  function printFleet() {
+    if (!currentFleet) return;
+    openPrintPreview();
+  }
+  function openPrintPreview() {
+    if (!currentFleet) return;
+    document.getElementById('print-preview-overlay')?.remove();
+    const ov = document.createElement('div');
+    ov.id = 'print-preview-overlay';
+    ov.className = 'print-preview-overlay';
+    ov.innerHTML = `
+      <div class="print-preview-bar">
+        <span class="print-preview-title">Print preview</span>
+        <label class="print-preview-opt"><input type="checkbox" id="pp-simple" ${settings.printSimple ? 'checked' : ''}> Simple Print View</label>
+        <label class="print-preview-opt"><input type="checkbox" id="pp-2col" ${settings.print2col ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> 2 columns</label>
+        <span class="print-preview-spacer"></span>
+        <button class="btn btn-ghost btn-sm" id="pp-close">Close</button>
+        <button class="btn btn-primary btn-sm" id="pp-print">Print</button>
+      </div>
+      <div class="print-preview-scroll"><div class="print-preview-surface" id="pp-surface">${fleetPrintHTML(currentFleet)}</div></div>`;
+    document.body.appendChild(ov);
+    const refresh = () => { const s = document.getElementById('pp-surface'); if (s) s.innerHTML = fleetPrintHTML(currentFleet); };
+    ov.querySelector('#pp-simple').onchange = (e) => { settings.printSimple = e.target.checked; saveSettings(); const c = ov.querySelector('#pp-2col'); if (c) c.disabled = e.target.checked; refresh(); };
+    ov.querySelector('#pp-2col').onchange = (e) => { settings.print2col = e.target.checked; saveSettings(); refresh(); };
+    ov.querySelector('#pp-close').onclick = () => ov.remove();
+    ov.querySelector('#pp-print').onclick = () => doPrintNow();
   }
 
   // ── Shared Fleet Viewer ──
@@ -5282,9 +5360,12 @@ const App = (() => {
     showToast('Fleets exported!');
   }
 
+  function saveSettings() {
+    try { localStorage.setItem('dfc_settings', JSON.stringify(settings)); } catch (e) {}
+  }
   function toggleSetting(key, value) {
     settings[key] = value;
-    try { localStorage.setItem('dfc_settings', JSON.stringify(settings)); } catch(e) {}
+    saveSettings();
     showToast(value ? 'Setting enabled' : 'Setting disabled');
     // Re-render if display-affecting settings changed
     if (key === 'compactView' || key === 'autoExpandLore' || key === 'altStatBlock') renderBuilder();
