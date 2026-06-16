@@ -1317,8 +1317,10 @@ button, a, input, select, textarea,
 .ship-art-hero .hero-art-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, 0.5); }
 .ship-art-hero .hero-art-dot.active { background: #fff; }
 .ship-art-hero img {
-  max-width: 90%;
-  max-height: 160px;
+  /* Fill more of the hero so the sculpt reads bigger, without growing the box
+     (vertical space is precious on a phone). */
+  max-width: 96%;
+  max-height: 174px;
   object-fit: contain;
   filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
 }

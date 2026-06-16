@@ -5566,14 +5566,16 @@ h1, h2, h3, h4, h5, h6 {
 .detail-hero {
   display: flex;
   gap: var(--sp-lg);
-  margin-bottom: var(--sp-lg);
+  margin-bottom: var(--sp-md);
   align-items: stretch;
 }
 .detail-hero-image {
   position: relative;
-  width: 48%;
-  min-width: 300px;
-  height: 230px;
+  /* Ships are wide sculpts, so the art gets most of the hero width; the facts +
+     stat grid fill the column beside it (no more empty space there). */
+  width: 58%;
+  min-width: 320px;
+  height: 264px;
   border-radius: var(--radius-md);
   background: var(--paper-alt);
   border: 1px solid var(--stroke-light);
@@ -5586,7 +5588,17 @@ h1, h2, h3, h4, h5, h6 {
   /* Ships are wide — show the whole sculpt rather than cropping it to a square. */
   object-fit: contain;
 }
-.detail-hero-info { flex: 1; }
+/* Facts (tonnage/cost/badges) at the top, stat grid filling the middle, and the
+   Add button pinned to the bottom so it lines up with the foot of the art. */
+.detail-hero-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+.detail-hero-info .stat-grid { max-width: 100%; }
+.detail-hero-info .detail-add-btn { margin-top: auto; }
 /* Hero art carousel: prev/next arrows (hover) + label & dots over the image. */
 .hero-art-arrow {
   position: absolute; top: 50%; transform: translateY(-50%);

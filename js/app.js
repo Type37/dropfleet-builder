@@ -6120,13 +6120,13 @@ const App = (() => {
         <div class="detail-hero-info">
           <div class="detail-hero-tonnage ship-tonnage-label ship-tonnage-${category}">${esc(tonnage)}</div>
           <div class="detail-hero-cost">${dbShip.points} pts</div>
-          ${badges.length > 0 ? `<div class="flex gap-xs" style="margin-top:var(--sp-sm)">${badges.join('')}</div>` : ''}
+          ${badges.length > 0 ? `<div class="flex gap-xs">${badges.join('')}</div>` : ''}
+          ${statsHtml}
           ${addable ? (category === 'famous_admirals'
-            ? `<button class="btn btn-primary" style="margin-top:var(--sp-md)" onclick="App.closeModal('modal-ship-detail'); App.addFamousAdmiralFromPicker('${shipKey}')">+ Add Admiral</button>`
-            : `<button class="btn btn-primary" style="margin-top:var(--sp-md)" onclick="App.addShipToGroup('${shipKey}','${category}'); App.closeModal('modal-ship-detail')">+ Add to fleet</button>`) : ''}
+            ? `<button class="btn btn-primary detail-add-btn" onclick="App.closeModal('modal-ship-detail'); App.addFamousAdmiralFromPicker('${shipKey}')">+ Add Admiral</button>`
+            : `<button class="btn btn-primary detail-add-btn" onclick="App.addShipToGroup('${shipKey}','${category}'); App.closeModal('modal-ship-detail')">+ Add to fleet</button>`) : ''}
         </div>
       </div>
-      ${statsHtml}
       ${weaponsHtml}
       ${loadoutsHtml}
       ${loadsHtml}
