@@ -2076,9 +2076,15 @@ body.sheet-open .sheet-scrim {
 }
 .lore-body p { margin: 0 0 var(--sp-s); }
 .lore-body p:last-child { margin-bottom: 0; }
-/* Links inside lore / namesake (Wikipedia, tourism boards, etc.). */
-.lore-link { color: var(--navy); text-decoration: underline; text-underline-offset: 2px; }
-.lore-link:active { color: var(--gold-dim); }
+/* Links inside lore / namesake: subtle — same colour as the text, faint underline only. */
+.lore-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(60, 56, 50, 0.3); /* fallback for no color-mix */
+  text-decoration-color: color-mix(in srgb, currentColor 28%, transparent);
+}
+.lore-link:active { text-decoration-color: color-mix(in srgb, currentColor 60%, transparent); }
 .lore-famous {
   margin-top: var(--sp-m);
   font-family: var(--font-lore);

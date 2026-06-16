@@ -251,10 +251,18 @@ h1, h2, h3, h4, h5, h6 {
 .text-rules p { margin: 0 0 0.7em; }
 .text-rules p:last-child { margin-bottom: 0; }
 
-/* Links inside lore / namesake (Wikipedia, tourism boards, etc.). Underlined so
-   they read as links against the grayed lore text; navy, gold on hover. */
-.lore-link { color: var(--navy); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
-.lore-link:hover { color: var(--gold-dark); }
+/* Links inside lore / namesake (Wikipedia, tourism boards, etc.). Subtle: same
+   colour as the surrounding lore text, distinguished only by a faint underline
+   that strengthens a touch on hover. They open in a new tab. */
+.lore-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(60, 56, 50, 0.3); /* fallback for no color-mix */
+  text-decoration-color: color-mix(in srgb, currentColor 28%, transparent);
+}
+.lore-link:hover { text-decoration-color: color-mix(in srgb, currentColor 60%, transparent); }
 
 /* ── 4. Art Deco Decorative Elements ─────────────────────────── */
 .deco-rule {
