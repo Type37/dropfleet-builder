@@ -490,7 +490,7 @@
     "famousShips": [
      "Starheart",
      "Hammer of Purpose",
-     "Deus Ex Machina",
+     "[Deus Ex Machina](https://en.wikipedia.org/wiki/Deus_ex_machina)",
      "Forgefire"
     ],
     "namesake": "[Romulus](https://en.wikipedia.org/wiki/Romulus_and_Remus) was, with his twin brother Remus, the legendary founder of Rome. Raised by a she-wolf, he killed Remus in a quarrel and became the city's first king."
@@ -559,8 +559,8 @@
     "lore": "The Octavius class super battleship features a broad array of gunnery designed to devastate large targets. A heavy calibre broadside, torpedoes, Neutron Missiles, and the dreaded Dark Matter Cannon all combine to make this one of the most fearsome non-dreadnought vessels in the cosmos.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Actium",
-     "Cleopatra’s Bane",
+     "[Actium](https://en.wikipedia.org/wiki/Battle_of_Actium)",
+     "[Cleopatra](https://en.wikipedia.org/wiki/Cleopatra)’s Bane",
      "Long Reign"
     ],
     "namesake": "[Octavius](https://en.wikipedia.org/wiki/Augustus) was the birth name of Augustus. As Gaius Julius Caesar Octavianus he hunted down Caesar's assassins, defeated Antony at Actium, and carefully dismantled the trappings of dictatorship while keeping all its substance. Born on 23 September 63 BC, he studied philosophy and rhetoric under Greek and Latin tutors as a young man. In 37 BC he married Livia Drusilla, who would remain his wife for the rest of his life."
@@ -623,7 +623,7 @@
     "lore": "The Ceasar class super battleship strains this new superstructure’s cutting-edge power matrix to the maximum. Featuring a terrifying array of forward-facing energy mega-weapons, this leviathan is designed to focus on one victim. Often, this target is obliterated in a single combined volley.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Julius Ceasar",
+     "[Julius Ceasar](https://en.wikipedia.org/wiki/Julius_Caesar)",
      "Dictator",
      "Supreme"
     ],
@@ -833,8 +833,8 @@
     "lore": "The Memnon class supercarrier leverages this new superstructure’s increased modularity by removing more of the ships’ generators to create further space of flights of launch assets. This vessel carries a more substantial fighter and bomber compliment than any other known PHR vessel in addition to torpedoes and hornet drones.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Mount Olympus",
-     "Valhalla",
+     "[Mount Olympus](https://en.wikipedia.org/wiki/Mount_Olympus)",
+     "[Valhalla](https://en.wikipedia.org/wiki/Valhalla)",
      "Majesty"
     ],
     "namesake": "[Memnon](https://en.wikipedia.org/wiki/Memnon_(mythology)) was the Ethiopian king and son of the dawn goddess Eos who came to Troy's aid after Hector's death. Eos wept so bitterly after Achilles killed him that her tears became the morning dew."
@@ -897,7 +897,7 @@
     "lore": "The Amphion was the first recorded vessel to utilise the Republic’s latest battleship superstructure. This evolution in post-human naval architecture features miniaturised, hyper-efficient core systems and thus enlarged internal spaces. An expanded power matrix allows it to accommodate Energy Glaive broadsides previously only seen aboard dreadnoughts as well as a ventral meganova laser.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Wrath of Zeus",
+     "Wrath of [Zeus](https://en.wikipedia.org/wiki/Zeus)",
      "Thunderbolt",
      "Elemental"
     ],
@@ -1018,7 +1018,7 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Destiny’s Fist",
-     "Triumph of Shangri-La",
+     "Triumph of [Shangri-La](https://en.wikipedia.org/wiki/Shangri-La)",
      "Godslayer",
      "Queen of Its Will"
     ],
@@ -1073,7 +1073,7 @@
     "lore": "Following the same deign ethos as their dreadnoughts, all of the Sarpedon battleship’s main weapons are energy-based. One of the Republic Grand Fleet’s latest creations, scans suggest that this class features a state of the art, single-unit power core with an output/volume ratio twice that of anything the UCMF can field. This allows the mounting of four, colossal energy weapons. Firstly, a linked pair of Meganova lasers provide superlative ship-slicing capability - even another battleship may be crippled by a single, sustained burn. Secondly, two hull-mounted multi-lance lasers can bracket and pulverise smaller ships with frightening ease. In the limited time that the UCMF have been able to observe this class, it seems it’s only weakness may be extreme heat buildup over sustained combat, although this is only an issue if any adversaries remain to return fire.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Triumvir",
+     "[Triumvir](https://en.wikipedia.org/wiki/Triumvirate)",
      "Four Suns",
      "Shining Path",
      "Dawnglaive"
@@ -1193,7 +1193,7 @@
     "famousShips": [
      "Enlightenment",
      "Renaissance",
-     "Queen Boudicca",
+     "Queen [Boudicca](https://en.wikipedia.org/wiki/Boudica)",
      "Code Eternal"
     ],
     "namesake": "The [greatest hero of Greek mythology](https://en.wikipedia.org/wiki/Heracles), son of Zeus and the mortal Alcmene. Killed his own family in a divine madness sent by Hera, then spent the rest of his life earning absolution through the Twelve Labors, slaying the Nemean Lion, capturing Cerberus, diverting rivers. Worshipped across the ancient world as the patron of strength and the destroyer of monsters."
@@ -1885,10 +1885,10 @@
     "lore": "The Ganymede is a sister class to the Orpheus, and shares its general design doctrine and basic hull although its armament and mission profile differs. Primarily, the Ganymede is configured to attack through orbital bombardment, preparing the surface battlefield for its infantry payload and supporting them on the surface. It achieves this by sacrificing some ship-ship firepower in favour of heavy bombard cannons. This essentially makes the Ganymede two ships in one, affording a PHR admiral options even when outnumbered or under-resourced. However, this makes the class somewhat specialised, as these qualities are wasted if deployed in an area with no legitimate ground targets. However, it still has access to a respectable number of ship-ship medium mass drivers for protection against orbital assets, superior in firepower to its contemporaries in other races.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Argo",
-     "Great Library",
-     "Copernicus",
-     "Judgement of Zeus"
+     "[Argo](https://en.wikipedia.org/wiki/Argo)",
+     "[Great Library](https://en.wikipedia.org/wiki/Library_of_Alexandria)",
+     "[Copernicus](https://en.wikipedia.org/wiki/Nicolaus_Copernicus)",
+     "Judgement of [Zeus](https://en.wikipedia.org/wiki/Zeus)"
     ],
     "namesake": "[Ganymede](https://en.wikipedia.org/wiki/Ganymede_(mythology)) was a beautiful Trojan prince in Greek myth who was abducted by Zeus, often in the form of an eagle. He was granted immortality and made cupbearer to the gods on Mount Olympus."
    }
@@ -1965,9 +1965,9 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "A Thousand Fathoms",
-     "Marie Curie",
-     "Actium",
-     "Newton’s Apple"
+     "[Marie Curie](https://en.wikipedia.org/wiki/Marie_Curie)",
+     "[Actium](https://en.wikipedia.org/wiki/Battle_of_Actium)",
+     "[Newton](https://en.wikipedia.org/wiki/Isaac_Newton)’s Apple"
     ],
     "namesake": "[Orpheus](https://en.wikipedia.org/wiki/Orpheus) was a legendary musician and poet of Greek myth whose playing could charm all living things. He descended into the underworld to recover his wife Eurydice but lost her by looking back before they reached the surface."
    }
@@ -2027,7 +2027,7 @@
     "famousShips": [
      "Old Boulder",
      "Ruined King",
-     "Ephyra’s Fist",
+     "[Ephyra](https://en.wikipedia.org/wiki/Ancient_Corinth)’s Fist",
      "Hubris"
     ],
     "famousShipsPrefix": "Known ships of the class:",
@@ -2091,10 +2091,10 @@
     "lore": "The Hector class heavy cruiser is the standard ship of its classification in the Grand Fleet and a formidable foe for anything but a battleship to face. It is armed primarily with 20 medium calibre mass drivers in double broadside layout, giving the Hector excellent all-round anti-ship capability when positioned with skill. In addition, it is equipped with a pair of prow mounted Supernova lasers, giving the vessel a powerful forward facing attack that makes the Hector far more dangerous than most PHR ships from the forward quarter. Like other PHR heavy cruisers, the Hector also features a reinforced and enhanced hull design, giving it a survivability above that of standard cruisers as well as enemy equivalents, which can rarely match Republic ships for toughness. Besides the need for careful manoeuvre coupled with a lack of speed, the Hector has few weaknesses and can generally be expected to deal with most opposition and emerge victorious, making it a staple of full scale PHR taskforces across the Reconquest.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Einstein’s Equation",
-     "Odyssey",
-     "Am Become Death",
-     "Cicero"
+     "[Einstein](https://en.wikipedia.org/wiki/Albert_Einstein)’s Equation",
+     "[Odyssey](https://en.wikipedia.org/wiki/Odyssey)",
+     "[Am Become Death](https://en.wikipedia.org/wiki/J._Robert_Oppenheimer)",
+     "[Cicero](https://en.wikipedia.org/wiki/Cicero)"
     ],
     "namesake": "[Hector](https://en.wikipedia.org/wiki/Hector) was the greatest warrior of Troy and a leading figure in Homer's Iliad. The eldest son of King Priam, he was slain in single combat by Achilles, who then dragged his body around the city walls."
    }
@@ -2152,10 +2152,10 @@
     ],
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Alexander’s Ambition",
-     "Socrates",
+     "[Alexander](https://en.wikipedia.org/wiki/Alexander_the_Great)’s Ambition",
+     "[Socrates](https://en.wikipedia.org/wiki/Socrates)",
      "Fireheart",
-     "Salamis"
+     "[Salamis](https://en.wikipedia.org/wiki/Battle_of_Salamis)"
     ],
     "namesake": "[Bellerophon](https://en.wikipedia.org/wiki/Bellerophon) was a hero of Greek myth who tamed the winged horse Pegasus and slew the fire-breathing Chimera. His later pride led him to attempt to fly to Mount Olympus, and Zeus cast him down for the affront."
    }
@@ -2214,8 +2214,8 @@
     "lore": "The Achilles is a class of heavy cruiser designed and constructed by the Post-Human Republic. Built on the same basic hull configuration as its cousin, the Hector, the Achilles nonetheless has a more specialised role thanks to its armament. Its main broadsides consist of four heavy mass drivers each, weapons designed to deal with thick enemy armour. As a result, the Achilles has exceptional lethality against the largest of ships, though its weaponry can be cumbersome to deploy against smaller targets. To improve its first strike potential, the Achilles is also equipped with a frontally-mounted torpedo to soften up targets before bringing its mass drivers to bear. The Achilles primarily takes on seek-and-destroy missions against the largest and most threatening enemy vessels in any engagement, a goal it often seeks to accomplish early, as the class is fairly undergunned compared to the Hector. That said, eight heavy mass drivers are still a threat against all but the lightest and most manoeuvrable of enemy vessels.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Gailileo",
-     "Iliad",
+     "[Gailileo](https://en.wikipedia.org/wiki/Galileo_Galilei)",
+     "[Iliad](https://en.wikipedia.org/wiki/Iliad)",
      "Unheeled",
      "Titan’s Ire"
     ],
@@ -2365,8 +2365,8 @@
     "lore": "The Ikarus class is an unusual ship as it carries the rare designation of vanguard carrier, a variant of the more common fleet carrier. Vessels of this designation have a strike craft launch capacity but are more often found at the front and centre of a battle line rather than at the rear, since they also carry significant regular firepower. The Ikarus includes two reduced medium mass driver broadsides in addition to a traversable front turret – weapons chosen for their universally dangerous output. While unleashing its many mass drivers against enemy ships, the Ikarus can also launch waves of fighters and bombers. Its typically forward position allows these long range assets to strike at enemy rearguard elements, making the class a highly useful tool much prized by PHR admirals. A vanguard positioning also makes it ideal for deploying fighter screens to protect  ships in the forefront of the formation. Its lower launch capacity also allows the usually limited number of available pilots to be spread more evenly throughout a fleet rather than concentrated in dedicated carriers, if the battle plan calls for it.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Red Cliffs",
-     "Plato",
+     "[Red Cliffs](https://en.wikipedia.org/wiki/Battle_of_Red_Cliffs)",
+     "[Plato](https://en.wikipedia.org/wiki/Plato)",
      "Tower of Knowledge",
      "Dark Prince"
     ],
@@ -2431,9 +2431,9 @@
     "lore": "The Orion class is the standard ship of the line for the Republic’s Grand Fleet and is the most common cruiser-level vessel in its arsenal. Its primary armament is completely made up of medium calibre mass drivers, excellent all-round anti-ship weapons capable of engaging a wide range of opponents. Most of these formidable weapons are laid out in a twin broadside configuration, with an additional turret mounted array at the prow. This gives the Orion excellent capability, flexibility and lethality. Like almost all PHR cruisers, the Orion is substantially tougher and heavier than  its equivalents from other races, highlighting the Republic’s intention to make every life count to the maximum in the crucible of combat. This aim normally takes precedence over a warship’s speed, allowing an opponent to assume this as their only meaningful advantage in battle. This doctrine is probably central to the PHR’s plans in this war, as most UCM analysts agree that the post-humans are likely to be sorely lacking in manpower when compared to the Colonies.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Mind of Asimov",
-     "Aristotle",
-     "Marathon",
+     "Mind of [Asimov](https://en.wikipedia.org/wiki/Isaac_Asimov)",
+     "[Aristotle](https://en.wikipedia.org/wiki/Aristotle)",
+     "[Marathon](https://en.wikipedia.org/wiki/Battle_of_Marathon)",
      "Journeyman"
     ],
     "namesake": "[Orion](https://en.wikipedia.org/wiki/Orion_(mythology)) was a giant huntsman of Greek myth. After his death he was placed among the stars as the constellation that still bears his name."
@@ -2497,9 +2497,9 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Knowing Virtue",
-     "Nikola Tesla",
-     "Hoplite’s Helm",
-     "Trident of Neptune"
+     "[Nikola Tesla](https://en.wikipedia.org/wiki/Nikola_Tesla)",
+     "[Hoplite](https://en.wikipedia.org/wiki/Hoplite)’s Helm",
+     "Trident of [Neptune](https://en.wikipedia.org/wiki/Neptune_(mythology))"
     ],
     "namesake": "[Perseus](https://en.wikipedia.org/wiki/Perseus) was a hero of Greek myth, son of Zeus and Danae, who beheaded the Gorgon Medusa and rescued the princess Andromeda. He was the legendary founder of Mycenae."
    }
@@ -2562,9 +2562,9 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Searing Truth",
-     "Archimedes",
+     "[Archimedes](https://en.wikipedia.org/wiki/Archimedes)",
      "Fatal",
-     "Turing’s Cipher"
+     "[Turing](https://en.wikipedia.org/wiki/Alan_Turing)’s Cipher"
     ],
     "namesake": "[Ajax the Great](https://en.wikipedia.org/wiki/Ajax_the_Great) was a hero of Greek myth and, after Achilles, the mightiest Greek warrior at Troy. Renowned for his enormous size and strength, he was famed for fighting behind a great tower-like shield."
    }
@@ -2665,9 +2665,9 @@
     "lore": "The Theseus class is one of the few examples of its designation in the Republic’s Grand Fleet as light cruisers appear not to be in vogue among PHR naval architects. However, the Theseus has proven capable and has successfully carved itself a niche in the Republic’s strategies. Its lack of prow weapon is compensated for by improved speed, allowing it to keep pace with the lighter ships typically employed in PHR raiding parties and flanking formations. The Theseus carries a mixed-calibre payload, matching banks of light mass drivers  with medium ones. This gives the class enhanced flexibility at the expense of ultimate firepower. This loadout is also configured to be independently targeting, allowing it to engage multiple targets with a single broadside while on the move. This enhances its peripheral role on the battlefield as it can engage the multiple small ships most likely sent to thwart its formation’s mission.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Hypatia",
-     "Phaeton",
-     "Voltaire",
+     "[Hypatia](https://en.wikipedia.org/wiki/Hypatia)",
+     "[Phaeton](https://en.wikipedia.org/wiki/Phaethon)",
+     "[Voltaire](https://en.wikipedia.org/wiki/Voltaire)",
      "Bright Mind"
     ],
     "namesake": "[Theseus](https://en.wikipedia.org/wiki/Theseus) was the legendary king and founding hero of Athens in Greek myth, best known for slaying the Minotaur in the Labyrinth of Crete and escaping with the aid of Ariadne's thread."
@@ -2780,9 +2780,9 @@
     "lore": "The Odysseus is, unusually for the PHR, a very focused and inflexible design. Its only mission profile is high speed and low-observable insertion of bulk infantry formations, supplies and defence batteries to advance targets. It achieves this through incredible combat speed, low signature and capacity for bulk landers, at the expense of almost all offensive capability save close action weaponry. It is not designed to face any significant combat, but rather to break past it and get to unguarded targets of opportunity. They are typically employed to establish remote beachheads and to bolster existing ones. The latter has been especially relevant of late to the beleaguered forces of Aurelia Felix on the Cradle World of Shangri-La. Trapped behind enemy lines and with a UCMF blockade fleet in place, only these lightning fast ships have thus far succeeded in keeping her forces resupplied significantly. Although the PHR has smaller and stealthier ships, the ability to the Odysseus to bring down bulk tonnage to a secure landing zone has been instrumental in her force’s survival thus far.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Neil Armstrong",
-     "Yuri Gagarin",
-     "Pathfinder"
+     "[Neil Armstrong](https://en.wikipedia.org/wiki/Neil_Armstrong)",
+     "[Yuri Gagarin](https://en.wikipedia.org/wiki/Yuri_Gagarin)",
+     "[Pathfinder](https://en.wikipedia.org/wiki/Mars_Pathfinder)"
     ],
     "namesake": "[Odysseus](https://en.wikipedia.org/wiki/Odysseus) was the king of Ithaca and a Greek hero of the Trojan War, famed for his cunning and for devising the Trojan Horse. His ten-year journey home is the subject of Homer's Odyssey."
    }
@@ -2843,7 +2843,7 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Ghost Warrior",
-     "Longship"
+     "[Longship](https://en.wikipedia.org/wiki/Longship)"
     ],
     "namesake": "[Jason](https://en.wikipedia.org/wiki/Jason) was a hero of Greek myth who led the Argonauts aboard the ship Argo on a quest to recover the Golden Fleece. He succeeded with the help of the sorceress Medea of Colchis."
    }
@@ -2942,7 +2942,7 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Strikehome",
-     "Myrmidon",
+     "[Myrmidon](https://en.wikipedia.org/wiki/Myrmidons)",
      "Known Purpose"
     ],
     "namesake": "[Ariadne](https://en.wikipedia.org/wiki/Ariadne) was a Cretan princess in Greek myth, daughter of King Minos and Pasiphae. She gave the hero Theseus a thread to find his way out of the Labyrinth after he slew the Minotaur."
@@ -2996,8 +2996,8 @@
     "lore": "This makes them especially useful in decapitation strikes, although they are less flexible when faced with superior numbers than other PHR vessels.\n\nof Damocles PHR destroyers are larger and bulkier than those of other races and the heavily armed Electra class is no exception. Indeed, by UCM reckoning it could almost be classed a light cruiser. It is armed with four heavy calibre mass drivers in two pairs. These massive guns are devastating when unleashed against large vessels, the Electra’s preferred prey. The fixed setup of these formidable weapons is unusual for a PHR ship, especially since they are limited to the forward arc. Naval Intelligence theorises that this is due to the sheer size of the guns, precluding the usual broadside setup due to the comparatively small size of the destroyer’s hull. Whatever the reason, this setup makes the Electra a highly focused and aggressive ship, favouring frontal assaults against single targets.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Trident of Poseidon",
-     "Harpe",
+     "Trident of [Poseidon](https://en.wikipedia.org/wiki/Poseidon)",
+     "[Harpe](https://en.wikipedia.org/wiki/Harpe)",
      "Sword"
     ],
     "namesake": "[Electra](https://en.wikipedia.org/wiki/Electra) was a princess of Mycenae in Greek myth, daughter of Agamemnon and Clytemnestra. She helped her brother Orestes avenge their father by killing their mother and her lover Aegisthus."
@@ -3083,7 +3083,7 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Eye of the Sphere",
-     "Ornithes Areioi",
+     "[Ornithes Areioi](https://en.wikipedia.org/wiki/Stymphalian_birds)",
      "Nightsun",
      "Fargaze"
     ],
@@ -3136,10 +3136,10 @@
     "lore": "The Pegasus is unusual for a Republic vessel in that it offers extreme speed and can only strike at close range. It makes its kills though deploying swarms of armed nano-drones, quick and tiny enough to be difficult for point defences to counter. The unmanned drones have a very limited envelope though, making this behave like a conventional close action weapon rather than a carrier. On paper this highly aggressive combatant suits the PHR’s most hot-headed captains, but the vessel’s support role requires anything but. More than almost any other Republic vessel, the Pegasus is infamous for operating far from any friendly ships to prey on outliers and merchantmen, especially in the days before the Triumvirate. The vessel is apt for long deployments far from repair facilities since its drones can also regenerate the Pegasus’ sleek hull. A careful, patient captain can use its great speed to make choice kills then lie in wait while their ship regains full potency.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Pegasus",
+     "[Pegasus](https://en.wikipedia.org/wiki/Pegasus)",
      "Righteous Blade",
      "Huntress",
-     "Mercury"
+     "[Mercury](https://en.wikipedia.org/wiki/Mercury_(mythology))"
     ],
     "namesake": "[Pegasus](https://en.wikipedia.org/wiki/Pegasus) was the immortal winged horse of Greek myth, born from the blood of the slain Gorgon Medusa. He was tamed by the hero Bellerophon and later set among the stars as a constellation."
    }
@@ -3372,10 +3372,10 @@
     "lore": "The Medea class strike carrier is a first wave assault vessel and the primary means of planetfall for the PHR’s dropships. These small craft are deployed into the upper atmosphere, delivering the PHR’s armoured forces direct to the frontline. They excel at attacking redoubts and routing out enemy ground troops. Most notably, the vast majority of the highly advanced type 1-5 Battle Walkers that are so infamous deploy in this manner. In addition, the Medea features a small but effective pair of under-slung mass drivers to support its ground forces directly. While not as devastating as true bombardment weapons, these guns can nevertheless be called upon to for close support missions, dropping precision ordnance on the foes of the Republic. It is designed to stay on station for some time after its drop is complete, assisting the PHR’s perennially outnumbered forces.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
-     "Castor",
+     "[Castor](https://en.wikipedia.org/wiki/Castor_and_Pollux)",
      "Homeshell",
      "Hellbringer",
-     "Alesia"
+     "[Alesia](https://en.wikipedia.org/wiki/Battle_of_Alesia)"
     ],
     "namesake": "[Medea](https://en.wikipedia.org/wiki/Medea) was a sorceress of Greek myth, daughter of King Aeetes of Colchis and a granddaughter of the sun god Helios. She used her magic to help the hero Jason win the Golden Fleece, and later took terrible revenge when he abandoned her."
    }
@@ -3433,8 +3433,8 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Young Mother",
-     "Columbus",
-     "Wright Flyer",
+     "[Columbus](https://en.wikipedia.org/wiki/Christopher_Columbus)",
+     "[Wright Flyer](https://en.wikipedia.org/wiki/Wright_Flyer)",
      "Shoal Princess"
     ],
     "namesake": "[Andromeda](https://en.wikipedia.org/wiki/Andromeda_(mythology)) was a princess of Aethiopia in Greek myth, daughter of King Cepheus and Queen Cassiopeia. Chained to a rock as a sacrifice to a sea monster, she was rescued by the hero Perseus, who took her as his wife."
@@ -3491,8 +3491,8 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Foe Confounded",
-     "Deep Blue",
-     "Waves of Lamarr",
+     "[Deep Blue](https://en.wikipedia.org/wiki/Deep_Blue_(chess_computer))",
+     "[Waves of Lamarr](https://en.wikipedia.org/wiki/Hedy_Lamarr)",
      "Inviolate"
     ],
     "namesake": "[Calypso](https://en.wikipedia.org/wiki/Calypso_(mythology)) was a nymph of Greek myth, daughter of the Titan Atlas, who dwelt on the island of Ogygia. She detained the shipwrecked hero Odysseus there for seven years before the gods compelled her to release him."
@@ -3539,7 +3539,7 @@
     "famousShips": [
      "Cyclopean Gaze",
      "Brightflame",
-     "Lance of Athena",
+     "Lance of [Athena](https://en.wikipedia.org/wiki/Athena)",
      "Illuminator"
     ],
     "namesake": "[Pandora](https://en.wikipedia.org/wiki/Pandora) was the first woman in Greek myth, fashioned by the gods on the orders of Zeus. She opened a jar that released all the evils into the world, leaving only hope trapped inside."
@@ -3585,7 +3585,7 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Steadfast",
-     "Countenance of Janus",
+     "Countenance of [Janus](https://en.wikipedia.org/wiki/Janus)",
      "Open Future",
      "Cold Warrior"
     ],
@@ -3638,9 +3638,8 @@
     "lore": "The PHR’s new Harpocrates Lighter takes Post-human mastery of electronic warfare and builds a whole ship around it. It has a single role: to render a target ship deaf, blind and hobbled without firing a shot. At close range only, its powerful EM field projection panels can be focused to lash an enemy ship so severely that its targeting systems wash out and its core goes into low yield standalone mode lest it collapse, forcing the drives to idle state. The only downside is that the collapse in the target’s warfighting stance makes it difficult to target, necessitating this as a specialist weapon for where preserving precious Republic souls matter more than reducing the enemy to scrap from afar.",
     "famousShips": [
      "The Veil",
-     "Labyrinth 1",
-     "2 and 3",
-     "Retiaritus"
+     "[Labyrinth](https://en.wikipedia.org/wiki/Labyrinth) 1, 2 and 3",
+     "[Retiaritus](https://en.wikipedia.org/wiki/Retiarius)"
     ],
     "famousShipsPrefix": "Known ships of the class:",
     "namesake": "[Harpocrates](https://en.wikipedia.org/wiki/Harpocrates) was the Greco-Egyptian god of silence and secrecy, a Hellenization of the Egyptian Horus the Child. He was depicted as a boy with a finger held to his lips, a childhood gesture the Greeks read as a call for silence."
