@@ -3021,9 +3021,21 @@ const App = (() => {
     const eff = dbShip ? effectiveStats(dbShip, ship, currentFleet && currentFleet.faction) : null;
     const statsHtml = dbShip ? renderStatGrid(eff.stats, eff.mods) : '';
 
-    // Base weapons
+    // Base weapons. A ship whose entire armament comes from a weapon-swap loadout
+    // (e.g. the New York, whose only guns are its Laser Refit) has no fixed
+    // weapons, which would render an empty weapon table. Fall back to the
+    // currently-selected loadout weapons so it still reads like an armed ship.
     let weaponsHtml = '';
-    const wpns = dbShip && Array.isArray(dbShip.weapons) ? dbShip.weapons : [];
+    let wpns = dbShip && Array.isArray(dbShip.weapons) ? dbShip.weapons : [];
+    if (wpns.length === 0 && dbShip && Array.isArray(dbShip.loadoutOptions)) {
+      const merged = [];
+      dbShip.loadoutOptions.forEach((lo, i) => {
+        const sel = (ship.loadouts && ship.loadouts[i] !== undefined) ? ship.loadouts[i] : 0;
+        const opt = lo.options && lo.options[sel];
+        if (opt && Array.isArray(opt.weapons)) merged.push(...opt.weapons);
+      });
+      wpns = merged;
+    }
     if (wpns.length > 0) {
       weaponsHtml = '<div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
     }

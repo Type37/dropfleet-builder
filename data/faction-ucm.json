@@ -714,6 +714,15 @@
           "damage": "1",
           "type": "K",
           "special": "Fusillade-2"
+         },
+         {
+          "name": "UF-4200 Mass Driver Turrets",
+          "arc": "F/S",
+          "attack": "4",
+          "lock": "4+",
+          "damage": "1",
+          "type": "K",
+          "special": "Fusillade-2"
          }
         ],
         "loads": []
@@ -811,6 +820,15 @@
         "name": "UF-4200 Mass Driver Turrets",
         "cost": 0,
         "weapons": [
+         {
+          "name": "UF-4200 Mass Driver Turrets",
+          "arc": "F/S",
+          "attack": "4",
+          "lock": "4+",
+          "damage": "1",
+          "type": "K",
+          "special": "Fusillade-2"
+         },
          {
           "name": "UF-4200 Mass Driver Turrets",
           "arc": "F/S",
@@ -932,6 +950,15 @@
           "damage": "1",
           "type": "K",
           "special": "Fusillade-2"
+         },
+         {
+          "name": "UF-4200 Mass Driver Turrets",
+          "arc": "F/S",
+          "attack": "4",
+          "lock": "4+",
+          "damage": "1",
+          "type": "K",
+          "special": "Fusillade-2"
          }
         ],
         "loads": []
@@ -1038,6 +1065,15 @@
         "name": "UF-4200 Mass Driver Turrets",
         "cost": 0,
         "weapons": [
+         {
+          "name": "UF-4200 Mass Driver Turrets",
+          "arc": "F/S",
+          "attack": "4",
+          "lock": "4+",
+          "damage": "1",
+          "type": "K",
+          "special": "Fusillade-2"
+         },
          {
           "name": "UF-4200 Mass Driver Turrets",
           "arc": "F/S",

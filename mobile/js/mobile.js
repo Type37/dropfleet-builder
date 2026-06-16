@@ -1751,6 +1751,19 @@
 
     const weapons = ship.weapons || [];
     const loadoutOptions = ship.loadoutOptions || [];
+    // A ship whose entire armament is a weapon-swap loadout (e.g. the New York,
+    // whose only guns are its Laser Refit) has no fixed weapons, so the weapon
+    // table would be empty. Fall back to the currently-selected loadout weapons.
+    let displayWeapons = weapons;
+    if (displayWeapons.length === 0) {
+      const merged = [];
+      loadoutOptions.forEach((lo, i) => {
+        const sel = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
+        const opt = lo.options && lo.options[sel];
+        if (opt && Array.isArray(opt.weapons)) merged.push(...opt.weapons);
+      });
+      displayWeapons = merged;
+    }
     // Show every ship special rule as a full text card (incl. Rare/Unique — the
     // user wants the rule spelled out, not just a chip). The compact Rare/Unique
     // tag by the name still carries the at-a-glance flag.
@@ -1814,11 +1827,11 @@
 
       ${statGridMobile(statEntries, true)}
 
-      ${weapons.length ? `<div class="weapon-table">
+      ${displayWeapons.length ? `<div class="weapon-table">
         <div class="weapon-row weapon-row-header">
           <div class="weapon-name">Weapon</div><div class="weapon-val">Lk</div><div class="weapon-val">At</div><div class="weapon-val">Dm</div><div class="weapon-val">Arc</div>
         </div>
-        ${weapons.map(w => {
+        ${displayWeapons.map(w => {
           const t = (w.type || '').toUpperCase();
           const tc = t === 'K' ? 'weapon-type-k' : t === 'E' ? 'weapon-type-e' : t === 'C' ? 'weapon-type-c' : '';
           const dmg = `${w.damage || ''}${t ? `<span class="${tc}" style="margin-left:2px;font-size:9px">${t}</span>` : ''}`;
