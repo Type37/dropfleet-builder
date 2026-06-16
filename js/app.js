@@ -5975,7 +5975,9 @@ const App = (() => {
   // http(s) URLs are turned into links, all other text is escaped).
   function loreLinks(text) {
     if (!text) return '';
-    const re = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
+    // URL may contain one level of balanced parens (e.g. .../Memnon_(mythology)),
+    // so match either a non-paren char or a whole (...) group, not just [^)].
+    const re = /\[([^\]]+)\]\((https?:\/\/(?:[^()\s]|\([^()\s]*\))*)\)/g;
     let out = '', last = 0, m;
     while ((m = re.exec(text)) !== null) {
       out += esc(text.slice(last, m.index));
