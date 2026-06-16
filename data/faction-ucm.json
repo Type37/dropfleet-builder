@@ -564,6 +564,15 @@
       "special": "Critical-1"
      },
      {
+      "name": "UF-6400 Mass Driver Turret Battery",
+      "arc": "F/S",
+      "attack": "8",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Critical-1"
+     },
+     {
       "name": "UF-4200 Mass Driver Turret Core Battery",
       "arc": "F/S",
       "attack": "6",
@@ -3988,6 +3997,15 @@
       "damage": "2",
       "type": "K",
       "special": "Alt-1"
+     },
+     {
+      "name": "UF-B-9000s (Bombardment)",
+      "arc": "F",
+      "attack": "2",
+      "lock": "4+",
+      "damage": "2",
+      "type": "K",
+      "special": "Alt-1, Bombardment"
      }
     ],
     "loads": [],
