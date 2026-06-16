@@ -3835,7 +3835,7 @@
       "special": "-"
      },
      {
-      "name": "Fire Ships",
+      "name": "Shaltari Fire Ships",
       "launch": "3",
       "special": "-"
      }
@@ -4560,6 +4560,15 @@
    "id": "cc1b-9d8b-db2d-9d32",
    "name": "Launch Assets",
    "assets": [
+    {
+     "name": "Shaltari Fire Ships",
+     "thrust": "7\"",
+     "attack": "4",
+     "lock": "5+",
+     "damage": "1",
+     "type": "K",
+     "special": "-"
+    },
     {
      "name": "Torpedo",
      "thrust": "6\"",
