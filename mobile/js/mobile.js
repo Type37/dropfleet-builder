@@ -1751,19 +1751,16 @@
 
     const weapons = ship.weapons || [];
     const loadoutOptions = ship.loadoutOptions || [];
-    // A ship whose entire armament is a weapon-swap loadout (e.g. the New York,
-    // whose only guns are its Laser Refit) has no fixed weapons, so the weapon
-    // table would be empty. Fall back to the currently-selected loadout weapons.
-    let displayWeapons = weapons;
-    if (displayWeapons.length === 0) {
-      const merged = [];
-      loadoutOptions.forEach((lo, i) => {
-        const sel = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
-        const opt = lo.options && lo.options[sel];
-        if (opt && Array.isArray(opt.weapons)) merged.push(...opt.weapons);
-      });
-      displayWeapons = merged;
-    }
+    // Weapon table = base weapons + the currently selected loadout option weapons,
+    // so swap options (Laser Refit) and ships whose entire armament is a loadout
+    // (the New York) read right. Each option's datasheet shows only on UNSELECTED
+    // cards below (a preview), so nothing is ever listed twice.
+    const displayWeapons = [...weapons];
+    loadoutOptions.forEach((lo, i) => {
+      const sel = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
+      const opt = lo.options && lo.options[sel];
+      if (opt && Array.isArray(opt.weapons)) displayWeapons.push(...opt.weapons);
+    });
     // Show every ship special rule as a full text card (incl. Rare/Unique — the
     // user wants the rule spelled out, not just a chip). The compact Rare/Unique
     // tag by the name still carries the at-a-glance flag.
@@ -1851,10 +1848,13 @@
           ${lo.options.map((opt, oi) => {
             const sel = inst.loadouts && inst.loadouts[loIdx] != null ? inst.loadouts[loIdx] : 0;
             const on = oi === sel;
-            const sheet = opt.weapons?.length ? optionWeaponSheet(opt.weapons)
-              : (opt.loads?.length ? buildLaunchTable(f.faction, opt.loads) : '');
-            // Don't repeat the option name when the weapon datasheet already shows it.
-            const redundant = opt.weapons?.length && opt.weapons.every(w => w.name === opt.name);
+            // The selected option's weapons/loads are already in the ship's main
+            // weapon + launch tables above, so only preview UNSELECTED options here.
+            const sheet = on ? '' : (opt.weapons?.length ? optionWeaponSheet(opt.weapons)
+              : (opt.loads?.length ? buildLaunchTable(f.faction, opt.loads) : ''));
+            // Don't repeat the option name when its datasheet shows it; the selected
+            // option has no datasheet here, so always keep its name.
+            const redundant = !on && opt.weapons?.length && opt.weapons.every(w => w.name === opt.name);
             return `<div class="loadout-option loadout-radio-opt ${on ? 'selected' : ''}" onclick="App.selectLoadout(${loIdx}, ${oi})">
               <div class="loadout-radio-row">
                 <span class="loadout-radio-dot"></span>
@@ -2957,6 +2957,21 @@
   }
 
   /* ── Share (URL encode, desktop-compatible) ────────────── */
+  // Unicode-safe base64 (btoa/atob are Latin1-only and throw on curly apostrophes,
+  // em-dashes, accents). Round-trip through UTF-8 bytes; ASCII encodes identically
+  // to plain btoa, so old links and cross-app (desktop) links still decode.
+  function b64FromStr(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function strFromB64(b64) {
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
   function encodeFleet(fleet) {
     const _sz = GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash;
     const mini = {
@@ -2989,13 +3004,13 @@
       if (fleet.spaceStation.systems && fleet.spaceStation.systems.length) mini.ss.sy = fleet.spaceStation.systems;
     }
     if (fleet.secondaryObjectives?.length) mini.so = fleet.secondaryObjectives;
-    return btoa(JSON.stringify(mini)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    return b64FromStr(JSON.stringify(mini)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   }
   function decodeFleet(encoded) {
     try {
       let b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
       while (b64.length % 4) b64 += '=';
-      const mini = JSON.parse(atob(b64));
+      const mini = JSON.parse(strFromB64(b64));
       const size = GAME_SIZES[mini.s] || GAME_SIZES.clash;
       const fleet = {
         id: uuid(), name: mini.n || 'Shared Fleet', description: mini.d || '',

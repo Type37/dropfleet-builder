@@ -658,6 +658,23 @@ const App = (() => {
   }
 
   // ── Fleet Sharing (URL encode/decode) ──
+  // Unicode-safe base64: btoa/atob only handle Latin1, so fleet/ship names with
+  // curly apostrophes, em-dashes or accented characters would throw on share.
+  // Round-trip through UTF-8 bytes instead. ASCII-only input produces the same
+  // base64 as plain btoa, so previously-shared links still decode.
+  function b64FromStr(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function strFromB64(b64) {
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
   function encodeFleet(fleet) {
     // Build a minimal representation — only data needed to reconstruct
     const mini = {
@@ -698,7 +715,7 @@ const App = (() => {
     if (fleet.secondaryObjectives && fleet.secondaryObjectives.length) mini.so = fleet.secondaryObjectives;
     const json = JSON.stringify(mini);
     // base64url encode (no padding, URL-safe chars)
-    return btoa(json).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    return b64FromStr(json).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   }
 
   function decodeFleet(encoded) {
@@ -706,7 +723,7 @@ const App = (() => {
       // Restore base64 padding and standard chars
       let b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
       while (b64.length % 4) b64 += '=';
-      const json = atob(b64);
+      const json = strFromB64(b64);
       const mini = JSON.parse(json);
 
       const fleet = {
@@ -2767,9 +2784,12 @@ const App = (() => {
         </span>
       </label>`;
     };
-    const noneRow = required ? '' : row('', 'No feature', 0, null, chosen === '');
+    // Deployable Features are always optional now, so always offer "No feature"
+    // and never flag the block as unset. (Previously referenced an undefined
+    // `required`, which threw and broke every Porter/feature-carrier ship.)
+    const noneRow = row('', 'No feature', 0, null, chosen === '');
     const featRows = feats.map(f => row(f.name, f.name, f.cost, f, f.name === chosen)).join('');
-    return `<div class="feature-carrier-block${(required && !chosen) ? ' feature-carrier-unset' : ''}">
+    return `<div class="feature-carrier-block">
       <div class="feature-carrier-label">${label}</div>
       <div class="feature-radio-list">${noneRow}${featRows}</div>
     </div>`;
@@ -3021,21 +3041,18 @@ const App = (() => {
     const eff = dbShip ? effectiveStats(dbShip, ship, currentFleet && currentFleet.faction) : null;
     const statsHtml = dbShip ? renderStatGrid(eff.stats, eff.mods) : '';
 
-    // Base weapons. A ship whose entire armament comes from a weapon-swap loadout
-    // (e.g. the New York, whose only guns are its Laser Refit) has no fixed
-    // weapons, which would render an empty weapon table. Fall back to the
-    // currently-selected loadout weapons so it still reads like an armed ship.
+    // Weapon table = base weapons + the weapons from the currently selected
+    // loadout option(s). This shows the ship's real current guns, so swap options
+    // (UCM Laser Refit) and ships whose entire armament is a loadout (the New
+    // York) read correctly. Each option's own datasheet appears only on the
+    // UNSELECTED option cards below (a preview), so nothing is ever listed twice.
     let weaponsHtml = '';
-    let wpns = dbShip && Array.isArray(dbShip.weapons) ? dbShip.weapons : [];
-    if (wpns.length === 0 && dbShip && Array.isArray(dbShip.loadoutOptions)) {
-      const merged = [];
-      dbShip.loadoutOptions.forEach((lo, i) => {
-        const sel = (ship.loadouts && ship.loadouts[i] !== undefined) ? ship.loadouts[i] : 0;
-        const opt = lo.options && lo.options[sel];
-        if (opt && Array.isArray(opt.weapons)) merged.push(...opt.weapons);
-      });
-      wpns = merged;
-    }
+    const wpns = (dbShip && Array.isArray(dbShip.weapons)) ? [...dbShip.weapons] : [];
+    (dbShip && Array.isArray(dbShip.loadoutOptions) ? dbShip.loadoutOptions : []).forEach((lo, i) => {
+      const sel = (ship.loadouts && ship.loadouts[i] !== undefined) ? ship.loadouts[i] : 0;
+      const opt = lo.options && lo.options[sel];
+      if (opt && Array.isArray(opt.weapons)) wpns.push(...opt.weapons);
+    });
     if (wpns.length > 0) {
       weaponsHtml = '<div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
     }
@@ -3045,7 +3062,12 @@ const App = (() => {
     // one (replaces the old dropdown so you can compare the guns before choosing).
     let loadoutsHtml = '';
     const loadoutOpts = dbShip && Array.isArray(dbShip.loadoutOptions) ? dbShip.loadoutOptions : [];
-    const optSheet = (opt) => {
+    // The SELECTED option's weapons/loads already appear in the ship's main
+    // weapon + launch tables above, so only render a datasheet for UNSELECTED
+    // options (a preview of what you'd switch to). Prevents listing the same
+    // gun/launch (e.g. a Torpedo Upgrade) twice.
+    const optSheet = (opt, isSelected) => {
+      if (isSelected) return '';
       let h = '';
       if (opt.weapons && opt.weapons.length) h += '<div class="weapon-list loadout-weapons">' + renderWeaponHeader() + opt.weapons.map(renderWeaponRow).join('') + '</div>';
       // Launch loadout options show their full launch-asset statblock too.
@@ -3061,9 +3083,9 @@ const App = (() => {
             const costLabel = opt.cost > 0 ? `+${opt.cost} pts` : opt.cost < 0 ? `${opt.cost} pts` : 'Included';
             // Don't repeat the option name when its weapon datasheet already shows
             // it (e.g. option "Cobra Heavy Laser Pair" over a Cobra Heavy Laser Pair
-            // weapon row). Keep the name only when it adds info (loads-only / no-op
-            // options like "No Torpedo", "Drive Refit").
-            const redundant = opt.weapons && opt.weapons.length && opt.weapons.every(w => w.name === opt.name);
+            // weapon row). The selected option shows no datasheet (it's in the main
+            // table), so always keep its name there so the choice stays labelled.
+            const redundant = !on && opt.weapons && opt.weapons.length && opt.weapons.every(w => w.name === opt.name);
             const head = redundant
               ? `<div class="loadout-radio-head loadout-radio-head-costonly"><span class="loadout-radio-cost">${costLabel}</span></div>`
               : `<div class="loadout-radio-head"><span class="loadout-radio-name">${esc(opt.name)}</span><span class="loadout-radio-cost">${costLabel}</span></div>`;
@@ -3072,14 +3094,15 @@ const App = (() => {
               <span class="loadout-radio-dot" aria-hidden="true"></span>
               <div class="loadout-radio-main">
                 ${head}
-                ${optSheet(opt)}
+                ${optSheet(opt, on)}
               </div>
             </label>`;
           }).join('');
           return `<div class="loadout-picker">${cards}</div>`;
         }
-        // Single fixed option — just show its datasheet.
-        return optSheet(lo.options[selIdx] || lo.options[0] || {});
+        // Single fixed option — always applied, so its stats already show in the
+        // ship's main weapon/launch tables; nothing extra to render here.
+        return optSheet(lo.options[selIdx] || lo.options[0] || {}, true);
       }).join('');
     }
 
@@ -5022,6 +5045,38 @@ const App = (() => {
   }
 
   // ── Shared Fleet Viewer ──
+  // One ship's datasheet body for the shared-fleet preview: effective stats,
+  // weapons (base + selected loadout), launch table, and special rules. Shared by
+  // the battle-group ships AND famous-admiral flagships so the flagship lists its
+  // full stats like the rest of the fleet.
+  function sharedShipDatasheet(fleet, ship, dbShip) {
+    if (!dbShip) return '';
+    let h = '';
+    const eff = effectiveStats(dbShip, ship, fleet.faction);
+    h += renderStatGrid(eff.stats, eff.mods);
+    const wpns = [...(dbShip.weapons || [])];
+    (dbShip.loadoutOptions || []).forEach((lo, i) => {
+      const sel = (ship.loadouts && ship.loadouts[i] !== undefined) ? ship.loadouts[i] : 0;
+      const opt = lo.options && lo.options[sel];
+      if (opt && Array.isArray(opt.weapons)) wpns.push(...opt.weapons);
+    });
+    if (wpns.length > 0) h += '<div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
+    const lt = renderLaunchTable(fleet.faction, dbShip, ship);
+    if (lt) h += lt;
+    const rules = dbShip.special_rules || [];
+    if (rules.length > 0) {
+      h += `<div class="special-rules">${rules.map(r => {
+        const detail = (dbShip.specialRuleDetails || []).find(d => d.name === r);
+        if (detail && detail.description) {
+          const pgA = detail.page ? ` data-rule-page="${esc(detail.page)}"` : '';
+          return `<span class="rule-chip has-tooltip" data-rule-desc="${esc(detail.description)}"${pgA} onclick="App.showRuleTooltip(event, this)">${esc(r)}</span>`;
+        }
+        return `<span class="rule-chip">${esc(r)}</span>`;
+      }).join('')}</div>`;
+    }
+    return h;
+  }
+
   function showSharedFleet(fleet) {
     document.querySelectorAll('#app > section').forEach(s => s.classList.add('hidden'));
     show('view-shared');
@@ -5090,6 +5145,24 @@ const App = (() => {
             </div>
             <span class="shared-admiral-pts">${a.points} pts</span>
           </div>`;
+          // Famous admirals fly a flagship — show its full datasheet like the rest
+          // of the fleet (stats/weapons/launch/rules), not just the admiral line.
+          if (a.type === 'Famous' && a.shipKey) {
+            const fdb = findShipInDB(fleet.faction, 'famous_admirals', a.shipKey);
+            if (fdb) {
+              const fimg = shipArtPath(fdb.ship_name || fdb.name) || fdb.image;
+              admiralHtml += `<div class="shared-ship-card">
+                <div class="shared-ship-top">
+                  ${fimg ? `<div class="shared-ship-art"><img src="${esc(thumbUrl(fimg))}" alt="${esc(fdb.ship_name || fdb.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+                  <div class="shared-ship-info">
+                    <div class="shared-ship-name">${esc(fdb.ship_name || fdb.name)}</div>
+                    <div class="shared-ship-type">${esc(tonLabel(fdb.tonnage) || '')}${fdb.className ? ', ' + esc(fdb.className) : ''}</div>
+                  </div>
+                </div>
+                ${sharedShipDatasheet(fleet, a, fdb)}
+              </div>`;
+            }
+          }
           return admiralHtml;
         }).join('')}
       </div>`;
@@ -5139,37 +5212,7 @@ const App = (() => {
         </div>`;
 
         // Show stats if available
-        if (dbShip) {
-          const eff = effectiveStats(dbShip, ship, fleet.faction);
-          html += renderStatGrid(eff.stats, eff.mods);
-
-          // Loadout info
-          if (ship.loadout && dbShip.loadoutOptions) {
-            const loGroup = dbShip.loadoutOptions.find(lo => lo.options.some(o => o.key === ship.loadout));
-            const loOption = loGroup ? loGroup.options.find(o => o.key === ship.loadout) : null;
-            if (loOption) {
-              html += `<div class="shared-loadout">Loadout: <strong>${esc(loOption.name)}</strong></div>`;
-            }
-          }
-
-          const wpns = dbShip.weapons || [];
-          if (wpns.length > 0) {
-            html += '<div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
-          }
-
-          // Special rules
-          const rules = dbShip.special_rules || [];
-          if (rules.length > 0) {
-            html += `<div class="special-rules">${rules.map(r => {
-              const detail = (dbShip.specialRuleDetails || []).find(d => d.name === r);
-              if (detail && detail.description) {
-                const pgA = detail.page ? ` data-rule-page="${esc(detail.page)}"` : '';
-                return `<span class="rule-chip has-tooltip" data-rule-desc="${esc(detail.description)}"${pgA} onclick="App.showRuleTooltip(event, this)">${esc(r)}</span>`;
-              }
-              return `<span class="rule-chip">${esc(r)}</span>`;
-            }).join('')}</div>`;
-          }
-        }
+        if (dbShip) html += sharedShipDatasheet(fleet, ship, dbShip);
 
         html += `</div>`;
       });
