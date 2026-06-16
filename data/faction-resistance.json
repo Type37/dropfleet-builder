@@ -343,10 +343,10 @@
     "rulesText": "This Ship must take a total of eight options from the Dreadnought Systems list. Up to four options may be taken from the Broadside Hardpoint category. Up to four options may be taken from the Turrets category. Up to four options may be taken from the Launch Hardpoint category. Up to two options may be taken from the Structures category.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "Esperance",
-     "Trinidad",
+     "[Esperance](https://en.wikipedia.org/wiki/French_flûte_Espérance_(1781))",
+     "[Trinidad](https://en.wikipedia.org/wiki/Trinidad_(ship))",
      "(Independents)",
-     "Conquistador"
+     "[Conquistador](https://en.wikipedia.org/wiki/Conquistador)"
     ],
     "systemSelection": {
      "listName": "Dreadnought Systems",
@@ -408,11 +408,12 @@
     "rulesText": "This Ship must take a total of six options from the Dreadnought Systems list. Up to three options may be taken from the Broadside Hardpoint category. Up to three options may be taken from the Turrets category. Up to three options may be taken from the Launch Hardpoint category. A single option may be taken from the Structures category.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "Sao Gabriel",
-     "Santa Maria",
-     "Gauss (Independents) Seedling",
+     "[Sao Gabriel](https://en.wikipedia.org/wiki/São_Gabriel_(ship))",
+     "[Santa Maria](https://en.wikipedia.org/wiki/Santa_María_(ship))",
+     "[Gauss](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss) (Independents)",
+     "Seedling",
      "Nostrum",
-     "Sulla"
+     "[Sulla](https://en.wikipedia.org/wiki/Sulla)"
     ],
     "systemSelection": {
      "listName": "Dreadnought Systems",
@@ -467,9 +468,9 @@
     "rulesText": "This Ship must take a total of four options from the Dreadnought Systems list. Up to two options may be taken from the Broadside Hardpoint category. Up to two options may be taken from the Turrets category. Up to two options may be taken from the Launch Hardpoint category. A single option may be taken from the Structures category.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "Nina",
-     "Pinta",
-     "Vostok (Independents)",
+     "[Nina](https://en.wikipedia.org/wiki/Niña_(ship))",
+     "[Pinta](https://en.wikipedia.org/wiki/Pinta_(ship))",
+     "[Vostok](https://en.wikipedia.org/wiki/Vostok_1) (Independents)",
      "Spear of Will",
      "Lightbringer",
      "Searcher"
@@ -696,8 +697,8 @@
     "rulesText": "This Ship may take an Engine Refit for +45 points, increasing its Thrust by 2”. Spinal Mass Annihilator If damage from this weapon or any Crippling Effect it would cause would destroy a ship, remove that ship from the game without rolling for Explosion.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "Bonaventure",
-     "Revenge (Independents)",
+     "[Bonaventure](https://en.wikipedia.org/wiki/English_ship_Bonaventure_(1567))",
+     "[Revenge](https://en.wikipedia.org/wiki/English_ship_Revenge_(1577)) (Independents)",
      "Soul Reaver",
      "Executioner (Kalium)"
     ],
@@ -766,7 +767,7 @@
     "rulesText": "This Ship may take an Engine Refit for +45 points, increasing its Thrust by 2”.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "Endeavour",
+     "[Endeavour](https://en.wikipedia.org/wiki/HMS_Endeavour)",
      "Tribe Bane (Independents)",
      "Hammer of Reason",
      "Subjugator"
@@ -1014,8 +1015,8 @@
     "rulesText": "This Ship may take an Engine Refit for +45 points, increasing its Thrust by 2”.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "Victory II",
-     "Trafalgar (Independents)",
+     "[Victory II](https://en.wikipedia.org/wiki/HMS_Victory)",
+     "[Trafalgar](https://en.wikipedia.org/wiki/Battle_of_Trafalgar) (Independents)",
      "Might of Kalium"
     ],
     "namesake": "[Admiral Horatio Nelson](https://en.wikipedia.org/wiki/Horatio_Nelson,_1st_Viscount_Nelson) (1758-1805), who shattered the Franco-Spanish fleet at Trafalgar and died in the hour of victory. He lost the sight in his right eye at Corsica and his right arm at Tenerife. His destruction of the French fleet at the Battle of the Nile in 1798 stranded Napoleon's army in Egypt."
@@ -1078,9 +1079,9 @@
     "lore": "EAAS Vanguard was once the only example of her class. A development of the earlier Iowa, she incorporated vent canon broadsides and what was once a state-of-the-art power core. She proved unstable due to her armament and insufficient cooling and was ultimately lost with all hands over Eden Prime during the Scourge invasion. However, her plans were widely available due to her age, and since then, many foolhardy and/or bloodthirsty resistance admirals have converted Musashis and Lexingtons into Vanguards using more recent cores and custom-built vent canons.",
     "famousShips": [
      "Fireheart",
-     "Einstein (Independents)",
-     "Nikola Tesla",
-     "Hyperion (Kalium)"
+     "[Einstein](https://en.wikipedia.org/wiki/Albert_Einstein) (Independents)",
+     "[Nikola Tesla](https://en.wikipedia.org/wiki/Nikola_Tesla)",
+     "[Hyperion](https://en.wikipedia.org/wiki/HMS_Hyperion_(H97)) (Kalium)"
     ],
     "famousShipsPrefix": "Recorded ships of the class:",
     "namesake": "[HMS Vanguard](https://en.wikipedia.org/wiki/HMS_Vanguard_(1944)), the last and largest battleship ever built for the Royal Navy, completed just after the Second World War."
@@ -1134,8 +1135,8 @@
     "lore": "Much rarer than its sister classes, the Iowa was the earliest known testbed of vent cannon technology. It mounts a pair of turreted heavy vent canons by dispensing with any broadside armament, freeing up space for a much enlarged, antique power core. Ventral NC-16 missiles complete the Iowa’s armament, given their negligible power drain. Like all Old Battleships, the Iowa has poor scanners and point defences by modern standards, necessitating careful use.",
     "famousShips": [
      "Ardent",
-     "Queen Bess (Independents)",
-     "Iowa",
+     "[Queen Bess](https://en.wikipedia.org/wiki/Elizabeth_I) (Independents)",
+     "[Iowa](https://en.wikipedia.org/wiki/USS_Iowa_(BB-61))",
      "Great Founder (Kalium)"
     ],
     "famousShipsPrefix": "Recorded ships of the class:",
@@ -1191,10 +1192,10 @@
     "tonnage": "H",
     "lore": "Like other Old Battleships, the Lexington could rightly belong in a museum, although it’s still a formidable warship today. Many survived the Scourge invasion since they were mostly relegated to frontier picket duty, being outmoded even then. In the hard centuries that followed, the Lexington has proven its worth countless times, offering a reliable loadout of NC-16 missiles, a single ventral torpedo, and a fair-sized strike craft hangar. The negligible power drain of all of these gives the class excellent toughness, endurance, and utility for its age.",
     "famousShips": [
-     "Yorktown",
-     "Missouri (Independents)",
-     "Black Prince",
-     "Scharnhorst (Kalium)"
+     "[Yorktown](https://en.wikipedia.org/wiki/USS_Yorktown_(CV-5))",
+     "[Missouri](https://en.wikipedia.org/wiki/USS_Missouri_(BB-63)) (Independents)",
+     "[Black Prince](https://en.wikipedia.org/wiki/HMS_Black_Prince_(1904))",
+     "[Scharnhorst](https://en.wikipedia.org/wiki/German_battleship_Scharnhorst) (Kalium)"
     ],
     "famousShipsPrefix": "Recorded ships of the class:",
     "namesake": "[USS Lexington](https://en.wikipedia.org/wiki/USS_Lexington_(CV-2)), the US aircraft carrier nicknamed 'Lady Lex', lost in the Battle of the Coral Sea in 1942."
@@ -1247,9 +1248,9 @@
     "tonnage": "H",
     "lore": "Once among the mightiest ships ever built by mankind, the Musashi is now a relic, even among resistance fleets. Introduced in the mid-24th century, around the time of first contact with the Shaltari, the youngest of these veterans is over 300 years old. However, they were overbuilt for the rigours of exploration and have proven supremely reliable. Its broadsides of chemically fired N-12 cannons are undemanding workhorses with a low power draw, so most Musashi’s spinal turrets have been refitted with 9K mass drivers over the centuries.",
     "famousShips": [
-     "Musashi",
-     "Endurance II (Independents)",
-     "Loki",
+     "[Musashi](https://en.wikipedia.org/wiki/Japanese_battleship_Musashi)",
+     "[Endurance II](https://en.wikipedia.org/wiki/Endurance_(1912_ship)) (Independents)",
+     "[Loki](https://en.wikipedia.org/wiki/Loki)",
      "Proud Empress (Kalium)"
     ],
     "famousShipsPrefix": "Recorded ships of the class:",
@@ -1329,7 +1330,7 @@
     "lore": "The Tribune is heavier, slower and tougher than modern battlecruisers. It shares a superstructure and one mass driver turret with the more common Phalanx class. The remainder of its firepower comes from two conventional cannon turrets and an increased close action capability. However, the Tribune is unusual for a full combat ship of this size in that it features capacity for bulk landers. Its only real modern descendants are the PHR’s assault troopships. In addition though, the Tribune has a significant flight deck, making it a fleet carrier as well. In combination, the Tribune is a jack of all trades, able to adapt to fluid combat situations better than most ships.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "Caesar’s Eagle"
+     "[Caesar’s Eagle](https://en.wikipedia.org/wiki/Aquila_(Roman))"
     ],
     "namesake": "A [tribune](https://en.wikipedia.org/wiki/Tribune), a senior Roman officer of the legions, or the people's elected champion against the power of the Senate."
    }
@@ -1447,9 +1448,9 @@
     "lore": "The Triumvir has been one of the most valued ships to the Resistance since escaping the Scourge invasion. Shipyards mostly being a lost luxury, any repairs had to be run in the void with the help of other ships - the Triumvir’s specialty. Though a military vessel with fighting armour and battlecruiser tonnage, most of its superstructure is dominated by an insectile bank of extending service armatures. Long-term, Triumvirs can run complex repairs that take weeks. In battle they inject expanding, rapid-cure polymer foam into hull breaches, armour cracks and voided areas, keeping a ship in the fight longer. Despite their value beyond the battlespace, many Resistance admirals gladly risk fielding Triumvirs for the sake of the greater good. To support its activities, the Triumvir has a large internal hangar for various service craft from shuttles to engineering barges. Triumvirs that go to battle tend to replace some of these with regular fighters and bombers to add offensive and escort capability.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "Brunel",
-     "Eiffel",
-     "Stephenson (Independents)",
+     "[Brunel](https://en.wikipedia.org/wiki/Isambard_Kingdom_Brunel)",
+     "[Eiffel](https://en.wikipedia.org/wiki/Gustave_Eiffel)",
+     "[Stephenson](https://en.wikipedia.org/wiki/George_Stephenson) (Independents)",
      "People’s Beneficence",
      "Kabal’s Wisdom",
      "As One (Kalium)"
@@ -1523,7 +1524,7 @@
     ],
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "Project 26-02",
+     "[Project 26-02](https://en.wikipedia.org/wiki/Kirov-class_cruiser)",
      "Dark Side of the Moon"
     ],
     "namesake": "A [senator](https://en.wikipedia.org/wiki/Roman_Senate), one of the elder statesmen of the Roman Senate, the council that steered the Republic and Empire."
@@ -1619,7 +1620,7 @@
      "Martian Wind",
      "Defiance",
      "Equatorial (Independents)",
-     "Hardrada",
+     "[Hardrada](https://en.wikipedia.org/wiki/Harald_Hardrada)",
      "Necromancer",
      "Purgatory (Kalium)"
     ],
@@ -1667,7 +1668,7 @@
      "Martian Wind",
      "Defiance",
      "Equatorial (Independents)",
-     "Hardrada",
+     "[Hardrada](https://en.wikipedia.org/wiki/Harald_Hardrada)",
      "Necromancer",
      "Purgatory (Kalium)"
     ],
@@ -1731,7 +1732,7 @@
      "Martian Wind",
      "Defiance",
      "Equatorial (Independents)",
-     "Hardrada",
+     "[Hardrada](https://en.wikipedia.org/wiki/Harald_Hardrada)",
      "Necromancer",
      "Purgatory (Kalium)"
     ],
@@ -1886,9 +1887,9 @@
     "tonnage": "L",
     "lore": "In many cases, the first humans to set foot on one of the UCM’s colonies did so from a bulk lander deployed by an Aldrin class colony ship. These hardy ships formed the vanguard of most expeditions and were deployed when a world looked suitable for habitation or exploitation. Bulk landers were preferred to dropships in those halcyon days, since advanced opposition was unlikely and heavy machinery was always needed planetside. Today, the Aldrin offers the capacity of a troopship in a package the size of a destroyer, possible since these ships were never designed for open warfare so offer additional space. Being below cruiser sized, they can also operate in atmosphere, protecting them from void weapons fire. Built to a standard not seen since the exploration days, they can withstand abuse no modern civilian vessel could survive.",
     "famousShips": [
-     "Endeavour",
-     "Endurance",
-     "Odyssey"
+     "[Endeavour](https://en.wikipedia.org/wiki/Space_Shuttle_Endeavour)",
+     "[Endurance](https://en.wikipedia.org/wiki/Endurance_(1912_ship))",
+     "[Odyssey](https://en.wikipedia.org/wiki/Apollo_13)"
     ],
     "famousShipsPrefix": "Recorded ships of the class:",
     "namesake": "[Buzz Aldrin](https://en.wikipedia.org/wiki/Buzz_Aldrin) (born 1930), the Apollo 11 lunar-module pilot and the second human to walk on the Moon. Born Edwin Eugene Aldrin Jr., he flew 66 combat missions in F-86 Sabres during the Korean War and earned a doctorate in astronautics from MIT for his work on orbital rendezvous. He had already flown in space on Gemini 12 before the Apollo 11 mission."
@@ -1944,9 +1945,9 @@
     "lore": "The Armstrong, Aldrin and Collins are some of the earliest human starships still in service; dating back to the late 24th century, they were designed for endurance exploration. Every UCM colony was discovered by hit-and-miss expeditions, requiring many semi-random foldspace jumps until a usable world could be found, explored and given a node. Such dependable hardiness ensured three centuries' service. In size and capability they equal a modern destroyer, though in displacement they are more akin to cruisers due to multiple redundancies, cavernous storage and antique tech. The Armstrong is armed with a deadly HF-6 Clearance Laser which, while useful in the long task of asteroid clearance, is put to much better use against enemy ships, offering Resistance an option for Burnthrough.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "Apollo 11",
-     "Tranquility",
-     "Saturn"
+     "[Apollo 11](https://en.wikipedia.org/wiki/Apollo_11)",
+     "[Tranquility](https://en.wikipedia.org/wiki/Tranquility_Base)",
+     "[Saturn](https://en.wikipedia.org/wiki/Saturn_V)"
     ],
     "namesake": "[Neil Armstrong](https://en.wikipedia.org/wiki/Neil_Armstrong) (1930-2012), commander of Apollo 11 and the first human to set foot on the Moon, in 1969. A naval aviator and test pilot, he flew the X-15 rocket plane before joining NASA and commanded the Gemini 8 mission in 1966. His words on stepping onto the lunar surface, \"that's one small step for man, one giant leap for mankind\", became among the most famous ever spoken."
    }
@@ -2122,8 +2123,8 @@
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
      "Amber Eye",
-     "Hubble IX",
-     "Magellan (Independents)",
+     "[Hubble IX](https://en.wikipedia.org/wiki/Hubble_Space_Telescope)",
+     "[Magellan](https://en.wikipedia.org/wiki/Magellan_Telescopes) (Independents)",
      "All-Seeing",
      "Lens of Truth",
      "Nightpiercer (Kalium)"
@@ -2181,8 +2182,8 @@
     "lore": "The Newton was the most common pre-war naval defence monitor in the service of mankind. Unlike modern monitors, the class is visually closer to a space station than a ship, suiting its near- static mission profile. With the speed of the Scourge invasion, few could manoeuvre into a firing position - unfortunate since it packs an enormous mass driver for a frigate-sized vessel. The XN-40 “Godray” was designed to destroy incoming targets long before they could return fire. It sits on a swivel mount, allowing not only tracking of deep space, but precise bombardment of surface targets. Pre-war this was largely used to quell any thoughts of insurrection or to level inhospitable landscape prior to surface exploration. Today, the Newton still brings incredible firepower for its cost, at the price of speed and survivability. This gives it a valued place on the gun line of any Resistance or Kalium admiral capable of harnessing this ship’s strengths. Although unwieldy to bring to a forward position, its bombardment and anti-shipping firepower can lend the class a new lease of life in an offensive role.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "His Apple",
-     "Principia"
+     "[His Apple](https://en.wikipedia.org/wiki/Isaac_Newton)",
+     "[Principia](https://en.wikipedia.org/wiki/Philosophiæ_Naturalis_Principia_Mathematica)"
     ],
     "namesake": "[Sir Isaac Newton](https://en.wikipedia.org/wiki/Isaac_Newton) (1642-1727), who set down the laws of motion and gravitation that govern every ship's course. His Philosophiae Naturalis Principia Mathematica, published in 1687, is among the most important works in the history of science. He also built the first reflecting telescope, showed that white light is a mixture of colours, and shares credit with Leibniz for the development of calculus. In later life he served as Master of the Royal Mint and President of the Royal Society."
    }
@@ -2441,7 +2442,7 @@
     "lore": "The Munifex is a fairly typical corvette – fast, atmospheric-capable and designed to kill Strike Carriers, as well as their opposite numbers. It is armed with specialist missiles, much like the UCM’s Santiago class.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "Great Wall",
+     "[Great Wall](https://en.wikipedia.org/wiki/Great_Wall_of_China)",
      "Marston’s Run (Independents)",
      "Hellhunter"
     ],
@@ -2801,7 +2802,7 @@
     "rulesText": "",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "Pilum",
+     "[Pilum](https://en.wikipedia.org/wiki/Pilum)",
      "Fontaine’s Miracle",
      "Myriad (Independents)",
      "Proudcore",

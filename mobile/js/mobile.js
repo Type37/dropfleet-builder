@@ -1952,25 +1952,28 @@
     const groups = [];
     let cur = [], tagged = false;
     famousShips.forEach(s => {
-      const txt = String(s);
-      const m = txt.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
-      if (m) {
+      const txt = String(s).trim();
+      // A trailing "(label)" closes a sub-faction column. Ignore it when the "("
+      // belongs to a markdown link [name](url) (name part ends with "]") or looks
+      // like a URL, so linked entries are not mistaken for tags.
+      const m = txt.match(/^(.*?)\s*\(([^)]+)\)$/);
+      if (m && !m[1].endsWith(']') && !/https?:\/\//.test(m[2])) {
         tagged = true;
         if (m[1].trim()) cur.push(m[1].trim());
         groups.push({ label: m[2].trim(), ships: cur });
         cur = [];
-      } else if (txt.trim()) {
-        cur.push(txt.trim());
+      } else if (txt) {
+        cur.push(txt);
       }
     });
     if (cur.length) groups.push({ label: '', ships: cur });
     const head = `<span class="lore-famous-label">${esc(prefix || 'Known ships of the class:')}</span>`;
     if (!tagged || groups.length < 2) {
       const flat = groups.length ? groups.flatMap(g => g.ships) : famousShips.map(String);
-      return `<div class="lore-famous">${head}<ul>${flat.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>`;
+      return `<div class="lore-famous">${head}<ul>${flat.map(s => `<li>${loreLinks(s)}</li>`).join('')}</ul></div>`;
     }
     const cols = groups.map(g =>
-      `<div class="lore-famous-col">${g.label ? `<span class="lore-famous-subhead">${esc(g.label)}</span>` : ''}<ul>${g.ships.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>`
+      `<div class="lore-famous-col">${g.label ? `<span class="lore-famous-subhead">${esc(g.label)}</span>` : ''}<ul>${g.ships.map(s => `<li>${loreLinks(s)}</li>`).join('')}</ul></div>`
     ).join('');
     return `<div class="lore-famous">${head}<div class="lore-famous-cols">${cols}</div></div>`;
   }
