@@ -4026,6 +4026,17 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: var(--sp-sm); flex-wrap: wrap;
 }
 .new-fleet-points-row #new-fleet-points { max-width: 150px; }
+.name-roll-row { display: flex; gap: var(--sp-sm); align-items: stretch; }
+.name-roll-row .form-input { flex: 1; }
+.name-roll-btn {
+  flex-shrink: 0; width: 42px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--stroke); border-radius: var(--radius-md);
+  background: var(--paper-warm); color: var(--ink-muted); cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+}
+.name-roll-btn:hover { color: var(--navy); border-color: var(--navy); background: var(--navy-wash); }
+.name-roll-btn:active { transform: scale(0.94); }
 .new-fleet-points-hint { font-size: var(--text-xs); color: var(--ink-muted); }
 
 .faction-pick-desc {

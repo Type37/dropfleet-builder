@@ -1179,6 +1179,15 @@ button, a, input, select, textarea,
   margin-bottom: var(--sp-xs);
 }
 
+.name-roll-row { display: flex; gap: var(--sp-s); align-items: stretch; }
+.name-roll-row .form-input { flex: 1; width: auto; }
+.name-roll-btn {
+  flex-shrink: 0; width: 48px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--stroke1); border-radius: var(--radius-md);
+  background: var(--paper-alt); color: var(--fg2); cursor: pointer;
+}
+.name-roll-btn:active { background: var(--navy); color: #fff; }
 .form-input,
 .form-textarea,
 .form-select {
