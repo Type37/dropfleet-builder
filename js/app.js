@@ -2217,12 +2217,6 @@ const App = (() => {
         </div>
         <div class="overview-section">
           <div class="overview-section-head">
-            <div class="overview-section-label">Admiral</div>
-          </div>
-          <div id="admiral-slot"></div>
-        </div>
-        <div class="overview-section">
-          <div class="overview-section-head">
             <div class="overview-section-label">Space Station</div>
           </div>
           <div id="station-slot"></div>
@@ -4269,34 +4263,17 @@ const App = (() => {
       let flagshipHtml = '';
       let admiralImgUrl = null;
       if (a.type === 'Famous' && a.shipKey) {
-        const factionShips = shipDB[currentFleet.faction];
-        const admiralGroup = factionShips?.groups?.famous_admirals;
-        const flagship = admiralGroup?.ships?.[a.shipKey];
+        const flagship = shipDB[currentFleet.faction]?.groups?.famous_admirals?.ships?.[a.shipKey];
         if (flagship) {
           admiralImgUrl = flagship.image || null;
           const fsName = flagship.ship_name || flagship.className || (flagship.tonnage ? flagship.tonnage + ' Ship' : 'Ship');
           const fsSize = flagship.shipCategory ? (CATEGORY_LABELS[flagship.shipCategory] || '') : '';
-          const fsSub = [fsSize, flagship.className && flagship.className !== fsName ? flagship.className : '', flagship.ship_cost ? flagship.ship_cost + ' pts' : ''].filter(Boolean).join(', ');
-          const img = flagship.image ? `<img src="${esc(flagship.image)}" alt="" class="admiral-flagship-art" loading="lazy" onerror="this.style.display='none'">` : '';
-          const wpns = flagship.weapons || [];
-          const wpnHtml = wpns.length ? `<div class="weapon-list">${renderWeaponHeader()}${wpns.map(renderWeaponRow).join('')}</div>` : '';
-          const rulesHtml = (flagship.specialRuleDetails || []).length
-            ? `<div class="admiral-flagship-rules">${flagship.specialRuleDetails.map(r => r.description
-                ? `<span class="rule-chip rule-chip-sm has-tooltip" data-rule-desc="${esc(r.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(r.name)}</span>`
-                : `<span class="rule-chip rule-chip-sm">${esc(r.name)}</span>`).join('')}</div>`
-            : '';
-          flagshipHtml = `<div class="admiral-flagship">
-            <div class="admiral-flagship-head">
-              ${img}
-              <div style="min-width:0">
-                <div class="admiral-flagship-name">${esc(fsName)}</div>
-                ${fsSub ? `<div class="admiral-flagship-sub">${esc(fsSub)}</div>` : ''}
-              </div>
-            </div>
-            ${renderStatGrid(flagship)}
-            ${wpnHtml}
-            ${rulesHtml}
-          </div>`;
+          // The flagship is a ship on the table: its card sits in the middle and
+          // opens the full datasheet. The admiral card here just links to it.
+          flagshipHtml = `<button class="admiral-flagship-link" onclick="App.openShipDetail('${currentFleet.faction}','famous_admirals','${a.shipKey}',false)" title="Open the flagship datasheet">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 11l6-8 6 8M3 11h10l-1 3H4z"/></svg>
+            <span>Flagship: <strong>${esc(fsName)}</strong>${fsSize ? `, ${esc(fsSize)}` : ''}</span>
+          </button>`;
         }
       }
       return `
