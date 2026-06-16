@@ -2887,6 +2887,16 @@
 
     const weapons = (def && def.weapons) || [];
     const weaponSheet = weapons.length ? optionWeaponSheet(weapons) : '';
+    // Weapons added by the selected upgrade (e.g. Defence Grid).
+    let upgradeWeaponSheet = '';
+    if (spec && st.systems) {
+      const upgradeWpns = [];
+      st.systems.forEach(name => {
+        const opt = spec.options.find(o => o.name === name);
+        if (opt && opt.weapons && opt.weapons.length) upgradeWpns.push(...opt.weapons);
+      });
+      if (upgradeWpns.length) upgradeWeaponSheet = optionWeaponSheet(upgradeWpns);
+    }
     // Launch assets as the full ship-style table (parity with desktop + ships).
     const loadsHtml = def ? renderLaunchTable(f.faction, def) : '';
     const rules = (def && def.stationRules) || [];
@@ -2898,6 +2908,7 @@
       ${art ? `<div class="ship-art-hero">${shopLinkImg(st.name, `<img src="${art}" alt="${esc(st.name)}" loading="lazy">`, def)}</div>` : ''}
       ${statGrid}
       ${weaponSheet}
+      ${upgradeWeaponSheet}
       ${loadsHtml}
       ${rulesHtml}
       ${picker}

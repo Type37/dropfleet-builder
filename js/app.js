@@ -4400,6 +4400,16 @@ const App = (() => {
     // Generic Small/Medium/Large stations choose modules in a modal (Hobgoblin
     // style). The card shows the chosen modules + a button to open the picker.
     const spec = stationArmamentSpec(ss);
+    // Weapons contributed by the selected upgrade (e.g. Defence Grid adds 5 weapons).
+    let upgradeWeaponSheet = '';
+    if (spec && ss.systems) {
+      const upgradeWpns = [];
+      ss.systems.forEach(name => {
+        const opt = spec.options.find(o => o.name === name);
+        if (opt && opt.weapons && opt.weapons.length) upgradeWpns.push(...opt.weapons);
+      });
+      if (upgradeWpns.length) upgradeWeaponSheet = `<div class="weapon-list" style="margin-top:var(--sp-sm)">${renderWeaponHeader()}${upgradeWpns.map(renderWeaponRow).join('')}</div>`;
+    }
     let pickerHtml = '';
     if (spec) {
       const sum = summariseStation(ss);
@@ -4427,6 +4437,7 @@ const App = (() => {
       ${renderStatGrid(stats)}
       ${rulesLine}
       ${weaponSheet}
+      ${upgradeWeaponSheet}
       ${loadsLine}
       ${stationRulesHtml}
       ${pickerHtml}
@@ -4625,14 +4636,18 @@ const App = (() => {
         // already labels it (the "Weapon Systems" heading was redundant).
         return `<div class="sys-cat"><div class="weapon-list station-arm-list">${head}${wrows}</div></div>`;
       }
-      // Launch modules show their full launch-asset statblock; Structures/Upgrades
-      // keep the row+effect layout (no weapon stats).
+      // Launch modules show their full launch-asset statblock; upgrades with weapons
+      // (e.g. Defence Grid) show a weapon table; Structures/effect-only options show
+      // their short effect line.
       const rows = opts.map(o => {
         const c = counts[o.name] || 0;
         const canAdd = canAddStationOption(station, o, spec);
+        const hasWeapons = o.weapons && o.weapons.length;
         const isLaunch = o.loads && o.loads.length;
-        const summary = (!isLaunch && o.effect) ? `<span class="sys-opt-detail">${esc(o.effect)}</span>` : '';
-        const sheet = isLaunch ? buildLaunchTable(currentFleet.faction, o.loads, true) : '';
+        const summary = (!hasWeapons && !isLaunch && o.effect) ? `<span class="sys-opt-detail">${esc(o.effect)}</span>` : '';
+        const sheet = hasWeapons
+          ? `<div class="weapon-list sys-opt-sheet">${renderWeaponHeader()}${o.weapons.map(w => renderWeaponRow(w)).join('')}</div>`
+          : (isLaunch ? buildLaunchTable(currentFleet.faction, o.loads, true) : '');
         const star = o.oncePerStation ? '<span class="sys-opt-star" title="Max one">*</span>' : '';
         return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}">
           ${stationOptThumb(o.name)}<div class="sys-opt-main"><span class="sys-opt-name">${esc(o.name)}${star}</span>${summary}</div>
