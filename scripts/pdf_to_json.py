@@ -236,6 +236,12 @@ def validate(ships, data_path):
     cost_misses = []
     stat_misses = []
     for sh in ships:
+        # A ship can appear both as a regular datasheet AND as a Famous Admiral's
+        # flagship (an upgraded variant with its own cost/stats). Only validate the
+        # regular datasheets against the regular data ships; comparing a flagship
+        # variant to the regular ship produces false "discrepancies".
+        if sh.get('famousAdmiral'):
+            continue
         nm = norm(sh['name'])
         # match by exact, or data name starting with the PDF name (+ class suffix)
         d = by.get(nm)
