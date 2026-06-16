@@ -3339,21 +3339,6 @@
   }
 
   /* ── Create / Edit Fleet modal ─────────────────────────── */
-  // Evocative random fleet names (dice button on the create form).
-  const FLEET_NAME_FORMS = ['Task Force', 'Battlegroup', 'Strike Force', 'Armada', 'Flotilla', 'Battle Fleet'];
-  const FLEET_NAME_ADJ = ['Iron', 'Crimson', 'Vengeful', 'Silent', 'Ascendant', 'Eternal', 'Resolute', 'Obsidian', 'Radiant', 'Wrathful', 'Sovereign', 'Adamant', 'Gilded', 'Hollow', 'Burning', 'Frozen', 'Distant', 'Final'];
-  const FLEET_NAME_NOUN = ['Vanguard', 'Sentinel', 'Tempest', 'Reckoning', 'Dawn', 'Hammer', 'Spear', 'Crucible', 'Aegis', 'Sabre', 'Bastion', 'Talon', 'Warden', 'Comet', 'Lance', 'Pyre', 'Tide', 'Horizon', 'Resolve'];
-  const FLEET_NAME_ORD = ['1st', '3rd', '7th', '9th', '13th', '22nd', '41st', '88th', '101st', '303rd'];
-  const FLEET_NAME_CORPS = ['Expeditionary Fleet', 'Reconquest Force', 'Line Squadron', 'Battle Fleet', 'Vanguard', 'Armada', 'Strike Group', 'Patrol Group'];
-  function rollFleetName() {
-    const pick = a => a[Math.floor(Math.random() * a.length)];
-    const r = Math.random();
-    const name = r < 0.4 ? `${pick(FLEET_NAME_FORMS)} ${pick(FLEET_NAME_ADJ)} ${pick(FLEET_NAME_NOUN)}`
-      : r < 0.7 ? `The ${pick(FLEET_NAME_ADJ)} ${pick(FLEET_NAME_NOUN)}`
-      : `${pick(FLEET_NAME_ORD)} ${pick(FLEET_NAME_CORPS)}`;
-    const input = document.getElementById('new-fleet-name');
-    if (input) { input.value = name; input.focus(); }
-  }
   let editingFleet = null;
   function populateFleetForm(fleet) {
     const fp = document.getElementById('new-fleet-faction');
@@ -3416,7 +3401,8 @@
   }
   function closeCreateFleet() { document.getElementById('modal-create-fleet').classList.remove('active'); }
   async function doCreateFleet() {
-    const name = document.getElementById('new-fleet-name').value.trim() || 'Unnamed Fleet';
+    // Fleet names start blank by design (naming UX to be revisited); no auto-default.
+    const name = document.getElementById('new-fleet-name').value.trim();
     const desc = document.getElementById('new-fleet-desc').value.trim();
     const faction = document.getElementById('new-fleet-faction').value;
     const gameSize = document.getElementById('new-fleet-size').value;
@@ -3506,7 +3492,7 @@
   /* ── Public API ────────────────────────────────────────── */
   window.App = {
     init, goBack, viewDesktop,
-    openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, selectFleetSize, openStarterFleets, rollFleetName,
+    openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, selectFleetSize, openStarterFleets,
     openAddGroup, filterShips, toggleAttr, toggleExtra, clearFilters, setSort, addShip,
     openGroup, toggleWarnings, cycleShipArt, changeQty, changeGroupQty, swipeDeleteGroup, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, copyGroup, groupOverflow, editGroupName, toggleSecondary, openSecondaryModal, closeSecondaryModal,
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,

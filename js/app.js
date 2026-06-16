@@ -801,24 +801,6 @@ const App = (() => {
   }
 
   // ── Fleet CRUD ──
-  // Evocative random fleet names (dice button on the New Fleet form).
-  const FLEET_NAME_FORMS = ['Task Force', 'Battlegroup', 'Strike Force', 'Armada', 'Flotilla', 'Battle Fleet'];
-  const FLEET_NAME_ADJ = ['Iron', 'Crimson', 'Vengeful', 'Silent', 'Ascendant', 'Eternal', 'Resolute', 'Obsidian', 'Radiant', 'Wrathful', 'Sovereign', 'Adamant', 'Gilded', 'Hollow', 'Burning', 'Frozen', 'Distant', 'Final'];
-  const FLEET_NAME_NOUN = ['Vanguard', 'Sentinel', 'Tempest', 'Reckoning', 'Dawn', 'Hammer', 'Spear', 'Crucible', 'Aegis', 'Sabre', 'Bastion', 'Talon', 'Warden', 'Comet', 'Lance', 'Pyre', 'Tide', 'Horizon', 'Resolve'];
-  const FLEET_NAME_ORD = ['1st', '3rd', '7th', '9th', '13th', '22nd', '41st', '88th', '101st', '303rd'];
-  const FLEET_NAME_CORPS = ['Expeditionary Fleet', 'Reconquest Force', 'Line Squadron', 'Battle Fleet', 'Vanguard', 'Armada', 'Strike Group', 'Patrol Group'];
-  function randomFleetName() {
-    const pick = a => a[Math.floor(Math.random() * a.length)];
-    const r = Math.random();
-    if (r < 0.4) return `${pick(FLEET_NAME_FORMS)} ${pick(FLEET_NAME_ADJ)} ${pick(FLEET_NAME_NOUN)}`;
-    if (r < 0.7) return `The ${pick(FLEET_NAME_ADJ)} ${pick(FLEET_NAME_NOUN)}`;
-    return `${pick(FLEET_NAME_ORD)} ${pick(FLEET_NAME_CORPS)}`;
-  }
-  function rollFleetName() {
-    const input = document.getElementById('new-fleet-name');
-    if (input) { input.value = randomFleetName(); input.focus(); }
-  }
-
   function openNewFleetModal() {
     document.getElementById('new-fleet-name').value = '';
     document.getElementById('new-fleet-desc').value = '';
@@ -992,9 +974,8 @@ const App = (() => {
     const gameSize = sizeRadio ? sizeRadio.value : 'clash';
     const sizeInfo = GAME_SIZES[gameSize];
 
-    const rawName = document.getElementById('new-fleet-name').value.trim();
-    const fLabel = FACTION_LABELS[faction] || faction.toUpperCase();
-    const name = rawName || `${fLabel} ${sizeInfo.label} Fleet`;
+    // Fleet names start blank by design (naming UX to be revisited); no auto-default.
+    const name = document.getElementById('new-fleet-name').value.trim();
 
     // Optional custom points limit (e.g. a 1500-pt Clash). Blank = bracket max.
     const ptsRaw = (document.getElementById('new-fleet-points') || {}).value;
@@ -6408,7 +6389,7 @@ const App = (() => {
 
   // ── Public API ──
   return {
-    navigate, openNewFleetModal, rollFleetName, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
+    navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, copyGroup, moveGroup, editGroupName, toggleFleetCardMenu,
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
