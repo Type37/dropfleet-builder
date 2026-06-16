@@ -2133,7 +2133,7 @@ const App = (() => {
       const catLabel = CATEGORY_LABELS[cat] || cat;
       const catColor = flagshipCatColor[cat] || 'var(--navy)';
       const artSrc = fs.image || null;
-      return `<div class="overview-group-card card-deco overview-flagship-card" style="border-left-color:${catColor}" title="Carries ${esc(a.name)}; its cost is counted with the admiral">
+      return `<div class="overview-group-card card-deco overview-flagship-card overview-flagship-clickable" style="border-left-color:${catColor}" title="${esc(name)} flies ${esc(a.name)}. Click for its datasheet" onclick="App.openShipDetail('${f.faction}','famous_admirals','${a.shipKey}',false)">
         <div class="overview-group-top">
           ${artSrc ? `<div class="overview-group-art"><img src="${esc(thumbUrl(artSrc))}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
           <div class="overview-group-info">

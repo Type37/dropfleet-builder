@@ -709,6 +709,9 @@ h1, h2, h3, h4, h5, h6 {
    (managed via the admiral slot), gold accent, "incl." instead of points since
    its cost is already counted with the admiral. */
 .overview-flagship-card { cursor: default; }
+/* The flagship is a hero ship: clicking opens its datasheet. */
+.overview-flagship-clickable { cursor: pointer; transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out); }
+.overview-flagship-clickable:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
 .overview-flagship-pts {
   font-size: var(--text-xs) !important;
   color: var(--ink-faint);
