@@ -1831,7 +1831,7 @@
         ${displayWeapons.map(w => {
           const t = (w.type || '').toUpperCase();
           const tc = t === 'K' ? 'weapon-type-k' : t === 'E' ? 'weapon-type-e' : t === 'C' ? 'weapon-type-c' : '';
-          const dmg = `${w.damage || ''}${t ? `<span class="${tc}" style="margin-left:2px;font-size:9px">${t}</span>` : ''}`;
+          const dmg = `${w.damage || ''}${t ? `<span class="${tc}" style="margin-left:2px;font-size: 12px">${t}</span>` : ''}`;
           return `<div class="weapon-row ${tc}">
             <div class="weapon-name">${esc(w.name)}</div><div class="weapon-val">${esc(w.lock || '')}</div>
             <div class="weapon-val">${esc(w.attack || '')}</div><div class="weapon-val">${dmg}</div><div class="weapon-val weapon-arc">${arcCell(w.arc)}</div>
@@ -2005,7 +2005,7 @@
     const rows = weapons.map(w => {
       const t = (w.type || '').toUpperCase();
       const tc = t === 'K' ? 'weapon-type-k' : t === 'E' ? 'weapon-type-e' : t === 'C' ? 'weapon-type-c' : '';
-      const dmg = `${w.damage || ''}${t ? `<span class="${tc}" style="margin-left:2px;font-size:9px">${t}</span>` : ''}`;
+      const dmg = `${w.damage || ''}${t ? `<span class="${tc}" style="margin-left:2px;font-size: 12px">${t}</span>` : ''}`;
       return `<div class="weapon-row ${tc}">
         ${omitName ? '' : `<div class="weapon-name">${esc(w.name)}</div>`}<div class="weapon-val">${esc(w.lock || '')}</div>
         <div class="weapon-val">${esc(w.attack || '')}</div><div class="weapon-val">${dmg}</div><div class="weapon-val weapon-arc">${arcCell(w.arc)}</div>
@@ -2553,7 +2553,7 @@
         ${weapons.map(w => {
           const t = (w.type || '').toUpperCase();
           const tc = t === 'K' ? 'weapon-type-k' : t === 'E' ? 'weapon-type-e' : t === 'C' ? 'weapon-type-c' : '';
-          const dmg = `${w.damage || ''}${t ? `<span class="${tc}" style="margin-left:2px;font-size:9px">${t}</span>` : ''}`;
+          const dmg = `${w.damage || ''}${t ? `<span class="${tc}" style="margin-left:2px;font-size: 12px">${t}</span>` : ''}`;
           return `<div class="weapon-row ${tc}">
             <div class="weapon-name">${esc(w.name)}</div><div class="weapon-val">${esc(w.lock || '')}</div>
             <div class="weapon-val">${esc(w.attack || '')}</div><div class="weapon-val">${dmg}</div><div class="weapon-val weapon-arc">${arcCell(w.arc)}</div>

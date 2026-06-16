@@ -2101,7 +2101,7 @@ const App = (() => {
           <div class="overview-group-info">
             <div class="overview-group-name group-name-editable" onclick="event.stopPropagation(); App.editGroupName('${g.id}', this)" role="button" tabindex="0" title="Click to rename battlegroup">${esc(g.name)}</div>
             <div class="overview-group-meta">
-              <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size:11px;padding:1px 6px">${esc(catLabel)}</span>
+              <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size: 12px;padding:1px 6px">${esc(catLabel)}</span>
               <span class="text-caption">${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
             </div>
             ${shipsLine && shipsLine !== g.name ? `<div class="overview-group-ships">${esc(shipsLine)}</div>` : ''}
@@ -2139,7 +2139,7 @@ const App = (() => {
           <div class="overview-group-info">
             <div class="overview-group-name">${esc(name)}</div>
             <div class="overview-group-meta">
-              <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size:11px;padding:1px 6px">${esc(catLabel)}</span>
+              <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size: 12px;padding:1px 6px">${esc(catLabel)}</span>
               <span class="text-caption">flies with ${esc(a.name)}</span>
             </div>
           </div>
@@ -4404,7 +4404,7 @@ const App = (() => {
         : '';
       return `<div class="station-option${isCurrent ? ' station-option-active' : ''}" onclick="App.selectStation('${ss.id}')">
         <div class="flex items-center justify-between" style="margin-bottom:var(--sp-xs)">
-          <span class="station-option-name">${optArt ? `<span class="station-option-thumb"><img src="${thumbUrl(optArt)}" alt="" loading="lazy" onerror="this.closest('.station-option-thumb').remove()"></span>` : ''}${esc(ss.name)}${isCurrent ? ' <span class="badge badge-navy" style="font-size:9px">Current</span>' : ''}</span>
+          <span class="station-option-name">${optArt ? `<span class="station-option-thumb"><img src="${thumbUrl(optArt)}" alt="" loading="lazy" onerror="this.closest('.station-option-thumb').remove()"></span>` : ''}${esc(ss.name)}${isCurrent ? ' <span class="badge badge-navy" style="font-size: 12px">Current</span>' : ''}</span>
           <span class="badge badge-gold">${ss.cost} pts</span>
         </div>
         ${renderStatGrid(stats)}

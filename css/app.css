@@ -341,7 +341,7 @@ h1, h2, h3, h4, h5, h6 {
 .topbar-context {
   font-family: var(--font-body);
   font-size: var(--text-sm);
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.88);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -353,7 +353,7 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.72);
   padding: 2px;
   border-radius: var(--radius-sm);
   transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
@@ -621,7 +621,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: 3px;
   font-family: var(--font-condensed);
-  font-size: 10px;
+  font-size: 12px;
   color: rgba(255,255,255,0.55);
   text-transform: none;
   letter-spacing: 0.03em;
@@ -716,7 +716,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .flagship-tag {
   display: inline-block;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--gold-dark);
@@ -806,7 +806,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .group-nav-cat {
   font-family: var(--font-condensed);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: var(--weight-medium);
   text-transform: none;
   letter-spacing: 0.01em;
@@ -814,14 +814,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 .group-nav-pts {
   font-family: var(--font-condensed);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: var(--weight-bold);
   color: rgba(255,255,255,0.55);
   letter-spacing: 0.02em;
 }
 .group-nav-count {
   font-family: var(--font-condensed);
-  font-size: 9px;
+  font-size: 12px;
   color: rgba(255,255,255,0.35);
   margin-left: auto;
 }
@@ -1761,13 +1761,13 @@ h1, h2, h3, h4, h5, h6 {
   background: #fef2f0;
   color: #c43c2f;
   border: 1px solid #f0c0b8;
-  font-size: 10px;
+  font-size: 12px;
 }
 .badge-warn {
   background: #fef9ea;
   color: #8a6d1e;
   border: 1px solid #e0c46c;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 /* Fleet card ship composition previews */
@@ -2107,7 +2107,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .weapon-col-arc svg { flex-shrink: 0; }
 .arc-label {
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1;
   letter-spacing: 0.02em;
   color: var(--ink-muted);
@@ -2220,7 +2220,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .launch-table .lt-launch-note {
   display: block;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: var(--weight-semibold);
   color: var(--ink-muted);
 }
@@ -2476,7 +2476,7 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-block;
   padding: 1px 5px;
   border-radius: var(--radius-sm);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: var(--weight-semibold);
   font-style: normal;
   background: var(--paper-alt);
@@ -2710,7 +2710,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: var(--weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -2891,7 +2891,7 @@ h1, h2, h3, h4, h5, h6 {
 .misc-vtoggle {
   display: inline-flex; align-items: center; gap: 6px;
   background: none; border: none; cursor: pointer; padding: 2px 6px;
-  font-family: var(--font-condensed); font-size: 10px; font-weight: 700;
+  font-family: var(--font-condensed); font-size: 12px; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted);
   line-height: 1.05; margin-left: 4px;
 }
@@ -3064,7 +3064,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0;
   border-radius: 0;
   text-transform: uppercase;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.06em;
 }
 .ship-badge-unique { color: var(--gold-dark); }
@@ -3075,7 +3075,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--gold-dark);
   color: var(--paper);
   text-transform: uppercase;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.06em;
 }
 /* Carrier tag — "Launch"/"Drop" so carriers read at a glance (replaces the star). */
@@ -3083,7 +3083,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--navy);
   color: var(--paper);
   text-transform: uppercase;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.06em;
 }
 .ship-badge-group {
@@ -3128,7 +3128,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .weapon-mini {
   font-family: var(--font-stat);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--ink-muted);
   background: var(--paper-warm);
   border: 1px solid var(--stroke-light);
@@ -3159,7 +3159,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: 2px;
   font-family: var(--font-stat);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--gold-dark);
 }
 .launch-indicator svg { opacity: 0.7; }
@@ -3396,7 +3396,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .station-add-optional:hover { border-color: var(--navy); color: var(--navy); }
 .station-add-optional .opt-tag {
-  font-size: 11px;
+  font-size: 12px;
   opacity: 0.6;
 }
 .station-card {
@@ -3452,7 +3452,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .station-stat {
   font-family: var(--font-stat);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-muted);
   background: var(--paper-warm);
   padding: 1px 6px;
@@ -3466,7 +3466,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: var(--sp-sm);
 }
 .rule-chip-sm {
-  font-size: 10px;
+  font-size: 12px;
   padding: 1px 6px;
 }
 
@@ -5616,7 +5616,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex; align-items: center; justify-content: space-between; gap: 4px;
   padding: 8px 6px 3px; background: linear-gradient(transparent, rgba(15, 38, 64, 0.72));
 }
-.hero-art-label { color: #fff; font-size: 10px; font-family: var(--font-condensed); font-weight: var(--weight-semibold); letter-spacing: 0.03em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hero-art-label { color: #fff; font-size: 12px; font-family: var(--font-condensed); font-weight: var(--weight-semibold); letter-spacing: 0.03em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hero-art-dots { display: flex; gap: 3px; flex-shrink: 0; }
 .hero-art-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, 0.45); }
 .hero-art-dot.active { background: #fff; }
@@ -5941,8 +5941,8 @@ h1, h2, h3, h4, h5, h6 {
   .faction-chip-name { font-size: var(--text-xs); }
 
   /* Sort bar compact */
-  .fleet-sort-btn { padding: var(--sp-xs) var(--sp-sm); font-size: 10px; }
-  .fleet-sort-label { font-size: 10px; }
+  .fleet-sort-btn { padding: var(--sp-xs) var(--sp-sm); font-size: 12px; }
+  .fleet-sort-label { font-size: 12px; }
 
   /* Overview compact */
   .overview-faction-icon { width: 28px; height: 28px; }
@@ -5991,7 +5991,7 @@ h1, h2, h3, h4, h5, h6 {
   .stat-cell { padding: 2px; }
   .stat-cell-label { font-size: 7px; }
   .stat-cell-value { font-size: var(--text-xs); }
-  .category-tab { padding: var(--sp-xs) var(--sp-sm); font-size: 10px; }
+  .category-tab { padding: var(--sp-xs) var(--sp-sm); font-size: 12px; }
   .topbar-brand { font-size: var(--text-xs); }
   .topbar-logo { height: 18px; }
 }

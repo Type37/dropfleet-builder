@@ -27,7 +27,7 @@
   --sp-xxxl: 32px;
 
   /* — Fluent 2 Type Ramp — */
-  --text-caption2: 11px;
+  --text-caption2: 12px;
   --text-caption1: 13px;
   --text-body1: 14px;
   --text-subtitle2: 16px;
@@ -573,7 +573,7 @@ button, a, input, select, textarea,
 }
 .weapon-arc .arc-ico svg { display: block; }
 .weapon-arc .arc-label {
-  font-size: 10px;
+  font-size: 12px;
   font-family: var(--font-condensed);
   font-weight: var(--weight-semibold);
   color: var(--fg3);
@@ -1312,7 +1312,7 @@ button, a, input, select, textarea,
   display: flex; align-items: center; justify-content: space-between; gap: 6px;
   padding: 16px 10px 6px; background: linear-gradient(transparent, rgba(15, 38, 64, 0.62));
 }
-.ship-art-hero .hero-art-label { color: #fff; font-size: 11px; font-weight: var(--weight-semibold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ship-art-hero .hero-art-label { color: #fff; font-size: 12px; font-weight: var(--weight-semibold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ship-art-hero .hero-art-dots { display: flex; gap: 4px; flex-shrink: 0; }
 .ship-art-hero .hero-art-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, 0.5); }
 .ship-art-hero .hero-art-dot.active { background: #fff; }
@@ -1655,7 +1655,7 @@ body.sheet-open .sheet-scrim {
   opacity: 0.85;
 }
 .add-slot-opt {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--fg3);
   opacity: 0.7;
   margin-right: 2px;
@@ -1804,8 +1804,8 @@ body.sheet-open .sheet-scrim {
   font-weight: var(--weight-semibold);
   vertical-align: middle;
 }
-.ship-tag-rare, .ship-tag-unique { background: none; padding: 0; border-radius: 0; text-transform: uppercase; font-size: 10px; letter-spacing: 0.06em; }
-.ship-tag-launch { background: var(--navy); color: var(--paper); text-transform: uppercase; font-size: 10px; letter-spacing: 0.06em; }
+.ship-tag-rare, .ship-tag-unique { background: none; padding: 0; border-radius: 0; text-transform: uppercase; font-size: 12px; letter-spacing: 0.06em; }
+.ship-tag-launch { background: var(--navy); color: var(--paper); text-transform: uppercase; font-size: 12px; letter-spacing: 0.06em; }
 .ship-tag-rare { color: var(--navy); }
 .ship-tag-unique { color: #8a5e10; }
 .row-disabled { opacity: 0.4; pointer-events: none; }
@@ -1820,7 +1820,7 @@ body.sheet-open .sheet-scrim {
   cursor: pointer;
 }
 .fleet-legal-check.legal-bad:active { background: rgba(196, 60, 47, 0.22); }
-.legal-bad-caret { font-size: 9px; line-height: 1; margin-left: 1px; }
+.legal-bad-caret { font-size: 12px; line-height: 1; margin-left: 1px; }
 .fleet-legal-check .status-svg { width: 17px; height: 17px; }
 
 /* ── 41. Form hint + loadout group label ───────────────── */
@@ -2246,7 +2246,7 @@ body.sheet-open .sheet-scrim {
   margin-right: var(--sp-s);
   border-radius: var(--radius-sm);
   font-family: var(--font-condensed);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: var(--weight-bold);
   color: #fff;
   vertical-align: -2px;
