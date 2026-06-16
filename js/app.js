@@ -23,6 +23,7 @@ const App = (() => {
       '4. How long have you played DFC?\n'
     );
   let activeGroupId = null;
+  let activeFlagship = null;  // admiral index when a famous flagship is selected (shown in the detail panel like a group)
   let shipSort = { key: 'points', dir: 'asc' };  // picker sort (parity w/ mobile: default cheapest-first)
   let activeCategory = 'all';
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
@@ -1840,6 +1841,7 @@ const App = (() => {
     // Clicking the already-active group toggles it off, returning focus to the
     // always-visible overview (there's no dedicated Overview nav row anymore).
     activeGroupId = (gid && gid === activeGroupId) ? null : (gid || null);
+    activeFlagship = null;   // selecting a group deselects any selected flagship
     // Selection only changes the nav highlight + which group the detail panel
     // shows — the overview content is unchanged, so don't rebuild it.
     scheduleRender(renderGroupsNav, renderDetailPanel);
@@ -1849,6 +1851,50 @@ const App = (() => {
       const sidebar = document.getElementById('builder-sidebar');
       if (sidebar.classList.contains('expanded')) sidebar.classList.remove('expanded');
     }
+  }
+
+  // Select a famous admiral's flagship (by admiral index): it shows in the detail
+  // panel like a normal battlegroup. Toggles off if already selected.
+  function selectFlagship(idx) {
+    activeFlagship = (activeFlagship === idx) ? null : idx;
+    activeGroupId = null;
+    scheduleRender(renderGroupsNav, renderDetailPanel);
+    const sidebar = document.getElementById('builder-sidebar');
+    if (sidebar && sidebar.classList.contains('expanded')) sidebar.classList.remove('expanded');
+  }
+
+  // The flagship's detail-panel view: same shape as a battlegroup's (header bar +
+  // ship card with the full datasheet). The admiral character is managed in the
+  // left rail; this is the ship on the table.
+  function renderFlagshipDetail(idx, a, fdb) {
+    const shipName = fdb.ship_name || fdb.name || 'Flagship';
+    const ton = tonLabel(fdb.tonnage) || '';
+    const tonClass = (fdb.tonnage || '').toLowerCase().replace(/\s+/g, '-');
+    const img = fdb.image;
+    return `
+    <button class="detail-back mobile-only" onclick="App.selectFlagship(${idx})">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg> Back to fleet
+    </button>
+    <div class="group-header-bar">
+      <div class="flex items-center gap-md flex-wrap">
+        <h2 class="group-title ship-card-name-link" onclick="App.openShipDetail('${currentFleet.faction}','famous_admirals','${a.shipKey}')">${esc(shipName)}</h2>
+        <span class="ship-badge ship-badge-unique">Flagship</span>
+        ${ton ? `<span class="badge badge-tonnage badge-tonnage-${tonClass}">${esc(ton)}</span>` : ''}
+        <span class="badge badge-navy">${a.points} pts</span>
+      </div>
+      <div class="group-header-actions">
+        <button class="btn btn-danger btn-sm" onclick="App.removeAdmiral(${idx})"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5"/><path d="M3 4l1 10h8l1-10"/></svg> Remove</button>
+      </div>
+    </div>
+    <div class="group-ships-list">
+      <div class="group-ship-entry">
+        ${img ? `<div class="ship-card-image"><img src="${esc(img)}" alt="${esc(shipName)}" loading="lazy" decoding="async" onerror="this.style.display='none'"></div>` : ''}
+        <div class="ship-card-body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
+          ${sharedShipDatasheet(currentFleet, a, fdb)}
+          <div class="text-caption">Flies with ${esc(a.name)}, who is managed in the left rail.</div>
+        </div>
+      </div>
+    </div>`;
   }
 
   function removeGroup(gid) {
@@ -2124,7 +2170,7 @@ const App = (() => {
     // admiral's points (no separate pts here → no double-count). Read-only —
     // managed via the admiral slot.
     const flagshipCatColor = { light: '#2f6ba0', medium: '#2f7a3a', heavy: '#8a5e10', colossal: '#b83828', payload: '#6a4c9c' };
-    const flagshipCards = (f.admirals || []).map(a => {
+    const flagshipCards = (f.admirals || []).map((a, ai) => {
       if (a.type !== 'Famous' || !a.shipKey) return '';
       const fs = shipDB[f.faction]?.groups?.famous_admirals?.ships?.[a.shipKey];
       if (!fs) return '';
@@ -2133,7 +2179,7 @@ const App = (() => {
       const catLabel = CATEGORY_LABELS[cat] || cat;
       const catColor = flagshipCatColor[cat] || 'var(--navy)';
       const artSrc = fs.image || null;
-      return `<div class="overview-group-card card-deco overview-flagship-card overview-flagship-clickable" style="border-left-color:${catColor}" title="${esc(name)} flies ${esc(a.name)}. Click for its datasheet" onclick="App.openShipDetail('${f.faction}','famous_admirals','${a.shipKey}',false)">
+      return `<div class="overview-group-card card-deco overview-flagship-card overview-flagship-clickable" style="border-left-color:${catColor}" title="${esc(name)} flies ${esc(a.name)}. Click to open its datasheet" onclick="App.selectFlagship(${ai})" role="button" tabindex="0">
         <div class="overview-group-top">
           ${artSrc ? `<div class="overview-group-art"><img src="${esc(thumbUrl(artSrc))}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
           <div class="overview-group-info">
@@ -2303,6 +2349,19 @@ const App = (() => {
   function renderDetailPanel() {
     const detailEl = document.getElementById('builder-detail');
     if (!currentFleet || !detailEl) return;
+
+    // A famous admiral's flagship selected from the overview shows here, exactly
+    // like a normal battlegroup (its full datasheet in the detail panel).
+    if (activeFlagship != null) {
+      const fa = (currentFleet.admirals || [])[activeFlagship];
+      const fdb = fa && fa.shipKey ? findShipInDB(currentFleet.faction, 'famous_admirals', fa.shipKey) : null;
+      if (fa && fdb) {
+        detailEl.classList.remove('hidden');
+        detailEl.innerHTML = renderFlagshipDetail(activeFlagship, fa, fdb);
+        return;
+      }
+      activeFlagship = null;
+    }
 
     // Detail panel: show when a group is selected
     if (!activeGroupId) {
@@ -4068,9 +4127,11 @@ const App = (() => {
   function removeAdmiral(index) {
     if (!currentFleet || !currentFleet.admirals) return;
     currentFleet.admirals.splice(index, 1);
+    activeFlagship = null;   // its flagship detail (if open) no longer applies
     saveFleets();
     renderAdmiralSlot();
     renderOverviewPanel();   // drop the flagship from the groups list
+    renderDetailPanel();
     updatePoints();
   }
 
@@ -6402,7 +6463,7 @@ const App = (() => {
   // ── Public API ──
   return {
     navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
-    loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, removeGroup, copyGroup, moveGroup, editGroupName, toggleFleetCardMenu,
+    loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, moveGroup, editGroupName, toggleFleetCardMenu,
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
