@@ -2062,6 +2062,21 @@ h1, h2, h3, h4, h5, h6 {
 .station-arm-row .sys-opt-step { margin: 0; }
 .station-arm-row.sys-opt-active { background: var(--paper); box-shadow: inset 2px 0 0 var(--navy); }
 
+/* Hardpoint picker: two-line weapon entries that fit the narrow detail panel.
+   Line 1 = name + cost + stepper; line 2 = the weapon stat line. */
+.hp-opt-list { border: 1px solid var(--stroke-light); border-radius: var(--radius-sm); overflow: hidden; }
+.hp-opt { padding: var(--sp-sm) var(--sp-md); background: var(--paper-alt); border-bottom: 1px solid var(--stroke-light); }
+.hp-opt:last-child { border-bottom: none; }
+.hp-opt-active { background: var(--paper); box-shadow: inset 3px 0 0 var(--navy); }
+.hp-opt-head { display: flex; align-items: center; gap: var(--sp-sm); }
+.hp-opt-name { flex: 1; min-width: 0; font-family: var(--font-condensed); font-weight: var(--weight-semibold); font-size: var(--text-sm); }
+.hp-opt-pts { font-family: var(--font-condensed); color: var(--ink-muted); font-size: var(--text-sm); white-space: nowrap; }
+.hp-opt-stat { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 4px; font-family: var(--font-condensed); font-size: var(--text-sm); }
+.hp-stat { white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; }
+.hp-stat-k { color: var(--ink-muted); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.03em; }
+.hp-stat-arc svg { vertical-align: middle; }
+.hp-opt-special { display: inline-flex; flex-wrap: wrap; gap: 3px; }
+
 /* In the narrow right detail panel, give the weapon name the full width and
    wrap SPECIAL onto its own row beneath it (the wide picker modal keeps the
    single-line 6-column layout). */
