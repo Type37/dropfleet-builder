@@ -3587,7 +3587,7 @@ const App = (() => {
     // with that category so the "click for info" works for them too.
     const cardOnclick = ` onclick="App.openShipDetail('${currentFleet.faction}','${isFamous ? 'famous_admirals' : category}','${key}',true)"`;
     const typeLine = isFamous
-      ? `${esc(data.ship_name || data.className || 'Flagship')} &middot; ${esc(tonLabel(data.tonnage) || catLabel)}`
+      ? `${esc(data.ship_name || data.className || 'Flagship')} · ${esc(tonLabel(data.tonnage) || catLabel)}`
       : `${esc(tonLabel(data.tonnage) || catLabel)}`;
     const addBtn = isFamous
       ? `<button class="btn btn-primary btn-sm"${famBlocked ? ` disabled title="${esc(famReason)}"` : ''} onclick="event.stopPropagation(); App.addFamousAdmiralFromPicker('${key}')">+ Add Admiral</button>`
