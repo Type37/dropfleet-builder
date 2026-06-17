@@ -4234,9 +4234,14 @@ const App = (() => {
   function renderAdmiralAbilities(a, index) {
     const info = getAdmiralAbilityInfo(a);
     if (!info) return '';
-    const liteLine = ab => `<div class="admiral-ability-lite">
+    const liteLine = ab => {
+      const tip = ab.effect
+        ? ` has-tooltip" data-rule-desc="${esc(ab.effect)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)`
+        : ``;
+      return `<div class="admiral-ability-lite${tip}">
         <span class="admiral-ability-name">${esc(ab.name || '')}</span>${ab.cost ? ` <span class="admiral-ability-cost">${esc(ab.cost)}</span>` : ''}
       </div>`;
+    };
     let html = '';
     if (info.innate.length) {
       html += `<div class="admiral-abilities-block">
