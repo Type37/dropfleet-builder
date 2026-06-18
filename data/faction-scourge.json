@@ -850,7 +850,7 @@
     },
     "weapons": [
      {
-      "name": "Heavy Plasma Beam",
+      "name": "Heavy Plasma Beam Triad",
       "arc": "F",
       "attack": "3",
       "lock": "3+",

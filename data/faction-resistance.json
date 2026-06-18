@@ -2159,6 +2159,15 @@
       "damage": "3",
       "type": "C",
       "special": "Alt-1, Calibre-H/C"
+     },
+     {
+      "name": "XN-40 “Godray” Bombardment Mass Driver",
+      "arc": "F",
+      "attack": "1",
+      "lock": "4+",
+      "damage": "3",
+      "type": "E",
+      "special": "Alt-1, Bombardment, Penetrator"
      }
     ],
     "loads": [],

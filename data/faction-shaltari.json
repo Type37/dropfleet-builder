@@ -275,6 +275,15 @@
       "special": "Close Action, Scald-1"
      },
      {
+      "name": "Ion Storm",
+      "arc": "F/S/R",
+      "attack": "6",
+      "lock": "4+",
+      "damage": "1",
+      "type": "E",
+      "special": "Bombardment, Scald-1"
+     },
+     {
       "name": "Gravity Coil Pair",
       "arc": "FN",
       "attack": "3",
@@ -1494,6 +1503,15 @@
       "special": "Close Action, Scald-1"
      },
      {
+      "name": "Ion Storm",
+      "arc": "F/S/R",
+      "attack": "6",
+      "lock": "4+",
+      "damage": "1",
+      "type": "E",
+      "special": "Bombardment, Scald-1"
+     },
+     {
       "name": "Disintegrator Battery Pair",
       "arc": "F/S",
       "attack": "5",
@@ -1749,6 +1767,15 @@
       "damage": "1",
       "type": "E",
       "special": "Close Action, Scald-1"
+     },
+     {
+      "name": "Ion Storm",
+      "arc": "F/S/R",
+      "attack": "6",
+      "lock": "4+",
+      "damage": "1",
+      "type": "E",
+      "special": "Bombardment, Scald-1"
      },
      {
       "name": "Gravity Coil Pair",
@@ -2231,6 +2258,15 @@
       "special": "Close Action, Scald-1"
      },
      {
+      "name": "Ion Storm",
+      "arc": "F/S/R",
+      "attack": "6",
+      "lock": "4+",
+      "damage": "1",
+      "type": "E",
+      "special": "Bombardment, Scald-1"
+     },
+     {
       "name": "Disintegrator Battery",
       "arc": "F/S",
       "attack": "5",
@@ -2524,6 +2560,15 @@
       "damage": "1",
       "type": "E",
       "special": "Close Action, Scald-1"
+     },
+     {
+      "name": "Ion Storm",
+      "arc": "F/S/R",
+      "attack": "6",
+      "lock": "4+",
+      "damage": "1",
+      "type": "E",
+      "special": "Bombardment, Scald-1"
      }
     ],
     "loads": [],

@@ -286,6 +286,10 @@ def validate(ships, data_path):
         print(f"  COST DIFF {nm}: pdf={p} data={dval}")
     for nm, diffs in stat_misses:
         print(f"  STAT DIFF {nm}: " + ', '.join(f"{k} pdf={pv} data={dv}" for k,(pv,dv) in diffs.items()))
+    for nm, pw, dw in wpn_misses:
+        only_pdf = [w for w in pw if w not in dw]
+        only_data = [w for w in dw if w not in pw]
+        print(f"  WPN DIFF {nm}: pdf-only={only_pdf} data-only={only_data}")
 
 if __name__ == '__main__':
     main()
