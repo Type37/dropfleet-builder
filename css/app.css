@@ -4099,6 +4099,10 @@ h1, h2, h3, h4, h5, h6 {
 .faction-pick-btn:hover .gold-frame rect,
 .faction-pick-btn[data-selected] .gold-frame rect { stroke-dashoffset: 0; }
 @media (prefers-reduced-motion: reduce) { .gold-frame rect { transition: none; } }
+/* The gold frame is the ONLY emphasis on the faction picker — kill the navy
+   hover (border/text) and the navy focus ring so there's no blue highlight. */
+.faction-pick-btn:hover { border-color: var(--stroke); color: var(--ink); box-shadow: none; }
+.faction-pick-btn:focus-visible { outline-color: var(--gold); }
 
 .game-size-visual {
   display: grid;
