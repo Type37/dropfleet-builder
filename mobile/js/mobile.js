@@ -2098,12 +2098,26 @@
   // assets (torpedoes, bombers, mines, fighters) use the universal 6" launch
   // placement and so are not listed here. Some ships carry a special rule that
   // overrides these (e.g. UCM "launch Dropships/Drop Pods at 6\"").
+  // Battalion-deploying Assets and their listed deploy ranges (Rulebook §7.4.1).
+  // Everything NOT in this map is a standard Asset that uses the general 6" rule.
   const DEPLOY_RANGE = {
     'bulk landers': '6"', 'bulk lander': '6"',
     'dropships': '3"', 'dropship': '3"',
     'boarding pods': '3"', 'boarding pod': '3"',
     'drop pods': '3"', 'drop pod': '3"'
   };
+  // Verbatim launch-placement rules behind the launch table's Range column. Standard
+  // Assets use the general 6" rule; battalion-deployers have their own targets/ranges.
+  const RANGE_TIPS = {
+    launch: { title: 'Launch Range', text: 'When you launch Assets, place those Assets up to their Launch Value within 6" of their Carrier (measured from the stem of the carrier to the center of the token) divided up as you wish. This placement counts as moving through scenery when placed through or onto scenery.' },
+    battalion: { title: 'Battalion Deployment', text: 'Battalions are deployed by launching their associated Asset. Each of these have different targets for their Battalions. These resolve immediately so do not need tokens—place 1 Battalion on their target for each Asset being launched at it. These Assets may only be launched at targets within their range, measured from the launching Carrier\'s stem to the center of the targeted site.\n\nWhen you deploy Battalions to Dropsites, you may instead deploy them to a specific Feature on that Dropsite.' }
+  };
+  function openRangeTip(kind) {
+    const t = RANGE_TIPS[kind];
+    if (t) showSheet(t.title, `<p>${ruleHtml(t.text)}</p>`);
+  }
+  // Shared 7-column grid for the launch table (Launch | Load | Rng | Thr | At | Lk | Dm).
+  const LT_GRID = '46px 1fr 38px 36px 28px 28px 36px';
 
   function getLaunchAssetMap(factionKey) {
     const f = FACTIONS[factionKey];
@@ -2128,14 +2142,16 @@
         const t = (a.type || '').toUpperCase();
         const tc = t === 'K' ? 'weapon-type-k' : t === 'E' ? 'weapon-type-e' : t === 'C' ? 'weapon-type-c' : '';
         const dmg = has ? `${a.damage || '-'}${t ? `<span class="${tc}" style="margin-left:2px">${t}</span>` : ''}` : '-';
-        const dr = DEPLOY_RANGE[part.toLowerCase()];
         const special = (a.special && a.special !== '-') ? renderSpecialChips(a.special)
           : a.ksReroll != null ? `<span class="weapon-special-chip tappable" onclick="event.stopPropagation();App.openRule('Close Protection')">Close Protection (re-roll ${a.ksReroll})</span>`
-          : dr ? `<span class="weapon-special-chip" title="Deploys within ${dr} of a friendly carrier">Deploy ${dr}</span>`
           : '-';
-        rows += `<div class="weapon-row ${tc}" style="grid-template-columns:52px 1fr 40px 32px 32px 40px">
+        const isBattalion = DEPLOY_RANGE[part.toLowerCase()] !== undefined;
+        const range = isBattalion ? DEPLOY_RANGE[part.toLowerCase()] : '6"';
+        const rangeKind = isBattalion ? 'battalion' : 'launch';
+        rows += `<div class="weapon-row ${tc}" style="grid-template-columns:${LT_GRID}">
           ${i === 0 ? `<div class="weapon-val" style="font-weight:700">${esc(load.launch || '-')}${ls}</div>` : '<div></div>'}
           <div class="weapon-name">${esc(part)}</div>
+          <div class="weapon-val"><span class="tappable" style="cursor:pointer;text-decoration:underline dotted" onclick="event.stopPropagation();App.openRangeTip('${rangeKind}')">${esc(range)}</span></div>
           <div class="weapon-val">${esc(a.thrust || '-')}</div>
           <div class="weapon-val">${has ? esc(a.attack) : '-'}</div>
           <div class="weapon-val">${has ? esc(a.lock) : '-'}</div>
@@ -2144,9 +2160,9 @@
       });
     });
     return `<div class="weapon-table">
-      <div class="weapon-row weapon-row-header" style="grid-template-columns:52px 1fr 40px 32px 32px 40px">
+      <div class="weapon-row weapon-row-header" style="grid-template-columns:${LT_GRID}">
         <div class="weapon-val">Launch</div><div class="weapon-name" style="color:var(--fg3)">Load</div>
-        <div class="weapon-val">Thr</div><div class="weapon-val">At</div><div class="weapon-val">Lk</div><div class="weapon-val">Dm</div>
+        <div class="weapon-val">Rng</div><div class="weapon-val">Thr</div><div class="weapon-val">At</div><div class="weapon-val">Lk</div><div class="weapon-val">Dm</div>
       </div>${rows}</div>`;
   }
 
@@ -3237,14 +3253,15 @@
         const a = map[part.toLowerCase()] || { name: part };
         const has = a.attack != null;
         const t = (a.type || '').toUpperCase();
-        const dr = DEPLOY_RANGE[part.toLowerCase()];
+        const isBattalion = DEPLOY_RANGE[part.toLowerCase()] !== undefined;
+        const range = isBattalion ? DEPLOY_RANGE[part.toLowerCase()] : '6"';
         const special = (a.special && a.special !== '-') ? a.special
           : a.ksReroll != null ? `Close Protection (re-roll ${a.ksReroll})`
-          : dr ? `Deploy ${dr} of carrier`
           : '';
         rows += `<tr>
           <td>${i === 0 ? esc(load.launch || '-') : ''}</td>
           <td>${esc(part)}</td>
+          <td>${esc(range)}</td>
           <td>${esc(a.thrust || '-')}</td>
           <td>${has ? esc(a.attack) : '-'}</td>
           <td>${has ? esc(a.lock) : '-'}</td>
@@ -3254,7 +3271,7 @@
       });
     });
     return `<div class="pr-launch-label">Launch Assets</div>
-      <table class="pr-weapons pr-launch"><thead><tr><th>Launch</th><th>Load</th><th>Thr</th><th>At</th><th>Lk</th><th>Dm</th><th>Special</th></tr></thead><tbody>${rows}</tbody></table>`;
+      <table class="pr-weapons pr-launch"><thead><tr><th>Launch</th><th>Load</th><th>Rng</th><th>Thr</th><th>At</th><th>Lk</th><th>Dm</th><th>Special</th></tr></thead><tbody>${rows}</tbody></table>`;
   }
 
   /* ── Export as PDF (printable view → browser "Save as PDF") ─ */
@@ -3556,7 +3573,7 @@
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,
     overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
     importFleetPrompt, doImportText,
-    openRule, openStat, closeRuleSheet, closeActionSheet
+    openRule, openRangeTip, openStat, closeRuleSheet, closeActionSheet
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

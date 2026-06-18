@@ -2277,6 +2277,12 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink);
 }
 .launch-table .lt-special { text-align: left; color: var(--ink-muted); }
+.launch-table .lt-range {
+  white-space: nowrap;
+  font-weight: var(--weight-semibold);
+}
+.launch-table .lt-range.has-tooltip { cursor: help; }
+.launch-table .lt-range.has-tooltip:hover { color: var(--navy); text-decoration: underline dotted; }
 
 .load-row {
   display: flex;

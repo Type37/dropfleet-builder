@@ -5824,12 +5824,19 @@ const App = (() => {
   // Combat assets (torpedoes/bombers/mines/fighters) use the universal 6"
   // launch placement and are intentionally omitted. Some ships carry a special
   // rule overriding these (e.g. UCM "launch Dropships/Drop Pods at 6\"").
+  // Battalion-deploying Assets and their listed deploy ranges (Rulebook §7.4.1).
+  // Everything NOT in this map is a standard Asset that uses the general 6" rule.
   const DEPLOY_RANGE = {
     'bulk landers': '6"', 'bulk lander': '6"',
     'dropships': '3"', 'dropship': '3"',
     'boarding pods': '3"', 'boarding pod': '3"',
     'drop pods': '3"', 'drop pod': '3"'
   };
+  // Verbatim launch-placement rules. Standard Assets use the general 6" rule;
+  // battalion-deployers (the DEPLOY_RANGE entries above) have their own targets
+  // and ranges, so the Range column carries one of these two tooltips.
+  const LAUNCH_RANGE_TIP = 'When you launch Assets, place those Assets up to their Launch Value within 6" of their Carrier (measured from the stem of the carrier to the center of the token) divided up as you wish. This placement counts as moving through scenery when placed through or onto scenery.';
+  const BATTALION_RANGE_TIP = 'Battalions are deployed by launching their associated Asset. Each of these have different targets for their Battalions. These resolve immediately so do not need tokens—place 1 Battalion on their target for each Asset being launched at it. These Assets may only be launched at targets within their range, measured from the launching Carrier\'s stem to the center of the targeted site.\n\nWhen you deploy Battalions to Dropsites, you may instead deploy them to a specific Feature on that Dropsite.';
 
   // Build a launch-asset stat table for a list of loads (each load = {name, launch,
   // special}; the name may be "A & B" → one row per sub-asset). Resolves each asset's
@@ -5854,13 +5861,17 @@ const App = (() => {
           ? `${esc(String(a.damage ?? ''))}${a.type ? `<span class="dmg-type dmg-type-${esc(a.type)}">${esc(a.type)}</span>` : ''}`
           : '-';
         let special = '-';
-        const dr = DEPLOY_RANGE[part.toLowerCase()];
         if (a.special && a.special !== '-') special = renderWeaponSpecialChips(a.special);
         else if (a.ksReroll !== undefined) special = closeProtectionChip(a.ksReroll);
-        else if (dr) special = `<span title="Deploys within ${dr} of a friendly carrier">Deploy ${dr}</span>`;
+        const drKey = part.toLowerCase();
+        const isBattalion = DEPLOY_RANGE[drKey] !== undefined;
+        const range = isBattalion ? DEPLOY_RANGE[drKey] : '6"';
+        const rangeTip = isBattalion ? BATTALION_RANGE_TIP : LAUNCH_RANGE_TIP;
+        const rangeCell = `<td class="lt-range has-tooltip" data-rule-desc="${escAttr(rangeTip)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(range)}</td>`;
         body += `<tr>
           ${i === 0 ? launchCell : ''}
           <td class="lt-load">${esc(part)}</td>
+          ${rangeCell}
           <td>${esc(String(a.thrust ?? '-'))}</td>
           <td>${hasStats ? esc(String(a.attack)) : '-'}</td>
           <td>${hasStats ? esc(String(a.lock)) : '-'}</td>
@@ -5871,7 +5882,7 @@ const App = (() => {
     });
     return `<div class="launch-table-wrap${compact ? ' sys-opt-sheet' : ''}">
       <table class="launch-table">
-        <thead><tr><th>Launch</th><th>Load</th><th>Thrust</th><th>Att</th><th>Lock</th><th>Dmg</th><th>Special</th></tr></thead>
+        <thead><tr><th>Launch</th><th>Load</th><th>Range</th><th>Thrust</th><th>Att</th><th>Lock</th><th>Dmg</th><th>Special</th></tr></thead>
         <tbody>${body}</tbody>
       </table>
     </div>`;
@@ -5988,6 +5999,10 @@ const App = (() => {
     div.textContent = String(str);
     return div.innerHTML;
   }
+
+  // esc() leaves quotes intact (fine for text nodes); for an HTML ATTRIBUTE value
+  // wrapped in double quotes we must also escape " (e.g. inch marks in rules text).
+  function escAttr(str) { return esc(str).replace(/"/g, '&quot;'); }
 
   // Rule/description text: escape everything, then re-allow our own <b> emphasis
   // (rules text stores verbatim bold via <b> tags) and turn newlines into breaks.
