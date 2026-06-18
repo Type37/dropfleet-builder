@@ -3532,10 +3532,13 @@ const App = (() => {
       });
     }
 
-    // Hide auxiliary/mercenary/civilian ships (cross-faction "additional" ships,
-    // flagged in the data) when the setting is off. Famous admirals always show —
-    // they're a deliberate pick, not auxiliary clutter.
-    if (!settings.showAdditionalShips) {
+    // Misc Ships is its OWN list: when the filter is OFF you see the faction's
+    // core ships (auxiliary/mercenary/civilian "additional" ships hidden); when
+    // ON you see ONLY those misc ships. Famous admirals always show alongside the
+    // core list (a deliberate pick, not auxiliary clutter).
+    if (settings.showAdditionalShips) {
+      ships = ships.filter(s => s.data.additional);
+    } else {
       ships = ships.filter(s => s.data.type === 'Famous' || !s.data.additional);
     }
 
@@ -5587,17 +5590,6 @@ const App = (() => {
     // Fleet description is edited in the overview "Add fleet notes" field; no need
     // to duplicate it here.
     body.innerHTML = `
-      <div class="settings-group">
-        <div class="settings-group-title">Ship Selection</div>
-        <label class="settings-toggle">
-          <span class="settings-toggle-label">
-            <span class="settings-toggle-name">Additional Ships</span>
-            <span class="settings-toggle-desc">Mercenaries, cross-faction ships, and other optional units</span>
-          </span>
-          <input type="checkbox" ${settings.showAdditionalShips ? 'checked' : ''} onchange="App.toggleSetting('showAdditionalShips', this.checked)">
-          <span class="settings-toggle-switch"></span>
-        </label>
-      </div>
       <div class="settings-group">
         <div class="settings-group-title">Builder Display</div>
         <label class="settings-toggle">

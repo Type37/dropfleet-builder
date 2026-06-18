@@ -1499,7 +1499,12 @@
     const search = (document.getElementById('picker-search')?.value || '').toLowerCase();
     let list = groups.concat(famousPseudo).filter(g => {
       const s = g.ship || {};
-      if (!pickerShowExtra && s.additional && !g._famous) return false;
+      // Misc Ships is its own list: ON = only additional ships; OFF = core ships
+      // (additional hidden). Famous admirals always show.
+      if (!g._famous) {
+        if (pickerShowExtra) { if (!s.additional) return false; }
+        else if (s.additional) return false;
+      }
       if (pickerFilter !== 'all' && g.category !== pickerFilter) return false;
       if (search && !(s.name || g.name).toLowerCase().includes(search)) return false;
       for (const k of pickerAttrs) { const d = attrDefs.find(a => a.key === k); if (d && !d.test(s)) return false; }
@@ -3032,8 +3037,7 @@
   // Tapping the toggle re-opens the sheet so its new on/off state is visible.
   function openSettingsSheet() {
     showActionSheet([
-      { label: `Additional ships  ${pickerShowExtra ? '✓ On' : 'Off'}`,
-        action: () => { pickerShowExtra = !pickerShowExtra; localStorage.setItem('dfc_show_extra', pickerShowExtra ? '1' : '0'); haptic(HAPTIC.tick); openSettingsSheet(); } },
+      // Misc Ships is a picker filter chip now (its own list), not a global setting.
       { label: `Two-column print  ${localStorage.getItem('dfc_print2col') === '1' ? '✓ On' : 'Off'}`,
         action: () => { localStorage.setItem('dfc_print2col', localStorage.getItem('dfc_print2col') === '1' ? '0' : '1'); haptic(HAPTIC.tick); openSettingsSheet(); } },
       { label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
