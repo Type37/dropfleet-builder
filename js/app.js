@@ -861,6 +861,7 @@ const App = (() => {
         style="position:relative;overflow:hidden">
         ${icon}
         <span>${name}</span>
+        <svg class="gold-frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="1" y="1" width="98" height="98" pathLength="100" vector-effect="non-scaling-stroke"/></svg>
       </button>`;
     }).join('');
     // Descriptor line beneath the picker (new-recruit onboarding)
@@ -907,6 +908,7 @@ const App = (() => {
           <div class="game-size-details">${lines[0]}</div>
           <div class="game-size-details game-size-sub">${lines[1]} · ${lines[2]}</div>
         </div>
+        <svg class="gold-frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="1" y="1" width="98" height="98" pathLength="100" vector-effect="non-scaling-stroke"/></svg>
       </div>`;
     }).join('');
   }
