@@ -1272,8 +1272,9 @@ button, a, input, select, textarea,
   font-weight: var(--weight-bold);
   line-height: 1.2;
 }
-/* Tap the battlegroup name to rename it; dotted underline hints the affordance. */
-.detail-name-editable { cursor: pointer; }
+/* Tap the battlegroup name to rename it; dotted underline hints the affordance.
+   inline-block keeps the tap target on the text, not the empty rest of the line. */
+.detail-name-editable { cursor: pointer; display: inline-block; }
 .detail-name-editable:active { opacity: 0.6; }
 .gname-input {
   font: inherit;

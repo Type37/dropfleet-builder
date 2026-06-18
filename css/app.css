@@ -527,6 +527,9 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-md);
   font-weight: var(--weight-bold);
   margin-bottom: 2px;
+  /* Rename click target = the name text only, not the full sidebar width. */
+  display: inline-block;
+  cursor: pointer;
 }
 
 .fleet-info-faction {
@@ -2742,12 +2745,10 @@ h1, h2, h3, h4, h5, h6 {
 .systems-picker {
   margin-top: var(--sp-xs);
   border: 1px solid var(--stroke-light);
-  border-left: 3px solid var(--navy);
   border-radius: var(--radius-sm);
   background: var(--paper-alt);
   overflow: hidden;
 }
-.systems-picker.systems-picker-incomplete { border-left-color: #c43c2f; }
 .systems-picker-head {
   display: flex;
   justify-content: space-between;
@@ -2809,10 +2810,10 @@ h1, h2, h3, h4, h5, h6 {
   white-space: nowrap;
   flex-shrink: 0;
 }
-.sys-opt-step { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-.sys-opt-count { min-width: 12px; text-align: center; font-weight: var(--weight-bold); font-size: var(--text-xs); }
+.sys-opt-step { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.sys-opt-count { min-width: 20px; text-align: center; font-weight: var(--weight-bold); font-size: var(--text-sm); }
 .sys-step-btn {
-  width: 20px; height: 20px;
+  width: 28px; height: 28px;
   border: 1px solid var(--stroke);
   background: var(--paper);
   border-radius: var(--radius-sm);
@@ -3680,7 +3681,9 @@ h1, h2, h3, h4, h5, h6 {
 /* ── Battlegroup inline rename ───────────────────────────────── */
 /* Click-to-rename names show a dotted underline on hover so the affordance is
    discoverable without cluttering the layout. */
-.group-name-editable { cursor: pointer; }
+/* Click target is the NAME TEXT only, not the whole row — inline-block shrinks
+   the editable element to its content width (align-self stops flex stretch). */
+.group-name-editable { cursor: pointer; display: inline-block; align-self: flex-start; max-width: 100%; }
 .group-name-editable:hover {
   text-decoration: underline dotted;
   text-underline-offset: 3px;
@@ -3914,8 +3917,8 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 .group-qty-btn {
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   border: none;
   background: var(--paper);
   border-radius: var(--radius-sm);
@@ -5539,8 +5542,8 @@ h1, h2, h3, h4, h5, h6 {
   cursor: default;
 }
 .ovg-step {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5639,6 +5642,29 @@ h1, h2, h3, h4, h5, h6 {
 
 .overview-desc {
   margin-bottom: var(--sp-lg);
+}
+/* Floating label: the "Add fleet notes" label sits inside the empty field and
+   floats above the border once the field is focused or filled. */
+.overview-desc.float-field { position: relative; }
+.overview-desc .float-label {
+  position: absolute;
+  left: var(--sp-md);
+  top: var(--sp-sm);
+  font-family: var(--font-reading);
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--ink-faint);
+  pointer-events: none;
+  background: var(--paper-warm);
+  padding: 0 4px;
+  transform-origin: left top;
+  transition: transform var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+}
+.overview-desc-input:focus + .float-label,
+.overview-desc-input:not(:placeholder-shown) + .float-label {
+  transform: translateY(-17px) scale(0.82);
+  color: var(--navy);
+  font-style: normal;
 }
 .overview-desc-input {
   width: 100%;

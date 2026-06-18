@@ -1892,9 +1892,12 @@ const App = (() => {
     </div>
     <div class="group-ships-list">
       <div class="group-ship-entry">
-        ${img ? `<div class="ship-card-image"><img src="${esc(img)}" alt="${esc(shipName)}" loading="lazy" decoding="async" onerror="this.style.display='none'"></div>` : ''}
+        ${img ? `<div class="ship-card-image">${shopLinkImg(shipName, `<img src="${esc(img)}" alt="${esc(shipName)}" loading="lazy" decoding="async" onerror="this.style.display='none'">`, fdb)}</div>` : ''}
         <div class="ship-card-body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
           ${sharedShipDatasheet(currentFleet, a, fdb)}
+          ${fdb.rulesText ? `<div class="ship-rules-block"><div class="ship-rules-block-label">Ship Rules</div><div class="ship-rules-block-text">${esc(fdb.rulesText)}</div></div>` : ''}
+          ${renderShipRulesGlossary(fdb, a)}
+          ${(fdb.lore || fdb.namesake) ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">Lore</summary><div class="ship-lore-text">${fdb.lore ? formatLore(fdb.lore, fdb.famousShipsPrefix, fdb.famousShips) : ''}${fdb.namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(fdb.namesake)}</div>` : ''}</div></details>` : ''}
           <div class="text-caption">Flies with ${esc(a.name)}, who is managed in the left rail.</div>
         </div>
       </div>
@@ -2093,7 +2096,16 @@ const App = (() => {
       const catLabel = CATEGORY_LABELS[cat] || cat;
       const firstShip = g.ships[0];
       const firstDbForArt = firstShip ? findShipInDB(f.faction, firstShip.groupCategory, firstShip.shipKey) : null;
-      const artSrc = firstDbForArt ? shipArtPath(firstDbForArt.name) : null;
+      let artSrc = firstDbForArt ? shipArtPath(firstDbForArt.name) : null;
+      let artThumb = true;
+      // Reflect a chosen alternate sculpt (persisted on the ship) on the card art.
+      if (firstShip && firstShip.artIdx && firstDbForArt) {
+        const alts = [];
+        if (firstDbForArt.image) alts.push(firstDbForArt.image);
+        shipAltArt(firstDbForArt.name).forEach(a => alts.push(a));
+        (firstDbForArt.variants || []).forEach(v => { if (v.image) alts.push(v.image); });
+        if (alts[firstShip.artIdx]) { artSrc = alts[firstShip.artIdx]; artThumb = false; }
+      }
       const artModularClass = isFullyModular(firstDbForArt) ? ' ship-img-modular' : '';
 
       const catColor = { light: '#2f6ba0', medium: '#2f7a3a', heavy: '#8a5e10', colossal: '#b83828', payload: '#6a4c9c' }[cat] || 'var(--navy)';
@@ -2147,7 +2159,7 @@ const App = (() => {
 
       return `${sectionDivider}<div class="overview-group-card card-deco" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-label="${esc(g.name)}, ${esc(catLabel)}, ${gPts} points" style="cursor:pointer;border-left-color:${catColor}">
         <div class="overview-group-top">
-          ${artSrc ? `<div class="overview-group-art${artModularClass}"><img src="${thumbUrl(artSrc)}" alt="" onerror="this.closest('.overview-group-art').remove()"></div>` : ''}
+          ${artSrc ? `<div class="overview-group-art${artModularClass}"><img src="${artThumb ? thumbUrl(artSrc) : esc(artSrc)}" alt="" onerror="this.closest('.overview-group-art').remove()"></div>` : ''}
           <div class="overview-group-info">
             <div class="overview-group-name group-name-editable" onclick="event.stopPropagation(); App.editGroupName('${g.id}', this)" role="button" tabindex="0" title="Click to rename battlegroup">${esc(g.name)}</div>
             <div class="overview-group-meta">
@@ -2246,8 +2258,9 @@ const App = (() => {
             ${effMax(f) !== 99999 ? (pts > effMax(f) ? `<span class="overview-legal-pill is-illegal">${pts - effMax(f)} pts over</span>` : `<span class="overview-legal-pill is-ok">${effMax(f) - pts} pts left</span>`) : ''}
           </div>
         </div>
-        <div class="overview-desc" onclick="this.querySelector('.overview-desc-input')?.focus()">
-          <textarea class="overview-desc-input" placeholder="Add fleet notes..." rows="2" onblur="App.saveFleetDesc(this.value)" onkeydown="if(event.key==='Escape'){this.blur()}">${esc(f.description || '')}</textarea>
+        <div class="overview-desc float-field" onclick="this.querySelector('.overview-desc-input')?.focus()">
+          <textarea class="overview-desc-input" id="overview-desc-ta" placeholder=" " rows="2" onblur="App.saveFleetDesc(this.value)" onkeydown="if(event.key==='Escape'){this.blur()}">${esc(f.description || '')}</textarea>
+          <label class="float-label" for="overview-desc-ta">Add fleet notes</label>
         </div>
         <div class="overview-section">
           <div class="overview-section-head">
@@ -3324,11 +3337,14 @@ const App = (() => {
     shipAltArt(name).forEach(a => heroArts.push({ src: a, label: 'Resin sculpt' }));
     (dbShip && dbShip.variants || []).forEach(v => { if (v.image) heroArts.push({ src: v.image, label: v.name }); });
     builderHeroArts[ship.id] = heroArts;
-    builderHeroIdx[ship.id] = 0;
+    // Restore the previously chosen sculpt (persisted on the ship) so it sticks.
+    const heroIdx = heroArts.length ? Math.min(Math.max(ship.artIdx || 0, 0), heroArts.length - 1) : 0;
+    builderHeroIdx[ship.id] = heroIdx;
     const multiArt = heroArts.length > 1;
-    const heroImgTag = `<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" decoding="async" onerror="this.style.display='none'">`;
+    const heroSrc = heroArts.length ? heroArts[heroIdx].src : img;
+    const heroImgTag = `<img src="${esc(heroSrc)}" alt="${esc(name)}" loading="lazy" decoding="async" onerror="this.style.display='none'">`;
     const heroCarousel = multiArt
-      ? `<button class="hero-art-arrow hero-art-prev" onclick="event.preventDefault();event.stopPropagation();App.cycleBuilderArt('${ship.id}',-1)" aria-label="Previous sculpt">‹</button><button class="hero-art-arrow hero-art-next" onclick="event.preventDefault();event.stopPropagation();App.cycleBuilderArt('${ship.id}',1)" aria-label="Next sculpt">›</button><div class="hero-art-meta"><span class="hero-art-label">${esc(heroArts[0].label)}</span><span class="hero-art-dots">${heroArts.map((_, i) => `<span class="hero-art-dot${i === 0 ? ' active' : ''}"></span>`).join('')}</span></div>`
+      ? `<button class="hero-art-arrow hero-art-prev" onclick="event.preventDefault();event.stopPropagation();App.cycleBuilderArt('${ship.id}',-1)" aria-label="Previous sculpt">‹</button><button class="hero-art-arrow hero-art-next" onclick="event.preventDefault();event.stopPropagation();App.cycleBuilderArt('${ship.id}',1)" aria-label="Next sculpt">›</button><div class="hero-art-meta"><span class="hero-art-label">${esc(heroArts[heroIdx].label)}</span><span class="hero-art-dots">${heroArts.map((_, i) => `<span class="hero-art-dot${i === heroIdx ? ' active' : ''}"></span>`).join('')}</span></div>`
       : '';
     const heroImageBlock = img
       ? `<div class="ship-card-image${isFullyModular(dbShip) ? ' ship-img-modular' : ''}${multiArt ? ' has-alts' : ''}" data-ship-art="${ship.id}"${isFullyModular(dbShip) ? ' title="Base hull shown, your ship\'s actual look depends on the systems you choose"' : ''}>${qtyBadge}${shopLinkImg(name, heroImgTag, dbShip)}${heroCarousel}</div>`
@@ -5568,19 +5584,9 @@ const App = (() => {
   // ── Settings ──
   function openSettings() {
     const body = document.getElementById('settings-body');
-    const descValue = currentFleet ? (currentFleet.description || '') : '';
-    const fleetSection = currentFleet ? `
-      <div class="settings-group">
-        <div class="settings-group-title">Fleet Details</div>
-        <div style="display:flex;flex-direction:column;gap:var(--sp-sm)">
-          <label class="form-label" style="margin-top:var(--sp-sm)">Description</label>
-          <textarea class="form-textarea" id="settings-fleet-desc" placeholder="Fleet notes..." style="min-height:60px;font-size:var(--text-sm)">${esc(descValue)}</textarea>
-          <button class="btn btn-outline btn-sm" style="align-self:flex-start" onclick="App.updateFleetDescription()">Save Description</button>
-        </div>
-      </div>` : '';
-
+    // Fleet description is edited in the overview "Add fleet notes" field; no need
+    // to duplicate it here.
     body.innerHTML = `
-      ${fleetSection}
       <div class="settings-group">
         <div class="settings-group-title">Ship Selection</div>
         <label class="settings-toggle">
@@ -5875,10 +5881,16 @@ const App = (() => {
     bombers: { title: 'Activating Bombers', text: _BOMBER_ACTIVATION },
     fireships: { title: 'Fire Ships', text: 'Fire Ships are a type of Bomber and follow the rules for Activating Bombers.\n\n' + _BOMBER_ACTIVATION },
     torpedoes: { title: 'Activating Torpedoes', text: 'First, move your Torpedoes in a straight line in any direction up to their Thrust.\n\nThey may then attack any Ship or Space Station they are in base contact with. <b>Only Torpedoes with the Bombardment special rule may attack Cities or attack Descent Groups in Atmosphere</b>. Torpedoes attack as if they were a Weapon with the stats in their profile. <b>Torpedoes can only damage the attacked Ship</b>.\n\n<b>When a Torpedo attacks, remove the attacking Torpedo from play after completing the attack.</b>' },
-    mines: { title: 'Mines', text: '<b>Mines cannot move or be moved once launched</b>. Instead, whenever an enemy Ship in Orbit moves through a Mine\'s Thrust, you may have that Mine attack that Ship.\n\nWhen a Mine attacks, remove it from the table and make an attack with its profile. This attack is made when the Ship completes its movement, even if it ends just out of range. <b>Mines can only damage the attacked Ship.</b>' }
+    mines: { title: 'Mines', text: '<b>Mines cannot move or be moved once launched</b>. Instead, whenever an enemy Ship in Orbit moves through a Mine\'s Thrust, you may have that Mine attack that Ship.\n\nWhen a Mine attacks, remove it from the table and make an attack with its profile. This attack is made when the Ship completes its movement, even if it ends just out of range. <b>Mines can only damage the attacked Ship.</b>' },
+    // Battalion-deployers: clicking the name shows their verbatim Target (where the
+    // Battalion is placed). The Range column still carries the general deploy rule.
+    bulklanders: { title: 'Bulk Landers', text: '<b>Target:</b> Dropsites on any orbital layer. If that Dropsite or its Features have enemy Battalions on them, 2 Bulk Landers are needed to place 1 Battalion.' },
+    dropships: { title: 'Dropships', text: '<b>Target:</b> Dropsites on the same orbital layer.' },
+    boardingpods: { title: 'Boarding Pods', text: '<b>Target:</b> Space Stations and enemy Ships in the same Orbital Layer.' },
+    droppods: { title: 'Drop Pods', text: '<b>Target:</b> Cities.' }
   };
-  // Map an asset name to its activation rule key (null = no activation tooltip,
-  // e.g. battalion-deployers, which are covered by the Range column instead).
+  // Map an asset name to its rule key (null = no tooltip). Combat assets show their
+  // activation rules; battalion-deployers show their Target.
   function launchRuleKey(name) {
     const n = (name || '').toLowerCase();
     if (n.includes('fire ship')) return 'fireships';
@@ -5886,6 +5898,10 @@ const App = (() => {
     if (n.includes('bomber')) return 'bombers';
     if (n.includes('torpedo')) return 'torpedoes';
     if (n.includes('mine')) return 'mines';
+    if (n.includes('bulk lander')) return 'bulklanders';
+    if (n.includes('dropship')) return 'dropships';
+    if (n.includes('boarding pod')) return 'boardingpods';
+    if (n.includes('drop pod')) return 'droppods';
     return null;
   }
 
@@ -6169,6 +6185,15 @@ const App = (() => {
     const im = wrap.querySelector('img'); if (im) { im.src = cur.src; im.alt = cur.label; }
     const label = wrap.querySelector('.hero-art-label'); if (label) label.textContent = cur.label;
     wrap.querySelectorAll('.hero-art-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+    // Persist the chosen sculpt on the ship so it sticks (and shows on the
+    // overview card art too); re-render the overview to reflect it.
+    if (currentFleet) {
+      for (const g of currentFleet.battleGroups) {
+        const sh = g.ships.find(s => s.id === shipId);
+        if (sh) { sh.artIdx = idx; saveFleets(); break; }
+      }
+      renderOverviewPanel();
+    }
   }
   function cycleShipArt(delta) {
     if (detailHeroArts.length < 2) return;

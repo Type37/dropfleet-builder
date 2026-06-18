@@ -1713,6 +1713,12 @@
     const img = wrap.querySelector('img'); if (img) { img.src = cur.src; img.alt = cur.label; }
     const label = wrap.querySelector('.hero-art-label'); if (label) label.textContent = cur.label;
     wrap.querySelectorAll('.hero-art-dot').forEach((d, j) => d.classList.toggle('active', j === heroIdxM));
+    // Persist the chosen sculpt on the group's ships so it sticks (shared schema
+    // with desktop's ship.artIdx).
+    if (activeFleet && activeGroupIdx >= 0) {
+      const g = activeFleet.battleGroups[activeGroupIdx];
+      if (g) { g.ships.forEach(s => s.artIdx = heroIdxM); saveFleets(); }
+    }
   }
   function cycleShipArt(delta) { setHeroArt(heroIdxM + delta); }
   function bindHeroSwipe() {
@@ -1798,11 +1804,13 @@
     if (artSrc) heroArtsM.push({ src: artSrc, label: 'Standard sculpt' });
     shipAltArt(ship.name).forEach(a => heroArtsM.push({ src: a, label: 'Resin sculpt' }));
     (ship.variants || []).forEach(v => { if (v.image) heroArtsM.push({ src: v.image.startsWith('assets/') ? '../' + v.image : v.image, label: v.name }); });
-    heroIdxM = 0;
+    // Restore the previously chosen sculpt (persisted on the ship) so it sticks.
+    heroIdxM = heroArtsM.length ? Math.min(Math.max(inst.artIdx || 0, 0), heroArtsM.length - 1) : 0;
     const multiArtM = heroArtsM.length > 1;
+    const heroSrcM = heroArtsM.length ? heroArtsM[heroIdxM].src : artSrc;
 
     document.getElementById('group-detail-content').innerHTML = `
-      ${artSrc ? `<div class="ship-art-hero${isFullyModular(ship) ? ' ship-img-modular' : ''}${multiArtM ? ' has-alts' : ''}">${isFullyModular(ship) ? '<div class="modular-art-note">Base hull shown, your ship’s look depends on the systems you choose</div>' : ''}${shopLinkImg(ship.name, `<img src="${artSrc}" alt="${esc(ship.name)}" loading="lazy">`, ship)}${multiArtM ? `<button class="hero-art-arrow hero-art-prev" onclick="event.preventDefault();event.stopPropagation();App.cycleShipArt(-1)" aria-label="Previous sculpt">‹</button><button class="hero-art-arrow hero-art-next" onclick="event.preventDefault();event.stopPropagation();App.cycleShipArt(1)" aria-label="Next sculpt">›</button><div class="hero-art-meta"><span class="hero-art-label">${esc(heroArtsM[0].label)}</span><span class="hero-art-dots">${heroArtsM.map((_, i) => `<span class="hero-art-dot${i === 0 ? ' active' : ''}"></span>`).join('')}</span></div>` : ''}</div>` : ''}
+      ${artSrc ? `<div class="ship-art-hero${isFullyModular(ship) ? ' ship-img-modular' : ''}${multiArtM ? ' has-alts' : ''}">${isFullyModular(ship) ? '<div class="modular-art-note">Base hull shown, your ship’s look depends on the systems you choose</div>' : ''}${shopLinkImg(ship.name, `<img src="${heroSrcM}" alt="${esc(ship.name)}" loading="lazy">`, ship)}${multiArtM ? `<button class="hero-art-arrow hero-art-prev" onclick="event.preventDefault();event.stopPropagation();App.cycleShipArt(-1)" aria-label="Previous sculpt">‹</button><button class="hero-art-arrow hero-art-next" onclick="event.preventDefault();event.stopPropagation();App.cycleShipArt(1)" aria-label="Next sculpt">›</button><div class="hero-art-meta"><span class="hero-art-label">${esc(heroArtsM[heroIdxM].label)}</span><span class="hero-art-dots">${heroArtsM.map((_, i) => `<span class="hero-art-dot${i === heroIdxM ? ' active' : ''}"></span>`).join('')}</span></div>` : ''}</div>` : ''}
       <div class="detail-header">
         <div>
           <div class="detail-name detail-name-editable" onclick="App.editGroupName()" title="Rename battlegroup">${esc((group.name && group.name !== ship.name) ? group.name : ship.name)}${ship.isUnique ? ' <span class="ship-tag ship-tag-unique">Unique</span>' : ship.isRare ? ' <span class="ship-tag ship-tag-rare">Rare</span>' : ''}</div>
@@ -2126,7 +2134,11 @@
     bombers: { title: 'Activating Bombers', text: _BOMBER_ACTIVATION },
     fireships: { title: 'Fire Ships', text: 'Fire Ships are a type of Bomber and follow the rules for Activating Bombers.\n\n' + _BOMBER_ACTIVATION },
     torpedoes: { title: 'Activating Torpedoes', text: 'First, move your Torpedoes in a straight line in any direction up to their Thrust.\n\nThey may then attack any Ship or Space Station they are in base contact with. <b>Only Torpedoes with the Bombardment special rule may attack Cities or attack Descent Groups in Atmosphere</b>. Torpedoes attack as if they were a Weapon with the stats in their profile. <b>Torpedoes can only damage the attacked Ship</b>.\n\n<b>When a Torpedo attacks, remove the attacking Torpedo from play after completing the attack.</b>' },
-    mines: { title: 'Mines', text: '<b>Mines cannot move or be moved once launched</b>. Instead, whenever an enemy Ship in Orbit moves through a Mine\'s Thrust, you may have that Mine attack that Ship.\n\nWhen a Mine attacks, remove it from the table and make an attack with its profile. This attack is made when the Ship completes its movement, even if it ends just out of range. <b>Mines can only damage the attacked Ship.</b>' }
+    mines: { title: 'Mines', text: '<b>Mines cannot move or be moved once launched</b>. Instead, whenever an enemy Ship in Orbit moves through a Mine\'s Thrust, you may have that Mine attack that Ship.\n\nWhen a Mine attacks, remove it from the table and make an attack with its profile. This attack is made when the Ship completes its movement, even if it ends just out of range. <b>Mines can only damage the attacked Ship.</b>' },
+    bulklanders: { title: 'Bulk Landers', text: '<b>Target:</b> Dropsites on any orbital layer. If that Dropsite or its Features have enemy Battalions on them, 2 Bulk Landers are needed to place 1 Battalion.' },
+    dropships: { title: 'Dropships', text: '<b>Target:</b> Dropsites on the same orbital layer.' },
+    boardingpods: { title: 'Boarding Pods', text: '<b>Target:</b> Space Stations and enemy Ships in the same Orbital Layer.' },
+    droppods: { title: 'Drop Pods', text: '<b>Target:</b> Cities.' }
   };
   function launchRuleKey(name) {
     const n = (name || '').toLowerCase();
@@ -2135,6 +2147,10 @@
     if (n.includes('bomber')) return 'bombers';
     if (n.includes('torpedo')) return 'torpedoes';
     if (n.includes('mine')) return 'mines';
+    if (n.includes('bulk lander')) return 'bulklanders';
+    if (n.includes('dropship')) return 'dropships';
+    if (n.includes('boarding pod')) return 'boardingpods';
+    if (n.includes('drop pod')) return 'droppods';
     return null;
   }
   function openLaunchRule(key) {
@@ -2609,8 +2625,10 @@
           </div>${w.special && w.special !== '-' ? `<div class="weapon-special">${renderSpecialChips(w.special)}</div>` : ''}`;
         }).join('')}
       </div>` : ''}
+      ${fs.loads && fs.loads.length ? buildLaunchTable(activeFleet.faction, fs.loads) : ''}
       ${specialText ? `<div class="rule-card"><div class="rule-card-text">${esc(specialText)}</div></div>` : ''}
-      ${rules.length ? rules.map(r => `<div class="rule-card"><div class="rule-card-name">${esc(r.name || r)}</div>${r.description ? `<div class="rule-card-text">${ruleHtml(r.description)}</div>` : ''}</div>`).join('') : ''}`;
+      ${rules.length ? rules.map(r => `<div class="rule-card"><div class="rule-card-name">${esc(r.name || r)}</div>${r.description ? `<div class="rule-card-text">${ruleHtml(r.description)}</div>` : ''}</div>`).join('') : ''}
+      ${renderLore(fs)}`;
   }
   function openAdmiralDetail(i) { activeAdmiralIdx = i; navigate('screen-admiral-detail'); }
   function renderAdmiralDetail() {
