@@ -3983,7 +3983,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .sort-label {
   font-family: var(--font-condensed);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
   color: var(--ink-faint);
   text-transform: uppercase;
@@ -3992,9 +3992,9 @@ h1, h2, h3, h4, h5, h6 {
 .sort-arrow { font-weight: var(--weight-heavy); }
 
 .sort-btn {
-  padding: var(--sp-xs) var(--sp-md);
+  padding: var(--sp-sm) var(--sp-md);
   border-radius: var(--radius-md);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   font-weight: var(--weight-bold);
   color: var(--ink-faint);
   background: transparent;
