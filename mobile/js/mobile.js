@@ -1848,13 +1848,12 @@
           ${lo.options.map((opt, oi) => {
             const sel = inst.loadouts && inst.loadouts[loIdx] != null ? inst.loadouts[loIdx] : 0;
             const on = oi === sel;
-            // The selected option's weapons/loads are already in the ship's main
-            // weapon + launch tables above, so only preview UNSELECTED options here.
-            const sheet = on ? '' : (opt.weapons?.length ? optionWeaponSheet(opt.weapons)
-              : (opt.loads?.length ? buildLaunchTable(f.faction, opt.loads) : ''));
-            // Don't repeat the option name when its datasheet shows it; the selected
-            // option has no datasheet here, so always keep its name.
-            const redundant = !on && opt.weapons?.length && opt.weapons.every(w => w.name === opt.name);
+            // Show BOTH options' datasheets so the two guns can be compared under
+            // their radios (matches desktop), not just the unselected preview.
+            const sheet = opt.weapons?.length ? optionWeaponSheet(opt.weapons)
+              : (opt.loads?.length ? buildLaunchTable(f.faction, opt.loads) : '');
+            // Don't repeat the option name when its datasheet already shows it.
+            const redundant = opt.weapons?.length && opt.weapons.every(w => w.name === opt.name);
             return `<div class="loadout-option loadout-radio-opt ${on ? 'selected' : ''}" onclick="App.selectLoadout(${loIdx}, ${oi})">
               <div class="loadout-radio-row">
                 <span class="loadout-radio-dot"></span>

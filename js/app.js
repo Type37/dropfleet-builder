@@ -3135,12 +3135,12 @@ const App = (() => {
     // one (replaces the old dropdown so you can compare the guns before choosing).
     let loadoutsHtml = '';
     const loadoutOpts = dbShip && Array.isArray(dbShip.loadoutOptions) ? dbShip.loadoutOptions : [];
-    // The SELECTED option's weapons/loads already appear in the ship's main
-    // weapon + launch tables above, so only render a datasheet for UNSELECTED
-    // options (a preview of what you'd switch to). Prevents listing the same
-    // gun/launch (e.g. a Torpedo Upgrade) twice.
-    const optSheet = (opt, isSelected) => {
-      if (isSelected) return '';
+    // Render an option's weapon + launch datasheet. In a multi-option picker we
+    // show this for BOTH the selected and the unselected choices so the two guns
+    // can be compared side by side under their radios. (A single fixed option is
+    // not a choice, so it stays out of the picker — its stats are in the ship's
+    // main tables already.)
+    const optSheet = (opt) => {
       let h = '';
       if (opt.weapons && opt.weapons.length) h += '<div class="weapon-list loadout-weapons">' + renderWeaponHeader() + opt.weapons.map(renderWeaponRow).join('') + '</div>';
       // Launch loadout options show their full launch-asset statblock too.
@@ -3158,7 +3158,7 @@ const App = (() => {
             // it (e.g. option "Cobra Heavy Laser Pair" over a Cobra Heavy Laser Pair
             // weapon row). The selected option shows no datasheet (it's in the main
             // table), so always keep its name there so the choice stays labelled.
-            const redundant = !on && opt.weapons && opt.weapons.length && opt.weapons.every(w => w.name === opt.name);
+            const redundant = opt.weapons && opt.weapons.length && opt.weapons.every(w => w.name === opt.name);
             const head = redundant
               ? `<div class="loadout-radio-head loadout-radio-head-costonly"><span class="loadout-radio-cost">${costLabel}</span></div>`
               : `<div class="loadout-radio-head"><span class="loadout-radio-name">${esc(opt.name)}</span><span class="loadout-radio-cost">${costLabel}</span></div>`;
@@ -3167,7 +3167,7 @@ const App = (() => {
               <span class="loadout-radio-dot" aria-hidden="true"></span>
               <div class="loadout-radio-main">
                 ${head}
-                ${optSheet(opt, on)}
+                ${optSheet(opt)}
               </div>
             </label>`;
           }).join('');
@@ -3175,7 +3175,7 @@ const App = (() => {
         }
         // Single fixed option — always applied, so its stats already show in the
         // ship's main weapon/launch tables; nothing extra to render here.
-        return optSheet(lo.options[selIdx] || lo.options[0] || {}, true);
+        return '';
       }).join('');
     }
 
