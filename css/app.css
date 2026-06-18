@@ -190,6 +190,15 @@ a:hover { color: var(--navy-light); }
 /* "Lore" is part of the same wordmark — same Terminal Grotesque Open, no slab. */
 .warlore-mark .wl-lore { font: inherit; }
 .warlore-mark:hover { color: #000; background: #FFCC00; }
+/* Inline variant for the credits footer: same gold-on-black brand, sized to sit
+   on the footer text line instead of as a standalone hero badge. */
+.warlore-mark.warlore-mark-inline {
+  font-size: 15px;
+  padding: 1px 6px;
+  margin-bottom: 0;
+  line-height: 1.3;
+  vertical-align: -2px;
+}
 
 /* Global focus-visible ring — two-stroke (Fluent): a thin light halo tight to
    the element + a navy ring just outside it. The light inner stroke keeps focus
@@ -2283,6 +2292,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 .launch-table .lt-range.has-tooltip { cursor: help; }
 .launch-table .lt-range.has-tooltip:hover { color: var(--navy); text-decoration: underline dotted; }
+.launch-table .lt-load-rule { cursor: help; text-decoration: underline dotted var(--stroke-accent); text-underline-offset: 2px; }
+.launch-table .lt-load-rule:hover { color: var(--navy); }
 
 .load-row {
   display: flex;
@@ -5305,6 +5316,12 @@ h1, h2, h3, h4, h5, h6 {
 .overview-alerts-list { margin: 0; padding-left: 18px; font-size: var(--text-sm); line-height: 1.5; }
 .overview-alerts-list .oa-error { color: #c43c2f; }
 .overview-alerts-list .oa-warn { color: var(--ink-muted); }
+/* Alerts now sit on the navy rail — give them an opaque light card so the
+   paper-tuned red/amber text keeps its contrast (rail default text is white). */
+.builder-sidebar #sidebar-alerts .overview-alerts { margin: 0; }
+.builder-sidebar #sidebar-alerts .overview-alerts.has-errors { background: #fbecea; }
+.builder-sidebar #sidebar-alerts .overview-alerts.has-warns { background: #fbf4e2; }
+.builder-sidebar #sidebar-alerts .overview-alerts-head { color: var(--ink); }
 .overview-section {
   margin-bottom: var(--sp-xl);
 }

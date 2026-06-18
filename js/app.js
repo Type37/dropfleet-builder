@@ -2226,14 +2226,9 @@ const App = (() => {
     const warnTitle = warnings.length
       ? [...errors, ...notes].map(w => w.msg).join('\n')
       : 'Legal fleet, ready to play';
-    // Visible alert panel (not just the legal-mark tooltip) — errors were too easy
-    // to miss. Errors (red) first, then soft notes (amber); each on its own line.
-    const validHtml = warnings.length
-      ? `<div class="overview-alerts ${errors.length ? 'has-errors' : 'has-warns'}">
-          <div class="overview-alerts-head">${errors.length ? `<span class="overview-alerts-dot err"></span>${errors.length} issue${errors.length !== 1 ? 's' : ''} to fix` : `<span class="overview-alerts-dot warn"></span>${notes.length} note${notes.length !== 1 ? 's' : ''}`}</div>
-          <ul class="overview-alerts-list">${[...errors, ...notes].map(w => `<li class="oa-${w.type}">${esc(w.msg)}</li>`).join('')}</ul>
-        </div>`
-      : '';
+    // The visible alert panel (errors + notes) now lives on the left rail
+    // (#sidebar-alerts, filled by renderSidebarAlerts) so it's always in view.
+    // Here we keep only the legal-check icon + pts pill in the overview header.
 
     return `
       <div class="fleet-overview">
@@ -2254,7 +2249,6 @@ const App = (() => {
         <div class="overview-desc" onclick="this.querySelector('.overview-desc-input')?.focus()">
           <textarea class="overview-desc-input" placeholder="Add fleet notes..." rows="2" onblur="App.saveFleetDesc(this.value)" onkeydown="if(event.key==='Escape'){this.blur()}">${esc(f.description || '')}</textarea>
         </div>
-        ${validHtml}
         <div class="overview-section">
           <div class="overview-section-head">
             <div class="overview-section-label">Battle Groups (${f.battleGroups.length})</div>
@@ -2348,6 +2342,23 @@ const App = (() => {
       renderAdmiralSlot();
       renderStationSlot();
     }
+    renderSidebarAlerts();
+  }
+
+  // Fleet legality alerts on the left rail (#sidebar-alerts): errors (red) first,
+  // then soft notes (amber). Always visible, so issues aren't missed below the fold.
+  function renderSidebarAlerts() {
+    const el = document.getElementById('sidebar-alerts');
+    if (!el || !currentFleet) return;
+    const warnings = validateFleet(currentFleet);
+    const errors = warnings.filter(w => w.type === 'error');
+    const notes = warnings.filter(w => w.type === 'warn');
+    el.innerHTML = warnings.length
+      ? `<div class="overview-alerts ${errors.length ? 'has-errors' : 'has-warns'}">
+          <div class="overview-alerts-head">${errors.length ? `<span class="overview-alerts-dot err"></span>${errors.length} issue${errors.length !== 1 ? 's' : ''} to fix` : `<span class="overview-alerts-dot warn"></span>${notes.length} note${notes.length !== 1 ? 's' : ''}`}</div>
+          <ul class="overview-alerts-list">${[...errors, ...notes].map(w => `<li class="oa-${w.type}">${esc(w.msg)}</li>`).join('')}</ul>
+        </div>`
+      : '';
   }
 
   function renderDetailPanel() {
@@ -5838,6 +5849,29 @@ const App = (() => {
   const LAUNCH_RANGE_TIP = 'When you launch Assets, place those Assets up to their Launch Value within 6" of their Carrier (measured from the stem of the carrier to the center of the token) divided up as you wish. This placement counts as moving through scenery when placed through or onto scenery.';
   const BATTALION_RANGE_TIP = 'Battalions are deployed by launching their associated Asset. Each of these have different targets for their Battalions. These resolve immediately so do not need tokens—place 1 Battalion on their target for each Asset being launched at it. These Assets may only be launched at targets within their range, measured from the launching Carrier\'s stem to the center of the targeted site.\n\nWhen you deploy Battalions to Dropsites, you may instead deploy them to a specific Feature on that Dropsite.';
 
+  // Verbatim activation rules (Rulebook §8.3.x) behind each launch asset's NAME.
+  // Tap/click the Load name to read these; <b> marks the book's bold. Fire Ships
+  // are Bombers, so they reproduce the Bomber activation after their own note.
+  const _BOMBER_ACTIVATION = 'First, move your Bombers in a straight line <b>in any direction</b> up to their Thrust, then form any Wings if allowed. Different types of Bombers (Such as Heavy Bombers or Fire Ships) may only form Wings with other Bombers of that type.\n\nThey may then attack any Group or Space Station they are in base contact with that does not have any friendly Battalions present. <b>Only Bombers with the Bombardment special rule may attack Cities or Descent Groups in Atmosphere.</b> When you attack with a Wing, all Bombers in that Wing contribute to the attack.\n\nBombers attack as if they were a Weapon with the stats in their profile. Every friendly Bomber in every friendly Wing attacking the same target combines into one roll. Damage is assigned to a Group in the usual way, including against Ships not in base contact with the Bombers.\n\n<b>When Bombers attack, remove the attacking Bombers from play after completing the attack.</b>';
+  const LAUNCH_RULES = {
+    fighters: { title: 'Activating Fighters', text: 'First, move your Fighters in a straight line <b>in any direction</b> up to their Thrust, then form any Wings if allowed.\n\nEach Wing may then attack one enemy Wing they are in base contact with.\n\nIf attacking a Bomber Wing, remove the attacking Fighters and defending Bombers equally until only one of those Wings remains.\n\nIf attacking a Fighter Wing, remove all the Fighters in the smaller Wing and the same number of Fighters in the larger.\n\nOnce all their attacks have been resolved, the Fighter\'s activation is over. Any remaining Fighters can activate again in the next round.' },
+    bombers: { title: 'Activating Bombers', text: _BOMBER_ACTIVATION },
+    fireships: { title: 'Fire Ships', text: 'Fire Ships are a type of Bomber and follow the rules for Activating Bombers.\n\n' + _BOMBER_ACTIVATION },
+    torpedoes: { title: 'Activating Torpedoes', text: 'First, move your Torpedoes in a straight line in any direction up to their Thrust.\n\nThey may then attack any Ship or Space Station they are in base contact with. <b>Only Torpedoes with the Bombardment special rule may attack Cities or attack Descent Groups in Atmosphere</b>. Torpedoes attack as if they were a Weapon with the stats in their profile. <b>Torpedoes can only damage the attacked Ship</b>.\n\n<b>When a Torpedo attacks, remove the attacking Torpedo from play after completing the attack.</b>' },
+    mines: { title: 'Mines', text: '<b>Mines cannot move or be moved once launched</b>. Instead, whenever an enemy Ship in Orbit moves through a Mine\'s Thrust, you may have that Mine attack that Ship.\n\nWhen a Mine attacks, remove it from the table and make an attack with its profile. This attack is made when the Ship completes its movement, even if it ends just out of range. <b>Mines can only damage the attacked Ship.</b>' }
+  };
+  // Map an asset name to its activation rule key (null = no activation tooltip,
+  // e.g. battalion-deployers, which are covered by the Range column instead).
+  function launchRuleKey(name) {
+    const n = (name || '').toLowerCase();
+    if (n.includes('fire ship')) return 'fireships';
+    if (n.includes('fighter')) return 'fighters';
+    if (n.includes('bomber')) return 'bombers';
+    if (n.includes('torpedo')) return 'torpedoes';
+    if (n.includes('mine')) return 'mines';
+    return null;
+  }
+
   // Build a launch-asset stat table for a list of loads (each load = {name, launch,
   // special}; the name may be "A & B" → one row per sub-asset). Resolves each asset's
   // full stats (Thrust/Att/Lock/Dmg/Special) from the faction's launchAssets. Reused
@@ -5868,9 +5902,13 @@ const App = (() => {
         const range = isBattalion ? DEPLOY_RANGE[drKey] : '6"';
         const rangeTip = isBattalion ? BATTALION_RANGE_TIP : LAUNCH_RANGE_TIP;
         const rangeCell = `<td class="lt-range has-tooltip" data-rule-desc="${escAttr(rangeTip)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(range)}</td>`;
+        const lrKey = launchRuleKey(part);
+        const loadCell = lrKey
+          ? `<td class="lt-load lt-load-rule has-tooltip" data-rule-desc="${escAttr(LAUNCH_RULES[lrKey].text)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(part)}</td>`
+          : `<td class="lt-load">${esc(part)}</td>`;
         body += `<tr>
           ${i === 0 ? launchCell : ''}
-          <td class="lt-load">${esc(part)}</td>
+          ${loadCell}
           ${rangeCell}
           <td>${esc(String(a.thrust ?? '-'))}</td>
           <td>${hasStats ? esc(String(a.attack)) : '-'}</td>

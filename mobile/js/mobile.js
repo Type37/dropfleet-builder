@@ -2116,6 +2116,30 @@
     const t = RANGE_TIPS[kind];
     if (t) showSheet(t.title, `<p>${ruleHtml(t.text)}</p>`);
   }
+  // Verbatim activation rules (Rulebook §8.3.x) behind each launch asset's NAME.
+  // Tap the Load name to read these; <b> marks the book's bold. Fire Ships are
+  // Bombers, so they reproduce the Bomber activation after their own note.
+  const _BOMBER_ACTIVATION = 'First, move your Bombers in a straight line <b>in any direction</b> up to their Thrust, then form any Wings if allowed. Different types of Bombers (Such as Heavy Bombers or Fire Ships) may only form Wings with other Bombers of that type.\n\nThey may then attack any Group or Space Station they are in base contact with that does not have any friendly Battalions present. <b>Only Bombers with the Bombardment special rule may attack Cities or Descent Groups in Atmosphere.</b> When you attack with a Wing, all Bombers in that Wing contribute to the attack.\n\nBombers attack as if they were a Weapon with the stats in their profile. Every friendly Bomber in every friendly Wing attacking the same target combines into one roll. Damage is assigned to a Group in the usual way, including against Ships not in base contact with the Bombers.\n\n<b>When Bombers attack, remove the attacking Bombers from play after completing the attack.</b>';
+  const LAUNCH_RULES = {
+    fighters: { title: 'Activating Fighters', text: 'First, move your Fighters in a straight line <b>in any direction</b> up to their Thrust, then form any Wings if allowed.\n\nEach Wing may then attack one enemy Wing they are in base contact with.\n\nIf attacking a Bomber Wing, remove the attacking Fighters and defending Bombers equally until only one of those Wings remains.\n\nIf attacking a Fighter Wing, remove all the Fighters in the smaller Wing and the same number of Fighters in the larger.\n\nOnce all their attacks have been resolved, the Fighter\'s activation is over. Any remaining Fighters can activate again in the next round.' },
+    bombers: { title: 'Activating Bombers', text: _BOMBER_ACTIVATION },
+    fireships: { title: 'Fire Ships', text: 'Fire Ships are a type of Bomber and follow the rules for Activating Bombers.\n\n' + _BOMBER_ACTIVATION },
+    torpedoes: { title: 'Activating Torpedoes', text: 'First, move your Torpedoes in a straight line in any direction up to their Thrust.\n\nThey may then attack any Ship or Space Station they are in base contact with. <b>Only Torpedoes with the Bombardment special rule may attack Cities or attack Descent Groups in Atmosphere</b>. Torpedoes attack as if they were a Weapon with the stats in their profile. <b>Torpedoes can only damage the attacked Ship</b>.\n\n<b>When a Torpedo attacks, remove the attacking Torpedo from play after completing the attack.</b>' },
+    mines: { title: 'Mines', text: '<b>Mines cannot move or be moved once launched</b>. Instead, whenever an enemy Ship in Orbit moves through a Mine\'s Thrust, you may have that Mine attack that Ship.\n\nWhen a Mine attacks, remove it from the table and make an attack with its profile. This attack is made when the Ship completes its movement, even if it ends just out of range. <b>Mines can only damage the attacked Ship.</b>' }
+  };
+  function launchRuleKey(name) {
+    const n = (name || '').toLowerCase();
+    if (n.includes('fire ship')) return 'fireships';
+    if (n.includes('fighter')) return 'fighters';
+    if (n.includes('bomber')) return 'bombers';
+    if (n.includes('torpedo')) return 'torpedoes';
+    if (n.includes('mine')) return 'mines';
+    return null;
+  }
+  function openLaunchRule(key) {
+    const r = LAUNCH_RULES[key];
+    if (r) showSheet(r.title, `<p>${ruleHtml(r.text)}</p>`);
+  }
   // Shared 7-column grid for the launch table (Launch | Load | Rng | Thr | At | Lk | Dm).
   const LT_GRID = '46px 1fr 38px 36px 28px 28px 36px';
 
@@ -2148,9 +2172,13 @@
         const isBattalion = DEPLOY_RANGE[part.toLowerCase()] !== undefined;
         const range = isBattalion ? DEPLOY_RANGE[part.toLowerCase()] : '6"';
         const rangeKind = isBattalion ? 'battalion' : 'launch';
+        const lrKey = launchRuleKey(part);
+        const nameCell = lrKey
+          ? `<div class="weapon-name"><span class="tappable" style="text-decoration:underline dotted;cursor:pointer" onclick="event.stopPropagation();App.openLaunchRule('${lrKey}')">${esc(part)}</span></div>`
+          : `<div class="weapon-name">${esc(part)}</div>`;
         rows += `<div class="weapon-row ${tc}" style="grid-template-columns:${LT_GRID}">
           ${i === 0 ? `<div class="weapon-val" style="font-weight:700">${esc(load.launch || '-')}${ls}</div>` : '<div></div>'}
-          <div class="weapon-name">${esc(part)}</div>
+          ${nameCell}
           <div class="weapon-val"><span class="tappable" style="cursor:pointer;text-decoration:underline dotted" onclick="event.stopPropagation();App.openRangeTip('${rangeKind}')">${esc(range)}</span></div>
           <div class="weapon-val">${esc(a.thrust || '-')}</div>
           <div class="weapon-val">${has ? esc(a.attack) : '-'}</div>
@@ -3573,7 +3601,7 @@
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,
     overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
     importFleetPrompt, doImportText,
-    openRule, openRangeTip, openStat, closeRuleSheet, closeActionSheet
+    openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
