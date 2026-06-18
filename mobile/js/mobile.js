@@ -2828,13 +2828,57 @@
     const byCat = {};
     spec.options.forEach(o => { (byCat[o.category] = byCat[o.category] || []).push(o); });
     const cats = Object.keys(byCat);
-    const optsHtml = cats.map(cat => `
+    const stationStepper = (o, c, canAdd) => `<div class="sys-option-controls">
+              <button class="counter-btn" onclick="App.removeStationSystem('${o.name.replace(/'/g, "\\'")}')" ${c <= 0 ? 'disabled' : ''}>−</button>
+              <span class="sys-option-count">${c}</span>
+              <button class="counter-btn" onclick="App.addStationSystem('${o.name.replace(/'/g, "\\'")}')" ${canAdd ? '' : 'disabled'}>+</button>
+            </div>`;
+    const optsHtml = cats.map(cat => {
+      const opts = byCat[cat];
+      // Weapon armaments share ONE table (single header), each weapon a row with
+      // its stats, then a compact cost + stepper line — mirrors desktop, no
+      // repeated per-weapon datasheet per option.
+      const isWeaponCat = opts.every(o => o.weapons && o.weapons.length);
+      if (isWeaponCat) {
+        const rows = opts.map(o => {
+          const c = counts[o.name] || 0;
+          const canAdd = canAddStationOption(station, o, spec);
+          const w = o.weapons[0];
+          const t = (w.type || '').toUpperCase();
+          const tc = t === 'K' ? 'weapon-type-k' : t === 'E' ? 'weapon-type-e' : t === 'C' ? 'weapon-type-c' : '';
+          const dmg = `${w.damage || ''}${t ? `<span class="${tc}" style="margin-left:2px;font-size:12px">${t}</span>` : ''}`;
+          const star = o.oncePerStation ? ' <span class="ship-tag">1×</span>' : '';
+          return `<div class="weapon-row station-arm-row ${c > 0 ? 'selected' : ''}">
+            <div class="weapon-name">${esc(o.name)}${star}</div>
+            <div class="weapon-val">${esc(w.lock || '')}</div>
+            <div class="weapon-val">${esc(w.attack || '')}</div>
+            <div class="weapon-val">${dmg}</div>
+            <div class="weapon-val weapon-arc">${arcCell(w.arc)}</div>
+          </div>
+          <div class="station-arm-ctrl">
+            <span class="station-arm-special">${w.special && w.special !== '-' ? renderSpecialChips(w.special) : ''}</span>
+            <span class="loadout-option-cost">${o.cost ? '+' + o.cost : '0'} pts</span>
+            ${stationStepper(o, c, canAdd)}
+          </div>`;
+        }).join('');
+        return `<div class="sys-cat-label">${esc(cat)}</div>
+          <div class="weapon-table station-arm-table">
+            <div class="weapon-row weapon-row-header">
+              <div class="weapon-name">Weapon</div><div class="weapon-val">Lk</div><div class="weapon-val">At</div><div class="weapon-val">Dm</div><div class="weapon-val">Arc</div>
+            </div>
+            ${rows}
+          </div>`;
+      }
+      // Non-weapon categories (launch modules, structures): keep the per-option
+      // card with its launch table or effect line.
+      return `
       <div class="sys-cat-label">${esc(cat)}</div>
-      ${byCat[cat].map(o => {
+      ${opts.map(o => {
         const c = counts[o.name] || 0;
         const canAdd = canAddStationOption(station, o, spec);
-        const sheet = (o.weapons && o.weapons.length)
-          ? optionWeaponSheet(o.weapons)
+        // A mixed category (e.g. Upgrades) can still hold a weapon-bearing option
+        // like Defence Grid — keep showing its datasheet here.
+        const sheet = (o.weapons && o.weapons.length) ? optionWeaponSheet(o.weapons)
           : (o.loads && o.loads.length) ? buildLaunchTable(activeFleet.faction, o.loads)
           : (o.effect ? `<div class="loadout-option-desc">${linkKeywords(o.effect)}</div>` : '');
         return `<div class="sys-option ${c > 0 ? 'selected' : ''}">
@@ -2846,16 +2890,13 @@
                 <span class="loadout-option-cost">${o.cost ? '+' + o.cost : '0'} pts</span>
               </div>
             </div>
-            <div class="sys-option-controls">
-              <button class="counter-btn" onclick="App.removeStationSystem('${o.name.replace(/'/g, "\\'")}')" ${c <= 0 ? 'disabled' : ''}>−</button>
-              <span class="sys-option-count">${c}</span>
-              <button class="counter-btn" onclick="App.addStationSystem('${o.name.replace(/'/g, "\\'")}')" ${canAdd ? '' : 'disabled'}>+</button>
-            </div>
+            ${stationStepper(o, c, canAdd)}
           </div>
           ${sheet}
         </div>`;
       }).join('')}
-    `).join('');
+    `;
+    }).join('');
     return `<div class="loadout-section">
       <div class="section-header" style="padding:0 0 var(--sp-xs)">
         Armaments, choose ${spec.required}

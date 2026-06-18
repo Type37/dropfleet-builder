@@ -1907,6 +1907,26 @@ body.sheet-open .sheet-scrim {
 .sys-option-main { flex: 1; min-width: 0; }
 /* The option's mini datasheet sits full-width under the name/cost/controls. */
 .opt-weapon-table { margin-top: 2px; }
+/* Station armaments: one combined weapons table. Each weapon row is followed by
+   a compact control line (special chips at left, cost + stepper at right) so the
+   header isn't repeated per option. */
+.station-arm-row.selected { background: var(--paper); }
+.station-arm-ctrl {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+  padding: 2px var(--sp-xs) 6px;
+  border-bottom: 1px solid var(--stroke);
+}
+.station-arm-table .weapon-row:last-of-type { border-bottom: none; }
+.station-arm-ctrl .station-arm-special {
+  margin-right: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+}
+.station-arm-ctrl .loadout-option-cost { flex-shrink: 0; }
 .sys-option-controls {
   display: flex;
   align-items: center;
