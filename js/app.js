@@ -415,9 +415,19 @@ const App = (() => {
 
     const famous = (faction.admirals || []).filter(a => a.isFamous);
     if (famous.length > 0) {
+      // Flagship data carries namesake but NOT lore/recorded-ships. Pull those
+      // from the matching regular ship by name (built above) so a famous admiral's
+      // flagship shows its lore in the detail panel.
+      const loreByName = {};
+      Object.values(groups).forEach(cat => {
+        if (cat && cat.ships) Object.values(cat.ships).forEach(sh => {
+          if (sh && sh.name) loreByName[sh.name] = sh;
+        });
+      });
       groups.famous_admirals = { ships: {} };
       famous.forEach(a => {
         const fs = a.flagship;
+        const src = (fs && loreByName[fs.name]) || {};
         groups.famous_admirals.ships[a.id] = {
           name: a.name,
           points: fs ? (a.cost + fs.cost) : a.cost,
@@ -440,6 +450,11 @@ const App = (() => {
           loads: fs?.loads || [],
           special_rules: (fs?.specialRules || []).map(r => r.name),
           specialRuleDetails: fs?.specialRules || [],
+          lore: fs?.lore || src.lore || '',
+          namesake: fs?.namesake || src.namesake || '',
+          famousShips: fs?.famousShips || src.famousShips || [],
+          famousShipsPrefix: fs?.famousShipsPrefix || src.famousShipsPrefix || '',
+          rulesText: fs?.rulesText || src.rulesText || '',
           image: admiralArtPath(a.name) || shipArtPath(fs?.name)
         };
       });

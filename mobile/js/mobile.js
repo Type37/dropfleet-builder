@@ -2598,6 +2598,16 @@
   // same components as the group ship detail so it matches desktop parity.
   function flagshipDatasheet(fs) {
     if (!fs) return '';
+    // Flagship data carries namesake but not lore — pull the flagship ship's lore
+    // (and recorded ships) from the matching regular ship by name so it shows.
+    const _fac = FACTIONS[activeFleet.faction];
+    const _loreSrc = (_fac && (_fac.groups || []).map(g => g.ship).find(s => s && s.name === fs.name)) || {};
+    const loreShip = {
+      lore: fs.lore || _loreSrc.lore || '',
+      namesake: fs.namesake || _loreSrc.namesake || '',
+      famousShips: fs.famousShips || _loreSrc.famousShips || [],
+      famousShipsPrefix: fs.famousShipsPrefix || _loreSrc.famousShipsPrefix || ''
+    };
     const stats = fs.stats || {};
     const statEntries = [
       { key: 'scan', label: 'Scan', val: stats.scan },
@@ -2633,7 +2643,7 @@
       ${fs.loads && fs.loads.length ? buildLaunchTable(activeFleet.faction, fs.loads) : ''}
       ${specialText ? `<div class="rule-card"><div class="rule-card-text">${esc(specialText)}</div></div>` : ''}
       ${rules.length ? rules.map(r => `<div class="rule-card"><div class="rule-card-name">${esc(r.name || r)}</div>${r.description ? `<div class="rule-card-text">${ruleHtml(r.description)}</div>` : ''}</div>`).join('') : ''}
-      ${renderLore(fs)}`;
+      ${renderLore(loreShip)}`;
   }
   function openAdmiralDetail(i) { activeAdmiralIdx = i; navigate('screen-admiral-detail'); }
   function renderAdmiralDetail() {
