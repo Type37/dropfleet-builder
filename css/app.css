@@ -2069,6 +2069,19 @@ h1, h2, h3, h4, h5, h6 {
 .station-arm-row .station-arm-qty { display: flex; justify-content: flex-end; }
 .station-arm-row .sys-opt-step { margin: 0; }
 .station-arm-row.sys-opt-active { background: var(--paper); box-shadow: inset 2px 0 0 var(--navy); }
+/* The hardpoint picker reuses this armaments table inside the narrow detail
+   panel. Re-assert the full 8-column grid (ID-scoped to beat the panel's
+   name-only weapon-row override) and restore the Special column to its own cell
+   rather than the full-width-below treatment the detail panel applies. */
+#builder-detail .station-arm-list .weapon-row.station-arm-row {
+  grid-template-columns: minmax(76px, 1.4fr) 40px 28px 28px 38px minmax(52px, 1.1fr) 38px 80px;
+}
+#builder-detail .station-arm-list .weapon-col-special {
+  grid-column: auto;
+  margin-top: 0;
+  padding-left: 0;
+}
+#builder-detail .station-arm-list .weapon-row-header .weapon-col-special { display: block; }
 
 /* Hardpoint picker: two-line weapon entries that fit the narrow detail panel.
    Line 1 = name + cost + stepper; line 2 = the weapon stat line. */
@@ -2609,9 +2622,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* Tarot "Namesake" etymology flavour */
 .lore-namesake {
-  margin-top: var(--sp-sm);
-  padding-top: var(--sp-sm);
-  border-top: 1px dashed var(--stroke-light);
+  margin-top: var(--sp-md);
   font-family: var(--font-lore);
   font-size: var(--text-xs);
   font-style: normal;
@@ -2779,9 +2790,22 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   line-height: 1;
   color: var(--ink);
+  /* Springy press: the resting transition uses an overshoot curve, so when the
+     :active squish is released the button pops back past its size and settles. */
+  transition: transform 300ms cubic-bezier(0.34, 1.7, 0.5, 1),
+              background-color 120ms ease, color 120ms ease, border-color 120ms ease;
 }
 .sys-step-btn:hover:not(:disabled) { background: var(--navy); color: #fff; border-color: var(--navy); }
+.sys-step-btn:active:not(:disabled) {
+  transform: scale(0.78);
+  transition-duration: 70ms;
+  background: var(--navy); color: #fff; border-color: var(--navy);
+}
 .sys-step-btn:disabled { opacity: 0.35; cursor: default; }
+@media (prefers-reduced-motion: reduce) {
+  .sys-step-btn { transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease; }
+  .sys-step-btn:active:not(:disabled) { transform: none; }
+}
 
 /* Keep wide tables from clipping on narrow screens — scroll instead of spill */
 .weapon-list, .launch-ref, .launch-ref-table { max-width: 100%; overflow-x: auto; }

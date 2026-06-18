@@ -2986,11 +2986,21 @@ const App = (() => {
           if (cat.startsWith(k)) capNote = `<span class="sys-cat-cap">${capUsage[k]}/${max}</span>`;
         });
       }
-      // Each weapon hardpoint is a two-line entry that fits the narrow detail
-      // panel: name + cost + stepper on top, the weapon's stat line below (arc,
-      // attack, lock, damage, special). All weapon options are single-weapon.
+      // Weapon hardpoints render as ONE aligned table (single header, each option
+      // a row) — the same layout as the station armaments picker, which reads far
+      // better than per-row inline stat labels. All weapon options are single-weapon.
       const isWeaponCat = opts.every(o => o.weapons && o.weapons.length === 1);
       if (isWeaponCat) {
+        const head = `<div class="weapon-row weapon-row-header station-arm-row">
+          <span class="weapon-col weapon-col-name">Weapon</span>
+          <span class="weapon-col weapon-col-arc">Arc</span>
+          <span class="weapon-col weapon-col-att">Att</span>
+          <span class="weapon-col weapon-col-lock">Lk</span>
+          <span class="weapon-col weapon-col-dmg">Dmg</span>
+          <span class="weapon-col weapon-col-special">Special</span>
+          <span class="weapon-col station-arm-pts">Pts</span>
+          <span class="weapon-col station-arm-qty"></span>
+        </div>`;
         const swRows = opts.map(o => {
           const c = counts[o.name] || 0;
           const canAdd = canAddSystem(ship, dbShip, factionKey, o.name);
@@ -2998,27 +3008,24 @@ const App = (() => {
           const star = o.oncePerShip ? '<span class="sys-opt-star" title="Max one per ship">*</span>' : '';
           const typeTag = w.type ? `<span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : '';
           const arcCell = ARC_ICONS[w.arc] ? ARC_ICONS[w.arc] + '<span class="arc-label">' + esc(w.arc || '') + '</span>' : esc(w.arc || '');
-          const special = w.special && w.special !== '-' ? `<span class="hp-opt-special">${renderWeaponSpecialChips(w.special)}</span>` : '';
-          return `<div class="hp-opt${c > 0 ? ' hp-opt-active' : ''}">
-            <div class="hp-opt-head">
-              <span class="hp-opt-name">${esc(o.name)}${star}</span>
-              <span class="hp-opt-pts">${o.cost > 0 ? '+' + o.cost : o.cost} pts</span>
+          return `<div class="weapon-row station-arm-row${c > 0 ? ' sys-opt-active' : ''}">
+            <span class="weapon-col weapon-col-name">${esc(o.name)}${star}</span>
+            <span class="weapon-col weapon-col-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${arcCell}</span>
+            <span class="weapon-col weapon-col-att">${esc(String(w.attack))}</span>
+            <span class="weapon-col weapon-col-lock">${esc(String(w.lock))}</span>
+            <span class="weapon-col weapon-col-dmg">${esc(String(w.damage))}${typeTag}</span>
+            <span class="weapon-col weapon-col-special">${w.special && w.special !== '-' ? renderWeaponSpecialChips(w.special) : ''}</span>
+            <span class="weapon-col station-arm-pts">${o.cost > 0 ? '+' + o.cost : o.cost}</span>
+            <span class="weapon-col station-arm-qty">
               <div class="sys-opt-step">
                 <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeSystem('${groupId}','${ship.id}','${esc(o.name).replace(/'/g, "\\'")}')">−</button>
                 <span class="sys-opt-count" aria-label="${c} selected">${c}</span>
                 <button class="sys-step-btn" aria-label="Add one ${esc(o.name)}" ${canAdd ? '' : 'disabled'} onclick="App.addSystem('${groupId}','${ship.id}','${esc(o.name).replace(/'/g, "\\'")}')">+</button>
               </div>
-            </div>
-            <div class="hp-opt-stat">
-              <span class="hp-stat hp-stat-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${arcCell}</span>
-              <span class="hp-stat"><span class="hp-stat-k">Att</span> ${esc(String(w.attack))}</span>
-              <span class="hp-stat"><span class="hp-stat-k">Lock</span> ${esc(String(w.lock))}</span>
-              <span class="hp-stat"><span class="hp-stat-k">Dmg</span> ${esc(String(w.damage))}${typeTag}</span>
-              ${special}
-            </div>
+            </span>
           </div>`;
         }).join('');
-        return `<div class="sys-cat"><div class="sys-cat-head">${esc(cat)}${capNote}</div><div class="hp-opt-list">${swRows}</div></div>`;
+        return `<div class="sys-cat"><div class="sys-cat-head">${esc(cat)}${capNote}</div><div class="weapon-list station-arm-list">${head}${swRows}</div></div>`;
       }
 
       const rows = opts.map(o => {

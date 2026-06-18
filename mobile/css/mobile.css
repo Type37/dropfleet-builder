@@ -972,12 +972,12 @@ button, a, input, select, textarea,
   transition: background-color 110ms var(--ease-standard),
               border-color 110ms var(--ease-standard),
               color 110ms var(--ease-standard),
-              transform var(--duration-fast) var(--ease-spring),
+              transform 300ms cubic-bezier(0.34, 1.7, 0.5, 1),
               box-shadow var(--duration-fast) var(--ease-standard);
 }
-/* Press feedback: a gentle scale-down + colour fill flashes on tap, then the
-   spring easing lets it pop back on release so the press clearly registers. */
-.counter-btn:active { transform: scale(0.92); background: var(--navy); color: var(--white); border-color: var(--navy); }
+/* Press feedback: a deep scale-down + colour fill flashes on tap, then the
+   overshoot curve lets it pop back past its size on release for a fun spring. */
+.counter-btn:active { transform: scale(0.8); transition-duration: 70ms; background: var(--navy); color: var(--white); border-color: var(--navy); }
 .counter-btn:disabled { opacity: 0.3; }
 @media (prefers-reduced-motion: reduce) {
   .counter-btn { transition: background-color 110ms linear, color 110ms linear, border-color 110ms linear; }
@@ -2149,8 +2149,6 @@ body.sheet-open .sheet-scrim {
 /* Namesake sits last, divided from the ship list; label bold, text upright. */
 .lore-namesake {
   margin-top: var(--sp-m);
-  padding-top: var(--sp-m);
-  border-top: 1px dashed var(--stroke2);
   font-family: var(--font-lore);
   font-size: var(--text-caption1);
   font-style: normal;
