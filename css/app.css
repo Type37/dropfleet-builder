@@ -138,6 +138,7 @@
 
   /* Layout */
   --topbar-h: 48px;
+  --footer-h: 40px;
   --sidebar-w: 260px;
 }
 
@@ -415,7 +416,7 @@ h1, h2, h3, h4, h5, h6 {
   flex-shrink: 0;
   position: sticky;
   top: var(--topbar-h);
-  height: calc(100vh - var(--topbar-h));
+  height: calc(100vh - var(--topbar-h) - var(--footer-h));
   overflow-y: auto;
   background: var(--navy-dark);
   color: #fff;
@@ -432,7 +433,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: var(--sp-lg) var(--sp-xl);
   background: var(--paper-warm);
   overflow-y: auto;
-  height: calc(100vh - var(--topbar-h));
+  height: calc(100vh - var(--topbar-h) - var(--footer-h));
   position: sticky;
   top: var(--topbar-h);
 }
@@ -442,7 +443,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: var(--sp-lg) var(--sp-xl);
   background: var(--paper);
   overflow-y: auto;
-  height: calc(100vh - var(--topbar-h));
+  height: calc(100vh - var(--topbar-h) - var(--footer-h));
   position: sticky;
   top: var(--topbar-h);
   border-left: 1px solid var(--stroke-light);
@@ -6141,10 +6142,17 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-xs);
   color: var(--ink-muted);
 }
-/* The builder fills the full viewport height, so the credits footer would hang
-   just below the fold and force a small scroll. Hide it there; it stays on the
-   landing/fleets browsing views where it belongs. */
-body[data-view="builder"] .game-info-footer { display: none; }
+/* On the builder the three sticky panels already fill 100vh - topbar. Pin the
+   footer to the very bottom of the viewport so it's always visible without any
+   page scroll. Panels are shortened by --footer-h (see above) so they don't
+   slide behind it. */
+body[data-view="builder"] .game-info-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-topbar);
+}
 .gif-inner {
   display: flex;
   flex-wrap: wrap;
