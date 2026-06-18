@@ -508,9 +508,9 @@
     "lore": "The Washington is the largest military starship in UCMF. Examples include the Shield of Aurum, the UCMF’s flagship and Our Will, the most decorated Colonial vessel. Its mass drivers match any battleship, but its strength lies in its launch compliment, more than an entire strike group, pivotal, if deployed skilfully. Just one of these monstrosities can throw up an impenetrable fighter screen or a wave of bombers dense enough to cripple a battleship in one blow.",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Washington",
-     "Eisenhower",
-     "Nimitz",
+     "[Washington](https://en.wikipedia.org/wiki/USS_George_Washington_%28CVN-73%29)",
+     "[Eisenhower](https://en.wikipedia.org/wiki/USS_Dwight_D._Eisenhower)",
+     "[Nimitz](https://en.wikipedia.org/wiki/USS_Nimitz)",
      "Our Will",
      "Shield of Aurum"
     ],
@@ -626,7 +626,7 @@
     "tonnage": "C",
     "lore": "Triple the displacement of a Battleship, the London is one of the most powerful warships ever produced by mankind, armed with fifty mass drivers in various gauges. One may annihilate an entire fleet, It takes an entire orbital yard sector three years to lay down the hull of one of these ships. The sheer resources to outfit crew and maintain the ship reserves its use for the direst circumstances, commanded by the UCMF’s most decorated Admirals. Each is a legend in its own right.",
     "famousShips": [
-     "London",
+     "[London](https://en.wikipedia.org/wiki/HMS_London_%2869%29)",
      "Robert A Bernard",
      "Destiny",
      "Sceptered Empress",
@@ -759,8 +759,8 @@
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
      "Thebes",
-     "Cadmus",
-     "Cassander",
+     "[Cadmus](https://en.wikipedia.org/wiki/Cadmus)",
+     "[Cassander](https://en.wikipedia.org/wiki/Cassander)",
      "Ark Majesty"
     ],
     "namesake": "[Thebes](https://en.wikipedia.org/wiki/Thebes,_Greece) was the most powerful city-state in Greece during the fourth century BC, home to the Sacred Band of Thebes; its earlier Egyptian namesake served as Egypt's capital for much of the New Kingdom period and is now known as Luxor. Greek Thebes briefly dominated the rest of Greece after the Theban general Epaminondas defeated Sparta at the Battle of Leuctra in 371 BC. The city was razed by Alexander the Great in 335 BC, though a settlement survives on the site to this day."
@@ -872,9 +872,9 @@
     "lore": "The Carthage focuses almost entirely on kinetic damage though, built around a pair of colossal UF-12000 mass drivers in a fixed frontal mounting. It maintains its sister’s fleet carrier capacity for enhanced strategic might. Should energy weapons be required, its UF-4200 turrets may be upgraded to a pair of Cobra heavy lasers, an option it shares with other UCM battleships.",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Hannibal",
-     "War Elephant",
-     "Phoenician"
+     "[Hannibal](https://en.wikipedia.org/wiki/Hannibal)",
+     "[War Elephant](https://en.wikipedia.org/wiki/War_elephant)",
+     "[Phoenician](https://en.wikipedia.org/wiki/Phoenicia)"
     ],
     "namesake": "[Carthage](https://en.wikipedia.org/wiki/Carthage) was a Phoenician trading colony founded near modern Tunis, Tunisia around 814 BC, became Rome's most dangerous rival for control of the western Mediterranean, and was destroyed by Scipio Aemilianus in 146 BC after a three-year siege. Its most famous general, Hannibal, marched an army with war elephants across the Alps to invade Italy during the Second Punic War. After the city's destruction the Romans rebuilt it, and Roman Carthage grew into one of the largest cities of the empire before the ruins were designated a UNESCO World Heritage Site in 1979."
    }
@@ -995,9 +995,9 @@
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
      "Byzantium",
-     "Constantine",
-     "Saladin",
-     "Basilic"
+     "[Constantine](https://en.wikipedia.org/wiki/Constantine_the_Great)",
+     "[Saladin](https://en.wikipedia.org/wiki/Saladin)",
+     "[Basilic](https://en.wikipedia.org/wiki/Basiliscus)"
     ],
     "namesake": "[Byzantium](https://en.wikipedia.org/wiki/Byzantium), on the European shore of the Bosphorus where the strait narrows to less than a kilometre, is one of the most strategically coveted sites in the ancient world. The settlement was renamed Constantinople by Constantine the Great in 330 AD, became Istanbul after the Ottoman conquest of 1453, and has never stopped being one of the most important cities on Earth under any of its names. The city was founded around 667 BC by colonists from the Greek city of Megara, traditionally led by a figure named Byzas. As Constantinople it served as the capital of the Roman and later Byzantine Empire for over a thousand years."
    }
@@ -1118,9 +1118,9 @@
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
      "Babylon",
-     "Alexander the Great",
-     "Gaugamela",
-     "Nebuchadnezzar"
+     "[Alexander the Great](https://en.wikipedia.org/wiki/Alexander_the_Great)",
+     "[Gaugamela](https://en.wikipedia.org/wiki/Battle_of_Gaugamela)",
+     "[Nebuchadnezzar](https://en.wikipedia.org/wiki/Nebuchadnezzar_II)"
     ],
     "namesake": "[Babylon](https://en.wikipedia.org/wiki/Babylon) stood on the Euphrates River in what is now central Iraq, was the largest city in the world under Nebuchadnezzar II in the sixth century BC, and gave its name to a civilisation; Alexander the Great died within its walls in 323 BC. Under the earlier king Hammurabi in the eighteenth century BC, Babylon became the centre of one of the first great Mesopotamian empires and the source of one of history's earliest written law codes. The site lies near the modern city of Hillah, about 85 kilometres south of Baghdad, and was inscribed as a UNESCO World Heritage Site in 2019."
    }
@@ -2780,7 +2780,7 @@
      "Warbringer",
      "Ark of Ferrum",
      "Sanctuary",
-     "Conqueror"
+     "[Conqueror](https://en.wikipedia.org/wiki/HMS_Conqueror_%28S48%29)"
     ],
     "namesake": "[San Francisco](https://www.sftravel.com/) occupies one of the most geographically dramatic sites on the Pacific coast, wrapped around a deep natural harbour on a narrow peninsula of steep hills. The city was largely destroyed by earthquake and fire in 1906 and rebuilt within a decade, its streetcars were running again within three years of the disaster. The Golden Gate Bridge, completed in 1937, spans the strait at the mouth of the harbour. The city is the financial and cultural heart of the wider San Francisco Bay Area and one of the most densely populated cities in the United States."
    }
@@ -2913,9 +2913,9 @@
     "lore": "The Seattle class is multi-role cruiser tonnage carrier for void-capable fighters and bombers. Its capacious hangars accommodate a large number of these nimble strike craft while the ship itself is armed with four UF-6400 mass drivers in a pair of turrets for direct ship-ship engagements. These characteristics make the Seattle a flexible and valuable asset in almost any engagement despite its lower launch capacity compared to some of the more dedicated carriers of other races. As a fleet carrier, the Seattle is often positioned towards the rear of the battle, where its strike craft can support the main formation while it stays clear of the engagement. However, since it sports reasonable anti-ship firepower and launch assets have low power requirements, it is possible for the Seattle to use both while conducting advanced manoeuvres. This makes the Seattle a potent tool in the hands of a skilled captain whose carefully directed aggression and quick thinking are rewarded with disproportionate damage to the enemy.",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Ark Royal",
-     "Midway",
-     "Enterprise",
+     "[Ark Royal](https://en.wikipedia.org/wiki/HMS_Ark_Royal_%2891%29)",
+     "[Midway](https://en.wikipedia.org/wiki/USS_Midway_%28CV-41%29)",
+     "[Enterprise](https://en.wikipedia.org/wiki/USS_Enterprise_%28CV-6%29)",
      "Waning Tide"
     ],
     "rulesText": "This ship may replace its Fighters & Bombers with Mines for +10 pts.",
@@ -3312,10 +3312,10 @@
     ],
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Aurora",
-     "Spear of Destiny",
+     "[Aurora](https://en.wikipedia.org/wiki/Russian_cruiser_Aurora)",
+     "[Spear of Destiny](https://en.wikipedia.org/wiki/Holy_Lance)",
      "Surefire",
-     "Ardent"
+     "[Ardent](https://en.wikipedia.org/wiki/HMS_Ardent_%28F184%29)"
     ],
     "namesake": "[Berlin](https://www.visitberlin.de/en) became the capital of a unified Germany in 1871, was divided between Allied occupation zones after 1945, and reunified only in 1990; the Brandenburg Gate stood in no-man's land between East and West for twenty-eight years. It is the largest city in Germany and sits on the banks of the Spree River. The Berlin Wall, which physically divided the city from 1961, was opened in November 1989, paving the way for German reunification."
    }
@@ -3377,8 +3377,8 @@
     ],
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Gaius Duilius",
-     "Constitution",
+     "[Gaius Duilius](https://en.wikipedia.org/wiki/Gaius_Duilius)",
+     "[Constitution](https://en.wikipedia.org/wiki/USS_Constitution)",
      "Soldier of Fortune",
      "Song of Hope"
     ],
@@ -3478,7 +3478,7 @@
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
      "Sunstar",
-     "Excalibur",
+     "[Excalibur](https://en.wikipedia.org/wiki/Excalibur)",
      "True Arrow",
      "Firebrand"
     ],
@@ -3531,10 +3531,10 @@
     "lore": "The Osaka class is the standard light cruiser of the UCMF, designed for aggressive strike operations and flanking raids. In combat involving advanced manoeuvres, the class can deliver a mass driver firepower equivalent of the heavier Rio class while offering superior speed and cost effectiveness. However, the Osaka cannot match it in more stable situations where the Rio’s full firepower can be unleashed. As such, Admirals are instructed to exploit this class’ strength while acknowledging its weaknesses, including its limited close action capabilities compared to full cruisers and its lighter Captains graduating from a frigate-level command often prefer light cruisers such as the Osaka as many of the same combat principles apply and the access to high combat speed remains. Indeed, Osakas are normally deployed in squadrons where they can support each other in battle, since by necessity they often operate away from the main fleet.",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Paladin",
-     "Dire Wolf",
-     "Belfast II",
-     "Wakizashi"
+     "[Paladin](https://en.wikipedia.org/wiki/Paladin)",
+     "[Dire Wolf](https://en.wikipedia.org/wiki/Dire_wolf)",
+     "[Belfast II](https://en.wikipedia.org/wiki/HMS_Belfast)",
+     "[Wakizashi](https://en.wikipedia.org/wiki/Wakizashi)"
     ],
     "namesake": "[Osaka](https://osaka-info.jp/en/) has been Japan's commercial capital since the Edo period, when the city's merchant class accumulated enough wealth to produce a distinct urban culture; it sits at the eastern end of the Seto Inland Sea on the Kansai plain. It is the capital of Osaka Prefecture and the third most populous city in Japan. The city was the site of Expo 70, the first world's fair held in Asia, and hosted Expo 2025."
    }
@@ -3626,7 +3626,7 @@
     "lore": "The Kiev is an interesting vessel, in that it features a pair of super-heavy, UF-9000 series mass drivers in a fixed position. These impressive weapons are heavier gauge than those mounted in almost any other UCMF warship, save the mighty dreadnoughts. The mission role of Kiev class is to hunt and kill the most heavily armoured enemy vessels with swift brutality. They are unsubtle sledgehammers and the bane of enemy flagships. Many an enemy admiral has met their ignominious deaths at the hands of this smaller adversary since its inception in the 2640s. These weapons are also large enough in gauge to fire new and experimental munitions featuring molecular repulsion  technology. These can cut through atmosphere and reach targets normally safe from the attentions of orbiting spacecraft. It is also an unusual ship due to its triple-hull configuration, borrowing core superstructure elements from standard UCMF destroyers, although with reinforced armour superior to that of most other light vessels. Although artificial gravity creates the comforting illusion of “up and down” as usual, the fact that other segments of the ship are oriented differently never ceases to confuse fresh crew members!",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Aleksy the Great",
+     "[Aleksy the Great](https://en.wikipedia.org/wiki/Alexander_the_Great)",
      "Green Square",
      "Wrathful"
     ],
@@ -3685,7 +3685,7 @@
     "lore": "The Vancouver class emerged from the UCMF Naval Design Bureau in the late 2640s in response to the obvious need for more cost effective fighter and bomber support than the well armed Seattle class offered. The Bureau opted for a vessel of destroyer tonnage - that is, a ship larger than a frigate but smaller than a cruiser for ease of mass manufacture. As a relatively new class, its numbers are currently low but increasing as the ever growing demands and spoils of the Reconquest spur the yards into unprecedented productivity. As a fighting ship, the Vancouver is very poorly armed in comparison with the Seattle, but offers a greater launch capacity in comparison to its cost. As such, it is best utilised in rearguard and central fleet operations, where conventional warships can protect it from enemy action. Thanks to its bomber compliment, the Vancouver is particularly dangerous to smaller vessels with poor point defence, while its fighters can lend crucial protection to other vessels.",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Hornet",
+     "[Hornet](https://en.wikipedia.org/wiki/USS_Hornet_%28CV-12%29)",
      "Commandment",
      "Atoll"
     ],
@@ -3744,8 +3744,8 @@
     "lore": "The Havana is the earliest type of destroyer currently in service with the UCMF, having first seen combat with the Shaltari in 2596. Its design stems from older and largely outmoded naval strategies revolving around the use of torpedoes as primary weapons. Since the 2620s, the Admiralty shifted away from the idea of these colossal munitions due to their very limited capacity and a tendency towards overkill. Both traits make them unreliable and expensive weapons compared to mass drivers. As the vast naval build-up to the Reconquest gathered steam, it was deemed that torpedoes should not consume precious resources for anything other than large vessels. As such, production of the Havana more or less ceased. Those that remain (and have survived the first few years of carnage) are now highly prized assets, able to deliver stunning amounts of damage to any target, disproportionate to their size. While the Havana may be a dinosaur in the modern fleet, old school admirals greatly covet the spectacle of the swift and violent hammer blow that only a 200m long explosive can provide.",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Mjolnir",
-     "Black Prince",
+     "[Mjolnir](https://en.wikipedia.org/wiki/Mj%C3%B6lnir)",
+     "[Black Prince](https://en.wikipedia.org/wiki/Edward_the_Black_Prince)",
      "Vengeance"
     ],
     "namesake": "[Havana](https://en.wikipedia.org/wiki/Havana), Cuba was established as a Spanish colonial port in 1519 and served for centuries as the principal assembly point for the treasure fleets carrying silver from the Americas back to Spain. It is the capital and largest city of Cuba and the country's main commercial centre. Old Havana, with its Spanish colonial fortifications and architecture, was inscribed as a UNESCO World Heritage Site in 1982."
@@ -3905,7 +3905,7 @@
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
      "Arrow",
-     "Lancelot",
+     "[Lancelot](https://en.wikipedia.org/wiki/Lancelot)",
      "Harpoon"
     ],
     "namesake": "[Reykjavik](https://visitreykjavik.is/), Iceland takes its name from the Old Norse for 'Smoky Bay', after the geothermal steam the first Norse settlers observed rising from hot springs on the shore. It is the capital and largest city of Iceland and, at roughly 64 degrees north, the world's northernmost capital of a sovereign state. Much of the city is heated using geothermal energy drawn from the surrounding volcanic landscape."
@@ -3963,8 +3963,8 @@
     "lore": "The Vienna shares some advantages and disadvantages of its sister class: low speed, high armour, and high firepower. However, it must be used in a slightly more conventional manner, since it suffers the same loss of performance when firing between orbital layers as ordinary vessels. It makes up for this by mounting an anti-ship laser - the smallest UCM ship to be able to do so - due to its otherwise low power requirements. It also fits into a quite different role: that of battleship escort. Used in this way, its laser serves the useful secondary purpose of heating the target, assisting the much larger ship’s gunnery. Given this application, the Vienna also mounts additional point-defence clusters for limited aegis capability, although not up to the level of the Jakarta, which was designed for this role alone. Since its sublight speed matches that of a slow battleship, it can keep up.",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Musketeer",
-     "Arquebus",
+     "[Musketeer](https://en.wikipedia.org/wiki/Musketeers_of_the_Guard)",
+     "[Arquebus](https://en.wikipedia.org/wiki/Arquebus)",
      "Count Nicholas"
     ],
     "namesake": "[Vienna](https://www.wien.info/en) has served as the capital of Austria since the thirteenth century, and from 1558 to 1806 was the seat of the Holy Roman Emperors; the city's Ringstrasse boulevard was constructed in the 1860s to project imperial prestige. It is the capital and largest city of Austria. A long association with composers such as Mozart, Beethoven, and Strauss earned it the nickname City of Music, and its historic centre is a UNESCO World Heritage Site."
@@ -4025,9 +4025,9 @@
     "lore": "The Istanbul is a typical naval defence monitor. Frigate-sized, it features armour as thick as a battleship’s and low speed to match. UCM Monitors achieve this through dispensing with Foldspace capability; they must be brought into system by tugs - large vessels under the auspices of the Fleet Logistical Corps. Once in system, its undersized, overstretched sublight thrusters slowly get the monitor into position. This massive sacrifice of mobility also frees up considerable power for weapons, allowing the Istanbul to be over-gunned for its relatively small size. It features a massive UF-B-9000 mass-driver, in a unique, rotating mount; supporting its defensive role. This allows the Istanbul to easily engage targets in higher orbital layers or directed towards the surface for bombardment.",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Fist of Osman",
-     "Suliman",
-     "Loyal Janissary"
+     "[Fist of Osman](https://en.wikipedia.org/wiki/Osman_I)",
+     "[Suliman](https://en.wikipedia.org/wiki/Suleiman_the_Magnificent)",
+     "[Loyal Janissary](https://en.wikipedia.org/wiki/Janissary)"
     ],
     "namesake": "[Istanbul, Turkey](https://visit.istanbul/) has been continuously inhabited for over two thousand years, serving successively as Byzantium, Constantinople, and its current name; it is the only city in the world that spans two continents. The city straddles the Bosphorus strait, which links the Black Sea to the Sea of Marmara and divides its European and Asian sides. Its historic areas, including the Hagia Sophia and the Sultan Ahmed Mosque, were inscribed as a UNESCO World Heritage Site in 1985."
    }
@@ -4181,7 +4181,7 @@
     "lore": "The New Orleans class strike carrier is a first wave planetary assault vessel designed to deliver ground troops to hot combat zones. The class is a mainstay of almost all UCM fleets and is one of the most common vessels of frigate tonnage to see service in the Reconquest, with almost a thousand operational by 2672. It is a relatively new class as its specifications were laid down late in the development of the UCM military machine to allow for the designs for its cargo to fully mature. The New Orleans’ formidable payload of armoured units and mechanised infantry are deployed by agile dropships, making it ideally suited to fluid, early stage combat operations where heavy enemy action is anticipated. It is one of the largest vessels the UCM has that is capable of atmospheric operations – an essential feature as most UCM dropships cannot operate in the void and must be deployed in atmosphere.",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Avenger",
+     "[Avenger](https://en.wikipedia.org/wiki/Grumman_TBF_Avenger)",
      "Aurum’s Grace",
      "Ocean",
      "Everblade"
@@ -4241,10 +4241,10 @@
     "lore": "The Lima class frigate is equipped with an extremely potent electronic warfare suite and detector array. Its highly focused mission parameters revolve around active scanning the engagement zone for enemy presence and assisting in accurate target acquisition for the main fleet. The presence of Lima’s in a UCM formation can increase the effective range of the entire fleet, providing the crucial opportunity of hitting first. Unfortunately, these systems proved costly and slow to produce during the Lima’s construction, greatly limiting the numbers available at the launch of the Reconquest. As of 2672, only 97 are in the register, making it a precious asset given its usefulness. Admirals are under orders to preserve these ships as much as possible and are usually given limited access to the class. Fortunately, it operates best from the rear of any fleet action, giving it a good chance of survival in most engagements.",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Pharos",
+     "[Pharos](https://en.wikipedia.org/wiki/Lighthouse_of_Alexandria)",
      "Guiding Light",
-     "Nostradamus",
-     "Virgil"
+     "[Nostradamus](https://en.wikipedia.org/wiki/Nostradamus)",
+     "[Virgil](https://en.wikipedia.org/wiki/Virgil)"
     ],
     "namesake": "[Lima, Peru](https://en.wikipedia.org/wiki/Lima) served as the seat of the Spanish Viceroyalty of Peru for nearly three centuries, the most powerful administrative centre on the Pacific coast of South America. It is the third largest desert city in the world, after Karachi and Cairo, yet its coastal position keeps the climate mild. The historic centre of Lima was designated a UNESCO World Heritage Site in 1988."
    }
@@ -4306,7 +4306,7 @@
     "famousShips": [
      "Aegis",
      "Shield of Ferrum",
-     "Congress",
+     "[Congress](https://en.wikipedia.org/wiki/USS_Congress_%281799%29)",
      "Noble Squire"
     ],
     "namesake": "[Jakarta](https://enjoy.jakarta.go.id/) served as the capital of Indonesia from independence in 1945 until 2024, when the government formally relocated to the new city of Nusantara on Borneo; Jakarta remains the country's largest city and commercial centre. Founded as the port settlement of Sunda Kelapa, it was renamed Batavia under Dutch colonial rule before reverting to Jakarta. The metropolitan area, known as Jabodetabek, is one of the most populous urban regions in the world."
@@ -4360,7 +4360,7 @@
     "lore": "The Taipei class missile frigate is a dedicated close assault vessel, designed for first wave attacks, flanking operations and supply interdiction missions. The class excels at bringing firepower to bear that belies its small size at the expense of range. As such, the Taipei must use its superior speed to attain close action range before it can strike with the full force of its Piranha missile system. Its attacks can be blocked by point defence so this class is most potent as a pack hunter, where the sheer volume of munitions can overcome these measures. It is also adept at hunting smaller vessels and non-combat ships, which often feature inferior point defence capabilities. Such an offensive mission profile clearly suits the bravest of captains who are ready to take risks and happy to operate far from the main fleet. Such attributes are necessary as regrettably, survival rates for the Taipei class are among the worst of all UCMF ships. The repair docks of Niccolum are littered with Taipei’s sporting horrific damage that have limped back to safety in defiance of all odds.",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Surprise",
+     "[Surprise](https://en.wikipedia.org/wiki/HMS_Surprise_%281796%29)",
      "Undaunted",
      "Assasin’s Blade",
      "Blackjack"
@@ -4407,9 +4407,9 @@
     "lore": "The Toulon class frigate is the standard combat frigate of the UCMF and has been for many years. This class has been the first command of many successful captains, making it an ideal posting for the young and ambitious. It was the first class to use the familiar hull design now utilised in most colonial frigates and has been perfected over many decades. It is a dependable, cost effective vessel with reasonable firepower for its size and is more than capable of taking on its equivalents in enemy fleets. When deployed in numbers this unglamorous class can take on the largest of opponents. The Toulon is armed with nine UF-2200 ‘Foe Hammer’ mass drivers in triple turret configuration, giving it excellent all round targeting capability and flexibility. These  turrets are standard on almost all UCM frigates, offering excellent dependability and common parts, following the efficient design doctrine of the Colonies. The UCMF has close to 400 of these mainstay ships in its register, making it an essential part of the Colonial Fleet for many years to come.",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Drake",
-     "Levant",
-     "Constellation",
+     "[Drake](https://en.wikipedia.org/wiki/Francis_Drake)",
+     "[Levant](https://en.wikipedia.org/wiki/Levant)",
+     "[Constellation](https://en.wikipedia.org/wiki/USS_Constellation_%281797%29)",
      "Titania Sunrise"
     ],
     "namesake": "[Toulon](https://toulontourisme.com/) is a port city on the Mediterranean coast of Provence in southern France, home to France's principal naval base since Louis XIV ordered its construction in the seventeenth century. It remains the home port of the French Navy's Mediterranean fleet, including the nuclear aircraft carrier Charles de Gaulle. A cable car ascends nearby Mont Faron, which overlooks the city and its natural harbour."
@@ -4491,7 +4491,7 @@
      "Blue Shade",
      "Eternal Darkness",
      "Azure Night",
-     "Leprechaun",
+     "[Leprechaun](https://en.wikipedia.org/wiki/Leprechaun)",
      "Silent"
     ],
     "namesake": "[Lysander of Sparta](https://en.wikipedia.org/wiki/Lysander), ancient Greece, was the navarch who destroyed the Athenian fleet at Aegospotami in 405 BC, ending the Peloponnesian War and becoming the first Greek general to receive divine honours in his own lifetime. He secured Persian funding for the Spartan fleet through an alliance with Cyrus the Younger, which proved decisive in the war. After the fall of Athens he installed pro-Spartan oligarchic governments across many Greek cities."
@@ -4549,10 +4549,10 @@
     "lore": "The Santiago class corvette is a small, atmospheric-capable vessel of sub-frigate tonnage. These nimble, fast ships were designed for a single purpose - hunting down enemy atmospheric fleet assets. They are armed with a potent array of air-to-air missiles, utterly lethal to the frigate sized vessels that are its favourite prey. In particular, strike carriers and their precious cargo are prime targets since these strategically vital ships are shielded from the majority of enemy fire while operating in atmosphere. Santiagos are favoured by the most aggressive captains fresh from Niccolum’s Naval Academy. Atmospheric combat is not for the faint of heart as it must be fought only at close range where the small Santiago is always vulnerable to return fire. The uniquely challenging nature of these operations is a fiery crucible from which many budding captains do not return, but those that do are often destined for greatness in the future.",
     "famousShipsPrefix": "Famous ships of the class:",
     "famousShips": [
-     "Jolly Roger",
-     "Queen Anne’s Revenge",
+     "[Jolly Roger](https://en.wikipedia.org/wiki/Jolly_Roger)",
+     "[Queen Anne’s Revenge](https://en.wikipedia.org/wiki/Queen_Anne%27s_Revenge)",
      "Flying Dragon",
-     "Golden Hind"
+     "[Golden Hind](https://en.wikipedia.org/wiki/Golden_Hind)"
     ],
     "namesake": "[Santiago de Chile](https://www.santiagoturismo.cl/en/) was founded in 1541 by Spanish conquistador Pedro de Valdivia on the floodplain between the Mapocho and Maipo rivers; its full official name is Santiago de Nueva Extremadura. It is the capital and largest city of Chile and lies in a valley framed by the snow-capped Andes mountains. The city serves as the country's political and financial centre, though the national congress sits in nearby Valparaiso."
    }
