@@ -46,7 +46,7 @@
   </div>
   <footer class="m-footer">
     <div><span class="m-footer-title">Dropfleet Commander</span> · by <a href="https://www.ttcombat.com/games/dropfleet-commander" target="_blank" rel="noopener">TTCombat</a></div>
-    <div class="m-footer-credit">Fleet builder by <a class="wl-brand" href="https://jetwong.neocities.org/" target="_blank" rel="noopener">WarLore</a> · <a href="https://github.com/Type37/dropfleet-builder" target="_blank" rel="noopener">Source on GitHub</a></div>
+    <div class="m-footer-credit">Fleet builder by <a class="warlore-mark warlore-mark-inline" href="https://linktr.ee/warlore" target="_blank" rel="noopener" title="WarLore">War<span class="wl-lore">Lore</span></a> · <a href="https://github.com/Type37/dropfleet-builder" target="_blank" rel="noopener">Source on GitHub</a></div>
   </footer>
   <div class="bottom-action">
     <button class="btn btn-primary btn-block" onclick="App.openCreateFleet()">Create Fleet</button>
@@ -241,7 +241,14 @@
   // The /mobile/ app needs its OWN service-worker registration: home-screen PWA
   // users never load the desktop index.html, so without this they'd freeze on a
   // stale cache forever. Registers the root sw.js (scope covers /mobile/).
-  if ('serviceWorker' in navigator) {
+  // Service worker is PRODUCTION-ONLY (see desktop index.html for the why). On
+  // localhost we skip registration AND unregister any existing SW + purge caches,
+  // so local preview of /mobile/ is never intercepted by a stale dev SW.
+  const IS_LOCAL = ['localhost', '127.0.0.1', '0.0.0.0', ''].includes(location.hostname);
+  if ('serviceWorker' in navigator && IS_LOCAL) {
+    navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())).catch(() => {});
+    if (window.caches) caches.keys().then(ks => ks.forEach(k => caches.delete(k))).catch(() => {});
+  } else if ('serviceWorker' in navigator) {
     if (navigator.serviceWorker.controller) {
       let reloading = false;
       navigator.serviceWorker.addEventListener('controllerchange', () => {

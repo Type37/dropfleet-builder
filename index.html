@@ -64,7 +64,6 @@
   <!-- ── Landing Page ── -->
   <section class="landing" id="view-landing">
     <div class="landing-hero">
-      <a class="warlore-mark" href="https://linktr.ee/warlore" target="_blank" rel="noopener" title="WarLore">War<span class="wl-lore">Lore</span></a>
       <div class="landing-logo">
         <img src="assets/logos/dfc_logo.webp" alt="Dropfleet Commander" class="landing-logo-img">
       </div>
@@ -156,6 +155,10 @@
           <div id="fleet-composition"></div>
           <div class="ap-line text-overline" id="fleet-ap-per-turn"></div>
         </div>
+
+        <!-- Fleet legality alerts (issues to fix / notes). Lives on the rail so
+             it's always visible without scrolling the middle panel. -->
+        <div id="sidebar-alerts"></div>
 
         <!-- Admiral lives on the left rail (highest-ranked first). The flagship is
              a ship on the table and shows as a clickable card in the middle. -->
@@ -428,11 +431,9 @@
     <span class="gif-sep">·</span>
     <span>by <a href="https://www.ttcombat.com/games/dropfleet-commander" target="_blank" rel="noopener">TTCombat</a></span>
     <span class="gif-sep">·</span>
-    <a href="https://jetwong.neocities.org/wargaming/dropfleet-commander/dropfleet-mission-maker" target="_blank" rel="noopener">Mission Maker</a>
-    <span class="gif-sep">·</span>
     <a href="https://jetwong.neocities.org/wargaming/dropfleet-commander/" target="_blank" rel="noopener">More DFC tools</a>
     <span class="gif-sep">·</span>
-    <span class="gif-builder">Fleet builder by <a href="https://linktr.ee/warlore" target="_blank" rel="noopener">WarLore</a></span>
+    <span class="gif-builder">Fleet builder by <a class="warlore-mark warlore-mark-inline" href="https://linktr.ee/warlore" target="_blank" rel="noopener" title="WarLore">War<span class="wl-lore">Lore</span></a></span>
     <span class="gif-sep">·</span>
     <a id="footer-feedback" href="mailto:warlore1@outlook.com">Send Feedback</a>
     <span class="gif-sep">·</span>
@@ -443,7 +444,15 @@
 <script src="js/rank-insignia.js"></script>
 <script src="js/app.js"></script>
 <script>
-  if ('serviceWorker' in navigator) {
+  // Service worker is PRODUCTION-ONLY. On localhost we skip registration AND
+  // actively unregister any existing SW + purge its caches: a dev service worker
+  // intercepts every request and serves stale shells, which is otherwise
+  // impossible to escape during local preview. Production keeps full offline/PWA.
+  const IS_LOCAL = ['localhost', '127.0.0.1', '0.0.0.0', ''].includes(location.hostname);
+  if ('serviceWorker' in navigator && IS_LOCAL) {
+    navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())).catch(() => {});
+    if (window.caches) caches.keys().then(ks => ks.forEach(k => caches.delete(k))).catch(() => {});
+  } else if ('serviceWorker' in navigator) {
     // Auto-reload an already-controlled tab when a new build takes over, and poll
     // for new versions while open — so a live tab self-updates (no hard refresh).
     if (navigator.serviceWorker.controller) {
