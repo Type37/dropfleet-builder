@@ -2891,8 +2891,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "P",
-    "lore": "",
-    "namesake": "A [summoner](https://en.wikipedia.org/wiki/Summoner) was an officer of a medieval ecclesiastical court who served citations ordering people to appear before it. Such officers were widely condemned for extortion and were satirised by Chaucer in The Canterbury Tales."
+    "lore": ""
    }
   },
   {
@@ -3017,8 +3016,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "P",
-    "lore": "",
-    "namesake": "A [prism](https://en.wikipedia.org/wiki/Prism) is a transparent optical element with flat polished faces that refracts light. A triangular prism disperses white light into its constituent colours because the deviation differs for each wavelength."
+    "lore": ""
    }
   },
   {
@@ -3059,8 +3057,7 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "P",
-    "namesake": "A [torpedo](https://en.wikipedia.org/wiki/Torpedo) is a self-propelled underwater weapon carrying an explosive warhead, launched from a submarine, surface ship, or aircraft to detonate on or near a target's hull. The modern self-propelled torpedo was developed by Robert Whitehead in 1866."
+    "tonnage": "P"
    }
   },
   {
@@ -3107,8 +3104,7 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "P",
-    "namesake": "A [lander](https://en.wikipedia.org/wiki/Lander_(spacecraft)) is a spacecraft that descends to and comes to rest on the surface of an astronomical body, making a soft landing so that it remains functional. The Soviet Luna 9 achieved the first lunar soft landing in 1966."
+    "tonnage": "P"
    }
   },
   {
