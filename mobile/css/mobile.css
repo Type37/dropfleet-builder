@@ -405,12 +405,28 @@ button, a, input, select, textarea,
   margin-top: var(--sp-xxs);
 }
 /* Launch-capability icons on picker rows. */
-.ship-card-launch { display: flex; flex-wrap: wrap; gap: 5px; margin-top: var(--sp-xs); }
-.launch-type-icon {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 22px; height: 22px; border-radius: var(--radius-s, 6px);
-  background: var(--navy-subtle, rgba(27,58,92,0.1)); color: var(--navy, #1b3a5c);
+.list-row-rules { display: flex; flex-wrap: wrap; gap: 4px; margin-top: var(--sp-xs); }
+.ship-card-launch { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-top: var(--sp-xs); }
+.launch-cap-lead {
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-semibold);
+  color: var(--fg3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
+/* Launch capability as a WORDED chip (icon + label) instead of a bare glyph. */
+.launch-type-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 1px 7px 1px 5px;
+  border-radius: var(--radius-s, 6px);
+  background: var(--navy-subtle, rgba(27,58,92,0.1)); color: var(--navy, #1b3a5c);
+  font-family: var(--font-condensed);
+  font-size: var(--text-caption2);
+  font-weight: var(--weight-semibold);
+  line-height: 1.4;
+}
+.launch-type-chip svg { width: 12px; height: 12px; flex-shrink: 0; }
 
 .list-row-pts {
   font-family: var(--font-condensed);
@@ -2306,6 +2322,10 @@ body.sheet-open .sheet-scrim {
 .m-footer-title { font-family: var(--font-display); font-weight: var(--weight-bold); color: var(--fg2); }
 .m-footer a { color: var(--navy); text-decoration: none; }
 .m-footer a:active { text-decoration: underline; }
+/* WarLore wordmark keeps its gold-on-black brand in the footer (the generic
+   footer-link colour above would otherwise force it to navy). */
+.m-footer a.warlore-mark { color: #FFCC00; }
+.m-footer a.warlore-mark:active { color: #000; background: #FFCC00; text-decoration: none; }
 .m-footer-credit {
   margin-top: var(--sp-xs);
   font-family: var(--font-condensed);

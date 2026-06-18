@@ -1458,9 +1458,9 @@
     if (!names.size) return '';
     const arr = [...names];
     const icons = [];
-    LAUNCH_TYPE_DEFS.forEach(t => { if (arr.some(n => t.re.test(n))) icons.push(`<span class="launch-type-icon" title="${esc(t.label)}">${t.icon}</span>`); });
-    if (arr.some(n => !LAUNCH_TYPE_DEFS.some(t => t.re.test(n)))) icons.push(`<span class="launch-type-icon" title="Other launch asset">${LAUNCH_TYPE_OTHER}</span>`);
-    return icons.length ? `<div class="ship-card-launch">${icons.join('')}</div>` : '';
+    LAUNCH_TYPE_DEFS.forEach(t => { if (arr.some(n => t.re.test(n))) icons.push(`<span class="launch-type-chip">${t.icon}<span>${esc(t.label)}</span></span>`); });
+    if (arr.some(n => !LAUNCH_TYPE_DEFS.some(t => t.re.test(n)))) icons.push(`<span class="launch-type-chip">${LAUNCH_TYPE_OTHER}<span>Other launch asset</span></span>`);
+    return icons.length ? `<div class="ship-card-launch"><span class="launch-cap-lead">Launches</span>${icons.join('')}</div>` : '';
   }
 
   function renderShipPicker() {
@@ -1579,6 +1579,7 @@
             <span class="list-row-pts">${gMin > 1 ? cost * gMin : cost}<span class="pts-unit">pts</span></span>
           </div>
           <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)}, Group ${gMin}${gMax > gMin ? '–' + gMax : ''}${gMin > 1 ? ` · ${gMin}× ${cost}` : ''}</div>
+          ${(() => { const rs = (ship.specialRules || []).map(r => r.name).filter(Boolean).join(', '); return rs ? `<div class="list-row-rules">${renderSpecialChips(rs)}</div>` : ''; })()}
           ${shipLaunchIcons(ship, activeFleet.faction)}
         </div>
       </div>`;

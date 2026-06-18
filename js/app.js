@@ -2355,7 +2355,7 @@ const App = (() => {
     const notes = warnings.filter(w => w.type === 'warn');
     el.innerHTML = warnings.length
       ? `<div class="overview-alerts ${errors.length ? 'has-errors' : 'has-warns'}">
-          <div class="overview-alerts-head">${errors.length ? `<span class="overview-alerts-dot err"></span>${errors.length} issue${errors.length !== 1 ? 's' : ''} to fix` : `<span class="overview-alerts-dot warn"></span>${notes.length} note${notes.length !== 1 ? 's' : ''}`}</div>
+          <div class="overview-alerts-head">${errors.length ? `${errors.length} issue${errors.length !== 1 ? 's' : ''} to fix` : `${notes.length} note${notes.length !== 1 ? 's' : ''}`}</div>
           <ul class="overview-alerts-list">${[...errors, ...notes].map(w => `<li class="oa-${w.type}">${esc(w.msg)}</li>`).join('')}</ul>
         </div>`
       : '';
@@ -2544,9 +2544,9 @@ const App = (() => {
     if (!names.size) return '';
     const arr = [...names];
     const icons = [];
-    LAUNCH_TYPE_DEFS.forEach(t => { if (arr.some(n => t.re.test(n))) icons.push(`<span class="launch-type-icon" title="${esc(t.label)}">${t.icon}</span>`); });
-    if (arr.some(n => !LAUNCH_TYPE_DEFS.some(t => t.re.test(n)))) icons.push(`<span class="launch-type-icon" title="Other launch asset">${LAUNCH_TYPE_OTHER}</span>`);
-    return icons.length ? `<div class="ship-card-launch" title="Launch capability">${icons.join('')}</div>` : '';
+    LAUNCH_TYPE_DEFS.forEach(t => { if (arr.some(n => t.re.test(n))) icons.push(`<span class="launch-type-chip">${t.icon}<span>${esc(t.label)}</span></span>`); });
+    if (arr.some(n => !LAUNCH_TYPE_DEFS.some(t => t.re.test(n)))) icons.push(`<span class="launch-type-chip">${LAUNCH_TYPE_OTHER}<span>Other launch asset</span></span>`);
+    return icons.length ? `<div class="ship-card-launch"><span class="launch-cap-lead">Launches</span>${icons.join('')}</div>` : '';
   }
 
   const ARC_LABELS = {
@@ -3120,7 +3120,7 @@ const App = (() => {
     const entries = [...seen.entries()].map(([name, full]) =>
       `<div class="detail-rule-entry"><span class="detail-rule-name">${esc(name)}${full.page ? ` <span class="detail-rule-page">p.${esc(full.page)}</span>` : ''}</span><span class="detail-rule-desc">${ruleHtml(full.description)}</span></div>`
     ).join('');
-    return `<div class="ship-rules-glossary"><div class="ship-rules-block-label">Rules</div><div class="detail-rules-list">${entries}</div></div>`;
+    return `<div class="ship-rules-glossary"><div class="detail-rules-list">${entries}</div></div>`;
   }
 
   function renderGroupShipEntry(ship, dbShip, groupId, count = 1) {
@@ -3316,9 +3316,27 @@ const App = (() => {
         ${rulesHtml}
         ${rulesTextHtml}`;
 
+    // Hero art with inline alt-sculpt carousel + TTCombat buy link (mirrors the
+    // ship-detail modal and mobile). Art list = primary + resin sculpt(s) +
+    // counts-as variant art; cycled per-card via cycleBuilderArt (keyed by ship.id).
+    const heroArts = [];
+    if (img) heroArts.push({ src: img, label: 'Standard sculpt' });
+    shipAltArt(name).forEach(a => heroArts.push({ src: a, label: 'Resin sculpt' }));
+    (dbShip && dbShip.variants || []).forEach(v => { if (v.image) heroArts.push({ src: v.image, label: v.name }); });
+    builderHeroArts[ship.id] = heroArts;
+    builderHeroIdx[ship.id] = 0;
+    const multiArt = heroArts.length > 1;
+    const heroImgTag = `<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" decoding="async" onerror="this.style.display='none'">`;
+    const heroCarousel = multiArt
+      ? `<button class="hero-art-arrow hero-art-prev" onclick="event.preventDefault();event.stopPropagation();App.cycleBuilderArt('${ship.id}',-1)" aria-label="Previous sculpt">‹</button><button class="hero-art-arrow hero-art-next" onclick="event.preventDefault();event.stopPropagation();App.cycleBuilderArt('${ship.id}',1)" aria-label="Next sculpt">›</button><div class="hero-art-meta"><span class="hero-art-label">${esc(heroArts[0].label)}</span><span class="hero-art-dots">${heroArts.map((_, i) => `<span class="hero-art-dot${i === 0 ? ' active' : ''}"></span>`).join('')}</span></div>`
+      : '';
+    const heroImageBlock = img
+      ? `<div class="ship-card-image${isFullyModular(dbShip) ? ' ship-img-modular' : ''}${multiArt ? ' has-alts' : ''}" data-ship-art="${ship.id}"${isFullyModular(dbShip) ? ' title="Base hull shown, your ship\'s actual look depends on the systems you choose"' : ''}>${qtyBadge}${shopLinkImg(name, heroImgTag, dbShip)}${heroCarousel}</div>`
+      : '';
+
     return `
     <div class="group-ship-entry${compact ? ' compact' : ''}${useAlt ? ' alt2x4' : ''}">
-      ${img ? `<div class="ship-card-image${isFullyModular(dbShip) ? ' ship-img-modular' : ''}"${isFullyModular(dbShip) ? ' title="Base hull shown, your ship\'s actual look depends on the systems you choose"' : ''}>${qtyBadge}<img src="${esc(img)}" alt="${esc(name)}" loading="lazy" decoding="async" onerror="this.style.display='none'"></div>` : ''}
+      ${heroImageBlock}
       <div class="ship-card-body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
         ${midSection}
         ${renderSystemsPicker(ship, dbShip, groupId, currentFleet.faction)}
@@ -3327,7 +3345,6 @@ const App = (() => {
         ${compact ? '' : loreHtml}
         ${compact ? '' : variantsHtml}
       </div>
-      <button class="btn btn-ghost btn-icon btn-sm group-ship-remove" onclick="App.removeShip('${groupId}','${ship.id}')" aria-label="Remove ship"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
     </div>`;
   }
 
@@ -3413,12 +3430,9 @@ const App = (() => {
     container.innerHTML = chips.map(f =>
       `<button class="filter-chip ${activeFilters.has(f.key) ? 'active' : ''}" onclick="App.toggleShipFilter('${f.key}')">${activeFilters.has(f.key) ? CHECK_SVG : ''}${f.label}</button>`
     ).join('') +
-      // Misc Ships is a distinct vertical toggle switch (not a filter chip) — it
-      // changes WHICH ships exist in the list, not just narrows them.
-      `<button class="misc-vtoggle ${settings.showAdditionalShips ? 'on' : ''}" role="switch" aria-checked="${settings.showAdditionalShips}" onclick="App.toggleMiscShips()" title="Show mercenaries, cross-faction and other optional ships">
-        <span class="misc-vtoggle-track"><span class="misc-vtoggle-knob"></span></span>
-        <span class="misc-vtoggle-label">Misc<br>Ships</span>
-      </button>`;
+      // Misc Ships is a filter chip like the rest: on = reveal mercenaries /
+      // cross-faction / other optional ships. (Also mirrored in Settings.)
+      `<button class="filter-chip ${settings.showAdditionalShips ? 'active' : ''}" onclick="App.toggleMiscShips()" title="Show mercenaries, cross-faction and other optional ships">${settings.showAdditionalShips ? CHECK_SVG : ''}Misc Ships</button>`;
   }
 
   // The "Misc Ships" picker chip mirrors the Settings "Additional Ships" toggle:
@@ -3628,14 +3642,17 @@ const App = (() => {
       ${renderStatGrid(data)}
       ${weaponSummary}
       ${isFamous ? '' : shipLaunchIcons(data, currentFleet.faction)}
-      ${specialRules.length > 0 ? `<div class="special-rules">${specialRules.slice(0, 4).map(r => {
+      ${specialRules.length > 0 ? `<div class="special-rules">${specialRules.map(r => {
+        // Every special rule is a clickable chip: prefer the ship's own detail,
+        // else fall back to the shared rules glossary so nothing is a dead chip.
         const detail = (data.specialRuleDetails || []).find(d => d.name === r);
-        if (detail && detail.description) {
-          const pgA = detail.page ? ` data-rule-page="${esc(detail.page)}"` : '';
-          return `<span class="rule-chip has-tooltip" data-rule-desc="${esc(detail.description)}"${pgA} onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(r)}</span>`;
+        const full = (detail && detail.description) ? detail : lookupRuleFull(r);
+        if (full && full.description) {
+          const pgA = full.page ? ` data-rule-page="${esc(full.page)}"` : '';
+          return `<span class="rule-chip has-tooltip" data-rule-desc="${esc(full.description)}"${pgA} onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(r)}</span>`;
         }
         return `<span class="rule-chip">${esc(r)}</span>`;
-      }).join('')}${specialRules.length > 4 ? `<span class="rule-chip" style="background:rgba(255,255,255,0.06);color:var(--ink-faint)">+${specialRules.length - 4}</span>` : ''}</div>` : ''}
+      }).join('')}</div>` : ''}
       <div class="flex items-center justify-between" style="margin-top:auto">
         <span class="text-caption">${data.g ? `Group: ${data.g}` : ''}</span>
         <div class="flex gap-xs">
@@ -6137,6 +6154,22 @@ const App = (() => {
   // mobile). State is reset each time the detail opens.
   let detailHeroArts = [];
   let detailHeroIdx = 0;
+  // Per-card hero-art state for the BUILDER detail panel (keyed by ship.id), so
+  // each ship card cycles its alternate sculpts independently of the modal.
+  const builderHeroArts = {};
+  const builderHeroIdx = {};
+  function cycleBuilderArt(shipId, delta) {
+    const arts = builderHeroArts[shipId];
+    if (!arts || arts.length < 2) return;
+    const idx = ((builderHeroIdx[shipId] || 0) + delta + arts.length) % arts.length;
+    builderHeroIdx[shipId] = idx;
+    const cur = arts[idx];
+    const wrap = document.querySelector(`.ship-card-image[data-ship-art="${shipId}"]`);
+    if (!wrap) return;
+    const im = wrap.querySelector('img'); if (im) { im.src = cur.src; im.alt = cur.label; }
+    const label = wrap.querySelector('.hero-art-label'); if (label) label.textContent = cur.label;
+    wrap.querySelectorAll('.hero-art-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
   function cycleShipArt(delta) {
     if (detailHeroArts.length < 2) return;
     detailHeroIdx = (detailHeroIdx + delta + detailHeroArts.length) % detailHeroArts.length;
@@ -6558,6 +6591,6 @@ const App = (() => {
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText,
-    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, cycleShipArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
+    openSettings, toggleSetting, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
   };
 })();
