@@ -876,21 +876,13 @@ const App = (() => {
   }
 
   function selectFaction(key) {
+    // Selection cue is the gold frame only (data-selected drives it); the button
+    // keeps its outline look, no navy fill.
     document.querySelectorAll('.faction-pick-btn').forEach(btn => {
-      btn.classList.remove('btn-primary');
-      btn.classList.add('btn-outline');
-      btn.style.background = '';
-      btn.style.color = '';
       delete btn.dataset.selected;
     });
     const btn = document.querySelector(`.faction-pick-btn[data-faction="${key}"]`);
-    if (btn) {
-      // Clear, high-contrast selection — neutral navy, not the faction colour
-      // (which reads poorly for light factions). The icon carries faction identity.
-      btn.classList.remove('btn-outline');
-      btn.classList.add('btn-primary');
-      btn.dataset.selected = 'true';
-    }
+    if (btn) btn.dataset.selected = 'true';
     const desc = document.getElementById('faction-pick-desc');
     if (desc) desc.textContent = '';
   }
@@ -908,7 +900,6 @@ const App = (() => {
           <div class="game-size-details">${lines[0]}</div>
           <div class="game-size-details game-size-sub">${lines[1]} · ${lines[2]}</div>
         </div>
-        <svg class="gold-frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect x="1" y="1" width="98" height="98" pathLength="100" vector-effect="non-scaling-stroke"/></svg>
       </div>`;
     }).join('');
   }

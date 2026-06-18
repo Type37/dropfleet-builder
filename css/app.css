@@ -4075,8 +4075,6 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-out);
   background: var(--paper);
-  position: relative;
-  overflow: hidden;
 }
 .game-size-option:hover { border-color: var(--stroke-strong); }
 .game-size-option.selected {
@@ -4085,9 +4083,10 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: inset 3px 0 0 var(--navy);
 }
 
-/* Art Deco gold frame that draws itself on hover and stays on the chosen option
-   (New Fleet faction + game-size pickers). non-scaling-stroke keeps the line an
-   even 2px even though the box is stretched; rx:0 = sharp Deco corners. */
+/* Art Deco gold frame that draws itself on hover and stays on the chosen FACTION
+   (New Fleet picker). The gold circling IS the selection cue, so the faction
+   button keeps its outline look (no navy fill). non-scaling-stroke keeps an even
+   2px line on the stretched box; rx:0 = sharp Deco corners. */
 .gold-frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
 .gold-frame rect {
   fill: none;
@@ -4098,9 +4097,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: stroke-dashoffset 0.8s var(--ease-out, ease);
 }
 .faction-pick-btn:hover .gold-frame rect,
-.faction-pick-btn[data-selected] .gold-frame rect,
-.game-size-option:hover .gold-frame rect,
-.game-size-option.selected .gold-frame rect { stroke-dashoffset: 0; }
+.faction-pick-btn[data-selected] .gold-frame rect { stroke-dashoffset: 0; }
 @media (prefers-reduced-motion: reduce) { .gold-frame rect { transition: none; } }
 
 .game-size-visual {
