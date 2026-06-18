@@ -549,6 +549,10 @@ const App = (() => {
       window.goatcounter.count({ path: '/' + (view || 'landing'), title: view || 'landing', event: false });
     }
     document.querySelectorAll('#app > section').forEach(s => s.classList.add('hidden'));
+    // Tag the body with the active view so view-scoped chrome can react. The
+    // builder is a full-height (100vh) workspace, so the credits footer is hidden
+    // there — otherwise it hangs just below the fold and forces a small scroll.
+    document.body.dataset.view = view || 'landing';
     const topActions = document.getElementById('topbar-actions');
     const topContext = document.getElementById('topbar-context');
     topActions.innerHTML = '';

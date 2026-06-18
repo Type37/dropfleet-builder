@@ -6110,6 +6110,10 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-xs);
   color: var(--ink-muted);
 }
+/* The builder fills the full viewport height, so the credits footer would hang
+   just below the fold and force a small scroll. Hide it there; it stays on the
+   landing/fleets browsing views where it belongs. */
+body[data-view="builder"] .game-info-footer { display: none; }
 .gif-inner {
   display: flex;
   flex-wrap: wrap;
