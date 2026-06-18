@@ -566,6 +566,13 @@ h1, h2, h3, h4, h5, h6 {
 .builder-sidebar .points-limit,
 .topbar .text-overline,
 .topbar .text-caption { color: #c4bfb5; }
+/* Add-slot placeholders ("Add Admiral", "Add Space Station") sit on the navy-dark
+   sidebar — ink-faint (#66615a) only achieves 2.4:1 there (fails AA). Use #c4bfb5
+   (7.7:1 on navy-dark, matches the sidebar label colour) and a white-wash hover. */
+.builder-sidebar .add-ship-area { color: #c4bfb5; border-color: rgba(255,255,255,0.2); }
+.builder-sidebar .add-ship-area:hover { color: #fff; background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.45); }
+.builder-sidebar .station-add-optional { color: #c4bfb5; border-color: rgba(255,255,255,0.2); }
+.builder-sidebar .station-add-optional:hover { color: #fff; border-color: rgba(255,255,255,0.45); }
 
 .points-limit {
   font-size: var(--text-sm);
