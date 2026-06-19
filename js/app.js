@@ -29,7 +29,7 @@ const App = (() => {
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: false };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -5358,9 +5358,8 @@ const App = (() => {
           ? `<div class="dp-hoist-chips">${hoistedHere.map(([n]) => `<span class="dp-hoist-chip">${esc(n)}</span>`).join('')}</div>` : '';
 
         const tonnageLabel = tonLabel(db.tonnage) || CATEGORY_LABELS[ship.groupCategory] || '';
-        // 'Unique' kept (one-of-a-kind is informative on the sheet); 'Rare' is a
-        // list-building limit with no in-game meaning, so it's not printed.
-        const badge = db.isUnique ? ' <span class="dp-badge">Unique</span>' : '';
+        // A small Unique/Rare pill (label only — no rule text needed on the sheet).
+        const badge = db.isUnique ? ' <span class="dp-badge">Unique</span>' : db.isRare ? ' <span class="dp-badge">Rare</span>' : '';
         const qtyPrefix = count > 1 ? `${count}× ` : '';
         const totalPts = ship.points * count;
         const artSrc = db.image || shipArtPath(db.name);
@@ -6118,6 +6117,13 @@ const App = (() => {
       if (localStorage.getItem('dfc_misc_off_v1') !== '1') {
         settings.showAdditionalShips = false;
         localStorage.setItem('dfc_misc_off_v1', '1');
+        localStorage.setItem('dfc_settings', JSON.stringify(settings));
+      }
+      // One-time switch to the new default print card (Option A / "Big mode").
+      // Forces it on once for existing users; their later toggle still persists.
+      if (localStorage.getItem('dfc_bigmode_default_v1') !== '1') {
+        settings.printBig = true;
+        localStorage.setItem('dfc_bigmode_default_v1', '1');
         localStorage.setItem('dfc_settings', JSON.stringify(settings));
       }
     } catch(e) {}
