@@ -5221,7 +5221,11 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Stat grid (echoes the on-screen stat cells): icon | value over label, packed
    into an aligned grid instead of a loose flowing line. */
-.dp-statgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap: 2px; margin: 3px 0; }
+/* 2-column paired layout (Scan|KS, Sig|ES, Thrust|BS, Hull spans) — matches the
+   on-screen stat grid. width:max-content keeps the block compact, not stretched. */
+.dp-statgrid { display: grid; grid-template-columns: repeat(2, minmax(46px, 78px)); gap: 2px; margin: 3px 0; width: max-content; max-width: 100%; }
+.dp-sc-wide { grid-column: 1 / -1; }
+.dp-sc-none { opacity: 0.5; }
 .dp-statcell {
   display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 3px;
   border: 1px solid #d4cec2; border-radius: 2px; padding: 1px 4px; background: #f6f4ef;
@@ -5240,8 +5244,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .dp-weapons { width: 100%; border-collapse: collapse; margin: 3px 0; font-size: 8pt; }
 .dp-weapons th {
-  text-align: center; background: #1b3a5c; color: #fff; font-weight: 600; padding: 1px 4px;
+  /* Dark text on a light tint + a dark underline — readable even if the printer
+     drops background fills (no white-on-navy). */
+  text-align: center; background: #e7ebf0; color: #1b3a5c; font-weight: 700; padding: 1px 4px;
   font-size: 7pt; text-transform: uppercase; letter-spacing: 0.02em;
+  border-bottom: 1.5px solid #1b3a5c;
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
 }
 .dp-weapons td { text-align: center; padding: 1px 4px; border-bottom: 1px solid #e2ddd4; }
@@ -5260,7 +5267,7 @@ h1, h2, h3, h4, h5, h6 {
 .dp-hull-boxes { display: inline-flex; flex-wrap: wrap; gap: 2px 6px; }
 .dp-hull-grp { display: inline-flex; gap: 1.5px; }
 .dp-box {
-  width: 9px; height: 9px; border: 1px solid #777; border-radius: 1px; display: inline-block;
+  width: 12px; height: 12px; border: 1px solid #555; border-radius: 1px; display: inline-block;
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
 }
 .dp-box-crip {

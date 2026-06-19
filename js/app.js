@@ -29,7 +29,7 @@ const App = (() => {
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: false, printBig: false };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: false };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -4863,17 +4863,24 @@ const App = (() => {
   // on screen (in the preview) as on paper — so the preview is WYSIWYG and a fleet
   // fits onto a few readable pages (Army-App / Hobgoblin style), instead of reusing
   // the big on-screen stat cells whose compact form only existed inside @media print.
-  const DP_STAT_ORDER =[['scan', 'Scan'], ['sig', 'Sig'], ['thrust', 'Thr'], ['hull', 'Hull'], ['es', 'ES'], ['ks', 'KS'], ['bs', 'BS']];
   function dpStatLine(stats, mods) {
-    // A tidy grid of stat cells (icon + value + label), echoing the on-screen stat
-    // grid, instead of a loose flowing line.
-    const cells = DP_STAT_ORDER.map(([k, lab]) => {
+    // Same 2-col paired layout as the on-screen stat grid (renderStatGrid):
+    //   Scan | KS,  Sig | ES,  Thrust | BS,  Hull (spans both).
+    const cell = (k, wide) => {
       const v = stats[k];
-      if (v === undefined || v === 0 || v === '-' || v === '--') return '';
+      if (v === undefined || v === null || v === 0) return '';
+      const meta = STAT_META[k]; if (!meta) return '';
+      const none = (k === 'bs' && (v === '-' || v === '--')) ? ' dp-sc-none' : '';
       const mod = mods && mods[k] ? ' dp-stat-mod' : '';
       const icon = STAT_ICONS[k] ? `<span class="dp-sc-icon">${STAT_ICONS[k]}</span>` : '';
-      return `<span class="dp-statcell${mod}">${icon}<span class="dp-sc-val">${esc(String(v))}</span><span class="dp-sc-lab">${lab}</span></span>`;
-    }).filter(Boolean).join('');
+      return `<span class="dp-statcell${wide ? ' dp-sc-wide' : ''}${mod}${none}">${icon}<span class="dp-sc-val">${esc(String(v))}</span><span class="dp-sc-lab">${esc(meta.label)}</span></span>`;
+    };
+    const cells = [
+      cell('scan'), cell('ks'),
+      cell('sig'), cell('es'),
+      cell('thrust'), cell('bs'),
+      cell('hull', true)
+    ].filter(Boolean).join('');
     return cells ? `<div class="dp-statgrid">${cells}</div>` : '';
   }
   // weapons: array of {name, arc, attack, lock, damage, type, special, qty?}
@@ -5029,8 +5036,13 @@ const App = (() => {
     // Decide by BASE name (Shield-3+/4+/5+ all count as "Shield") so a faction-wide
     // rule is recognised even when its value varies; but keep each value-variant
     // verbatim in the glossary (no text rewriting). Cards show the value chip.
+    // Also hoist common WEAPON specials (Close Action, Scald, Crippling, …): those
+    // repeat hardest and matter most for paper (fewer pages). The keyword stays in
+    // the weapon table's Special column, so the card still shows what the gun does;
+    // only the spelled-out text moves to the end glossary.
     const baseRuleName = nm => String(nm).replace(/[-\s](?:\d+\+?|X|[0-9]+x\S*)$/, '').trim();
     const baseCardCount = {}, ruleDefByName = {};
+    const wBaseCardCount = {};
     let glossTotalCards = 0;
     f.battleGroups.forEach(g => {
       const seen = new Set();
@@ -5047,13 +5059,21 @@ const App = (() => {
           bases.add(baseRuleName(r.name));
         });
         bases.forEach(b => { baseCardCount[b] = (baseCardCount[b] || 0) + 1; });
+        const wbases = new Set();
+        (db.weapons || []).forEach(w => {
+          if (!w.special || w.special === '-') return;
+          w.special.split(',').forEach(s => { const t = s.trim(); if (t) wbases.add(baseRuleName(t)); });
+        });
+        wbases.forEach(b => { wBaseCardCount[b] = (wBaseCardCount[b] || 0) + 1; });
       });
     });
     // Hoist when a rule (by base) is on a meaningful share of the fleet (faction-wide),
     // min 3 cards so a small list doesn't send a 2-ship rule to the back.
     const glossThreshold = Math.max(3, Math.ceil(glossTotalCards * 0.4));
     const hoistedBases = new Set(Object.keys(baseCardCount).filter(b => baseCardCount[b] >= glossThreshold));
+    const hoistedWeaponBases = new Set(Object.keys(wBaseCardCount).filter(b => wBaseCardCount[b] >= glossThreshold));
     const hoistedGlossNames = Object.keys(ruleDefByName).filter(n => hoistedBases.has(baseRuleName(n))).sort();
+    const hoistedWeaponDefs = {}; // full token -> {description, page}, filled while rendering cards
 
     // Groups — dense, self-contained datasheets that read the same on screen (in the
     // preview) as on paper. System/loadout weapons merge into the weapon table.
@@ -5163,7 +5183,12 @@ const App = (() => {
         const shipRuleEntries = shipRuleEntriesAll.filter(e => !hoistedBases.has(baseRuleName(e[0])));
         const hoistedHere = shipRuleEntriesAll.filter(e => hoistedBases.has(baseRuleName(e[0])));
         const shipRuleNames = new Set(shipRuleEntriesAll.map(e => e[0]));
-        const gunRuleEntries = Object.entries(weaponSpecials).filter(([n]) => !shipRuleNames.has(n)).map(([n, e]) => [n, e.description, e.page || '']);
+        const gunRuleEntries = [];
+        Object.entries(weaponSpecials).forEach(([n, e]) => {
+          if (shipRuleNames.has(n)) return;
+          if (hoistedWeaponBases.has(baseRuleName(n))) { hoistedWeaponDefs[n] = { description: e.description, page: e.page || '' }; return; }
+          gunRuleEntries.push([n, e.description, e.page || '']);
+        });
         const renderRules = entries => entries.length
           ? `<div class="dp-rules">${entries.map(([n, d, p]) => `<span class="dp-rule"><b>${esc(n)}${p ? ` p.${esc(p)}` : ''}:</b> ${ruleHtml(d)}</span>`).join('')}</div>` : '';
         const shipRulesHtml = renderRules(shipRuleEntries);
@@ -5245,11 +5270,15 @@ const App = (() => {
 
     // Faction Rules glossary — rules shared across the fleet, defined once here
     // (the cards show the keyword + per-ship value, e.g. "Shield-3+").
-    if (hoistedGlossNames.length) {
-      const items = hoistedGlossNames.map(n =>
-        `<span class="dp-rule"><b>${esc(n)}${ruleDefByName[n].page ? ` p.${esc(ruleDefByName[n].page)}` : ''}:</b> ${ruleHtml(ruleDefByName[n].description)}</span>`
+    const glossEntries = [
+      ...hoistedGlossNames.map(n => [n, ruleDefByName[n]]),
+      ...Object.keys(hoistedWeaponDefs).sort().map(n => [n, hoistedWeaponDefs[n]])
+    ];
+    if (glossEntries.length) {
+      const items = glossEntries.map(([n, def]) =>
+        `<span class="dp-rule"><b>${esc(n)}${def.page ? ` p.${esc(def.page)}` : ''}:</b> ${ruleHtml(def.description)}</span>`
       ).join('');
-      html += `<div class="print-section dp-glossary"><div class="print-section-title">Faction Rules</div><div class="dp-rules">${items}</div></div>`;
+      html += `<div class="print-section dp-glossary"><div class="print-section-title">Rules</div><div class="dp-rules">${items}</div></div>`;
     }
 
     // Fleet totals summary
