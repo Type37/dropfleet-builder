@@ -1698,6 +1698,12 @@ h1, h2, h3, h4, h5, h6 {
 .coll-count { min-width: 20px; text-align: center; font-weight: var(--weight-bold); font-variant-numeric: tabular-nums; }
 .coll-loading, .coll-empty { color: var(--ink-muted); font-size: var(--text-sm); padding: var(--sp-md) 0; }
 
+/* Owned/spare badge on picker cards. */
+.coll-badge { display: inline-block; margin-left: 6px; font-size: var(--text-xs); font-weight: var(--weight-medium); padding: 0 6px; border-radius: var(--radius-pill); border: 1px solid currentColor; }
+.coll-badge-ok { color: #2e7d32; }
+.coll-badge-over { color: #c43c2f; }
+.coll-badge-none { color: var(--ink-faint); }
+
 .fleet-card {
   background: var(--paper);
   border: 1px solid var(--stroke);

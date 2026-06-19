@@ -678,6 +678,13 @@ const App = (() => {
   // { factionKey: { shipKey: count } }, stored locally (shared schema w/ mobile).
   let collection = {};
   let collectionFaction = 'ucm'; // active faction tab in the Collection view
+  let collectionFilterOn = false; // picker "Buildable" filter (only ships you have spare)
+  function toggleBuildableFilter() {
+    collectionFilterOn = !collectionFilterOn;
+    renderShipFilters();
+    const fg = shipDB[currentFleet && currentFleet.faction];
+    if (fg && fg.groups) renderShipSelectGrid(fg.groups, activeCategory);
+  }
   function loadCollection() {
     try { collection = JSON.parse(localStorage.getItem('dfc_collection') || '{}'); }
     catch { collection = {}; }
@@ -1775,6 +1782,23 @@ const App = (() => {
         warnings.push({ type: 'error', msg: `${info.name} is Rare, max ${rareMax} group${rareMax > 1 ? 's' : ''} at ${sizeInfo.label}` });
       }
     });
+
+    // 5b. Collection check (soft) — only when you've recorded a collection for
+    // this faction: flag fielding more of a ship than you own. Never blocks.
+    if (collection[fleet.faction] && Object.keys(collection[fleet.faction]).length) {
+      const usedByKey = {};
+      fleet.battleGroups.forEach(g => (g.ships || []).forEach(s => {
+        if (!usedByKey[s.shipKey]) usedByKey[s.shipKey] = { used: 0, cat: s.groupCategory };
+        usedByKey[s.shipKey].used++;
+      }));
+      Object.entries(usedByKey).forEach(([key, info]) => {
+        const owned = ownedCount(fleet.faction, key);
+        if (info.used > owned) {
+          const db = findShipInDB(fleet.faction, info.cat, key);
+          warnings.push({ type: 'warn', msg: `${db ? db.name : key}: fielding ${info.used}, you own ${owned}` });
+        }
+      });
+    }
 
     // 6. Group size validation (ships per group within min-max). Payloads
     // (Bioficer Cells) have no group size, so they're exempt from this check.
@@ -3660,7 +3684,11 @@ const App = (() => {
     ).join('') +
       // Misc Ships is a filter chip like the rest: on = reveal mercenaries /
       // cross-faction / other optional ships. (Also mirrored in Settings.)
-      `<button class="filter-chip ${settings.showAdditionalShips ? 'active' : ''}" onclick="App.toggleMiscShips()" title="Show mercenaries, cross-faction and other optional ships">${settings.showAdditionalShips ? CHECK_SVG : ''}Misc Ships</button>`;
+      `<button class="filter-chip ${settings.showAdditionalShips ? 'active' : ''}" onclick="App.toggleMiscShips()" title="Show mercenaries, cross-faction and other optional ships">${settings.showAdditionalShips ? CHECK_SVG : ''}Misc Ships</button>` +
+      // "Buildable" only appears when you've recorded a collection for this faction.
+      (currentFleet && collection[currentFleet.faction] && Object.keys(collection[currentFleet.faction]).length
+        ? `<button class="filter-chip ${collectionFilterOn ? 'active' : ''}" onclick="App.toggleBuildableFilter()" title="Only ships you still have spare in your collection">${collectionFilterOn ? CHECK_SVG : ''}Buildable</button>`
+        : '');
   }
 
   // The "Misc Ships" picker chip mirrors the Settings "Additional Ships" toggle:
@@ -3774,6 +3802,14 @@ const App = (() => {
       });
     }
 
+    // "Buildable" filter: only ships you still have spare in your collection.
+    if (collectionFilterOn && currentFleet && collection[currentFleet.faction]) {
+      ships = ships.filter(s => {
+        if (s.data.type === 'Famous') return true; // never hide named admirals
+        return (ownedCount(currentFleet.faction, s.key) - usedInFleet(currentFleet, s.key)) > 0;
+      });
+    }
+
     const sortDir = shipSort.dir === 'desc' ? -1 : 1;
     const shipCmp = {
       points:  (a, b) => (a.data.points || 0) - (b.data.points || 0),
@@ -3860,6 +3896,17 @@ const App = (() => {
       ? `<button class="btn btn-primary btn-sm"${famBlocked ? ` disabled title="${esc(famReason)}"` : ''} onclick="event.stopPropagation(); App.addFamousAdmiralFromPicker('${key}')">+ Add Admiral</button>`
       : `<button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addShipToGroup('${key}','${category}')">+ Add</button>`;
 
+    // Collection badge: only when you've recorded a collection for this faction.
+    let collBadge = '';
+    const cfk = currentFleet.faction;
+    if (!isFamous && collection[cfk] && Object.keys(collection[cfk]).length) {
+      const owned = ownedCount(cfk, key);
+      const spare = owned - usedInFleet(currentFleet, key);
+      const cls = owned === 0 ? 'coll-badge-none' : (spare > 0 ? 'coll-badge-ok' : 'coll-badge-over');
+      const txt = owned === 0 ? 'not owned' : `${owned} owned · ${spare} spare`;
+      collBadge = `<span class="coll-badge ${cls}" title="Your collection">${txt}</span>`;
+    }
+
     return `
     <div class="ship-card${isFamous ? ' ship-card-admiral' : ''}"${cardOnclick} title="${isFamous ? esc(data.name) : 'View full datasheet'}">
       <div class="ship-card-top">
@@ -3885,7 +3932,7 @@ const App = (() => {
         return `<span class="rule-chip">${esc(r)}</span>`;
       }).join('')}</div>` : ''}
       <div class="flex items-center justify-between" style="margin-top:auto">
-        <span class="text-caption">${data.g ? `Group: ${data.g}` : ''}</span>
+        <span class="text-caption">${data.g ? `Group: ${data.g}` : ''}${collBadge}</span>
         <div class="flex gap-xs">
           ${addBtn}
         </div>
@@ -6976,7 +7023,7 @@ const App = (() => {
   return {
     navigate, openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, collectionFaction: selectCollectionFaction, collectionAdjust, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, moveGroup, editGroupName, toggleFleetCardMenu,
-    openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
+    openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
     toggleSidebar, printFleet,
