@@ -1011,6 +1011,103 @@ const App = (() => {
     navigate('builder', fleet.id);
   }
 
+  // "Surprise me" — generate a random, roughly-legal fleet that fills out the
+  // points budget: a spread of ships across tonnages (respecting each ship's
+  // group size, Unique/Rare limits, the colossal cap and max battlegroups), plus
+  // a faction admiral with random abilities and, often, a space station. Honours
+  // a faction picked in the modal; otherwise picks one at random. NOTE: this is a
+  // fun starting point, not validated against full battlegroup-composition rules.
+  async function generateRandomFleet() {
+    const factions = ['ucm', 'phr', 'scourge', 'shaltari', 'resistance', 'bioficer'];
+    const sel = document.querySelector('.faction-pick-btn[data-selected="true"]');
+    const faction = (sel && sel.dataset.faction) || factions[Math.floor(Math.random() * factions.length)];
+    const btn = document.getElementById('btn-random-fleet');
+    if (btn) { btn.disabled = true; btn.textContent = 'Rolling…'; }
+    await ensureFactionLoaded(faction);
+    const fdb = shipDB[faction];
+    if (!fdb || !fdb.groups) { if (btn) { btn.disabled = false; btn.textContent = 'Surprise me'; } return; }
+
+    const rng = n => Math.floor(Math.random() * n);
+    const pick = a => a[rng(a.length)];
+    const sizeKey = pick(['skirmish', 'clash', 'battle']);
+    const sizeInfo = GAME_SIZES[sizeKey];
+    const limit = sizeInfo.max;
+
+    const pools = {};
+    ['light', 'medium', 'heavy', 'colossal'].forEach(c => {
+      const g = fdb.groups[c];
+      pools[c] = (g && g.ships) ? Object.entries(g.ships).map(([key, s]) => ({ key, s })) : [];
+    });
+
+    const battleGroups = [];
+    let pts = 0, colossalUsed = 0, rareUsed = 0;
+    const uniqueUsed = new Set();
+    const rareCap = Math.max(1, Math.floor(limit / 1000) + 1);
+    const weighted = ['light', 'light', 'light', 'medium', 'medium', 'medium', 'heavy', 'heavy'];
+    let guard = 0;
+    while (pts < limit * 0.9 && battleGroups.length < sizeInfo.groups && guard++ < 500) {
+      let cat = pick(weighted);
+      if (Math.random() < 0.07 && colossalUsed < sizeInfo.colossalMax && pools.colossal.length) cat = 'colossal';
+      const pool = pools[cat];
+      if (!pool || !pool.length) continue;
+      const { key, s } = pick(pool);
+      if (!s || !s.points) continue;
+      if (s.isUnique && uniqueUsed.has(key)) continue;
+      if (s.isRare && rareUsed >= rareCap) continue;
+      if (cat === 'colossal' && colossalUsed >= sizeInfo.colossalMax) continue;
+      const gmin = s.groupMin || 1, gmax = s.groupMax || 1;
+      let qty = gmin + rng(gmax - gmin + 1);
+      const loadouts = {}; let loCost = 0;
+      (s.loadoutOptions || []).forEach((lo, i) => { loadouts[i] = 0; loCost += lo.options[0]?.cost || 0; });
+      const per = (s.points || 0) + loCost;
+      if (pts + per * qty > limit) { if (pts + per * gmin > limit) continue; qty = gmin; }
+      const ships = Array.from({ length: qty }, () => ({ id: uuid(), shipKey: key, groupCategory: cat, points: per, loadouts: { ...loadouts } }));
+      battleGroups.push({ id: uuid(), name: s.name, ships });
+      pts += per * qty;
+      if (s.isUnique) uniqueUsed.add(key);
+      if (s.isRare) rareUsed++;
+      if (cat === 'colossal') colossalUsed++;
+    }
+    if (!battleGroups.length) { if (btn) { btn.disabled = false; btn.textContent = 'Surprise me'; } return; }
+
+    // Faction admiral (level within the bracket cap, affordable) with random abilities.
+    const admirals = [];
+    const admPool = (fdb.admirals || []).filter(a => !a.isFamous && (a.level || 1) <= sizeInfo.maxAdmiralLevel && (a.cost || 0) <= (limit - pts));
+    if (admPool.length) {
+      const a = pick(admPool);
+      const admObj = { admiralId: a.id, name: a.name, points: a.cost || 0, level: a.level || 1, type: 'Faction', selectedAbilities: [] };
+      // Inline the Abilities-Table pick (getAdmiralAbilityInfo needs currentFleet,
+      // which isn't set yet during generation).
+      const table = fdb.abilitiesTable || [];
+      const picks = a.abilityPicks || 1;
+      if (table.length) admObj.selectedAbilities = [...table].sort(() => Math.random() - 0.5).slice(0, Math.min(picks, table.length)).map(t => t.name);
+      admirals.push(admObj);
+      pts += a.cost || 0;
+    }
+
+    // Space station, sometimes, if there's budget.
+    let spaceStation = null;
+    const stations = fdb.spaceStations || [];
+    if (stations.length && Math.random() < 0.6) {
+      const st = pick(stations);
+      if ((st.cost || 0) <= (limit - pts)) {
+        spaceStation = { name: st.name, cost: st.cost || 0, stats: st.stats, weapons: st.weapons, specialRules: st.specialRules, systems: [] };
+      }
+    }
+
+    const fleet = {
+      id: uuid(), name: '', description: '', faction, gameSize: sizeKey,
+      pointsLimit: limit, maxGroups: sizeInfo.groups,
+      admirals, battleGroups, spaceStation,
+      createdAt: Date.now(), updatedAt: Date.now()
+    };
+    fleets.push(fleet);
+    saveFleets();
+    if (btn) { btn.disabled = false; btn.textContent = 'Surprise me'; }
+    closeModal('modal-new-fleet');
+    navigate('builder', fleet.id);
+  }
+
   // Fleet-card overflow (⋮) menu — toggle the inline options menu, closing on
   // outside click. Duplicate/Delete re-render the list so the menu clears.
   function toggleFleetCardMenu(ev, btn) {
@@ -6704,7 +6801,7 @@ const App = (() => {
 
   // ── Public API ──
   return {
-    navigate, openNewFleetModal, createFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
+    navigate, openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, moveGroup, editGroupName, toggleFleetCardMenu,
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
