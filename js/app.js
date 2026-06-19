@@ -3059,8 +3059,8 @@ const App = (() => {
   function systemOptionSummary(opt) {
     if (opt.weapons && opt.weapons.length) {
       const w = opt.weapons[0];
-      const icon = WEAPON_TYPE_ICONS[w.type] || '';
-      return `<span class="sys-opt-detail">${esc(w.arc || '')} · ${esc(w.attack || '')}/${esc(w.lock || '')}/${esc(w.damage || '')}${icon}${w.special && w.special !== '-' ? ' · ' + esc(w.special) : ''}</span>`;
+      const typeTag = w.type ? ` <span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : '';
+      return `<span class="sys-opt-detail">${esc(w.arc || '')} · ${esc(w.attack || '')}/${esc(w.lock || '')}/${esc(w.damage || '')}${typeTag}${w.special && w.special !== '-' ? ' · ' + esc(w.special) : ''}</span>`;
     }
     if (opt.loads && opt.loads.length) {
       const l = opt.loads[0];
@@ -3719,8 +3719,8 @@ const App = (() => {
     let weaponSummary = '';
     if (wpns.length > 0) {
       const parts = wpns.map(w => {
-        const typeIcon = WEAPON_TYPE_ICONS[w.type] || '';
-        return `<span class="weapon-mini" title="${esc(w.name)}: ${w.attack}A Lk${w.lock} D${w.damage} ${w.arc || ''}">${typeIcon} ${esc(w.name)}</span>`;
+        const typeTag = w.type ? `<span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span> ` : '';
+        return `<span class="weapon-mini" title="${esc(w.name)}: ${w.attack}A Lk${w.lock} D${w.damage} ${w.arc || ''}">${typeTag}${esc(w.name)}</span>`;
       });
       weaponSummary = `<div class="weapon-summary">${parts.join('')}</div>`;
     }
@@ -6279,8 +6279,7 @@ const App = (() => {
 
     const offRow = a => {
       const typeLabel = WEAPON_TYPE_LABELS[a.type] || a.type || '';
-      const typeClass = a.type ? `weapon-type-${a.type.toLowerCase()}` : '';
-      const typeIcon = WEAPON_TYPE_ICONS[a.type] || '';
+      const typeCell = a.type ? `<span class="dmg-type dmg-type-${esc(a.type)}">${esc(a.type)}</span>` : '';
       const special = (a.special && a.special !== '-') ? renderWeaponSpecialChips(a.special) : '';
       return `<tr>
         <td class="lar-name">${esc(a.name)}</td>
@@ -6288,7 +6287,7 @@ const App = (() => {
         <td>${a.attack || ''}</td>
         <td>${a.lock || ''}</td>
         <td>${a.damage || ''}</td>
-        <td class="lar-type ${typeClass}" title="${esc(typeLabel)}">${typeIcon || esc(a.type || '')}</td>
+        <td class="lar-type" title="${esc(typeLabel)}">${typeCell}</td>
         <td class="lar-special">${special}</td>
       </tr>`;
     };
