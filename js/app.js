@@ -4863,9 +4863,11 @@ const App = (() => {
   // on screen (in the preview) as on paper — so the preview is WYSIWYG and a fleet
   // fits onto a few readable pages (Army-App / Hobgoblin style), instead of reusing
   // the big on-screen stat cells whose compact form only existed inside @media print.
-  function dpStatLine(stats, mods) {
+  function dpStatLine(stats, mods, hullHtml) {
     // Same 2-col paired layout as the on-screen stat grid (renderStatGrid):
-    //   Scan | KS,  Sig | ES,  Thrust | BS,  Hull (spans both).
+    //   Scan | KS,  Sig | ES,  Thrust | BS,  then Hull spanning both.
+    // For ship cards the Hull cell is REPLACED by the actual hull tracking boxes
+    // (passed in as hullHtml); the flagship (no boxes) keeps the numeric Hull cell.
     const cell = (k, wide) => {
       const v = stats[k];
       if (v === undefined || v === null || v === 0) return '';
@@ -4875,13 +4877,13 @@ const App = (() => {
       const icon = STAT_ICONS[k] ? `<span class="dp-sc-icon">${STAT_ICONS[k]}</span>` : '';
       return `<span class="dp-statcell${wide ? ' dp-sc-wide' : ''}${mod}${none}">${icon}<span class="dp-sc-val">${esc(String(v))}</span><span class="dp-sc-lab">${esc(meta.label)}</span></span>`;
     };
-    const cells = [
+    const base = [
       cell('scan'), cell('ks'),
       cell('sig'), cell('es'),
-      cell('thrust'), cell('bs'),
-      cell('hull', true)
+      cell('thrust'), cell('bs')
     ].filter(Boolean).join('');
-    return cells ? `<div class="dp-statgrid">${cells}</div>` : '';
+    const hullEl = hullHtml ? `<div class="dp-sc-wide dp-sc-hull">${hullHtml}</div>` : cell('hull', true);
+    return (base || hullEl) ? `<div class="dp-statgrid">${base}${hullEl}</div>` : '';
   }
   // weapons: array of {name, arc, attack, lock, damage, type, special, qty?}
   function dpWeaponTable(weapons) {
@@ -5208,9 +5210,10 @@ const App = (() => {
         const thumbSrc = thumbUrl(artSrc);
         const thumbHtml = (thumbSrc && !settings.printBig) ? `<img class="dp-thumb" src="${esc(thumbSrc)}" alt="" loading="lazy" onerror="this.remove()">` : '';
 
-        const statHtml = dpStatLine(eff.stats, eff.mods);
-        const weaponsHtml = dpWeaponTable(weaponRows);
+        // Hull tracking boxes replace the numeric Hull cell inside the stat grid.
         const hullHtml = dpHullTrack(db.hull, count);
+        const statHtml = dpStatLine(eff.stats, eff.mods, hullHtml);
+        const weaponsHtml = dpWeaponTable(weaponRows);
         const abilHtml = `${loadsHtml}${sysHtml}${featHtml}${rulesHtml}`;
         const headHtml = `<div class="dp-ship-head">
             <span class="dp-name-wrap">${thumbHtml}<span class="dp-name">${esc(qtyPrefix)}${esc(name)}${tonnageLabel ? ` <span class="dp-ton">${esc(tonnageLabel)}</span>` : ''}${badge}</span></span>
@@ -5232,7 +5235,6 @@ const App = (() => {
               <div class="dp-zone dp-zone-abil">${abilZone || '<span class="dp-zone-empty">No special rules</span>'}</div>
               <div class="dp-zone dp-zone-guns">${gunZone || '<span class="dp-zone-empty">No weapons</span>'}</div>
             </div>
-            ${hullHtml}
           </div>`;
         } else {
           groupsHtml += `<div class="dp-ship">
@@ -5241,7 +5243,6 @@ const App = (() => {
             ${hoistChips}
             ${weaponsHtml}
             ${abilHtml}
-            ${hullHtml}
           </div>`;
         }
       });

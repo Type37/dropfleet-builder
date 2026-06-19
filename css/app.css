@@ -5226,6 +5226,8 @@ h1, h2, h3, h4, h5, h6 {
 .dp-statgrid { display: grid; grid-template-columns: repeat(2, minmax(46px, 78px)); gap: 2px; margin: 3px 0; width: max-content; max-width: 100%; }
 .dp-sc-wide { grid-column: 1 / -1; }
 .dp-sc-none { opacity: 0.5; }
+/* Hull tracking boxes occupy the Hull slot of the stat grid (replacing the number). */
+.dp-statgrid .dp-sc-hull .dp-hull { margin-top: 0; }
 .dp-statcell {
   display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 3px;
   border: 1px solid #d4cec2; border-radius: 2px; padding: 1px 4px; background: #f6f4ef;
