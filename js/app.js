@@ -4865,14 +4865,16 @@ const App = (() => {
   // the big on-screen stat cells whose compact form only existed inside @media print.
   const DP_STAT_ORDER =[['scan', 'Scan'], ['sig', 'Sig'], ['thrust', 'Thr'], ['hull', 'Hull'], ['es', 'ES'], ['ks', 'KS'], ['bs', 'BS']];
   function dpStatLine(stats, mods) {
+    // A tidy grid of stat cells (icon + value + label), echoing the on-screen stat
+    // grid, instead of a loose flowing line.
     const cells = DP_STAT_ORDER.map(([k, lab]) => {
       const v = stats[k];
       if (v === undefined || v === 0 || v === '-' || v === '--') return '';
       const mod = mods && mods[k] ? ' dp-stat-mod' : '';
-      const icon = STAT_ICONS[k] ? `<span class="dp-stat-icon">${STAT_ICONS[k]}</span>` : '';
-      return `<span class="dp-stat${mod}">${icon}<b>${lab}</b> ${esc(String(v))}</span>`;
+      const icon = STAT_ICONS[k] ? `<span class="dp-sc-icon">${STAT_ICONS[k]}</span>` : '';
+      return `<span class="dp-statcell${mod}">${icon}<span class="dp-sc-val">${esc(String(v))}</span><span class="dp-sc-lab">${lab}</span></span>`;
     }).filter(Boolean).join('');
-    return cells ? `<div class="dp-statline">${cells}</div>` : '';
+    return cells ? `<div class="dp-statgrid">${cells}</div>` : '';
   }
   // weapons: array of {name, arc, attack, lock, damage, type, special, qty?}
   function dpWeaponTable(weapons) {
@@ -4959,7 +4961,8 @@ const App = (() => {
             // Group all of an admiral's abilities into ONE block (innate + chosen) so
             // they read as a single unit under the admiral (law of proximity).
             let inner = '';
-            if (info.innate.length) inner += `<div class="print-admiral-ability-sublabel">Innate</div>${info.innate.map(abilityLine).join('')}`;
+            // Innate abilities just list (no header); only the chosen ones get a label.
+            if (info.innate.length) inner += info.innate.map(abilityLine).join('');
             if (chosen.length) inner += `<div class="print-admiral-ability-sublabel">Chosen Abilities</div>${chosen.map(abilityLine).join('')}`;
             if (inner) abilitiesHtml = `<div class="print-admiral-abilities">${inner}</div>`;
           }
