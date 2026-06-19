@@ -5022,12 +5022,16 @@ const App = (() => {
           featHtml = `<div class="dp-systems"><b>Deployable Feature:</b> ${esc(ship.feature)}${fStat ? ', ' + esc(fStat) : ''}</div>`;
         }
 
-        // Spelled-out rules: ship rules first, then weapon abilities (incl. High Power).
-        const ruleEntries = [];
-        (db.specialRuleDetails || []).forEach(r => { if (r.description) ruleEntries.push([r.name, r.description, r.page || '']); });
-        Object.entries(weaponSpecials).forEach(([n, e]) => { if (!ruleEntries.some(([rn]) => rn === n)) ruleEntries.push([n, e.description, e.page || '']); });
-        const rulesHtml = ruleEntries.length
-          ? `<div class="dp-rules">${ruleEntries.map(([n, d, p]) => `<span class="dp-rule"><b>${esc(n)}${p ? ` p.${esc(p)}` : ''}:</b> ${ruleHtml(d)}</span>`).join('')}</div>` : '';
+        // Spelled-out rules, split into SHIP rules and WEAPON ("gun") abilities so
+        // Big mode can keep gun abilities next to the guns and ship rules separate.
+        const shipRuleEntries = (db.specialRuleDetails || []).filter(r => r.description).map(r => [r.name, r.description, r.page || '']);
+        const shipRuleNames = new Set(shipRuleEntries.map(e => e[0]));
+        const gunRuleEntries = Object.entries(weaponSpecials).filter(([n]) => !shipRuleNames.has(n)).map(([n, e]) => [n, e.description, e.page || '']);
+        const renderRules = entries => entries.length
+          ? `<div class="dp-rules">${entries.map(([n, d, p]) => `<span class="dp-rule"><b>${esc(n)}${p ? ` p.${esc(p)}` : ''}:</b> ${ruleHtml(d)}</span>`).join('')}</div>` : '';
+        const shipRulesHtml = renderRules(shipRuleEntries);
+        const gunRulesHtml = renderRules(gunRuleEntries);
+        const rulesHtml = renderRules([...shipRuleEntries, ...gunRuleEntries]); // combined (normal mode)
 
         const tonnageLabel = tonLabel(db.tonnage) || CATEGORY_LABELS[ship.groupCategory] || '';
         // 'Unique' kept (one-of-a-kind is informative on the sheet); 'Rare' is a
@@ -5050,15 +5054,19 @@ const App = (() => {
           </div>`;
 
         if (settings.printBig) {
-          // "Big mode": one wide rectangle per ship — [art + stats] | guns | abilities,
-          // with the hull track full-width underneath. Roomy, easy to read across a table.
+          // "Big mode": one wide rectangle per ship, ordered by how often you need it:
+          //   [art + stats]  |  abilities (ship rules + systems/features)  |  guns & gun abilities.
+          // Stats are always needed, ship rules often, weapons only on activation.
+          // Hull track spans full-width underneath.
           const bigArt = artSrc ? `<img class="dp-big-art" src="${esc(artSrc)}" alt="" loading="lazy" onerror="this.remove()">` : '';
+          const abilZone = `${shipRulesHtml}${sysHtml}${featHtml}`;
+          const gunZone = `${weaponsHtml}${loadsHtml}${gunRulesHtml}`;
           groupsHtml += `<div class="dp-ship dp-ship-big">
             ${headHtml}
             <div class="dp-ship-body">
               <div class="dp-zone dp-zone-vis">${bigArt}${statHtml}</div>
-              <div class="dp-zone dp-zone-guns">${weaponsHtml || '<span class="dp-zone-empty">No weapons</span>'}</div>
-              <div class="dp-zone dp-zone-abil">${abilHtml || '<span class="dp-zone-empty">No special rules</span>'}</div>
+              <div class="dp-zone dp-zone-abil">${abilZone || '<span class="dp-zone-empty">No special rules</span>'}</div>
+              <div class="dp-zone dp-zone-guns">${gunZone || '<span class="dp-zone-empty">No weapons</span>'}</div>
             </div>
             ${hullHtml}
           </div>`;

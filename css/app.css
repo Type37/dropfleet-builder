@@ -4145,24 +4145,28 @@ h1, h2, h3, h4, h5, h6 {
 .size-grid .game-size-name { font-size: var(--text-sm); }
 .size-grid .game-size-details { font-size: var(--text-xs); line-height: 1.35; }
 .game-size-sub { opacity: 0.85; }
-.new-fleet-points-row {
-  position: relative; display: inline-block; margin-top: var(--sp-md);
-}
-.new-fleet-points-row #new-fleet-points { width: 220px; max-width: 100%; }
-.new-fleet-points-row .float-label {
+/* Floating-label field (New Fleet modal: Fleet Name, Description, Points limit).
+   Input first, label second (adjacent sibling). Label sits centered in the box,
+   then shrinks and lifts to the top border on focus or when the field has a value. */
+.float-field { position: relative; }
+.float-field > .form-input { width: 100%; }
+.float-field > .float-label {
   position: absolute; left: var(--sp-md); top: 50%;
   transform: translateY(-50%); transform-origin: left center;
   font-family: var(--font-body); font-size: var(--text-base);
   line-height: 1.1; min-height: 0; white-space: nowrap;
+  max-width: calc(100% - var(--sp-lg)); overflow: hidden; text-overflow: ellipsis;
   color: var(--ink-faint); pointer-events: none;
   background: var(--paper); padding: 0 4px;
   transition: transform var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
 }
-.new-fleet-points-row #new-fleet-points:focus + .float-label,
-.new-fleet-points-row #new-fleet-points:not(:placeholder-shown) + .float-label {
+.float-field > .form-input:focus + .float-label,
+.float-field > .form-input:not(:placeholder-shown) + .float-label {
   transform: translateY(-50%) translateY(-19px) scale(0.82);
   color: var(--navy);
 }
+.new-fleet-points-row { display: inline-block; margin-top: var(--sp-md); }
+.new-fleet-points-row #new-fleet-points { width: 220px; max-width: 100%; }
 .new-fleet-points-hint { font-size: var(--text-xs); color: var(--ink-muted); }
 
 .faction-pick-desc {
@@ -5329,7 +5333,8 @@ h1, h2, h3, h4, h5, h6 {
    track full-width underneath. Always one column (set in JS). */
 .pf-big .dp-ship { border-left-width: 4px; padding: 6px 10px; }
 .pf-big .dp-ship-body {
-  display: grid; grid-template-columns: 150px minmax(0, 1.5fr) minmax(0, 1.15fr);
+  /* [art + stats] | abilities | guns & gun abilities — guns widest (weapon table). */
+  display: grid; grid-template-columns: 150px minmax(0, 1.05fr) minmax(0, 1.6fr);
   gap: 12px; align-items: start; margin-top: 5px;
 }
 .pf-big .dp-zone { min-width: 0; }
