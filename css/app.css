@@ -2356,46 +2356,39 @@ h1, h2, h3, h4, h5, h6 {
   border-bottom: 1px solid var(--stroke-light);
 }
 
+/* One aligned table (offensive assets + fighters share the same columns). */
 .launch-ref-table {
-  display: flex;
-  flex-direction: column;
-}
-
-.launch-ref-table + .launch-ref-table {
-  border-top: 1px solid var(--stroke-light);
-}
-
-.launch-ref-row {
-  display: flex;
-  align-items: center;
-  padding: var(--sp-xs) var(--sp-md);
-  border-bottom: 1px solid var(--stroke-light);
+  width: 100%;
+  border-collapse: collapse;
   font-family: var(--font-stat);
   font-size: var(--text-sm);
-  gap: var(--sp-xs);
 }
-
-.launch-ref-row:last-child {
-  border-bottom: none;
-}
-
-.launch-ref-row-header {
+.launch-ref-table th {
+  background: var(--warm);
+  color: var(--ink-muted);
   font-weight: var(--weight-bold);
   font-size: var(--text-xs);
-  text-transform: none;
-  letter-spacing: 0.04em;
-  color: var(--ink-muted);
-  background: var(--warm);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  text-align: center;
+  padding: var(--sp-xs) var(--sp-sm);
+  white-space: nowrap;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
 }
-
-.launch-ref-col { flex-shrink: 0; }
-.launch-ref-col-name { flex: 1 1 auto; min-width: 100px; font-weight: var(--weight-bold); color: var(--ink); }
-.launch-ref-col-thrust { width: 52px; text-align: center; }
-.launch-ref-col-att { width: 32px; text-align: center; }
-.launch-ref-col-lock { width: 32px; text-align: center; }
-.launch-ref-col-dmg { width: 32px; text-align: center; }
-.launch-ref-col-type { width: 32px; text-align: center; }
-.launch-ref-col-special { flex: 1 1 auto; display: flex; flex-wrap: wrap; gap: 3px; }
+.launch-ref-table td {
+  text-align: center;
+  padding: var(--sp-xs) var(--sp-sm);
+  border-top: 1px solid var(--stroke-light);
+  vertical-align: middle;
+}
+.launch-ref-table .lar-name { text-align: left; font-weight: var(--weight-bold); color: var(--ink); white-space: nowrap; }
+.launch-ref-table .lar-type svg { vertical-align: middle; }
+.launch-ref-table .lar-special { text-align: left; }
+.launch-ref-table .lar-special .weapon-special-chip { vertical-align: middle; }
+/* Tighter for print + the dp- print sheet. */
+.dp-groups + .launch-ref .launch-ref-table th,
+.dp-groups + .launch-ref .launch-ref-table td { padding: 1px 6px; }
+.pf-inksaver .launch-ref-table th { background: #fff !important; color: #000 !important; border: 1px solid #999; }
 
 /* Loadout selectors */
 .loadout-selector {

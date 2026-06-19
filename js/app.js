@@ -6188,63 +6188,44 @@ const App = (() => {
   function renderLaunchAssetReference(assets) {
     if (!assets || assets.length === 0) return '';
 
-    // Separate fighters (no attack/damage) from offensive assets
+    // One aligned table: offensive assets carry full stats; fighters (defensive)
+    // leave the combat columns blank and show Close Protection in the Special col,
+    // so every column lines up under one set of headers.
     const offensive = assets.filter(a => a.attack);
     const defensive = assets.filter(a => a.ksReroll !== undefined && !a.attack);
+    if (!offensive.length && !defensive.length) return '';
 
-    let html = '<div class="launch-ref">';
-    html += '<div class="launch-ref-header">Launch Asset Reference</div>';
+    const offRow = a => {
+      const typeLabel = WEAPON_TYPE_LABELS[a.type] || a.type || '';
+      const typeClass = a.type ? `weapon-type-${a.type.toLowerCase()}` : '';
+      const typeIcon = WEAPON_TYPE_ICONS[a.type] || '';
+      const special = (a.special && a.special !== '-') ? renderWeaponSpecialChips(a.special) : '';
+      return `<tr>
+        <td class="lar-name">${esc(a.name)}</td>
+        <td>${esc(a.thrust || '')}</td>
+        <td>${a.attack || ''}</td>
+        <td>${a.lock || ''}</td>
+        <td>${a.damage || ''}</td>
+        <td class="lar-type ${typeClass}" title="${esc(typeLabel)}">${typeIcon || esc(a.type || '')}</td>
+        <td class="lar-special">${special}</td>
+      </tr>`;
+    };
+    const defRow = a => `<tr>
+      <td class="lar-name">${esc(a.name)}</td>
+      <td>${esc(a.thrust || '')}</td>
+      <td></td><td></td><td></td><td></td>
+      <td class="lar-special">${closeProtectionChip(a.ksReroll)}</td>
+    </tr>`;
 
-    // Offensive assets table (torpedoes, bombers, mines)
-    if (offensive.length > 0) {
-      html += `<div class="launch-ref-table">
-        <div class="launch-ref-row launch-ref-row-header">
-          <span class="launch-ref-col launch-ref-col-name">Asset</span>
-          <span class="launch-ref-col launch-ref-col-thrust">Thrust</span>
-          <span class="launch-ref-col launch-ref-col-att">Att</span>
-          <span class="launch-ref-col launch-ref-col-lock">Lk</span>
-          <span class="launch-ref-col launch-ref-col-dmg">Dmg</span>
-          <span class="launch-ref-col launch-ref-col-type">Type</span>
-          <span class="launch-ref-col launch-ref-col-special">Special</span>
-        </div>`;
-      offensive.forEach(a => {
-        const typeLabel = WEAPON_TYPE_LABELS[a.type] || a.type || '';
-        const typeClass = a.type ? `weapon-type-${a.type.toLowerCase()}` : '';
-        const typeIcon = WEAPON_TYPE_ICONS[a.type] || '';
-        const special = a.special && a.special !== '-' ? a.special : '';
-        html += `<div class="launch-ref-row">
-          <span class="launch-ref-col launch-ref-col-name">${esc(a.name)}</span>
-          <span class="launch-ref-col launch-ref-col-thrust">${esc(a.thrust)}</span>
-          <span class="launch-ref-col launch-ref-col-att">${a.attack}</span>
-          <span class="launch-ref-col launch-ref-col-lock">${a.lock}</span>
-          <span class="launch-ref-col launch-ref-col-dmg">${a.damage}</span>
-          <span class="launch-ref-col launch-ref-col-type ${typeClass}" title="${typeLabel}">${typeIcon || a.type || ''}</span>
-          <span class="launch-ref-col launch-ref-col-special">${special ? renderWeaponSpecialChips(special) : ''}</span>
-        </div>`;
-      });
-      html += '</div>';
-    }
-
-    // Fighters table (different stat line — thrust + KS reroll)
-    if (defensive.length > 0) {
-      html += `<div class="launch-ref-table">
-        <div class="launch-ref-row launch-ref-row-header">
-          <span class="launch-ref-col launch-ref-col-name">Asset</span>
-          <span class="launch-ref-col launch-ref-col-thrust">Thrust</span>
-          <span class="launch-ref-col launch-ref-col-special">Close Protection</span>
-        </div>`;
-      defensive.forEach(a => {
-        html += `<div class="launch-ref-row">
-          <span class="launch-ref-col launch-ref-col-name">${esc(a.name)}</span>
-          <span class="launch-ref-col launch-ref-col-thrust">${esc(a.thrust)}</span>
-          <span class="launch-ref-col launch-ref-col-special">${closeProtectionChip(a.ksReroll)}</span>
-        </div>`;
-      });
-      html += '</div>';
-    }
-
-    html += '</div>';
-    return html;
+    return `<div class="launch-ref">
+      <div class="launch-ref-header">Launch Asset Reference</div>
+      <table class="launch-ref-table">
+        <thead><tr>
+          <th class="lar-name">Asset</th><th>Thrust</th><th>Att</th><th>Lk</th><th>Dmg</th><th>Type</th><th class="lar-special">Special</th>
+        </tr></thead>
+        <tbody>${offensive.map(offRow).join('')}${defensive.map(defRow).join('')}</tbody>
+      </table>
+    </div>`;
   }
 
   // ── Helpers ──
