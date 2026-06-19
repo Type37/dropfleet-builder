@@ -4863,7 +4863,7 @@ const App = (() => {
   // on screen (in the preview) as on paper — so the preview is WYSIWYG and a fleet
   // fits onto a few readable pages (Army-App / Hobgoblin style), instead of reusing
   // the big on-screen stat cells whose compact form only existed inside @media print.
-  const DP_STAT_ORDER = [['scan', 'Scan'], ['sig', 'Sig'], ['thrust', 'Thr'], ['hull', 'Hull'], ['es', 'ES'], ['ks', 'KS'], ['bs', 'BS']];
+  const DP_STAT_ORDER =[['scan', 'Scan'], ['sig', 'Sig'], ['thrust', 'Thr'], ['hull', 'Hull'], ['es', 'ES'], ['ks', 'KS'], ['bs', 'BS']];
   function dpStatLine(stats, mods) {
     const cells = DP_STAT_ORDER.map(([k, lab]) => {
       const v = stats[k];
@@ -5019,6 +5019,39 @@ const App = (() => {
       });
     }
 
+    // Faction-wide rules glossary: spell a ship special rule out ONCE at the end
+    // instead of on every card when it's shared across the fleet (e.g. Shaltari
+    // "Shield"). A rule on a single card stays in place; the card always keeps the
+    // keyword (with its per-ship value, e.g. "Shield-3+") so you know it has it.
+    // Decide by BASE name (Shield-3+/4+/5+ all count as "Shield") so a faction-wide
+    // rule is recognised even when its value varies; but keep each value-variant
+    // verbatim in the glossary (no text rewriting). Cards show the value chip.
+    const baseRuleName = nm => String(nm).replace(/[-\s](?:\d+\+?|X|[0-9]+x\S*)$/, '').trim();
+    const baseCardCount = {}, ruleDefByName = {};
+    let glossTotalCards = 0;
+    f.battleGroups.forEach(g => {
+      const seen = new Set();
+      g.ships.forEach(ship => {
+        const k = `${ship.shipKey}:${ship.groupCategory}:${JSON.stringify(ship.loadouts || {})}:${JSON.stringify(ship.systems || [])}:${ship.feature || ''}`;
+        if (seen.has(k)) return; seen.add(k);
+        glossTotalCards++;
+        const db = findShipInDB(f.faction, ship.groupCategory, ship.shipKey);
+        if (!db) return;
+        const bases = new Set();
+        (db.specialRuleDetails || []).forEach(r => {
+          if (!r.description) return;
+          ruleDefByName[r.name] = { description: r.description, page: r.page || '' };
+          bases.add(baseRuleName(r.name));
+        });
+        bases.forEach(b => { baseCardCount[b] = (baseCardCount[b] || 0) + 1; });
+      });
+    });
+    // Hoist when a rule (by base) is on a meaningful share of the fleet (faction-wide),
+    // min 3 cards so a small list doesn't send a 2-ship rule to the back.
+    const glossThreshold = Math.max(3, Math.ceil(glossTotalCards * 0.4));
+    const hoistedBases = new Set(Object.keys(baseCardCount).filter(b => baseCardCount[b] >= glossThreshold));
+    const hoistedGlossNames = Object.keys(ruleDefByName).filter(n => hoistedBases.has(baseRuleName(n))).sort();
+
     // Groups — dense, self-contained datasheets that read the same on screen (in the
     // preview) as on paper. System/loadout weapons merge into the weapon table.
     const allLaunchAssetNames = new Set();
@@ -5121,14 +5154,20 @@ const App = (() => {
 
         // Spelled-out rules, split into SHIP rules and WEAPON ("gun") abilities so
         // Big mode can keep gun abilities next to the guns and ship rules separate.
-        const shipRuleEntries = (db.specialRuleDetails || []).filter(r => r.description).map(r => [r.name, r.description, r.page || '']);
-        const shipRuleNames = new Set(shipRuleEntries.map(e => e[0]));
+        // Faction-wide ship rules (e.g. Shield) are hoisted to the end glossary: the
+        // card shows just the keyword (with its per-ship value) instead of the text.
+        const shipRuleEntriesAll = (db.specialRuleDetails || []).filter(r => r.description).map(r => [r.name, r.description, r.page || '']);
+        const shipRuleEntries = shipRuleEntriesAll.filter(e => !hoistedBases.has(baseRuleName(e[0])));
+        const hoistedHere = shipRuleEntriesAll.filter(e => hoistedBases.has(baseRuleName(e[0])));
+        const shipRuleNames = new Set(shipRuleEntriesAll.map(e => e[0]));
         const gunRuleEntries = Object.entries(weaponSpecials).filter(([n]) => !shipRuleNames.has(n)).map(([n, e]) => [n, e.description, e.page || '']);
         const renderRules = entries => entries.length
           ? `<div class="dp-rules">${entries.map(([n, d, p]) => `<span class="dp-rule"><b>${esc(n)}${p ? ` p.${esc(p)}` : ''}:</b> ${ruleHtml(d)}</span>`).join('')}</div>` : '';
         const shipRulesHtml = renderRules(shipRuleEntries);
         const gunRulesHtml = renderRules(gunRuleEntries);
         const rulesHtml = renderRules([...shipRuleEntries, ...gunRuleEntries]); // combined (normal mode)
+        const hoistChips = hoistedHere.length
+          ? `<div class="dp-hoist-chips">${hoistedHere.map(([n]) => `<span class="dp-hoist-chip">${esc(n)}</span>`).join('')}</div>` : '';
 
         const tonnageLabel = tonLabel(db.tonnage) || CATEGORY_LABELS[ship.groupCategory] || '';
         // 'Unique' kept (one-of-a-kind is informative on the sheet); 'Rare' is a
@@ -5156,7 +5195,7 @@ const App = (() => {
           // Stats are always needed, ship rules often, weapons only on activation.
           // Hull track spans full-width underneath.
           const bigArt = artSrc ? `<img class="dp-big-art" src="${esc(artSrc)}" alt="" loading="lazy" onerror="this.remove()">` : '';
-          const abilZone = `${shipRulesHtml}${sysHtml}${featHtml}`;
+          const abilZone = `${hoistChips}${shipRulesHtml}${sysHtml}${featHtml}`;
           const gunZone = `${weaponsHtml}${loadsHtml}${gunRulesHtml}`;
           groupsHtml += `<div class="dp-ship dp-ship-big">
             ${headHtml}
@@ -5171,6 +5210,7 @@ const App = (() => {
           groupsHtml += `<div class="dp-ship">
             ${headHtml}
             ${statHtml}
+            ${hoistChips}
             ${weaponsHtml}
             ${abilHtml}
             ${hullHtml}
@@ -5198,6 +5238,15 @@ const App = (() => {
       if (relevantAssets.length > 0) {
         html += renderLaunchAssetReference(relevantAssets);
       }
+    }
+
+    // Faction Rules glossary — rules shared across the fleet, defined once here
+    // (the cards show the keyword + per-ship value, e.g. "Shield-3+").
+    if (hoistedGlossNames.length) {
+      const items = hoistedGlossNames.map(n =>
+        `<span class="dp-rule"><b>${esc(n)}${ruleDefByName[n].page ? ` p.${esc(ruleDefByName[n].page)}` : ''}:</b> ${ruleHtml(ruleDefByName[n].description)}</span>`
+      ).join('');
+      html += `<div class="print-section dp-glossary"><div class="print-section-title">Faction Rules</div><div class="dp-rules">${items}</div></div>`;
     }
 
     // Fleet totals summary

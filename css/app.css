@@ -5316,6 +5316,19 @@ h1, h2, h3, h4, h5, h6 {
 .pf-inksaver .dp-flagship { background: #fff !important; border-color: #777; }
 .pf-inksaver .dp-statline, .pf-inksaver .dp-rules,
 .pf-inksaver .dp-loads, .pf-inksaver .dp-systems { color: #000; }
+/* Hoisted faction-rule keyword chips on a card (full text is in the end glossary). */
+.dp-hoist-chips { display: flex; flex-wrap: wrap; gap: 3px; margin: 3px 0; }
+.dp-hoist-chip {
+  font-size: 7.5pt; font-weight: 700; color: #1b3a5c;
+  border: 1px solid #c9c2b4; border-radius: 3px; padding: 0 5px; background: #f3f1ec;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+/* Faction Rules glossary at the end of the sheet. */
+.dp-glossary { break-inside: avoid; margin-top: 8px; border-top: 1.5px solid #1b3a5c; padding-top: 4px; }
+.pf-comfortable .dp-hoist-chip { font-size: 8pt; }
+.pf-inksaver .dp-hoist-chip { background: #fff !important; color: #000 !important; border-color: #999; }
+.pf-inksaver .dp-glossary { border-top-color: #000; }
+
 .pf-inksaver .dp-thumb { filter: grayscale(1) contrast(1.05); }
 .pf-inksaver .dp-stat-icon, .pf-inksaver .dp-arc { color: #000; }
 .pf-inksaver .dp-stat-icon svg, .pf-inksaver .dp-arc svg { filter: grayscale(1); }
