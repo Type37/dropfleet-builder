@@ -5118,7 +5118,6 @@ const App = (() => {
     if (f.admirals && f.admirals.length > 0) {
       const factionAdmirals = factionInfo ? factionInfo.admirals || [] : [];
       html += `<div class="print-section">
-        <div class="print-section-title">Admiral${f.admirals.length > 1 ? 's' : ''}</div>
         ${f.admirals.map(a => {
           const info = getAdmiralAbilityInfo(a);
           const abilityLine = ab => `<div class="print-admiral-ability"><span class="print-ability-name">${esc(ab.name)}</span>${ab.cost ? ` <span class="print-ability-cost">${esc(ab.cost)}</span>` : ''}${ab.effect ? `, ${esc(ab.effect)}` : ''}</div>`;
