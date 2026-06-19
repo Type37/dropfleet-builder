@@ -5221,9 +5221,18 @@ h1, h2, h3, h4, h5, h6 {
 .dp-pts { font-size: 8.5pt; font-weight: 700; color: #1b3a5c; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .dp-each { font-weight: 400; color: #777; font-size: 7.5pt; }
 
-.dp-statline { display: flex; flex-wrap: wrap; gap: 1px 10px; margin: 3px 0; font-size: 8.7pt; color: #1c1a17; }
+.dp-statline { display: flex; flex-wrap: wrap; gap: 2px 9px; margin: 3px 0; font-size: 8.7pt; color: #1c1a17; }
+.dp-stat { display: inline-flex; align-items: center; gap: 3px; }
 .dp-stat b { font-weight: 700; color: #666; font-size: 7.3pt; text-transform: uppercase; letter-spacing: 0.02em; }
 .dp-stat-mod, .dp-stat-mod b { color: #2e7d32; font-weight: 700; }
+.dp-stat-icon { display: inline-flex; color: #1b3a5c; }
+.dp-stat-icon svg { width: 11px; height: 11px; display: block; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.dp-stat-mod .dp-stat-icon { color: #2e7d32; }
+/* Firing-arc icon in the print weapon table (the little arc diagram + its label). */
+.dp-w-arc { white-space: nowrap; }
+.dp-arc { display: inline-flex; align-items: center; justify-content: center; gap: 2px; color: #1b3a5c; }
+.dp-arc svg { width: 12px; height: 12px; display: block; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.dp-arc-lab { font-size: 6.8pt; color: #555; }
 
 .dp-weapons { width: 100%; border-collapse: collapse; margin: 3px 0; font-size: 8pt; }
 .dp-weapons th {
@@ -5244,7 +5253,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .dp-hull { display: flex; align-items: center; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
 .dp-hull-lab { font-size: 7pt; font-weight: 700; text-transform: uppercase; color: #777; }
-.dp-hull-boxes { display: inline-flex; flex-wrap: wrap; gap: 1.5px; }
+.dp-hull-boxes { display: inline-flex; flex-wrap: wrap; gap: 2px 6px; }
+.dp-hull-grp { display: inline-flex; gap: 1.5px; }
 .dp-box {
   width: 9px; height: 9px; border: 1px solid #777; border-radius: 1px; display: inline-block;
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
@@ -5309,6 +5319,9 @@ h1, h2, h3, h4, h5, h6 {
 .pf-inksaver .dp-statline, .pf-inksaver .dp-rules,
 .pf-inksaver .dp-loads, .pf-inksaver .dp-systems { color: #000; }
 .pf-inksaver .dp-thumb { filter: grayscale(1) contrast(1.05); }
+.pf-inksaver .dp-stat-icon, .pf-inksaver .dp-arc { color: #000; }
+.pf-inksaver .dp-stat-icon svg, .pf-inksaver .dp-arc svg { filter: grayscale(1); }
+.pf-comfortable .dp-stat-icon svg, .pf-comfortable .dp-arc svg { width: 12.5px; height: 12.5px; }
 
 /* ── Fleet Overview (no group selected) ──────────────────────── */
 .fleet-overview {

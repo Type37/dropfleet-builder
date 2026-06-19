@@ -4772,7 +4772,8 @@ const App = (() => {
       const v = stats[k];
       if (v === undefined || v === 0 || v === '-' || v === '--') return '';
       const mod = mods && mods[k] ? ' dp-stat-mod' : '';
-      return `<span class="dp-stat${mod}"><b>${lab}</b> ${esc(String(v))}</span>`;
+      const icon = STAT_ICONS[k] ? `<span class="dp-stat-icon">${STAT_ICONS[k]}</span>` : '';
+      return `<span class="dp-stat${mod}">${icon}<b>${lab}</b> ${esc(String(v))}</span>`;
     }).filter(Boolean).join('');
     return cells ? `<div class="dp-statline">${cells}</div>` : '';
   }
@@ -4783,7 +4784,10 @@ const App = (() => {
       const dmg = `${esc(w.damage || '')}${w.type ? ' ' + esc(w.type) : ''}`;
       const special = (w.special && w.special !== '-') ? esc(w.special) : '';
       const nm = `${w.qty > 1 ? w.qty + '× ' : ''}${esc(w.name || '')}`;
-      return `<tr><td class="dp-w-name">${nm}</td><td>${esc(w.arc || '')}</td><td>${esc(w.attack || '')}</td><td>${esc(w.lock || '')}</td><td>${dmg}</td><td class="dp-w-spec">${special}</td></tr>`;
+      const arc = ARC_ICONS[w.arc]
+        ? `<span class="dp-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${ARC_ICONS[w.arc]}<span class="dp-arc-lab">${esc(w.arc || '')}</span></span>`
+        : esc(w.arc || '');
+      return `<tr><td class="dp-w-name">${nm}</td><td class="dp-w-arc">${arc}</td><td>${esc(w.attack || '')}</td><td>${esc(w.lock || '')}</td><td>${dmg}</td><td class="dp-w-spec">${special}</td></tr>`;
     }).join('');
     return `<table class="dp-weapons"><thead><tr><th class="dp-w-name">Weapon</th><th>Arc</th><th>Att</th><th>Lk</th><th>Dmg</th><th class="dp-w-spec">Special</th></tr></thead><tbody>${body}</tbody></table>`;
   }
@@ -4791,7 +4795,11 @@ const App = (() => {
     const h = parseInt(hull, 10);
     if (!h || h <= 0) return '';
     const crip = Math.ceil(h / 2);
-    const track = (label) => `<div class="dp-hull"><span class="dp-hull-lab">${esc(label)}</span><span class="dp-hull-boxes">${Array.from({ length: h }, (_, i) => `<span class="dp-box${i + 1 === crip ? ' dp-box-crip' : ''}"></span>`).join('')}</span></div>`;
+    // Boxes grouped in 5s (with a gap between groups) so damage is easy to count.
+    const boxes = Array.from({ length: h }, (_, i) => `<span class="dp-box${i + 1 === crip ? ' dp-box-crip' : ''}"></span>`);
+    let grouped = '';
+    for (let i = 0; i < boxes.length; i += 5) grouped += `<span class="dp-hull-grp">${boxes.slice(i, i + 5).join('')}</span>`;
+    const track = (label) => `<div class="dp-hull"><span class="dp-hull-lab">${esc(label)}</span><span class="dp-hull-boxes">${grouped}</span></div>`;
     if (count <= 1) return track('Hull');
     return Array.from({ length: count }, (_, i) => track('#' + (i + 1))).join('');
   }
