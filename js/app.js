@@ -825,7 +825,7 @@ const App = (() => {
     document.getElementById('new-fleet-name').value = '';
     document.getElementById('new-fleet-desc').value = '';
     const ptsInput = document.getElementById('new-fleet-points');
-    if (ptsInput) { ptsInput.value = ''; ptsInput.placeholder = `${(GAME_SIZES.clash || {}).max || ''} (bracket max)`; }
+    if (ptsInput) ptsInput.value = '';   // floating label; blank = bracket default
     renderFactionPicker();
     renderSizePicker();
     openModal('modal-new-fleet');
@@ -916,10 +916,6 @@ const App = (() => {
       const radio = selected.querySelector('input[type="radio"]');
       if (radio) radio.checked = true;
     }
-    // Reflect the new bracket maximum in the custom points-limit placeholder.
-    const ptsInput = document.getElementById('new-fleet-points');
-    const max = (GAME_SIZES[key] || {}).max;
-    if (ptsInput && max) ptsInput.placeholder = `${max} (bracket max)`;
   }
 
   function openGameSizeChanger() {

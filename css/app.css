@@ -4146,10 +4146,23 @@ h1, h2, h3, h4, h5, h6 {
 .size-grid .game-size-details { font-size: var(--text-xs); line-height: 1.35; }
 .game-size-sub { opacity: 0.85; }
 .new-fleet-points-row {
-  display: flex; align-items: center; gap: var(--sp-sm);
-  margin-top: var(--sp-sm); flex-wrap: wrap;
+  position: relative; display: inline-block; margin-top: var(--sp-md);
 }
-.new-fleet-points-row #new-fleet-points { max-width: 150px; }
+.new-fleet-points-row #new-fleet-points { width: 220px; max-width: 100%; }
+.new-fleet-points-row .float-label {
+  position: absolute; left: var(--sp-md); top: 50%;
+  transform: translateY(-50%); transform-origin: left center;
+  font-family: var(--font-body); font-size: var(--text-base);
+  line-height: 1.1; min-height: 0; white-space: nowrap;
+  color: var(--ink-faint); pointer-events: none;
+  background: var(--paper); padding: 0 4px;
+  transition: transform var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+}
+.new-fleet-points-row #new-fleet-points:focus + .float-label,
+.new-fleet-points-row #new-fleet-points:not(:placeholder-shown) + .float-label {
+  transform: translateY(-50%) translateY(-19px) scale(0.82);
+  color: var(--navy);
+}
 .new-fleet-points-hint { font-size: var(--text-xs); color: var(--ink-muted); }
 
 .faction-pick-desc {
