@@ -4824,8 +4824,9 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: none;
   letter-spacing: 0.01em;
   color: #8a6d1e;
-  margin-top: 2pt;
+  margin-top: 4pt;
 }
+.print-admiral-abilities .print-admiral-ability-sublabel:first-child { margin-top: 0; }
 .print-admiral-ability {
   font-size: 8pt;
   line-height: 1.35;
@@ -5322,6 +5323,31 @@ h1, h2, h3, h4, h5, h6 {
 .pf-inksaver .dp-stat-icon, .pf-inksaver .dp-arc { color: #000; }
 .pf-inksaver .dp-stat-icon svg, .pf-inksaver .dp-arc svg { filter: grayscale(1); }
 .pf-comfortable .dp-stat-icon svg, .pf-comfortable .dp-arc svg { width: 12.5px; height: 12.5px; }
+
+/* ── Big mode ────────────────────────────────────────────────────
+   One wide rectangle per ship: [art + stats] | guns | abilities, with the hull
+   track full-width underneath. Always one column (set in JS). */
+.pf-big .dp-ship { border-left-width: 4px; padding: 6px 10px; }
+.pf-big .dp-ship-body {
+  display: grid; grid-template-columns: 150px minmax(0, 1.5fr) minmax(0, 1.15fr);
+  gap: 12px; align-items: start; margin-top: 5px;
+}
+.pf-big .dp-zone { min-width: 0; }
+.pf-big .dp-zone-vis { display: flex; flex-direction: column; gap: 5px; }
+.pf-big .dp-big-art {
+  width: 100%; max-height: 118px; object-fit: contain;
+  border: 1px solid #ccc; border-radius: 3px; background: #fff;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.pf-big .dp-zone-vis .dp-statline { margin: 0; }
+.pf-big .dp-zone-guns .dp-weapons { margin: 0; }
+.pf-big .dp-zone-abil .dp-rules,
+.pf-big .dp-zone-abil .dp-loads:first-child,
+.pf-big .dp-zone-abil .dp-systems:first-child { margin-top: 0; }
+.pf-big .dp-hull { margin-top: 6px; border-top: 1px dotted #ccc; padding-top: 4px; }
+.pf-big .dp-zone-empty { font-size: 8pt; color: #999; font-style: italic; }
+/* Stack to a single column on very narrow paper / preview overflow. */
+@media (max-width: 560px) { .pf-big .dp-ship-body { grid-template-columns: 1fr; } }
 
 /* ── Fleet Overview (no group selected) ──────────────────────── */
 .fleet-overview {

@@ -29,7 +29,7 @@ const App = (() => {
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: false };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: false, printBig: false };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -4829,7 +4829,8 @@ const App = (() => {
       : '';
 
     const densityClass = settings.printDensity === 'compact' ? 'pf-compact' : 'pf-comfortable';
-    let html = `<div class="print-fleet${settings.print2col ? ' print-2col' : ''} ${densityClass}${settings.printInk ? ' pf-inksaver' : ''}" data-fleet-name="${esc(f.name)}">
+    const twoCol = settings.print2col && !settings.printBig; // big mode is inherently one wide column
+    let html = `<div class="print-fleet${twoCol ? ' print-2col' : ''} ${densityClass}${settings.printInk ? ' pf-inksaver' : ''}${settings.printBig ? ' pf-big' : ''}" data-fleet-name="${esc(f.name)}">
       <div class="print-header">
         <div class="print-header-top">
           ${fIcon ? `<img src="${fIcon}" alt="" class="print-faction-icon">` : ''}
@@ -4858,12 +4859,12 @@ const App = (() => {
           if (info) {
             const chosen = (a.selectedAbilities || [])
               .map(n => info.table.find(t => t.name === n)).filter(Boolean);
-            if (info.innate.length) {
-              abilitiesHtml += `<div class="print-admiral-abilities">${info.innate.map(abilityLine).join('')}</div>`;
-            }
-            if (chosen.length) {
-              abilitiesHtml += `<div class="print-admiral-abilities"><div class="print-admiral-ability-sublabel">Chosen Abilities</div>${chosen.map(abilityLine).join('')}</div>`;
-            }
+            // Group all of an admiral's abilities into ONE block (innate + chosen) so
+            // they read as a single unit under the admiral (law of proximity).
+            let inner = '';
+            if (info.innate.length) inner += `<div class="print-admiral-ability-sublabel">Innate</div>${info.innate.map(abilityLine).join('')}`;
+            if (chosen.length) inner += `<div class="print-admiral-ability-sublabel">Chosen Abilities</div>${chosen.map(abilityLine).join('')}`;
+            if (inner) abilitiesHtml = `<div class="print-admiral-abilities">${inner}</div>`;
           }
           // Famous admirals: print the flagship datasheet (stats + weapons).
           let flagshipHtml = '';
@@ -5029,31 +5030,52 @@ const App = (() => {
           ? `<div class="dp-rules">${ruleEntries.map(([n, d, p]) => `<span class="dp-rule"><b>${esc(n)}${p ? ` p.${esc(p)}` : ''}:</b> ${ruleHtml(d)}</span>`).join('')}</div>` : '';
 
         const tonnageLabel = tonLabel(db.tonnage) || CATEGORY_LABELS[ship.groupCategory] || '';
-        const badge = db.isUnique ? ' <span class="dp-badge">Unique</span>' : db.isRare ? ' <span class="dp-badge">Rare</span>' : '';
+        // 'Unique' kept (one-of-a-kind is informative on the sheet); 'Rare' is a
+        // list-building limit with no in-game meaning, so it's not printed.
+        const badge = db.isUnique ? ' <span class="dp-badge">Unique</span>' : '';
         const qtyPrefix = count > 1 ? `${count}× ` : '';
         const totalPts = ship.points * count;
-        // Small ship thumbnail so the sheet can be matched to the model on the table.
-        const thumbSrc = thumbUrl(db.image || shipArtPath(db.name));
-        const thumbHtml = thumbSrc ? `<img class="dp-thumb" src="${esc(thumbSrc)}" alt="" loading="lazy" onerror="this.remove()">` : '';
+        const artSrc = db.image || shipArtPath(db.name);
+        // Small thumbnail (normal mode) so the sheet can be matched to the model.
+        const thumbSrc = thumbUrl(artSrc);
+        const thumbHtml = (thumbSrc && !settings.printBig) ? `<img class="dp-thumb" src="${esc(thumbSrc)}" alt="" loading="lazy" onerror="this.remove()">` : '';
 
-        groupsHtml += `<div class="dp-ship">
-          <div class="dp-ship-head">
+        const statHtml = dpStatLine(eff.stats, eff.mods);
+        const weaponsHtml = dpWeaponTable(weaponRows);
+        const hullHtml = dpHullTrack(db.hull, count);
+        const abilHtml = `${loadsHtml}${sysHtml}${featHtml}${rulesHtml}`;
+        const headHtml = `<div class="dp-ship-head">
             <span class="dp-name-wrap">${thumbHtml}<span class="dp-name">${esc(qtyPrefix)}${esc(name)}${tonnageLabel ? ` <span class="dp-ton">${esc(tonnageLabel)}</span>` : ''}${badge}</span></span>
             <span class="dp-pts">${count > 1 ? `${totalPts} pts <span class="dp-each">(${ship.points} ea)</span>` : `${ship.points} pts`}</span>
-          </div>
-          ${dpStatLine(eff.stats, eff.mods)}
-          ${dpWeaponTable(weaponRows)}
-          ${loadsHtml}
-          ${sysHtml}
-          ${featHtml}
-          ${rulesHtml}
-          ${dpHullTrack(db.hull, count)}
-        </div>`;
+          </div>`;
+
+        if (settings.printBig) {
+          // "Big mode": one wide rectangle per ship — [art + stats] | guns | abilities,
+          // with the hull track full-width underneath. Roomy, easy to read across a table.
+          const bigArt = artSrc ? `<img class="dp-big-art" src="${esc(artSrc)}" alt="" loading="lazy" onerror="this.remove()">` : '';
+          groupsHtml += `<div class="dp-ship dp-ship-big">
+            ${headHtml}
+            <div class="dp-ship-body">
+              <div class="dp-zone dp-zone-vis">${bigArt}${statHtml}</div>
+              <div class="dp-zone dp-zone-guns">${weaponsHtml || '<span class="dp-zone-empty">No weapons</span>'}</div>
+              <div class="dp-zone dp-zone-abil">${abilHtml || '<span class="dp-zone-empty">No special rules</span>'}</div>
+            </div>
+            ${hullHtml}
+          </div>`;
+        } else {
+          groupsHtml += `<div class="dp-ship">
+            ${headHtml}
+            ${statHtml}
+            ${weaponsHtml}
+            ${abilHtml}
+            ${hullHtml}
+          </div>`;
+        }
       });
 
       groupsHtml += '</div>';
     });
-    html += `<div class="dp-groups${settings.print2col ? ' dp-2col' : ''}">${groupsHtml}</div>`;
+    html += `<div class="dp-groups${twoCol ? ' dp-2col' : ''}">${groupsHtml}</div>`;
 
     // Launch asset reference for the whole fleet
     if (factionInfo && factionInfo.launchAssets && allLaunchAssetNames.size > 0) {
@@ -5169,7 +5191,8 @@ const App = (() => {
         <span class="pp-pagecount" id="pp-pagecount"></span>
         <span class="print-preview-spacer"></span>
         <label class="print-preview-opt"><input type="checkbox" id="pp-simple" ${settings.printSimple ? 'checked' : ''}> Simple list</label>
-        <label class="print-preview-opt"><input type="checkbox" id="pp-2col" ${settings.print2col ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> 2 columns</label>
+        <label class="print-preview-opt"><input type="checkbox" id="pp-big" ${settings.printBig ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Big mode</label>
+        <label class="print-preview-opt"><input type="checkbox" id="pp-2col" ${settings.print2col ? 'checked' : ''} ${(settings.printSimple || settings.printBig) ? 'disabled' : ''}> 2 columns</label>
         <label class="print-preview-opt"><input type="checkbox" id="pp-ink" ${settings.printInk ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Ink-saver</label>
         <label class="print-preview-opt">Text
           <select id="pp-density" class="pp-density-sel" ${settings.printSimple ? 'disabled' : ''}>
@@ -5224,10 +5247,17 @@ const App = (() => {
       s.querySelectorAll('img').forEach(img => { img.addEventListener('load', schedulePaginate); img.addEventListener('error', schedulePaginate); });
       schedulePaginate();
     };
-    const setSimpleDisabled = (on) => {
-      ['#pp-2col', '#pp-ink', '#pp-density'].forEach(sel => { const el = ov.querySelector(sel); if (el) el.disabled = on; });
+    const updateToggleStates = () => {
+      const simple = settings.printSimple, big = settings.printBig;
+      // Simple list disables every datasheet option; Big mode forces one wide column.
+      const set = (sel, off) => { const el = ov.querySelector(sel); if (el) el.disabled = off; };
+      set('#pp-big', simple);
+      set('#pp-2col', simple || big);
+      set('#pp-ink', simple);
+      set('#pp-density', simple);
     };
-    ov.querySelector('#pp-simple').onchange = (e) => { settings.printSimple = e.target.checked; saveSettings(); setSimpleDisabled(e.target.checked); refresh(); };
+    ov.querySelector('#pp-simple').onchange = (e) => { settings.printSimple = e.target.checked; saveSettings(); updateToggleStates(); refresh(); };
+    ov.querySelector('#pp-big').onchange = (e) => { settings.printBig = e.target.checked; saveSettings(); updateToggleStates(); refresh(); };
     ov.querySelector('#pp-2col').onchange = (e) => { settings.print2col = e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-ink').onchange = (e) => { settings.printInk = e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-density').onchange = (e) => { settings.printDensity = e.target.value; saveSettings(); refresh(); };
