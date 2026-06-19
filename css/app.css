@@ -4528,9 +4528,11 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── 26. Print ───────────────────────────────────────────────── */
 @media print {
+  /* No forced size — adapt to whatever paper the user selects (A4 or US Letter).
+     Margins are safe for both: content sits inside the A4 width (the narrower)
+     and the US Letter height (the shorter), so nothing clips on either. */
   @page {
-    size: A4;
-    margin: 12mm 10mm 14mm;
+    margin: 12mm;
   }
 
   /* Hide everything except the print container */
@@ -4604,21 +4606,6 @@ h1, h2, h3, h4, h5, h6 {
   .print-2col .print-ship { break-inside: avoid; }
   .print-2col .print-ship .weapon-row { grid-template-columns: minmax(64px, 1.2fr) 26px 22px 22px 28px minmax(50px, 1.5fr); font-size: 7.5pt; }
 
-  /* Footer with fleet name on each page */
-  .print-fleet::after {
-    content: attr(data-fleet-name);
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 7pt;
-    color: #ccc;
-    text-transform: none;
-    letter-spacing: 0.01em;
-    padding-bottom: 2mm;
-  }
 }
 
 /* Print Preview overlay — pick options + see the output before the print dialog. */
@@ -4644,10 +4631,29 @@ h1, h2, h3, h4, h5, h6 {
   background: #ffcc00; border-color: #ffcc00; color: #1b2a3a; font-weight: var(--weight-bold);
 }
 .print-preview-bar #pp-print:hover { background: #ffd633; border-color: #ffd633; }
-.print-preview-scroll { flex: 1; overflow: auto; padding: var(--sp-lg); display: flex; justify-content: center; }
+.print-preview-scroll { flex: 1; overflow: auto; padding: var(--sp-lg); display: flex; justify-content: center; align-items: flex-start; }
 .print-preview-surface {
+  position: relative;
   background: #fff; width: 210mm; max-width: 100%;
-  padding: 14mm; box-shadow: 0 4px 24px rgba(0,0,0,0.4); border-radius: 2px;
+  padding: 12mm; box-shadow: 0 4px 24px rgba(0,0,0,0.4); border-radius: 2px;
+}
+/* Page-count readout + density select in the preview bar. */
+.pp-pagecount { font-size: var(--text-sm); color: #cdd6e0; font-variant-numeric: tabular-nums; }
+.pp-density-sel {
+  background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 4px; padding: 1px 4px; font-size: var(--text-sm); cursor: pointer;
+}
+.pp-density-sel option { color: #1c1a17; }
+.pp-density-sel:disabled, .print-preview-opt input:disabled { opacity: 0.4; cursor: default; }
+/* Estimated page boundary on the continuous preview sheet (screen only). */
+.pp-page-break {
+  position: absolute; left: 0; right: 0; height: 0;
+  border-top: 1.5px dashed #b04a3a; pointer-events: none;
+}
+.pp-page-break-label {
+  position: absolute; right: 0; top: 2px;
+  background: #b04a3a; color: #fff; font-size: 8pt; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 6px; border-radius: 0 0 3px 3px;
 }
 /* Simple Print View — compact roster list (screen + print). */
 .print-simple { font-family: 'Jost', sans-serif; color: #1c1a17; font-size: 11pt; }
@@ -5253,6 +5259,56 @@ h1, h2, h3, h4, h5, h6 {
   background: #faf8f5; -webkit-print-color-adjust: exact; print-color-adjust: exact;
 }
 .dp-flagship-name { font-weight: 700; font-size: 8.5pt; color: #1b3a5c; margin-bottom: 2px; }
+
+/* Per-ship thumbnail — sits left of the ship name so the sheet can be matched to
+   the model on the table. Sized by the density tier below. */
+.dp-ship-head { align-items: center; }
+.dp-name-wrap { display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+.dp-thumb {
+  width: 34px; height: 34px; flex: 0 0 auto; object-fit: contain;
+  border: 1px solid #ccc; border-radius: 2px; background: #fff;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+
+/* ── Density tiers (preview toggle) ──────────────────────────────
+   Comfortable = arm's-length readable at the table (default). Compact = max
+   density / fewest pages. Both stay 2-column when 2 columns is on. */
+.pf-comfortable .dp-group-name { font-size: 11.5pt; }
+.pf-comfortable .dp-name { font-size: 10.4pt; }
+.pf-comfortable .dp-pts { font-size: 9.2pt; }
+.pf-comfortable .dp-statline { font-size: 9.6pt; }
+.pf-comfortable .dp-weapons { font-size: 8.8pt; }
+.pf-comfortable .dp-weapons th { font-size: 7.6pt; }
+.pf-comfortable .dp-loads, .pf-comfortable .dp-systems { font-size: 8.8pt; }
+.pf-comfortable .dp-rules { font-size: 8.5pt; line-height: 1.4; }
+.pf-comfortable .dp-ship { padding: 5px 8px; }
+.pf-comfortable .dp-thumb { width: 40px; height: 40px; }
+.pf-comfortable .dp-box { width: 10px; height: 10px; }
+
+.pf-compact .dp-group-name { font-size: 10pt; }
+.pf-compact .dp-name { font-size: 9.2pt; }
+.pf-compact .dp-statline { font-size: 8.3pt; }
+.pf-compact .dp-weapons { font-size: 7.6pt; }
+.pf-compact .dp-loads, .pf-compact .dp-systems { font-size: 7.6pt; }
+.pf-compact .dp-rules { font-size: 7.4pt; line-height: 1.28; }
+.pf-compact .dp-ship { padding: 3px 6px; margin-bottom: 5px; }
+.pf-compact .dp-thumb { width: 28px; height: 28px; }
+
+/* ── Ink-saver (preview toggle) ──────────────────────────────────
+   Strip the ink-heavy fills (navy weapon header, zebra striping) to white with
+   black text, and grayscale the thumbnails. Safe for B&W / draft printing. */
+.pf-inksaver .dp-weapons th { background: #fff !important; color: #000 !important; border: 1px solid #555; }
+.pf-inksaver .dp-weapons tr:nth-child(even) td { background: #fff !important; }
+.pf-inksaver .dp-group-name, .pf-inksaver .dp-pts, .pf-inksaver .dp-group-pts,
+.pf-inksaver .dp-w-name, .pf-inksaver .dp-loads b, .pf-inksaver .dp-systems b,
+.pf-inksaver .dp-rule b, .pf-inksaver .dp-flagship-name { color: #000 !important; }
+.pf-inksaver .dp-group-head { border-bottom-color: #000 !important; }
+.pf-inksaver .dp-ship { border-left-color: #000 !important; }
+.pf-inksaver .dp-group-cat { color: #000 !important; }
+.pf-inksaver .dp-flagship { background: #fff !important; border-color: #777; }
+.pf-inksaver .dp-statline, .pf-inksaver .dp-rules,
+.pf-inksaver .dp-loads, .pf-inksaver .dp-systems { color: #000; }
+.pf-inksaver .dp-thumb { filter: grayscale(1) contrast(1.05); }
 
 /* ── Fleet Overview (no group selected) ──────────────────────── */
 .fleet-overview {

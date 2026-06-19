@@ -29,7 +29,7 @@ const App = (() => {
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: false, printSimple: false };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: false };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -4810,13 +4810,8 @@ const App = (() => {
     const totalGroups = f.battleGroups.length;
     const admCount = (f.admirals || []).length;
 
-    // Validation warnings
-    const warnings = validateFleet(f);
-    const printWarnings = warnings.length > 0
-      ? `<div class="print-warnings">${warnings.map(w =>
-          `<div class="print-warning print-warning-${w.type}">${esc(w.msg)}</div>`
-        ).join('')}</div>`
-      : '';
+    // Validation warnings are a build-time aid only — kept in the on-screen builder
+    // (sidebar alerts), never printed on the final army-list sheet.
 
     const fIcon = FACTION_ICONS[f.faction];
 
@@ -4825,7 +4820,8 @@ const App = (() => {
       ? `<div class="print-desc">${esc(f.description)}</div>`
       : '';
 
-    let html = `<div class="print-fleet${settings.print2col ? ' print-2col' : ''}" data-fleet-name="${esc(f.name)}">
+    const densityClass = settings.printDensity === 'compact' ? 'pf-compact' : 'pf-comfortable';
+    let html = `<div class="print-fleet${settings.print2col ? ' print-2col' : ''} ${densityClass}${settings.printInk ? ' pf-inksaver' : ''}" data-fleet-name="${esc(f.name)}">
       <div class="print-header">
         <div class="print-header-top">
           ${fIcon ? `<img src="${fIcon}" alt="" class="print-faction-icon">` : ''}
@@ -4840,8 +4836,7 @@ const App = (() => {
         </div>
         <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''}, ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? `, ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? `, ${esc(f.spaceStation.name)}${(f.spaceStation.systems && f.spaceStation.systems.length) ? ' (' + f.spaceStation.systems.map(esc).join(', ') + ')' : ''}` : ''}</div>
       </div>
-      ${descHtml}
-      ${printWarnings}`;
+      ${descHtml}`;
 
     // Admirals
     if (f.admirals && f.admirals.length > 0) {
@@ -5029,10 +5024,13 @@ const App = (() => {
         const badge = db.isUnique ? ' <span class="dp-badge">Unique</span>' : db.isRare ? ' <span class="dp-badge">Rare</span>' : '';
         const qtyPrefix = count > 1 ? `${count}× ` : '';
         const totalPts = ship.points * count;
+        // Small ship thumbnail so the sheet can be matched to the model on the table.
+        const thumbSrc = thumbUrl(db.image || shipArtPath(db.name));
+        const thumbHtml = thumbSrc ? `<img class="dp-thumb" src="${esc(thumbSrc)}" alt="" loading="lazy" onerror="this.remove()">` : '';
 
         groupsHtml += `<div class="dp-ship">
           <div class="dp-ship-head">
-            <span class="dp-name">${esc(qtyPrefix)}${esc(name)}${tonnageLabel ? ` <span class="dp-ton">${esc(tonnageLabel)}</span>` : ''}${badge}</span>
+            <span class="dp-name-wrap">${thumbHtml}<span class="dp-name">${esc(qtyPrefix)}${esc(name)}${tonnageLabel ? ` <span class="dp-ton">${esc(tonnageLabel)}</span>` : ''}${badge}</span></span>
             <span class="dp-pts">${count > 1 ? `${totalPts} pts <span class="dp-each">(${ship.points} ea)</span>` : `${ship.points} pts`}</span>
           </div>
           ${dpStatLine(eff.stats, eff.mods)}
@@ -5160,9 +5158,17 @@ const App = (() => {
     ov.innerHTML = `
       <div class="print-preview-bar">
         <span class="print-preview-title">Print preview</span>
+        <span class="pp-pagecount" id="pp-pagecount"></span>
         <span class="print-preview-spacer"></span>
-        <label class="print-preview-opt"><input type="checkbox" id="pp-simple" ${settings.printSimple ? 'checked' : ''}> Simple Print View</label>
+        <label class="print-preview-opt"><input type="checkbox" id="pp-simple" ${settings.printSimple ? 'checked' : ''}> Simple list</label>
         <label class="print-preview-opt"><input type="checkbox" id="pp-2col" ${settings.print2col ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> 2 columns</label>
+        <label class="print-preview-opt"><input type="checkbox" id="pp-ink" ${settings.printInk ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Ink-saver</label>
+        <label class="print-preview-opt">Text
+          <select id="pp-density" class="pp-density-sel" ${settings.printSimple ? 'disabled' : ''}>
+            <option value="comfortable" ${settings.printDensity !== 'compact' ? 'selected' : ''}>Comfortable</option>
+            <option value="compact" ${settings.printDensity === 'compact' ? 'selected' : ''}>Compact</option>
+          </select>
+        </label>
         <button class="btn btn-outline btn-sm pp-close-btn" id="pp-close" type="button">Close</button>
         <button class="btn btn-primary btn-sm" id="pp-print" type="button">Print</button>
       </div>
@@ -5171,13 +5177,60 @@ const App = (() => {
     const closePreview = () => { ov.remove(); document.removeEventListener('keydown', onKey); };
     const onKey = (e) => { if (e.key === 'Escape') closePreview(); };
     document.addEventListener('keydown', onKey);
-    const refresh = () => { const s = document.getElementById('pp-surface'); if (s) s.innerHTML = fleetPrintHTML(currentFleet); };
-    ov.querySelector('#pp-simple').onchange = (e) => { settings.printSimple = e.target.checked; saveSettings(); const c = ov.querySelector('#pp-2col'); if (c) c.disabled = e.target.checked; refresh(); };
+
+    // Mark page boundaries on the continuous "paper" surface and report the page
+    // count, so you see roughly how many sheets the list prints to before opening
+    // the browser dialog. A4 content area (210x297mm, 12mm margins) = 186x273mm;
+    // breaks fall every 273mm of content (a card straddling a line really prints
+    // on the next page, so the count is an estimate, accurate for typical lists).
+    let pageTimer = null;
+    const paginate = () => {
+      const s = document.getElementById('pp-surface');
+      const label = document.getElementById('pp-pagecount');
+      if (!s) return;
+      s.querySelectorAll('.pp-page-break').forEach(el => el.remove());
+      const cs = getComputedStyle(s);
+      const padTop = parseFloat(cs.paddingTop) || 0;
+      const padBot = parseFloat(cs.paddingBottom) || 0;
+      const pxPerMm = s.getBoundingClientRect().width / 210; // surface is 210mm wide
+      const pageContentPx = 273 * pxPerMm;
+      const contentPx = s.scrollHeight - padTop - padBot;
+      const pages = Math.max(1, Math.ceil((contentPx - 1) / pageContentPx));
+      if (label) label.textContent = pages === 1 ? '1 page' : `~${pages} pages`;
+      for (let k = 1; k < pages; k++) {
+        const brk = document.createElement('div');
+        brk.className = 'pp-page-break';
+        brk.style.top = (padTop + k * pageContentPx) + 'px';
+        brk.innerHTML = `<span class="pp-page-break-label">Page ${k + 1}</span>`;
+        s.appendChild(brk);
+      }
+    };
+    const schedulePaginate = () => { clearTimeout(pageTimer); pageTimer = setTimeout(paginate, 60); };
+
+    const refresh = () => {
+      const s = document.getElementById('pp-surface');
+      if (!s) return;
+      s.innerHTML = fleetPrintHTML(currentFleet);
+      paginate();
+      // Re-run once art/fonts settle (image onerror removals change height).
+      s.querySelectorAll('img').forEach(img => { img.addEventListener('load', schedulePaginate); img.addEventListener('error', schedulePaginate); });
+      schedulePaginate();
+    };
+    const setSimpleDisabled = (on) => {
+      ['#pp-2col', '#pp-ink', '#pp-density'].forEach(sel => { const el = ov.querySelector(sel); if (el) el.disabled = on; });
+    };
+    ov.querySelector('#pp-simple').onchange = (e) => { settings.printSimple = e.target.checked; saveSettings(); setSimpleDisabled(e.target.checked); refresh(); };
     ov.querySelector('#pp-2col').onchange = (e) => { settings.print2col = e.target.checked; saveSettings(); refresh(); };
+    ov.querySelector('#pp-ink').onchange = (e) => { settings.printInk = e.target.checked; saveSettings(); refresh(); };
+    ov.querySelector('#pp-density').onchange = (e) => { settings.printDensity = e.target.value; saveSettings(); refresh(); };
     ov.querySelector('#pp-close').addEventListener('click', closePreview);
     ov.querySelector('#pp-print').addEventListener('click', doPrintNow);
     // Click on the dark backdrop (outside the page surface) also closes.
     ov.querySelector('.print-preview-scroll').addEventListener('click', (e) => { if (e.target === e.currentTarget) closePreview(); });
+    // Initial pagination (the surface is already populated from innerHTML above).
+    const surf0 = document.getElementById('pp-surface');
+    if (surf0) surf0.querySelectorAll('img').forEach(img => { img.addEventListener('load', schedulePaginate); img.addEventListener('error', schedulePaginate); });
+    schedulePaginate();
   }
 
   // ── Shared Fleet Viewer ──
