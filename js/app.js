@@ -29,7 +29,7 @@ const App = (() => {
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true, printRoster: false };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -5095,8 +5095,9 @@ const App = (() => {
       : '';
 
     const densityClass = settings.printDensity === 'compact' ? 'pf-compact' : 'pf-comfortable';
-    const twoCol = settings.print2col && !settings.printBig; // big mode is inherently one wide column
-    let html = `<div class="print-fleet${twoCol ? ' print-2col' : ''} ${densityClass}${settings.printInk ? ' pf-inksaver' : ''}${settings.printBig ? ' pf-big' : ''}" data-fleet-name="${esc(f.name)}">
+    const roster = settings.printRoster;
+    const twoCol = settings.print2col && !settings.printBig && !roster; // big/roster are one column
+    let html = `<div class="print-fleet${twoCol ? ' print-2col' : ''} ${densityClass}${settings.printInk ? ' pf-inksaver' : ''}${(settings.printBig && !roster) ? ' pf-big' : ''}${roster ? ' pf-roster' : ''}" data-fleet-name="${esc(f.name)}">
       <div class="print-header">
         <div class="print-header-top">
           ${fIcon ? `<img src="${fIcon}" alt="" class="print-faction-icon">` : ''}
@@ -5229,7 +5230,8 @@ const App = (() => {
     });
     // Hoist when a rule (by base) is on a meaningful share of the fleet (faction-wide),
     // min 3 cards so a small list doesn't send a 2-ship rule to the back.
-    const glossThreshold = Math.max(3, Math.ceil(glossTotalCards * 0.4));
+    // Roster mode keeps rows tiny by sending EVERY rule's text to the glossary.
+    const glossThreshold = settings.printRoster ? 1 : Math.max(3, Math.ceil(glossTotalCards * 0.4));
     const hoistedBases = new Set(Object.keys(baseCardCount).filter(b => baseCardCount[b] >= glossThreshold));
     const hoistedWeaponBases = new Set(Object.keys(wBaseCardCount).filter(b => wBaseCardCount[b] >= glossThreshold));
     const hoistedGlossNames = Object.keys(ruleDefByName).filter(n => hoistedBases.has(baseRuleName(n))).sort();
@@ -5243,11 +5245,15 @@ const App = (() => {
       const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
       const gCat = g.ships.length > 0 ? (g.ships[0].groupCategory || 'medium') : 'medium';
       const gCatLabel = CATEGORY_LABELS[gCat] || gCat;
-      groupsHtml += `<div class="dp-group">
+      if (roster) {
+        groupsHtml += `<tr class="rt-group dp-group-cat-${gCat}"><td colspan="13">${esc(g.name)} <span class="rt-gcat">${gCatLabel}</span> <span class="rt-gpts">${gPts} pts · ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span></td></tr>`;
+      } else {
+        groupsHtml += `<div class="dp-group">
         <div class="dp-group-head">
           <span class="dp-group-name">${esc(g.name)} <span class="dp-group-cat dp-group-cat-${gCat}">${gCatLabel}</span></span>
           <span class="dp-group-pts">${gPts} pts · ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
         </div>`;
+      }
 
       // Collapse identical ships (same loadout/systems/feature) into one card with N hull tracks.
       const shipBuckets = [];
@@ -5377,7 +5383,39 @@ const App = (() => {
             <span class="dp-pts">${count > 1 ? `${totalPts} pts <span class="dp-each">(${ship.points} ea)</span>` : `${ship.points} pts`}</span>
           </div>`;
 
-        if (settings.printBig) {
+        if (roster) {
+          // Compact roster: one row-block per ship — stats in columns, weapons as
+          // sub-rows, hull as a small box strip in the ship cell, all rule text in
+          // the end glossary (keywords stay on the row). Aims for 2-3 pages.
+          const wr = weaponRows;
+          const rowCount = Math.max(1, wr.length + (allLoads.length ? 1 : 0));
+          const ruleKw = shipRuleEntriesAll.length ? `<div class="rt-rules">${shipRuleEntriesAll.map(e => esc(e[0])).join(', ')}</div>` : '';
+          const ptsStr = count > 1 ? `${totalPts} pts (${ship.points} ea)` : `${ship.points} pts`;
+          const nameCell = `<div class="rt-shipname">${esc(qtyPrefix)}${esc(name)}${tonnageLabel ? ` <span class="rt-ton">${esc(tonnageLabel)}</span>` : ''}${badge} <span class="rt-pts">${ptsStr}</span></div>${ruleKw}<div class="rt-hull">${hullHtml}</div>`;
+          const sc = k => { const v = eff.stats[k]; return (v === undefined || v === null) ? '' : esc(String(v)); };
+          const statCells = `<td rowspan="${rowCount}">${sc('scan')}</td><td rowspan="${rowCount}">${sc('sig')}</td><td rowspan="${rowCount}">${sc('thrust')}</td><td rowspan="${rowCount}">${eff.stats.hull || ''}</td><td rowspan="${rowCount}">${sc('es')}</td><td rowspan="${rowCount}">${sc('ks')}</td><td rowspan="${rowCount}">${sc('bs')}</td>`;
+          const wCell = w => {
+            const dmg = `${esc(w.damage || '')}${w.type ? ` <span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : ''}`;
+            const sp = (w.special && w.special !== '-') ? ` <span class="rt-wsp">${esc(w.special)}</span>` : '';
+            const nm = `${w.qty > 1 ? w.qty + '× ' : ''}${esc(w.name || '')}`;
+            return `<td class="rt-w">${nm}${sp}</td><td>${esc(w.arc || '')}</td><td>${esc(w.attack || '')}</td><td>${esc(w.lock || '')}</td><td>${dmg}</td>`;
+          };
+          if (wr.length === 0 && allLoads.length === 0) {
+            groupsHtml += `<tr class="rt-ship rt-first"><td class="rt-name">${nameCell}</td>${statCells}<td class="rt-w" colspan="5"><span class="rt-none">No weapons</span></td></tr>`;
+          } else {
+            wr.forEach((w, i) => {
+              groupsHtml += `<tr class="rt-ship${i === 0 ? ' rt-first' : ''}">`;
+              if (i === 0) groupsHtml += `<td class="rt-name" rowspan="${rowCount}">${nameCell}</td>${statCells}`;
+              groupsHtml += wCell(w) + `</tr>`;
+            });
+            if (allLoads.length) {
+              const loads = allLoads.map(l => `${esc(String(l.name))} (${esc(String(l.launch))})`).join('; ');
+              groupsHtml += `<tr class="rt-ship${wr.length === 0 ? ' rt-first' : ''}">`;
+              if (wr.length === 0) groupsHtml += `<td class="rt-name">${nameCell}</td>${statCells}`;
+              groupsHtml += `<td class="rt-w rt-load" colspan="5">Launch: ${loads}</td></tr>`;
+            }
+          }
+        } else if (settings.printBig) {
           // "Big mode" = Option A: one wide card per ship with DEFENSES down the left
           // (the F-stem — art, stats + saves + hull boxes, then ship rules/systems),
           // and GUNS + gun abilities on the right (the "only when I activate" stuff).
@@ -5402,9 +5440,16 @@ const App = (() => {
         }
       });
 
-      groupsHtml += '</div>';
+      if (!roster) groupsHtml += '</div>';
     });
-    html += `<div class="dp-groups${twoCol ? ' dp-2col' : ''}">${groupsHtml}</div>`;
+    if (roster) {
+      html += `<table class="roster-table"><thead><tr>
+        <th class="rt-name">Ship</th><th>Scan</th><th>Sig</th><th>Thr</th><th>Hull</th><th>ES</th><th>KS</th><th>BS</th>
+        <th class="rt-w">Weapon</th><th>Arc</th><th>A</th><th>Lk</th><th>Dmg</th>
+      </tr></thead><tbody>${groupsHtml}</tbody></table>`;
+    } else {
+      html += `<div class="dp-groups${twoCol ? ' dp-2col' : ''}">${groupsHtml}</div>`;
+    }
 
     // Launch asset reference for the whole fleet
     if (factionInfo && factionInfo.launchAssets && allLaunchAssetNames.size > 0) {
@@ -5533,8 +5578,9 @@ const App = (() => {
         <span class="pp-pagecount" id="pp-pagecount"></span>
         <span class="print-preview-spacer"></span>
         <label class="print-preview-opt"><input type="checkbox" id="pp-simple" ${settings.printSimple ? 'checked' : ''}> Simple list</label>
-        <label class="print-preview-opt"><input type="checkbox" id="pp-big" ${settings.printBig ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Big mode</label>
-        <label class="print-preview-opt"><input type="checkbox" id="pp-2col" ${settings.print2col ? 'checked' : ''} ${(settings.printSimple || settings.printBig) ? 'disabled' : ''}> 2 columns</label>
+        <label class="print-preview-opt"><input type="checkbox" id="pp-roster" ${settings.printRoster ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Roster (2-3 pg)</label>
+        <label class="print-preview-opt"><input type="checkbox" id="pp-big" ${settings.printBig ? 'checked' : ''} ${(settings.printSimple || settings.printRoster) ? 'disabled' : ''}> Big mode</label>
+        <label class="print-preview-opt"><input type="checkbox" id="pp-2col" ${settings.print2col ? 'checked' : ''} ${(settings.printSimple || settings.printBig || settings.printRoster) ? 'disabled' : ''}> 2 columns</label>
         <label class="print-preview-opt"><input type="checkbox" id="pp-ink" ${settings.printInk ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Ink-saver</label>
         <label class="print-preview-opt">Text
           <select id="pp-density" class="pp-density-sel" ${settings.printSimple ? 'disabled' : ''}>
@@ -5590,15 +5636,17 @@ const App = (() => {
       schedulePaginate();
     };
     const updateToggleStates = () => {
-      const simple = settings.printSimple, big = settings.printBig;
-      // Simple list disables every datasheet option; Big mode forces one wide column.
+      const simple = settings.printSimple, big = settings.printBig, rost = settings.printRoster;
+      // Simple list disables every datasheet option; Roster + Big each force one column.
       const set = (sel, off) => { const el = ov.querySelector(sel); if (el) el.disabled = off; };
-      set('#pp-big', simple);
-      set('#pp-2col', simple || big);
+      set('#pp-roster', simple);
+      set('#pp-big', simple || rost);
+      set('#pp-2col', simple || big || rost);
       set('#pp-ink', simple);
       set('#pp-density', simple);
     };
     ov.querySelector('#pp-simple').onchange = (e) => { settings.printSimple = e.target.checked; saveSettings(); updateToggleStates(); refresh(); };
+    ov.querySelector('#pp-roster').onchange = (e) => { settings.printRoster = e.target.checked; saveSettings(); updateToggleStates(); refresh(); };
     ov.querySelector('#pp-big').onchange = (e) => { settings.printBig = e.target.checked; saveSettings(); updateToggleStates(); refresh(); };
     ov.querySelector('#pp-2col').onchange = (e) => { settings.print2col = e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-ink').onchange = (e) => { settings.printInk = e.target.checked; saveSettings(); refresh(); };

@@ -5386,6 +5386,48 @@ h1, h2, h3, h4, h5, h6 {
 .pf-inksaver .dp-hoist-chip { background: #fff !important; color: #000 !important; border-color: #999; }
 .pf-inksaver .dp-glossary { border-top-color: #000; }
 
+/* ── Roster table (compact 2-3 page print option) ───────────── */
+.roster-table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 7.5pt; margin-top: 6px; }
+.roster-table th:nth-child(1) { width: 27%; }
+.roster-table th:nth-child(2), .roster-table th:nth-child(3), .roster-table th:nth-child(4),
+.roster-table th:nth-child(5), .roster-table th:nth-child(6), .roster-table th:nth-child(7),
+.roster-table th:nth-child(8) { width: 5.2%; }
+.roster-table th:nth-child(9) { width: 24%; }
+.roster-table th:nth-child(10) { width: 5%; }
+.roster-table th:nth-child(11), .roster-table th:nth-child(12), .roster-table th:nth-child(13) { width: 4%; }
+.roster-table th {
+  background: #e7ebf0; color: #1b3a5c; font-size: 6.5pt; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.02em; padding: 2px 3px;
+  border-bottom: 1.5px solid #1b3a5c; text-align: center;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.roster-table th.rt-name, .roster-table th.rt-w { text-align: left; }
+.roster-table td { padding: 1px 4px; text-align: center; border-bottom: 1px solid #e2ddd4; vertical-align: top; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.roster-table td.rt-name { text-align: left; border-left: 3px solid #1b3a5c; }
+.roster-table td.rt-w { text-align: left; }
+.rt-group td {
+  background: #f1efe8; color: #1b3a5c; font-weight: 700; padding: 3px 6px;
+  border-top: 1.5px solid #1b3a5c;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.rt-gcat { font-size: 6.5pt; text-transform: uppercase; border: 1px solid currentColor; border-radius: 3px; padding: 0 3px; margin-left: 4px; }
+.rt-gpts { font-weight: 400; color: #555; font-size: 7pt; margin-left: 6px; }
+.rt-shipname { font-weight: 700; color: #1c1a17; line-height: 1.2; }
+.rt-ton { font-weight: 600; font-size: 6.5pt; color: #777; text-transform: uppercase; letter-spacing: 0.03em; }
+.rt-pts { font-weight: 400; color: #1b3a5c; font-size: 7pt; }
+.rt-rules { font-size: 6.8pt; color: #555; line-height: 1.3; margin-top: 1px; }
+.rt-rules::before { content: 'Rules: '; color: #1b3a5c; font-weight: 700; }
+.rt-hull { margin-top: 2px; }
+.pf-roster .rt-hull .dp-hull-lab { display: none; }
+.pf-roster .rt-hull .dp-hull { margin-top: 0; gap: 2px; }
+.pf-roster .dp-box { width: 8px; height: 8px; }
+.rt-wsp { color: #666; font-size: 7pt; }
+.rt-load { color: #1b3a5c; font-size: 7.5pt; }
+.rt-none { color: #999; font-style: italic; }
+.roster-table tr.rt-first > td { border-top: 1px solid #c9c2b4; }
+.pf-roster .dp-glossary { margin-top: 6px; }
+.pf-inksaver .roster-table th, .pf-inksaver .rt-group td { background: #fff !important; }
+
 .pf-inksaver .dp-thumb { filter: grayscale(1) contrast(1.05); }
 .pf-inksaver .dp-sc-icon, .pf-inksaver .dp-arc { color: #000; }
 .pf-inksaver .dp-sc-icon svg, .pf-inksaver .dp-arc svg { filter: grayscale(1); }
