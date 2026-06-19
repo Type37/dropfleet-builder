@@ -5397,9 +5397,9 @@ h1, h2, h3, h4, h5, h6 {
    track full-width underneath. Always one column (set in JS). */
 .pf-big .dp-ship { border-left-width: 4px; padding: 6px 10px; }
 .pf-big .dp-ship-body {
-  /* [art + stats] | abilities | guns & gun abilities — guns widest (weapon table). */
-  display: grid; grid-template-columns: 150px minmax(0, 1.05fr) minmax(0, 1.6fr);
-  gap: 12px; align-items: start; margin-top: 5px;
+  /* Option A: defenses down the left (F-stem) | guns & gun abilities on the right. */
+  display: grid; grid-template-columns: 192px minmax(0, 1fr);
+  gap: 14px; align-items: start; margin-top: 5px;
 }
 .pf-big .dp-zone { min-width: 0; }
 .pf-big .dp-zone-vis { display: flex; flex-direction: column; gap: 5px; }

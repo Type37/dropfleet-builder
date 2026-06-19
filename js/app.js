@@ -5379,18 +5379,16 @@ const App = (() => {
           </div>`;
 
         if (settings.printBig) {
-          // "Big mode": one wide rectangle per ship, ordered by how often you need it:
-          //   [art + stats]  |  abilities (ship rules + systems/features)  |  guns & gun abilities.
-          // Stats are always needed, ship rules often, weapons only on activation.
-          // Hull track spans full-width underneath.
+          // "Big mode" = Option A: one wide card per ship with DEFENSES down the left
+          // (the F-stem — art, stats + saves + hull boxes, then ship rules/systems),
+          // and GUNS + gun abilities on the right (the "only when I activate" stuff).
           const bigArt = artSrc ? `<img class="dp-big-art" src="${esc(artSrc)}" alt="" loading="lazy" onerror="this.remove()">` : '';
-          const abilZone = `${hoistChips}${shipRulesHtml}${sysHtml}${featHtml}`;
+          const defZone = `${bigArt}${statHtml}${hoistChips}${shipRulesHtml}${sysHtml}${featHtml}`;
           const gunZone = `${weaponsHtml}${loadsHtml}${gunRulesHtml}`;
           groupsHtml += `<div class="dp-ship dp-ship-big">
             ${headHtml}
             <div class="dp-ship-body">
-              <div class="dp-zone dp-zone-vis">${bigArt}${statHtml}</div>
-              <div class="dp-zone dp-zone-abil">${abilZone || '<span class="dp-zone-empty">No special rules</span>'}</div>
+              <div class="dp-zone dp-zone-vis">${defZone}</div>
               <div class="dp-zone dp-zone-guns">${gunZone || '<span class="dp-zone-empty">No weapons</span>'}</div>
             </div>
           </div>`;
