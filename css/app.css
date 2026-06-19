@@ -1662,6 +1662,42 @@ h1, h2, h3, h4, h5, h6 {
   gap: var(--sp-lg);
 }
 
+/* ── Collection (models you own) ─────────────────────────────── */
+.coll-fac-tabs { display: flex; flex-wrap: wrap; gap: var(--sp-xs); margin-bottom: var(--sp-md); }
+.coll-fac-tab {
+  font-family: var(--font-body); font-size: var(--text-sm); font-weight: var(--weight-medium);
+  padding: 4px 12px; border: 1px solid var(--stroke-medium); border-radius: var(--radius-pill);
+  background: var(--paper); color: var(--ink-muted); cursor: pointer;
+}
+.coll-fac-tab:hover { border-color: var(--navy); color: var(--ink); }
+.coll-fac-tab.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+.coll-summary { font-size: var(--text-sm); color: var(--ink-muted); margin-bottom: var(--sp-md); }
+.coll-cat {
+  font-family: var(--font-header); font-size: var(--text-sm); font-weight: var(--weight-bold);
+  color: var(--navy); text-transform: uppercase; letter-spacing: 0.04em;
+  margin: var(--sp-md) 0 var(--sp-sm); padding-bottom: 2px; border-bottom: 1px solid var(--stroke-light);
+}
+.coll-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--sp-sm); }
+.coll-card {
+  display: flex; align-items: center; gap: var(--sp-sm);
+  border: 1px solid var(--stroke-light); border-radius: var(--radius-md);
+  padding: 6px 8px; background: var(--paper);
+}
+.coll-card.owned { border-color: var(--navy); background: var(--warm); }
+.coll-art { width: 46px; height: 46px; object-fit: contain; flex: 0 0 auto; border-radius: var(--radius-sm); background: var(--paper-alt); }
+.coll-info { display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; }
+.coll-name { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--ink); line-height: 1.2; }
+.coll-pts { font-size: var(--text-xs); color: var(--ink-muted); }
+.coll-step { display: flex; align-items: center; gap: 4px; flex: 0 0 auto; }
+.coll-btn {
+  width: 26px; height: 26px; border: 1px solid var(--stroke-medium); border-radius: var(--radius-sm);
+  background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.coll-btn:hover { border-color: var(--navy); background: var(--warm); }
+.coll-count { min-width: 20px; text-align: center; font-weight: var(--weight-bold); font-variant-numeric: tabular-nums; }
+.coll-loading, .coll-empty { color: var(--ink-muted); font-size: var(--text-sm); padding: var(--sp-md) 0; }
+
 .fleet-card {
   background: var(--paper);
   border: 1px solid var(--stroke);

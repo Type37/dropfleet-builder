@@ -132,6 +132,7 @@ const App = (() => {
 
     loadSettings();
     loadFleets();
+    loadCollection();
     setupRouting();
     initBottomSheetGestures();
     const fb = document.getElementById('footer-feedback');
@@ -671,6 +672,106 @@ const App = (() => {
 
   function saveFleets() {
     localStorage.setItem('dfc_fleets', JSON.stringify(fleets));
+  }
+
+  // ── Collection (models you own) ──────────────────────────────
+  // { factionKey: { shipKey: count } }, stored locally (shared schema w/ mobile).
+  let collection = {};
+  let collectionFaction = 'ucm'; // active faction tab in the Collection view
+  function loadCollection() {
+    try { collection = JSON.parse(localStorage.getItem('dfc_collection') || '{}'); }
+    catch { collection = {}; }
+  }
+  function saveCollection() { localStorage.setItem('dfc_collection', JSON.stringify(collection)); }
+  function ownedCount(faction, key) { return (collection[faction] && collection[faction][key]) || 0; }
+  function setOwned(faction, key, n) {
+    n = Math.max(0, Math.floor(n) || 0);
+    if (!collection[faction]) collection[faction] = {};
+    if (n === 0) delete collection[faction][key]; else collection[faction][key] = n;
+    if (collection[faction] && !Object.keys(collection[faction]).length) delete collection[faction];
+    saveCollection();
+  }
+  // How many of a ship a fleet uses (ships + famous-admiral flagships) — for the
+  // picker's owned / in-this-fleet / spare readout.
+  function usedInFleet(fleet, key) {
+    if (!fleet) return 0;
+    let n = 0;
+    (fleet.battleGroups || []).forEach(g => (g.ships || []).forEach(s => { if (s.shipKey === key) n++; }));
+    (fleet.admirals || []).forEach(a => { if (a.shipKey === key) n++; });
+    return n;
+  }
+  function shipPointsByKey(faction, key) {
+    const fdb = shipDB[faction]; if (!fdb || !fdb.groups) return 0;
+    for (const cat of CATEGORY_ORDER) { const g = fdb.groups[cat]; if (g && g.ships && g.ships[key]) return g.ships[key].points || 0; }
+    return 0;
+  }
+
+  function selectCollectionFaction(fk) { collectionFaction = fk; renderCollection(); }
+  function collectionAdjust(faction, key, delta) {
+    setOwned(faction, key, ownedCount(faction, key) + delta);
+    const card = document.querySelector(`.coll-card[data-key="${key}"]`);
+    if (card) {
+      const n = ownedCount(faction, key);
+      const c = card.querySelector('.coll-count'); if (c) c.textContent = n;
+      card.classList.toggle('owned', n > 0);
+    }
+    updateCollectionSummary();
+  }
+  function renderCollection() {
+    const container = document.getElementById('collection-container');
+    if (!container) return;
+    const factions = ['ucm', 'phr', 'scourge', 'shaltari', 'resistance', 'bioficer'];
+    const tabs = factions.map(fk => {
+      const lbl = (factionData[fk] && (factionData[fk].shortName || factionData[fk].name)) || fk.toUpperCase();
+      return `<button class="coll-fac-tab${fk === collectionFaction ? ' active' : ''}" onclick="App.collectionFaction('${fk}')">${esc(lbl)}</button>`;
+    }).join('');
+    container.innerHTML = `
+      <div class="coll-fac-tabs">${tabs}</div>
+      <div class="coll-summary" id="coll-summary"></div>
+      <div class="coll-grid" id="coll-grid"><div class="coll-loading">Loading…</div></div>`;
+    ensureFactionLoaded(collectionFaction).then(renderCollectionGrid);
+  }
+  function renderCollectionGrid() {
+    const grid = document.getElementById('coll-grid');
+    if (!grid) return;
+    const fk = collectionFaction;
+    const fdb = shipDB[fk];
+    if (!fdb || !fdb.groups) { grid.innerHTML = '<div class="coll-empty">No ships.</div>'; return; }
+    let html = '';
+    CATEGORY_ORDER.forEach(cat => {
+      const g = fdb.groups[cat];
+      if (!g || !g.ships) return;
+      const ships = Object.entries(g.ships).filter(([, s]) => s.type !== 'launch_asset');
+      if (!ships.length) return;
+      html += `<div class="coll-cat">${esc(CATEGORY_LABELS[cat] || cat)}</div><div class="coll-cards">`;
+      ships.forEach(([key, s]) => {
+        const art = thumbUrl(s.image || shipArtPath(s.name));
+        const n = ownedCount(fk, key);
+        html += `<div class="coll-card${n > 0 ? ' owned' : ''}" data-key="${esc(key)}">
+          ${art ? `<img class="coll-art" src="${esc(art)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<div class="coll-art"></div>'}
+          <div class="coll-info"><span class="coll-name">${esc(s.name)}</span><span class="coll-pts">${s.points || 0} pts</span></div>
+          <div class="coll-step">
+            <button class="coll-btn" aria-label="Remove one ${esc(s.name)}" onclick="App.collectionAdjust('${fk}','${esc(key)}',-1)">&minus;</button>
+            <span class="coll-count">${n}</span>
+            <button class="coll-btn" aria-label="Add one ${esc(s.name)}" onclick="App.collectionAdjust('${fk}','${esc(key)}',1)">+</button>
+          </div>
+        </div>`;
+      });
+      html += `</div>`;
+    });
+    grid.innerHTML = html || '<div class="coll-empty">No ships.</div>';
+    updateCollectionSummary();
+  }
+  function updateCollectionSummary() {
+    const el = document.getElementById('coll-summary');
+    if (!el) return;
+    const fk = collectionFaction;
+    const c = collection[fk] || {};
+    let total = 0, distinct = 0, pts = 0;
+    Object.entries(c).forEach(([key, n]) => { if (n > 0) { distinct++; total += n; pts += shipPointsByKey(fk, key) * n; } });
+    el.textContent = total
+      ? `${total} model${total !== 1 ? 's' : ''} · ${distinct} distinct · ${pts} pts of ships owned`
+      : 'Nothing recorded yet — punch in what you own below.';
   }
 
   function uuid() {
@@ -1244,22 +1345,32 @@ const App = (() => {
     activeFleetTab = tab;
     const myTab = document.getElementById('tab-my-fleets');
     const fpTab = document.getElementById('tab-fastplay');
+    const colTab = document.getElementById('tab-collection');
     const grid = document.getElementById('fleet-grid');
     const sortBar = document.getElementById('fleet-sort-bar');
     const fpContainer = document.getElementById('fastplay-container');
+    const colContainer = document.getElementById('collection-container');
     const actions = document.getElementById('fleet-actions');
 
-    if (tab === 'my') {
-      myTab.classList.add('active'); fpTab.classList.remove('active');
-      grid.classList.remove('hidden'); sortBar.classList.remove('hidden');
-      fpContainer.classList.add('hidden');
-      if (actions) actions.style.display = '';
-    } else {
-      fpTab.classList.add('active'); myTab.classList.remove('active');
-      grid.classList.add('hidden'); sortBar.classList.add('hidden');
+    [myTab, fpTab, colTab].forEach(t => t && t.classList.remove('active'));
+    grid.classList.add('hidden'); sortBar.classList.add('hidden');
+    fpContainer.classList.add('hidden');
+    if (colContainer) colContainer.classList.add('hidden');
+
+    if (tab === 'fastplay') {
+      if (fpTab) fpTab.classList.add('active');
       fpContainer.classList.remove('hidden');
       if (actions) actions.style.display = 'none';
       renderFastplayFleets();
+    } else if (tab === 'collection') {
+      if (colTab) colTab.classList.add('active');
+      if (colContainer) colContainer.classList.remove('hidden');
+      if (actions) actions.style.display = 'none';
+      renderCollection();
+    } else {
+      if (myTab) myTab.classList.add('active');
+      grid.classList.remove('hidden'); sortBar.classList.remove('hidden');
+      if (actions) actions.style.display = '';
     }
   }
 
@@ -6864,7 +6975,7 @@ const App = (() => {
   // ── Public API ──
   return {
     navigate, openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
-    loadDemoFleets, showFleetTab, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, moveGroup, editGroupName, toggleFleetCardMenu,
+    loadDemoFleets, showFleetTab, collectionFaction: selectCollectionFaction, collectionAdjust, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, moveGroup, editGroupName, toggleFleetCardMenu,
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
