@@ -75,6 +75,9 @@
 
   const std = freshState(), bld = freshState();
   function st(scope) { return scope === 'bld' ? bld : std; }
+  // Telescope is a Resistance-only token (Galileo). Shown in the full standalone
+  // tool; in the builder pane only when your fleet is Resistance.
+  function teleAllowed(scope) { return scope !== 'bld' || bld.faction === 'resistance'; }
 
   /* ---- engine bridge ------------------------------------------------------- */
   function compute(state) {
@@ -82,10 +85,12 @@
     if (!active.length) return null;
     const pt = ptFromState(state), sit = sitFromState(state);
     const T = D.createTarget(pt, sit);
+    const teleOK = state !== bld || bld.faction === 'resistance'; // telescope gated to Resistance in the builder pane
     const engineWeapons = [], spans = [];
     state.weapons.forEach(r => {
       if (!r.active) { spans.push(null); return; }
-      const ws = D.createWeapon(rowToPW(r), pt, sit, rowToWsit(r), r.crippling);
+      const wsit = rowToWsit(r); if (!teleOK) wsit.telescope = false;
+      const ws = D.createWeapon(rowToPW(r), pt, sit, wsit, r.crippling);
       spans.push([engineWeapons.length, ws.length]);
       engineWeapons.push(...ws);
     });
@@ -133,6 +138,7 @@
     return `
       <div class="calc-panel-title">Target ${s.targetPreset !== 'Custom' ? `<span class="calc-preset-tag">${esc(s.targetPreset)}</span>` : ''}</div>
       <label class="calc-field calc-field-wide"><span>Preset</span>${comboBox(scope, 'target', s.targetPreset === 'Custom' ? '' : s.targetPreset, 'Search ' + TARGET_NAMES.length + ' ships (blank = custom)')}</label>
+      ${!custom ? `<div class="calc-preset-hint">Preset stats locked. <button type="button" class="calc-linkbtn" onclick="Calc.chooseTargetPreset('${scope}','')">Edit as Custom</button></div>` : ''}
       <div class="calc-saves calc-saves-3">
         <label class="calc-field"><span>Type</span><select class="calc-select" onchange="Calc.setType('${scope}',this.value)">${['Ship', 'City', 'Station'].map(t => `<option${t === s.type ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
         <label class="calc-field"><span>Weight</span><select class="calc-select" ${dis} onchange="Calc.setPT('${scope}','weight',this.value)">${['L', 'M', 'H', 'C'].map(t => `<option value="${t}"${t === s.pt.weight ? ' selected' : ''}>${({ L: 'Light', M: 'Medium', H: 'Heavy', C: 'Colossal' })[t]}</option>`).join('')}</select></label>
@@ -151,19 +157,23 @@
       </div>
       <details class="calc-mods"${scope === 'std' ? ' open' : ''}>
         <summary>Situation</summary>
-        <div class="calc-checks">
+        <div class="calc-modgroup"><div class="calc-modgroup-head">Saves</div><div class="calc-checks">
           ${chkT('reinforced', 'Reinforced armour', 'Crits one harder to roll')}
-          ${chk('close', 'Within scan range', 'Enables Scald / Close Action')}
           ${chk('defences_offline', 'Defences offline', '+1 to all saves')}
           ${chk('opal', 'Opal (shield -1)')}
           ${chk('grouped', 'Grouped (6+ backup)')}
+          ${chk('shielded', 'Use shields', 'Defender rolls shield save instead of armour')}
+        </div></div>
+        <div class="calc-modgroup"><div class="calc-modgroup-head">Lock & orders</div><div class="calc-checks">
           ${chk('impetuous', 'Impetuous (Lock -1)')}
           ${chk('WF', 'Weapons Free', 'Adds Fusillade attacks')}
-          ${chk('shielded', 'Use shields', 'Defender rolls shield save instead of armour')}
+          ${chk('close', 'Within scan range', 'Enables Scald / Close Action')}
+        </div></div>
+        <div class="calc-modgroup"><div class="calc-modgroup-head">Atmosphere</div><div class="calc-checks">
           ${chk('target_atmo', 'Target in atmosphere')}
           ${chk('attacker_atmo', 'Attacker in atmosphere')}
           ${chkT('descent', 'Target descending', 'Dropping into atmosphere: most weapons hit on 6+')}
-        </div>
+        </div></div>
       </details>`;
   }
 
@@ -181,7 +191,7 @@
     const custom = r.preset === 'Custom';
     const dis = custom ? '' : 'disabled';
     const cripEn = r.active && (custom || r.crippling);
-    const calChk = (k) => `<label class="calc-cal"><input type="checkbox"${r.calibre[k] ? ' checked' : ''} ${dis} onchange="Calc.setCal('${scope}',${idx},'${k}',this.checked)"><span>${k}</span></label>`;
+    const calSeg = ['L', 'M', 'H', 'C'].map(k => `<button type="button" class="calc-seg-btn${r.calibre[k] ? ' on' : ''}"${custom ? '' : ' disabled'} aria-pressed="${!!r.calibre[k]}" onclick="Calc.setCal('${scope}',${idx},'${k}',${!r.calibre[k]})">${k}</button>`).join('');
     return `
       <div class="calc-weapon${r.active ? '' : ' calc-weapon-off'}">
         <div class="calc-weapon-head">
@@ -190,6 +200,7 @@
           <button class="calc-weapon-del" title="Remove" onclick="Calc.removeWeapon('${scope}',${idx})"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
         </div>
         ${(r.name || r.arc) ? `<div class="calc-weapon-id">${r.name ? `<span class="calc-weapon-name-lbl">${esc(r.name)}</span>` : ''}${r.arc ? `<span class="calc-weapon-arc" title="Firing arc">${esc(r.arc)}</span>` : ''}</div>` : ''}
+        ${(!custom) ? `<div class="calc-preset-hint">Preset stats locked. <button type="button" class="calc-linkbtn" onclick="Calc.chooseWeaponPreset('${scope}',${idx},'')">Edit as Custom</button></div>` : ''}
         <div class="calc-weapon-stats">
           <label class="calc-field calc-field-sm"><span>Att</span><input type="number" min="1" max="62" class="calc-num" value="${r.attack}" ${dis} onchange="Calc.setStat('${scope}',${idx},'attack',this.value)"></label>
           <label class="calc-field calc-field-sm"><span>Lock</span><select class="calc-select" ${dis} onchange="Calc.setStat('${scope}',${idx},'lock',this.value)">${[2, 3, 4, 5, 6].map(l => `<option${l === r.lock ? ' selected' : ''}>${l}</option>`).join('')}</select></label>
@@ -215,23 +226,60 @@
           ${flag(r, scope, idx, 'escape', 'Escape Velocity')}
           ${flag(r, scope, idx, 'entry', 'Re-Entry')}
           ${flag(r, scope, idx, 'bomber', 'Bomber')}
-          <span class="calc-cal-group" title="Calibre tonnages">Calibre ${calChk('L')}${calChk('M')}${calChk('H')}${calChk('C')}</span>
+          <span class="calc-seg" title="Calibre tonnage (improves Lock vs matching weight)"><span class="calc-seg-lbl">Calibre</span>${calSeg}</span>
         </div>
         <div class="calc-wsit">
           <label class="calc-field calc-field-sm"><span>${r.bomber ? 'Bombers' : 'Number'}</span><input type="number" min="1" max="40" class="calc-num"${r.active ? '' : ' disabled'} value="${r.wsit.number}" onchange="Calc.setWsit('${scope}',${idx},'number',this.value)"></label>
           <label class="calc-field calc-field-sm"><span>Calypso</span><input type="number" min="-4" max="4" class="calc-num"${r.active ? '' : ' disabled'} value="${r.wsit.calypso}" onchange="Calc.setWsit('${scope}',${idx},'calypso',this.value)"></label>
-          <label class="calc-flag"><input type="checkbox"${r.wsit.telescope ? ' checked' : ''}${r.active ? '' : ' disabled'} onchange="Calc.setWsit('${scope}',${idx},'telescope',this.checked)"><span>Telescope</span></label>
+          ${teleAllowed(scope) ? `<label class="calc-flag" title="Resistance Galileo: one weapon crits one easier"><input type="checkbox"${r.wsit.telescope ? ' checked' : ''}${r.active ? '' : ' disabled'} onchange="Calc.setWsit('${scope}',${idx},'telescope',this.checked)"><span>Telescope</span></label>` : ''}
           <label class="calc-flag"><input type="checkbox"${r.wsit.overcharging ? ' checked' : ''}${(r.active && r.overcharge) ? '' : ' disabled'} onchange="Calc.setWsit('${scope}',${idx},'overcharging',this.checked)"><span>Overcharging</span></label>
           <label class="calc-flag"><input type="checkbox"${r.wsit.sustaining ? ' checked' : ''}${(r.active && r.sustained) ? '' : ' disabled'} onchange="Calc.setWsit('${scope}',${idx},'sustaining',this.checked)"><span>Sustaining</span></label>
         </div>
       </div>`;
   }
+  // Compact read-only weapon card for the builder sidebar (audit #1): the roster
+  // weapon's stats are fixed, so show them as a summary instead of the full editor.
+  function ruleChipsText(r) {
+    const c = [];
+    if (r.burnthrough.on) c.push('Burnthrough-' + r.burnthrough.val);
+    if (r.reave.on) c.push('Reave-' + r.reave.val);
+    if (r.critical.on) c.push('Critical-' + r.critical.val);
+    if (r.scald.on) c.push('Scald-' + r.scald.val);
+    if (r.fusillade.on) c.push('Fusillade-' + r.fusillade.val);
+    if (r.penetrator) c.push('Penetrator');
+    if (r.crippling) c.push('Crippling');
+    if (r.caw) c.push('Close Action');
+    if (r.bombardment) c.push('Bombardment');
+    if (r.mauler) c.push('Mauler');
+    if (r.overcharge) c.push('Overcharge');
+    if (r.bomber) c.push('Bomber');
+    if (r.sustained) c.push('Sustained');
+    const cal = ['L', 'M', 'H', 'C'].filter(k => r.calibre[k]);
+    if (cal.length) c.push('Calibre-' + cal.join('/'));
+    return c;
+  }
+  function compactWeaponRow(s, scope, idx) {
+    const r = s.weapons[idx];
+    const chips = ruleChipsText(r).map(t => `<span class="calc-chip">${esc(t)}</span>`).join('');
+    return `
+      <div class="calc-weapon calc-weapon-compact${r.active ? '' : ' calc-weapon-off'}">
+        <div class="calc-weapon-head">
+          <input type="checkbox" class="calc-weapon-active" title="Include this weapon"${r.active ? ' checked' : ''} onchange="Calc.setActive('${scope}',${idx},this.checked)">
+          <span class="calc-weapon-name-lbl">${esc(r.name || ('Weapon ' + (idx + 1)))}</span>
+          ${r.arc ? `<span class="calc-weapon-arc" title="Firing arc">${esc(r.arc)}</span>` : ''}
+          <button class="calc-weapon-del" title="Remove" onclick="Calc.removeWeapon('${scope}',${idx})"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+        </div>
+        <div class="calc-compact-stats"><span>Att <b>${r.attack}${r.wsit.number > 1 && !r.bomber ? ' ×' + r.wsit.number : ''}</b></span><span>Lock <b>${r.lock}+</b></span><span>Dmg <b>${r.damage}${r.type}</b></span></div>
+        ${chips ? `<div class="calc-weapon-chips">${chips}</div>` : ''}
+      </div>`;
+  }
   function weaponsPanel(s, scope) {
-    const rows = s.weapons.map((_, i) => weaponRow(s, scope, i)).join('');
+    const compact = scope === 'bld';
+    const rows = s.weapons.map((_, i) => (compact ? compactWeaponRow : weaponRow)(s, scope, i)).join('');
     return `
       <div class="calc-panel-title">Weapons ${s.weapons.length ? `<span class="calc-count">${s.weapons.length}</span>` : ''}</div>
-      <div class="calc-weapons-list">${rows || '<div class="calc-empty">No weapons yet.</div>'}</div>
-      <div class="calc-weapon-add"><button class="btn btn-outline btn-sm" onclick="Calc.addCustomWeapon('${scope}')"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> Add weapon</button></div>`;
+      <div class="calc-weapons-list">${rows || '<div class="calc-empty">Click a weapon\'s damage in the roster to add it.</div>'}</div>
+      ${compact ? '' : `<div class="calc-weapon-add"><button class="btn btn-outline btn-sm" onclick="Calc.addCustomWeapon('${scope}')"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> Add weapon</button></div>`}`;
   }
 
   /* ---- results ------------------------------------------------------------- */
@@ -349,7 +397,7 @@
     setRule(scope, idx, k, v) { st(scope).weapons[idx][k].on = !!v; rerenderWeapons(scope); },
     setRuleVal(scope, idx, k, v) { st(scope).weapons[idx][k].val = Math.max(1, pInt(v, 1)); rerenderResults(scope); },
     setFlag(scope, idx, k, v) { st(scope).weapons[idx][k] = !!v; rerenderWeapons(scope); },
-    setCal(scope, idx, k, v) { st(scope).weapons[idx].calibre[k] = !!v; rerenderResults(scope); },
+    setCal(scope, idx, k, v) { st(scope).weapons[idx].calibre[k] = !!v; rerenderWeapons(scope); },
     setWsit(scope, idx, k, v) { const r = st(scope).weapons[idx]; if (k === 'number') r.wsit.number = Math.max(1, pInt(v, 1)); else if (k === 'calypso') r.wsit.calypso = Math.max(-4, Math.min(4, pInt(v, 0))); else r.wsit[k] = !!v; rerenderWeapons(scope); },
     addCustomWeapon(scope) { st(scope).weapons.push(defaultRow()); rerenderWeapons(scope); },
     removeWeapon(scope, idx) { st(scope).weapons.splice(idx, 1); rerenderWeapons(scope); },

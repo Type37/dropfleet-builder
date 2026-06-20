@@ -6672,3 +6672,20 @@ body[data-view="builder"] .game-info-footer {
 .calc-configcode { margin-top: var(--sp-sm); border-top: 1px solid var(--stroke-light); padding-top: var(--sp-sm); }
 .calc-configcode .calc-select { font-family: var(--font-mono); font-size: 12px; }
 .calc-code-btns { display: flex; gap: 6px; margin-top: 5px; }
+
+/* ── Calc: segmented calibre, grouped situation, hints, compact builder card ── */
+.calc-seg { display: inline-flex; align-items: center; gap: 5px; font-size: var(--text-xs); color: var(--ink-faint); font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .03em; }
+.calc-seg-btn { font-family: var(--font-condensed); font-size: 12px; font-weight: 600; min-width: 22px; min-height: 24px; padding: 2px 6px; border: 1px solid var(--stroke); background: var(--paper); color: var(--ink-muted); cursor: pointer; }
+.calc-seg-btn + .calc-seg-btn { border-left: 0; }
+.calc-seg-btn:first-of-type { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.calc-seg-btn:last-of-type { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.calc-seg-btn.on { background: var(--navy); border-color: var(--navy); color: #fff; }
+.calc-seg-btn:disabled { opacity: .45; cursor: default; }
+.calc-modgroup { margin-top: var(--sp-xs); }
+.calc-modgroup-head { font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .05em; font-size: 10px; color: var(--gold-dark); margin-bottom: 1px; border-bottom: 1px solid var(--stroke-light); }
+.calc-preset-hint { font-size: 11px; color: var(--ink-faint); margin-top: 3px; }
+.calc-linkbtn { background: none; border: 0; padding: 0; color: var(--gold-dark); font: inherit; font-size: 11px; cursor: pointer; text-decoration: underline; }
+.calc-weapon-compact .calc-weapon-head { gap: 6px; }
+.calc-weapon-compact .calc-weapon-name-lbl { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.calc-compact-stats { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; font-size: var(--text-xs); color: var(--ink-muted); font-family: var(--font-condensed); }
+.calc-compact-stats b { color: var(--navy-dark); font-weight: 700; }
