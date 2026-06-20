@@ -1175,7 +1175,8 @@
     "tonnage": "H",
     "lore": "The Beelzebub is a class of battleship designed and constructed by the Scourge. Much to the concern of the UCM's Office of Naval Intelligence, the Beelzebub - alongside several other never-before-seen classes of Scourge battleship - have begun to appear on the battlefields of the Reconquest. As with the previously-encountered classes, the hulls of these ships are scarred and pitted from countless years of service. Why these classes are only being committed now is a question of great concern for the UCM and its allies.\n\nThe Beelzebub differentiates itself from its contemporaries thanks to its furnace batteries - two collections of furnace cannons that can output enough firepower to melt through cruisers in a single salvo. As if that wasn't enough, the Beelzebub also packs an underslung mega plasma lance battery on a traversable mount to give it an edge against enemy battleships, as well as potent close action (as is the standard for Scourge vessels).",
     "rulesText": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”.",
-    "namesake": "A prince of Hell whose name means 'Lord of the Flies', ranked among the chief demons and tied to the sin of gluttony."
+    "namesake": "A prince of Hell whose name means 'Lord of the Flies', ranked among the chief demons and tied to the sin of gluttony.",
+    "storeUrl": "https://ttcombat.com/products/scourge-beelzebub-battleship-1"
    }
   },
   {
@@ -1309,7 +1310,8 @@
     "tonnage": "H",
     "lore": "The Daemon is a class of battleship designed and constructed by the Scourge. Like its sister class, the Dragon, the Daemon is one of the oldest starship designs still in service with the Scourge, behind only the rarely-seen super-dreadnoughts.\n\nBased on the general aging and battle scars sighted on these battleships, the UCM's naval planners estimate they were constructed somewhere between 500 to 2000 years ago, making them truly ancient.\n\nNewer Daemons have never been sighted, leading some to speculate that the Scourge have lost the ability to construct new ones. Regardless of whether or not it's true, the Scourge have yet to replace any destroyed battleships and only deploy those they have at their disposal when the outcome is assured.\n\nRegardless of age, the Daemon possesses firepower beyond question. Its prow is laced with oculus weaponry and tipped with a pair of furnace fangs, making it one of the most potent vessels available to the Scourge.",
     "rulesText": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”.",
-    "namesake": "From the Greek 'daimon', a spirit standing between gods and mortals; in later lore, a demon outright."
+    "namesake": "From the Greek 'daimon', a spirit standing between gods and mortals; in later lore, a demon outright.",
+    "storeUrl": "https://ttcombat.com/products/scourge-battleships"
    }
   },
   {
@@ -1543,7 +1545,13 @@
      "Dark Scion",
      "Nosferatu (Banshee class)"
     ],
-    "namesake": "A wailing female spirit of Irish folklore whose mournful cry in the night foretells a coming death."
+    "namesake": "A wailing female spirit of Irish folklore whose mournful cry in the night foretells a coming death.",
+    "altSculpts": [
+     {
+      "name": "Basilisk",
+      "url": "https://ttcombat.com/products/scourge-basilisk-exclusive"
+     }
+    ]
    }
   },
   {
@@ -1620,7 +1628,13 @@
     "famousShips": [
      "Earthbane"
     ],
-    "namesake": "In Japanese belief, an akuma is a malevolent fire-spirit or demon that brings misfortune and ruin."
+    "namesake": "In Japanese belief, an akuma is a malevolent fire-spirit or demon that brings misfortune and ruin.",
+    "altSculpts": [
+     {
+      "name": "Basilisk",
+      "url": "https://ttcombat.com/products/scourge-basilisk-exclusive"
+     }
+    ]
    }
   },
   {
@@ -2062,7 +2076,13 @@
      "Firebreather",
      "Kronstein’s Lament"
     ],
-    "namesake": "A wyvern, the two-legged winged dragon of European heraldry, fierce and venom-tailed."
+    "namesake": "A wyvern, the two-legged winged dragon of European heraldry, fierce and venom-tailed.",
+    "altSculpts": [
+     {
+      "name": "Solar Wyvern",
+      "url": "https://ttcombat.com/products/scourge-solar-cruisers"
+     }
+    ]
    }
   },
   {
@@ -2127,7 +2147,13 @@
      "Old Serpent",
      "Roche’s Nightmare"
     ],
-    "namesake": "The Sphinx, the lion-bodied riddler of Greek myth who devoured any traveller that failed her riddle."
+    "namesake": "The Sphinx, the lion-bodied riddler of Greek myth who devoured any traveller that failed her riddle.",
+    "altSculpts": [
+     {
+      "name": "Solar Sphinx",
+      "url": "https://ttcombat.com/products/scourge-solar-cruisers"
+     }
+    ]
    }
   },
   {
@@ -2455,7 +2481,8 @@
     "isUnique": true,
     "tonnage": "L",
     "lore": "Thankfully, this vessel’s main weapon is unique to it. The Anharmonic Resonator is marked by two distinctive emanation banks along the ship’s midsection and is one of the most despised weapons any captain might face, hence the moniker given to whatever captain this ship has: The Hated. This individual throws its ship into combat with little regard for personal safely, unfortunate, since the weapon’s effects are limited to close victims. The Resonator throws pulsing waves of penetrating subatomic particles and exotic radiations into the target, causing a range of unpredictable internal effects, crew deaths, widespread vomiting, and systems failures. Given the necessity of being near the target, Little Chaos is equipped with one of the best stealth suites yet observed on any Scourge vessel. It is speculated that this ship was exceedingly difficult for the enemy to build or is challenging to maintain since they have produced no other known examples despite its horrible effectiveness. There are even suggestions that its entire crew might die of radiation poisoning after an engagement, although the captain’s consistent behaviour suggests that it, at least, fights from a heavily shielded bridge.",
-    "namesake": "[Chaos](https://en.wikipedia.org/wiki/Chaos_(cosmogony)) was the primordial void in Greek cosmogony, the formless gap that existed before all else. In Hesiod's Theogony it is the first being to come into existence, from which Erebus and Nyx were born."
+    "namesake": "[Chaos](https://en.wikipedia.org/wiki/Chaos_(cosmogony)) was the primordial void in Greek cosmogony, the formless gap that existed before all else. In Hesiod's Theogony it is the first being to come into existence, from which Erebus and Nyx were born.",
+    "storeUrl": "https://ttcombat.com/products/the-hated-little-chaos"
    }
   },
   {
@@ -2595,7 +2622,8 @@
      "Chang’s End",
      "Bloodtide"
     ],
-    "namesake": "A succubus, a female demon of European folklore that visits and drains sleeping men."
+    "namesake": "A succubus, a female demon of European folklore that visits and drains sleeping men.",
+    "storeUrl": "https://ttcombat.com/products/succubus-destroyers"
    }
   },
   {
@@ -2794,7 +2822,8 @@
      "Crow Nebula 2",
      "Sable Vulture"
     ],
-    "namesake": "A wraith, a ghostly apparition of Scottish lore whose appearance often heralds a death."
+    "namesake": "A wraith, a ghostly apparition of Scottish lore whose appearance often heralds a death.",
+    "storeUrl": "https://ttcombat.com/products/scourge-wraith-cutters"
    }
   },
   {
@@ -2967,7 +2996,8 @@
      "Silent Guardian",
      "Xi’s Sentinel"
     ],
-    "namesake": "A Mesopotamian protective spirit, a winged bull-man set as a guardian upon the thresholds of palaces."
+    "namesake": "A Mesopotamian protective spirit, a winged bull-man set as a guardian upon the thresholds of palaces.",
+    "storeUrl": "https://ttcombat.com/products/scourge-monitors-1"
    }
   },
   {
@@ -3389,7 +3419,8 @@
     "famousShips": [
      "None - all destroyed"
     ],
-    "namesake": "Hiruko, the 'leech child' of Shinto myth, a malformed deity set adrift on the sea by its divine parents."
+    "namesake": "Hiruko, the 'leech child' of Shinto myth, a malformed deity set adrift on the sea by its divine parents.",
+    "storeUrl": "https://ttcombat.com/products/hiruko-boarding-cutters-1"
    }
   },
   {
@@ -3436,7 +3467,8 @@
      "Halsey’s Folly",
      "Jack the Ripper"
     ],
-    "namesake": "A nicker (or nixie), a shape-shifting water-spirit of Germanic folklore that lures travellers to drown."
+    "namesake": "A nicker (or nixie), a shape-shifting water-spirit of Germanic folklore that lures travellers to drown.",
+    "storeUrl": "https://ttcombat.com/products/scourge-hunter-killer-nickar-class-1"
    }
   },
   {

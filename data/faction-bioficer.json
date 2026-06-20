@@ -1163,7 +1163,13 @@
       "lore": "Although all Bioficer sightings are rare, if increasing, certain ship classes have only been observed once. The sole record of the fearsome Styx class comes from the mangled tertiary flight recorder of the battleship UCMS Bellaque. She was lost with all hands in the Eden system, and only an atomic cloud and cored-out hull fragments remained – the work of the fearsome Decon Annihilator, the Styx’s colossal primary weapon.\n\nThe Styx seems to have similar capabilities to the Stature class, but utilises an enlarged, novel hull more closely related to Bioficer cruisers. Some believe this vessel was unique, casting further doubt on the old notion that the Bioficers lack individuality."
      }
     ],
-    "lore": "Reporting class: Battlecruiser. Every Battlecruiser carries a designation beginning with S."
+    "lore": "Reporting class: Battlecruiser. Every Battlecruiser carries a designation beginning with S.",
+    "altSculpts": [
+     {
+      "name": "Styx",
+      "url": "https://ttcombat.com/products/bioficer-styx-exclusive"
+     }
+    ]
    }
   },
   {
@@ -2122,7 +2128,8 @@
     "isRare": false,
     "isUnique": true,
     "tonnage": "L",
-    "lore": "Nicknamed by lucky survivors, The Melter became a feared lone wolf among Bioficer raiding parties. Its favoured victims were larger foes who didn’t feel as threatened by a vessel of its modest size as they should. No other ship was known in this configuration, so the Admiralty assigned its guiding Intelligence the designation Anode. This individual was entirely unsubtle and clearly had access to superior technology over its peers. It featured an enhanced superstructure and power matrix, upping it to heavy destroyer tonnage. All this supported a single, prow weapons system: the Themator Cage. Quite different in form to regular thermators, this was as devastating as most battleship primary armaments, albeit only at close range. This led to the vessel’s destruction at the hands of the UCMS Gaugamela over Olympus in early 2679. However, reports of an identical vessel and characteristic behaviours followed weeks later, forcing the Admiralty to conclude that this Intelligence had successfully transferred out and potentially has several of these unusual vessels at its disposal."
+    "lore": "Nicknamed by lucky survivors, The Melter became a feared lone wolf among Bioficer raiding parties. Its favoured victims were larger foes who didn’t feel as threatened by a vessel of its modest size as they should. No other ship was known in this configuration, so the Admiralty assigned its guiding Intelligence the designation Anode. This individual was entirely unsubtle and clearly had access to superior technology over its peers. It featured an enhanced superstructure and power matrix, upping it to heavy destroyer tonnage. All this supported a single, prow weapons system: the Themator Cage. Quite different in form to regular thermators, this was as devastating as most battleship primary armaments, albeit only at close range. This led to the vessel’s destruction at the hands of the UCMS Gaugamela over Olympus in early 2679. However, reports of an identical vessel and characteristic behaviours followed weeks later, forcing the Admiralty to conclude that this Intelligence had successfully transferred out and potentially has several of these unusual vessels at its disposal.",
+    "storeUrl": "https://ttcombat.com/products/anode-the-melter"
    }
   },
   {

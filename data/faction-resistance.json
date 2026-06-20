@@ -358,7 +358,8 @@
       "Launch": 4,
       "Structures": 2
      }
-    }
+    },
+    "storeUrl": "https://ttcombat.com/products/resistance-coloniser-dreadnought-pre-order-october-3rd-2025"
    }
   },
   {
@@ -1527,7 +1528,13 @@
      "[Project 26-02](https://en.wikipedia.org/wiki/Kirov-class_cruiser)",
      "Dark Side of the Moon"
     ],
-    "namesake": "A [senator](https://en.wikipedia.org/wiki/Roman_Senate), one of the elder statesmen of the Roman Senate, the council that steered the Republic and Empire."
+    "namesake": "A [senator](https://en.wikipedia.org/wiki/Roman_Senate), one of the elder statesmen of the Roman Senate, the council that steered the Republic and Empire.",
+    "altSculpts": [
+     {
+      "name": "Vicarius",
+      "url": "https://ttcombat.com/products/resistance-vicarius-exclusive"
+     }
+    ]
    }
   },
   {
@@ -1584,7 +1591,8 @@
      "Hell’s Fury",
      "Vengefire (Kalium)"
     ],
-    "namesake": "A [gladiator](https://en.wikipedia.org/wiki/Gladiator), the armed fighter who battled for the crowd's favour in the arenas of ancient Rome."
+    "namesake": "A [gladiator](https://en.wikipedia.org/wiki/Gladiator), the armed fighter who battled for the crowd's favour in the arenas of ancient Rome.",
+    "storeUrl": "https://ttcombat.com/products/resistance-grand-cruiser-1"
    }
   },
   {
@@ -1796,7 +1804,8 @@
     "isUnique": true,
     "tonnage": "L",
     "lore": "Guy Fawkes (clearly not his real name) is infamous for one thing, blowing battleships to smithereens with massive fire ships. His small, eager crew of plastique-happy privateers are backed by a personal deep-space shipyard kitted out for packing ships with explosives and armouring them enough to survive a one-way charge towards any enemy of any sufficiently flush benefactor. Fawkes prefers old colony ships as candidates, given their cavernous holds. To their creaking frames his engineers affix laughably thick frontal armour plates, having freed up mass by tearing out crew quarters, weapons, spares and anything needed for long-term operations. In combat, Fawkes flies his ship-sized munition personally alongside an insanely loyal, or just insane, skeleton crew. They all jump ship in escape pods at the last possible moment, coordinating with a nearby friendly vessel to collect them so they might do it all again another day. He's currently on Parliament XIII, with no indication he might retire for the quiet life among his explosively gotten gains.",
-    "namesake": "[Guy Fawkes](https://en.wikipedia.org/wiki/Guy_Fawkes) (1570-1606), the conspirator caught beneath Parliament with the gunpowder meant to blow it sky-high in 1605. A convert to Catholicism, he fought for Catholic Spain in the Eighty Years' War before joining the plot, in which he was tasked with guarding the gunpowder and lighting the fuse. He avoided the full horror of his execution by hanging, drawing and quartering by breaking his neck in a fall from the gallows. His effigy is still burnt across Britain each year on Bonfire Night."
+    "namesake": "[Guy Fawkes](https://en.wikipedia.org/wiki/Guy_Fawkes) (1570-1606), the conspirator caught beneath Parliament with the gunpowder meant to blow it sky-high in 1605. A convert to Catholicism, he fought for Catholic Spain in the Eighty Years' War before joining the plot, in which he was tasked with guarding the gunpowder and lighting the fuse. He avoided the full horror of his execution by hanging, drawing and quartering by breaking his neck in a fall from the gallows. His effigy is still burnt across Britain each year on Bonfire Night.",
+    "storeUrl": "https://ttcombat.com/products/resistance-famous-commander"
    }
   },
   {
@@ -2063,7 +2072,8 @@
      "First Message",
      "Wrathful (Kalium)"
     ],
-    "namesake": "The [sagittarii](https://en.wikipedia.org/wiki/Sagittarii), the auxiliary archers who lent ranged firepower to the close-packed ranks of the Roman legions."
+    "namesake": "The [sagittarii](https://en.wikipedia.org/wiki/Sagittarii), the auxiliary archers who lent ranged firepower to the close-packed ranks of the Roman legions.",
+    "storeUrl": "https://ttcombat.com/products/resistance-sagittarii-cutters-1"
    }
   },
   {
@@ -2402,7 +2412,8 @@
      "DS-1",
      "DS-2 etc (Kalium)"
     ],
-    "namesake": "[Seneca the Younger](https://en.wikipedia.org/wiki/Seneca_the_Younger) (c.4 BC-AD 65), the Roman Stoic philosopher and statesman, tutor to Nero and forced to take his own life. Born in Corduba in Roman Spain, he was one of the foremost writers of Stoic philosophy, best known for his moral essays and his Letters to Lucilius. He also wrote nine tragedies, including Medea and Thyestes, which strongly influenced Renaissance and Elizabethan drama."
+    "namesake": "[Seneca the Younger](https://en.wikipedia.org/wiki/Seneca_the_Younger) (c.4 BC-AD 65), the Roman Stoic philosopher and statesman, tutor to Nero and forced to take his own life. Born in Corduba in Roman Spain, he was one of the foremost writers of Stoic philosophy, best known for his moral essays and his Letters to Lucilius. He also wrote nine tragedies, including Medea and Thyestes, which strongly influenced Renaissance and Elizabethan drama.",
+    "storeUrl": "https://ttcombat.com/products/seneca-detonators"
    }
   },
   {
@@ -2455,7 +2466,8 @@
      "Marston’s Run (Independents)",
      "Hellhunter"
     ],
-    "namesake": "A [munifex](https://en.wikipedia.org/wiki/Immunes), the ordinary Roman legionary liable for the full burden of fatigues and labour."
+    "namesake": "A [munifex](https://en.wikipedia.org/wiki/Immunes), the ordinary Roman legionary liable for the full burden of fatigues and labour.",
+    "storeUrl": "https://ttcombat.com/products/resistance-corvettes-1"
    }
   },
   {

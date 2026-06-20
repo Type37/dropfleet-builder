@@ -1201,7 +1201,8 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "Like the Bronze and Silver class battleships, the Gold class supercarrier is a relatively new and scarce sighting. Since none of these classes were recorded before 2672, it is assumed they are newly laid down, but with the Shaltari, things are seldom as they seem.\n\nUnlike the familiar Platinum class, the Gold is a far more aggressive vessel, since it mounts the powerful, close-action microwave arrays of its sister classes. Also armed with the Ion Cannonade, the Gold is a terror to almost any vessel, and that's before its swarms of formidable Shaltari bombers strike. Certainly, the Gold is one the Shaltari's premier assets and a worthy chariot for the mightiest of attack-oriented Starchiefs.",
-    "namesake": "The dense, untarnishing yellow metal that has served as treasure and currency across every civilisation."
+    "namesake": "The dense, untarnishing yellow metal that has served as treasure and currency across every civilisation.",
+    "storeUrl": "https://ttcombat.com/products/shaltari-gold-battleship"
    }
   },
   {
@@ -1820,7 +1821,13 @@
      "Forever in Wisdom",
      "Supreme"
     ],
-    "namesake": "The blue variety of corundum, second only to diamond in hardness among gems."
+    "namesake": "The blue variety of corundum, second only to diamond in hardness among gems.",
+    "altSculpts": [
+     {
+      "name": "Palladium",
+      "url": "https://ttcombat.com/products/shaltari-adamant-exclusive"
+     }
+    ]
    }
   },
   {
@@ -1894,7 +1901,13 @@
      "Bringer of Final Death",
      "Ages Scarlet"
     ],
-    "namesake": "The blood-red variety of corundum, among the most valued of all coloured gemstones."
+    "namesake": "The blood-red variety of corundum, among the most valued of all coloured gemstones.",
+    "altSculpts": [
+     {
+      "name": "Adamant",
+      "url": "https://ttcombat.com/products/shaltari-adamant-exclusive"
+     }
+    ]
    }
   },
   {
@@ -2434,7 +2447,13 @@
      "Warhold",
      "Kingdom of Osiris"
     ],
-    "namesake": "The brilliant green gem of the beryl family, valued since antiquity above almost all other stones."
+    "namesake": "The brilliant green gem of the beryl family, valued since antiquity above almost all other stones.",
+    "altSculpts": [
+     {
+      "name": "Aaru Emerald",
+      "url": "https://ttcombat.com/products/shaltari-aaru-cruisers"
+     }
+    ]
    }
   },
   {
@@ -2530,7 +2549,13 @@
      "Fatebringer"
     ],
     "rulesText": "This ship may replace its Fighters & Bombers with Mines for +10 pts.",
-    "namesake": "A dark, fine-grained volcanic rock - the most common stone of the planet's crust and ocean floors."
+    "namesake": "A dark, fine-grained volcanic rock - the most common stone of the planet's crust and ocean floors.",
+    "altSculpts": [
+     {
+      "name": "Aaru Basalt",
+      "url": "https://ttcombat.com/products/shaltari-aaru-cruisers"
+     }
+    ]
    }
   },
   {
@@ -3107,7 +3132,8 @@
      "Black Pulse",
      "Long Certainty"
     ],
-    "namesake": "A hard, lustrous metal that resists tarnish; its name comes from the Greek for 'colour', for its vivid compounds."
+    "namesake": "A hard, lustrous metal that resists tarnish; its name comes from the Greek for 'colour', for its vivid compounds.",
+    "storeUrl": "https://ttcombat.com/products/chromium-destroyers"
    }
   },
   {
@@ -3234,7 +3260,8 @@
      "Raa’s Claw",
      "Featherblade"
     ],
-    "namesake": "A soft, golden alkali metal so reactive it ignites in air; its atomic vibrations define the modern second."
+    "namesake": "A soft, golden alkali metal so reactive it ignites in air; its atomic vibrations define the modern second.",
+    "storeUrl": "https://ttcombat.com/products/shaltari-caesium-cutters-1"
    }
   },
   {
@@ -3724,7 +3751,8 @@
      "Sudden Lash",
      "Ether Rider"
     ],
-    "namesake": "The second-lightest element, an inert gas born in the hearts of stars and lighter than air."
+    "namesake": "The second-lightest element, an inert gas born in the hearts of stars and lighter than air.",
+    "storeUrl": "https://ttcombat.com/products/helium-voidflyers"
    }
   },
   {
@@ -3836,7 +3864,8 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "L",
-    "lore": "The bizzare nature of these ‘ships’ has resulted in the unique classification of ‘voidgate’, devoid as they are of unique character. Indeed, the Shaltari seem to share this opinion, rarely naming them and or giving them more than a skeleton crew. These vessels loosely fulfil the same tactical role as strike carriers for other races, although they do not actually carry troops. Instead, they merely act as a conduit for Shaltari teleportation, transferring Gates (such as the Eden and the Gaia - Shaltari analogues to dropships) from an orbiting mothership to the atmosphere. Since a voidgate must be present in the immediate vicinity of the dropsite, it must physically move to where the teleported construct(s) are to re-materialise. This removes the risk to the forces before deployment as they are never physically present aboard the voidgate, but are instead aboard a much larger and tougher mothership. Voidgates can also re-route forces between each other once on the ground, affording the Shaltari immense tactical flexibility to counterbalance their low Voidgates also create a substantial field of energetic disturbance in the air. This energy can be unleashed against nearby enemy atmospheric assets, such as strike carriers, dropships or bulk landers and can also take the place of defence batteries in a tactical sense, since the Shaltari have no bulk landers of their own."
+    "lore": "The bizzare nature of these ‘ships’ has resulted in the unique classification of ‘voidgate’, devoid as they are of unique character. Indeed, the Shaltari seem to share this opinion, rarely naming them and or giving them more than a skeleton crew. These vessels loosely fulfil the same tactical role as strike carriers for other races, although they do not actually carry troops. Instead, they merely act as a conduit for Shaltari teleportation, transferring Gates (such as the Eden and the Gaia - Shaltari analogues to dropships) from an orbiting mothership to the atmosphere. Since a voidgate must be present in the immediate vicinity of the dropsite, it must physically move to where the teleported construct(s) are to re-materialise. This removes the risk to the forces before deployment as they are never physically present aboard the voidgate, but are instead aboard a much larger and tougher mothership. Voidgates can also re-route forces between each other once on the ground, affording the Shaltari immense tactical flexibility to counterbalance their low Voidgates also create a substantial field of energetic disturbance in the air. This energy can be unleashed against nearby enemy atmospheric assets, such as strike carriers, dropships or bulk landers and can also take the place of defence batteries in a tactical sense, since the Shaltari have no bulk landers of their own.",
+    "storeUrl": "https://ttcombat.com/products/shaltari-voidgates"
    }
   },
   {
