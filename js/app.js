@@ -4300,6 +4300,15 @@ const App = (() => {
     return `<div class="admiral-thumb rank-thumb">${ins}</div>`;
   }
 
+  // Collapsible lore for a famous admiral. The only lore we hold for admirals is
+  // their flagship's class lore (+ namesake / known ships), pulled in during the
+  // transform, so surface that on the admiral card.
+  function admiralLoreBlock(a) {
+    if (!a || !a.lore) return '';
+    const namesake = a.namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(a.namesake)}</div>` : '';
+    return `<details class="ship-lore" style="margin-top:var(--sp-sm)"><summary class="ship-lore-toggle">Lore</summary><div class="ship-lore-text">${formatLore(a.lore, a.famousShipsPrefix, a.famousShips)}${namesake}</div></details>`;
+  }
+
   function openAdmiralModal() {
     if (!currentFleet) return;
     const factionShips = shipDB[currentFleet.faction];
@@ -4383,6 +4392,7 @@ const App = (() => {
             </div>
           </div>
           ${abilities.length > 0 ? `<div style="margin-top:var(--sp-md);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${esc(a.cost)})` : ''}${a.effect ? ', ' + esc(a.effect) : ''}</div>`).join('')}</div>` : ''}
+          ${admiralLoreBlock(admiral)}
           <div class="admiral-modal-picks">+ choose ${admiral.ability_picks || 1} from the Abilities Table</div>
           ${isDisabled ? `<div class="text-caption" style="margin-top:var(--sp-sm)">${tooHighLevel ? `Requires ${sizeInfo.label}+` : 'One named admiral per fleet'}</div>` : `<button class="btn btn-primary btn-sm" style="margin-top:var(--sp-md)" onclick="App.addFamousAdmiral('${key}')">Add to fleet: brings ${esc(admiral.ship_name || 'their ship')}</button>`}
         </div>`;
