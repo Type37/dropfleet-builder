@@ -3257,6 +3257,8 @@ h1, h2, h3, h4, h5, h6 {
 /* Launch-capability icons on picker cards (fighters / fire ships / mines /
    dropships / torpedoes / other). */
 .ship-card-launch { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-top: var(--sp-xs); }
+/* Bombardment tag: same shape as Launches, gold accent so it reads as distinct. */
+.ship-card-bombard .launch-type-chip { background: var(--gold-subtle); color: var(--gold-dark); }
 .launch-cap-lead {
   font-family: var(--font-condensed);
   font-size: var(--text-xs);

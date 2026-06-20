@@ -2813,6 +2813,13 @@ const App = (() => {
     return icons.length ? `<div class="ship-card-launch"><span class="launch-cap-lead">Launches</span>${icons.join('')}</div>` : '';
   }
 
+  // Bombardment capability tag for ship cards (sibling to the Launches tag).
+  function shipBombardmentTag(dbShip) {
+    if (!dbShip || !shipHasBombardment(dbShip)) return '';
+    const icon = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1v2.5M8 12.5V15M1 8h2.5M12.5 8H15" stroke-linecap="round"/></svg>';
+    return `<div class="ship-card-launch ship-card-bombard"><span class="launch-cap-lead">Bombardment</span><span class="launch-type-chip">${icon}<span>Orbital bombardment</span></span></div>`;
+  }
+
   const ARC_LABELS = {
     'B': 'Broadside (Port & Starboard)',
     'F': 'Front',
@@ -3688,9 +3695,17 @@ const App = (() => {
     const has = arr => (arr || []).some(l => DROP_RE.test((l && l.name) || ''));
     return has(s.loads) || (s.loadoutOptions || []).some(lo => (lo.options || []).some(o => has(o.loads)));
   };
+  // "Bombardment" = carries a weapon with the Bombardment rule (orbital strike on
+  // cities / ships in atmosphere), directly or via a loadout option.
+  const BOMBARDMENT_RE = /\bBombardment\b/i;
+  const shipHasBombardment = s => {
+    const has = arr => (arr || []).some(w => w && BOMBARDMENT_RE.test(w.special || ''));
+    return has(s.weapons) || (s.loadoutOptions || []).some(lo => (lo.options || []).some(o => has(o.weapons)));
+  };
   const SHIP_FILTERS = [
     { key: 'launch',  label: 'Has Launch',   test: s => (s.loads && s.loads.length > 0) || (s.loadoutOptions || []).some(lo => lo.options.some(o => o.loads && o.loads.length > 0)) },
     { key: 'drop',    label: 'Has Drop',     test: shipHasDrop },
+    { key: 'bombardment', label: 'Bombardment', test: shipHasBombardment },
     { key: 'rare',    label: 'Rare',         test: s => s.isRare },
     { key: 'unique',  label: 'Unique',       test: s => s.isUnique },
     { key: 'famous',  label: 'Famous',       test: s => s.type === 'Famous' },
@@ -3946,6 +3961,7 @@ const App = (() => {
       ${renderStatGrid(data)}
       ${weaponSummary}
       ${isFamous ? '' : shipLaunchIcons(data, currentFleet.faction)}
+      ${isFamous ? '' : shipBombardmentTag(data)}
       ${specialRules.length > 0 ? `<div class="special-rules">${specialRules.map(r => {
         // Every special rule is a clickable chip: prefer the ship's own detail,
         // else fall back to the shared rules glossary so nothing is a dead chip.
