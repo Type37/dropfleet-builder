@@ -2098,7 +2098,17 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "namesake": "[Siam](https://en.wikipedia.org/wiki/Thailand) was the name of the kingdom centred on the Chao Phraya River basin in Southeast Asia from the fourteenth century until 1939, when the government renamed the country Thailand; the historical name persisted in foreign usage for decades afterward. It was the only Southeast Asian state never to be colonised by a European power, preserving its independence between the British and French empires. The kingdom is now known as Thailand, a name that translates as land of the free."
+    "namesake": "[Siam](https://en.wikipedia.org/wiki/Thailand) was the name of the kingdom centred on the Chao Phraya River basin in Southeast Asia from the fourteenth century until 1939, when the government renamed the country Thailand; the historical name persisted in foreign usage for decades afterward. It was the only Southeast Asian state never to be colonised by a European power, preserving its independence between the British and French empires. The kingdom is now known as Thailand, a name that translates as land of the free.",
+    "models": [
+     {
+      "label": "Plastic",
+      "url": "https://ttcombat.com/products/ucm-battlecruisers-1"
+     },
+     {
+      "label": "Resin (direct)",
+      "url": "https://ttcombat.com/products/ucm-battlecruisers"
+     }
+    ]
    }
   },
   {
@@ -2162,7 +2172,17 @@
     "tonnage": "H",
     "lore": "The Venice is a class of battlecruiser designed and constructed by the United Colonies of Mankind. While most UCM admirals take to the field in battleships or dreadnoughts, the need for a specialist command ship led to the eventual creation of the Venice. On top of being extremely durable - the better to protect its precious cargo - the Venice is equipped with a unique communications array that grants any officer mounted in the ship access to peerless battlespace awareness, crystal-clear comms, and advanced spatial mapping. That said, this comms array is highly expensive and extremely large, preventing it from being mounted on any other ship of a similar tonnage.",
     "rulesText": "An admiral assigned to this ship gains the following Command Abilities: Telemetry Link: When you activate another friendly Group in Orbit, that Group increases its total movement (after orders) by 4” this round. Order to Fire: When you activate another friendly Group in Orbit, pick one of the following options: •\t While that Group is on the General Quarters, Course Change, or Damage Control orders, each Ship may attack with an additional weapon. •\t While that Group is on the General Quarters or Weapons Free orders, you may attack with a single allowed Weapon System before turning and moving any Ships in that Group. That Weapon System cannot be used for the rest of the Group’s activation.",
-    "namesake": "[Venice](https://www.veneziaunica.it/en), Italy is the only major city in the world built entirely on water, its 118 islands connected by roughly 400 bridges over 150 canals. The city has been slowly sinking into the Adriatic since its construction, and the threat of flooding has grown acute enough that a system of mobile floodgates now seals the lagoon during high-water events. For roughly a thousand years it was the capital of the Republic of Venice, a maritime trading power that dominated commerce between Europe and the East. The historic city and its lagoon are inscribed together as a UNESCO World Heritage Site."
+    "namesake": "[Venice](https://www.veneziaunica.it/en), Italy is the only major city in the world built entirely on water, its 118 islands connected by roughly 400 bridges over 150 canals. The city has been slowly sinking into the Adriatic since its construction, and the threat of flooding has grown acute enough that a system of mobile floodgates now seals the lagoon during high-water events. For roughly a thousand years it was the capital of the Republic of Venice, a maritime trading power that dominated commerce between Europe and the East. The historic city and its lagoon are inscribed together as a UNESCO World Heritage Site.",
+    "models": [
+     {
+      "label": "Plastic",
+      "url": "https://ttcombat.com/products/ucm-battlecruisers-1"
+     },
+     {
+      "label": "Resin (direct)",
+      "url": "https://ttcombat.com/products/ucm-battlecruisers"
+     }
+    ]
    }
   },
   {
@@ -2219,7 +2239,17 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "The Rome is a class of battlecruiser designed and constructed by the United Colonies of Mankind. Despite being one of the largest vessels in the UCM's fleet, the Rome owes its existence to the actions of a much smaller - and much older - class of ship, the Havana. Several well-publicised kills scored by aging Havanas put enough pressure on the UCM Admiralty to finance the development of a new ship that primarily focused on torpedoes. Faced with these criteria, UCM naval designers came up with the Rome, opting for a battlecruiser hull in order to support double tubes.\n\nThe Rome is intended to be an aggressive ship killer, making use of its speed to get into the enemy's face before unloading its payload of two heavy torpedoes. To give it a modicum of protection for this somewhat risky maneuver, the Rome is equipped with 46 additional Aegis-V point defence lasers, all the better to sponge off return fire from the enemy vessel. This overabundance of defence also means the Rome can lend aid to nearby ships, giving it a secondary role to fill should its torpedoes be expended.\n\nThe Rome entered service on the second month of the battle for Earth. Two of these brand-new vessels - the Charlemagne and the Eden Victory - were destroyed as a Scourge dreadnought moved to engage Admiral Halsey's flagship, but their torpedoes broke the enemy vessel in half shortly thereafter, cementing the Rome's place in the UCM navy.",
-    "namesake": "[Rome](https://www.turismoroma.it/en), Italy was traditionally founded in 753 BC on seven hills beside the Tiber River, grew to govern an empire stretching from Scotland to Mesopotamia, and has been continuously inhabited longer than any other city in Western Europe. It is the capital of modern Italy and the most populous city in the country. Within its boundaries lies Vatican City, the independent enclave that serves as the seat of the Roman Catholic Church."
+    "namesake": "[Rome](https://www.turismoroma.it/en), Italy was traditionally founded in 753 BC on seven hills beside the Tiber River, grew to govern an empire stretching from Scotland to Mesopotamia, and has been continuously inhabited longer than any other city in Western Europe. It is the capital of modern Italy and the most populous city in the country. Within its boundaries lies Vatican City, the independent enclave that serves as the seat of the Roman Catholic Church.",
+    "models": [
+     {
+      "label": "Plastic",
+      "url": "https://ttcombat.com/products/ucm-battlecruisers-1"
+     },
+     {
+      "label": "Resin (direct)",
+      "url": "https://ttcombat.com/products/ucm-battlecruisers"
+     }
+    ]
    }
   },
   {
@@ -2290,7 +2320,17 @@
      }
     ],
     "lore": "The Perth is a class of battlecruiser designed and constructed by the United Colonies of Mankind. Alongside the Johannesburg, the Perth's design came out of the battlecruiser testbed program, building off the successes of the prototype vessel. While the Johannesburg is armed with a more conventional mass driver battery as its main armament, the Perth is instead built around the Viper superheavy laser - a truly massive weapon that stands as one of the largest the UCM has ever designed. Taking up almost half the ship's length, the Viper laser is more than capable of bisecting a cruiser, though its fixed mount makes firing it a test of skill for the captain.\n\nThe Perth entered production using an all-new battlecruiser hull that was designed for speed and firepower at the expense of survivability, and which could be more cheaply produced than the prototype version would allow. Despite this, the Perth currently cannot be built fast enough to satisfy demand, as its unique mission profile is well-suited to the hunter-killer operations of the Reconquest.\n\nAs a part of the battlecruiser testbed program, the UCMS Avalon was constructed to trial the Viper laser and the mission profile of battlecruisers as a whole. Similarly to the UCMS Atlantis, the Avalon was constructed using many of the same components that UCM cruisers do, allowing for an easy method of prototype testing without requiring a new hull design. However, upon the UCM's decision to design an all-new hull for their battlecruisers, the Avalon was left as the only vessel of her class. It is currently unknown if the Avalon is still in active service.",
-    "namesake": "[Perth](https://visitperth.com/) was founded in 1829 on the Swan River in Western Australia as a free settlement; it is the most geographically isolated major city on Earth, closer to Singapore than to Sydney, and grew rapidly after gold was discovered in the hinterland in 1893. It is the capital and largest city of Western Australia, the state that covers roughly a third of the continent. Its Mediterranean climate gives it some of the sunniest weather of any major Australian city."
+    "namesake": "[Perth](https://visitperth.com/) was founded in 1829 on the Swan River in Western Australia as a free settlement; it is the most geographically isolated major city on Earth, closer to Singapore than to Sydney, and grew rapidly after gold was discovered in the hinterland in 1893. It is the capital and largest city of Western Australia, the state that covers roughly a third of the continent. Its Mediterranean climate gives it some of the sunniest weather of any major Australian city.",
+    "models": [
+     {
+      "label": "Plastic",
+      "url": "https://ttcombat.com/products/ucm-battlecruisers-1"
+     },
+     {
+      "label": "Resin (direct)",
+      "url": "https://ttcombat.com/products/ucm-battlecruisers"
+     }
+    ]
    }
   },
   {
@@ -2362,6 +2402,20 @@
     "altSculpts": [
      {
       "name": "Atlantis",
+      "url": "https://ttcombat.com/products/ucm-atlantis-exclusive"
+     }
+    ],
+    "models": [
+     {
+      "label": "Plastic",
+      "url": "https://ttcombat.com/products/ucm-battlecruisers-1"
+     },
+     {
+      "label": "Resin (direct)",
+      "url": "https://ttcombat.com/products/ucm-battlecruisers"
+     },
+     {
+      "label": "Alternate resin: Atlantis",
       "url": "https://ttcombat.com/products/ucm-atlantis-exclusive"
      }
     ]

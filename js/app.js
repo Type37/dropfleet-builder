@@ -338,6 +338,7 @@ const App = (() => {
     resistance: 'resistance', bioficer: 'bioficers'
   };
   function shipStoreUrl(name, ship) {
+    if (ship && Array.isArray(ship.models) && ship.models.length) return ship.models[0].url;
     if (ship && ship.storeUrl) return ship.storeUrl;
     const tag = TTC_FACTION_TAG[currentFleet && currentFleet.faction];
     if (tag) return 'https://ttcombat.com/collections/dropfleet-commander/faction_' + tag;
@@ -359,6 +360,17 @@ const App = (() => {
     if (!alts.length) return '';
     const links = alts.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${esc(a.name)}</a>`).join(', ');
     return `<div class="ship-alt-sculpt no-print"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h9v9H2z"/><path d="M5 4V2h9v9h-2"/></svg> Alternate sculpt: ${links} <span class="ship-alt-sculpt-src">(TTCombat)</span></div>`;
+  }
+  // Buyable model versions for a ship: ship.models = [{label, url}] (e.g. Plastic /
+  // Resin (direct) / Alternate resin: Atlantis). Falls back to the older
+  // altSculpts line for ships not yet given a models list.
+  function renderShipModels(ship) {
+    const models = ship && Array.isArray(ship.models) ? ship.models : [];
+    if (!models.length) return altSculptLinks(ship);
+    const links = models.map(m =>
+      `<a class="ship-model-link" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${esc(m.label)}</a>`
+    ).join('');
+    return `<div class="ship-models no-print"><span class="ship-models-lead"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h9v9H2z"/><path d="M5 4V2h9v9h-2"/></svg> Models</span>${links}<span class="ship-models-src">TTCombat</span></div>`;
   }
 
   function admiralArtPath(admiralName) {
@@ -420,7 +432,8 @@ const App = (() => {
         variants: s.variants || [],
         systemSelection: s.systemSelection || null,
         storeUrl: s.storeUrl || null,
-        altSculpts: s.altSculpts || []
+        altSculpts: s.altSculpts || [],
+        models: s.models || []
       };
     });
 
@@ -3604,7 +3617,7 @@ const App = (() => {
       ${heroImageBlock}
       <div class="ship-card-body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
         ${midSection}
-        ${altSculptLinks(dbShip)}
+        ${renderShipModels(dbShip)}
         ${renderSystemsPicker(ship, dbShip, groupId, currentFleet.faction)}
         ${renderFeatureCarrierBlock(ship, dbShip, groupId)}
         ${compact ? '' : renderShipRulesGlossary(dbShip, ship)}

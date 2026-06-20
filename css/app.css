@@ -3108,6 +3108,13 @@ h1, h2, h3, h4, h5, h6 {
 .ship-alt-sculpt a { color: var(--gold-dark); font-weight: 600; text-decoration: none; }
 .ship-alt-sculpt a:hover { text-decoration: underline; }
 .ship-alt-sculpt-src { color: var(--ink-faint); }
+/* Buyable model versions list (Plastic / Resin / Alternate resin). */
+.ship-models { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: var(--text-xs); color: var(--ink-muted); font-family: var(--font-condensed); }
+.ship-models-lead { display: inline-flex; align-items: center; gap: 4px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); }
+.ship-models-lead svg { color: var(--gold-dark); }
+.ship-model-link { color: var(--gold-dark); font-weight: 600; text-decoration: none; border: 1px solid var(--gold-line); border-radius: var(--radius-sm); padding: 1px 7px; }
+.ship-model-link:hover { background: var(--gold-subtle); text-decoration: none; }
+.ship-models-src { color: var(--ink-faint); }
 /* ×N multiplier on collapsed identical-ship cards */
 .ship-qty-badge {
   position: absolute;
