@@ -2783,17 +2783,28 @@ const App = (() => {
   // Launch-asset TYPE icons for the picker cards, so you can tell at a glance what a
   // ship can launch (fighters, fire ships, mines, dropships/landers, torpedoes, or
   // something else). Detection is by the load name.
+  // Distinct launch-asset types (each its own worded chip). Order matters: the
+  // more specific patterns (drop pod, boarding pod, bulk lander) are listed before
+  // generic ones so e.g. "Drop Pod" never reads as a "Dropship".
   const LAUNCH_TYPE_DEFS = [
-    { key: 'fighters', re: /fighter|bomber/i, label: 'Fighters / Bombers',
+    { key: 'fighters', re: /fighter/i, label: 'Fighters',
       icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l5.5 13L8 11l-5.5 3z"/></svg>' },
+    { key: 'bombers', re: /bomber/i, label: 'Bombers',
+      icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 15L2.5 3h11z"/></svg>' },
+    { key: 'torpedoes', re: /torpedo/i, label: 'Torpedoes',
+      icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect x="1.5" y="6" width="9" height="4" rx="2"/><path d="M10.5 8l4-2.2v4.4z"/></svg>' },
+    { key: 'boardingpods', re: /boarding\s*pod/i, label: 'Boarding Pods',
+      icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="8" height="12" rx="4"/><circle cx="8" cy="6" r="1.3" fill="currentColor" stroke="none"/></svg>' },
+    { key: 'bulklanders', re: /bulk\s*lander/i, label: 'Bulk Landers',
+      icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1.5v8M4.5 6.5L8 10l3.5-3.5M2.5 14h11"/></svg>' },
+    { key: 'dropships', re: /dropship/i, label: 'Dropships',
+      icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l5 4 5-4M3 9.5l5 4 5-4"/></svg>' },
+    { key: 'droppods', re: /drop\s*pod/i, label: 'Drop Pods',
+      icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="1.5" width="6" height="9" rx="3" fill="currentColor" stroke="none"/><path d="M5.5 12.5L8 15l2.5-2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
     { key: 'fireships', re: /fire\s*ship/i, label: 'Fire Ships',
       icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5c.5 2.5 3.5 3.5 3.5 7a3.5 3.5 0 0 1-7 0c0-1.4.6-2.3 1.3-3 .1 1 .7 1.4 1.4 1 0-1.9-.8-3.3.8-5z"/></svg>' },
     { key: 'mines', re: /\bmine/i, label: 'Mines',
       icon: '<svg width="14" height="14" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M8 1.6v2.3M8 12.1v2.3M1.6 8h2.3M12.1 8h2.3M3.4 3.4l1.6 1.6M11 11l1.6 1.6M12.6 3.4 11 5M5 11l-1.6 1.6"/></g></svg>' },
-    { key: 'dropships', re: /dropship|drop\s*pod|bulk\s*lander/i, label: 'Dropships / Landers',
-      icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1.5v8M4.5 6.5L8 10l3.5-3.5M2.5 14h11"/></svg>' },
-    { key: 'torpedoes', re: /torpedo|boarding\s*pod/i, label: 'Torpedoes / Boarding Pods',
-      icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><rect x="1.5" y="6" width="9" height="4" rx="2"/><path d="M10.5 8l4-2.2v4.4z"/></svg>' },
   ];
   const LAUNCH_TYPE_OTHER = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1.6v2M8 12.4v2M1.6 8h2M12.4 8h2" stroke-linecap="round"/></svg>';
 
