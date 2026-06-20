@@ -6496,7 +6496,6 @@ body[data-view="builder"] .game-info-footer {
 .weapon-col-dmg--calc:hover { color: #fff; background: var(--navy); border-color: var(--navy); }
 .weapon-col-dmg--calc:hover .dmg-type { color: #fff; }
 .weapon-col-dmg--calc:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
-.weapon-dmg-calc-cue { display: inline-flex; opacity: .8; }
 
 /* Builder far-right pane */
 .builder-calc {
@@ -6509,6 +6508,9 @@ body[data-view="builder"] .game-info-footer {
 }
 .builder-calc.hidden { display: none; }
 .builder-layout.calc-open .builder-detail { flex: 1; }
+.calc-builder { position: relative; min-height: 100%; }
+.calc-resize-handle { position: absolute; left: 0; top: 0; width: 7px; height: 100%; cursor: col-resize; z-index: 5; transition: background .1s; }
+.calc-resize-handle:hover, .calc-resize-handle:active { background: var(--gold-line); }
 .calc-builder-head {
   display: flex; align-items: center; justify-content: space-between;
   padding: var(--sp-md) var(--sp-lg); border-bottom: 1px solid var(--gold-line);
@@ -6559,7 +6561,9 @@ body[data-view="builder"] .game-info-footer {
   display: flex; gap: 8px; align-items: baseline; padding: 6px 9px;
   font-size: var(--text-sm); color: var(--ink); cursor: pointer; text-transform: none; letter-spacing: 0;
 }
-.calc-combo-item:hover { background: var(--navy-subtle); }
+.calc-combo-item:hover, .calc-combo-item.active { background: var(--navy-subtle); }
+.calc-combo-item.active { box-shadow: inset 2px 0 0 var(--gold); }
+.calc-combo-group { position: sticky; top: 0; background: var(--paper-alt); color: var(--gold-dark); font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .05em; font-size: 10px; padding: 3px 9px; border-bottom: 1px solid var(--stroke-light); }
 .calc-combo-custom { font-style: italic; color: var(--ink-muted); border-bottom: 1px solid var(--stroke-light); }
 .calc-combo-fac { flex: 0 0 58px; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); font-family: var(--font-condensed); }
 .calc-combo-name { flex: 1; min-width: 0; }

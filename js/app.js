@@ -3010,7 +3010,7 @@ const App = (() => {
         + ` onclick="Calc.addBuilderWeapon(this)"`
         + ` onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Calc.addBuilderWeapon(this)}"`
         + ` data-cn="${esc(w.name || '')}" data-ca="${esc(w.attack)}" data-cl="${esc(w.lock)}" data-cd="${esc(w.damage)}" data-ct="${esc(w.type || '')}" data-cs="${esc(w.special || '')}">`
-        + `${w.damage}${typeTag}<span class="weapon-dmg-calc-cue" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="2.5" y="1.5" width="11" height="13" rx="1.5"/><line x1="2.5" y1="5.5" x2="13.5" y2="5.5"/><line x1="6" y1="9" x2="6" y2="9" stroke-width="2.2" stroke-linecap="round"/><line x1="10" y1="9" x2="10" y2="9" stroke-width="2.2" stroke-linecap="round"/><line x1="6" y1="12" x2="6" y2="12" stroke-width="2.2" stroke-linecap="round"/><line x1="10" y1="12" x2="10" y2="12" stroke-width="2.2" stroke-linecap="round"/></svg></span></span>`
+        + `${w.damage}${typeTag}</span>`
       : `<span class="weapon-col weapon-col-dmg" title="${w.damage} ${typeLabel}">${w.damage}${typeTag}</span>`;
     return `<div class="weapon-row">
       ${omitName === true ? '' : `<span class="weapon-col weapon-col-name">${esc(w.name)}</span>`}
@@ -7095,7 +7095,7 @@ const App = (() => {
   return {
     navigate, ensureFactionLoaded,
     // Data hooks for the Combat Calculator (Calc, js/calc-ui.js).
-    getCalcData: () => ({ shipDB, factionData, FACTION_LABELS, CATEGORY_ORDER, CATEGORY_LABELS }),
+    getCalcData: () => ({ shipDB, factionData, FACTION_LABELS, CATEGORY_ORDER, CATEGORY_LABELS, currentFaction: currentFleet ? currentFleet.faction : null }),
     openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, collectionFaction: selectCollectionFaction, collectionAdjust, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, moveGroup, editGroupName, toggleFleetCardMenu,
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,

@@ -8,9 +8,8 @@
        weapon row in the builder's main pane. Accumulates a salvo, fires at any
        enemy ship (remembers the last target).
 
-   Damage math is by the author of everlasting-flawless-engineering.anvil.app;
-   this is a vanilla-JS reimplementation of that engine. Charts are hand-built
-   SVG to match the site. No external libraries, no dice simulated.
+   Damage maths by Jafdy (everlasting-flawless-engineering.anvil.app); this is a
+   vanilla-JS reimplementation of that engine. Charts are hand-built SVG.
    ========================================================================== */
 (function () {
   'use strict';
@@ -26,6 +25,7 @@
 
   /* ---- ship database (lazy) ------------------------------------------------ */
   let loaded = false, targets = [], targetByKey = {};
+  const _combo = {}; // per-combobox keyboard-nav state: { keys:[], active:int }
 
   async function ensureLoaded() {
     if (loaded) return;
@@ -71,7 +71,27 @@
       });
     });
     targets.sort((a, b) => a.factionLabel.localeCompare(b.factionLabel) || a.name.localeCompare(b.name));
+    // Generic non-ship targets (stations + cities) at the top of the list.
+    GENERIC_TARGETS.forEach(g => { targets.unshift(g); targetByKey[g.key] = g.base; });
   }
+
+  // Generic targets from the rulebook (Fleet & Space Stations, Cities). Stations:
+  // Small/Medium/Large all use ES 4+ / KS 4+, no backup, no shield. City stats per
+  // the rulebook ground-target profile.
+  const GENERIC_TARGETS = [
+    { key: 'gen/station-s', name: 'Space Station (Small)', faction: 'generic', factionLabel: 'Generic',
+      base: { ES: 4, KS: 4, BS: 7, SS: 7, aegis: 0, reinforced: false, weight: 'C', city: false, descent: false, station: true, name: 'Space Station (Small)', faction: 'generic', factionLabel: 'Generic', weapons: [] } },
+    { key: 'gen/station-m', name: 'Space Station (Medium)', faction: 'generic', factionLabel: 'Generic',
+      base: { ES: 4, KS: 4, BS: 7, SS: 7, aegis: 0, reinforced: false, weight: 'C', city: false, descent: false, station: true, name: 'Space Station (Medium)', faction: 'generic', factionLabel: 'Generic', weapons: [] } },
+    { key: 'gen/station-l', name: 'Space Station (Large)', faction: 'generic', factionLabel: 'Generic',
+      base: { ES: 4, KS: 4, BS: 7, SS: 7, aegis: 0, reinforced: false, weight: 'C', city: false, descent: false, station: true, name: 'Space Station (Large)', faction: 'generic', factionLabel: 'Generic', weapons: [] } },
+    { key: 'gen/city-s', name: 'City (Small)', faction: 'generic', factionLabel: 'Generic',
+      base: { ES: 5, KS: 5, BS: 7, SS: 7, aegis: 0, reinforced: false, weight: 'C', city: true, descent: false, station: false, name: 'City (Small)', faction: 'generic', factionLabel: 'Generic', weapons: [] } },
+    { key: 'gen/city-m', name: 'City (Medium)', faction: 'generic', factionLabel: 'Generic',
+      base: { ES: 5, KS: 5, BS: 7, SS: 7, aegis: 0, reinforced: false, weight: 'C', city: true, descent: false, station: false, name: 'City (Medium)', faction: 'generic', factionLabel: 'Generic', weapons: [] } },
+    { key: 'gen/city-l', name: 'City (Large)', faction: 'generic', factionLabel: 'Generic',
+      base: { ES: 5, KS: 5, BS: 7, SS: 7, aegis: 0, reinforced: false, weight: 'C', city: true, descent: false, station: false, name: 'City (Large)', faction: 'generic', factionLabel: 'Generic', weapons: [] } }
+  ];
 
   /* ---- special-rule parsing ------------------------------------------------ */
   function parseSpecial(str) {
@@ -132,7 +152,7 @@
   function defaultSit() {
     return { fighters: 0, opal: false, WF: false, attacker_atmo: false, target_atmo: false, defences_offline: false, close: false, grouped: false, impetuous: false, telescope: false };
   }
-  function freshState() { return { targetKey: '', base: customBase(), sit: defaultSit(), weapons: [] }; }
+  function freshState() { return { targetKey: '', base: customBase(), sit: defaultSit(), weapons: [], faction: null }; }
 
   const std = freshState();
   const bld = freshState();
@@ -279,9 +299,10 @@
       <input class="calc-select calc-combo-input" id="${id}-input" type="text" autocomplete="off" spellcheck="false"
         placeholder="${esc(placeholder)}" value="${esc(value || '')}"
         oninput="Calc.comboFilter('${scope}','${kind}',this.value)"
-        onfocus="this.select();Calc.comboFilter('${scope}','${kind}',this.value)"
+        onfocus="this.select();Calc.comboFilter('${scope}','${kind}','')"
+        onkeydown="Calc.comboKey('${scope}','${kind}',event)"
         onblur="Calc.comboBlur('${scope}','${kind}')">
-      <div class="calc-combo-list" id="${id}-list"></div>
+      <div class="calc-combo-list" id="${id}-list" role="listbox"></div>
     </div>`;
   }
 
@@ -316,11 +337,11 @@
           ${chk('grouped','Grouped (6+ backup)',sit,'Gives a 6+ Backup save to ships with none')}
           ${chk('impetuous','Impetuous (Lock -1)',sit)}
           ${chk('WF','Weapons Free',sit,'Adds Fusillade attacks')}
-          ${chk('telescope','Telescope token',sit,'Resistance Galileo only: one of your weapons (the best one) crits one easier against this target')}
-          ${chkBase('city','Target is a City')}
+          ${(scope === 'std' || state.faction === 'resistance') ? chk('telescope','Telescope token',sit,'Resistance Galileo only: one of your weapons (the best one) crits one easier against this target') : ''}
+          ${chkBase('city','Target is a city')}
           ${chk('target_atmo','Target in atmosphere',sit)}
           ${chk('attacker_atmo','Attacker in atmosphere',sit)}
-          ${chkBase('descent','Target descending')}
+          ${chkBase('descent','Target dropping into atmosphere','A ship descending from orbit into atmosphere is very hard to hit: most weapons can only hit it on a 6+ (needs Target in atmosphere too)')}
         </div>
       </details>
     `;
@@ -390,8 +411,7 @@
       <div class="calc-standalone">
         <div class="calc-intro">
           <h1 class="calc-title">Combat Calculator</h1>
-          <p class="calc-byline">Exact damage odds for Dropfleet Commander. Every probability is computed, not simulated. Damage math by the
-            <a href="https://everlasting-flawless-engineering.anvil.app" target="_blank" rel="noopener">DFC2 Calculator</a> author.</p>
+          <p class="calc-byline">Damage maths by <a href="https://everlasting-flawless-engineering.anvil.app" target="_blank" rel="noopener">Jafdy</a>.</p>
         </div>
         <div class="calc-grid">
           <section class="calc-col calc-col-target" id="calc-std-target">${targetPanelHtml(std, 'std')}</section>
@@ -411,8 +431,10 @@
     const el = document.getElementById('builder-calc');
     if (!el) return;
     if (!loaded) { el.innerHTML = `<div class="calc-loading">Loading…</div>`; return; }
+    try { const w = parseInt(localStorage.getItem('dfc_calc_pane_w'), 10); if (w >= 300 && w <= 680) el.style.width = w + 'px'; } catch (e) {}
     el.innerHTML = `
       <div class="calc-builder">
+        <div class="calc-resize-handle" title="Drag to resize" onmousedown="Calc.startResize(event)"></div>
         <div class="calc-builder-head">
           <span class="calc-builder-title">Combat Calculator</span>
           <button class="calc-builder-close" title="Close" onclick="Calc.closeBuilder()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
@@ -494,6 +516,9 @@
       const w = { name: btn.getAttribute('data-cn'), attack: btn.getAttribute('data-ca'), lock: btn.getAttribute('data-cl'),
         damage: btn.getAttribute('data-cd'), type: btn.getAttribute('data-ct'), special: btn.getAttribute('data-cs') };
       ensureLoaded().then(() => {
+        // your fleet's faction gates faction-only situations (e.g. Telescope = Resistance)
+        try { bld.faction = App.getCalcData().currentFaction; } catch (e) {}
+        if (bld.faction !== 'resistance') bld.sit.telescope = false;
         // restore last target on first open
         if (!bld.targetKey && !bld.weapons.length) {
           const lastKey = localStorage.getItem('dfc_calc_target');
@@ -502,6 +527,21 @@
         bld.weapons.push(makeWeaponRow(w));
         this.openBuilderPane();
       });
+    },
+
+    startResize(ev) {
+      ev.preventDefault();
+      const pane = document.getElementById('builder-calc');
+      if (!pane) return;
+      const right = pane.getBoundingClientRect().right;
+      const move = (e) => { let w = right - e.clientX; w = Math.max(300, Math.min(680, w)); pane.style.width = w + 'px'; };
+      const up = () => {
+        document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up);
+        document.body.style.userSelect = '';
+        try { localStorage.setItem('dfc_calc_pane_w', parseInt(pane.style.width, 10)); } catch (e) {}
+      };
+      document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
+      document.body.style.userSelect = 'none';
     },
 
     openBuilderPane() {
@@ -542,15 +582,41 @@
       const terms = q.split(/\s+/).filter(Boolean);
       const matches = !terms.length ? targets
         : targets.filter(t => { const hay = (t.name + ' ' + t.factionLabel).toLowerCase(); return terms.every(w => hay.indexOf(w) !== -1); });
-      const cap = 40;
+      const cap = 60;
       const shown = matches.slice(0, cap);
+      const keys = []; // flat list of selectable keys, in display order (for keyboard nav)
       let html = '';
-      if (kind === 'target') html += `<div class="calc-combo-item calc-combo-custom" onmousedown="event.preventDefault();Calc.comboPick('${scope}','target','')">Custom target</div>`;
-      html += shown.map(t => `<div class="calc-combo-item" onmousedown="event.preventDefault();Calc.comboPick('${scope}','${kind}','${esc(t.key)}')"><span class="calc-combo-fac">${esc(t.factionLabel)}</span><span class="calc-combo-name">${esc(t.name)}</span></div>`).join('');
+      if (kind === 'target') { html += `<div class="calc-combo-item calc-combo-custom" data-i="0" onmousedown="event.preventDefault();Calc.comboPick('${scope}','target','')">Custom target</div>`; keys.push(''); }
+      let curFac = null;
+      shown.forEach(t => {
+        if (t.factionLabel !== curFac) { html += `<div class="calc-combo-group">${esc(t.factionLabel)}</div>`; curFac = t.factionLabel; }
+        html += `<div class="calc-combo-item" data-i="${keys.length}" onmousedown="event.preventDefault();Calc.comboPick('${scope}','${kind}','${esc(t.key)}')"><span class="calc-combo-name">${esc(t.name)}</span></div>`;
+        keys.push(t.key);
+      });
       if (terms.length && !shown.length) html += `<div class="calc-combo-empty">No ships match that.</div>`;
       else if (matches.length > cap) html += `<div class="calc-combo-more">${matches.length - cap} more, keep typing to narrow.</div>`;
       list.innerHTML = html;
       list.classList.add('open');
+      _combo[scope + kind] = { keys: keys, active: -1 };
+    },
+    comboKey(scope, kind, ev) {
+      const st = _combo[scope + kind];
+      const list = document.getElementById('combo-' + scope + '-' + kind + '-list');
+      if (!st || !list) return;
+      if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+        ev.preventDefault();
+        if (!list.classList.contains('open')) { this.comboFilter(scope, kind, ev.target.value); return; }
+        st.active += (ev.key === 'ArrowDown' ? 1 : -1);
+        if (st.active < 0) st.active = st.keys.length - 1;
+        if (st.active >= st.keys.length) st.active = 0;
+        const items = list.querySelectorAll('.calc-combo-item');
+        items.forEach((el, i) => el.classList.toggle('active', i === st.active));
+        const act = items[st.active]; if (act) act.scrollIntoView({ block: 'nearest' });
+      } else if (ev.key === 'Enter') {
+        if (st.active >= 0 && st.active < st.keys.length) { ev.preventDefault(); this.comboPick(scope, kind, st.keys[st.active]); ev.target.blur(); }
+      } else if (ev.key === 'Escape') {
+        list.classList.remove('open');
+      }
     },
     comboPick(scope, kind, key) {
       if (kind === 'target') this.chooseTarget(scope, key);
