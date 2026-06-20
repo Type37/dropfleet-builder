@@ -793,7 +793,7 @@ const App = (() => {
     Object.entries(c).forEach(([key, n]) => { if (n > 0) { distinct++; total += n; pts += shipPointsByKey(fk, key) * n; } });
     el.textContent = total
       ? `${total} model${total !== 1 ? 's' : ''} · ${distinct} distinct · ${pts} pts of ships owned`
-      : 'Nothing recorded yet — punch in what you own below.';
+      : 'Nothing recorded yet. Punch in what you own below.';
   }
 
   function uuid() {
@@ -3006,7 +3006,7 @@ const App = (() => {
     // cell; rule chips elsewhere are untouched.
     const dmgCell = withCalc === true
       ? `<span class="weapon-col weapon-col-dmg weapon-col-dmg--calc" role="button" tabindex="0"`
-        + ` title="Damage odds — open in Combat Calculator"`
+        + ` title="Damage odds, open in the Combat Calculator"`
         + ` onclick="Calc.addBuilderWeapon(this)"`
         + ` onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Calc.addBuilderWeapon(this)}"`
         + ` data-cn="${esc(w.name || '')}" data-ca="${esc(w.attack)}" data-cl="${esc(w.lock)}" data-cd="${esc(w.damage)}" data-ct="${esc(w.type || '')}" data-cs="${esc(w.special || '')}">`
@@ -6374,7 +6374,7 @@ const App = (() => {
   // battalion-deployers (the DEPLOY_RANGE entries above) have their own targets
   // and ranges, so the Range column carries one of these two tooltips.
   const LAUNCH_RANGE_TIP = 'When you launch Assets, place those Assets up to their Launch Value within 6" of their Carrier (measured from the stem of the carrier to the center of the token) divided up as you wish. This placement counts as moving through scenery when placed through or onto scenery.';
-  const BATTALION_RANGE_TIP = 'Battalions are deployed by launching their associated Asset. Each of these have different targets for their Battalions. These resolve immediately so do not need tokens—place 1 Battalion on their target for each Asset being launched at it. These Assets may only be launched at targets within their range, measured from the launching Carrier\'s stem to the center of the targeted site.\n\nWhen you deploy Battalions to Dropsites, you may instead deploy them to a specific Feature on that Dropsite.';
+  const BATTALION_RANGE_TIP = 'Battalions are deployed by launching their associated Asset. Each of these have different targets for their Battalions. These resolve immediately so do not need tokens, place 1 Battalion on their target for each Asset being launched at it. These Assets may only be launched at targets within their range, measured from the launching Carrier\'s stem to the center of the targeted site.\n\nWhen you deploy Battalions to Dropsites, you may instead deploy them to a specific Feature on that Dropsite.';
 
   // Verbatim activation rules (Rulebook §8.3.x) behind each launch asset's NAME.
   // Tap/click the Load name to read these; <b> marks the book's bold. Fire Ships

@@ -6542,9 +6542,9 @@ body[data-view="builder"] .game-info-footer {
 .calc-select, .calc-num {
   font-family: var(--font-body); font-size: var(--text-sm); color: var(--ink);
   background: var(--paper); border: 1px solid var(--stroke); border-radius: var(--radius-sm);
-  padding: 5px 7px; text-transform: none; letter-spacing: 0; width: 100%;
+  padding: 7px 9px; min-height: 36px; text-transform: none; letter-spacing: 0; width: 100%;
 }
-.calc-num { width: 56px; }
+.calc-num { width: 64px; }
 .calc-select:focus, .calc-num:focus { outline: 2px solid var(--gold-line); border-color: var(--gold); }
 /* Type-to-search combobox (enemy ship + add-ship pickers) */
 .calc-combo { position: relative; }
@@ -6568,9 +6568,10 @@ body[data-view="builder"] .game-info-footer {
 .calc-saves { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-sm); }
 .calc-saves-2 { grid-template-columns: repeat(3, 1fr); }
 .calc-checks { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-xs) var(--sp-sm); margin-top: var(--sp-sm); }
-.calc-check, .calc-wtoggle { display: flex; align-items: center; gap: 6px; font-size: var(--text-xs); color: var(--ink-soft); cursor: pointer; }
-.calc-check input, .calc-wtoggle input { accent-color: var(--navy); }
-.calc-mods summary { cursor: pointer; font-size: var(--text-xs); color: var(--gold-dark); font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .05em; padding: 2px 0; }
+.calc-check, .calc-wtoggle { display: flex; align-items: center; gap: 8px; font-size: var(--text-sm); color: var(--ink-soft); cursor: pointer; padding: 6px 8px; border-radius: var(--radius-sm); min-height: 34px; transition: background .1s; }
+.calc-check:hover, .calc-wtoggle:hover { background: var(--navy-subtle); }
+.calc-check input, .calc-wtoggle input { accent-color: var(--navy); width: 17px; height: 17px; flex-shrink: 0; cursor: pointer; }
+.calc-mods summary { cursor: pointer; font-size: var(--text-xs); color: var(--gold-dark); font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .05em; padding: 8px 0; min-height: 32px; }
 
 /* Weapons */
 .calc-weapons-list { display: flex; flex-direction: column; gap: var(--sp-sm); }
@@ -6579,10 +6580,12 @@ body[data-view="builder"] .game-info-footer {
 .calc-weapon-name { flex: 1; font-family: var(--font-condensed); font-weight: 600; font-size: var(--text-sm); color: var(--navy-dark); background: transparent; border: 0; border-bottom: 1px dashed transparent; padding: 2px 0; }
 .calc-weapon-name:hover { border-bottom-color: var(--stroke); }
 .calc-weapon-name:focus { outline: none; border-bottom-color: var(--gold); }
-.calc-weapon-del { background: transparent; border: 0; color: var(--ink-muted); cursor: pointer; padding: 3px; border-radius: var(--radius-sm); }
-.calc-weapon-del:hover { color: #c0392b; background: rgba(192,57,43,.08); }
+.calc-weapon-del { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; flex-shrink: 0; background: transparent; border: 1px solid transparent; color: var(--ink-muted); cursor: pointer; padding: 0; border-radius: var(--radius-sm); }
+.calc-weapon-del:hover { color: #c0392b; background: rgba(192,57,43,.08); border-color: rgba(192,57,43,.25); }
 .calc-weapon-stats { display: flex; gap: var(--sp-sm); margin-top: var(--sp-sm); flex-wrap: wrap; }
-.calc-field-sm .calc-select, .calc-field-sm .calc-num { width: 58px; }
+.calc-field-sm { flex: 1; min-width: 60px; }
+.calc-field-sm .calc-select, .calc-field-sm .calc-num { width: 100%; }
+.calc-weapon-stats { gap: var(--sp-sm); }
 .calc-weapon-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: var(--sp-sm); }
 .calc-chip { font-size: 10.5px; font-family: var(--font-condensed); letter-spacing: .03em; text-transform: uppercase; color: var(--navy); background: var(--navy-subtle); border: 1px solid var(--navy-subtle); border-radius: var(--radius-sm); padding: 1px 6px; }
 .calc-weapon-toggles { display: flex; flex-wrap: wrap; gap: var(--sp-sm) var(--sp-md); margin-top: var(--sp-sm); }

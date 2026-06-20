@@ -61,6 +61,7 @@
         const grp = fdb.groups[cat]; if (!grp || !grp.ships) return;
         Object.entries(grp.ships).forEach(([id, ship]) => {
           if (!ship || cat === 'famous_admirals') return; // skip admiral duplicates
+          if (ship.additional) return; // skip neutral / civilian / mercenary "misc" ships
           const key = fk + '/' + cat + '/' + id;
           const base = shipBase(ship, cat, fk);
           base.factionLabel = (FACTION_LABELS && FACTION_LABELS[fk]) || fk.toUpperCase();
@@ -129,7 +130,7 @@
     return { ES: 4, KS: 4, BS: 7, SS: 7, aegis: 0, reinforced: false, weight: 'M', city: false, descent: false, station: false, name: 'Custom target', faction: null };
   }
   function defaultSit() {
-    return { fighters: 0, opal: false, WF: false, attacker_atmo: false, target_atmo: false, defences_offline: false, close: false, grouped: false, impetuous: false };
+    return { fighters: 0, opal: false, WF: false, attacker_atmo: false, target_atmo: false, defences_offline: false, close: false, grouped: false, impetuous: false, telescope: false };
   }
   function freshState() { return { targetKey: '', base: customBase(), sit: defaultSit(), weapons: [] }; }
 
@@ -143,17 +144,42 @@
       attacker_atmo: state.sit.attacker_atmo, target_atmo: state.sit.target_atmo, defences_offline: state.sit.defences_offline,
       close: state.sit.close, grouped: state.sit.grouped, impetuous: state.sit.impetuous };
     const target = E.createTarget(base, sit);
+    if (!state.weapons.length) return null;
+    // Telescope (Resistance token): exactly ONE weapon system crits one easier.
+    // Pick the row where it helps most by trying each and keeping the best average.
+    let teleRow = -1;
+    if (state.sit.telescope) {
+      let best = -1;
+      state.weapons.forEach((r, i) => {
+        const av = telescopeTrial(base, sit, state.weapons, i, target);
+        if (av > best) { best = av; teleRow = i; }
+      });
+    }
     const engineWeapons = [], rowSpans = [];
-    state.weapons.forEach(r => {
-      const ws = E.buildWeapons(rowToParsedWeapon(r), base, sit, r.wsit);
+    state.weapons.forEach((r, i) => {
+      const wsit = (i === teleRow) ? Object.assign({}, r.wsit, { telescope: true }) : r.wsit;
+      const ws = E.buildWeapons(rowToParsedWeapon(r), base, sit, wsit);
       rowSpans.push([engineWeapons.length, ws.length]);
       engineWeapons.push(...ws);
     });
     if (!engineWeapons.length) return null;
     try {
       const A = new E.Attack(engineWeapons, target).run();
-      return { A, target, rowSpans };
+      return { A, target, rowSpans, teleRow };
     } catch (e) { return { error: e.message || String(e) }; }
+  }
+
+  // Average total damage if Telescope is applied to row `teleIdx` (used to pick
+  // the best single weapon for the token). Returns -1 on error.
+  function telescopeTrial(base, sit, weapons, teleIdx, target) {
+    const ews = [];
+    weapons.forEach((r, i) => {
+      const wsit = (i === teleIdx) ? Object.assign({}, r.wsit, { telescope: true }) : r.wsit;
+      ews.push(...E.buildWeapons(rowToParsedWeapon(r), base, sit, wsit));
+    });
+    if (!ews.length) return -1;
+    try { return new E.Attack(ews, target).run().average_result.toNumber(); }
+    catch (e) { return -1; }
   }
 
   /* ---- SVG charts ---------------------------------------------------------- */
@@ -290,6 +316,7 @@
           ${chk('grouped','Grouped (6+ backup)',sit,'Gives a 6+ Backup save to ships with none')}
           ${chk('impetuous','Impetuous (Lock -1)',sit)}
           ${chk('WF','Weapons Free',sit,'Adds Fusillade attacks')}
+          ${chk('telescope','Telescope token',sit,'Resistance Galileo only: one of your weapons (the best one) crits one easier against this target')}
           ${chkBase('city','Target is a City')}
           ${chk('target_atmo','Target in atmosphere',sit)}
           ${chk('attacker_atmo','Attacker in atmosphere',sit)}
@@ -319,10 +346,12 @@
   function weaponRowHtml(state, scope, idx) {
     const r = state.weapons[idx];
     const p = r.parsed;
+    // Per-weapon toggles only appear when the weapon actually has that rule.
+    // (Telescope is NOT here: it is a Resistance target-side token, handled as a
+    // single situation toggle that auto-applies to the best weapon.)
     const toggles = [];
-    if (p.overcharge) toggles.push(`<label class="calc-wtoggle" title="Double damage"><input type="checkbox"${r.wsit.overcharging?' checked':''} onchange="Calc.setWsit('${scope}',${idx},'overcharging',this.checked)"><span>Overcharge</span></label>`);
-    if (p.sustained) toggles.push(`<label class="calc-wtoggle" title="Hit the same target last round"><input type="checkbox"${r.wsit.sustaining?' checked':''} onchange="Calc.setWsit('${scope}',${idx},'sustaining',this.checked)"><span>Sustained</span></label>`);
-    toggles.push(`<label class="calc-wtoggle" title="Lowers the crit threshold by 1"><input type="checkbox"${r.wsit.telescope?' checked':''} onchange="Calc.setWsit('${scope}',${idx},'telescope',this.checked)"><span>Telescope</span></label>`);
+    if (p.overcharge) toggles.push(`<label class="calc-wtoggle" title="Double this weapon's damage (Overcharge)"><input type="checkbox"${r.wsit.overcharging?' checked':''} onchange="Calc.setWsit('${scope}',${idx},'overcharging',this.checked)"><span>Overcharge</span></label>`);
+    if (p.sustained) toggles.push(`<label class="calc-wtoggle" title="Hit the same target last round (Sustained Fire doubles attacks)"><input type="checkbox"${r.wsit.sustaining?' checked':''} onchange="Calc.setWsit('${scope}',${idx},'sustaining',this.checked)"><span>Sustained</span></label>`);
     return `
       <div class="calc-weapon">
         <div class="calc-weapon-head">
@@ -336,7 +365,7 @@
           <label class="calc-field calc-field-sm"><span>Type</span><select class="calc-select" onchange="Calc.setWeapon('${scope}',${idx},'type',this.value)">${['E','K','C'].map(t=>`<option value="${t}"${t===r.type?' selected':''}>${t}</option>`).join('')}</select></label>
         </div>
         ${ruleChips(p) ? `<div class="calc-weapon-chips">${ruleChips(p)}</div>` : ''}
-        <div class="calc-weapon-toggles">${toggles.join('')}</div>
+        ${toggles.length ? `<div class="calc-weapon-toggles">${toggles.join('')}</div>` : ''}
       </div>`;
   }
 
