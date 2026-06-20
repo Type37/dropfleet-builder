@@ -3095,6 +3095,19 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   text-decoration: none;
 }
+/* Alternate-sculpt store link line (e.g. PHR Agamemnon -> Leonidas kit). */
+.ship-alt-sculpt {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  font-family: var(--font-condensed);
+}
+.ship-alt-sculpt svg { color: var(--gold-dark); flex-shrink: 0; }
+.ship-alt-sculpt a { color: var(--gold-dark); font-weight: 600; text-decoration: none; }
+.ship-alt-sculpt a:hover { text-decoration: underline; }
+.ship-alt-sculpt-src { color: var(--ink-faint); }
 /* ×N multiplier on collapsed identical-ship cards */
 .ship-qty-badge {
   position: absolute;
@@ -6464,4 +6477,124 @@ body[data-view="builder"] .game-info-footer {
 @media (max-width: 600px) {
   .gif-inner { justify-content: center; gap: 4px var(--sp-sm); }
   .gif-builder { margin-left: 0; flex-basis: 100%; text-align: center; margin-top: var(--sp-xs); }
+}
+
+/* ===========================================================================
+   Combat Calculator (js/calc-ui.js) — standalone tool + builder pane.
+   Light Art Deco theme, no external chart library.
+   =========================================================================== */
+
+/* Weapon calculator affordance (builder main pane): the DAMAGE cell is the
+   click target that sends the weapon to the Combat Calculator pane. */
+.weapon-col-dmg--calc {
+  cursor: pointer; border-radius: var(--radius-sm);
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 1px 4px; margin: -1px 0; border: 1px solid var(--gold-line);
+  background: var(--navy-subtle); color: var(--navy);
+  transition: color .12s, background .12s, border-color .12s;
+}
+.weapon-col-dmg--calc:hover { color: #fff; background: var(--navy); border-color: var(--navy); }
+.weapon-col-dmg--calc:hover .dmg-type { color: #fff; }
+.weapon-col-dmg--calc:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+.weapon-dmg-calc-cue { display: inline-flex; opacity: .8; }
+
+/* Builder far-right pane */
+.builder-calc {
+  width: 348px; flex-shrink: 0;
+  background: var(--paper-warm);
+  border-left: 1px solid var(--gold-line);
+  height: calc(100vh - var(--topbar-h) - var(--footer-h));
+  position: sticky; top: var(--topbar-h);
+  overflow-y: auto;
+}
+.builder-calc.hidden { display: none; }
+.builder-layout.calc-open .builder-detail { flex: 1; }
+.calc-builder-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--sp-md) var(--sp-lg); border-bottom: 1px solid var(--gold-line);
+  background: var(--navy-dark); color: #fff; position: sticky; top: 0; z-index: 2;
+}
+.calc-builder-title { font-family: var(--font-condensed); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; font-size: var(--text-sm); }
+.calc-builder-close { background: transparent; border: 0; color: rgba(255,255,255,.7); cursor: pointer; padding: 4px; border-radius: var(--radius-sm); }
+.calc-builder-close:hover { color: #fff; background: rgba(255,255,255,.12); }
+.calc-builder-body { padding: var(--sp-lg); display: flex; flex-direction: column; gap: var(--sp-lg); }
+.calc-builder-body > section { display: flex; flex-direction: column; gap: var(--sp-sm); }
+.calc-builder-foot { border-top: 1px solid var(--stroke-light); padding-top: var(--sp-sm); text-align: center; }
+
+/* Standalone view */
+.calc-view { padding: var(--sp-xl) var(--sp-2xl) var(--sp-4xl); max-width: 1180px; margin: 0 auto; width: 100%; }
+.calc-loading, .calc-empty { color: var(--ink-faint); font-size: var(--text-sm); padding: var(--sp-md) 0; }
+.calc-error { color: var(--warning); }
+.calc-intro { text-align: center; margin-bottom: var(--sp-2xl); }
+.calc-title { font-family: var(--font-display); font-size: var(--text-3xl); color: var(--navy-dark); margin: 0 0 var(--sp-xs); }
+.calc-byline { color: var(--ink-muted); font-size: var(--text-sm); max-width: 560px; margin: 0 auto; }
+.calc-byline a { color: var(--gold-dark); }
+.calc-grid { display: grid; grid-template-columns: 1fr 1.1fr 1fr; gap: var(--sp-xl); align-items: start; }
+.calc-col { background: var(--paper); border: 1px solid var(--stroke-light); border-radius: var(--radius-lg); padding: var(--sp-lg); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: var(--sp-md); }
+.calc-col-results { position: sticky; top: calc(var(--topbar-h) + var(--sp-md)); }
+
+.calc-panel-title { font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .06em; font-size: var(--text-xs); color: var(--gold-dark); font-weight: 600; display: flex; align-items: center; gap: var(--sp-sm); }
+.calc-count { background: var(--navy-subtle); color: var(--navy); border-radius: 999px; padding: 0 7px; font-size: 11px; font-weight: 700; }
+
+/* Fields */
+.calc-field { display: flex; flex-direction: column; gap: 2px; font-size: 11px; color: var(--ink-muted); font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .04em; }
+.calc-field-wide { width: 100%; }
+.calc-select, .calc-num {
+  font-family: var(--font-body); font-size: var(--text-sm); color: var(--ink);
+  background: var(--paper); border: 1px solid var(--stroke); border-radius: var(--radius-sm);
+  padding: 5px 7px; text-transform: none; letter-spacing: 0; width: 100%;
+}
+.calc-num { width: 56px; }
+.calc-select:focus, .calc-num:focus { outline: 2px solid var(--gold-line); border-color: var(--gold); }
+.calc-saves { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-sm); }
+.calc-saves-2 { grid-template-columns: repeat(3, 1fr); }
+.calc-checks { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-xs) var(--sp-sm); margin-top: var(--sp-sm); }
+.calc-check, .calc-wtoggle { display: flex; align-items: center; gap: 6px; font-size: var(--text-xs); color: var(--ink-soft); cursor: pointer; }
+.calc-check input, .calc-wtoggle input { accent-color: var(--navy); }
+.calc-mods summary { cursor: pointer; font-size: var(--text-xs); color: var(--gold-dark); font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .05em; padding: 2px 0; }
+
+/* Weapons */
+.calc-weapons-list { display: flex; flex-direction: column; gap: var(--sp-sm); }
+.calc-weapon { border: 1px solid var(--stroke-light); border-radius: var(--radius-md); padding: var(--sp-sm) var(--sp-md); background: var(--paper-warm); }
+.calc-weapon-head { display: flex; align-items: center; gap: var(--sp-sm); }
+.calc-weapon-name { flex: 1; font-family: var(--font-condensed); font-weight: 600; font-size: var(--text-sm); color: var(--navy-dark); background: transparent; border: 0; border-bottom: 1px dashed transparent; padding: 2px 0; }
+.calc-weapon-name:hover { border-bottom-color: var(--stroke); }
+.calc-weapon-name:focus { outline: none; border-bottom-color: var(--gold); }
+.calc-weapon-del { background: transparent; border: 0; color: var(--ink-muted); cursor: pointer; padding: 3px; border-radius: var(--radius-sm); }
+.calc-weapon-del:hover { color: #c0392b; background: rgba(192,57,43,.08); }
+.calc-weapon-stats { display: flex; gap: var(--sp-sm); margin-top: var(--sp-sm); flex-wrap: wrap; }
+.calc-field-sm .calc-select, .calc-field-sm .calc-num { width: 58px; }
+.calc-weapon-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: var(--sp-sm); }
+.calc-chip { font-size: 10.5px; font-family: var(--font-condensed); letter-spacing: .03em; text-transform: uppercase; color: var(--navy); background: var(--navy-subtle); border: 1px solid var(--navy-subtle); border-radius: var(--radius-sm); padding: 1px 6px; }
+.calc-weapon-toggles { display: flex; flex-wrap: wrap; gap: var(--sp-sm) var(--sp-md); margin-top: var(--sp-sm); }
+.calc-weapon-add { display: flex; flex-direction: column; gap: var(--sp-sm); margin-top: var(--sp-sm); }
+.calc-addship { font-family: var(--font-body); }
+
+/* Results */
+.calc-headline { text-align: center; padding: var(--sp-md) 0 var(--sp-sm); border-bottom: 1px solid var(--stroke-light); margin-bottom: var(--sp-md); }
+.calc-headline-num { font-family: var(--font-display); font-size: var(--text-3xl); color: var(--gold-dark); line-height: 1; }
+.calc-headline-lbl { display: block; font-size: var(--text-xs); color: var(--ink-muted); text-transform: uppercase; letter-spacing: .06em; font-family: var(--font-condensed); margin-top: 2px; }
+.calc-headline-sub { font-size: var(--text-sm); color: var(--ink-soft); margin-top: var(--sp-xs); }
+.calc-chart-block { margin-top: var(--sp-md); }
+.calc-chart-title { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-muted); font-family: var(--font-condensed); margin-bottom: 4px; display: flex; justify-content: space-between; }
+.calc-chart-hint { color: var(--ink-faint); text-transform: none; letter-spacing: 0; }
+.calc-chart { width: 100%; height: 92px; display: block; overflow: visible; }
+.calc-bar rect { fill: var(--navy); transition: fill .1s; }
+.calc-bar:hover rect { fill: var(--gold); }
+.calc-bar-x { font-size: 5px; fill: var(--ink-faint); font-family: var(--font-condensed); }
+.calc-cum-area { fill: var(--gold-subtle); stroke: none; }
+.calc-cum-line { fill: none; stroke: var(--gold-dark); stroke-width: 1.2; }
+.calc-dot circle { fill: var(--gold-dark); }
+.calc-dot:hover circle { fill: var(--navy); }
+.calc-rowavgs { margin-top: var(--sp-md); border-top: 1px solid var(--stroke-light); padding-top: var(--sp-sm); }
+.calc-rowavgs-head { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-muted); font-family: var(--font-condensed); margin-bottom: var(--sp-xs); }
+.calc-rowavg { display: flex; align-items: baseline; gap: var(--sp-sm); font-size: var(--text-sm); padding: 2px 0; }
+.calc-rowavg-name { flex: 1; color: var(--ink-soft); }
+.calc-rowavg-val { font-family: var(--font-display); color: var(--navy-dark); }
+.calc-row-crip { font-size: 11px; color: var(--warning); }
+.calc-share { margin-top: var(--sp-md); }
+
+@media (max-width: 880px) {
+  .calc-grid { grid-template-columns: 1fr; }
+  .calc-col-results { position: static; }
 }

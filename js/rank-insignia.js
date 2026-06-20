@@ -20,9 +20,12 @@
                 out at L4 = the complete side-2 triangle of 4 sub-triangles.)
    ───────────────────────────────────────────────────────────────────────── */
 (function () {
+  // Each faction's insignia is drawn in that faction's accent colour (per the
+  // user's spec): UCM green, PHR gold, Scourge purple, Shaltari orange,
+  // Bioficer red, Resistance blue.
   const COLOR = {
-    ucm: '#3e9945', phr: '#B8952F', scourge: '#c43c2f',
-    shaltari: '#d98c1f', bioficer: '#2a8c8c', resistance: '#2a6099'
+    ucm: '#3e9945', phr: '#b8932e', scourge: '#6a4c9c',
+    shaltari: '#d98c1f', bioficer: '#c1272d', resistance: '#2a6099'
   };
   const LABEL = {
     ucm: 'UCM', phr: 'PHR', scourge: 'Scourge',
@@ -138,13 +141,17 @@
     const mark = MARK[faction] || MARK.shaltari;
     const n = Math.max(1, Math.min(5, parseInt(level, 10) || 1));
     const s = sizePx || 20;
+    // UCM and PHR motifs are swapped: UCM now wears the post-human up-chevrons,
+    // PHR wears the stripes + diamond-device sunburst.
     const marks = faction === 'bioficer'
       ? bioficerInsignia(n, c)
       : faction === 'resistance'
         ? resistanceInsignia(n, c)
-        : faction === 'ucm'
+        : faction === 'phr'
           ? ucmInsignia(n, c)
-          : rows(n).map((y, i) => mark(y, i, n, c)).join('');
+          : faction === 'ucm'
+            ? rows(n).map((y, i) => MARK.phr(y, i, n, c)).join('')
+            : rows(n).map((y, i) => mark(y, i, n, c)).join('');
     return `<svg class="rank-insignia rank-${faction}" viewBox="0 0 24 24" width="${s}" height="${s}" ` +
       `role="img" aria-label="${LABEL[faction] || faction} rank — Level ${n}" ` +
       `xmlns="http://www.w3.org/2000/svg">${marks}</svg>`;

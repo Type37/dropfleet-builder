@@ -1078,7 +1078,8 @@
      "Shining Path",
      "Dawnglaive"
     ],
-    "namesake": "[Sarpedon](https://en.wikipedia.org/wiki/Sarpedon_(Trojan_War_hero)) was a son of Zeus and a Lycian king who fought as Troy's most important ally. Zeus wept tears of blood when Sarpedon was killed by Patroclus, and considered saving him, but Hera reminded him that interfering with fate would undo the order of the world."
+    "namesake": "[Sarpedon](https://en.wikipedia.org/wiki/Sarpedon_(Trojan_War_hero)) was a son of Zeus and a Lycian king who fought as Troy's most important ally. Zeus wept tears of blood when Sarpedon was killed by Patroclus, and considered saving him, but Hera reminded him that interfering with fate would undo the order of the world.",
+    "storeUrl": "https://ttcombat.com/products/phr-sarpedon-battleship-copy"
    }
   },
   {
@@ -1196,7 +1197,8 @@
      "Queen [Boudicca](https://en.wikipedia.org/wiki/Boudica)",
      "Code Eternal"
     ],
-    "namesake": "The [greatest hero of Greek mythology](https://en.wikipedia.org/wiki/Heracles), son of Zeus and the mortal Alcmene. Killed his own family in a divine madness sent by Hera, then spent the rest of his life earning absolution through the Twelve Labors, slaying the Nemean Lion, capturing Cerberus, diverting rivers. Worshipped across the ancient world as the patron of strength and the destroyer of monsters."
+    "namesake": "The [greatest hero of Greek mythology](https://en.wikipedia.org/wiki/Heracles), son of Zeus and the mortal Alcmene. Killed his own family in a divine madness sent by Hera, then spent the rest of his life earning absolution through the Twelve Labors, slaying the Nemean Lion, capturing Cerberus, diverting rivers. Worshipped across the ancient world as the patron of strength and the destroyer of monsters.",
+    "storeUrl": "https://ttcombat.com/products/phr-battleships-blister-copy"
    }
   },
   {
@@ -1525,7 +1527,13 @@
      }
     ],
     "lore": "The Scipio and Priam are two battlecruiser-carrier hybrids of equivalent performance, the latter being more frequently encountered. Much like the Leonidas and the Agamemnon, the differences in hull design may be down to shipyard, planet of origin or to another unknown factor. Both vessels are equally dangerous opponents and have similar mission profiles. Generally, the Scipio and Priam are tasked with destroying large groups of enemy light vessels and merchant shipping, making their roles closer to that of traditional battlecruisers. They are equipped with an extensive light calibre broadside, configured for excellent target acquisition and multipleengagement of smaller ships. In concert with this, these vessels include cavernous launch bays the equal of a Bellerophon heavy carrier. Since lighter ships with poor point defence are particularly vulnerable to bombers, this supports the ship’s primary role. In addition, the ability to throw up an enormous swarm of fighters allows the Scipio or Priam to protect friendly ships, often the lighter escorts that may accompany it on interdiction missions behind enemy lines.",
-    "namesake": "[Priam](https://en.wikipedia.org/wiki/Priam) was the aged king of Troy during the Trojan War, father of fifty sons including Hector and Paris."
+    "namesake": "[Priam](https://en.wikipedia.org/wiki/Priam) was the aged king of Troy during the Trojan War, father of fifty sons including Hector and Paris.",
+    "altSculpts": [
+     {
+      "name": "Scipio",
+      "url": "https://ttcombat.com/products/phr-leonidas-exclusive-copy"
+     }
+    ]
    }
   },
   {
@@ -1605,7 +1613,13 @@
      }
     ],
     "lore": "The Leonidas and Agamemnon are fearsome battlecruisers of equivalent capability. Both feature a double-decker mixed mass driver broadside of light and heavy calibre weapons, allowing them to lay waste to multiple foes. They lack meaningful firepower on the front quarter, making them best employed in the heart of an engagement. PHR battlecruisers are efficient broadside platforms where superior toughness gets these lethal ships to the heart of any fight.",
-    "namesake": "[Agamemnon](https://en.wikipedia.org/wiki/Agamemnon) was king of Mycenae and commander of the Greek forces at Troy, whose sacrifice of his daughter Iphigenia set in motion the chain of vengeance that consumed his whole family. His murder by Clytemnestra is the subject of the Oresteia."
+    "namesake": "[Agamemnon](https://en.wikipedia.org/wiki/Agamemnon) was king of Mycenae and commander of the Greek forces at Troy, whose sacrifice of his daughter Iphigenia set in motion the chain of vengeance that consumed his whole family. His murder by Clytemnestra is the subject of the Oresteia.",
+    "altSculpts": [
+     {
+      "name": "Leonidas",
+      "url": "https://ttcombat.com/products/phr-leonidas-exclusive-copy"
+     }
+    ]
    }
   },
   {
@@ -3642,7 +3656,8 @@
      "[Retiaritus](https://en.wikipedia.org/wiki/Retiarius)"
     ],
     "famousShipsPrefix": "Known ships of the class:",
-    "namesake": "[Harpocrates](https://en.wikipedia.org/wiki/Harpocrates) was the Greco-Egyptian god of silence and secrecy, a Hellenization of the Egyptian Horus the Child. He was depicted as a boy with a finger held to his lips, a childhood gesture the Greeks read as a call for silence."
+    "namesake": "[Harpocrates](https://en.wikipedia.org/wiki/Harpocrates) was the Greco-Egyptian god of silence and secrecy, a Hellenization of the Egyptian Horus the Child. He was depicted as a boy with a finger held to his lips, a childhood gesture the Greeks read as a call for silence.",
+    "storeUrl": "https://ttcombat.com/products/phr-harpocrates-guerrilla-lighter"
    }
   },
   {
@@ -3711,7 +3726,8 @@
      "Cloudhunter",
      "Mist Cleaver"
     ],
-    "namesake": "[Echo](https://en.wikipedia.org/wiki/Echo_(mythology)) was a mountain nymph in Greek myth, cursed by Hera to repeat only the last words spoken to her. Spurned by Narcissus, she wasted away until nothing remained but her voice."
+    "namesake": "[Echo](https://en.wikipedia.org/wiki/Echo_(mythology)) was a mountain nymph in Greek myth, cursed by Hera to repeat only the last words spoken to her. Spurned by Narcissus, she wasted away until nothing remained but her voice.",
+    "storeUrl": "https://ttcombat.com/products/phr-corvettes-echo-class-copy"
    }
   },
   {
@@ -3778,7 +3794,8 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "The UCM first encountered the Pungari as part of a Shaltari force during Phase 2 of the Reconquest. Unlike their masters, they were prolific in numbers. In them, the Shaltari found a subservient race to exploit in much the same way they had planned for humanity.\n\nSightings of Pungari ships were reported shortly afterwards, not all had fallen in with the Shaltari. Apparently, the Pungari are new to starfaring; their blocky ships are primitive yet robust. Instead of the low-crew, high-firepower approach advanced generators afford to other races, the Pungari leverage sheer numbers. Routinely, they hurl thousands into suicidal boarding actions; something Pungari do willingly and, as far as UCM soldiers can tell, with much glee. Their stocky frames may cope with the extreme g-forces involved, unencumbered by too much brain to damage.\n\nWhen encountering Pungari it is always a coin toss on whether they attack or not. They may try to broker simple alliances, happy to plunge into the wars of other races without expecting much in return, beyond a master to serve in awe.",
-    "additional": true
+    "additional": true,
+    "storeUrl": "https://ttcombat.com/products/pungari-thresher-cruiser-event-exclusive"
    }
   },
   {
@@ -3911,7 +3928,8 @@
     "tonnage": "H",
     "lore": "Pre-war System Admirals had unconscionable budgets and could procure ships for their battlefleet with little oversight from Earth. When it came to their personal ship, this created the conditions for a strange offering from the naval yards: opulence. Trident Industrial met this need lavishly with the Palatine Class Command Barge. An unusual ship of battlecruiser tonnage, it shares the typical style on the outside, but inside, no expense was spared. Marble, ebony and craftsmanship are terms you don't hear in military circles. Indeed, a single Palatine cost more than three Grand Battleships to build. The class features twelve overlarge lifeboats of unique design, the Magellan, each closer to an armoured yacht than an escape craft. Even the ship's guns use expensive, low-observable shells to reduce the ship's signature in combat. To offset this fabulous cost, Trident Industrial offered vessels to the private sector; owners included planetary governors, corporate titans and infamous syndicate heads.\n\nThough rare, a high proportion survived the Scourge invasion and the hard centuries that followed due to quality, their excessive point defences, and the fact that owners weren't generally the sorts to go down fighting. Since everything on the Palatine was overbuilt to the highest standards, survivors are still prized, capable ships. Their bygone splendour and the hand-ground perfection of their optics even make them worthwhile to the Republic's Grand Fleet, which operates several, mostly the former property of prophesy-spooked CEOs. Kalium possesses two which the UCM is aware of, although apparently their more opulent spaces have been painted grey, they're still Shangrilanian inlay underneath. The UCM has five on their lists, including River Queen, which is reserved for Presidential use. Such ships could be built today, but the cost would make no military sense, it never did.",
     "additional": true,
-    "namesake": "[The Palatine](https://en.wikipedia.org/wiki/Palatine_Hill), the Roman hill at the heart of the city where the emperors raised their palaces - the root of the word itself. Excavations show people have lived on the hill since at least the 10th century BC, with Iron Age huts marking the era of Rome's traditional founding. Roman legend placed the Lupercal cave here, where the she-wolf was said to have suckled Romulus and Remus."
+    "namesake": "[The Palatine](https://en.wikipedia.org/wiki/Palatine_Hill), the Roman hill at the heart of the city where the emperors raised their palaces - the root of the word itself. Excavations show people have lived on the hill since at least the 10th century BC, with Iron Age huts marking the era of Rome's traditional founding. Roman legend placed the Lupercal cave here, where the she-wolf was said to have suckled Romulus and Remus.",
+    "storeUrl": "https://ttcombat.com/products/resistance-palatine-command-barge-exclusive"
    }
   },
   {
@@ -4402,7 +4420,8 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "The Oblivion OBV64 Barge is a heavily armoured civilian vessel designed to transport extremely hazardous materials, unstable technology, failed reactors, and biohazards, too dangerous to store on planets. These ships travel discreetly between remote depots, derelict battlefields, and disposal zones. Crewed by an extensive team of highly trained specialists under strict quarantine and secrecy protocols, The Oblivion barge handles cargo that is often poorly understood or classified. Their role is to quietly remove dangerous discoveries and remnants from circulation before they can threaten the wider fleet, or attract unwanted attention.",
-    "additional": true
+    "additional": true,
+    "storeUrl": "https://ttcombat.com/products/obv-64-oblivion-barge-hazard-disposal"
    }
   },
   {
@@ -4589,7 +4608,8 @@
     "isUnique": false,
     "tonnage": "C",
     "lore": "A monolithic vessel of unimaginable scale, the Provenance Ark dwarfs most ships. A precursor to the modular construction found on Coloniser class vessels, these ships were a talisman of hope and expansionism. These are the first major terraforming vessels built by mankind, reaching out into an unknown universe. Built to prepare entire worlds for habitation, it carries vast stores of genetic material, atmospheric stabilizers, and autonomous resource systems. The Ark monitors planetary progress through an extensive network of sensors and automated regulators, adjusting atmospheric composition, maintaining microbial balance, and even modulating gravitational and magnetic fields to stabilize emerging terrains.\n\nEntire cities once mere schematics, rise, with power grids, transport arteries, and habitation modules ready long before the first settlers arrive. Inside, Construction drones and biotic cultivators orchestrate the birth of forests, oceans, and breathable atmospheres with the precision of a master artisan.\n\nMany ships of this class feature underslung terraforming torpedo launchers. While near useless in ship to ship combat, these torpedoes are geared towards atmospheric re-entry and contain a plethora of mutagens and nerve agents, some of which would be used on Senator class battlecruisers. Under normal circumstances the use of these would constitute a war crime. Here they are simply used to rid prospective landing areas of their megafauna, causing mass hysteria and aggression in local fauna. Any issues with unruly creatures take care of themselves, and those left over can be cut down by specialised anti-fauna vehicles. Once the LZ is cleared of hostiles, the terraformer can then deploy more traditional terraforming methods.",
-    "additional": true
+    "additional": true,
+    "storeUrl": "https://ttcombat.com/products/prk-91-provenance-ark-terraformer"
    }
   }
  ],

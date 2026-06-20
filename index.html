@@ -11,7 +11,11 @@
     var onMobile = window.innerWidth < 640 || screen.width < 640;
     var forcedDesktop = localStorage.getItem('dfc_force_desktop') === '1';
     var alreadyMobile = location.pathname.indexOf('/mobile') !== -1;
-    if (onMobile && !forcedDesktop && !alreadyMobile) {
+    // The Combat Calculator is a responsive standalone tool with no mobile
+    // counterpart yet, so let phones load it directly (e.g. a shared #calc link)
+    // instead of bouncing to /mobile/.
+    var isCalc = (location.hash || '').slice(1).split('/')[0] === 'calc';
+    if (onMobile && !forcedDesktop && !alreadyMobile && !isCalc) {
       // Preserve the hash (e.g. shared fleet links) if present
       var hash = location.hash || '';
       location.replace(location.origin + location.pathname.replace(/\/?$/, '/') + 'mobile/' + hash);
@@ -84,6 +88,13 @@
         </div>
         <h2 class="tool-card-title">Mission Maker</h2>
         <p class="tool-card-desc">Randomized scenarios with deployment zones and objectives.</p>
+      </div>
+      <div class="tool-card tool-card--calc card-deco" onclick="App.navigate('calc')">
+        <div class="tool-card-icon">
+          <svg width="32" height="32" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="2" width="16" height="20" rx="2.5" stroke="currentColor" stroke-width="1.6"/><line x1="4" y1="8" x2="20" y2="8" stroke="currentColor" stroke-width="1.6"/><g fill="currentColor"><circle cx="9" cy="12.5" r="1.1"/><circle cx="15" cy="12.5" r="1.1"/><circle cx="9" cy="16.5" r="1.1"/><circle cx="15" cy="16.5" r="1.1"/></g></svg>
+        </div>
+        <h2 class="tool-card-title">Combat Calculator</h2>
+        <p class="tool-card-desc">Exact damage odds for any weapon and target. No dice rolled, every probability computed.</p>
       </div>
     </div>
     <div class="landing-objectives" id="landing-objectives"></div>
@@ -185,7 +196,18 @@
       <div class="builder-detail hidden" id="builder-detail">
         <!-- Group detail rendered here by JS -->
       </div>
+
+      <!-- Combat Calculator pane (far right, desktop). Opens when a weapon's
+           calculator icon is clicked in the detail pane. Rendered by Calc. -->
+      <aside class="builder-calc hidden" id="builder-calc">
+        <!-- Rendered by js/calc-ui.js -->
+      </aside>
     </div>
+  </section>
+
+  <!-- ── Combat Calculator (standalone tool) ── -->
+  <section class="hidden calc-view" id="view-calc">
+    <!-- Rendered by js/calc-ui.js -->
   </section>
 
   <!-- Shared Fleet View (read-only) -->
@@ -448,7 +470,9 @@
 </footer>
 
 <script src="js/rank-insignia.js"></script>
+<script src="js/calc-engine.js"></script>
 <script src="js/app.js"></script>
+<script src="js/calc-ui.js"></script>
 <script>
   // Service worker is PRODUCTION-ONLY. On localhost we skip registration AND
   // actively unregister any existing SW + purge its caches: a dev service worker

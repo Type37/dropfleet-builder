@@ -352,6 +352,14 @@ const App = (() => {
     const url = shipStoreUrl(name, ship);
     return `<a class="shop-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="Find ${esc(name || 'this ship')} on the TTCombat store" onclick="event.stopPropagation()">${imgTag}</a>`;
   }
+  // Alternate-sculpt store links (e.g. the PHR Leonidas kit is an alt Agamemnon).
+  // A ship's `altSculpts` is [{name, url}]; rendered as a small line in the detail.
+  function altSculptLinks(ship) {
+    const alts = ship && Array.isArray(ship.altSculpts) ? ship.altSculpts : [];
+    if (!alts.length) return '';
+    const links = alts.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${esc(a.name)}</a>`).join(', ');
+    return `<div class="ship-alt-sculpt no-print"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h9v9H2z"/><path d="M5 4V2h9v9h-2"/></svg> Alternate sculpt: ${links} <span class="ship-alt-sculpt-src">(TTCombat)</span></div>`;
+  }
 
   function admiralArtPath(admiralName) {
     if (!admiralName) return null;
@@ -410,7 +418,9 @@ const App = (() => {
         namesake: s.namesake || '',
         image: shipArtPath(s.name),
         variants: s.variants || [],
-        systemSelection: s.systemSelection || null
+        systemSelection: s.systemSelection || null,
+        storeUrl: s.storeUrl || null,
+        altSculpts: s.altSculpts || []
       };
     });
 
@@ -620,6 +630,11 @@ const App = (() => {
           }
         }
         navigate('fleets');
+        break;
+      case 'calc':
+        show('view-calc');
+        topContext.innerHTML = `<a href="#landing" class="topbar-back" onclick="App.navigate('landing'); return false;"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> Combat Calculator`;
+        if (window.Calc) Calc.openStandalone(param);
         break;
       default:
         show('view-landing');
@@ -1783,22 +1798,9 @@ const App = (() => {
       }
     });
 
-    // 5b. Collection check (soft) — only when Settings → Collection is on: flag
-    // fielding more of a ship than you own. Never blocks.
-    if (settings.showCollection) {
-      const usedByKey = {};
-      fleet.battleGroups.forEach(g => (g.ships || []).forEach(s => {
-        if (!usedByKey[s.shipKey]) usedByKey[s.shipKey] = { used: 0, cat: s.groupCategory };
-        usedByKey[s.shipKey].used++;
-      }));
-      Object.entries(usedByKey).forEach(([key, info]) => {
-        const owned = ownedCount(fleet.faction, key);
-        if (info.used > owned) {
-          const db = findShipInDB(fleet.faction, info.cat, key);
-          warnings.push({ type: 'warn', msg: `${db ? db.name : key}: fielding ${info.used}, you own ${owned}` });
-        }
-      });
-    }
+    // 5b. (Removed) The "fielding N, you own M" collection warnings were noise in
+    // the legality alerts. The Collection tab and the picker's owned/spare badges
+    // still show what you own; the alert rail no longer flags over-collection.
 
     // 6. Group size validation (ships per group within min-max). Payloads
     // (Bioficer Cells) have no group size, so they're exempt from this check.
@@ -2993,18 +2995,29 @@ const App = (() => {
     }).join('');
   }
 
-  function renderWeaponRow(w, omitName) {
+  function renderWeaponRow(w, omitName, withCalc) {
     const special = w.special && w.special !== '-' ? w.special : '';
     const typeLabel = WEAPON_TYPE_LABELS[w.type] || w.type || '?';
     // Damage carries its type as a colour-coded letter (e.g. 1E, 2K, 1C) — the
     // type is part of the damage, not a separate "special".
     const typeTag = w.type ? `<span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : '';
+    // In the builder main pane (withCalc), the DAMAGE cell is the click target
+    // that sends the weapon to the Combat Calculator pane. Data rides on that
+    // cell; rule chips elsewhere are untouched.
+    const dmgCell = withCalc === true
+      ? `<span class="weapon-col weapon-col-dmg weapon-col-dmg--calc" role="button" tabindex="0"`
+        + ` title="Damage odds — open in Combat Calculator"`
+        + ` onclick="Calc.addBuilderWeapon(this)"`
+        + ` onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Calc.addBuilderWeapon(this)}"`
+        + ` data-cn="${esc(w.name || '')}" data-ca="${esc(w.attack)}" data-cl="${esc(w.lock)}" data-cd="${esc(w.damage)}" data-ct="${esc(w.type || '')}" data-cs="${esc(w.special || '')}">`
+        + `${w.damage}${typeTag}<span class="weapon-dmg-calc-cue" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="2.5" y="1.5" width="11" height="13" rx="1.5"/><line x1="2.5" y1="5.5" x2="13.5" y2="5.5"/><line x1="6" y1="9" x2="6" y2="9" stroke-width="2.2" stroke-linecap="round"/><line x1="10" y1="9" x2="10" y2="9" stroke-width="2.2" stroke-linecap="round"/><line x1="6" y1="12" x2="6" y2="12" stroke-width="2.2" stroke-linecap="round"/><line x1="10" y1="12" x2="10" y2="12" stroke-width="2.2" stroke-linecap="round"/></svg></span></span>`
+      : `<span class="weapon-col weapon-col-dmg" title="${w.damage} ${typeLabel}">${w.damage}${typeTag}</span>`;
     return `<div class="weapon-row">
       ${omitName === true ? '' : `<span class="weapon-col weapon-col-name">${esc(w.name)}</span>`}
       <span class="weapon-col weapon-col-arc" title="${ARC_LABELS[w.arc] || 'Firing Arc: ' + (w.arc || '')}">${ARC_ICONS[w.arc] ? ARC_ICONS[w.arc] + '<span class="arc-label">' + esc(w.arc || '') + '</span>' : esc(w.arc || '')}</span>
       <span class="weapon-col weapon-col-att">${w.attack}</span>
       <span class="weapon-col weapon-col-lock">${w.lock}</span>
-      <span class="weapon-col weapon-col-dmg" title="${w.damage} ${typeLabel}">${w.damage}${typeTag}</span>
+      ${dmgCell}
       ${special ? `<span class="weapon-col weapon-col-special">${renderWeaponSpecialChips(special)}</span>` : ''}
     </div>`;
   }
@@ -3394,7 +3407,7 @@ const App = (() => {
       if (opt && Array.isArray(opt.weapons)) wpns.push(...opt.weapons);
     });
     if (wpns.length > 0) {
-      weaponsHtml = '<div class="weapon-list">' + renderWeaponHeader() + wpns.map(renderWeaponRow).join('') + '</div>';
+      weaponsHtml = '<div class="weapon-list weapon-list--calc">' + renderWeaponHeader() + wpns.map(w => renderWeaponRow(w, false, true)).join('') + '</div>';
     }
 
     // Loadout options — an either/or weapon swap (e.g. UCM Laser Refit). Present
@@ -3591,6 +3604,7 @@ const App = (() => {
       ${heroImageBlock}
       <div class="ship-card-body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
         ${midSection}
+        ${altSculptLinks(dbShip)}
         ${renderSystemsPicker(ship, dbShip, groupId, currentFleet.faction)}
         ${renderFeatureCarrierBlock(ship, dbShip, groupId)}
         ${compact ? '' : renderShipRulesGlossary(dbShip, ship)}
@@ -7079,7 +7093,10 @@ const App = (() => {
 
   // ── Public API ──
   return {
-    navigate, openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
+    navigate, ensureFactionLoaded,
+    // Data hooks for the Combat Calculator (Calc, js/calc-ui.js).
+    getCalcData: () => ({ shipDB, factionData, FACTION_LABELS, CATEGORY_ORDER, CATEGORY_LABELS }),
+    openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, collectionFaction: selectCollectionFaction, collectionAdjust, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, moveGroup, editGroupName, toggleFleetCardMenu,
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
