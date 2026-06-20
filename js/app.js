@@ -4320,6 +4320,19 @@ const App = (() => {
     return `<details class="ship-lore" style="margin-top:var(--sp-sm)"><summary class="ship-lore-toggle">Lore</summary><div class="ship-lore-text">${formatLore(a.lore, a.famousShipsPrefix, a.famousShips)}${namesake}</div></details>`;
   }
 
+  // A famous admiral's flagship stat line + weapons. The flagship is a specific
+  // named variant, so its stats/guns can differ from the standard hull of that
+  // class — show the admiral's own values, not the regular ship's.
+  function admiralShipBlock(a) {
+    if (!a || !a.es) return '';
+    const wpns = a.weapons || [];
+    const weaponsHtml = wpns.length ? `<div class="weapon-list" style="margin-top:var(--sp-xs)">${renderWeaponHeader()}${wpns.map(w => renderWeaponRow(w)).join('')}</div>` : '';
+    return `<div class="admiral-ship-block">
+      ${a.ship_name ? `<div class="admiral-ship-name">${esc(a.ship_name)}${a.tonnage ? ` <span class="ton-tag">${esc(tonLabel(a.tonnage))}</span>` : ''}</div>` : ''}
+      ${renderStatGrid(a)}${weaponsHtml}
+    </div>`;
+  }
+
   function openAdmiralModal() {
     if (!currentFleet) return;
     const factionShips = shipDB[currentFleet.faction];
@@ -4402,6 +4415,7 @@ const App = (() => {
               ${admiral.ship_name ? `<div style="margin-top:var(--sp-xs);font-size:var(--text-xs);color:var(--ink-muted)">Ship: ${esc(admiral.ship_name)}${admiral.shipCategory ? ', ' + (CATEGORY_LABELS[admiral.shipCategory] || '') : ''}</div>` : ''}
             </div>
           </div>
+          ${admiralShipBlock(admiral)}
           ${abilities.length > 0 ? `<div style="margin-top:var(--sp-md);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${esc(a.cost)})` : ''}${a.effect ? ', ' + esc(a.effect) : ''}</div>`).join('')}</div>` : ''}
           ${admiralLoreBlock(admiral)}
           <div class="admiral-modal-picks">+ choose ${admiral.ability_picks || 1} from the Abilities Table</div>

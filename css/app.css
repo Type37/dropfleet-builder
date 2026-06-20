@@ -6691,3 +6691,8 @@ body[data-view="builder"] .game-info-footer {
 .calc-weapon-compact .calc-weapon-name-lbl { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .calc-compact-stats { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; font-size: var(--text-xs); color: var(--ink-muted); font-family: var(--font-condensed); }
 .calc-compact-stats b { color: var(--navy-dark); font-weight: 700; }
+
+/* Admiral card: flagship stat line + weapons */
+.admiral-ship-block { margin-top: var(--sp-sm); padding-top: var(--sp-sm); border-top: 1px dashed var(--stroke-light); }
+.admiral-ship-name { font-family: var(--font-condensed); font-weight: 600; font-size: var(--text-sm); color: var(--navy-dark); margin-bottom: 3px; }
+.admiral-ship-name .ton-tag { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); border: 1px solid var(--stroke-light); border-radius: var(--radius-sm); padding: 0 5px; margin-left: 4px; }
