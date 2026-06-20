@@ -325,8 +325,8 @@
       </div>
       <div class="calc-saves calc-saves-2">
         <label class="calc-field"><span>Aegis</span><select class="calc-select" onchange="Calc.setBase('${scope}','aegis',this.value)">${[0,1,2,3,4,5,6].map(n=>`<option value="${n}"${n===(b.aegis|0)?' selected':''}>${n}</option>`).join('')}</select></label>
-        <label class="calc-field"><span>Fighters</span><select class="calc-select" onchange="Calc.setSit('${scope}','fighters',this.value)">${[0,1,2,3,4,5,6,99].map(n=>`<option value="${n}"${n===(sit.fighters|0)?' selected':''}>${n===99?'∞':n}</option>`).join('')}</select></label>
-        <label class="calc-field calc-field-ton"><span>Tonnage</span><select class="calc-select" onchange="Calc.setBase('${scope}','weight',this.value)">${['L','M','H','C','P'].map(t=>`<option value="${t}"${t===b.weight?' selected':''}>${({L:'Light',M:'Medium',H:'Heavy',C:'Colossal',P:'Payload'})[t]}</option>`).join('')}</select></label>
+        <label class="calc-field"><span>Tonnage</span><select class="calc-select" onchange="Calc.setBase('${scope}','weight',this.value)">${['L','M','H','C','P'].map(t=>`<option value="${t}"${t===b.weight?' selected':''}>${({L:'Light',M:'Medium',H:'Heavy',C:'Colossal',P:'Payload'})[t]}</option>`).join('')}</select></label>
+        <label class="calc-field calc-field-fr" title="Defender's fighter rerolls (Close Protection) against Close Action weapons"><span>Fighter rerolls</span><select class="calc-select" onchange="Calc.setSit('${scope}','fighters',this.value)">${[0,1,2,3,4,5,6,99].map(n=>`<option value="${n}"${n===(sit.fighters|0)?' selected':''}>${n===99?'∞':n}</option>`).join('')}</select></label>
       </div>
       <details class="calc-mods"${scope==='std'?' open':''}>
         <summary>Situation</summary>

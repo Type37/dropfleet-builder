@@ -6580,7 +6580,8 @@ body[data-view="builder"] .game-info-footer {
 .calc-combo-empty, .calc-combo-more { padding: 7px 9px; font-size: var(--text-xs); color: var(--ink-faint); }
 .calc-field-note { font-style: italic; color: var(--ink-faint); text-transform: none; font-weight: 400; }
 .calc-saves { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
-.calc-saves-2 { grid-template-columns: repeat(3, 1fr); }
+.calc-saves-2 { grid-template-columns: repeat(2, 1fr); }
+.calc-field-fr { grid-column: 1 / -1; }
 .calc-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--sp-sm); margin-top: 2px; }
 .calc-check, .calc-wtoggle { display: flex; align-items: center; gap: 7px; font-size: var(--text-sm); color: var(--ink-soft); cursor: pointer; padding: 3px 6px; border-radius: var(--radius-sm); min-height: 30px; transition: background .1s; }
 .calc-check:hover, .calc-wtoggle:hover { background: var(--navy-subtle); }
