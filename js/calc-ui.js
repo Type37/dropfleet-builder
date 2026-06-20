@@ -246,16 +246,29 @@
     return out;
   }
 
+  // Type-to-search combobox (replaces the 400-option dropdowns). kind: 'target' | 'addship'.
+  function comboBox(scope, kind, value, placeholder) {
+    const id = 'combo-' + scope + '-' + kind;
+    return `<div class="calc-combo" id="${id}-wrap">
+      <input class="calc-select calc-combo-input" id="${id}-input" type="text" autocomplete="off" spellcheck="false"
+        placeholder="${esc(placeholder)}" value="${esc(value || '')}"
+        oninput="Calc.comboFilter('${scope}','${kind}',this.value)"
+        onfocus="this.select();Calc.comboFilter('${scope}','${kind}',this.value)"
+        onblur="Calc.comboBlur('${scope}','${kind}')">
+      <div class="calc-combo-list" id="${id}-list"></div>
+    </div>`;
+  }
+
   function targetPanelHtml(state, scope) {
     const b = state.base;
-    const opts = '<option value="">Custom target</option>' + shipOptgroups(state.targetKey);
+    const curName = state.targetKey ? ((targets.find(t => t.key === state.targetKey) || {}).name || '') : '';
     const sit = state.sit;
     const chk = (k, label, src, hint) => `<label class="calc-check"${hint ? ` title="${esc(hint)}"` : ''}><input type="checkbox"${(src[k]) ? ' checked' : ''} onchange="Calc.setSit('${scope}','${k}',this.checked)"><span>${label}</span></label>`;
     const chkBase = (k, label, hint) => `<label class="calc-check"${hint ? ` title="${esc(hint)}"` : ''}><input type="checkbox"${(b[k]) ? ' checked' : ''} onchange="Calc.setBase('${scope}','${k}',this.checked)"><span>${label}</span></label>`;
     return `
       <div class="calc-panel-title">Target</div>
-      <label class="calc-field calc-field-wide"><span>Enemy ship</span>
-        <select class="calc-select" onchange="Calc.chooseTarget('${scope}',this.value)">${opts}</select></label>
+      <label class="calc-field calc-field-wide"><span>Enemy ship ${curName ? '' : '<em class="calc-field-note">custom</em>'}</span>
+        ${comboBox(scope, 'target', curName, 'Type a ship name (or leave blank for custom)')}</label>
       <div class="calc-saves">
         ${saveSelect('Energy', clampSave(b.ES), `onchange="Calc.setBase('${scope}','ES',this.value)"`)}
         ${saveSelect('Kinetic', clampSave(b.KS), `onchange="Calc.setBase('${scope}','KS',this.value)"`)}
@@ -329,10 +342,7 @@
 
   function weaponsPanelHtml(state, scope) {
     const rows = state.weapons.map((_, i) => weaponRowHtml(state, scope, i)).join('');
-    const addShip = `<select class="calc-select calc-addship" onchange="Calc.addShipWeapons('${scope}',this.value); this.value='';">
-        <option value="">Add weapons from a ship</option>
-        ${shipOptgroups('')}
-      </select>`;
+    const addShip = comboBox(scope, 'addship', '', 'Add weapons from a ship (type to search)');
     return `
       <div class="calc-panel-title">Weapons ${state.weapons.length ? `<span class="calc-count">${state.weapons.length}</span>` : ''}</div>
       <div class="calc-weapons-list">${rows || '<div class="calc-empty">No weapons yet.</div>'}</div>
@@ -493,6 +503,34 @@
         if (scope === 'bld') { try { localStorage.setItem('dfc_calc_target', key); } catch (e) {} }
       }
       rerenderTarget(scope);
+    },
+
+    // ── type-to-search combobox (target + add-ship pickers) ──
+    comboFilter(scope, kind, q) {
+      const list = document.getElementById('combo-' + scope + '-' + kind + '-list');
+      if (!list) return;
+      q = (q || '').trim().toLowerCase();
+      const terms = q.split(/\s+/).filter(Boolean);
+      const matches = !terms.length ? targets
+        : targets.filter(t => { const hay = (t.name + ' ' + t.factionLabel).toLowerCase(); return terms.every(w => hay.indexOf(w) !== -1); });
+      const cap = 40;
+      const shown = matches.slice(0, cap);
+      let html = '';
+      if (kind === 'target') html += `<div class="calc-combo-item calc-combo-custom" onmousedown="event.preventDefault();Calc.comboPick('${scope}','target','')">Custom target</div>`;
+      html += shown.map(t => `<div class="calc-combo-item" onmousedown="event.preventDefault();Calc.comboPick('${scope}','${kind}','${esc(t.key)}')"><span class="calc-combo-fac">${esc(t.factionLabel)}</span><span class="calc-combo-name">${esc(t.name)}</span></div>`).join('');
+      if (terms.length && !shown.length) html += `<div class="calc-combo-empty">No ships match that.</div>`;
+      else if (matches.length > cap) html += `<div class="calc-combo-more">${matches.length - cap} more, keep typing to narrow.</div>`;
+      list.innerHTML = html;
+      list.classList.add('open');
+    },
+    comboPick(scope, kind, key) {
+      if (kind === 'target') this.chooseTarget(scope, key);
+      else if (key) this.addShipWeapons(scope, key);
+      const list = document.getElementById('combo-' + scope + '-' + kind + '-list');
+      if (list) { list.innerHTML = ''; list.classList.remove('open'); }
+    },
+    comboBlur(scope, kind) {
+      setTimeout(() => { const list = document.getElementById('combo-' + scope + '-' + kind + '-list'); if (list) list.classList.remove('open'); }, 150);
     },
     setBase(scope, k, v) {
       const s = st(scope);

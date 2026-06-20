@@ -6546,6 +6546,25 @@ body[data-view="builder"] .game-info-footer {
 }
 .calc-num { width: 56px; }
 .calc-select:focus, .calc-num:focus { outline: 2px solid var(--gold-line); border-color: var(--gold); }
+/* Type-to-search combobox (enemy ship + add-ship pickers) */
+.calc-combo { position: relative; }
+.calc-combo-input { width: 100%; }
+.calc-combo-list {
+  position: absolute; left: 0; right: 0; top: calc(100% + 2px); z-index: 60;
+  background: var(--paper); border: 1px solid var(--stroke); border-radius: var(--radius-sm);
+  max-height: 260px; overflow-y: auto; box-shadow: var(--shadow-lg); display: none;
+}
+.calc-combo-list.open { display: block; }
+.calc-combo-item {
+  display: flex; gap: 8px; align-items: baseline; padding: 6px 9px;
+  font-size: var(--text-sm); color: var(--ink); cursor: pointer; text-transform: none; letter-spacing: 0;
+}
+.calc-combo-item:hover { background: var(--navy-subtle); }
+.calc-combo-custom { font-style: italic; color: var(--ink-muted); border-bottom: 1px solid var(--stroke-light); }
+.calc-combo-fac { flex: 0 0 58px; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); font-family: var(--font-condensed); }
+.calc-combo-name { flex: 1; min-width: 0; }
+.calc-combo-empty, .calc-combo-more { padding: 7px 9px; font-size: var(--text-xs); color: var(--ink-faint); }
+.calc-field-note { font-style: italic; color: var(--ink-faint); text-transform: none; font-weight: 400; }
 .calc-saves { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-sm); }
 .calc-saves-2 { grid-template-columns: repeat(3, 1fr); }
 .calc-checks { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-xs) var(--sp-sm); margin-top: var(--sp-sm); }
