@@ -29,7 +29,7 @@ const App = (() => {
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true, printRoster: false };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true, printRoster: false, showCollection: false };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -1783,9 +1783,9 @@ const App = (() => {
       }
     });
 
-    // 5b. Collection check (soft) — only when you've recorded a collection for
-    // this faction: flag fielding more of a ship than you own. Never blocks.
-    if (collection[fleet.faction] && Object.keys(collection[fleet.faction]).length) {
+    // 5b. Collection check (soft) — only when Settings → Collection is on: flag
+    // fielding more of a ship than you own. Never blocks.
+    if (settings.showCollection) {
       const usedByKey = {};
       fleet.battleGroups.forEach(g => (g.ships || []).forEach(s => {
         if (!usedByKey[s.shipKey]) usedByKey[s.shipKey] = { used: 0, cat: s.groupCategory };
@@ -3685,9 +3685,9 @@ const App = (() => {
       // Misc Ships is a filter chip like the rest: on = reveal mercenaries /
       // cross-faction / other optional ships. (Also mirrored in Settings.)
       `<button class="filter-chip ${settings.showAdditionalShips ? 'active' : ''}" onclick="App.toggleMiscShips()" title="Show mercenaries, cross-faction and other optional ships">${settings.showAdditionalShips ? CHECK_SVG : ''}Misc Ships</button>` +
-      // "Buildable" only appears when you've recorded a collection for this faction.
-      (currentFleet && collection[currentFleet.faction] && Object.keys(collection[currentFleet.faction]).length
-        ? `<button class="filter-chip ${collectionFilterOn ? 'active' : ''}" onclick="App.toggleBuildableFilter()" title="Only ships you still have spare in your collection">${collectionFilterOn ? CHECK_SVG : ''}Buildable</button>`
+      // "In collection" only appears when Settings → Collection is on.
+      (settings.showCollection
+        ? `<button class="filter-chip ${collectionFilterOn ? 'active' : ''}" onclick="App.toggleBuildableFilter()" title="Only ships in your collection">${collectionFilterOn ? CHECK_SVG : ''}In collection</button>`
         : '');
   }
 
@@ -3802,11 +3802,11 @@ const App = (() => {
       });
     }
 
-    // "Buildable" filter: only ships you still have spare in your collection.
-    if (collectionFilterOn && currentFleet && collection[currentFleet.faction]) {
+    // "In collection" filter: only ships you own (count >= 1).
+    if (collectionFilterOn && settings.showCollection && currentFleet) {
       ships = ships.filter(s => {
         if (s.data.type === 'Famous') return true; // never hide named admirals
-        return (ownedCount(currentFleet.faction, s.key) - usedInFleet(currentFleet, s.key)) > 0;
+        return ownedCount(currentFleet.faction, s.key) > 0;
       });
     }
 
@@ -3896,14 +3896,13 @@ const App = (() => {
       ? `<button class="btn btn-primary btn-sm"${famBlocked ? ` disabled title="${esc(famReason)}"` : ''} onclick="event.stopPropagation(); App.addFamousAdmiralFromPicker('${key}')">+ Add Admiral</button>`
       : `<button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addShipToGroup('${key}','${category}')">+ Add</button>`;
 
-    // Collection badge: only when you've recorded a collection for this faction.
+    // Collection chip — opt-in via Settings → Collection (default off). Just the
+    // owned count from the Collection tab; no fleet-relative maths.
     let collBadge = '';
-    const cfk = currentFleet.faction;
-    if (!isFamous && collection[cfk] && Object.keys(collection[cfk]).length) {
-      const owned = ownedCount(cfk, key);
-      const spare = owned - usedInFleet(currentFleet, key);
-      const cls = owned === 0 ? 'coll-badge-none' : (spare > 0 ? 'coll-badge-ok' : 'coll-badge-over');
-      const txt = owned === 0 ? 'not owned' : `${owned} owned · ${spare} spare`;
+    if (!isFamous && settings.showCollection) {
+      const owned = ownedCount(currentFleet.faction, key);
+      const cls = owned > 0 ? 'coll-badge-ok' : 'coll-badge-none';
+      const txt = owned > 0 ? `${owned} in collection` : 'not in collection';
       collBadge = `<span class="coll-badge ${cls}" title="Your collection">${txt}</span>`;
     }
 
@@ -6090,6 +6089,14 @@ const App = (() => {
             <span class="settings-toggle-desc">Automatically show flavour text on ship cards instead of requiring a click</span>
           </span>
           <input type="checkbox" ${settings.autoExpandLore ? 'checked' : ''} onchange="App.toggleSetting('autoExpandLore', this.checked)">
+          <span class="settings-toggle-switch"></span>
+        </label>
+        <label class="settings-toggle">
+          <span class="settings-toggle-label">
+            <span class="settings-toggle-name">Collection</span>
+            <span class="settings-toggle-desc">Show an "in collection" chip on ship cards and an In-collection filter, using counts from the Collection tab</span>
+          </span>
+          <input type="checkbox" ${settings.showCollection ? 'checked' : ''} onchange="App.toggleSetting('showCollection', this.checked)">
           <span class="settings-toggle-switch"></span>
         </label>
       </div>
