@@ -3022,7 +3022,7 @@ const App = (() => {
         + ` title="Damage odds, open in the Combat Calculator"`
         + ` onclick="Calc.addBuilderWeapon(this)"`
         + ` onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Calc.addBuilderWeapon(this)}"`
-        + ` data-cn="${esc(w.name || '')}" data-ca="${esc(w.attack)}" data-cl="${esc(w.lock)}" data-cd="${esc(w.damage)}" data-ct="${esc(w.type || '')}" data-cs="${esc(w.special || '')}">`
+        + ` data-cn="${esc(w.name || '')}" data-ca="${esc(w.attack)}" data-cl="${esc(w.lock)}" data-cd="${esc(w.damage)}" data-ct="${esc(w.type || '')}" data-cs="${esc(w.special || '')}" data-carc="${esc(w.arc || '')}">`
         + `${w.damage}${typeTag}</span>`
       : `<span class="weapon-col weapon-col-dmg" title="${w.damage} ${typeLabel}">${w.damage}${typeTag}</span>`;
     return `<div class="weapon-row">
