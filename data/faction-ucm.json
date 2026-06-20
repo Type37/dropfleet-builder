@@ -1373,7 +1373,8 @@
     ],
     "lore": "The Hanoi is a class of battleship designed and constructed by the United Colonies of Mankind. Along with its sister class, the Delhi, the Hanoi was designed to be a part of a new wave of battleships to help replace some of the UCM's more venerable designs, with the first of her class launched in 2673. Though old stalwarts like the Beijing are still being constructed, such classes are nearing 90 years' worth of service and are starting to show their age. The Hanoi meanwhile was constructed with the latest technological advancements that the UCMF has made, all in service of increased modernity, capabilities, and lethality.\n\nWhile the Delhi uses its battleship-sized bulk to ferry troops to landing points, the Hanoi was instead designed as a peerless ship-hunter. Central to this game plan are its two, overwhelmingly large UF-12000 mass drivers, attached in fixed mounts to the front of the ship. Such weapons pack enough ship-killing potential to match even the most devastating armaments of the other factions, giving the UCM a true shock-and-awe weapon to deploy in orbital combat. These weapons do come at the cost of requiring significant amount of next-gen capacitors and a fully-overhauled power core system to function - changes that could never have been made to one of the legacy battleships.",
     "rulesText": "This Ship may take a Drive Refit for +45 points, increasing its Thrust by 3”. Laser Refit This Ship may take a Laser Refit for +5 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
-    "namesake": "[Hanoi](https://vietnam.travel/places-to-go/northern-vietnam/ha-noi) has been the capital of Vietnam for most of the past thousand years, first founded as the Ly dynasty capital in 1010 on a bend of the Red River; the city's name means 'inside the river bend'. The city served as the capital of French Indochina from 1902 to 1954. Among its landmarks is the Temple of Literature, founded in 1070, which housed Vietnam's first national university."
+    "namesake": "[Hanoi](https://vietnam.travel/places-to-go/northern-vietnam/ha-noi) has been the capital of Vietnam for most of the past thousand years, first founded as the Ly dynasty capital in 1010 on a bend of the Red River; the city's name means 'inside the river bend'. The city served as the capital of French Indochina from 1902 to 1954. Among its landmarks is the Temple of Literature, founded in 1070, which housed Vietnam's first national university.",
+    "storeUrl": "https://ttcombat.com/products/ucm-hanoi-battleship-copy"
    }
   },
   {
@@ -2357,7 +2358,13 @@
      }
     ],
     "lore": "The Johannesburg is a class of battlecruiser designed and constructed by the United Colonies of Mankind. Primarily, Johannesburgs are intended for flanking and interdiction operations, chasing down lesser ships and destroying them. As a result, the class was designed to focus on maximizing firepower while maintaining cruiser-level speeds, at the expense of survivability. Though Johannesburgs can easily decimate their targets with their batteries of mass drivers, the class is also equipped with a small hangar, allowing it to crush fleeing vessels with bombers or inflict extra damage against warships with poor point defence.\n\nThe Johannesburg, alongside the Perth, was designed around an all-new hull created for the specific requirements of battlecruisers. This has the side benefit of making it significantly cheaper to produce than the Atlantis-class, allowing Johannesburgs to quickly eclipse the Atlantis in terms of numbers.\n\nThe UCMS Atlantis was the predecessor to the Johannesburg class. Originally concepted as a testbed for future warship development, the Atlantis was built off a cruiser hull and shares many of the same components. Her actions during the Wolfrum Penal Insurrection, as well as limited engagements with the Shaltari, proved the battlecruiser concept sound, paving the way for future vessels of similar scope. However, the UCM's pivot to a new hull design resulted in the Atlantis becoming the first and only member of her class, as despite having equivalent firepower, her hull was significantly more expensive to produce and maintain. Regardless, the Atlantis is still in active service with the UCMF.",
-    "namesake": "[Johannesburg](https://visit.joburg/), South Africa was established in 1886 as a mining camp after the discovery of the world's largest gold deposit on the Witwatersrand; it grew into sub-Saharan Africa's largest city within a generation. It sits on the high inland plateau known as the Highveld at an elevation of around 1,750 metres. Although it is the economic heart of the country and of the province of Gauteng, it is not a national or provincial capital."
+    "namesake": "[Johannesburg](https://visit.joburg/), South Africa was established in 1886 as a mining camp after the discovery of the world's largest gold deposit on the Witwatersrand; it grew into sub-Saharan Africa's largest city within a generation. It sits on the high inland plateau known as the Highveld at an elevation of around 1,750 metres. Although it is the economic heart of the country and of the province of Gauteng, it is not a national or provincial capital.",
+    "altSculpts": [
+     {
+      "name": "Atlantis",
+      "url": "https://ttcombat.com/products/ucm-atlantis-exclusive"
+     }
+    ]
    }
   },
   {
@@ -3482,7 +3489,13 @@
      "True Arrow",
      "Firebrand"
     ],
-    "namesake": "[New Cairo](https://en.wikipedia.org/wiki/New_Cairo), Egypt is a planned city on the desert plateau east of historic Cairo, begun in the 1990s to relieve pressure on the ancient capital; the original Cairo was founded in 969 AD by the Fatimid caliphate beside the ruins of earlier Roman and Arab settlements. It is governed by the New Urban Communities Authority and is home to numerous gated communities, malls, and private universities, including the main campus of the American University in Cairo. The city recorded a population of roughly 300,000 in the 2017 census."
+    "namesake": "[New Cairo](https://en.wikipedia.org/wiki/New_Cairo), Egypt is a planned city on the desert plateau east of historic Cairo, begun in the 1990s to relieve pressure on the ancient capital; the original Cairo was founded in 969 AD by the Fatimid caliphate beside the ruins of earlier Roman and Arab settlements. It is governed by the New Urban Communities Authority and is home to numerous gated communities, malls, and private universities, including the main campus of the American University in Cairo. The city recorded a population of roughly 300,000 in the 2017 census.",
+    "altSculpts": [
+     {
+      "name": "Saratoga",
+      "url": "https://ttcombat.com/products/saratoga-class-light-cruiser-event-exclusive"
+     }
+    ]
    }
   },
   {
@@ -3536,7 +3549,13 @@
      "[Belfast II](https://en.wikipedia.org/wiki/HMS_Belfast)",
      "[Wakizashi](https://en.wikipedia.org/wiki/Wakizashi)"
     ],
-    "namesake": "[Osaka](https://osaka-info.jp/en/) has been Japan's commercial capital since the Edo period, when the city's merchant class accumulated enough wealth to produce a distinct urban culture; it sits at the eastern end of the Seto Inland Sea on the Kansai plain. It is the capital of Osaka Prefecture and the third most populous city in Japan. The city was the site of Expo 70, the first world's fair held in Asia, and hosted Expo 2025."
+    "namesake": "[Osaka](https://osaka-info.jp/en/) has been Japan's commercial capital since the Edo period, when the city's merchant class accumulated enough wealth to produce a distinct urban culture; it sits at the eastern end of the Seto Inland Sea on the Kansai plain. It is the capital of Osaka Prefecture and the third most populous city in Japan. The city was the site of Expo 70, the first world's fair held in Asia, and hosted Expo 2025.",
+    "altSculpts": [
+     {
+      "name": "Athens",
+      "url": "https://ttcombat.com/products/dropfleet-commander-athens-class-light-cruiser-event-exclusive"
+     }
+    ]
    }
   },
   {
@@ -3748,7 +3767,8 @@
      "[Black Prince](https://en.wikipedia.org/wiki/Edward_the_Black_Prince)",
      "Vengeance"
     ],
-    "namesake": "[Havana](https://en.wikipedia.org/wiki/Havana), Cuba was established as a Spanish colonial port in 1519 and served for centuries as the principal assembly point for the treasure fleets carrying silver from the Americas back to Spain. It is the capital and largest city of Cuba and the country's main commercial centre. Old Havana, with its Spanish colonial fortifications and architecture, was inscribed as a UNESCO World Heritage Site in 1982."
+    "namesake": "[Havana](https://en.wikipedia.org/wiki/Havana), Cuba was established as a Spanish colonial port in 1519 and served for centuries as the principal assembly point for the treasure fleets carrying silver from the Americas back to Spain. It is the capital and largest city of Cuba and the country's main commercial centre. Old Havana, with its Spanish colonial fortifications and architecture, was inscribed as a UNESCO World Heritage Site in 1982.",
+    "storeUrl": "https://ttcombat.com/products/havana-destroyers"
    }
   },
   {
@@ -3908,7 +3928,8 @@
      "[Lancelot](https://en.wikipedia.org/wiki/Lancelot)",
      "Harpoon"
     ],
-    "namesake": "[Reykjavik](https://visitreykjavik.is/), Iceland takes its name from the Old Norse for 'Smoky Bay', after the geothermal steam the first Norse settlers observed rising from hot springs on the shore. It is the capital and largest city of Iceland and, at roughly 64 degrees north, the world's northernmost capital of a sovereign state. Much of the city is heated using geothermal energy drawn from the surrounding volcanic landscape."
+    "namesake": "[Reykjavik](https://visitreykjavik.is/), Iceland takes its name from the Old Norse for 'Smoky Bay', after the geothermal steam the first Norse settlers observed rising from hot springs on the shore. It is the capital and largest city of Iceland and, at roughly 64 degrees north, the world's northernmost capital of a sovereign state. Much of the city is heated using geothermal energy drawn from the surrounding volcanic landscape.",
+    "storeUrl": "https://ttcombat.com/products/ucm-reykjavik-cutters-copy"
    }
   },
   {
@@ -4029,7 +4050,8 @@
      "[Suliman](https://en.wikipedia.org/wiki/Suleiman_the_Magnificent)",
      "[Loyal Janissary](https://en.wikipedia.org/wiki/Janissary)"
     ],
-    "namesake": "[Istanbul, Turkey](https://visit.istanbul/) has been continuously inhabited for over two thousand years, serving successively as Byzantium, Constantinople, and its current name; it is the only city in the world that spans two continents. The city straddles the Bosphorus strait, which links the Black Sea to the Sea of Marmara and divides its European and Asian sides. Its historic areas, including the Hagia Sophia and the Sultan Ahmed Mosque, were inscribed as a UNESCO World Heritage Site in 1985."
+    "namesake": "[Istanbul, Turkey](https://visit.istanbul/) has been continuously inhabited for over two thousand years, serving successively as Byzantium, Constantinople, and its current name; it is the only city in the world that spans two continents. The city straddles the Bosphorus strait, which links the Black Sea to the Sea of Marmara and divides its European and Asian sides. Its historic areas, including the Hagia Sophia and the Sultan Ahmed Mosque, were inscribed as a UNESCO World Heritage Site in 1985.",
+    "storeUrl": "https://ttcombat.com/products/ucm-monitors-1"
    }
   },
   {
@@ -4494,7 +4516,8 @@
      "[Leprechaun](https://en.wikipedia.org/wiki/Leprechaun)",
      "Silent"
     ],
-    "namesake": "[Lysander of Sparta](https://en.wikipedia.org/wiki/Lysander), ancient Greece, was the navarch who destroyed the Athenian fleet at Aegospotami in 405 BC, ending the Peloponnesian War and becoming the first Greek general to receive divine honours in his own lifetime. He secured Persian funding for the Spartan fleet through an alliance with Cyrus the Younger, which proved decisive in the war. After the fall of Athens he installed pro-Spartan oligarchic governments across many Greek cities."
+    "namesake": "[Lysander of Sparta](https://en.wikipedia.org/wiki/Lysander), ancient Greece, was the navarch who destroyed the Athenian fleet at Aegospotami in 405 BC, ending the Peloponnesian War and becoming the first Greek general to receive divine honours in his own lifetime. He secured Persian funding for the Spartan fleet through an alliance with Cyrus the Younger, which proved decisive in the war. After the fall of Athens he installed pro-Spartan oligarchic governments across many Greek cities.",
+    "storeUrl": "https://ttcombat.com/products/lysander-stealth-lighters"
    }
   },
   {
@@ -4554,7 +4577,8 @@
      "Flying Dragon",
      "[Golden Hind](https://en.wikipedia.org/wiki/Golden_Hind)"
     ],
-    "namesake": "[Santiago de Chile](https://www.santiagoturismo.cl/en/) was founded in 1541 by Spanish conquistador Pedro de Valdivia on the floodplain between the Mapocho and Maipo rivers; its full official name is Santiago de Nueva Extremadura. It is the capital and largest city of Chile and lies in a valley framed by the snow-capped Andes mountains. The city serves as the country's political and financial centre, though the national congress sits in nearby Valparaiso."
+    "namesake": "[Santiago de Chile](https://www.santiagoturismo.cl/en/) was founded in 1541 by Spanish conquistador Pedro de Valdivia on the floodplain between the Mapocho and Maipo rivers; its full official name is Santiago de Nueva Extremadura. It is the capital and largest city of Chile and lies in a valley framed by the snow-capped Andes mountains. The city serves as the country's political and financial centre, though the national congress sits in nearby Valparaiso.",
+    "storeUrl": "https://ttcombat.com/products/ucm-corvettes-santiago-class-1"
    }
   },
   {
