@@ -6542,8 +6542,10 @@ body[data-view="builder"] .game-info-footer {
 .calc-panel-title { font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .06em; font-size: var(--text-xs); color: var(--gold-dark); font-weight: 600; display: flex; align-items: center; gap: var(--sp-sm); margin-bottom: 1px; }
 .calc-count { background: var(--navy-subtle); color: var(--navy); border-radius: 999px; padding: 0 7px; font-size: 11px; font-weight: 700; }
 
-/* Fields */
-.calc-field { display: flex; flex-direction: column; gap: 1px; font-size: 10px; color: var(--ink-muted); font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .04em; }
+/* Fields: label sits INLINE to the left of the control (saves a line each). */
+.calc-field { display: flex; flex-direction: row; align-items: center; gap: 6px; font-size: 10px; color: var(--ink-muted); font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .04em; }
+.calc-field > span { flex: 0 0 auto; white-space: nowrap; }
+.calc-field > .calc-select, .calc-field > .calc-num, .calc-field > .calc-combo { flex: 1 1 auto; min-width: 0; }
 .calc-field-wide { width: 100%; }
 .calc-select, .calc-num {
   font-family: var(--font-body); font-size: var(--text-sm); color: var(--ink);
@@ -6595,7 +6597,7 @@ body[data-view="builder"] .game-info-footer {
 .calc-weapon-del { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; flex-shrink: 0; background: transparent; border: 1px solid transparent; color: var(--ink-muted); cursor: pointer; padding: 0; border-radius: var(--radius-sm); }
 .calc-weapon-del:hover { color: #c0392b; background: rgba(192,57,43,.08); border-color: rgba(192,57,43,.25); }
 .calc-weapon-stats { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
-.calc-field-sm { flex: 1; min-width: 56px; }
+.calc-field-sm { flex: 1 1 auto; min-width: 84px; }
 .calc-field-sm .calc-select, .calc-field-sm .calc-num { width: 100%; }
 .calc-weapon-chips { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 5px; }
 .calc-chip { font-size: 10.5px; font-family: var(--font-condensed); letter-spacing: .03em; text-transform: uppercase; color: var(--navy); background: var(--navy-subtle); border: 1px solid var(--navy-subtle); border-radius: var(--radius-sm); padding: 1px 6px; }
