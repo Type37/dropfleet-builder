@@ -6531,9 +6531,13 @@ body[data-view="builder"] .game-info-footer {
 .calc-title { font-family: var(--font-display); font-size: var(--text-2xl); color: var(--navy-dark); margin: 0 0 1px; }
 .calc-byline { color: var(--ink-muted); font-size: var(--text-xs); max-width: 560px; margin: 0 auto; }
 .calc-byline a { color: var(--gold-dark); }
-.calc-grid { display: grid; grid-template-columns: 1fr 1.1fr 1fr; gap: var(--sp-md); align-items: start; }
+.calc-grid { display: flex; align-items: stretch; gap: 0; }
 .calc-col { background: var(--paper); border: 1px solid var(--stroke-light); border-radius: var(--radius-md); padding: var(--sp-md); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: var(--sp-sm); }
-.calc-col-results { position: sticky; top: calc(var(--topbar-h) + var(--sp-sm)); }
+.calc-col-target, .calc-col-weapons { min-width: 240px; }
+.calc-col-results { flex: 1 1 0; min-width: 260px; }
+.calc-vsplit { flex: 0 0 12px; align-self: stretch; cursor: col-resize; position: relative; }
+.calc-vsplit::before { content: ''; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: var(--stroke-light); border-radius: 1px; transition: background .1s; }
+.calc-vsplit:hover::before, .calc-vsplit:active::before { background: var(--gold); width: 3px; left: 4px; }
 
 .calc-panel-title { font-family: var(--font-condensed); text-transform: uppercase; letter-spacing: .06em; font-size: var(--text-xs); color: var(--gold-dark); font-weight: 600; display: flex; align-items: center; gap: var(--sp-sm); margin-bottom: 1px; }
 .calc-count { background: var(--navy-subtle); color: var(--navy); border-radius: 999px; padding: 0 7px; font-size: 11px; font-weight: 700; }
@@ -6557,6 +6561,10 @@ body[data-view="builder"] .game-info-footer {
   max-height: 260px; overflow-y: auto; box-shadow: var(--shadow-lg); display: none;
 }
 .calc-combo-list.open { display: block; }
+.calc-combo-chips { position: sticky; top: 0; z-index: 1; display: flex; flex-wrap: wrap; gap: 3px; padding: 5px 6px; background: var(--paper); border-bottom: 1px solid var(--stroke-light); }
+.calc-combo-chip { font-family: var(--font-condensed); font-size: 11px; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-muted); background: var(--paper-alt); border: 1px solid var(--stroke-light); border-radius: var(--radius-sm); padding: 3px 7px; cursor: pointer; min-height: 24px; }
+.calc-combo-chip:hover { color: var(--navy); border-color: var(--gold-line); }
+.calc-combo-chip.active { color: #fff; background: var(--navy); border-color: var(--navy); }
 .calc-combo-item {
   display: flex; gap: 8px; align-items: baseline; padding: 6px 9px;
   font-size: var(--text-sm); color: var(--ink); cursor: pointer; text-transform: none; letter-spacing: 0;
@@ -6620,6 +6628,8 @@ body[data-view="builder"] .game-info-footer {
 .calc-share { margin-top: var(--sp-sm); }
 
 @media (max-width: 880px) {
-  .calc-grid { grid-template-columns: 1fr; }
+  .calc-grid { flex-direction: column; align-items: stretch; }
+  .calc-vsplit { display: none; }
+  .calc-col-target, .calc-col-weapons { flex: 1 1 auto !important; min-width: 0; }
   .calc-col-results { position: static; }
 }

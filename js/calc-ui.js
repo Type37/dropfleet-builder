@@ -22,6 +22,7 @@
   function pInt(v, dflt) { const m = String(v == null ? '' : v).match(/-?\d+/); return m ? parseInt(m[0], 10) : (dflt === undefined ? 0 : dflt); }
   function pSave(v) { const m = String(v == null ? '' : v).match(/\d+/); return m ? parseInt(m[0], 10) : 7; }
   function clampSave(n) { n = pInt(n, 7); return n < 2 ? 2 : (n > 7 ? 7 : n); }
+  function colW(which, dflt) { try { const v = parseInt(localStorage.getItem('dfc_calc_col_' + which), 10); if (v >= 240 && v <= 620) return v; } catch (e) {} return dflt; }
 
   /* ---- ship database (lazy) ------------------------------------------------ */
   let loaded = false, targets = [], targetByKey = {};
@@ -414,8 +415,10 @@
           <p class="calc-byline">Damage maths by <a href="https://everlasting-flawless-engineering.anvil.app" target="_blank" rel="noopener">Jafdy</a>.</p>
         </div>
         <div class="calc-grid">
-          <section class="calc-col calc-col-target" id="calc-std-target">${targetPanelHtml(std, 'std')}</section>
-          <section class="calc-col calc-col-weapons" id="calc-std-weapons">${weaponsPanelHtml(std, 'std')}</section>
+          <section class="calc-col calc-col-target" id="calc-std-target" style="flex:0 0 ${colW('t', 320)}px">${targetPanelHtml(std, 'std')}</section>
+          <div class="calc-vsplit" title="Drag to resize" onmousedown="Calc.startColResize(event,'t')"></div>
+          <section class="calc-col calc-col-weapons" id="calc-std-weapons" style="flex:0 0 ${colW('w', 360)}px">${weaponsPanelHtml(std, 'std')}</section>
+          <div class="calc-vsplit" title="Drag to resize" onmousedown="Calc.startColResize(event,'w')"></div>
           <section class="calc-col calc-col-results">
             <div class="calc-panel-title">Result</div>
             <div id="calc-std-results">${resultsHtml(std)}</div>
@@ -529,6 +532,21 @@
       });
     },
 
+    startColResize(ev, which) {
+      ev.preventDefault();
+      const col = document.getElementById(which === 't' ? 'calc-std-target' : 'calc-std-weapons');
+      if (!col) return;
+      const startX = ev.clientX, startW = col.getBoundingClientRect().width;
+      const move = (e) => { let w = startW + (e.clientX - startX); w = Math.max(240, Math.min(620, w)); col.style.flex = '0 0 ' + w + 'px'; };
+      const up = () => {
+        document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up);
+        document.body.style.userSelect = '';
+        try { localStorage.setItem('dfc_calc_col_' + which, Math.round(col.getBoundingClientRect().width)); } catch (e) {}
+      };
+      document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
+      document.body.style.userSelect = 'none';
+    },
+
     startResize(ev) {
       ev.preventDefault();
       const pane = document.getElementById('builder-calc');
@@ -578,18 +596,25 @@
     comboFilter(scope, kind, q) {
       const list = document.getElementById('combo-' + scope + '-' + kind + '-list');
       if (!list) return;
+      const prev = _combo[scope + kind];
+      const fac = (prev && prev.fac) || '';
       q = (q || '').trim().toLowerCase();
       const terms = q.split(/\s+/).filter(Boolean);
-      const matches = !terms.length ? targets
-        : targets.filter(t => { const hay = (t.name + ' ' + t.factionLabel).toLowerCase(); return terms.every(w => hay.indexOf(w) !== -1); });
+      let matches = targets;
+      if (fac) matches = matches.filter(t => t.factionLabel === fac);
+      if (terms.length) matches = matches.filter(t => { const hay = (t.name + ' ' + t.factionLabel).toLowerCase(); return terms.every(w => hay.indexOf(w) !== -1); });
       const cap = 60;
       const shown = matches.slice(0, cap);
+      // faction filter chips (sticky header)
+      const facList = ['Generic', 'UCM', 'PHR', 'Scourge', 'Shaltari', 'Bioficers', 'Resistance'].filter(f => targets.some(t => t.factionLabel === f));
+      let chips = `<button type="button" class="calc-combo-chip${fac === '' ? ' active' : ''}" onmousedown="event.preventDefault();Calc.comboFac('${scope}','${kind}','')">All</button>`;
+      chips += facList.map(f => `<button type="button" class="calc-combo-chip${fac === f ? ' active' : ''}" onmousedown="event.preventDefault();Calc.comboFac('${scope}','${kind}','${esc(f)}')">${esc(f)}</button>`).join('');
       const keys = []; // flat list of selectable keys, in display order (for keyboard nav)
-      let html = '';
+      let html = `<div class="calc-combo-chips">${chips}</div>`;
       if (kind === 'target') { html += `<div class="calc-combo-item calc-combo-custom" data-i="0" onmousedown="event.preventDefault();Calc.comboPick('${scope}','target','')">Custom target</div>`; keys.push(''); }
       let curFac = null;
       shown.forEach(t => {
-        if (t.factionLabel !== curFac) { html += `<div class="calc-combo-group">${esc(t.factionLabel)}</div>`; curFac = t.factionLabel; }
+        if (!fac && t.factionLabel !== curFac) { html += `<div class="calc-combo-group">${esc(t.factionLabel)}</div>`; curFac = t.factionLabel; }
         html += `<div class="calc-combo-item" data-i="${keys.length}" onmousedown="event.preventDefault();Calc.comboPick('${scope}','${kind}','${esc(t.key)}')"><span class="calc-combo-name">${esc(t.name)}</span></div>`;
         keys.push(t.key);
       });
@@ -597,7 +622,14 @@
       else if (matches.length > cap) html += `<div class="calc-combo-more">${matches.length - cap} more, keep typing to narrow.</div>`;
       list.innerHTML = html;
       list.classList.add('open');
-      _combo[scope + kind] = { keys: keys, active: -1 };
+      _combo[scope + kind] = { keys: keys, active: -1, fac: fac };
+    },
+    comboFac(scope, kind, fac) {
+      const c = _combo[scope + kind] || (_combo[scope + kind] = { keys: [], active: -1, fac: '' });
+      c.fac = fac;
+      const inp = document.getElementById('combo-' + scope + '-' + kind + '-input');
+      this.comboFilter(scope, kind, inp ? inp.value : '');
+      if (inp) inp.focus();
     },
     comboKey(scope, kind, ev) {
       const st = _combo[scope + kind];
