@@ -2115,6 +2115,22 @@ h1, h2, h3, h4, h5, h6 {
 .stat-cell-icon { flex-shrink: 0; display: inline-flex; align-items: center; }
 .stat-cell-icon svg { width: 15px; height: 15px; opacity: 0.8; }
 .stat-cell-text { display: flex; flex-direction: row; align-items: baseline; gap: 4px; min-width: 0; }
+/* Reinforced Armour chip, pinned to the right of the (full-width) Hull cell. */
+.stat-ra-chip {
+  margin-left: auto;
+  align-self: center;
+  font-family: var(--font-condensed);
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.02em;
+  color: var(--gold-dark);
+  background: var(--gold-subtle);
+  border: 1px solid var(--gold-line);
+  border-radius: 999px;
+  padding: 1px 8px;
+  white-space: nowrap;
+  cursor: help;
+}
 
 .stat-cell-value {
   font-family: var(--font-display);
@@ -2290,6 +2306,9 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--weight-semibold);
   font-size: 15px;
 }
+/* Dice glyph after a weapon's Attack count (you roll that many dice). */
+.atk-die { width: 0.92em; height: 0.92em; vertical-align: -0.11em; margin-left: 1px; opacity: 0.7; }
+.dp-weapons .atk-die { width: 0.85em; height: 0.85em; }
 /* Critical-on value under the Lock (only for weapons whose rules use criticals). */
 .weapon-col-crit {
   display: block;
@@ -5471,7 +5490,7 @@ h1, h2, h3, h4, h5, h6 {
    of the sheet's column/big/roster mode (the list is long and reads better split). */
 .dp-secobj .dp-rules { column-count: 2; column-gap: 18px; }
 .dp-secobj .dp-secobj-row { display: block; break-inside: avoid; -webkit-column-break-inside: avoid; }
-.dp-secobj .dp-checkbox { font-family: var(--font-stat); font-size: 1.05em; color: #1b3a5c; margin-right: 2px; }
+.dp-secobj .dp-checkbox { font-family: var(--font-stat); font-size: 1.7em; line-height: 1; vertical-align: -0.18em; color: #1b3a5c; margin-right: 4px; }
 .dp-secobj .dp-secobj-on { background: rgba(184, 147, 46, 0.08); border-radius: 3px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 .dp-secobj .dp-secobj-on .dp-checkbox { color: #8a6d1e; }
 
@@ -5522,7 +5541,7 @@ h1, h2, h3, h4, h5, h6 {
 .pf-comfortable .dp-loads, .pf-comfortable .dp-systems { font-size: 8.8pt; }
 .pf-comfortable .dp-rules { font-size: 8.5pt; line-height: 1.4; }
 .pf-comfortable .dp-ship { padding: 5px 8px; }
-.pf-comfortable .dp-thumb { width: 40px; height: 40px; }
+.pf-comfortable .dp-thumb { width: 58px; height: 58px; }
 .pf-comfortable .dp-box { width: 10px; height: 10px; }
 
 .pf-compact .dp-group-name { font-size: 10pt; }
@@ -5532,7 +5551,7 @@ h1, h2, h3, h4, h5, h6 {
 .pf-compact .dp-loads, .pf-compact .dp-systems { font-size: 7.6pt; }
 .pf-compact .dp-rules { font-size: 7.4pt; line-height: 1.28; }
 .pf-compact .dp-ship { padding: 3px 6px; margin-bottom: 5px; }
-.pf-compact .dp-thumb { width: 28px; height: 28px; }
+.pf-compact .dp-thumb { width: 42px; height: 42px; }
 
 /* ── Ink-saver (preview toggle) ──────────────────────────────────
    Strip the ink-heavy fills (navy weapon header, zebra striping) to white with

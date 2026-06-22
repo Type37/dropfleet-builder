@@ -2946,11 +2946,21 @@ const App = (() => {
         </span>
       </div>`;
     };
+    // Reinforced Armour is an armour rule, so surface it as a chip on the Hull cell.
+    const raHay = (ship.special || '') + ' ' + (ship.special_rules || []).join(' ');
+    let hullCell = cell('hull', 'stat-cell-wide');
+    if (hullCell && /Reinforced Armour/i.test(raHay)) {
+      const ra = lookupRuleFull('Reinforced Armour');
+      const raChip = ra && ra.description
+        ? `<span class="stat-ra-chip has-tooltip" data-rule-desc="${esc(ra.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">Reinforced Armour</span>`
+        : `<span class="stat-ra-chip">Reinforced Armour</span>`;
+      hullCell = hullCell.replace('</div>', raChip + '</div>');
+    }
     const cells = [
       cell('scan'), cell('ks'),
       cell('sig'),  cell('es'),
       cell('thrust'), cell('bs'),
-      cell('hull', 'stat-cell-wide')
+      hullCell
     ].filter(Boolean).join('');
     return cells ? `<div class="stat-grid">${cells}</div>` : '';
   }
@@ -3039,6 +3049,15 @@ const App = (() => {
     }).join('');
   }
 
+  // A weapon's Attack value is how many dice you roll, so show it as "6 [die]" as a
+  // reminder you're rolling that many dice. Only for a plain attack count (not "-",
+  // not random/variable attacks like "D6").
+  const DICE_SVG = '<svg class="atk-die" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10.998 1.58a2 2 0 0 1 2.004 0l7.5 4.342a2 2 0 0 1 .998 1.731v8.694a2 2 0 0 1-.998 1.73l-7.5 4.343a2 2 0 0 1-2.004 0l-7.5-4.342a2 2 0 0 1-.998-1.731V7.653a2 2 0 0 1 .998-1.73zM5.25 8.092a.5.5 0 0 0-.751.433v6.669a2 2 0 0 0 .998 1.73l5.751 3.33a.5.5 0 0 0 .751-.432v-6.669a2 2 0 0 0-.998-1.73zm10.517-2.575c-.478-.276-1.254-.276-1.732 0s-.478.724 0 1s1.254.276 1.732 0s.478-.724 0-1m-5.8 0c-.478-.276-1.254-.276-1.732 0s-.478.724 0 1s1.254.276 1.732 0c.479-.276.479-.724 0-1m7.025 10.328c.597-.345 1.082-1.184 1.082-1.875c0-.69-.485-.97-1.082-.625S15.91 14.53 15.91 15.22s.485.97 1.082.625M6.365 12.2c.478.277.866.053.866-.5c0-.552-.388-1.223-.866-1.5s-.866-.052-.866.5c0 .553.388 1.224.866 1.5m4.33 5.498c0 .552-.389.776-.867.5s-.866-.948-.866-1.5s.388-.776.866-.5s.866.948.866 1.5M7.231 15.7c0 .553-.388.777-.866.5c-.478-.276-.866-.947-.866-1.5c0-.552.388-.776.866-.5c.478.277.866.948.866 1.5m3.463-2c0 .553-.388.777-.866.5c-.479-.275-.866-.947-.866-1.5c0-.551.387-.775.866-.5c.478.277.866.949.866 1.5"/></svg>';
+  function attackHtml(att) {
+    const s = String(att == null ? '' : att).trim();
+    return /^\d+$/.test(s) ? s + DICE_SVG : esc(s);
+  }
+
   function renderWeaponRow(w, omitName, withCalc) {
     const special = w.special && w.special !== '-' ? w.special : '';
     const typeLabel = WEAPON_TYPE_LABELS[w.type] || w.type || '?';
@@ -3063,7 +3082,7 @@ const App = (() => {
     return `<div class="weapon-row">
       ${omitName === true ? '' : `<span class="weapon-col weapon-col-name">${esc(w.name)}</span>`}
       <span class="weapon-col weapon-col-arc" title="${ARC_LABELS[w.arc] || 'Firing Arc: ' + (w.arc || '')}">${ARC_ICONS[w.arc] ? ARC_ICONS[w.arc] + '<span class="arc-label">' + esc(w.arc || '') + '</span>' : esc(w.arc || '')}</span>
-      <span class="weapon-col weapon-col-att">${w.attack}</span>
+      <span class="weapon-col weapon-col-att">${attackHtml(w.attack)}</span>
       <span class="weapon-col weapon-col-lock">${w.lock}${critOn ? `<span class="weapon-col-crit" title="Scores a critical on ${esc(critOn)} (2 over Lock); this weapon has rules that use criticals">crit ${esc(critOn)}</span>` : ''}</span>
       ${dmgCell}
       ${special ? `<span class="weapon-col weapon-col-special">${renderWeaponSpecialChips(special)}</span>` : ''}
@@ -3330,7 +3349,7 @@ const App = (() => {
           return `<div class="weapon-row station-arm-row${c > 0 ? ' sys-opt-active' : ''}">
             <span class="weapon-col weapon-col-name">${esc(o.name)}${star}</span>
             <span class="weapon-col weapon-col-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${arcCell}</span>
-            <span class="weapon-col weapon-col-att">${esc(String(w.attack))}</span>
+            <span class="weapon-col weapon-col-att">${attackHtml(w.attack)}</span>
             <span class="weapon-col weapon-col-lock">${esc(String(w.lock))}${weaponCritOn(w) ? `<span class="weapon-col-crit" title="Scores a critical on ${esc(weaponCritOn(w))} (2 over Lock); this weapon has rules that use criticals">crit ${esc(weaponCritOn(w))}</span>` : ''}</span>
             <span class="weapon-col weapon-col-dmg weapon-col-dmg--calc" role="button" tabindex="0" title="Damage odds, open in the Combat Calculator" onclick="event.stopPropagation();Calc.addBuilderWeapon(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Calc.addBuilderWeapon(this)}" data-cn="${esc(w.name || o.name || '')}" data-ca="${esc(String(w.attack))}" data-cl="${esc(String(w.lock))}" data-cd="${esc(String(w.damage))}" data-ct="${esc(w.type || '')}" data-cs="${esc(w.special || '')}" data-carc="${esc(w.arc || '')}">${esc(String(w.damage))}${typeTag}</span>
             <span class="weapon-col weapon-col-special">${w.special && w.special !== '-' ? renderWeaponSpecialChips(w.special) : ''}</span>
@@ -5170,7 +5189,7 @@ const App = (() => {
         : esc(w.arc || '');
       const crit = weaponCritOn(w);
       const lockCell = `${esc(w.lock || '')}${crit ? `<span class="dp-w-crit" title="Scores a critical on ${esc(crit)} (2 over Lock); this weapon has rules that use criticals">crit ${esc(crit)}</span>` : ''}`;
-      return `<tr><td class="dp-w-name">${nm}</td><td class="dp-w-arc">${arc}</td><td>${esc(w.attack || '')}</td><td>${lockCell}</td><td>${dmg}</td><td class="dp-w-spec">${special}</td></tr>`;
+      return `<tr><td class="dp-w-name">${nm}</td><td class="dp-w-arc">${arc}</td><td>${attackHtml(w.attack)}</td><td>${lockCell}</td><td>${dmg}</td><td class="dp-w-spec">${special}</td></tr>`;
     }).join('');
     return `<table class="dp-weapons"><thead><tr><th class="dp-w-name">Weapon</th><th>Arc</th><th>Att</th><th>Lk</th><th>Dmg</th><th class="dp-w-spec">Special</th></tr></thead><tbody>${body}</tbody></table>`;
   }
@@ -5517,7 +5536,10 @@ const App = (() => {
             const dmg = `${esc(w.damage || '')}${w.type ? ` <span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : ''}`;
             const sp = (w.special && w.special !== '-') ? ` <span class="rt-wsp">${esc(w.special)}</span>` : '';
             const nm = `${w.qty > 1 ? w.qty + '× ' : ''}${esc(w.name || '')}`;
-            return `<td class="rt-w">${nm}${sp}</td><td>${esc(w.arc || '')}</td><td>${esc(w.attack || '')}</td><td>${esc(w.lock || '')}</td><td>${dmg}</td>`;
+            const arcCell = ARC_ICONS[w.arc]
+              ? `<span class="dp-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${ARC_ICONS[w.arc]}<span class="dp-arc-lab">${esc(w.arc || '')}</span></span>`
+              : esc(w.arc || '');
+            return `<td class="rt-w">${nm}${sp}</td><td class="rt-arc">${arcCell}</td><td>${attackHtml(w.attack)}</td><td>${esc(w.lock || '')}</td><td>${dmg}</td>`;
           };
           if (wr.length === 0 && allLoads.length === 0) {
             groupsHtml += `<tr class="rt-ship rt-first"><td class="rt-name">${nameCell}</td>${statCells}<td class="rt-w" colspan="5"><span class="rt-none">No weapons</span></td></tr>`;
