@@ -3285,7 +3285,11 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Only ship of the class:",
+      "famousShips": [
+       "Hyperyacht Aurorum"
+      ]
      }
     },
     {
@@ -3330,7 +3334,11 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Only ship of the class:",
+      "famousShips": [
+       "Hyperyacht Somniferum"
+      ]
      }
     },
     {
@@ -3497,7 +3505,7 @@
        "Ride to Die",
        "Tugging Along",
        "T-104",
-       "T-666 (destroyed)"
+       "T-666 [destroyed]"
       ]
      }
     },
@@ -7475,7 +7483,11 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Only ship of the class:",
+      "famousShips": [
+       "Hyperyacht Aurorum"
+      ]
      }
     },
     {
@@ -7663,7 +7675,11 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Only ship of the class:",
+      "famousShips": [
+       "Hyperyacht Somniferum"
+      ]
      }
     },
     {
@@ -7830,7 +7846,7 @@
        "Ride to Die",
        "Tugging Along",
        "T-104",
-       "T-666 (destroyed)"
+       "T-666 [destroyed]"
       ]
      }
     },
@@ -10749,7 +10765,11 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Only ship of the class:",
+      "famousShips": [
+       "Hyperyacht Aurorum"
+      ]
      }
     },
     {
@@ -10937,7 +10957,11 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Only ship of the class:",
+      "famousShips": [
+       "Hyperyacht Somniferum"
+      ]
      }
     },
     {
@@ -11104,7 +11128,7 @@
        "Ride to Die",
        "Tugging Along",
        "T-104",
-       "T-666 (destroyed)"
+       "T-666 [destroyed]"
       ]
      }
     },
@@ -15052,7 +15076,11 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Only ship of the class:",
+      "famousShips": [
+       "Hyperyacht Aurorum"
+      ]
      }
     },
     {
@@ -15097,7 +15125,11 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Only ship of the class:",
+      "famousShips": [
+       "Hyperyacht Somniferum"
+      ]
      }
     },
     {
@@ -15264,7 +15296,7 @@
        "Ride to Die",
        "Tugging Along",
        "T-104",
-       "T-666 (destroyed)"
+       "T-666 [destroyed]"
       ]
      }
     },
@@ -19433,7 +19465,11 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Only ship of the class:",
+      "famousShips": [
+       "Hyperyacht Aurorum"
+      ]
      }
     },
     {
@@ -19478,7 +19514,11 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Only ship of the class:",
+      "famousShips": [
+       "Hyperyacht Somniferum"
+      ]
      }
     },
     {
@@ -19645,7 +19685,7 @@
        "Ride to Die",
        "Tugging Along",
        "T-104",
-       "T-666 (destroyed)"
+       "T-666 [destroyed]"
       ]
      }
     },
@@ -24646,7 +24686,11 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Only ship of the class:",
+      "famousShips": [
+       "Hyperyacht Aurorum"
+      ]
      }
     },
     {
@@ -24834,7 +24878,11 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Only ship of the class:",
+      "famousShips": [
+       "Hyperyacht Somniferum"
+      ]
      }
     },
     {
@@ -25001,7 +25049,7 @@
        "Ride to Die",
        "Tugging Along",
        "T-104",
-       "T-666 (destroyed)"
+       "T-666 [destroyed]"
       ]
      }
     },

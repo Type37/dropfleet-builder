@@ -9,6 +9,7 @@ import json, glob
 NOTED    = "Noted ships of the class:"
 KNOWN    = "Known ships of the class:"
 RECORDED = "Recorded ships of the class:"
+ONLY     = "Only ship of the class:"
 
 # keyed by any name that appears on the ship's wrapper, ship leaf, or variant leaf
 MAP = {
@@ -40,9 +41,14 @@ MAP = {
     "SLM-9 Resupply Hauler": (NOTED,
         ["Crate Expectations", "Right on Time", "Reliable"]),
     "T-Type Tugboats": (KNOWN,
-        ["Tug & Go", "Ride to Die", "Tugging Along", "T-104", "T-666 (destroyed)"]),
+        # "[destroyed]" in brackets, not parens, so it shows verbatim instead of
+        # being parsed as a (faction) column tag and dropped.
+        ["Tug & Go", "Ride to Die", "Tugging Along", "T-104", "T-666 [destroyed]"]),
     "LKS Dredgers": (NOTED,
         ["Dredger", "Silt Siphon", "Ground Town"]),
+    # Unique one-off hulls the PDF flags with "Only ship of the class:".
+    "Hyperyacht Aurorum": (ONLY, ["Hyperyacht Aurorum"]),
+    "Hyperyacht Somniferum": (ONLY, ["Hyperyacht Somniferum"]),
     # --- Resistance / Bioficer counts-as ships (Misc Combined PDF) ---
     "Centurion Grand Cruisers": (RECORDED,
         ["Pilum", "Fontaine's Miracle", "Myriad (Independents)",

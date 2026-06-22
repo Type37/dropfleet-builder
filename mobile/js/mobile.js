@@ -334,17 +334,25 @@
   const ARC_LABELS = {
     'B': 'Broadside (Port & Starboard)', 'F': 'Front', 'F/S': 'Front & Side',
     'F/S/R': 'Front, Side & Rear', 'FN': 'Front Narrow', 'Fn': 'Front Narrow',
-    'S': 'Side', 'SL': 'Side Left', 'SR': 'Side Right', 'R': 'Rear'
+    'S': 'Side', 'SL': 'Side Left', 'SR': 'Side Right', 'R': 'Rear',
+    '*': 'Shuriken Arcs — 5 unique 72° arcs (see Disintegrator Bank)'
   };
+  // Firing-arc glyphs, tuned for legibility at ~16px (bow points up): a bolder ring
+  // + an edge stroke on each wedge so narrow arcs read. FN/RN are 30deg (the rule's
+  // 22deg is an invisible sliver this small); Broadside (B) uses wider fore/aft gaps
+  // so it stays distinct from the full F/S/R disc. Kept in sync with desktop app.js.
   const ARC_ICONS = {
-    'B': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,18.9A44,44 0 0,1 81.1,81.1Z" fill="currentColor"/><path d="M50,50L18.9,81.1A44,44 0 0,1 18.9,18.9Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'F': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L18.9,18.9A44,44 0 0,1 81.1,18.9Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'F/S': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L18.9,81.1A44,44 0 1,1 81.1,81.1Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'F/S/R': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="currentColor" r="44"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'FN': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L28,11.9A44,44 0 0,1 72,11.9Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'Fn': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L28,11.9A44,44 0 0,1 72,11.9Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'S': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,18.9A44,44 0 0,1 81.1,81.1Z" fill="currentColor"/><path d="M50,50L18.9,81.1A44,44 0 0,1 18.9,18.9Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'R': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,81.1A44,44 0 0,1 18.9,81.1Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>'
+    'B': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L68.6,10.1A44,44 0 0,1 68.6,89.9Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M50,50L31.4,10.1A44,44 0 0,0 31.4,89.9Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'F': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L18.9,18.9A44,44 0 0,1 81.1,18.9Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'F/S': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L18.9,81.1A44,44 0 1,1 81.1,81.1Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'F/S/R': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="currentColor" r="44"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5"/><polygon fill="#FFFFFF" points="50,2 47,8 53,8"/></svg>',
+    'FN': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L38.6,7.5A44,44 0 0,1 61.4,7.5Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'Fn': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L38.6,7.5A44,44 0 0,1 61.4,7.5Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'S': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,18.9A44,44 0 0,1 81.1,81.1Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M50,50L18.9,81.1A44,44 0 0,1 18.9,18.9Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'SL': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L18.9,81.1A44,44 0 0,1 18.9,18.9Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'SR': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,18.9A44,44 0 0,1 81.1,81.1Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'R': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,81.1A44,44 0 0,1 18.9,81.1Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    '*': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><g stroke="currentColor" stroke-width="3"><line x1="50" y1="50" x2="50" y2="6"/><line x1="50" y1="50" x2="91.8" y2="36.4"/><line x1="50" y1="50" x2="75.9" y2="85.6"/><line x1="50" y1="50" x2="24.1" y2="85.6"/><line x1="50" y1="50" x2="8.2" y2="36.4"/></g><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/></svg>'
   };
   function arcCell(arc) {
     const a = (arc || '').trim();
@@ -389,8 +397,9 @@
   function statIcon(key) {
     return STAT_ICONS[key] ? `<span class="stat-icon stat-icon-${key}">${STAT_ICONS[key]}</span>` : '';
   }
-  // Shared stat grid: Scan|Sig, Thrust|Saves, then Hull full-width. ES/KS/BS
-  // 2-col grid: Scan|KS, Sig|ES, Thrust|BS, Hull(full). Each save its own cell.
+  // Shared stat grid, matching the official profile order (and desktop): Thrust on
+  // top, saves run KS / ES / BS downward.
+  // 2-col grid: Thrust|KS, Scan|ES, Sig|BS, Hull(full). Each save its own cell.
   function statGridMobile(entries, tappable) {
     const byKey = {}; entries.forEach(e => { byKey[e.key] = e; });
     const cell = (k, cls = '') => {
@@ -402,9 +411,9 @@
       return `<div class="stat-cell ${extra} ${cls}${tap}">${statIcon(k)}<span class="stat-cell-text"><span class="stat-value">${esc(e.val)}</span><span class="stat-label">${e.label}</span></span></div>`;
     };
     const cells = [
-      cell('scan'), cell('ks'),
-      cell('sig'),  cell('es'),
-      cell('thrust'), cell('bs'),
+      cell('thrust'), cell('ks'),
+      cell('scan'),   cell('es'),
+      cell('sig'),    cell('bs'),
       cell('hull', 'stat-cell-wide')
     ].filter(Boolean).join('');
     return `<div class="stat-grid">${cells}</div>`;
@@ -1221,7 +1230,7 @@
       return `<div class="list-row flagship-row" onclick="App.openAdmiralDetail(${ai})">
         ${art ? `<div class="ship-thumb"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
-          <div class="list-row-title">${esc(fs.name)}</div>
+          <div class="list-row-title">${esc(flagshipLabel(fs, true))}</div>
           <div class="list-row-sub">${sizeClass ? esc(sizeClass) + ', ' : ''}flies with ${esc(a.name)}</div>
         </div>
         <span class="list-chevron">›</span>
@@ -1966,11 +1975,13 @@
     let cur = [], tagged = false;
     famousShips.forEach(s => {
       const txt = String(s).trim();
-      // A trailing "(label)" closes a sub-faction column. Ignore it when the "("
-      // belongs to a markdown link [name](url) (name part ends with "]") or looks
-      // like a URL, so linked entries are not mistaken for tags.
+      // A trailing "(label)" closes a sub-faction column. A markdown link [name](url)
+      // ends in "](...)" with no space, so its closing paren is not a tag; a bracketed
+      // "[ne X]" note followed by " (Faction)" keeps a space before "(", so a real
+      // faction tag is still recognised.
       const m = txt.match(/^(.*?)\s*\(([^)]+)\)$/);
-      if (m && !m[1].endsWith(']') && !/https?:\/\//.test(m[2])) {
+      const isMdLink = /\]\([^)]*\)$/.test(txt);
+      if (m && !isMdLink && !/https?:\/\//.test(m[2])) {
         tagged = true;
         if (m[1].trim()) cur.push(m[1].trim());
         groups.push({ label: m[2].trim(), ships: cur });
@@ -2592,7 +2603,18 @@
     if (!a || !a.admiralId) return null;
     const faction = FACTIONS[activeFleet.faction];
     const def = (faction && faction.admirals || []).find(x => x.id === a.admiralId);
-    return (def && def.isFamous && def.flagship) ? def.flagship : null;
+    if (!(def && def.isFamous && def.flagship)) return null;
+    // Some famous admirals have a pre-named flagship (e.g. "Fortune's Fancy"); the
+    // proper name lives on the admiral def, the class name on the flagship ship.
+    return def.flagshipName ? Object.assign({}, def.flagship, { flagshipName: def.flagshipName }) : def.flagship;
+  }
+  // A named flagship reads "Fortune's Fancy (Tribune Battlecruiser)"; an unnamed one
+  // just shows its class. `withClass` appends the class in parentheses.
+  function flagshipLabel(fs, withClass) {
+    if (!fs) return '';
+    const cls = fs.name || '';
+    if (fs.flagshipName) return (withClass && cls) ? `${fs.flagshipName} (${cls})` : fs.flagshipName;
+    return cls;
   }
   // Render a flagship's full datasheet (stat grid + weapons + rules), reusing the
   // same components as the group ship detail so it matches desktop parity.
@@ -2623,7 +2645,7 @@
     const specialText = stats.special && stats.special !== '-' ? stats.special : '';
     const artSrc = shipArtPath(fs.name);
     const sizeClass = fs.category ? (CATEGORY_LABELS[fs.category] || '') : '';
-    return `<div class="section-header">${esc(fs.name)}${sizeClass ? ', ' + sizeClass : ''}${fs.cost ? `, ${fs.cost} pts` : ''}</div>
+    return `<div class="section-header">${esc(flagshipLabel(fs, true))}${sizeClass ? ', ' + sizeClass : ''}${fs.cost ? `, ${fs.cost} pts` : ''}</div>
       ${artSrc ? `<div class="ship-art-hero">${shopLinkImg(fs.name, `<img src="${artSrc}" alt="${esc(fs.name)}" loading="lazy">`, fs)}</div>` : ''}
       ${statGridMobile(statEntries, false)}
       ${weapons.length ? `<div class="weapon-table">

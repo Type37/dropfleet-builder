@@ -4775,7 +4775,11 @@
     "isUnique": true,
     "tonnage": "L",
     "lore": "Hyperyacht Aurorum, launched 2493, was commissioned by Caesar Dun, boss of the East Eden Syndicate. She was uniquely built to impeccable standards, riddled with unregistered spaces, and armed far beyond EAA-sanctioned levels. While using her peerless stealth capabilities to evade justice, he unwittingly dodged the Scourge invasion. After months of shadowing a survivor flotilla, Caesar was garrotted by his lieutenant, who took Aurorum to join the refugees.\n\nToday, Aurorum serves as the flagship of Karl Stieglitz, head of the galaxy's most infamous mercenaries: The Decapitators. This privateer flotilla earned dark renown during the Battle of Earth in the vanguard of the Vega Scrapfleet but is now a gun for hire. Stieglitz has already been approached by Kalium and, it is rumoured, the PHR. The UCM has yet to decide how to respond.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Only ship of the class:",
+    "famousShips": [
+     "Hyperyacht Aurorum"
+    ]
    }
   },
   {
@@ -4970,7 +4974,11 @@
     "isUnique": true,
     "tonnage": "L",
     "lore": "The Hyperyacht Somniferum is not a sight civilized governments want to see on situation reports. Colloquially known as \"the party bus\", a spike in crime and illegal substances usually follows in its wake. Somniferum's current owner is the \"Master of Ceremonies\" Maeby Hy. The Somniferum is almost unrecognisable from its initial configuration as an Eden Aerospace Systems Luxury Liner. Lab explosions, combat damage, and ad-hoc refits have all added to it's hodge-podge appearance.\n\nOne of these many changes to the ship is the addition of a peculiar weapon system. While it has no official name, the crew and any who face it have dubbed it \"Party Poppers\". This weapon system fires armour piercing fragmenting flechettes that disperse airborne narcotics and electromagnetic interference into its target. Far too small and numerous to effectively track, this weapon is able to bypass the majority of a ship's point defences and deliver strikes straight to the hull.\n\nThe Somniferum is rarely seen over combat zones, preferring to stick to those planets that are safe enough for civilian travel. While able to defend itself against small time competitors, the ship isn't built for combat. More often than not, the Somniferum will make a hasty exit from a planet as soon as it detects any law enforcement on an intercept course.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Only ship of the class:",
+    "famousShips": [
+     "Hyperyacht Somniferum"
+    ]
    }
   },
   {
@@ -5143,7 +5151,7 @@
      "Ride to Die",
      "Tugging Along",
      "T-104",
-     "T-666 (destroyed)"
+     "T-666 [destroyed]"
     ]
    }
   },
