@@ -5294,10 +5294,14 @@ h1, h2, h3, h4, h5, h6 {
 .dp-group-pts { font-size: 8.5pt; color: #555; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
 .dp-ship {
-  break-inside: avoid; border: 1px solid #bbb; border-left: 3px solid #1b3a5c;
+  break-inside: avoid; page-break-inside: avoid; border: 1px solid #bbb; border-left: 3px solid #1b3a5c;
   border-radius: 3px; padding: 4px 7px; margin-bottom: 6px; background: #fff;
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
 }
+/* If a card is taller than a page and MUST break, never split it through the
+   stat block / head — force the page break to fall after the stats instead. */
+.dp-ship-head { break-after: avoid; break-inside: avoid; page-break-inside: avoid; }
+.dp-statgrid, .dp-big-top { break-inside: avoid; page-break-inside: avoid; }
 .dp-ship-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .dp-name { font-weight: 700; font-size: 9.5pt; color: #1c1a17; }
 .dp-ton { font-weight: 600; font-size: 7.5pt; color: #777; text-transform: uppercase; letter-spacing: 0.03em; }

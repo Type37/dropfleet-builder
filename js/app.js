@@ -29,7 +29,7 @@ const App = (() => {
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true, printRoster: false, showCollection: false };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true, printRoster: false, printNoRules: false, showCollection: false };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -5457,7 +5457,9 @@ const App = (() => {
           if (hoistedWeaponBases.has(baseRuleName(n))) { hoistedWeaponDefs[n] = { description: e.description, page: e.page || '' }; return; }
           gunRuleEntries.push([n, e.description, e.page || '']);
         });
-        const renderRules = entries => entries.length
+        // "Skip rules/obj." hides all spelled-out rule text (the keyword chips and
+        // the weapon Special column still name the rules, so the sheet stays usable).
+        const renderRules = entries => (entries.length && !settings.printNoRules)
           ? `<div class="dp-rules">${entries.map(([n, d, p]) => `<span class="dp-rule"><b>${esc(n)}${p ? ` p.${esc(p)}` : ''}:</b> ${ruleHtml(d)}</span>`).join('')}</div>` : '';
         const shipRulesHtml = renderRules(shipRuleEntries);
         const gunRulesHtml = renderRules(gunRuleEntries);
@@ -5599,7 +5601,7 @@ const App = (() => {
       ...hoistedGlossNames.map(n => [n, ruleDefByName[n]]),
       ...Object.keys(hoistedWeaponDefs).sort().map(n => [n, hoistedWeaponDefs[n]])
     ]);
-    if (glossEntries.length) {
+    if (glossEntries.length && !settings.printNoRules) {
       const items = glossEntries.map(([n, def]) =>
         `<span class="dp-rule"><b>${esc(n)}${def.page ? ` p.${esc(def.page)}` : ''}:</b> ${ruleHtml(def.description)}</span>`
       ).join('');
@@ -5617,7 +5619,7 @@ const App = (() => {
     // them off at the table. Options already chosen in the builder are pre-ticked.
     const allSecObjs = (rawFleetData && rawFleetData.secondaryObjectives) || [];
     const chosenSec = new Set(f.secondaryObjectives || []);
-    if (allSecObjs.length) {
+    if (allSecObjs.length && !settings.printNoRules) {
       html += `<div class="print-section dp-secobj">
         <div class="print-section-title">Secondary Objectives <span class="dp-secobj-hint">pick two for your game</span></div>
         <div class="dp-rules">${allSecObjs.map(o => {
@@ -5680,6 +5682,7 @@ const App = (() => {
         <label class="print-preview-opt"><input type="checkbox" id="pp-big" ${settings.printBig ? 'checked' : ''} ${(settings.printSimple || settings.printRoster) ? 'disabled' : ''}> Big mode</label>
         <label class="print-preview-opt"><input type="checkbox" id="pp-2col" ${settings.print2col ? 'checked' : ''} ${(settings.printSimple || settings.printBig || settings.printRoster) ? 'disabled' : ''}> 2 columns</label>
         <label class="print-preview-opt"><input type="checkbox" id="pp-ink" ${settings.printInk ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Ink-saver</label>
+        <label class="print-preview-opt" title="Hide all rules text and the secondary-objective list (saves paper when you reprint a list whose rules you already have)"><input type="checkbox" id="pp-norules" ${settings.printNoRules ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Skip rules/obj.</label>
         <label class="print-preview-opt">Text
           <select id="pp-density" class="pp-density-sel" ${settings.printSimple ? 'disabled' : ''}>
             <option value="comfortable" ${settings.printDensity !== 'compact' ? 'selected' : ''}>Comfortable</option>
@@ -5742,12 +5745,14 @@ const App = (() => {
       set('#pp-2col', simple || big || rost);
       set('#pp-ink', simple);
       set('#pp-density', simple);
+      set('#pp-norules', simple);
     };
     ov.querySelector('#pp-simple').onchange = (e) => { settings.printSimple = e.target.checked; saveSettings(); updateToggleStates(); refresh(); };
     ov.querySelector('#pp-roster').onchange = (e) => { settings.printRoster = e.target.checked; saveSettings(); updateToggleStates(); refresh(); };
     ov.querySelector('#pp-big').onchange = (e) => { settings.printBig = e.target.checked; saveSettings(); updateToggleStates(); refresh(); };
     ov.querySelector('#pp-2col').onchange = (e) => { settings.print2col = e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-ink').onchange = (e) => { settings.printInk = e.target.checked; saveSettings(); refresh(); };
+    ov.querySelector('#pp-norules').onchange = (e) => { settings.printNoRules = e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-density').onchange = (e) => { settings.printDensity = e.target.value; saveSettings(); refresh(); };
     ov.querySelector('#pp-close').addEventListener('click', closePreview);
     ov.querySelector('#pp-print').addEventListener('click', doPrintNow);
