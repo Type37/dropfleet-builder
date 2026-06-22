@@ -5467,7 +5467,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* Secondary-objective checklist: every option with a tickbox to pick at the table. */
 .dp-secobj-hint { font-weight: 400; font-style: italic; color: #8a6d1e; font-size: 0.82em; text-transform: none; letter-spacing: 0; }
-.dp-secobj .dp-secobj-row { display: block; }
+/* Secondary-objective checklist is ALWAYS two columns for readability, regardless
+   of the sheet's column/big/roster mode (the list is long and reads better split). */
+.dp-secobj .dp-rules { column-count: 2; column-gap: 18px; }
+.dp-secobj .dp-secobj-row { display: block; break-inside: avoid; -webkit-column-break-inside: avoid; }
 .dp-secobj .dp-checkbox { font-family: var(--font-stat); font-size: 1.05em; color: #1b3a5c; margin-right: 2px; }
 .dp-secobj .dp-secobj-on { background: rgba(184, 147, 46, 0.08); border-radius: 3px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 .dp-secobj .dp-secobj-on .dp-checkbox { color: #8a6d1e; }
