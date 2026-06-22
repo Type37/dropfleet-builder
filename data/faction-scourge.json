@@ -3950,7 +3950,7 @@
      "ks": "5+",
      "bs": "6+",
      "g": "1",
-     "special": "Rare, Reinforced Armour, Acquired Mines"
+     "special": "Boardable, Civilian Transport, Rare, Reinforced Armour"
     },
     "weapons": [
      {
@@ -3972,14 +3972,32 @@
     ],
     "specialRules": [
      {
+      "name": "Boardable",
+      "description": "This Ship can have Battalions Assigned to it as if it were a Space Station.\nAt the start of the round, this Ship is controlled by a Player if only they have any Battalions on it, lasting until the end of the round.\nPlayers that control a Boardable Ship may activate it as if it were a Ship in their Fleet, after all other Groups have activated."
+     },
+     {
+      "name": "Civilian Transport",
+      "description": "This Ship can only choose the General Quarters order.\nThis Ship cannot be attacked unless it is controlled by a player. Players cannot attack a friendly Civilian Transport.\nThis Ship cannot be the target of Abilities."
+     },
+     {
       "name": "Rare",
-      "description": "You may only take one Group of this Ship in a Skirmish-sized game, two in a Clash, three in a Battle, and four in a Reconquest.",
-      "page": "37",
-      "publicationId": "45b0-3e3b-e83d-fd70"
+      "description": "You may only take one Group of this Ship in a Skirmish-sized game, two in a Clash, three in a Battle, and four in a Reconquest."
      },
      {
       "name": "Reinforced Armour",
       "description": "Weapons rolling to hit this Ship or its Group can only score criticals against it on a result of a 3 higher than its Lock value."
+     },
+     {
+      "name": "Expel Hazards",
+      "description": "This weapon can only be used against targets within Scan range and on the same Orbital Layer.\nWhile this Ship is below its starting Hull Points, for every 2 Hull Points lost from its starting Hull Points, increase the attack of this weapon by 1."
+     },
+     {
+      "name": "Acquired Mines",
+      "description": "This Ship's Mines use the stats of its parent fleet."
+     },
+     {
+      "name": "Mercenary",
+      "description": "This Ship may be used in any fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -4007,7 +4025,7 @@
      "ks": "3+",
      "bs": "5+",
      "g": "1",
-     "special": "Porter F-2, Reinforced Armour, Monitor, Scrap Hauler, Scratch Bodge Job, Industrial Design"
+     "special": "Boardable, Porter F-2, Reinforced Armour, Monitor"
     },
     "weapons": [
      {
@@ -4023,10 +4041,12 @@
     "loads": [],
     "specialRules": [
      {
+      "name": "Boardable",
+      "description": "This Ship can have Battalions Assigned to it as if it were a Space Station.\nAt the start of the round, this Ship is controlled by a Player if only they have any Battalions on it, lasting until the end of the round.\nPlayers that control a Boardable Ship may activate it as if it were a Ship in their Fleet, after all other Groups have activated."
+     },
+     {
       "name": "Porter F-2",
-      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 2.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
-      "page": "37",
-      "publicationId": "45b0-3e3b-e83d-fd70"
+      "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 2.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship."
      },
      {
       "name": "Reinforced Armour",
@@ -4034,13 +4054,27 @@
      },
      {
       "name": "Monitor",
-      "description": "Ships with this rule may not use Course Change or Max Thrust orders.",
-      "page": "36",
-      "publicationId": "45b0-3e3b-e83d-fd70"
+      "description": "Ships with this rule may not use Course Change or Max Thrust orders."
+     },
+     {
+      "name": "Colossal Salvage Cutter",
+      "description": "This weapon can only be used against targets in base contact."
+     },
+     {
+      "name": "Scrap Hauler",
+      "description": "If this Group ends its activation within 1\" of a Debris Field, this Group gains a scrap token and cannot gain scrap tokens from that Debris Field for the rest of the game. A Group can have a maximum of 8 scrap tokens at any one time. Any attached Payload ships that have any scrap tokens do not count towards this limit. Whenever another Ship within 6\" of a friendly Ship with this rule is destroyed, pick one of those friendly Ships, that Ship gains a scrap token."
+     },
+     {
+      "name": "Scratch Bodge Job",
+      "description": "At the end of this Ship's activation, you may remove any number of scrap tokens and choose one of the following:\nScrappy Plating: One friendly Ship within 6\" recovers lost Hull points equal to the amount of scrap tokens removed.\nBodge Repairs: Remove a crippling effect from a friendly Ship within 6\" for each scrap token removed."
      },
      {
       "name": "Industrial Design",
       "description": "Improve this Group’s Backup save by 2 when rolling to save hits due to Debris Fields."
+     },
+     {
+      "name": "Mercenary",
+      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable rule."
      }
     ],
     "groupMin": 1,
