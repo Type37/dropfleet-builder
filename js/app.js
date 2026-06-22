@@ -2453,7 +2453,7 @@ const App = (() => {
       const catLabel = CATEGORY_LABELS[cat] || cat;
       const catColor = flagshipCatColor[cat] || 'var(--navy)';
       const artSrc = fs.image || null;
-      return `<div class="overview-group-card card-deco overview-flagship-card overview-flagship-clickable" style="border-left-color:${catColor}" title="${esc(name)} flies ${esc(a.name)}. Click to open its datasheet" onclick="App.selectFlagship(${ai})" role="button" tabindex="0">
+      return `<div class="overview-group-card card-deco overview-flagship-card overview-flagship-clickable" style="border-left-color:${catColor}" title="${esc(name)} flies ${esc(a.name)}. Click to open its profile" onclick="App.selectFlagship(${ai})" role="button" tabindex="0">
         <div class="overview-group-top">
           ${artSrc ? `<div class="overview-group-art"><img src="${esc(thumbUrl(artSrc))}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
           <div class="overview-group-info">
@@ -3996,7 +3996,7 @@ const App = (() => {
     }
 
     return `
-    <div class="ship-card${isFamous ? ' ship-card-admiral' : ''}"${cardOnclick} title="${isFamous ? esc(data.name) : 'View full datasheet'}">
+    <div class="ship-card${isFamous ? ' ship-card-admiral' : ''}"${cardOnclick} title="${isFamous ? esc(data.name) : 'View full profile'}">
       <div class="ship-card-top">
         ${data.image ? `<div class="ship-card-image"><img src="${esc(thumbUrl(data.image))}" alt="${esc(data.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
         <div class="ship-card-info">
@@ -4769,7 +4769,7 @@ const App = (() => {
           const fsSize = flagship.shipCategory ? (CATEGORY_LABELS[flagship.shipCategory] || '') : '';
           // The flagship is a ship on the table: its card sits in the middle and
           // opens the full datasheet. The admiral card here just links to it.
-          flagshipHtml = `<button class="admiral-flagship-link" onclick="App.openShipDetail('${currentFleet.faction}','famous_admirals','${a.shipKey}',false)" title="Open the flagship datasheet">
+          flagshipHtml = `<button class="admiral-flagship-link" onclick="App.openShipDetail('${currentFleet.faction}','famous_admirals','${a.shipKey}',false)" title="Open the flagship profile">
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 11l6-8 6 8M3 11h10l-1 3H4z"/></svg>
             <span>Flagship: <strong>${esc(fsName)}</strong>${fsSize ? `, ${esc(fsSize)}` : ''}</span>
           </button>`;
