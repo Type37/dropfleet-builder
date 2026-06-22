@@ -2290,6 +2290,18 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--weight-semibold);
   font-size: 15px;
 }
+/* Critical-on value under the Lock (only for weapons whose rules use criticals). */
+.weapon-col-crit {
+  display: block;
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  line-height: 1.05;
+  color: var(--gold-dark);
+  letter-spacing: 0.02em;
+  margin-top: 1px;
+  white-space: nowrap;
+  cursor: help;
+}
 .weapon-col-dmg {
   display: flex;
   align-items: center;

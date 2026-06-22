@@ -22,6 +22,8 @@ const App = (() => {
       '3. What would make you use it for your next game?\n\n' +
       '4. How long have you played DFC?\n'
     );
+  // The user's combined faction quick-reference sheets (all factions, one PDF).
+  const FACTION_REF_PDF = 'https://jetwong.neocities.org/wargaming/dropfleet-commander/Dropfleet-Faction-References.pdf';
   let activeGroupId = null;
   let activeFlagship = null;  // admiral index when a famous flagship is selected (shown in the detail panel like a group)
   let shipSort = { key: 'points', dir: 'asc' };  // picker sort (parity w/ mobile: default cheapest-first)
@@ -622,6 +624,10 @@ const App = (() => {
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6V2h8v4M4 12H2V7h12v5h-2"/><rect x="4" y="10" width="8" height="4"/></svg>
                 <span class="topbar-action-label">Print preview</span>
               </button>
+              <a class="btn btn-ghost btn-sm topbar-action-btn" href="${FACTION_REF_PDF}" target="_blank" rel="noopener" data-tooltip="Faction quick-reference sheets (PDF)">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2h7l3 3v9H3z"/><path d="M6 6h5M6 9h5M6 12h3"/></svg>
+                <span class="topbar-action-label">Reference</span>
+              </a>
               <button class="btn btn-ghost btn-sm topbar-action-btn" onclick="App.openSettings()" data-tooltip="Settings">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path opacity=".55" d="M13.765 2.152C13.398 2 12.932 2 12 2s-1.398 0-1.765.152a2 2 0 0 0-1.083 1.083c-.092.223-.129.484-.143.863a1.62 1.62 0 0 1-.79 1.353a1.62 1.62 0 0 1-1.567.008c-.336-.178-.579-.276-.82-.308a2 2 0 0 0-1.478.396C4.04 5.79 3.806 6.193 3.34 7s-.7 1.21-.751 1.605a2 2 0 0 0 .396 1.479c.148.192.355.353.676.555c.473.297.777.803.777 1.361s-.304 1.064-.777 1.36c-.321.203-.529.364-.676.556a2 2 0 0 0-.396 1.479c.052.394.285.798.75 1.605c.467.807.7 1.21 1.015 1.453a2 2 0 0 0 1.479.396c.24-.032.483-.13.819-.308a1.62 1.62 0 0 1 1.567.008c.483.28.77.795.79 1.353c.014.38.05.64.143.863a2 2 0 0 0 1.083 1.083C10.602 22 11.068 22 12 22s1.398 0 1.765-.152a2 2 0 0 0 1.083-1.083c.092-.223.129-.483.143-.863c.02-.558.307-1.074.79-1.353a1.62 1.62 0 0 1 1.567-.008c.336.178.579.276.819.308a2 2 0 0 0 1.479-.396c.315-.242.548-.646 1.014-1.453s.7-1.21.751-1.605a2 2 0 0 0-.396-1.479c-.148-.192-.355-.353-.676-.555A1.62 1.62 0 0 1 19.562 12c0-.558.304-1.064.777-1.36c.321-.203.529-.364.676-.556a2 2 0 0 0 .396-1.479c-.052-.394-.285-.798-.75-1.605c-.467-.807-.7-1.21-1.015-1.453a2 2 0 0 0-1.479-.396c-.24.032-.483.13-.82.308a1.62 1.62 0 0 1-1.566-.008a1.62 1.62 0 0 1-.79-1.353c-.014-.38-.05-.64-.143-.863a2 2 0 0 0-1.083-1.083Z"/></svg>
               </button>`;
@@ -3036,6 +3042,10 @@ const App = (() => {
   function renderWeaponRow(w, omitName, withCalc) {
     const special = w.special && w.special !== '-' ? w.special : '';
     const typeLabel = WEAPON_TYPE_LABELS[w.type] || w.type || '?';
+    // Critical-on value (Lock + 2) — shown under the Lock only for weapons whose
+    // rules actually use criticals (Penetrator, Critical-X, Crippling, Reave-X,
+    // Impel-X, Burnthrough-X). Same logic as the print datasheet.
+    const critOn = weaponCritOn(w);
     // Damage carries its type as a colour-coded letter (e.g. 1E, 2K, 1C) — the
     // type is part of the damage, not a separate "special".
     const typeTag = w.type ? `<span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : '';
@@ -3054,7 +3064,7 @@ const App = (() => {
       ${omitName === true ? '' : `<span class="weapon-col weapon-col-name">${esc(w.name)}</span>`}
       <span class="weapon-col weapon-col-arc" title="${ARC_LABELS[w.arc] || 'Firing Arc: ' + (w.arc || '')}">${ARC_ICONS[w.arc] ? ARC_ICONS[w.arc] + '<span class="arc-label">' + esc(w.arc || '') + '</span>' : esc(w.arc || '')}</span>
       <span class="weapon-col weapon-col-att">${w.attack}</span>
-      <span class="weapon-col weapon-col-lock">${w.lock}</span>
+      <span class="weapon-col weapon-col-lock">${w.lock}${critOn ? `<span class="weapon-col-crit" title="Scores a critical on ${esc(critOn)} (2 over Lock); this weapon has rules that use criticals">crit ${esc(critOn)}</span>` : ''}</span>
       ${dmgCell}
       ${special ? `<span class="weapon-col weapon-col-special">${renderWeaponSpecialChips(special)}</span>` : ''}
     </div>`;
@@ -3321,7 +3331,7 @@ const App = (() => {
             <span class="weapon-col weapon-col-name">${esc(o.name)}${star}</span>
             <span class="weapon-col weapon-col-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${arcCell}</span>
             <span class="weapon-col weapon-col-att">${esc(String(w.attack))}</span>
-            <span class="weapon-col weapon-col-lock">${esc(String(w.lock))}</span>
+            <span class="weapon-col weapon-col-lock">${esc(String(w.lock))}${weaponCritOn(w) ? `<span class="weapon-col-crit" title="Scores a critical on ${esc(weaponCritOn(w))} (2 over Lock); this weapon has rules that use criticals">crit ${esc(weaponCritOn(w))}</span>` : ''}</span>
             <span class="weapon-col weapon-col-dmg weapon-col-dmg--calc" role="button" tabindex="0" title="Damage odds, open in the Combat Calculator" onclick="event.stopPropagation();Calc.addBuilderWeapon(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Calc.addBuilderWeapon(this)}" data-cn="${esc(w.name || o.name || '')}" data-ca="${esc(String(w.attack))}" data-cl="${esc(String(w.lock))}" data-cd="${esc(String(w.damage))}" data-ct="${esc(w.type || '')}" data-cs="${esc(w.special || '')}" data-carc="${esc(w.arc || '')}">${esc(String(w.damage))}${typeTag}</span>
             <span class="weapon-col weapon-col-special">${w.special && w.special !== '-' ? renderWeaponSpecialChips(w.special) : ''}</span>
             <span class="weapon-col station-arm-pts">${o.cost > 0 ? '+' + o.cost : o.cost}</span>
