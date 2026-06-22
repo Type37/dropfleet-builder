@@ -7133,8 +7133,17 @@
       },
       "weapons": [
        {
-        "name": "Medium Calibre Bank (Left)",
+        "name": "Medium Calibre Bank",
         "arc": "SL",
+        "attack": "2",
+        "lock": "4+",
+        "damage": "2",
+        "type": "K",
+        "special": "-"
+       },
+       {
+        "name": "Medium Calibre Bank",
+        "arc": "SR",
         "attack": "2",
         "lock": "4+",
         "damage": "2",
