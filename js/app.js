@@ -3737,7 +3737,7 @@ const App = (() => {
     ).join('') +
       // Misc Ships is a filter chip like the rest: on = reveal mercenaries /
       // cross-faction / other optional ships. (Also mirrored in Settings.)
-      `<button class="filter-chip ${settings.showAdditionalShips ? 'active' : ''}" onclick="App.toggleMiscShips()" title="Show mercenaries, cross-faction and other optional ships">${settings.showAdditionalShips ? CHECK_SVG : ''}Misc Ships</button>` +
+      `<button class="filter-chip ${settings.showAdditionalShips ? 'active' : ''}" onclick="App.toggleMiscShips()" title="Include mercenaries, cross-faction and civilian ships alongside the core list">${settings.showAdditionalShips ? CHECK_SVG : ''}Misc Ships</button>` +
       // "In collection" only appears when Settings → Collection is on.
       (settings.showCollection
         ? `<button class="filter-chip ${collectionFilterOn ? 'active' : ''}" onclick="App.toggleBuildableFilter()" title="Only ships in your collection">${collectionFilterOn ? CHECK_SVG : ''}In collection</button>`
@@ -3825,13 +3825,12 @@ const App = (() => {
       });
     }
 
-    // Misc Ships is its OWN list: when the filter is OFF you see the faction's
-    // core ships (auxiliary/mercenary/civilian "additional" ships hidden); when
-    // ON you see ONLY those misc ships. Famous admirals always show alongside the
-    // core list (a deliberate pick, not auxiliary clutter).
-    if (settings.showAdditionalShips) {
-      ships = ships.filter(s => s.data.additional);
-    } else {
+    // "Misc Ships" reveals the optional mercenary / cross-faction / civilian ships.
+    // OFF (default): hide them so the core faction list stays uncluttered. ON: show
+    // them ALONGSIDE the core ships (each tagged "Misc") so the toggle composes with
+    // the other filters, the category tabs and search — a real filter, not a list
+    // swap that emptied out whenever the active tonnage tab had no misc ships.
+    if (!settings.showAdditionalShips) {
       ships = ships.filter(s => s.data.type === 'Famous' || !s.data.additional);
     }
 
@@ -3910,6 +3909,9 @@ const App = (() => {
     if (isFamous) selectBadges += '<span class="ship-badge ship-badge-admiral">Admiral</span>';
     else if (data.isUnique) selectBadges += '<span class="ship-badge ship-badge-unique">Unique</span>';
     else if (data.isRare) selectBadges += '<span class="ship-badge ship-badge-rare">Rare</span>';
+    // Mark the optional mercenary / cross-faction / civilian ships so they're
+    // distinguishable when revealed alongside the core list via the Misc filter.
+    if (!isFamous && data.additional) selectBadges += '<span class="ship-badge ship-badge-misc" title="Mercenary / cross-faction / civilian ship">Misc</span>';
     // (No Launch/Drop badge next to the name — launch capability already reads
     // from the launch-capacity indicator, the weapon summary and the loads.)
 

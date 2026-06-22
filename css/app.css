@@ -3184,6 +3184,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 .ship-badge-unique { color: var(--gold-dark); }
 .ship-badge-rare { color: var(--navy); }
+/* Misc = optional mercenary / cross-faction / civilian ship, shown only when the
+   Misc filter reveals them. A muted pill so it reads as "secondary to the core list". */
+.ship-badge-misc {
+  background: var(--ink-faint, #6b6357);
+  color: var(--paper);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
 /* Famous admiral entries in the ship picker read as a small filled pill so they
    stand out from regular hulls. */
 .ship-badge-admiral {
