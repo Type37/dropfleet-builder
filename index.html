@@ -22,6 +22,15 @@
     }
   })();
 </script>
+<script>
+  // Apply the saved theme before first paint (no flash of light on dark-mode users).
+  (function () {
+    try {
+      var s = JSON.parse(localStorage.getItem('dfc_settings') || '{}');
+      if (s.theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+  })();
+</script>
 <meta name="theme-color" content="#1b3a5c">
 <meta property="og:title" content="Dropfleet Commander Fleet Builder">
 <meta property="og:description" content="Dropfleet Commander by TTCombat. This is an army list / fleet builder made by WarLore.">
@@ -61,6 +70,7 @@
   <div class="topbar-sep desktop-only"></div>
   <span class="topbar-context" id="topbar-context">Fleet Builder</span>
   <div class="topbar-actions" id="topbar-actions"></div>
+  <button class="topbar-theme-btn" id="theme-toggle" type="button" onclick="App.toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
 </header>
 
 <!-- ═══ App Shell ═══ -->

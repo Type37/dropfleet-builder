@@ -142,6 +142,71 @@
   --sidebar-w: 260px;
 }
 
+/* ── Dark Theme ──────────────────────────────────────────────────
+   Opt-in via the topbar toggle (data-theme="dark" on <html>). Only the COLOUR
+   tokens flip — every component reads them, so the whole on-screen UI re-themes.
+   The print sheet uses hardcoded paper colours (not these tokens), so printouts
+   stay light on paper regardless of theme. Contrast tuned for WCAG AA. */
+html[data-theme="dark"] {
+  --paper: #161a1f;
+  --paper-warm: #1c212a;
+  --paper-alt: #232a33;
+  --ink: #e9e7e2;
+  --ink-soft: #c6c2ba;
+  --ink-muted: #9aa0a8;     /* AA on paper/paper-alt */
+  --ink-faint: #8b919a;
+
+  --navy: #4f8bcc;          /* accent; bright enough to read as text on dark */
+  --navy-light: #74a7e0;
+  --navy-dark: #356aa6;
+  --navy-subtle: rgba(111, 166, 220, 0.16);
+  --navy-wash: rgba(111, 166, 220, 0.08);
+
+  --gold: #d8b24e;
+  --gold-light: #ecc96c;
+  --gold-dark: #e0bb55;     /* on dark, the "dark" gold must be LIGHT to read */
+  --gold-subtle: rgba(216, 178, 78, 0.14);
+  --gold-line: rgba(216, 178, 78, 0.40);
+
+  /* Faction text tints re-lightened for dark surfaces */
+  --faction-ucm-text: #5cc063;
+  --faction-shaltari-text: #e3ad3e;
+  --faction-bioficer-text: #44b8b8;
+
+  --success: #5cc063;
+  --warning: #e3ad3e;
+  --error: #e2685a;
+  --info: #74a7e0;
+
+  --stroke: #353c45;
+  --stroke-light: #2a313a;
+  --stroke-strong: #49515b;
+  --stroke-accent: rgba(111, 166, 220, 0.30);
+
+  /* Shadows read as near-black ambient + a hairline light ring for elevation. */
+  --shadow-sm: 0 0 0 1px rgba(255,255,255,0.03), 0 1px 2px rgba(0,0,0,0.40);
+  --shadow-md: 0 0 0 1px rgba(255,255,255,0.04), 0 2px 6px rgba(0,0,0,0.45);
+  --shadow-lg: 0 0 0 1px rgba(255,255,255,0.04), 0 6px 14px rgba(0,0,0,0.50);
+  --shadow-xl: 0 0 0 1px rgba(255,255,255,0.05), 0 10px 24px rgba(0,0,0,0.55);
+  --shadow-sheet: 0 0 0 1px rgba(255,255,255,0.05), 0 -12px 32px rgba(0,0,0,0.60);
+  --shadow-dialog: 0 0 0 1px rgba(255,255,255,0.06), 0 24px 60px rgba(0,0,0,0.65);
+
+  color-scheme: dark;
+}
+/* Primary buttons keep white text on a saturated navy in dark mode (the lighter
+   accent navy would fail contrast under white), and the page background fills. */
+html[data-theme="dark"] body { background: var(--paper); }
+html[data-theme="dark"] .btn-primary { background: #2e6db5; border-color: #2e6db5; color: #fff; }
+html[data-theme="dark"] .btn-primary:hover { background: #3a7cc6; border-color: #3a7cc6; }
+/* Topbar theme toggle */
+.topbar-theme-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; margin-left: var(--sp-xs); padding: 0;
+  background: transparent; border: 1px solid var(--stroke); border-radius: var(--radius-md);
+  color: var(--ink-soft); cursor: pointer; transition: background var(--duration-fast), border-color var(--duration-fast);
+}
+.topbar-theme-btn:hover { background: var(--navy-subtle); border-color: var(--stroke-accent); color: var(--navy); }
+
 /* ── 2. Reset & Base ─────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
