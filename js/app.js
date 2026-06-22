@@ -114,9 +114,17 @@ const App = (() => {
       ['medium','Comet',1],['medium','Cavern',1],['medium','Catastrophe',1],
       ['payload','Prism Cell',1],['light','Fulcrum',2],['light','Foray',2],
       ['payload','Invasion Cell',2],['payload','Lander Cell',2]] },
+    // Resistance fastplay ships are MODULAR (Cruiser/Strike Carrier/Frigate hulls with
+    // chosen systems) and carry flavour names on the official sheet. Each is its own
+    // group named for its sheet name, with its starting modules pre-selected (from the
+    // Resistance Fastplay Sheet A5 2.3). Object-form entries: {cat, ship, qty, name, systems}.
     { faction: 'resistance', name: 'Resistance Fast Play', size: 'skirmish', groups: [
-      ['medium','Heavy Cruiser',1],['medium','Cruiser',1],['medium','Light Cruiser',1],
-      ['light','Strike Carrier',2],['light','Heavy Frigate',2]] }
+      { cat:'medium', ship:'Cruiser', qty:1, name:'VH2A Gun Cruiser', systems:['Vent Cannon Turret','N-31 Hybrid Gun Bank','N-31 Hybrid Gun Bank','Ablative Armour'] },
+      { cat:'medium', ship:'Cruiser', qty:1, name:'TFCS Hybrid Carrier', systems:['XN-31 Mass Driver Turret','NC-16 Missile Bank','Fighters & Bombers','Scanner Array'] },
+      { cat:'medium', ship:'Cruiser', qty:1, name:'L2BR Fast Transport', systems:['N-109 Bombardment Mortar Turret','Bulk Landers & Fire Ships','Drive Refit'] },
+      { cat:'light', ship:'Strike Carrier', qty:2, name:'TL Strike Carrier', systems:['N-31 Hybrid Gun Turret'] },
+      { cat:'light', ship:'Heavy Frigate', qty:2, name:'CT Attack Frigate', systems:['NC-16 Missile Turret','Light Vent Cannon Turret'] }
+    ] }
   ];
 
   // ── Init ──
@@ -135,6 +143,7 @@ const App = (() => {
     loadSettings();
     applyTheme(settings.theme);
     loadFleets();
+    seedFastplayFleetsIfFirstRun();
     loadCollection();
     setupRouting();
     initBottomSheetGestures();
@@ -1426,7 +1435,7 @@ const App = (() => {
       const fIcon = FACTION_ICONS[fk];
       const spec = fastplaySpecs.find(s => s.faction === fk);
       if (!spec) return '';
-      const shipList = spec.groups.map(([cat, name]) => esc(name)).join(', ');
+      const shipList = spec.groups.map(e => esc(Array.isArray(e) ? e[1] : (e.name || e.ship))).join(', ');
       return `<button class="fastplay-faction-btn" onclick="App.loadFastplayFaction('${fk}')">
         ${fIcon ? `<img src="${fIcon}" alt="" style="width:20px;height:20px;object-fit:contain">` : ''}
         <div style="text-align:left;flex:1">
@@ -1444,8 +1453,8 @@ const App = (() => {
       const spec = fastplaySpecs.find(s => s.faction === fk);
       if (!spec) return;
       const battleGroups = [];
-      spec.groups.forEach(([cat, name, qty]) => {
-        const g = makeGroup(fk, null, cat, name, qty);
+      spec.groups.forEach(entry => {
+        const g = makeGroupFromEntry(fk, entry);
         if (g) battleGroups.push(g);
       });
       if (battleGroups.length === 0) return;
@@ -1467,8 +1476,8 @@ const App = (() => {
       const spec = fastplaySpecs.find(s => s.faction === factionKey);
       if (!spec) return;
       const battleGroups = [];
-      spec.groups.forEach(([cat, name, qty]) => {
-        const g = makeGroup(factionKey, null, cat, name, qty);
+      spec.groups.forEach(entry => {
+        const g = makeGroupFromEntry(factionKey, entry);
         if (g) battleGroups.push(g);
       });
       if (battleGroups.length === 0) return;
@@ -1531,23 +1540,55 @@ const App = (() => {
     return substringMatch;
   }
 
-  function makeGroup(factionKey, groupName, category, namePart, qty) {
-    const found = findShipKey(factionKey, category, namePart);
+  // A fastplay group entry is either the legacy [category, name, qty] tuple OR an
+  // object {cat, ship, qty, name, systems} — the object form names the group and
+  // pre-selects modular systems (Resistance fastplay ships ship WITH modules chosen).
+  function makeGroupFromEntry(factionKey, entry) {
+    const f = Array.isArray(entry)
+      ? { cat: entry[0], ship: entry[1], qty: entry[2], name: null, systems: null }
+      : { cat: entry.cat, ship: entry.ship, qty: entry.qty || 1, name: entry.name || null, systems: entry.systems || null };
+    const found = findShipKey(factionKey, f.cat, f.ship);
     if (!found) return null;
-    const { key, ship } = found;
+    const { key, ship: dbShip } = found;
     const ships = [];
-    for (let i = 0; i < qty; i++) {
+    for (let i = 0; i < f.qty; i++) {
       const loadouts = {};
-      let loadoutCost = 0;
-      if (ship.loadoutOptions && ship.loadoutOptions.length > 0) {
-        ship.loadoutOptions.forEach((lo, loIdx) => {
-          loadouts[loIdx] = 0;
-          loadoutCost += lo.options[0]?.cost || 0;
-        });
+      if (dbShip.loadoutOptions && dbShip.loadoutOptions.length > 0) {
+        dbShip.loadoutOptions.forEach((lo, loIdx) => { loadouts[loIdx] = 0; });
       }
-      ships.push({ id: uuid(), shipKey: key, groupCategory: category, points: (ship.points || 0) + loadoutCost, loadouts });
+      const bs = { id: uuid(), shipKey: key, groupCategory: f.cat, points: dbShip.points || 0, loadouts };
+      if (f.systems && f.systems.length) bs.systems = f.systems.slice();
+      bs.points = recalcShipPoints(bs, dbShip, factionKey);
+      ships.push(bs);
     }
-    return { id: uuid(), name: groupName || ship.name, ships };
+    return { id: uuid(), name: f.name || dbShip.name, ships };
+  }
+
+  // On a fresh first run, drop the six Fast Play fleets straight into "My Fleets"
+  // so there's something to open immediately. Guarded by a one-time flag, and only
+  // when the user has no fleets yet (never clobbers an existing collection).
+  function seedFastplayFleetsIfFirstRun() {
+    if (localStorage.getItem('dfc_fastplay_seeded_v1') === '1') return;
+    localStorage.setItem('dfc_fastplay_seeded_v1', '1');
+    if (fleets.length > 0) return;
+    Promise.all(fastplaySpecs.map(s => ensureFactionLoaded(s.faction))).then(() => {
+      fastplaySpecs.forEach(spec => {
+        if (!shipDB[spec.faction]) return;
+        const battleGroups = [];
+        spec.groups.forEach(entry => { const g = makeGroupFromEntry(spec.faction, entry); if (g) battleGroups.push(g); });
+        if (!battleGroups.length) return;
+        const gs = GAME_SIZES[spec.size || 'skirmish'] || GAME_SIZES.skirmish;
+        fleets.push({
+          id: uuid(), name: spec.name, faction: spec.faction,
+          gameSize: spec.size || 'skirmish', pointsLimit: gs.max, maxGroups: gs.groups,
+          admirals: [], battleGroups, spaceStation: null,
+          createdAt: Date.now(), updatedAt: Date.now()
+        });
+      });
+      saveFleets();
+      const onFleets = !location.hash || location.hash.startsWith('#fleets') || location.hash === '#';
+      if (onFleets && typeof renderFleetList === 'function') renderFleetList();
+    });
   }
 
   // ── Demo Fleets ──
@@ -1565,8 +1606,8 @@ const App = (() => {
       demoSpecs.forEach(spec => {
         if (!shipDB[spec.faction]) return;
         const battleGroups = [];
-        spec.groups.forEach(([cat, name, qty]) => {
-          const g = makeGroup(spec.faction, null, cat, name, qty);
+        spec.groups.forEach(entry => {
+          const g = makeGroupFromEntry(spec.faction, entry);
           if (g) battleGroups.push(g);
         });
         if (battleGroups.length === 0) return;
