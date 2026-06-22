@@ -3161,8 +3161,8 @@ h1, h2, h3, h4, h5, h6 {
   margin-left: auto; padding-left: var(--sp-sm); border-left: 1px solid var(--stroke-light);
 }
 .picker-switch {
-  display: inline-flex; align-items: center; gap: 6px;
-  height: 30px; padding: 2px 12px 2px 3px;
+  display: inline-flex; align-items: center; gap: 10px;
+  height: 30px; padding: 2px 22px 2px 4px;
   border: 1px solid var(--stroke); border-radius: 999px;
   background: var(--paper-alt); color: var(--ink-muted);
   font-size: var(--text-sm); font-weight: var(--weight-semibold); cursor: pointer; white-space: nowrap;
@@ -3173,7 +3173,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: transform 180ms var(--ease-out), background-color 140ms ease;
 }
 .picker-switch.on { background: var(--navy-subtle); border-color: var(--navy); color: var(--navy); }
-.picker-switch.on .picker-switch-knob { background: var(--navy); transform: translateX(3px); }
+.picker-switch.on .picker-switch-knob { background: var(--navy); transform: translateX(6px); }
 .picker-switch:hover { border-color: var(--navy); }
 /* Miscellaneous Ships rides apart in a gold accent so it's the obvious "browse a
    different pool" switch, distinct from the navy filter controls. */
@@ -3181,7 +3181,7 @@ h1, h2, h3, h4, h5, h6 {
 .picker-switch-misc .picker-switch-knob { background: var(--gold); }
 .picker-switch-misc:hover { border-color: var(--gold); }
 .picker-switch-misc.on { background: var(--gold-subtle); border-color: var(--gold); color: var(--gold-dark); }
-.picker-switch-misc.on .picker-switch-knob { background: var(--gold-dark); transform: translateX(3px); }
+.picker-switch-misc.on .picker-switch-knob { background: var(--gold-dark); transform: translateX(6px); }
 
 .filter-chip {
   display: inline-flex;
