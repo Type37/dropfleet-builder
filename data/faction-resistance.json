@@ -2230,7 +2230,7 @@
     "specialRules": [
      {
       "name": "Reinforced Armour",
-      "description": "Weapons rolling to hit this Ship or its Group increase the result needed to score a critical by 1 (so a weapon that would crit on a 4+ crits on a 5+ instead)."
+      "description": "Weapons rolling to hit this Ship or its Group can only score criticals against it on a result of a 3 higher than its Lock value."
      }
     ],
     "groupMin": 2,
@@ -3256,7 +3256,7 @@
      },
      {
       "name": "Reinforced Armour",
-      "description": "Weapons rolling to hit this Ship or its Group increase the result needed to score a critical by 1 (so a weapon that would crit on a 4+ crits on a 5+ instead)."
+      "description": "Weapons rolling to hit this Ship or its Group can only score criticals against it on a result of a 3 higher than its Lock value."
      }
     ],
     "groupMin": 1,
@@ -3307,7 +3307,7 @@
      },
      {
       "name": "Reinforced Armour",
-      "description": "Weapons rolling to hit this Ship or its Group increase the result needed to score a critical by 1 (so a weapon that would crit on a 4+ crits on a 5+ instead)."
+      "description": "Weapons rolling to hit this Ship or its Group can only score criticals against it on a result of a 3 higher than its Lock value."
      },
      {
       "name": "Monitor",

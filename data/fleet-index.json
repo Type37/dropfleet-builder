@@ -154,7 +154,7 @@
    "page": "37"
   },
   "Reinforced Armour": {
-   "description": "Weapons rolling to hit this Ship or its Group increase the result needed to score a critical by 1 (so a weapon that would crit on a 4+ crits on a 5+ instead)."
+   "description": "Weapons rolling to hit this Ship or its Group can only score criticals against it on a result of a 3 higher than its Lock value."
   },
   "Shield-X": {
    "description": "This Group has a Shield Save of X+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
