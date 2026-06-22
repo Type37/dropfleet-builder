@@ -5335,6 +5335,17 @@ h1, h2, h3, h4, h5, h6 {
 .dp-weapons tr:nth-child(even) td { background: #f6f4ef; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 .dp-w-name { text-align: left !important; font-weight: 600; }
 .dp-w-spec { text-align: left !important; color: #555; }
+/* Critical-on value under the Lock, only for weapons whose rules use criticals. */
+.dp-w-crit {
+  display: block; font-size: 6.8pt; font-weight: 700; line-height: 1.1;
+  color: #8a6d1e; letter-spacing: 0.02em; white-space: nowrap; margin-top: 1px;
+}
+/* Secondary-objective checklist: every option with a tickbox to pick at the table. */
+.dp-secobj-hint { font-weight: 400; font-style: italic; color: #8a6d1e; font-size: 0.82em; text-transform: none; letter-spacing: 0; }
+.dp-secobj .dp-secobj-row { display: block; }
+.dp-secobj .dp-checkbox { font-family: var(--font-stat); font-size: 1.05em; color: #1b3a5c; margin-right: 2px; }
+.dp-secobj .dp-secobj-on { background: rgba(184, 147, 46, 0.08); border-radius: 3px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.dp-secobj .dp-secobj-on .dp-checkbox { color: #8a6d1e; }
 
 .dp-loads, .dp-systems { font-size: 8pt; margin: 2px 0; color: #1c1a17; line-height: 1.35; }
 .dp-loads b, .dp-systems b { color: #1b3a5c; }

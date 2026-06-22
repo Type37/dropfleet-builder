@@ -5130,6 +5130,18 @@ const App = (() => {
     return (base || hullEl) ? `<div class="dp-statgrid">${base}${hullEl}</div>` : '';
   }
   // weapons: array of {name, arc, attack, lock, damage, type, special, qty?}
+  // A critical is any to-hit roll at least 2 higher than the Weapon's Lock (rulebook
+  // 7.3.4). A critical does nothing on its own, so we only surface the crit value for
+  // Weapons whose special rules actually use criticals (Penetrator, Critical-X,
+  // Crippling, Reave-X, Impel-X, Burnthrough-X). Returns e.g. "4+" or null.
+  const CRIT_RELEVANT_RE = /^(Penetrator|Critical|Crippling|Reave|Impel|Burnthrough)\b/i;
+  function weaponCritOn(w) {
+    if (!w.special || w.special === '-') return null;
+    if (!w.special.split(',').some(s => CRIT_RELEVANT_RE.test(s.trim()))) return null;
+    const m = String(w.lock || '').match(/(\d+)/);
+    if (!m) return null;
+    return (parseInt(m[1], 10) + 2) + '+';
+  }
   function dpWeaponTable(weapons) {
     if (!weapons.length) return '';
     const body = weapons.map(w => {
@@ -5139,7 +5151,9 @@ const App = (() => {
       const arc = ARC_ICONS[w.arc]
         ? `<span class="dp-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${ARC_ICONS[w.arc]}<span class="dp-arc-lab">${esc(w.arc || '')}</span></span>`
         : esc(w.arc || '');
-      return `<tr><td class="dp-w-name">${nm}</td><td class="dp-w-arc">${arc}</td><td>${esc(w.attack || '')}</td><td>${esc(w.lock || '')}</td><td>${dmg}</td><td class="dp-w-spec">${special}</td></tr>`;
+      const crit = weaponCritOn(w);
+      const lockCell = `${esc(w.lock || '')}${crit ? `<span class="dp-w-crit" title="Scores a critical on ${esc(crit)} (2 over Lock); this weapon has rules that use criticals">crit ${esc(crit)}</span>` : ''}`;
+      return `<tr><td class="dp-w-name">${nm}</td><td class="dp-w-arc">${arc}</td><td>${esc(w.attack || '')}</td><td>${lockCell}</td><td>${dmg}</td><td class="dp-w-spec">${special}</td></tr>`;
     }).join('');
     return `<table class="dp-weapons"><thead><tr><th class="dp-w-name">Weapon</th><th>Arc</th><th>Att</th><th>Lk</th><th>Dmg</th><th class="dp-w-spec">Special</th></tr></thead><tbody>${body}</tbody></table>`;
   }
@@ -5196,7 +5210,6 @@ const App = (() => {
             <div class="print-points-cap">${effMax(f) !== 99999 ? '/ ' + effMax(f) : ''} pts</div>
           </div>
         </div>
-        <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''}, ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? `, ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? `, ${esc(f.spaceStation.name)}${(f.spaceStation.systems && f.spaceStation.systems.length) ? ' (' + f.spaceStation.systems.map(esc).join(', ') + ')' : ''}` : ''}</div>
       </div>
       ${descHtml}
       <!--LAUNCH_REF-->`;
@@ -5598,14 +5611,17 @@ const App = (() => {
     // above, so the player reads it in place (no page-flipping) and the sheet stays
     // to a few pages. `rulesGlossary` is still collected for potential future use.
 
-    // Secondary objectives (the two chosen for the game), spelled out for the table.
-    const secObjList = (f.secondaryObjectives || []).map(n =>
-      ((rawFleetData && rawFleetData.secondaryObjectives) || []).find(x => x.name === n) || { name: n, description: '' }
-    );
-    if (secObjList.length) {
-      html += `<div class="print-section">
-        <div class="print-section-title">Secondary Objectives</div>
-        <div class="dp-rules">${secObjList.map(o => `<span class="dp-rule"><b>${esc(o.name)}:</b> ${o.description ? ruleHtml(o.description) : ''}</span>`).join('')}</div>
+    // Secondary objectives — print EVERY option with a checkbox so you can pick/check
+    // them off at the table. Options already chosen in the builder are pre-ticked.
+    const allSecObjs = (rawFleetData && rawFleetData.secondaryObjectives) || [];
+    const chosenSec = new Set(f.secondaryObjectives || []);
+    if (allSecObjs.length) {
+      html += `<div class="print-section dp-secobj">
+        <div class="print-section-title">Secondary Objectives <span class="dp-secobj-hint">pick two for your game</span></div>
+        <div class="dp-rules">${allSecObjs.map(o => {
+          const on = chosenSec.has(o.name);
+          return `<span class="dp-rule dp-secobj-row${on ? ' dp-secobj-on' : ''}"><span class="dp-checkbox" aria-hidden="true">${on ? '☑' : '☐'}</span> <b>${esc(o.name)}:</b> ${o.description ? ruleHtml(o.description) : ''}</span>`;
+        }).join('')}</div>
       </div>`;
     }
 
