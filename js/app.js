@@ -5503,18 +5503,18 @@ const App = (() => {
             }
           }
         } else if (settings.printBig) {
-          // "Big mode" = Option A: one wide card per ship with DEFENSES down the left
-          // (the F-stem — art, stats + saves + hull boxes, then ship rules/systems),
-          // and GUNS + gun abilities on the right (the "only when I activate" stuff).
-          const bigArt = artSrc ? `<img class="dp-big-art" src="${esc(artSrc)}" alt="" loading="lazy" onerror="this.remove()">` : '';
-          const defZone = `${bigArt}${statHtml}${hoistChips}${shipRulesHtml}${sysHtml}${featHtml}`;
-          const gunZone = `${weaponsHtml}${loadsHtml}${gunRulesHtml}`;
+          // "Big mode": art + stat grid in a compact top row, then weapons and all
+          // rules flow FULL-WIDTH beneath, so the card height matches its content
+          // (no empty side gap on weapon-heavy ships).
+          const bigArt = artSrc ? `<img class="dp-big-art" src="${esc(artSrc)}" alt="" loading="lazy" onerror="(this.closest('.dp-big-art-wrap')||this).remove()">` : '';
+          const belowHtml = `${weaponsHtml || '<span class="dp-zone-empty">No weapons</span>'}${gunRulesHtml}${loadsHtml}${shipRulesHtml}${sysHtml}${featHtml}`;
           groupsHtml += `<div class="dp-ship dp-ship-big">
             ${headHtml}
-            <div class="dp-ship-body">
-              <div class="dp-zone dp-zone-vis">${defZone}</div>
-              <div class="dp-zone dp-zone-guns">${gunZone || '<span class="dp-zone-empty">No weapons</span>'}</div>
+            <div class="dp-big-top">
+              ${bigArt ? `<div class="dp-big-art-wrap">${bigArt}</div>` : ''}
+              <div class="dp-big-stats">${statHtml}${hoistChips}</div>
             </div>
+            <div class="dp-big-below">${belowHtml}</div>
           </div>`;
         } else {
           groupsHtml += `<div class="dp-ship">

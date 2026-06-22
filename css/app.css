@@ -5471,30 +5471,29 @@ h1, h2, h3, h4, h5, h6 {
 .pf-comfortable .dp-sc-icon svg, .pf-comfortable .dp-arc svg { width: 13px; height: 13px; }
 
 /* ── Big mode ────────────────────────────────────────────────────
-   One wide rectangle per ship: [art + stats] | guns | abilities, with the hull
-   track full-width underneath. Always one column (set in JS). */
+   Art + stat grid in a compact top row, then weapons and rules flow full-width
+   beneath, so each card's height matches its content (no empty side gap). */
 .pf-big .dp-ship { border-left-width: 4px; padding: 6px 10px; }
-.pf-big .dp-ship-body {
-  /* Option A: defenses down the left (F-stem) | guns & gun abilities on the right. */
-  display: grid; grid-template-columns: 192px minmax(0, 1fr);
-  gap: 14px; align-items: start; margin-top: 5px;
+.pf-big .dp-big-top {
+  display: flex; gap: 14px; align-items: flex-start; margin-top: 5px;
 }
-.pf-big .dp-zone { min-width: 0; }
-.pf-big .dp-zone-vis { display: flex; flex-direction: column; gap: 5px; }
+.pf-big .dp-big-art-wrap { flex: 0 0 200px; }
 .pf-big .dp-big-art {
-  width: 100%; max-height: 118px; object-fit: contain;
+  width: 100%; max-height: 124px; object-fit: contain;
   border: 1px solid #ccc; border-radius: 3px; background: #fff;
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
 }
-.pf-big .dp-zone-vis .dp-statgrid { margin: 0; }
-.pf-big .dp-zone-guns .dp-weapons { margin: 0; }
-.pf-big .dp-zone-abil .dp-rules,
-.pf-big .dp-zone-abil .dp-loads:first-child,
-.pf-big .dp-zone-abil .dp-systems:first-child { margin-top: 0; }
+.pf-big .dp-big-stats { flex: 1 1 auto; min-width: 0; }
+.pf-big .dp-big-stats .dp-statgrid { margin: 0; }
+.pf-big .dp-big-below { margin-top: 7px; }
+.pf-big .dp-big-below .dp-weapons { margin: 0; }
+.pf-big .dp-big-below > .dp-rules:first-child,
+.pf-big .dp-big-below > .dp-loads:first-child,
+.pf-big .dp-big-below > .dp-systems:first-child { margin-top: 0; }
 .pf-big .dp-hull { margin-top: 6px; border-top: 1px dotted #ccc; padding-top: 4px; }
 .pf-big .dp-zone-empty { font-size: 8pt; color: #999; font-style: italic; }
-/* Stack to a single column on very narrow paper / preview overflow. */
-@media (max-width: 560px) { .pf-big .dp-ship-body { grid-template-columns: 1fr; } }
+/* On very narrow paper / preview overflow, stack art above the stats. */
+@media (max-width: 560px) { .pf-big .dp-big-top { flex-direction: column; } .pf-big .dp-big-art-wrap { flex-basis: auto; max-width: 220px; } }
 
 /* ── Fleet Overview (no group selected) ──────────────────────── */
 .fleet-overview {
