@@ -6868,6 +6868,21 @@ const App = (() => {
         }).join('') + '</div>';
     }
 
+    // Famous-admiral abilities — the unique abilities this admiral grants, plus how
+    // many they pick from the faction Abilities Table. Only for famous admirals.
+    let admiralHtml = '';
+    if (category === 'famous_admirals') {
+      const abils = dbShip.special_abilities || [];
+      const picks = dbShip.ability_picks || 0;
+      let inner = abils.map(ab =>
+        `<div class="detail-rule-entry"><span class="detail-rule-name">${esc(ab.name || '')}${ab.cost ? ` <span class="detail-ability-cost">${esc(ab.cost)}</span>` : ''}</span>${ab.effect ? `<span class="detail-rule-desc">${esc(ab.effect)}</span>` : ''}</div>`
+      ).join('');
+      if (picks) inner += `<div class="detail-ability-picks">Also chooses <b>${picks}</b> from the faction Abilities Table (each Ability only once per list).</div>`;
+      if (inner) {
+        admiralHtml = `<div class="detail-section-label">Admiral Abilities${dbShip.level ? ` <span class="detail-rule-page">Level ${esc(dbShip.level)}</span>` : ''}</div><div class="detail-rules-list">${inner}</div>`;
+      }
+    }
+
     // Variants
     let variantsHtml = '';
     if (dbShip.variants && dbShip.variants.length > 0) {
@@ -6922,6 +6937,7 @@ const App = (() => {
             : `<button class="btn btn-primary detail-add-btn" onclick="App.addShipToGroup('${shipKey}','${category}'); App.closeModal('modal-ship-detail')">+ Add to fleet</button>`) : ''}
         </div>
       </div>
+      ${admiralHtml}
       ${weaponsHtml}
       ${loadoutsHtml}
       ${loadsHtml}

@@ -6098,6 +6098,19 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.6;
   margin-top: 2px;
 }
+/* Famous-admiral ability cost (e.g. "2AP") + the "choose N from the table" note. */
+.detail-ability-cost {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--gold-dark);
+  letter-spacing: 0.03em;
+}
+.detail-ability-picks {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  font-style: italic;
+  margin-top: var(--sp-xs);
+}
 
 .detail-loadout-group {
   margin-bottom: var(--sp-md);
