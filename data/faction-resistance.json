@@ -167,7 +167,8 @@
     "category": "heavy",
     "namesake": "[Mount Olympus](https://en.wikipedia.org/wiki/Mount_Olympus) is the highest mountain in Greece and, in Greek myth, the home of the twelve Olympian gods. Its cloud-wreathed peak was held to be the seat of Zeus and the council of the gods."
    },
-   "abilityPicks": 1
+   "abilityPicks": 1,
+   "flagshipName": "Grosses Messer"
   },
   {
    "id": "cee5-c500-357a-d910",
@@ -252,7 +253,8 @@
     "category": "heavy",
     "namesake": "A tribune, a senior Roman officer of the legions, or the people's elected champion against the power of the Senate."
    },
-   "abilityPicks": 1
+   "abilityPicks": 1,
+   "flagshipName": "Fortune's Fancy"
   },
   {
    "id": "6839-7d0a-57fd-5ad9",
@@ -292,7 +294,8 @@
     "tonnage": "",
     "category": "medium"
    },
-   "abilityPicks": 1
+   "abilityPicks": 1,
+   "flagshipName": "Red Baron"
   }
  ],
  "groups": [

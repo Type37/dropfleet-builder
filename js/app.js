@@ -475,6 +475,7 @@ const App = (() => {
           ability_picks: a.abilityPicks || 1,
           ship_name: fs?.name || null,
           className: fs?.className || null,
+          flagshipName: a.flagshipName || null,   // proper named flagship, e.g. "Fortune's Fancy"
           shipCategory: fs?.category || null,
           scan: fs?.stats?.scan, sig: fs?.stats?.sig,
           thrust: fs?.stats?.thrust, hull: fs?.stats?.hull,
@@ -2179,8 +2180,21 @@ const App = (() => {
   // The flagship's detail-panel view: same shape as a battlegroup's (header bar +
   // ship card with the full datasheet). The admiral character is managed in the
   // left rail; this is the ship on the table.
+  // A famous admiral's flagship label: its proper name when it has one (e.g.
+  // "Fortune's Fancy"), optionally with the ship class in parentheses; falls back
+  // to the class name. `o` is a famous_admirals ship object.
+  function flagshipLabel(o, withClass) {
+    if (!o) return 'Ship';
+    const cls = o.ship_name || o.className || (o.tonnage ? tonLabel(o.tonnage) + ' Ship' : 'Ship');
+    if (!o.flagshipName) return cls;
+    return withClass && cls ? `${o.flagshipName} (${cls})` : o.flagshipName;
+  }
+
   function renderFlagshipDetail(idx, a, fdb) {
-    const shipName = fdb.ship_name || fdb.name || 'Flagship';
+    // Famous admirals fly a named flagship (e.g. "Fortune's Fancy"); show that as the
+    // title with its class beside it. Falls back to the class name if unnamed.
+    const shipName = fdb.flagshipName || fdb.ship_name || fdb.name || 'Flagship';
+    const shipClass = fdb.flagshipName ? (fdb.ship_name || '') : '';
     const ton = tonLabel(fdb.tonnage) || '';
     const tonClass = (fdb.tonnage || '').toLowerCase().replace(/\s+/g, '-');
     const img = fdb.image;
@@ -2191,6 +2205,7 @@ const App = (() => {
     <div class="group-header-bar">
       <div class="flex items-center gap-md flex-wrap">
         <h2 class="group-title ship-card-name-link" onclick="App.openShipDetail('${currentFleet.faction}','famous_admirals','${a.shipKey}')">${esc(shipName)}</h2>
+        ${shipClass ? `<span class="flagship-class">${esc(shipClass)}</span>` : ''}
         <span class="ship-badge ship-badge-unique">Flagship</span>
         ${ton ? `<span class="badge badge-tonnage badge-tonnage-${tonClass}">${esc(ton)}</span>` : ''}
         <span class="badge badge-navy">${a.points} pts</span>
@@ -2499,7 +2514,7 @@ const App = (() => {
       if (a.type !== 'Famous' || !a.shipKey) return '';
       const fs = shipDB[f.faction]?.groups?.famous_admirals?.ships?.[a.shipKey];
       if (!fs) return '';
-      const name = fs.ship_name || fs.className || 'Ship';
+      const name = flagshipLabel(fs);
       const cat = fs.shipCategory || 'medium';
       const catLabel = CATEGORY_LABELS[cat] || cat;
       const catColor = flagshipCatColor[cat] || 'var(--navy)';
@@ -4037,7 +4052,7 @@ const App = (() => {
     // with that category so the "click for info" works for them too.
     const cardOnclick = ` onclick="App.openShipDetail('${currentFleet.faction}','${isFamous ? 'famous_admirals' : category}','${key}',true)"`;
     const typeLine = isFamous
-      ? `${esc(data.ship_name || data.className || 'Flagship')} · ${esc(tonLabel(data.tonnage) || catLabel)}`
+      ? `${esc(flagshipLabel(data, true))} · ${esc(tonLabel(data.tonnage) || catLabel)}`
       : `${esc(tonLabel(data.tonnage) || catLabel)}`;
     const addBtn = isFamous
       ? `<button class="btn btn-primary btn-sm"${famBlocked ? ` disabled title="${esc(famReason)}"` : ''} onclick="event.stopPropagation(); App.addFamousAdmiralFromPicker('${key}')">+ Add Admiral</button>`
@@ -4443,7 +4458,7 @@ const App = (() => {
     const wpns = a.weapons || [];
     const weaponsHtml = wpns.length ? `<div class="weapon-list" style="margin-top:var(--sp-xs)">${renderWeaponHeader()}${wpns.map(w => renderWeaponRow(w)).join('')}</div>` : '';
     return `<div class="admiral-ship-block">
-      ${a.ship_name ? `<div class="admiral-ship-name">${esc(a.ship_name)}${a.tonnage ? ` <span class="ton-tag">${esc(tonLabel(a.tonnage))}</span>` : ''}</div>` : ''}
+      ${a.ship_name ? `<div class="admiral-ship-name">${esc(flagshipLabel(a, true))}${a.tonnage ? ` <span class="ton-tag">${esc(tonLabel(a.tonnage))}</span>` : ''}</div>` : ''}
       ${renderStatGrid(a)}${weaponsHtml}
     </div>`;
   }
@@ -4527,14 +4542,14 @@ const App = (() => {
                 <span class="badge badge-gold">${admiral.points} pts</span>
                 ${admiral.ship_cost ? `<span class="badge badge-neutral">Ship: ${admiral.ship_cost} pts</span>` : ''}
               </div>
-              ${admiral.ship_name ? `<div style="margin-top:var(--sp-xs);font-size:var(--text-xs);color:var(--ink-muted)">Ship: ${esc(admiral.ship_name)}${admiral.shipCategory ? ', ' + (CATEGORY_LABELS[admiral.shipCategory] || '') : ''}</div>` : ''}
+              ${admiral.ship_name ? `<div style="margin-top:var(--sp-xs);font-size:var(--text-xs);color:var(--ink-muted)">Ship: ${esc(flagshipLabel(admiral, true))}${admiral.shipCategory ? ', ' + (CATEGORY_LABELS[admiral.shipCategory] || '') : ''}</div>` : ''}
             </div>
           </div>
           ${admiralShipBlock(admiral)}
           ${abilities.length > 0 ? `<div style="margin-top:var(--sp-md);font-size:var(--text-sm);color:var(--ink-muted);line-height:1.5">${abilities.map(a => `<div style="margin-bottom:var(--sp-xs)"><strong>${esc(a.name || '')}</strong>${a.cost ? ` (${esc(a.cost)})` : ''}${a.effect ? ', ' + esc(a.effect) : ''}</div>`).join('')}</div>` : ''}
           ${admiralLoreBlock(admiral)}
           <div class="admiral-modal-picks">+ choose ${admiral.ability_picks || 1} from the Abilities Table</div>
-          ${isDisabled ? `<div class="text-caption" style="margin-top:var(--sp-sm)">${tooHighLevel ? `Requires ${sizeInfo.label}+` : 'One named admiral per fleet'}</div>` : `<button class="btn btn-primary btn-sm" style="margin-top:var(--sp-md)" onclick="App.addFamousAdmiral('${key}')">Add to fleet: brings ${esc(admiral.ship_name || 'their ship')}</button>`}
+          ${isDisabled ? `<div class="text-caption" style="margin-top:var(--sp-sm)">${tooHighLevel ? `Requires ${sizeInfo.label}+` : 'One named admiral per fleet'}</div>` : `<button class="btn btn-primary btn-sm" style="margin-top:var(--sp-md)" onclick="App.addFamousAdmiral('${key}')">Add to fleet: brings ${esc(admiral.flagshipName || admiral.ship_name || 'their ship')}</button>`}
         </div>`;
       });
     }
@@ -4835,7 +4850,7 @@ const App = (() => {
         const flagship = shipDB[currentFleet.faction]?.groups?.famous_admirals?.ships?.[a.shipKey];
         if (flagship) {
           admiralImgUrl = flagship.image || null;
-          const fsName = flagship.ship_name || flagship.className || (flagship.tonnage ? flagship.tonnage + ' Ship' : 'Ship');
+          const fsName = flagshipLabel(flagship, true);
           const fsSize = flagship.shipCategory ? (CATEGORY_LABELS[flagship.shipCategory] || '') : '';
           // The flagship is a ship on the table: its card sits in the middle and
           // opens the full datasheet. The admiral card here just links to it.
@@ -5345,7 +5360,7 @@ const App = (() => {
           if (a.type === 'Famous' && a.shipKey) {
             const fsp = factionInfo?.groups?.famous_admirals?.ships?.[a.shipKey];
             if (fsp) {
-              const fsName = fsp.ship_name || fsp.className || (fsp.tonnage ? fsp.tonnage + ' Ship' : 'Ship');
+              const fsName = flagshipLabel(fsp, true);
               const fsSize = fsp.shipCategory ? (CATEGORY_LABELS[fsp.shipCategory] || '') : '';
               const wpns = fsp.weapons || [];
               flagshipHtml = `<div class="dp-flagship">
@@ -5982,7 +5997,7 @@ const App = (() => {
                 <div class="shared-ship-top">
                   ${fimg ? `<div class="shared-ship-art"><img src="${esc(thumbUrl(fimg))}" alt="${esc(fdb.ship_name || fdb.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
                   <div class="shared-ship-info">
-                    <div class="shared-ship-name">${esc(fdb.ship_name || fdb.name)}</div>
+                    <div class="shared-ship-name">${esc(flagshipLabel(fdb, true) || fdb.name)}</div>
                     <div class="shared-ship-type">${esc(tonLabel(fdb.tonnage) || '')}${fdb.className ? ', ' + esc(fdb.className) : ''}</div>
                   </div>
                 </div>
@@ -6355,7 +6370,7 @@ const App = (() => {
       admirals.forEach(a => {
         const fsp = (a.shipKey && factionInfo && factionInfo.groups && factionInfo.groups.famous_admirals && factionInfo.groups.famous_admirals.ships[a.shipKey]) || null;
         if (fsp) {
-          const flagName = fsp.ship_name || fsp.className || 'Flagship';
+          const flagName = flagshipLabel(fsp, true);
           const flagCost = fsp.ship_cost || 0;
           out += `• 1x ${a.name} [${(a.points || 0) - flagCost} pts]\n`;
           out += `• 1x ${flagName} [${flagCost} pts]\n`;

@@ -159,7 +159,8 @@
     "category": "colossal",
     "namesake": "[Washington DC](https://washington.org/) was designed from scratch as a purpose-built capital in 1790, sited on the Potomac River between Maryland and Virginia at the insistence of George Washington; the city was burned by British forces in 1814 and rebuilt within a year. The city is named after George Washington, the first president of the United States, while the District of Columbia honours Christopher Columbus. Its layout was planned by the French-born engineer Pierre Charles L'Enfant, whose design of broad diagonal avenues overlaid on a grid still shapes the modern city."
    },
-   "abilityPicks": 2
+   "abilityPicks": 2,
+   "flagshipName": "Shield of Aurum"
   },
   {
    "id": "35e6-a97b-0bc4-a778",
@@ -258,7 +259,8 @@
     "category": "heavy",
     "namesake": "[New York](https://www.nyctourism.com/) was founded as New Amsterdam by the Dutch West India Company in 1626 on the southern tip of Manhattan Island, captured by the English in 1664, and grew into the most populous city in the Western world. It was renamed New York in honour of the Duke of York, the future King James II of England. The city briefly served as the first capital of the United States, and George Washington was inaugurated as president there in 1789."
    },
-   "abilityPicks": 1
+   "abilityPicks": 1,
+   "flagshipName": "Carpe Noctum"
   },
   {
    "id": "0691-dfab-1c01-7865",
@@ -336,7 +338,8 @@
     "category": "heavy",
     "namesake": "[Perth](https://visitperth.com/) was founded in 1829 on the Swan River in Western Australia as a free settlement; it is the most geographically isolated major city on Earth, closer to Singapore than to Sydney, and grew rapidly after gold was discovered in the hinterland in 1893. It is the capital and largest city of Western Australia, the state that covers roughly a third of the continent. Its Mediterranean climate gives it some of the sunniest weather of any major Australian city."
    },
-   "abilityPicks": 1
+   "abilityPicks": 1,
+   "flagshipName": "Nicolum's Wrath"
   },
   {
    "id": "6d3f-389f-1a9c-cdba",
@@ -401,7 +404,8 @@
     "category": "medium",
     "namesake": "[Warsaw](https://go2warsaw.pl/en/) became the capital of Poland in 1596, was systematically destroyed by Nazi forces in 1944 following the Warsaw Uprising, and was rebuilt almost stone by stone from historic records over the following decades. The city sits on the Vistula River, which divides it into a larger left bank and the right-bank district of Praga. Its reconstructed Old Town was inscribed on the UNESCO World Heritage List in 1980 as an example of near-total restoration of a historic centre."
    },
-   "abilityPicks": 1
+   "abilityPicks": 1,
+   "flagshipName": "Aurum Eyes"
   }
  ],
  "groups": [
