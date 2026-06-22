@@ -3318,7 +3318,7 @@ const App = (() => {
             <span class="weapon-col weapon-col-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${arcCell}</span>
             <span class="weapon-col weapon-col-att">${esc(String(w.attack))}</span>
             <span class="weapon-col weapon-col-lock">${esc(String(w.lock))}</span>
-            <span class="weapon-col weapon-col-dmg">${esc(String(w.damage))}${typeTag}</span>
+            <span class="weapon-col weapon-col-dmg weapon-col-dmg--calc" role="button" tabindex="0" title="Damage odds, open in the Combat Calculator" onclick="event.stopPropagation();Calc.addBuilderWeapon(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Calc.addBuilderWeapon(this)}" data-cn="${esc(w.name || o.name || '')}" data-ca="${esc(String(w.attack))}" data-cl="${esc(String(w.lock))}" data-cd="${esc(String(w.damage))}" data-ct="${esc(w.type || '')}" data-cs="${esc(w.special || '')}" data-carc="${esc(w.arc || '')}">${esc(String(w.damage))}${typeTag}</span>
             <span class="weapon-col weapon-col-special">${w.special && w.special !== '-' ? renderWeaponSpecialChips(w.special) : ''}</span>
             <span class="weapon-col station-arm-pts">${o.cost > 0 ? '+' + o.cost : o.cost}</span>
             <span class="weapon-col station-arm-qty">
@@ -3349,7 +3349,7 @@ const App = (() => {
         const omitName = isWeapon && o.weapons.length === 1;
         const summary = (isWeapon || isLaunch) ? '' : systemOptionSummary(o);
         const sheet = isWeapon
-          ? `<div class="weapon-list sys-opt-sheet${omitName ? ' weapon-list-noname' : ''}">${renderWeaponHeader(omitName)}${o.weapons.map(w => renderWeaponRow(w, omitName)).join('')}</div>`
+          ? `<div class="weapon-list sys-opt-sheet${omitName ? ' weapon-list-noname' : ''}">${renderWeaponHeader(omitName)}${o.weapons.map(w => renderWeaponRow(w, omitName, true)).join('')}</div>`
           : (isLaunch ? buildLaunchTable(factionKey, o.loads, true) : '');
         return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}">
           <div class="sys-opt-main">

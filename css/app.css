@@ -4678,6 +4678,26 @@ h1, h2, h3, h4, h5, h6 {
   body > *:not(#print-container) { display: none !important; }
   #print-container { display: block !important; }
 
+  /* macOS/WebKit fix: <body> is a column flexbox (display:flex on screen). In a
+     paginated context WebKit will not fragment a flex item across pages and
+     collapses the lone remaining child to ~zero height — printing ONE BLANK PAGE
+     (Windows/Blink prints fine). Reset the body back to normal block flow for
+     print so #print-container paginates as an ordinary block. */
+  html, body {
+    display: block !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    margin: 0 !important;
+  }
+  #print-container {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    transform: none !important;
+  }
+
   /* Stat grid — compact for print */
   .stat-grid { gap: 0; }
   .stat-cell {
