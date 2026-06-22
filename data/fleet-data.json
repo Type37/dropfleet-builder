@@ -3215,7 +3215,14 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Ishmael",
+       "Megellan",
+       "Quint's Bane",
+       "Dust Devil"
+      ]
      }
     },
     {
@@ -3366,7 +3373,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Dredger",
+       "Silt Siphon",
+       "Ground Town"
+      ]
      }
     },
     {
@@ -3401,7 +3414,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Crate Expectations",
+       "Right on Time",
+       "Reliable"
+      ]
      }
     },
     {
@@ -3471,7 +3490,15 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Tug & Go",
+       "Ride to Die",
+       "Tugging Along",
+       "T-104",
+       "T-666 (destroyed)"
+      ]
      }
     },
     {
@@ -3546,7 +3573,17 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Dreadhold",
+       "No Mercy",
+       "Last Chance (UCM)",
+       "Infestation (Scourge)",
+       "Blood Money",
+       "Tooth and Claw (Independents)",
+       "DH2745 (Kalium)"
+      ]
      }
     },
     {
@@ -3597,7 +3634,14 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Ever Astra",
+       "Maersk Olympus",
+       "Foldship Ace",
+       "TTF Shippy"
+      ]
      }
     },
     {
@@ -3670,7 +3714,14 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Rad Wretch",
+       "Trash Bash",
+       "S-Stain (Independents)",
+       "Volatile Contents Hauler KHC-04a (Kalium)"
+      ]
      }
     },
     {
@@ -3745,7 +3796,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Terminus",
+       "Slag Pit",
+       "Scrap Hammer"
+      ]
      }
     },
     {
@@ -3800,7 +3857,14 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Wreck & Ruin",
+       "Twisted Metal",
+       "Steel Beams",
+       "Grindcore"
+      ]
      }
     },
     {
@@ -3867,7 +3931,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "C"
+      "tonnage": "C",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Provenance",
+       "Endurance (Independents)",
+       "Capitana (Kalium)"
+      ]
      }
     }
    ],
@@ -7335,7 +7405,14 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Ishmael",
+       "Megellan",
+       "Quint's Bane",
+       "Dust Devil"
+      ]
      }
     },
     {
@@ -7463,7 +7540,22 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "famousShipsPrefix": "Recorded ships of the class:",
+      "famousShips": [
+       "River Queen",
+       "Twilight Spectre",
+       "Eclipse (UCM)",
+       "Domus Aurea",
+       "Samuda",
+       "AAA (PHR)",
+       "Kabal's Raiment [né Versailles]",
+       "Kabal's Insight [né Midas] (Kalium)",
+       "Bruised Beautiful [né Atlantique]",
+       "Daughter of Eden (Vega Scrapfleet)",
+       "Gilded Trident",
+       "In Diamond Clad (Independents)"
+      ]
      }
     },
     {
@@ -7517,7 +7609,16 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Recorded ships of the class:",
+      "famousShips": [
+       "Pilum",
+       "Fontaine's Miracle",
+       "Myriad (Independents)",
+       "Proudcore",
+       "Industry",
+       "Fist of Iron (Kalium)"
+      ]
      }
     },
     {
@@ -7605,7 +7706,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Dredger",
+       "Silt Siphon",
+       "Ground Town"
+      ]
      }
     },
     {
@@ -7640,7 +7747,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Crate Expectations",
+       "Right on Time",
+       "Reliable"
+      ]
      }
     },
     {
@@ -7710,7 +7823,15 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Tug & Go",
+       "Ride to Die",
+       "Tugging Along",
+       "T-104",
+       "T-666 (destroyed)"
+      ]
      }
     },
     {
@@ -7785,7 +7906,17 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Dreadhold",
+       "No Mercy",
+       "Last Chance (UCM)",
+       "Infestation (Scourge)",
+       "Blood Money",
+       "Tooth and Claw (Independents)",
+       "DH2745 (Kalium)"
+      ]
      }
     },
     {
@@ -7830,7 +7961,13 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Bird-in-hand",
+       "Lustrous Glint",
+       "Penny for your Thoughts"
+      ]
      }
     },
     {
@@ -7881,7 +8018,14 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Ever Astra",
+       "Maersk Olympus",
+       "Foldship Ace",
+       "TTF Shippy"
+      ]
      }
     },
     {
@@ -7954,7 +8098,14 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Rad Wretch",
+       "Trash Bash",
+       "S-Stain (Independents)",
+       "Volatile Contents Hauler KHC-04a (Kalium)"
+      ]
      }
     },
     {
@@ -8029,7 +8180,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Terminus",
+       "Slag Pit",
+       "Scrap Hammer"
+      ]
      }
     },
     {
@@ -8084,7 +8241,14 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Wreck & Ruin",
+       "Twisted Metal",
+       "Steel Beams",
+       "Grindcore"
+      ]
      }
     },
     {
@@ -8151,7 +8315,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "C"
+      "tonnage": "C",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Provenance",
+       "Endurance (Independents)",
+       "Capitana (Kalium)"
+      ]
      }
     }
    ],
@@ -10382,7 +10552,13 @@
       "groupMax": 2,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Recorded ships of the class:",
+      "famousShips": [
+       "Heartbleeder",
+       "Souleater",
+       "Rend II"
+      ]
      }
     },
     {
@@ -10426,7 +10602,13 @@
       "groupMax": 2,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Recorded ships of the class:",
+      "famousShips": [
+       "Beton Brut",
+       "Chaimberlain Powelbon",
+       "Du Hast"
+      ]
      }
     },
     {
@@ -10497,7 +10679,14 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Ishmael",
+       "Megellan",
+       "Quint's Bane",
+       "Dust Devil"
+      ]
      }
     },
     {
@@ -10625,7 +10814,22 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "famousShipsPrefix": "Recorded ships of the class:",
+      "famousShips": [
+       "River Queen",
+       "Twilight Spectre",
+       "Eclipse (UCM)",
+       "Domus Aurea",
+       "Samuda",
+       "AAA (PHR)",
+       "Kabal's Raiment [né Versailles]",
+       "Kabal's Insight [né Midas] (Kalium)",
+       "Bruised Beautiful [né Atlantique]",
+       "Daughter of Eden (Vega Scrapfleet)",
+       "Gilded Trident",
+       "In Diamond Clad (Independents)"
+      ]
      }
     },
     {
@@ -10679,7 +10883,16 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Recorded ships of the class:",
+      "famousShips": [
+       "Pilum",
+       "Fontaine's Miracle",
+       "Myriad (Independents)",
+       "Proudcore",
+       "Industry",
+       "Fist of Iron (Kalium)"
+      ]
      }
     },
     {
@@ -10767,7 +10980,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Dredger",
+       "Silt Siphon",
+       "Ground Town"
+      ]
      }
     },
     {
@@ -10802,7 +11021,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Crate Expectations",
+       "Right on Time",
+       "Reliable"
+      ]
      }
     },
     {
@@ -10872,7 +11097,15 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Tug & Go",
+       "Ride to Die",
+       "Tugging Along",
+       "T-104",
+       "T-666 (destroyed)"
+      ]
      }
     },
     {
@@ -10947,7 +11180,17 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Dreadhold",
+       "No Mercy",
+       "Last Chance (UCM)",
+       "Infestation (Scourge)",
+       "Blood Money",
+       "Tooth and Claw (Independents)",
+       "DH2745 (Kalium)"
+      ]
      }
     },
     {
@@ -10992,7 +11235,13 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Bird-in-hand",
+       "Lustrous Glint",
+       "Penny for your Thoughts"
+      ]
      }
     },
     {
@@ -11043,7 +11292,14 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Ever Astra",
+       "Maersk Olympus",
+       "Foldship Ace",
+       "TTF Shippy"
+      ]
      }
     },
     {
@@ -11116,7 +11372,14 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Rad Wretch",
+       "Trash Bash",
+       "S-Stain (Independents)",
+       "Volatile Contents Hauler KHC-04a (Kalium)"
+      ]
      }
     },
     {
@@ -11191,7 +11454,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Terminus",
+       "Slag Pit",
+       "Scrap Hammer"
+      ]
      }
     },
     {
@@ -11246,7 +11515,14 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Wreck & Ruin",
+       "Twisted Metal",
+       "Steel Beams",
+       "Grindcore"
+      ]
      }
     },
     {
@@ -11313,7 +11589,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "C"
+      "tonnage": "C",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Provenance",
+       "Endurance (Independents)",
+       "Capitana (Kalium)"
+      ]
      }
     }
    ],
@@ -14700,7 +14982,14 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Ishmael",
+       "Megellan",
+       "Quint's Bane",
+       "Dust Devil"
+      ]
      }
     },
     {
@@ -14851,7 +15140,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Dredger",
+       "Silt Siphon",
+       "Ground Town"
+      ]
      }
     },
     {
@@ -14886,7 +15181,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Crate Expectations",
+       "Right on Time",
+       "Reliable"
+      ]
      }
     },
     {
@@ -14956,7 +15257,15 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Tug & Go",
+       "Ride to Die",
+       "Tugging Along",
+       "T-104",
+       "T-666 (destroyed)"
+      ]
      }
     },
     {
@@ -15031,7 +15340,17 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Dreadhold",
+       "No Mercy",
+       "Last Chance (UCM)",
+       "Infestation (Scourge)",
+       "Blood Money",
+       "Tooth and Claw (Independents)",
+       "DH2745 (Kalium)"
+      ]
      }
     },
     {
@@ -15082,7 +15401,14 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Ever Astra",
+       "Maersk Olympus",
+       "Foldship Ace",
+       "TTF Shippy"
+      ]
      }
     },
     {
@@ -15155,7 +15481,14 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Rad Wretch",
+       "Trash Bash",
+       "S-Stain (Independents)",
+       "Volatile Contents Hauler KHC-04a (Kalium)"
+      ]
      }
     },
     {
@@ -15230,7 +15563,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Terminus",
+       "Slag Pit",
+       "Scrap Hammer"
+      ]
      }
     },
     {
@@ -15285,7 +15624,14 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Wreck & Ruin",
+       "Twisted Metal",
+       "Steel Beams",
+       "Grindcore"
+      ]
      }
     },
     {
@@ -15352,7 +15698,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "C"
+      "tonnage": "C",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Provenance",
+       "Endurance (Independents)",
+       "Capitana (Kalium)"
+      ]
      }
     }
    ],
@@ -19011,7 +19363,14 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Ishmael",
+       "Megellan",
+       "Quint's Bane",
+       "Dust Devil"
+      ]
      }
     },
     {
@@ -19162,7 +19521,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Dredger",
+       "Silt Siphon",
+       "Ground Town"
+      ]
      }
     },
     {
@@ -19197,7 +19562,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Crate Expectations",
+       "Right on Time",
+       "Reliable"
+      ]
      }
     },
     {
@@ -19267,7 +19638,15 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Tug & Go",
+       "Ride to Die",
+       "Tugging Along",
+       "T-104",
+       "T-666 (destroyed)"
+      ]
      }
     },
     {
@@ -19342,7 +19721,17 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Dreadhold",
+       "No Mercy",
+       "Last Chance (UCM)",
+       "Infestation (Scourge)",
+       "Blood Money",
+       "Tooth and Claw (Independents)",
+       "DH2745 (Kalium)"
+      ]
      }
     },
     {
@@ -19387,7 +19776,13 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Bird-in-hand",
+       "Lustrous Glint",
+       "Penny for your Thoughts"
+      ]
      }
     },
     {
@@ -19438,7 +19833,14 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Ever Astra",
+       "Maersk Olympus",
+       "Foldship Ace",
+       "TTF Shippy"
+      ]
      }
     },
     {
@@ -19511,7 +19913,14 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Rad Wretch",
+       "Trash Bash",
+       "S-Stain (Independents)",
+       "Volatile Contents Hauler KHC-04a (Kalium)"
+      ]
      }
     },
     {
@@ -19586,7 +19995,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Terminus",
+       "Slag Pit",
+       "Scrap Hammer"
+      ]
      }
     },
     {
@@ -19641,7 +20056,14 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Wreck & Ruin",
+       "Twisted Metal",
+       "Steel Beams",
+       "Grindcore"
+      ]
      }
     },
     {
@@ -19708,7 +20130,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "C"
+      "tonnage": "C",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Provenance",
+       "Endurance (Independents)",
+       "Capitana (Kalium)"
+      ]
      }
     }
    ],
@@ -24148,7 +24576,14 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Ishmael",
+       "Megellan",
+       "Quint's Bane",
+       "Dust Devil"
+      ]
      }
     },
     {
@@ -24276,7 +24711,22 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "famousShipsPrefix": "Recorded ships of the class:",
+      "famousShips": [
+       "River Queen",
+       "Twilight Spectre",
+       "Eclipse (UCM)",
+       "Domus Aurea",
+       "Samuda",
+       "AAA (PHR)",
+       "Kabal's Raiment [né Versailles]",
+       "Kabal's Insight [né Midas] (Kalium)",
+       "Bruised Beautiful [né Atlantique]",
+       "Daughter of Eden (Vega Scrapfleet)",
+       "Gilded Trident",
+       "In Diamond Clad (Independents)"
+      ]
      }
     },
     {
@@ -24330,7 +24780,16 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Recorded ships of the class:",
+      "famousShips": [
+       "Pilum",
+       "Fontaine's Miracle",
+       "Myriad (Independents)",
+       "Proudcore",
+       "Industry",
+       "Fist of Iron (Kalium)"
+      ]
      }
     },
     {
@@ -24418,7 +24877,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Dredger",
+       "Silt Siphon",
+       "Ground Town"
+      ]
      }
     },
     {
@@ -24453,7 +24918,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Crate Expectations",
+       "Right on Time",
+       "Reliable"
+      ]
      }
     },
     {
@@ -24523,7 +24994,15 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Tug & Go",
+       "Ride to Die",
+       "Tugging Along",
+       "T-104",
+       "T-666 (destroyed)"
+      ]
      }
     },
     {
@@ -24598,7 +25077,17 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": true,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Dreadhold",
+       "No Mercy",
+       "Last Chance (UCM)",
+       "Infestation (Scourge)",
+       "Blood Money",
+       "Tooth and Claw (Independents)",
+       "DH2745 (Kalium)"
+      ]
      }
     },
     {
@@ -24643,7 +25132,13 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Bird-in-hand",
+       "Lustrous Glint",
+       "Penny for your Thoughts"
+      ]
      }
     },
     {
@@ -24694,7 +25189,14 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Ever Astra",
+       "Maersk Olympus",
+       "Foldship Ace",
+       "TTF Shippy"
+      ]
      }
     },
     {
@@ -24767,7 +25269,14 @@
       "groupMax": 1,
       "isRare": true,
       "isUnique": false,
-      "tonnage": "M"
+      "tonnage": "M",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Rad Wretch",
+       "Trash Bash",
+       "S-Stain (Independents)",
+       "Volatile Contents Hauler KHC-04a (Kalium)"
+      ]
      }
     },
     {
@@ -24842,7 +25351,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Terminus",
+       "Slag Pit",
+       "Scrap Hammer"
+      ]
      }
     },
     {
@@ -24897,7 +25412,14 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "L"
+      "tonnage": "L",
+      "famousShipsPrefix": "Noted ships of the class:",
+      "famousShips": [
+       "Wreck & Ruin",
+       "Twisted Metal",
+       "Steel Beams",
+       "Grindcore"
+      ]
      }
     },
     {
@@ -24964,7 +25486,13 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "C"
+      "tonnage": "C",
+      "famousShipsPrefix": "Known ships of the class:",
+      "famousShips": [
+       "Provenance",
+       "Endurance (Independents)",
+       "Capitana (Kalium)"
+      ]
      }
     }
    ],

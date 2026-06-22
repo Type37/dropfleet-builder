@@ -1522,8 +1522,14 @@
       "name": "Vicarius",
       "note": "Vicarius counts as Senator",
       "image": "assets/art/vicarius.webp",
-      "famousShips": "Vicarius (Independent), Warcrimes, Grim Enforcer, Exterminator (Kalium)",
-      "lore": "While the Senator class battlecruiser was an abhorrent and unsanctioned creation of certain paranoid admirals, EAAS Vicarius was downright infamous. She was once the sole example of her class and, it is now understood, instrumental in the Cleansing of Wolfrum. In 2495, twelve years before the Scourge invasion, the mining colony of Wolfrum rebelled, violently. Soon, an unknown vessel of battlecruiser tonnage appeared above the capital and unleashed a spread of VX gas bombardment munitions, slaughtering the entire population.\n\nNo comment was made by the military and the government vehemently denied involvement. Senior individuals were executed in the following years, and often for crimes that should have warranted prison sentences. EAAS Vicarius next appeared as a loner in 2674, her decks cold with a sparse skeleton crew. Her senior officers had apparently boarded another human vessel and had not returned. Now, in 2679, new examples of her class have been spotted among Kalium’s sinister vanguard fleets."
+      "famousShips": [
+       "Vicarius (Independents)",
+       "Warcrimes",
+       "Grim Enforcer",
+       "Exterminator (Kalium)"
+      ],
+      "lore": "While the Senator class battlecruiser was an abhorrent and unsanctioned creation of certain paranoid admirals, EAAS Vicarius was downright infamous. She was once the sole example of her class and, it is now understood, instrumental in the Cleansing of Wolfrum. In 2495, twelve years before the Scourge invasion, the mining colony of Wolfrum rebelled, violently. Soon, an unknown vessel of battlecruiser tonnage appeared above the capital and unleashed a spread of VX gas bombardment munitions, slaughtering the entire population.\n\nNo comment was made by the military and the government vehemently denied involvement. Senior individuals were executed in the following years, and often for crimes that should have warranted prison sentences. EAAS Vicarius next appeared as a loner in 2674, her decks cold with a sparse skeleton crew. Her senior officers had apparently boarded another human vessel and had not returned. Now, in 2679, new examples of her class have been spotted among Kalium’s sinister vanguard fleets.",
+      "famousShipsPrefix": "Recorded ships of the class:"
      }
     ],
     "famousShipsPrefix": "Recorded ships of the class:",
@@ -1726,15 +1732,25 @@
       "name": "Kalium KNC-5",
       "note": "This Ship counts as a Resistance Light Cruiser with one NC-16 Missile Bank and two Vent Cannon Turrets.",
       "image": "assets/art/kalium_knc5.webp",
-      "famousShips": "Heartbleeder, Souleater, Rend II",
-      "lore": "Generally, Kalium’s ruling Kabal prefers to replicate proven pre-war designs than to innovate, with a focus on numbers. However, after Kalium’s first major blooding in the opening stages of the Battle for Earth, deficiencies became apparent. Visitors to UCM vessels brought back memories (and hushed whispers) that their ships might not be as advanced as their Kabal proclaimed. While combat performance was solid, helped by the iron discipline of their career-sailors, the lack of modern “dressings” in crew areas verged on embarrassing. Clunky 2D viewscreens, general lack of lighting and spartan comforts were more visible than inefficient drives and un-optimised construction.\n\nKalium’s latest vessels, while essentially the same underneath, have a more modern, distinct appearance as well as countless internal refinements. Kalium still does not favour colourful class names, though. A “KNC-5” (Kalium Navy Cruiser, Type 5) is one of their most common, new line cruisers, armed with a pair of vent cannon turrets and a potent close action missile array."
+      "famousShips": [
+       "Heartbleeder",
+       "Souleater",
+       "Rend II"
+      ],
+      "lore": "Generally, Kalium’s ruling Kabal prefers to replicate proven pre-war designs than to innovate, with a focus on numbers. However, after Kalium’s first major blooding in the opening stages of the Battle for Earth, deficiencies became apparent. Visitors to UCM vessels brought back memories (and hushed whispers) that their ships might not be as advanced as their Kabal proclaimed. While combat performance was solid, helped by the iron discipline of their career-sailors, the lack of modern “dressings” in crew areas verged on embarrassing. Clunky 2D viewscreens, general lack of lighting and spartan comforts were more visible than inefficient drives and un-optimised construction.\n\nKalium’s latest vessels, while essentially the same underneath, have a more modern, distinct appearance as well as countless internal refinements. Kalium still does not favour colourful class names, though. A “KNC-5” (Kalium Navy Cruiser, Type 5) is one of their most common, new line cruisers, armed with a pair of vent cannon turrets and a potent close action missile array.",
+      "famousShipsPrefix": "Recorded ships of the class:"
      },
      {
       "name": "Kalium KNC-12",
       "note": "This Ship counts as a Resistance Light Cruiser with one Vent Cannon Turret and two Fighters & Bombers.",
       "image": "assets/art/kalium_knc12.webp",
-      "famousShips": "Beton Brut, Chaimberlain Powelbon, Du Hast",
-      "lore": "Kalium’s newest vessels’ unique aesthetic suggests a deliberate attempt by the Kabal to “brand” their forces, or at least to make them distinct from the old, tired ships of Resistance fleets. Certainly, the brutalist design speaks of utility, strength and a total disdain for beauty – not that the UCM cares much for those either, but at least they don’t seem to revel in them. The KNC-12 Fleet Carrier is one of the more common, offering excellent, cost-efficient utility to any admiral by way of a potent (if unsafe) vent cannon turret and a double set of launch bays. Unlike the Shaltari, Kalium has no shortage of pilots.\n\nThe increasing percentage of these newest vessels in recent engagements speaks of the extreme speed at which the Kabal can build ships – helped, no doubt, by the multitudes under the whip of penal servitude. Their manufacturing capacity is also fearsome, as scattered reports of the class operating under the flag of several Resistance fleets now exist, suggesting that Kalium’s resupply arrangements, as the only manufacturer of old military hardware, have expanded greatly in recent months."
+      "famousShips": [
+       "Beton Brut",
+       "Chaimberlain Powelbon",
+       "Du Hast"
+      ],
+      "lore": "Kalium’s newest vessels’ unique aesthetic suggests a deliberate attempt by the Kabal to “brand” their forces, or at least to make them distinct from the old, tired ships of Resistance fleets. Certainly, the brutalist design speaks of utility, strength and a total disdain for beauty – not that the UCM cares much for those either, but at least they don’t seem to revel in them. The KNC-12 Fleet Carrier is one of the more common, offering excellent, cost-efficient utility to any admiral by way of a potent (if unsafe) vent cannon turret and a double set of launch bays. Unlike the Shaltari, Kalium has no shortage of pilots.\n\nThe increasing percentage of these newest vessels in recent engagements speaks of the extreme speed at which the Kabal can build ships – helped, no doubt, by the multitudes under the whip of penal servitude. Their manufacturing capacity is also fearsome, as scattered reports of the class operating under the flag of several Resistance fleets now exist, suggesting that Kalium’s resupply arrangements, as the only manufacturer of old military hardware, have expanded greatly in recent months.",
+      "famousShipsPrefix": "Recorded ships of the class:"
      }
     ],
     "rulesText": "This ship must take a total of three options from the Cruiser Systems list. A maximum of two options from the Broadside Hardpoint categories may be taken and up to two options may be taken from the Structures category.",
@@ -2519,7 +2535,13 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "Generally, Kalium's ruling Kabal prefers to replicate proven pre-war designs than to innovate, with a focus on numbers. However, after Kalium's first major blooding in the opening stages of the Battle for Earth, deficiencies became apparent. Visitors to UCM vessels brought back memories (and hushed whispers) that their ships might not be as advanced as their Kabal proclaimed. While combat performance was solid, helped by the iron discipline of their career-sailors, the lack of modern `dressings' in crew areas verged on embarrassing. Clunky 2D viewscreens, general lack of lighting and spartan comforts were more visible than inefficient drives and un-optimised construction.\n\nKaluim's latest vessels, while essentially the same underneath, have a more modern, distinct appearance as well as countless internal refinements. Kalium still does not favour colourful class names, though. A `KNC-5' (Kalium Navy Cruiser, Type 5) is one of their most common, new line cruisers, armed with a pair of vent cannon turrets and a potent close action missile array.",
-    "namesake": "[Kalium](https://en.wikipedia.org/wiki/Potassium) is the Latin name for potassium, the source of the element's chemical symbol K. It derives from the Arabic al-qaliy, meaning the calcined ashes from which the substance was first obtained."
+    "namesake": "[Kalium](https://en.wikipedia.org/wiki/Potassium) is the Latin name for potassium, the source of the element's chemical symbol K. It derives from the Arabic al-qaliy, meaning the calcined ashes from which the substance was first obtained.",
+    "famousShipsPrefix": "Recorded ships of the class:",
+    "famousShips": [
+     "Heartbleeder",
+     "Souleater",
+     "Rend II"
+    ]
    }
   },
   {
@@ -2565,7 +2587,13 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "Kalium's newest vessels' unique aesthetic suggests a deliberate attempt by the Kabal to `brand' their forces, or at least to make them distinct from the old, tired ships of Resistance fleets. Certainly, the brutalist design speaks of utility, strength and a total distain for beauty - not that the UCM cares much for those either, but at least they don't seem to revel in them. The KNC-12 Fleet Carrier is one of the more common, offering excellent, cost-efficient utility to any admiral by way of a potent (if unsafe) vent cannon turret and a double set of launch bays. Unlike the Shaltari, Kalium has no shortage of pilots.\n\nThe increasing percentage of these newest vessels in recent engagements speaks of the extreme speed at which the Kabal can build ships - helped, no doubt, by the multitudes under the whip of penal servitude. Their manufacturing capacity is also fearsome, as scattered reports of the class operating under the flag of several Resistance fleets now exist, suggesting that Kalium's resupply arrangements, as the only manufacturer of old military hardware, have expanded greatly in recent months.",
-    "namesake": "[Kalium](https://en.wikipedia.org/wiki/Potassium) is the Latin name for potassium, the source of the element's chemical symbol K. It derives from the Arabic al-qaliy, meaning the calcined ashes from which the substance was first obtained."
+    "namesake": "[Kalium](https://en.wikipedia.org/wiki/Potassium) is the Latin name for potassium, the source of the element's chemical symbol K. It derives from the Arabic al-qaliy, meaning the calcined ashes from which the substance was first obtained.",
+    "famousShipsPrefix": "Recorded ships of the class:",
+    "famousShips": [
+     "Beton Brut",
+     "Chaimberlain Powelbon",
+     "Du Hast"
+    ]
    }
   },
   {
@@ -2632,7 +2660,14 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "The UCM first encountered the Pungari as part of a Shaltari force during Phase 2 of the Reconquest. Unlike their masters, they were prolific in numbers. In them, the Shaltari found a subservient race to exploit in much the same way they had planned for humanity.\n\nSightings of Pungari ships were reported shortly afterwards, not all had fallen in with the Shaltari. Apparently, the Pungari are new to starfaring; their blocky ships are primitive yet robust. Instead of the low-crew, high-firepower approach advanced generators afford to other races, the Pungari leverage sheer numbers. Routinely, they hurl thousands into suicidal boarding actions; something Pungari do willingly and, as far as UCM soldiers can tell, with much glee. Their stocky frames may cope with the extreme g-forces involved, unencumbered by too much brain to damage.\n\nWhen encountering Pungari it is always a coin toss on whether they attack or not. They may try to broker simple alliances, happy to plunge into the wars of other races without expecting much in return, beyond a master to serve in awe.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Noted ships of the class:",
+    "famousShips": [
+     "Ishmael",
+     "Megellan",
+     "Quint's Bane",
+     "Dust Devil"
+    ]
    }
   },
   {
@@ -2765,7 +2800,22 @@
     "tonnage": "H",
     "lore": "Pre-war System Admirals had unconscionable budgets and could procure ships for their battlefleet with little oversight from Earth. When it came to their personal ship, this created the conditions for a strange offering from the naval yards: opulence. Trident Industrial met this need lavishly with the Palatine Class Command Barge. An unusual ship of battlecruiser tonnage, it shares the typical style on the outside, but inside, no expense was spared. Marble, ebony and craftsmanship are terms you don't hear in military circles. Indeed, a single Palatine cost more than three Grand Battleships to build. The class features twelve overlarge lifeboats of unique design, the Magellan, each closer to an armoured yacht than an escape craft. Even the ship's guns use expensive, low-observable shells to reduce the ship's signature in combat. To offset this fabulous cost, Trident Industrial offered vessels to the private sector; owners included planetary governors, corporate titans and infamous syndicate heads.\n\nThough rare, a high proportion survived the Scourge invasion and the hard centuries that followed due to quality, their excessive point defences, and the fact that owners weren't generally the sorts to go down fighting. Since everything on the Palatine was overbuilt to the highest standards, survivors are still prized, capable ships. Their bygone splendour and the hand-ground perfection of their optics even make them worthwhile to the Republic's Grand Fleet, which operates several, mostly the former property of prophesy-spooked CEOs. Kalium possesses two which the UCM is aware of, although apparently their more opulent spaces have been painted grey, they're still Shangrilanian inlay underneath. The UCM has five on their lists, including River Queen, which is reserved for Presidential use. Such ships could be built today, but the cost would make no military sense, it never did.",
     "namesake": "[The Palatine](https://en.wikipedia.org/wiki/Palatine_Hill), the Roman hill at the heart of the city where the emperors raised their palaces - the root of the word itself. Excavations show people have lived on the hill since at least the 10th century BC, with Iron Age huts marking the era of Rome's traditional founding. Roman legend placed the Lupercal cave here, where the she-wolf was said to have suckled Romulus and Remus.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Recorded ships of the class:",
+    "famousShips": [
+     "River Queen",
+     "Twilight Spectre",
+     "Eclipse (UCM)",
+     "Domus Aurea",
+     "Samuda",
+     "AAA (PHR)",
+     "Kabal's Raiment [né Versailles]",
+     "Kabal's Insight [né Midas] (Kalium)",
+     "Bruised Beautiful [né Atlantique]",
+     "Daughter of Eden (Vega Scrapfleet)",
+     "Gilded Trident",
+     "In Diamond Clad (Independents)"
+    ]
    }
   },
   {
@@ -2826,8 +2876,8 @@
     "rulesText": "",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
-     "[Pilum](https://en.wikipedia.org/wiki/Pilum)",
-     "Fontaine’s Miracle",
+     "Pilum",
+     "Fontaine's Miracle",
      "Myriad (Independents)",
      "Proudcore",
      "Industry",
@@ -2925,7 +2975,13 @@
     "isUnique": false,
     "tonnage": "L",
     "lore": "A relentless machine of industry, built to mulch, sift, and extract until its timer runs dry. It drills deep, rips apart rock, and spits out raw profit, indifferent to the hands that keep it running. No legacy, no ownership, just a contract ticking toward expiration. When time is up, it moves on, leaving its crew behind, waiting for the next company to stake its claim on the battered frame. Inside, the workers endure the constant grind, wedged between failing systems and the unyielding demand for productivity. Comfort is non-existent, maintenance is endless.\n\nEquipped with a heavy duty drill and front mounted mining array, this vessel doesn't just extract minerals, it carves deep trenches into asteroid surfaces and space debris, kicking up clouds of pulverized rock and metallic sediment. A network of sediment filters and gravity sifting tanks separates valuable ore from dust before storing the processed materials in its cargo bays.\n\nProminently displayed on the ship's exterior, the countdown display isn't a warning, it's a fact. The contract will expire, and if it doesn't get topped up, the vessel moves on to whatever comes next. Passed from one mining company to the next, these hand me down workhorses run until their rental contracts dry up. Refurbished just enough to stay functional, they degrade with every transfer, patched, battered, barely space worthy, considered scrap with engines.\n\nUpper management doesn't care about the ship, only the ore it pulls in before time runs out. The crew works under relentless pressure, knowing there's no guarantee of renewal.\n\nWhen the timer hits zero, it's out of their hands. Either the contract gets extended, or the ship moves on.\n\nDespite its size, the colossal vessel remains a world of tight corridors for its 190 crew members. Dust and grime clings to every surface, settling in forgotten corners and coating equipment in a fine greasy layer. Minimal comforts, constant maintenance, and the daily expectation that something will break.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Noted ships of the class:",
+    "famousShips": [
+     "Dredger",
+     "Silt Siphon",
+     "Ground Town"
+    ]
    }
   },
   {
@@ -2962,7 +3018,13 @@
     "isUnique": false,
     "tonnage": "L",
     "lore": "A relic from the now liquidated Eden Void Logistics inc, the SLM-9 is a battle tested bulk logistics vessel, trusted for fleet replenishment in high risk environments. Though the company behind its design has since shuttered, the SLM-9 endures as a testament to their engineering prowess and affordability. Its metal cargo frame, hydraulic deployment arms and universal clamps ensure rapid, adaptable resupply of ordnance, fuel, and supplies anywhere. Rugged and inexpensive, the SLM-9 remains a reasonable choice for fleets needing a dependable workhorse at a fraction of the cost of newer models.\n\nUnlike conventional Logistics Vessels that unload cargo gradually, the SLM-9 releases its entire payload in a single, controlled operation. Hydraulic deployment arms manoeuvre the entire cargo bed outward, allowing for structured and efficient transfer without manual unloading.\n\nBuilt for adaptability, the SLM-9's pincer like grappling arms latch onto ships regardless of docking compatibility. Variable force actuators fine tune pressure, securing a stable hold without compromising hull integrity. Whether resupplying warships or assisting stranded vessels, its clamps ensure critical cargo transfer under any conditions.\n\nThe SLM-9's hydraulic deployment arms are its defining feature, but also its greatest liability. If compromised by enemy fire or mechanical failure, the vessel loses its ability to unload cargo entirely, rendering it useless. A damaged deployment system means supplies remain trapped onboard, preventing fleet resupply and turning the ship into dead weight. While reinforced plating offers some protection, direct hits can buckle the arms, leading to catastrophic failure.\n\nDue to its critical vulnerability, the SLM-9 has begun to be phased out in favour of newer resupply haulers with reinforced unloading mechanisms and modular backup systems. The remaining SLM-9 units are considered outdated relics, still operational but increasingly rare.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Noted ships of the class:",
+    "famousShips": [
+     "Crate Expectations",
+     "Right on Time",
+     "Reliable"
+    ]
    }
   },
   {
@@ -3034,7 +3096,15 @@
     "isUnique": false,
     "tonnage": "L",
     "lore": "The T-Type was once a common sight across many shipyards. Due to the size of many pre-war ships, a way of moving these gargantuan vessels out of drydock was needed. T-Types were devised to be the answer to this sizeable problem. The first batch of these floated out of the assembly lines prior to the first Pathfinder, ready and waiting to guide it to a safe launching point. Since then, countless multitudes of these ships have been constructed. Most serve their entire service life in the void, however some are refitted as lunar landers once their superstructure becomes unusable for its intended purpose.\n\nOnly a small amount of these were refit with foldspace drives, the majority were only designed to work around a single planet and its satellites. Those that were refit tend to be found in independent fleets, where they assist in swapping components on their larger vessels. T-Types are not built for any form of combat, though their internal bracing gives them a certain resilience, they are unable to weather any attack from dedicated combat ships.\n\nSome T-Types have been converted to function similarly to mines, albeit with a much more personal weapon system. These have weaponised their towing ability, captains with a death wish will attach their tug to an enemy vessel and set their engines to full. When performed right, this can violently tear vessels in half, though at the cost of the tugboat and its crew.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Known ships of the class:",
+    "famousShips": [
+     "Tug & Go",
+     "Ride to Die",
+     "Tugging Along",
+     "T-104",
+     "T-666 (destroyed)"
+    ]
    }
   },
   {
@@ -3111,7 +3181,17 @@
     "isUnique": true,
     "tonnage": "M",
     "lore": "The DH-Type represents one of the Colonial Fleet's largest run of dedicated long-range prison ships, built around a standardized architecture of reinforced armour, multi-tier detention decks and automated security. Originally intended strictly for high-risk inmate transport and remote incarceration, wartime pressures pushed the class into broader operational roles.\n\nThough designed with consistent core systems, such as compartmentalized containment blocks, automated defensive suites, ECM shielding, and a C.A.G.E emitter field. The ships grew increasingly variable due to differing missions, retrofits, and partial deactivations. Although uncommon, Individual DH-Type vessels gained their own notoriety, such as Iron Veil, Remnant Forge, Dreadhold and Bright Spire. The DH-Type ships illustrated the evolution through conversions into troop transports, logistics carriers, medical ships, and frontier support platforms, often retaining traces of their original penal infrastructure.\n\nIn modern service, L1-class hulls endure as adaptable, if austere, multi-role assets. Their durable construction, intimidating infrastructure, and legacy security systems continue to define their operational character, reflecting both the robustness of the original design and the fleet's ongoing need to repurpose coercive architecture for broader demands.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Known ships of the class:",
+    "famousShips": [
+     "Dreadhold",
+     "No Mercy",
+     "Last Chance (UCM)",
+     "Infestation (Scourge)",
+     "Blood Money",
+     "Tooth and Claw (Independents)",
+     "DH2745 (Kalium)"
+    ]
    }
   },
   {
@@ -3158,7 +3238,13 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "The Jah'tar are an independent, if diminished, starfaring race that sails from the planet Jaheria. Over two century's peaceable trade with the UCM's colony of Platina, they have shared some of their history.\n\nTheir Time of Many Worlds ended roughly three millennia ago when the Great Adversary came. The Jah'tar do not know if any of their other planets survived. Their lifespans of roughly 35 years make this race-memory dimmer than one might expect, but parallels to mankind's own experience was clear, the Scourge were the likely culprits. Surviving artworks show cruder invading ships, but some Jah'tar technology bears limited similarity to Scourge, and most scientists believe it was absorbed and evolved by the enemy. Jah'tar ships also appear grown rather than made, although theirs are largely pseudo-organic chitin over a fine titanium weave.\n\nThe Jah'tar no longer fully understand their own technology. Possibly such knowledge was confined to their lost central worlds, but as in antiquity, all Jah'tar works radiate a passion for style and beauty. They covet precious materials and gems, driving their trade with Platina. In return, the UCM gains access to the Jaherian System's ores and wealth of rare elements essential for FTL drive core construction.\n\nThe Jah'tar are rangier than humans with stronger limbs and thick, leathery skin. Naturally placid and artistic, they move in an unhurried way but are fast when pressed. With long, prehensile tails they are agile climbers, leading to some exotic spaces aboard their ships. Their four, quad-jointed digits are equally dextrous on hands or feet, and are in constant motion, possibly as a base layer of communication. Their language is a series of rapid clicks and screeches, so they use human speech in negotiations out of respect for our limited vocal range.\n\nMost of humanity's contact with the Jah'tar is via their famous Startraders, graceful, cruiser-sized ships with lavishly decorated meeting spaces, living areas, and cavernous holds. These vessels are permitted free passage within the Platina System but are closely monitored whenever they appear elsewhere in UCM space, despite being unarmed. Hawkish colonial admirals insist that all that internal space could be put to more nefarious uses. Some Startraders serve as mercenaries with other races in exchange for favourable trades, although the UCM occasionally utilises their services so too. Their value lies with their unique support technologies since the Jah'tar refuse to license any true warships to other's violence.\n\nRelations with the alien Jah'tar is an aberration for the UCM, but these arrangements go back before the Scourge invasion and are frankly easier than conquest. Although Jaheria would inevitably be crushed, Jah'tar weaponry is formidable when they are forced to use it, and high casualties that humanity can ill-afford would result.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Known ships of the class:",
+    "famousShips": [
+     "Bird-in-hand",
+     "Lustrous Glint",
+     "Penny for your Thoughts"
+    ]
    }
   },
   {
@@ -3211,7 +3297,14 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "M-Type Barges are the larger cousin of the L-Type. Produced at the same Tharsis Manufacturing shipyards over Mars, the M-Type was designed for corporate bulk shipping. Many and more of these were owned and operated by the enduring shipping companies of old Earth, each of them emblazoned with corporate livery. Designed and built after the L-Type, these ships feature much improved Foldspace drives as well as the latest innovations in structural bracing. Optimisations in production brought the build time on these freight behemoths down to only twice that of the L-Type.\n\nMany of these were spared the events of the Scourge invasion, most would have been slowly moving between the colonies and the cradle worlds, far enough away to make emergency jumps to safety. The initial trade and logistics network of the UCM was built upon the backs of the M-Type, their reliability and availability gave the colonies enough trade stability to recover from the loss of the cradle worlds. M-Types are surprisingly rare in Resistance fleets, most of the captains of these ships were more interested in meeting deadlines and quotas than in doomsday predictions prior to the battle of Vega. Kalium is yet to be seen operating these ships, preferring the L-Type for combat resupply, though may potentially be using M-Types in more secure Kalium controlled systems.\n\nRecent developments in prefabricated defensive structures have allowed a small number of these ships to carry deployable missile defence outposts in place of their normal cargo compliment. These outposts are designed to grant a foothold on a planet and supplement its missile halo while more permanent structures are built, re-purposed, or captured.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Known ships of the class:",
+    "famousShips": [
+     "Ever Astra",
+     "Maersk Olympus",
+     "Foldship Ace",
+     "TTF Shippy"
+    ]
    }
   },
   {
@@ -3286,7 +3379,14 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "The Oblivion OBV64 Barge is a heavily armoured civilian vessel designed to transport extremely hazardous materials, unstable technology, failed reactors, and biohazards, too dangerous to store on planets. These ships travel discreetly between remote depots, derelict battlefields, and disposal zones. Crewed by an extensive team of highly trained specialists under strict quarantine and secrecy protocols, The Oblivion barge handles cargo that is often poorly understood or classified. Their role is to quietly remove dangerous discoveries and remnants from circulation before they can threaten the wider fleet, or attract unwanted attention.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Known ships of the class:",
+    "famousShips": [
+     "Rad Wretch",
+     "Trash Bash",
+     "S-Stain (Independents)",
+     "Volatile Contents Hauler KHC-04a (Kalium)"
+    ]
    }
   },
   {
@@ -3363,7 +3463,13 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "The Type-87 Terminus Harvester is a colossal reclamation vessel built to consume the unrepairable wreckage of war. Its monolithic maw engulfs chunks up to frigate tonnage, feeding them into vast crushing chambers where superheated hydraulic presses obliterate hull plating to slag. Two VX-22 Flensers detach from its hull, peeling derelicts apart and hauling scraps to their final destruction. Ancient, slow-moving, and relentless, it labours, stripping vessels down to raw material. Within its corroded halls, life is harsh. Dim corridors reek of burning metal as air filters struggle against decades of industrial smog.\n\nThe Type-87's wedge-like prow is battered and scarred, worn from decades of grinding through wreckage. Deep gouges and warped plating mark where debris crumpled beneath its relentless push, clearing the way for the behemoth behind.\n\nA monolithic opening capable of engulfing entire frigates, feeding them into a crushing chamber spanning the volume of a megastructure. Inside, reinforced walls lined with titanic hydraulic presses grind vessels down in a superheated maelstrom of pulverized metal, reducing all to molten slag.\n\nEquipped with two VX-22 Flensers, these small salvage vessels dock onto the Harvester's hull when idle but detach to roam wreckage fields. They Brutally peel derelicts apart piecemeal while hauling fragmented components to the crushing maw. Though technically separate, they operate as an extension of the Harvester, ensuring no usable scrap escapes consumption.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Noted ships of the class:",
+    "famousShips": [
+     "Terminus",
+     "Slag Pit",
+     "Scrap Hammer"
+    ]
    }
   },
   {
@@ -3420,7 +3526,14 @@
     "isUnique": false,
     "tonnage": "L",
     "lore": "The VX-22 Flensers are compact salvage vessels designed for brutal ship dismantling. Their prow mounted sawblades don't cut cleanly, they tear, shred, and rip through wreckage with unrestrained violence. Designed for aggressive reclamation, they are the smaller, more aggressive sibling to the T-Type Tugboat. Where the Tugboat manoeuvres and stabilizes wreckage for controlled processing, the Flensers gut derelicts with reckless brutality, prioritizing destruction over precision.\n\nHeavy rotating saws brutally cut through hull plating, breaking it into manageable pieces and scattering debris as they progress. Instead of delicate incision, the Flensers' sawblades operate at maximum torque, chewing through reinforced bulkheads with enough force to buckle surrounding structure.\n\nTheir cutting mechanisms frequently overheat, causing violent energy surges that make their hulls shudder mid operation.\n\nThe Flenser hurls debris into the Type-87 Terminus Harvester's compactor bay, sometimes suffering brutal kickback as the churning machinery spits chunks back out. When it happens, the debris slams into its failing frame, worsening the damage and making every load a gamble.\n\nPositioned below the cockpit, this reinforced plating shields pilots from wreckage kicked up during cutting operations. Sloped for maximum deflection, it redirects debris that could slam into the hull with deadly force, absorbing impacts before they buckle metal or breach compartments.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Noted ships of the class:",
+    "famousShips": [
+     "Wreck & Ruin",
+     "Twisted Metal",
+     "Steel Beams",
+     "Grindcore"
+    ]
    }
   },
   {
@@ -3489,7 +3602,13 @@
     "isUnique": false,
     "tonnage": "C",
     "lore": "A monolithic vessel of unimaginable scale, the Provenance Ark dwarfs most ships. A precursor to the modular construction found on Coloniser class vessels, these ships were a talisman of hope and expansionism. These are the first major terraforming vessels built by mankind, reaching out into an unknown universe. Built to prepare entire worlds for habitation, it carries vast stores of genetic material, atmospheric stabilizers, and autonomous resource systems. The Ark monitors planetary progress through an extensive network of sensors and automated regulators, adjusting atmospheric composition, maintaining microbial balance, and even modulating gravitational and magnetic fields to stabilize emerging terrains.\n\nEntire cities once mere schematics, rise, with power grids, transport arteries, and habitation modules ready long before the first settlers arrive. Inside, Construction drones and biotic cultivators orchestrate the birth of forests, oceans, and breathable atmospheres with the precision of a master artisan.\n\nMany ships of this class feature underslung terraforming torpedo launchers. While near useless in ship to ship combat, these torpedoes are geared towards atmospheric re-entry and contain a plethora of mutagens and nerve agents, some of which would be used on Senator class battlecruisers. Under normal circumstances the use of these would constitute a war crime. Here they are simply used to rid prospective landing areas of their megafauna, causing mass hysteria and aggression in local fauna. Any issues with unruly creatures take care of themselves, and those left over can be cut down by specialised anti-fauna vehicles. Once the LZ is cleared of hostiles, the terraformer can then deploy more traditional terraforming methods.",
-    "additional": true
+    "additional": true,
+    "famousShipsPrefix": "Known ships of the class:",
+    "famousShips": [
+     "Provenance",
+     "Endurance (Independents)",
+     "Capitana (Kalium)"
+    ]
    }
   }
  ],

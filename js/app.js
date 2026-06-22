@@ -6975,7 +6975,11 @@ const App = (() => {
       // belongs to a markdown link [name](url) (name part ends with "]") or looks
       // like a URL, so linked entries are not mistaken for tags.
       const m = txt.match(/^(.*?)\s*\(([^)]+)\)$/);
-      if (m && !m[1].endsWith(']') && !/https?:\/\//.test(m[2])) {
+      // A markdown link [name](url) ends in "](...)" with no space, so its closing
+      // paren is not a column tag. A bracketed "[ne X]" note followed by " (Faction)"
+      // keeps a space before "(", so a real faction tag is still recognised.
+      const isMdLink = /\]\([^)]*\)$/.test(txt);
+      if (m && !isMdLink && !/https?:\/\//.test(m[2])) {
         tagged = true;
         if (m[1].trim()) cur.push(m[1].trim());
         groups.push({ label: m[2].trim(), ships: cur });
