@@ -121,7 +121,7 @@ const App = (() => {
     { faction: 'resistance', name: 'Resistance Fast Play', size: 'skirmish', groups: [
       { cat:'medium', ship:'Cruiser', qty:1, name:'VH2A Gun Cruiser', systems:['Vent Cannon Turret','N-31 Hybrid Gun Bank','N-31 Hybrid Gun Bank','Ablative Armour'] },
       { cat:'medium', ship:'Cruiser', qty:1, name:'TFCS Hybrid Carrier', systems:['XN-31 Mass Driver Turret','NC-16 Missile Bank','Fighters & Bombers','Scanner Array'] },
-      { cat:'medium', ship:'Cruiser', qty:1, name:'L2BR Fast Transport', systems:['N-109 Bombardment Mortar Turret','Bulk Landers & Fire Ships','Drive Refit'] },
+      { cat:'medium', ship:'Cruiser', qty:1, name:'L2BR Fast Transport', systems:['N-109 Bombardment Mortar Turret','Bulk Landers & Fire Ships','Bulk Landers & Fire Ships','Drive Refit'] },
       { cat:'light', ship:'Strike Carrier', qty:2, name:'TL Strike Carrier', systems:['N-31 Hybrid Gun Turret'] },
       { cat:'light', ship:'Heavy Frigate', qty:2, name:'CT Attack Frigate', systems:['NC-16 Missile Turret','Light Vent Cannon Turret'] }
     ] }
@@ -3347,7 +3347,18 @@ const App = (() => {
       ? list.categories
       : [...new Set(list.options.map(o => o.category))];
 
+    // Stepper with the unit cost ON the + button (no separate Pts column), and a
+    // snap toggle for Structures (you only ever have 0 or 1 of each).
+    const esq = n => esc(n).replace(/'/g, "\\'");
+    const sysStepper = (o, c, canAdd) => `<div class="sys-opt-step">
+      <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeSystem('${groupId}','${ship.id}','${esq(o.name)}')">−</button>
+      <span class="sys-opt-count" aria-label="${c} selected">${c}</span>
+      <button class="sys-step-btn sys-step-add" aria-label="Add one ${esc(o.name)}${o.cost ? ', ' + o.cost + ' points' : ''}" ${canAdd ? '' : 'disabled'} onclick="App.addSystem('${groupId}','${ship.id}','${esq(o.name)}')">+${o.cost > 0 ? o.cost : ''}</button>
+    </div>`;
+    const sysToggle = (o, on, canAdd) => `<button class="sys-toggle${on ? ' on' : ''}" role="switch" aria-checked="${on}" aria-label="${esc(o.name)}${o.cost ? ', ' + o.cost + ' points' : ''}" ${(!on && !canAdd) ? 'disabled' : ''} onclick="App.toggleSystem('${groupId}','${ship.id}','${esq(o.name)}')"><span class="sys-toggle-knob"></span>${o.cost > 0 ? `<span class="sys-toggle-cost">+${o.cost}</span>` : ''}</button>`;
+
     const body = cats.map(cat => {
+      const isStructureCat = /structure/i.test(cat);
       const opts = list.options.filter(o => o.category === cat);
       if (!opts.length) return '';
       // cap label for this category. Per-tier model shows count/need and flags
@@ -3377,7 +3388,6 @@ const App = (() => {
           <span class="weapon-col weapon-col-lock">Lk</span>
           <span class="weapon-col weapon-col-dmg">Dmg</span>
           <span class="weapon-col weapon-col-special">Special</span>
-          <span class="weapon-col station-arm-pts">Pts</span>
           <span class="weapon-col station-arm-qty"></span>
         </div>`;
         const swRows = opts.map(o => {
@@ -3394,14 +3404,7 @@ const App = (() => {
             <span class="weapon-col weapon-col-lock">${esc(String(w.lock))}${weaponCritOn(w) ? `<span class="weapon-col-crit" title="Scores a critical on ${esc(weaponCritOn(w))} (2 over Lock); this weapon has rules that use criticals">crit ${esc(weaponCritOn(w))}</span>` : ''}</span>
             <span class="weapon-col weapon-col-dmg weapon-col-dmg--calc" role="button" tabindex="0" title="Damage odds, open in the Combat Calculator" onclick="event.stopPropagation();Calc.addBuilderWeapon(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Calc.addBuilderWeapon(this)}" data-cn="${esc(w.name || o.name || '')}" data-ca="${esc(String(w.attack))}" data-cl="${esc(String(w.lock))}" data-cd="${esc(String(w.damage))}" data-ct="${esc(w.type || '')}" data-cs="${esc(w.special || '')}" data-carc="${esc(w.arc || '')}">${esc(String(w.damage))}${typeTag}</span>
             <span class="weapon-col weapon-col-special">${w.special && w.special !== '-' ? renderWeaponSpecialChips(w.special) : ''}</span>
-            <span class="weapon-col station-arm-pts">${o.cost > 0 ? '+' + o.cost : o.cost}</span>
-            <span class="weapon-col station-arm-qty">
-              <div class="sys-opt-step">
-                <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeSystem('${groupId}','${ship.id}','${esc(o.name).replace(/'/g, "\\'")}')">−</button>
-                <span class="sys-opt-count" aria-label="${c} selected">${c}</span>
-                <button class="sys-step-btn" aria-label="Add one ${esc(o.name)}" ${canAdd ? '' : 'disabled'} onclick="App.addSystem('${groupId}','${ship.id}','${esc(o.name).replace(/'/g, "\\'")}')">+</button>
-              </div>
-            </span>
+            <span class="weapon-col station-arm-qty">${sysStepper(o, c, canAdd)}</span>
           </div>`;
         }).join('');
         return `<div class="sys-cat"><div class="sys-cat-head">${esc(cat)}${capNote}</div><div class="weapon-list station-arm-list">${head}${swRows}</div></div>`;
@@ -3425,17 +3428,13 @@ const App = (() => {
         const sheet = isWeapon
           ? `<div class="weapon-list sys-opt-sheet${omitName ? ' weapon-list-noname' : ''}">${renderWeaponHeader(omitName)}${o.weapons.map(w => renderWeaponRow(w, omitName, true)).join('')}</div>`
           : (isLaunch ? buildLaunchTable(factionKey, o.loads, true) : '');
-        return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}">
+        const control = isStructureCat ? sysToggle(o, c > 0, canAdd) : sysStepper(o, c, canAdd);
+        return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}${isStructureCat ? ' sys-opt-structure' : ''}">
           <div class="sys-opt-main">
             <span class="sys-opt-name">${esc(o.name)}${star}</span>
             ${summary}
           </div>
-          <span class="sys-opt-cost">${o.cost > 0 ? '+' + o.cost : o.cost} pts</span>
-          <div class="sys-opt-step">
-            <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeSystem('${groupId}','${ship.id}','${esc(o.name).replace(/'/g, "\\'")}')">−</button>
-            <span class="sys-opt-count" aria-label="${c} selected">${c}</span>
-            <button class="sys-step-btn" aria-label="Add one ${esc(o.name)}" ${canAdd ? '' : 'disabled'} onclick="App.addSystem('${groupId}','${ship.id}','${esc(o.name).replace(/'/g, "\\'")}')">+</button>
-          </div>
+          ${control}
           ${sheet}
         </div>`;
       }).join('');
@@ -4272,6 +4271,18 @@ const App = (() => {
     saveFleets();
     updatePoints();
     scheduleRender(renderGroupsNav, renderActiveGroup);
+  }
+
+  // Snap-toggle a binary system (Structures): add it if absent, remove if present.
+  function toggleSystem(groupId, shipId, optName) {
+    if (!currentFleet) return;
+    const group = currentFleet.battleGroups.find(g => g.id === groupId);
+    if (!group) return;
+    const ship = group.ships.find(s => s.id === shipId);
+    if (!ship) return;
+    const has = (ship.systems || []).includes(optName);
+    if (has) removeSystem(groupId, shipId, optName);
+    else addSystem(groupId, shipId, optName);
   }
 
   function removeShip(groupId, shipId) {
@@ -7309,7 +7320,7 @@ const App = (() => {
     getCalcData: () => ({ shipDB, factionData, FACTION_LABELS, CATEGORY_ORDER, CATEGORY_LABELS, currentFaction: currentFleet ? currentFleet.faction : null }),
     openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, collectionFaction: selectCollectionFaction, collectionAdjust, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, moveGroup, editGroupName, toggleFleetCardMenu,
-    openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem,
+    openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem, toggleSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
     toggleSidebar, printFleet,

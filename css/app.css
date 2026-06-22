@@ -2978,6 +2978,28 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--navy); color: #fff; border-color: var(--navy);
 }
 .sys-step-btn:disabled { opacity: 0.35; cursor: default; }
+/* The + button carries the unit cost (e.g. "+10"), so it widens to fit the number. */
+.sys-step-add { width: auto; min-width: 28px; padding: 0 8px; font-variant-numeric: tabular-nums; letter-spacing: 0.01em; }
+/* Snap toggle for Structures (binary on/off — you only ever have 0 or 1). */
+.sys-opt-structure { align-items: center; }
+.sys-toggle {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+  height: 26px; padding: 2px 8px 2px 2px;
+  border: 1px solid var(--stroke); border-radius: 999px;
+  background: var(--paper-alt); color: var(--ink-muted); cursor: pointer;
+  font-weight: var(--weight-semibold); font-size: var(--text-xs);
+  transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+.sys-toggle-knob {
+  width: 20px; height: 20px; border-radius: 50%; background: var(--ink-muted);
+  flex-shrink: 0; transition: transform 180ms var(--ease-out), background-color 140ms ease;
+}
+.sys-toggle.on { background: var(--navy-subtle); border-color: var(--navy); color: var(--navy); }
+.sys-toggle.on .sys-toggle-knob { background: var(--navy); transform: translateX(2px); }
+.sys-toggle:hover:not(:disabled) { border-color: var(--navy); }
+.sys-toggle:disabled { opacity: 0.4; cursor: default; }
+.sys-toggle-cost { font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { .sys-toggle-knob { transition: background-color 140ms ease; } }
 @media (prefers-reduced-motion: reduce) {
   .sys-step-btn { transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease; }
   .sys-step-btn:active:not(:disabled) { transform: none; }
