@@ -2903,18 +2903,22 @@ const App = (() => {
     '*': 'Shuriken Arcs — 5 unique 72° arcs (see Disintegrator Bank)'
   };
 
+  // Firing-arc glyphs, tuned for legibility at ~16px in weapon rows: bow points up,
+  // a bolder ring + an edge stroke on each wedge so even narrow arcs read. FN/RN are
+  // 30deg (the rule's 22deg is an invisible sliver at this size); Broadside (B) uses
+  // wider fore/aft gaps so it stays distinct from the full F/S/R disc when tiny.
   const ARC_ICONS = {
-    'B': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,18.9A44,44 0 0,1 81.1,81.1Z" fill="currentColor"/><path d="M50,50L18.9,81.1A44,44 0 0,1 18.9,18.9Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'F': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L18.9,18.9A44,44 0 0,1 81.1,18.9Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'F/S': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L18.9,81.1A44,44 0 1,1 81.1,81.1Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'F/S/R': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="currentColor" r="44"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'FN': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L28,11.9A44,44 0 0,1 72,11.9Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'Fn': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L28,11.9A44,44 0 0,1 72,11.9Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'S': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,18.9A44,44 0 0,1 81.1,81.1Z" fill="currentColor"/><path d="M50,50L18.9,81.1A44,44 0 0,1 18.9,18.9Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'SL': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L18.9,81.1A44,44 0 0,1 18.9,18.9Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'SR': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,18.9A44,44 0 0,1 81.1,81.1Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    'R': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,81.1A44,44 0 0,1 18.9,81.1Z" fill="currentColor"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
-    '*': '<svg height="14" viewBox="0 0 100 100" width="14"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><g stroke="currentColor" stroke-width="2"><line x1="50" y1="50" x2="50" y2="6"/><line x1="50" y1="50" x2="91.8" y2="36.4"/><line x1="50" y1="50" x2="75.9" y2="85.6"/><line x1="50" y1="50" x2="24.1" y2="85.6"/><line x1="50" y1="50" x2="8.2" y2="36.4"/></g><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/></svg>'
+    'B': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L68.6,10.1A44,44 0 0,1 68.6,89.9Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M50,50L31.4,10.1A44,44 0 0,0 31.4,89.9Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'F': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L18.9,18.9A44,44 0 0,1 81.1,18.9Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'F/S': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L18.9,81.1A44,44 0 1,1 81.1,81.1Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'F/S/R': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="currentColor" r="44"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5"/><polygon fill="#FFFFFF" points="50,2 47,8 53,8"/></svg>',
+    'FN': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L38.6,7.5A44,44 0 0,1 61.4,7.5Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'Fn': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L38.6,7.5A44,44 0 0,1 61.4,7.5Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'S': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,18.9A44,44 0 0,1 81.1,81.1Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M50,50L18.9,81.1A44,44 0 0,1 18.9,18.9Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'SL': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L18.9,81.1A44,44 0 0,1 18.9,18.9Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'SR': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,18.9A44,44 0 0,1 81.1,81.1Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    'R': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><path d="M50,50L81.1,81.1A44,44 0 0,1 18.9,81.1Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/><polygon fill="currentColor" points="50,2 47,8 53,8"/></svg>',
+    '*': '<svg height="16" viewBox="0 0 100 100" width="16"><circle cx="50" cy="50" fill="#FFFFFF" r="44"/><g stroke="currentColor" stroke-width="3"><line x1="50" y1="50" x2="50" y2="6"/><line x1="50" y1="50" x2="91.8" y2="36.4"/><line x1="50" y1="50" x2="75.9" y2="85.6"/><line x1="50" y1="50" x2="24.1" y2="85.6"/><line x1="50" y1="50" x2="8.2" y2="36.4"/></g><circle cx="50" cy="50" fill="none" r="44" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="50" fill="#FFFFFF" r="5" stroke="currentColor" stroke-width="1.5"/></svg>'
   };
 
   const STAT_ICONS = {
@@ -3012,9 +3016,9 @@ const App = (() => {
       hullCell = hullCell.replace('</div>', raChip + '</div>');
     }
     const cells = [
-      cell('thrust'), cell('bs'),
-      cell('scan'), cell('ks'),
-      cell('sig'),  cell('es'),
+      cell('thrust'), cell('ks'),
+      cell('scan'), cell('es'),
+      cell('sig'),  cell('bs'),
       hullCell
     ].filter(Boolean).join('');
     return cells ? `<div class="stat-grid">${cells}</div>` : '';
@@ -3825,9 +3829,9 @@ const App = (() => {
     ).join('');
     // Misc Ships (and In-collection) are not filters on the core list — they CHANGE
     // which pool you're browsing — so they sit apart as labelled snap switches.
-    const sw = (on, label, fn, title) =>
-      `<button class="picker-switch${on ? ' on' : ''}" role="switch" aria-checked="${on}" onclick="${fn}" title="${title}"><span class="picker-switch-knob"></span>${label}</button>`;
-    const toggles = sw(settings.showAdditionalShips, 'Misc ships', 'App.toggleMiscShips()', 'Include mercenaries, cross-faction and civilian ships alongside the core list')
+    const sw = (on, label, fn, tip, extra) =>
+      `<button class="picker-switch${extra ? ' ' + extra : ''}${on ? ' on' : ''}" role="switch" aria-checked="${on}" onclick="${fn}" data-tooltip="${escAttr(tip)}"><span class="picker-switch-knob"></span>${label}</button>`;
+    const toggles = sw(settings.showAdditionalShips, 'Miscellaneous Ships', 'App.toggleMiscShips()', 'Show mercenary, cross-faction & civilian ships', 'picker-switch-misc')
       + (settings.showCollection ? sw(collectionFilterOn, 'In collection', 'App.toggleBuildableFilter()', 'Only ships in your collection') : '');
     container.innerHTML = `<div class="ship-filter-chips">${chipsHtml}</div><div class="ship-filter-switches">${toggles}</div>`;
   }
@@ -5224,9 +5228,9 @@ const App = (() => {
       return `<span class="dp-statcell${wide ? ' dp-sc-wide' : ''}${mod}${none}">${icon}<span class="dp-sc-val">${esc(String(v))}</span><span class="dp-sc-lab">${esc(meta.label)}</span></span>`;
     };
     const base = [
-      cell('thrust'), cell('bs'),
-      cell('scan'), cell('ks'),
-      cell('sig'), cell('es')
+      cell('thrust'), cell('ks'),
+      cell('scan'), cell('es'),
+      cell('sig'), cell('bs')
     ].filter(Boolean).join('');
     const hullEl = hullHtml ? `<div class="dp-sc-wide dp-sc-hull">${hullHtml}</div>` : cell('hull', true);
     return (base || hullEl) ? `<div class="dp-statgrid">${base}${hullEl}</div>` : '';

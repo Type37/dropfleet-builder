@@ -3175,6 +3175,13 @@ h1, h2, h3, h4, h5, h6 {
 .picker-switch.on { background: var(--navy-subtle); border-color: var(--navy); color: var(--navy); }
 .picker-switch.on .picker-switch-knob { background: var(--navy); transform: translateX(3px); }
 .picker-switch:hover { border-color: var(--navy); }
+/* Miscellaneous Ships rides apart in a gold accent so it's the obvious "browse a
+   different pool" switch, distinct from the navy filter controls. */
+.picker-switch-misc { border-color: var(--gold-line); color: var(--gold-dark); font-weight: var(--weight-bold); }
+.picker-switch-misc .picker-switch-knob { background: var(--gold); }
+.picker-switch-misc:hover { border-color: var(--gold); }
+.picker-switch-misc.on { background: var(--gold-subtle); border-color: var(--gold); color: var(--gold-dark); }
+.picker-switch-misc.on .picker-switch-knob { background: var(--gold-dark); transform: translateX(3px); }
 
 .filter-chip {
   display: inline-flex;
