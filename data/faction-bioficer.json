@@ -3877,6 +3877,364 @@
     "lore": "A monolithic vessel of unimaginable scale, the Provenance Ark dwarfs most ships. A precursor to the modular construction found on Coloniser class vessels, these ships were a talisman of hope and expansionism. These are the first major terraforming vessels built by mankind, reaching out into an unknown universe. Built to prepare entire worlds for habitation, it carries vast stores of genetic material, atmospheric stabilizers, and autonomous resource systems. The Ark monitors planetary progress through an extensive network of sensors and automated regulators, adjusting atmospheric composition, maintaining microbial balance, and even modulating gravitational and magnetic fields to stabilize emerging terrains.\n\nEntire cities once mere schematics, rise, with power grids, transport arteries, and habitation modules ready long before the first settlers arrive. Inside, Construction drones and biotic cultivators orchestrate the birth of forests, oceans, and breathable atmospheres with the precision of a master artisan.\n\nMany ships of this class feature underslung terraforming torpedo launchers. While near useless in ship to ship combat, these torpedoes are geared towards atmospheric re-entry and contain a plethora of mutagens and nerve agents, some of which would be used on Senator class battlecruisers. Under normal circumstances the use of these would constitute a war crime. Here they are simply used to rid prospective landing areas of their megafauna, causing mass hysteria and aggression in local fauna. Any issues with unruly creatures take care of themselves, and those left over can be cut down by specialised anti-fauna vehicles. Once the LZ is cleared of hostiles, the terraformer can then deploy more traditional terraforming methods.",
     "additional": true
    }
+  },
+  {
+   "id": "1d20-87a5-21f8-d60a",
+   "name": "Sluice",
+   "category": "medium",
+   "ship": {
+    "name": "Sluice",
+    "cost": 152,
+    "stats": {
+     "thrust": "7\"",
+     "scan": "10\"",
+     "sig": "4\"",
+     "hull": 11,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "Feature Carrier"
+    },
+    "weapons": [
+     {
+      "name": "Hyper Lightvice",
+      "arc": "F/S",
+      "attack": "5",
+      "lock": "2+",
+      "damage": "3",
+      "type": "K",
+      "special": "Bloom-1, Close Action, Focused, Scald-1"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Torpedo",
+      "launch": "2",
+      "special": "Limited-4"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Feature Carrier",
+      "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ab66-1595-c873-1c26",
+   "name": "Source",
+   "category": "heavy",
+   "ship": {
+    "name": "Source",
+    "cost": 190,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "10\"",
+     "sig": "4\"",
+     "hull": 12,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "Vanguard-6, High Velocity Boarding Pods, Bombardment Spine"
+    },
+    "weapons": [
+     {
+      "name": "Bombardment Spine",
+      "arc": "F/S/R",
+      "attack": "9",
+      "lock": "5+",
+      "damage": "2",
+      "type": "E",
+      "special": "Alt-1, Bombardment"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Drop Pods",
+      "launch": "4",
+      "special": "Alt-1"
+     },
+     {
+      "name": "Boarding Pods",
+      "launch": "2",
+      "special": "-"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Vanguard-6\"",
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+     },
+     {
+      "name": "High Velocity Boarding Pods",
+      "description": "This Ship’s Boarding Pods may be used against targets up to 6” away."
+     },
+     {
+      "name": "Bombardment Spine",
+      "description": "This weapon gains the Corruptor-2 special rule while on the Weapons Free order."
+     }
+    ]
+   }
+  },
+  {
+   "id": "7708-0eb9-3964-bbe5",
+   "name": "Syntax",
+   "category": "heavy",
+   "ship": {
+    "name": "Syntax",
+    "cost": 175,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "10\"",
+     "sig": "4\"",
+     "hull": 14,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "Feature Carrier"
+    },
+    "weapons": [
+     {
+      "name": "Decon Annihilator",
+      "arc": "FN",
+      "attack": "12",
+      "lock": "3+",
+      "damage": "1",
+      "type": "E",
+      "special": "Reave-1"
+     },
+     {
+      "name": "Decon Blaster",
+      "arc": "FN",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "E",
+      "special": "-"
+     },
+     {
+      "name": "Decon Blaster",
+      "arc": "FN",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "E",
+      "special": "-"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Feature Carrier",
+      "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
+     }
+    ]
+   }
+  },
+  {
+   "id": "a5f9-b76e-ffad-5eac",
+   "name": "Synthesis",
+   "category": "heavy",
+   "ship": {
+    "name": "Synthesis",
+    "cost": 230,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "10\"",
+     "sig": "4\"",
+     "hull": 14,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "Feature Carrier"
+    },
+    "weapons": [
+     {
+      "name": "Decon Blast",
+      "arc": "F/S/R",
+      "attack": "4",
+      "lock": "4+",
+      "damage": "1",
+      "type": "E",
+      "special": "-"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Fighters & Bombers",
+      "launch": "5",
+      "special": "-"
+     },
+     {
+      "name": "Torpedo",
+      "launch": "2",
+      "special": "Limited-4"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Feature Carrier",
+      "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
+     }
+    ]
+   }
+  },
+  {
+   "id": "89e5-7a82-8627-60a8",
+   "name": "Sierra",
+   "category": "heavy",
+   "ship": {
+    "name": "Sierra",
+    "cost": 185,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "10\"",
+     "sig": "4\"",
+     "hull": 14,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "Feature Carrier"
+    },
+    "weapons": [
+     {
+      "name": "Hyper Lightvice",
+      "arc": "F/S",
+      "attack": "5",
+      "lock": "2+",
+      "damage": "3",
+      "type": "K",
+      "special": "Bloom-1, Close Action, Focused, Scald-1"
+     },
+     {
+      "name": "Decon Blaster",
+      "arc": "FN",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "E",
+      "special": "-"
+     },
+     {
+      "name": "Decon Blaster",
+      "arc": "FN",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "E",
+      "special": "-"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Feature Carrier",
+      "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
+     }
+    ]
+   }
+  },
+  {
+   "id": "a414-1431-e676-07fc",
+   "name": "Shade",
+   "category": "heavy",
+   "ship": {
+    "name": "Shade",
+    "cost": 225,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "10\"",
+     "sig": "4\"",
+     "hull": 14,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "Feature Carrier, High Velocity Boarding Pods, Bombardment Spine"
+    },
+    "weapons": [
+     {
+      "name": "Bombardment Spine",
+      "arc": "F/S/R",
+      "attack": "9",
+      "lock": "5+",
+      "damage": "2",
+      "type": "E",
+      "special": "Alt-1, Bombardment"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Drop Pods",
+      "launch": "4",
+      "special": "Alt-1"
+     },
+     {
+      "name": "Boarding Pods",
+      "launch": "2",
+      "special": "-"
+     },
+     {
+      "name": "Torpedoes",
+      "launch": "2",
+      "special": "Limited-4"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Feature Carrier",
+      "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
+     },
+     {
+      "name": "High Velocity Boarding Pods",
+      "description": "This Ship’s Boarding Pods may be used against targets up to 6” away."
+     },
+     {
+      "name": "Bombardment Spine",
+      "description": "This weapon gains the Corruptor-2 special rule while on the Weapons Free order."
+     }
+    ]
+   }
+  },
+  {
+   "id": "6a38-3dd2-89b8-89f5",
+   "name": "Genitor Tower",
+   "category": "payload",
+   "ship": {
+    "name": "Genitor Tower",
+    "cost": 15,
+    "stats": {
+     "thrust": "-",
+     "scan": "-",
+     "sig": "-",
+     "hull": 5,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "-",
+     "g": "-",
+     "special": "Payload S-1"
+    },
+    "weapons": [],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Payload S-1",
+      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up 1 of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
+      "page": "36",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Genitor Tower",
+      "description": "This Feature may be purchased for your fleet when you build your list. It must be assigned to a Ship with the Porter special rule as if it were a Ship with the Payload S-1 special rule. When one or more enemy Battalions on this Dropsite and its Features are removed for any reason, place 2 friendly Battalions on this Dropsite regardless of the number of Battalions removed or Genitor Towers on this Dropsite. If these Battalions are gained through Battalion Combat, they are placed after Battalion Combat. When this Feature is destroyed, it contributes its points to the Kill Points of the opposing player that destroyed it."
+     }
+    ]
+   }
   }
  ],
  "launchAssets": [
@@ -3980,12 +4338,12 @@
  ],
  "deployableFeatures": [
   {
-   "id": "gen1-tow3-r000-bf01",
-   "name": "Genitor Tower",
-   "cost": 15,
+   "id": "87f0-f033-ef39-6eb7",
+   "name": "Gravitational Arc",
+   "cost": 0,
    "features": [
     {
-     "name": "Genitor Tower",
+     "name": "Gravitational Arc",
      "es": "4+",
      "ks": "4+",
      "special": "-"
@@ -3993,8 +4351,32 @@
    ],
    "rules": [
     {
-     "name": "Genitor Tower",
-     "description": "This Feature may be purchased for your fleet when you build your list. It must be assigned to a Ship with the Porter special rule as if it were a Ship with the Payload S-1 special rule. When one or more enemy Battalions on this Dropsite and its Features are removed for any reason, place 2 friendly Battalions on this Dropsite regardless of the number of Battalions removed or Genitor Towers on this Dropsite. If these Battalions are gained through Battalion Combat, they are placed after Battalion Combat. When this Feature is destroyed, it contributes its points to the Kill Points of the opposing player that destroyed it."
+     "name": "Gravitational Arc",
+     "description": "When an enemy Group ends its move within 6\" of this Feature's dropsite and in atmosphere, that Group's player rolls a dice. On a 1-3, the Group is moved into Orbit and cannot move into Atmosphere again this round. It suffers the effects of moving through any scenery it is placed in. This takes place before that Group attacks or launches assets. If all Ships in the Group have Orbital Decay tokens, they are not affected.\nThis feature requires 5 or more Battalions to be removed during Battalion Combat and 5 damage to remove due to attacks."
+    }
+   ]
+  },
+  {
+   "id": "9aed-ad75-3ff9-c296",
+   "name": "Ghost Orb Tower",
+   "cost": 0,
+   "features": [
+    {
+     "name": "Ghost Orb Tower",
+     "es": "4+",
+     "ks": "4+",
+     "special": "-",
+     "weapon": "Ghost Orb: Scan 8\", Att 2, Lock 3+, DMG 2 E, Close Action, Escape Velocity, Status"
+    }
+   ],
+   "rules": [
+    {
+     "name": "Ghost Orb Tower",
+     "description": "When you activate this Feature, remove 1 enemy Battalion from each Feature on this Dropsite, then remove 1 enemy Battalion from anywhere on this Dropsite.\nThis feature requires 5 or more Battalions to be removed due to Battalion Combat and 5 damage to remove due to Group/Asset attacks."
+    },
+    {
+     "name": "Ghost Orb",
+     "description": "Effects caused by this weapon's Status rule are removed at the start of next round's End Phase instead of this round's End Phase.\nGhost Orb weapon: Scan 8\", Att 2, Lock 3+, DMG 2, Type E. Special: Close Action, Escape Velocity, Status."
     }
    ]
   }

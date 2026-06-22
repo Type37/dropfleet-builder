@@ -3066,16 +3066,14 @@ const App = (() => {
   function isFeatureCarrier(dbShip) {
     if (!dbShip) return false;
     // NB: the DB ship exposes special-rule NAMES as `special_rules` (not
-    // `specialRules`). A ship may carry a Deployable Feature if its rules say so
-    // OR if it has the Porter rule — Porters may take a Genitor Tower as a
-    // Payload S-1 (DFC: "assigned to a Ship with the Porter special rule").
-    // The Genitor Tower is specifically a Payload S-1, so only Porter S ships
-    // qualify — a Porter L can't carry a size-S payload. (Hard-codes size S; the
-    // only Bioficer deployable feature today is the Tower.) The porter size lives
-    // in the capacity stat string `special` (e.g. "Porter S-1" / "Porter L-1").
+    // `specialRules`). A ship carries a Deployable Feature only if its rules say so
+    // (a "Feature Carrier" picks one feature to start the game carrying — e.g. the
+    // Bioficer supercruiser/pocket-battleship choice of Gravitational Arc or Ghost
+    // Orb Tower). The Genitor Tower is NOT handled here: it is a Payload S-1 unit in
+    // the Payload tab (consumes Porter S capacity), not a per-Porter upgrade.
     const ruleNames = (dbShip.special_rules || []).join(' ');
     const hay = (dbShip.rulesText || '') + ' ' + ruleNames;
-    return /Deployable Feature|Feature Carrier/i.test(hay) || /Porter\s*S\b/i.test(dbShip.special || '');
+    return /Deployable Feature|Feature Carrier/i.test(hay);
   }
 
   // A genuine "choose one Deployable Feature" ship MUST take one; a Porter MAY.
