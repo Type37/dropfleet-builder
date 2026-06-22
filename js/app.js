@@ -5288,7 +5288,7 @@ const App = (() => {
     // repeat hardest and matter most for paper (fewer pages). The keyword stays in
     // the weapon table's Special column, so the card still shows what the gun does;
     // only the spelled-out text moves to the end glossary.
-    const baseRuleName = nm => String(nm).replace(/[-\s](?:\d+\+?|X|[0-9]+x\S*)$/, '').trim();
+    const baseRuleName = nm => String(nm).replace(/[-\s](?:\d+\+?"?|X"?|[0-9]+x\S*)$/, '').trim();
     const baseCardCount = {}, ruleDefByName = {};
     const wBaseCardCount = {};
     let glossTotalCards = 0;
@@ -5561,10 +5561,29 @@ const App = (() => {
 
     // Faction Rules glossary — rules shared across the fleet, defined once here
     // (the cards show the keyword + per-ship value, e.g. "Shield-3+").
-    const glossEntries = [
+    // Numeric/measurement value families (Vanguard-4", Reave-2, Critical-2 ...) collapse
+    // to a single generic "<base>-X" entry — the value already shows on each ship card,
+    // so the glossary just needs the rule once. Named-effect families (Crippling-Fire,
+    // Crippling-Navigation Offline) end in a word, so they stay listed individually.
+    const collapseGloss = pairs => {
+      const seen = new Set(), out = [];
+      pairs.forEach(([name, def]) => {
+        let key = name, d = def;
+        const m = String(name).match(/^(.*?)[-\s]\d+\+?"?$/);
+        if (m) {
+          const generic = m[1].trim() + '-X';
+          const gdef = lookupRuleFull(generic);
+          if (gdef && gdef.description) { key = generic; d = gdef; }
+        }
+        if (seen.has(key)) return;
+        seen.add(key); out.push([key, d]);
+      });
+      return out;
+    };
+    const glossEntries = collapseGloss([
       ...hoistedGlossNames.map(n => [n, ruleDefByName[n]]),
       ...Object.keys(hoistedWeaponDefs).sort().map(n => [n, hoistedWeaponDefs[n]])
-    ];
+    ]);
     if (glossEntries.length) {
       const items = glossEntries.map(([n, def]) =>
         `<span class="dp-rule"><b>${esc(n)}${def.page ? ` p.${esc(def.page)}` : ''}:</b> ${ruleHtml(def.description)}</span>`
@@ -6556,12 +6575,17 @@ const App = (() => {
     const defensive = assets.filter(a => a.ksReroll !== undefined && !a.attack);
     if (!offensive.length && !defensive.length) return '';
 
+    // Deploy (launch) range: assets launch within 6" of the carrier by default;
+    // Dropships / Boarding Pods / Drop Pods are 3" (rulebook 8). The assets in this
+    // reference (Fighters/Bombers/Torpedoes/Mines/Fire Ships) are all 6".
+    const launchRange = name => /dropship|drop\s*pod|boarding\s*pod/i.test(name || '') ? '3"' : '6"';
     const offRow = a => {
       const typeLabel = WEAPON_TYPE_LABELS[a.type] || a.type || '';
       const typeCell = a.type ? `<span class="dmg-type dmg-type-${esc(a.type)}">${esc(a.type)}</span>` : '';
       const special = (a.special && a.special !== '-') ? renderWeaponSpecialChips(a.special) : '';
       return `<tr>
         <td class="lar-name">${esc(a.name)}</td>
+        <td>${esc(launchRange(a.name))}</td>
         <td>${esc(a.thrust || '')}</td>
         <td>${a.attack || ''}</td>
         <td>${a.lock || ''}</td>
@@ -6572,6 +6596,7 @@ const App = (() => {
     };
     const defRow = a => `<tr>
       <td class="lar-name">${esc(a.name)}</td>
+      <td>${esc(launchRange(a.name))}</td>
       <td>${esc(a.thrust || '')}</td>
       <td></td><td></td><td></td><td></td>
       <td class="lar-special">${closeProtectionChip(a.ksReroll)}</td>
@@ -6580,7 +6605,7 @@ const App = (() => {
     return `<div class="launch-ref">
       <table class="launch-ref-table">
         <thead><tr>
-          <th class="lar-name">Asset</th><th>Thrust</th><th>Att</th><th>Lk</th><th>Dmg</th><th>Type</th><th class="lar-special">Special</th>
+          <th class="lar-name">Asset</th><th title="Launch range from the carrier">Launch</th><th>Thrust</th><th>Att</th><th>Lk</th><th>Dmg</th><th>Type</th><th class="lar-special">Special</th>
         </tr></thead>
         <tbody>${offensive.map(offRow).join('')}${defensive.map(defRow).join('')}</tbody>
       </table>
