@@ -5462,9 +5462,12 @@ h1, h2, h3, h4, h5, h6 {
    preview) and on paper, so the preview is WYSIWYG and a whole fleet fits onto a few
    readable pages (Army-App / Hobgoblin style). Backgrounds force colour in print. */
 .dp-groups { margin-top: 10px; }
-.dp-groups.dp-2col { column-count: 2; column-gap: 14px; }
-.dp-group { margin-bottom: 8px; break-inside: avoid-column; }
-.dp-2col .dp-group { break-inside: auto; }
+.dp-groups.dp-2col { column-count: 2; column-gap: 14px; column-fill: balance; }
+/* Keep each group whole within a column: the header never orphans from its ships and
+   a group never splits awkwardly across the gutter, so the two columns read cleanly.
+   The browser still balances the columns between groups. */
+.dp-group { margin-bottom: 8px; break-inside: avoid; }
+.dp-2col .dp-group { break-inside: avoid; }
 .dp-group-head {
   display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
   border-bottom: 1.5px solid #1b3a5c; padding-bottom: 2px; margin-bottom: 4px;
