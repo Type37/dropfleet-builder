@@ -6752,12 +6752,24 @@ const App = (() => {
     if (!factionInfo || !allLoads || !allLoads.length) return '';
     const assetsByName = {};
     (factionInfo.launchAssets || []).forEach(a => { assetsByName[a.name.toLowerCase()] = a; });
-    let body = '';
+    // Consolidate identical loads (e.g. 2x "Bulk Landers & Fire Ships" from two
+    // hardpoints) into ONE block with a "×N" count, rather than repeating the whole
+    // datasheet block per copy — so multiples read as "two sets of 2", not a dupe.
+    const grouped = [];
+    const byKey = new Map();
     allLoads.forEach(load => {
+      if (!load.name) return;
+      const key = `${load.name}|${load.launch ?? ''}|${load.special ?? ''}`;
+      if (byKey.has(key)) byKey.get(key).count++;
+      else { const g = { ...load, count: 1 }; byKey.set(key, g); grouped.push(g); }
+    });
+    let body = '';
+    grouped.forEach(load => {
       if (!load.name) return;
       const parts = load.name.split(/\s*&\s*/).map(p => p.trim()).filter(Boolean);
       const loadSpecial = (load.special && load.special !== '-') ? load.special : '';
-      const launchCell = `<td class="lt-launch" rowspan="${parts.length}">${esc(String(load.launch ?? '-'))}${loadSpecial ? `<span class="lt-launch-note">${renderWeaponSpecialChips(loadSpecial)}</span>` : ''}</td>`;
+      const countTag = load.count > 1 ? `<span class="lt-count" title="${load.count} sets">×${load.count}</span>` : '';
+      const launchCell = `<td class="lt-launch" rowspan="${parts.length}">${esc(String(load.launch ?? '-'))}${countTag}${loadSpecial ? `<span class="lt-launch-note">${renderWeaponSpecialChips(loadSpecial)}</span>` : ''}</td>`;
       parts.forEach((part, i) => {
         const a = assetsByName[part.toLowerCase()] || { name: part };
         const hasStats = a.attack !== undefined;
