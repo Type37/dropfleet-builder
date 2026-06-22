@@ -1090,7 +1090,18 @@ const App = (() => {
           <span class="game-size-popover-desc">${lines[0]} · ${lines[1]}</span>
         </div>
       </button>`;
-    }).join('');
+    }).join('') + `
+      <div class="game-size-custom">
+        <label class="game-size-custom-label" for="gs-custom-pts">Custom points limit</label>
+        <div class="game-size-custom-row">
+          <input id="gs-custom-pts" type="number" min="1" step="50" inputmode="numeric"
+            class="game-size-custom-input" placeholder="${bracketMax(currentFleet)}"
+            value="${isCustomMax(currentFleet) ? currentFleet.pointsLimit : ''}"
+            onclick="event.stopPropagation()" oninput="App.setCustomMax(this.value)">
+          <span class="game-size-custom-unit">pts</span>
+        </div>
+        <span class="game-size-custom-hint">e.g. 1500 — overrides the bracket cap; blank = default</span>
+      </div>`;
 
     // Position near the badge
     const badge = document.getElementById('builder-fleet-size');
@@ -2145,9 +2156,8 @@ const App = (() => {
     // always-visible overview (there's no dedicated Overview nav row anymore).
     activeGroupId = (gid && gid === activeGroupId) ? null : (gid || null);
     activeFlagship = null;   // selecting a group deselects any selected flagship
-    // Selection only changes the nav highlight + which group the detail panel
-    // shows — the overview content is unchanged, so don't rebuild it.
-    scheduleRender(renderGroupsNav, renderDetailPanel);
+    // Re-render the overview too so the card you're editing gets the active highlight.
+    scheduleRender(renderGroupsNav, renderOverviewPanel, renderDetailPanel);
 
     // On mobile, collapse sidebar
     if (gid) {
@@ -2456,7 +2466,7 @@ const App = (() => {
         : '';
       lastCat = cat;
 
-      return `${sectionDivider}<div class="overview-group-card card-deco" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-label="${esc(g.name)}, ${esc(catLabel)}, ${gPts} points" style="cursor:pointer;border-left-color:${catColor}">
+      return `${sectionDivider}<div class="overview-group-card card-deco${g.id === activeGroupId ? ' overview-group-active' : ''}" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-current="${g.id === activeGroupId ? 'true' : 'false'}" aria-label="${esc(g.name)}, ${esc(catLabel)}, ${gPts} points" style="cursor:pointer;border-left-color:${catColor}">
         <div class="overview-group-top">
           ${artSrc ? `<div class="overview-group-art${artModularClass}"><img src="${artThumb ? thumbUrl(artSrc) : esc(artSrc)}" alt="" onerror="this.closest('.overview-group-art').remove()"></div>` : ''}
           <div class="overview-group-info">
@@ -3806,16 +3816,16 @@ const App = (() => {
     const fgroups = (shipDB[currentFleet && currentFleet.faction] || {}).groups || {};
     Object.values(fgroups).forEach(cat => { if (cat && cat.ships) Object.values(cat.ships).forEach(d => pool.push(d)); });
     const chips = SHIP_FILTERS.filter(f => activeFilters.has(f.key) || pool.some(d => { try { return f.test(d); } catch (e) { return false; } }));
-    container.innerHTML = chips.map(f =>
+    const chipsHtml = chips.map(f =>
       `<button class="filter-chip ${activeFilters.has(f.key) ? 'active' : ''}" onclick="App.toggleShipFilter('${f.key}')">${activeFilters.has(f.key) ? CHECK_SVG : ''}${f.label}</button>`
-    ).join('') +
-      // Misc Ships is a filter chip like the rest: on = reveal mercenaries /
-      // cross-faction / other optional ships. (Also mirrored in Settings.)
-      `<button class="filter-chip ${settings.showAdditionalShips ? 'active' : ''}" onclick="App.toggleMiscShips()" title="Include mercenaries, cross-faction and civilian ships alongside the core list">${settings.showAdditionalShips ? CHECK_SVG : ''}Misc Ships</button>` +
-      // "In collection" only appears when Settings → Collection is on.
-      (settings.showCollection
-        ? `<button class="filter-chip ${collectionFilterOn ? 'active' : ''}" onclick="App.toggleBuildableFilter()" title="Only ships in your collection">${collectionFilterOn ? CHECK_SVG : ''}In collection</button>`
-        : '');
+    ).join('');
+    // Misc Ships (and In-collection) are not filters on the core list — they CHANGE
+    // which pool you're browsing — so they sit apart as labelled snap switches.
+    const sw = (on, label, fn, title) =>
+      `<button class="picker-switch${on ? ' on' : ''}" role="switch" aria-checked="${on}" onclick="${fn}" title="${title}"><span class="picker-switch-knob"></span>${label}</button>`;
+    const toggles = sw(settings.showAdditionalShips, 'Misc ships', 'App.toggleMiscShips()', 'Include mercenaries, cross-faction and civilian ships alongside the core list')
+      + (settings.showCollection ? sw(collectionFilterOn, 'In collection', 'App.toggleBuildableFilter()', 'Only ships in your collection') : '');
+    container.innerHTML = `<div class="ship-filter-chips">${chipsHtml}</div><div class="ship-filter-switches">${toggles}</div>`;
   }
 
   // The "Misc Ships" picker chip mirrors the Settings "Additional Ships" toggle:
