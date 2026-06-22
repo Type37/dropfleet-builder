@@ -3012,9 +3012,9 @@ const App = (() => {
       hullCell = hullCell.replace('</div>', raChip + '</div>');
     }
     const cells = [
+      cell('thrust'), cell('bs'),
       cell('scan'), cell('ks'),
       cell('sig'),  cell('es'),
-      cell('thrust'), cell('bs'),
       hullCell
     ].filter(Boolean).join('');
     return cells ? `<div class="stat-grid">${cells}</div>` : '';
@@ -5224,9 +5224,9 @@ const App = (() => {
       return `<span class="dp-statcell${wide ? ' dp-sc-wide' : ''}${mod}${none}">${icon}<span class="dp-sc-val">${esc(String(v))}</span><span class="dp-sc-lab">${esc(meta.label)}</span></span>`;
     };
     const base = [
+      cell('thrust'), cell('bs'),
       cell('scan'), cell('ks'),
-      cell('sig'), cell('es'),
-      cell('thrust'), cell('bs')
+      cell('sig'), cell('es')
     ].filter(Boolean).join('');
     const hullEl = hullHtml ? `<div class="dp-sc-wide dp-sc-hull">${hullHtml}</div>` : cell('hull', true);
     return (base || hullEl) ? `<div class="dp-statgrid">${base}${hullEl}</div>` : '';
