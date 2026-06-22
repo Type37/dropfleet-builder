@@ -4301,6 +4301,15 @@ const App = (() => {
     { level: 4, cost: 60 }
   ];
 
+  // Core player abilities (rulebook 4.2.1.1) — available to every player each round
+  // regardless of admiral. Shown on generic-admiral cards so the player has them to hand.
+  const CORE_ABILITIES = [
+    { name: 'AP Re-roll', cost: '*AP', effect: 'Once per Group, Asset, or Dropsite activation, after you roll any dice, you can re-roll any number of those dice. You must re-roll at least one dice, spending 1AP for each dice re-rolled.' },
+    { name: 'Brace for Impact', cost: '2AP', effect: 'When a player would roll for Crippling Effects, instead of rolling, make the result of a Crippling Effect roll (for you or your opponent) a 4.' },
+    { name: 'Contain Reactor', cost: '2AP', effect: 'When a player would roll for Explosion, instead of rolling, make the result of an Explosion roll (for you or your opponent) a 2.' },
+    { name: 'Time to Target', cost: '2AP', effect: 'After moving a Wing of your Fighters or Bombers, you may move that Wing a second time with a Thrust of 6" in any direction. The Wing cannot divide into or form larger Wings due to this movement.' }
+  ];
+
   // The portrait-thumbnail slot for an admiral: the portrait when one exists
   // (famous admirals), otherwise the rank insignia fills the whole square
   // (generic/faction admirals have no portrait). The insignia lives here now,
@@ -5199,18 +5208,19 @@ const App = (() => {
         ${f.admirals.map(a => {
           const info = getAdmiralAbilityInfo(a);
           const abilityLine = ab => `<div class="print-admiral-ability"><span class="print-ability-name">${esc(ab.name)}</span>${ab.cost ? ` <span class="print-ability-cost">${esc(ab.cost)}</span>` : ''}${ab.effect ? `, ${esc(ab.effect)}` : ''}</div>`;
-          let abilitiesHtml = '';
+          let inner = '';
           if (info) {
             const chosen = (a.selectedAbilities || [])
               .map(n => info.table.find(t => t.name === n)).filter(Boolean);
             // Group all of an admiral's abilities into ONE block (innate + chosen) so
             // they read as a single unit under the admiral (law of proximity).
-            let inner = '';
-            // Innate abilities just list (no header); only the chosen ones get a label.
             if (info.innate.length) inner += info.innate.map(abilityLine).join('');
             if (chosen.length) inner += `<div class="print-admiral-ability-sublabel">Chosen Abilities</div>${chosen.map(abilityLine).join('')}`;
-            if (inner) abilitiesHtml = `<div class="print-admiral-abilities">${inner}</div>`;
           }
+          // Generic admirals have no named abilities of their own, so list the core
+          // player abilities (4.2.1.1) every fleet can use each round.
+          if (a.type !== 'Famous') inner += `<div class="print-admiral-ability-sublabel">Core Abilities</div>${CORE_ABILITIES.map(abilityLine).join('')}`;
+          const abilitiesHtml = inner ? `<div class="print-admiral-abilities"><div class="print-admiral-abilities-head">Abilities</div>${inner}</div>` : '';
           // Famous admirals: print the flagship datasheet (stats + weapons).
           let flagshipHtml = '';
           if (a.type === 'Famous' && a.shipKey) {
@@ -6568,7 +6578,6 @@ const App = (() => {
     </tr>`;
 
     return `<div class="launch-ref">
-      <div class="launch-ref-header">Launch Asset Reference</div>
       <table class="launch-ref-table">
         <thead><tr>
           <th class="lar-name">Asset</th><th>Thrust</th><th>Att</th><th>Lk</th><th>Dmg</th><th>Type</th><th class="lar-special">Special</th>
