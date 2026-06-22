@@ -5189,7 +5189,8 @@ const App = (() => {
         </div>
         <div class="print-fleet-summary">${totalGroups} group${totalGroups !== 1 ? 's' : ''}, ${totalShips} ship${totalShips !== 1 ? 's' : ''}${admCount > 0 ? `, ${admCount} admiral${admCount !== 1 ? 's' : ''}` : ''}${f.spaceStation ? `, ${esc(f.spaceStation.name)}${(f.spaceStation.systems && f.spaceStation.systems.length) ? ' (' + f.spaceStation.systems.map(esc).join(', ') + ')' : ''}` : ''}</div>
       </div>
-      ${descHtml}`;
+      ${descHtml}
+      <!--LAUNCH_REF-->`;
 
     // Admirals
     if (f.admirals && f.admirals.length > 0) {
@@ -5527,7 +5528,10 @@ const App = (() => {
       html += `<div class="dp-groups${twoCol ? ' dp-2col' : ''}">${groupsHtml}</div>`;
     }
 
-    // Launch asset reference for the whole fleet
+    // Launch asset reference for the whole fleet. Rendered at the TOP of the sheet
+    // via the <!--LAUNCH_REF--> placeholder; computed here because the load names
+    // are only known once the groups have been built.
+    let launchRefHtml = '';
     if (factionInfo && factionInfo.launchAssets && allLaunchAssetNames.size > 0) {
       const relevantAssets = [];
       const seenNames = new Set();
@@ -5541,7 +5545,7 @@ const App = (() => {
         });
       });
       if (relevantAssets.length > 0) {
-        html += renderLaunchAssetReference(relevantAssets);
+        launchRefHtml = renderLaunchAssetReference(relevantAssets);
       }
     }
 
@@ -5558,37 +5562,8 @@ const App = (() => {
       html += `<div class="print-section dp-glossary"><div class="print-section-title">Rules</div><div class="dp-rules">${items}</div></div>`;
     }
 
-    // Fleet totals summary
-    const admPts = (f.admirals || []).reduce((t, a) => t + (a.points || 0), 0);
-    const stationPts = f.spaceStation ? (f.spaceStation.cost || 0) : 0;
-    const shipPts = pts - admPts - stationPts;
-    const groupPtsList = f.battleGroups.map(g => {
-      const gp = g.ships.reduce((t, s) => t + (s.points || 0), 0);
-      return `<span class="print-totals-item">${esc(g.name)}: ${gp}</span>`;
-    }).join('');
-
-    html += `<div class="print-totals">
-      <div class="print-totals-header">Fleet Summary</div>
-      <div class="print-totals-grid">
-        <div class="print-totals-row">
-          <span class="print-totals-label">Ships</span>
-          <span class="print-totals-value">${shipPts} pts</span>
-        </div>
-        ${admPts > 0 ? `<div class="print-totals-row">
-          <span class="print-totals-label">Admirals</span>
-          <span class="print-totals-value">${admPts} pts</span>
-        </div>` : ''}
-        ${stationPts > 0 ? `<div class="print-totals-row">
-          <span class="print-totals-label">Space Station</span>
-          <span class="print-totals-value">${stationPts} pts</span>
-        </div>` : ''}
-        <div class="print-totals-row print-totals-total">
-          <span class="print-totals-label">Total</span>
-          <span class="print-totals-value">${pts}${effMax(f) !== 99999 ? ' / ' + effMax(f) : ''} pts</span>
-        </div>
-      </div>
-      <div class="print-totals-breakdown">${groupPtsList}</div>
-    </div>`;
+    // (Fleet Summary totals block removed — the total points already show in the
+    // print header, and the per-group breakdown was redundant on the printout.)
 
     // No separate rules glossary: every rule is already spelled out on each ship card
     // above, so the player reads it in place (no page-flipping) and the sheet stays
@@ -5606,7 +5581,7 @@ const App = (() => {
     }
 
     html += '</div>';
-    return html;
+    return html.replace('<!--LAUNCH_REF-->', launchRefHtml || '');
   }
 
   // "Simple Print View" = the plain-text army list (the same New-Recruit-style export
