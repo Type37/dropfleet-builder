@@ -3018,12 +3018,18 @@ const App = (() => {
     return specialStr.split(',').map(s => {
       const trimmed = s.trim();
       if (!trimmed) return '';
+      // "Alt-N" is a choose-one group id, NOT a rated value — the bare "Alt-1" reads
+      // like a rating (cf. Reave-2). Show it as a clearer "Alt" chip; the tooltip
+      // carries the verbatim rule (only one same-Alt Weapon/Load may fire per round).
+      const isAlt = /^Alt-\d+$/i.test(trimmed);
+      const label = isAlt ? 'Alt' : esc(trimmed);
+      const altClass = isAlt ? ' weapon-special-chip-alt' : '';
       const full = lookupRuleFull(trimmed);
       if (full && full.description) {
         const pageAttr = full.page ? ` data-rule-page="${esc(full.page)}"` : '';
-        return `<span class="weapon-special-chip has-tooltip" data-rule-desc="${esc(full.description)}"${pageAttr} onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(trimmed)}</span>`;
+        return `<span class="weapon-special-chip${altClass} has-tooltip" data-rule-desc="${esc(full.description)}"${pageAttr} onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${label}</span>`;
       }
-      return `<span class="weapon-special-chip">${esc(trimmed)}</span>`;
+      return `<span class="weapon-special-chip${altClass}">${label}</span>`;
     }).join('');
   }
 
@@ -6537,7 +6543,7 @@ const App = (() => {
       if (!load.name) return;
       const parts = load.name.split(/\s*&\s*/).map(p => p.trim()).filter(Boolean);
       const loadSpecial = (load.special && load.special !== '-') ? load.special : '';
-      const launchCell = `<td class="lt-launch" rowspan="${parts.length}">${esc(String(load.launch ?? '-'))}${loadSpecial ? `<span class="lt-launch-note">${esc(loadSpecial)}</span>` : ''}</td>`;
+      const launchCell = `<td class="lt-launch" rowspan="${parts.length}">${esc(String(load.launch ?? '-'))}${loadSpecial ? `<span class="lt-launch-note">${renderWeaponSpecialChips(loadSpecial)}</span>` : ''}</td>`;
       parts.forEach((part, i) => {
         const a = assetsByName[part.toLowerCase()] || { name: part };
         const hasStats = a.attack !== undefined;

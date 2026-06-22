@@ -2658,6 +2658,19 @@ h1, h2, h3, h4, h5, h6 {
   white-space: nowrap;
   letter-spacing: 0.01em;
 }
+/* "Alt" = a choose-one fire/load group, not a rated value. Dashed gold outline so
+   it reads as a mode-link distinct from rated specials (Reave-2, Scald-1, etc.). */
+.weapon-special-chip-alt {
+  border-style: dashed;
+  border-color: var(--gold-line);
+  color: var(--gold-dark);
+  background: var(--gold-subtle);
+}
+.weapon-special-chip-alt.has-tooltip:hover {
+  background: var(--gold-subtle);
+  border-color: var(--gold);
+  color: var(--gold-dark);
+}
 .weapon-special-chip.has-tooltip {
   cursor: help;
   transition: all var(--duration-fast) var(--ease-out);
