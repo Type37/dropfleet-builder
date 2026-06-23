@@ -6232,90 +6232,256 @@ const App = (() => {
     return null;
   }
 
-  // Parse a New-Recruit-style (or our own) plain-text army list into a structure.
-  // Returns null if it doesn't look like an army list. Best-effort: captures faction,
-  // game size, total, generic admirals, and each group's ships (name/count/points).
+  // Section-header keywords used to re-insert line breaks into comma-collapsed exports.
+  const NR_SECT_KW = /(Light|Medium|Heavy|Super ?heavy|Colossal|Payload) Groups?\s*\[\s*\d+\s*pts?\s*\]|Admirals?\s*\[\s*\d+\s*pts?\s*\]|Space Stations?\s*\[\s*\d+\s*pts?\s*\]/gi;
+  // New Recruit sometimes shares a list collapsed onto one line (commas instead of
+  // newlines). Re-introduce breaks so the line parser can read it. No-op for the
+  // normal multi-line paste.
+  function nrNormalize(text) {
+    if (text.split(/\n/).length > 6) return text;
+    let t = text;
+    t = t.replace(NR_SECT_KW, m => '\n' + m);
+    t = t.replace(/\s*[•]\s*(\d+\s*[x×])/g, '\n• $1');
+    t = t.replace(/(\])\s+(?=(?:\d+\s*[x×]\s*)?[A-Z][A-Za-z0-9'’.\- ]+?\s*\[\s*\d+\s*pts)/g, '$1\n');
+    t = t.replace(/,\s*(?=[A-Z][A-Za-z0-9'’.\- ]+?\s*\[\s*\d+\s*pts)/g, '\n');
+    return t;
+  }
+
+  // Section header (with or without our own "##"), tolerant of a comma-joined first
+  // entry, e.g. "Heavy Groups [235pts],Sarpedon Battleship [235pts]: …".
+  const NR_SECT = /^#{0,2}\s*(Light|Medium|Heavy|Super ?heavy|Colossal|Payload|Space Station)s?(?:\s+Groups?)?\s*\[\s*(\d+)\s*pts?\s*\]\s*,?\s*(.*)$/i;
+  const NR_ADM  = /^#{0,2}\s*Admirals?\s*\[\s*(\d+)\s*pts?\s*\]\s*,?\s*(.*)$/i;
+  const NR_TON  = { light:'light', medium:'medium', heavy:'heavy', superheavy:'colossal', colossal:'colossal', payload:'payload', spacestation:'station' };
+
+  // Parse a New-Recruit (or our own) plain-text army list into a structure. Returns
+  // null if it doesn't look like an army list. Captures a tentative faction (from the
+  // header — importArmyList re-votes by ship names), game size, total, admirals
+  // (name/level/pts) and each group's ships (name/count/points/loadout-names).
   function parseArmyListText(text) {
     if (!/##\s|\[\s*\d+\s*pts\s*\]/i.test(text)) return null;
-    const faction = detectFactionFromText(text);
-    if (!faction) return null;
+    text = nrNormalize(text);
     const lines = text.split(/\r?\n/);
+    const faction = detectFactionFromText(text);   // tentative; re-voted on import
     let name = (lines.find(l => l.trim()) || 'Imported list').trim()
       .replace(/\s*\[\s*\d+\s*pts\s*\].*/i, '').replace(/^#+\s*/, '').replace(/\+\+/g, '')
-      .replace(/\s*[-–]\s*\d*\s*[-–]?\s*$/, '').trim() || 'Imported list';
+      .replace(/\s*[-–]\s*[^-–]*$/, '').replace(/\s*[-–]\s*$/, '').trim() || 'Imported list';
     const sizeM = text.match(/Game Size:\s*(Skirmish|Clash|Battle|Reconquest)/i);
     const size = sizeM ? sizeM[1].toLowerCase() : null;
     const totalM = text.match(/\[\s*(\d+)\s*pts\s*\]/i);
     const totalPts = totalM ? parseInt(totalM[1], 10) : null;
     const admirals = [], groups = [];
     let curTon = null, curGroup = null;
-    const TONS = /^(Colossal|Heavy|Medium|Light)$/i;
-    for (const raw of lines) {
-      const line = raw.trim();
-      if (!line) continue;
-      let m;
-      if (/^##\s*Admirals/i.test(line)) { curTon = 'admirals'; curGroup = null; continue; }
-      if ((m = line.match(/^##\s*(Colossal|Heavy|Medium|Light)\s+Groups/i))) { curTon = m[1].toLowerCase(); curGroup = null; continue; }
-      if (/^#/.test(line)) { curTon = null; curGroup = null; continue; }   // Configuration / Reference / Fleet header
+
+    const SHIP = /^(?:[•\-*]\s*)?(\d+)\s*[x×]\s*(.+?)\s*\[\s*(\d+)\s*pts?\s*\]\s*(?::\s*(.*))?$/i;
+    const GROUP_HDR = /\[\s*\d+\s*pts?\s*\]\s*:\s*$/;
+    const SINGLE = /^(.+?)\s*\[\s*(\d+)\s*pts?\s*\]\s*(?::\s*(.*))?$/;
+
+    function handleEntry(line) {
+      line = (line || '').trim(); if (!line) return;
       if (curTon === 'admirals') {
-        const am = line.match(/Lvl\s*(\d+)/i), pm = line.match(/\[\s*(\d+)\s*pts\s*\]/);
-        if (am) admirals.push({ level: parseInt(am[1], 10), pts: pm ? parseInt(pm[1], 10) : 0 });
-        continue;
+        const lvl = line.match(/Lvl\s*(\d+)/i), pm = line.match(/\[\s*(\d+)\s*pts?\s*\]/);
+        const nm = line.split(':')[0]
+          .replace(/\[\s*\d+\s*pts?\s*\]/, '').replace(/\(Lvl\s*\d+\)/i, '')
+          .replace(/^[•\-*]\s*/, '').replace(/^\d+\s*[x×]\s*/, '').replace(/Lvl\s*\d+/i, '')
+          .replace(/^[:,\s]+|[:,\s]+$/g, '').trim();
+        if (pm || lvl) admirals.push({ name: nm, level: lvl ? parseInt(lvl[1], 10) : null, pts: pm ? parseInt(pm[1], 10) : 0 });
+        return;
       }
-      if (!curTon) continue;
-      // Multi-ship sub-line: "• 2x Medea Strike Carrier [50 pts]: loadouts"
-      if ((m = line.match(/^[•\-*]\s*(\d+)\s*[x×]\s*(.+?)\s*\[\s*(\d+)\s*pts\s*\]\s*(?::\s*(.*))?$/i))) {
+      if (!curTon) return;
+      let m;
+      if ((m = line.match(SHIP))) {
         const ship = { name: m[2].trim(), count: parseInt(m[1], 10), pts: parseInt(m[3], 10), loadouts: (m[4] || '').split(',').map(s => s.trim()).filter(Boolean) };
-        if (curGroup) curGroup.ships.push(ship);
-        else groups.push({ tonnage: curTon, ships: [ship] });
-        continue;
+        if (curGroup) curGroup.ships.push(ship); else groups.push({ tonnage: curTon, ships: [ship] });
+        return;
       }
-      // Multi-ship group header: "Medea Strike Carriers [100 pts]:" (nothing after the colon)
-      if (/\[\s*\d+\s*pts\s*\]\s*:\s*$/.test(line)) { curGroup = { tonnage: curTon, ships: [] }; groups.push(curGroup); continue; }
-      // Single ship: "Augustus Super Battleship [245 pts]: loadouts" or "... [245 pts]"
-      if ((m = line.match(/^(.+?)\s*\[\s*(\d+)\s*pts\s*\]\s*(?::\s*(.*))?$/))) {
+      if (GROUP_HDR.test(line)) { curGroup = { tonnage: curTon, ships: [] }; groups.push(curGroup); return; }
+      if ((m = line.match(SINGLE))) {
         groups.push({ tonnage: curTon, ships: [{ name: m[1].trim(), count: 1, pts: parseInt(m[2], 10), loadouts: (m[3] || '').split(',').map(s => s.trim()).filter(Boolean) }] });
         curGroup = null;
       }
+    }
+
+    for (const raw of lines) {
+      const line = raw.trim();
+      if (!line) continue;
+      if (/^\+\+/.test(line)) continue;                       // "++ Fleet ++ …"
+      let m;
+      if ((m = line.match(NR_ADM))) { curTon = 'admirals'; curGroup = null; if (m[2]) handleEntry(m[2]); continue; }
+      if ((m = line.match(NR_SECT))) {
+        curTon = NR_TON[m[1].toLowerCase().replace(/\s+/g, '')] || m[1].toLowerCase();
+        curGroup = null; if (m[3]) handleEntry(m[3]); continue;
+      }
+      if (/^#/.test(line)) { curTon = null; curGroup = null; continue; }  // Configuration / Reference
+      // faction/title line: "Faction - name - [pts]" before any section
+      if (curTon === null && /[-–].*\[\s*\d+\s*pts\s*\]/.test(line) && !/:/.test(line)) continue;
+      handleEntry(line);
     }
     if (!groups.length) return null;
     return { faction, name, size, totalPts, admirals, groups };
   }
 
+  // Best faction for a parsed list: vote by which roster the ship names belong to
+  // (fixes e.g. Bioficer lists whose header reads "Post-Human"/"Bioficers"). Needs
+  // every faction loaded first. Falls back to the header guess.
+  function voteFactionFromGroups(parsed) {
+    const names = [];
+    (parsed.groups || []).forEach(g => g.ships.forEach(s => names.push(s.name)));
+    let best = parsed.faction, bestN = -1;
+    for (const fac of Object.keys(shipDB)) {
+      if (!shipDB[fac] || !shipDB[fac].groups) continue;
+      let n = 0; for (const nm of names) if (findShipAnyCategory(fac, nm)) n++;
+      if (n > bestN) { bestN = n; best = fac; }
+    }
+    return best || parsed.faction;
+  }
+
+  // Resolve a parsed weapon/load-name list into the builder's loadout selection map
+  // { optGroupIdx: chosenOptionIdx }. Picks the option whose name / weapons / loads
+  // best matches the names New Recruit listed; defaults to option 0.
+  function resolveLoadoutSelections(dbShip, names) {
+    const out = {}; const lc = (names || []).map(n => n.toLowerCase());
+    (dbShip.loadoutOptions || []).forEach((lo, i) => {
+      out[i] = 0; let best = -1, bestScore = 0;
+      (lo.options || []).forEach((o, j) => {
+        const cand = [o.name, ...(o.weapons || []).map(w => w.name), ...((o.loads || []).map(l => (l && l.name) || l))]
+          .filter(Boolean).map(x => String(x).toLowerCase());
+        let score = 0;
+        for (const c of cand) if (lc.some(n => n === c || n.includes(c) || c.includes(n))) score++;
+        if (score > bestScore) { bestScore = score; best = j; }
+      });
+      if (best >= 0) out[i] = best;
+    });
+    return out;
+  }
+
+  // Find a space station by name within a faction's spaceStations list.
+  function findStationByName(factionKey, name) {
+    const list = (shipDB[factionKey] && shipDB[factionKey].spaceStations) || [];
+    const lc = String(name || '').trim().toLowerCase();
+    return list.find(st => (st.name || '').toLowerCase() === lc || (st.name || '').toLowerCase() === lc + 's' || lc === (st.name || '').toLowerCase() + 's') || null;
+  }
+
+  const IMPORT_FACTIONS = ['ucm', 'phr', 'scourge', 'shaltari', 'bioficer', 'resistance'];
+
   function importArmyList(al) {
-    ensureFactionLoaded(al.faction).then(() => {
-      if (!shipDB[al.faction]) { showToast('Could not load that faction'); return; }
-      const unmatched = [];
+    // Load every roster so we can vote the faction by ship names (handles lists whose
+    // header faction differs from their ships, e.g. Bioficer).
+    Promise.all(IMPORT_FACTIONS.map(f => ensureFactionLoaded(f).catch(() => {}))).then(() => {
+      const faction = voteFactionFromGroups(al);
+      if (!faction || !shipDB[faction]) { showToast('Could not recognise that faction'); return; }
+
+      const warnings = { ships: [], loadouts: [], admirals: [], stations: [] };
       const battleGroups = [];
-      al.groups.forEach(g => g.ships.forEach(sh => {
-        const found = findShipAnyCategory(al.faction, sh.name);
-        if (!found) { unmatched.push(sh.name); return; }
-        const ships = [];
-        for (let i = 0; i < (sh.count || 1); i++) {
-          const loadouts = {};
-          (found.ship.loadoutOptions || []).forEach((lo, idx) => { loadouts[idx] = 0; });
-          ships.push({ id: uuid(), shipKey: found.key, groupCategory: found.category, points: sh.pts || found.ship.points || 0, loadouts });
+      let spaceStation = null;
+
+      al.groups.forEach(g => {
+        if (g.tonnage === 'station') {                 // Space Stations section
+          g.ships.forEach(sh => {
+            const st = findStationByName(faction, sh.name);
+            if (st && !spaceStation) spaceStation = { name: st.name, cost: st.cost || 0, stats: st.stats, weapons: st.weapons, specialRules: st.specialRules, systems: [] };
+            else if (!st) warnings.stations.push(sh.name);
+          });
+          return;
         }
-        battleGroups.push({ id: uuid(), name: sh.name, ships });
-      }));
+        g.ships.forEach(sh => {
+          const found = findShipAnyCategory(faction, sh.name);
+          if (!found) { warnings.ships.push(sh.name); return; }
+          const sel = resolveLoadoutSelections(found.ship, sh.loadouts);
+          // Flag a configurable ship whose listed weapons we couldn't place on any option.
+          if ((found.ship.loadoutOptions || []).length && sh.loadouts.length && !Object.values(sel).some(v => v > 0)) {
+            // only warn when the ship actually has a non-default choice available
+            if ((found.ship.loadoutOptions || []).some(lo => (lo.options || []).length > 1))
+              warnings.loadouts.push(`${found.ship.name} (${sh.loadouts.join(', ')})`);
+          }
+          const ships = [];
+          for (let i = 0; i < (sh.count || 1); i++) {
+            ships.push({ id: uuid(), shipKey: found.key, groupCategory: found.category, points: found.ship.points || sh.pts || 0, loadouts: { ...sel } });
+          }
+          battleGroups.push({ id: uuid(), name: found.ship.name, ships });
+        });
+      });
       if (!battleGroups.length) { showToast('No ships matched — could not import that list'); return; }
+
       const size = al.size || (al.totalPts != null ? bracketForPoints(al.totalPts) : 'clash');
       const gs = GAME_SIZES[size] || GAME_SIZES.clash;
-      const admirals = (al.admirals || []).map(a => ({ name: `Level ${a.level} Admiral`, points: a.pts || 0, level: a.level, type: 'Generic' }));
+      const admirals = (al.admirals || []).map(a => resolveAdmiral(faction, a, warnings)).filter(Boolean);
+
       const fleet = {
-        id: uuid(), name: al.name + ' (imported)', faction: al.faction,
+        id: uuid(), name: al.name + ' (imported)', faction,
         gameSize: size, pointsLimit: (al.totalPts && al.totalPts !== gs.max) ? al.totalPts : gs.max,
-        maxGroups: gs.groups, admirals, battleGroups, spaceStation: null,
+        maxGroups: gs.groups, admirals, battleGroups, spaceStation,
         createdAt: Date.now(), updatedAt: Date.now()
       };
+      // Sanity check: if our recomputed total is well off the list's stated total,
+      // something was dropped/merged (common with single-line collapsed pastes).
+      const computed = calcFleetPoints(fleet);
+      if (al.totalPts && Math.abs(computed - al.totalPts) > 15) {
+        warnings.points = `List states ${al.totalPts} pts, imported total is ${computed} pts — a ship or upgrade may be missing.`;
+      }
       fleets.push(fleet);
       saveFleets();
       renderFleetList();
-      showToast(unmatched.length
-        ? `Imported "${fleet.name}" — ${unmatched.length} ship${unmatched.length > 1 ? 's' : ''} not matched (${unmatched.slice(0, 3).join(', ')}${unmatched.length > 3 ? '…' : ''})`
-        : `Imported "${fleet.name}"`);
+      showImportReport(fleet, warnings);
     });
     return true;
+  }
+
+  // Map a parsed admiral {name, level, pts} to a fleet admiral. Famous → matched by
+  // name with its flagship; named rank → faction admiral (uses our cost/level);
+  // bare "Admiral (Lvl N)" → generic admiral at that level.
+  function resolveAdmiral(faction, a, warnings) {
+    const fdb = shipDB[faction];
+    const nm = (a.name || '').toLowerCase();
+    // Famous admiral (carries a flagship)
+    const fam = fdb.groups && fdb.groups.famous_admirals && fdb.groups.famous_admirals.ships;
+    if (fam) {
+      for (const [id, fa] of Object.entries(fam)) {
+        if ((fa.name || '').toLowerCase() === nm) return { id: uuid(), shipKey: id, name: fa.name, points: fa.points || 0, level: fa.level || 1, type: 'Famous', selectedAbilities: [] };
+      }
+    }
+    // Named faction rank (Captain, Vice Director, Artificer, …)
+    const rank = (fdb.admirals || []).find(x => !x.isFamous && (x.name || '').toLowerCase() === nm);
+    if (rank) return { id: uuid(), admiralId: rank.id, name: rank.name, points: rank.cost || 0, level: rank.level || a.level || 1, type: 'Faction', selectedAbilities: [] };
+    // Generic "Admiral (Lvl N)"
+    if (a.level) return { id: uuid(), name: `Level ${a.level} Admiral`, points: a.pts || 0, level: a.level, type: 'Generic', selectedAbilities: [] };
+    if (a.name) warnings.admirals.push(a.name);
+    return null;
+  }
+
+  // After an army-list import, show what came in and (transparently) anything we
+  // couldn't map 1:1, with a button to open the new fleet.
+  let lastImportedFleetId = null;
+  function showImportReport(fleet, warnings) {
+    lastImportedFleetId = fleet.id;
+    closeModal('modal-import');
+    const shipCount = (fleet.battleGroups || []).reduce((t, g) => t + g.ships.length, 0);
+    const pts = calcFleetPoints(fleet);
+    const w = warnings || { ships: [], loadouts: [], admirals: [], stations: [] };
+    const clean = !w.ships.length && !w.loadouts.length && !w.admirals.length && !w.stations.length && !w.points;
+    const section = (title, items, note) => items && items.length
+      ? `<div style="margin-top:var(--sp-md)"><div class="text-caption" style="font-weight:600">${title}</div>`
+        + (note ? `<div class="text-caption" style="opacity:.7;margin-bottom:4px">${note}</div>` : '')
+        + `<ul style="margin:4px 0 0;padding-left:18px;font-size:var(--text-sm)">${items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></div>`
+      : '';
+    const body = document.getElementById('import-report-body');
+    if (body) {
+      body.innerHTML =
+        `<div style="font-size:var(--text-md)"><strong>${esc(fleet.name)}</strong></div>`
+        + `<div class="text-caption" style="margin-top:2px">${(factionData[fleet.faction] || {}).name || fleet.faction} · ${shipCount} ship${shipCount === 1 ? '' : 's'} · ${pts} pts</div>`
+        + (clean
+          ? `<div style="margin-top:var(--sp-md);color:var(--success,#2e7d32)">Imported cleanly — everything mapped.</div>`
+          : `<div style="margin-top:var(--sp-md)">Imported, with a few things to check:</div>`)
+        + section('Ships not found (skipped)', w.ships, 'Not in this faction’s roster, or renamed.')
+        + section('Loadouts set to default', w.loadouts, 'Couldn’t match the listed weapons to an option — pick manually.')
+        + section('Admirals to re-check', w.admirals)
+        + section('Space stations not found', w.stations)
+        + (w.points ? `<div style="margin-top:var(--sp-md)"><div class="text-caption" style="font-weight:600">Points mismatch</div><div class="text-caption" style="opacity:.7">${esc(w.points)}</div></div>` : '');
+    }
+    openModal('modal-import-report');
+  }
+  function openLastImported() {
+    closeModal('modal-import-report');
+    if (lastImportedFleetId) navigate('builder', lastImportedFleetId);
   }
 
   // Smallest bracket whose max covers the points (for lists with no explicit size).
@@ -7495,7 +7661,7 @@ const App = (() => {
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
     toggleSidebar, printFleet,
-    shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText,
+    shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText, openLastImported,
     openSettings, toggleSetting, toggleTheme, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
   };
 })();
