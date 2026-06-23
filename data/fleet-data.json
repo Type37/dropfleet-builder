@@ -16881,7 +16881,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Drive Augmentation",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Drive Augmentation",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Drive Augmentation (+3\" Thrust)",
+          "cost": 35,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\"."
      }
     },
     {
@@ -16936,7 +16961,32 @@
       "isRare": false,
       "isUnique": false,
       "tonnage": "H",
-      "lore": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3”."
+      "lore": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3”.",
+      "loadoutOptions": [
+       {
+        "name": "Drive Augmentation",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Drive Augmentation",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Drive Augmentation (+3\" Thrust)",
+          "cost": 35,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\"."
      }
     },
     {
@@ -16999,7 +17049,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Drive Augmentation",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Drive Augmentation",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Drive Augmentation (+3\" Thrust)",
+          "cost": 35,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\"."
      }
     },
     {
@@ -17062,7 +17137,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Drive Augmentation",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Drive Augmentation",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Drive Augmentation (+3\" Thrust)",
+          "cost": 35,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\"."
      }
     },
     {
@@ -17127,7 +17227,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Drive Augmentation",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Drive Augmentation",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Drive Augmentation (+3\" Thrust)",
+          "cost": 35,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\"."
      }
     },
     {
@@ -17196,7 +17321,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Drive Augmentation",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Drive Augmentation",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Drive Augmentation (+3\" Thrust)",
+          "cost": 35,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\"."
      }
     },
     {
@@ -17260,7 +17410,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Drive Augmentation",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Drive Augmentation",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Drive Augmentation (+3\" Thrust)",
+          "cost": 35,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\"."
      }
     },
     {

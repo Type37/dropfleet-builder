@@ -946,8 +946,32 @@
      "Forgeheart",
      "Dreadcloud"
     ],
-    "rulesText": "Drive Augmentation This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3”.",
-    "namesake": "The workhorse metal at the heart of steel, of planets, and of red blood itself."
+    "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\".",
+    "namesake": "The workhorse metal at the heart of steel, of planets, and of red blood itself.",
+    "loadoutOptions": [
+     {
+      "name": "Drive Augmentation",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Drive Augmentation",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Drive Augmentation (+3\" Thrust)",
+        "cost": 35,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -1003,8 +1027,32 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "The Copper is a class of battleship designed and constructed by the Shaltari Tribes.",
-    "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3”.",
-    "namesake": "A reddish, highly conductive metal, one of the first ever worked by human hands."
+    "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\".",
+    "namesake": "A reddish, highly conductive metal, one of the first ever worked by human hands.",
+    "loadoutOptions": [
+     {
+      "name": "Drive Augmentation",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Drive Augmentation",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Drive Augmentation (+3\" Thrust)",
+        "cost": 35,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -1069,7 +1117,32 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "Although many Shaltari ships can be considered unusual, the Bronze class battleship is especially so. At the prow, it mounts the fearsome Ion Cannonade - two vast rows of ion weapons with an excessive rate of fire. Like all ion weapons, these can cause havoc to a ship's power systems before battering it to shreds with a hail of energy pulses. On the ship's back, it mounts a Gravitic Beamer. While damaging enough on a basic level, this weapon's real threat comes from its effectiveness against ships in atmosphere and its tendency to literally shove ships forward, often into unfortunate places. Lastly, the ship mounts twin broadside crescents of microwave emitters for close-in killing power.\n\nUnlike other, more focused battleships, this class requires a Starchief with flexible cunning to achieve its maximum lethality while frustrating enemy operations.",
-    "namesake": "The alloy of copper and tin whose mastery gave its name to an entire age of human history."
+    "namesake": "The alloy of copper and tin whose mastery gave its name to an entire age of human history.",
+    "loadoutOptions": [
+     {
+      "name": "Drive Augmentation",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Drive Augmentation",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Drive Augmentation (+3\" Thrust)",
+        "cost": 35,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ],
+    "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\"."
    }
   },
   {
@@ -1134,7 +1207,32 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "Closely related to the Bronze, the Silver class battleship also features a broadside microwave array and a prow-mounted Gravitic Beamer, but replaces the Ion Cannonade with the spectacular Obliterator Cannon. This massive weapon's capacitance prongs take up nearly half the ship's length. These generate a cracking flow of unstable, rare particles then channel them through a small emitter nozzle at the unfortunate target. For a Shaltari weapon, It is uncharacteristically random in its destructive power due to exactly how this torrent of particles interacts with its target. In the worst cases, they burrow through a ship like lightning through jelly, annihilating ordinary matter in their quest not to exist. Such a strike can cripple even another battleship, so only the most foolhardy captain would bank on a hit dissipating harmlessly around their ship's hull. Although most Starchiefs may be considered shrewd operators, those that command the Silver class may have an insatiable, gambler's mindset.",
-    "namesake": "The brilliant white precious metal, the finest conductor of electricity and a coin of the realm for ages."
+    "namesake": "The brilliant white precious metal, the finest conductor of electricity and a coin of the realm for ages.",
+    "loadoutOptions": [
+     {
+      "name": "Drive Augmentation",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Drive Augmentation",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Drive Augmentation (+3\" Thrust)",
+        "cost": 35,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ],
+    "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\"."
    }
   },
   {
@@ -1202,7 +1300,32 @@
     "tonnage": "H",
     "lore": "Like the Bronze and Silver class battleships, the Gold class supercarrier is a relatively new and scarce sighting. Since none of these classes were recorded before 2672, it is assumed they are newly laid down, but with the Shaltari, things are seldom as they seem.\n\nUnlike the familiar Platinum class, the Gold is a far more aggressive vessel, since it mounts the powerful, close-action microwave arrays of its sister classes. Also armed with the Ion Cannonade, the Gold is a terror to almost any vessel, and that's before its swarms of formidable Shaltari bombers strike. Certainly, the Gold is one the Shaltari's premier assets and a worthy chariot for the mightiest of attack-oriented Starchiefs.",
     "namesake": "The dense, untarnishing yellow metal that has served as treasure and currency across every civilisation.",
-    "storeUrl": "https://ttcombat.com/products/shaltari-gold-battleship"
+    "storeUrl": "https://ttcombat.com/products/shaltari-gold-battleship",
+    "loadoutOptions": [
+     {
+      "name": "Drive Augmentation",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Drive Augmentation",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Drive Augmentation (+3\" Thrust)",
+        "cost": 35,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ],
+    "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\"."
    }
   },
   {
@@ -1273,7 +1396,32 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "The Platinum Class shares the same basic hull design as the Diamond class, but its internal space and vast upper levels are dominated by an enormous flight deck, making this vessel a supercarrier by UCM reckoning. The Platinum class can unleash swarms of fighters and bombers in an unstoppable tide of destruction, in volumes and quality that few other ships can match. In addition (and like its cousin the Diamond) it also serves the secondary function of mothership, carrying a small number of ground troops to supplement surface landings.\n\nShips of this class are among the most ancient vessels ever encountered by mankind. Indeed, the very first non-human ship to make contact with humanity on the now famous exploration frigate Endurance was the Platinum class Supercarrier Aten. During the then cordial relations between Shaltari and Human, the Starchief at the helm of the mighty ship proudly proclaimed that it was over 7000 Earth years of age, and that was well over 300 years ago. Their continued survival over the millennia is due in part to their scale, but mostly to the extended combat range granted by its strike craft, ensuring that finally ending one of these behemoths is a challenging task in the extreme.",
-    "namesake": "A dense, precious, silver-white metal, prized for jewellery and as a catalyst, and rarer than gold."
+    "namesake": "A dense, precious, silver-white metal, prized for jewellery and as a catalyst, and rarer than gold.",
+    "loadoutOptions": [
+     {
+      "name": "Drive Augmentation",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Drive Augmentation",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Drive Augmentation (+3\" Thrust)",
+        "cost": 35,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ],
+    "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\"."
    }
   },
   {
@@ -1339,7 +1487,32 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "The Diamond Class battleship is a truly frightening spectacle. Stretching 1546 meters in length, this mighty vessel is one of the largest known battleships and an imposing figurehead for any fleet. Despite their rarity, more UCMF officers ranking Admiral or above have met their deaths at the hands of one of these leviathans than any other type of ship in the Reconquest. This has caused many to speculate that the aliens use them to specifically hunt flagships, or simply that their captains treat the slaying of an opposite number as the highest achievement, such as it can be when fighting humans.\n\nIn addition to a pair of disintegrator banks, the Diamond class' primary armament is a triad of super particle lances. These vast weapons extend through half the ship's entire length and are fixed in the forward arc, such is their unknowable mass. These monstrosities have the ability to scythe through any armour like butter, their beams frequently passing right through a capital ship. While their damage dealing ability is potent, their real strength lies in reliability, the certainty that the enemy will feel the Diamond's wrath, no matter how well protected it is.",
-    "namesake": "The hardest natural material known, a crystal of pure carbon forged under immense heat and pressure."
+    "namesake": "The hardest natural material known, a crystal of pure carbon forged under immense heat and pressure.",
+    "loadoutOptions": [
+     {
+      "name": "Drive Augmentation",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Drive Augmentation",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Drive Augmentation (+3\" Thrust)",
+        "cost": 35,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ],
+    "rulesText": "This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\"."
    }
   },
   {
