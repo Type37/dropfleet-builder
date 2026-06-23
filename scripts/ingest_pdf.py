@@ -5,7 +5,7 @@ Stats PDF:
   1. ART     extract the ship art (largest image on each ship page), cut out its
              background to transparent, and save it as assets/art/<slug>.webp.
   2. STATS   parse name / cost / class / tonnage / stat-line / weapons / launch
-             loads / refits  (reuses the proven parser in pdf_to_json.py).
+             loads / refits from the datasheet table (self-contained parser).
   3. RULES   collect the verbatim special-rule prose on the page, matched to the
              rule names in the stat line's Special cell.
   4. LORE    capture the lore paragraph + "Famous ships of the class:" line when
@@ -31,7 +31,6 @@ Flags: --dry (write nothing), --no-art (skip image extraction), --out <json>,
 import sys, os, re, io, json, glob, argparse, subprocess, hashlib
 from collections import deque
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 try:
     import fitz  # PyMuPDF
 except ImportError:
@@ -41,12 +40,197 @@ try:
 except ImportError:
     sys.exit("Pillow required: pip install pillow")
 
-# Reuse the proven stats/weapons/loads parser rather than reinventing it.
-import importlib.util
-_spec = importlib.util.spec_from_file_location("pdf_to_json", os.path.join(os.path.dirname(__file__), "pdf_to_json.py"))
-P = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(P)
-
 ART_DIR_DEFAULT = "assets/art"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Stat-block parser (PyMuPDF returns each table cell on its own line in reading
+# order, keeping a TRAILING SPACE on the non-final fragment of a wrapped cell, so
+# wrapped cells re-join deterministically). Extracts name/cost/class/tonnage/
+# stats/weapons/loads/refits/famous-ships. Quotes verbatim; invents nothing.
+# ─────────────────────────────────────────────────────────────────────────────
+ARC_RE = re.compile(r'^[FSRN](?:/?[FSRN])*$')
+LOCK_RE = re.compile(r'^(\d\+|-)$')
+NUM_RE = re.compile(r'^(\d+|-)$')
+TYPE_RE = re.compile(r'^[KEC]$')
+PTS_RE = re.compile(r'^(\d+)\s*pts(?:\s*\((\d+)\s*\+\s*(\d+)\s*pts\))?', re.I)
+TON_RE = re.compile(r'^([LMHCS])\s*/\s*(\d+)mm$')
+FAMOUS_RE = re.compile(r'^Famous Admiral Level\s*(\d+)\s*&\s*(.+)$', re.I)
+
+def canon(s):
+    s = str(s).replace('”', '"').replace('“', '"').replace("'", '"')
+    while '""' in s:
+        s = s.replace('""', '"')
+    return s.strip()
+
+def merge_cells(raw_lines):
+    out, cur = [], None
+    for l in raw_lines:
+        if not l.strip():
+            continue
+        cur = l if cur is None else cur + l
+        if cur.endswith(' ') or cur.endswith('\t'):
+            continue
+        out.append(re.sub(r'\s+', ' ', cur).strip()); cur = None
+    if cur is not None:
+        out.append(re.sub(r'\s+', ' ', cur).strip())
+    return out
+
+def is_break(l):
+    if l in ('Load', 'Name', 'Thrust'):
+        return True
+    if re.match(r'^(This Ship|This Flagship|Famous ships|When |While |At the |If )', l):
+        return True
+    if re.search(r'\bRefit$', l):
+        return True
+    return len(l) > 50
+
+def parse_weapons(lines, start):
+    weapons, j = [], start
+    while j < len(lines):
+        if is_break(lines[j]):
+            break
+        name_parts = []
+        while j < len(lines) and not ARC_RE.match(lines[j]) and not is_break(lines[j]):
+            name_parts.append(lines[j]); j += 1
+        if j + 5 >= len(lines) or not ARC_RE.match(lines[j]):
+            break
+        arc, att, lock, dmg, typ, special = lines[j:j+6]
+        if not (NUM_RE.match(att) and LOCK_RE.match(lock) and NUM_RE.match(dmg) and TYPE_RE.match(typ)):
+            break
+        weapons.append({"name": ' '.join(name_parts).strip(), "arc": arc, "attack": att,
+                        "lock": lock, "damage": dmg, "type": typ,
+                        "special": special if special != '-' else '-'})
+        j += 6
+    return weapons, j
+
+def parse_loads(lines, start):
+    loads, j = [], start
+    while j < len(lines):
+        if is_break(lines[j]):
+            break
+        name_parts = []
+        while j < len(lines) and not NUM_RE.match(lines[j]) and not is_break(lines[j]):
+            name_parts.append(lines[j]); j += 1
+        if j + 1 >= len(lines) or not NUM_RE.match(lines[j]):
+            break
+        launch, special = lines[j], lines[j+1]
+        loads.append({"name": ' '.join(name_parts).strip(), "launch": launch,
+                      "special": special if special != '-' else '-'})
+        j += 2
+    return loads, j
+
+def parse_page(text):
+    lines = merge_cells(text.split('\n'))
+    pts_idx = next((i for i, l in enumerate(lines) if PTS_RE.match(l)), None)
+    if pts_idx is None:
+        return None
+    ship = {}
+    m = PTS_RE.match(lines[pts_idx])
+    ship["cost"] = int(m.group(1))
+    name = lines[pts_idx - 1].strip() if pts_idx > 0 else ''
+    cls = lines[pts_idx + 1] if pts_idx + 1 < len(lines) else ''
+    ton = lines[pts_idx + 2] if pts_idx + 2 < len(lines) else ''
+    fm = FAMOUS_RE.match(cls)
+    if fm and m.group(2):
+        adm, _, flagship = name.partition(' - ')
+        ship["famousAdmiral"] = {"admiral": adm.strip(), "level": int(fm.group(1)),
+                                 "admiralCost": int(m.group(2)), "shipCost": int(m.group(3))}
+        ship["name"] = flagship.strip() or name
+        ship["class"] = fm.group(2).strip()
+    else:
+        ship["name"] = name
+        ship["class"] = cls.strip()
+    tm = TON_RE.match(ton)
+    if tm:
+        ship["tonnage"] = tm.group(1); ship["armour"] = tm.group(2) + "mm"
+    try:
+        sh = next(i for i in range(len(lines) - 1) if lines[i] == 'Thrust' and lines[i+1] == 'Scan')
+    except StopIteration:
+        return ship
+    try:
+        spec_rel = next(k - sh for k in range(sh, len(lines)) if lines[k] == 'Special')
+    except StopIteration:
+        return ship
+    labels = lines[sh: sh + spec_rel + 1]
+    nvals = len(labels) - 1
+    vals = lines[sh + len(labels):]
+    stats = {}
+    for lab, v in zip(labels[:-1], vals[:nvals]):
+        stats[lab.strip().lower()] = canon(v)
+    sp = []
+    for l in vals[nvals:]:
+        if l in ('Name', 'Load') or is_break(l):
+            break
+        sp.append(l)
+    stats['special'] = ' '.join(sp).strip() if sp else '-'
+    ship["stats"] = stats
+    try:
+        wh = next(i for i in range(len(lines) - 1) if lines[i] == 'Name' and lines[i+1] == 'Arc')
+        ship["weapons"], _ = parse_weapons(lines, wh + 7)
+    except StopIteration:
+        ship["weapons"] = []
+    lh = next((i for i in range(len(lines) - 1) if lines[i] == 'Load' and lines[i+1] == 'Launch'), None)
+    if lh is not None:
+        ship["loads"], _ = parse_loads(lines, lh + 3)
+    refits = []
+    for l in lines:
+        rm = re.match(r'^This Ship may take a (.+?) for \+(\d+) points?,?\s*(.*)$', l)
+        if rm:
+            refits.append({"name": rm.group(1).strip(), "cost": int(rm.group(2)), "text": l.strip()})
+    if refits:
+        ship["refits"] = refits
+    fam = next((l for l in lines if l.startswith('Famous ships of the class')), None)
+    if fam:
+        ship["famousShips"] = fam.split(':', 1)[1].strip()
+    return ship
+
+def _vnorm(s):
+    return re.sub(r'[^a-z0-9]', '', s.lower())
+
+def validate(ships, data_path):
+    data = json.load(open(data_path, encoding='utf-8'))
+    by = {}
+    for g in data.get('groups', []):
+        s = g.get('ship') or {}
+        if s.get('name'): by[_vnorm(s['name'])] = s
+    print(f"\n=== Validation vs {data_path} ({len(by)} data ships) ===")
+    ok_cost = ok_stat = ok_wpn = matched = 0
+    misses, wpn_misses, cost_misses, stat_misses = [], [], [], []
+    for sh in ships:
+        if sh.get('famousAdmiral'):
+            continue
+        nm = _vnorm(sh['name'])
+        d = by.get(nm)
+        if not d:
+            cand = [v for k, v in by.items() if k.startswith(nm) or nm.startswith(k)]
+            d = cand[0] if len(cand) == 1 else None
+        if not d:
+            misses.append(sh['name']); continue
+        matched += 1
+        pc = sh.get('famousAdmiral', {}).get('shipCost', sh.get('cost'))
+        if pc == d.get('cost'): ok_cost += 1
+        else: cost_misses.append((sh['name'], pc, d.get('cost')))
+        ds = d.get('stats', {})
+        keys = ['thrust','scan','sig','hull','es','ks','bs','g']
+        common = [k for k in keys if sh.get('stats',{}).get(k) not in (None, '') and ds.get(k) not in (None, '')]
+        diffs = {k: (sh['stats'][k], ds.get(k)) for k in common if canon(sh['stats'][k]) != canon(ds.get(k))}
+        if not diffs: ok_stat += 1
+        else: stat_misses.append((sh['name'], diffs))
+        pw = sorted(_vnorm(w['name']) for w in sh.get('weapons', []))
+        dwl = list(d.get('weapons', []))
+        for lo in d.get('loadoutOptions', []):
+            opts = lo.get('options', [])
+            if opts and opts[0].get('weapons'): dwl += opts[0]['weapons']
+        dw = sorted(_vnorm(w.get('name','')) for w in dwl)
+        if pw == dw: ok_wpn += 1
+        elif pw: wpn_misses.append((sh['name'], pw, dw))
+    print(f"matched {matched}/{len(ships)} | cost {ok_cost}/{matched} | stats {ok_stat}/{matched} | weapon-names {ok_wpn}/{matched}")
+    if misses: print(f"unmatched ({len(misses)}):", misses)
+    for nm, p, dval in cost_misses: print(f"  COST DIFF {nm}: pdf={p} data={dval}")
+    for nm, diffs in stat_misses:
+        print(f"  STAT DIFF {nm}: " + ', '.join(f"{k} pdf={pv} data={dv}" for k,(pv,dv) in diffs.items()))
+    for nm, pw, dw in wpn_misses:
+        print(f"  WPN DIFF {nm}: pdf-only={[w for w in pw if w not in dw]} data-only={[w for w in dw if w not in pw]}")
 
 # ── art slug (mirror js/app.js shipArtPath: first word, lowercased, alnum only) ──
 def art_slug(name):
@@ -151,7 +335,7 @@ def resolve_desc(tok, gloss):
     return ""
 
 def extract_rules_lore(text, special_cell, gloss):
-    lines = P.merge_cells(text.split("\n"))
+    lines = merge_cells(text.split("\n"))
     # split the Special cell into tokens, dropping famous-admiral table noise.
     want = [re.sub(r"^[\-–\s]+", "", t).strip() for t in re.split(r",(?![^()]*\))", special_cell or "")]
     want = [t for t in want if t and t != "-" and not re.search(r"\b(Cost|Effect|AP)\b|\*", t)]
@@ -206,7 +390,7 @@ def main():
         if "Thrust" not in text or "Scan" not in text:
             continue
         try:
-            sh = P.parse_page(text)
+            sh = parse_page(text)
         except Exception as e:
             perrors.append((pi, str(e))); continue
         if not sh or not sh.get("name") or not sh.get("stats"):
@@ -264,7 +448,7 @@ def main():
     if perrors:
         print(f"\nPage parse errors: {perrors[:5]}")
     if args.validate:
-        P.validate(flat, args.validate)
+        validate(flat, args.validate)
     if args.thumbs and not args.dry:
         subprocess.run([sys.executable, os.path.join("scripts", "gen-thumbnails.py")], check=False)
 
