@@ -212,7 +212,10 @@ const App = (() => {
     'construct','cosmic','diode','domain','foray','forestall','fresco',
     'fugue','fulcrum','gremlin','logic','mantle','matrix','monarch',
     'sagitarii','sanctum','scion','stature','supercell','tally','tine',
-    'torrent','vertex','zenith','zodiac'
+    'torrent','vertex','zenith','zodiac',
+    // Bioficer: new May-2026 ships + previously art-less hulls/cells
+    'anode','invasion','lander','prism','shade','sierra','sluice','source',
+    'summoner','syntax','synthesis','torpedo'
   ]);
   const SHIP_ART_SPECIAL = {
     'New York':'new_york','New Cairo':'new_cairo','New Mombasa':'new_mombasa',

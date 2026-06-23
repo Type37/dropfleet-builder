@@ -92,21 +92,26 @@ def extract_art(doc, page, dry, art_dir, slug):
     texture (those cover ~the whole page) and not a tiny icon. Returns (status, pct)."""
     imgs = page.get_images(full=True)
     if not imgs: return ("no-image", 0)
-    page_area = page.rect.width * page.rect.height or 1
-    best=None; barea=0
+    ph = page.rect.height or 1
+    page_area = page.rect.width * ph or 1
+    # Collect real candidates: not a tiny icon, not the full-page background.
+    cands = []   # (pixmap, pixel_area, y0_fraction)
     for x in imgs:
         try:
             pix = fitz.Pixmap(doc, x[0])
             rects = page.get_image_rects(x[0])
         except Exception: continue
-        if pix.width < 300 or pix.height < 300:        # arc/feature icon, not art
+        if pix.width * pix.height < 12000:              # tiny arc/type icon
             continue
         cov = (rects[0].width * rects[0].height / page_area) if rects else 1.0
         if cov > 0.70:                                  # full-page background texture
             continue
-        a = pix.width * pix.height
-        if a > barea: barea=a; best=pix
-    if best is None: return ("no-art-image", 0)
+        y0f = (rects[0].y0 / ph) if rects else 1.0
+        cands.append((pix, pix.width * pix.height, y0f))
+    if not cands: return ("no-art-image", 0)
+    # Ship art sits at the top of the page; icons sit lower in the stat/weapon table.
+    top = [c for c in cands if c[2] < 0.50]
+    best = max(top or cands, key=lambda c: c[1])[0]
     if best.n - best.alpha >= 4:  # CMYK etc.
         best = fitz.Pixmap(fitz.csRGB, best)
     im = Image.open(io.BytesIO(best.tobytes("png")))
