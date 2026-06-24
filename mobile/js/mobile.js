@@ -1785,7 +1785,19 @@
     // Show every ship special rule as a full text card (incl. Rare/Unique — the
     // user wants the rule spelled out, not just a chip). The compact Rare/Unique
     // tag by the name still carries the at-a-glance flag.
-    const rules = (ship.specialRules || []);
+    // Rules granted by a selected loadout option (e.g. a Cloaking Crest grants Cloak-2
+    // + Stealth), resolved to full text from the shared glossary so they read as real
+    // rules, not just a line in the option name.
+    const gainedRules = [];
+    loadoutOptions.forEach((lo, i) => {
+      const sel = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
+      const opt = lo.options && lo.options[sel];
+      if (opt && Array.isArray(opt.gainRules)) opt.gainRules.forEach(nm => {
+        const r = lookupRule(nm);
+        if (r && r.description) gainedRules.push({ name: nm, description: r.description });
+      });
+    });
+    const rules = [...(ship.specialRules || []), ...gainedRules];
     const ruleNames = new Set(rules.map(r => (r.name || '').toLowerCase()));
     // The special-stat chip row must not repeat anything already shown as a full
     // card below (e.g. "Rare" lives in both stats.special and specialRules).

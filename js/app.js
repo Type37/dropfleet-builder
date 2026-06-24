@@ -3486,6 +3486,20 @@ const App = (() => {
     </div>`;
   }
 
+  // Rule NAMES a ship gains from its currently-selected loadout options. An option
+  // may carry `gainRules: ["Cloak-2","Stealth"]` to grant special rules that aren't a
+  // stat/weapon/load change (e.g. a Scourge Cloaking Crest). Resolved to full text
+  // wherever rules are spelled out, like any other rule name.
+  function loadoutGainedRuleNames(dbShip, ship) {
+    const names = [];
+    (dbShip && dbShip.loadoutOptions || []).forEach((lo, i) => {
+      const sel = (ship && ship.loadouts && ship.loadouts[i] !== undefined) ? ship.loadouts[i] : 0;
+      const opt = lo.options && lo.options[sel];
+      if (opt && Array.isArray(opt.gainRules)) names.push(...opt.gainRules);
+    });
+    return names;
+  }
+
   // Every special rule the ship actually uses (its own + all weapon specials,
   // base and selected loadout), spelled out in full once, deduped. So the rules
   // are readable on the detail page without tapping a single chip.
@@ -3508,6 +3522,7 @@ const App = (() => {
       const sel = (ship && ship.loadouts && ship.loadouts[i] !== undefined) ? ship.loadouts[i] : 0;
       const opt = lo.options && lo.options[sel];
       if (opt && opt.weapons) weapons.push(...opt.weapons);
+      if (opt && opt.gainRules) opt.gainRules.forEach(add);
     });
     // Selected systems/hardpoints carry their own weapons (e.g. Vent Cannon Turret).
     const glossarySysList = systemsListFor(dbShip, currentFleet && currentFleet.faction);
@@ -5591,7 +5606,11 @@ const App = (() => {
         // Big mode can keep gun abilities next to the guns and ship rules separate.
         // Faction-wide ship rules (e.g. Shield) are hoisted to the end glossary: the
         // card shows just the keyword (with its per-ship value) instead of the text.
-        const shipRuleEntriesAll = (db.specialRuleDetails || []).filter(r => r.description).map(r => [r.name, r.description, r.page || '']);
+        const gainedRuleEntries = loadoutGainedRuleNames(db, ship).map(n => {
+          const f = lookupRuleFull(n) || { description: '', page: '' };
+          return [n, f.description, f.page || ''];
+        }).filter(e => e[1]);
+        const shipRuleEntriesAll = [...(db.specialRuleDetails || []).filter(r => r.description).map(r => [r.name, r.description, r.page || '']), ...gainedRuleEntries];
         const shipRuleEntries = shipRuleEntriesAll.filter(e => !hoistedBases.has(baseRuleName(e[0])));
         const hoistedHere = shipRuleEntriesAll.filter(e => hoistedBases.has(baseRuleName(e[0])));
         const shipRuleNames = new Set(shipRuleEntriesAll.map(e => e[0]));

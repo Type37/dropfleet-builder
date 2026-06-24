@@ -298,7 +298,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Bloom-1 Burnthrough-1, Flash-1, Focused"
+      "special": "Bloom-1, Burnthrough-1, Flash-1, Focused"
      },
      {
       "name": "UF-4200 Mass Driver Turrets",
@@ -909,7 +909,7 @@
       "lock": "3+",
       "damage": "2",
       "type": "E",
-      "special": "Bloom-2 Burnthrough-2, Flash-1, Focused"
+      "special": "Bloom-2, Burnthrough-2, Flash-1, Focused"
      },
      {
       "name": "UF-B-8000 Bombardment Turrets",
@@ -1032,7 +1032,7 @@
       "lock": "3+",
       "damage": "2",
       "type": "E",
-      "special": "Bloom-2 Burnthrough-2, Flash-1, Focused"
+      "special": "Bloom-2, Burnthrough-2, Flash-1, Focused"
      },
      {
       "name": "UF-6400 Mass Driver Turret Triad",
@@ -1407,7 +1407,7 @@
       "lock": "3+",
       "damage": "2",
       "type": "E",
-      "special": "Bloom-2 Burnthrough-2, Flash-1, Focused"
+      "special": "Bloom-2, Burnthrough-2, Flash-1, Focused"
      },
      {
       "name": "UF-B-8000 Bombardment Turrets",
@@ -1645,7 +1645,7 @@
       "lock": "3+",
       "damage": "2",
       "type": "E",
-      "special": "Bloom-2 Burnthrough-2, Flash-1, Focused"
+      "special": "Bloom-2, Burnthrough-2, Flash-1, Focused"
      },
      {
       "name": "UF-6400 Mass Driver Turret Triad",
@@ -1999,7 +1999,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Bloom-1 Burnthrough-1, Flash-1, Focused"
+      "special": "Bloom-1, Burnthrough-1, Flash-1, Focused"
      },
      {
       "name": "UF-4200 Mass Driver Turrets",
@@ -2282,7 +2282,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Bloom-1 Burnthrough-1, Flash-1, Focused"
+      "special": "Bloom-1, Burnthrough-1, Flash-1, Focused"
      },
      {
       "name": "UF-4200 Mass Driver Turrets",
@@ -5048,16 +5048,30 @@
      "ks": "5+",
      "bs": "6+",
      "g": "1",
-     "special": "Vectored, Resupply and Rearm, Flawed Design"
+     "special": "Boardable, Vectored"
     },
     "weapons": [],
     "loads": [],
     "specialRules": [
      {
+      "name": "Boardable",
+      "description": "This Ship can have Battalions Assigned to it as if it were a Space Station.\nAt the start of the round, this Ship is controlled by a Player if only they have any Battalions on it, lasting until the end of the round.\nPlayers that control a Boardable Ship may activate it as if it were a Ship in their Fleet, after all other Groups have activated."
+     },
+     {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
-      "page": "37",
-      "publicationId": "45b0-3e3b-e83d-fd70"
+      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
+     },
+     {
+      "name": "Resupply and Rearm",
+      "description": "If this ship ends its movement in base contact with a friendly ship of Medium Tonnage or higher or a Space Station, pick one of the following:\nResupply: That Ship or Space Station recovers 3 Hull points and remove any Crippling Effect tokens.\nRearm: Increase the Limited-X value of any of that Ship or Space Station's Weapons and Launch Assets by 1 until the end of the round."
+     },
+     {
+      "name": "Flawed Design",
+      "description": "This Ship cannot use its Resupply and Rearm rule if it is below half of its starting Hull."
+     },
+     {
+      "name": "Mercenary",
+      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable rule."
      }
     ],
     "groupMin": 1,
@@ -5311,7 +5325,7 @@
      "ks": "5+",
      "bs": "6+",
      "g": "1",
-     "special": "Monitor, Feature Carrier (Outpost)"
+     "special": "Boardable, Civilian Transport, Monitor"
     },
     "weapons": [
      {
@@ -5333,10 +5347,24 @@
     ],
     "specialRules": [
      {
+      "name": "Boardable",
+      "description": "This Ship can have Battalions Assigned to it as if it were a Space Station.\nAt the start of the round, this Ship is controlled by a Player if only they have any Battalions on it, lasting until the end of the round.\nPlayers that control a Boardable Ship may activate it as if it were a Ship in their Fleet, after all other Groups have activated."
+     },
+     {
+      "name": "Civilian Transport",
+      "description": "This Ship can only choose the General Quarters order.\nThis Ship cannot be attacked unless it is controlled by a player. Players cannot attack a friendly Civilian Transport.\nThis Ship cannot be the target of Abilities."
+     },
+     {
       "name": "Monitor",
-      "description": "Ships with this rule may not use Course Change or Max Thrust orders.",
-      "page": "36",
-      "publicationId": "45b0-3e3b-e83d-fd70"
+      "description": "Ships with this rule may not use Course Change or Max Thrust orders."
+     },
+     {
+      "name": "Feature Carrier (Outpost)",
+      "description": "This Ship starts the game carrying a Military Outpost as a Deployable Feature."
+     },
+     {
+      "name": "Mercenary",
+      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -5536,7 +5564,7 @@
      "ks": "4+",
      "bs": "6+",
      "g": "-",
-     "special": "Payload F-1, Vectored, Scrap Collection, Unload, Industrial Design"
+     "special": "Payload F-1, Vectored"
     },
     "weapons": [
      {
@@ -5553,19 +5581,27 @@
     "specialRules": [
      {
       "name": "Payload F-1",
-      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up 1 of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
-      "page": "36",
-      "publicationId": "45b0-3e3b-e83d-fd70"
+      "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up 1 of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed."
      },
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
-      "page": "37",
-      "publicationId": "45b0-3e3b-e83d-fd70"
+      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
      },
      {
       "name": "Industrial Design",
       "description": "Improve this Group’s Backup save by 2 when rolling to save hits due to Debris Fields."
+     },
+     {
+      "name": "Scrap Collection",
+      "description": "If this Ship ends its activation within 1\" of a Debris Field, this Ship gains a scrap token and cannot gain scrap tokens from that Debris Field for the rest of the game. A Ship with this rule can have a maximum of 3 scrap tokens at any one time. Whenever another Ship within 6\" of a friendly Ship with this rule is destroyed, pick one of those friendly Ships, that Ship gains a scrap token."
+     },
+     {
+      "name": "Unload",
+      "description": "When you attach this Ship to a Porter Ship, you may have the Porter Ship gain all of this Ship's scrap tokens."
+     },
+     {
+      "name": "Mercenary",
+      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable rule."
      }
     ],
     "groupMin": 1,
@@ -5600,7 +5636,7 @@
      "ks": "4+",
      "bs": "5+",
      "g": "1",
-     "special": "Expansive Radiator Systems"
+     "special": "Boardable, Civilian Transport"
     },
     "weapons": [
      {
@@ -5643,7 +5679,28 @@
       "special": "-"
      }
     ],
-    "specialRules": [],
+    "specialRules": [
+     {
+      "name": "Boardable",
+      "description": "This Ship can have Battalions Assigned to it as if it were a Space Station.\nAt the start of the round, this Ship is controlled by a Player if only they have any Battalions on it, lasting until the end of the round.\nPlayers that control a Boardable Ship may activate it as if it were a Ship in their Fleet, after all other Groups have activated."
+     },
+     {
+      "name": "Civilian Transport",
+      "description": "This Ship can only choose the General Quarters order.\nThis Ship cannot be attacked unless it is controlled by a player. Players cannot attack a friendly Civilian Transport.\nThis Ship cannot be the target of Abilities."
+     },
+     {
+      "name": "Genesis Spikes",
+      "description": "When this weapon successfully inflicts any amount of damage against a City, place a Mutant Fauna token on that Dropsite. Mutant Fauna tokens are not Battalions and cannot control or contest a Dropsite. When any player deploys any number of Battalions to that Dropsite, if that Dropsite has any Mutant Fauna tokens, those Battalions are only placed on a roll of a 5+. If any Battalions are not placed this way, remove a Mutant Fauna token from that Dropsite. If a Dropsite starts a round with a Mutant Fauna token, remove that token at the end of the round."
+     },
+     {
+      "name": "Expansive Radiator Systems",
+      "description": "At the start of this Ship's activation, remove two Spikes from it."
+     },
+     {
+      "name": "Mercenary",
+      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules. This ship's Fighters & Bombers use the stats of its parent fleet (if you included this ship in a Scourge fleet, its Fighters & Bombers would follow the Scourge Fighters & Bombers rules)."
+     }
+    ],
     "groupMin": 1,
     "groupMax": 1,
     "isRare": false,
