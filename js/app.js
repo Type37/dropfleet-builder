@@ -3645,7 +3645,8 @@ const App = (() => {
       const varNames = variants.map(v => esc(v.name)).join(', ');
       const varDetails = variants.map(v => {
         const vImg = v.image ? `<img src="${esc(v.image)}" alt="${esc(v.name)}" loading="lazy" style="height:56px;width:auto;object-fit:contain;border-radius:var(--radius-sm)" onerror="this.style.display='none'">` : '';
-        const vLore = v.lore ? `<div class="ship-lore-text" style="border:none;padding:var(--sp-xs) 0 0;background:none;font-size:var(--text-xs)">${formatLore(v.lore, v.famousShips ? 'Famous ships of the class:' : '', v.famousShips ? v.famousShips.split(', ') : [])}</div>` : '';
+        const vf = variantFamous(v);
+        const vLore = v.lore ? `<div class="ship-lore-text" style="border:none;padding:var(--sp-xs) 0 0;background:none;font-size:var(--text-xs)">${formatLore(v.lore, vf.prefix, vf.ships)}</div>` : '';
         return `<div style="margin-top:var(--sp-sm);padding:var(--sp-sm);background:var(--paper-alt);border-radius:var(--radius-sm);display:flex;gap:var(--sp-sm);align-items:flex-start">
           ${vImg}
           <div style="flex:1;min-width:0">
@@ -7169,6 +7170,15 @@ const App = (() => {
     return `<div class="lore-famous-ships">${head}<div class="lore-famous-cols">${cols}</div></div>`;
   }
 
+  // A variant's famousShips may be a legacy "A, B, C" string or an array (the newer
+  // faction-column form). Normalise to the array formatLore expects, carrying the
+  // variant's own prefix (falling back to a generic label).
+  function variantFamous(v) {
+    const ships = Array.isArray(v.famousShips) ? v.famousShips
+      : (v.famousShips ? String(v.famousShips).split(', ') : []);
+    return { ships, prefix: v.famousShipsPrefix || (ships.length ? 'Famous ships of the class:' : '') };
+  }
+
   function formatLore(loreText, famousShipsPrefix, famousShips) {
     if (!loreText && (!famousShips || famousShips.length === 0)) return '';
     let html = '';
@@ -7343,14 +7353,14 @@ const App = (() => {
     if (dbShip.variants && dbShip.variants.length > 0) {
       variantsHtml = `<div class="detail-lore">
         <div class="detail-section-label">Also available as</div>
-        ${dbShip.variants.map(v => `<div style="margin-bottom:var(--sp-md);display:flex;gap:var(--sp-md);align-items:flex-start">
+        ${dbShip.variants.map(v => { const vf = variantFamous(v); return `<div style="margin-bottom:var(--sp-md);display:flex;gap:var(--sp-md);align-items:flex-start">
           ${v.image ? `<img src="${esc(v.image)}" alt="${esc(v.name)}" loading="lazy" style="height:80px;width:auto;object-fit:contain;border-radius:var(--radius-sm)" onerror="this.style.display='none'">` : ''}
           <div style="flex:1;min-width:0">
             <div style="font-weight:var(--weight-semibold)">${esc(v.name)}</div>
             <div class="text-muted" style="font-size:var(--text-sm)">${esc(v.note)}</div>
-            ${v.lore ? `<div class="text-rules" style="margin-top:var(--sp-xs)">${formatLore(v.lore, v.famousShips ? 'Famous ships of the class:' : '', v.famousShips ? v.famousShips.split(', ') : [])}</div>` : ''}
+            ${v.lore ? `<div class="text-rules" style="margin-top:var(--sp-xs)">${formatLore(v.lore, vf.prefix, vf.ships)}</div>` : ''}
           </div>
-        </div>`).join('')}
+        </div>`; }).join('')}
       </div>`;
     }
 
