@@ -1969,19 +1969,20 @@
   // Recorded ships list. Entries may carry a trailing sub-faction tag like
   // "Equatorial (Independents)" / "Purgatory (Kalium)"; when present the tag marks
   // the end of that run, so the list splits into separate underlined columns.
+  // A trailing "(label)" only opens a sub-faction column when the label is an actual
+  // faction/operator; a descriptive note like "(Manticore class)" or a markdown link's
+  // "(url)" stays inline. Kept in sync with desktop FAMOUS_COL_TAG.
+  const FAMOUS_COL_TAG = /^(UCM|PHR|Scourge|Shaltari|Resistance|Bioficers?|Independents?|Kalium|Vega Scrapfleet)$/i;
+
   function renderFamousShips(prefix, famousShips) {
+    if (typeof famousShips === 'string') famousShips = famousShips ? famousShips.split(', ') : [];
     if (!famousShips || !famousShips.length) return '';
     const groups = [];
     let cur = [], tagged = false;
     famousShips.forEach(s => {
       const txt = String(s).trim();
-      // A trailing "(label)" closes a sub-faction column. A markdown link [name](url)
-      // ends in "](...)" with no space, so its closing paren is not a tag; a bracketed
-      // "[ne X]" note followed by " (Faction)" keeps a space before "(", so a real
-      // faction tag is still recognised.
       const m = txt.match(/^(.*?)\s*\(([^)]+)\)$/);
-      const isMdLink = /\]\([^)]*\)$/.test(txt);
-      if (m && !isMdLink && !/https?:\/\//.test(m[2])) {
+      if (m && FAMOUS_COL_TAG.test(m[2].trim())) {
         tagged = true;
         if (m[1].trim()) cur.push(m[1].trim());
         groups.push({ label: m[2].trim(), ships: cur });
