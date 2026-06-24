@@ -3161,27 +3161,35 @@ h1, h2, h3, h4, h5, h6 {
   margin-left: auto; padding-left: var(--sp-sm); border-left: 1px solid var(--stroke-light);
 }
 .picker-switch {
-  display: inline-flex; align-items: center; gap: 16px;
-  height: 30px; padding: 2px 22px 2px 4px;
-  border: 1px solid var(--stroke); border-radius: 999px;
-  background: var(--paper-alt); color: var(--ink-muted);
-  font-size: var(--text-sm); font-weight: var(--weight-semibold); cursor: pointer; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 7px;
+  height: 28px; padding: 0 12px 0 5px;
+  border: 1px solid var(--stroke-medium); border-radius: 100px;
+  background: var(--paper); color: var(--ink-faint);
+  /* Label matches the filter chips exactly (small Jost). */
+  font-family: var(--font-body); font-size: var(--text-xs);
+  font-weight: var(--weight-semibold); letter-spacing: 0.02em;
+  cursor: pointer; white-space: nowrap;
   transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
 }
-.picker-switch-knob {
-  width: 22px; height: 22px; border-radius: 50%; background: var(--ink-faint); flex-shrink: 0;
-  transition: transform 180ms var(--ease-out), background-color 140ms ease;
+/* iOS-style toggle: a pill track with a white knob that slides its full width. */
+.picker-switch-track {
+  position: relative; width: 36px; height: 20px; border-radius: 999px;
+  background: var(--stroke-strong); flex-shrink: 0;
+  transition: background-color 160ms ease;
 }
-.picker-switch.on { background: var(--navy-subtle); border-color: var(--navy); color: var(--navy); }
-.picker-switch.on .picker-switch-knob { background: var(--navy); transform: translateX(14px); }
-.picker-switch:hover { border-color: var(--navy); }
-/* Miscellaneous Ships rides apart in a gold accent so it's the obvious "browse a
-   different pool" switch, distinct from the navy filter controls. */
-.picker-switch-misc { border-color: var(--gold-line); color: var(--gold-dark); font-weight: var(--weight-bold); }
-.picker-switch-misc .picker-switch-knob { background: var(--gold); }
-.picker-switch-misc:hover { border-color: var(--gold); }
-.picker-switch-misc.on { background: var(--gold-subtle); border-color: var(--gold); color: var(--gold-dark); }
-.picker-switch-misc.on .picker-switch-knob { background: var(--gold-dark); transform: translateX(14px); }
+.picker-switch-knob {
+  position: absolute; top: 2px; left: 2px; width: 16px; height: 16px;
+  border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
+  transition: transform 190ms var(--ease-out);
+}
+.picker-switch.on .picker-switch-knob { transform: translateX(16px); }
+.picker-switch.on { color: var(--ink); border-color: var(--stroke-strong); }
+.picker-switch.on .picker-switch-track { background: var(--navy); }
+.picker-switch:hover { border-color: var(--stroke-strong); }
+/* Miscellaneous Ships keeps a gold accent so it reads as the "browse a different
+   pool" switch, distinct from the navy In-collection toggle. */
+.picker-switch-misc.on { color: var(--gold-dark); }
+.picker-switch-misc.on .picker-switch-track { background: var(--gold-dark); }
 
 .filter-chip {
   display: inline-flex;
@@ -3192,11 +3200,11 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--stroke-medium);
   background: var(--paper);
   color: var(--ink-faint);
-  font-family: var(--font-condensed);
+  font-family: var(--font-body);
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
   text-transform: none;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-out);
 }

@@ -216,42 +216,24 @@
     "tonnage": "H",
     "loadoutOptions": [
      {
-      "name": "Laser Refit",
+      "name": "Drive Refit",
       "minSelections": 1,
       "maxSelections": 1,
-      "defaultId": "a7d7-445a-8b57-df38",
       "options": [
        {
-        "name": "UF-4200 Mass Driver Turrets",
+        "name": "No Drive Refit",
         "cost": 0,
-        "weapons": [
-         {
-          "name": "UF-4200 Mass Driver Turrets",
-          "arc": "F/S",
-          "attack": "4",
-          "lock": "4+",
-          "damage": "1",
-          "type": "K",
-          "special": "Fusillade-2"
-         }
-        ],
+        "weapons": [],
         "loads": []
        },
        {
-        "name": "Cobra Heavy Laser Pair",
-        "cost": 5,
-        "weapons": [
-         {
-          "name": "Cobra Heavy Laser Pair",
-          "arc": "FN",
-          "attack": "6",
-          "lock": "3+",
-          "damage": "1",
-          "type": "E",
-          "special": "Burnthrough-2, Flash-2, Focused"
-         }
-        ],
-        "loads": []
+        "name": "Drive Refit (+3\" Thrust)",
+        "cost": 45,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
        }
       ]
      }

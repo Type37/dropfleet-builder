@@ -488,6 +488,7 @@ const App = (() => {
           tonnage: fs?.tonnage || fs?.stats?.tonnage,
           weapons: fs?.weapons || [],
           loads: fs?.loads || [],
+          loadoutOptions: fs?.loadoutOptions || [],
           special_rules: (fs?.specialRules || []).map(r => r.name),
           specialRuleDetails: fs?.specialRules || [],
           lore: fs?.lore || src.lore || '',
@@ -2193,6 +2194,55 @@ const App = (() => {
     return withClass && cls ? `${o.flagshipName} (${cls})` : o.flagshipName;
   }
 
+  // Famous-admiral flagships can carry loadoutOptions too (e.g. Havelock's Drive
+  // Refit). Render them as the same radio picker a battlegroup ship uses; the choice
+  // lives on the admiral instance (a.loadouts) so effectiveStats + points pick it up.
+  function renderFlagshipLoadout(idx, a, fdb) {
+    const los = (fdb && fdb.loadoutOptions) || [];
+    if (!los.length) return '';
+    const blocks = los.map((lo, loIdx) => {
+      if (!lo.options || lo.options.length < 2) return '';
+      const selIdx = (a.loadouts && a.loadouts[loIdx] !== undefined) ? a.loadouts[loIdx] : 0;
+      const cards = lo.options.map((opt, oi) => {
+        const on = oi === selIdx;
+        const costLabel = opt.cost > 0 ? `+${opt.cost} pts` : opt.cost < 0 ? `${opt.cost} pts` : 'Included';
+        const redundant = opt.weapons && opt.weapons.length && opt.weapons.every(w => w.name === opt.name);
+        const head = redundant
+          ? `<div class="loadout-radio-head loadout-radio-head-costonly"><span class="loadout-radio-cost">${costLabel}</span></div>`
+          : `<div class="loadout-radio-head"><span class="loadout-radio-name">${esc(opt.name)}</span><span class="loadout-radio-cost">${costLabel}</span></div>`;
+        const sheet = (opt.weapons && opt.weapons.length)
+          ? '<div class="weapon-list loadout-weapons">' + renderWeaponHeader() + opt.weapons.map(renderWeaponRow).join('') + '</div>' : '';
+        return `<label class="loadout-radio${on ? ' selected' : ''}">
+          <input type="radio" class="loadout-radio-input" name="flo-${idx}-${loIdx}" ${on ? 'checked' : ''} onchange="App.changeFlagshipLoadout(${idx},${loIdx},${oi})">
+          <span class="loadout-radio-dot" aria-hidden="true"></span>
+          <div class="loadout-radio-main">${head}${sheet}</div>
+        </label>`;
+      }).join('');
+      return `<div class="detail-section-label">${esc(lo.name)}</div><div class="loadout-picker">${cards}</div>`;
+    }).join('');
+    return blocks;
+  }
+
+  function changeFlagshipLoadout(admiralIdx, loIdx, optIdx) {
+    if (!currentFleet) return;
+    const a = (currentFleet.admirals || [])[admiralIdx];
+    if (!a) return;
+    const db = (((shipDB[currentFleet.faction] || {}).groups || {}).famous_admirals || {ships:{}}).ships[a.shipKey];
+    if (!db || !db.loadoutOptions) return;
+    a.loadouts = a.loadouts || {};
+    a.loadouts[loIdx] = optIdx;
+    // Points = the admiral's base cost (admiral + flagship at default loadout) plus
+    // every selected option's cost.
+    let extra = 0;
+    db.loadoutOptions.forEach((lo, i) => {
+      const sel = a.loadouts[i] !== undefined ? a.loadouts[i] : 0;
+      extra += (lo.options[sel] && lo.options[sel].cost) || 0;
+    });
+    a.points = (db.points || 0) + extra;
+    saveFleets();
+    scheduleRender(renderDetailPanel, renderOverviewPanel, updatePoints);
+  }
+
   function renderFlagshipDetail(idx, a, fdb) {
     // Famous admirals fly a named flagship (e.g. "Fortune's Fancy"); show that as the
     // title with its class beside it. Falls back to the class name if unnamed.
@@ -2222,6 +2272,7 @@ const App = (() => {
         ${img ? `<div class="ship-card-image">${shopLinkImg(shipName, `<img src="${esc(img)}" alt="${esc(shipName)}" loading="lazy" decoding="async" onerror="this.style.display='none'">`, fdb)}</div>` : ''}
         <div class="ship-card-body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
           ${sharedShipDatasheet(currentFleet, a, fdb)}
+          ${renderFlagshipLoadout(idx, a, fdb)}
           ${fdb.rulesText ? `<div class="ship-rules-block"><div class="ship-rules-block-label">Ship Rules</div><div class="ship-rules-block-text">${esc(fdb.rulesText)}</div></div>` : ''}
           ${renderShipRulesGlossary(fdb, a)}
           ${(fdb.lore || fdb.namesake) ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">Lore</summary><div class="ship-lore-text">${fdb.lore ? formatLore(fdb.lore, fdb.famousShipsPrefix, fdb.famousShips) : ''}${fdb.namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(fdb.namesake)}</div>` : ''}</div></details>` : ''}
@@ -3119,8 +3170,15 @@ const App = (() => {
       const altClass = isAlt ? ' weapon-special-chip-alt' : '';
       const full = lookupRuleFull(trimmed);
       if (full && full.description) {
+        let desc = full.description;
+        // Overcharging a Weapon turns it into a High Power Weapon, so fold that rule's
+        // text into the Overcharge tooltip too (no need to hunt for it separately).
+        if (/^Overcharge$/i.test(trimmed)) {
+          const hp = lookupRuleFull('High Power');
+          if (hp && hp.description) desc += `\n\nHigh Power (when Overcharged): ${hp.description}`;
+        }
         const pageAttr = full.page ? ` data-rule-page="${esc(full.page)}"` : '';
-        return `<span class="weapon-special-chip${altClass} has-tooltip" data-rule-desc="${esc(full.description)}"${pageAttr} onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${label}</span>`;
+        return `<span class="weapon-special-chip${altClass} has-tooltip" data-rule-desc="${esc(desc)}"${pageAttr} onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${label}</span>`;
       }
       return `<span class="weapon-special-chip${altClass}">${label}</span>`;
     }).join('');
@@ -3864,7 +3922,7 @@ const App = (() => {
     // Misc Ships (and In-collection) are not filters on the core list — they CHANGE
     // which pool you're browsing — so they sit apart as labelled snap switches.
     const sw = (on, label, fn, tip, extra) =>
-      `<button class="picker-switch${extra ? ' ' + extra : ''}${on ? ' on' : ''}" role="switch" aria-checked="${on}" onclick="${fn}" data-tooltip="${escAttr(tip)}"><span class="picker-switch-knob"></span>${label}</button>`;
+      `<button class="picker-switch${extra ? ' ' + extra : ''}${on ? ' on' : ''}" role="switch" aria-checked="${on}" onclick="${fn}" data-tooltip="${escAttr(tip)}"><span class="picker-switch-track"><span class="picker-switch-knob"></span></span><span class="picker-switch-label">${esc(label)}</span></button>`;
     const toggles = sw(settings.showAdditionalShips, 'Miscellaneous Ships', 'App.toggleMiscShips()', 'Show mercenary, cross-faction & civilian ships', 'picker-switch-misc')
       + (settings.showCollection ? sw(collectionFilterOn, 'In collection', 'App.toggleBuildableFilter()', 'Only ships in your collection') : '');
     container.innerHTML = `<div class="ship-filter-chips">${chipsHtml}</div><div class="ship-filter-switches">${toggles}</div>`;
@@ -6564,7 +6622,7 @@ const App = (() => {
   // New-Recruit-style plain-text army list (the "simple army list"): a header with
   // the total, then sections (Famous Admirals, then groups by tonnage Colossal→Light,
   // then Space Station), each with its points subtotal. Multi-ship groups read
-  // "• Nx Name [per-ship pts]"; single ships read "Name [pts]". Loadout/system/feature
+  // "• Nx Name [per-ship pts]"; single ships read "• Name [pts]". Loadout/system/feature
   // picks are indented sub-lines only when present.
   function generateFleetText(fleet) {
     const total = calcFleetPoints(fleet);
@@ -6607,7 +6665,7 @@ const App = (() => {
         profs.forEach(({ s, count }) => {
           const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
           const nm = db ? db.name : s.shipKey;
-          out += count > 1 ? `• ${count}x ${nm} [${s.points} pts]\n` : `${nm} [${s.points} pts]\n`;
+          out += count > 1 ? `• ${count}x ${nm} [${s.points} pts]\n` : `• ${nm} [${s.points} pts]\n`;
           const notes = [];
           (db && db.loadoutOptions || []).forEach((lo, i) => { const o = lo.options[(s.loadouts && s.loadouts[i]) || 0]; if (o && o.cost) notes.push(o.name); });
           if (s.systems && s.systems.length) { const c = {}; s.systems.forEach(n => c[n] = (c[n] || 0) + 1); notes.push(...Object.entries(c).map(([n, k]) => k > 1 ? `${k}x ${n}` : n)); }
@@ -7710,7 +7768,7 @@ const App = (() => {
     getCalcData: () => ({ shipDB, factionData, FACTION_LABELS, CATEGORY_ORDER, CATEGORY_LABELS, currentFaction: currentFleet ? currentFleet.faction : null }),
     openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, collectionFaction: selectCollectionFaction, collectionAdjust, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, moveGroup, editGroupName, toggleFleetCardMenu,
-    openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFeature, addSystem, removeSystem, toggleSystem,
+    openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFlagshipLoadout, changeFeature, addSystem, removeSystem, toggleSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
     toggleSidebar, printFleet,

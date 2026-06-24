@@ -3,7 +3,7 @@
 // populating the cache as resources are fetched.
 // Bump this on every deploy so existing clients purge the old cache on activate
 // (the app updates frequently — stale assets must not survive a new build).
-const CACHE = 'dfc-cache-v324';
+const CACHE = 'dfc-cache-v325';
 // Same-origin code/data that MUST be fresh when online. Network-first alone is
 // not enough: fetch() still consults the browser HTTP cache, so a client can
 // keep running a stale app.js for as long as GitHub Pages' cache headers allow.
