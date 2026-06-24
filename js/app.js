@@ -5372,7 +5372,10 @@ const App = (() => {
     const boxes = Array.from({ length: h }, (_, i) => `<span class="dp-box${i + 1 === crip ? ' dp-box-crip' : ''}"></span>`);
     let grouped = '';
     for (let i = 0; i < boxes.length; i += 5) grouped += `<span class="dp-hull-grp">${boxes.slice(i, i + 5).join('')}</span>`;
-    const track = (label) => `<div class="dp-hull"><span class="dp-hull-lab">${esc(label)}</span><span class="dp-hull-boxes">${grouped}</span></div>`;
+    // Show the starting hull NUMBER alongside the boxes so you can read it at a glance
+    // without counting. Kept as a sibling of the label (not inside it) so it still
+    // shows in roster mode, where the "Hull" label itself is hidden.
+    const track = (label) => `<div class="dp-hull"><span class="dp-hull-lab">${esc(label)}</span><span class="dp-hull-num">${h}</span><span class="dp-hull-boxes">${grouped}</span></div>`;
     if (count <= 1) return track('Hull');
     return Array.from({ length: count }, (_, i) => track('#' + (i + 1))).join('');
   }
