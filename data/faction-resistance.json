@@ -561,7 +561,31 @@
      "Spear of Onyx",
      "Decapitator"
     ],
-    "namesake": "[Isoroku Yamamoto](https://en.wikipedia.org/wiki/Isoroku_Yamamoto) (1884-1943), the Japanese admiral who conceived and directed the attack on Pearl Harbor. He studied at Harvard University and served two postings in the United States, leaving him wary of provoking a war he believed Japan could not ultimately win. An early champion of naval aviation, he steered the Imperial Japanese Navy away from battleships toward aircraft carriers. He was killed in 1943 when American fighters intercepted his aircraft over the Solomon Islands."
+    "namesake": "[Isoroku Yamamoto](https://en.wikipedia.org/wiki/Isoroku_Yamamoto) (1884-1943), the Japanese admiral who conceived and directed the attack on Pearl Harbor. He studied at Harvard University and served two postings in the United States, leaving him wary of provoking a war he believed Japan could not ultimately win. An early champion of naval aviation, he steered the Imperial Japanese Navy away from battleships toward aircraft carriers. He was killed in 1943 when American fighters intercepted his aircraft over the Solomon Islands.",
+    "loadoutOptions": [
+     {
+      "name": "Engine Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Engine Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Refit (+2\" Thrust)",
+        "cost": 45,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 2
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -624,7 +648,31 @@
      "Volcanic",
      "Your Fate (Kalium)"
     ],
-    "namesake": "Fleet Admiral [Chester Nimitz](https://en.wikipedia.org/wiki/Chester_W._Nimitz) (1885-1966), commander of US naval forces across the Pacific in the Second World War. He began his career as a submariner and helped pioneer the U.S. Navy's early diesel submarine force. He was promoted to the five-star rank of Fleet Admiral in December 1944 and signed the Japanese surrender for the United States aboard the USS Missouri. The supercarrier USS Nimitz was later named in his honour."
+    "namesake": "Fleet Admiral [Chester Nimitz](https://en.wikipedia.org/wiki/Chester_W._Nimitz) (1885-1966), commander of US naval forces across the Pacific in the Second World War. He began his career as a submariner and helped pioneer the U.S. Navy's early diesel submarine force. He was promoted to the five-star rank of Fleet Admiral in December 1944 and signed the Japanese surrender for the United States aboard the USS Missouri. The supercarrier USS Nimitz was later named in his honour.",
+    "loadoutOptions": [
+     {
+      "name": "Engine Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Engine Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Refit (+2\" Thrust)",
+        "cost": 45,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 2
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -706,7 +754,31 @@
      "Soul Reaver",
      "Executioner (Kalium)"
     ],
-    "namesake": "[Sir Francis Drake](https://en.wikipedia.org/wiki/Francis_Drake) (c.1540-1596), the English privateer and explorer, second to circumnavigate the globe and scourge of Spain. He served as vice admiral of the English fleet that repelled the Spanish Armada in 1588, commanding the galleon Revenge. He was elected Mayor of Plymouth and twice sat in Parliament."
+    "namesake": "[Sir Francis Drake](https://en.wikipedia.org/wiki/Francis_Drake) (c.1540-1596), the English privateer and explorer, second to circumnavigate the globe and scourge of Spain. He served as vice admiral of the English fleet that repelled the Spanish Armada in 1588, commanding the galleon Revenge. He was elected Mayor of Plymouth and twice sat in Parliament.",
+    "loadoutOptions": [
+     {
+      "name": "Engine Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Engine Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Refit (+2\" Thrust)",
+        "cost": 45,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 2
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -776,7 +848,31 @@
      "Hammer of Reason",
      "Subjugator"
     ],
-    "namesake": "[David Farragut](https://en.wikipedia.org/wiki/David_Farragut) (1801-1870), the first admiral of the US Navy, remembered for 'Damn the torpedoes, full speed ahead.'. He entered the navy as a midshipman at the age of nine and captured New Orleans for the Union in 1862. Congress created the ranks of rear admiral and later full admiral expressly to honour his service."
+    "namesake": "[David Farragut](https://en.wikipedia.org/wiki/David_Farragut) (1801-1870), the first admiral of the US Navy, remembered for 'Damn the torpedoes, full speed ahead.'. He entered the navy as a midshipman at the age of nine and captured New Orleans for the Union in 1862. Congress created the ranks of rear admiral and later full admiral expressly to honour his service.",
+    "loadoutOptions": [
+     {
+      "name": "Engine Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Engine Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Refit (+2\" Thrust)",
+        "cost": 45,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 2
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -860,7 +956,31 @@
      "Our Gaze",
      "Illuminator (Kalium)"
     ],
-    "namesake": "[Hayreddin Barbarossa](https://en.wikipedia.org/wiki/Hayreddin_Barbarossa) (c.1478-1546), the corsair who became grand admiral of the Ottoman fleet and ruled the Mediterranean. Born on the island of Lesbos, he inherited the name Barbarossa from his elder brother Oruc. His decisive victory at the Battle of Preveza in 1538 secured Ottoman naval dominance over the Mediterranean for decades."
+    "namesake": "[Hayreddin Barbarossa](https://en.wikipedia.org/wiki/Hayreddin_Barbarossa) (c.1478-1546), the corsair who became grand admiral of the Ottoman fleet and ruled the Mediterranean. Born on the island of Lesbos, he inherited the name Barbarossa from his elder brother Oruc. His decisive victory at the Battle of Preveza in 1538 secured Ottoman naval dominance over the Mediterranean for decades.",
+    "loadoutOptions": [
+     {
+      "name": "Engine Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Engine Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Refit (+2\" Thrust)",
+        "cost": 45,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 2
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -945,7 +1065,31 @@
     "famousShips": [
      "My Masterpiece"
     ],
-    "namesake": "[Yi Sun-sin](https://en.wikipedia.org/wiki/Yi_Sun-sin) (1545-1598), the Korean admiral whose armoured 'turtle ships' crushed far larger Japanese fleets without a single defeat. At the Battle of Myeongnyang in 1597 he is said to have routed a vastly larger Japanese fleet with only a handful of ships. He was killed by a stray bullet at the Battle of Noryang in 1598 and ordered his death kept secret so the fight could go on."
+    "namesake": "[Yi Sun-sin](https://en.wikipedia.org/wiki/Yi_Sun-sin) (1545-1598), the Korean admiral whose armoured 'turtle ships' crushed far larger Japanese fleets without a single defeat. At the Battle of Myeongnyang in 1597 he is said to have routed a vastly larger Japanese fleet with only a handful of ships. He was killed by a stray bullet at the Battle of Noryang in 1598 and ordered his death kept secret so the fight could go on.",
+    "loadoutOptions": [
+     {
+      "name": "Engine Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Engine Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Refit (+2\" Thrust)",
+        "cost": 45,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 2
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -1023,7 +1167,31 @@
      "[Trafalgar](https://en.wikipedia.org/wiki/Battle_of_Trafalgar) (Independents)",
      "Might of Kalium"
     ],
-    "namesake": "[Admiral Horatio Nelson](https://en.wikipedia.org/wiki/Horatio_Nelson,_1st_Viscount_Nelson) (1758-1805), who shattered the Franco-Spanish fleet at Trafalgar and died in the hour of victory. He lost the sight in his right eye at Corsica and his right arm at Tenerife. His destruction of the French fleet at the Battle of the Nile in 1798 stranded Napoleon's army in Egypt."
+    "namesake": "[Admiral Horatio Nelson](https://en.wikipedia.org/wiki/Horatio_Nelson,_1st_Viscount_Nelson) (1758-1805), who shattered the Franco-Spanish fleet at Trafalgar and died in the hour of victory. He lost the sight in his right eye at Corsica and his right arm at Tenerife. His destruction of the French fleet at the Battle of the Nile in 1798 stranded Napoleon's army in Egypt.",
+    "loadoutOptions": [
+     {
+      "name": "Engine Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Engine Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Refit (+2\" Thrust)",
+        "cost": 45,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 2
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {

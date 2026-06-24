@@ -9048,7 +9048,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Engine Refit",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Engine Refit",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Refit (+2\" Thrust)",
+          "cost": 45,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 2
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take an Engine Refit for +45 points, increasing its Thrust by 2\"."
      }
     },
     {
@@ -9101,7 +9126,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Engine Refit",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Engine Refit",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Refit (+2\" Thrust)",
+          "cost": 45,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 2
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take an Engine Refit for +45 points, increasing its Thrust by 2\"."
      }
     },
     {
@@ -9157,7 +9207,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Engine Refit",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Engine Refit",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Refit (+2\" Thrust)",
+          "cost": 45,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 2
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take an Engine Refit for +45 points, increasing its Thrust by 2\"."
      }
     },
     {
@@ -9210,7 +9285,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Engine Refit",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Engine Refit",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Refit (+2\" Thrust)",
+          "cost": 45,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 2
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take an Engine Refit for +45 points, increasing its Thrust by 2\"."
      }
     },
     {
@@ -9277,7 +9377,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Engine Refit",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Engine Refit",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Refit (+2\" Thrust)",
+          "cost": 45,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 2
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take an Engine Refit for +45 points, increasing its Thrust by 2\"."
      }
     },
     {
@@ -9330,7 +9455,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Engine Refit",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Engine Refit",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Refit (+2\" Thrust)",
+          "cost": 45,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 2
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take an Engine Refit for +45 points, increasing its Thrust by 2\"."
      }
     },
     {
@@ -9383,7 +9533,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Engine Refit",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Engine Refit",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Refit (+2\" Thrust)",
+          "cost": 45,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 2
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take an Engine Refit for +45 points, increasing its Thrust by 2\"."
      }
     },
     {
