@@ -31,7 +31,7 @@ const App = (() => {
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true, printRoster: false, printNoRules: false, showCollection: false, theme: 'light' };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true, printRoster: false, printNoRules: false, printSortTonnage: false, showCollection: false, theme: 'light' };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -5512,7 +5512,14 @@ const App = (() => {
     const baseCardCount = {}, ruleDefByName = {};
     const wBaseCardCount = {};
     let glossTotalCards = 0;
-    f.battleGroups.forEach(g => {
+    // Optional print sort: order ships by tonnage (Colossal -> Heavy -> Medium ->
+    // Light -> Payload) instead of the order they were added.
+    const PRINT_CAT_ORDER = { colossal: 0, heavy: 1, medium: 2, light: 3, payload: 4 };
+    const printGroups = settings.printSortTonnage
+      ? [...f.battleGroups].sort((a, b) =>
+          (PRINT_CAT_ORDER[a.ships[0]?.groupCategory] ?? 9) - (PRINT_CAT_ORDER[b.ships[0]?.groupCategory] ?? 9))
+      : f.battleGroups;
+    printGroups.forEach(g => {
       const seen = new Set();
       g.ships.forEach(ship => {
         const k = `${ship.shipKey}:${ship.groupCategory}:${JSON.stringify(ship.loadouts || {})}:${JSON.stringify(ship.systems || [])}:${ship.feature || ''}`;
@@ -5548,7 +5555,7 @@ const App = (() => {
     // preview) as on paper. System/loadout weapons merge into the weapon table.
     const allLaunchAssetNames = new Set();
     let groupsHtml = '';
-    f.battleGroups.forEach(g => {
+    printGroups.forEach(g => {
       const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
       const gCat = g.ships.length > 0 ? (g.ships[0].groupCategory || 'medium') : 'medium';
       const gCatLabel = CATEGORY_LABELS[gCat] || gCat;
@@ -5740,7 +5747,7 @@ const App = (() => {
               groupsHtml += wCell(w) + `</tr>`;
             });
             if (allLoads.length) {
-              const loads = allLoads.map(l => `${esc(String(l.name))} (${esc(String(l.launch))})`).join('; ');
+              const loads = allLoads.map(l => `${esc(String(l.name))} (${esc(String(l.launch))}${l.special && l.special !== '-' ? ', ' + esc(l.special) : ''})`).join('; ');
               groupsHtml += `<tr class="rt-ship${wr.length === 0 ? ' rt-first' : ''}">`;
               if (wr.length === 0) groupsHtml += `<td class="rt-name">${nameCell}</td>${statCells}`;
               groupsHtml += `<td class="rt-w rt-load" colspan="5">Launch: ${loads}</td></tr>`;
@@ -5910,6 +5917,7 @@ const App = (() => {
         <label class="print-preview-opt"><input type="checkbox" id="pp-2col" ${settings.print2col ? 'checked' : ''} ${(settings.printSimple || settings.printBig || settings.printRoster) ? 'disabled' : ''}> 2 columns</label>
         <label class="print-preview-opt"><input type="checkbox" id="pp-ink" ${settings.printInk ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Ink-saver</label>
         <label class="print-preview-opt" title="Hide all rules text and the secondary-objective list (saves paper when you reprint a list whose rules you already have)"><input type="checkbox" id="pp-norules" ${settings.printNoRules ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Skip rules/obj.</label>
+        <label class="print-preview-opt" title="Order ships by tonnage (Colossal, Heavy, Medium, Light, Payload) instead of the order they were added"><input type="checkbox" id="pp-sortton" ${settings.printSortTonnage ? 'checked' : ''}> Sort by tonnage</label>
         <label class="print-preview-opt">Text
           <select id="pp-density" class="pp-density-sel" ${settings.printSimple ? 'disabled' : ''}>
             <option value="comfortable" ${settings.printDensity !== 'compact' ? 'selected' : ''}>Comfortable</option>
@@ -5980,6 +5988,7 @@ const App = (() => {
     ov.querySelector('#pp-2col').onchange = (e) => { settings.print2col = e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-ink').onchange = (e) => { settings.printInk = e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-norules').onchange = (e) => { settings.printNoRules = e.target.checked; saveSettings(); refresh(); };
+    ov.querySelector('#pp-sortton').onchange = (e) => { settings.printSortTonnage = e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-density').onchange = (e) => { settings.printDensity = e.target.value; saveSettings(); refresh(); };
     ov.querySelector('#pp-close').addEventListener('click', closePreview);
     ov.querySelector('#pp-print').addEventListener('click', doPrintNow);

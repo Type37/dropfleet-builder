@@ -5700,6 +5700,12 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
 }
 .roster-table th.rt-name, .roster-table th.rt-w { text-align: left; }
+/* Repeat the column header on every printed page so you don't have to flip back to
+   page 1 to remember which column is Scan vs Thrust. (table-header-group is the
+   default, but make it explicit since some print paths drop it.) */
+.roster-table thead { display: table-header-group; }
+.roster-table tfoot { display: table-footer-group; }
+@media print { .roster-table thead { display: table-header-group; } }
 .roster-table td { padding: 1px 4px; text-align: center; border-bottom: 1px solid #e2ddd4; vertical-align: top; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .roster-table td.rt-name { text-align: left; border-left: 3px solid #1b3a5c; }
 .roster-table td.rt-w { text-align: left; }
