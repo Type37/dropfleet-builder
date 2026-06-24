@@ -5282,10 +5282,16 @@ const App = (() => {
     }).join('');
     return `<table class="dp-weapons"><thead><tr><th class="dp-w-name">Weapon</th><th>Arc</th><th>Att</th><th>Lk</th><th>Dmg</th><th class="dp-w-spec">Special</th></tr></thead><tbody>${body}</tbody></table>`;
   }
-  function dpHullTrack(hull, count) {
+  function dpHullTrack(hull, count, tonnage) {
     const h = parseInt(hull, 10);
     if (!h || h <= 0) return '';
-    const crip = Math.ceil(h / 2);
+    // Only Capital Ships (Medium/Heavy/Colossal tonnage) suffer Crippling Effects
+    // (rulebook 7.3.6 + "Ships of Medium, Heavy, and Colossal Tonnage are referred to
+    // as Capital Ships"). Light and Payload ships get no half-hull crippling marker.
+    // db.tonnage is normally the word ("Light"/"Payload") via CATEGORY_LABELS, but can
+    // be the letter ("L"/"P") when a ship carries its own stats.tonnage — accept both.
+    const noCrip = /^(L|P|Light|Payload)$/i.test(String(tonnage || ''));
+    const crip = noCrip ? -1 : Math.ceil(h / 2);
     // Boxes grouped in 5s (with a gap between groups) so damage is easy to count.
     const boxes = Array.from({ length: h }, (_, i) => `<span class="dp-box${i + 1 === crip ? ' dp-box-crip' : ''}"></span>`);
     let grouped = '';
@@ -5601,7 +5607,7 @@ const App = (() => {
         const thumbHtml = (thumbSrc && !settings.printBig) ? `<img class="dp-thumb" src="${esc(thumbSrc)}" alt="" loading="lazy" onerror="this.remove()">` : '';
 
         // Hull tracking boxes replace the numeric Hull cell inside the stat grid.
-        const hullHtml = dpHullTrack(db.hull, count);
+        const hullHtml = dpHullTrack(db.hull, count, db.tonnage);
         const statHtml = dpStatLine(eff.stats, eff.mods, hullHtml);
         const weaponsHtml = dpWeaponTable(weaponRows);
         const abilHtml = `${loadsHtml}${sysHtml}${featHtml}${rulesHtml}`;
