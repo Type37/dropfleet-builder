@@ -141,7 +141,8 @@
     "category": "colossal",
     "namesake": "Nosferatu, the archaic name for a vampire, made famous by the 1922 silent film of the same name."
    },
-   "abilityPicks": 2
+   "abilityPicks": 2,
+   "bio": "The ship known as the Lord of Flies was one of the Scourge Dreadnoughts assigned to the Earth home fleet. It was last seen escorting a small battlegroup of unknown ship types to Earth's outer marker before jumping to an unknown destination.\n\nDuring the bulk of the fighting however, it was front and centre of one of the Scourge home fleets. Despite managing to take out several important UCM ships as well as inflicting damage on both the Shield of Aurum and Carpe Noctum, most of its battlegroup was destroyed in return fire.\n\nFalling back after the Shield of Aurum, Carpe Noctum, and their respective battlegroups destroyed the Darkheart, the Lord of Flies took on a more defensive role. Clearly the Scourge were wounded by the loss of the Darkheart and adjusted their battle tactics accordingly. Approximately 8 hours after the destruction of the Darkheart, the Lord of Flies made a course change that took it over Geneva, where it rendezvoused with a small fleet of ships not yet known to the UCM.\n\nAdmiral Havelock ordered all of her remaining Lima frigates to pursue and maintain an active scan on the unknown vessels. The Lord of Flies managed to hinder efforts by having its fighters and bombers swarm and obscure the mystery ships, which were summarily left behind when it, along with the unknown ships made their foldspace jumps elsewhere."
   },
   {
    "id": "6aad-bbb7-c1bf-9583",
@@ -217,7 +218,8 @@
     "category": "heavy",
     "namesake": "From the Greek 'daimon', a spirit standing between gods and mortals; in later lore, a demon outright."
    },
-   "abilityPicks": 2
+   "abilityPicks": 2,
+   "bio": "Baba Yaga is one of the oldest Scourge vessels witnessed by the UCM. One of the original ships that assaulted Eden Prime, analysis of data brought back to the UCM by stealth recon ships prior to the reconquest show that Baba Yaga was still present high above Eden Prime.\n\nHigh resolution scans of its hull show extensive repairs of battle damage, though reports from the exodus state that Baba Yaga saw very little combat during the initial invasion. Admiralty believe that this battle damage was gained during the Scourge's subjugation of the reptilian race they parasitised before humanity, as the damage patterns do not match anything either humanity, or the Shaltari were able to inflict at the time.\n\nDuring the reconquest of Eden Prime, Baba Yaga and its battlegroup were responsible for sending over 20,000 sailors to their deaths, before falling back to points unknown. Sporadic sightings of Baba Yaga have been reported over various combat theatres. The ship always appears and inflicts a heavy death toll before disappearing again.\n\nUCM Admiralty have designated Baba Yaga as a priority target to be taken out with extreme prejudice."
   },
   {
    "id": "0b1b-4cad-329b-7d5a",
@@ -311,7 +313,8 @@
     "category": "heavy",
     "namesake": "A [shadow](https://en.wikipedia.org/wiki/Shadow) is the dark region cast on a surface when an opaque object blocks a source of light. The word carries connotations of concealment and stealth."
    },
-   "abilityPicks": 1
+   "abilityPicks": 1,
+   "bio": "Flayer was one of the ships seen during the Scourge's attack on Ferrum, though was assumed destroyed as UCM reinforcements arrived from Niccolum. Commodore Tayne's Battlegroup Aluminia Grit was the group responsible for defending the planet from Flayer's Battlegroup. The two Battlegroups would clash on more than one occasion, with both inflicting heavy casualties on each other in each bout. It was assumed that Flayer was eliminated during the last charge of the Aurum Eyes.\n\nThat assumption was later proven wrong, as a second Flayer seemingly appeared over Aluminia. Though completely different ships of the same pattern, their battle tactics were near identical to the original Flayer above Ferrum. This ship however, made it from the combat zone intact and later would reappear over Wolfrum.\n\nOnce again, Commodore Tayne and Flayer would lock horns. Despite their best efforts, neither of them could put a killing blow on the other, though many ships would meet their ends as collateral damage from these bouts. By the end of the battle over Wolfrum, Flayer would be unaccounted for, this time assumed alive and operational."
   },
   {
    "id": "b472-ebd8-dca8-b337",
@@ -393,7 +396,8 @@
     "category": "medium",
     "namesake": "A beast of lightning in Japanese myth, a creature of fire and storm that leaps with the thunderbolt."
    },
-   "abilityPicks": 2
+   "abilityPicks": 2,
+   "bio": "The Raiju designated Enslaver is one of the most reviled Scourge warships encountered during the reconquest. This admiral is usually seen at the head of a formation designed to board and capture enemy ships. Leading a host of Hiruko's, Akuma's, and more recently, Ebisu class ships, this admiral seems to revel in the capture of helpless ships. It is clear the reasons behind this, the Scourge lack for fresh supplies of hosts and without a new conquest they must make do with the relatively slim pickings afforded by battles in the void. Each ship they capture only adds to the enemy faced by humanity, thousands of capable sailors become unwilling hosts to the vile parasite.\n\nFortunately for the UCM, Enslaver has been seen in scant few combat areas, most notably counter-attacks against UCM forces during the reconquest. Months go by between sightings, suggesting lengthy transfers of personnel between engagements. Due to Enslaver's proclivity for capturing vessels, fleet command has issued fleet wide instructions to destroy this ship with extreme prejudice."
   }
  ],
  "groups": [

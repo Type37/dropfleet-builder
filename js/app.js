@@ -492,6 +492,7 @@ const App = (() => {
           special_rules: (fs?.specialRules || []).map(r => r.name),
           specialRuleDetails: fs?.specialRules || [],
           lore: fs?.lore || src.lore || '',
+          admiralLore: a.bio || a.lore || '',   // the admiral's personal bio (distinct from the ship lore)
           namesake: fs?.namesake || src.namesake || '',
           famousShips: fs?.famousShips || src.famousShips || [],
           famousShipsPrefix: fs?.famousShipsPrefix || src.famousShipsPrefix || '',
@@ -638,12 +639,9 @@ const App = (() => {
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6V2h8v4M4 12H2V7h12v5h-2"/><rect x="4" y="10" width="8" height="4"/></svg>
                 <span class="topbar-action-label">Print preview</span>
               </button>
-              <a class="btn btn-ghost btn-sm topbar-action-btn" href="${FACTION_REF_PDF}" target="_blank" rel="noopener" data-tooltip="Faction quick-reference sheets (PDF)">
-                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2h7l3 3v9H3z"/><path d="M6 6h5M6 9h5M6 12h3"/></svg>
-                <span class="topbar-action-label">Reference</span>
-              </a>
-              <button class="btn btn-ghost btn-sm topbar-action-btn" onclick="App.openSettings()" data-tooltip="Settings">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path opacity=".55" d="M13.765 2.152C13.398 2 12.932 2 12 2s-1.398 0-1.765.152a2 2 0 0 0-1.083 1.083c-.092.223-.129.484-.143.863a1.62 1.62 0 0 1-.79 1.353a1.62 1.62 0 0 1-1.567.008c-.336-.178-.579-.276-.82-.308a2 2 0 0 0-1.478.396C4.04 5.79 3.806 6.193 3.34 7s-.7 1.21-.751 1.605a2 2 0 0 0 .396 1.479c.148.192.355.353.676.555c.473.297.777.803.777 1.361s-.304 1.064-.777 1.36c-.321.203-.529.364-.676.556a2 2 0 0 0-.396 1.479c.052.394.285.798.75 1.605c.467.807.7 1.21 1.015 1.453a2 2 0 0 0 1.479.396c.24-.032.483-.13.819-.308a1.62 1.62 0 0 1 1.567.008c.483.28.77.795.79 1.353c.014.38.05.64.143.863a2 2 0 0 0 1.083 1.083C10.602 22 11.068 22 12 22s1.398 0 1.765-.152a2 2 0 0 0 1.083-1.083c.092-.223.129-.483.143-.863c.02-.558.307-1.074.79-1.353a1.62 1.62 0 0 1 1.567-.008c.336.178.579.276.819.308a2 2 0 0 0 1.479-.396c.315-.242.548-.646 1.014-1.453s.7-1.21.751-1.605a2 2 0 0 0-.396-1.479c-.148-.192-.355-.353-.676-.555A1.62 1.62 0 0 1 19.562 12c0-.558.304-1.064.777-1.36c.321-.203.529-.364.676-.556a2 2 0 0 0 .396-1.479c-.052-.394-.285-.798-.75-1.605c-.467-.807-.7-1.21-1.015-1.453a2 2 0 0 0-1.479-.396c-.24.032-.483.13-.82.308a1.62 1.62 0 0 1-1.566-.008a1.62 1.62 0 0 1-.79-1.353c-.014-.38-.05-.64-.143-.863a2 2 0 0 0-1.083-1.083Z"/></svg>
+              <button class="btn btn-sm topbar-action-btn topbar-settings-btn" onclick="App.openSettings()" data-tooltip="Settings">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></svg>
+                <span class="topbar-action-label">Settings</span>
               </button>`;
             ensureFactionLoaded(currentFleet.faction).then(() => renderBuilder());
             return;
@@ -2275,7 +2273,8 @@ const App = (() => {
           ${renderFlagshipLoadout(idx, a, fdb)}
           ${fdb.rulesText ? `<div class="ship-rules-block"><div class="ship-rules-block-label">Ship Rules</div><div class="ship-rules-block-text">${esc(fdb.rulesText)}</div></div>` : ''}
           ${renderShipRulesGlossary(fdb, a)}
-          ${(fdb.lore || fdb.namesake) ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">Lore</summary><div class="ship-lore-text">${fdb.lore ? formatLore(fdb.lore, fdb.famousShipsPrefix, fdb.famousShips) : ''}${fdb.namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(fdb.namesake)}</div>` : ''}</div></details>` : ''}
+          ${fdb.admiralLore ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">About ${esc(a.name)}</summary><div class="ship-lore-text">${formatLore(fdb.admiralLore, '', [])}</div></details>` : ''}
+          ${(fdb.lore || fdb.namesake) ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">Flagship lore</summary><div class="ship-lore-text">${fdb.lore ? formatLore(fdb.lore, fdb.famousShipsPrefix, fdb.famousShips) : ''}${fdb.namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(fdb.namesake)}</div>` : ''}</div></details>` : ''}
           <div class="text-caption">Flies with ${esc(a.name)}, who is managed in the left rail.</div>
         </div>
       </div>
@@ -4518,13 +4517,17 @@ const App = (() => {
     return `<div class="admiral-thumb rank-thumb">${ins}</div>`;
   }
 
-  // Collapsible lore for a famous admiral. The only lore we hold for admirals is
-  // their flagship's class lore (+ namesake / known ships), pulled in during the
-  // transform, so surface that on the admiral card.
+  // Collapsible lore for a famous admiral: the admiral's own bio first (their personal
+  // background), then their flagship's class lore (+ namesake / known ships).
   function admiralLoreBlock(a) {
-    if (!a || !a.lore) return '';
+    if (!a) return '';
+    const open = settings.autoExpandLore ? ' open' : '';
     const namesake = a.namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(a.namesake)}</div>` : '';
-    return `<details class="ship-lore" style="margin-top:var(--sp-sm)"><summary class="ship-lore-toggle">Lore</summary><div class="ship-lore-text">${formatLore(a.lore, a.famousShipsPrefix, a.famousShips)}${namesake}</div></details>`;
+    const bio = a.admiralLore
+      ? `<details class="ship-lore" style="margin-top:var(--sp-sm)"${open}><summary class="ship-lore-toggle">Admiral</summary><div class="ship-lore-text">${formatLore(a.admiralLore, '', [])}</div></details>` : '';
+    const ship = a.lore
+      ? `<details class="ship-lore" style="margin-top:var(--sp-sm)"${open}><summary class="ship-lore-toggle">Flagship lore</summary><div class="ship-lore-text">${formatLore(a.lore, a.famousShipsPrefix, a.famousShips)}${namesake}</div></details>` : '';
+    return bio + ship;
   }
 
   // A famous admiral's flagship stat line + weapons. The flagship is a specific

@@ -191,7 +191,8 @@
     "category": "heavy",
     "namesake": "The greatest hero of Greek mythology, son of Zeus and the mortal Alcmene. Killed his own family in a divine madness sent by Hera, then spent the rest of his life earning absolution through the Twelve Labors, slaying the Nemean Lion, capturing Cerberus, diverting rivers. Worshipped across the ancient world as the patron of strength and the destroyer of monsters."
    },
-   "abilityPicks": 2
+   "abilityPicks": 2,
+   "bio": "Claudia Rhee is a rarity amongst the PHR. Once a Siren, her tactical aptitude and control over countless Familiars gained her a place as a Medusa, one of the most elite members of the already elite Siren Corps. She earned her place in the captains chair when her ship was ambushed by Shaltari pirates. Their initial volley had struck right through the ship's CIC, killing many of the command crew and leaving vital systems unmanned. Acting immediately, Claudia networked her Familiars with the ships' systems, restored order and brought weapons to bear. Her quick thinking saved the lives of many that day and while the ship itself was unsalvageable, Claudia was approached with an offer that would one day see her commanding not only her own ship, but an entire fleet.\n\nAs the daughter of Octavia Rhee, there has been high expectations of her since the day she was born. Fortunately for her she has exceeded every single one of them. She was able to control multiple Familiars by the time her peers were only just able to operate a single Familiar. She aced every single combat proficiency test thrown at her and her field operation record is impeccable.\n\nThough despite all of this she still lives in her mother's shadow, made even darker by her recent sacrifice in the Shangri-La system. While Claudia is determined to make those responsible pay, the alliances made before the Battle of Earth make this a difficult prospect as of late. It is only a matter of time, however, before that all breaks down, countless simulations calculated by her Familiars have shown her that over and over again."
   },
   {
    "id": "3498-03f8-e547-1c37",
@@ -247,7 +248,8 @@
     "category": "heavy",
     "namesake": "[Gnaeus Pompeius Magnus](https://en.wikipedia.org/wiki/Pompey) (Pompey the Great) was the Roman general who conquered the eastern Mediterranean, cleared the sea of pirates in forty days, and formed the First Triumvirate with Caesar and Crassus before civil war made them enemies. He earned the cognomen Magnus, meaning the Great, early in his career under the dictator Sulla. In Rome he dedicated the city's first permanent stone theatre, an immense complex that bore his name."
    },
-   "abilityPicks": 1
+   "abilityPicks": 1,
+   "bio": "Helena of Asgard is one of the most aggressive ranking officers active in the Asgard System. Part of the force tasked with destroying as many UCM Strike Carriers as possible. Retreating groups learned to steer clear of her flagship's Heavy Quad Battery lest the entire group be obliterated.\n\nWhile the UCM believe Helena is part of the external PHR forces, the truth is that Helena is an Asgard native. During the PHR's initial dealings with the resistance forces on Asgard Prime a young Helena started a rapport with PHR naval personnel, listening to tales of sights she would never see staying put on her home planet. Resolved to go with the returning PHR forces she sneaked aboard an outbound PHR transport. To her new allies, however, her infiltration attempt was painfully obvious.\n\nAlthough among plenty of other Asgardians that had decided to join their PHR allies, Helena showed great enthusiasm and promise in fleet-based operations. Proving herself again and again, Helena returned to Asgard Prime shortly before the ambush on the UCM fleet."
   },
   {
    "id": "7ef9-eaa2-4a63-34ad",
@@ -328,7 +330,8 @@
     "category": "medium",
     "namesake": "[Achilles](https://en.wikipedia.org/wiki/Achilles) was the greatest Greek warrior of the Trojan War and the central hero of Homer's Iliad. He was famously invulnerable except at his heel, where he was eventually slain."
    },
-   "abilityPicks": 1
+   "abilityPicks": 1,
+   "bio": "Director Javelin is a man of few words, and seemingly fewer actions. Every fleet movement, every communication, always short and to the point. He is not a man to mince words or waste effort on the superfluous. The UCM believe that Javelin is more machine than man, that his cold calculating persona is a complete lack of humanity.\n\nThe truth is that Javelin is rather lacking in many of the extra augmentations PHR admirals get to further interface with their ships. Making him more human than his peers. His cold stoicism comes from his natural temperament when dealing with the unknown, and his caution comes from the knowledge his high-level clearance burdens him with.\n\nHe values PHR life incredibly highly and will defend them with singular efficiency, even going so far as to force the hand of his superiors to allow prototype self-repairing armour systems to be installed on-board his flagship. Thanks to the extra durability this provides his flagship, Javelin is able to plant his feet, so to speak, on critical locations."
   }
  ],
  "groups": [

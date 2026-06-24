@@ -469,6 +469,12 @@ h1, h2, h3, h4, h5, h6 {
   border-color: rgba(255,255,255,0.55);
 }
 .topbar-actions .topbar-action-btn svg { width: 18px; height: 18px; }
+/* Settings reads as the primary topbar control — filled, not ghost, so it stands out. */
+.topbar-actions .topbar-settings-btn {
+  background: rgba(255,255,255,0.16);
+  border-color: rgba(255,255,255,0.34);
+}
+.topbar-actions .topbar-settings-btn:hover { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.6); }
 .topbar-actions .topbar-action-label {
   font-family: var(--font-body);
   font-size: var(--text-sm);

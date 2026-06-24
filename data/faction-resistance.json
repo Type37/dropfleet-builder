@@ -168,7 +168,8 @@
     "namesake": "[Mount Olympus](https://en.wikipedia.org/wiki/Mount_Olympus) is the highest mountain in Greece and, in Greek myth, the home of the twelve Olympian gods. Its cloud-wreathed peak was held to be the seat of Zeus and the council of the gods."
    },
    "abilityPicks": 1,
-   "flagshipName": "Grosses Messer"
+   "flagshipName": "Grosses Messer",
+   "bio": "Originally conscripted from one of the poorest locales on Kalium, Nguen has seen a meteoric rise through the ranks of the Kalium navy. He has proven himself time and time again for the Kabal, his first command would see him trade blows with the Shaltari in anti-piracy actions protecting valuable in-system shipping routes.\n\nSince his start as a Vent Cannon technician, Nguen has gained an intimate understanding of the technology and physics behind the devastating weapons. Preferring commands on ships equipped with the unstable weapons, he's reduced scores of ships to molten metal, very few of which were his own.\n\nThe defining point of his career was the destruction of a trio of scourge battlecruisers with his previous command, a Gladiator class Grand Cruiser. Suffering serious damage after the destruction of one and the crippling of another, a final volley of vent fire overloaded the ships reactor. Ordering the ship to fly at full thrust towards the third and the call to abandon ship, Nguen would soon watch the reactor consume both his ship and the enemy battlecruiser from the relative safety of his escape vessel.\n\nUpon his return to Kalium, Nguen and his surviving crew would be assigned to the nearly complete Grosses Messer, overseeing its final reactor adjustments and being tasked with a live fire shakedown cruise."
   },
   {
    "id": "cee5-c500-357a-d910",
@@ -254,7 +255,8 @@
     "namesake": "A tribune, a senior Roman officer of the legions, or the people's elected champion against the power of the Senate."
    },
    "abilityPicks": 1,
-   "flagshipName": "Fortune's Fancy"
+   "flagshipName": "Fortune's Fancy",
+   "bio": "The Flagship of the independent High Technician known as Hagen is believed to have once belonged to the Kalium Kabal. Though quite why they would relinquish a working Battlecruiser to independents is currently unknown to UCM intelligence. Any chance to communicate and question those in Hagen's fleet state that it was \"empty when we found it\" and that the ship is \"legitimate salvage\".\n\nRegardless of how these independents acquired this ship, they seem more than capable of using and maintaining it. Having taken part in the battles above Luna, the Fortune's Fancy scored Hagen and his fleet several Scourge kills. The Fortune's Fancy is suspected to be highly modified, capable of carrying its standard launch compliment, along with a pair of internally stored torpedoes. Observations by the UCMF Saccharine show that these torpedoes are launched in the crudest way possible. Simply being allowed to float outwards from the bulk lander bays and fired while free floating."
   },
   {
    "id": "6839-7d0a-57fd-5ad9",
@@ -295,7 +297,8 @@
     "category": "medium"
    },
    "abilityPicks": 1,
-   "flagshipName": "Red Baron"
+   "flagshipName": "Red Baron",
+   "bio": "Typhoon Vasquez is the Head Engineer of the Red Baron, a pre-war ship used as a test-bed for various ammunition types designed for then-current Artillery Cannons. Vasquez's Battlegroup contains a large number of industrial ships, including the Andar Errente, a pre-war Industrial Raft. Thanks to copious amounts of manufacturing ability, Vasquez is able to be very liberal with the application of the various bootleg munitions produced by his fleet.\n\nVasquez's combat capable ships were present at the Battle for Earth and managed to score several Scourge kills. The Red Baron spent most of the engagement firing on any and every cylinder it could find. Vasquez's battle tactics seemed to either be genius, drawing most of the Scourge return fire towards the Red Baron and its ablative armour, or the absolute lunacy of being on constant weapons-free."
   }
  ],
  "groups": [

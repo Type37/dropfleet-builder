@@ -160,7 +160,8 @@
     "namesake": "[Washington DC](https://washington.org/) was designed from scratch as a purpose-built capital in 1790, sited on the Potomac River between Maryland and Virginia at the insistence of George Washington; the city was burned by British forces in 1814 and rebuilt within a year. The city is named after George Washington, the first president of the United States, while the District of Columbia honours Christopher Columbus. Its layout was planned by the French-born engineer Pierre Charles L'Enfant, whose design of broad diagonal avenues overlaid on a grid still shapes the modern city."
    },
    "abilityPicks": 2,
-   "flagshipName": "Shield of Aurum"
+   "flagshipName": "Shield of Aurum",
+   "bio": "Head of the most powerful institution mankind has ever known, Supreme Admiral Jacob 'Granite' Halsey is famous for his steely, brisk, borderline-offensive, flare. His rank grants him a permanent seat on the High Council, but his record there is of extensive truancy, not that anyone dares raise that. A career-sailor, his career began as a teenage rating aboard the ageing grand battleship UCMS Virginia, which he would, thirty-two years later, captain. His remaining on the bridge to the last as the venerable ship was wrecked by Shaltari privateers earned him a promotion to commodore, along with facial scarring and a lifetime's hatred for the 'filthy rotten stinking echidnas'. After another two decade's service as the UCMF's most battlehardened, pre-Reconquest commander, he attained mastery of the entire UCMF.\n\nPreferring to lead from the front, Halsey was present in the opening hours of the Battle for Earth, where, for the ninth time in his career, he had his CIC destroyed around him. Forced to command from the Shield of Aurum's auxiliary CIC, he remained a pivotal force in that titanic engagement, personally scoring nineteen capital ship kills in the first forty-eight hours.\n\nHalsey is a fixture on whichever frontline is hottest, and although he's burst some more blood vessels on his pockmarked face, he's at the razor's edge of command."
   },
   {
    "id": "35e6-a97b-0bc4-a778",
@@ -242,7 +243,8 @@
     "namesake": "[New York](https://www.nyctourism.com/) was founded as New Amsterdam by the Dutch West India Company in 1626 on the southern tip of Manhattan Island, captured by the English in 1664, and grew into the most populous city in the Western world. It was renamed New York in honour of the Duke of York, the future King James II of England. The city briefly served as the first capital of the United States, and George Washington was inaugurated as president there in 1789."
    },
    "abilityPicks": 1,
-   "flagshipName": "Carpe Noctum"
+   "flagshipName": "Carpe Noctum",
+   "bio": "Famous for her ice-cold head and killer instinct, June Havelock, 39, is the youngest admiral in the UCMF. Credited with spearheading the assault on D-Day - Earth from her battleship Carpe Noctum, she scored the most crucial kill of the day: the Scourge super-dreadnought Darkheart. One of the leading admirals of Battlefleet Sol, she regularly deputises supreme command above Earth. Thus far, Grand Admiral Halsey's respect and patronage has not been misplaced.\n\nHavelock climbed far, quickly. At the outbreak of the Reconquest, she was a lowly Lieutenant Commander aboard the cruiser UCMS Regalia, and was deemed competent if unspectacular. While the fires of war have never yet taken her head, the crucible of combat has forged her. Forced to take command of the crippled Regalia on D+3 - Eden, Havelock successfully rammed the Scourge battleship Sorn's Nemesis, destroying her and emerging as the only officer commanding to survive a ramming action that year.\n\nToday, she is one of the most decorated officers in the fleet and one of a handful to have been present at over four D-Days. Although she commands from a carrier-type battleship, she is noteworthy for her gunnery skills, since she values skilled crew in that area in particular."
   },
   {
    "id": "0691-dfab-1c01-7865",
@@ -321,7 +323,8 @@
     "namesake": "[Perth](https://visitperth.com/) was founded in 1829 on the Swan River in Western Australia as a free settlement; it is the most geographically isolated major city on Earth, closer to Singapore than to Sydney, and grew rapidly after gold was discovered in the hinterland in 1893. It is the capital and largest city of Western Australia, the state that covers roughly a third of the continent. Its Mediterranean climate gives it some of the sunniest weather of any major Australian city."
    },
    "abilityPicks": 1,
-   "flagshipName": "Nicolum's Wrath"
+   "flagshipName": "Nicolum's Wrath",
+   "bio": "Admiral Weaver is never a name that the UCMA want to hear is backing them up. No fewer than 6 times they have required ground forces to make a mass, emergency extraction from an AO. Many Commanders believe that Weaver is a destructive maniac, levelling precious cities instead of letting ground forces do their thing. To an extent, that's true.\n\nWhile Weaver delights in ridding worlds of Scourge occupation and reducing their fleets to molten slag, the destruction of historically important sites always pains them deeply. Weaver is an avid historian, especially of golden age architecture. Prior to their enlistment they were on track to finish their masters degree at one of the most prestigious universities on Aurum. However, during the build-up to the Reconquest they felt it was part of their duty to reclaim their heritage before the Scourge ruin it forever.\n\nNow they seek to excise the corruption that are the Scourge. Using their Perth's laser like a precision scalpel, they burn away Scourge strongholds, glassing the parasites and everything around them. Their Flagship, Nicolum's Wrath has been in service since the start of the reconquest and has an impressive kill count. Despite this it's remained relatively undamaged throughout all its engagements. Thanks to minimal crew attrition, the officers are keenly aware of the limits of the ship and routinely use what other crews would call \"aggressive evasive manoeuvres\" to line up the perfect shot."
   },
   {
    "id": "6d3f-389f-1a9c-cdba",
@@ -387,7 +390,8 @@
     "namesake": "[Warsaw](https://go2warsaw.pl/en/) became the capital of Poland in 1596, was systematically destroyed by Nazi forces in 1944 following the Warsaw Uprising, and was rebuilt almost stone by stone from historic records over the following decades. The city sits on the Vistula River, which divides it into a larger left bank and the right-bank district of Praga. Its reconstructed Old Town was inscribed on the UNESCO World Heritage List in 1980 as an example of near-total restoration of a historic centre."
    },
    "abilityPicks": 1,
-   "flagshipName": "Aurum Eyes"
+   "flagshipName": "Aurum Eyes",
+   "bio": "Commodore Tobias Tayne is one of the UCMF's rising stars. An aggressive admiral that has seen through many engagements in command of one of the original run of Warsaw Heavy Cruisers. He played a pivotal role in the defence of Ferrum from the Scourge's surprise attack; his Battlegroup protected half a continent from Scourge attack and ensured the safety of several important Ferrum Motors factories.\n\nDespite his valiant efforts, his original Warsaw, the Aurum Eyes was irreparably damaged and consigned to scrap. For his efforts he was given a promotion to Commodore and assigned a new ship. Retaining most of his original crew, they settled into this latest-gen cruiser, the Aurum Eyes II.\n\nHaving spent the battle over Ferrum pushing the Aurum Eyes to its absolute limit and beyond, Tayne and his crew know exactly what the class is capable of. Due to this, they're a lot more willing to push the ship to the point just before structural failure to ensure their Cobra Lasers have the enemy in their sights."
   }
  ],
  "groups": [

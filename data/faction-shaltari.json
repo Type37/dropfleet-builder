@@ -148,7 +148,8 @@
     "category": "colossal",
     "namesake": "The heavy, radioactive metal whose splitting atoms power reactors and the most destructive of weapons."
    },
-   "abilityPicks": 2
+   "abilityPicks": 2,
+   "bio": "Prime Starchief Quetzalcoatl has been a bane of UCM and PHR forces for the entirety of the Reconquest. Far too often the forces of one of the branches of Humanity will be winning an engagement against the Scourge only for Quetzalcoatl to arrive with his fleet and engage the existing combatants. In short order Quetzalcoatl annihilates the Capital Ships in the area and will then quickly leave the engagement, handing the Scourge a crucial victory.\n\nHowever, the very next day, as the Scourge seem close to victory, he'll reappear and destroy any Scourge Capital ships before they're able to retaliate and again leaves the area, handing victory to whoever is facing them. Quetzalcoatl's interference as part of a tribe that has not formally made itself known to the UCM shows that there are yet more Shaltari tribes that seek to prolong the conflict between Humanity and the Scourge.\n\nNo attempts at communication have succeeded, and he has been given a threat level of the highest priority, however currently, no one from the UCM or PHR have managed even the most cursory of communications with them, only gleaning the name from Pungari mercenaries that have themselves, only heard of Quetzalcoatl in name and reputation."
   },
   {
    "id": "4a39-2a06-9bbe-9563",
@@ -229,7 +230,8 @@
     "category": "heavy",
     "namesake": "The hardest natural material known, a crystal of pure carbon forged under immense heat and pressure."
    },
-   "abilityPicks": 1
+   "abilityPicks": 1,
+   "bio": "Mergen the Learned claims to have been alive long enough to have borne witness to the Shaltari's exodus from Aaru. Whether or not this is true can be left up for debate, but what is known is that this alabaster elder is an incredible tactician. Proving pivotal in the recapture of Aaru, Mergen was able to recall the exact sites of dormant Shaltari teleportation nodes. With this ancient knowledge Mergen's flagship, The Heart of the Mountain, was able to deploy vanguard battalions to critical locations ahead of the main Shaltari host.\n\nIn the void battles above the planet, Mergens fleet was responsible for sending a fifth of what Scourge remained above Aaru to their demise. The only other Starchief to achieve a similar number of confirmed kills was Quetzalcoatl, unsurprising given their martial prowess.\n\nWith the void above Aaru all but captured, Mergen is able to turn his attention to restoring the buried teleportation network on Aaru. Once his work on Aaru is done, the reclamation of other Shaltari strongholds awaits his attention."
   },
   {
    "id": "60ba-9a6d-3eca-7e54",
@@ -318,7 +320,8 @@
     "category": "heavy",
     "namesake": "The blue variety of corundum, second only to diamond in hardness among gems."
    },
-   "abilityPicks": 1
+   "abilityPicks": 1,
+   "bio": "Starchief Seth is part of a Shaltari Tribe that specializes in the use of Gravity weapons. The use of these esoteric Shaltari weapons is incredibly hard to plan against, it's easier to defend against a weapon that destroys you, but one that has you turning the wrong way and flying towards your own fleet is much more difficult.\n\nSeth exemplifies these battle tactics of his tribe, his gravity weapons are more powerful than usual, a potentially unique modification in the otherwise standardized Shaltari arsenal. His ship will go in and out of orbital levels without any effort, allowing him to stage ambushes where, with a few well-placed shots, leaves an enemy battle plan in tatters.\n\nHis Sapphire Battlecruiser is a dreaded sight for any Reconquest leader, as soon as he is spotted, they know their best laid plans are already laid to waste. As often with the Shaltari, communication is erratic, and Seth has been known to engage in quite active communication at times, seemingly acting friendly, right up till he can activate his gravity weapons."
   },
   {
    "id": "d871-8769-d471-c13f",
@@ -385,7 +388,8 @@
     "category": "medium",
     "namesake": "Fossilised tree resin, warm and golden, that sometimes preserves insects trapped within it millions of years ago."
    },
-   "abilityPicks": 2
+   "abilityPicks": 2,
+   "bio": "The twins have been sighted working alongside various tribes. Which has led UCM intelligence to believe they are some type of mercenary within Shaltari culture. However, their modus operandi is the same every time. Arriving in a pair of Amber class cruisers they will work with other cruisers and, via methods unknown to the UCM at this time, will increase the maneuverability of those ships giving the Shaltari fleet an unexpected advantage.\n\nThey are never seen separated, and even if one is destroyed, the next time they engage in fleet combat they'll be back together as a pair of Ambers. Causing chaos and disrupting even the most carefully laid plans by the Reconquest forces.\n\nAny Communication with the Twins has seen them actively mocking and teasing any forces they are battling, seemingly enjoying the chaos they cause and the destruction with a relish that seems unnerving."
   }
  ],
  "groups": [
