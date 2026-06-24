@@ -12592,7 +12592,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Keel Options",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Upgrade (+3\" Thrust)",
+          "cost": 10,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship must take either a Cloaking Keel, gaining Stealth and Cloak-2, or an Engine Upgrade for +10 points, increasing Thrust by 3\"."
      }
     },
     {
@@ -12676,7 +12701,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Keel Options",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Upgrade (+3\" Thrust)",
+          "cost": 10,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship must take either a Cloaking Keel, gaining Stealth and Cloak-2, or an Engine Upgrade for +10 points, increasing Thrust by 3\"."
      }
     },
     {
@@ -12756,7 +12806,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Keel Options",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Upgrade (+3\" Thrust)",
+          "cost": 10,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship must take either a Cloaking Keel, gaining Stealth and Cloak-2, or an Engine Upgrade for +10 points, increasing Thrust by 3\"."
      }
     },
     {
@@ -12825,7 +12900,32 @@
       "groupMax": 1,
       "isRare": false,
       "isUnique": false,
-      "tonnage": "H"
+      "tonnage": "H",
+      "loadoutOptions": [
+       {
+        "name": "Keel Options",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Upgrade (+3\" Thrust)",
+          "cost": 10,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship must take either a Cloaking Keel, gaining Stealth and Cloak-2, or an Engine Upgrade for +10 points, increasing Thrust by 3\"."
      }
     },
     {
@@ -13018,7 +13118,38 @@
       "isRare": false,
       "isUnique": false,
       "tonnage": "H",
-      "lore": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”."
+      "lore": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”.",
+      "loadoutOptions": [
+       {
+        "name": "Keel Refit",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Keel Refit",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+          "cost": 15,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Upgrade (+3\" Thrust)",
+          "cost": 25,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3\"."
      }
     },
     {
@@ -13094,7 +13225,38 @@
       "isRare": false,
       "isUnique": false,
       "tonnage": "H",
-      "lore": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”."
+      "lore": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”.",
+      "loadoutOptions": [
+       {
+        "name": "Keel Refit",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Keel Refit",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+          "cost": 15,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Upgrade (+3\" Thrust)",
+          "cost": 25,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3\"."
      }
     },
     {
@@ -13166,7 +13328,38 @@
       "isRare": false,
       "isUnique": false,
       "tonnage": "H",
-      "lore": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”."
+      "lore": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”.",
+      "loadoutOptions": [
+       {
+        "name": "Keel Refit",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Keel Refit",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+          "cost": 15,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Upgrade (+3\" Thrust)",
+          "cost": 25,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3\"."
      }
     },
     {
@@ -13236,7 +13429,38 @@
       "isRare": false,
       "isUnique": false,
       "tonnage": "H",
-      "lore": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”."
+      "lore": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”.",
+      "loadoutOptions": [
+       {
+        "name": "Keel Refit",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Keel Refit",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+          "cost": 15,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Engine Upgrade (+3\" Thrust)",
+          "cost": 25,
+          "weapons": [],
+          "loads": [],
+          "statMods": {
+           "thrust": 3
+          }
+         }
+        ]
+       }
+      ],
+      "rulesText": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3\"."
      }
     },
     {
@@ -14299,7 +14523,29 @@
       "isRare": false,
       "isUnique": false,
       "tonnage": "L",
-      "lore": "This ship may take a Cloaking Crest for +5 pts, gaining Cloak-2 and Stealth. Infamous ships of the class: The Four Horsemen (group of four vessels), Greywolf The Revenant is one of the most feared of the Scourge destroyers, and for good reason. The class offers a range of options for dealing death, from conventional Oculus weapons, to powerful close action, to bomber capacity. In particular, this combination allows the ship to unleash its full destructive potential subtlety, without having to generate significant energy spikes all while still able to manoeuvre. This varied armament and ability makes it a consistently deadly foe, especially for groups of frigates at close range. The downside to this mixed approach is that its capacity for fighters and bombers is proportionately low, explaining its designation as a destroyer as opposed to an escort carrier by the Admiralty. In order to build up significant waves of bombers able to overcome enemy point defence, Revenants frequently hunt in larger packs than typical Scourge destroyers. A full group of four of these accomplished killers is a threat to almost anything in the battlespace."
+      "lore": "This ship may take a Cloaking Crest for +5 pts, gaining Cloak-2 and Stealth. Infamous ships of the class: The Four Horsemen (group of four vessels), Greywolf The Revenant is one of the most feared of the Scourge destroyers, and for good reason. The class offers a range of options for dealing death, from conventional Oculus weapons, to powerful close action, to bomber capacity. In particular, this combination allows the ship to unleash its full destructive potential subtlety, without having to generate significant energy spikes all while still able to manoeuvre. This varied armament and ability makes it a consistently deadly foe, especially for groups of frigates at close range. The downside to this mixed approach is that its capacity for fighters and bombers is proportionately low, explaining its designation as a destroyer as opposed to an escort carrier by the Admiralty. In order to build up significant waves of bombers able to overcome enemy point defence, Revenants frequently hunt in larger packs than typical Scourge destroyers. A full group of four of these accomplished killers is a threat to almost anything in the battlespace.",
+      "loadoutOptions": [
+       {
+        "name": "Cloaking Crest",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Cloaking Crest",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Cloaking Crest (gain Cloak-2, Stealth)",
+          "cost": 5,
+          "weapons": [],
+          "loads": []
+         }
+        ]
+       }
+      ],
+      "rulesText": "This ship may take a Cloaking Crest for +5 pts, gaining Cloak-2 and Stealth."
      }
     },
     {
@@ -14360,7 +14606,29 @@
       "isRare": false,
       "isUnique": false,
       "tonnage": "L",
-      "lore": "This ship may take a Cloaking Crest for +5 pts, gaining Cloak-2 and Stealth. Infamous ships of the class: Fool’s Doom, Chang’s End, Bloodtide The Succubus is the most common Scourge vessel of destroyer tonnage encountered in the Reconquest so far. Although they are far less common than frigates, the enemy appears to be increasing its use of destroyers, especially where increasingly outnumbered. Such ships are useful in that they offer the speed and utility of a frigate with increased resilience and firepower. As a fighting ship, the Succubus has proven to be highly adaptable and capable. It is a troublesome opponent for capital ships and swarms of lighter vessels alike due to its numerous weapons systems. The only downside to this armament is its power consumption, producing highly conspicuous energy spikes when fully unleashed. This is often mitigated by the inclusion of a cloaking crest, similar to that employed by larger Scourge vessels. It appears that this is an optional addition that is not always present in the class. Naval analysts have speculated that such technology is resource intensive, and only sees use where the enemy needs it most."
+      "lore": "This ship may take a Cloaking Crest for +5 pts, gaining Cloak-2 and Stealth. Infamous ships of the class: Fool’s Doom, Chang’s End, Bloodtide The Succubus is the most common Scourge vessel of destroyer tonnage encountered in the Reconquest so far. Although they are far less common than frigates, the enemy appears to be increasing its use of destroyers, especially where increasingly outnumbered. Such ships are useful in that they offer the speed and utility of a frigate with increased resilience and firepower. As a fighting ship, the Succubus has proven to be highly adaptable and capable. It is a troublesome opponent for capital ships and swarms of lighter vessels alike due to its numerous weapons systems. The only downside to this armament is its power consumption, producing highly conspicuous energy spikes when fully unleashed. This is often mitigated by the inclusion of a cloaking crest, similar to that employed by larger Scourge vessels. It appears that this is an optional addition that is not always present in the class. Naval analysts have speculated that such technology is resource intensive, and only sees use where the enemy needs it most.",
+      "loadoutOptions": [
+       {
+        "name": "Cloaking Crest",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Cloaking Crest",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Cloaking Crest (gain Cloak-2, Stealth)",
+          "cost": 5,
+          "weapons": [],
+          "loads": []
+         }
+        ]
+       }
+      ],
+      "rulesText": "This ship may take a Cloaking Crest for +5 pts, gaining Cloak-2 and Stealth."
      }
     },
     {
@@ -14430,7 +14698,29 @@
       "isRare": false,
       "isUnique": false,
       "tonnage": "L",
-      "lore": "This ship may take a Cloaking Crest for +5 pts, gaining Cloak-2 and Stealth. Infamous ships of the class: Night’s Eye, Pompeii, Darkstone The Incubus is the sister class of the more common Succubus. It carries a more conspicuous armament; a single enlarged furnace cannon, a fearsome weapon capable of cutting to the heart of any adversary. The weapon also offers multiple fire modes, as it does on larger Scourge ships, making it useful for damage dealing and target marking. The latter mode is especially potent in this class, as a pack of these ships can heat an enemy vessel’s hull to extreme levels, making it highly visible to the rest of the fleet. Coupled with an optional cloaking crest, the Incubus is an excellent expeditionary The class also features formidable close action weaponry far superior to that of most Scourge frigates and equivalent to other destroyers. This makes the Incubus a multi-role threat that should always be considered in any battle plan. Failure to deal with these ships in the early stages of an engagement risks losing the advantage at longer ranges usually expected when facing the Scourge."
+      "lore": "This ship may take a Cloaking Crest for +5 pts, gaining Cloak-2 and Stealth. Infamous ships of the class: Night’s Eye, Pompeii, Darkstone The Incubus is the sister class of the more common Succubus. It carries a more conspicuous armament; a single enlarged furnace cannon, a fearsome weapon capable of cutting to the heart of any adversary. The weapon also offers multiple fire modes, as it does on larger Scourge ships, making it useful for damage dealing and target marking. The latter mode is especially potent in this class, as a pack of these ships can heat an enemy vessel’s hull to extreme levels, making it highly visible to the rest of the fleet. Coupled with an optional cloaking crest, the Incubus is an excellent expeditionary The class also features formidable close action weaponry far superior to that of most Scourge frigates and equivalent to other destroyers. This makes the Incubus a multi-role threat that should always be considered in any battle plan. Failure to deal with these ships in the early stages of an engagement risks losing the advantage at longer ranges usually expected when facing the Scourge.",
+      "loadoutOptions": [
+       {
+        "name": "Cloaking Crest",
+        "minSelections": 1,
+        "maxSelections": 1,
+        "options": [
+         {
+          "name": "No Cloaking Crest",
+          "cost": 0,
+          "weapons": [],
+          "loads": []
+         },
+         {
+          "name": "Cloaking Crest (gain Cloak-2, Stealth)",
+          "cost": 5,
+          "weapons": [],
+          "loads": []
+         }
+        ]
+       }
+      ],
+      "rulesText": "This ship may take a Cloaking Crest for +5 pts, gaining Cloak-2 and Stealth."
      }
     },
     {

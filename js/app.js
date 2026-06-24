@@ -5571,6 +5571,21 @@ const App = (() => {
           const fStat = feat ? (feat.features || []).map(x => `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`).join('; ') : '';
           featHtml = `<div class="dp-systems"><b>Deployable Feature:</b> ${esc(ship.feature)}${fStat ? ', ' + esc(fStat) : ''}</div>`;
         }
+        // Selected refits that aren't weapon/load swaps (those already show in the
+        // weapon table / launch line) — e.g. a Drive/Engine Refit or a Cloaking Crest.
+        // Surfacing the option name is the only place a stat-only or rule-only refit
+        // (Cloaking gains Cloak-2/Stealth) is visible on the sheet.
+        const refitNotes = [];
+        (db.loadoutOptions || []).forEach((lo, loIdx) => {
+          const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
+          const selOpt = lo.options[selIdx];
+          if (!selOpt) return;
+          if ((selOpt.weapons && selOpt.weapons.length) || (selOpt.loads && selOpt.loads.length)) return;
+          if (/^No\b/i.test(selOpt.name)) return; // the "No <refit>" default = nothing taken
+          refitNotes.push(selOpt.name);
+        });
+        const refitHtml = refitNotes.length
+          ? `<div class="dp-systems"><b>Refit:</b> ${esc(refitNotes.join('; '))}</div>` : '';
 
         // Spelled-out rules, split into SHIP rules and WEAPON ("gun") abilities so
         // Big mode can keep gun abilities next to the guns and ship rules separate.
@@ -5610,7 +5625,7 @@ const App = (() => {
         const hullHtml = dpHullTrack(db.hull, count, db.tonnage);
         const statHtml = dpStatLine(eff.stats, eff.mods, hullHtml);
         const weaponsHtml = dpWeaponTable(weaponRows);
-        const abilHtml = `${loadsHtml}${sysHtml}${featHtml}${rulesHtml}`;
+        const abilHtml = `${loadsHtml}${sysHtml}${featHtml}${refitHtml}${rulesHtml}`;
         const headHtml = `<div class="dp-ship-head">
             <span class="dp-name-wrap">${thumbHtml}<span class="dp-name">${esc(qtyPrefix)}${esc(name)}${tonnageLabel ? ` <span class="dp-ton">${esc(tonnageLabel)}</span>` : ''}${badge}</span></span>
             <span class="dp-pts">${count > 1 ? `${totalPts} pts <span class="dp-each">(${ship.points} ea)</span>` : `${ship.points} pts`}</span>

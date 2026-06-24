@@ -655,7 +655,31 @@
      "Descent",
      "Cloud over Shangri-la"
     ],
-    "namesake": "Dr. Faust, the legendary scholar who sold his soul to the devil Mephistopheles for knowledge and power."
+    "namesake": "Dr. Faust, the legendary scholar who sold his soul to the devil Mephistopheles for knowledge and power.",
+    "loadoutOptions": [
+     {
+      "name": "Keel Options",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Upgrade (+3\" Thrust)",
+        "cost": 10,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -743,7 +767,31 @@
      "Severity",
      "Destroying"
     ],
-    "namesake": "Samael, the dread angel of death and venom in Jewish lore, at once accuser, destroyer and seducer."
+    "namesake": "Samael, the dread angel of death and venom in Jewish lore, at once accuser, destroyer and seducer.",
+    "loadoutOptions": [
+     {
+      "name": "Keel Options",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Upgrade (+3\" Thrust)",
+        "cost": 10,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -827,7 +875,31 @@
      "Facets of Death",
      "Stygia"
     ],
-    "namesake": "Bael (or Baal), a king of Hell and the first spirit named in the Lesser Key of Solomon, commanding legions of demons."
+    "namesake": "Bael (or Baal), a king of Hell and the first spirit named in the Lesser Key of Solomon, commanding legions of demons.",
+    "loadoutOptions": [
+     {
+      "name": "Keel Options",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Upgrade (+3\" Thrust)",
+        "cost": 10,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -907,7 +979,31 @@
      "Void Giant",
      "Elysium’s Hammer"
     ],
-    "namesake": "The Nephilim, the giant offspring of the 'sons of God' and mortal women in the Book of Genesis."
+    "namesake": "The Nephilim, the giant offspring of the 'sons of God' and mortal women in the Book of Genesis.",
+    "loadoutOptions": [
+     {
+      "name": "Keel Options",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Upgrade (+3\" Thrust)",
+        "cost": 10,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -1103,7 +1199,37 @@
     "tonnage": "H",
     "lore": "The Devil is a class of battleship designed and constructed by the Scourge. Alongside Beelzebub- and Lucifer-class battleships, Devil-class vessels have materialized over contested war zones throughout the Reconquest, seemingly from nowhere. As these ships are all of similar age to existing classes, the implication is that these are not new - leading to the more concerning question of why the Scourge did not see fit to deploy them against humanity until now.\n\nThe Devil shares the underslung mega plasma lance battery with the Beelzebub-class, but from there the two classes differ. Where the latter mounts banks of furnace cannons, the former instead features rack upon rack of voidcraft, allowing it to swarm the opposition with bombers at a moment's notice or throw up massive fighter screens.",
     "rulesText": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”.",
-    "namesake": "The Devil, supreme spirit of evil and adversary of the divine across Christian and folk tradition."
+    "namesake": "The Devil, supreme spirit of evil and adversary of the divine across Christian and folk tradition.",
+    "loadoutOptions": [
+     {
+      "name": "Keel Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Keel Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+        "cost": 15,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Upgrade (+3\" Thrust)",
+        "cost": 25,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -1176,7 +1302,37 @@
     "lore": "The Beelzebub is a class of battleship designed and constructed by the Scourge. Much to the concern of the UCM's Office of Naval Intelligence, the Beelzebub - alongside several other never-before-seen classes of Scourge battleship - have begun to appear on the battlefields of the Reconquest. As with the previously-encountered classes, the hulls of these ships are scarred and pitted from countless years of service. Why these classes are only being committed now is a question of great concern for the UCM and its allies.\n\nThe Beelzebub differentiates itself from its contemporaries thanks to its furnace batteries - two collections of furnace cannons that can output enough firepower to melt through cruisers in a single salvo. As if that wasn't enough, the Beelzebub also packs an underslung mega plasma lance battery on a traversable mount to give it an edge against enemy battleships, as well as potent close action (as is the standard for Scourge vessels).",
     "rulesText": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”.",
     "namesake": "A prince of Hell whose name means 'Lord of the Flies', ranked among the chief demons and tied to the sin of gluttony.",
-    "storeUrl": "https://ttcombat.com/products/scourge-beelzebub-battleship-1"
+    "storeUrl": "https://ttcombat.com/products/scourge-beelzebub-battleship-1",
+    "loadoutOptions": [
+     {
+      "name": "Keel Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Keel Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+        "cost": 15,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Upgrade (+3\" Thrust)",
+        "cost": 25,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -1244,7 +1400,37 @@
     "tonnage": "H",
     "lore": "The Dragon is a class of battleship designed and constructed by the Scourge. As with its sister class, the Daemon, the Dragon is one of the oldest classes of warship still in service with the Scourge, and similarly is assumed to no longer be in production. Though some optimistic naval planners have postulated that the Scourge have lost the capacity to build more battleships, it's equally possible that the Scourge have simply shifted resources to building larger ships, such as their dreadnoughts.\n\nThough the Dragon's anti-ship armament is comparatively small, the class makes up for this with two cavernous hangars and a pair of Scourge torpedoes, giving it significantly more flexibility than its counterpart battleship. As a result, Dragons are generally found in the center of Scourge vanguard fleets, the better to support their allies or clear a path through their enemies.",
     "rulesText": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”.",
-    "namesake": "The dragon, the great winged serpent of myth the world over, hoarder of treasure and breather of fire."
+    "namesake": "The dragon, the great winged serpent of myth the world over, hoarder of treasure and breather of fire.",
+    "loadoutOptions": [
+     {
+      "name": "Keel Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Keel Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+        "cost": 15,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Upgrade (+3\" Thrust)",
+        "cost": 25,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -1311,7 +1497,37 @@
     "lore": "The Daemon is a class of battleship designed and constructed by the Scourge. Like its sister class, the Dragon, the Daemon is one of the oldest starship designs still in service with the Scourge, behind only the rarely-seen super-dreadnoughts.\n\nBased on the general aging and battle scars sighted on these battleships, the UCM's naval planners estimate they were constructed somewhere between 500 to 2000 years ago, making them truly ancient.\n\nNewer Daemons have never been sighted, leading some to speculate that the Scourge have lost the ability to construct new ones. Regardless of whether or not it's true, the Scourge have yet to replace any destroyed battleships and only deploy those they have at their disposal when the outcome is assured.\n\nRegardless of age, the Daemon possesses firepower beyond question. Its prow is laced with oculus weaponry and tipped with a pair of furnace fangs, making it one of the most potent vessels available to the Scourge.",
     "rulesText": "This Ship may take a Cloaking Keel for +15 points, gaining Stealth and Cloak-2, or an Engine Upgrade for +25 points increasing Thrust by 3”.",
     "namesake": "From the Greek 'daimon', a spirit standing between gods and mortals; in later lore, a demon outright.",
-    "storeUrl": "https://ttcombat.com/products/scourge-battleships"
+    "storeUrl": "https://ttcombat.com/products/scourge-battleships",
+    "loadoutOptions": [
+     {
+      "name": "Keel Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Keel Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Cloaking Keel (gain Stealth, Cloak-2)",
+        "cost": 15,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Engine Upgrade (+3\" Thrust)",
+        "cost": 25,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -2550,7 +2766,28 @@
      "Greywolf"
     ],
     "famousShipsPrefix": "Infamous ships of the class:",
-    "namesake": "A revenant, a corpse risen from the grave in medieval folklore to torment the living."
+    "namesake": "A revenant, a corpse risen from the grave in medieval folklore to torment the living.",
+    "loadoutOptions": [
+     {
+      "name": "Cloaking Crest",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Cloaking Crest",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Cloaking Crest (gain Cloak-2, Stealth)",
+        "cost": 5,
+        "weapons": [],
+        "loads": []
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -2623,7 +2860,28 @@
      "Bloodtide"
     ],
     "namesake": "A succubus, a female demon of European folklore that visits and drains sleeping men.",
-    "storeUrl": "https://ttcombat.com/products/succubus-destroyers"
+    "storeUrl": "https://ttcombat.com/products/succubus-destroyers",
+    "loadoutOptions": [
+     {
+      "name": "Cloaking Crest",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Cloaking Crest",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Cloaking Crest (gain Cloak-2, Stealth)",
+        "cost": 5,
+        "weapons": [],
+        "loads": []
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -2695,7 +2953,28 @@
      "Pompeii",
      "Darkstone"
     ],
-    "namesake": "An incubus, a demon of European folklore that preys upon sleepers in the dead of night."
+    "namesake": "An incubus, a demon of European folklore that preys upon sleepers in the dead of night.",
+    "loadoutOptions": [
+     {
+      "name": "Cloaking Crest",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Cloaking Crest",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Cloaking Crest (gain Cloak-2, Stealth)",
+        "cost": 5,
+        "weapons": [],
+        "loads": []
+       }
+      ]
+     }
+    ]
    }
   },
   {
