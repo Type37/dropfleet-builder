@@ -559,7 +559,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "lore": "The Octavius class super battleship features a broad array of gunnery designed to devastate large targets. A heavy calibre broadside, torpedoes, Neutron Missiles, and the dreaded Dark Matter Cannon all combine to make this one of the most fearsome non-dreadnought vessels in the cosmos.",
+    "lore": "The Octavius class super battleship features a broad array of gunnery designed to devastate large targets. A heavy calibre broadside, torpedoes, Neutron Missiles, and the dreaded Dark Matter Cannon all combine to make this one of the most fearsome non-dreadnought vessels in the cosmos. Load Launch Special Torpedo 2 Limited-2",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "[Actium](https://en.wikipedia.org/wiki/Battle_of_Actium)",
@@ -777,7 +777,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "lore": "The Trajan class battleship uses the same internal power structure as its cousin the Memnon, but this class is more overtly offensive and aggressive. Multiple attack drone and nanomachine systems make this giant lethal at close range while a sizable compliment of fighters and bombers can deploy in support or to strike at more distant targets.",
+    "lore": "The Trajan class battleship uses the same internal power structure as its cousin the Memnon, but this class is more overtly offensive and aggressive. Multiple attack drone and nanomachine systems make this giant lethal at close range while a sizable compliment of fighters and bombers can deploy in support or to strike at more distant targets. Load Launch Special Fighters & Bombers 4 -",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Godhammer",
@@ -3328,7 +3328,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "L",
-    "lore": "The Castor, much like its Colonial opposite number - the Istanbul - features heavy calibre mass drivers, able to lay down considerable cross-orbital defensive fire. Its vertical hull is quite unusual for a PHR ship, and allows these weapons to pivot around a central arc.",
+    "lore": "The general performance profile of a typical defence monitors would seem to fit the PHR well � that of high armour, low speed. However, since the PHR have almost exclusively been on the offensive thus far, very few of them have been seen in action. Most of what the UCM knew of PHR monitors was gleaned from spies over the Tlalocan Moons, where the PHR has now established a permanent base, which naturally needs defending. After beachheads were established in the Battle for Earth, the PHR brought in Castor class monitors to defend their landing zones, illustrating that the PHR were behind their warnings that this war would be a longer-haul than the UCM were hoping for. The Castor, much like its Colonial opposite number - the Istanbul - features heavy calibre mass drivers, able to lay down considerable cross-orbital defensive fire. Its vertical hull is quite unusual for a PHR ship, and allows these weapons to pivot around a central arc.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Cogent Reason",

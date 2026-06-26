@@ -733,7 +733,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "lore": "The Cerium carries four in two tubes, a cruiser-sized Mega Thermal Lance Cannon, and microwave broadsides.",
+    "lore": "Shaltari torpedoes are extremely rare, and many would assume that such gargantuan, physical munitions are primitive for such an advanced race. However, when these technological marvels near their target, they detonate as a tiny supernova, channelling that colossal energy into a beam of incandescent power, liquifying the target. The Cerium carries four in two tubes, a cruiser-sized Mega Thermal Lance Cannon, and microwave broadsides. Load Launch Special Torpedo 2 Limited-4",
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Starbringer",
@@ -943,7 +943,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "lore": "The Iron class supercarrier is a formidable vessel designed for lone surface incursions. While its conventional armament is minimal, its cavernous hold contains swarms of fighters, bombers, and rare Shaltari launch assets. Bulk landers give the aliens an atypical deployment method requiring no support vessels while advanced torpedoes obliterate any responders.",
+    "lore": "The Iron class supercarrier is a formidable vessel designed for lone surface incursions. While its conventional armament is minimal, its cavernous hold contains swarms of fighters, bombers, and rare Shaltari launch assets. Bulk landers give the aliens an atypical deployment method requiring no support vessels while advanced torpedoes obliterate any responders. Drive Augmentation This Ship may take a Drive Augmentation for +35 points, increasing its Thrust by 3\". Load Launch Special Torpedo 2 Limited-4 Bulk Landers 2 - Fighters & Bombers 4 -",
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Inspiration",
@@ -1849,7 +1849,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "lore": "The Goethite is a more conventional, multi-role battlecruiser compared to its cousin the Hematite. It has also emerged recently, suggesting this may be a newly developed series. Its primary armament is a twin Hyperwave Cannon - a gigantic offshoot of the microwave-based weapons dreaded by infantry. In fleet terms, its closest equivalent is the far smaller arrays carried by Amethyst frigates, but this matches the range of conventional guns. The effect of hyper-concentrated microwaves on the target is stunning - a superheated mass of core superstructure results, which over time simply melts through the guts of the target, often destroying it long after the Goethite has moved on to a fresh target. The Goethite also carries a compliment of Shaltari fighters and bombers, providing flexibility in combat. Its captains often close to medium range, engaging large targets with the Hyperwave Cannons while dispatching smaller victims with waves of bombers.",
+    "lore": "The Goethite is a more conventional, multi-role battlecruiser compared to its cousin the Hematite. It has also emerged recently, suggesting this may be a newly developed series. Its primary armament is a twin Hyperwave Cannon - a gigantic offshoot of the microwave-based weapons dreaded by infantry. In fleet terms, its closest equivalent is the far smaller arrays carried by Amethyst frigates, but this matches the range of conventional guns. The effect of hyper-concentrated microwaves on the target is stunning - a superheated mass of core superstructure results, which over time simply melts through the guts of the target, often destroying it long after the Goethite has moved on to a fresh target. The Goethite also carries a compliment of Shaltari fighters and bombers, providing flexibility in combat. Its captains often close to medium range, engaging large targets with the Hyperwave Cannons while dispatching smaller victims with waves of bombers. Load Launch Special Fighters & Bombers 3 -",
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Starheart",
@@ -3557,7 +3557,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "L",
-    "lore": "The Selenium class is one such vessel. It has the transference capacity of a Voidgate, and guns designed to fire out of atmosphere at starships. This allows the Selenium to defend the ground troops deployed through it. These enhanced capabilities and much improved survivability over Voidgates makes the class particularly useful in the thick of heavy fighting, especially given the importance Shaltari place on their own lives. As a result, more of this class have been seen during the Battle for Earth than anywhere else.",
+    "lore": "Most Shaltari ground forces reach the surface via Voidgates - ubiquitous, unglamorous ships. Voidgates tend to be lightly armoured and unarmed, making them easy targets. However, as common as these vessels are, sometimes the Shaltari need to guarantee landings planetside, so rely on heavier ships. The Selenium class is one such vessel. It has the transference capacity of a Voidgate, and guns designed to fire out of atmosphere at starships. This allows the Selenium to defend the ground troops deployed through it. These enhanced capabilities and much improved survivability over Voidgates makes the class particularly useful in the thick of heavy fighting, especially given the importance Shaltari place on their own lives. As a result, more of this class have been seen during the Battle for Earth than anywhere else.",
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Warchariot",

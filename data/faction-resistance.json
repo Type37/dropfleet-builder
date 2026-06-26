@@ -842,7 +842,7 @@
       "image": "assets/art/argonaut.webp"
      }
     ],
-    "lore": "Developed alongside the Barbarossa, the Farragut offers a more straightforward weapons loadout with surplus power capacity. This surplus and the relative simplicity of its armaments gave the Farragut legendary endurance and has made it a favourite of Resistance fleets. Offering the same quad-turret NC-16 battery and NC-12 broadsides as the Barbarossa, the Farragut also mounts six enormous torpedoes in three tubes, allowing for two devastating spreads. Few ships can survive a single salvo from this ancient leviathan.",
+    "lore": "Developed alongside the Barbarossa, the Farragut offers a more straightforward weapons loadout with surplus power capacity. This surplus and the relative simplicity of its armaments gave the Farragut legendary endurance and has made it a favourite of Resistance fleets. Offering the same quad-turret NC-16 battery and NC-12 broadsides as the Barbarossa, the Farragut also mounts six enormous torpedoes in three tubes, allowing for two devastating spreads. Few ships can survive a single salvo from this ancient leviathan. Name Arc Att Lock DMG Type Special NC-16 Missile Battery Turret Quad F/S/R 6 3+ 2 K Close Action, Volley-2 N-12 Artillery Cannon Half Battery B 5 4+ 1 K Low Power, Volley-2 N-12 Artillery Cannon Half Battery B 5 4+ 1 K Low Power, Volley-2",
     "rulesText": "This Ship may take an Engine Refit for +45 points, increasing its Thrust by 2”.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
@@ -1560,7 +1560,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "lore": "The Phalanx is armed with long broadsides of transition mass drivers and four Titanmetall 9K mass drivers in two traversable turrets. In combination, the class can unleash withering fire against multiple targets, given the right positioning.",
+    "lore": "Sharing many superstructure elements with the smaller Centurion Grand Cruiser, the Phalanx was one of the largest standardised classes produced by Trident Industrial, though today it's only built in Kalium's yards. Pre-war Battlecruisers differ from modern types in that they are slower and offer less firepower in manoeuvre, but far superior toughness. Indeed, it's best to think of them as pocket- battleships rather than specialist, aggressive ships. The Phalanx is armed with long broadsides of transition mass drivers and four Titanmetall 9K mass drivers in two traversable turrets. In combination, the class can unleash withering fire against multiple targets, given the right positioning.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
      "Last Bastion",
