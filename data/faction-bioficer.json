@@ -58,7 +58,7 @@
    ],
    "flagship": {
     "name": "Zenith Dreadnought",
-    "cost": 445,
+    "cost": 520,
     "stats": {
      "thrust": "6\"",
      "scan": "14\"",
@@ -68,7 +68,7 @@
      "ks": "3+",
      "bs": "5+",
      "g": "1",
-     "special": "Marines-1, Reinforced Armour, High Velocity Boarding Pods"
+     "special": "Marines-3, Reinforced Armour, High Velocity Boarding Pods"
     },
     "weapons": [
      {
@@ -79,6 +79,33 @@
       "damage": "3",
       "type": "K",
       "special": "Bloom-1, Close Action, Focused, Scald-2"
+     },
+     {
+      "name": "Grand Bisector",
+      "arc": "FN",
+      "attack": "5",
+      "lock": "3+",
+      "damage": "3",
+      "type": "E",
+      "special": "Bloom-2, Calibre-H/C, Crippling, Focused, Penetrator"
+     },
+     {
+      "name": "Scythes",
+      "arc": "FN",
+      "attack": "8",
+      "lock": "4+",
+      "damage": "1",
+      "type": "E",
+      "special": "Anti Wing, Fusillade-3, Reave-1"
+     },
+     {
+      "name": "Scythes",
+      "arc": "FN",
+      "attack": "8",
+      "lock": "4+",
+      "damage": "1",
+      "type": "E",
+      "special": "Anti Wing, Fusillade-3, Reave-1"
      }
     ],
     "loads": [
@@ -89,14 +116,14 @@
      },
      {
       "name": "Boarding Pods",
-      "launch": "1",
+      "launch": "3",
       "special": "-"
      }
     ],
     "specialRules": [
      {
-      "name": "Marines-1",
-      "description": "Remove 1 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
+      "name": "Marines-3",
+      "description": "Remove 3 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -155,7 +182,7 @@
    ],
    "flagship": {
     "name": "Bastion Battleship",
-    "cost": 225,
+    "cost": 245,
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
@@ -163,19 +190,19 @@
      "hull": 17,
      "es": "3+",
      "ks": "3+",
-     "bs": "5+",
+     "bs": "4+",
      "g": "1",
      "special": "Porter L-1"
     },
     "weapons": [
      {
-      "name": "Gravitic Hyperlance",
-      "arc": "Fn",
+      "name": "Gravitic Hyperspear",
+      "arc": "FN",
       "attack": "6",
       "lock": "3+",
       "damage": "2",
       "type": "C",
-      "special": "Arrest-2, Bloom-2"
+      "special": "Arrest-4, Bloom-2"
      },
      {
       "name": "Thermator",
@@ -352,7 +379,7 @@
    "category": "colossal",
    "ship": {
     "name": "Zenith Dreadnought",
-    "cost": 445,
+    "cost": 520,
     "stats": {
      "thrust": "6\"",
      "scan": "14\"",
@@ -362,7 +389,7 @@
      "ks": "3+",
      "bs": "5+",
      "g": "1",
-     "special": "Marines-1, Reinforced Armour, High Velocity Boarding Pods"
+     "special": "Marines-3, Reinforced Armour, High Velocity Boarding Pods"
     },
     "weapons": [
      {
@@ -373,6 +400,33 @@
       "damage": "3",
       "type": "K",
       "special": "Bloom-1, Close Action, Focused, Scald-2"
+     },
+     {
+      "name": "Grand Bisector",
+      "arc": "FN",
+      "attack": "5",
+      "lock": "3+",
+      "damage": "3",
+      "type": "E",
+      "special": "Bloom-2, Calibre-H/C, Crippling, Focused, Penetrator"
+     },
+     {
+      "name": "Scythes",
+      "arc": "FN",
+      "attack": "8",
+      "lock": "4+",
+      "damage": "1",
+      "type": "E",
+      "special": "Anti Wing, Fusillade-3, Reave-1"
+     },
+     {
+      "name": "Scythes",
+      "arc": "FN",
+      "attack": "8",
+      "lock": "4+",
+      "damage": "1",
+      "type": "E",
+      "special": "Anti Wing, Fusillade-3, Reave-1"
      }
     ],
     "loads": [
@@ -383,14 +437,14 @@
      },
      {
       "name": "Boarding Pods",
-      "launch": "1",
+      "launch": "3",
       "special": "-"
      }
     ],
     "specialRules": [
      {
-      "name": "Marines-1",
-      "description": "Remove 1 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
+      "name": "Marines-3",
+      "description": "Remove 3 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -861,7 +915,7 @@
    "category": "heavy",
    "ship": {
     "name": "Bastion Battleship",
-    "cost": 225,
+    "cost": 245,
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
@@ -869,19 +923,19 @@
      "hull": 17,
      "es": "3+",
      "ks": "3+",
-     "bs": "5+",
+     "bs": "4+",
      "g": "1",
      "special": "Porter L-1"
     },
     "weapons": [
      {
-      "name": "Gravitic Hyperlance",
-      "arc": "Fn",
+      "name": "Gravitic Hyperspear",
+      "arc": "FN",
       "attack": "6",
       "lock": "3+",
       "damage": "2",
       "type": "C",
-      "special": "Arrest-2, Bloom-2"
+      "special": "Arrest-4, Bloom-2"
      },
      {
       "name": "Thermator",
