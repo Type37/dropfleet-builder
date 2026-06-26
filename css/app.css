@@ -7017,3 +7017,30 @@ body[data-view="builder"] .game-info-footer {
 .admiral-ship-block { margin-top: var(--sp-sm); padding-top: var(--sp-sm); border-top: 1px dashed var(--stroke-light); }
 .admiral-ship-name { font-family: var(--font-condensed); font-weight: 600; font-size: var(--text-sm); color: var(--navy-dark); margin-bottom: 3px; }
 .admiral-ship-name .ton-tag { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); border: 1px solid var(--stroke-light); border-radius: var(--radius-sm); padding: 0 5px; margin-left: 4px; }
+
+/* ── What's New / changelog modal ─────────────────────────────────────── */
+.changelog-disclaimer {
+  font-size: var(--text-sm);
+  color: var(--fg3);
+  background: var(--bg2);
+  border-left: 3px solid var(--accent, #b8902b);
+  padding: var(--sp-sm) var(--sp-md);
+  border-radius: 4px;
+  margin: 0 0 var(--sp-md);
+  font-style: italic;
+}
+.changelog-entry { margin-bottom: var(--sp-md); }
+.changelog-date {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: var(--text-sm);
+  color: var(--fg2);
+  border-bottom: 1px solid var(--border, rgba(0,0,0,0.12));
+  padding-bottom: 2px;
+  margin-bottom: var(--sp-xs);
+}
+.changelog-title { color: var(--accent, #b8902b); }
+.changelog-list { margin: 0; padding-left: 1.1em; }
+.changelog-list li { font-size: var(--text-sm); line-height: 1.45; margin-bottom: 3px; color: var(--fg2); }

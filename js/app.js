@@ -523,6 +523,7 @@ const App = (() => {
       name: df.name,
       cost: df.cost || 0,
       features: df.features || [],
+      weapons: df.weapons || [],
       rules: df.rules || []
     }));
 
@@ -1930,16 +1931,25 @@ const App = (() => {
     // capacity of that letter. Fleet-wide aggregate, not per-Porter assignment.
     const porterCap = {};      // { S: n, L: n } — capacity from Porter stat strings
     const payloadDemand = {};  // { S: n, L: n } — capacity consumed by Payload Ships
+    const tallyPorter = special => {
+      let m;
+      const pRe = /Porter\s*([SLF])-(\d+)/gi;
+      while ((m = pRe.exec(special || ''))) { const L = m[1].toUpperCase(); porterCap[L] = (porterCap[L] || 0) + parseInt(m[2], 10); }
+      const dRe = /Payload\s*([SLF])-(\d+)/gi;
+      while ((m = dRe.exec(special || ''))) { const L = m[1].toUpperCase(); payloadDemand[L] = (payloadDemand[L] || 0) + parseInt(m[2], 10); }
+    };
     fleet.battleGroups.forEach(g => {
       g.ships.forEach(s => {
         const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
-        const special = (db && db.special) || '';
-        let m;
-        const pRe = /Porter\s*([SLF])-(\d+)/gi;
-        while ((m = pRe.exec(special))) { const L = m[1].toUpperCase(); porterCap[L] = (porterCap[L] || 0) + parseInt(m[2], 10); }
-        const dRe = /Payload\s*([SLF])-(\d+)/gi;
-        while ((m = dRe.exec(special))) { const L = m[1].toUpperCase(); payloadDemand[L] = (payloadDemand[L] || 0) + parseInt(m[2], 10); }
+        tallyPorter(db && db.special);
       });
+    });
+    // Famous-admiral flagships are ships on the table too — their Porter ability
+    // (e.g. Atlas's Catastrophe is Porter S-1) counts toward fleet capacity.
+    (fleet.admirals || []).forEach(a => {
+      if (!a.shipKey) return;
+      const db = findShipInDB(fleet.faction, 'famous_admirals', a.shipKey);
+      tallyPorter(db && db.special);
     });
     ['S', 'L', 'F'].forEach(letter => {
       const demand = payloadDemand[letter] || 0;
@@ -3258,17 +3268,25 @@ const App = (() => {
       && (!dbShip.loads || dbShip.loads.length === 0));
   }
 
+  // A deployable feature can carry a weapon (e.g. the Scourge Skybane Halo's
+  // Skybane Oculus Array). Feature weapons fire by Scan range, not Arc.
+  function renderFeatureWeapons(feat) {
+    return (feat.weapons || []).map(w =>
+      `<div class="feature-weapon">${esc(w.name)} — ${w.scan ? `Scan ${esc(w.scan)}, ` : ''}Att ${esc(w.attack)}, Lock ${esc(w.lock)}, Dmg ${esc(w.damage)}${w.type ? `<span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : ''}${w.special && w.special !== '-' ? ` ${renderWeaponSpecialChips(w.special)}` : ''}</div>`
+    ).join('');
+  }
   function renderFeatureStats(feat) {
     if (!feat) return '';
     const statLine = (feat.features || []).map(f =>
       `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.special && f.special !== '-' ? `, ${esc(f.special)}` : ''}</span>`
     ).join('');
+    const weapons = renderFeatureWeapons(feat);
     const ruleChips = (feat.rules || []).map(r =>
       r.description
         ? `<span class="rule-chip rule-chip-sm has-tooltip" data-rule-desc="${esc(r.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(r.name)}</span>`
         : `<span class="rule-chip rule-chip-sm">${esc(r.name)}</span>`
     ).join('');
-    return `${statLine ? `<div class="station-stats" style="margin-top:var(--sp-xs)">${statLine}</div>` : ''}${ruleChips ? `<div style="margin-top:var(--sp-xs)">${ruleChips}</div>` : ''}`;
+    return `${statLine ? `<div class="station-stats" style="margin-top:var(--sp-xs)">${statLine}</div>` : ''}${weapons ? `<div style="margin-top:var(--sp-xs)">${weapons}</div>` : ''}${ruleChips ? `<div style="margin-top:var(--sp-xs)">${ruleChips}</div>` : ''}`;
   }
 
   function renderFeatureCarrierBlock(ship, dbShip, groupId) {
@@ -3311,10 +3329,11 @@ const App = (() => {
     const statLine = (feat.features || []).map(f =>
       `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.special && f.special !== '-' ? `, ${esc(f.special)}` : ''}</span>`
     ).join('');
+    const weapons = renderFeatureWeapons(feat);
     const rules = (feat.rules || []).map(r =>
       `<div class="feature-rule">${r.description ? `<b>${esc(r.name)}:</b> ${ruleHtml(r.description)}` : `<b>${esc(r.name)}</b>`}</div>`
     ).join('');
-    return `${statLine ? `<div class="station-stats" style="margin-top:2px">${statLine}</div>` : ''}${rules}`;
+    return `${statLine ? `<div class="station-stats" style="margin-top:2px">${statLine}</div>` : ''}${weapons ? `<div style="margin-top:2px">${weapons}</div>` : ''}${rules}`;
   }
 
   // ── Systems / Hardpoint selection (Resistance Cruiser/Frigate/Dreadnought) ──
@@ -6700,6 +6719,44 @@ const App = (() => {
   }
 
   // ── Settings ──
+  // Curated "What's New" log. TTCombat doesn't publish an official changelog, so
+  // this is the maintainer's best-effort interpretation of edition changes plus
+  // the builder's own feature history. Newest first.
+  const CHANGELOG = [
+    { date: '2026-06-26', title: 'New rules editions + heroes', items: [
+      'Scourge updated to the latest edition: Oculus Beam Array Attack 2→3 (Shadow, Umbra, Banshee, Akuma, Flayer), Shadow & Umbra points changes, and a reworked Oculus Booster rule.',
+      'Eight new Scourge ships: Nereid, Rusalka, Nixie, Gloam, Kikimora, Bannik, Melusine, Fossegrim.',
+      'Three new Scourge Deployable Features: Skybane Halo, Shrouding Platform, Infestation Bastion.',
+      'New hero ships: Avram Bei (PHR, the Subatomic) and Rhiannon Major (UCM, the Leaden Triad).',
+      'Famous-admiral flagship Porter abilities now count toward your fleet Payload capacity.',
+      'Sharper, higher-resolution ship art thumbnails.',
+    ] },
+    { date: '2026-06-25', title: 'Datasheet accuracy pass', items: [
+      'Audited every famous-admiral flagship against the official Combined Fleet Stats PDFs and fixed missing or wrong weapons, stats and points (Havelock, Enslaver, Hagen, Vasquez, Magellan, Claudia Rhee, Twins of Aaru, plus Bioficer Agency & Ascendant).',
+      'Fixed missing Alt-fire weapon modes and several weapon stat errors.',
+      'Restored 14 ships’ full lore and corrected scrambled lore order on 16 ships; fixed the UCM Defence Hangar / Munitions Platform art swap.',
+    ] },
+    { date: '2026-06', title: 'Earlier highlights', items: [
+      'New Recruit list import.',
+      'Exact-odds combat damage calculator on ship/weapon cards.',
+      'Collection tracker: record the ships you own and filter the picker to what you can build.',
+      'Print overhaul: per-ship thumbnails, ink-saver and density toggles, page-break preview.',
+      'Name your battlegroups (names persist, share and print).',
+    ] },
+  ];
+  function openChangelog() {
+    const body = document.getElementById('changelog-body');
+    body.innerHTML = `
+      <p class="changelog-disclaimer">TTCombat has not kept the changelog updated or made it public, so this is my interpretation. No promises!</p>
+      ${CHANGELOG.map(e => `
+        <div class="changelog-entry">
+          <div class="changelog-date">${esc(e.date)}${e.title ? ` &middot; <span class="changelog-title">${esc(e.title)}</span>` : ''}</div>
+          <ul class="changelog-list">${e.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+        </div>`).join('')}
+    `;
+    openModal('modal-changelog');
+  }
+
   function openSettings() {
     const body = document.getElementById('settings-body');
     // Fleet description is edited in the overview "Add fleet notes" field; no need
@@ -6754,6 +6811,7 @@ const App = (() => {
         <div class="settings-group-title">Feedback</div>
         <div class="flex gap-sm">
           <a class="btn btn-outline btn-sm" href="${FEEDBACK_HREF}"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12v8H2zM2 4l6 5 6-5"/></svg> Send Feedback</a>
+          <button class="btn btn-outline btn-sm" onclick="App.closeModal('modal-settings'); App.openChangelog()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1v14M1 8h14"/></svg> What's New</button>
         </div>
       </div>
     `;
@@ -7788,6 +7846,6 @@ const App = (() => {
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText, openLastImported,
-    openSettings, toggleSetting, toggleTheme, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
+    openSettings, openChangelog, toggleSetting, toggleTheme, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
   };
 })();

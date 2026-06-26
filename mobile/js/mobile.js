@@ -953,16 +953,23 @@
     // must be assigned to a Porter of the same size letter (S or L). Soft warning
     // when total Payload of a letter exceeds total Porter capacity of that letter.
     const porterCap = {}, payloadDemand = {};
+    const tallyPorter = special => {
+      let m;
+      const pRe = /Porter\s*([SLF])-(\d+)/gi;
+      while ((m = pRe.exec(special || ''))) { const L = m[1].toUpperCase(); porterCap[L] = (porterCap[L] || 0) + parseInt(m[2], 10); }
+      const dRe = /Payload\s*([SLF])-(\d+)/gi;
+      while ((m = dRe.exec(special || ''))) { const L = m[1].toUpperCase(); payloadDemand[L] = (payloadDemand[L] || 0) + parseInt(m[2], 10); }
+    };
     fleet.battleGroups.forEach(g => {
       g.ships.forEach(s => {
         const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
-        const special = (db && db.stats && db.stats.special) || '';
-        let m;
-        const pRe = /Porter\s*([SLF])-(\d+)/gi;
-        while ((m = pRe.exec(special))) { const L = m[1].toUpperCase(); porterCap[L] = (porterCap[L] || 0) + parseInt(m[2], 10); }
-        const dRe = /Payload\s*([SLF])-(\d+)/gi;
-        while ((m = dRe.exec(special))) { const L = m[1].toUpperCase(); payloadDemand[L] = (payloadDemand[L] || 0) + parseInt(m[2], 10); }
+        tallyPorter(db && db.stats && db.stats.special);
       });
+    });
+    // Famous-admiral flagships count too (e.g. Atlas's Catastrophe is Porter S-1).
+    (fleet.admirals || []).forEach(a => {
+      const fs = admiralFlagship(a);
+      tallyPorter(fs && fs.stats && fs.stats.special);
     });
     ['S', 'L', 'F'].forEach(letter => {
       const demand = payloadDemand[letter] || 0;
@@ -1922,6 +1929,10 @@
           const rulesHtml = (ft.rules || []).map(r =>
             `<div class="feature-rule">${r.description ? `<b>${esc(r.name)}:</b> ${ruleHtml(r.description)}` : `<b>${esc(r.name)}</b>`}</div>`
           ).join('');
+          // Feature weapons (e.g. Skybane Halo's Skybane Oculus Array) fire by Scan, not Arc.
+          const weaponsHtml = (ft.weapons || []).map(w =>
+            `<div class="feature-rule">${esc(w.name)} — ${w.scan ? `Scan ${esc(w.scan)}, ` : ''}Att ${esc(w.attack)}, Lock ${esc(w.lock)}, Dmg ${esc(w.damage)} ${esc(w.type || '')}${w.special && w.special !== '-' ? ' ' + renderSpecialChips(w.special) : ''}</div>`
+          ).join('');
           const art = featureArtPath(ft.name);
           return `<div class="loadout-option loadout-radio-opt ${sel ? 'selected' : ''}" onclick="App.selectFeature('${ft.name.replace(/'/g, "\\'")}')">
             <div class="loadout-radio-row">
@@ -1931,6 +1942,7 @@
               <span class="loadout-option-cost">${ft.cost ? '+' + ft.cost + 'pts' : 'Free'}</span>
             </div>
             ${detail ? `<div class="loadout-option-desc">${esc(detail)}</div>` : ''}
+            ${weaponsHtml}
             ${rulesHtml}
           </div>`;
         }).join('')}
@@ -3080,11 +3092,36 @@
   // Settings/options sheet (the gear in the app bar) — mobile equivalent of the
   // desktop Settings modal: the Additional-ships toggle, feedback, desktop switch.
   // Tapping the toggle re-opens the sheet so its new on/off state is visible.
+  // What's New — TTCombat publishes no official changelog, so this is the
+  // maintainer's interpretation. Mirrors the desktop changelog.
+  const CHANGELOG = [
+    { date: '2026-06-26', title: 'New rules editions + heroes', items: [
+      'Scourge updated to the latest edition: Oculus Beam Array Attack 2→3 (Shadow, Umbra, Banshee, Akuma, Flayer), Shadow & Umbra points changes, reworked Oculus Booster rule.',
+      'Eight new Scourge ships: Nereid, Rusalka, Nixie, Gloam, Kikimora, Bannik, Melusine, Fossegrim.',
+      'Three new Scourge Deployable Features: Skybane Halo, Shrouding Platform, Infestation Bastion.',
+      'New hero ships: Avram Bei (PHR) and Rhiannon Major (UCM).',
+      'Famous-admiral flagship Porter abilities now count toward Payload capacity.',
+      'Sharper, higher-resolution ship art thumbnails.',
+    ] },
+    { date: '2026-06-25', title: 'Datasheet accuracy pass', items: [
+      'Audited every famous-admiral flagship against the official PDFs and fixed wrong weapons, stats and points.',
+      'Fixed missing Alt-fire weapon modes; restored and reordered ship lore; fixed a UCM station art swap.',
+    ] },
+    { date: '2026-06', title: 'Earlier highlights', items: [
+      'New Recruit list import; combat damage calculator; collection tracker; print overhaul; battlegroup naming.',
+    ] },
+  ];
+  function openChangelog() {
+    const body = `<p style="font-style:italic;color:var(--fg3);background:var(--bg2);border-left:3px solid var(--accent,#b8902b);padding:8px 10px;border-radius:4px;margin:0 0 12px">TTCombat has not kept the changelog updated or made it public, so this is my interpretation. No promises!</p>`
+      + CHANGELOG.map(e => `<div style="margin-bottom:12px"><div style="font-weight:600;text-transform:uppercase;letter-spacing:.03em;font-size:.85em;border-bottom:1px solid rgba(0,0,0,.12);padding-bottom:2px;margin-bottom:4px">${esc(e.date)} &middot; ${esc(e.title)}</div><ul style="margin:0;padding-left:1.1em">${e.items.map(i => `<li style="margin-bottom:3px">${esc(i)}</li>`).join('')}</ul></div>`).join('');
+    showSheet("What's New", body);
+  }
   function openSettingsSheet() {
     showActionSheet([
       // Misc Ships is a picker filter chip now (its own list), not a global setting.
       { label: `Two-column print  ${localStorage.getItem('dfc_print2col') === '1' ? '✓ On' : 'Off'}`,
         action: () => { localStorage.setItem('dfc_print2col', localStorage.getItem('dfc_print2col') === '1' ? '0' : '1'); haptic(HAPTIC.tick); openSettingsSheet(); } },
+      { label: "What's New", action: openChangelog },
       { label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
       { label: 'Switch to desktop view', action: viewDesktop }
     ]);

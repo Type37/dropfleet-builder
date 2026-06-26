@@ -11,7 +11,7 @@ from PIL import Image
 
 SRC = 'assets/art'
 DST = 'assets/art/thumb'
-WIDTH = 400            # crisp on retina for the largest small context (~280px card) too
+WIDTH = 600            # hi-res: crisp even on retina at the largest small context; thumbs lazy-load
 os.makedirs(DST, exist_ok=True)
 
 made = skipped = 0
@@ -27,7 +27,7 @@ for path in glob.glob(os.path.join(SRC, '*.webp')):
         if im.width > WIDTH:
             h = round(im.height * WIDTH / im.width)
             im = im.resize((WIDTH, h), Image.LANCZOS)
-        im.save(out, 'WEBP', quality=85, method=6)
+        im.save(out, 'WEBP', quality=90, method=6)
     made += 1
 
 # report savings
