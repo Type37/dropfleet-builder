@@ -237,7 +237,7 @@
    ],
    "flagship": {
     "name": "Shadow Battlecruiser",
-    "cost": 220,
+    "cost": 230,
     "stats": {
      "thrust": "10\"",
      "scan": "6\"",
@@ -253,7 +253,7 @@
      {
       "name": "Oculus Beam Array",
       "arc": "F",
-      "attack": "2",
+      "attack": "3",
       "lock": "3+",
       "damage": "2",
       "type": "E",
@@ -1572,7 +1572,7 @@
    "category": "heavy",
    "ship": {
     "name": "Umbra Battlecruiser",
-    "cost": 225,
+    "cost": 235,
     "stats": {
      "thrust": "10\"",
      "scan": "9\"",
@@ -1588,7 +1588,7 @@
      {
       "name": "Oculus Beam Array",
       "arc": "F",
-      "attack": "2",
+      "attack": "3",
       "lock": "3+",
       "damage": "2",
       "type": "E",
@@ -1618,7 +1618,7 @@
      },
      {
       "name": "Oculus Booster",
-      "description": "At the end of this Ship’s activation, you may place an Oculus token on an enemy Group in line of sight in this Ship’s Front Arc. Unused Oculus tokens placed by this Ship persist between rounds and are only removed when this Ship would place another Oculus token or when a Ship with an Oculus token goes on the Silent Running order.\nWhen you assign \"Oculus\" weapons to a Group that has an Oculus Token, you may remove the token. If you do, one of the Group's “Oculus” Weapon Systems replaces its Scald-X rule with Reave-X (of the same value) against that Group for that attack."
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of this Ship’s activation, you may place an Oculus token on an enemy Group in line of sight in this Ship’s Front Arc. Unused Oculus tokens placed by this Ship persist between rounds and are only removed when this Ship would place another Oculus token or when a Ship with an Oculus token goes on the Silent Running order.\n\nWhen you assign “Oculus” weapons to a Group that has an Oculus Token and is within Scan range of the attacking Group, you may remove the token. If you do, one of the Group’s “Oculus” Weapon Systems’ Type becomes Core against that Group for that attack."
      }
     ],
     "groupMin": 1,
@@ -1643,7 +1643,7 @@
    "category": "heavy",
    "ship": {
     "name": "Shadow Battlecruiser",
-    "cost": 220,
+    "cost": 230,
     "stats": {
      "thrust": "10\"",
      "scan": "6\"",
@@ -1659,7 +1659,7 @@
      {
       "name": "Oculus Beam Array",
       "arc": "F",
-      "attack": "2",
+      "attack": "3",
       "lock": "3+",
       "damage": "2",
       "type": "E",
@@ -1735,7 +1735,7 @@
      {
       "name": "Oculus Beam Array",
       "arc": "F",
-      "attack": "2",
+      "attack": "3",
       "lock": "3+",
       "damage": "2",
       "type": "E",
@@ -1828,7 +1828,7 @@
      {
       "name": "Oculus Beam Array",
       "arc": "F",
-      "attack": "2",
+      "attack": "3",
       "lock": "3+",
       "damage": "2",
       "type": "E",
@@ -4673,6 +4673,471 @@
      "Capitana (Kalium)"
     ]
    }
+  },
+  {
+   "id": "2614-a678-1d91-0530",
+   "name": "Nereid Supercruiser",
+   "category": "medium",
+   "ship": {
+    "name": "Nereid Supercruiser",
+    "cost": 190,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "6\"",
+     "sig": "8\"",
+     "hull": 13,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "6+",
+     "g": "1",
+     "special": "Cloak-1, Stealth"
+    },
+    "weapons": [
+     {
+      "name": "Oculus Beam Array",
+      "arc": "F",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Scald-1"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Fighters & Bombers",
+      "launch": "4",
+      "special": "-"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Cloak-1",
+      "description": "This Group may have a maximum of 1 Spikes."
+     },
+     {
+      "name": "Stealth",
+      "description": "This Ship may fire one Weapon while Silent Running."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "M"
+   }
+  },
+  {
+   "id": "de86-3329-c0f7-76e7",
+   "name": "Rusalka Supercruiser",
+   "category": "medium",
+   "ship": {
+    "name": "Rusalka Supercruiser",
+    "cost": 130,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "6\"",
+     "sig": "8\"",
+     "hull": 13,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "6+",
+     "g": "1",
+     "special": "-"
+    },
+    "weapons": [
+     {
+      "name": "Oculus Beam Array",
+      "arc": "F",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Scald-1"
+     },
+     {
+      "name": "Magneton Lash",
+      "arc": "FN",
+      "attack": "4",
+      "lock": "*",
+      "damage": "2",
+      "type": "E",
+      "special": "Calibre-H/C, Close Action, Mauler, Penetrator"
+     }
+    ],
+    "loads": [],
+    "specialRules": [],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "M"
+   }
+  },
+  {
+   "id": "60eb-f9db-c11a-0f18",
+   "name": "Nixie Supercruiser",
+   "category": "medium",
+   "ship": {
+    "name": "Nixie Supercruiser",
+    "cost": 145,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "6\"",
+     "sig": "8\"",
+     "hull": 13,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "6+",
+     "g": "1",
+     "special": "Cloak-1, Stealth"
+    },
+    "weapons": [
+     {
+      "name": "Oculus Beam Array",
+      "arc": "F",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Scald-1"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Cloak-1",
+      "description": "This Group may have a maximum of 1 Spikes."
+     },
+     {
+      "name": "Stealth",
+      "description": "This Ship may fire one Weapon while Silent Running."
+     },
+     {
+      "name": "Feature Carrier",
+      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the Scourge Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "M"
+   }
+  },
+  {
+   "id": "6ff7-5ea6-3e92-e745",
+   "name": "Gloam Battlecruiser",
+   "category": "heavy",
+   "ship": {
+    "name": "Gloam Battlecruiser",
+    "cost": 160,
+    "stats": {
+     "thrust": "10\"",
+     "scan": "6\"",
+     "sig": "8\"",
+     "hull": 14,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "6+",
+     "g": "1",
+     "special": "Cloak-1, Stealth, Vanguard-6”"
+    },
+    "weapons": [
+     {
+      "name": "Oculus Beam Array",
+      "arc": "F",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Scald-1"
+     },
+     {
+      "name": "Furnace Incisors",
+      "arc": "FN",
+      "attack": "6",
+      "lock": "3+",
+      "damage": "1",
+      "type": "E",
+      "special": "Burnthrough-1, Crippling-2xFire, Focused"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Cloak-1",
+      "description": "This Group may have a maximum of 1 Spikes."
+     },
+     {
+      "name": "Stealth",
+      "description": "This Ship may fire one Weapon while Silent Running."
+     },
+     {
+      "name": "Vanguard-6\"",
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H"
+   }
+  },
+  {
+   "id": "249f-92eb-8ebb-7aec",
+   "name": "Kikimora Pocket Battleship",
+   "category": "heavy",
+   "ship": {
+    "name": "Kikimora Pocket Battleship",
+    "cost": 230,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "6\"",
+     "sig": "8\"",
+     "hull": 15,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "Cloak-1, Stealth"
+    },
+    "weapons": [
+     {
+      "name": "Oculus Beam Array",
+      "arc": "F",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Scald-1"
+     },
+     {
+      "name": "Furnace Incisors",
+      "arc": "FN",
+      "attack": "6",
+      "lock": "3+",
+      "damage": "1",
+      "type": "E",
+      "special": "Burnthrough-1, Crippling-2xFire, Focused"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Fighters & Bombers",
+      "launch": "4",
+      "special": "-"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Cloak-1",
+      "description": "This Group may have a maximum of 1 Spikes."
+     },
+     {
+      "name": "Stealth",
+      "description": "This Ship may fire one Weapon while Silent Running."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H"
+   }
+  },
+  {
+   "id": "f6a2-42ae-797a-06c6",
+   "name": "Bannik Pocket Battleship",
+   "category": "heavy",
+   "ship": {
+    "name": "Bannik Pocket Battleship",
+    "cost": 250,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "6\"",
+     "sig": "8\"",
+     "hull": 15,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "Command Ship-1"
+    },
+    "weapons": [
+     {
+      "name": "Oculus Beam Array",
+      "arc": "F",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Scald-1"
+     },
+     {
+      "name": "Furnace Incisors",
+      "arc": "FN",
+      "attack": "6",
+      "lock": "3+",
+      "damage": "1",
+      "type": "E",
+      "special": "Burnthrough-1, Crippling-2xFire, Focused"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Torpedo",
+      "launch": "1",
+      "special": "Limited-2"
+     },
+     {
+      "name": "Fighters & Bombers",
+      "launch": "4",
+      "special": "-"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Command Ship-1",
+      "description": "Increase the Level of any Admiral assigned to this Ship by 1."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H"
+   }
+  },
+  {
+   "id": "9b94-7e31-2413-6c42",
+   "name": "Melusine Pocket Battleship",
+   "category": "heavy",
+   "ship": {
+    "name": "Melusine Pocket Battleship",
+    "cost": 255,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "6\"",
+     "sig": "8\"",
+     "hull": 15,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "-"
+    },
+    "weapons": [
+     {
+      "name": "Oculus Beam Array",
+      "arc": "F",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Scald-1"
+     },
+     {
+      "name": "Oculus Beam Phalanx",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Scald-1, Volley-2"
+     },
+     {
+      "name": "Magneton Lash",
+      "arc": "FN",
+      "attack": "4",
+      "lock": "*",
+      "damage": "2",
+      "type": "E",
+      "special": "Calibre-H/C, Close Action, Mauler, Penetrator"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Torpedo",
+      "launch": "1",
+      "special": "Limited-2"
+     },
+     {
+      "name": "Fighters & Bombers",
+      "launch": "4",
+      "special": "-"
+     }
+    ],
+    "specialRules": [],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H"
+   }
+  },
+  {
+   "id": "0544-b712-f96f-598c",
+   "name": "Fossegrim Pocket Battleship",
+   "category": "heavy",
+   "ship": {
+    "name": "Fossegrim Pocket Battleship",
+    "cost": 195,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "6\"",
+     "sig": "8\"",
+     "hull": 15,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "Cloak-1, Stealth"
+    },
+    "weapons": [
+     {
+      "name": "Oculus Beam Array",
+      "arc": "F",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Scald-1"
+     },
+     {
+      "name": "Plasma Tempest",
+      "arc": "F/S",
+      "attack": "8",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Fusillade-2, Scald-2"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Torpedo",
+      "launch": "1",
+      "special": "Limited-2"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Cloak-1",
+      "description": "This Group may have a maximum of 1 Spikes."
+     },
+     {
+      "name": "Stealth",
+      "description": "This Ship may fire one Weapon while Silent Running."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H"
+   }
   }
  ],
  "launchAssets": [
@@ -4830,7 +5295,69 @@
    "namesake": "A [nematocyst](https://en.wikipedia.org/wiki/Cnidocyte) is the venomous stinging organelle housed within the cnidocyte cells of jellyfish, sea anemones, and other cnidarians. It fires a coiled, barbed thread to inject toxin into prey, in one of the fastest mechanical processes in nature."
   }
  ],
- "deployableFeatures": [],
+ "deployableFeatures": [
+  {
+   "id": "0d16-998e-317e-6349",
+   "name": "Skybane Halo",
+   "cost": 0,
+   "features": [
+    {
+     "name": "Skybane Halo",
+     "es": "4+",
+     "ks": "5+",
+     "special": "Aegis-2"
+    }
+   ],
+   "rules": [
+    {
+     "name": "Skybane Halo",
+     "description": "Each friendly Skybane Halo counts as a separate friendly Group for the purposes of its Aegis-X special rule. While this feature is deployed to a Dropsite, friendly groups treat the Dropsite as if it were a friendly Ship with Aegis-2 on the same Orbital Layer for the purposes of enemy close action and bomber attacks.\nThis Feature’s Aegis special rule affects friendly Ships in Orbit in addition to Atmosphere."
+    },
+    {
+     "name": "Skybane Oculus Array",
+     "description": "Weapon — Scan 8”, Att 6, Lock 3+, DMG 1, Type E. Special: Anti Wing, Escape Velocity, Scald-2."
+    }
+   ]
+  },
+  {
+   "id": "12d0-88ec-4d14-4f80",
+   "name": "Shrouding Platform",
+   "cost": 0,
+   "features": [
+    {
+     "name": "Shrouding Platform",
+     "es": "5+",
+     "ks": "5+",
+     "special": "-"
+    }
+   ],
+   "rules": [
+    {
+     "name": "Shrouding Platform",
+     "description": "This Dropsite has a Signature of 0” and cannot gain Spikes.\nFriendly Groups within 6” of this Dropsite count as having one fewer Spike when an opponent is determining potential targets and assigning Weapons to targets.\nWhen friendly Bulk Landers are launched to this Dropsite, they ignore enemy Battalions on this Dropsite."
+    }
+   ]
+  },
+  {
+   "id": "da3d-bc95-8e2a-b482",
+   "name": "Infestation Bastion",
+   "cost": 0,
+   "features": [
+    {
+     "name": "Infestation Bastion",
+     "es": "5+",
+     "ks": "5+",
+     "special": "-"
+    }
+   ],
+   "rules": [
+    {
+     "name": "Infestation Bastion",
+     "description": "After enemy Battalions are deployed to this Dropsite, roll a dice for each of those Battalions. For each result of a 5+, remove one of those Battalions. Only one Infestation Bastion can be used this way for each Battalion and any Battalions already on the Dropsite are ignored."
+    }
+   ]
+  }
+ ],
  "abilitiesTable": [
   {
    "name": "For the Species",

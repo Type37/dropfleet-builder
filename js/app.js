@@ -187,11 +187,11 @@ const App = (() => {
     'thebes','tokyo','toulon','ulaanbaatar','vancouver','venice','vienna',
     'vilnius','warsaw','washington','weaver','yokohama',
     // Scourge
-    'akuma','apsasu','bael','banshee','beelzebub','charybdis','chimera',
-    'cthulhu','daemon','devil','djinn','dragon','ebisu','faust','gargoyle',
-    'harpy','hiruko','hydra','ifrit','incubus','kulshedra','lamassu','lucifer',
-    'munifex','nephilim','nickar','nosferatu','parasite','raiju','raum',
-    'revenant','samael','scylla','shadow','shenlong','sphinx','strix',
+    'akuma','apsasu','bael','banshee','bannik','beelzebub','charybdis','chimera',
+    'cthulhu','daemon','devil','djinn','dragon','ebisu','faust','fossegrim','gargoyle',
+    'gloam','harpy','hiruko','hydra','ifrit','incubus','kikimora','kulshedra','lamassu','lucifer',
+    'melusine','munifex','nephilim','nereid','nickar','nixie','nosferatu','parasite','raiju','raum',
+    'revenant','rusalka','samael','scylla','shadow','shenlong','sphinx','strix',
     'succubus','wraith','wyvern','yokai',
     // Shaltari
     'actinium','amber','amethyst','aquamarine','azurite','baleares','basalt',
