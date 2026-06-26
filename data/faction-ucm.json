@@ -14,7 +14,7 @@
     {
      "name": "Dedicated Survey Teams",
      "cost": "2AP",
-     "effect": "When you activate a Group of a single Ship, that Ship may Survey a Dropsite and attack with a single weapon this round (but still cannot launch Assets)."
+     "effect": "When you activate a Group of a single Ship, that Ship may Survey a Dropsite and attack with a single weapon this round (but still cannot launch Assets)."
     }
    ],
    "flagship": null,
@@ -36,7 +36,7 @@
     {
      "name": "Overcharge Lasers",
      "cost": "2AP",
-     "effect": "When you assign a Group’s weapons to a target, pick one of the attacking Group’s Weapon Systems with “Laser” in its name. That Weapon System gains Fusillade-2 for that attack sequence."
+     "effect": "When you assign a Group’s weapons to a target, pick one of the attacking Group’s Weapon Systems with “Laser” in its name. That Weapon System gains Fusillade-2 for that attack sequence."
     }
    ],
    "flagship": null,
@@ -53,7 +53,7 @@
     {
      "name": "Master Tactician",
      "cost": "4AP",
-     "effect": "At the end of this Group’s activation, discard a Pass Token and target another friendly Group of L or M Tonnage. If you do, that Group may turn up to 45 degrees, then move up to a quarter of its Thrust, and then each Ship in it may attack with a single weapon."
+     "effect": "At the end of this Group’s activation, discard a Pass Token and target another friendly Group of L or M Tonnage. If you do, that Group may turn up to 45 degrees, then move up to a quarter of its Thrust, and then each Ship in it may attack with a single weapon."
     }
    ],
    "flagship": {
@@ -132,7 +132,7 @@
     "specialRules": [
      {
       "name": "Aegis-6",
-      "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -174,7 +174,7 @@
     {
      "name": "Ballistic Prediction",
      "cost": "2AP",
-     "effect": "When you assign a Group’s weapons to a target, pick one of the attacking Group’s Weapon Systems with “Mass Driver” in its name. That Weapon System improves its Lock by 1 for that attack sequence."
+     "effect": "When you assign a Group’s weapons to a target, pick one of the attacking Group’s Weapon Systems with “Mass Driver” in its name. That Weapon System improves its Lock by 1 for that attack sequence."
     }
    ],
    "flagship": {
@@ -326,7 +326,7 @@
     "specialRules": [
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      },
      {
       "name": "Jink",
@@ -494,7 +494,7 @@
     "specialRules": [
      {
       "name": "Aegis-6",
-      "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -613,7 +613,7 @@
     "specialRules": [
      {
       "name": "Aegis-6",
-      "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -1813,7 +1813,7 @@
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
@@ -1883,11 +1883,11 @@
      },
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
      },
      {
       "name": "UCMA Battlenet",
-      "description": "An admiral assigned to this ship gains the following Command Abilities:\nDouble Time Bulk Line (2AP): When you activate another friendly Group in Orbit, until the end of its activation, that Group may launch its Bulk Landers as if the target Dropsite has no enemy Battalions.\nFeet First into Hell (2AP): When you activate another friendly Group in atmosphere, until the end of its activation, that Group can launch its Dropships or Drop Pods with a range of 6”. Drop Pods launched due to this rule ignore the Alt-Launch rule.",
+      "description": "An admiral assigned to this ship gains the following Command Abilities:\nDouble Time Bulk Line (2AP): When you activate another friendly Group in Orbit, until the end of its activation, that Group may launch its Bulk Landers as if the target Dropsite has no enemy Battalions.\nFeet First into Hell (2AP): When you activate another friendly Group in atmosphere, until the end of its activation, that Group can launch its Dropships or Drop Pods with a range of 6”. Drop Pods launched due to this rule ignore the Alt-Launch rule.",
       "page": "45",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1959,11 +1959,11 @@
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
      },
      {
       "name": "Aegis-6",
-      "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2038,7 +2038,7 @@
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
@@ -2099,7 +2099,7 @@
     "specialRules": [
      {
       "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -2165,13 +2165,13 @@
      },
      {
       "name": "UCMF Battlenet",
-      "description": "An admiral assigned to this ship gains the following Command Abilities:\nTelemetry Link (2AP): When you activate another friendly Group in Orbit, that Group increases its total movement (after orders) by 4” this round.\nOrder to Fire (2AP): When you activate another friendly Group in Orbit, pick one of the following options:\n• While that Group is on the General Quarters, Course Change, or Damage Control orders, each Ship may attack with an additional weapon.\n• While that Group is on the General Quarters or Weapons Free orders, you may attack with a single allowed Weapon System before turning and moving any Ships in that Group. That Weapon System cannot be used for the rest of the Group’s activation.",
+      "description": "An admiral assigned to this ship gains the following Command Abilities:\nTelemetry Link (2AP): When you activate another friendly Group in Orbit, that Group increases its total movement (after orders) by 4” this round.\nOrder to Fire (2AP): When you activate another friendly Group in Orbit, pick one of the following options:\n• While that Group is on the General Quarters, Course Change, or Damage Control orders, each Ship may attack with an additional weapon.\n• While that Group is on the General Quarters or Weapons Free orders, you may attack with a single allowed Weapon System before turning and moving any Ships in that Group. That Weapon System cannot be used for the rest of the Group’s activation.",
       "page": "45",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
       "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -2233,13 +2233,13 @@
     "specialRules": [
      {
       "name": "Aegis-6",
-      "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
       "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -2312,7 +2312,7 @@
     "specialRules": [
      {
       "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -2390,7 +2390,7 @@
     "specialRules": [
      {
       "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -2490,7 +2490,7 @@
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
@@ -2563,7 +2563,7 @@
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
@@ -2621,7 +2621,7 @@
      },
      {
       "name": "Detector",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -2899,7 +2899,7 @@
     "specialRules": [
      {
       "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -3031,7 +3031,7 @@
      },
      {
       "name": "Detector",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3754,7 +3754,7 @@
     "specialRules": [
      {
       "name": "Escort",
-      "description": "After Weapons have been assigned to a friendly Ship of H or C tonnage within 6” of this Ship on the same Orbital Layer, you may declare the use of Escort for the friendly Ship. Only one Group may Escort at a time and it must be in Coherency.\nAfter your opponent rolls to hit the original target, allocate an amount of hits from that roll to this Group. An Escort Group cannot be allocated more damage by those hits than each remaining Ship in it has in starting Hull. You may use this even if the Escort Group is out of range, arc, and line of sight of the attacking Group. Continue the attack sequence using the Escort Group.\nWeapons with the Focused rule cannot be affected by the Escort rule.",
+      "description": "After Weapons have been assigned to a friendly Ship of H or C tonnage within 6” of this Ship on the same Orbital Layer, you may declare the use of Escort for the friendly Ship. Only one Group may Escort at a time and it must be in Coherency.\nAfter your opponent rolls to hit the original target, allocate an amount of hits from that roll to this Group. An Escort Group cannot be allocated more damage by those hits than each remaining Ship in it has in starting Hull. You may use this even if the Escort Group is out of range, arc, and line of sight of the attacking Group. Continue the attack sequence using the Escort Group.\nWeapons with the Focused rule cannot be affected by the Escort rule.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -4028,13 +4028,13 @@
     "specialRules": [
      {
       "name": "Aegis-3",
-      "description": "All Ships with this rule in a Group combine their 3 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 3 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
       "name": "Escort",
-      "description": "After Weapons have been assigned to a friendly Ship of H or C tonnage within 6” of this Ship on the same Orbital Layer, you may declare the use of Escort for the friendly Ship. Only one Group may Escort at a time and it must be in Coherency.\nAfter your opponent rolls to hit the original target, allocate an amount of hits from that roll to this Group. An Escort Group cannot be allocated more damage by those hits than each remaining Ship in it has in starting Hull. You may use this even if the Escort Group is out of range, arc, and line of sight of the attacking Group. Continue the attack sequence using the Escort Group.\nWeapons with the Focused rule cannot be affected by the Escort rule.",
+      "description": "After Weapons have been assigned to a friendly Ship of H or C tonnage within 6” of this Ship on the same Orbital Layer, you may declare the use of Escort for the friendly Ship. Only one Group may Escort at a time and it must be in Coherency.\nAfter your opponent rolls to hit the original target, allocate an amount of hits from that roll to this Group. An Escort Group cannot be allocated more damage by those hits than each remaining Ship in it has in starting Hull. You may use this even if the Escort Group is out of range, arc, and line of sight of the attacking Group. Continue the attack sequence using the Escort Group.\nWeapons with the Focused rule cannot be affected by the Escort rule.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -4307,7 +4307,7 @@
     "specialRules": [
      {
       "name": "Detector",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -4376,7 +4376,7 @@
     "specialRules": [
      {
       "name": "Aegis-2",
-      "description": "All Ships with this rule in a Group combine their 2 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 2 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -4557,11 +4557,11 @@
      },
      {
       "name": "Stealth Drop",
-      "description": "When this Group launches its Dropships, 2 Dropships are needed to place 1 Battalion. If this Group contains a single ship, each Dropship only places a Battalion on a roll of a 4+."
+      "description": "When this Group launches its Dropships, 2 Dropships are needed to place 1 Battalion. If this Group contains a single ship, each Dropship only places a Battalion on a roll of a 4+."
      },
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 2,
@@ -4826,7 +4826,7 @@
      },
      {
       "name": "Detector",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -4838,7 +4838,7 @@
      },
      {
       "name": "Advanced Artillery",
-      "description": "While on the Max Thrust or Silent Running Orders, this Ship may attack with its N-12 Artillery Cannon Turrets.\nWhile on the Weapons Free Order, this Ship counts as having an additional weapon for its Detector rule."
+      "description": "While on the Max Thrust or Silent Running Orders, this Ship may attack with its N-12 Artillery Cannon Turrets.\nWhile on the Weapons Free Order, this Ship counts as having an additional weapon for its Detector rule."
      },
      {
       "name": "Magellan Lifeboats",
@@ -5239,7 +5239,7 @@
      },
      {
       "name": "Penal Legions",
-      "description": "When taken as part of your fleet, this Ship starts the game with 2 friendly Battalions on it. When any number of enemy Battalions are removed due to Boarding Actions or Battalion Combat on a Space Station within 6” of this Ship, place a single friendly Battalion on this Ship. This Ship’s Boarding Pods and Drop Pods can only be used while it has friendly Battalions on it and each Boarding Pod or Drop Pod launched causes one friendly Battalion on this Ship to be removed."
+      "description": "When taken as part of your fleet, this Ship starts the game with 2 friendly Battalions on it. When any number of enemy Battalions are removed due to Boarding Actions or Battalion Combat on a Space Station within 6” of this Ship, place a single friendly Battalion on this Ship. This Ship’s Boarding Pods and Drop Pods can only be used while it has friendly Battalions on it and each Boarding Pod or Drop Pod launched causes one friendly Battalion on this Ship to be removed."
      }
     ],
     "groupMin": 1,
@@ -5284,7 +5284,7 @@
     "specialRules": [
      {
       "name": "Aegis-4",
-      "description": "All Ships with this rule in a Group combine their 4 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 4 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -6027,32 +6027,32 @@
   {
    "name": "Colonial Legions",
    "cost": "2AP",
-   "effect": "After the Battalion Combat step of the Asset Phase, target a Dropsite or Feature. If any enemy Battalions completely removed any friendly Battalions from that Dropsite or Feature, place 1 Battalion on that Dropsite or Feature."
+   "effect": "After the Battalion Combat step of the Asset Phase, target a Dropsite or Feature. If any enemy Battalions completely removed any friendly Battalions from that Dropsite or Feature, place 1 Battalion on that Dropsite or Feature."
   },
   {
    "name": "Intensify Point-Defence",
    "cost": "1AP",
-   "effect": "At the end of the Planning Phase, pick one friendly Group. All Ships in that Group improve their Aegis-X value by 2 or gain Aegis-1 if they do not have the Aegis-X special rule."
+   "effect": "At the end of the Planning Phase, pick one friendly Group. All Ships in that Group improve their Aegis-X value by 2 or gain Aegis-1 if they do not have the Aegis-X special rule."
   },
   {
    "name": "Infiltrate and Sabotage",
    "cost": "2AP",
-   "effect": "At the end of the Planning Phase, pick one Dropsite within 6” of a friendly Group. That Dropsite takes D3+1 Core hits."
+   "effect": "At the end of the Planning Phase, pick one Dropsite within 6” of a friendly Group. That Dropsite takes D3+1 Core hits."
   },
   {
    "name": "Mass Driver Volley",
    "cost": "2AP",
-   "effect": "When you assign a Group’s weapons to a target, each of the attacking Group’s Weapon Systems with “Mass Driver” in their name improve their Lock by 1 for that attack sequence."
+   "effect": "When you assign a Group’s weapons to a target, each of the attacking Group’s Weapon Systems with “Mass Driver” in their name improve their Lock by 1 for that attack sequence."
   },
   {
    "name": "Atmospheric Bombing Run",
    "cost": "1AP",
-   "effect": "At the start of the Asset Phase, target one friendly Wing of Bombers. That Wing gains the Bombardment special rule until the end of the round."
+   "effect": "At the start of the Asset Phase, target one friendly Wing of Bombers. That Wing gains the Bombardment special rule until the end of the round."
   },
   {
    "name": "Next-Gen Armour Plating",
    "cost": "2AP",
-   "effect": "At the end of the Planning Phase, target one friendly Group. That Group may re-roll failed Energy Saves until the end of the round."
+   "effect": "At the end of the Planning Phase, target one friendly Group. That Group may re-roll failed Energy Saves until the end of the round."
   }
  ]
 }

@@ -53,7 +53,7 @@
     {
      "name": "Overwatch ",
      "cost": "2AP",
-     "effect": "When you activate this Ship on General Quarters, you may choose to forgo attacking with this Ship. If you do, this Ship goes on Overwatch until the end of the round or until it declares the use of Overwatch. At the end of any enemy Group’s activation, if that Group moved through this Ship’s Front arc and was in weapons range while doing so, you may declare the use of Overwatch against that Group. When you use Overwatch, this Ship immediately makes an Attack as if on General Quarters against the enemy Group, even if it is out of arc and weapon range."
+     "effect": "When you activate this Ship on General Quarters, you may choose to forgo attacking with this Ship. If you do, this Ship goes on Overwatch until the end of the round or until it declares the use of Overwatch. At the end of any enemy Group’s activation, if that Group moved through this Ship’s Front arc and was in weapons range while doing so, you may declare the use of Overwatch against that Group. When you use Overwatch, this Ship immediately makes an Attack as if on General Quarters against the enemy Group, even if it is out of arc and weapon range."
     }
    ],
    "flagship": {
@@ -177,7 +177,7 @@
     {
      "name": "Sinthetic Grav Waves",
      "cost": "2AP",
-     "effect": "When you inflict damage to an enemy Ship with a weapon with the Arrest-X special rule, each Ship in the damaged Group is affected by the Arrest rule and increases its X value by 2 for that attack."
+     "effect": "When you inflict damage to an enemy Ship with a weapon with the Arrest-X special rule, each Ship in the damaged Group is affected by the Arrest rule and increases its X value by 2 for that attack."
     }
    ],
    "flagship": {
@@ -291,7 +291,7 @@
     "specialRules": [
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1209,7 +1209,7 @@
     "specialRules": [
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1277,7 +1277,7 @@
     "specialRules": [
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1321,7 +1321,7 @@
     "specialRules": [
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1821,7 +1821,7 @@
     "specialRules": [
      {
       "name": "Detector",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -2179,7 +2179,7 @@
     "specialRules": [
      {
       "name": "Hero",
-      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet.",
+      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet.",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -2956,7 +2956,7 @@
      },
      {
       "name": "Summoning Cell",
-      "description": "When you activate a Wing within 4” of this Ship, instead of moving them normally, you may remove them from the table, then place them anywhere within 18” of this Ship. Wings placed this way suffer the effects of any scenery they are placed on but ignore intervening scenery. Wings placed this way may form and divide into Wings as if they had moved normally."
+      "description": "When you activate a Wing within 4” of this Ship, instead of moving them normally, you may remove them from the table, then place them anywhere within 18” of this Ship. Wings placed this way suffer the effects of any scenery they are placed on but ignore intervening scenery. Wings placed this way may form and divide into Wings as if they had moved normally."
      }
     ],
     "groupMin": 1,
@@ -3000,7 +3000,7 @@
     "specialRules": [
      {
       "name": "Aegis-3",
-      "description": "All Ships with this rule in a Group combine their 3 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 3 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3018,7 +3018,7 @@
      },
      {
       "name": "Limited Aegis Bandwidth",
-      "description": "Friendly Ships with this rule may combine their Aegis values as if they were the same Group. When these Ships combine their Aegis value, only those within 6” of the Group using the benefits of Aegis are counted. A Ship with this rule cannot gain the benefit of Aegis from another Ship with this rule."
+      "description": "Friendly Ships with this rule may combine their Aegis values as if they were the same Group. When these Ships combine their Aegis value, only those within 6” of the Group using the benefits of Aegis are counted. A Ship with this rule cannot gain the benefit of Aegis from another Ship with this rule."
      }
     ],
     "groupMin": 1,
@@ -3063,7 +3063,7 @@
     "specialRules": [
      {
       "name": "Aegis-1",
-      "description": "All Ships with this rule in a Group combine their 1 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 1 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3081,7 +3081,7 @@
      },
      {
       "name": "Limited Aegis Bandwidth",
-      "description": "Friendly Ships with this rule may combine their Aegis values as if they were the same Group. When these Ships combine their Aegis value, only those within 6” of the Group using the benefits of Aegis are counted. A Ship with this rule cannot gain the benefit of Aegis from another Ship with this rule."
+      "description": "Friendly Ships with this rule may combine their Aegis values as if they were the same Group. When these Ships combine their Aegis value, only those within 6” of the Group using the benefits of Aegis are counted. A Ship with this rule cannot gain the benefit of Aegis from another Ship with this rule."
      }
     ],
     "groupMin": 1,
@@ -3684,7 +3684,7 @@
      },
      {
       "name": "Penal Legions",
-      "description": "When taken as part of your fleet, this Ship starts the game with 2 friendly Battalions on it. When any number of enemy Battalions are removed due to Boarding Actions or Battalion Combat on a Space Station within 6” of this Ship, place a single friendly Battalion on this Ship. This Ship’s Boarding Pods and Drop Pods can only be used while it has friendly Battalions on it and each Boarding Pod or Drop Pod launched causes one friendly Battalion on this Ship to be removed."
+      "description": "When taken as part of your fleet, this Ship starts the game with 2 friendly Battalions on it. When any number of enemy Battalions are removed due to Boarding Actions or Battalion Combat on a Space Station within 6” of this Ship, place a single friendly Battalion on this Ship. This Ship’s Boarding Pods and Drop Pods can only be used while it has friendly Battalions on it and each Boarding Pod or Drop Pod launched causes one friendly Battalion on this Ship to be removed."
      }
     ],
     "groupMin": 1,
@@ -4201,7 +4201,7 @@
     "specialRules": [
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      },
      {
       "name": "High Velocity Boarding Pods",
@@ -4741,32 +4741,32 @@
   {
    "name": "Good Fight, We Should Do It More Often",
    "cost": "1AP",
-   "effect": "If a friendly Group’s attack would cause an enemy Group to be completely removed from the table, the friendly Group may immediately turn up to 45 degrees."
+   "effect": "If a friendly Group’s attack would cause an enemy Group to be completely removed from the table, the friendly Group may immediately turn up to 45 degrees."
   },
   {
    "name": "Maddening Communiqué",
    "cost": "3AP",
-   "effect": "At the start of the Activation Phase, pick an opponent. That opponent’s Abilities cost 1 additional AP to use until the end of the round."
+   "effect": "At the start of the Activation Phase, pick an opponent. That opponent’s Abilities cost 1 additional AP to use until the end of the round."
   },
   {
    "name": "Forcing an Unfair Fight",
    "cost": "2AP",
-   "effect": "At the start of the Activation Phase, pick a Dropsite you contest. Add a friendly Battalion to each Feature on that Dropsite. At the beginning of the Cleanup step of the End Phase, remove a friendly Battalion from each Feature on that Dropsite."
+   "effect": "At the start of the Activation Phase, pick a Dropsite you contest. Add a friendly Battalion to each Feature on that Dropsite. At the beginning of the Cleanup step of the End Phase, remove a friendly Battalion from each Feature on that Dropsite."
   },
   {
    "name": "Precision Strike",
    "cost": "2AP",
-   "effect": "When you assign a Group’s weapons to targets, pick one of the attacking Group’s Weapon Systems. Improve the Lock of that Weapon System by 1 for this attack sequence."
+   "effect": "When you assign a Group’s weapons to targets, pick one of the attacking Group’s Weapon Systems. Improve the Lock of that Weapon System by 1 for this attack sequence."
   },
   {
    "name": "Prismatic Surprise",
    "cost": "1AP",
-   "effect": "At the end of the Planning Phase, you may swap the attached Payloads of two Porter Ships with the same Porter value."
+   "effect": "At the end of the Planning Phase, you may swap the attached Payloads of two Porter Ships with the same Porter value."
   },
   {
    "name": "Unsportsmanlike Behaviour",
    "cost": "3AP",
-   "effect": "During this round’s Cleanup step of the End Phase, all players retain any unspent AP from this round into the next round. In the next round, only players that have used this Ability this round can generate AP in the Planning Phase."
+   "effect": "During this round’s Cleanup step of the End Phase, all players retain any unspent AP from this round into the next round. In the next round, only players that have used this Ability this round can generate AP in the Planning Phase."
   }
  ]
 }

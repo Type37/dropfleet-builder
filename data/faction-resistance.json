@@ -14,7 +14,7 @@
     {
      "name": "Subsystem Network",
      "cost": "1AP",
-     "effect": "Before you attack with a Group of M tonnage, pick two of its weapon systems with the same name without the Linked-X special rule. Those weapons gain Linked-SSN for that attack."
+     "effect": "Before you attack with a Group of M tonnage, pick two of its weapon systems with the same name without the Linked-X special rule. Those weapons gain Linked-SSN for that attack."
     }
    ],
    "flagship": null,
@@ -53,7 +53,7 @@
     {
      "name": "Magellan Expedition",
      "cost": "2AP",
-     "effect": "When you launch Bulk Landers from this Ship or a Ship within 6” of it, you may have that Ship launch an additional 2 or 4 Bulk Landers. Any Ship that does takes that much damage (causing Crippling Effects and Explosions where applicable)."
+     "effect": "When you launch Bulk Landers from this Ship or a Ship within 6” of it, you may have that Ship launch an additional 2 or 4 Bulk Landers. Any Ship that does takes that much damage (causing Crippling Effects and Explosions where applicable)."
     }
    ],
    "flagship": {
@@ -299,7 +299,7 @@
     "specialRules": [
      {
       "name": "Vanguard-3\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -325,7 +325,7 @@
     {
      "name": "Artillery Strike",
      "cost": "2AP*",
-     "effect": "When you assign targets to a Weapon System with “Artillery” in its name, that Weapon System’s damage type becomes Core for those attacks. If that Weapon System is on a H or C tonnage Ship this Ability costs 3AP."
+     "effect": "When you assign targets to a Weapon System with “Artillery” in its name, that Weapon System’s damage type becomes Core for those attacks. If that Weapon System is on a H or C tonnage Ship this Ability costs 3AP."
     }
    ],
    "flagship": {
@@ -1031,7 +1031,7 @@
     "specialRules": [
      {
       "name": "Detector",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -1596,7 +1596,7 @@
     "specialRules": [
      {
       "name": "Vanguard-3\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1654,7 +1654,7 @@
     "specialRules": [
      {
       "name": "Vanguard-3\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1706,15 +1706,15 @@
      },
      {
       "name": "Repair Bay",
-      "description": "Friendly Ships within 6” of this Ship that roll to repair Crippling Effects during the Repair step of the End Phase repair those effects on a roll of a 2+ instead of a 4+. Friendly Ships that end their activation within 6” of this Ship on the same Orbital Layer recover 2 lost Hull Points."
+      "description": "Friendly Ships within 6” of this Ship that roll to repair Crippling Effects during the Repair step of the End Phase repair those effects on a roll of a 2+ instead of a 4+. Friendly Ships that end their activation within 6” of this Ship on the same Orbital Layer recover 2 lost Hull Points."
      },
      {
       "name": "Box of Scraps",
-      "description": "At the end of this ship’s activation, pick one friendly ship within 6” in line of sight (including this one). Place a Box Of Scraps token next to that ship. The next time that Ship would be destroyed due to damage, it isn’t. Instead, before continuing to inflict damage, remove the Box of Scraps token and that ship remains in play with D3 Hull Points remaining, then continue inflicting damage as normal. Box Of Scraps tokens persist through rounds but a ship may only have 1 Box Of Scraps token."
+      "description": "At the end of this ship’s activation, pick one friendly ship within 6” in line of sight (including this one). Place a Box Of Scraps token next to that ship. The next time that Ship would be destroyed due to damage, it isn’t. Instead, before continuing to inflict damage, remove the Box of Scraps token and that ship remains in play with D3 Hull Points remaining, then continue inflicting damage as normal. Box Of Scraps tokens persist through rounds but a ship may only have 1 Box Of Scraps token."
      },
      {
       "name": "Vanguard-3\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1781,7 +1781,7 @@
      },
      {
       "name": "Vanguard-3\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -2080,7 +2080,7 @@
     "specialRules": [
      {
       "name": "Hero",
-      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet.",
+      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet.",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -2143,7 +2143,7 @@
      },
      {
       "name": "Wing Support",
-      "description": "Friendly Fighters within 6” of this Ship can be used for Close Protection against any Kinetic weapons (in addition to Close Action and Bomber attacks). When friendly Fighters within 6” of this Ship are used to remove enemy Bombers, each Fighter removes 2 Bombers instead of 1. When friendly Bombers (of any type) within 6” of a Ship with this rule attack, they Saturation Fire when there are 5 or more Bombers in the attack instead of 6."
+      "description": "Friendly Fighters within 6” of this Ship can be used for Close Protection against any Kinetic weapons (in addition to Close Action and Bomber attacks). When friendly Fighters within 6” of this Ship are used to remove enemy Bombers, each Fighter removes 2 Bombers instead of 1. When friendly Bombers (of any type) within 6” of a Ship with this rule attack, they Saturation Fire when there are 5 or more Bombers in the attack instead of 6."
      }
     ],
     "groupMin": 1,
@@ -2408,7 +2408,7 @@
     "specialRules": [
      {
       "name": "Detector",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -2430,7 +2430,7 @@
      },
      {
       "name": "Telescope Token",
-      "description": "When you assign weapons to a Group that has a Telescope token, you may remove the token. If you do, one of the Group's Weapon Systems lowers the result required to score a critical against that Group by 1 for that attack (so a weapon that would crit on a 5+ crits on a 4+ instead).\nTelescope tokens placed by this Ship persist between rounds and are only removed when this Ship would place another Telescope token or when a Ship with a Telescope token goes on the Silent Running order."
+      "description": "When you assign weapons to a Group that has a Telescope token, you may remove the token. If you do, one of the Group's Weapon Systems lowers the result required to score a critical against that Group by 1 for that attack (so a weapon that would crit on a 5+ crits on a 4+ instead).\nTelescope tokens placed by this Ship persist between rounds and are only removed when this Ship would place another Telescope token or when a Ship with a Telescope token goes on the Silent Running order."
      }
     ],
     "groupMin": 1,
@@ -2499,7 +2499,7 @@
      },
      {
       "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -3068,7 +3068,7 @@
      },
      {
       "name": "Detector",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3080,7 +3080,7 @@
      },
      {
       "name": "Advanced Artillery",
-      "description": "While on the Max Thrust or Silent Running Orders, this Ship may attack with its N-12 Artillery Cannon Turrets.\nWhile on the Weapons Free Order, this Ship counts as having an additional weapon for its Detector rule."
+      "description": "While on the Max Thrust or Silent Running Orders, this Ship may attack with its N-12 Artillery Cannon Turrets.\nWhile on the Weapons Free Order, this Ship counts as having an additional weapon for its Detector rule."
      },
      {
       "name": "Magellan Lifeboats",
@@ -3484,7 +3484,7 @@
      },
      {
       "name": "Penal Legions",
-      "description": "When taken as part of your fleet, this Ship starts the game with 2 friendly Battalions on it. When any number of enemy Battalions are removed due to Boarding Actions or Battalion Combat on a Space Station within 6” of this Ship, place a single friendly Battalion on this Ship. This Ship’s Boarding Pods and Drop Pods can only be used while it has friendly Battalions on it and each Boarding Pod or Drop Pod launched causes one friendly Battalion on this Ship to be removed."
+      "description": "When taken as part of your fleet, this Ship starts the game with 2 friendly Battalions on it. When any number of enemy Battalions are removed due to Boarding Actions or Battalion Combat on a Space Station within 6” of this Ship, place a single friendly Battalion on this Ship. This Ship’s Boarding Pods and Drop Pods can only be used while it has friendly Battalions on it and each Boarding Pod or Drop Pod launched causes one friendly Battalion on this Ship to be removed."
      }
     ],
     "groupMin": 1,
@@ -3529,7 +3529,7 @@
     "specialRules": [
      {
       "name": "Aegis-4",
-      "description": "All Ships with this rule in a Group combine their 4 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 4 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -4620,32 +4620,32 @@
   {
    "name": "Expert Repair Crews",
    "cost": "2AP",
-   "effect": "At the start of the Repair step of the End Phase, remove all Crippling effects from a friendly Group."
+   "effect": "At the start of the Repair step of the End Phase, remove all Crippling effects from a friendly Group."
   },
   {
    "name": "Duct Tape and Bubblegum",
    "cost": "2AP",
-   "effect": "When a friendly Ship of M, H, or C tonnage is destroyed by damage from an opponent's attack (including any Crippling or Explosion Effects), it remains in play until the start of the End Phase. At the start of the End Phase, roll for explosion and remove that Ship from play. That Ship counts as destroyed."
+   "effect": "When a friendly Ship of M, H, or C tonnage is destroyed by damage from an opponent's attack (including any Crippling or Explosion Effects), it remains in play until the start of the End Phase. At the start of the End Phase, roll for explosion and remove that Ship from play. That Ship counts as destroyed."
   },
   {
    "name": "Redundant Ship Systems",
    "cost": "1AP",
-   "effect": "When you would Roll for Crippling Effects for a friendly Ship (for any reason), roll 1D6 instead of 2D6 for that Ship’s Crippling Effect. Count a result of a 1 as a result of a 2."
+   "effect": "When you would Roll for Crippling Effects for a friendly Ship (for any reason), roll 1D6 instead of 2D6 for that Ship’s Crippling Effect. Count a result of a 1 as a result of a 2."
   },
   {
    "name": "Final Mission",
    "cost": "1AP",
-   "effect": "When you attack with Fire Ships, one of those attacking Wings gains Corruptor-2 for that attack."
+   "effect": "When you attack with Fire Ships, one of those attacking Wings gains Corruptor-2 for that attack."
   },
   {
    "name": "Never Tell Me The Odds",
    "cost": "1AP",
-   "effect": "When you move a Group through Scenery or move/place a Wing of Assets through Scenery, that Group/Wing ignores the effects of that Scenery piece until the end of the movement."
+   "effect": "When you move a Group through Scenery or move/place a Wing of Assets through Scenery, that Group/Wing ignores the effects of that Scenery piece until the end of the movement."
   },
   {
    "name": "Sabotage",
    "cost": "2AP",
-   "effect": "At the end of the Activation Phase, before activating Dropsites, pick one Dropsite controlled by an enemy player within 6” of a friendly Group. That Dropsite takes D3+1 Core Hits. After rolling, you may spend an additional 1AP to re-roll the D3 and treat this ability as an attack for the purposes of removing a feature."
+   "effect": "At the end of the Activation Phase, before activating Dropsites, pick one Dropsite controlled by an enemy player within 6” of a friendly Group. That Dropsite takes D3+1 Core Hits. After rolling, you may spend an additional 1AP to re-roll the D3 and treat this ability as an attack for the purposes of removing a feature."
   }
  ]
 }

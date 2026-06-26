@@ -14,7 +14,7 @@
     {
      "name": "Reaving Gaze",
      "cost": "1AP",
-     "effect": "When you assign a Group’s weapons to a target, pick one of the attacking Group’s Weapon Systems with “Oculus” in its name. That Weapon System replaces its Scald-X rule with Reave-X (of the same value) for that attack. If the attacking Group has 2 or more Ships, this Ability costs 2AP."
+     "effect": "When you assign a Group’s weapons to a target, pick one of the attacking Group’s Weapon Systems with “Oculus” in its name. That Weapon System replaces its Scald-X rule with Reave-X (of the same value) for that attack. If the attacking Group has 2 or more Ships, this Ability costs 2AP."
     }
    ],
    "flagship": null,
@@ -68,7 +68,7 @@
      "ks": "2+",
      "bs": "5+",
      "g": "1",
-     "special": "Cloak-1, Stealth, Winged Bulwark"
+     "special": "Cloak-1, Stealth, Winged Bulwark"
     },
     "weapons": [
      {
@@ -130,7 +130,7 @@
      },
      {
       "name": "Winged Bulwark",
-      "description": "Friendly Wings that activate within 14” of this Flagship may not move further than 14” away from this Flagship.\nThis Ship may launch Assets regardless of its order, keeping its Signature of 0” on Silent Running and additional turn on Course Change."
+      "description": "Friendly Wings that activate within 14” of this Flagship may not move further than 14” away from this Flagship.\nThis Ship may launch Assets regardless of its order, keeping its Signature of 0” on Silent Running and additional turn on Course Change."
      }
     ],
     "groupMin": 1,
@@ -288,15 +288,15 @@
     "specialRules": [
      {
       "name": "Vanguard-7\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 7” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 7” away from your Deployment Zone."
      },
      {
       "name": "Savagery",
-      "description": "When this Flagship becomes Crippled, it gains the Impetuous and Vectored special rules."
+      "description": "When this Flagship becomes Crippled, it gains the Impetuous and Vectored special rules."
      },
      {
       "name": "Impetuous",
-      "description": "At the start of each round, friendly Groups with this rule improve the Lock of their Weapon Systems by 1 until you activate a friendly Group without this rule."
+      "description": "At the start of each round, friendly Groups with this rule improve the Lock of their Weapon Systems by 1 until you activate a friendly Group without this rule."
      },
      {
       "name": "Vectored",
@@ -327,7 +327,7 @@
     {
      "name": "Infernal Maw",
      "cost": "2AP",
-     "effect": "After you roll to hit with a Furnace weapon, you may re-roll any of that weapon’s attack dice (both hits and misses)."
+     "effect": "After you roll to hit with a Furnace weapon, you may re-roll any of that weapon’s attack dice (both hits and misses)."
     }
    ],
    "flagship": {
@@ -1614,7 +1614,7 @@
     "specialRules": [
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      },
      {
       "name": "Oculus Booster",
@@ -1694,7 +1694,7 @@
     "specialRules": [
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1773,7 +1773,7 @@
      },
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1860,7 +1860,7 @@
      },
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -2515,7 +2515,7 @@
     "specialRules": [
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 2,
@@ -2575,7 +2575,7 @@
     "specialRules": [
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 2,
@@ -2636,7 +2636,7 @@
     "specialRules": [
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 2,
@@ -2711,7 +2711,7 @@
      },
      {
       "name": "Hero",
-      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet.",
+      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet.",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3070,7 +3070,7 @@
      },
      {
       "name": "Energy Siphon",
-      "description": "Before or after this Group completes any step in its activation, you may have it siphon energy. If you do, pick one other Group within 3” without the Energy Siphon special rule. That Group loses all Spikes and this Group gains those Spikes.\nAfter siphoning at least one Spike from another Group, increase the Attack of this Group’s Siphoned Oculus Rays by 1 until the end of the round. If this Group has 3 or more Spikes after siphoning, increase the Attack of this Group’s Siphoned Oculus Rays by 2 until the end of the round instead.\nWhen this Group is on the General Quarters or Silent Running Orders, it gains Regenerate-X, where X is the amount of Spikes it removes at the start of its activation."
+      "description": "Before or after this Group completes any step in its activation, you may have it siphon energy. If you do, pick one other Group within 3” without the Energy Siphon special rule. That Group loses all Spikes and this Group gains those Spikes.\nAfter siphoning at least one Spike from another Group, increase the Attack of this Group’s Siphoned Oculus Rays by 1 until the end of the round. If this Group has 3 or more Spikes after siphoning, increase the Attack of this Group’s Siphoned Oculus Rays by 2 until the end of the round instead.\nWhen this Group is on the General Quarters or Silent Running Orders, it gains Regenerate-X, where X is the amount of Spikes it removes at the start of its activation."
      }
     ],
     "groupMin": 1,
@@ -3301,7 +3301,7 @@
     "specialRules": [
      {
       "name": "Detector",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3669,7 +3669,7 @@
     "specialRules": [
      {
       "name": "Impetuous",
-      "description": "At the start of each round, friendly Groups with this rule improve the Lock of their Weapon Systems by 1 until you activate a friendly Group without this rule."
+      "description": "At the start of each round, friendly Groups with this rule improve the Lock of their Weapon Systems by 1 until you activate a friendly Group without this rule."
      },
      {
       "name": "Rare",
@@ -3679,7 +3679,7 @@
      },
      {
       "name": "Vanguard-7\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 7” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 7” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -3729,11 +3729,11 @@
     "specialRules": [
      {
       "name": "Impetuous",
-      "description": "At the start of each round, friendly Groups with this rule improve the Lock of their Weapon Systems by 1 until you activate a friendly Group without this rule."
+      "description": "At the start of each round, friendly Groups with this rule improve the Lock of their Weapon Systems by 1 until you activate a friendly Group without this rule."
      },
      {
       "name": "Vanguard-7\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 7” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 7” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -4245,7 +4245,7 @@
      },
      {
       "name": "Penal Legions",
-      "description": "When taken as part of your fleet, this Ship starts the game with 2 friendly Battalions on it. When any number of enemy Battalions are removed due to Boarding Actions or Battalion Combat on a Space Station within 6” of this Ship, place a single friendly Battalion on this Ship. This Ship’s Boarding Pods and Drop Pods can only be used while it has friendly Battalions on it and each Boarding Pod or Drop Pod launched causes one friendly Battalion on this Ship to be removed."
+      "description": "When taken as part of your fleet, this Ship starts the game with 2 friendly Battalions on it. When any number of enemy Battalions are removed due to Boarding Actions or Battalion Combat on a Space Station within 6” of this Ship, place a single friendly Battalion on this Ship. This Ship’s Boarding Pods and Drop Pods can only be used while it has friendly Battalions on it and each Boarding Pod or Drop Pod launched causes one friendly Battalion on this Ship to be removed."
      }
     ],
     "groupMin": 1,
@@ -4875,7 +4875,7 @@
      },
      {
       "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -5369,32 +5369,32 @@
   {
    "name": "For the Species",
    "cost": "1AP",
-   "effect": "At the end of a friendly Groups’ activation, pick a Crippled Ship in that Group and target an enemy Ship within 3” of it on the same Orbital Layer. Roll a dice for each of the friendly Ship’s remaining Hull Points. The target Ship is inflicted 1 Damage for each result of a 3+. The friendly Ship is destroyed and does not roll for explosion."
+   "effect": "At the end of a friendly Groups’ activation, pick a Crippled Ship in that Group and target an enemy Ship within 3” of it on the same Orbital Layer. Roll a dice for each of the friendly Ship’s remaining Hull Points. The target Ship is inflicted 1 Damage for each result of a 3+. The friendly Ship is destroyed and does not roll for explosion."
   },
   {
    "name": "Augmentations",
    "cost": "3AP",
-   "effect": "At the start of a friendly Carrier’s activation, if that Carrier has 2 or more Bulk Landers, it replaces all its Bulk Landers with a single deployable Orbital Defence Gun Feature (see 7.4.2 Deploying Features and 11.3 Features) until the end of the round. This Ability can only be used once each round."
+   "effect": "At the start of a friendly Carrier’s activation, if that Carrier has 2 or more Bulk Landers, it replaces all its Bulk Landers with a single deployable Orbital Defence Gun Feature (see 7.4.2 Deploying Features and 11.3 Features) until the end of the round. This Ability can only be used once each round."
   },
   {
    "name": "Abandon all Hope",
    "cost": "2AP",
-   "effect": "At the end of the Planning Phase, target an opponent. That opponent discards D3 Ability Points."
+   "effect": "At the end of the Planning Phase, target an opponent. That opponent discards D3 Ability Points."
   },
   {
    "name": "Assimilated Bioforms",
    "cost": "1AP",
-   "effect": "At the start of the Battalion Combat step of the Asset Phase, pick a City with friendly Battalions on it. Deploy D3 Assimilated Battalions to that City. At the end of the Battalion Combat step, remove any remaining Assimilated Battalions from the Dropsite."
+   "effect": "At the start of the Battalion Combat step of the Asset Phase, pick a City with friendly Battalions on it. Deploy D3 Assimilated Battalions to that City. At the end of the Battalion Combat step, remove any remaining Assimilated Battalions from the Dropsite."
   },
   {
    "name": "High Speed Launch",
    "cost": "2AP",
-   "effect": "At the end of the Planning Phase, pick a friendly Group. That Group gains Rapid Drop and may launch Assets at the end of its activation while on the Max Thrust order until the end of the round."
+   "effect": "At the end of the Planning Phase, pick a friendly Group. That Group gains Rapid Drop and may launch Assets at the end of its activation while on the Max Thrust order until the end of the round."
   },
   {
    "name": "Expert Defence Crews",
    "cost": "1AP",
-   "effect": "At the start of the Asset Phase, pick a friendly Group. That Group gains Marines-2D3 until the end of the round."
+   "effect": "At the start of the Asset Phase, pick a friendly Group. That Group gains Marines-2D3 until the end of the round."
   }
  ]
 }

@@ -14,7 +14,7 @@
     {
      "name": "Akira Manoeuvre",
      "cost": "1AP",
-     "effect": "When you activate a Group of a single Ship, that Group must go on General Quarters this activation. That Group only removes a single Spike and does not turn before its movement. After its movement, the Group must turn between 45 and 90 degrees, then continue its activation as normal."
+     "effect": "When you activate a Group of a single Ship, that Group must go on General Quarters this activation. That Group only removes a single Spike and does not turn before its movement. After its movement, the Group must turn between 45 and 90 degrees, then continue its activation as normal."
     }
    ],
    "flagship": null,
@@ -31,7 +31,7 @@
     {
      "name": "Re-route Systems",
      "cost": "1AP",
-     "effect": "At the start of a friendly Group’s activation, remove one Crippling Effect token (of any type) from that Group."
+     "effect": "At the start of a friendly Group’s activation, remove one Crippling Effect token (of any type) from that Group."
     },
     {
      "name": "Ranked Fire",
@@ -68,7 +68,7 @@
      "ks": "3+",
      "bs": "5+",
      "g": "1",
-     "special": "Reinforced Armour, Cutting Power"
+     "special": "Reinforced Armour, Cutting Power"
     },
     "weapons": [
      {
@@ -116,7 +116,7 @@
      },
      {
       "name": "Cutting Power",
-      "description": "If you attack with and do not Overcharge any of this Flagship’s Energy Glaive Batteries, they gain Reave-2 for their attacks this activation."
+      "description": "If you attack with and do not Overcharge any of this Flagship’s Energy Glaive Batteries, they gain Reave-2 for their attacks this activation."
      },
      {
       "name": "Reave-2",
@@ -255,7 +255,7 @@
     "specialRules": [
      {
       "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1423,11 +1423,11 @@
     "specialRules": [
      {
       "name": "Holo Interference Field",
-      "description": "At the end of this ship's activation, you may place a Holo Interference Field within 3” of this ship. These Holo Interference Fields are removed during the Cleanup step of the End Phase and are circular with a 4” diameter (a D6 or custom template are perfect tokens to represent these). Enemy Ships ignore the target's Spikes and Signature when attacking through a Holo Interference Field. Enemy Fighters & Bombers underneath the Holo Interference Field when it is placed, or that move/are placed into the Holo Interference Field are removed on a 4+."
+      "description": "At the end of this ship’s activation, you may place a Holo Interference Field within 3” of this ship. These Holo Interference Fields are removed during the Cleanup step of the End Phase and are circular with a 4” diameter (a D6 or custom template are perfect tokens to represent these). Enemy Ships ignore the target’s Spikes and Signature when attacking through a Holo Interference Field. Enemy Fighters & Bombers underneath the Holo Interference Field when it is placed, or that move/are placed into the Holo Interference Field are removed on a 4+."
      },
      {
       "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1472,7 +1472,7 @@
     "specialRules": [
      {
       "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1532,7 +1532,7 @@
     "specialRules": [
      {
       "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1617,7 +1617,7 @@
     "specialRules": [
      {
       "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -1730,7 +1730,7 @@
      },
      {
       "name": "Holo Interference Field",
-      "description": "At the end of this ship's activation, you may place a Holo Interference Field within 3” of this ship. These Holo Interference Fields are removed during the Cleanup step of the End Phase and are circular with a 4” diameter (a D6 or custom template are perfect tokens to represent these). Enemy Ships ignore the target's Spikes and Signature when attacking through a Holo Interference Field. Enemy Fighters & Bombers underneath the Holo Interference Field when it is placed, or that move/are placed into the Holo Interference Field are removed on a 4+."
+      "description": "At the end of this ship’s activation, you may place a Holo Interference Field within 3” of this ship. These Holo Interference Fields are removed during the Cleanup step of the End Phase and are circular with a 4” diameter (a D6 or custom template are perfect tokens to represent these). Enemy Ships ignore the target’s Spikes and Signature when attacking through a Holo Interference Field. Enemy Fighters & Bombers underneath the Holo Interference Field when it is placed, or that move/are placed into the Holo Interference Field are removed on a 4+."
      },
      {
       "name": "Feature Carrier",
@@ -2356,7 +2356,7 @@
     "specialRules": [
      {
       "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -3106,7 +3106,7 @@
      },
      {
       "name": "Targeting Link",
-      "description": "Friendly Ships within their Scan range of this Ship may use it as a spotter when they attack. If they do, before assigning weapons to targets, choose any amount of the attacking Ship’s weapons. When assigning targets to those weapons, measure Weapons Range from this Ship, using this Ship’s Scan. Attacks made this way must still be in Arc and line of sight of the attacking Ship. This rule has no effect on Close Action Weapons and weapons already benefiting from this rule."
+      "description": "Friendly Ships within their Scan range of this Ship may use it as a spotter when they attack. If they do, before assigning weapons to targets, choose any amount of the attacking Ship’s weapons. When assigning targets to those weapons, measure Weapons Range from this Ship, using this Ship’s Scan. Attacks made this way must still be in Arc and line of sight of the attacking Ship. This rule has no effect on Close Action Weapons and weapons already benefiting from this rule."
      }
     ],
     "groupMin": 1,
@@ -3224,7 +3224,7 @@
      },
      {
       "name": "Catapult Launcher",
-      "description": "When you launch Torpedoes from this Ship, if it launches a single Torpedo, you may launch that Torpedo up to 9” away instead of 6”."
+      "description": "When you launch Torpedoes from this Ship, if it launches a single Torpedo, you may launch that Torpedo up to 9” away instead of 6”."
      }
     ],
     "groupMin": 1,
@@ -3278,13 +3278,13 @@
     "specialRules": [
      {
       "name": "Aegis-2",
-      "description": "All Ships with this rule in a Group combine their 2 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 2 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
       "name": "Escort",
-      "description": "After Weapons have been assigned to a friendly Ship of H or C tonnage within 6” of this Ship on the same Orbital Layer, you may declare the use of Escort for the friendly Ship. Only one Group may Escort at a time and it must be in Coherency.\nAfter your opponent rolls to hit the original target, allocate an amount of hits from that roll to this Group. An Escort Group cannot be allocated more damage by those hits than each remaining Ship in it has in starting Hull. You may use this even if the Escort Group is out of range, arc, and line of sight of the attacking Group. Continue the attack sequence using the Escort Group.\nWeapons with the Focused rule cannot be affected by the Escort rule.",
+      "description": "After Weapons have been assigned to a friendly Ship of H or C tonnage within 6” of this Ship on the same Orbital Layer, you may declare the use of Escort for the friendly Ship. Only one Group may Escort at a time and it must be in Coherency.\nAfter your opponent rolls to hit the original target, allocate an amount of hits from that roll to this Group. An Escort Group cannot be allocated more damage by those hits than each remaining Ship in it has in starting Hull. You may use this even if the Escort Group is out of range, arc, and line of sight of the attacking Group. Continue the attack sequence using the Escort Group.\nWeapons with the Focused rule cannot be affected by the Escort rule.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3346,7 +3346,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "L",
-    "lore": "The general performance profile of a typical defence monitors would seem to fit the PHR well � that of high armour, low speed. However, since the PHR have almost exclusively been on the offensive thus far, very few of them have been seen in action. Most of what the UCM knew of PHR monitors was gleaned from spies over the Tlalocan Moons, where the PHR has now established a permanent base, which naturally needs defending. After beachheads were established in the Battle for Earth, the PHR brought in Castor class monitors to defend their landing zones, illustrating that the PHR were behind their warnings that this war would be a longer-haul than the UCM were hoping for. The Castor, much like its Colonial opposite number - the Istanbul - features heavy calibre mass drivers, able to lay down considerable cross-orbital defensive fire. Its vertical hull is quite unusual for a PHR ship, and allows these weapons to pivot around a central arc.",
+    "lore": "The general performance profile of a typical defence monitors would seem to fit the PHR well – that of high armour, low speed. However, since the PHR have almost exclusively been on the offensive thus far, very few of them have been seen in action. Most of what the UCM knew of PHR monitors was gleaned from spies over the Tlalocan Moons, where the PHR has now established a permanent base, which naturally needs defending. After beachheads were established in the Battle for Earth, the PHR brought in Castor class monitors to defend their landing zones, illustrating that the PHR were behind their warnings that this war would be a longer-haul than the UCM were hoping for. The Castor, much like its Colonial opposite number - the Istanbul - features heavy calibre mass drivers, able to lay down considerable cross-orbital defensive fire. Its vertical hull is quite unusual for a PHR ship, and allows these weapons to pivot around a central arc.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Cogent Reason",
@@ -3454,7 +3454,7 @@
     "specialRules": [
      {
       "name": "Escort",
-      "description": "After Weapons have been assigned to a friendly Ship of H or C tonnage within 6” of this Ship on the same Orbital Layer, you may declare the use of Escort for the friendly Ship. Only one Group may Escort at a time and it must be in Coherency.\nAfter your opponent rolls to hit the original target, allocate an amount of hits from that roll to this Group. An Escort Group cannot be allocated more damage by those hits than each remaining Ship in it has in starting Hull. You may use this even if the Escort Group is out of range, arc, and line of sight of the attacking Group. Continue the attack sequence using the Escort Group.\nWeapons with the Focused rule cannot be affected by the Escort rule.",
+      "description": "After Weapons have been assigned to a friendly Ship of H or C tonnage within 6” of this Ship on the same Orbital Layer, you may declare the use of Escort for the friendly Ship. Only one Group may Escort at a time and it must be in Coherency.\nAfter your opponent rolls to hit the original target, allocate an amount of hits from that roll to this Group. An Escort Group cannot be allocated more damage by those hits than each remaining Ship in it has in starting Hull. You may use this even if the Escort Group is out of range, arc, and line of sight of the attacking Group. Continue the attack sequence using the Escort Group.\nWeapons with the Focused rule cannot be affected by the Escort rule.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3514,7 +3514,7 @@
      },
      {
       "name": "Advanced ECM Suite",
-      "description": "When a friendly Group (including this Ship’s Group) within 4\" of this Ship is attacked, you may have this Ship use its Advanced ECM Suite. If you do, after all weapons have been assigned, reduce the Lock of weapons belonging to one of the attacking Ships by 1 for the rest of the round. The attacking group must be on the same orbital layer as this ship. A Ship can be affected multiple times each round by this rule but each Ship with this rule can only use it once per round."
+      "description": "When a friendly Group (including this Ship’s Group) within 4\" of this Ship is attacked, you may have this Ship use its Advanced ECM Suite. If you do, after all weapons have been assigned, reduce the Lock of weapons belonging to one of the attacking Ships by 1 for the rest of the round. The attacking group must be on the same orbital layer as this ship. A Ship can be affected multiple times each round by this rule but each Ship with this rule can only use it once per round."
      }
     ],
     "groupMin": 1,
@@ -3943,7 +3943,7 @@
      },
      {
       "name": "Detector",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3955,7 +3955,7 @@
      },
      {
       "name": "Advanced Artillery",
-      "description": "While on the Max Thrust or Silent Running Orders, this Ship may attack with its N-12 Artillery Cannon Turrets.\nWhile on the Weapons Free Order, this Ship counts as having an additional weapon for its Detector rule."
+      "description": "While on the Max Thrust or Silent Running Orders, this Ship may attack with its N-12 Artillery Cannon Turrets.\nWhile on the Weapons Free Order, this Ship counts as having an additional weapon for its Detector rule."
      },
      {
       "name": "Magellan Lifeboats",
@@ -4357,7 +4357,7 @@
      },
      {
       "name": "Penal Legions",
-      "description": "When taken as part of your fleet, this Ship starts the game with 2 friendly Battalions on it. When any number of enemy Battalions are removed due to Boarding Actions or Battalion Combat on a Space Station within 6” of this Ship, place a single friendly Battalion on this Ship. This Ship’s Boarding Pods and Drop Pods can only be used while it has friendly Battalions on it and each Boarding Pod or Drop Pod launched causes one friendly Battalion on this Ship to be removed."
+      "description": "When taken as part of your fleet, this Ship starts the game with 2 friendly Battalions on it. When any number of enemy Battalions are removed due to Boarding Actions or Battalion Combat on a Space Station within 6” of this Ship, place a single friendly Battalion on this Ship. This Ship’s Boarding Pods and Drop Pods can only be used while it has friendly Battalions on it and each Boarding Pod or Drop Pod launched causes one friendly Battalion on this Ship to be removed."
      }
     ],
     "groupMin": 1,
@@ -4402,7 +4402,7 @@
     "specialRules": [
      {
       "name": "Aegis-4",
-      "description": "All Ships with this rule in a Group combine their 4 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+      "description": "All Ships with this rule in a Group combine their 4 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -5186,7 +5186,7 @@
    "rules": [
     {
      "name": "Heavy Calibre Orbital Gun",
-     "description": "While a Ship is carrying this feature, it has the Heavy Calibre Orbital Gun (Mounted) Weapon System in addition to its normal Weapon Systems, using the carrying Ship’s Scan with an Arc of FN.\nThis feature cannot use the Heavy Calibre Orbital Gun (Mounted) weapon profile."
+     "description": "While a Ship is carrying this feature, it has the Heavy Calibre Orbital Gun (Mounted) Weapon System in addition to its normal Weapon Systems, using the carrying Ship’s Scan with an Arc of FN.\nThis feature cannot use the Heavy Calibre Orbital Gun (Mounted) weapon profile."
     },
     {
      "name": "Calibre-X",
@@ -5223,7 +5223,7 @@
    "rules": [
     {
      "name": "Shield Platform",
-     "description": "Friendly Groups in coherency within 6” of this Dropsite gain the Reinforced Armour special rule.\nThis Dropsite counts as having the Reinforced Armour special rule against enemy attacks. Reduce the Lock of enemy weapons targeting this Dropsite by 1."
+     "description": "Friendly Groups in coherency within 6” of this Dropsite gain the Reinforced Armour special rule.\nThis Dropsite counts as having the Reinforced Armour special rule against enemy attacks. Reduce the Lock of enemy weapons targeting this Dropsite by 1."
     }
    ]
   },
@@ -5242,7 +5242,7 @@
    "rules": [
     {
      "name": "Scanner Tower",
-     "description": "When you activate this Feature, place two Spikes on any enemy Group in line of sight, then, place another two Spikes on any enemy Group in line of sight."
+     "description": "When you activate this Feature, place two Spikes on any enemy Group in line of sight, then, place another two Spikes on any enemy Group in line of sight."
     }
    ]
   }
@@ -5251,32 +5251,32 @@
   {
    "name": "Countermeasures Hack",
    "cost": "1AP",
-   "effect": "At the start of a friendly Group’s activation, target an enemy Group that a friendly Admiral can draw line of sight to. Until the end of the activation, that Group cannot use its Backup Save, cannot gain the benefits of Aegis, and cannot gain the benefits of Fighters’ Close Protection. If this Ability targets a H or C tonnage Group, this Ability costs 2AP."
+   "effect": "At the start of a friendly Group’s activation, target an enemy Group that a friendly Admiral can draw line of sight to. Until the end of the activation, that Group cannot use its Backup Save, cannot gain the benefits of Aegis, and cannot gain the benefits of Fighters’ Close Protection. If this Ability targets a H or C tonnage Group, this Ability costs 2AP."
   },
   {
    "name": "Weapons Hack",
    "cost": "2AP",
-   "effect": "Once per round, at the start of an enemy Group’s activation, choose one of that Group’s Weapon Systems. Until the end of that Group’s activation, each of that Weapon System’s attack dice results of a 1 causes the attacking Ship to lose the weapon’s unmodified Damage value in hull points."
+   "effect": "Once per round, at the start of an enemy Group’s activation, choose one of that Group’s Weapon Systems. Until the end of that Group’s activation, each of that Weapon System’s attack dice results of a 1 causes the attacking Ship to lose the weapon’s unmodified Damage value in hull points."
   },
   {
    "name": "Ship of the Line",
    "cost": "1AP",
-   "effect": "When you assign targets to a Group's weapons, that Group's Broadside Arc weapons that have the Fusillade-X special rule gain the benefit of their Fusillade rule regardless of the Group's Order for its attacks this activation. If the attacking Group is on the Weapons Free order, it instead doubles the Fusillade value of those weapons for that attack."
+   "effect": "When you assign targets to a Group's weapons, that Group's Broadside Arc weapons that have the Fusillade-X special rule gain the benefit of their Fusillade rule regardless of the Group's Order for its attacks this activation. If the attacking Group is on the Weapons Free order, it instead doubles the Fusillade value of those weapons for that attack."
   },
   {
    "name": "Drive Hack",
    "cost": "2AP",
-   "effect": "Once per round, at the end of the Planning Phase, target an enemy Group that a friendly Admiral can draw line of sight to. At the start of that Group’s activation, it must make a single Backup save. If it fails (or has no) Backup save, that Group cannot go on the Course Change and Max Thrust orders."
+   "effect": "Once per round, at the end of the Planning Phase, target an enemy Group that a friendly Admiral can draw line of sight to. At the start of that Group’s activation, it must make a single Backup save. If it fails (or has no) Backup save, that Group cannot go on the Course Change and Max Thrust orders."
   },
   {
    "name": "Repair Drone Squadron",
    "cost": "1AP",
-   "effect": "At the end of the Repair step of the End Phase, target a friendly Ship. That Ship recovers D3 lost Hull Points."
+   "effect": "At the end of the Repair step of the End Phase, target a friendly Ship. That Ship recovers D3 lost Hull Points."
   },
   {
    "name": "Elite Ground Forces",
    "cost": "2AP",
-   "effect": "At the start of the Battalion Combat step of the Asset Phase, choose a Feature containing friendly Battalions. Until the end of the Battalion Combat step, those Battalions remove 2 enemy Battalions instead of 1 and may also be used to remove enemy Battalions from anywhere on that Dropsite in the 3rd step of the combat sequence."
+   "effect": "At the start of the Battalion Combat step of the Asset Phase, choose a Feature containing friendly Battalions. Until the end of the Battalion Combat step, those Battalions remove 2 enemy Battalions instead of 1 and may also be used to remove enemy Battalions from anywhere on that Dropsite in the 3rd step of the combat sequence."
   }
  ]
 }
