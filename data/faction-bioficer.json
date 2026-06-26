@@ -242,13 +242,22 @@
     },
     "weapons": [
      {
-      "name": "Hyper Lightvice",
-      "arc": "F",
+      "name": "Godray Lightvice (Anti-Ship)",
+      "arc": "F/S",
       "attack": "5",
       "lock": "2+",
       "damage": "3",
       "type": "K",
-      "special": "Bloom-1, Close Action, Focused, Scald-1"
+      "special": "Alt-1, Bloom-1, Close Action, Focused, Scald-1"
+     },
+     {
+      "name": "Godray Lightvice (Bombardment)",
+      "arc": "F/S",
+      "attack": "5",
+      "lock": "4+",
+      "damage": "3",
+      "type": "K",
+      "special": "Alt-1, Bloom-1, Bombardment, Close Action, Focused, Scald-1"
      }
     ],
     "loads": [],

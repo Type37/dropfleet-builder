@@ -224,13 +224,22 @@
     },
     "weapons": [
      {
-      "name": "Heavy Quad Battery",
+      "name": "Heavy Quad Battery (Anti-Capital)",
       "arc": "F",
       "attack": "4",
       "lock": "3+",
       "damage": "2",
       "type": "K",
-      "special": "Calibre-H/C, Critical-1, Penetrator"
+      "special": "Alt-1, Calibre-H/C, Critical-1, Penetrator"
+     },
+     {
+      "name": "Heavy Quad Battery (Flak)",
+      "arc": "F",
+      "attack": "12",
+      "lock": "2+",
+      "damage": "1",
+      "type": "K",
+      "special": "Alt-1, Fusillade-4"
      }
     ],
     "loads": [],

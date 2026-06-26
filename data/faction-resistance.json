@@ -2129,6 +2129,15 @@
       "damage": "2",
       "type": "E",
       "special": "Alt-1, Burnthrough-1, Calibre-L/M, Mauler"
+     },
+     {
+      "name": "HF-8 Clearance Laser (Wide)",
+      "arc": "F",
+      "attack": "6",
+      "lock": "3+",
+      "damage": "0",
+      "type": "E",
+      "special": "Alt-1, Anti Wing"
      }
     ],
     "loads": [],
