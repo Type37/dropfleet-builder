@@ -182,7 +182,7 @@ const App = (() => {
     'caracas','carthage','centurion','delhi','detroit','edmonton','geneva',
     'gladiator','glasgow','halsey','hanoi','havana','havelock','istanbul',
     'jakarta','johannesburg','kyiv','lima','london','lysander','madrid',
-    'milwaukee','newton','osaka','oslo','perth','reykjavik','rio','rome',
+    'milwaukee','newton','osaka','oslo','perth','reykjavik','rhiannon','rio','rome',
     'rotterdam','santiago','seattle','sheffield','siam','taipei','tayne',
     'thebes','tokyo','toulon','ulaanbaatar','vancouver','venice','vienna',
     'vilnius','warsaw','washington','weaver','yokohama',

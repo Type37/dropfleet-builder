@@ -5720,6 +5720,76 @@
      "Capitana (Kalium)"
     ]
    }
+  },
+  {
+   "id": "a6ac-b2e1-a5fd-2b88",
+   "name": "Rhiannon Major - Leaden Triad Heavy Destroyer",
+   "category": "light",
+   "ship": {
+    "name": "Rhiannon Major - Leaden Triad Heavy Destroyer",
+    "cost": 71,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "6\"",
+     "sig": "4\"",
+     "hull": 6,
+     "es": "3+",
+     "ks": "4+",
+     "bs": "6+",
+     "g": "1",
+     "special": "Hero, Unique"
+    },
+    "weapons": [
+     {
+      "name": "Artillery Cannon",
+      "arc": "F",
+      "attack": "1",
+      "lock": "4+",
+      "damage": "2",
+      "type": "K",
+      "special": "Calibre-H/C, Fusillade-1, Low Power"
+     },
+     {
+      "name": "Artillery Cannon",
+      "arc": "F",
+      "attack": "1",
+      "lock": "4+",
+      "damage": "2",
+      "type": "K",
+      "special": "Calibre-H/C, Fusillade-1, Low Power"
+     },
+     {
+      "name": "Artillery Cannon",
+      "arc": "F",
+      "attack": "1",
+      "lock": "4+",
+      "damage": "2",
+      "type": "K",
+      "special": "Calibre-H/C, Fusillade-1, Low Power"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Hero",
+      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet."
+     },
+     {
+      "name": "Unique",
+      "description": "You may only take one Group of this Ship."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": true,
+    "tonnage": "L",
+    "famousShipsPrefix": "Only ship of the class:",
+    "famousShips": [
+     "Leaden Triad"
+    ],
+    "lore": "Leaden Triad is a new, experimental vessel designed and built by the restored Eden Drive Yards Corporation. This pre-war colossus was ended by the Scourge invasion, but this reincarnation is based in its recaptured shipyards, and the new corporation has all the recovered tech of its predecessor, including its work on the largest chemical guns ever built. Though they never got a chance to enter service, three prototypes were recovered and have been installed aboard a unique heavy destroyer hull.\n\nCaptain Rhiannon Major, already the UCM’s finest naval gunnery officer at just 34 years of age, has been given command. Though not a natural leader, her icy bravery and uncanny intelligence are the natural fit to shepherd this project into combat testing. Already, she has demonstrated the devastating power of this antique technology when writ large by deftly annihilating two Bioficer battlecruisers. These guns hurl house-sized shells at vast muzzle energy with negligible power drain, allowing full manoeuvrability and systems use while firing weapons far exceeding this ship’s tonnage grade. However, despite Major’s calculations and brilliant heat management, frequent and ultra-costly barrel changes seem inevitable."
+   }
   }
  ],
  "launchAssets": [
