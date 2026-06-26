@@ -3010,12 +3010,12 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "L",
-    "lore": "This makes them especially useful in decapitation strikes, although they are less flexible when faced with superior numbers than other PHR vessels.\n\nof Damocles PHR destroyers are larger and bulkier than those of other races and the heavily armed Electra class is no exception. Indeed, by UCM reckoning it could almost be classed a light cruiser. It is armed with four heavy calibre mass drivers in two pairs. These massive guns are devastating when unleashed against large vessels, the Electra’s preferred prey. The fixed setup of these formidable weapons is unusual for a PHR ship, especially since they are limited to the forward arc. Naval Intelligence theorises that this is due to the sheer size of the guns, precluding the usual broadside setup due to the comparatively small size of the destroyer’s hull. Whatever the reason, this setup makes the Electra a highly focused and aggressive ship, favouring frontal assaults against single targets.",
+    "lore": "PHR destroyers are larger and bulkier than those of other races and the heavily armed Electra class is no exception. Indeed, by UCM reckoning it could almost be classed a light cruiser. It is armed with four heavy calibre mass drivers in two pairs. These massive guns are devastating when unleashed against large vessels, the Electra’s preferred prey. The fixed setup of these formidable weapons is unusual for a PHR ship, especially since they are limited to the forward arc. Naval Intelligence theorises that this is due to the sheer size of the guns, precluding the usual broadside setup due to the comparatively small size of the destroyer’s hull. Whatever the reason, this setup makes the Electra a highly focused and aggressive ship, favouring frontal assaults against single targets. This makes them especially useful in decapitation strikes, although they are less flexible when faced with superior numbers than other PHR vessels.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Trident of [Poseidon](https://en.wikipedia.org/wiki/Poseidon)",
      "[Harpe](https://en.wikipedia.org/wiki/Harpe)",
-     "Sword"
+     "Sword of Damocles"
     ],
     "namesake": "[Electra](https://en.wikipedia.org/wiki/Electra) was a princess of Mycenae in Greek myth, daughter of Agamemnon and Clytemnestra. She helped her brother Orestes avenge their father by killing their mother and her lover Aegisthus."
    }

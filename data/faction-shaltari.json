@@ -1575,14 +1575,14 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "lore": "This killing power is supplemented by a standard feature, thus far, of all Shaltari pocket battleships – launch clamps for self-deploying surface assets. On the Boracite, these are often employed as launch and forget assets while en-route to the next kill, although if targets are plentiful, the Boracite may remain on station of unleash salvos of annihilating energy at its foes.\n\nHandmaiden A sister class of the Euclase, the Boracite is configured for pure ship-ship combat through increased firepower. Here, the Euclase’s launch bays are replaced with a linked pair of disintegrator batteries. Coupled with the twinned Thermal Lance Cannons, this ship is at its most deadly when its captain, who must possess time-honed skill, can manoeuvre into an optimal firing position prior to unleashing all weapons, pushing the ship’s enhanced power matrix to the limit.",
+    "lore": "A sister class of the Euclase, the Boracite is configured for pure ship-ship combat through increased firepower. Here, the Euclase’s launch bays are replaced with a linked pair of disintegrator batteries. Coupled with the twinned Thermal Lance Cannons, this ship is at its most deadly when its captain, who must possess time-honed skill, can manoeuvre into an optimal firing position prior to unleashing all weapons, pushing the ship’s enhanced power matrix to the limit. This killing power is supplemented by a standard feature, thus far, of all Shaltari pocket battleships – launch clamps for self-deploying surface assets. On the Boracite, these are often employed as launch and forget assets while en-route to the next kill, although if targets are plentiful, the Boracite may remain on station of unleash salvos of annihilating energy at its foes.",
     "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Starlance",
      "Journeyman",
      "New Death",
-     "Portent’s"
+     "Portent’s Handmaiden"
     ],
     "namesake": "A hard borate mineral, usually colourless to green, that forms within beds of salt and gypsum."
    }
@@ -2193,14 +2193,14 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "M",
-    "lore": "This svelte ship-killer is armed with a twin Hyperwave Cannon, matching the primary armament of the heavier Goethite class. It foregoes other capabilities though in favour of a mount for two stacked self-deploying surface instillations. These vary from the Stellargate, which brings starship-grade teleport technology to the surface, to the Electrowave Caster, a devilish weapons instillation capable of inflicting crippling damage on orbiting starships. The most awe-inspiring and outlandish is the Worldstrider – by far the largest known walker-type construct, thus far. This city block-spanning monstrosity smashes whole instillations beneath its six, tungsten-sheaved legs.\n\nQueen While Shaltari battlecruisers are regrettably familiar, some of their latest, lightest derivatives are not. Classified as supercruisers, these ships appear to be brand new. The alien’s choice to increase battlecruiser production and variety suggests a development, but whether that’s the strain or war or simply innovation is unknown. The first Shaltari supercruiser sighting, early in 2679, was the Mesolite.",
+    "lore": "While Shaltari battlecruisers are regrettably familiar, some of their latest, lightest derivatives are not. Classified as supercruisers, these ships appear to be brand new. The alien’s choice to increase battlecruiser production and variety suggests a development, but whether that’s the strain or war or simply innovation is unknown. The first Shaltari supercruiser sighting, early in 2679, was the Mesolite. This svelte ship-killer is armed with a twin Hyperwave Cannon, matching the primary armament of the heavier Goethite class. It foregoes other capabilities though in favour of a mount for two stacked self-deploying surface instillations. These vary from the Stellargate, which brings starship-grade teleport technology to the surface, to the Electrowave Caster, a devilish weapons instillation capable of inflicting crippling damage on orbiting starships. The most awe-inspiring and outlandish is the Worldstrider – by far the largest known walker-type construct, thus far. This city block-spanning monstrosity smashes whole instillations beneath its six, tungsten-sheaved legs.",
     "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Black Pyramid",
      "Aten’s Chariot",
      "Invader",
-     "Sun"
+     "Sun Queen"
     ],
     "namesake": "A delicate, needle-like white zeolite mineral that forms in the cavities of volcanic rock."
    }
@@ -3615,12 +3615,12 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "L",
-    "lore": "While these effectively damage ships in higher orbital layers, their true value is in disrupting the power systems of larger ships. This makes the Silicon especially favoured by the type to Starchief who likes taking prizes, or enjoys boarding actions against helpless foes, drifting helplessly in the void.\n\nSilencer Much as with the Scourge, monitors are an unusual fit in Shaltari fleets, due to their low speed and consequent lack of finesse. In addition, the Shaltari rarely fight defensive actions, making an ordinary monitor-type configuration superfluous. Instead, Shaltari types fulfil a rearguard role. The most frequently seen is the Silicon class, armed with a quad-bank of tilt-able ion cannons, giant versions of those commonly found on Kukri grav-tanks.",
+    "lore": "Much as with the Scourge, monitors are an unusual fit in Shaltari fleets, due to their low speed and consequent lack of finesse. In addition, the Shaltari rarely fight defensive actions, making an ordinary monitor-type configuration superfluous. Instead, Shaltari types fulfil a rearguard role. The most frequently seen is the Silicon class, armed with a quad-bank of tilt-able ion cannons, giant versions of those commonly found on Kukri grav-tanks. While these effectively damage ships in higher orbital layers, their true value is in disrupting the power systems of larger ships. This makes the Silicon especially favoured by the type to Starchief who likes taking prizes, or enjoys boarding actions against helpless foes, drifting helplessly in the void.",
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Euthaniser",
      "Benevolent Mercy",
-     "Rio’s"
+     "Rio’s Silencer"
     ],
     "namesake": "The grey metalloid that, after oxygen, makes up most of the crust, and the foundation of every microchip."
    }
@@ -3981,7 +3981,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "L",
-    "lore": "Although not as dangerous as a Corvette alone, their cooperation can quickly reduce the target to so much falling debris in a matter of seconds.\n\nThese tiny vessels fulfil the role of the corvettes of other races, although they are smaller even than those diminutive ships. They are designed solely to hunt enemy atmospheric assets and are extremely fast. These ships are favoured by the most aggressive Shaltari with the least fear of death and as such are generally crewed by Firstborn Shaltari new to the arts of naval warfare. They have a small crew of just twelve individuals and feature no shields due to their size, their pace and atmospheric capability their best protection against the enemy. Typically, they hunt in packs, utilising their compact but lethal ion cannons to rake the hulls of the larger strike carriers which are their preferred prey.",
+    "lore": "These tiny vessels fulfil the role of the corvettes of other races, although they are smaller even than those diminutive ships. They are designed solely to hunt enemy atmospheric assets and are extremely fast. These ships are favoured by the most aggressive Shaltari with the least fear of death and as such are generally crewed by Firstborn Shaltari new to the arts of naval warfare. They have a small crew of just twelve individuals and feature no shields due to their size, their pace and atmospheric capability their best protection against the enemy. Typically, they hunt in packs, utilising their compact but lethal ion cannons to rake the hulls of the larger strike carriers which are their preferred prey. Although not as dangerous as a Corvette alone, their cooperation can quickly reduce the target to so much falling debris in a matter of seconds.",
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Aetherwind",

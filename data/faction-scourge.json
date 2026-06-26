@@ -766,14 +766,14 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "lore": "This wide suite of weapons allows this super battleship to destroy multiple foes simultaneously or pummel one victim with extreme prejudice.\n\nAngel Likely a close relation to its cousin, the Bael class, the Samael also mounts a mega plasma lance battery, multiple oculus weapons systems, and torpedoes. It forgoes the Bael’s launch capacity though, in favour of even more direct anti-shipping firepower in the form of a pair of furnace fangs.",
+    "lore": "Likely a close relation to its cousin, the Bael class, the Samael also mounts a mega plasma lance battery, multiple oculus weapons systems, and torpedoes. It forgoes the Bael’s launch capacity though, in favour of even more direct anti-shipping firepower in the form of a pair of furnace fangs. This wide suite of weapons allows this super battleship to destroy multiple foes simultaneously or pummel one victim with extreme prejudice.",
     "rulesText": "This Ship must take either a Cloaking Keel, gaining Stealth and Cloak-2, or an Engine Upgrade for +10 points, increasing Thrust by 3”.",
     "famousShipsPrefix": "Infamous ships of the class:",
     "famousShips": [
      "Our Plague",
      "Primeval Serpent",
      "Severity",
-     "Destroying"
+     "Destroying Angel"
     ],
     "namesake": "Samael, the dread angel of death and venom in Jewish lore, at once accuser, destroyer and seducer.",
     "loadoutOptions": [
@@ -1781,7 +1781,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "lore": "This allows them to unleash their considerable firepower and manoeuvre violently with no negative consequences -  a formidable advantage to any captain in a heated engagement. Both classes differ fom the Basilisk and Akuma by dispensing with much of their oculus cannon loadout in favour of lethal close range plasma weapons. Utilising their cloaks, these ships can approach a target silently before suddenly unleashing superheated hell. Even once it has done so, the Manticore or Banshee will not pay for its aggression by becoming more visible to the enemy. Both classes also mount a single, terrifying Scourge torpedo. This massive munition is designed to blast a significant chunk from even a capital ship’s hull before injecting hundreds of  Razorworms into the wound - deadly killing machines more than capable of eviscerating what’s left of the unfortunate\n\nIn a similar vein to its cousin the Basilisk, the Manticore is an older (but no less  dangerous) type of Scourge battlecruiser currently being phased out in favour of a newer equivalent design, in this case the dreaded Banshee. Both types feature an awesomely potent cloaking crest, making it virtually impossible for them to register energy outputs to enemy scanners.",
+    "lore": "In a similar vein to its cousin the Basilisk, the Manticore is an older (but no less  dangerous) type of Scourge battlecruiser currently being phased out in favour of a newer equivalent design, in this case the dreaded Banshee. Both types feature an awesomely potent cloaking crest, making it virtually impossible for them to register energy outputs to enemy scanners. This allows them to unleash their considerable firepower and manoeuvre violently with no negative consequences -  a formidable advantage to any captain in a heated engagement. Both classes differ fom the Basilisk and Akuma by dispensing with much of their oculus cannon loadout in favour of lethal close range plasma weapons. Utilising their cloaks, these ships can approach a target silently before suddenly unleashing superheated hell. Even once it has done so, the Manticore or Banshee will not pay for its aggression by becoming more visible to the enemy. Both classes also mount a single, terrifying Scourge torpedo. This massive munition is designed to blast a significant chunk from even a capital ship’s hull before injecting hundreds of  Razorworms into the wound - deadly killing machines more than capable of eviscerating what’s left of the unfortunate",
     "variants": [
      {
       "name": "Manticore",
