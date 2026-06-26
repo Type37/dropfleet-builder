@@ -50,3 +50,11 @@ art-review/
 
 # Jafdy original calculator source (reference only, do not republish)
 tools/dfc2-source/
+
+# Untracked working scratch / source-art folders (not part of the live site)
+DFC-Art-Assets/
+partpicker/
+brand-guide.html
+scripts/_pdfpages/
+scripts/*-ingest.json
+scripts/__pycache__/

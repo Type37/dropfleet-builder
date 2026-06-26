@@ -316,7 +316,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-muted);
 }
 .text-rules {
-  font-family: var(--font-lore);
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   line-height: 1.7;
   color: var(--ink-muted);   /* grayed to match the namesake (AA: 5:1+) */
@@ -1691,7 +1691,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: var(--sp-xs);
 }
 .objective-card-desc {
-  font-family: var(--font-reading);
+  font-family: var(--font-body);
   font-size: 12px;
   line-height: 1.55;
   color: var(--ink-soft);
@@ -2687,7 +2687,7 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
 }
 .rule-tooltip-body {
-  font-family: var(--font-reading);
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   line-height: 1.65;
   color: var(--ink-soft);
@@ -5494,7 +5494,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .print-glossary-desc {
   color: #333;
-  font-family: var(--font-lore);
+  font-family: var(--font-body);
   font-size: 7.5pt;
 }
 
@@ -6359,7 +6359,7 @@ h1, h2, h3, h4, h5, h6 {
 .detail-rule-desc {
   display: block;
   color: var(--ink-soft);
-  font-family: var(--font-reading);
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   line-height: 1.6;
   margin-top: 2px;

@@ -747,7 +747,7 @@ button, a, input, select, textarea,
 }
 
 .rule-card-text {
-  font-family: var(--font-lore);
+  font-family: var(--font-body);
   font-size: var(--text-caption1);
   line-height: 1.6;
   color: var(--fg2);
@@ -1588,7 +1588,7 @@ body.sheet-open .sheet-scrim {
 .rule-sheet-close:active { background: var(--paper); }
 
 .rule-sheet-body {
-  font-family: var(--font-lore);
+  font-family: var(--font-body);
   font-size: var(--text-body1);
   line-height: 1.65;
   color: var(--fg1);

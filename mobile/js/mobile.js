@@ -2667,7 +2667,11 @@
     if (stats.bs && stats.bs !== '-') statEntries.push({ key: 'bs', label: 'BS', val: stats.bs });
     const weapons = fs.weapons || [];
     const rules = fs.specialRules || [];
-    const specialText = stats.special && stats.special !== '-' ? stats.special : '';
+    // Don't list a special twice: as a bare chip from stats.special AND as a full
+    // rule card below (e.g. a flagship's Porter S-1 lives in both).
+    const ruleNames = new Set(rules.map(r => (r.name || r || '').toLowerCase()));
+    const specialText = (stats.special && stats.special !== '-' ? stats.special : '')
+      .split(',').map(s => s.trim()).filter(t => t && !ruleNames.has(t.toLowerCase())).join(', ');
     const artSrc = shipArtPath(fs.name);
     const sizeClass = fs.category ? (CATEGORY_LABELS[fs.category] || '') : '';
     return `<div class="section-header">${esc(flagshipLabel(fs, true))}${sizeClass ? ', ' + sizeClass : ''}${fs.cost ? `, ${fs.cost} pts` : ''}</div>

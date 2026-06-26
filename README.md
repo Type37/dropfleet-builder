@@ -4,52 +4,52 @@
 
 # Dropfleet Commander Fleet Builder
 
-A browser fleet builder for [Dropfleet Commander](https://www.ttcombat.com/games/dropfleet-commander). No sign-up; fleets save in your browser and work offline.
+A free fleet builder for [Dropfleet Commander](https://www.ttcombat.com/games/dropfleet-commander). No login, nothing to install. Your fleets save right in your browser and work offline, so they're with you at the table even when the signal isn't.
 
-### ▶ [Desktop Builder](https://type37.github.io/dropfleet-builder/) &nbsp;·&nbsp; 📱 [Mobile Builder](https://type37.github.io/dropfleet-builder/mobile/)
+### ▶ [Desktop](https://type37.github.io/dropfleet-builder/) &nbsp;&nbsp;&nbsp; 📱 [Mobile](https://type37.github.io/dropfleet-builder/mobile/)
 
-*(Phones auto-redirect to the mobile build. Both share the same saved fleets.)*
+*Phones jump straight to the mobile version. Both share the same saved fleets, so a list you start on your laptop is already on your phone.*
 
 </div>
 
----
-
 ## What it does
 
-Build a fleet, check it's legal, then share or print it. All six factions: UCM, PHR, Scourge, Shaltari, Resistance, Bioficers.
+Build a list, check it's actually legal, then print it or fire off a share link. All six factions are in: UCM, PHR, Scourge, Shaltari, Resistance and the Bioficers.
 
-- Every ship's stats, weapons, launch assets and special rules, with the rulebook text for any keyword on tap.
-- Generic and famous admirals (famous ones bring their own flagship).
-- Game sizes from Skirmish to Reconquest, with the right group, Colossal and admiral caps enforced.
-- Resistance modular ships: Systems and Hardpoint pickers, Feature Carriers and loadout refits, all folded into the effective stats.
-- Live legality checks: points, group caps, Unique/Rare, required systems, Porter/Payload capacity.
-- Space stations, secondary objectives, ship art and class lore.
-- Print view, share-by-link, and a New Recruit text export.
+- Full stats, weapons, launch assets and special rules for every ship, with the real rulebook text for any keyword one tap away.
+- Generic and famous admirals, and the famous ones turn up flying their own flagship.
+- Every game size from Skirmish to Reconquest, with the group, Colossal and admiral limits all checked for you.
+- Resistance modular ships done properly: Systems and Hardpoint pickers, Feature Carriers and loadout refits, all baked into the stats you actually field.
+- It tells you when something's illegal: points, group caps, Unique and Rare, required systems, Porter and Payload capacity.
+- Space stations, secondary objectives, ship art, and a bit of lore for every class.
+- Print sheets, share by link, and a New Recruit export if you want to take your list elsewhere.
 
-## Mobile
+## On your phone
 
-Phones redirect to [`/mobile/`](https://type37.github.io/dropfleet-builder/mobile/), a phone-first build that shares the same `dfc_fleets` storage as desktop, so a fleet built on one device shows up on the other. Same features, plus copy-as-text, PDF export, and one-tap Fast Play sheets. Installs as a PWA and works offline at the table.
+Phones get sent to [the mobile build](https://type37.github.io/dropfleet-builder/mobile/), which is made for thumbs rather than a shrunk-down desktop. It uses the same storage as the desktop site, so your fleets follow you around. You also get copy-as-text, PDF export and one-tap Fast Play sheets. Add it to your home screen and it runs offline like an app.
 
-## Data and art
+## Where the numbers come from
 
-Stats come from the [BSData repo](https://github.com/BSData/dropfleet-commander), converted to JSON: `data/fleet-index.json` loads on startup, then one `data/faction-<key>.json` per faction. Ship art is TTCombat's own renders, converted to WebP; it belongs to TTCombat.
+Stats start from the [BSData project](https://github.com/BSData/dropfleet-commander), get converted to JSON, and are checked against the official Combined Fleet Stats PDFs, so the data tracks the latest editions. The ship art is TTCombat's own renders. None of it is mine, it all belongs to TTCombat.
 
-## Tech
+## Under the hood
 
-Static HTML/CSS/JS. No framework, no build step. Open `index.html`, or:
+Plain HTML, CSS and JavaScript. No framework, no build step. Open `index.html`, or spin up a quick local server:
 
 ```sh
 npx serve .
 ```
 
-Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Roboto Slab](https://fonts.google.com/specimen/Roboto+Slab), [Barlow Condensed](https://fonts.google.com/specimen/Barlow+Condensed).
+Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https://fonts.google.com/specimen/Libre+Baskerville), [Roboto Slab](https://fonts.google.com/specimen/Roboto+Slab), [Barlow Condensed](https://fonts.google.com/specimen/Barlow+Condensed).
 
-## Links
+## Find me
 
-- **WarLore:** [site](https://jetwong.neocities.org/) · [Linktree](https://linktr.ee/warlore) · [YouTube](https://www.youtube.com/@WarLore)
-- **More DFC tools:** [Mission Maker and others](https://jetwong.neocities.org/wargaming/dropfleet-commander/)
-- **Feedback:** [warlore1@outlook.com](mailto:warlore1@outlook.com)
+This is a WarLore project. If you want more wargaming stuff:
 
-## License
+- WarLore: [site](https://jetwong.neocities.org/), [Linktree](https://linktr.ee/warlore), [YouTube](https://www.youtube.com/@WarLore)
+- More DFC tools: [Mission Maker and the rest](https://jetwong.neocities.org/wargaming/dropfleet-commander/)
+- Found a bug, or want something added? Drop me a line: [warlore1@outlook.com](mailto:warlore1@outlook.com)
 
-Code is MIT. Ship art and game data belong to TTCombat / Hawk Wargames. A fan project, not affiliated with or endorsed by TTCombat.
+## The boring legal bit
+
+The code is MIT, do what you like with it. The ship art and game data belong to TTCombat / Hawk Wargames. This is a fan project, not official, and nobody at TTCombat has endorsed it.
