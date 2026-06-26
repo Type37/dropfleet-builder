@@ -130,7 +130,7 @@
   const SHIP_ART = new Set([
     // PHR
     'achilles','agamemnon','agrippa','ajax','amphion','andromeda','antigonus',
-    'antony','ariadne','augustus','bellerophon','brutus','cadmus','caesar',
+    'antony','ariadne','augustus','avram','bellerophon','brutus','cadmus','caesar',
     'calypso','castor','cato','chrysaor','echo','electra','europa','ganymede',
     'harpocrates','hector','heracles','ikarus','jason','kairos','leonnatus',
     'medea','meleager','memnon','minos','octavius','odysseus','orion','orpheus',

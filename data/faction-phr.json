@@ -4840,6 +4840,67 @@
      "Capitana (Kalium)"
     ]
    }
+  },
+  {
+   "id": "b69a-239e-39bf-22d4",
+   "name": "Avram Bei - Subatomic Heavy Destroyer",
+   "category": "light",
+   "ship": {
+    "name": "Avram Bei - Subatomic Heavy Destroyer",
+    "cost": 96,
+    "stats": {
+     "thrust": "12\"",
+     "scan": "8\"",
+     "sig": "2\"",
+     "hull": 8,
+     "es": "4+",
+     "ks": "5+",
+     "bs": "6+",
+     "g": "1",
+     "special": "Hero, Unique"
+    },
+    "weapons": [
+     {
+      "name": "Neutron Missile Silo",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "2+",
+      "damage": "2",
+      "type": "E",
+      "special": "Close Action, Crippling, Penetrator"
+     },
+     {
+      "name": "Twin Supernova Laser",
+      "arc": "FN",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Burnthrough-2, Flash-2, Focused"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Hero",
+      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet."
+     },
+     {
+      "name": "Unique",
+      "description": "You may only take one Group of this Ship."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": true,
+    "tonnage": "L",
+    "famousShipsPrefix": "Only ship of the class:",
+    "famousShips": [
+     "Subatomic"
+    ],
+    "lore": "Neutron missiles are a rightly feared branch of PHR weapons technology, but until now they have been confined to the largest capital ships due to warhead core containment requirements prior to launch. A single new ship, Subatomic, has a full battery of these top-tier munitions though, complimented with twinned lasers, despite its slightly enlarged destroyer tonnage. It’s understood that this ship has yet to receive clearance for wider construction. Possible crew losses due to containment failures have been rumoured although secrecy surrounds the vessel.\n\nIts famous captain, Avram Bei, is part of a splinter fleet that has yet to declare for one side or the other in the PHR’s recent schism, preferring to focus on their bloody pursuit of Shaltari pirates near Aaru before considering theological matters, or whether theology is even the right way of thinking about the White Sphere. Bei is a practical, non-nonsense warrior with little interest in the big picture. He is known to relish fighting at the heart of any engagement, a joy undimmed even though half of his frequently injured body has been replaced with combat augmetics."
+   }
   }
  ],
  "launchAssets": [
