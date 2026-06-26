@@ -339,7 +339,7 @@
    ],
    "flagship": {
     "name": "Amber Cruiser",
-    "cost": 100,
+    "cost": 200,
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
@@ -348,7 +348,7 @@
      "es": "5+",
      "ks": "4+",
      "bs": "-",
-     "g": "1-2",
+     "g": "2",
      "special": "Shield-4+"
     },
     "weapons": [
@@ -3096,7 +3096,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "-"
+      "special": "Fusillade-1"
      }
     ],
     "loads": [

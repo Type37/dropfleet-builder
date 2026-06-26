@@ -357,8 +357,8 @@
      {
       "name": "Furnace Cannons",
       "arc": "FN",
-      "attack": "6",
-      "lock": "3+",
+      "attack": "4",
+      "lock": "2+",
       "damage": "1",
       "type": "E",
       "special": "Burnthrough-1, Crippling-Fire, Focused"

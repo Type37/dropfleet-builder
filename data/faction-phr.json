@@ -179,6 +179,15 @@
       "damage": "2",
       "type": "E",
       "special": "Critical-1, Crippling, Penetrator"
+     },
+     {
+      "name": "Hornet Drones",
+      "arc": "F/S/R",
+      "attack": "5",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action"
      }
     ],
     "loads": [],
@@ -690,7 +699,7 @@
      },
      {
       "name": "Black Nano Drones",
-      "arc": "F/S",
+      "arc": "F/S/R",
       "attack": "8",
       "lock": "4+",
       "damage": "1",
@@ -749,7 +758,7 @@
     "weapons": [
      {
       "name": "Black Nano Drones",
-      "arc": "F/S",
+      "arc": "F/S/R",
       "attack": "8",
       "lock": "4+",
       "damage": "1",
