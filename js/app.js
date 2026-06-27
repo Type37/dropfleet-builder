@@ -2950,8 +2950,14 @@ const App = (() => {
     const add = loads => (loads || []).forEach(l => { if (l && l.name) String(l.name).split(/\s*&\s*/).forEach(p => names.add(p.trim().toLowerCase())); });
     add(dbShip.loads);
     (dbShip.loadoutOptions || []).forEach(lo => (lo.options || []).forEach(o => add(o.loads)));
-    const list = systemsListFor(dbShip, factionKey);
-    if (list) (list.options || []).forEach(o => add(o.loads));
+    // Only show system-option launch types for fully-modular ships (no base loads);
+    // ships with fixed launches (like the Zenith) shouldn't show optional extras here.
+    const hasBaseLaunches = (dbShip.loads && dbShip.loads.length > 0) ||
+      (dbShip.loadoutOptions || []).some(lo => lo.options.some(o => o.loads && o.loads.length > 0));
+    if (!hasBaseLaunches) {
+      const list = systemsListFor(dbShip, factionKey);
+      if (list) (list.options || []).forEach(o => add(o.loads));
+    }
     if (!names.size) return '';
     const arr = [...names];
     const icons = [];

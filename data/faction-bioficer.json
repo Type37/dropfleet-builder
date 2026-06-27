@@ -142,26 +142,7 @@
     "isUnique": false,
     "tonnage": "",
     "category": "colossal",
-    "systemSelection": {
-     "listName": "Dreadnought Systems",
-     "totalRequired": 3,
-     "totalIsExact": false,
-     "categoryReq": {
-      "Secondary Hardpoint": {
-       "min": 1,
-       "max": 1
-      },
-      "Tertiary Hardpoint": {
-       "min": 2,
-       "max": 2
-      },
-      "Launch Hardpoint": {
-       "min": 0,
-       "max": 1
-      }
-     }
-    },
-    "rulesText": "This Ship must take a total of one option from the Dreadnought Systems Secondary Hardpoint category. This Ship must take a total of two options from the Dreadnought Systems Tertiary Hardpoint category. This Ship may take one option from the Dreadnought Systems Launch Hardpoint category.",
+    "rulesText": "Giga Lightvice When determining potential targets for this weapon, you may use an unmodifiable Scan of 7" instead of this Ship's Scan value. High Velocity Boarding Pods This Ship's Boarding Pods may be used against targets up to 6" away.",
     "namesake": "In astronomy the [zenith](https://en.wikipedia.org/wiki/Zenith) is the point on the celestial sphere directly overhead an observer, opposite the nadir. The word is used figuratively for the highest point or peak of anything."
    },
    "abilityPicks": 2
@@ -379,92 +360,65 @@
    "category": "colossal",
    "ship": {
     "name": "Zenith Dreadnought",
-    "cost": 520,
-    "stats": {
-     "thrust": "6\"",
-     "scan": "14\"",
-     "sig": "10\"",
-     "hull": 22,
-     "es": "3+",
-     "ks": "3+",
-     "bs": "5+",
-     "g": "1",
-     "special": "Marines-3, Reinforced Armour, High Velocity Boarding Pods"
+    “cost”: 445,
+    “stats”: {
+     “thrust”: “6\””,
+     “scan”: “14\””,
+     “sig”: “10\””,
+     “hull”: 22,
+     “es”: “3+”,
+     “ks”: “3+”,
+     “bs”: “5+”,
+     “g”: “1”,
+     “special”: “Marines-1, Reinforced Armour, High Velocity Boarding Pods”
     },
-    "weapons": [
+    “weapons”: [
      {
-      "name": "Giga Lightvice",
-      "arc": "F",
-      "attack": "8",
-      "lock": "2+",
-      "damage": "3",
-      "type": "K",
-      "special": "Bloom-1, Close Action, Focused, Scald-2"
-     },
-     {
-      "name": "Grand Bisector",
-      "arc": "FN",
-      "attack": "5",
-      "lock": "3+",
-      "damage": "3",
-      "type": "E",
-      "special": "Bloom-2, Calibre-H/C, Crippling, Focused, Penetrator"
-     },
-     {
-      "name": "Scythes",
-      "arc": "FN",
-      "attack": "8",
-      "lock": "4+",
-      "damage": "1",
-      "type": "E",
-      "special": "Anti Wing, Fusillade-3, Reave-1"
-     },
-     {
-      "name": "Scythes",
-      "arc": "FN",
-      "attack": "8",
-      "lock": "4+",
-      "damage": "1",
-      "type": "E",
-      "special": "Anti Wing, Fusillade-3, Reave-1"
+      “name”: “Giga Lightvice”,
+      “arc”: “F”,
+      “attack”: “8”,
+      “lock”: “2+”,
+      “damage”: “3”,
+      “type”: “K”,
+      “special”: “Bloom-1, Close Action, Focused, Scald-2”
      }
     ],
-    "loads": [
+    “loads”: [
      {
-      "name": "Fighters & Bombers",
-      "launch": "5",
-      "special": "-"
+      “name”: “Fighters & Bombers”,
+      “launch”: “5”,
+      “special”: “-”
      },
      {
-      "name": "Boarding Pods",
-      "launch": "3",
-      "special": "-"
+      “name”: “Boarding Pods”,
+      “launch”: “1”,
+      “special”: “-”
      }
     ],
-    "specialRules": [
+    “specialRules”: [
      {
-      "name": "Marines-3",
-      "description": "Remove 3 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
-      "page": "36",
-      "publicationId": "45b0-3e3b-e83d-fd70"
+      “name”: “Marines-1”,
+      “description”: “Remove 1 enemy Battalion from this Ship at the beginning of the Battalion Combat step.”,
+      “page”: “36”,
+      “publicationId”: “45b0-3e3b-e83d-fd70”
      },
      {
-      "name": "Reinforced Armour",
-      "description": "Weapons rolling to hit this Ship or its Group can only score criticals against it on a result of a 3 higher than its Lock value."
+      “name”: “Reinforced Armour”,
+      “description”: “Weapons rolling to hit this Ship or its Group can only score criticals against it on a result of a 3 higher than its Lock value.”
      },
      {
-      "name": "High Velocity Boarding Pods",
-      "description": "This Ship’s Boarding Pods may be used against targets up to 6” away."
+      “name”: “High Velocity Boarding Pods”,
+      “description”: “This Ship’s Boarding Pods may be used against targets up to 6” away.”
      }
     ],
-    "groupMin": 1,
-    "groupMax": 1,
-    "isRare": false,
-    "isUnique": false,
-    "tonnage": "C",
-    "lore": "In 2679, the Zenith class Bioficer dreadnought is the most dreaded close-action vessel in known space. In several early engagements with admirals who didn't appreciate what they were facing, a single example chewed through scores of capital ships and emerged victorious. The Zenith's primary prow armament is the Giga Lightvice. This weapon's fanged maw emits a biblical level of atomic destruction capable of rending a battleship in seconds. Like its cousin the Zodiac, the Zenith's prow-ventral hardpoint will accept any battleship primary armament, although on a dreadnought this is merely secondary. Tertiary armament is typically a quad array of Thermators, another weapon which does its killing up close. Completing the Zenith's offensive suite is a substantial, exposed spinal flight deck. Reporting class: Dreadnought. Every Dreadnought carries a designation beginning with Z.",
-    "rulesText": "This Ship must take a total of one option from the Dreadnought Systems Secondary Hardpoint category. This Ship must take a total of two options from the Dreadnought Systems Tertiary Hardpoint category. This Ship may take one option from the Dreadnought Systems Launch Hardpoint category. Giga Lightvice When determining potential targets for this weapon, you may use an unmodifiable Scan of 7” instead of this Ship’s Scan value. High Velocity Boarding Pods This Ship’s Boarding Pods may be used against targets up to 6” away.",
-    "systemSelection": {
+    “groupMin”: 1,
+    “groupMax”: 1,
+    “isRare”: false,
+    “isUnique”: false,
+    “tonnage”: “C”,
+    “lore”: “In 2679, the Zenith class Bioficer dreadnought is the most dreaded close-action vessel in known space. In several early engagements with admirals who didn’t appreciate what they were facing, a single example chewed through scores of capital ships and emerged victorious. The Zenith’s primary prow armament is the Giga Lightvice. This weapon’s fanged maw emits a biblical level of atomic destruction capable of rending a battleship in seconds. Like its cousin the Zodiac, the Zenith’s prow-ventral hardpoint will accept any battleship primary armament, although on a dreadnought this is merely secondary. Tertiary armament is typically a quad array of Thermators, another weapon which does its killing up close. Completing the Zenith’s offensive suite is a substantial, exposed spinal flight deck. Reporting class: Dreadnought. Every Dreadnought carries a designation beginning with Z.”,
+    “rulesText”: “This Ship must take a total of one option from the Dreadnought Systems Secondary Hardpoint category. This Ship must take a total of two options from the Dreadnought Systems Tertiary Hardpoint category. This Ship may take one option from the Dreadnought Systems Launch Hardpoint category. Giga Lightvice When determining potential targets for this weapon, you may use an unmodifiable Scan of 7” instead of this Ship’s Scan value. High Velocity Boarding Pods This Ship’s Boarding Pods may be used against targets up to 6” away.”,
+    “systemSelection”: {
      "listName": "Dreadnought Systems",
      "totalRequired": 3,
      "totalIsExact": false,
