@@ -1776,6 +1776,10 @@
     "loads": [],
     "specialRules": [
      {
+      "name": "VX Bomb",
+      "description": "This weapon gains the Scald-2 special rule when targeting Cities. If this weapon does damage to a Dropsite, remove all Battalions (friendly and enemy) from that Dropsite and its Features."
+     },
+     {
       "name": "Swacs",
       "description": "Enemy Ships within 12” of this ship may be targeted by friendly Ships firing Close Action weapons using the firing Ship’s normal Weapon Range (Scan + Sig)."
      },
@@ -2088,6 +2092,10 @@
       "description": "You may only take one Group of this Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Explosive Detonation",
+      "description": "When attacking with this weapon, skip the assign weapons to targets step and proceed to roll to hit instead. When rolling to hit with this weapon, for each result of a 6 (including rolls from this rule), roll an additional dice. After rolling to hit, assign hits as equally as possible to each other Ship and Space Station on the same Orbital Layer within 6\" until no hits remain. Then continue the attack sequence as normal."
      },
      {
       "name": "Set Timers And Run",
