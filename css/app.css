@@ -817,6 +817,28 @@ h1, h2, h3, h4, h5, h6 {
   border-color: rgba(220, 50, 40, 0.3);
 }
 
+/* Drag-to-reorder grip (reorders groups within their weight class). Lives on the
+   dark sidebar, so it's a muted white that brightens on row hover / grab. */
+.group-nav-grip {
+  flex-shrink: 0;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  padding: 2px 1px;
+  color: rgba(255,255,255,0.30);
+  cursor: grab;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+}
+.group-nav-item:hover .group-nav-grip,
+.group-nav-item.active .group-nav-grip { opacity: 1; }
+.group-nav-grip:hover { color: rgba(255,255,255,0.75); }
+.group-nav-grip:active { cursor: grabbing; }
+.group-nav-item.dragging { opacity: 0.45; }
+/* Insertion indicator (layout-safe inset bar) for the hovered drop target. */
+.group-nav-item.drag-over-before { box-shadow: inset 0 3px 0 var(--nav-accent, #fff); }
+.group-nav-item.drag-over-after { box-shadow: inset 0 -3px 0 var(--nav-accent, #fff); }
+
 /* A famous admiral's flagship shown among the overview group cards — read-only
    (managed via the admiral slot), gold accent, "incl." instead of points since
    its cost is already counted with the admiral. */

@@ -2104,11 +2104,16 @@ const App = (() => {
     }
 
     const catColors = { light: '#5b9bd5', medium: '#3e9945', heavy: '#d98c1f', colossal: '#c43c2f', payload: '#6a4c9c' };
+    // Per-class group counts — the drag grip only appears when a weight class has
+    // 2+ groups (with one group there's nothing to reorder it against).
+    const classCounts = {};
+    currentFleet.battleGroups.forEach(g => { const c = (g.ships[0]?.groupCategory) || 'medium'; classCounts[c] = (classCounts[c] || 0) + 1; });
     // The centre panel always shows the fleet overview, so a dedicated
     // "Overview" nav row in the sidebar is redundant — clicking the active
     // group again deselects it and returns focus to the overview.
-    // Groups auto-order by weight class (heaviest first), matching the overview
-    // and printout — so there's no manual reorder; the order is always the same.
+    // Groups auto-bucket by weight class (heaviest first), matching the overview
+    // and printout. The grip handle drag-reorders groups WITHIN the same weight
+    // class only (cross-class position is always decided by weight).
     nav.innerHTML = sortGroupsByWeight(currentFleet.battleGroups).map((g) => {
       const shipCount = g.ships.length;
       const groupPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
@@ -2139,7 +2144,7 @@ const App = (() => {
       const accentColor = catColors[catKey] || 'rgba(255,255,255,0.15)';
 
       return `
-      <div class="group-nav-item ${isActive ? 'active' : ''}${hasError ? ' has-error' : ''}" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-pressed="${isActive}" aria-label="${esc(g.name)}, ${catLabel}, ${groupPts} points, ${shipCount} ship${shipCount !== 1 ? 's' : ''}" style="--nav-accent:${accentColor}">
+      <div class="group-nav-item ${isActive ? 'active' : ''}${hasError ? ' has-error' : ''}" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-pressed="${isActive}" aria-label="${esc(g.name)}, ${catLabel}, ${groupPts} points, ${shipCount} ship${shipCount !== 1 ? 's' : ''}" style="--nav-accent:${accentColor}" data-gcat="${catKey}" ondragover="App.onGroupDragOver(event,'${g.id}')" ondragleave="App.onGroupDragLeave(event)" ondrop="App.onGroupDrop(event,'${g.id}')">
         ${artThumb}
         <div class="group-nav-body">
           <div class="group-nav-top">
@@ -2152,6 +2157,7 @@ const App = (() => {
             <span class="group-nav-count">${shipCount} ship${shipCount !== 1 ? 's' : ''}</span>
           </div>
         </div>
+        ${classCounts[catKey] > 1 ? `<span class="group-nav-grip" draggable="true" title="Drag to reorder within ${esc(catLabel)}" aria-label="Drag to reorder ${esc(g.name)} within its weight class" onclick="event.stopPropagation()" ondragstart="App.onGroupDragStart(event,'${g.id}')" ondragend="App.onGroupDragEnd(event)"><svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.3"/><circle cx="7" cy="3" r="1.3"/><circle cx="3" cy="8" r="1.3"/><circle cx="7" cy="8" r="1.3"/><circle cx="3" cy="13" r="1.3"/><circle cx="7" cy="13" r="1.3"/></svg></span>` : ''}
       </div>`;
     }).join('');
   }
@@ -2361,6 +2367,75 @@ const App = (() => {
     saveFleets();
     scheduleRender(renderGroupsNav, renderActiveGroup, updatePoints);
     showToast(`Copied ${g.name}`);
+  }
+
+  // ── Drag-to-reorder battlegroups (within a weight class only) ──
+  // Groups always bucket by weight class (sortGroupsByWeight). Dragging a group's
+  // grip handle reorders it among its same-class siblings; the underlying array
+  // order IS the within-class order (the sort is stable), so we just move the
+  // dragged group next to its drop target in currentFleet.battleGroups.
+  let dragGroupId = null;
+  function groupCatOf(g) { return (g && g.ships && g.ships[0] && g.ships[0].groupCategory) || 'medium'; }
+
+  function onGroupDragStart(ev, gid) {
+    dragGroupId = gid;
+    if (ev.dataTransfer) {
+      ev.dataTransfer.effectAllowed = 'move';
+      try { ev.dataTransfer.setData('text/plain', gid); } catch (e) {}
+    }
+    const row = ev.currentTarget.closest('.group-nav-item');
+    if (row) {
+      row.classList.add('dragging');
+      try { const r = row.getBoundingClientRect(); ev.dataTransfer.setDragImage(row, ev.clientX - r.left, ev.clientY - r.top); } catch (e) {}
+    }
+  }
+
+  function onGroupDragOver(ev, gid) {
+    if (!dragGroupId || dragGroupId === gid || !currentFleet) return;
+    const dragged = currentFleet.battleGroups.find(g => g.id === dragGroupId);
+    const target = currentFleet.battleGroups.find(g => g.id === gid);
+    // Only same-weight-class groups are valid drop targets (no preventDefault on a
+    // different class → browser shows "no-drop", cross-class order stays automatic).
+    if (!dragged || !target || groupCatOf(dragged) !== groupCatOf(target)) return;
+    ev.preventDefault();
+    if (ev.dataTransfer) ev.dataTransfer.dropEffect = 'move';
+    const el = ev.currentTarget;
+    const r = el.getBoundingClientRect();
+    const after = ev.clientY > r.top + r.height / 2;
+    el.classList.toggle('drag-over-after', after);
+    el.classList.toggle('drag-over-before', !after);
+  }
+
+  function onGroupDragLeave(ev) {
+    ev.currentTarget.classList.remove('drag-over-before', 'drag-over-after');
+  }
+
+  function onGroupDrop(ev, gid) {
+    ev.preventDefault();
+    const el = ev.currentTarget;
+    const after = el.classList.contains('drag-over-after');
+    el.classList.remove('drag-over-before', 'drag-over-after');
+    reorderGroupWithinClass(dragGroupId, gid, after);
+    dragGroupId = null;
+  }
+
+  function onGroupDragEnd() {
+    dragGroupId = null;
+    document.querySelectorAll('.group-nav-item.dragging, .group-nav-item.drag-over-before, .group-nav-item.drag-over-after')
+      .forEach(el => el.classList.remove('dragging', 'drag-over-before', 'drag-over-after'));
+  }
+
+  function reorderGroupWithinClass(draggedGid, targetGid, placeAfter) {
+    if (!currentFleet || !draggedGid || draggedGid === targetGid) return;
+    const groups = currentFleet.battleGroups;
+    const dragged = groups.find(g => g.id === draggedGid);
+    const target = groups.find(g => g.id === targetGid);
+    if (!dragged || !target || groupCatOf(dragged) !== groupCatOf(target)) return;
+    groups.splice(groups.indexOf(dragged), 1);
+    const ti = groups.indexOf(target);
+    groups.splice(placeAfter ? ti + 1 : ti, 0, dragged);
+    saveFleets();
+    scheduleRender(renderGroupsNav, renderOverviewPanel);
   }
 
   function editFleetName() {
@@ -7840,6 +7915,7 @@ const App = (() => {
     getCalcData: () => ({ shipDB, factionData, FACTION_LABELS, CATEGORY_ORDER, CATEGORY_LABELS, currentFaction: currentFleet ? currentFleet.faction : null }),
     openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, collectionFaction: selectCollectionFaction, collectionAdjust, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, editGroupName, toggleFleetCardMenu,
+    onGroupDragStart, onGroupDragOver, onGroupDragLeave, onGroupDrop, onGroupDragEnd,
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFlagshipLoadout, changeFeature, addSystem, removeSystem, toggleSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
