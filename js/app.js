@@ -31,7 +31,7 @@ const App = (() => {
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true, printRoster: false, printNoRules: false, printSortTonnage: false, showCollection: false, theme: 'light' };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true, printRoster: false, printNoRules: false, showCollection: false, theme: 'light' };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -89,6 +89,16 @@ const App = (() => {
   };
 
   const CATEGORY_ORDER = ['light','medium','heavy','colossal','payload'];
+
+  // Battlegroups always display heaviest-first (Colossal > Heavy > Medium > Light),
+  // with Bioficer payload Cells last. Used by the sidebar nav, the centre overview
+  // and the printout so screen and paper read in the same order. Array.sort is
+  // stable, so groups within the same weight class keep the order they were added.
+  const GROUP_CAT_ORDER = { colossal: 0, heavy: 1, medium: 2, light: 3, payload: 4 };
+  function sortGroupsByWeight(groups) {
+    return [...(groups || [])].sort((a, b) =>
+      (GROUP_CAT_ORDER[a.ships[0]?.groupCategory] ?? 9) - (GROUP_CAT_ORDER[b.ships[0]?.groupCategory] ?? 9));
+  }
 
   // Spell out the single-letter tonnage code for display (L = Light, not Large).
   // Stored values stay single-letter (rules/sorting depend on them) — display only.
@@ -2093,12 +2103,13 @@ const App = (() => {
       return;
     }
 
-    const total = currentFleet.battleGroups.length;
     const catColors = { light: '#5b9bd5', medium: '#3e9945', heavy: '#d98c1f', colossal: '#c43c2f', payload: '#6a4c9c' };
     // The centre panel always shows the fleet overview, so a dedicated
     // "Overview" nav row in the sidebar is redundant — clicking the active
     // group again deselects it and returns focus to the overview.
-    nav.innerHTML = currentFleet.battleGroups.map((g, i) => {
+    // Groups auto-order by weight class (heaviest first), matching the overview
+    // and printout — so there's no manual reorder; the order is always the same.
+    nav.innerHTML = sortGroupsByWeight(currentFleet.battleGroups).map((g) => {
       const shipCount = g.ships.length;
       const groupPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
       const isActive = g.id === activeGroupId;
@@ -2127,12 +2138,6 @@ const App = (() => {
       // Tonnage accent color
       const accentColor = catColors[catKey] || 'rgba(255,255,255,0.15)';
 
-      const reorderBtns = isActive && total > 1
-        ? `<span class="group-nav-reorder" onclick="event.stopPropagation()">
-            <button class="group-move-btn" onclick="App.moveGroup('${g.id}',-1)" ${i === 0 ? 'disabled' : ''} title="Move up"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10l4-4 4 4"/></svg></button>
-            <button class="group-move-btn" onclick="App.moveGroup('${g.id}',1)" ${i === total - 1 ? 'disabled' : ''} title="Move down"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg></button>
-           </span>`
-        : '';
       return `
       <div class="group-nav-item ${isActive ? 'active' : ''}${hasError ? ' has-error' : ''}" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-pressed="${isActive}" aria-label="${esc(g.name)}, ${catLabel}, ${groupPts} points, ${shipCount} ship${shipCount !== 1 ? 's' : ''}" style="--nav-accent:${accentColor}">
         ${artThumb}
@@ -2140,7 +2145,6 @@ const App = (() => {
           <div class="group-nav-top">
             <span class="group-nav-name group-name-editable" onclick="event.stopPropagation(); App.editGroupName('${g.id}', this)" title="Click to rename battlegroup">${esc(g.name)}</span>
             ${statusDot}
-            ${reorderBtns}
           </div>
           <div class="group-nav-meta">
             <span class="group-nav-cat">${catLabel}</span>
@@ -2359,19 +2363,6 @@ const App = (() => {
     showToast(`Copied ${g.name}`);
   }
 
-  function moveGroup(gid, direction) {
-    if (!currentFleet) return;
-    const groups = currentFleet.battleGroups;
-    const idx = groups.findIndex(g => g.id === gid);
-    if (idx < 0) return;
-    const newIdx = idx + direction;
-    if (newIdx < 0 || newIdx >= groups.length) return;
-    // Swap
-    [groups[idx], groups[newIdx]] = [groups[newIdx], groups[idx]];
-    saveFleets();
-    renderGroupsNav();
-  }
-
   function editFleetName() {
     if (!currentFleet) return;
     const nameEl = document.getElementById('builder-fleet-name');
@@ -2458,13 +2449,8 @@ const App = (() => {
     const notes = warnings.filter(w => w.type === 'warn');
     const fIcon = FACTION_ICONS[f.faction];
 
-    // Group cards — sorted by tonnage category then rendered with section dividers
-    const catOrder = { colossal: 0, heavy: 1, medium: 2, light: 3, payload: 4 };
-    const sortedGroups = [...f.battleGroups].sort((a, b) => {
-      const aCat = a.ships.length > 0 ? (a.ships[0].groupCategory || 'medium') : 'medium';
-      const bCat = b.ships.length > 0 ? (b.ships[0].groupCategory || 'medium') : 'medium';
-      return (catOrder[aCat] ?? 5) - (catOrder[bCat] ?? 5);
-    });
+    // Group cards — sorted by weight class then rendered with section dividers.
+    const sortedGroups = sortGroupsByWeight(f.battleGroups);
     let lastCat = null;
     const groupCards = sortedGroups.map(g => {
       const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
@@ -5449,26 +5435,12 @@ const App = (() => {
       ${descHtml}
       <!--LAUNCH_REF-->`;
 
-    // Admirals
+    // Admirals — each card carries the admiral header + (for Famous) the flagship
+    // datasheet. Their abilities are NOT listed per-card; instead every ability the
+    // fleet can use this match is collected into one consolidated table below.
     if (f.admirals && f.admirals.length > 0) {
-      const factionAdmirals = factionInfo ? factionInfo.admirals || [] : [];
       html += `<div class="print-section">
         ${f.admirals.map(a => {
-          const info = getAdmiralAbilityInfo(a);
-          const abilityLine = ab => `<div class="print-admiral-ability"><span class="print-ability-name">${esc(ab.name)}</span>${ab.cost ? ` <span class="print-ability-cost">${esc(ab.cost)}</span>` : ''}${ab.effect ? `, ${esc(ab.effect)}` : ''}</div>`;
-          let inner = '';
-          if (info) {
-            const chosen = (a.selectedAbilities || [])
-              .map(n => info.table.find(t => t.name === n)).filter(Boolean);
-            // Group all of an admiral's abilities into ONE block (innate + chosen) so
-            // they read as a single unit under the admiral (law of proximity).
-            if (info.innate.length) inner += info.innate.map(abilityLine).join('');
-            if (chosen.length) inner += `<div class="print-admiral-ability-sublabel">Chosen Abilities</div>${chosen.map(abilityLine).join('')}`;
-          }
-          // Generic admirals have no named abilities of their own, so list the core
-          // player abilities (4.2.1.1) every fleet can use each round.
-          if (a.type !== 'Famous') inner += `<div class="print-admiral-ability-sublabel">Core Abilities</div>${CORE_ABILITIES.map(abilityLine).join('')}`;
-          const abilitiesHtml = inner ? `<div class="print-admiral-abilities"><div class="print-admiral-abilities-head">Abilities</div>${inner}</div>` : '';
           // Famous admirals: print the flagship datasheet (stats + weapons).
           let flagshipHtml = '';
           if (a.type === 'Famous' && a.shipKey) {
@@ -5491,9 +5463,37 @@ const App = (() => {
               <span class="print-admiral-pts">${a.points} pts</span>
             </div>
             ${flagshipHtml}
-            ${abilitiesHtml}
           </div>`;
         }).join('')}
+      </div>`;
+
+      // Consolidated "abilities you can use this match" table: every admiral's
+      // innate + chosen abilities (deduped by name) plus the universal Core
+      // Abilities (4.2.1.1). One table beats hunting across admiral cards mid-game.
+      const seenAbil = new Set();
+      const admiralAbilities = [];
+      f.admirals.forEach(a => {
+        const info = getAdmiralAbilityInfo(a);
+        if (!info) return;
+        (info.innate || []).forEach(ab => {
+          if (ab && ab.name && !seenAbil.has(ab.name)) { seenAbil.add(ab.name); admiralAbilities.push(ab); }
+        });
+        (a.selectedAbilities || []).forEach(n => {
+          const ab = (info.table || []).find(t => t.name === n);
+          if (ab && !seenAbil.has(ab.name)) { seenAbil.add(ab.name); admiralAbilities.push(ab); }
+        });
+      });
+      const abilRow = ab => `<tr><td class="dp-abil-name">${esc(ab.name)}</td><td class="dp-abil-cost">${esc(ab.cost || '')}</td><td class="dp-abil-effect">${ruleHtml(ab.effect || '')}</td></tr>`;
+      const abilGroupRow = label => `<tr class="dp-abil-grouprow"><td colspan="3">${esc(label)}</td></tr>`;
+      let abilBody = '';
+      if (admiralAbilities.length) abilBody += abilGroupRow('Admiral Abilities') + admiralAbilities.map(abilRow).join('');
+      abilBody += abilGroupRow('Core Abilities (available to all)') + CORE_ABILITIES.map(abilRow).join('');
+      html += `<div class="print-section dp-abilities">
+        <div class="print-section-title">Admiral Abilities</div>
+        <table class="launch-ref-table dp-abilities-table">
+          <thead><tr><th class="dp-abil-name">Ability</th><th class="dp-abil-cost">AP</th><th class="dp-abil-effect">Effect</th></tr></thead>
+          <tbody>${abilBody}</tbody>
+        </table>
       </div>`;
     }
 
@@ -5540,13 +5540,8 @@ const App = (() => {
     const baseCardCount = {}, ruleDefByName = {};
     const wBaseCardCount = {};
     let glossTotalCards = 0;
-    // Optional print sort: order ships by tonnage (Colossal -> Heavy -> Medium ->
-    // Light -> Payload) instead of the order they were added.
-    const PRINT_CAT_ORDER = { colossal: 0, heavy: 1, medium: 2, light: 3, payload: 4 };
-    const printGroups = settings.printSortTonnage
-      ? [...f.battleGroups].sort((a, b) =>
-          (PRINT_CAT_ORDER[a.ships[0]?.groupCategory] ?? 9) - (PRINT_CAT_ORDER[b.ships[0]?.groupCategory] ?? 9))
-      : f.battleGroups;
+    // Print in the same weight-class order as the on-screen builder (heaviest first).
+    const printGroups = sortGroupsByWeight(f.battleGroups);
     printGroups.forEach(g => {
       const seen = new Set();
       g.ships.forEach(ship => {
@@ -5945,7 +5940,6 @@ const App = (() => {
         <label class="print-preview-opt"><input type="checkbox" id="pp-2col" ${settings.print2col ? 'checked' : ''} ${(settings.printSimple || settings.printBig || settings.printRoster) ? 'disabled' : ''}> 2 columns</label>
         <label class="print-preview-opt"><input type="checkbox" id="pp-ink" ${settings.printInk ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Ink-saver</label>
         <label class="print-preview-opt" title="Hide all rules text and the secondary-objective list (saves paper when you reprint a list whose rules you already have)"><input type="checkbox" id="pp-norules" ${settings.printNoRules ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Skip rules/obj.</label>
-        <label class="print-preview-opt" title="Order ships by tonnage (Colossal, Heavy, Medium, Light, Payload) instead of the order they were added"><input type="checkbox" id="pp-sortton" ${settings.printSortTonnage ? 'checked' : ''}> Sort by tonnage</label>
         <label class="print-preview-opt">Text
           <select id="pp-density" class="pp-density-sel" ${settings.printSimple ? 'disabled' : ''}>
             <option value="comfortable" ${settings.printDensity !== 'compact' ? 'selected' : ''}>Comfortable</option>
@@ -6016,7 +6010,6 @@ const App = (() => {
     ov.querySelector('#pp-2col').onchange = (e) => { settings.print2col = e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-ink').onchange = (e) => { settings.printInk = e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-norules').onchange = (e) => { settings.printNoRules = e.target.checked; saveSettings(); refresh(); };
-    ov.querySelector('#pp-sortton').onchange = (e) => { settings.printSortTonnage = e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-density').onchange = (e) => { settings.printDensity = e.target.value; saveSettings(); refresh(); };
     ov.querySelector('#pp-close').addEventListener('click', closePreview);
     ov.querySelector('#pp-print').addEventListener('click', doPrintNow);
@@ -7846,7 +7839,7 @@ const App = (() => {
     // Data hooks for the Combat Calculator (Calc, js/calc-ui.js).
     getCalcData: () => ({ shipDB, factionData, FACTION_LABELS, CATEGORY_ORDER, CATEGORY_LABELS, currentFaction: currentFleet ? currentFleet.faction : null }),
     openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
-    loadDemoFleets, showFleetTab, collectionFaction: selectCollectionFaction, collectionAdjust, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, moveGroup, editGroupName, toggleFleetCardMenu,
+    loadDemoFleets, showFleetTab, collectionFaction: selectCollectionFaction, collectionAdjust, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, editGroupName, toggleFleetCardMenu,
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFlagshipLoadout, changeFeature, addSystem, removeSystem, toggleSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,

@@ -611,6 +611,13 @@
 
   const CATEGORY_ORDER = ['light', 'medium', 'heavy', 'colossal', 'payload'];
   const CATEGORY_LABELS = { light: 'Light', medium: 'Medium', heavy: 'Heavy', colossal: 'Colossal', payload: 'Payload', famous_admirals: 'Famous Admiral' };
+  // Battlegroups print heaviest-first (Colossal > Heavy > Medium > Light, payloads
+  // last), matching the text export and the desktop sheet. Array.sort is stable.
+  const GROUP_CAT_ORDER = { colossal: 0, heavy: 1, medium: 2, light: 3, payload: 4 };
+  function sortGroupsByWeight(groups) {
+    return [...(groups || [])].sort((a, b) =>
+      (GROUP_CAT_ORDER[a.ships[0]?.groupCategory] ?? 9) - (GROUP_CAT_ORDER[b.ships[0]?.groupCategory] ?? 9));
+  }
   // Spell out the single-letter tonnage code for display (L = Light, not Large).
   // Stored values stay single-letter — this is display only.
   const TON_WORDS = { L: 'Light', M: 'Medium', H: 'Heavy', C: 'Colossal', P: 'Payload' };
@@ -3428,7 +3435,7 @@
     };
     const laMap = getLaunchAssetMap(f.faction);
 
-    const groupsHtml = (f.battleGroups || []).map(g => {
+    const groupsHtml = sortGroupsByWeight(f.battleGroups).map(g => {
       const inst = g.ships[0];
       if (!inst) return '';
       const db = findShip(f.faction, inst.groupCategory, inst.shipKey);

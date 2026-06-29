@@ -2553,6 +2553,26 @@ h1, h2, h3, h4, h5, h6 {
 .dp-groups + .launch-ref .launch-ref-table td { padding: 1px 6px; }
 .pf-inksaver .launch-ref-table th { background: #fff !important; color: #000 !important; border: 1px solid #999; }
 
+/* Consolidated Admiral Abilities reference table (print sheet). Reuses the
+   launch-ref-table base; the Effect column is the wide, left-aligned body. */
+.dp-abilities-table .dp-abil-name { text-align: left; font-weight: var(--weight-bold); color: var(--ink); white-space: normal; width: 22%; }
+.dp-abilities-table .dp-abil-cost { width: 7%; white-space: nowrap; }
+.dp-abilities-table .dp-abil-effect { text-align: left; font-weight: var(--weight-regular); line-height: 1.35; }
+.dp-abilities-table .dp-abil-grouprow td {
+  text-align: left;
+  background: var(--warm);
+  font-family: var(--font-header);
+  font-weight: var(--weight-bold);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ink-muted);
+  padding: 2px 6px;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.dp-abilities { break-inside: auto; }
+.pf-inksaver .dp-abilities-table .dp-abil-grouprow td { background: #fff !important; color: #000 !important; border-top: 1px solid #999; }
+
 /* Loadout selectors */
 .loadout-selector {
   display: flex;
