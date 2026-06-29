@@ -4312,15 +4312,11 @@
      "ks": "5+",
      "bs": "6+",
      "g": "1",
-     "special": "Boardable, Vectored"
+     "special": "Vectored"
     },
     "weapons": [],
     "loads": [],
     "specialRules": [
-     {
-      "name": "Boardable",
-      "description": "This Ship can have Battalions Assigned to it as if it were a Space Station.\nAt the start of the round, this Ship is controlled by a Player if only they have any Battalions on it, lasting until the end of the round.\nPlayers that control a Boardable Ship may activate it as if it were a Ship in their Fleet, after all other Groups have activated."
-     },
      {
       "name": "Vectored",
       "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
@@ -4589,7 +4585,7 @@
      "ks": "5+",
      "bs": "6+",
      "g": "1",
-     "special": "Boardable, Civilian Transport, Monitor"
+     "special": "Monitor"
     },
     "weapons": [
      {
@@ -4610,14 +4606,6 @@
      }
     ],
     "specialRules": [
-     {
-      "name": "Boardable",
-      "description": "This Ship can have Battalions Assigned to it as if it were a Space Station.\nAt the start of the round, this Ship is controlled by a Player if only they have any Battalions on it, lasting until the end of the round.\nPlayers that control a Boardable Ship may activate it as if it were a Ship in their Fleet, after all other Groups have activated."
-     },
-     {
-      "name": "Civilian Transport",
-      "description": "This Ship can only choose the General Quarters order.\nThis Ship cannot be attacked unless it is controlled by a player. Players cannot attack a friendly Civilian Transport.\nThis Ship cannot be the target of Abilities."
-     },
      {
       "name": "Monitor",
       "description": "Ships with this rule may not use Course Change or Max Thrust orders."
@@ -4663,7 +4651,7 @@
      "ks": "5+",
      "bs": "6+",
      "g": "1",
-     "special": "Boardable, Civilian Transport, Rare, Reinforced Armour"
+     "special": "Rare, Reinforced Armour"
     },
     "weapons": [
      {
@@ -4684,14 +4672,6 @@
      }
     ],
     "specialRules": [
-     {
-      "name": "Boardable",
-      "description": "This Ship can have Battalions Assigned to it as if it were a Space Station.\nAt the start of the round, this Ship is controlled by a Player if only they have any Battalions on it, lasting until the end of the round.\nPlayers that control a Boardable Ship may activate it as if it were a Ship in their Fleet, after all other Groups have activated."
-     },
-     {
-      "name": "Civilian Transport",
-      "description": "This Ship can only choose the General Quarters order.\nThis Ship cannot be attacked unless it is controlled by a player. Players cannot attack a friendly Civilian Transport.\nThis Ship cannot be the target of Abilities."
-     },
      {
       "name": "Rare",
       "description": "You may only take one Group of this Ship in a Skirmish-sized game, two in a Clash, three in a Battle, and four in a Reconquest."
@@ -4745,7 +4725,7 @@
      "ks": "3+",
      "bs": "5+",
      "g": "1",
-     "special": "Boardable, Porter F-2, Reinforced Armour, Monitor"
+     "special": "Porter F-2, Reinforced Armour, Monitor"
     },
     "weapons": [
      {
@@ -4760,10 +4740,6 @@
     ],
     "loads": [],
     "specialRules": [
-     {
-      "name": "Boardable",
-      "description": "This Ship can have Battalions Assigned to it as if it were a Space Station.\nAt the start of the round, this Ship is controlled by a Player if only they have any Battalions on it, lasting until the end of the round.\nPlayers that control a Boardable Ship may activate it as if it were a Ship in their Fleet, after all other Groups have activated."
-     },
      {
       "name": "Porter F-2",
       "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of 2.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship."
@@ -4900,7 +4876,7 @@
      "ks": "4+",
      "bs": "5+",
      "g": "1",
-     "special": "Boardable, Civilian Transport"
+     "special": "-"
     },
     "weapons": [
      {
@@ -4944,14 +4920,6 @@
      }
     ],
     "specialRules": [
-     {
-      "name": "Boardable",
-      "description": "This Ship can have Battalions Assigned to it as if it were a Space Station.\nAt the start of the round, this Ship is controlled by a Player if only they have any Battalions on it, lasting until the end of the round.\nPlayers that control a Boardable Ship may activate it as if it were a Ship in their Fleet, after all other Groups have activated."
-     },
-     {
-      "name": "Civilian Transport",
-      "description": "This Ship can only choose the General Quarters order.\nThis Ship cannot be attacked unless it is controlled by a player. Players cannot attack a friendly Civilian Transport.\nThis Ship cannot be the target of Abilities."
-     },
      {
       "name": "Genesis Spikes",
       "description": "When this weapon successfully inflicts any amount of damage against a City, place a Mutant Fauna token on that Dropsite. Mutant Fauna tokens are not Battalions and cannot control or contest a Dropsite. When any player deploys any number of Battalions to that Dropsite, if that Dropsite has any Mutant Fauna tokens, those Battalions are only placed on a roll of a 5+. If any Battalions are not placed this way, remove a Mutant Fauna token from that Dropsite. If a Dropsite starts a round with a Mutant Fauna token, remove that token at the end of the round."
