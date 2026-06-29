@@ -577,7 +577,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "lore": "The Octavius class super battleship features a broad array of gunnery designed to devastate large targets. A heavy calibre broadside, torpedoes, Neutron Missiles, and the dreaded Dark Matter Cannon all combine to make this one of the most fearsome non-dreadnought vessels in the cosmos. Load Launch Special Torpedo 2 Limited-2",
+    "lore": "The Octavius class super battleship features a broad array of gunnery designed to devastate large targets. A heavy calibre broadside, torpedoes, Neutron Missiles, and the dreaded Dark Matter Cannon all combine to make this one of the most fearsome non-dreadnought vessels in the cosmos.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "[Actium](https://en.wikipedia.org/wiki/Battle_of_Actium)",
@@ -795,7 +795,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "lore": "The Trajan class battleship uses the same internal power structure as its cousin the Memnon, but this class is more overtly offensive and aggressive. Multiple attack drone and nanomachine systems make this giant lethal at close range while a sizable compliment of fighters and bombers can deploy in support or to strike at more distant targets. Load Launch Special Fighters & Bombers 4 -",
+    "lore": "The Trajan class battleship uses the same internal power structure as its cousin the Memnon, but this class is more overtly offensive and aggressive. Multiple attack drone and nanomachine systems make this giant lethal at close range while a sizable compliment of fighters and bombers can deploy in support or to strike at more distant targets.",
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Godhammer",
