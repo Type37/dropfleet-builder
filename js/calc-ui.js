@@ -13,9 +13,65 @@
   function esc(s) { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
   function pInt(v, dflt) { const m = String(v == null ? '' : v).match(/-?\d+/); return m ? parseInt(m[0], 10) : (dflt === undefined ? 0 : dflt); }
 
-  const TARGET_NAMES = Object.keys(D.target_coded);
+  const TARGET_NAMES_FALLBACK = Object.keys(D.target_coded);
   const WEAPON_NAMES = Object.keys(D.weapon_coded);
   const SAVES = [2, 3, 4, 5, 6, 7]; // 7 = none
+
+  /* ---- target presets sourced from the app's real ship database -------------
+     The ported calculator shipped generic class targets ("UCM Frigate"); instead
+     build the target list from the live ship DB so you pick an ACTUAL ship with
+     its real saves / weight / Reinforced / Shield. Cached per set of loaded
+     factions; falls back to the generic table only when the DB isn't available. */
+  function _calcData() { try { return App.getCalcData(); } catch (e) { return null; } }
+  function parseSave(v) { const m = String(v == null ? '' : v).match(/(\d)/); return m ? parseInt(m[1], 10) : 7; }
+  function weightOf(sh, cat) {
+    const t = String(sh.tonnage || '').trim(), c = t.charAt(0).toUpperCase();
+    if (t.length === 1 && 'LMHC'.indexOf(c) !== -1) return c;
+    const lc = t.toLowerCase();
+    if (lc.indexOf('light') === 0) return 'L';
+    if (lc.indexOf('med') === 0) return 'M';
+    if (lc.indexOf('heav') === 0) return 'H';
+    if (lc.indexOf('colo') === 0) return 'C';
+    return ({ light: 'L', medium: 'M', heavy: 'H', colossal: 'C', payload: 'M' })[cat] || 'M';
+  }
+  function shipHay(sh) { return (sh.special || '') + ' ' + ((sh.special_rules || []).join(' ')); }
+  function shieldOf(sh) { const m = shipHay(sh).match(/Shield-?(\d)/i); return m ? parseInt(m[1], 10) : 7; }
+  function hasReinforced(sh) { return /Reinforced Armour/i.test(shipHay(sh)); }
+  let _tpCache = null, _tpSig = '';
+  function targetPresets() {
+    const data = _calcData(), db = data && data.shipDB;
+    if (!db) return TARGET_NAMES_FALLBACK.map(n => ({ name: n, jafdy: D.target_coded[n] }));
+    const sig = Object.keys(db).sort().join(',');
+    if (_tpCache && _tpSig === sig) return _tpCache;
+    const labels = data.FACTION_LABELS || {};
+    const cats = data.CATEGORY_ORDER || ['light', 'medium', 'heavy', 'colossal', 'payload'];
+    const seen = {}, out = [];
+    Object.keys(db).forEach(fk => {
+      const fLabel = labels[fk] || fk, groups = (db[fk] && db[fk].groups) || {};
+      cats.forEach(cat => {
+        const g = groups[cat]; if (!g || !g.ships) return;
+        Object.keys(g.ships).forEach(key => {
+          const sh = g.ships[key]; if (!sh || !sh.name) return;
+          // Civilian / cross-faction ships are shared across every faction — list
+          // them once (un-prefixed) instead of six times. Core ships get a faction
+          // prefix so same-named hulls (e.g. Resistance "Cruiser") stay distinct.
+          const name = sh.additional ? sh.name : (fLabel + ' ' + sh.name);
+          if (seen[name]) return; seen[name] = 1;
+          out.push({ name: name, weight: weightOf(sh, cat), ES: parseSave(sh.es), KS: parseSave(sh.ks), BS: parseSave(sh.bs), SS: shieldOf(sh), reinforced: hasReinforced(sh), station: false });
+        });
+      });
+    });
+    out.sort((a, b) => a.name.localeCompare(b.name));
+    _tpCache = out; _tpSig = sig; return out;
+  }
+  function targetNames() { return targetPresets().map(p => p.name); }
+  // Load every faction's ships so the target list is complete (the DB loads lazily).
+  function ensureAllFactions() {
+    const data = _calcData(), labels = (data && data.FACTION_LABELS) || {};
+    const keys = Object.keys(labels);
+    if (!keys.length || !window.App || !App.ensureFactionLoaded) return Promise.resolve();
+    return Promise.all(keys.map(k => App.ensureFactionLoaded(k).catch(function () {})));
+  }
 
   /* ---- state model --------------------------------------------------------- */
   function rowFromPW(pw, wsit, presetName) {
@@ -137,7 +193,7 @@
     const chkT = (k, label, hint) => `<label class="calc-check${custom ? '' : ' calc-disabled'}"${hint ? ` title="${esc(hint)}"` : ''}><input type="checkbox"${s.pt[k] ? ' checked' : ''} ${dis} onchange="Calc.setPT('${scope}','${k}',this.checked)"><span>${label}</span></label>`;
     return `
       <div class="calc-panel-title">Target ${s.targetPreset !== 'Custom' ? `<span class="calc-preset-tag">${esc(s.targetPreset)}</span>` : ''}</div>
-      <label class="calc-field calc-field-wide"><span>Preset</span>${comboBox(scope, 'target', s.targetPreset === 'Custom' ? '' : s.targetPreset, 'Search ' + TARGET_NAMES.length + ' ships (blank = custom)')}</label>
+      <label class="calc-field calc-field-wide"><span>Preset</span>${comboBox(scope, 'target', s.targetPreset === 'Custom' ? '' : s.targetPreset, 'Search ' + targetNames().length + ' ships (blank = custom)')}</label>
       ${!custom ? `<div class="calc-preset-hint">Preset stats locked. <button type="button" class="calc-linkbtn" onclick="Calc.chooseTargetPreset('${scope}','')">Edit as Custom</button></div>` : ''}
       <div class="calc-saves calc-saves-3">
         <label class="calc-field"><span>Type</span><select class="calc-select" onchange="Calc.setType('${scope}',this.value)">${['Ship', 'City', 'Station'].map(t => `<option${t === s.type ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
@@ -377,6 +433,8 @@
     openStandalone(param) {
       renderStandalone();
       if (param) { try { setStateFromCode(std, param); } catch (e) {} renderStandalone(); }
+      // Pull in every faction's ships (DB loads lazily) then refresh the target list.
+      ensureAllFactions().then(() => { _tpCache = null; const n = document.getElementById('calc-std-target'); if (n) rerenderTarget('std'); });
     },
     addBuilderWeapon(btn) {
       const w = { name: btn.getAttribute('data-cn'), attack: btn.getAttribute('data-ca'), lock: btn.getAttribute('data-cl'), damage: btn.getAttribute('data-cd'), type: btn.getAttribute('data-ct'), special: btn.getAttribute('data-cs'), arc: btn.getAttribute('data-carc') };
@@ -384,7 +442,7 @@
       bld.weapons.push(parseBuilderWeapon(w));
       this.openBuilderPane();
     },
-    openBuilderPane() { const p = document.getElementById('builder-calc'), l = document.getElementById('builder-layout'); if (p) p.classList.remove('hidden'); if (l) l.classList.add('calc-open'); renderBuilder(); },
+    openBuilderPane() { const p = document.getElementById('builder-calc'), l = document.getElementById('builder-layout'); if (p) p.classList.remove('hidden'); if (l) l.classList.add('calc-open'); renderBuilder(); ensureAllFactions().then(() => { _tpCache = null; const n = document.getElementById('calc-bld-target'); if (n) rerenderTarget('bld'); }); },
     closeBuilder() { const p = document.getElementById('builder-calc'), l = document.getElementById('builder-layout'); if (p) p.classList.add('hidden'); if (l) l.classList.remove('calc-open'); },
     openFull() { std.targetPreset = bld.targetPreset; std.type = bld.type; std.pt = Object.assign({}, bld.pt); std.sit = Object.assign({}, bld.sit); std.weapons = bld.weapons.map(r => JSON.parse(JSON.stringify(r))); App.navigate('calc'); },
 
@@ -405,12 +463,22 @@
     chooseTargetPreset(scope, name) {
       const s = st(scope);
       if (!name) { s.targetPreset = 'Custom'; rerenderTarget(scope); return; }
-      const imp = D.importTarget(D.target_coded[name]); if (!imp) return;
-      const [atk, pt] = imp; s.targetPreset = name;
-      s.pt = { weight: pt.weight, ES: pt.ES, KS: pt.KS, BS: pt.BS, SS: pt.SS, descent: pt.descent, reinforced: pt.reinforced };
-      s.type = pt.city ? 'City' : (pt.station ? 'Station' : 'Ship');
-      // adopt the preset's situational defaults (WF/close etc.)
-      s.sit = Object.assign(s.sit, { aegisOn: atk.aegis > 0, aegis: atk.aegis, fullFighters: atk.fighters === Infinity, fightersOn: atk.fighters > 0 && atk.fighters !== Infinity, fighters: atk.fighters === Infinity ? 0 : atk.fighters, opal: atk.opal, WF: atk.WF, attacker_atmo: atk.attacker_atmo, target_atmo: atk.target_atmo, defences_offline: atk.defences_offline, close: atk.close, grouped: atk.grouped, impetuous: atk.impetuous });
+      const p = targetPresets().find(x => x.name === name);
+      if (!p) return;
+      // Fallback path: the ported generic table (only when the ship DB isn't loaded).
+      if (p.jafdy) {
+        const imp = D.importTarget(p.jafdy); if (!imp) return;
+        const [atk, pt] = imp; s.targetPreset = name;
+        s.pt = { weight: pt.weight, ES: pt.ES, KS: pt.KS, BS: pt.BS, SS: pt.SS, descent: pt.descent, reinforced: pt.reinforced };
+        s.type = pt.city ? 'City' : (pt.station ? 'Station' : 'Ship');
+        s.sit = Object.assign(s.sit, { aegisOn: atk.aegis > 0, aegis: atk.aegis, fullFighters: atk.fighters === Infinity, fightersOn: atk.fighters > 0 && atk.fighters !== Infinity, fighters: atk.fighters === Infinity ? 0 : atk.fighters, opal: atk.opal, WF: atk.WF, attacker_atmo: atk.attacker_atmo, target_atmo: atk.target_atmo, defences_offline: atk.defences_offline, close: atk.close, grouped: atk.grouped, impetuous: atk.impetuous });
+        rerenderTarget(scope); return;
+      }
+      // Real ship from the app's database: take its saves / weight / Reinforced /
+      // Shield. Situational toggles are the attacker's choice, so leave them as set.
+      s.targetPreset = name;
+      s.pt = { weight: p.weight, ES: p.ES, KS: p.KS, BS: p.BS, SS: p.SS, descent: false, reinforced: !!p.reinforced };
+      s.type = p.station ? 'Station' : 'Ship';
       rerenderTarget(scope);
     },
     chooseWeaponPreset(scope, idx, name) {
@@ -436,7 +504,7 @@
     // combobox
     comboFilter(scope, kind, q) {
       const list = document.getElementById('combo-' + scope + '-' + kind + '-list'); if (!list) return;
-      const names = kind === 'target' ? TARGET_NAMES : WEAPON_NAMES;
+      const names = kind === 'target' ? targetNames() : WEAPON_NAMES;
       q = (q || '').trim().toLowerCase(); const terms = q.split(/\s+/).filter(Boolean);
       const matches = terms.length ? names.filter(n => { const h = n.toLowerCase(); return terms.every(w => h.indexOf(w) !== -1); }) : names;
       const cap = 60, shown = matches.slice(0, cap), keys = [];
