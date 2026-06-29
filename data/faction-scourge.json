@@ -5309,7 +5309,7 @@
    "rules": [
     {
      "name": "Shrouding Platform",
-     "description": "This Dropsite has a Signature of 0” and cannot gain Spikes.\nFriendly Groups within 6” of this Dropsite count as having one fewer Spike when an opponent is determining potential targets and assigning Weapons to targets.\nWhen friendly Bulk Landers are launched to this Dropsite, they ignore enemy Battalions on this Dropsite."
+     "description": "This Dropsite has a Signature of 0” and cannot gain Spikes.\nFriendly Groups within 6” of this Dropsite count as having one fewer Spike when an opponent is determining potential targets and assigning Weapons to targets."
     }
    ]
   },
@@ -5328,7 +5328,7 @@
    "rules": [
     {
      "name": "Infestation Bastion",
-     "description": "After enemy Battalions are deployed to this Dropsite, roll a dice for each of those Battalions. For each result of a 5+, remove one of those Battalions. Only one Infestation Bastion can be used this way for each Battalion and any Battalions already on the Dropsite are ignored."
+     "description": "When friendly Bulk Landers are launched to this Dropsite, they ignore enemy Battalions on this Dropsite. After enemy Battalions are deployed to this Dropsite, roll a dice for each of those Battalions. For each result of a 5+, remove one of those Battalions. Only one Infestation Bastion can be used this way for each Battalion and any Battalions already on the Dropsite are ignored."
     }
    ]
   }
