@@ -6031,24 +6031,68 @@ const App = (() => {
     document.addEventListener('keydown', onKey);
 
     // Mark page boundaries on the continuous "paper" surface and report the page
-    // count, so you see roughly how many sheets the list prints to before opening
-    // the browser dialog. A4 content area (210x297mm, 12mm margins) = 186x273mm;
-    // breaks fall every 273mm of content (a card straddling a line really prints
-    // on the next page, so the count is an estimate, accurate for typical lists).
+    // count. Print keeps certain blocks whole (CSS break-inside: avoid — ship and
+    // admiral cards, the launch/abilities references, the glossary), so a naive
+    // "every 273mm" split would draw breaks mid-card that the printer won't make.
+    // Instead we find those atomic blocks and, when one would straddle a boundary,
+    // insert a spacer that pushes it to the next page — exactly how print resolves
+    // it — so the preview's breaks and page count match the real output. Spacers
+    // and break lines are preview-only; doPrintNow rebuilds clean HTML to print.
+    // A4 content area (210x297mm, 12mm margins) = 186x273mm.
     let pageTimer = null;
     const paginate = () => {
       const s = document.getElementById('pp-surface');
       const label = document.getElementById('pp-pagecount');
       if (!s) return;
-      s.querySelectorAll('.pp-page-break').forEach(el => el.remove());
+      s.querySelectorAll('.pp-page-break, .pp-page-spacer').forEach(el => el.remove());
       const cs = getComputedStyle(s);
       const padTop = parseFloat(cs.paddingTop) || 0;
       const padBot = parseFloat(cs.paddingBottom) || 0;
       const pxPerMm = s.getBoundingClientRect().width / 210; // surface is 210mm wide
       const pageContentPx = 273 * pxPerMm;
+      if (!(pageContentPx > 0)) return;
+
+      // 1-column layouts stack as a simple vertical run, so we can push straddling
+      // cards down. The roster table and 2-column grid don't, so they keep the plain
+      // height estimate. Guarded so a measurement hiccup falls back, never blanks.
+      const oneColumn = !s.querySelector('.roster-table, .dp-2col, .print-2col');
+      if (oneColumn) {
+        try {
+          const sTop = s.getBoundingClientRect().top;
+          const blocks = [...s.querySelectorAll('.print-header, .launch-ref, .print-admiral-card, .dp-ship, .dp-glossary, .dp-secobj-row, .dp-abilities')]
+            .map(el => { const r = el.getBoundingClientRect(); return { el, top: r.top - sTop - padTop, h: r.height, breakable: el.classList.contains('dp-abilities') }; })
+            .filter(b => b.h > 0)
+            .sort((a, b) => a.top - b.top);
+          let offset = 0;            // total spacer height added above the current block
+          let pageLimit = pageContentPx;
+          const spacers = [];
+          blocks.forEach(b => {
+            const top = b.top + offset;
+            const bottom = top + b.h;
+            // A block that may break (the abilities table) or is taller than a whole
+            // page just advances the boundary past it — print splits it between rows.
+            if (b.breakable || b.h >= pageContentPx) { while (pageLimit < bottom) pageLimit += pageContentPx; return; }
+            if (bottom > pageLimit) {                 // would straddle → push to next page
+              const gap = pageLimit - top;
+              if (gap > 1) spacers.push({ el: b.el, gap });
+              offset += gap;
+              pageLimit += pageContentPx;
+            }
+          });
+          spacers.forEach(({ el, gap }) => {
+            const sp = document.createElement('div');
+            sp.className = 'pp-page-spacer';
+            sp.style.height = gap + 'px';
+            el.parentNode.insertBefore(sp, el);
+          });
+        } catch (e) {
+          s.querySelectorAll('.pp-page-spacer').forEach(el => el.remove());
+        }
+      }
+
       const contentPx = s.scrollHeight - padTop - padBot;
       const pages = Math.max(1, Math.ceil((contentPx - 1) / pageContentPx));
-      if (label) label.textContent = pages === 1 ? '1 page' : `~${pages} pages`;
+      if (label) label.textContent = pages === 1 ? '1 page' : `${pages} pages`;
       for (let k = 1; k < pages; k++) {
         const brk = document.createElement('div');
         brk.className = 'pp-page-break';
@@ -6797,6 +6841,13 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-06-29', title: 'Fleet sorting, abilities table & fixes', items: [
+      'Battlegroups now auto-order by weight class (Colossal first, then Heavy, Medium, Light). Drag the grip handle on a group to reorder groups within the same weight class.',
+      'Printed and exported sheets list one consolidated table of every Admiral Ability you can use that match (with AP cost), and follow the same group order as the builder.',
+      'Print Preview page-break markers now reflect how cards actually stay together on a page, so the page count is accurate.',
+      'Slimmer Settings panel; all print options now live in Print Preview.',
+      'Fixed the Zenith Dreadnought datasheet: the buildable version no longer comes with preselected hardpoint weapons.',
+    ] },
     { date: '2026-06-26', title: 'New rules editions + heroes', items: [
       'Scourge updated to the latest edition: Oculus Beam Array Attack 2→3 (Shadow, Umbra, Banshee, Akuma, Flayer), Shadow & Umbra points changes, and a reworked Oculus Booster rule.',
       'Eight new Scourge ships: Nereid, Rusalka, Nixie, Gloam, Kikimora, Bannik, Melusine, Fossegrim.',
@@ -6835,58 +6886,27 @@ const App = (() => {
     const body = document.getElementById('settings-body');
     // Fleet description is edited in the overview "Add fleet notes" field; no need
     // to duplicate it here.
+    // Compact, single-line toggles (full descriptions live in the hover tooltip).
+    // Print options are NOT here — they all live in Print Preview.
+    const tog = (key, name, desc) => `<label class="settings-toggle" title="${esc(desc).replace(/"/g, '&quot;')}">
+          <span class="settings-toggle-name">${esc(name)}</span>
+          <input type="checkbox" ${settings[key] ? 'checked' : ''} onchange="App.toggleSetting('${key}', this.checked)">
+          <span class="settings-toggle-switch"></span>
+        </label>`;
     body.innerHTML = `
       <div class="settings-group">
         <div class="settings-group-title">Builder Display</div>
-        <label class="settings-toggle">
-          <span class="settings-toggle-label">
-            <span class="settings-toggle-name">Compact View</span>
-            <span class="settings-toggle-desc">Hide weapon tables and launch assets in the fleet builder for a denser overview</span>
-          </span>
-          <input type="checkbox" ${settings.compactView ? 'checked' : ''} onchange="App.toggleSetting('compactView', this.checked)">
-          <span class="settings-toggle-switch"></span>
-        </label>
-        <label class="settings-toggle">
-          <span class="settings-toggle-label">
-            <span class="settings-toggle-name">Auto-expand Lore</span>
-            <span class="settings-toggle-desc">Automatically show flavour text on ship cards instead of requiring a click</span>
-          </span>
-          <input type="checkbox" ${settings.autoExpandLore ? 'checked' : ''} onchange="App.toggleSetting('autoExpandLore', this.checked)">
-          <span class="settings-toggle-switch"></span>
-        </label>
-        <label class="settings-toggle">
-          <span class="settings-toggle-label">
-            <span class="settings-toggle-name">Collection</span>
-            <span class="settings-toggle-desc">Show an "in collection" chip on ship cards and an In-collection filter, using counts from the Collection tab</span>
-          </span>
-          <input type="checkbox" ${settings.showCollection ? 'checked' : ''} onchange="App.toggleSetting('showCollection', this.checked)">
-          <span class="settings-toggle-switch"></span>
-        </label>
+        ${tog('compactView', 'Compact view', 'Hide weapon tables and launch assets in the fleet builder for a denser overview')}
+        ${tog('autoExpandLore', 'Auto-expand lore', 'Automatically show flavour text on ship cards instead of requiring a click')}
+        ${tog('showCollection', 'Collection', 'Show an "in collection" chip on ship cards and an In-collection filter, using counts from the Collection tab')}
       </div>
       <div class="settings-group">
-        <div class="settings-group-title">Print</div>
-        <label class="settings-toggle">
-          <span class="settings-toggle-label">
-            <span class="settings-toggle-name">Two-column units</span>
-            <span class="settings-toggle-desc">Pack units two per row when printing (about four per page) to save paper</span>
-          </span>
-          <input type="checkbox" ${settings.print2col ? 'checked' : ''} onchange="App.toggleSetting('print2col', this.checked)">
-          <span class="settings-toggle-switch"></span>
-        </label>
-      </div>
-      <div class="settings-group">
-        <div class="settings-group-title">Data</div>
-        <div class="flex gap-sm">
-          <button class="btn btn-outline btn-sm" onclick="App.exportAllFleets()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg> Export All Fleets</button>
-        </div>
-        <p class="text-caption" style="margin-top:var(--sp-sm)">Download all your fleet data as a JSON backup file.</p>
-      </div>
-      <div class="settings-group">
-        <div class="settings-group-title">Feedback</div>
-        <div class="flex gap-sm">
-          <a class="btn btn-outline btn-sm" href="${FEEDBACK_HREF}"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12v8H2zM2 4l6 5 6-5"/></svg> Send Feedback</a>
+        <div class="settings-actions">
+          <button class="btn btn-outline btn-sm" onclick="App.exportAllFleets()" title="Download all your fleets as a JSON backup"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg> Export fleets</button>
+          <a class="btn btn-outline btn-sm" href="${FEEDBACK_HREF}"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12v8H2zM2 4l6 5 6-5"/></svg> Feedback</a>
           <button class="btn btn-outline btn-sm" onclick="App.closeModal('modal-settings'); App.openChangelog()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1v14M1 8h14"/></svg> What's New</button>
         </div>
+        <p class="settings-note">Print options live in Print Preview.</p>
       </div>
     `;
     openModal('modal-settings');

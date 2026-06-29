@@ -1114,7 +1114,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── Settings Panel ──────────────────────────────────────────── */
 .settings-group {
-  margin-bottom: var(--sp-xl);
+  margin-bottom: var(--sp-lg);
 }
 .settings-group-title {
   font-family: var(--font-condensed);
@@ -1125,33 +1125,34 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-muted);
   border-bottom: 1px solid var(--stroke);
   padding-bottom: var(--sp-xs);
-  margin-bottom: var(--sp-lg);
+  margin-bottom: var(--sp-xs);
 }
 .settings-toggle {
   display: flex;
   align-items: center;
-  gap: var(--sp-lg);
-  padding: var(--sp-md) 0;
+  gap: var(--sp-md);
+  padding: var(--sp-sm) 0;
   cursor: pointer;
   border-bottom: 1px solid var(--stroke-light);
 }
 .settings-toggle:last-child { border-bottom: none; }
-.settings-toggle-label {
+.settings-toggle-name {
   flex: 1;
   min-width: 0;
-}
-.settings-toggle-name {
-  display: block;
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-medium);
   font-size: var(--text-sm);
   color: var(--ink);
 }
-.settings-toggle-desc {
-  display: block;
+/* Compact action row (Export / Feedback / What's New) + footnote. */
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+}
+.settings-note {
   font-size: var(--text-xs);
   color: var(--ink-muted);
-  margin-top: 2px;
-  line-height: 1.4;
+  margin-top: var(--sp-sm);
 }
 .settings-toggle input[type="checkbox"] {
   display: none;
@@ -6588,7 +6589,7 @@ h1, h2, h3, h4, h5, h6 {
   .category-tab { min-height: 40px; padding: var(--sp-sm) var(--sp-md); font-size: var(--text-xs); }
   .group-nav-item { min-height: 44px; }
   .filter-chip { min-height: 36px; padding: var(--sp-xs) var(--sp-md); }
-  .settings-toggle { padding: var(--sp-lg) 0; }
+  .settings-toggle { padding: var(--sp-md) 0; }
 
   /* Ship entries */
   .group-ship-entry { padding: var(--sp-lg); }
