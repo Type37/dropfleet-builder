@@ -241,7 +241,9 @@ const App = (() => {
     // Civilian / industrial / mercenary ships (cross-faction "Misc Ships") — wire
     // their transparent art so they show with art instead of being hidden/blank.
     'Anode':'anode_the_melter',
+    'Argonaut':'argonaut_astrofauna',
     'DH-Type Penal Transport':'dh_type_penal_transport',
+    'EX-7 Packet Runner':'ex7_packet_runner',
     'Frigate':'frigate',
     'Hyperyacht Aurorum':'hyperyacht_aurorum',
     'Hyperyacht Somniferum':'hyperyacht_somniferum',
@@ -6841,6 +6843,10 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-01', title: 'New civilian ships', items: [
+      'Two new ships from the latest Civilian Ships & Scenarios update: the EX-7 Packet Runner (UCM courier, 57 pts) and the Argonaut (a space-dwelling astrofauna, 112 pts). Both can be taken in any fleet.',
+      'Find them under the "Additional ships" toggle in the picker, with full stats, rules, art and lore.',
+    ] },
     { date: '2026-06-29', title: 'Fleet sorting, abilities table & fixes', items: [
       'Battlegroups now auto-order by weight class (Colossal first, then Heavy, Medium, Light). Drag the grip handle on a group to reorder groups within the same weight class.',
       'Printed and exported sheets list one consolidated table of every Admiral Ability you can use that match (with AP cost), and follow the same group order as the builder.',

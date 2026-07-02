@@ -188,7 +188,9 @@
     // Civilian / industrial / mercenary ships (cross-faction "Misc Ships") — wire
     // their transparent art so they show with art instead of being hidden/blank.
     'Anode':'anode_the_melter',
+    'Argonaut':'argonaut_astrofauna',
     'DH-Type Penal Transport':'dh_type_penal_transport',
+    'EX-7 Packet Runner':'ex7_packet_runner',
     'Frigate':'frigate',
     'Hyperyacht Aurorum':'hyperyacht_aurorum',
     'Hyperyacht Somniferum':'hyperyacht_somniferum',
