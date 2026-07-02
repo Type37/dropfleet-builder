@@ -449,6 +449,7 @@ const App = (() => {
         groupMin: s.groupMin, groupMax: s.groupMax,
         isRare: s.isRare, isUnique: s.isUnique,
         additional: !!s.additional,
+        noAdmiral: !!s.noAdmiral,   // e.g. Argonaut "Mind of its Own": no Admiral may be assigned
         loadoutOptions: s.loadoutOptions || [],
         lore: s.lore || '',
         rulesText: s.rulesText || '',
@@ -4863,8 +4864,10 @@ const App = (() => {
       const s = g.ships[0];
       const db = findShipInDB(currentFleet.faction, s.groupCategory, s.shipKey);
       const cat = db ? (db.category || s.groupCategory) : s.groupCategory;
-      return { id: g.id, name: g.name, cat };
-    }).filter(g => g.cat === 'medium' || g.cat === 'heavy' || g.cat === 'colossal');
+      // A ship whose rules forbid an Admiral (e.g. Argonaut "Mind of its Own") is
+      // never a valid host, even though it is Capital tonnage.
+      return { id: g.id, name: g.name, cat, noAdmiral: !!(db && db.noAdmiral) };
+    }).filter(g => (g.cat === 'medium' || g.cat === 'heavy' || g.cat === 'colossal') && !g.noAdmiral);
   }
 
   // Assign a Generic/Faction admiral to one of the fleet's Capital ships.
@@ -6866,10 +6869,11 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
-    { date: '2026-07-02', title: 'Print and battlegroup fixes', items: [
+    { date: '2026-07-02', title: 'Print, reordering & rules fixes', items: [
       'Battlegroup reordering: each group card now shows a drag handle (whenever its weight class holds two or more groups), so you can drag to reorder groups within a class. The handle previously never rendered.',
       'Print and Print Preview: a battlegroup heading no longer prints alone at the foot of a page while its ship card flows onto the next.',
       'Rules text no longer splits mid-sentence across a page break, in both Big mode and the compact Roster layout.',
+      'The Argonaut can no longer be assigned an Admiral, enforcing its "Mind of its Own" rule during list-building.',
     ] },
     { date: '2026-07-01', title: 'New civilian ships', items: [
       'Two new ships from the latest Civilian Ships & Scenarios update: the EX-7 Packet Runner (UCM courier, 57 pts) and the Argonaut (a space-dwelling astrofauna, 112 pts). Both can be taken in any fleet.',

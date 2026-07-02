@@ -2625,7 +2625,11 @@
   function capitalShipGroups() {
     return (activeFleet.battleGroups || []).filter(g => {
       const cat = g.ships[0]?.groupCategory;
-      return cat === 'medium' || cat === 'heavy' || cat === 'colossal';
+      if (!(cat === 'medium' || cat === 'heavy' || cat === 'colossal')) return false;
+      // A ship whose rules forbid an Admiral (e.g. Argonaut "Mind of its Own") is
+      // never a valid host, even though it is Capital tonnage.
+      const db = findShip(activeFleet.faction, g.ships[0].groupCategory, g.ships[0].shipKey);
+      return !(db && db.noAdmiral);
     }).map(g => {
       const s = g.ships[0];
       const db = findShip(activeFleet.faction, s.groupCategory, s.shipKey);
@@ -3108,8 +3112,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
-    { date: '2026-07-02', title: 'Print and battlegroup fixes', items: [
+    { date: '2026-07-02', title: 'Print, reordering & rules fixes', items: [
       'Desktop: group cards now show a drag handle to reorder battlegroups within a weight class, and print sheets keep headings with their ships and no longer split rules mid-sentence across a page.',
+      'The Argonaut can no longer be assigned an Admiral, enforcing its "Mind of its Own" rule during list-building.',
     ] },
     { date: '2026-07-01', title: 'New civilian ships', items: [
       'Two new ships from the Civilian Ships & Scenarios update: the EX-7 Packet Runner (UCM courier, 57 pts) and the Argonaut (space-dwelling astrofauna, 112 pts). Both can be taken in any fleet, under the Misc Ships filter.',

@@ -101,6 +101,9 @@ ARGONAUT = {
         ],
         "groupMin": 1, "groupMax": 1,
         "isRare": True, "isUnique": False,
+        # "Mind of its Own": this Ship cannot have an Admiral assigned to it for any
+        # reason. Enforced in list-building (excluded from the Capital-ship host list).
+        "noAdmiral": True,
         "tonnage": "M",
         "lore": (
             "Though there has been extensive speculation on the viability or even potential existence of any kind of life adapted "
