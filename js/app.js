@@ -6061,10 +6061,25 @@ const App = (() => {
       if (oneColumn) {
         try {
           const sTop = s.getBoundingClientRect().top;
-          const blocks = [...s.querySelectorAll('.print-header, .launch-ref, .print-admiral-card, .dp-ship, .dp-glossary, .dp-secobj-row, .dp-abilities')]
-            .map(el => { const r = el.getBoundingClientRect(); return { el, top: r.top - sTop - padTop, h: r.height, breakable: el.classList.contains('dp-abilities') }; })
-            .filter(b => b.h > 0)
-            .sort((a, b) => a.top - b.top);
+          // Glue each group header to its first ship card into one atom, so a header
+          // never lands alone at the foot of a page while its ships flow to the next.
+          const rawEls = [...s.querySelectorAll('.print-header, .launch-ref, .print-admiral-card, .dp-group-head, .dp-ship, .dp-glossary, .dp-secobj-row, .dp-abilities')];
+          const measured = [];
+          for (let i = 0; i < rawEls.length; i++) {
+            const el = rawEls[i];
+            const r = el.getBoundingClientRect();
+            if (el.classList.contains('dp-group-head')) {
+              const nxt = rawEls[i + 1];
+              if (nxt && nxt.classList.contains('dp-ship')) {
+                const nr = nxt.getBoundingClientRect();
+                measured.push({ el, top: r.top - sTop - padTop, h: nr.bottom - r.top, breakable: false });
+                i++; // the first ship is now part of this glued header block
+                continue;
+              }
+            }
+            measured.push({ el, top: r.top - sTop - padTop, h: r.height, breakable: el.classList.contains('dp-abilities') });
+          }
+          const blocks = measured.filter(b => b.h > 0).sort((a, b) => a.top - b.top);
           let offset = 0;            // total spacer height added above the current block
           let pageLimit = pageContentPx;
           const spacers = [];
@@ -6843,6 +6858,10 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-02', title: 'Cleaner print page breaks', items: [
+      'Print and Print Preview: a battlegroup heading no longer prints alone at the foot of a page while its ship card flows onto the next.',
+      'Rules text no longer splits mid-sentence across a page break, in both Big mode and the compact Roster layout.',
+    ] },
     { date: '2026-07-01', title: 'New civilian ships', items: [
       'Two new ships from the latest Civilian Ships & Scenarios update: the EX-7 Packet Runner (UCM courier, 57 pts) and the Argonaut (a space-dwelling astrofauna, 112 pts). Both can be taken in any fleet.',
       'Find them under the "Additional ships" toggle in the picker, with full stats, rules, art and lore.',

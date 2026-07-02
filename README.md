@@ -47,6 +47,10 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-02 — Cleaner print page breaks
+- Print and Print Preview: a battlegroup heading no longer prints alone at the foot of a page while its ship card flows onto the next.
+- Rules text no longer splits mid-sentence across a page break, in both Big mode and the compact Roster layout.
+
 ### 2026-07-01 — New civilian ships
 - Two new ships from the Civilian Ships & Scenarios update: the EX-7 Packet Runner (UCM courier, 57 pts) and the Argonaut (space-dwelling astrofauna, 112 pts). Both can be taken in any fleet, under the Misc Ships filter.
 

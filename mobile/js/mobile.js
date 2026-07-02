@@ -3108,6 +3108,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-02', title: 'Cleaner print page breaks', items: [
+      'Desktop print sheets: battlegroup headings stay with their ships and rules no longer split mid-sentence across a page break.',
+    ] },
     { date: '2026-07-01', title: 'New civilian ships', items: [
       'Two new ships from the Civilian Ships & Scenarios update: the EX-7 Packet Runner (UCM courier, 57 pts) and the Argonaut (space-dwelling astrofauna, 112 pts). Both can be taken in any fleet, under the Misc Ships filter.',
     ] },

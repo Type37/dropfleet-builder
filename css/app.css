@@ -5133,6 +5133,8 @@ h1, h2, h3, h4, h5, h6 {
   border-bottom: 1px solid #ddd;
   padding-bottom: 4px;
   margin-bottom: 8px;
+  /* A section title (e.g. "Rules") must never sit alone at a page foot. */
+  break-after: avoid; page-break-after: avoid;
 }
 
 .print-admiral {
@@ -5644,7 +5646,7 @@ h1, h2, h3, h4, h5, h6 {
 .dp-loads, .dp-systems { font-size: 8pt; margin: 2px 0; color: #1c1a17; line-height: 1.35; }
 .dp-loads b, .dp-systems b { color: #1b3a5c; }
 .dp-rules { font-size: 7.8pt; margin-top: 3px; color: #333; line-height: 1.35; }
-.dp-rule { display: block; margin-bottom: 1px; }
+.dp-rule { display: block; margin-bottom: 1px; break-inside: avoid; page-break-inside: avoid; }
 .dp-rule b { color: #1b3a5c; }
 
 .dp-hull { display: flex; align-items: center; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
@@ -5773,6 +5775,10 @@ h1, h2, h3, h4, h5, h6 {
 .rt-load { color: #1b3a5c; font-size: 7.5pt; }
 .rt-none { color: #999; font-style: italic; }
 .roster-table tr.rt-first > td { border-top: 1px solid #c9c2b4; }
+/* Page transitions: a ship's row(s) never split across a page, and a group header
+   row never lands alone at the foot of a page away from its first ship. */
+.roster-table tr.rt-ship, .roster-table tr.rt-group { break-inside: avoid; page-break-inside: avoid; }
+.roster-table tr.rt-group { break-after: avoid; page-break-after: avoid; }
 .pf-roster .dp-glossary { margin-top: 6px; }
 .pf-inksaver .roster-table th, .pf-inksaver .rt-group td { background: #fff !important; }
 
