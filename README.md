@@ -47,7 +47,8 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
-### 2026-07-02 — Cleaner print page breaks
+### 2026-07-02 — Print and battlegroup fixes
+- Battlegroup reordering: each group card now shows a drag handle (whenever its weight class holds two or more groups), so you can drag to reorder groups within a class. The handle previously never rendered.
 - Print and Print Preview: a battlegroup heading no longer prints alone at the foot of a page while its ship card flows onto the next.
 - Rules text no longer splits mid-sentence across a page break, in both Big mode and the compact Roster layout.
 

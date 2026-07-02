@@ -6055,6 +6055,26 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: inset 3px 0 0 0 var(--navy), 0 0 0 1px var(--navy-subtle), var(--shadow-md);
   border-left-width: 5px;
 }
+/* Drag-reorder grip on a group card — only shown when its weight class holds 2+
+   groups. Always visible (subtle) so the affordance is discoverable, unlike the
+   old hover-only grip which read as "not there". */
+.overview-group-grip {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  margin-left: -2px;
+  color: #c2b9ac;
+  cursor: grab;
+  touch-action: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.overview-group-card:hover .overview-group-grip { color: #9c9284; }
+.overview-group-grip:hover { color: var(--navy); }
+.overview-group-grip:active { cursor: grabbing; }
+.overview-group-card.dragging { opacity: 0.5; }
+.overview-group-card.drag-over-before { box-shadow: inset 0 3px 0 0 var(--navy); }
+.overview-group-card.drag-over-after { box-shadow: inset 0 -3px 0 0 var(--navy); }
 .overview-group-top {
   display: flex;
   align-items: center;

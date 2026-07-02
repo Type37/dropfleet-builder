@@ -2385,7 +2385,7 @@ const App = (() => {
       ev.dataTransfer.effectAllowed = 'move';
       try { ev.dataTransfer.setData('text/plain', gid); } catch (e) {}
     }
-    const row = ev.currentTarget.closest('.group-nav-item');
+    const row = ev.currentTarget.closest('.overview-group-card, .group-nav-item');
     if (row) {
       row.classList.add('dragging');
       try { const r = row.getBoundingClientRect(); ev.dataTransfer.setDragImage(row, ev.clientX - r.left, ev.clientY - r.top); } catch (e) {}
@@ -2423,7 +2423,7 @@ const App = (() => {
 
   function onGroupDragEnd() {
     dragGroupId = null;
-    document.querySelectorAll('.group-nav-item.dragging, .group-nav-item.drag-over-before, .group-nav-item.drag-over-after')
+    document.querySelectorAll('.dragging, .drag-over-before, .drag-over-after')
       .forEach(el => el.classList.remove('dragging', 'drag-over-before', 'drag-over-after'));
   }
 
@@ -2528,6 +2528,10 @@ const App = (() => {
 
     // Group cards — sorted by weight class then rendered with section dividers.
     const sortedGroups = sortGroupsByWeight(f.battleGroups);
+    // Per-weight-class group counts — the drag-reorder grip only appears when a
+    // class holds 2+ groups (a lone group has nothing to reorder against).
+    const ovClassCounts = {};
+    sortedGroups.forEach(sg => { const c = (sg.ships[0]?.groupCategory) || 'medium'; ovClassCounts[c] = (ovClassCounts[c] || 0) + 1; });
     let lastCat = null;
     const groupCards = sortedGroups.map(g => {
       const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
@@ -2607,8 +2611,12 @@ const App = (() => {
         : '';
       lastCat = cat;
 
-      return `${sectionDivider}<div class="overview-group-card card-deco${g.id === activeGroupId ? ' overview-group-active' : ''}" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-current="${g.id === activeGroupId ? 'true' : 'false'}" aria-label="${esc(g.name)}, ${esc(catLabel)}, ${gPts} points" style="cursor:pointer;border-left-color:${catColor}">
+      const gripHtml = ovClassCounts[cat] > 1
+        ? `<span class="overview-group-grip" draggable="true" title="Drag to reorder within ${esc(catLabel)}" aria-label="Drag to reorder ${esc(g.name)} within its weight class" onclick="event.stopPropagation()" ondragstart="App.onGroupDragStart(event,'${g.id}')" ondragend="App.onGroupDragEnd(event)"><svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.3"/><circle cx="7" cy="3" r="1.3"/><circle cx="3" cy="8" r="1.3"/><circle cx="7" cy="8" r="1.3"/><circle cx="3" cy="13" r="1.3"/><circle cx="7" cy="13" r="1.3"/></svg></span>`
+        : '';
+      return `${sectionDivider}<div class="overview-group-card card-deco${g.id === activeGroupId ? ' overview-group-active' : ''}" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-current="${g.id === activeGroupId ? 'true' : 'false'}" aria-label="${esc(g.name)}, ${esc(catLabel)}, ${gPts} points" style="cursor:pointer;border-left-color:${catColor}" ondragover="App.onGroupDragOver(event,'${g.id}')" ondragleave="App.onGroupDragLeave(event)" ondrop="App.onGroupDrop(event,'${g.id}')">
         <div class="overview-group-top">
+          ${gripHtml}
           ${artSrc ? `<div class="overview-group-art${artModularClass}"><img src="${artThumb ? thumbUrl(artSrc) : esc(artSrc)}" alt="" onerror="this.closest('.overview-group-art').remove()"></div>` : ''}
           <div class="overview-group-info">
             <div class="overview-group-name group-name-editable" onclick="event.stopPropagation(); App.editGroupName('${g.id}', this)" role="button" tabindex="0" title="Click to rename battlegroup">${esc(g.name)}</div>
@@ -6858,7 +6866,8 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
-    { date: '2026-07-02', title: 'Cleaner print page breaks', items: [
+    { date: '2026-07-02', title: 'Print and battlegroup fixes', items: [
+      'Battlegroup reordering: each group card now shows a drag handle (whenever its weight class holds two or more groups), so you can drag to reorder groups within a class. The handle previously never rendered.',
       'Print and Print Preview: a battlegroup heading no longer prints alone at the foot of a page while its ship card flows onto the next.',
       'Rules text no longer splits mid-sentence across a page break, in both Big mode and the compact Roster layout.',
     ] },
