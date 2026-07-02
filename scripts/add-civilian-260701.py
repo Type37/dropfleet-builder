@@ -101,9 +101,12 @@ ARGONAUT = {
         ],
         "groupMin": 1, "groupMax": 1,
         "isRare": True, "isUnique": False,
-        # "Mind of its Own": this Ship cannot have an Admiral assigned to it for any
-        # reason. Enforced in list-building (excluded from the Capital-ship host list).
+        # "Mind of its Own" list-building effects (both enforced, not just printed):
+        #  - cannot have an Admiral assigned (excluded from the Capital-ship host list)
+        #  - does NOT count toward points spent on M Tonnage ships (rulebook 4.2
+        #    Light<=Med+Heavy / Heavy<=Med budget), so it is skipped in that tally.
         "noAdmiral": True,
+        "noTonnageCount": True,
         "tonnage": "M",
         "lore": (
             "Though there has been extensive speculation on the viability or even potential existence of any kind of life adapted "

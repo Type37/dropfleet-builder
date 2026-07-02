@@ -450,6 +450,7 @@ const App = (() => {
         isRare: s.isRare, isUnique: s.isUnique,
         additional: !!s.additional,
         noAdmiral: !!s.noAdmiral,   // e.g. Argonaut "Mind of its Own": no Admiral may be assigned
+        noTonnageCount: !!s.noTonnageCount, // e.g. Argonaut: excluded from the 4.2 tonnage-points budget
         loadoutOptions: s.loadoutOptions || [],
         lore: s.lore || '',
         rulesText: s.rulesText || '',
@@ -1912,7 +1913,12 @@ const App = (() => {
     // 7. Tonnage restrictions (Section 4.2)
     let lightPts = 0, mediumPts = 0, heavyPts = 0;
     fleet.battleGroups.forEach(g => {
-      const cat = g.ships[0]?.groupCategory;
+      const s0 = g.ships[0];
+      const cat = s0?.groupCategory;
+      // A ship whose rule exempts it from tonnage points (e.g. Argonaut "Mind of
+      // its Own") contributes to neither its tonnage total nor the allowances.
+      const db0 = s0 ? findShipInDB(fleet.faction, s0.groupCategory, s0.shipKey) : null;
+      if (db0 && db0.noTonnageCount) return;
       const groupPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
       if (cat === 'light') lightPts += groupPts;
       else if (cat === 'medium') mediumPts += groupPts;
@@ -6873,7 +6879,7 @@ const App = (() => {
       'Battlegroup reordering: each group card now shows a drag handle (whenever its weight class holds two or more groups), so you can drag to reorder groups within a class. The handle previously never rendered.',
       'Print and Print Preview: a battlegroup heading no longer prints alone at the foot of a page while its ship card flows onto the next.',
       'Rules text no longer splits mid-sentence across a page break, in both Big mode and the compact Roster layout.',
-      'The Argonaut can no longer be assigned an Admiral, enforcing its "Mind of its Own" rule during list-building.',
+      'The Argonaut\'s "Mind of its Own" is now enforced when building a list: no Admiral can be assigned to it, and its points do not count toward your Medium-tonnage allowance (rulebook 4.2 Light/Heavy limits).',
     ] },
     { date: '2026-07-01', title: 'New civilian ships', items: [
       'Two new ships from the latest Civilian Ships & Scenarios update: the EX-7 Packet Runner (UCM courier, 57 pts) and the Argonaut (a space-dwelling astrofauna, 112 pts). Both can be taken in any fleet.',

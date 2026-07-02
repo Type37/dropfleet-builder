@@ -51,7 +51,7 @@ Mirrors the in-app "What's New". TTCombat publishes no official changelog, so da
 - Battlegroup reordering: each group card now shows a drag handle (whenever its weight class holds two or more groups), so you can drag to reorder groups within a class. The handle previously never rendered.
 - Print and Print Preview: a battlegroup heading no longer prints alone at the foot of a page while its ship card flows onto the next.
 - Rules text no longer splits mid-sentence across a page break, in both Big mode and the compact Roster layout.
-- The Argonaut can no longer be assigned an Admiral, enforcing its "Mind of its Own" rule during list-building.
+- The Argonaut's "Mind of its Own" is now enforced when building a list: no Admiral can be assigned to it, and its points do not count toward your Medium-tonnage allowance (rulebook 4.2 Light/Heavy limits).
 
 ### 2026-07-01 — New civilian ships
 - Two new ships from the Civilian Ships & Scenarios update: the EX-7 Packet Runner (UCM courier, 57 pts) and the Argonaut (space-dwelling astrofauna, 112 pts). Both can be taken in any fleet, under the Misc Ships filter.

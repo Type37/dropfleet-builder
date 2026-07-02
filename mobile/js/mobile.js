@@ -951,7 +951,11 @@
     // Tonnage restrictions
     let light = 0, medium = 0, heavy = 0;
     fleet.battleGroups.forEach(g => {
-      const cat = g.ships[0]?.groupCategory;
+      const s0 = g.ships[0];
+      const cat = s0?.groupCategory;
+      // Argonaut "Mind of its Own": excluded from the 4.2 tonnage-points budget.
+      const db0 = s0 ? findShip(fleet.faction, s0.groupCategory, s0.shipKey) : null;
+      if (db0 && db0.noTonnageCount) return;
       const p = groupPoints(fleet, g);
       if (cat === 'light') light += p; else if (cat === 'medium') medium += p; else if (cat === 'heavy') heavy += p;
     });
@@ -3114,7 +3118,7 @@
   const CHANGELOG = [
     { date: '2026-07-02', title: 'Print, reordering & rules fixes', items: [
       'Desktop: group cards now show a drag handle to reorder battlegroups within a weight class, and print sheets keep headings with their ships and no longer split rules mid-sentence across a page.',
-      'The Argonaut can no longer be assigned an Admiral, enforcing its "Mind of its Own" rule during list-building.',
+      'The Argonaut\'s "Mind of its Own" is now enforced when building a list: no Admiral can be assigned to it, and its points do not count toward your Medium-tonnage allowance (rulebook 4.2).',
     ] },
     { date: '2026-07-01', title: 'New civilian ships', items: [
       'Two new ships from the Civilian Ships & Scenarios update: the EX-7 Packet Runner (UCM courier, 57 pts) and the Argonaut (space-dwelling astrofauna, 112 pts). Both can be taken in any fleet, under the Misc Ships filter.',
