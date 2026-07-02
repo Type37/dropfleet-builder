@@ -6852,7 +6852,7 @@ const App = (() => {
       'Printed and exported sheets list one consolidated table of every Admiral Ability you can use that match (with AP cost), and follow the same group order as the builder.',
       'Print Preview page-break markers now reflect how cards actually stay together on a page, so the page count is accurate.',
       'Slimmer Settings panel; all print options now live in Print Preview.',
-      'Fixed the Zenith Dreadnought datasheet: the buildable version no longer comes with preselected hardpoint weapons.',
+      'Fixed the buildable Zenith Dreadnought: it no longer comes with preselected hardpoint weapons.',
     ] },
     { date: '2026-06-26', title: 'New rules editions + heroes', items: [
       'Scourge updated to the latest edition: Oculus Beam Array Attack 2→3 (Shadow, Umbra, Banshee, Akuma, Flayer), Shadow & Umbra points changes, and a reworked Oculus Booster rule.',
@@ -6862,7 +6862,7 @@ const App = (() => {
       'Famous-admiral flagship Porter abilities now count toward your fleet Payload capacity.',
       'Sharper, higher-resolution ship art thumbnails.',
     ] },
-    { date: '2026-06-25', title: 'Datasheet accuracy pass', items: [
+    { date: '2026-06-25', title: 'Ship-stats accuracy pass', items: [
       'Audited every famous-admiral flagship against the official Combined Fleet Stats PDFs and fixed missing or wrong weapons, stats and points (Havelock, Enslaver, Hagen, Vasquez, Magellan, Claudia Rhee, Twins of Aaru, plus Bioficer Agency & Ascendant).',
       'Fixed missing Alt-fire weapon modes and several weapon stat errors.',
       'Restored 14 ships’ full lore and corrected scrambled lore order on 16 ships; fixed the UCM Defence Hangar / Munitions Platform art swap.',

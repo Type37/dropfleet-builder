@@ -3108,6 +3108,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-01', title: 'New civilian ships', items: [
+      'Two new ships from the Civilian Ships & Scenarios update: the EX-7 Packet Runner (UCM courier, 57 pts) and the Argonaut (space-dwelling astrofauna, 112 pts). Both can be taken in any fleet, under the Misc Ships filter.',
+    ] },
     { date: '2026-06-26', title: 'New rules editions + heroes', items: [
       'Scourge updated to the latest edition: Oculus Beam Array Attack 2→3 (Shadow, Umbra, Banshee, Akuma, Flayer), Shadow & Umbra points changes, reworked Oculus Booster rule.',
       'Eight new Scourge ships: Nereid, Rusalka, Nixie, Gloam, Kikimora, Bannik, Melusine, Fossegrim.',
@@ -3116,7 +3119,7 @@
       'Famous-admiral flagship Porter abilities now count toward Payload capacity.',
       'Sharper, higher-resolution ship art thumbnails.',
     ] },
-    { date: '2026-06-25', title: 'Datasheet accuracy pass', items: [
+    { date: '2026-06-25', title: 'Ship-stats accuracy pass', items: [
       'Audited every famous-admiral flagship against the official PDFs and fixed wrong weapons, stats and points.',
       'Fixed missing Alt-fire weapon modes; restored and reordered ship lore; fixed a UCM station art swap.',
     ] },
