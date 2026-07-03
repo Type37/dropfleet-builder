@@ -869,7 +869,7 @@
    "category": "heavy",
    "ship": {
     "name": "Bastion Battleship",
-    "cost": 245,
+    "cost": 225,
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
@@ -877,19 +877,19 @@
      "hull": 17,
      "es": "3+",
      "ks": "3+",
-     "bs": "4+",
+     "bs": "5+",
      "g": "1",
      "special": "Porter L-1"
     },
     "weapons": [
      {
-      "name": "Gravitic Hyperspear",
+      "name": "Gravitic Hyperlance",
       "arc": "FN",
       "attack": "6",
       "lock": "3+",
       "damage": "2",
       "type": "C",
-      "special": "Arrest-4, Bloom-2"
+      "special": "Arrest-2, Bloom-2"
      },
      {
       "name": "Thermator",

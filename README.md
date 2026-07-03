@@ -47,6 +47,9 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-02 — Bastion ship-stats fix
+- Fixed the buildable Bioficer Bastion Battleship: it is 225 pts with BS 5+ (it had wrongly carried the Agency flagship Bastion's 245 pts and BS 4+). Its main gun reads Gravitic Hyperlance (Arrest-2) again, and the Torpedo is an optional +20 upgrade. The Agency flagship Bastion is unchanged and remains correct.
+
 ### 2026-07-02 — Print, reordering & rules fixes
 - Battlegroup reordering: each group card now shows a drag handle (whenever its weight class holds two or more groups), so you can drag to reorder groups within a class. The handle previously never rendered.
 - Print and Print Preview: a battlegroup heading no longer prints alone at the foot of a page while its ship card flows onto the next.

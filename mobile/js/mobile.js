@@ -3116,6 +3116,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-02', title: 'Bastion ship-stats fix', items: [
+      'Fixed the buildable Bioficer Bastion Battleship: 225 pts, BS 5+, Gravitic Hyperlance (it had wrongly carried the Agency flagship\'s 245 pts / BS 4+). The Agency flagship Bastion is unchanged.',
+    ] },
     { date: '2026-07-02', title: 'Print, reordering & rules fixes', items: [
       'Desktop: group cards now show a drag handle to reorder battlegroups within a weight class, and print sheets keep headings with their ships and no longer split rules mid-sentence across a page.',
       'The Argonaut\'s "Mind of its Own" is now enforced when building a list: no Admiral can be assigned to it, and its points do not count toward your Medium-tonnage allowance (rulebook 4.2).',
