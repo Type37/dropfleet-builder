@@ -6875,6 +6875,9 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-04', title: 'Mobile Resistance Fast Play fix', items: [
+      'Brought the mobile Resistance Fast Play sheet to parity with desktop: it now builds the correct modular Cruiser, Strike Carrier and Heavy Frigate hulls with systems pre-selected and their proper sheet names, instead of unequipped generic cruisers.',
+    ] },
     { date: '2026-07-02', title: 'Bastion ship-stats fix', items: [
       'Fixed the buildable Bioficer Bastion Battleship: it is 225 pts with BS 5+ (it had wrongly carried the Agency flagship Bastion\'s 245 pts and BS 4+). Its main gun reads Gravitic Hyperlance (Arrest-2) again, and the Torpedo is an optional +20 upgrade. The Agency flagship Bastion is unchanged and remains correct.',
     ] },

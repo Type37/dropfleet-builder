@@ -121,9 +121,17 @@
       ['medium','Comet',1],['medium','Cavern',1],['medium','Catastrophe',1],
       ['payload','Prism Cell',1],['light','Fulcrum',2],['light','Foray',2],
       ['payload','Invasion Cell',2],['payload','Lander Cell',2]] },
+    // Resistance fastplay ships are MODULAR (Cruiser/Strike Carrier/Heavy Frigate hulls
+    // with chosen systems) and carry flavour names on the official sheet. Each is its own
+    // group named for its sheet name, with its starting modules pre-selected (from the
+    // Resistance Fastplay Sheet A5 2.3). Object-form entries: {cat, ship, qty, name, systems}.
     { faction: 'resistance', name: 'Resistance Fast Play', size: 'skirmish', groups: [
-      ['medium','Heavy Cruiser',1],['medium','Cruiser',1],['medium','Light Cruiser',1],
-      ['light','Strike Carrier',2],['light','Heavy Frigate',2]] }
+      { cat:'medium', ship:'Cruiser', qty:1, name:'VH2A Gun Cruiser', systems:['Vent Cannon Turret','N-31 Hybrid Gun Bank','N-31 Hybrid Gun Bank','Ablative Armour'] },
+      { cat:'medium', ship:'Cruiser', qty:1, name:'TFCS Hybrid Carrier', systems:['XN-31 Mass Driver Turret','NC-16 Missile Bank','Fighters & Bombers','Scanner Array'] },
+      { cat:'medium', ship:'Cruiser', qty:1, name:'L2BR Fast Transport', systems:['N-109 Bombardment Mortar Turret','Bulk Landers & Fire Ships','Bulk Landers & Fire Ships','Drive Refit'] },
+      { cat:'light', ship:'Strike Carrier', qty:2, name:'TL Strike Carrier', systems:['N-31 Hybrid Gun Turret'] },
+      { cat:'light', ship:'Heavy Frigate', qty:2, name:'CT Attack Frigate', systems:['NC-16 Missile Turret','Light Vent Cannon Turret'] }
+    ] }
   ];
 
   /* ── Ship art ──────────────────────────────────────────── */
@@ -725,12 +733,25 @@
     await ensureFaction(spec.faction);   // starter ships need the faction data loaded
     const size = GAME_SIZES[spec.size] || GAME_SIZES.skirmish;
     const battleGroups = [];
-    spec.groups.forEach(([cat, name, qty]) => {
-      const g = findGroupByName(spec.faction, cat, name);
+    // A starter group entry is either the legacy [category, name, qty] tuple OR an
+    // object {cat, ship, qty, name, systems} — the object form names the group and
+    // pre-selects modular systems (Resistance fastplay ships ship WITH modules chosen).
+    spec.groups.forEach(entry => {
+      const e = Array.isArray(entry)
+        ? { cat: entry[0], ship: entry[1], qty: entry[2], name: null, systems: null }
+        : { cat: entry.cat, ship: entry.ship, qty: entry.qty || 1, name: entry.name || null, systems: entry.systems || null };
+      const g = findGroupByName(spec.faction, e.cat, e.ship);
       if (!g) return;
       const ships = [];
-      for (let i = 0; i < qty; i++) ships.push(makeShipInstance(spec.faction, cat, g.id));
-      battleGroups.push({ id: uuid(), name: g.ship.name, ships });
+      for (let i = 0; i < e.qty; i++) {
+        const inst = makeShipInstance(spec.faction, e.cat, g.id);
+        if (e.systems && e.systems.length) {
+          inst.systems = e.systems.slice();
+          inst.points = recalcShipPoints(spec.faction, g.ship, inst);
+        }
+        ships.push(inst);
+      }
+      battleGroups.push({ id: uuid(), name: e.name || g.ship.name, ships });
     });
     if (!battleGroups.length) return;
     const fleet = {
@@ -3116,6 +3137,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-04', title: 'Mobile Resistance Fast Play fix', items: [
+      'The mobile Resistance Fast Play sheet now matches desktop: it builds the correct modular Cruiser, Strike Carrier and Heavy Frigate hulls with their systems pre-selected and their proper sheet names (VH2A Gun Cruiser, TFCS Hybrid Carrier, L2BR Fast Transport, TL Strike Carrier, CT Attack Frigate), instead of unequipped generic cruisers.',
+    ] },
     { date: '2026-07-02', title: 'Bastion ship-stats fix', items: [
       'Fixed the buildable Bioficer Bastion Battleship: 225 pts, BS 5+, Gravitic Hyperlance (it had wrongly carried the Agency flagship\'s 245 pts / BS 4+). The Agency flagship Bastion is unchanged.',
     ] },
