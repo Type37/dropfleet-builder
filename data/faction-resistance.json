@@ -2886,6 +2886,15 @@
       "damage": "1",
       "type": "E",
       "special": "Overcharge, Reave-1"
+     },
+     {
+      "name": "Vent Cannon Turret",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "E",
+      "special": "Overcharge, Reave-1"
      }
     ],
     "loads": [],
@@ -2935,6 +2944,11 @@
      }
     ],
     "loads": [
+     {
+      "name": "Fighters & Bombers",
+      "launch": "2",
+      "special": "-"
+     },
      {
       "name": "Fighters & Bombers",
       "launch": "2",
@@ -3653,6 +3667,15 @@
       "damage": "1",
       "type": "K",
       "special": "Close Action"
+     },
+     {
+      "name": "Deterrence Missiles",
+      "arc": "F/S",
+      "attack": "4",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action"
      }
     ],
     "loads": [
@@ -3936,6 +3959,15 @@
      "special": "-"
     },
     "weapons": [
+     {
+      "name": "Heavy Dual Vent Cannon Turret",
+      "arc": "F/S",
+      "attack": "4",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Fusillade-1, Overcharge, Reave-1"
+     },
      {
       "name": "Heavy Dual Vent Cannon Turret",
       "arc": "F/S",
