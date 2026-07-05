@@ -3422,7 +3422,7 @@
      }
     ],
     "groupMin": 1,
-    "groupMax": 1,
+    "groupMax": 2,
     "isRare": false,
     "isUnique": false,
     "tonnage": "L",
@@ -3553,7 +3553,7 @@
      }
     ],
     "groupMin": 1,
-    "groupMax": 1,
+    "groupMax": 4,
     "isRare": false,
     "isUnique": false,
     "tonnage": "L",
@@ -4519,7 +4519,7 @@
      }
     ],
     "groupMin": 1,
-    "groupMax": 1,
+    "groupMax": 2,
     "isRare": true,
     "isUnique": false,
     "noAdmiral": true,

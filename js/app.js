@@ -3702,11 +3702,9 @@ const App = (() => {
     if (glossarySysList && ship && Array.isArray(ship.systems)) {
       ship.systems.forEach(nm => { const o = findSystemOption(glossarySysList, nm); if (o && o.weapons) weapons.push(...o.weapons); });
     }
-    let hasOvercharge = false;
-    weapons.forEach(w => { if (w && w.special) { if (/\bOvercharge\b/i.test(w.special)) hasOvercharge = true; w.special.split(',').forEach(add); } });
-    // Overcharging a Weapon turns it into a High Power Weapon, so spell that rule
-    // out too (it is never shown as its own weapon chip).
-    if (hasOvercharge) add('High Power');
+    weapons.forEach(w => { if (w && w.special) { w.special.split(',').forEach(add); } });
+    // (High Power is not spelled out here from Overcharge — it is folded into the
+    // Overcharge chip's own tooltip so it only surfaces when relevant.)
     if (!seen.size) return '';
     const entries = [...seen.entries()].map(([name, full]) =>
       `<div class="detail-rule-entry"><span class="detail-rule-name">${esc(name)}${full.page ? ` <span class="detail-rule-page">p.${esc(full.page)}</span>` : ''}</span><span class="detail-rule-desc">${ruleHtml(full.description)}</span></div>`
@@ -5740,7 +5738,15 @@ const App = (() => {
             const o = findSystemOption(sysList, nm);
             if (!o) return;
             if (o.weapons && o.weapons.length) o.weapons.forEach(w => weaponRows.push({ ...w, name: w.name || nm, qty: c }));
-            else if (o.loads && o.loads.length) o.loads.forEach(l => allLoads.push({ ...l, name: (c > 1 ? c + '× ' : '') + l.name }));
+            else if (o.loads && o.loads.length) o.loads.forEach(l => {
+              // Launch capacity adds up: a launch bay taken c times is Launch (val×c),
+              // shown once — not "c× <name>". Fall back to the count prefix only when
+              // the launch value isn't numeric (can't be summed).
+              const n = parseInt(l.launch, 10);
+              allLoads.push(Number.isFinite(n) && c > 1
+                ? { ...l, launch: String(n * c) }
+                : { ...l, name: (c > 1 ? c + '× ' : '') + l.name });
+            });
             else nonWeaponSystems.push(`${c > 1 ? c + '× ' : ''}${nm}${o.effect ? ', ' + o.effect : ''}`);
           });
         }
@@ -5749,10 +5755,8 @@ const App = (() => {
         // system weapons); plus High Power whenever a weapon carries Overcharge.
         (db.specialRuleDetails || []).forEach(r => { if (r.description) rulesGlossary[r.name] = { description: r.description, page: r.page || '' }; });
         const weaponSpecials = {};
-        let hasOvercharge = false;
         weaponRows.forEach(w => {
           if (!w.special || w.special === '-') return;
-          if (/\bOvercharge\b/i.test(w.special)) hasOvercharge = true;
           w.special.split(',').forEach(s => {
             const t = s.trim(); if (!t) return;
             const full = lookupRuleFull(t);
@@ -5763,10 +5767,8 @@ const App = (() => {
             }
           });
         });
-        if (hasOvercharge) {
-          const hp = lookupRuleFull('High Power');
-          if (hp && hp.description) { rulesGlossary['High Power'] = { description: hp.description, page: hp.page || '' }; weaponSpecials['High Power'] = { description: hp.description, page: hp.page || '' }; }
-        }
+        // (High Power is not injected from Overcharge here — see the note in the ship
+        // detail renderer; the Overcharge chip tooltip carries it contextually.)
 
         // Launch line + feed the fleet launch-asset reference.
         let loadsHtml = '';
@@ -6888,6 +6890,13 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-05', title: 'Kalium KNC fixes & launch totals', items: [
+      'Fixed the Kalium KNC-5 Line Cruiser (now 70 pts each, 140 for the minimum group of 2) and the KNC-12 Fleet Carrier (now 115 pts each, 230 for a group of 2). Both had wrongly shown the bare 45 pt Light Cruiser hull, with their loadout never costed in.',
+      'Both KNC ships now use their correct group size of 2 to 3, and only appear under the "Additional ships" toggle (they are Counts As resin models from the Misc ship stats).',
+      'Launch bays now add up: a ship with two Fighters & Bombers Launch 2 bays reads as Launch 4, rather than "Launch 2 x2". Applies everywhere launch assets are shown, on both the builder and the phone app.',
+      'High Power is no longer listed as a standing special rule just because a weapon can Overcharge. It only matters when a weapon is actually Overcharged, so it now lives inside the Overcharge rule text instead of on every card.',
+      'Corrected the group sizes of three more Additional ships whose printed range disagreed with what the builder allowed: LKS Dredger (1 to 2), T-Type Tugboat (1 to 4) and Argonaut (1 to 2).',
+    ] },
     { date: '2026-07-04', title: 'Mobile Resistance Fast Play fix', items: [
       'Brought the mobile Resistance Fast Play sheet to parity with desktop: it now builds the correct modular Cruiser, Strike Carrier and Heavy Frigate hulls with systems pre-selected and their proper sheet names, instead of unequipped generic cruisers.',
     ] },
@@ -7273,16 +7282,25 @@ const App = (() => {
     if (!factionInfo || !allLoads || !allLoads.length) return '';
     const assetsByName = {};
     (factionInfo.launchAssets || []).forEach(a => { assetsByName[a.name.toLowerCase()] = a; });
-    // Consolidate identical loads (e.g. 2x "Bulk Landers & Fire Ships" from two
-    // hardpoints) into ONE block with a "×N" count, rather than repeating the whole
-    // datasheet block per copy — so multiples read as "two sets of 2", not a dupe.
+    // Consolidate identical loads (e.g. two "Fighters & Bombers" launch bays from two
+    // hardpoints) into ONE block. Launch capacity ADDS UP, so two Launch 2 bays read as
+    // a single "Launch 4" — never "Launch 2 ×2". Loads are keyed by name+special (not
+    // launch value) so different-rated copies still merge and sum. A "×N" count is only
+    // kept as a fallback for loads whose launch value isn't numeric (can't be summed).
     const grouped = [];
     const byKey = new Map();
     allLoads.forEach(load => {
       if (!load.name) return;
-      const key = `${load.name}|${load.launch ?? ''}|${load.special ?? ''}`;
-      if (byKey.has(key)) byKey.get(key).count++;
-      else { const g = { ...load, count: 1 }; byKey.set(key, g); grouped.push(g); }
+      const key = `${load.name}|${load.special ?? ''}`;
+      const n = parseInt(load.launch, 10);
+      if (byKey.has(key)) {
+        const g = byKey.get(key);
+        if (Number.isFinite(n) && Number.isFinite(g._launchNum)) { g._launchNum += n; g.launch = String(g._launchNum); }
+        else g.count++;
+      } else {
+        const g = { ...load, count: 1, _launchNum: Number.isFinite(n) ? n : null };
+        byKey.set(key, g); grouped.push(g);
+      }
     });
     let body = '';
     grouped.forEach(load => {
@@ -7623,8 +7641,18 @@ const App = (() => {
       }).join('');
     }
 
-    // Launch assets
-    const loads = dbShip.loads || [];
+    // Launch assets. Launch capacity adds up: merge identical launch bays (name+special)
+    // and sum their numeric launch values, so two "Fighters & Bombers" Launch 2 bays read
+    // as a single Launch 4 row, not two "Launch 2" rows.
+    const loads = [];
+    const _loadKeys = new Map();
+    (dbShip.loads || []).forEach(l => {
+      if (!l || !l.name) return;
+      const n = parseInt(l.launch, 10);
+      const key = Number.isFinite(n) ? `${l.name}|${l.special ?? ''}` : null;
+      if (key && _loadKeys.has(key)) { const g = _loadKeys.get(key); g._n += n; g.launch = String(g._n); }
+      else { const g = { ...l, _n: Number.isFinite(n) ? n : null }; if (key) _loadKeys.set(key, g); loads.push(g); }
+    });
     let loadsHtml = '';
     if (loads.length > 0) {
       loadsHtml = loads.map(l =>
@@ -7638,17 +7666,10 @@ const App = (() => {
     // Special rules with full descriptions
     const ruleDetails = dbShip.specialRuleDetails || [];
     const ruleRows = ruleDetails.map(r => ({ name: r.name, page: r.page, desc: r.description }));
-    // Overcharging a Weapon turns it into a High Power Weapon, so if any of this ship's
-    // weapons (base, loadout option, or system option) has Overcharge, list High Power
-    // too (it is never shown as its own weapon chip).
-    const detailWeapons = [...(dbShip.weapons || [])];
-    (dbShip.loadoutOptions || []).forEach(lo => (lo.options || []).forEach(o => { if (o.weapons) detailWeapons.push(...o.weapons); }));
-    const detailSysList = systemsListFor(dbShip, faction);
-    if (detailSysList) (detailSysList.options || []).forEach(o => { if (o.weapons) detailWeapons.push(...o.weapons); });
-    if (detailWeapons.some(w => w.special && /\bOvercharge\b/i.test(w.special)) && !ruleRows.some(r => /^High Power$/i.test(r.name))) {
-      const hp = lookupRuleFull('High Power');
-      if (hp && hp.description) ruleRows.push({ name: 'High Power', page: hp.page, desc: hp.description });
-    }
+    // High Power is intentionally NOT auto-listed here just because a weapon carries
+    // Overcharge. It only matters situationally (when a weapon is actually Overcharged),
+    // so it is folded into the Overcharge chip's own tooltip instead of being surfaced
+    // as if the ship natively has the rule.
     let rulesHtml = '';
     if (ruleRows.length > 0) {
       rulesHtml = '<div class="detail-section-label">Special Rules</div><div class="detail-rules-list">' +
