@@ -49,8 +49,9 @@ Mirrors the in-app "What's New". TTCombat publishes no official changelog, so da
 
 ### 2026-07-05 — Kalium KNC fixes & launch totals
 - Fixed the Kalium KNC-5 Line Cruiser (now 70 pts each, 140 for the minimum group of 2) and the KNC-12 Fleet Carrier (now 115 pts each, 230 for a group of 2). Both had wrongly shown the bare 45 pt Light Cruiser hull, with their loadout never costed in.
+- The KNC-12 is a Fleet Carrier, not a Line Cruiser - fixed its name everywhere it appears (it had wrongly copied the KNC-5's class name).
 - Both KNC ships now use their correct group size of 2 to 3, and only appear under the "Additional ships" toggle (they are Counts As resin models from the Misc ship stats).
-- Launch bays now add up: a ship with two Fighters & Bombers Launch 2 bays reads as Launch 4, rather than "Launch 2 x2". Applies everywhere launch assets are shown, on both the builder and the phone app.
+- Launch bays now add up: a ship with two Fighters & Bombers Launch 2 bays reads as Launch 4, rather than "Launch 2 x2". Applies everywhere launch assets are shown, including the printed sheet, where two identical loads previously printed as separate, unmerged lines.
 - High Power is no longer listed as a standing special rule just because a weapon can Overcharge. It only matters when a weapon is actually Overcharged, so it now lives inside the Overcharge rule text instead of on every card.
 - Corrected the group sizes of three more Additional ships whose printed range disagreed with what the builder allowed: LKS Dredger (1 to 2), T-Type Tugboat (1 to 4) and Argonaut (1 to 2).
 - Added a data audit (`scripts/audit-group-range.py`) that flags any ship whose printed group range disagrees with the group size the builder enforces.

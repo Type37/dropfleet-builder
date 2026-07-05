@@ -2917,10 +2917,10 @@
   },
   {
    "id": "5554-9f7d-880e-8f1f",
-   "name": "Kalium KNC-12 Line Cruisers",
+   "name": "Kalium KNC-12 Fleet Carriers",
    "category": "medium",
    "ship": {
-    "name": "Kalium KNC-12 Line Cruiser",
+    "name": "Kalium KNC-12 Fleet Carrier",
     "cost": 115,
     "stats": {
      "thrust": "9\"",

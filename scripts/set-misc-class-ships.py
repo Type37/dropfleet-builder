@@ -57,7 +57,7 @@ MAP = {
         ["Heartbleeder", "Souleater", "Rend II"]),
     "Kalium KNC-5": (RECORDED,
         ["Heartbleeder", "Souleater", "Rend II"]),
-    "Kalium KNC-12 Line Cruisers": (RECORDED,
+    "Kalium KNC-12 Fleet Carriers": (RECORDED,
         ["Beton Brut", "Chaimberlain Powelbon", "Du Hast"]),
     "Kalium KNC-12": (RECORDED,
         ["Beton Brut", "Chaimberlain Powelbon", "Du Hast"]),

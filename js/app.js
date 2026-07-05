@@ -5720,12 +5720,23 @@ const App = (() => {
           const selOpt = lo.options[selIdx];
           if (selOpt && selOpt.weapons) selOpt.weapons.forEach(w => weaponRows.push({ ...w }));
         });
-        // Loads: base + selected loadout.
-        const allLoads = [...(db.loads || [])];
+        // Loads: base + selected loadout. Launch capacity adds up: merge identical
+        // loads (name+special) and sum their numeric launch values, so a ship with two
+        // base "Fighters & Bombers" bays prints one Launch 4 line, not two Launch 2 lines.
+        const allLoads = [];
+        const _loadKeys = new Map();
+        const _pushLoad = l => {
+          if (!l || !l.name) return;
+          const n = parseInt(l.launch, 10);
+          const key = Number.isFinite(n) ? `${l.name}|${l.special ?? ''}` : null;
+          if (key && _loadKeys.has(key)) { const g = _loadKeys.get(key); g._n += n; g.launch = String(g._n); }
+          else { const g = { ...l, _n: Number.isFinite(n) ? n : null }; if (key) _loadKeys.set(key, g); allLoads.push(g); }
+        };
+        (db.loads || []).forEach(_pushLoad);
         (db.loadoutOptions || []).forEach((lo, loIdx) => {
           const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
           const selOpt = lo.options[selIdx];
-          if (selOpt && selOpt.loads) allLoads.push(...selOpt.loads);
+          if (selOpt && selOpt.loads) selOpt.loads.forEach(_pushLoad);
         });
         // Selected systems: weapon options → the weapon table, load options → launch,
         // everything else → a short note line.
@@ -5740,10 +5751,11 @@ const App = (() => {
             if (o.weapons && o.weapons.length) o.weapons.forEach(w => weaponRows.push({ ...w, name: w.name || nm, qty: c }));
             else if (o.loads && o.loads.length) o.loads.forEach(l => {
               // Launch capacity adds up: a launch bay taken c times is Launch (val×c),
-              // shown once — not "c× <name>". Fall back to the count prefix only when
-              // the launch value isn't numeric (can't be summed).
+              // merged with any other identical load (via _pushLoad) rather than shown
+              // as "c× <name>". Fall back to the count prefix only when the launch
+              // value isn't numeric (can't be summed).
               const n = parseInt(l.launch, 10);
-              allLoads.push(Number.isFinite(n) && c > 1
+              _pushLoad(Number.isFinite(n) && c > 1
                 ? { ...l, launch: String(n * c) }
                 : { ...l, name: (c > 1 ? c + '× ' : '') + l.name });
             });
@@ -6892,8 +6904,9 @@ const App = (() => {
   const CHANGELOG = [
     { date: '2026-07-05', title: 'Kalium KNC fixes & launch totals', items: [
       'Fixed the Kalium KNC-5 Line Cruiser (now 70 pts each, 140 for the minimum group of 2) and the KNC-12 Fleet Carrier (now 115 pts each, 230 for a group of 2). Both had wrongly shown the bare 45 pt Light Cruiser hull, with their loadout never costed in.',
+      'The KNC-12 is a Fleet Carrier, not a Line Cruiser - fixed its name everywhere it appears (it had wrongly copied the KNC-5\'s class name).',
       'Both KNC ships now use their correct group size of 2 to 3, and only appear under the "Additional ships" toggle (they are Counts As resin models from the Misc ship stats).',
-      'Launch bays now add up: a ship with two Fighters & Bombers Launch 2 bays reads as Launch 4, rather than "Launch 2 x2". Applies everywhere launch assets are shown, on both the builder and the phone app.',
+      'Launch bays now add up: a ship with two Fighters & Bombers Launch 2 bays reads as Launch 4, rather than "Launch 2 x2". Applies everywhere launch assets are shown, including the printed sheet, where two identical loads previously printed as separate, unmerged lines.',
       'High Power is no longer listed as a standing special rule just because a weapon can Overcharge. It only matters when a weapon is actually Overcharged, so it now lives inside the Overcharge rule text instead of on every card.',
       'Corrected the group sizes of three more Additional ships whose printed range disagreed with what the builder allowed: LKS Dredger (1 to 2), T-Type Tugboat (1 to 4) and Argonaut (1 to 2).',
     ] },
