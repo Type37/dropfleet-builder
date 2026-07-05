@@ -190,6 +190,24 @@
       "special": "Critical-1, Penetrator, Volley-2"
      },
      {
+      "name": "9K Mass Driver Turrets",
+      "arc": "F/S",
+      "attack": "2",
+      "lock": "2+",
+      "damage": "2",
+      "type": "K",
+      "special": "Critical-1, Penetrator, Volley-2"
+     },
+     {
+      "name": "Mega Vent Cannon Half Battery",
+      "arc": "B",
+      "attack": "2",
+      "lock": "3+",
+      "damage": "3",
+      "type": "E",
+      "special": "Overcharge, Fusillade-2, Reave-1, Volley-2"
+     },
+     {
       "name": "Mega Vent Cannon Half Battery",
       "arc": "B",
       "attack": "2",
@@ -729,6 +747,15 @@
       "damage": "2",
       "type": "K",
       "special": "Close Action"
+     },
+     {
+      "name": "NC-16 Missile Battery Turret Pair",
+      "arc": "F/S/R",
+      "attack": "6",
+      "lock": "3+",
+      "damage": "2",
+      "type": "K",
+      "special": "Close Action"
      }
     ],
     "loads": [
@@ -915,6 +942,15 @@
       "special": "Low Power, Volley-2"
      },
      {
+      "name": "N-12 Artillery Cannon Half Battery",
+      "arc": "B",
+      "attack": "5",
+      "lock": "4+",
+      "damage": "1",
+      "type": "K",
+      "special": "Low Power, Volley-2"
+     },
+     {
       "name": "NC-16 Missile Battery Turret Quad",
       "arc": "F/S/R",
       "attack": "6",
@@ -1009,13 +1045,22 @@
       "special": "Fusillade-1, Overcharge, Reave-1"
      },
      {
-      "name": "NC-16 Missile Battery Turret Quad",
+      "name": "NC-16 Missile Battery",
       "arc": "F/S/R",
       "attack": "6",
       "lock": "3+",
       "damage": "2",
       "type": "K",
       "special": "Close Action, Volley-2"
+     },
+     {
+      "name": "N-12 Artillery Cannon Half Battery",
+      "arc": "B",
+      "attack": "5",
+      "lock": "4+",
+      "damage": "1",
+      "type": "K",
+      "special": "Low Power, Volley-2"
      },
      {
       "name": "N-12 Artillery Cannon Half Battery",
@@ -1235,7 +1280,16 @@
       "special": "Critical-1, Penetrator, Volley-2"
      },
      {
-      "name": "N-12 Artillery Cannon Half Battery",
+      "name": "N-12 Artillery Cannon Battery",
+      "arc": "B",
+      "attack": "5",
+      "lock": "4+",
+      "damage": "1",
+      "type": "K",
+      "special": "Low Power, Volley-2"
+     },
+     {
+      "name": "N-12 Artillery Cannon Battery",
       "arc": "B",
       "attack": "5",
       "lock": "4+",
@@ -1497,6 +1551,15 @@
      "special": "-"
     },
     "weapons": [
+     {
+      "name": "N-12 Artillery Cannon Half Battery",
+      "arc": "B",
+      "attack": "5",
+      "lock": "4+",
+      "damage": "1",
+      "type": "K",
+      "special": "Low Power, Volley-2"
+     },
      {
       "name": "N-12 Artillery Cannon Half Battery",
       "arc": "B",
