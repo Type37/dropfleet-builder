@@ -1924,6 +1924,19 @@ const App = (() => {
       else if (cat === 'medium') mediumPts += groupPts;
       else if (cat === 'heavy') heavyPts += groupPts;
     });
+    // Famous-admiral flagships are ships on the table too (rulebook 4.2 makes no
+    // exemption for them), so their ship cost counts toward their Tonnage total
+    // just like any other ship's points would.
+    (fleet.admirals || []).forEach(a => {
+      if (!a.shipKey) return;
+      const db = findShipInDB(fleet.faction, 'famous_admirals', a.shipKey);
+      if (!db) return;
+      const shipPts = db.ship_cost || 0;
+      const cat = (db.shipCategory || '').toLowerCase();
+      if (cat === 'light') lightPts += shipPts;
+      else if (cat === 'medium') mediumPts += shipPts;
+      else if (cat === 'heavy') heavyPts += shipPts;
+    });
     // Both are hard restrictions per Section 4.2: Heavy points may not exceed
     // Medium points; Light points may not exceed Medium + Heavy points.
     if (heavyPts > mediumPts) {
