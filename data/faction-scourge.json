@@ -4906,6 +4906,10 @@
      {
       "name": "Stealth",
       "description": "This Ship may fire one Weapon while Silent Running."
+     },
+     {
+      "name": "Feature Carrier",
+      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the Scourge Deployable Features List. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
@@ -4931,7 +4935,7 @@
      "ks": "4+",
      "bs": "5+",
      "g": "1",
-     "special": "Command Ship-1"
+     "special": "Command Ship-1, Oculus Booster"
     },
     "weapons": [
      {
@@ -4969,6 +4973,10 @@
      {
       "name": "Command Ship-1",
       "description": "Increase the Level of any Admiral assigned to this Ship by 1."
+     },
+     {
+      "name": "Oculus Booster",
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of this Ship’s activation, you may place an Oculus token on an enemy Group in line of sight in this Ship’s Front Arc. Unused Oculus tokens placed by this Ship persist between rounds and are only removed when this Ship would place another Oculus token or when a Ship with an Oculus token goes on the Silent Running order.\n\nWhen you assign “Oculus” weapons to a Group that has an Oculus Token and is within Scan range of the attacking Group, you may remove the token. If you do, one of the Group’s “Oculus” Weapon Systems’ Type becomes Core against that Group for that attack."
      }
     ],
     "groupMin": 1,
@@ -5098,6 +5106,10 @@
      {
       "name": "Stealth",
       "description": "This Ship may fire one Weapon while Silent Running."
+     },
+     {
+      "name": "Feature Carrier",
+      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the Scourge Deployable Features List. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
