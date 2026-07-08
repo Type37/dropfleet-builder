@@ -202,7 +202,7 @@ const App = (() => {
   // The subtle "(thee-syoos)" respelling shown after a namesake; tap to hear it.
   function pronSpan(p) {
     const say = esc(p.say), word = esc(p.word);
-    const tip = p.ipa ? `IPA /${esc(p.ipa)}/ — tap to hear ${word}` : `Tap to hear ${word}`;
+    const tip = p.ipa ? `IPA /${esc(p.ipa)}/ · tap to hear ${word}` : `Tap to hear ${word}`;
     return `(<span class="lore-pron" role="button" tabindex="0" onclick="event.stopPropagation();App.sayName(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();App.sayName(this)}" data-word="${word}" data-say="${say}" title="${tip}">${say}</span>)`;
   }
 
@@ -221,6 +221,19 @@ const App = (() => {
     const wordRe = new RegExp('(^|>|\\s)(' + w + ')(?=[\\s.,;:)]|$)', 'i');
     if (wordRe.test(html)) return html.replace(wordRe, '$1$2 ' + span);
     return `<span class="lore-namesake-name">${esc(p.word)}</span> ${span}. ${html}`;
+  }
+
+  // The complete "Namesake:" line for a ship (or ''). Uses the namesake text when
+  // present; when a ship has a hard name but no namesake text, still surfaces a
+  // bare "Namesake: Kikimora (kih-KEE-mor-uh)" so the guide isn't lost.
+  function namesakeDiv(namesakeText, shipName) {
+    let inner = '';
+    if (namesakeText) inner = namesakePron(namesakeText, shipName);
+    else {
+      const p = pronFor(shipName);
+      if (p) inner = `<span class="lore-namesake-name">${esc(p.word)}</span> ${pronSpan(p)}`;
+    }
+    return inner ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${inner}</div>` : '';
   }
 
   // Speak a namesake aloud. We feed the respelling (not the raw name) to the
@@ -2394,7 +2407,7 @@ const App = (() => {
           ${fdb.rulesText ? `<div class="ship-rules-block"><div class="ship-rules-block-label">Ship Rules</div><div class="ship-rules-block-text">${esc(fdb.rulesText)}</div></div>` : ''}
           ${renderShipRulesGlossary(fdb, a)}
           ${fdb.admiralLore ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">About ${esc(a.name)}</summary><div class="ship-lore-text">${formatLore(fdb.admiralLore, '', [])}</div></details>` : ''}
-          ${(fdb.lore || fdb.namesake) ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">Flagship lore</summary><div class="ship-lore-text">${fdb.lore ? formatLore(fdb.lore, fdb.famousShipsPrefix, fdb.famousShips) : ''}${fdb.namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${namesakePron(fdb.namesake, fdb.name)}</div>` : ''}</div></details>` : ''}
+          ${(fdb.lore || namesakeDiv(fdb.namesake, fdb.name)) ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">Flagship lore</summary><div class="ship-lore-text">${fdb.lore ? formatLore(fdb.lore, fdb.famousShipsPrefix, fdb.famousShips) : ''}${namesakeDiv(fdb.namesake, fdb.name)}</div></details>` : ''}
           <div class="text-caption">Flies with ${esc(a.name)}, who is managed in the left rail.</div>
         </div>
       </div>
@@ -3928,23 +3941,21 @@ const App = (() => {
     // Lore / flavor text (collapsible, hidden in print)
     let loreHtml = '';
     const loreText = dbShip ? dbShip.lore : '';
+    const nsDiv = namesakeDiv(dbShip.namesake, dbShip.name);
     if (loreText) {
       const loreId = `lore-${ship.id}`;
       const openAttr = settings.autoExpandLore ? ' open' : '';
-      const namesakeHtml = dbShip.namesake
-        ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${namesakePron(dbShip.namesake, dbShip.name)}</div>`
-        : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
-        <div class="ship-lore-text">${formatLore(loreText, dbShip.famousShipsPrefix, dbShip.famousShips)}${namesakeHtml}</div>
+        <div class="ship-lore-text">${formatLore(loreText, dbShip.famousShipsPrefix, dbShip.famousShips)}${nsDiv}</div>
       </details>`;
-    } else if (dbShip.namesake) {
+    } else if (nsDiv) {
       // Namesake flavour even when there's no main lore block
       const loreId = `lore-${ship.id}`;
       const openAttr = settings.autoExpandLore ? ' open' : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
-        <div class="ship-lore-text"><div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${namesakePron(dbShip.namesake, dbShip.name)}</div></div>
+        <div class="ship-lore-text">${nsDiv}</div>
       </details>`;
     }
 
@@ -4714,11 +4725,11 @@ const App = (() => {
   function admiralLoreBlock(a) {
     if (!a) return '';
     const open = settings.autoExpandLore ? ' open' : '';
-    const namesake = a.namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${namesakePron(a.namesake, a.ship_name || a.shipName)}</div>` : '';
+    const namesake = namesakeDiv(a.namesake, a.ship_name || a.shipName || a.flagship);
     const bio = a.admiralLore
       ? `<details class="ship-lore" style="margin-top:var(--sp-sm)"${open}><summary class="ship-lore-toggle">Admiral</summary><div class="ship-lore-text">${formatLore(a.admiralLore, '', [])}</div></details>` : '';
-    const ship = a.lore
-      ? `<details class="ship-lore" style="margin-top:var(--sp-sm)"${open}><summary class="ship-lore-toggle">Flagship lore</summary><div class="ship-lore-text">${formatLore(a.lore, a.famousShipsPrefix, a.famousShips)}${namesake}</div></details>` : '';
+    const ship = (a.lore || namesake)
+      ? `<details class="ship-lore" style="margin-top:var(--sp-sm)"${open}><summary class="ship-lore-toggle">Flagship lore</summary><div class="ship-lore-text">${a.lore ? formatLore(a.lore, a.famousShipsPrefix, a.famousShips) : ''}${namesake}</div></details>` : '';
     return bio + ship;
   }
 
@@ -7816,10 +7827,8 @@ const App = (() => {
 
     // Lore
     let loreHtml = '';
-    const detailNamesake = dbShip.namesake
-      ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${namesakePron(dbShip.namesake, dbShip.name)}</div>`
-      : '';
-    if (dbShip.lore || dbShip.namesake) {
+    const detailNamesake = namesakeDiv(dbShip.namesake, dbShip.name);
+    if (dbShip.lore || detailNamesake) {
       loreHtml = `<div class="detail-lore">
         <div class="detail-section-label">Lore</div>
         <div class="text-rules">${formatLore(dbShip.lore, dbShip.famousShipsPrefix, dbShip.famousShips)}${detailNamesake}</div>

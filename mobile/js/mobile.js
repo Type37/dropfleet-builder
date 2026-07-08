@@ -638,7 +638,7 @@
   }
   function pronSpan(p) {
     const say = esc(p.say), word = esc(p.word);
-    const tip = p.ipa ? `IPA /${esc(p.ipa)}/ - tap to hear ${word}` : `Tap to hear ${word}`;
+    const tip = p.ipa ? `IPA /${esc(p.ipa)}/ · tap to hear ${word}` : `Tap to hear ${word}`;
     return `(<span class="lore-pron" role="button" tabindex="0" onclick="event.stopPropagation();App.sayName(this)" data-word="${word}" data-say="${say}" title="${tip}">${say}</span>)`;
   }
   function namesakePron(namesakeText, shipName) {
@@ -652,6 +652,13 @@
     const wordRe = new RegExp('(^|>|\\s)(' + w + ')(?=[\\s.,;:)]|$)', 'i');
     if (wordRe.test(html)) return html.replace(wordRe, '$1$2 ' + span);
     return `<span class="lore-namesake-name">${esc(p.word)}</span> ${span}. ${html}`;
+  }
+  // Inner HTML for the "Namesake:" line (or '' ). Falls back to a bare
+  // "Kikimora (kih-KEE-mor-uh)" when a hard-named ship has no namesake text.
+  function namesakeInner(namesakeText, shipName) {
+    if (namesakeText) return namesakePron(namesakeText, shipName);
+    const p = pronFor(shipName);
+    return p ? `<span class="lore-namesake-name">${esc(p.word)}</span> ${pronSpan(p)}` : '';
   }
   function sayName(btn) {
     try {
@@ -2102,11 +2109,12 @@
     const lore = (ship.lore || '').trim();
     const namesake = (ship.namesake || '').trim();
     const famous = ship.famousShips || [];
-    if (!lore && !namesake && !famous.length) return '';
+    const nsInner = namesakeInner(namesake, ship.name);
+    if (!lore && !nsInner && !famous.length) return '';
     const paras = lore ? lore.split(/\n\n+/).map(p => `<p>${loreLinks(p.trim())}</p>`).join('') : '';
     // Order matches desktop: lore → famous ships (bold header, italic bullets) → Namesake.
     const famousList = renderFamousShips(ship.famousShipsPrefix, famous);
-    const namesakeLine = namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${namesakePron(namesake, ship.name)}</div>` : '';
+    const namesakeLine = nsInner ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${nsInner}</div>` : '';
     return `<div class="lore-card">
       <div class="lore-label">Lore</div>
       <div class="lore-body">${paras}</div>
