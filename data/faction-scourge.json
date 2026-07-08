@@ -4692,7 +4692,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "The [Nereids](https://en.wikipedia.org/wiki/Nereid) were sea nymphs of Greek myth, the fifty daughters of the sea god Nereus, escorts of Poseidon and protectors of sailors in distress."
    }
   },
   {
@@ -4739,7 +4740,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "M"
+    "tonnage": "M",
+    "namesake": "A [Rusalka](https://en.wikipedia.org/wiki/Rusalka) is the restless spirit of a woman who died by water in Slavic folklore, said to lure travellers to a watery grave."
    }
   },
   {
@@ -4916,7 +4918,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "H"
+    "tonnage": "H",
+    "namesake": "A [Kikimora](https://en.wikipedia.org/wiki/Kikimora) is a household spirit of Slavic folklore, benevolent when the home is kept well but a malicious tormentor of a lazy or unhappy one."
    }
   },
   {
@@ -5050,7 +5053,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "H"
+    "tonnage": "H",
+    "namesake": "[Melusine](https://en.wikipedia.org/wiki/Melusine) is a figure of European folklore, a woman said to transform into a serpent or fish from the waist down, most often after bathing unseen on a forbidden day."
    }
   },
   {
@@ -5116,7 +5120,8 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "H"
+    "tonnage": "H",
+    "namesake": "A [Fossegrim](https://en.wikipedia.org/wiki/Fossegrim) is a water spirit of Scandinavian folklore, said to play such enchanting music on his fiddle that listeners are compelled to dance until they collapse."
    }
   },
   {

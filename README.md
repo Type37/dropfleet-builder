@@ -47,6 +47,12 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-08 — Namesake pronunciations: 12 more ships, search, admiral bios
+- Wrote and added the 12 namesakes that were missing a pronunciation guide: Melusine, Rusalka, Nereid, Fossegrim, Kikimora (desktop + mobile); Scipio, Myrmidon, Vicarius and Aaru (desktop only, shown under a ship's "Also available as" counts-as variant, which mobile doesn't render).
+- Ship search (desktop + mobile) now also matches a ship's Namesake text, so searching a mythological/folklore name finds its ship even if that word isn't in the ship's own name.
+- For three Shaltari/Resistance famous admirals whose own CHARACTER name is the hard one to say, not their flagship's class (Quetzalcoatl, Mergen the Learned, Nguen), the pronunciation weaves into the first mention of their name in their own Admiral bio (desktop only; mobile has no admiral bio panel).
+- Style: pronunciations now read as "A Rusalka (roo-SAL-kuh) is..." rather than leading with the bare linked name, matching common English phrasing.
+
 ### 2026-07-08 — How do you say it? Namesake pronunciations
 - Ships named after hard-to-pronounce people, places and creatures now carry a pronunciation guide in the Lore panel, woven into the Namesake line at the first mention, e.g. "Namesake: Theseus (THEE-syoos) was the legendary king and founding hero of Athens...". Tap the respelling to hear it spoken aloud.
 - Covers the trickiest namesakes across every faction (PHR Greek myth, Scourge folklore, Shaltari minerals, plus place and admiral names like Kyiv, Reykjavik and Yi Sun-sin), leaning toward the source-language pronunciation where two are commonly accepted. Data lives in `data/pronunciations.json` (word → respelling / IPA), rendered only on the Namesake line.

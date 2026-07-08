@@ -206,6 +206,22 @@ const App = (() => {
     return `(<span class="lore-pron" role="button" tabindex="0" onclick="event.stopPropagation();App.sayName(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();App.sayName(this)}" data-word="${word}" data-say="${say}" title="${tip}">${say}</span>)`;
   }
 
+  // Insert a pronunciation span right after the first mention of `entityName`'s
+  // hard word inside `html` (a wiki-linked mention wins over a bare one, wherever
+  // either falls in the string). Returns { html, wove }; `wove` is false when the
+  // word never appears in the text (caller decides what to do then).
+  function weavePronIntoHtml(html, entityName) {
+    const p = pronFor(entityName);
+    if (!p) return { html, wove: false };
+    const span = pronSpan(p);
+    const w = p.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const linkRe = new RegExp('<a\\b[^>]*>\\s*' + w + '[^<]*<\\/a>', 'i');
+    if (linkRe.test(html)) return { html: html.replace(linkRe, m => m + ' ' + span), wove: true };
+    const wordRe = new RegExp('\\b' + w + '\\b', 'i');
+    if (wordRe.test(html)) return { html: html.replace(wordRe, m => m + ' ' + span), wove: true };
+    return { html, wove: false };
+  }
+
   // Render a namesake line's HTML with the pronunciation woven in. If the text
   // names the figure (PHR/UCM lead with it), the respelling drops in right after
   // the first mention; otherwise (Shaltari minerals describe without naming) the
@@ -214,13 +230,19 @@ const App = (() => {
     const html = loreLinks(namesakeText);
     const p = pronFor(shipName || namesakeText);
     if (!p) return html;
-    const span = pronSpan(p);
-    const w = p.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const linkRe = new RegExp('^(\\s*<a\\b[^>]*>\\s*' + w + '[^<]*<\\/a>)', 'i');
-    if (linkRe.test(html)) return html.replace(linkRe, '$1 ' + span);
-    const wordRe = new RegExp('(^|>|\\s)(' + w + ')(?=[\\s.,;:)]|$)', 'i');
-    if (wordRe.test(html)) return html.replace(wordRe, '$1$2 ' + span);
-    return `<span class="lore-namesake-name">${esc(p.word)}</span> ${span}. ${html}`;
+    const { html: woven, wove } = weavePronIntoHtml(html, shipName || namesakeText);
+    if (wove) return woven;
+    return `<span class="lore-namesake-name">${esc(p.word)}</span> ${pronSpan(p)}. ${html}`;
+  }
+
+  // For a famous admiral whose CHARACTER name (not their flagship's class) is the
+  // hard one to say (e.g. Quetzalcoatl, Mergen the Learned, Nguen) - weave the
+  // respelling into the first mention of their name within their own bio text.
+  // No-op (returns the bio unchanged) when the admiral's name has no pron entry.
+  function admiralBioHtml(a) {
+    const html = formatLore(a.admiralLore, '', []);
+    if (!html) return html;
+    return weavePronIntoHtml(html, a.name).html;
   }
 
   // The complete "Namesake:" line for a ship (or ''). Uses the namesake text when
@@ -3923,7 +3945,8 @@ const App = (() => {
       const varDetails = variants.map(v => {
         const vImg = v.image ? `<img src="${esc(v.image)}" alt="${esc(v.name)}" loading="lazy" style="height:56px;width:auto;object-fit:contain;border-radius:var(--radius-sm)" onerror="this.style.display='none'">` : '';
         const vf = variantFamous(v);
-        const vLore = v.lore ? `<div class="ship-lore-text" style="border:none;padding:var(--sp-xs) 0 0;background:none;font-size:var(--text-xs)">${formatLore(v.lore, vf.prefix, vf.ships)}</div>` : '';
+        const vNamesake = namesakeDiv(v.namesake, v.name);
+        const vLore = (v.lore || vNamesake) ? `<div class="ship-lore-text" style="border:none;padding:var(--sp-xs) 0 0;background:none;font-size:var(--text-xs)">${v.lore ? formatLore(v.lore, vf.prefix, vf.ships) : ''}${vNamesake}</div>` : '';
         return `<div style="margin-top:var(--sp-sm);padding:var(--sp-sm);background:var(--paper-alt);border-radius:var(--radius-sm);display:flex;gap:var(--sp-sm);align-items:flex-start">
           ${vImg}
           <div style="flex:1;min-width:0">
@@ -4220,13 +4243,16 @@ const App = (() => {
       ships = ships.filter(s => s.data.type === 'Famous' || !s.data.additional);
     }
 
-    // Apply search filter
+    // Apply search filter. Namesake text is included so a mythological/folklore
+    // name (e.g. "Rusalka", "Theseus") finds its ship even if a search doesn't
+    // match the ship's own name exactly.
     if (shipSearchQuery) {
       ships = ships.filter(s => {
         const name = (s.data.name || '').toLowerCase();
         const tonnage = (s.data.tonnage || '').toLowerCase();
         const rules = (s.data.special_rules || []).join(' ').toLowerCase();
-        return name.includes(shipSearchQuery) || tonnage.includes(shipSearchQuery) || rules.includes(shipSearchQuery);
+        const namesake = (s.data.namesake || '').toLowerCase();
+        return name.includes(shipSearchQuery) || tonnage.includes(shipSearchQuery) || rules.includes(shipSearchQuery) || namesake.includes(shipSearchQuery);
       });
     }
 
@@ -4727,7 +4753,7 @@ const App = (() => {
     const open = settings.autoExpandLore ? ' open' : '';
     const namesake = namesakeDiv(a.namesake, a.ship_name || a.shipName || a.flagship);
     const bio = a.admiralLore
-      ? `<details class="ship-lore" style="margin-top:var(--sp-sm)"${open}><summary class="ship-lore-toggle">Admiral</summary><div class="ship-lore-text">${formatLore(a.admiralLore, '', [])}</div></details>` : '';
+      ? `<details class="ship-lore" style="margin-top:var(--sp-sm)"${open}><summary class="ship-lore-toggle">Admiral</summary><div class="ship-lore-text">${admiralBioHtml(a)}</div></details>` : '';
     const ship = (a.lore || namesake)
       ? `<details class="ship-lore" style="margin-top:var(--sp-sm)"${open}><summary class="ship-lore-toggle">Flagship lore</summary><div class="ship-lore-text">${a.lore ? formatLore(a.lore, a.famousShipsPrefix, a.famousShips) : ''}${namesake}</div></details>` : '';
     return bio + ship;
@@ -6991,6 +7017,11 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-08', title: 'Namesake pronunciations: 12 more ships, search, admiral bios', items: [
+      'Wrote and added the 12 namesakes that were missing a pronunciation guide: Melusine, Rusalka, Nereid, Fossegrim, Kikimora and Scipio, Myrmidon, Vicarius (shown under "Also available as" for their counts-as variant), plus Aaru (Aaru Emerald/Aaru Basalt).',
+      'Ship search now also matches a ship\'s Namesake text, so searching a mythological or folklore name finds its ship even if that word isn\'t in the ship\'s own name.',
+      'For three Shaltari/Resistance famous admirals whose own CHARACTER name is the hard one to say (not their flagship\'s class), the pronunciation now weaves into the first mention of their name in their own Admiral bio instead: Quetzalcoatl, Mergen the Learned, Nguen.',
+    ] },
     { date: '2026-07-08', title: 'How do you say it? Namesake pronunciations', items: [
       'Ships named after hard-to-pronounce people, places and creatures now carry a pronunciation guide in the Lore panel, woven into the Namesake line at the first mention, e.g. "Namesake: Theseus (THEE-syoos) was the legendary king and founding hero of Athens...".',
       'Tap the respelling to hear it spoken aloud.',
@@ -7814,12 +7845,13 @@ const App = (() => {
     if (dbShip.variants && dbShip.variants.length > 0) {
       variantsHtml = `<div class="detail-lore">
         <div class="detail-section-label">Also available as</div>
-        ${dbShip.variants.map(v => { const vf = variantFamous(v); return `<div style="margin-bottom:var(--sp-md);display:flex;gap:var(--sp-md);align-items:flex-start">
+        ${dbShip.variants.map(v => { const vf = variantFamous(v); const vNamesake = namesakeDiv(v.namesake, v.name); return `<div style="margin-bottom:var(--sp-md);display:flex;gap:var(--sp-md);align-items:flex-start">
           ${v.image ? `<img src="${esc(v.image)}" alt="${esc(v.name)}" loading="lazy" style="height:80px;width:auto;object-fit:contain;border-radius:var(--radius-sm)" onerror="this.style.display='none'">` : ''}
           <div style="flex:1;min-width:0">
             <div style="font-weight:var(--weight-semibold)">${esc(v.name)}</div>
             <div class="text-muted" style="font-size:var(--text-sm)">${esc(v.note)}</div>
             ${v.lore ? `<div class="text-rules" style="margin-top:var(--sp-xs)">${formatLore(v.lore, vf.prefix, vf.ships)}</div>` : ''}
+            ${vNamesake}
           </div>
         </div>`; }).join('')}
       </div>`;

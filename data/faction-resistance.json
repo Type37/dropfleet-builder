@@ -1094,7 +1094,8 @@
      {
       "name": "Myrmidon",
       "note": "Myrmidon counts as Barbarossa",
-      "image": "assets/art/myrmidon.webp"
+      "image": "assets/art/myrmidon.webp",
+      "namesake": "Myrmidon was, in Greek myth, the eponymous ancestor of the Myrmidons, the fiercely disciplined warriors who followed Achilles to Troy."
      }
     ],
     "lore": "A specialist variant of the Nelson, the Barbarossa replaces the power-hungry, early mass driver turrets with NC-16 missiles. In addition to offering increased lethality at close range, this frees up power for an enormous scanner array. Unlike most vessels with a detector role, the Barbarossa typically fights at the forefront of any engagement, caring little for the increased visibility that comes with running active scanners due to its already vast signature. To fully utilise the remaining power, the class’s lethality was further bolstered by a pair of chin-mounted vent canons.",
@@ -1869,7 +1870,8 @@
        "Exterminator (Kalium)"
       ],
       "lore": "While the Senator class battlecruiser was an abhorrent and unsanctioned creation of certain paranoid admirals, EAAS Vicarius was downright infamous. She was once the sole example of her class and, it is now understood, instrumental in the Cleansing of Wolfrum. In 2495, twelve years before the Scourge invasion, the mining colony of Wolfrum rebelled, violently. Soon, an unknown vessel of battlecruiser tonnage appeared above the capital and unleashed a spread of VX gas bombardment munitions, slaughtering the entire population.\n\nNo comment was made by the military and the government vehemently denied involvement. Senior individuals were executed in the following years, and often for crimes that should have warranted prison sentences. EAAS Vicarius next appeared as a loner in 2674, her decks cold with a sparse skeleton crew. Her senior officers had apparently boarded another human vessel and had not returned. Now, in 2679, new examples of her class have been spotted among Kalium’s sinister vanguard fleets.",
-      "famousShipsPrefix": "Recorded ships of the class:"
+      "famousShipsPrefix": "Recorded ships of the class:",
+      "namesake": "Vicarius is Latin for 'substitute' or 'deputy', one who acts with another's authority in their place. It is the root of the English word 'vicar'."
      }
     ],
     "famousShipsPrefix": "Recorded ships of the class:",

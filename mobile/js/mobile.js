@@ -647,10 +647,10 @@
     if (!p) return html;
     const span = pronSpan(p);
     const w = p.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const linkRe = new RegExp('^(\\s*<a\\b[^>]*>\\s*' + w + '[^<]*<\\/a>)', 'i');
-    if (linkRe.test(html)) return html.replace(linkRe, '$1 ' + span);
-    const wordRe = new RegExp('(^|>|\\s)(' + w + ')(?=[\\s.,;:)]|$)', 'i');
-    if (wordRe.test(html)) return html.replace(wordRe, '$1$2 ' + span);
+    const linkRe = new RegExp('<a\\b[^>]*>\\s*' + w + '[^<]*<\\/a>', 'i');
+    if (linkRe.test(html)) return html.replace(linkRe, m => m + ' ' + span);
+    const wordRe = new RegExp('\\b' + w + '\\b', 'i');
+    if (wordRe.test(html)) return html.replace(wordRe, m => m + ' ' + span);
     return `<span class="lore-namesake-name">${esc(p.word)}</span> ${span}. ${html}`;
   }
   // Inner HTML for the "Namesake:" line (or '' ). Falls back to a bare
@@ -1615,7 +1615,10 @@
         else if (s.additional) return false;
       }
       if (pickerFilter !== 'all' && g.category !== pickerFilter) return false;
-      if (search && !(s.name || g.name).toLowerCase().includes(search)) return false;
+      if (search) {
+        const hay = ((s.name || g.name) + ' ' + (s.namesake || '')).toLowerCase();
+        if (!hay.includes(search)) return false;
+      }
       for (const k of pickerAttrs) { const d = attrDefs.find(a => a.key === k); if (d && !d.test(s)) return false; }
       return true;
     });
@@ -3194,6 +3197,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-08', title: 'Namesake pronunciations: 5 more ships, search', items: [
+      'Wrote and added namesakes for 5 ships that were missing a pronunciation guide: Melusine, Rusalka, Nereid, Fossegrim and Kikimora Pocket Battleship/Supercruiser.',
+      'Ship search now also matches a ship\'s Namesake text, so searching a mythological or folklore name finds its ship even if that word isn\'t in the ship\'s own name.',
+    ] },
     { date: '2026-07-08', title: 'How do you say it? Namesake pronunciations', items: [
       'Ships named after hard-to-pronounce people, places and creatures now carry a pronunciation guide in the Lore panel, woven into the Namesake line at the first mention, e.g. "Namesake: Theseus (THEE-syoos) was the legendary king...".',
       'Tap the respelling to hear it spoken aloud.',
