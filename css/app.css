@@ -202,6 +202,10 @@ html[data-theme="dark"] {
 html[data-theme="dark"] body { background: var(--paper); }
 html[data-theme="dark"] .btn-primary { background: #2e6db5; border-color: #2e6db5; color: #fff; }
 html[data-theme="dark"] .btn-primary:hover { background: #3a7cc6; border-color: #3a7cc6; }
+/* Admiral ("generals") accent text sits on raised panels / tinted chips where the
+   dark accent navy is a touch low-contrast; lift to the lighter accent for AA. */
+html[data-theme="dark"] .admiral-flagship-name,
+html[data-theme="dark"] .admiral-ability-cost { color: var(--navy-light); }
 /* Topbar theme toggle */
 .topbar-theme-btn {
   display: inline-flex; align-items: center; justify-content: center;
