@@ -140,6 +140,12 @@ const App = (() => {
   // ── Init ──
   let factionLoadPromises = {};
 
+  // "How do you say it?" guide for hard ship names (data/pronunciations.json).
+  // Flat map of distinctive word -> respelling; matched as a whole word, longest
+  // key wins. See pronFor() / pronBadgeHtml().
+  let PRON = {};
+  let PRON_KEYS = [];
+
   async function init() {
     try {
       const res = await fetch('data/fleet-index.json');
@@ -148,6 +154,17 @@ const App = (() => {
       populateLanding(rawFleetData);
     } catch (e) {
       console.error('Failed to load fleet index:', e);
+    }
+
+    try {
+      const pr = await fetch('data/pronunciations.json');
+      const raw = await pr.json();
+      PRON = {};
+      Object.keys(raw).forEach(k => { if (!k.startsWith('_')) PRON[k] = raw[k]; });
+      // Longest keys first so multi-word names ("Baba Yaga") win over any short one.
+      PRON_KEYS = Object.keys(PRON).sort((a, b) => b.length - a.length);
+    } catch (e) {
+      console.error('Failed to load pronunciations:', e);
     }
 
     loadSettings();
@@ -160,6 +177,50 @@ const App = (() => {
     const fb = document.getElementById('footer-feedback');
     if (fb) fb.href = FEEDBACK_HREF;   // upgrade the plain mailto to the guided one
     window.dispatchEvent(new Event('hashchange'));
+  }
+
+  // Find the pronunciation entry whose key appears as a whole word in a ship name.
+  // Returns { word, say } or null. Cached per name to keep render cheap.
+  const _pronCache = new Map();
+  function pronFor(name) {
+    if (!name) return null;
+    if (_pronCache.has(name)) return _pronCache.get(name);
+    let hit = null;
+    for (const key of PRON_KEYS) {
+      const re = new RegExp('\\b' + key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+      if (re.test(name)) { hit = { word: key, say: PRON[key] }; break; }
+    }
+    _pronCache.set(name, hit);
+    return hit;
+  }
+
+  // Small inline "how to say it" affordance: the respelling plus a tap-to-hear
+  // button (Web Speech). Only rendered for names we have a guide for.
+  function pronBadgeHtml(name) {
+    const p = pronFor(name);
+    if (!p) return '';
+    const say = esc(p.say);
+    const word = esc(p.word);
+    return `<button type="button" class="pron-badge" onclick="event.preventDefault();event.stopPropagation();App.sayName(this)" data-word="${word}" data-say="${say}" aria-label="How to say ${word}: ${say}. Tap to hear it." title="How to say ${word}">`
+      + `<svg class="pron-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>`
+      + `<span class="pron-say">${say}</span></button>`;
+  }
+
+  // Speak a ship name aloud. We feed the respelling (not the raw name) to the
+  // synth so it lands close to the intended pronunciation.
+  function sayName(btn) {
+    try {
+      const synth = window.speechSynthesis;
+      if (!synth) return;
+      const word = btn.getAttribute('data-word') || '';
+      const say = btn.getAttribute('data-say') || word;
+      synth.cancel();
+      const u = new SpeechSynthesisUtterance(say.replace(/-/g, ' ').toLowerCase());
+      u.rate = 0.9;
+      synth.speak(u);
+      btn.classList.add('pron-speaking');
+      u.onend = () => btn.classList.remove('pron-speaking');
+    } catch (e) { /* speech optional */ }
   }
 
   async function ensureFactionLoaded(factionKey) {
@@ -2297,7 +2358,7 @@ const App = (() => {
     </button>
     <div class="group-header-bar">
       <div class="flex items-center gap-md flex-wrap">
-        <h2 class="group-title ship-card-name-link" onclick="App.openShipDetail('${currentFleet.faction}','famous_admirals','${a.shipKey}')">${esc(shipName)}</h2>
+        <h2 class="group-title ship-card-name-link" onclick="App.openShipDetail('${currentFleet.faction}','famous_admirals','${a.shipKey}')">${esc(shipName)}</h2>${pronBadgeHtml(shipName)}
         ${shipClass ? `<span class="flagship-class">${esc(shipClass)}</span>` : ''}
         <span class="ship-badge ship-badge-unique">Flagship</span>
         ${ton ? `<span class="badge badge-tonnage badge-tonnage-${tonClass}">${esc(ton)}</span>` : ''}
@@ -2904,7 +2965,7 @@ const App = (() => {
         else if (firstDb.isRare) headerBadges += '<span class="ship-badge ship-badge-rare">Rare</span>';
         const gmin = firstDb.groupMin || 1, gmax = firstDb.groupMax || 1;
         if (gmax > 1) headerBadges += `<span class="ship-badge ship-badge-group">${gmin}–${gmax}</span>`;
-        titleHtml = `<h2 class="group-title ship-card-name-link" id="detail-group-title" onclick="App.openShipDetail('${currentFleet.faction}','${fs0.groupCategory}','${fs0.shipKey}')">${esc(group.name)}</h2>`;
+        titleHtml = `<h2 class="group-title ship-card-name-link" id="detail-group-title" onclick="App.openShipDetail('${currentFleet.faction}','${fs0.groupCategory}','${fs0.shipKey}')">${esc(group.name)}</h2>${pronBadgeHtml(group.name)}`;
       }
     }
 
@@ -4263,7 +4324,7 @@ const App = (() => {
       <div class="ship-card-top">
         ${data.image ? `<div class="ship-card-image"><img src="${esc(thumbUrl(data.image))}" alt="${esc(data.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
         <div class="ship-card-info">
-          <div class="ship-card-name">${esc(data.name)}${selectBadges ? ` ${selectBadges}` : ''}</div>
+          <div class="ship-card-name">${esc(data.name)}${selectBadges ? ` ${selectBadges}` : ''}${pronBadgeHtml(data.name)}</div>
           <div class="ship-card-type">${typeLine}</div>
         </div>
         <div class="ship-card-cost">${(data.groupMin > 1 && !isFamous) ? (data.points || 0) * data.groupMin : (data.points || 0)}<span style="font-size:var(--text-sm);font-weight:var(--weight-regular)"> pts</span>${(data.groupMin > 1 && !isFamous) ? `<span class="ship-card-cost-each">${data.groupMin}× ${data.points}</span>` : ''}</div>
@@ -6902,6 +6963,11 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-08', title: 'How do you say it? Pronunciation guide', items: [
+      'Ships with hard-to-pronounce names now show a small gold "how to say it" pill beside the name (in the picker, the ship card and its full profile). Harpocrates reads har-POCK-ruh-teez, Quetzalcoatl reads ket-sahl-koh-AH-tul, and so on.',
+      'Tap the pill to hear the name spoken aloud.',
+      'Covers the trickiest names across every faction (PHR Greek myth, Scourge folklore, Shaltari minerals, plus real-world city and admiral names like Kyiv, Reykjavik and Yi Sun-sin). Leans toward the Greek-flavoured pronunciation where two are commonly accepted.',
+    ] },
     { date: '2026-07-08', title: 'Scourge missing special rules', items: [
       'The Bannik Pocket Battleship now has its Oculus Booster rule, which had been dropped when the Scourge fleet was updated to the latest edition. Its Special line reads "Command Ship-1, Oculus Booster" again.',
       'The Kikimora and Fossegrim Pocket Battleships now carry their Feature Carrier rule (choose a Scourge Deployable Feature at the start of the game), which was likewise missing.',
@@ -7615,6 +7681,8 @@ const App = (() => {
     if (!dbShip) return;
 
     document.getElementById('detail-ship-name').textContent = dbShip.name;
+    const detailPron = document.getElementById('detail-ship-pron');
+    if (detailPron) detailPron.innerHTML = pronBadgeHtml(dbShip.name);
     const body = document.getElementById('detail-ship-body');
 
     const img = dbShip.image;
@@ -8043,6 +8111,6 @@ const App = (() => {
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText, openLastImported,
-    openSettings, openChangelog, toggleSetting, toggleTheme, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
+    openSettings, openChangelog, toggleSetting, toggleTheme, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, sayName, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
   };
 })();

@@ -615,6 +615,45 @@
   /* ── Helpers ───────────────────────────────────────────── */
   function uuid() { return 'xxxx-xxxx-xxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16)); }
   function esc(s) { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+
+  // "How do you say it?" guide for hard ship names (../data/pronunciations.json).
+  // Flat map of distinctive word -> respelling; matched as a whole word, longest
+  // key wins. Shared with the desktop app.
+  let PRON = {}, PRON_KEYS = [];
+  const _pronCache = new Map();
+  function pronFor(name) {
+    if (!name) return null;
+    if (_pronCache.has(name)) return _pronCache.get(name);
+    let hit = null;
+    for (const key of PRON_KEYS) {
+      const re = new RegExp('\\b' + key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+      if (re.test(name)) { hit = { word: key, say: PRON[key] }; break; }
+    }
+    _pronCache.set(name, hit);
+    return hit;
+  }
+  function pronBadgeHtml(name) {
+    const p = pronFor(name);
+    if (!p) return '';
+    const say = esc(p.say), word = esc(p.word);
+    return `<button type="button" class="pron-badge" onclick="event.preventDefault();event.stopPropagation();App.sayName(this)" data-word="${word}" data-say="${say}" aria-label="How to say ${word}: ${say}. Tap to hear it." title="How to say ${word}">`
+      + `<svg class="pron-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>`
+      + `<span class="pron-say">${say}</span></button>`;
+  }
+  function sayName(btn) {
+    try {
+      const synth = window.speechSynthesis;
+      if (!synth) return;
+      const word = btn.getAttribute('data-word') || '';
+      const say = btn.getAttribute('data-say') || word;
+      synth.cancel();
+      const u = new SpeechSynthesisUtterance(say.replace(/-/g, ' ').toLowerCase());
+      u.rate = 0.9;
+      synth.speak(u);
+      btn.classList.add('pron-speaking');
+      u.onend = () => btn.classList.remove('pron-speaking');
+    } catch (e) { /* speech optional */ }
+  }
   // Rule/description text: escape everything, then re-allow our own <b> emphasis
   // (rules text stores verbatim bold via <b> tags) and turn newlines into breaks.
   function ruleHtml(s) { return esc(s).replace(/&lt;(\/?)b&gt;/g, '<$1b>').replace(/\n/g, '<br>'); }
@@ -1633,7 +1672,7 @@
             <span class="list-row-title">${esc(ship.name)} ${tags.join('')}</span>
             <span class="list-row-pts">${gMin > 1 ? cost * gMin : cost}<span class="pts-unit">pts</span></span>
           </div>
-          <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)}, Group ${gMin}${gMax > gMin ? '–' + gMax : ''}${gMin > 1 ? ` · ${gMin}× ${cost}` : ''}</div>
+          <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)}, Group ${gMin}${gMax > gMin ? '–' + gMax : ''}${gMin > 1 ? ` · ${gMin}× ${cost}` : ''}${pronBadgeHtml(ship.name)}</div>
           ${(() => { const rs = (ship.specialRules || []).map(r => r.name).filter(Boolean).join(', '); return rs ? `<div class="list-row-rules">${renderSpecialChips(rs)}</div>` : ''; })()}
           ${shipLaunchIcons(ship, activeFleet.faction)}
         </div>
@@ -1871,7 +1910,7 @@
       <div class="detail-header">
         <div>
           <div class="detail-name detail-name-editable" onclick="App.editGroupName()" title="Rename battlegroup">${esc((group.name && group.name !== ship.name) ? group.name : ship.name)}${ship.isUnique ? ' <span class="ship-tag ship-tag-unique">Unique</span>' : ship.isRare ? ' <span class="ship-tag ship-tag-rare">Rare</span>' : ''}</div>
-          <div class="detail-type">${(group.name && group.name !== ship.name) ? esc(ship.name) + ' · ' : ''}${tonLabel(ship.tonnage) || CATEGORY_LABELS[inst.groupCategory] || ''}</div>
+          <div class="detail-type">${(group.name && group.name !== ship.name) ? esc(ship.name) + ' · ' : ''}${tonLabel(ship.tonnage) || CATEGORY_LABELS[inst.groupCategory] || ''}${pronBadgeHtml(ship.name)}</div>
         </div>
         <div class="pts-badge-lg"><div class="pts-badge-value">${gp}</div><div class="pts-badge-label">Points</div></div>
       </div>
@@ -3134,6 +3173,11 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-08', title: 'How do you say it? Pronunciation guide', items: [
+      'Ships with hard-to-pronounce names now show a small gold "how to say it" pill beside the name, in the picker and on the ship profile. Harpocrates reads har-POCK-ruh-teez, Quetzalcoatl reads ket-sahl-koh-AH-tul, and so on.',
+      'Tap the pill to hear the name spoken aloud.',
+      'Covers the trickiest names across every faction (PHR Greek myth, Scourge folklore, Shaltari minerals, plus real-world city and admiral names like Kyiv, Reykjavik and Yi Sun-sin).',
+    ] },
     { date: '2026-07-08', title: 'Scourge missing special rules', items: [
       'The Bannik Pocket Battleship now has its Oculus Booster rule, which had been dropped when the Scourge fleet was updated to the latest edition. Its Special line reads "Command Ship-1, Oculus Booster" again.',
       'The Kikimora and Fossegrim Pocket Battleships now carry their Feature Carrier rule (choose a Scourge Deployable Feature at the start of the game), which was likewise missing.',
@@ -3719,6 +3763,12 @@
       STATION_ARMAMENTS = idx.stationArmaments || null;
     }).catch(() => {});
 
+    await fetch('../data/pronunciations.json').then(r => r.json()).then(raw => {
+      PRON = {};
+      Object.keys(raw).forEach(k => { if (!k.startsWith('_')) PRON[k] = raw[k]; });
+      PRON_KEYS = Object.keys(PRON).sort((a, b) => b.length - a.length);
+    }).catch(() => {});
+
     loadFleets();
 
     // Bottom-sheet swipe gestures — wire early so they work even on the
@@ -3768,7 +3818,7 @@
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,
     overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
     importFleetPrompt, doImportText,
-    openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet
+    openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet, sayName
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

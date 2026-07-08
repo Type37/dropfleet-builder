@@ -47,6 +47,10 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-08 — How do you say it? Pronunciation guide
+- Ships with hard-to-pronounce names now show a small gold "how to say it" pill beside the name (in the picker, the ship card and its full profile). Harpocrates reads har-POCK-ruh-teez, Quetzalcoatl reads ket-sahl-koh-AH-tul, and so on. Tap the pill to hear it spoken aloud.
+- Covers the trickiest names across every faction (PHR Greek myth, Scourge folklore, Shaltari minerals, plus real-world city and admiral names like Kyiv, Reykjavik and Yi Sun-sin), leaning toward the Greek-flavoured pronunciation where two are commonly accepted. Data lives in `data/pronunciations.json` (a flat, easy-to-edit word → respelling map).
+
 ### 2026-07-08 — Scourge missing special rules
 - The Bannik Pocket Battleship now has its Oculus Booster rule, which had been dropped when the Scourge fleet was updated to the latest edition. Its Special line reads "Command Ship-1, Oculus Booster" again.
 - The Kikimora and Fossegrim Pocket Battleships now carry their Feature Carrier rule (choose a Scourge Deployable Feature at the start of the game), which was likewise missing.
