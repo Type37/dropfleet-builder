@@ -140,9 +140,10 @@ const App = (() => {
   // ── Init ──
   let factionLoadPromises = {};
 
-  // "How do you say it?" guide for hard ship names (data/pronunciations.json).
-  // Flat map of distinctive word -> respelling; matched as a whole word, longest
-  // key wins. See pronFor() / pronBadgeHtml().
+  // "How do you say it?" guide for hard namesakes (data/pronunciations.json).
+  // Map of distinctive word -> respelling string, or { say, ipa }. Matched as a
+  // whole word, longest key wins. Shown inline in the lore "Namesake:" line only
+  // (after the first mention). See pronFor() / namesakePron().
   let PRON = {};
   let PRON_KEYS = [];
 
@@ -179,8 +180,8 @@ const App = (() => {
     window.dispatchEvent(new Event('hashchange'));
   }
 
-  // Find the pronunciation entry whose key appears as a whole word in a ship name.
-  // Returns { word, say } or null. Cached per name to keep render cheap.
+  // Find the pronunciation entry whose key appears as a whole word in `name`
+  // (usually the ship name). Returns { word, say, ipa } or null. Cached per name.
   const _pronCache = new Map();
   function pronFor(name) {
     if (!name) return null;
@@ -188,25 +189,41 @@ const App = (() => {
     let hit = null;
     for (const key of PRON_KEYS) {
       const re = new RegExp('\\b' + key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
-      if (re.test(name)) { hit = { word: key, say: PRON[key] }; break; }
+      if (re.test(name)) {
+        const e = PRON[key];
+        hit = { word: key, say: typeof e === 'string' ? e : (e && e.say) || '', ipa: (e && e.ipa) || '' };
+        break;
+      }
     }
     _pronCache.set(name, hit);
     return hit;
   }
 
-  // Small inline "how to say it" affordance: the respelling plus a tap-to-hear
-  // button (Web Speech). Only rendered for names we have a guide for.
-  function pronBadgeHtml(name) {
-    const p = pronFor(name);
-    if (!p) return '';
-    const say = esc(p.say);
-    const word = esc(p.word);
-    return `<button type="button" class="pron-badge" onclick="event.preventDefault();event.stopPropagation();App.sayName(this)" data-word="${word}" data-say="${say}" aria-label="How to say ${word}: ${say}. Tap to hear it." title="How to say ${word}">`
-      + `<svg class="pron-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>`
-      + `<span class="pron-say">${say}</span></button>`;
+  // The subtle "(thee-syoos)" respelling shown after a namesake; tap to hear it.
+  function pronSpan(p) {
+    const say = esc(p.say), word = esc(p.word);
+    const tip = p.ipa ? `IPA /${esc(p.ipa)}/ — tap to hear ${word}` : `Tap to hear ${word}`;
+    return `(<span class="lore-pron" role="button" tabindex="0" onclick="event.stopPropagation();App.sayName(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();App.sayName(this)}" data-word="${word}" data-say="${say}" title="${tip}">${say}</span>)`;
   }
 
-  // Speak a ship name aloud. We feed the respelling (not the raw name) to the
+  // Render a namesake line's HTML with the pronunciation woven in. If the text
+  // names the figure (PHR/UCM lead with it), the respelling drops in right after
+  // the first mention; otherwise (Shaltari minerals describe without naming) the
+  // name + respelling leads the line. `shipName` supplies the hard word to match.
+  function namesakePron(namesakeText, shipName) {
+    const html = loreLinks(namesakeText);
+    const p = pronFor(shipName || namesakeText);
+    if (!p) return html;
+    const span = pronSpan(p);
+    const w = p.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const linkRe = new RegExp('^(\\s*<a\\b[^>]*>\\s*' + w + '[^<]*<\\/a>)', 'i');
+    if (linkRe.test(html)) return html.replace(linkRe, '$1 ' + span);
+    const wordRe = new RegExp('(^|>|\\s)(' + w + ')(?=[\\s.,;:)]|$)', 'i');
+    if (wordRe.test(html)) return html.replace(wordRe, '$1$2 ' + span);
+    return `<span class="lore-namesake-name">${esc(p.word)}</span> ${span}. ${html}`;
+  }
+
+  // Speak a namesake aloud. We feed the respelling (not the raw name) to the
   // synth so it lands close to the intended pronunciation.
   function sayName(btn) {
     try {
@@ -2358,7 +2375,7 @@ const App = (() => {
     </button>
     <div class="group-header-bar">
       <div class="flex items-center gap-md flex-wrap">
-        <h2 class="group-title ship-card-name-link" onclick="App.openShipDetail('${currentFleet.faction}','famous_admirals','${a.shipKey}')">${esc(shipName)}</h2>${pronBadgeHtml(shipName)}
+        <h2 class="group-title ship-card-name-link" onclick="App.openShipDetail('${currentFleet.faction}','famous_admirals','${a.shipKey}')">${esc(shipName)}</h2>
         ${shipClass ? `<span class="flagship-class">${esc(shipClass)}</span>` : ''}
         <span class="ship-badge ship-badge-unique">Flagship</span>
         ${ton ? `<span class="badge badge-tonnage badge-tonnage-${tonClass}">${esc(ton)}</span>` : ''}
@@ -2377,7 +2394,7 @@ const App = (() => {
           ${fdb.rulesText ? `<div class="ship-rules-block"><div class="ship-rules-block-label">Ship Rules</div><div class="ship-rules-block-text">${esc(fdb.rulesText)}</div></div>` : ''}
           ${renderShipRulesGlossary(fdb, a)}
           ${fdb.admiralLore ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">About ${esc(a.name)}</summary><div class="ship-lore-text">${formatLore(fdb.admiralLore, '', [])}</div></details>` : ''}
-          ${(fdb.lore || fdb.namesake) ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">Flagship lore</summary><div class="ship-lore-text">${fdb.lore ? formatLore(fdb.lore, fdb.famousShipsPrefix, fdb.famousShips) : ''}${fdb.namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(fdb.namesake)}</div>` : ''}</div></details>` : ''}
+          ${(fdb.lore || fdb.namesake) ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">Flagship lore</summary><div class="ship-lore-text">${fdb.lore ? formatLore(fdb.lore, fdb.famousShipsPrefix, fdb.famousShips) : ''}${fdb.namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${namesakePron(fdb.namesake, fdb.name)}</div>` : ''}</div></details>` : ''}
           <div class="text-caption">Flies with ${esc(a.name)}, who is managed in the left rail.</div>
         </div>
       </div>
@@ -2965,7 +2982,7 @@ const App = (() => {
         else if (firstDb.isRare) headerBadges += '<span class="ship-badge ship-badge-rare">Rare</span>';
         const gmin = firstDb.groupMin || 1, gmax = firstDb.groupMax || 1;
         if (gmax > 1) headerBadges += `<span class="ship-badge ship-badge-group">${gmin}–${gmax}</span>`;
-        titleHtml = `<h2 class="group-title ship-card-name-link" id="detail-group-title" onclick="App.openShipDetail('${currentFleet.faction}','${fs0.groupCategory}','${fs0.shipKey}')">${esc(group.name)}</h2>${pronBadgeHtml(group.name)}`;
+        titleHtml = `<h2 class="group-title ship-card-name-link" id="detail-group-title" onclick="App.openShipDetail('${currentFleet.faction}','${fs0.groupCategory}','${fs0.shipKey}')">${esc(group.name)}</h2>`;
       }
     }
 
@@ -3915,7 +3932,7 @@ const App = (() => {
       const loreId = `lore-${ship.id}`;
       const openAttr = settings.autoExpandLore ? ' open' : '';
       const namesakeHtml = dbShip.namesake
-        ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(dbShip.namesake)}</div>`
+        ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${namesakePron(dbShip.namesake, dbShip.name)}</div>`
         : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
@@ -3927,7 +3944,7 @@ const App = (() => {
       const openAttr = settings.autoExpandLore ? ' open' : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
-        <div class="ship-lore-text"><div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(dbShip.namesake)}</div></div>
+        <div class="ship-lore-text"><div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${namesakePron(dbShip.namesake, dbShip.name)}</div></div>
       </details>`;
     }
 
@@ -4324,7 +4341,7 @@ const App = (() => {
       <div class="ship-card-top">
         ${data.image ? `<div class="ship-card-image"><img src="${esc(thumbUrl(data.image))}" alt="${esc(data.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
         <div class="ship-card-info">
-          <div class="ship-card-name">${esc(data.name)}${selectBadges ? ` ${selectBadges}` : ''}${pronBadgeHtml(data.name)}</div>
+          <div class="ship-card-name">${esc(data.name)}${selectBadges ? ` ${selectBadges}` : ''}</div>
           <div class="ship-card-type">${typeLine}</div>
         </div>
         <div class="ship-card-cost">${(data.groupMin > 1 && !isFamous) ? (data.points || 0) * data.groupMin : (data.points || 0)}<span style="font-size:var(--text-sm);font-weight:var(--weight-regular)"> pts</span>${(data.groupMin > 1 && !isFamous) ? `<span class="ship-card-cost-each">${data.groupMin}× ${data.points}</span>` : ''}</div>
@@ -4697,7 +4714,7 @@ const App = (() => {
   function admiralLoreBlock(a) {
     if (!a) return '';
     const open = settings.autoExpandLore ? ' open' : '';
-    const namesake = a.namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(a.namesake)}</div>` : '';
+    const namesake = a.namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${namesakePron(a.namesake, a.ship_name || a.shipName)}</div>` : '';
     const bio = a.admiralLore
       ? `<details class="ship-lore" style="margin-top:var(--sp-sm)"${open}><summary class="ship-lore-toggle">Admiral</summary><div class="ship-lore-text">${formatLore(a.admiralLore, '', [])}</div></details>` : '';
     const ship = a.lore
@@ -6963,10 +6980,10 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
-    { date: '2026-07-08', title: 'How do you say it? Pronunciation guide', items: [
-      'Ships with hard-to-pronounce names now show a small gold "how to say it" pill beside the name (in the picker, the ship card and its full profile). Harpocrates reads har-POCK-ruh-teez, Quetzalcoatl reads ket-sahl-koh-AH-tul, and so on.',
-      'Tap the pill to hear the name spoken aloud.',
-      'Covers the trickiest names across every faction (PHR Greek myth, Scourge folklore, Shaltari minerals, plus real-world city and admiral names like Kyiv, Reykjavik and Yi Sun-sin). Leans toward the Greek-flavoured pronunciation where two are commonly accepted.',
+    { date: '2026-07-08', title: 'How do you say it? Namesake pronunciations', items: [
+      'Ships named after hard-to-pronounce people, places and creatures now carry a pronunciation guide in the Lore panel, woven into the Namesake line at the first mention, e.g. "Namesake: Theseus (THEE-syoos) was the legendary king and founding hero of Athens...".',
+      'Tap the respelling to hear it spoken aloud.',
+      'Covers the trickiest namesakes across every faction (PHR Greek myth, Scourge folklore, Shaltari minerals, plus place and admiral names like Kyiv, Reykjavik and Yi Sun-sin), leaning toward the source-language pronunciation where two are commonly accepted.',
     ] },
     { date: '2026-07-08', title: 'Scourge missing special rules', items: [
       'The Bannik Pocket Battleship now has its Oculus Booster rule, which had been dropped when the Scourge fleet was updated to the latest edition. Its Special line reads "Command Ship-1, Oculus Booster" again.',
@@ -7681,8 +7698,6 @@ const App = (() => {
     if (!dbShip) return;
 
     document.getElementById('detail-ship-name').textContent = dbShip.name;
-    const detailPron = document.getElementById('detail-ship-pron');
-    if (detailPron) detailPron.innerHTML = pronBadgeHtml(dbShip.name);
     const body = document.getElementById('detail-ship-body');
 
     const img = dbShip.image;
@@ -7802,7 +7817,7 @@ const App = (() => {
     // Lore
     let loreHtml = '';
     const detailNamesake = dbShip.namesake
-      ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(dbShip.namesake)}</div>`
+      ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${namesakePron(dbShip.namesake, dbShip.name)}</div>`
       : '';
     if (dbShip.lore || dbShip.namesake) {
       loreHtml = `<div class="detail-lore">

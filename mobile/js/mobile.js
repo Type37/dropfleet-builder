@@ -616,9 +616,9 @@
   function uuid() { return 'xxxx-xxxx-xxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16)); }
   function esc(s) { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
 
-  // "How do you say it?" guide for hard ship names (../data/pronunciations.json).
-  // Flat map of distinctive word -> respelling; matched as a whole word, longest
-  // key wins. Shared with the desktop app.
+  // "How do you say it?" guide for hard namesakes (../data/pronunciations.json).
+  // Map of distinctive word -> respelling string or { say, ipa }; matched as a whole
+  // word, longest key wins. Shown inline in the lore "Namesake:" line. Desktop-shared.
   let PRON = {}, PRON_KEYS = [];
   const _pronCache = new Map();
   function pronFor(name) {
@@ -627,18 +627,31 @@
     let hit = null;
     for (const key of PRON_KEYS) {
       const re = new RegExp('\\b' + key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
-      if (re.test(name)) { hit = { word: key, say: PRON[key] }; break; }
+      if (re.test(name)) {
+        const e = PRON[key];
+        hit = { word: key, say: typeof e === 'string' ? e : (e && e.say) || '', ipa: (e && e.ipa) || '' };
+        break;
+      }
     }
     _pronCache.set(name, hit);
     return hit;
   }
-  function pronBadgeHtml(name) {
-    const p = pronFor(name);
-    if (!p) return '';
+  function pronSpan(p) {
     const say = esc(p.say), word = esc(p.word);
-    return `<button type="button" class="pron-badge" onclick="event.preventDefault();event.stopPropagation();App.sayName(this)" data-word="${word}" data-say="${say}" aria-label="How to say ${word}: ${say}. Tap to hear it." title="How to say ${word}">`
-      + `<svg class="pron-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>`
-      + `<span class="pron-say">${say}</span></button>`;
+    const tip = p.ipa ? `IPA /${esc(p.ipa)}/ - tap to hear ${word}` : `Tap to hear ${word}`;
+    return `(<span class="lore-pron" role="button" tabindex="0" onclick="event.stopPropagation();App.sayName(this)" data-word="${word}" data-say="${say}" title="${tip}">${say}</span>)`;
+  }
+  function namesakePron(namesakeText, shipName) {
+    const html = loreLinks(namesakeText);
+    const p = pronFor(shipName || namesakeText);
+    if (!p) return html;
+    const span = pronSpan(p);
+    const w = p.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const linkRe = new RegExp('^(\\s*<a\\b[^>]*>\\s*' + w + '[^<]*<\\/a>)', 'i');
+    if (linkRe.test(html)) return html.replace(linkRe, '$1 ' + span);
+    const wordRe = new RegExp('(^|>|\\s)(' + w + ')(?=[\\s.,;:)]|$)', 'i');
+    if (wordRe.test(html)) return html.replace(wordRe, '$1$2 ' + span);
+    return `<span class="lore-namesake-name">${esc(p.word)}</span> ${span}. ${html}`;
   }
   function sayName(btn) {
     try {
@@ -1672,7 +1685,7 @@
             <span class="list-row-title">${esc(ship.name)} ${tags.join('')}</span>
             <span class="list-row-pts">${gMin > 1 ? cost * gMin : cost}<span class="pts-unit">pts</span></span>
           </div>
-          <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)}, Group ${gMin}${gMax > gMin ? '–' + gMax : ''}${gMin > 1 ? ` · ${gMin}× ${cost}` : ''}${pronBadgeHtml(ship.name)}</div>
+          <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)}, Group ${gMin}${gMax > gMin ? '–' + gMax : ''}${gMin > 1 ? ` · ${gMin}× ${cost}` : ''}</div>
           ${(() => { const rs = (ship.specialRules || []).map(r => r.name).filter(Boolean).join(', '); return rs ? `<div class="list-row-rules">${renderSpecialChips(rs)}</div>` : ''; })()}
           ${shipLaunchIcons(ship, activeFleet.faction)}
         </div>
@@ -1910,7 +1923,7 @@
       <div class="detail-header">
         <div>
           <div class="detail-name detail-name-editable" onclick="App.editGroupName()" title="Rename battlegroup">${esc((group.name && group.name !== ship.name) ? group.name : ship.name)}${ship.isUnique ? ' <span class="ship-tag ship-tag-unique">Unique</span>' : ship.isRare ? ' <span class="ship-tag ship-tag-rare">Rare</span>' : ''}</div>
-          <div class="detail-type">${(group.name && group.name !== ship.name) ? esc(ship.name) + ' · ' : ''}${tonLabel(ship.tonnage) || CATEGORY_LABELS[inst.groupCategory] || ''}${pronBadgeHtml(ship.name)}</div>
+          <div class="detail-type">${(group.name && group.name !== ship.name) ? esc(ship.name) + ' · ' : ''}${tonLabel(ship.tonnage) || CATEGORY_LABELS[inst.groupCategory] || ''}</div>
         </div>
         <div class="pts-badge-lg"><div class="pts-badge-value">${gp}</div><div class="pts-badge-label">Points</div></div>
       </div>
@@ -2093,7 +2106,7 @@
     const paras = lore ? lore.split(/\n\n+/).map(p => `<p>${loreLinks(p.trim())}</p>`).join('') : '';
     // Order matches desktop: lore → famous ships (bold header, italic bullets) → Namesake.
     const famousList = renderFamousShips(ship.famousShipsPrefix, famous);
-    const namesakeLine = namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${loreLinks(namesake)}</div>` : '';
+    const namesakeLine = namesake ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${namesakePron(namesake, ship.name)}</div>` : '';
     return `<div class="lore-card">
       <div class="lore-label">Lore</div>
       <div class="lore-body">${paras}</div>
@@ -3173,10 +3186,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
-    { date: '2026-07-08', title: 'How do you say it? Pronunciation guide', items: [
-      'Ships with hard-to-pronounce names now show a small gold "how to say it" pill beside the name, in the picker and on the ship profile. Harpocrates reads har-POCK-ruh-teez, Quetzalcoatl reads ket-sahl-koh-AH-tul, and so on.',
-      'Tap the pill to hear the name spoken aloud.',
-      'Covers the trickiest names across every faction (PHR Greek myth, Scourge folklore, Shaltari minerals, plus real-world city and admiral names like Kyiv, Reykjavik and Yi Sun-sin).',
+    { date: '2026-07-08', title: 'How do you say it? Namesake pronunciations', items: [
+      'Ships named after hard-to-pronounce people, places and creatures now carry a pronunciation guide in the Lore panel, woven into the Namesake line at the first mention, e.g. "Namesake: Theseus (THEE-syoos) was the legendary king...".',
+      'Tap the respelling to hear it spoken aloud.',
+      'Covers the trickiest namesakes across every faction (PHR Greek myth, Scourge folklore, Shaltari minerals, plus place and admiral names like Kyiv, Reykjavik and Yi Sun-sin).',
     ] },
     { date: '2026-07-08', title: 'Scourge missing special rules', items: [
       'The Bannik Pocket Battleship now has its Oculus Booster rule, which had been dropped when the Scourge fleet was updated to the latest edition. Its Special line reads "Command Ship-1, Oculus Booster" again.',

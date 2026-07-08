@@ -47,9 +47,10 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
-### 2026-07-08 — How do you say it? Pronunciation guide
-- Ships with hard-to-pronounce names now show a small gold "how to say it" pill beside the name (in the picker, the ship card and its full profile). Harpocrates reads har-POCK-ruh-teez, Quetzalcoatl reads ket-sahl-koh-AH-tul, and so on. Tap the pill to hear it spoken aloud.
-- Covers the trickiest names across every faction (PHR Greek myth, Scourge folklore, Shaltari minerals, plus real-world city and admiral names like Kyiv, Reykjavik and Yi Sun-sin), leaning toward the Greek-flavoured pronunciation where two are commonly accepted. Data lives in `data/pronunciations.json` (a flat, easy-to-edit word → respelling map).
+### 2026-07-08 — How do you say it? Namesake pronunciations
+- Ships named after hard-to-pronounce people, places and creatures now carry a pronunciation guide in the Lore panel, woven into the Namesake line at the first mention, e.g. "Namesake: Theseus (THEE-syoos) was the legendary king and founding hero of Athens...". Tap the respelling to hear it spoken aloud.
+- Covers the trickiest namesakes across every faction (PHR Greek myth, Scourge folklore, Shaltari minerals, plus place and admiral names like Kyiv, Reykjavik and Yi Sun-sin), leaning toward the source-language pronunciation where two are commonly accepted. Data lives in `data/pronunciations.json` (word → respelling / IPA), rendered only on the Namesake line.
+- Dark mode readability: fixed the admiral ("generals") panels, which fell back to a light cream background in dark mode (an undefined `--surface` token) and left their text unreadable; also lifted the changelog title colour so it reads on dark.
 
 ### 2026-07-08 — Scourge missing special rules
 - The Bannik Pocket Battleship now has its Oculus Booster rule, which had been dropped when the Scourge fleet was updated to the latest edition. Its Special line reads "Command Ship-1, Oculus Booster" again.

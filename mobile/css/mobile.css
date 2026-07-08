@@ -404,27 +404,17 @@ button, a, input, select, textarea,
   color: var(--fg3);
   margin-top: var(--sp-xxs);
 }
-/* "How do you say it?" pronunciation guide for hard ship names. Tap to hear. */
-.pron-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  margin-left: 6px;
-  padding: 1px 7px 1px 5px;
-  vertical-align: middle;
-  border: 1px solid rgba(184, 147, 46, 0.4);
-  border-radius: 999px;
-  background: rgba(184, 147, 46, 0.12);
+/* Pronunciation respelling woven into a lore "Namesake:" line, e.g. Theseus
+   (thee-syoos). Subtle; dotted underline hints tap-to-hear. */
+.lore-pron {
   color: var(--gold-dim);
-  font-size: var(--text-caption2, 0.7rem);
-  font-weight: 600;
-  line-height: 1.35;
+  font-style: italic;
+  border-bottom: 1px dotted rgba(184, 147, 46, 0.5);
   cursor: pointer;
-  white-space: nowrap;
   -webkit-tap-highlight-color: transparent;
 }
-.pron-badge .pron-ico { flex: 0 0 auto; opacity: 0.85; }
-.pron-badge.pron-speaking { background: var(--gold); border-color: var(--gold); color: #2a2410; }
+.lore-pron.pron-speaking { color: var(--gold); border-bottom-color: var(--gold); }
+.lore-namesake-name { font-weight: 600; color: var(--fg2, inherit); }
 /* Launch-capability icons on picker rows. */
 .list-row-rules { display: flex; flex-wrap: wrap; gap: 4px; margin-top: var(--sp-xs); }
 .ship-card-launch { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-top: var(--sp-xs); }
