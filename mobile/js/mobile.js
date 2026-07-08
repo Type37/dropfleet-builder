@@ -687,6 +687,7 @@
     return [...(groups || [])].sort((a, b) =>
       (GROUP_CAT_ORDER[a.ships[0]?.groupCategory] ?? 9) - (GROUP_CAT_ORDER[b.ships[0]?.groupCategory] ?? 9));
   }
+  function groupCatOf(g) { return (g && g.ships && g.ships[0] && g.ships[0].groupCategory) || 'medium'; }
   // Spell out the single-letter tonnage code for display (L = Light, not Large).
   // Stored values stay single-letter — this is display only.
   const TON_WORDS = { L: 'Light', M: 'Medium', H: 'Heavy', C: 'Colossal', P: 'Payload' };
@@ -1339,7 +1340,18 @@
     // No empty-state block when there are no groups — the section header's
     // "Add Group" button (and the FAB) are the affordance; show nothing.
     if ((f.battleGroups || []).length) {
-      html += (f.battleGroups || []).map((g, i) => {
+      // Groups auto-bucket by weight class (heaviest first), matching desktop's
+      // overview panel and the print/share output — screen order now always
+      // agrees with what gets printed. The underlying array keeps insertion
+      // order; only the display is sorted (stable), so every existing handler
+      // below still gets the group's REAL index (pair.i), unchanged.
+      const catColors = { light: '#5b9bd5', medium: '#3e9945', heavy: '#d98c1f', colossal: '#c43c2f', payload: '#6a4c9c' };
+      const paired = f.battleGroups.map((g, i) => ({ g, i }));
+      const sortedPairs = [...paired].sort((a, b) => (GROUP_CAT_ORDER[groupCatOf(a.g)] ?? 9) - (GROUP_CAT_ORDER[groupCatOf(b.g)] ?? 9));
+      const classCounts = {};
+      sortedPairs.forEach(p => { const c = groupCatOf(p.g); classCounts[c] = (classCounts[c] || 0) + 1; });
+      let lastCat = null;
+      html += sortedPairs.map(({ g, i }) => {
         const s = g.ships[0];
         if (!s) return '';
         const db = findShip(f.faction, s.groupCategory, s.shipKey);
@@ -1348,6 +1360,8 @@
         const art = shipArtPath(db?.name);
         const modCls = isFullyModular(db) ? ' ship-img-modular' : '';
         const { gMin, gMax } = groupQtyBounds(db, s.groupCategory);
+        const cat = groupCatOf(g);
+        const catLabel = CATEGORY_LABELS[cat] || cat;
         // A variable-size group gets an inline ×N stepper so you set the count
         // right here, no panel-hop. Fixed groups (gMin===gMax) just show ×N.
         const canVary = gMax > gMin;
@@ -1357,9 +1371,17 @@
             <span class="row-qty-num">×${qty}</span>
             <button class="counter-btn counter-btn-sm" onclick="event.stopPropagation();App.changeGroupQty(${i},1)" ${qty >= gMax ? 'disabled' : ''} aria-label="Add one">+</button>
           </div>` : '';
-        return `<div class="swipe-row">
+        const divider = cat !== lastCat
+          ? `<div class="roster-cat-divider" style="--cat-color:${catColors[cat] || 'var(--navy)'}"><span class="roster-cat-label">${esc(catLabel)}</span></div>`
+          : '';
+        lastCat = cat;
+        const grip = classCounts[cat] > 1
+          ? `<span class="group-drag-grip" title="Drag to reorder within ${esc(catLabel)}" aria-label="Drag to reorder ${esc(g.name)} within its weight class" onpointerdown="App.onGripPointerDown(event,'${g.id}')"><svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.3"/><circle cx="3" cy="7" r="1.3"/><circle cx="8" cy="3" r="1.3"/><circle cx="8" cy="7" r="1.3"/><circle cx="13" cy="3" r="1.3"/><circle cx="13" cy="7" r="1.3"/></svg></span>`
+          : '';
+        return `${divider}<div class="swipe-row" data-gcat="${cat}" data-gid="${g.id}">
           <button class="swipe-del" onclick="event.stopPropagation();App.swipeDeleteGroup(${i})" aria-label="Remove group">Remove</button>
           <div class="list-row swipe-fg" onclick="App.openGroup(${i})">
+            ${grip}
             ${art ? `<div class="ship-thumb${modCls}"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
             <div class="list-row-content">
               <div class="list-row-title">${esc((g.name && g.name !== (db?.name || 'Unknown')) ? g.name : (db?.name || 'Unknown'))}${titleQty}</div>
@@ -1443,7 +1465,7 @@
     let fg = null, sx = 0, sy = 0, dx = 0, dir = null, openFg = null, swiped = false;
     const closeOpen = () => { if (openFg) { openFg.style.transform = ''; openFg.classList.remove('swipe-open'); openFg = null; } };
     c.addEventListener('pointerdown', e => {
-      if (e.target.closest('.row-qty') || e.target.closest('.ship-thumb') || e.target.closest('.swipe-del')) return;
+      if (e.target.closest('.row-qty') || e.target.closest('.ship-thumb') || e.target.closest('.swipe-del') || e.target.closest('.group-drag-grip')) return;
       const el = e.target.closest('.swipe-fg');
       if (el !== openFg) closeOpen();
       fg = el; sx = e.clientX; sy = e.clientY; dx = 0; dir = null; swiped = false;
@@ -1486,6 +1508,91 @@
     f.updatedAt = Date.now();
     saveFleets();
     haptic(HAPTIC.remove);
+    renderFleetDetail();
+  }
+
+  // ── Drag-to-reorder battlegroups (within a weight class only) ──
+  // Mirrors desktop: groups auto-bucket by weight class (heaviest first, matching
+  // print/share); a grip reorders a group among its same-class siblings only.
+  // Pointer Events, not native HTML5 drag-and-drop, so it works with touch.
+  let groupDrag = null; // { gid, rowEl, startY, rowTop, rowH, peers, targetGid, after }
+
+  function onGripPointerDown(ev, gid) {
+    const f = activeFleet;
+    if (!f) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    const grip = ev.currentTarget;
+    const row = grip.closest('.swipe-row');
+    const dragged = f.battleGroups.find(g => g.id === gid);
+    if (!row || !dragged) return;
+    const cat = groupCatOf(dragged);
+    const peers = [...document.querySelectorAll('#fleet-groups .swipe-row')]
+      .filter(r => r.dataset.gcat === cat)
+      .map(r => { const rc = r.getBoundingClientRect(); return { gid: r.dataset.gid, el: r, top: rc.top, height: rc.height }; });
+    if (peers.length < 2) return;
+    const rowRect = row.getBoundingClientRect();
+    groupDrag = { gid, rowEl: row, startY: ev.clientY, rowTop: rowRect.top, rowH: rowRect.height, peers, targetGid: null, after: false };
+    row.classList.add('dragging');
+    try { grip.setPointerCapture(ev.pointerId); } catch (e) {}
+    grip.addEventListener('pointermove', onGripPointerMove);
+    grip.addEventListener('pointerup', onGripPointerUp);
+    grip.addEventListener('pointercancel', onGripPointerCancel);
+    haptic(HAPTIC.tick);
+  }
+
+  function onGripPointerMove(ev) {
+    if (!groupDrag) return;
+    ev.preventDefault();
+    const dy = ev.clientY - groupDrag.startY;
+    groupDrag.rowEl.style.transform = `translateY(${dy}px)`;
+    const centerY = groupDrag.rowTop + groupDrag.rowH / 2 + dy;
+    groupDrag.peers.forEach(p => p.el.classList.remove('drag-over-before', 'drag-over-after'));
+    let best = null, bestDist = Infinity;
+    groupDrag.peers.forEach(p => {
+      if (p.gid === groupDrag.gid) return;
+      const dist = Math.abs(centerY - (p.top + p.height / 2));
+      if (dist < bestDist) { bestDist = dist; best = p; }
+    });
+    if (best) {
+      const after = centerY > (best.top + best.height / 2);
+      best.el.classList.add(after ? 'drag-over-after' : 'drag-over-before');
+      groupDrag.targetGid = best.gid;
+      groupDrag.after = after;
+    } else {
+      groupDrag.targetGid = null;
+    }
+  }
+
+  function endGripDrag(grip, commit) {
+    grip.removeEventListener('pointermove', onGripPointerMove);
+    grip.removeEventListener('pointerup', onGripPointerUp);
+    grip.removeEventListener('pointercancel', onGripPointerCancel);
+    if (!groupDrag) return;
+    const { gid, targetGid, after, rowEl, peers } = groupDrag;
+    rowEl.style.transform = '';
+    rowEl.classList.remove('dragging');
+    peers.forEach(p => p.el.classList.remove('drag-over-before', 'drag-over-after'));
+    groupDrag = null;
+    if (commit && targetGid) reorderGroupWithinClass(gid, targetGid, after);
+  }
+
+  function onGripPointerUp(ev) { endGripDrag(ev.currentTarget, true); }
+  function onGripPointerCancel(ev) { endGripDrag(ev.currentTarget, false); }
+
+  function reorderGroupWithinClass(draggedGid, targetGid, placeAfter) {
+    const f = activeFleet;
+    if (!f || !draggedGid || draggedGid === targetGid) return;
+    const groups = f.battleGroups;
+    const dragged = groups.find(g => g.id === draggedGid);
+    const target = groups.find(g => g.id === targetGid);
+    if (!dragged || !target || groupCatOf(dragged) !== groupCatOf(target)) return;
+    groups.splice(groups.indexOf(dragged), 1);
+    const ti = groups.indexOf(target);
+    groups.splice(placeAfter ? ti + 1 : ti, 0, dragged);
+    f.updatedAt = Date.now();
+    saveFleets();
+    haptic(HAPTIC.tick);
     renderFleetDetail();
   }
 
@@ -3197,6 +3304,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-09', title: 'Battlegroups now sort by weight class + drag to reorder', items: [
+      'The battlegroup list now auto-buckets by weight class (Colossal > Heavy > Medium > Light > Payload), with a divider between each, exactly matching desktop and the printed/shared sheet. Previously mobile showed groups in whatever order you added them, which could look different from what got printed or shared.',
+      'Added a drag handle to reorder a group among its same-weight-class siblings (built with Pointer Events, so it works reliably with touch).',
+    ] },
     { date: '2026-07-08', title: 'Namesake pronunciations: 5 more ships, search', items: [
       'Wrote and added namesakes for 5 ships that were missing a pronunciation guide: Melusine, Rusalka, Nereid, Fossegrim and Kikimora Pocket Battleship/Supercruiser.',
       'Ship search now also matches a ship\'s Namesake text, so searching a mythological or folklore name finds its ship even if that word isn\'t in the ship\'s own name.',
@@ -3840,7 +3951,7 @@
     init, goBack, viewDesktop,
     openFleet, openCreateFleet, openEditFleet, closeCreateFleet, doCreateFleet, selectFleetSize, openStarterFleets,
     openAddGroup, filterShips, toggleAttr, toggleExtra, clearFilters, setSort, addShip,
-    openGroup, toggleWarnings, cycleShipArt, changeQty, changeGroupQty, swipeDeleteGroup, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, copyGroup, groupOverflow, editGroupName, toggleSecondary, openSecondaryModal, closeSecondaryModal,
+    openGroup, toggleWarnings, cycleShipArt, changeQty, changeGroupQty, swipeDeleteGroup, onGripPointerDown, selectLoadout, selectFeature, addSystem, removeSystem, removeGroup, copyGroup, groupOverflow, editGroupName, toggleSecondary, openSecondaryModal, closeSecondaryModal,
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral, closeAbilityModal,
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,

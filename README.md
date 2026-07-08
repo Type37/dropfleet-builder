@@ -47,6 +47,11 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-09 — Battlegroup reordering rebuilt on Pointer Events
+- Drag-to-reorder battlegroups (desktop) was built on native HTML5 drag-and-drop, which iOS Safari never fires for touch at all and Android handles inconsistently — it silently didn't work on touchscreens and felt fragile with a mouse. Rebuilt on Pointer Events (`setPointerCapture`), which behave identically for mouse, touch and pen. Same-weight-class-only restriction and insertion indicator are unchanged.
+- Mobile's battlegroup list now auto-buckets by weight class (Colossal > Heavy > Medium > Light > Payload) with a divider between each, matching desktop's overview panel and the printed/shared sheet — previously mobile showed groups in raw insertion order on screen, which could look different from what got printed. Added the same Pointer Events drag handle to reorder within a class.
+- Found and left in place (harmless, matches the new mechanism if ever revived): desktop's sidebar battlegroup nav list (`#groups-nav`) is dead code from an earlier layout — the element it targets no longer exists in the current builder, which now uses only the center overview panel.
+
 ### 2026-07-08 — Namesake pronunciations: 12 more ships, search, admiral bios
 - Wrote and added the 12 namesakes that were missing a pronunciation guide: Melusine, Rusalka, Nereid, Fossegrim, Kikimora (desktop + mobile); Scipio, Myrmidon, Vicarius and Aaru (desktop only, shown under a ship's "Also available as" counts-as variant, which mobile doesn't render).
 - Ship search (desktop + mobile) now also matches a ship's Namesake text, so searching a mythological/folklore name finds its ship even if that word isn't in the ship's own name.

@@ -2279,7 +2279,7 @@ const App = (() => {
       const accentColor = catColors[catKey] || 'rgba(255,255,255,0.15)';
 
       return `
-      <div class="group-nav-item ${isActive ? 'active' : ''}${hasError ? ' has-error' : ''}" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-pressed="${isActive}" aria-label="${esc(g.name)}, ${catLabel}, ${groupPts} points, ${shipCount} ship${shipCount !== 1 ? 's' : ''}" style="--nav-accent:${accentColor}" data-gcat="${catKey}" ondragover="App.onGroupDragOver(event,'${g.id}')" ondragleave="App.onGroupDragLeave(event)" ondrop="App.onGroupDrop(event,'${g.id}')">
+      <div class="group-nav-item ${isActive ? 'active' : ''}${hasError ? ' has-error' : ''}" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-pressed="${isActive}" aria-label="${esc(g.name)}, ${catLabel}, ${groupPts} points, ${shipCount} ship${shipCount !== 1 ? 's' : ''}" style="--nav-accent:${accentColor}" data-gcat="${catKey}" data-gid="${g.id}">
         ${artThumb}
         <div class="group-nav-body">
           <div class="group-nav-top">
@@ -2292,7 +2292,7 @@ const App = (() => {
             <span class="group-nav-count">${shipCount} ship${shipCount !== 1 ? 's' : ''}</span>
           </div>
         </div>
-        ${classCounts[catKey] > 1 ? `<span class="group-nav-grip" draggable="true" title="Drag to reorder within ${esc(catLabel)}" aria-label="Drag to reorder ${esc(g.name)} within its weight class" onclick="event.stopPropagation()" ondragstart="App.onGroupDragStart(event,'${g.id}')" ondragend="App.onGroupDragEnd(event)"><svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.3"/><circle cx="7" cy="3" r="1.3"/><circle cx="3" cy="8" r="1.3"/><circle cx="7" cy="8" r="1.3"/><circle cx="3" cy="13" r="1.3"/><circle cx="7" cy="13" r="1.3"/></svg></span>` : ''}
+        ${classCounts[catKey] > 1 ? `<span class="group-nav-grip" title="Drag to reorder within ${esc(catLabel)}" aria-label="Drag to reorder ${esc(g.name)} within its weight class" onclick="event.stopPropagation()" onpointerdown="App.onGripPointerDown(event,'${g.id}','.group-nav-item')"><svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.3"/><circle cx="7" cy="3" r="1.3"/><circle cx="3" cy="8" r="1.3"/><circle cx="7" cy="8" r="1.3"/><circle cx="3" cy="13" r="1.3"/><circle cx="7" cy="13" r="1.3"/></svg></span>` : ''}
       </div>`;
     }).join('');
   }
@@ -2509,56 +2509,77 @@ const App = (() => {
   // grip handle reorders it among its same-class siblings; the underlying array
   // order IS the within-class order (the sort is stable), so we just move the
   // dragged group next to its drop target in currentFleet.battleGroups.
-  let dragGroupId = null;
+  //
+  // Uses Pointer Events, NOT native HTML5 drag-and-drop. Native drag-and-drop
+  // never fires on touch at all in iOS Safari and is inconsistent on Android —
+  // Pointer Events (with setPointerCapture) work identically for mouse, touch
+  // and pen, which is why this was rewritten (2026-07-09, "unusably bad/broken
+  // on touch" report).
+  let groupDrag = null; // { gid, rowEl, startY, rowTop, rowH, peers, targetGid, after }
   function groupCatOf(g) { return (g && g.ships && g.ships[0] && g.ships[0].groupCategory) || 'medium'; }
 
-  function onGroupDragStart(ev, gid) {
-    dragGroupId = gid;
-    if (ev.dataTransfer) {
-      ev.dataTransfer.effectAllowed = 'move';
-      try { ev.dataTransfer.setData('text/plain', gid); } catch (e) {}
-    }
-    const row = ev.currentTarget.closest('.overview-group-card, .group-nav-item');
-    if (row) {
-      row.classList.add('dragging');
-      try { const r = row.getBoundingClientRect(); ev.dataTransfer.setDragImage(row, ev.clientX - r.left, ev.clientY - r.top); } catch (e) {}
-    }
-  }
-
-  function onGroupDragOver(ev, gid) {
-    if (!dragGroupId || dragGroupId === gid || !currentFleet) return;
-    const dragged = currentFleet.battleGroups.find(g => g.id === dragGroupId);
-    const target = currentFleet.battleGroups.find(g => g.id === gid);
-    // Only same-weight-class groups are valid drop targets (no preventDefault on a
-    // different class → browser shows "no-drop", cross-class order stays automatic).
-    if (!dragged || !target || groupCatOf(dragged) !== groupCatOf(target)) return;
+  function onGripPointerDown(ev, gid, peerSelector) {
+    if (!currentFleet || ev.button === 2) return;
     ev.preventDefault();
-    if (ev.dataTransfer) ev.dataTransfer.dropEffect = 'move';
-    const el = ev.currentTarget;
-    const r = el.getBoundingClientRect();
-    const after = ev.clientY > r.top + r.height / 2;
-    el.classList.toggle('drag-over-after', after);
-    el.classList.toggle('drag-over-before', !after);
+    ev.stopPropagation();
+    const grip = ev.currentTarget;
+    const row = grip.closest(peerSelector);
+    const dragged = currentFleet.battleGroups.find(g => g.id === gid);
+    if (!row || !dragged) return;
+    const cat = groupCatOf(dragged);
+    const peers = [...document.querySelectorAll(peerSelector)]
+      .filter(r => r.dataset.gcat === cat)
+      .map(r => { const rc = r.getBoundingClientRect(); return { gid: r.dataset.gid, el: r, top: rc.top, height: rc.height }; });
+    if (peers.length < 2) return;
+    const rowRect = row.getBoundingClientRect();
+    groupDrag = { gid, rowEl: row, startY: ev.clientY, rowTop: rowRect.top, rowH: rowRect.height, peers, targetGid: null, after: false };
+    row.classList.add('dragging');
+    row.style.zIndex = '50';
+    try { grip.setPointerCapture(ev.pointerId); } catch (e) {}
+    grip.addEventListener('pointermove', onGripPointerMove);
+    grip.addEventListener('pointerup', onGripPointerUp);
+    grip.addEventListener('pointercancel', onGripPointerCancel);
   }
 
-  function onGroupDragLeave(ev) {
-    ev.currentTarget.classList.remove('drag-over-before', 'drag-over-after');
-  }
-
-  function onGroupDrop(ev, gid) {
+  function onGripPointerMove(ev) {
+    if (!groupDrag) return;
     ev.preventDefault();
-    const el = ev.currentTarget;
-    const after = el.classList.contains('drag-over-after');
-    el.classList.remove('drag-over-before', 'drag-over-after');
-    reorderGroupWithinClass(dragGroupId, gid, after);
-    dragGroupId = null;
+    const dy = ev.clientY - groupDrag.startY;
+    groupDrag.rowEl.style.transform = `translateY(${dy}px)`;
+    const centerY = groupDrag.rowTop + groupDrag.rowH / 2 + dy;
+    groupDrag.peers.forEach(p => p.el.classList.remove('drag-over-before', 'drag-over-after'));
+    let best = null, bestDist = Infinity;
+    groupDrag.peers.forEach(p => {
+      if (p.gid === groupDrag.gid) return;
+      const dist = Math.abs(centerY - (p.top + p.height / 2));
+      if (dist < bestDist) { bestDist = dist; best = p; }
+    });
+    if (best) {
+      const after = centerY > (best.top + best.height / 2);
+      best.el.classList.add(after ? 'drag-over-after' : 'drag-over-before');
+      groupDrag.targetGid = best.gid;
+      groupDrag.after = after;
+    } else {
+      groupDrag.targetGid = null;
+    }
   }
 
-  function onGroupDragEnd() {
-    dragGroupId = null;
-    document.querySelectorAll('.dragging, .drag-over-before, .drag-over-after')
-      .forEach(el => el.classList.remove('dragging', 'drag-over-before', 'drag-over-after'));
+  function endGripDrag(grip, commit) {
+    grip.removeEventListener('pointermove', onGripPointerMove);
+    grip.removeEventListener('pointerup', onGripPointerUp);
+    grip.removeEventListener('pointercancel', onGripPointerCancel);
+    if (!groupDrag) return;
+    const { gid, targetGid, after, rowEl, peers } = groupDrag;
+    rowEl.style.transform = '';
+    rowEl.style.zIndex = '';
+    rowEl.classList.remove('dragging');
+    peers.forEach(p => p.el.classList.remove('drag-over-before', 'drag-over-after'));
+    groupDrag = null;
+    if (commit && targetGid) reorderGroupWithinClass(gid, targetGid, after);
   }
+
+  function onGripPointerUp(ev) { endGripDrag(ev.currentTarget, true); }
+  function onGripPointerCancel(ev) { endGripDrag(ev.currentTarget, false); }
 
   function reorderGroupWithinClass(draggedGid, targetGid, placeAfter) {
     if (!currentFleet || !draggedGid || draggedGid === targetGid) return;
@@ -2745,9 +2766,9 @@ const App = (() => {
       lastCat = cat;
 
       const gripHtml = ovClassCounts[cat] > 1
-        ? `<span class="overview-group-grip" draggable="true" title="Drag to reorder within ${esc(catLabel)}" aria-label="Drag to reorder ${esc(g.name)} within its weight class" onclick="event.stopPropagation()" ondragstart="App.onGroupDragStart(event,'${g.id}')" ondragend="App.onGroupDragEnd(event)"><svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.3"/><circle cx="7" cy="3" r="1.3"/><circle cx="3" cy="8" r="1.3"/><circle cx="7" cy="8" r="1.3"/><circle cx="3" cy="13" r="1.3"/><circle cx="7" cy="13" r="1.3"/></svg></span>`
+        ? `<span class="overview-group-grip" title="Drag to reorder within ${esc(catLabel)}" aria-label="Drag to reorder ${esc(g.name)} within its weight class" onclick="event.stopPropagation()" onpointerdown="App.onGripPointerDown(event,'${g.id}','.overview-group-card')"><svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.3"/><circle cx="7" cy="3" r="1.3"/><circle cx="3" cy="8" r="1.3"/><circle cx="7" cy="8" r="1.3"/><circle cx="3" cy="13" r="1.3"/><circle cx="7" cy="13" r="1.3"/></svg></span>`
         : '';
-      return `${sectionDivider}<div class="overview-group-card card-deco${g.id === activeGroupId ? ' overview-group-active' : ''}" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-current="${g.id === activeGroupId ? 'true' : 'false'}" aria-label="${esc(g.name)}, ${esc(catLabel)}, ${gPts} points" style="cursor:pointer;border-left-color:${catColor}" ondragover="App.onGroupDragOver(event,'${g.id}')" ondragleave="App.onGroupDragLeave(event)" ondrop="App.onGroupDrop(event,'${g.id}')">
+      return `${sectionDivider}<div class="overview-group-card card-deco${g.id === activeGroupId ? ' overview-group-active' : ''}" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-current="${g.id === activeGroupId ? 'true' : 'false'}" aria-label="${esc(g.name)}, ${esc(catLabel)}, ${gPts} points" style="cursor:pointer;border-left-color:${catColor}" data-gcat="${cat}" data-gid="${g.id}">
         <div class="overview-group-top">
           ${gripHtml}
           ${artSrc ? `<div class="overview-group-art${artModularClass}"><img src="${artThumb ? thumbUrl(artSrc) : esc(artSrc)}" alt="" onerror="this.closest('.overview-group-art').remove()"></div>` : ''}
@@ -7017,6 +7038,10 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-09', title: 'Battlegroup reordering fixed (was broken on touch)', items: [
+      'Drag-to-reorder battlegroups was built on native browser drag-and-drop, which iOS Safari never fires for touch at all and Android handles inconsistently, so it silently didn\'t work on phones and felt fragile with a mouse. Rebuilt it on Pointer Events instead, which behave identically for mouse, touch and pen.',
+      'The insertion indicator, same-weight-class-only restriction and drag-to-reorder behaviour are unchanged, just far more reliable to actually grab and use.',
+    ] },
     { date: '2026-07-08', title: 'Namesake pronunciations: 12 more ships, search, admiral bios', items: [
       'Wrote and added the 12 namesakes that were missing a pronunciation guide: Melusine, Rusalka, Nereid, Fossegrim, Kikimora and Scipio, Myrmidon, Vicarius (shown under "Also available as" for their counts-as variant), plus Aaru (Aaru Emerald/Aaru Basalt).',
       'Ship search now also matches a ship\'s Namesake text, so searching a mythological or folklore name finds its ship even if that word isn\'t in the ship\'s own name.',
@@ -8161,7 +8186,7 @@ const App = (() => {
     getCalcData: () => ({ shipDB, factionData, FACTION_LABELS, CATEGORY_ORDER, CATEGORY_LABELS, currentFaction: currentFleet ? currentFleet.faction : null }),
     openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
     loadDemoFleets, showFleetTab, collectionFaction: selectCollectionFaction, collectionAdjust, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, editGroupName, toggleFleetCardMenu,
-    onGroupDragStart, onGroupDragOver, onGroupDragLeave, onGroupDrop, onGroupDragEnd,
+    onGripPointerDown,
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFlagshipLoadout, changeFeature, addSystem, removeSystem, toggleSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,

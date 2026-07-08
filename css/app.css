@@ -832,17 +832,22 @@ h1, h2, h3, h4, h5, h6 {
   margin-left: auto;
   display: flex;
   align-items: center;
-  padding: 2px 1px;
+  justify-content: center;
+  padding: 8px 6px;
   color: rgba(255,255,255,0.30);
   cursor: grab;
   opacity: 0;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
   transition: opacity var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
 }
 .group-nav-item:hover .group-nav-grip,
 .group-nav-item.active .group-nav-grip { opacity: 1; }
+/* Always visible on touch devices (no hover to reveal it). */
+@media (hover: none) { .group-nav-grip { opacity: 0.7; } }
 .group-nav-grip:hover { color: rgba(255,255,255,0.75); }
 .group-nav-grip:active { cursor: grabbing; }
-.group-nav-item.dragging { opacity: 0.45; }
+.group-nav-item.dragging { opacity: 0.9; position: relative; box-shadow: var(--shadow-lg); }
 /* Insertion indicator (layout-safe inset bar) for the hovered drop target. */
 .group-nav-item.drag-over-before { box-shadow: inset 0 3px 0 var(--nav-accent, #fff); }
 .group-nav-item.drag-over-after { box-shadow: inset 0 -3px 0 var(--nav-accent, #fff); }
@@ -6082,17 +6087,20 @@ h1, h2, h3, h4, h5, h6 {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  padding: 2px;
+  justify-content: center;
+  padding: 8px 6px;
   margin-left: -2px;
   color: #c2b9ac;
   cursor: grab;
   touch-action: none;
+  -webkit-tap-highlight-color: transparent;
   transition: color var(--duration-fast) var(--ease-out);
 }
 .overview-group-card:hover .overview-group-grip { color: #9c9284; }
+@media (hover: none) { .overview-group-grip { color: #9c9284; } }
 .overview-group-grip:hover { color: var(--navy); }
 .overview-group-grip:active { cursor: grabbing; }
-.overview-group-card.dragging { opacity: 0.5; }
+.overview-group-card.dragging { opacity: 0.9; position: relative; box-shadow: var(--shadow-lg); }
 .overview-group-card.drag-over-before { box-shadow: inset 0 3px 0 0 var(--navy); }
 .overview-group-card.drag-over-after { box-shadow: inset 0 -3px 0 0 var(--navy); }
 .overview-group-top {

@@ -848,6 +848,35 @@ button, a, input, select, textarea,
   transition: transform .18s var(--ease-standard); will-change: transform;
   touch-action: pan-y;
 }
+/* Weight-class section divider above the roster list (mirrors desktop's overview
+   panel dividers), so groups always read heaviest-first and screen order matches
+   the printed/shared sheet. */
+.roster-cat-divider {
+  display: flex; align-items: center; gap: var(--sp-xs);
+  padding: var(--sp-s) var(--sp-m) 4px;
+  border-left: 3px solid var(--cat-color, var(--navy));
+  margin-left: -3px;
+}
+.roster-cat-label {
+  font-family: var(--font-condensed); font-weight: var(--weight-bold);
+  font-size: var(--text-caption1); text-transform: uppercase; letter-spacing: .04em;
+  color: var(--fg3);
+}
+/* Drag-to-reorder grip (reorders a group within its weight class only). A
+   generous touch target since it must be reliably grabbable on a phone. */
+.group-drag-grip {
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; width: 28px; height: 44px; margin-left: -6px;
+  color: var(--fg4, #b8b2a6); cursor: grab; touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.group-drag-grip:active { cursor: grabbing; }
+.swipe-row.dragging {
+  position: relative; z-index: 20; opacity: 0.95;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+}
+.swipe-row.drag-over-before { box-shadow: inset 0 3px 0 0 var(--navy); }
+.swipe-row.drag-over-after { box-shadow: inset 0 -3px 0 0 var(--navy); }
 
 /* Visible game-size card picker (mobile New Fleet) */
 .size-card-list { display: flex; flex-direction: column; gap: var(--sp-xs); }
