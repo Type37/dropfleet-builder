@@ -4037,10 +4037,10 @@
   },
   {
    "id": "1d20-87a5-21f8-d60a",
-   "name": "Sluice",
+   "name": "Sluice Supercruiser",
    "category": "medium",
    "ship": {
-    "name": "Sluice",
+    "name": "Sluice Supercruiser",
     "cost": 152,
     "stats": {
      "thrust": "7\"",
@@ -4076,15 +4076,20 @@
       "name": "Feature Carrier",
       "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
      }
-    ]
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "M"
    }
   },
   {
    "id": "ab66-1595-c873-1c26",
-   "name": "Source",
+   "name": "Source Battlecruiser",
    "category": "heavy",
    "ship": {
-    "name": "Source",
+    "name": "Source Battlecruiser",
     "cost": 190,
     "stats": {
      "thrust": "8\"",
@@ -4095,7 +4100,7 @@
      "ks": "4+",
      "bs": "5+",
      "g": "1",
-     "special": "Vanguard-6, High Velocity Boarding Pods, Bombardment Spine"
+     "special": "Vanguard-6\", High Velocity Boarding Pods, Bombardment Spine"
     },
     "weapons": [
      {
@@ -4133,15 +4138,20 @@
       "name": "Bombardment Spine",
       "description": "This weapon gains the Corruptor-2 special rule while on the Weapons Free order."
      }
-    ]
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H"
    }
   },
   {
    "id": "7708-0eb9-3964-bbe5",
-   "name": "Syntax",
+   "name": "Syntax Pocket Battleship",
    "category": "heavy",
    "ship": {
-    "name": "Syntax",
+    "name": "Syntax Pocket Battleship",
     "cost": 175,
     "stats": {
      "thrust": "8\"",
@@ -4189,15 +4199,20 @@
       "name": "Feature Carrier",
       "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
      }
-    ]
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H"
    }
   },
   {
    "id": "a5f9-b76e-ffad-5eac",
-   "name": "Synthesis",
+   "name": "Synthesis Pocket Battleship",
    "category": "heavy",
    "ship": {
-    "name": "Synthesis",
+    "name": "Synthesis Pocket Battleship",
     "cost": 230,
     "stats": {
      "thrust": "8\"",
@@ -4238,15 +4253,20 @@
       "name": "Feature Carrier",
       "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
      }
-    ]
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H"
    }
   },
   {
    "id": "89e5-7a82-8627-60a8",
-   "name": "Sierra",
+   "name": "Sierra Pocket Battleship",
    "category": "heavy",
    "ship": {
-    "name": "Sierra",
+    "name": "Sierra Pocket Battleship",
     "cost": 185,
     "stats": {
      "thrust": "8\"",
@@ -4294,15 +4314,20 @@
       "name": "Feature Carrier",
       "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
      }
-    ]
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H"
    }
   },
   {
    "id": "a414-1431-e676-07fc",
-   "name": "Shade",
+   "name": "Shade Pocket Battleship",
    "category": "heavy",
    "ship": {
-    "name": "Shade",
+    "name": "Shade Pocket Battleship",
     "cost": 225,
     "stats": {
      "thrust": "8\"",
@@ -4338,7 +4363,7 @@
       "special": "-"
      },
      {
-      "name": "Torpedoes",
+      "name": "Torpedo",
       "launch": "2",
       "special": "Limited-4"
      }
@@ -4356,7 +4381,12 @@
       "name": "Bombardment Spine",
       "description": "This weapon gains the Corruptor-2 special rule while on the Weapons Free order."
      }
-    ]
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H"
    }
   },
   {

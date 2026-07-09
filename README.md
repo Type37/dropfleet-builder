@@ -47,6 +47,11 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-09 — Six Bioficer ships were missing their Class
+- Sluice, Source, Syntax, Synthesis, Sierra and Shade showed only a single-word name with no ship Class, unlike every other ship in the roster. Verified byte-for-byte against the canonical Bioficer stats sheet and fixed to Sluice Supercruiser, Source Battlecruiser, Syntax Pocket Battleship, Synthesis Pocket Battleship, Sierra Pocket Battleship and Shade Pocket Battleship.
+- Also filled in missing `tonnage`/`groupMin`/`groupMax`/`isRare`/`isUnique` fields for the same six ships (present on every sibling ship but absent here), and fixed Shade's Torpedo load, which was misnamed "Torpedoes" — a naming mismatch that silently dropped its Corruptor-2 stat from the launch-asset lookup.
+- `audit-special-rules.py` and `audit-group-range.py` both pass clean after the fix.
+
 ### 2026-07-09 — Admiral initiative wording fix; Bioficer Torpedo Corruptor-2
 - Mobile's generic-admiral picker said an Admiral "adds Level for AP & initiative". The AP half is correct, but initiative isn't additive: per rulebook section 6.3, only the single highest-Level Admiral on the table (or all sides if tied for highest) adds a flat +1 to their initiative roll. Corrected the wording to "adds Level for AP; highest-Level Admiral adds +1 to Initiative".
 - Fixed the Bioficer Torpedo launch asset, which was missing its Corruptor-2 special rule (present on the official stats sheet). Any ship carrying a Torpedo load, e.g. the Bastion Battleship, now shows it correctly.

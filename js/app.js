@@ -7038,6 +7038,10 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-09', title: 'Six Bioficer ships were missing their Class', items: [
+      'Sluice, Source, Syntax, Synthesis, Sierra and Shade showed only a single-word name with no ship Class, unlike every other ship in the roster. Fixed to Sluice Supercruiser, Source Battlecruiser, Syntax Pocket Battleship, Synthesis Pocket Battleship, Sierra Pocket Battleship and Shade Pocket Battleship, matching the official stats sheet.',
+      'Also filled in missing tonnage codes and group-size fields for the same six ships, and fixed Shade\'s Torpedo load (was misnamed "Torpedoes", which meant it silently missed its Corruptor-2 stat).',
+    ] },
     { date: '2026-07-09', title: 'Bioficer Torpedo missing Corruptor-2', items: [
       'The Bioficer Torpedo launch asset was missing its Corruptor-2 special rule, so any ship carrying a Torpedo load (e.g. the Bastion Battleship) showed it without that stat. Fixed to match the official stats sheet.',
     ] },
