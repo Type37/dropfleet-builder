@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PHR Quick Reference · WarLore Wargaming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:wght@300;400;500;600;700;800&family=Roboto+Slab:wght@300;400;500;600;700;800;900&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --ink-soft: #1f1f1f;
+    --paper: #ffffff;
+    --hair: #8f8f8f;
+    --rowalt: #eeeeee;
+    --ucm: #1e4d7b;
+    --ucm-pale: #eef2f7;
+    --ucm-ink: #ffffff;
+    --ap: #0a0a0a;
+    --warlore: #FFE000;
+  }
+
+  @page { size: 8.5in 11in; margin: 0; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: #3a3a3a;
+    font-family: 'Barlow Condensed', sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet {
+    width: 8.5in;
+    height: 11in;
+    background: var(--paper);
+    margin: 0.3in auto;
+    padding: 0.05in 0.13in 0.04in 0.13in;
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+    row-gap: 0.02in;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.45);
+  }
+
+  /* ============= BRAND / TITLE BAR ============= */
+  .brand {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 1.5pt 8pt 1.5pt 8pt;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 8pt;
+    border-bottom: 1.25pt solid var(--ink);
+    box-shadow: inset 0 -2.5pt 0 0 var(--ucm);
+  }
+  .brand .title {
+    font-family: 'Roboto Slab', serif;
+    font-weight: 900;
+    font-size: 17pt;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .brand .faction {
+    font-family: 'Roboto Slab', serif;
+    font-weight: 500;
+    color: var(--ink);
+    font-size: 8pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    justify-self: start;
+    padding-left: 8pt;
+    border-left: 0.5pt solid #888;
+    margin-left: 2pt;
+  }
+  .brand .meta {
+    font-family: 'Roboto Slab', serif;
+    font-size: 7pt;
+    letter-spacing: 0.16em;
+    color: #444;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  /* ============= MAIN 2-COL GRID ============= */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 0.14in;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .col { display: flex; flex-direction: column; gap: 1.5pt; min-width: 0; overflow: hidden; }
+
+  /* ============= SECTION HEADER ============= */
+  .sec {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 3.5pt 7pt 3pt 7pt;
+    font-family: 'Jost', sans-serif;
+    font-weight: 800;
+    font-size: 10pt;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 5pt;
+    line-height: 1;
+    border-bottom: 0.75pt solid var(--ink);
+    box-shadow: inset 0 -2pt 0 0 var(--ucm);
+  }
+  .sec .sub {
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 7.2pt;
+    letter-spacing: 0.14em;
+    color: #666;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ============= RULE BLOCK ============= */
+  .rule {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 500;
+    font-size: 8pt;
+    line-height: 1.2;
+    color: var(--ink);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 3.5pt;
+    padding: 0.3pt 0;
+    border-bottom: 0.4pt solid var(--hair);
+    align-items: start;
+  }
+  /* three-column rules (checkbox + AP badge + text) */
+  .rule.rule-3col {
+    grid-template-columns: auto auto 1fr;
+  }
+  .rule:last-child { border-bottom: none; }
+
+  .cbox {
+    display: inline-block;
+    width: 10pt;
+    height: 10pt;
+    border: 0.75pt solid var(--ink);
+    background: var(--paper);
+    margin-top: 0.4pt;
+    flex-shrink: 0;
+  }
+
+  .ap {
+    font-family: 'Jost', sans-serif;
+    font-weight: 800;
+    font-size: 7.2pt;
+    color: #ffffff;
+    background: #a11d12;
+    border: 0.6pt solid #6a1109;
+    padding: 1.2pt 3.5pt 0.8pt 3.5pt;
+    align-self: start;
+    min-width: 22pt;
+    text-align: center;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    margin-top: 0.2pt;
+  }
+  .ap.starap { background: var(--paper); color: var(--ink); border: 0.6pt dashed var(--ink); }
+
+  .rule b { font-weight: 700; font-style: italic; color: var(--ink); }
+
+  /* ============= ADMIRAL BLOCK ============= */
+  .adm {
+    border-top: 0.6pt solid var(--ink);
+    padding-top: 0.4pt;
+    margin-top: 0.2pt;
+  }
+  .adm:first-of-type { border-top: none; margin-top: 0; padding-top: 0.6pt; }
+
+  .adm-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 4pt;
+    margin-bottom: 0.3pt;
+  }
+  .adm-name {
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-size: 10px;
+    color: var(--ink);
+    display: block;
+    line-height: 1.15;
+  }
+  .adm-tier {
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 6.8pt;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ucm);
+    display: block;
+    margin-top: 1.2pt;
+    line-height: 1.1;
+  }
+  .adm-cost {
+    font-family: 'Jost', sans-serif;
+    font-weight: 800;
+    font-size: 10pt;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .adm-cost .split {
+    font-weight: 500;
+    color: #666;
+    font-size: 7pt;
+  }
+
+  /* ============= GENERIC ADMIRAL TABLE ============= */
+  table.gen {
+    width: 88%;
+    border-collapse: collapse;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 8pt;
+    margin-top: 0.5pt;
+  }
+  table.gen thead th {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 7pt;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2.5pt 3pt;
+    text-align: center;
+  }
+  table.gen tbody td {
+    padding: 2pt 3pt;
+    border-bottom: 0.4pt solid var(--hair);
+    text-align: center;
+  }
+  table.gen tbody td:first-child {
+    text-align: left;
+    padding-left: 4pt;
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 8.4pt;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  table.gen tbody td:nth-child(2) {
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 8.2pt;
+  }
+  table.gen tbody tr:nth-child(even) td { background: var(--rowalt); }
+  table.gen tbody tr:last-child td { border-bottom: none; }
+
+  /* ============= FEATURES ============= */
+  .feat {
+    padding: 1.2pt 0;
+    border-bottom: 0.4pt solid var(--hair);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 500;
+    font-size: 7.6pt;
+    line-height: 1.22;
+  }
+  .feat:last-child { border-bottom: none; padding-bottom: 0; }
+  .feat-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 5pt;
+    margin-bottom: 0.5pt;
+    flex-wrap: nowrap;
+  }
+  .feat-name {
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 8.6pt;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .feat-stats {
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 8pt;
+    letter-spacing: 0.04em;
+    color: var(--ucm);
+  }
+  .deploy-note {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 7.4pt;
+    line-height: 1.25;
+    padding: 1.5pt 0;
+    color: var(--ink-soft);
+    border-bottom: 0.4pt solid var(--hair);
+    margin-bottom: 0.5pt;
+  }
+  .deploy-note b {
+    font-weight: 700;
+    font-style: normal;
+    color: var(--ink);
+  }
+
+  /* ============= SECONDARY OBJECTIVES ============= */
+  .sec-objs-hdr .sub { text-transform: none !important; letter-spacing: 0.02em; font-size: 7.6pt; font-weight: 500; color: #444; }
+  .sec-objs {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 0.5pt;
+  }
+  .objs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 0.15in;
+    row-gap: 0;
+  }
+
+  .obj {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 500;
+    font-size: 7.6pt;
+    line-height: 1.25;
+    padding: 1pt 0;
+    border-bottom: 0.3pt solid var(--hair);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 4pt;
+    align-items: start;
+  }
+  .obj:last-child { border-bottom: none; }
+
+  .cbox-lg {
+    display: inline-block;
+    width: 10pt;
+    height: 10pt;
+    border: 1pt solid var(--ink);
+    background: var(--paper);
+    margin-top: 0.3pt;
+    flex-shrink: 0;
+  }
+
+  .obj .name {
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 8.4pt;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ucm);
+    margin-right: 3pt;
+  }
+  .obj .vp {
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 7pt;
+    color: var(--ap);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  /* ============= LAUNCH ASSETS TABLE ============= */
+  table.launch {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 8.4pt;
+    margin-top: 1pt;
+  }
+  table.launch thead th {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 7.4pt;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2.2pt 2pt;
+    text-align: center;
+    line-height: 1;
+  }
+  table.launch tbody td {
+    padding: 1.2pt 2pt;
+    border-bottom: 0.3pt solid var(--hair);
+    text-align: center;
+    line-height: 1.12;
+  }
+  table.launch tbody td:first-child {
+    text-align: left;
+    padding-left: 4pt;
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 8.2pt;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  table.launch tbody td:last-child {
+    text-align: left;
+    padding-left: 4pt;
+    font-style: italic;
+  }
+  table.launch tbody tr:nth-child(even) td { background: var(--rowalt); }
+  table.launch tbody tr:last-child td { border-bottom: none; }
+
+  .micro {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 500;
+    font-size: 7.2pt;
+    line-height: 1.25;
+    color: var(--ink);
+    margin-top: 1.5pt;
+  }
+  .micro b { font-weight: 700; font-style: italic; }
+
+  /* ============= FOOTER ============= */
+  .foot {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 8pt;
+    padding-top: 1.5pt;
+    border-top: 0.6pt solid var(--ink);
+    position: relative;
+  }
+  .foot::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    top: 0.5pt;
+    border-top: 0.25pt solid var(--ink);
+  }
+  .foot .left, .foot .right {
+    font-family: 'VT323', monospace;
+    font-size: 8pt;
+    color: #444;
+  }
+  .foot .right { text-align: right; }
+  .foot .center {
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 7pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  @media print {
+    html, body { background: white; }
+    .sheet { margin: 0; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <header class="brand">
+    <div class="title">PHR Quick Reference</div>
+    <div class="faction">Post-Human Republic</div>
+    <div class="meta">Dropfleet Commander · v2.3.1</div>
+  </header>
+
+  <main class="grid">
+
+    <!-- ============= LEFT COLUMN: ALL ADMIRALS ============= -->
+    <section class="col" style="padding: 8px;">
+
+      <!-- Generic Admirals -->
+      <div class="sec">Generic Admirals <span class="sub">any number</span></div>
+
+      <table class="gen">
+        <thead>
+          <tr><th style="text-align:left;padding-left:4pt;">Level</th><th>Pts</th><th>AP / Phase</th><th>Available in</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>L 2</td><td>20</td><td>3</td><td>Skirmish (501–1000) · 16 Groups</td></tr>
+          <tr><td>L 3</td><td>40</td><td>4</td><td>Clash (1001–2000) · 20 Groups</td></tr>
+          <tr><td>L 4</td><td>60</td><td>5</td><td>Battle (2001–3000) · 24 Groups</td></tr>
+          <tr><td>—</td><td>—</td><td>—</td><td>Reconquest (3001+) · 28 Groups +4/1k</td></tr>
+        </tbody>
+      </table>
+      <div class="micro">
+        <b>AP = 1 + Admiral Level</b> per Planning Phase. Generics provide no command abilities.
+      </div>
+
+      <!-- Faction Admirals -->
+      <div class="sec" id="sec-faction" style="margin-top:4pt;">Faction Admirals <span class="sub">one, or famous</span></div>
+
+      <div class="adm">
+        <div class="adm-head">
+          <div>
+            <span class="adm-name">PHR Vizier</span>
+            <span class="adm-tier">Level 1 · +1 PHR Ability</span>
+          </div>
+          <div class="adm-cost">25 <span class="split">pts</span></div>
+        </div>
+        <div class="rule"><span class="ap">1AP</span><div><b>Akira Manoeuvre.</b> When you activate a Group of a single Ship, that Group must go on General Quarters. Only removes a single Spike and does not turn before movement. After moving, the Group must turn between 45° and 90°, then continue its activation as normal.</div></div>
+      </div>
+
+      <div class="adm">
+        <div class="adm-head">
+          <div>
+            <span class="adm-name">PHR Vice Director</span>
+            <span class="adm-tier">Level 3 · +1 PHR Ability</span>
+          </div>
+          <div class="adm-cost">65 <span class="split">pts</span></div>
+        </div>
+        <div class="rule"><span class="ap">1AP</span><div><b>Re-route Systems.</b> At the start of a friendly Group's activation, remove one Crippling Effect token (of any type) from that Group.</div></div>
+        <div class="rule"><span class="ap">3AP</span><div><b>Ranked Fire.</b> When assigning targets to Broadside Arc weapons, select one with the Volley-X special rule. That weapon does not need to alternate arcs due to Volley-X for that attack (can attack the same target in the same arc using each Volley attack).</div></div>
+      </div>
+
+      <!-- Famous Admirals -->
+      <div class="sec" style="margin-top:4pt;">Famous Admirals <span class="sub">one, or faction</span></div>
+
+      <div class="adm">
+        <div class="adm-head">
+          <div>
+            <span class="adm-name">Helena of Asgard · <i>Pompeius</i>-Class Battlecruiser</span>
+            <span class="adm-tier">L2 Battlecruiser · +1 Ability</span>
+          </div>
+          <div class="adm-cost">200 <span class="split">pts (60+140)</span></div>
+        </div>
+        <div class="rule"><span class="ap">2AP</span><div><b>Experimental Munitions.</b> When assigning targets to weapons, select one with the Calibre-X special rule. That weapon gains the benefits of Calibre-X regardless of the Tonnage of the target Group for that attack.</div></div>
+      </div>
+
+      <div class="adm">
+        <div class="adm-head">
+          <div>
+            <span class="adm-name">Director Javelin · <i>Achilles</i>-Class Heavy Cruiser</span>
+            <span class="adm-tier">L3 Heavy Cruiser · +1 Ability</span>
+          </div>
+          <div class="adm-cost">207 <span class="split">pts (65+142)</span></div>
+        </div>
+        <div class="rule"><span class="ap">2AP</span><div><b>Heavy Sniper.</b> When assigning targets to a weapon with the Calibre-H special rule, the attacking Ship doubles its Scan value against H Tonnage Ships for that weapon's attack (other attacks and weapons unaffected).</div></div>
+      </div>
+
+      <div class="adm">
+        <div class="adm-head">
+          <div>
+            <span class="adm-name">Claudia Rhee · <i>Heracles</i>-Class Battleship</span>
+            <span class="adm-tier">L4 Battleship · +2 Abilities</span>
+          </div>
+          <div class="adm-cost">310 <span class="split">pts (75+235)</span></div>
+        </div>
+        <div class="rule"><span class="ap">2AP</span><div><b>High-G Manoeuvre.</b> When a friendly Group is given a Max Thrust order, it may turn as if it was on General Quarters.</div></div>
+      </div>
+
+      <div class="adm">
+        <div class="adm-head">
+          <div>
+            <span class="adm-name">Gaius Chau · <i>Romulus</i>-Class Dreadnought</span>
+            <span class="adm-tier">L5 Dreadnought · +2 Abilities</span>
+          </div>
+          <div class="adm-cost">555 <span class="split">pts (105+450)</span></div>
+        </div>
+        <div class="rule"><span class="ap">2AP</span><div><b>Backup Systems Engaged.</b> When a friendly ship would roll for Crippling Damage, roll a dice. On a 4+ that Ship does not roll on the Crippling Damage table but is still Crippled.</div></div>
+      </div>
+
+      <!-- Launch Assets -->
+      <div class="sec" style="margin-top:4pt;">Launch Assets</div>
+
+      <table class="launch">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding-left:5pt;">Load</th>
+            <th>Thrust</th>
+            <th>Att</th>
+            <th>Lock</th>
+            <th>DMG</th>
+            <th>Type</th>
+            <th style="text-align:left;padding-left:6pt;">Special</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Fighters</td><td>12"</td><td>—</td><td>—</td><td>—</td><td>—</td><td style="font-size:6.8pt;white-space:nowrap;">2 re-rolls vs Bombers / Close Action only</td></tr>
+          <tr><td>Bombers</td><td>9"</td><td>2</td><td>2+</td><td>1</td><td>K</td><td>—</td></tr>
+          <tr><td>Torpedo</td><td>6"</td><td>4</td><td>2+</td><td>2</td><td>K</td><td>Penetrator</td></tr>
+          <tr><td>Mines</td><td>4"</td><td>2</td><td>2+</td><td>2</td><td>K</td><td>—</td></tr>
+        </tbody>
+      </table>
+
+    </section>
+
+    <!-- ============= RIGHT COLUMN: ALL ABILITIES ============= -->
+    <section class="col" style="padding: 8px;">
+
+      <!-- Core Abilities -->
+      <div class="sec">Core Abilities <span class="sub">all factions</span></div>
+
+      <div class="rule"><span class="ap starap">*AP</span><div><b>AP Re-roll.</b> Once per Group, Asset, or Dropsite activation, after rolling any dice you may re-roll any number. Must re-roll at least one die, spending 1AP per die.</div></div>
+      <div class="rule"><span class="ap">2AP</span><div><b>Brace for Impact.</b> When a player would roll for Crippling Effects, instead make the result a 4 (for you or opponent).</div></div>
+      <div class="rule"><span class="ap">2AP</span><div><b>Contain Reactor.</b> When a player would roll for Explosion, instead make the result a 2 (for you or opponent).</div></div>
+      <div class="rule"><span class="ap">2AP</span><div><b>Time to Target.</b> After moving a Wing of Fighters or Bombers, move that Wing again up to 6" in any direction. Cannot divide or merge Wings from this additional move.</div></div>
+
+      <!-- PHR Abilities -->
+      <div class="sec" id="sec-phr-abilities" style="margin-top:4pt;">PHR Abilities</div>
+
+      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">1AP</span><div><b>Countermeasures Hack.</b> At the start of a friendly Group's activation, target an enemy Group a friendly Admiral can draw line of sight to. Until end of activation, that Group cannot use Backup Save, cannot benefit from Aegis, and cannot benefit from Fighters' Close Protection. Costs <b>2AP</b> vs H or C tonnage.</div></div>
+      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">2AP</span><div><b>Weapons Hack.</b> Once per round, at the start of an enemy Group's activation, choose one of that Group's Weapon Systems. Until end of that Group's activation, each of that weapon's attack dice results of <b>1</b> causes the attacking Ship to lose the weapon's unmodified Damage value in hull points.</div></div>
+      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">1AP</span><div><b>Ship Of The Line.</b> When you assign targets to a Group's weapons, that Group's Broadside Arc weapons with <b>Fusillade-X</b> gain the benefit of Fusillade regardless of the Group's Order this activation. If on Weapons Free, instead <b>double</b> the Fusillade value of those weapons for that attack.</div></div>
+      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">2AP</span><div><b>Drive Hack.</b> Once per round, at end of the Planning Phase, target an enemy Group a friendly Admiral can draw line of sight to. At the start of that Group's activation, it must make a single Backup save. If it fails (or has no Backup save), that Group <b>cannot go on Course Change or Max Thrust</b>.</div></div>
+      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">1AP</span><div><b>Repair Drone Squadron.</b> At end of the Repair step of the End Phase, target a friendly Ship. That Ship recovers <b>D3</b> lost Hull Points.</div></div>
+      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">2AP</span><div><b>Elite Ground Forces.</b> At start of the Battalion Combat step of the Asset Phase, choose a Feature containing friendly Battalions. Until end of that step, those Battalions remove <b>2</b> enemy Battalions instead of 1 and may also remove enemy Battalions from <b>anywhere on that Dropsite</b> in the 3rd step of the combat sequence.</div></div>
+
+      <!-- Deployable Features -->
+      <div class="sec" style="margin-top:4pt;">Deployable Features</div>
+
+      <div class="deploy-note"><b>Deploy:</b> Ships with <b>Feature Carrier</b> (Ptolemy, Seleucus, Antigonus, Antony) pick one Feature pre-game. Launched as an Asset, range 6", any Orbital Layer.</div>
+
+      <div class="feat">
+        <div class="feat-head">
+          <span class="feat-name">Heavy Calibre Orbital Gun</span>
+          <span class="feat-stats">ES 5+ · KS 3+</span>
+        </div>
+        While a Ship <b>carries</b> this Feature, it gains the <b>Heavy Calibre Orbital Gun (Mounted)</b> Weapon System in addition to its normal weapons. The Feature itself cannot fire the Mounted profile while carried. Once <b>deployed</b>, the Dropsite fires the Deployed profile.
+        <table class="launch" style="margin-top:2pt;">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding-left:5pt;">Profile</th>
+              <th>Scan</th>
+              <th>Arc</th>
+              <th>Att</th>
+              <th>Lock</th>
+              <th>DMG</th>
+              <th>Type</th>
+              <th style="text-align:left;padding-left:6pt;">Special</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Mounted</td><td>carrier</td><td>FN</td><td>2</td><td>3+</td><td>2</td><td>K</td><td style="font-size:6.8pt;">Calibre-H/C, Critical-2</td></tr>
+            <tr><td>Deployed</td><td>8"</td><td>FN</td><td>2</td><td>3+</td><td>2</td><td>K</td><td style="font-size:6.8pt;">Calibre-H/C, Critical-2, Escape Velocity</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="feat">
+        <div class="feat-head">
+          <span class="feat-name">Shield Platform</span>
+          <span class="feat-stats">ES 4+ · KS 4+</span>
+        </div>
+        Friendly Groups in coherency within 6" of this Dropsite gain <b>Reinforced Armour.</b> This Dropsite counts as having Reinforced Armour against enemy attacks; reduce the Lock of enemy weapons targeting this Dropsite by 1.
+      </div>
+
+      <div class="feat">
+        <div class="feat-head">
+          <span class="feat-name">Scanner Tower</span>
+          <span class="feat-stats">ES 3+ · KS 5+</span>
+        </div>
+        When you activate this Feature, place <b>2 Spikes</b> on any enemy Group in line of sight, then place <b>2 more Spikes</b> on any enemy Group in line of sight.
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Secondary Objectives -->
+  <section class="sec-objs">
+    <div class="sec sec-objs-hdr">Secondary Objectives <span class="sub">Pick 2 secondaries during listbuilding · Reveal your 2 before first planning phase · Score highest 1 at game end</span></div>
+    <div class="objs-grid">
+      <div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Key Site.</span><span class="vp">2 / 3 VP</span> &nbsp;Nominate a Dropsite at least 24" from your DZ. Control at game end: <b>2VP</b>. If that Dropsite is within 6" of or inside opponent's DZ, score <b>3VP instead</b>.</div></div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Priority Target.</span><span class="vp">2 / 3 VP</span> &nbsp;Nominate a M or L Dropsite at least 24" from your DZ. Level at game end: <b>2VP</b>. If that Dropsite is within 6" of or inside opponent's DZ, score <b>3VP instead</b>.</div></div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Long Shot.</span><span class="vp">2 VP</span> &nbsp;Nominate a Feature in a Dropsite within 12" of opponent's DZ. Destroyed at game end: <b>2VP</b>. Each Feature can only be nominated once.</div></div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Annihilate.</span><span class="vp">max 3 VP</span> &nbsp;1VP per 500 pts of Ships and Admirals destroyed.</div></div>
+      </div>
+      <div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Take Prizes.</span><span class="vp">max 3 VP</span> &nbsp;1VP per 100 pts of Ships captured.</div></div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Gather Intel.</span><span class="vp">max 2 VP</span> &nbsp;1VP per Survey over 24" from DZ. Capital Ship within 6" may sub attack/launch for Survey. One per Dropsite.</div></div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Decapitate.</span><span class="vp">2 VP</span> &nbsp;Kill opponent's highest-Level Admiral (or one of if tied).</div></div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Objectives Beyond.</span><span class="vp">1 / 2 VP</span> &nbsp;Nominate one M+ Ship. It must permanently fly off in opponent's DZ. If not Crippled when it leaves: <b>1VP</b>. If it was Heavy or Colossal tonnage, score <b>2VP instead</b>.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="left">linktr.ee/warlore</div>
+    <div class="center"></div>
+    <div class="right">QRS by WarLore</div>
+  </footer>
+
+</div>
+
+<script>
+(function() {
+  function align() {
+    var f = document.getElementById('sec-faction');
+    var u = document.getElementById('sec-phr-abilities');
+    if (!f || !u) return;
+    f.style.marginTop = '4pt';
+    u.style.marginTop = '4pt';
+    var fy = f.getBoundingClientRect().top;
+    var uy = u.getBoundingClientRect().top;
+    var diff = uy - fy;
+    if (diff > 0) {
+      f.style.marginTop = (4 + diff) + 'px';
+    } else if (diff < 0) {
+      u.style.marginTop = (4 + Math.abs(diff)) + 'px';
+    }
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function(){ requestAnimationFrame(align); });
+  } else {
+    window.addEventListener('load', align);
+  }
+  window.addEventListener('resize', align);
+})();
+</script>
+</body>
+</html>
