@@ -2404,6 +2404,219 @@ body.sheet-open .sheet-scrim {
 }
 
 
+/* ── 50. Play Mode ─────────────────────────────────────────
+   In-game companion: hull trackers, spike pips, crippling
+   effects, orders, pass tokens, round counter. ─────────── */
+
+.play-empty { padding: 24px; text-align: center; color: var(--fg3); }
+
+/* Sticky header band */
+.play-header {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--navy); color: #fff;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  padding: 8px var(--sp-m);
+  box-shadow: 0 2px 8px rgba(0,0,0,.24);
+}
+.play-round-ctrl { display: flex; align-items: center; gap: 6px; }
+.play-round-btn {
+  width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,.1); color: #fff; font-size: 18px; line-height: 1;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: background var(--duration-fast);
+}
+.play-round-btn:active { background: rgba(255,255,255,.25); }
+.play-round-block { display: flex; flex-direction: column; align-items: center; min-width: 44px; }
+.play-round-label { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; opacity: .7; line-height: 1; }
+.play-round-num { font-family: var(--font-display); font-size: 22px; line-height: 1.1; color: #fff; }
+.play-round-of { font-size: 12px; opacity: .55; }
+.play-pass-tokens { display: flex; align-items: center; gap: 5px; flex: 1; min-width: 0; }
+.play-pass-label { font-size: 11px; opacity: .8; white-space: nowrap; }
+.play-pass-pip {
+  width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.5);
+  background: rgba(255,255,255,.15); cursor: pointer; transition: background var(--duration-fast);
+  flex-shrink: 0;
+}
+.play-pass-pip.play-pass-used { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.2); opacity: .4; }
+.play-end-round-btn {
+  background: var(--gold); color: #fff; border: none; border-radius: var(--radius-md);
+  font-family: var(--font-body); font-weight: var(--weight-semibold); font-size: 12px;
+  padding: 6px 10px; cursor: pointer; white-space: nowrap; transition: opacity var(--duration-fast);
+}
+.play-end-round-btn:active { opacity: .75; }
+
+/* Battlegroup cards */
+.play-bg-card {
+  background: var(--card-bg); border: 1px solid var(--stroke1);
+  border-radius: var(--radius-lg); margin-bottom: var(--sp-m);
+  transition: opacity var(--duration-normal);
+}
+.play-bg-card.play-activated { opacity: .52; }
+.play-bg-header {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  padding: 8px var(--sp-m); border-bottom: 1px solid var(--stroke2);
+}
+.play-ton-badge {
+  font-size: 10px; font-weight: var(--weight-bold); text-transform: uppercase;
+  letter-spacing: .06em; padding: 2px 6px; border-radius: var(--radius-sm);
+}
+.play-ton-L { background: #e8f4e8; color: #2a6b2a; }
+.play-ton-M { background: #e8eef8; color: #1b3a7a; }
+.play-ton-H { background: #fdf3e7; color: #7a4510; }
+.play-ton-S { background: #f5e8f5; color: #6a1b6a; }
+.play-bg-name { font-weight: var(--weight-semibold); font-size: 13px; flex: 1; }
+.play-bg-admiral { color: var(--fg3); font-weight: var(--weight-regular); font-size: 11px; }
+.play-act-btn {
+  font-size: 12px; font-weight: var(--weight-semibold); border-radius: var(--radius-md);
+  border: 1.5px solid var(--gold); background: transparent; color: var(--gold);
+  padding: 4px 10px; cursor: pointer; white-space: nowrap; transition: background var(--duration-fast), color var(--duration-fast);
+}
+.play-act-btn:active { background: var(--gold); color: #fff; }
+.play-act-btn.play-done { background: var(--gold); color: #fff; border-color: var(--gold); }
+
+/* Spike tracker */
+.play-spike-row {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 6px var(--sp-m); border-bottom: 1px solid var(--stroke3);
+}
+.play-spike-label { font-size: 12px; color: var(--fg3); flex: 1; }
+.play-spike-sig { color: var(--danger); font-weight: var(--weight-semibold); }
+.play-spike-pips { display: flex; gap: 4px; }
+.play-spike-pip {
+  width: 32px; height: 32px; border: none; background: none; padding: 4px; cursor: pointer;
+  color: var(--fg3); display: flex; align-items: center; justify-content: center;
+}
+.play-spike-pip svg { width: 22px; height: 22px; }
+.play-spike-pip.play-spike-on { color: var(--gold); }
+.play-spike-pip:active { opacity: .6; }
+
+/* Orders row */
+.play-orders-row {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  padding: 6px var(--sp-m); border-bottom: 1px solid var(--stroke3);
+}
+.play-order-chip {
+  font-size: 11px; border: 1px solid var(--stroke1); border-radius: var(--radius-pill);
+  background: var(--paper-alt); color: var(--fg2); padding: 3px 9px; cursor: pointer;
+  transition: background var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast);
+}
+.play-order-chip:active { opacity: .7; }
+.play-order-chip.play-order-sel { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+/* Ship list */
+.play-ships { padding: var(--sp-s) 0; }
+.play-ship {
+  padding: 8px var(--sp-m); border-bottom: 1px solid var(--stroke3);
+}
+.play-ship:last-child { border-bottom: none; }
+.play-ship.play-ship-destroyed { opacity: .42; }
+
+/* Ship name + hull tracker */
+.play-ship-nameline {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap;
+}
+.play-ship-name { font-weight: var(--weight-semibold); font-size: 13px; flex: 1; min-width: 0; }
+.play-crippled-badge {
+  font-size: 10px; font-weight: var(--weight-bold); color: var(--danger);
+  text-transform: uppercase; letter-spacing: .05em;
+  border: 1px solid var(--danger); border-radius: var(--radius-sm); padding: 1px 4px;
+}
+.play-hull-tracker { display: flex; align-items: center; gap: 4px; }
+.play-hull-btn {
+  width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--stroke1);
+  background: var(--paper-alt); color: var(--fg1); font-size: 16px;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: background var(--duration-fast);
+}
+.play-hull-btn:active { background: var(--stroke1); }
+.play-hull-val { font-family: var(--font-display); font-size: 15px; font-weight: var(--weight-bold); }
+.play-hull-cur { color: var(--fg1); }
+.play-hull-val.play-crippled .play-hull-cur { color: var(--danger); }
+.play-hull-val.play-destroyed .play-hull-cur { color: var(--fg4); }
+.play-hull-sep, .play-hull-max { color: var(--fg3); font-size: 13px; }
+
+/* Hull pips */
+.play-hull-pips { display: flex; flex-wrap: wrap; gap: 3px; margin: 4px 0; }
+.play-pip {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--fg1); display: inline-block;
+}
+.play-pip.play-pip-crip { background: var(--danger); }
+.play-pip.play-pip-dead { background: transparent; border: 1.5px solid var(--stroke1); }
+.play-pip.play-pip-threshold {
+  position: relative;
+}
+.play-pip.play-pip-threshold::before {
+  content: ''; position: absolute; left: -3px; top: 0; bottom: 0;
+  width: 2px; background: var(--danger); border-radius: 1px;
+}
+
+/* Stat line */
+.play-statline { display: flex; flex-wrap: wrap; gap: 6px 10px; margin: 4px 0; }
+.play-stat { display: flex; flex-direction: column; align-items: center; min-width: 32px; }
+.play-stat-val { font-family: var(--font-display); font-size: 14px; font-weight: var(--weight-bold); color: var(--fg1); line-height: 1; }
+.play-stat-lbl { font-size: 10px; color: var(--fg3); text-transform: uppercase; letter-spacing: .04em; }
+
+/* Weapon table */
+.play-weapons { width: 100%; border-collapse: collapse; font-size: 11px; margin: 4px 0; }
+.play-weapons th { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--fg3); font-weight: var(--weight-semibold); padding: 2px 4px; text-align: left; border-bottom: 1px solid var(--stroke2); }
+.play-weapons td { padding: 3px 4px; vertical-align: top; border-bottom: 1px solid var(--stroke3); }
+.play-wt-name { font-weight: var(--weight-medium); max-width: 100px; word-break: break-word; }
+.play-wt-num { text-align: center; white-space: nowrap; }
+.play-wt-special { color: var(--fg3); font-size: 10px; max-width: 80px; word-break: break-word; }
+.play-crippled-atk { color: var(--danger); font-weight: var(--weight-bold); }
+.play-dmg-D { color: #7a1b1b; }
+.play-dmg-L { color: #1b4a7a; }
+
+/* Special rules chips */
+.play-status-tokens { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; }
+.play-rule-chip {
+  font-size: 11px; border: 1px solid var(--stroke1); border-radius: var(--radius-pill);
+  background: var(--paper-alt); color: var(--fg2); padding: 2px 8px; cursor: pointer;
+  transition: background var(--duration-fast);
+}
+.play-rule-chip:active { background: var(--stroke1); }
+
+/* Crippling effects row */
+.play-crip-row {
+  display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0;
+}
+.play-crip-tok {
+  display: flex; align-items: center; gap: 3px; border: 1.5px solid var(--stroke1);
+  border-radius: var(--radius-md); background: var(--paper-alt); padding: 4px 7px;
+  cursor: pointer; font-size: 11px; color: var(--fg2); transition: background var(--duration-fast), border-color var(--duration-fast), color var(--duration-fast);
+}
+.play-crip-tok:active { opacity: .7; }
+.play-crip-counter {
+  display: flex; align-items: center; gap: 3px; border: 1.5px solid var(--stroke1);
+  border-radius: var(--radius-md); background: var(--paper-alt); padding: 2px 4px; font-size: 11px; color: var(--fg2);
+}
+.play-crip-adj {
+  width: 22px; height: 22px; border: none; background: none; font-size: 16px; cursor: pointer;
+  color: var(--fg2); padding: 0; display: flex; align-items: center; justify-content: center;
+}
+.play-crip-adj:active { opacity: .6; }
+.play-crip-icon { width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; }
+.play-crip-icon svg { width: 14px; height: 14px; }
+.play-crip-badge-lbl { font-size: 10px; white-space: nowrap; }
+.play-crip-count { font-weight: var(--weight-bold); min-width: 12px; text-align: center; }
+/* Active states */
+.play-crip-tok.play-crip-on, .play-crip-counter.play-crip-on {
+  border-color: currentColor;
+}
+.play-crip-on.play-crip-err { color: var(--danger); background: #fef6f4; }
+.play-crip-on.play-crip-warn { color: #7a4510; background: #fdf3e7; }
+
+/* Corruptor counter */
+.play-corruptor-ctrl { display: flex; align-items: center; gap: 4px; }
+.play-corruptor-btn {
+  width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--stroke1);
+  background: var(--paper-alt); color: var(--fg1); font-size: 15px;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.play-corruptor-btn:active { background: var(--stroke1); }
+.play-corruptor-label { font-size: 12px; color: var(--fg2); }
+
 /* ── 51. Reduced motion ────────────────────────────────────
    Respect the OS "reduce motion" setting: drop slides/transforms,
    keep a near-instant cross-fade so the UI still feels responsive. */

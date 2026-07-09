@@ -1127,7 +1127,8 @@
     'screen-admiral': renderAdmiralPicker,
     'screen-admiral-detail': renderAdmiralDetail,
     'screen-station': renderStationPicker,
-    'screen-station-detail': renderStationDetail
+    'screen-station-detail': renderStationDetail,
+    'screen-play': renderMobilePlay
   };
 
   function navigate(screenId, opts) {
@@ -1218,6 +1219,7 @@
       case 'screen-admiral-detail': back.classList.remove('hidden'); title.textContent = 'Admiral'; showPts(); break;
       case 'screen-station': back.classList.remove('hidden'); title.textContent = 'Space Station'; showPts(); break;
       case 'screen-station-detail': back.classList.remove('hidden'); title.textContent = 'Space Station'; showPts(); break;
+      case 'screen-play': back.classList.remove('hidden'); title.textContent = (mPlayFleet ? esc(mPlayFleet.name) + ' — Play' : 'Play Mode'); break;
     }
   }
 
@@ -3298,12 +3300,333 @@
     `;
   }
 
+  /* ── Play Mode ─────────────────────────────────────────── */
+  const M_PLAY_ORDERS = ['Standard', 'Max Thrust', 'Silent Running', 'Station Keeping', 'Weapons Free'];
+  const M_PLAY_CAPITAL = new Set(['M', 'H', 'S']);
+  const M_CRIP_EFFECTS = [
+    { key: 'fire',        label: 'On Fire',           stackable: true,
+      icon: '<svg viewBox="0 0 20 24" fill="currentColor"><path d="M10 0C10 0 6 5 6 10c0 1.6.4 3 1 4.2C5.2 13.1 4 11 4 8.5 4 8.5 1 11 1 16a9 9 0 0 0 18 0C19 8 10 0 10 0Zm0 21a5 5 0 0 1-5-5c0-2.5 1.7-4.5 3-5.5.2 1 .8 2 1.7 2.5C9 10.5 10 8 10 8c0 0 3 2.5 3 6a3 3 0 0 1-3 3Z"/></svg>',
+      color: 'err', title: '1 damage per token at start of End Phase. Repairable on 4+.' },
+    { key: 'defSysOff',   label: 'Def. Sys. Offline',  stackable: false,
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2Z"/><line x1="8" y1="8" x2="16" y2="16"/><line x1="16" y1="8" x2="8" y2="16"/></svg>',
+      color: 'warn', title: 'All saves -1. Can be targeted as Focused ignoring Formation. Repairable 4+.' },
+    { key: 'scannersOff', label: 'Scanners Offline',   stackable: false,
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="8"/><line x1="4" y1="4" x2="20" y2="20" stroke-width="2.5"/></svg>',
+      color: 'warn', title: 'Scan reduced to 1". Repairable on 4+.' },
+    { key: 'weaponsOff',  label: 'Weapons Offline',    stackable: false,
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><line x1="12" y1="3" x2="12" y2="10"/><line x1="4" y1="4" x2="20" y2="20" stroke-width="2.5"/></svg>',
+      color: 'warn', title: 'Cannot use Weapons or launch Assets. Repairable on 4+.' },
+    { key: 'navOff',      label: 'Nav. Offline',       stackable: false,
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8l-3 8 3-2 3 2-3-8Z" fill="currentColor" stroke="none"/><line x1="4" y1="4" x2="20" y2="20" stroke-width="2.5"/></svg>',
+      color: 'warn', title: 'Movement capped at 2". Cannot turn or change Orbital Layer. Repairable on 4+.' },
+    { key: 'orbDecay',    label: 'Orbital Decay',      stackable: false,
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M12 12v8"/><path d="M8 18l4 4 4-4"/></svg>',
+      color: 'err', title: 'Falls into Atmosphere. Cannot return to Orbit. Repairable on 6+.' },
+  ];
+  let mPlayFleet = null;
+  let mPlayState = null;
+
+  function escAttr(s) { return esc(s).replace(/"/g, '&quot;'); }
+
+  function mLoadPlayState(fleetId) {
+    try { const r = localStorage.getItem('dfc_play_' + fleetId); return r ? JSON.parse(r) : null; } catch { return null; }
+  }
+  function mSavePlayState() {
+    if (!mPlayFleet || !mPlayState) return;
+    try { localStorage.setItem('dfc_play_' + mPlayFleet.id, JSON.stringify(mPlayState)); } catch {}
+  }
+  function mInitPlayState(fleet) {
+    const ex = mLoadPlayState(fleet.id) || {};
+    mPlayState = { round: ex.round || 1, passes: ex.passes || [false, false, false], battlegroups: ex.battlegroups || {}, ships: ex.ships || {} };
+    for (const bg of (fleet.battleGroups || [])) {
+      if (!mPlayState.battlegroups[bg.id]) mPlayState.battlegroups[bg.id] = { order: 'Standard', activated: false, spikes: 0 };
+      else if (mPlayState.battlegroups[bg.id].spikes === undefined) mPlayState.battlegroups[bg.id].spikes = 0;
+      for (const inst of (bg.ships || [])) {
+        const db = findShip(fleet.faction, inst.groupCategory, inst.shipKey);
+        const mods = db ? loadoutStatMods(db, inst, fleet.faction) : {};
+        const rawHull = db && db.stats && db.stats.hull;
+        const hull = db ? (parseInt(mods.hull ? adjustStatVal(rawHull, mods.hull) : rawHull) || 1) : 1;
+        if (!mPlayState.ships[inst.id]) {
+          mPlayState.ships[inst.id] = { cur: hull, fire: 0, defSysOff: false, scannersOff: false, weaponsOff: false, navOff: false, orbDecay: false };
+        } else {
+          const ss = mPlayState.ships[inst.id];
+          if (ss.onFire !== undefined) { if (!ss.fire) ss.fire = ss.onFire ? 1 : 0; delete ss.onFire; }
+          if (ss.powerOut !== undefined) { if (ss.weaponsOff === undefined) ss.weaponsOff = ss.powerOut; delete ss.powerOut; }
+          M_CRIP_EFFECTS.forEach(e => { if (!e.stackable && ss[e.key] === undefined) ss[e.key] = false; });
+          if (ss.fire === undefined) ss.fire = 0;
+        }
+      }
+    }
+    mSavePlayState();
+  }
+  function openMobilePlay() {
+    if (!activeFleet) return;
+    mPlayFleet = activeFleet;
+    ensureFaction(mPlayFleet.faction).then(() => {
+      mInitPlayState(mPlayFleet);
+      navigate('screen-play');
+    });
+  }
+  function renderMobilePlay() {
+    const el = document.getElementById('play-content');
+    if (!mPlayFleet || !mPlayState) { el.innerHTML = '<div class="play-empty">No fleet loaded.</div>'; return; }
+    const PASS_INFO = '<svg viewBox="0 0 20 20" fill="currentColor" style="width:12px;height:12px;vertical-align:middle;color:var(--ink-faint)"><path d="M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2Zm1 11H9V9h2v4Zm0-6H9V5h2v2Z"/></svg>';
+    const passHtml = mPlayState.passes.map((used, i) =>
+      `<span class="play-pass-pip${used ? ' play-pass-used' : ''}" onclick="App.mPlayTogglePass(${i})"></span>`
+    ).join('');
+    const bgCards = (mPlayFleet.battleGroups || []).map(bg => renderMobilePlayBg(bg)).join('');
+    el.innerHTML = `
+      <div class="play-header">
+        <div class="play-round-ctrl">
+          <button class="play-round-btn" onclick="App.mPlayChangeRound(-1)" aria-label="Previous round">-</button>
+          <div class="play-round-block">
+            <span class="play-round-label">Round</span>
+            <span class="play-round-num">${mPlayState.round}<span class="play-round-of">/6</span></span>
+          </div>
+          <button class="play-round-btn" onclick="App.mPlayChangeRound(1)" aria-label="Next round">+</button>
+        </div>
+        <div class="play-pass-tokens"><span class="play-pass-label">Pass ${PASS_INFO}</span>${passHtml}</div>
+        <button class="play-end-round-btn" onclick="App.mPlayEndRound()">End Round</button>
+      </div>
+      <div class="play-bgs" style="padding:var(--sp-m);padding-bottom:88px">${bgCards}</div>`;
+  }
+  function renderMobilePlayBg(bg) {
+    const bgs = mPlayState.battlegroups[bg.id] || { order: 'Standard', activated: false, spikes: 0 };
+    const spikes = bgs.spikes || 0;
+    let tonCode = 'M';
+    if (bg.ships && bg.ships.length) {
+      const db0 = findShip(mPlayFleet.faction, bg.ships[0].groupCategory, bg.ships[0].shipKey);
+      if (db0 && db0.tonnage) tonCode = db0.tonnage;
+    }
+    const tonLabels = { L: 'Light', M: 'Medium', H: 'Heavy', S: 'Super-Heavy' };
+    let admiralStr = '';
+    if (mPlayFleet.admirals && mPlayFleet.admirals.length) {
+      const adm = mPlayFleet.admirals.find(a => a.groupId === bg.id);
+      if (adm) admiralStr = ` <span class="play-bg-admiral">&mdash; ${esc(adm.name || 'Admiral')} (${adm.rating || 0})</span>`;
+    }
+    const spikePips = [0,1,2,3].map(i =>
+      `<button class="play-spike-pip${i < spikes ? ' play-spike-on' : ''}" onclick="App.mPlaySpikeChange('${escAttr(bg.id)}',${i < spikes ? -1 : 1})">
+        <svg viewBox="0 0 24 24" fill="${i < spikes ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M12 2l10 10-10 10L2 12Z"/></svg>
+      </button>`
+    ).join('');
+    const orderChips = M_PLAY_ORDERS.map(o =>
+      `<button class="play-order-chip${bgs.order === o ? ' play-order-sel' : ''}" onclick="App.mPlaySetOrder('${escAttr(bg.id)}','${escAttr(o)}')">${esc(o)}</button>`
+    ).join('');
+    const shipsHtml = (bg.ships || []).map(inst => renderMobilePlayShip(inst)).join('');
+    const actDone = bgs.activated;
+    return `<div class="play-bg-card${actDone ? ' play-activated' : ''}">
+      <div class="play-bg-header">
+        <span class="play-ton-badge play-ton-${tonCode}">${tonLabels[tonCode] || tonCode}</span>
+        <span class="play-bg-name">${esc(bg.name || 'Unnamed battlegroup')}${admiralStr}</span>
+        <button class="play-act-btn${actDone ? ' play-done' : ''}" onclick="App.mPlayToggleActivation('${escAttr(bg.id)}')">${actDone ? 'Activation Finished' : 'Activate'}</button>
+      </div>
+      <div class="play-spike-row">
+        <span class="play-spike-label">Spikes${spikes ? ` <span class="play-spike-sig">+${spikes * 3}" Sig</span>` : ''}</span>
+        <div class="play-spike-pips">${spikePips}</div>
+      </div>
+      <div class="play-orders-row">${orderChips}</div>
+      <div class="play-ships">${shipsHtml}</div>
+    </div>`;
+  }
+  function renderMobilePlayShip(inst) {
+    const db = findShip(mPlayFleet.faction, inst.groupCategory, inst.shipKey);
+    if (!db) return '';
+    const mods = loadoutStatMods(db, inst, mPlayFleet.faction);
+    const getS = k => { const v = db.stats && db.stats[k]; return mods[k] ? adjustStatVal(v, mods[k]) : v; };
+    const isCapital = M_PLAY_CAPITAL.has(db.tonnage);
+    const ss = mPlayState.ships[inst.id] || { cur: parseInt(getS('hull')) || 1, fire: 0 };
+    const hullMax = parseInt(getS('hull')) || 1;
+    const cur = Math.max(0, Math.min(hullMax, ss.cur));
+    const isCrippled = isCapital && cur > 0 && cur <= Math.floor(hullMax / 2);
+    const isDestroyed = cur === 0;
+    const crip = Math.floor(hullMax / 2);
+    let hullPips = '';
+    if (hullMax <= 20) {
+      const dots = Array.from({ length: hullMax }, (_, i) => {
+        const alive = i < cur;
+        const atThreshold = isCapital && i === crip;
+        return `<span class="play-pip${alive ? (isCrippled ? ' play-pip-crip' : '') : ' play-pip-dead'}${atThreshold ? ' play-pip-threshold' : ''}"></span>`;
+      }).join('');
+      hullPips = `<div class="play-hull-pips">${dots}</div>`;
+    }
+    const hullCls = isDestroyed ? ' play-destroyed' : isCrippled ? ' play-crippled' : '';
+    const cripBadge = (isCrippled && !isDestroyed) ? `<span class="play-crippled-badge">Crippled</span>` : '';
+    const statCells = [
+      { k: 'thrust', l: 'Thrust' }, { k: 'scan', l: 'Scan' }, { k: 'sig', l: 'Sig' },
+      { k: 'es', l: 'ES' }, { k: 'ks', l: 'KS' }, { k: 'bs', l: 'BS' }
+    ].filter(c => { const v = getS(c.k); return v && v !== '-' && v !== '--'; }).map(c =>
+      `<div class="play-stat"><span class="play-stat-val">${esc(String(getS(c.k)))}</span><span class="play-stat-lbl">${c.l}</span></div>`
+    ).join('');
+    const wpns = Array.isArray(db.weapons) ? [...db.weapons] : [];
+    (Array.isArray(db.loadoutOptions) ? db.loadoutOptions : []).forEach((lo, i) => {
+      const sel = (inst.loadouts && inst.loadouts[i] !== undefined) ? inst.loadouts[i] : 0;
+      const opt = lo.options && lo.options[sel];
+      if (opt && Array.isArray(opt.weapons)) wpns.push(...opt.weapons);
+    });
+    let weaponsHtml = '';
+    if (wpns.length) {
+      const rows = wpns.map(w => {
+        const attRaw = parseInt(w.attack || w.att || 0);
+        const attDisplay = isCrippled ? `<span class="play-crippled-atk">${Math.floor(attRaw / 2)}</span>` : (attRaw || '-');
+        const dmgType = w.type || w.t || '';
+        const dmg = w.damage || w.dmg || '-';
+        return `<tr>
+          <td class="play-wt-name">${esc(w.name)}</td>
+          <td class="play-wt-num">${esc(w.arc || '-')}</td>
+          <td class="play-wt-num">${attDisplay}</td>
+          <td class="play-wt-num">${esc(w.lock || w.lk || '-')}</td>
+          <td class="play-wt-num play-dmg-${dmgType}">${esc(String(dmg))}${dmgType ? `<span style="font-size:9px;opacity:.7">${dmgType}</span>` : ''}</td>
+          <td class="play-wt-special">${esc(w.special || w.sp || '-')}</td>
+        </tr>`;
+      }).join('');
+      weaponsHtml = `<table class="play-weapons">
+        <thead><tr><th>Weapon</th><th>Arc</th><th>Att</th><th>Lk</th><th>Dmg</th><th>Sp</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+    }
+    const rules = (db.special_rules || []).map(r => (typeof r === 'string' ? r : r.name)).filter(Boolean);
+    let rulesHtml = '';
+    if (rules.length) {
+      const chips = rules.map(rname => {
+        const fullRule = lookupRule(rname);
+        if (fullRule && fullRule.description) {
+          return `<span class="play-rule-chip" onclick="App.openRule('${escAttr(rname)}')">${esc(rname)}</span>`;
+        }
+        return `<span class="play-rule-chip">${esc(rname)}</span>`;
+      }).join('');
+      rulesHtml = `<div class="play-status-tokens">${chips}</div>`;
+    }
+    let cripHtml = '';
+    if (isCapital) {
+      const effs = M_CRIP_EFFECTS.map(ef => {
+        if (ef.stackable) {
+          const count = ss[ef.key] || 0;
+          return `<div class="play-crip-counter${count ? ' play-crip-on play-crip-' + ef.color : ''}">
+            <button class="play-crip-adj" onclick="App.mPlayCripChange('${escAttr(inst.id)}','${ef.key}',-1)">-</button>
+            <span class="play-crip-icon">${ef.icon}</span>
+            <span class="play-crip-badge-lbl">${esc(ef.label)}</span>
+            <span class="play-crip-count">${count}</span>
+            <button class="play-crip-adj" onclick="App.mPlayCripChange('${escAttr(inst.id)}','${ef.key}',1)">+</button>
+          </div>`;
+        }
+        const on = !!ss[ef.key];
+        return `<button class="play-crip-tok${on ? ' play-crip-on play-crip-' + ef.color : ''}" onclick="App.mPlayCripToggle('${escAttr(inst.id)}','${ef.key}')" title="${escAttr(ef.title)}">
+          <span class="play-crip-icon">${ef.icon}</span>
+          <span class="play-crip-badge-lbl">${esc(ef.label)}</span>
+        </button>`;
+      }).join('');
+      cripHtml = `<div class="play-crip-row">${effs}</div>`;
+    }
+    const hasCorruptor = rules.some(r => /corruptor/i.test(r)) || /corruptor/i.test((db.stats && db.stats.special) || '');
+    let corruptorHtml = '';
+    if (hasCorruptor) {
+      const cc = ss.corruptor || 0;
+      corruptorHtml = `<div class="play-status-tokens"><div class="play-corruptor-ctrl">
+        <button class="play-corruptor-btn" onclick="App.mPlayCorruptorChange('${escAttr(inst.id)}',-1)">-</button>
+        <span class="play-corruptor-label">Corruptor &times;${cc}</span>
+        <button class="play-corruptor-btn" onclick="App.mPlayCorruptorChange('${escAttr(inst.id)}',1)">+</button>
+      </div></div>`;
+    }
+    return `<div class="play-ship${isDestroyed ? ' play-ship-destroyed' : ''}">
+      <div class="play-ship-nameline">
+        <span class="play-ship-name">${esc(db.name)}</span>
+        ${cripBadge}
+        <div class="play-hull-tracker">
+          <button class="play-hull-btn" onclick="App.mPlayHullChange('${escAttr(inst.id)}',-1)" aria-label="Reduce hull">-</button>
+          <span class="play-hull-val${hullCls}"><span class="play-hull-cur">${cur}</span><span class="play-hull-sep">/</span><span class="play-hull-max">${hullMax}</span></span>
+          <button class="play-hull-btn" onclick="App.mPlayHullChange('${escAttr(inst.id)}',1)" aria-label="Increase hull">+</button>
+        </div>
+      </div>
+      ${hullPips}
+      <div class="play-statline">${statCells}</div>
+      ${weaponsHtml}
+      ${rulesHtml}
+      ${cripHtml}
+      ${corruptorHtml}
+    </div>`;
+  }
+  function mPlayChangeRound(delta) {
+    if (!mPlayState) return;
+    mPlayState.round = Math.max(1, Math.min(6, mPlayState.round + delta));
+    mSavePlayState(); renderMobilePlay();
+  }
+  function mPlayEndRound() {
+    if (!mPlayState) return;
+    Object.values(mPlayState.battlegroups).forEach(b => { b.activated = false; });
+    mPlayState.passes = [false, false, false];
+    mSavePlayState(); renderMobilePlay();
+  }
+  function mPlayTogglePass(i) {
+    if (!mPlayState) return;
+    mPlayState.passes[i] = !mPlayState.passes[i];
+    mSavePlayState(); renderMobilePlay();
+  }
+  function mPlaySpikeChange(bgId, delta) {
+    if (!mPlayState) return;
+    const bg = mPlayState.battlegroups[bgId] || (mPlayState.battlegroups[bgId] = { order: 'Standard', activated: false, spikes: 0 });
+    bg.spikes = Math.max(0, Math.min(4, (bg.spikes || 0) + delta));
+    mSavePlayState(); renderMobilePlay();
+  }
+  function mPlaySetOrder(bgId, order) {
+    if (!mPlayState) return;
+    if (!mPlayState.battlegroups[bgId]) mPlayState.battlegroups[bgId] = { order: 'Standard', activated: false, spikes: 0 };
+    mPlayState.battlegroups[bgId].order = order;
+    mSavePlayState(); renderMobilePlay();
+  }
+  function mPlayToggleActivation(bgId) {
+    if (!mPlayState) return;
+    if (!mPlayState.battlegroups[bgId]) mPlayState.battlegroups[bgId] = { order: 'Standard', activated: false, spikes: 0 };
+    mPlayState.battlegroups[bgId].activated = !mPlayState.battlegroups[bgId].activated;
+    mSavePlayState(); renderMobilePlay();
+  }
+  function mPlayHullChange(shipId, delta) {
+    if (!mPlayState) return;
+    const ss = mPlayState.ships[shipId];
+    if (!ss) return;
+    let hullMax = 1;
+    if (mPlayFleet) {
+      outer: for (const bg of (mPlayFleet.battleGroups || [])) {
+        for (const inst of (bg.ships || [])) {
+          if (inst.id === shipId) {
+            const db = findShip(mPlayFleet.faction, inst.groupCategory, inst.shipKey);
+            if (db) {
+              const mods = loadoutStatMods(db, inst, mPlayFleet.faction);
+              const rawH = db.stats && db.stats.hull;
+              hullMax = parseInt(mods.hull ? adjustStatVal(rawH, mods.hull) : rawH) || 1;
+            }
+            break outer;
+          }
+        }
+      }
+    }
+    ss.cur = Math.max(0, Math.min(hullMax, ss.cur + delta));
+    mSavePlayState(); renderMobilePlay();
+  }
+  function mPlayCripChange(shipId, key, delta) {
+    if (!mPlayState || !mPlayState.ships[shipId]) return;
+    const ss = mPlayState.ships[shipId];
+    ss[key] = Math.max(0, (ss[key] || 0) + delta);
+    mSavePlayState(); renderMobilePlay();
+  }
+  function mPlayCripToggle(shipId, key) {
+    if (!mPlayState || !mPlayState.ships[shipId]) return;
+    mPlayState.ships[shipId][key] = !mPlayState.ships[shipId][key];
+    mSavePlayState(); renderMobilePlay();
+  }
+  function mPlayCorruptorChange(shipId, delta) {
+    if (!mPlayState || !mPlayState.ships[shipId]) return;
+    const ss = mPlayState.ships[shipId];
+    ss.corruptor = Math.max(0, (ss.corruptor || 0) + delta);
+    mSavePlayState(); renderMobilePlay();
+  }
+
   /* ── Overflow dispatcher (app-bar ··· button) ──────────── */
   function overflow() {
     const active = document.querySelector('.screen.active')?.id;
     if (active === 'screen-group-detail') groupOverflow();
     else fleetOverflow();
   }
+
 
   /* ── Fleet overflow (delete / duplicate / share) ───────── */
   // Settings/options sheet (the gear in the app bar) — mobile equivalent of the
@@ -3312,6 +3635,18 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-09', title: 'Play Mode', items: [
+      'New: tap the ... menu on a fleet and choose "Play mode" to open an in-game companion for your fleet.',
+      'Per-ship hull pips (filled/empty dots) for instant damage readout, plus numeric tracker. Crippled only triggers on Capital ships (M/H/S tonnage, rulebook 7.3.6) -- Light frigates are never crippled.',
+      'When a Capital Ship hits half hull, a cripple threshold marker appears on the pips and weapon attacks show halved in red.',
+      'Spike tracker per battlegroup: 4 diamond pips, each showing +3" Sig penalty.',
+      'Full crippling effects panel per Capital Ship: On Fire (stackable counter), Defence Systems Offline, Scanners Offline, Weapons Offline, Navigation Offline, Orbital Decay -- each with icon and rules summary.',
+      'Special rules as tappable chips that open the full rule description.',
+      'Orders picker, Activate / Activation Finished button that dims the battlegroup card.',
+      'Round counter (1/6 to 6/6), Pass token pips with info icon, End Round button resets activations and pass tokens.',
+      'Bioficer ships get a Corruptor counter.',
+      'All state persists in localStorage -- shared with the desktop app for the same fleet.',
+    ] },
     { date: '2026-07-09', title: 'Quieter ship class next to named flagships', items: [
       'A named famous-admiral flagship (e.g. "Fortune\'s Fancy") now shows its ship class in a smaller, muted aside on the same line, e.g. Fortune\'s Fancy (Tribune Battlecruiser), rather than the class competing at full size with the flagship\'s proper name.',
     ] },
@@ -3396,6 +3731,7 @@
 
   function fleetOverflow() {
     showActionSheet([
+      { label: 'Play mode', action: openMobilePlay },
       { label: 'Copy army list', action: copyFleetText },
       { label: 'Copy as JSON', action: copyFleetJSON },
       { label: 'Export PDF', action: exportPdf },
@@ -3976,6 +4312,7 @@
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,
     overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
     importFleetPrompt, doImportText,
+    openMobilePlay, renderMobilePlay, mPlayChangeRound, mPlayEndRound, mPlayTogglePass, mPlaySpikeChange, mPlaySetOrder, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayCorruptorChange,
     openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet, sayName
   };
 

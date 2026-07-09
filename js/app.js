@@ -7067,16 +7067,38 @@ const App = (() => {
   }
 
   // ── Play Mode ──────────────────────────────────────────────────────────────
-  // Per-fleet play state lives in localStorage under 'dfc_play_{fleetId}'.
-  // Tracks round, pass tokens, per-battlegroup orders + activation, and per-ship
-  // hull / status tokens. Hull max is always re-derived from the live shipDB so
-  // stat-modifying refits are reflected correctly.
+  // Per-fleet play state in localStorage under 'dfc_play_{fleetId}'.
+  // Hull max always re-derived from live shipDB so refits stay reflected.
 
   let playFleet = null;
   let playState = null;
 
   const PLAY_ORDERS = ['Standard', 'Max Thrust', 'Silent Running', 'Station Keeping', 'Weapons Free'];
   const PLAY_STORAGE_PREFIX = 'dfc_play_';
+  // Rulebook 7.3.6: only Medium/Heavy/Colossal are Capital Ships — Light (frigates) never crip.
+  const PLAY_CAPITAL = new Set(['M', 'H', 'S']);
+
+  // Crippling effects (2D6 table, rulebook 7.3.6). Fire is stackable; others are boolean.
+  const CRIP_EFFECTS = [
+    { key: 'fire',        label: 'On Fire',             stackable: true,
+      icon: '<svg viewBox="0 0 20 24" fill="currentColor"><path d="M10 0C10 0 6 5 6 10c0 1.6.4 3 1 4.2C5.2 13.1 4 11 4 8.5 4 8.5 1 11 1 16a9 9 0 0 0 18 0C19 8 10 0 10 0Zm0 21a5 5 0 0 1-5-5c0-2.5 1.7-4.5 3-5.5.2 1 .8 2 1.7 2.5C9 10.5 10 8 10 8c0 0 3 2.5 3 6a3 3 0 0 1-3 3Z"/></svg>',
+      color: 'err', title: '1 damage per token at start of End Phase. Repairable on 4+.' },
+    { key: 'defSysOff',   label: 'Def. Sys. Offline',   stackable: false,
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2Z"/><line x1="8" y1="8" x2="16" y2="16"/><line x1="16" y1="8" x2="8" y2="16"/></svg>',
+      color: 'warn', title: 'All saves -1. Can be targeted as Focused ignoring Formation. Repairable 4+.' },
+    { key: 'scannersOff', label: 'Scanners Offline',     stackable: false,
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="8"/><line x1="4" y1="4" x2="20" y2="20" stroke-width="2.5"/></svg>',
+      color: 'warn', title: 'Scan reduced to 1". Repairable on 4+.' },
+    { key: 'weaponsOff',  label: 'Weapons Offline',      stackable: false,
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><line x1="12" y1="3" x2="12" y2="10"/><line x1="4" y1="4" x2="20" y2="20" stroke-width="2.5"/></svg>',
+      color: 'warn', title: 'Cannot use Weapons or launch Assets. Repairable on 4+.' },
+    { key: 'navOff',      label: 'Nav. Offline',         stackable: false,
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8l-3 8 3-2 3 2-3-8Z" fill="currentColor" stroke="none"/><line x1="4" y1="4" x2="20" y2="20" stroke-width="2.5"/></svg>',
+      color: 'warn', title: 'Movement capped at 2". Cannot turn or change Orbital Layer. Repairable on 4+.' },
+    { key: 'orbDecay',    label: 'Orbital Decay',        stackable: false,
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M12 12v8"/><path d="M8 18l4 4 4-4"/></svg>',
+      color: 'err', title: 'Falls into Atmosphere. Cannot return to Orbit. Repairable on 6+.' },
+  ];
 
   function loadPlayState(fleetId) {
     try { const r = localStorage.getItem(PLAY_STORAGE_PREFIX + fleetId); return r ? JSON.parse(r) : null; } catch { return null; }
@@ -7088,20 +7110,22 @@ const App = (() => {
 
   function initPlayState(fleet, faction) {
     const ex = loadPlayState(fleet.id) || {};
-    playState = {
-      round: ex.round || 1,
-      passes: ex.passes || [false, false, false],
-      battlegroups: ex.battlegroups || {},
-      ships: ex.ships || {}
-    };
+    playState = { round: ex.round || 1, passes: ex.passes || [false, false, false], battlegroups: ex.battlegroups || {}, ships: ex.ships || {} };
     for (const bg of (fleet.battleGroups || [])) {
-      if (!playState.battlegroups[bg.id])
-        playState.battlegroups[bg.id] = { order: 'Standard', activated: false };
+      if (!playState.battlegroups[bg.id]) playState.battlegroups[bg.id] = { order: 'Standard', activated: false, spikes: 0 };
+      else if (playState.battlegroups[bg.id].spikes === undefined) playState.battlegroups[bg.id].spikes = 0;
       for (const ship of (bg.ships || [])) {
+        const db = findShipInDB(faction, ship.groupCategory, ship.shipKey);
+        const hull = db ? (parseInt(effectiveStats(db, ship, faction).stats.hull) || 1) : 1;
         if (!playState.ships[ship.id]) {
-          const db = findShipInDB(faction, ship.groupCategory, ship.shipKey);
-          const hull = db ? (parseInt(effectiveStats(db, ship, faction).stats.hull) || 1) : 1;
-          playState.ships[ship.id] = { cur: hull, onFire: false, powerOut: false };
+          playState.ships[ship.id] = { cur: hull, fire: 0, defSysOff: false, scannersOff: false, weaponsOff: false, navOff: false, orbDecay: false };
+        } else {
+          // Migrate old onFire/powerOut fields to new schema.
+          const ss = playState.ships[ship.id];
+          if (ss.onFire !== undefined) { if (!ss.fire) ss.fire = ss.onFire ? 1 : 0; delete ss.onFire; }
+          if (ss.powerOut !== undefined) { if (ss.weaponsOff === undefined) ss.weaponsOff = ss.powerOut; delete ss.powerOut; }
+          CRIP_EFFECTS.forEach(e => { if (!e.stackable && ss[e.key] === undefined) ss[e.key] = false; });
+          if (ss.fire === undefined) ss.fire = 0;
         }
       }
     }
@@ -7117,16 +7141,18 @@ const App = (() => {
     });
   }
 
+  // SVG (?) info icon for pass token explanation.
+  const PASS_INFO = '<svg viewBox="0 0 20 20" fill="currentColor" style="width:12px;height:12px;vertical-align:middle;color:var(--ink-faint)" title="When you have 2 or more fewer Groups than your opponent, you generate Pass tokens. Use a Pass token instead of activating a Group."><path d="M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2Zm1 11H9V9h2v4Zm0-6H9V5h2v2Z"/></svg>';
+
   function renderPlayMode() {
     const el = document.getElementById('view-play');
     if (!playFleet || !playState) { el.innerHTML = '<div class="play-empty">No fleet loaded.</div>'; return; }
-    const faction = playFleet.faction;
 
     const passHtml = playState.passes.map((used, i) =>
       `<span class="play-pass-pip${used ? ' play-pass-used' : ''}" onclick="App.playTogglePass(${i})" title="Pass token ${i + 1}"></span>`
     ).join('');
 
-    const bgCards = (playFleet.battleGroups || []).map(bg => renderPlayBgCard(bg, faction)).join('');
+    const bgCards = (playFleet.battleGroups || []).map(bg => renderPlayBgCard(bg, playFleet.faction)).join('');
 
     el.innerHTML = `
       <div class="play-header">
@@ -7134,11 +7160,11 @@ const App = (() => {
           <button class="play-round-btn" onclick="App.playChangeRound(-1)" aria-label="Previous round">−</button>
           <div class="play-round-block">
             <span class="play-round-label">Round</span>
-            <span class="play-round-num">${playState.round}</span>
+            <span class="play-round-num">${playState.round}<span class="play-round-of">/6</span></span>
           </div>
           <button class="play-round-btn" onclick="App.playChangeRound(1)" aria-label="Next round">+</button>
         </div>
-        <div class="play-pass-tokens"><span>Pass:</span>${passHtml}</div>
+        <div class="play-pass-tokens"><span class="play-pass-label">Pass ${PASS_INFO}</span>${passHtml}</div>
         <div class="play-header-spacer"></div>
         <button class="play-end-round-btn" onclick="App.playEndRound()">End Round</button>
       </div>
@@ -7146,7 +7172,8 @@ const App = (() => {
   }
 
   function renderPlayBgCard(bg, faction) {
-    const bgs = playState.battlegroups[bg.id] || { order: 'Standard', activated: false };
+    const bgs = playState.battlegroups[bg.id] || { order: 'Standard', activated: false, spikes: 0 };
+    const spikes = bgs.spikes || 0;
 
     let tonCode = 'M';
     if (bg.ships && bg.ships.length) {
@@ -7161,17 +7188,29 @@ const App = (() => {
       if (adm) admiralStr = ` <span class="play-bg-admiral">&mdash; ${esc(adm.name || 'Admiral')} (${adm.rating || 0})</span>`;
     }
 
+    // Spike pips: 4 diamond-shaped clickable buttons. Click a filled pip to remove, empty to add.
+    const spikePips = [0,1,2,3].map(i =>
+      `<button class="play-spike-pip${i < spikes ? ' play-spike-on' : ''}" onclick="App.playSpikeChange('${escAttr(bg.id)}',${i < spikes ? -1 : 1})" title="${i < spikes ? 'Remove Spike' : 'Add Spike (+3&quot; Sig)'}">
+        <svg viewBox="0 0 24 24" fill="${i < spikes ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M12 2l10 10-10 10L2 12Z"/></svg>
+      </button>`
+    ).join('');
+
     const orderChips = PLAY_ORDERS.map(o =>
       `<button class="play-order-chip${bgs.order === o ? ' play-order-sel' : ''}" onclick="App.playSetOrder('${escAttr(bg.id)}','${escAttr(o)}')">${esc(o)}</button>`
     ).join('');
 
     const shipsHtml = (bg.ships || []).map(ship => renderPlayShip(ship, faction)).join('');
+    const actDone = bgs.activated;
 
-    return `<div class="play-bg-card${bgs.activated ? ' play-activated' : ''}">
+    return `<div class="play-bg-card${actDone ? ' play-activated' : ''}">
       <div class="play-bg-header">
         <span class="play-ton-badge play-ton-${tonCode}">${tonLabels[tonCode] || tonCode}</span>
         <span class="play-bg-name">${esc(bg.name || 'Unnamed battlegroup')}${admiralStr}</span>
-        <button class="play-act-btn${bgs.activated ? ' play-done' : ''}" onclick="App.playToggleActivation('${escAttr(bg.id)}')">${bgs.activated ? 'Done' : 'Activate'}</button>
+        <button class="play-act-btn${actDone ? ' play-done' : ''}" onclick="App.playToggleActivation('${escAttr(bg.id)}')">${actDone ? 'Activation Finished' : 'Activate'}</button>
+      </div>
+      <div class="play-spike-row">
+        <span class="play-spike-label">Spikes${spikes ? ` <span class="play-spike-sig">+${spikes * 3}" Sig</span>` : ''}</span>
+        <div class="play-spike-pips">${spikePips}</div>
       </div>
       <div class="play-orders-row">${orderChips}</div>
       <div class="play-ships">${shipsHtml}</div>
@@ -7183,17 +7222,29 @@ const App = (() => {
     if (!db) return '';
     const eff = effectiveStats(db, ship, faction);
     const s = eff.stats;
-    const ss = playState.ships[ship.id] || { cur: parseInt(s.hull) || 1, onFire: false, powerOut: false };
+    const isCapital = PLAY_CAPITAL.has(db.tonnage);
+    const ss = playState.ships[ship.id] || { cur: parseInt(s.hull) || 1, fire: 0 };
     const hullMax = parseInt(s.hull) || 1;
     const cur = Math.max(0, Math.min(hullMax, ss.cur));
-    const isCrippled = cur > 0 && cur <= Math.floor(hullMax / 2);
+    const isCrippled = isCapital && cur > 0 && cur <= Math.floor(hullMax / 2);
     const isDestroyed = cur === 0;
+    const crip = Math.floor(hullMax / 2); // cripple threshold index
+
+    // Hull pips (up to 20 shown as dots; larger ships fall back to number display).
+    let hullPips = '';
+    if (hullMax <= 20) {
+      const dots = Array.from({ length: hullMax }, (_, i) => {
+        const alive = i < cur;
+        const atThreshold = isCapital && i === crip;
+        return `<span class="play-pip${alive ? (isCrippled ? ' play-pip-crip' : '') : ' play-pip-dead'}${atThreshold ? ' play-pip-threshold' : ''}"></span>`;
+      }).join('');
+      hullPips = `<div class="play-hull-pips">${dots}</div>`;
+    }
 
     const hullCls = isDestroyed ? ' play-destroyed' : isCrippled ? ' play-crippled' : '';
-    const badges = [];
-    if (isCrippled && !isDestroyed) badges.push(`<span class="play-crippled-badge">Crippled</span>`);
-    if (ss.onFire) badges.push(`<span class="play-fire-badge">On fire</span>`);
+    const cripBadge = (isCrippled && !isDestroyed) ? `<span class="play-crippled-badge">Crippled</span>` : '';
 
+    // Compact stat line (hull shown in tracker above, not here).
     const statCells = [
       { k: 'thrust', l: 'Thrust' }, { k: 'scan', l: 'Scan' }, { k: 'sig', l: 'Sig' },
       { k: 'es', l: 'ES' }, { k: 'ks', l: 'KS' }, { k: 'bs', l: 'BS' }
@@ -7201,7 +7252,7 @@ const App = (() => {
       `<div class="play-stat"><span class="play-stat-val">${esc(String(s[c.k]))}</span><span class="play-stat-lbl">${c.l}</span></div>`
     ).join('');
 
-    // Effective weapons: base + selected loadout option weapons (mirrors renderGroupShipEntry logic).
+    // Effective weapons (base + selected loadout, mirrors renderGroupShipEntry).
     const wpns = Array.isArray(db.weapons) ? [...db.weapons] : [];
     (Array.isArray(db.loadoutOptions) ? db.loadoutOptions : []).forEach((lo, i) => {
       const sel = (ship.loadouts && ship.loadouts[i] !== undefined) ? ship.loadouts[i] : 0;
@@ -7233,39 +7284,71 @@ const App = (() => {
       </table>`;
     }
 
-    // Special rule chips (name only, for quick in-game reference).
+    // Special rules — clickable chips that open the full description tooltip.
     const rules = (db.special_rules || []).map(r => (typeof r === 'string' ? r : r.name)).filter(Boolean);
-    const rulesHtml = rules.length
-      ? `<div class="play-status-tokens">${rules.map(r => `<span class="play-rule-chip">${esc(r)}</span>`).join('')}</div>`
-      : '';
+    let rulesHtml = '';
+    if (rules.length) {
+      const chips = rules.map(rname => {
+        const fullRule = lookupRuleFull(rname);
+        if (fullRule && fullRule.description) {
+          return `<span class="play-rule-chip has-tooltip" data-rule-desc="${escAttr(fullRule.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(rname)}</span>`;
+        }
+        return `<span class="play-rule-chip">${esc(rname)}</span>`;
+      }).join('');
+      rulesHtml = `<div class="play-status-tokens">${chips}</div>`;
+    }
 
-    // Corruptor tracker (Bioficer ships).
+    // Crippling effects panel (Capital Ships only).
+    let cripHtml = '';
+    if (isCapital) {
+      const effs = CRIP_EFFECTS.map(ef => {
+        if (ef.stackable) {
+          const count = ss[ef.key] || 0;
+          return `<div class="play-crip-counter${count ? ' play-crip-on play-crip-' + ef.color : ''}">
+            <button class="play-crip-adj" onclick="App.playCripChange('${escAttr(ship.id)}','${ef.key}',-1)">−</button>
+            <span class="play-crip-icon">${ef.icon}</span>
+            <span class="play-crip-badge-lbl">${esc(ef.label)}</span>
+            <span class="play-crip-count">${count}</span>
+            <button class="play-crip-adj" onclick="App.playCripChange('${escAttr(ship.id)}','${ef.key}',1)">+</button>
+          </div>`;
+        }
+        const on = !!ss[ef.key];
+        return `<button class="play-crip-tok${on ? ' play-crip-on play-crip-' + ef.color : ''}" onclick="App.playCripToggle('${escAttr(ship.id)}','${ef.key}')" title="${escAttr(ef.title)}">
+          <span class="play-crip-icon">${ef.icon}</span>
+          <span class="play-crip-badge-lbl">${esc(ef.label)}</span>
+        </button>`;
+      }).join('');
+      cripHtml = `<div class="play-crip-row">${effs}</div>`;
+    }
+
+    // Corruptor counter (Bioficer ships).
     const hasCorruptor = rules.some(r => /corruptor/i.test(r)) || /corruptor/i.test(s.special || '');
-    const corrCount = ss.corruptor || 0;
-    const corruptorHtml = hasCorruptor ? `<div class="play-corruptor-ctrl">
-      <button class="play-corruptor-btn" onclick="App.playCorruptorChange('${escAttr(ship.id)}',-1)">−</button>
-      <span class="play-corruptor-label">Corruptor &times;${corrCount}</span>
-      <button class="play-corruptor-btn" onclick="App.playCorruptorChange('${escAttr(ship.id)}',1)">+</button>
-    </div>` : '';
+    let corruptorHtml = '';
+    if (hasCorruptor) {
+      const cc = ss.corruptor || 0;
+      corruptorHtml = `<div class="play-status-tokens"><div class="play-corruptor-ctrl">
+        <button class="play-corruptor-btn" onclick="App.playCorruptorChange('${escAttr(ship.id)}',-1)">−</button>
+        <span class="play-corruptor-label">Corruptor &times;${cc}</span>
+        <button class="play-corruptor-btn" onclick="App.playCorruptorChange('${escAttr(ship.id)}',1)">+</button>
+      </div></div>`;
+    }
 
-    return `<div class="play-ship">
+    return `<div class="play-ship${isDestroyed ? ' play-ship-destroyed' : ''}">
       <div class="play-ship-nameline">
         <span class="play-ship-name">${esc(db.name)}</span>
-        ${badges.join('')}
+        ${cripBadge}
         <div class="play-hull-tracker">
           <button class="play-hull-btn" onclick="App.playHullChange('${escAttr(ship.id)}',-1)" aria-label="Reduce hull">−</button>
           <span class="play-hull-val${hullCls}"><span class="play-hull-cur">${cur}</span><span class="play-hull-sep">/</span><span class="play-hull-max">${hullMax}</span></span>
           <button class="play-hull-btn" onclick="App.playHullChange('${escAttr(ship.id)}',1)" aria-label="Increase hull">+</button>
         </div>
       </div>
+      ${hullPips}
       <div class="play-statline">${statCells}</div>
       ${weaponsHtml}
       ${rulesHtml}
-      <div class="play-status-tokens">
-        <button class="play-tok${ss.onFire ? ' play-tok-active' : ''}" onclick="App.playToggleFire('${escAttr(ship.id)}')">On fire</button>
-        <button class="play-tok${ss.powerOut ? ' play-tok-active' : ''}" onclick="App.playTogglePower('${escAttr(ship.id)}')">Power out</button>
-        ${corruptorHtml}
-      </div>
+      ${cripHtml}
+      ${corruptorHtml}
     </div>`;
   }
 
@@ -7277,6 +7360,7 @@ const App = (() => {
   function playEndRound() {
     if (!playState) return;
     Object.values(playState.battlegroups).forEach(b => { b.activated = false; });
+    playState.passes = [false, false, false];
     savePlayState(); renderPlayMode();
   }
   function playTogglePass(i) {
@@ -7284,15 +7368,21 @@ const App = (() => {
     playState.passes[i] = !playState.passes[i];
     savePlayState(); renderPlayMode();
   }
+  function playSpikeChange(bgId, delta) {
+    if (!playState) return;
+    const bg = playState.battlegroups[bgId] || (playState.battlegroups[bgId] = { order: 'Standard', activated: false, spikes: 0 });
+    bg.spikes = Math.max(0, Math.min(4, (bg.spikes || 0) + delta));
+    savePlayState(); renderPlayMode();
+  }
   function playSetOrder(bgId, order) {
     if (!playState) return;
-    if (!playState.battlegroups[bgId]) playState.battlegroups[bgId] = { order: 'Standard', activated: false };
+    if (!playState.battlegroups[bgId]) playState.battlegroups[bgId] = { order: 'Standard', activated: false, spikes: 0 };
     playState.battlegroups[bgId].order = order;
     savePlayState(); renderPlayMode();
   }
   function playToggleActivation(bgId) {
     if (!playState) return;
-    if (!playState.battlegroups[bgId]) playState.battlegroups[bgId] = { order: 'Standard', activated: false };
+    if (!playState.battlegroups[bgId]) playState.battlegroups[bgId] = { order: 'Standard', activated: false, spikes: 0 };
     playState.battlegroups[bgId].activated = !playState.battlegroups[bgId].activated;
     savePlayState(); renderPlayMode();
   }
@@ -7315,16 +7405,20 @@ const App = (() => {
     ss.cur = Math.max(0, Math.min(hullMax, ss.cur + delta));
     savePlayState(); renderPlayMode();
   }
-  function playToggleFire(shipId) {
+  function playCripChange(shipId, key, delta) {
     if (!playState || !playState.ships[shipId]) return;
-    playState.ships[shipId].onFire = !playState.ships[shipId].onFire;
+    const ss = playState.ships[shipId];
+    ss[key] = Math.max(0, (ss[key] || 0) + delta);
     savePlayState(); renderPlayMode();
   }
-  function playTogglePower(shipId) {
+  function playCripToggle(shipId, key) {
     if (!playState || !playState.ships[shipId]) return;
-    playState.ships[shipId].powerOut = !playState.ships[shipId].powerOut;
+    playState.ships[shipId][key] = !playState.ships[shipId][key];
     savePlayState(); renderPlayMode();
   }
+  // Legacy shims kept so any bookmarked links / old saves don't break.
+  function playToggleFire(shipId) { playCripChange(shipId, 'fire', playState?.ships[shipId]?.fire ? -1 : 1); }
+  function playTogglePower(shipId) { playCripToggle(shipId, 'weaponsOff'); }
   function playCorruptorChange(shipId, delta) {
     if (!playState || !playState.ships[shipId]) return;
     const ss = playState.ships[shipId];
@@ -7338,12 +7432,16 @@ const App = (() => {
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
     { date: '2026-07-09', title: 'Play Mode', items: [
-      'New Play button in the fleet builder topbar opens a compact in-game companion view for your fleet.',
-      'Battlegroups shown in a two-column grid, each with an orders picker (Standard / Max Thrust / Silent Running / Station Keeping / Weapons Free) and an Activate button that dims the card when done.',
-      'Per-ship hull tracker with automatic Crippled badge at half hull or below. When crippled, all weapon attack values are shown halved in red.',
-      'Status tokens per ship: On fire and Power out (tap to toggle). Bioficer ships get a Corruptor counter.',
-      'Round counter (1-6), Pass token pips, and End Round button that resets all activation markers.',
-      'Play state (hull damage, orders, activation) persists in localStorage per fleet so you can close the tab and resume.',
+      'New Play button in the fleet builder topbar opens a compact in-game companion for your fleet.',
+      'Per-ship hull pips (filled/empty dots) for instant damage readout, plus numeric tracker with +/- buttons. Crippled only triggers on Medium/Heavy/Colossal ships (rulebook 7.3.6) -- Light tonnage frigates are never crippled.',
+      'When a Capital Ship hits half hull, a cripple threshold mark appears on the pips and all weapon attacks show halved in red.',
+      'Spike tracker per battlegroup: 4 large diamond pips. Each filled Spike shows its +3" Sig penalty.',
+      'Full crippling effects panel per Capital Ship: On Fire counter (stackable), Defence Systems Offline, Scanners Offline, Weapons Offline, Navigation Offline, Orbital Decay -- each with icon and rules summary on hover.',
+      'Special rules are now tappable chips that open the full in-game rule description.',
+      'Orders picker, Activate / Activation Finished button that dims the battlegroup card.',
+      'Round counter (1-6), Pass token pips with explanatory tooltip, End Round resets activations and pass tokens.',
+      'Bioficer ships get a Corruptor counter.',
+      'All state persists in localStorage per fleet.',
     ] },
     { date: '2026-07-09', title: 'Quieter ship class next to named flagships', items: [
       'A named famous-admiral flagship (e.g. "Fortune\'s Fancy") now shows its ship class in a smaller, muted aside on the same line, e.g. Fortune\'s Fancy (Tribune Battlecruiser), rather than the class competing at full size with the flagship\'s proper name.',
@@ -8507,7 +8605,7 @@ const App = (() => {
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFlagshipLoadout, changeFeature, addSystem, removeSystem, toggleSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
-    openPlayMode, playChangeRound, playEndRound, playTogglePass, playSetOrder, playToggleActivation, playHullChange, playToggleFire, playTogglePower, playCorruptorChange,
+    openPlayMode, playChangeRound, playEndRound, playTogglePass, playSpikeChange, playSetOrder, playToggleActivation, playHullChange, playCripChange, playCripToggle, playToggleFire, playTogglePower, playCorruptorChange,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText, openLastImported,
     openSettings, openChangelog, toggleSetting, toggleTheme, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, sayName, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal

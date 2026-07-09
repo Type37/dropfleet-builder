@@ -7331,3 +7331,79 @@ html[data-theme="dark"] .play-corruptor-label { color: #ce93d8; background: rgba
 }
 .play-empty { padding: var(--sp-xl); text-align: center; color: var(--ink-muted); font-size: 14px; }
 .topbar-play-btn { color: var(--success) !important; border-color: rgba(62,153,69,0.3) !important; }
+
+/* ── Play: round counter ── */
+.play-round-of { font-size: 14px; font-weight: 400; color: var(--ink-muted); }
+.play-pass-label { font-size: 11px; margin-right: 2px; }
+
+/* ── Play: hull pips ── */
+.play-hull-pips { display: flex; gap: 3px; flex-wrap: wrap; margin: 3px 0 2px; }
+.play-pip {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--ink); flex-shrink: 0;
+  transition: background var(--duration-fast);
+}
+.play-pip-crip { background: var(--error); }
+.play-pip-dead { background: transparent; border: 1.5px solid var(--stroke-strong); }
+.play-ship-destroyed .play-pip-dead { border-color: var(--stroke-light); opacity: 0.45; }
+.play-pip-threshold { margin-left: 5px; }
+.play-pip-threshold::before {
+  content: ''; display: inline-block; width: 1.5px; height: 10px;
+  background: var(--error); opacity: 0.35; border-radius: 1px;
+  margin-right: 3px; vertical-align: middle;
+}
+
+/* ── Play: spike row ── */
+.play-spike-row {
+  display: flex; align-items: center; gap: var(--sp-sm);
+  padding: var(--sp-xs) var(--sp-md);
+  border-bottom: 1px solid var(--stroke-light);
+}
+.play-spike-label {
+  font-size: 10px; font-family: var(--font-condensed); font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted); white-space: nowrap;
+}
+.play-spike-sig { font-weight: 700; color: var(--warning); }
+.play-spike-pips { display: flex; gap: 3px; align-items: center; }
+.play-spike-pip {
+  width: 28px; height: 28px;
+  border: none; background: transparent; cursor: pointer; padding: 3px;
+  color: var(--stroke-strong); transition: color var(--duration-fast), transform var(--duration-fast);
+}
+.play-spike-pip:hover { transform: scale(1.18); }
+.play-spike-pip.play-spike-on { color: var(--gold); }
+
+/* ── Play: destroyed ship ── */
+.play-ship-destroyed { opacity: 0.42; }
+
+/* ── Play: crippling effects ── */
+.play-crip-row { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 2px; }
+.play-crip-tok {
+  display: flex; align-items: center; gap: 3px;
+  padding: 3px 7px 3px 5px;
+  border: 1px solid var(--stroke); border-radius: var(--radius-md);
+  background: transparent; color: var(--ink-muted);
+  cursor: pointer; font-family: inherit; font-size: 11px;
+  transition: all var(--duration-fast); white-space: nowrap;
+}
+.play-crip-tok:hover { border-color: var(--stroke-strong); color: var(--ink); }
+.play-crip-tok.play-crip-on.play-crip-err  { background: rgba(196,60,47,0.1);  color: var(--error);   border-color: rgba(196,60,47,0.4); }
+.play-crip-tok.play-crip-on.play-crip-warn { background: rgba(217,140,31,0.1); color: var(--warning); border-color: rgba(217,140,31,0.4); }
+.play-crip-counter {
+  display: flex; align-items: center; gap: 2px;
+  padding: 2px 4px;
+  border: 1px solid var(--stroke); border-radius: var(--radius-md);
+  font-size: 11px; color: var(--ink-muted); white-space: nowrap;
+}
+.play-crip-counter.play-crip-on.play-crip-err  { background: rgba(196,60,47,0.08);  color: var(--error);   border-color: rgba(196,60,47,0.4); }
+.play-crip-counter.play-crip-on.play-crip-warn { background: rgba(217,140,31,0.08); color: var(--warning); border-color: rgba(217,140,31,0.4); }
+.play-crip-adj {
+  width: 18px; height: 18px; border: none; background: transparent;
+  cursor: pointer; font-size: 13px; color: inherit; padding: 0; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; border-radius: 2px; line-height: 1;
+}
+.play-crip-adj:hover { background: var(--paper-alt); }
+.play-crip-icon { width: 14px; height: 14px; display: flex; align-items: center; flex-shrink: 0; }
+.play-crip-icon svg { width: 14px; height: 14px; }
+.play-crip-badge-lbl { white-space: nowrap; }
+.play-crip-count { font-size: 13px; font-weight: 700; font-family: var(--font-condensed); min-width: 14px; text-align: center; }
