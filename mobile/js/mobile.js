@@ -3386,16 +3386,15 @@
     const myGroups = (mPlayFleet.battleGroups || []).length;
     const oppGroups = mPlayState.opponentGroups || 0;
     const calcTokens = oppGroups > 0 ? Math.max(0, oppGroups - myGroups - 1) : 0;
-    if (oppGroups > 0) {
-      while (mPlayState.passes.length < calcTokens) mPlayState.passes.push(false);
-      if (mPlayState.passes.length > calcTokens) mPlayState.passes = mPlayState.passes.slice(0, calcTokens);
-    }
+    // Always resize — guards against ghost tokens when opp groups drops back to 0.
+    while (mPlayState.passes.length < calcTokens) mPlayState.passes.push(false);
+    if (mPlayState.passes.length > calcTokens) mPlayState.passes = mPlayState.passes.slice(0, calcTokens);
     const passes = mPlayState.passes || [];
     const passHtml = passes.length
       ? passes.map((used, i) =>
           `<span class="play-pass-pip${used ? ' play-pass-used' : ''}" onclick="App.mPlayTogglePass(${i})"></span>`
         ).join('')
-      : (oppGroups > 0 ? '<span class="play-pass-none">none</span>' : '<span class="play-pass-none">set Opp Groups →</span>');
+      : (oppGroups > 0 ? '<span class="play-pass-none">none</span>' : '<span class="play-pass-none">&#x2193; groups</span>');
     const passInfoBtn = `<button class="play-pass-info-btn" onclick="App.mShowPlayPassInfo()" title="Pass token rules">&#9432;</button>`;
     const vp = mPlayState.vp || 0;
     const oppVp = mPlayState.oppVp || 0;

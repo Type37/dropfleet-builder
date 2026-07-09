@@ -7161,11 +7161,9 @@ const App = (() => {
     const myGroups = (playFleet.battleGroups || []).length;
     const oppGroups = playState.opponentGroups || 0;
     const calcTokens = oppGroups > 0 ? Math.max(0, oppGroups - myGroups - 1) : 0;
-    if (oppGroups > 0) {
-      // Resize passes array to match calculated token count.
-      while (playState.passes.length < calcTokens) playState.passes.push(false);
-      if (playState.passes.length > calcTokens) playState.passes = playState.passes.slice(0, calcTokens);
-    }
+    // Always resize — guards against ghost tokens when opp groups drops back to 0.
+    while (playState.passes.length < calcTokens) playState.passes.push(false);
+    if (playState.passes.length > calcTokens) playState.passes = playState.passes.slice(0, calcTokens);
     const passes = playState.passes || [];
     const passHtml = passes.length
       ? passes.map((used, i) =>

@@ -2652,7 +2652,7 @@ body.sheet-open .sheet-scrim {
 }
 .play-pass-info-btn:active { opacity: .6; }
 .play-pass-pips { display: flex; gap: 4px; align-items: center; }
-.play-pass-none { font-size: 10px; opacity: .65; font-style: italic; }
+.play-pass-none { font-size: 10px; opacity: .65; font-style: italic; white-space: nowrap; }
 
 /* Header two-row layout */
 .play-header-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; width: 100%; }
@@ -2692,7 +2692,7 @@ body.sheet-open .sheet-scrim {
 
 /* Weapons table horizontal scroll */
 .play-weapons-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
-.play-weapons { min-width: 340px; }
+.play-weapons { width: 100%; }
 
 /* ── 51. Reduced motion ────────────────────────────────────
    Respect the OS "reduce motion" setting: drop slides/transforms,
