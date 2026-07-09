@@ -3302,7 +3302,7 @@
 
   /* ── Play Mode ─────────────────────────────────────────── */
   const M_PLAY_ORDERS = ['Standard', 'Max Thrust', 'Silent Running', 'Station Keeping', 'Weapons Free'];
-  const M_PLAY_CAPITAL = new Set(['M', 'H', 'S']);
+  const M_PLAY_CAPITAL = new Set(['M', 'H', 'C']);
   const M_CRIP_EFFECTS = [
     { key: 'fire',        label: 'On Fire',           stackable: true,
       icon: '<svg viewBox="0 0 20 24" fill="currentColor"><path d="M10 0C10 0 6 5 6 10c0 1.6.4 3 1 4.2C5.2 13.1 4 11 4 8.5 4 8.5 1 11 1 16a9 9 0 0 0 18 0C19 8 10 0 10 0Zm0 21a5 5 0 0 1-5-5c0-2.5 1.7-4.5 3-5.5.2 1 .8 2 1.7 2.5C9 10.5 10 8 10 8c0 0 3 2.5 3 6a3 3 0 0 1-3 3Z"/></svg>',
@@ -3367,13 +3367,17 @@
       navigate('screen-play');
     });
   }
+  function mShowPlayPassInfo() {
+    showSheet('Pass Tokens', '<p>Determine how many Groups each player has on the table, plus any the Scenario states may deploy this turn. If a player has two fewer Groups than the player with the most, they generate a Pass token. For each additional Group fewer, they generate another Pass token.</p><p>Pass tokens do not persist after the Activation Phase.</p>');
+  }
   function renderMobilePlay() {
     const el = document.getElementById('play-content');
     if (!mPlayFleet || !mPlayState) { el.innerHTML = '<div class="play-empty">No fleet loaded.</div>'; return; }
-    const PASS_INFO = '<svg viewBox="0 0 20 20" fill="currentColor" style="width:12px;height:12px;vertical-align:middle;color:var(--ink-faint)"><path d="M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2Zm1 11H9V9h2v4Zm0-6H9V5h2v2Z"/></svg>';
-    const passHtml = mPlayState.passes.map((used, i) =>
+    const passes = mPlayState.passes || [];
+    const passHtml = passes.map((used, i) =>
       `<span class="play-pass-pip${used ? ' play-pass-used' : ''}" onclick="App.mPlayTogglePass(${i})"></span>`
     ).join('');
+    const passInfoBtn = `<button class="play-pass-info-btn" onclick="App.mShowPlayPassInfo()" title="Pass token rules">&#9432;</button>`;
     const bgCards = (mPlayFleet.battleGroups || []).map(bg => renderMobilePlayBg(bg)).join('');
     el.innerHTML = `
       <div class="play-header">
@@ -3385,7 +3389,10 @@
           </div>
           <button class="play-round-btn" onclick="App.mPlayChangeRound(1)" aria-label="Next round">+</button>
         </div>
-        <div class="play-pass-tokens"><span class="play-pass-label">Pass ${PASS_INFO}</span>${passHtml}</div>
+        <div class="play-pass-tokens">
+          <span class="play-pass-label">Pass ${passInfoBtn}</span>
+          <span class="play-pass-pips">${passHtml}</span>
+        </div>
         <button class="play-end-round-btn" onclick="App.mPlayEndRound()">End Round</button>
       </div>
       <div class="play-bgs" style="padding:var(--sp-m);padding-bottom:88px">${bgCards}</div>`;
@@ -3398,12 +3405,10 @@
       const db0 = findShip(mPlayFleet.faction, bg.ships[0].groupCategory, bg.ships[0].shipKey);
       if (db0 && db0.tonnage) tonCode = db0.tonnage;
     }
-    const tonLabels = { L: 'Light', M: 'Medium', H: 'Heavy', S: 'Super-Heavy' };
+    const tonLabels = { L: 'Light', M: 'Medium', H: 'Heavy', C: 'Super-Heavy' };
     let admiralStr = '';
-    if (mPlayFleet.admirals && mPlayFleet.admirals.length) {
-      const adm = mPlayFleet.admirals.find(a => a.groupId === bg.id);
-      if (adm) admiralStr = ` <span class="play-bg-admiral">&mdash; ${esc(adm.name || 'Admiral')} (${adm.rating || 0})</span>`;
-    }
+    const bgAdmiral = (mPlayFleet.admirals || []).find(a => a.groupId === bg.id);
+    if (bgAdmiral) admiralStr = ` <span class="play-bg-admiral">&mdash; ${esc(bgAdmiral.name || 'Admiral')} (${bgAdmiral.rating || 0})</span>`;
     const spikePips = [0,1,2,3].map(i =>
       `<button class="play-spike-pip${i < spikes ? ' play-spike-on' : ''}" onclick="App.mPlaySpikeChange('${escAttr(bg.id)}',${i < spikes ? -1 : 1})">
         <svg viewBox="0 0 24 24" fill="${i < spikes ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M12 2l10 10-10 10L2 12Z"/></svg>
@@ -3412,23 +3417,27 @@
     const orderChips = M_PLAY_ORDERS.map(o =>
       `<button class="play-order-chip${bgs.order === o ? ' play-order-sel' : ''}" onclick="App.mPlaySetOrder('${escAttr(bg.id)}','${escAttr(o)}')">${esc(o)}</button>`
     ).join('');
-    const shipsHtml = (bg.ships || []).map(inst => renderMobilePlayShip(inst)).join('');
+    const famAdmiral = bgAdmiral && bgAdmiral.flagshipName ? bgAdmiral : null;
+    const shipsHtml = (bg.ships || []).map((inst, idx) =>
+      renderMobilePlayShip(inst, idx === 0 && famAdmiral ? famAdmiral.flagshipName : null)
+    ).join('');
     const actDone = bgs.activated;
     return `<div class="play-bg-card${actDone ? ' play-activated' : ''}">
       <div class="play-bg-header">
         <span class="play-ton-badge play-ton-${tonCode}">${tonLabels[tonCode] || tonCode}</span>
         <span class="play-bg-name">${esc(bg.name || 'Unnamed battlegroup')}${admiralStr}</span>
-        <button class="play-act-btn${actDone ? ' play-done' : ''}" onclick="App.mPlayToggleActivation('${escAttr(bg.id)}')">${actDone ? 'Activation Finished' : 'Activate'}</button>
+        <button class="play-act-btn${actDone ? ' play-done' : ''}" onclick="App.mPlayToggleActivation('${escAttr(bg.id)}')">${actDone ? 'Activated' : 'Activate'}</button>
       </div>
       <div class="play-spike-row">
-        <span class="play-spike-label">Spikes${spikes ? ` <span class="play-spike-sig">+${spikes * 3}" Sig</span>` : ''}</span>
+        <span class="play-spike-label">Spikes</span>
+        <span class="play-spike-sig">${spikes ? `+${spikes * 3}" Sig` : ''}</span>
         <div class="play-spike-pips">${spikePips}</div>
       </div>
       <div class="play-orders-row">${orderChips}</div>
       <div class="play-ships">${shipsHtml}</div>
     </div>`;
   }
-  function renderMobilePlayShip(inst) {
+  function renderMobilePlayShip(inst, flagshipName) {
     const db = findShip(mPlayFleet.faction, inst.groupCategory, inst.shipKey);
     if (!db) return '';
     const mods = loadoutStatMods(db, inst, mPlayFleet.faction);
@@ -3437,20 +3446,29 @@
     const ss = mPlayState.ships[inst.id] || { cur: parseInt(getS('hull')) || 1, fire: 0 };
     const hullMax = parseInt(getS('hull')) || 1;
     const cur = Math.max(0, Math.min(hullMax, ss.cur));
-    const isCrippled = isCapital && cur > 0 && cur <= Math.floor(hullMax / 2);
+    const dmgTaken = hullMax - cur;
+    const cripThresh = Math.floor(hullMax / 2);
+    const isCrippled = isCapital && cur > 0 && cur <= cripThresh;
     const isDestroyed = cur === 0;
-    const crip = Math.floor(hullMax / 2);
-    let hullPips = '';
+
+    // Ship name: flagship override shows famous admiral ship name, then class muted.
+    const nameHtml = flagshipName
+      ? `${esc(flagshipName)} <span class="play-ship-class">${esc(db.name)}</span>`
+      : esc(db.name);
+
+    // Hull pips: empty = healthy, filled orange/red = hit. Fill left→right as damage taken.
+    let hullPipHtml = '';
     if (hullMax <= 20) {
-      const dots = Array.from({ length: hullMax }, (_, i) => {
-        const alive = i < cur;
-        const atThreshold = isCapital && i === crip;
-        return `<span class="play-pip${alive ? (isCrippled ? ' play-pip-crip' : '') : ' play-pip-dead'}${atThreshold ? ' play-pip-threshold' : ''}"></span>`;
+      hullPipHtml = Array.from({ length: hullMax }, (_, i) => {
+        const isDmg = i < dmgTaken;
+        const pastCrip = isCapital && i >= cripThresh;
+        const atThresh = isCapital && i === cripThresh;
+        return `<span class="play-pip${isDmg ? (pastCrip ? ' play-pip-crip' : ' play-pip-dmg') : ''}${atThresh ? ' play-pip-thresh' : ''}"></span>`;
       }).join('');
-      hullPips = `<div class="play-hull-pips">${dots}</div>`;
     }
-    const hullCls = isDestroyed ? ' play-destroyed' : isCrippled ? ' play-crippled' : '';
-    const cripBadge = (isCrippled && !isDestroyed) ? `<span class="play-crippled-badge">Crippled</span>` : '';
+    const hullNumCls = isDestroyed ? ' play-hull-dead' : isCrippled ? ' play-hull-crippled' : '';
+    const hullNum = `<span class="play-hull-num${hullNumCls}">${cur}/${hullMax}</span>`;
+
     const statCells = [
       { k: 'thrust', l: 'Thrust' }, { k: 'scan', l: 'Scan' }, { k: 'sig', l: 'Sig' },
       { k: 'es', l: 'ES' }, { k: 'ks', l: 'KS' }, { k: 'bs', l: 'BS' }
@@ -3484,15 +3502,20 @@
         <tbody>${rows}</tbody>
       </table>`;
     }
-    const rules = (db.special_rules || []).map(r => (typeof r === 'string' ? r : r.name)).filter(Boolean);
+    // Launch assets. Note: field is specialRules (camelCase), not special_rules.
+    const loads = db.loads || [];
+    let launchHtml = '';
+    if (loads.length) {
+      const items = loads.map(l =>
+        `<span class="play-launch-item"><span class="play-launch-name">${esc(l.name)}</span> <span class="play-launch-val">Launch ${esc(String(l.launch || '?'))}</span>${l.special && l.special !== '-' ? ` <span class="play-launch-sp">${esc(l.special)}</span>` : ''}</span>`
+      ).join(' ');
+      launchHtml = `<div class="play-launch-row">${items}</div>`;
+    }
+    const rules = (db.specialRules || []).map(r => (typeof r === 'string' ? r : r.name)).filter(Boolean);
     let rulesHtml = '';
     if (rules.length) {
       const chips = rules.map(rname => {
-        const fullRule = lookupRule(rname);
-        if (fullRule && fullRule.description) {
-          return `<span class="play-rule-chip" onclick="App.openRule('${escAttr(rname)}')">${esc(rname)}</span>`;
-        }
-        return `<span class="play-rule-chip">${esc(rname)}</span>`;
+        return `<span class="play-rule-chip" onclick="App.openRule('${escAttr(rname)}')">${esc(rname)}</span>`;
       }).join('');
       rulesHtml = `<div class="play-status-tokens">${chips}</div>`;
     }
@@ -3529,17 +3552,17 @@
     }
     return `<div class="play-ship${isDestroyed ? ' play-ship-destroyed' : ''}">
       <div class="play-ship-nameline">
-        <span class="play-ship-name">${esc(db.name)}</span>
-        ${cripBadge}
-        <div class="play-hull-tracker">
-          <button class="play-hull-btn" onclick="App.mPlayHullChange('${escAttr(inst.id)}',-1)" aria-label="Reduce hull">-</button>
-          <span class="play-hull-val${hullCls}"><span class="play-hull-cur">${cur}</span><span class="play-hull-sep">/</span><span class="play-hull-max">${hullMax}</span></span>
-          <button class="play-hull-btn" onclick="App.mPlayHullChange('${escAttr(inst.id)}',1)" aria-label="Increase hull">+</button>
-        </div>
+        <span class="play-ship-name">${nameHtml}</span>
+        ${isCrippled && !isDestroyed ? '<span class="play-crippled-badge">Crippled</span>' : ''}
       </div>
-      ${hullPips}
+      <div class="play-hull-row">
+        <button class="play-hull-hit" onclick="App.mPlayHullChange('${escAttr(inst.id)}',-1)" title="Take 1 hull damage">Hit</button>
+        <div class="play-hull-pips">${hullPipHtml}${hullNum}</div>
+        <button class="play-hull-fix" onclick="App.mPlayHullChange('${escAttr(inst.id)}',1)" title="Repair 1 hull">Fix</button>
+      </div>
       <div class="play-statline">${statCells}</div>
       ${weaponsHtml}
+      ${launchHtml}
       ${rulesHtml}
       ${cripHtml}
       ${corruptorHtml}
@@ -3635,15 +3658,25 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-09', title: 'Play Mode improvements', items: [
+      'Hull tracker redesigned: Hit/Fix buttons flank the pips inline. Pips now fill left-to-right as damage accumulates (orange = below cripple, red = past it).',
+      'Crippled badge and halved attack dice now correctly appear for Colossal/Super-Heavy ships -- previously missing due to wrong tonnage code.',
+      'Activate button now says "Activated" once tapped, not "Activation Finished".',
+      'Pass token button now opens full pass-token rules on tap.',
+      'Launch assets (drop/assault) shown on ships that carry them.',
+      'Famous-admiral flagship names shown as primary; ship class in muted parentheses.',
+      'Spike Sig text always reserves its width -- no more layout jump when spikes are added.',
+      'Special rules chips now correctly appear for all ships.',
+    ] },
     { date: '2026-07-09', title: 'Play Mode', items: [
       'New: tap the ... menu on a fleet and choose "Play mode" to open an in-game companion for your fleet.',
-      'Per-ship hull pips (filled/empty dots) for instant damage readout, plus numeric tracker. Crippled only triggers on Capital ships (M/H/S tonnage, rulebook 7.3.6) -- Light frigates are never crippled.',
+      'Per-ship hull pips (filled/empty dots) for instant damage readout, plus numeric tracker. Crippled only triggers on Capital ships (M/H/C tonnage, rulebook 7.3.6) -- Light frigates are never crippled.',
       'When a Capital Ship hits half hull, a cripple threshold marker appears on the pips and weapon attacks show halved in red.',
       'Spike tracker per battlegroup: 4 diamond pips, each showing +3" Sig penalty.',
       'Full crippling effects panel per Capital Ship: On Fire (stackable counter), Defence Systems Offline, Scanners Offline, Weapons Offline, Navigation Offline, Orbital Decay -- each with icon and rules summary.',
       'Special rules as tappable chips that open the full rule description.',
-      'Orders picker, Activate / Activation Finished button that dims the battlegroup card.',
-      'Round counter (1/6 to 6/6), Pass token pips with info icon, End Round button resets activations and pass tokens.',
+      'Orders picker, Activate button that dims the battlegroup card once tapped.',
+      'Round counter (1/6 to 6/6), Pass token pips with tap-for-rules button, End Round resets activations and pass tokens.',
       'Bioficer ships get a Corruptor counter.',
       'All state persists in localStorage -- shared with the desktop app for the same fleet.',
     ] },
@@ -4312,7 +4345,7 @@
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,
     overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
     importFleetPrompt, doImportText,
-    openMobilePlay, renderMobilePlay, mPlayChangeRound, mPlayEndRound, mPlayTogglePass, mPlaySpikeChange, mPlaySetOrder, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayCorruptorChange,
+    openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayTogglePass, mPlaySpikeChange, mPlaySetOrder, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayCorruptorChange,
     openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet, sayName
   };
 

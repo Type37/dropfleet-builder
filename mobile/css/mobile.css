@@ -2480,8 +2480,11 @@ body.sheet-open .sheet-scrim {
   padding: 6px var(--sp-m); border-bottom: 1px solid var(--stroke3);
 }
 .play-spike-label { font-size: 12px; color: var(--fg3); flex: 1; }
-.play-spike-sig { color: var(--danger); font-weight: var(--weight-semibold); }
-.play-spike-pips { display: flex; gap: 4px; }
+.play-spike-sig {
+  color: var(--danger); font-weight: var(--weight-semibold); font-size: 12px;
+  min-width: 5.5em; display: inline-block;
+}
+.play-spike-pips { display: flex; gap: 4px; margin-left: auto; }
 .play-spike-pip {
   width: 32px; height: 32px; border: none; background: none; padding: 4px; cursor: pointer;
   color: var(--fg3); display: flex; align-items: center; justify-content: center;
@@ -2516,39 +2519,44 @@ body.sheet-open .sheet-scrim {
   display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap;
 }
 .play-ship-name { font-weight: var(--weight-semibold); font-size: 13px; flex: 1; min-width: 0; }
+.play-ship-class { font-size: 10px; color: var(--fg3); font-weight: 400; margin-left: 2px; }
 .play-crippled-badge {
   font-size: 10px; font-weight: var(--weight-bold); color: var(--danger);
   text-transform: uppercase; letter-spacing: .05em;
   border: 1px solid var(--danger); border-radius: var(--radius-sm); padding: 1px 4px;
 }
-.play-hull-tracker { display: flex; align-items: center; gap: 4px; }
-.play-hull-btn {
-  width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--stroke1);
-  background: var(--paper-alt); color: var(--fg1); font-size: 16px;
-  display: flex; align-items: center; justify-content: center; cursor: pointer;
+/* Hull row: [Hit] [pips + count] [Fix] inline */
+.play-hull-row { display: flex; align-items: center; gap: 6px; margin: 4px 0; flex-wrap: nowrap; }
+.play-hull-hit, .play-hull-fix {
+  flex-shrink: 0; padding: 4px 11px; border: 1.5px solid; border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 12px; font-weight: var(--weight-bold);
+  text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.3;
+  transition: opacity var(--duration-fast);
+}
+.play-hull-hit { background: rgba(200,50,40,0.08); color: var(--danger); border-color: rgba(200,50,40,0.3); }
+.play-hull-hit:active { opacity: .7; }
+.play-hull-fix { background: rgba(30,110,30,0.07); color: #2a7a2a; border-color: rgba(30,110,30,0.25); }
+.play-hull-fix:active { opacity: .7; }
+.play-hull-num {
+  font-family: var(--font-display); font-size: 12px; font-weight: var(--weight-bold);
+  color: var(--fg3); white-space: nowrap; margin-left: 2px;
+}
+.play-hull-crippled { color: var(--danger) !important; }
+.play-hull-dead { color: var(--fg4) !important; text-decoration: line-through; }
+
+/* Hull pips: empty = healthy, filled orange/red = hit taken. Fill left→right as damage. */
+.play-hull-pips { display: flex; flex-wrap: wrap; gap: 3px; align-items: center; flex: 1; min-width: 0; }
+.play-pip {
+  width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+  border: 1.5px solid var(--stroke1); background: transparent;
   transition: background var(--duration-fast);
 }
-.play-hull-btn:active { background: var(--stroke1); }
-.play-hull-val { font-family: var(--font-display); font-size: 15px; font-weight: var(--weight-bold); }
-.play-hull-cur { color: var(--fg1); }
-.play-hull-val.play-crippled .play-hull-cur { color: var(--danger); }
-.play-hull-val.play-destroyed .play-hull-cur { color: var(--fg4); }
-.play-hull-sep, .play-hull-max { color: var(--fg3); font-size: 13px; }
-
-/* Hull pips */
-.play-hull-pips { display: flex; flex-wrap: wrap; gap: 3px; margin: 4px 0; }
-.play-pip {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: var(--fg1); display: inline-block;
-}
-.play-pip.play-pip-crip { background: var(--danger); }
-.play-pip.play-pip-dead { background: transparent; border: 1.5px solid var(--stroke1); }
-.play-pip.play-pip-threshold {
-  position: relative;
-}
-.play-pip.play-pip-threshold::before {
+.play-pip.play-pip-dmg { background: #d07020; border-color: #d07020; }
+.play-pip.play-pip-crip { background: var(--danger); border-color: var(--danger); }
+.play-pip.play-pip-thresh { margin-left: 3px; position: relative; }
+.play-pip.play-pip-thresh::before {
   content: ''; position: absolute; left: -3px; top: 0; bottom: 0;
-  width: 2px; background: var(--danger); border-radius: 1px;
+  width: 2px; background: var(--danger); border-radius: 1px; opacity: .5;
 }
 
 /* Stat line */
@@ -2616,6 +2624,25 @@ body.sheet-open .sheet-scrim {
 }
 .play-corruptor-btn:active { background: var(--stroke1); }
 .play-corruptor-label { font-size: 12px; color: var(--fg2); }
+
+/* Launch assets */
+.play-launch-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; align-items: center; }
+.play-launch-item { display: flex; align-items: center; gap: 3px; }
+.play-launch-name { font-size: 11px; color: var(--fg3); }
+.play-launch-val {
+  font-size: 12px; font-weight: var(--weight-bold);
+  color: #1565c0; background: rgba(21,101,192,0.08);
+  padding: 1px 6px; border-radius: 10px; border: 1px solid rgba(21,101,192,0.2);
+}
+.play-launch-sp { font-size: 10px; color: var(--fg4); }
+
+/* Pass info button */
+.play-pass-info-btn {
+  background: none; border: none; cursor: pointer; padding: 0 2px;
+  font-size: 14px; color: var(--fg4); line-height: 1; vertical-align: middle;
+}
+.play-pass-info-btn:active { opacity: .6; }
+.play-pass-pips { display: flex; gap: 4px; align-items: center; }
 
 /* ── 51. Reduced motion ────────────────────────────────────
    Respect the OS "reduce motion" setting: drop slides/transforms,

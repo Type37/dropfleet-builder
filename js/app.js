@@ -7076,7 +7076,8 @@ const App = (() => {
   const PLAY_ORDERS = ['Standard', 'Max Thrust', 'Silent Running', 'Station Keeping', 'Weapons Free'];
   const PLAY_STORAGE_PREFIX = 'dfc_play_';
   // Rulebook 7.3.6: only Medium/Heavy/Colossal are Capital Ships — Light (frigates) never crip.
-  const PLAY_CAPITAL = new Set(['M', 'H', 'S']);
+  // Data uses 'C' for Colossal/Super-Heavy (not 'S').
+  const PLAY_CAPITAL = new Set(['M', 'H', 'C']);
 
   // Crippling effects (2D6 table, rulebook 7.3.6). Fire is stackable; others are boolean.
   const CRIP_EFFECTS = [
@@ -7110,7 +7111,7 @@ const App = (() => {
 
   function initPlayState(fleet, faction) {
     const ex = loadPlayState(fleet.id) || {};
-    playState = { round: ex.round || 1, passes: ex.passes || [false, false, false], battlegroups: ex.battlegroups || {}, ships: ex.ships || {} };
+    playState = { round: ex.round || 1, passes: ex.passes || [false, false, false], opponentGroups: ex.opponentGroups || 0, battlegroups: ex.battlegroups || {}, ships: ex.ships || {} };
     for (const bg of (fleet.battleGroups || [])) {
       if (!playState.battlegroups[bg.id]) playState.battlegroups[bg.id] = { order: 'Standard', activated: false, spikes: 0 };
       else if (playState.battlegroups[bg.id].spikes === undefined) playState.battlegroups[bg.id].spikes = 0;
@@ -7120,7 +7121,6 @@ const App = (() => {
         if (!playState.ships[ship.id]) {
           playState.ships[ship.id] = { cur: hull, fire: 0, defSysOff: false, scannersOff: false, weaponsOff: false, navOff: false, orbDecay: false };
         } else {
-          // Migrate old onFire/powerOut fields to new schema.
           const ss = playState.ships[ship.id];
           if (ss.onFire !== undefined) { if (!ss.fire) ss.fire = ss.onFire ? 1 : 0; delete ss.onFire; }
           if (ss.powerOut !== undefined) { if (ss.weaponsOff === undefined) ss.weaponsOff = ss.powerOut; delete ss.powerOut; }
@@ -7141,16 +7141,20 @@ const App = (() => {
     });
   }
 
-  // SVG (?) info icon for pass token explanation.
-  const PASS_INFO = '<svg viewBox="0 0 20 20" fill="currentColor" style="width:12px;height:12px;vertical-align:middle;color:var(--ink-faint)" title="When you have 2 or more fewer Groups than your opponent, you generate Pass tokens. Use a Pass token instead of activating a Group."><path d="M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2Zm1 11H9V9h2v4Zm0-6H9V5h2v2Z"/></svg>';
+  function showPlayPassInfo(event) {
+    showRuleTooltip(event, event.currentTarget);
+  }
 
   function renderPlayMode() {
     const el = document.getElementById('view-play');
     if (!playFleet || !playState) { el.innerHTML = '<div class="play-empty">No fleet loaded.</div>'; return; }
 
-    const passHtml = playState.passes.map((used, i) =>
+    const passes = playState.passes || [];
+    const passHtml = passes.map((used, i) =>
       `<span class="play-pass-pip${used ? ' play-pass-used' : ''}" onclick="App.playTogglePass(${i})" title="Pass token ${i + 1}"></span>`
     ).join('');
+    const passInfoDesc = escAttr('Determine how many Groups each player has on the table, plus any the Scenario states may deploy this turn. If a player has two fewer Groups than the player with the most, they generate a Pass token. For each additional Group fewer, they generate another Pass token. Pass tokens do not persist after the Activation Phase.');
+    const passInfoBtn = `<button class="play-pass-info-btn" data-rule-desc="${passInfoDesc}" onclick="App.showPlayPassInfo(event)" title="Pass token rules">ⓘ</button>`;
 
     const bgCards = (playFleet.battleGroups || []).map(bg => renderPlayBgCard(bg, playFleet.faction)).join('');
 
@@ -7164,7 +7168,10 @@ const App = (() => {
           </div>
           <button class="play-round-btn" onclick="App.playChangeRound(1)" aria-label="Next round">+</button>
         </div>
-        <div class="play-pass-tokens"><span class="play-pass-label">Pass ${PASS_INFO}</span>${passHtml}</div>
+        <div class="play-pass-tokens">
+          <span class="play-pass-label">Pass ${passInfoBtn}</span>
+          <span class="play-pass-pips">${passHtml}</span>
+        </div>
         <div class="play-header-spacer"></div>
         <button class="play-end-round-btn" onclick="App.playEndRound()">End Round</button>
       </div>
@@ -7180,15 +7187,12 @@ const App = (() => {
       const db0 = findShipInDB(faction, bg.ships[0].groupCategory, bg.ships[0].shipKey);
       if (db0 && db0.tonnage) tonCode = db0.tonnage;
     }
-    const tonLabels = { L: 'Light', M: 'Medium', H: 'Heavy', S: 'Super-Heavy' };
+    const tonLabels = { L: 'Light', M: 'Medium', H: 'Heavy', C: 'Super-Heavy' };
 
     let admiralStr = '';
-    if (playFleet.admirals && playFleet.admirals.length) {
-      const adm = playFleet.admirals.find(a => a.groupId === bg.id);
-      if (adm) admiralStr = ` <span class="play-bg-admiral">&mdash; ${esc(adm.name || 'Admiral')} (${adm.rating || 0})</span>`;
-    }
+    const bgAdmiral = (playFleet.admirals || []).find(a => a.groupId === bg.id);
+    if (bgAdmiral) admiralStr = ` <span class="play-bg-admiral">&mdash; ${esc(bgAdmiral.name || 'Admiral')} (${bgAdmiral.rating || 0})</span>`;
 
-    // Spike pips: 4 diamond-shaped clickable buttons. Click a filled pip to remove, empty to add.
     const spikePips = [0,1,2,3].map(i =>
       `<button class="play-spike-pip${i < spikes ? ' play-spike-on' : ''}" onclick="App.playSpikeChange('${escAttr(bg.id)}',${i < spikes ? -1 : 1})" title="${i < spikes ? 'Remove Spike' : 'Add Spike (+3&quot; Sig)'}">
         <svg viewBox="0 0 24 24" fill="${i < spikes ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M12 2l10 10-10 10L2 12Z"/></svg>
@@ -7199,17 +7203,22 @@ const App = (() => {
       `<button class="play-order-chip${bgs.order === o ? ' play-order-sel' : ''}" onclick="App.playSetOrder('${escAttr(bg.id)}','${escAttr(o)}')">${esc(o)}</button>`
     ).join('');
 
-    const shipsHtml = (bg.ships || []).map(ship => renderPlayShip(ship, faction)).join('');
+    // Pass famous admiral flagship name to the first ship in the group.
+    const famAdmiral = bgAdmiral && bgAdmiral.flagshipName ? bgAdmiral : null;
+    const shipsHtml = (bg.ships || []).map((ship, idx) =>
+      renderPlayShip(ship, faction, idx === 0 && famAdmiral ? famAdmiral.flagshipName : null)
+    ).join('');
     const actDone = bgs.activated;
 
     return `<div class="play-bg-card${actDone ? ' play-activated' : ''}">
       <div class="play-bg-header">
         <span class="play-ton-badge play-ton-${tonCode}">${tonLabels[tonCode] || tonCode}</span>
         <span class="play-bg-name">${esc(bg.name || 'Unnamed battlegroup')}${admiralStr}</span>
-        <button class="play-act-btn${actDone ? ' play-done' : ''}" onclick="App.playToggleActivation('${escAttr(bg.id)}')">${actDone ? 'Activation Finished' : 'Activate'}</button>
+        <button class="play-act-btn${actDone ? ' play-done' : ''}" onclick="App.playToggleActivation('${escAttr(bg.id)}')">${actDone ? 'Activated' : 'Activate'}</button>
       </div>
       <div class="play-spike-row">
-        <span class="play-spike-label">Spikes${spikes ? ` <span class="play-spike-sig">+${spikes * 3}" Sig</span>` : ''}</span>
+        <span class="play-spike-label">Spikes</span>
+        <span class="play-spike-sig">${spikes ? `+${spikes * 3}" Sig` : ''}</span>
         <div class="play-spike-pips">${spikePips}</div>
       </div>
       <div class="play-orders-row">${orderChips}</div>
@@ -7217,7 +7226,7 @@ const App = (() => {
     </div>`;
   }
 
-  function renderPlayShip(ship, faction) {
+  function renderPlayShip(ship, faction, flagshipName) {
     const db = findShipInDB(faction, ship.groupCategory, ship.shipKey);
     if (!db) return '';
     const eff = effectiveStats(db, ship, faction);
@@ -7226,25 +7235,30 @@ const App = (() => {
     const ss = playState.ships[ship.id] || { cur: parseInt(s.hull) || 1, fire: 0 };
     const hullMax = parseInt(s.hull) || 1;
     const cur = Math.max(0, Math.min(hullMax, ss.cur));
-    const isCrippled = isCapital && cur > 0 && cur <= Math.floor(hullMax / 2);
+    const dmgTaken = hullMax - cur;
+    const cripThresh = Math.floor(hullMax / 2);
+    const isCrippled = isCapital && cur > 0 && cur <= cripThresh;
     const isDestroyed = cur === 0;
-    const crip = Math.floor(hullMax / 2); // cripple threshold index
 
-    // Hull pips (up to 20 shown as dots; larger ships fall back to number display).
-    let hullPips = '';
+    // Ship name: flagship override shows the famous admiral's ship name, then class in muted text.
+    const nameHtml = flagshipName
+      ? `${esc(flagshipName)} <span class="play-ship-class">${esc(db.name)}</span>`
+      : esc(db.name);
+
+    // Hull pips (up to 20): empty = healthy, filled = hit taken. Fill left→right as damage accumulates.
+    let hullPipHtml = '';
     if (hullMax <= 20) {
-      const dots = Array.from({ length: hullMax }, (_, i) => {
-        const alive = i < cur;
-        const atThreshold = isCapital && i === crip;
-        return `<span class="play-pip${alive ? (isCrippled ? ' play-pip-crip' : '') : ' play-pip-dead'}${atThreshold ? ' play-pip-threshold' : ''}"></span>`;
+      hullPipHtml = Array.from({ length: hullMax }, (_, i) => {
+        const isDmg = i < dmgTaken;
+        const pastCrip = isCapital && i >= cripThresh;
+        const atThresh = isCapital && i === cripThresh;
+        return `<span class="play-pip${isDmg ? (pastCrip ? ' play-pip-crip' : ' play-pip-dmg') : ''}${atThresh ? ' play-pip-thresh' : ''}"></span>`;
       }).join('');
-      hullPips = `<div class="play-hull-pips">${dots}</div>`;
     }
+    const hullNumCls = isDestroyed ? ' play-hull-dead' : isCrippled ? ' play-hull-crippled' : '';
+    const hullNum = `<span class="play-hull-num${hullNumCls}">${cur}/${hullMax}</span>`;
 
-    const hullCls = isDestroyed ? ' play-destroyed' : isCrippled ? ' play-crippled' : '';
-    const cripBadge = (isCrippled && !isDestroyed) ? `<span class="play-crippled-badge">Crippled</span>` : '';
-
-    // Compact stat line (hull shown in tracker above, not here).
+    // Compact stat line.
     const statCells = [
       { k: 'thrust', l: 'Thrust' }, { k: 'scan', l: 'Scan' }, { k: 'sig', l: 'Sig' },
       { k: 'es', l: 'ES' }, { k: 'ks', l: 'KS' }, { k: 'bs', l: 'BS' }
@@ -7252,7 +7266,7 @@ const App = (() => {
       `<div class="play-stat"><span class="play-stat-val">${esc(String(s[c.k]))}</span><span class="play-stat-lbl">${c.l}</span></div>`
     ).join('');
 
-    // Effective weapons (base + selected loadout, mirrors renderGroupShipEntry).
+    // Effective weapons (base + selected loadout).
     const wpns = Array.isArray(db.weapons) ? [...db.weapons] : [];
     (Array.isArray(db.loadoutOptions) ? db.loadoutOptions : []).forEach((lo, i) => {
       const sel = (ship.loadouts && ship.loadouts[i] !== undefined) ? ship.loadouts[i] : 0;
@@ -7284,8 +7298,18 @@ const App = (() => {
       </table>`;
     }
 
-    // Special rules — clickable chips that open the full description tooltip.
-    const rules = (db.special_rules || []).map(r => (typeof r === 'string' ? r : r.name)).filter(Boolean);
+    // Launch assets (drop/launch capabilities not in the weapons table).
+    const loads = db.loads || [];
+    let launchHtml = '';
+    if (loads.length) {
+      const items = loads.map(l =>
+        `<span class="play-launch-item"><span class="play-launch-name">${esc(l.name)}</span> <span class="play-launch-val">Launch ${esc(String(l.launch || '?'))}</span>${l.special && l.special !== '-' ? ` <span class="play-launch-sp">${esc(l.special)}</span>` : ''}</span>`
+      ).join(' ');
+      launchHtml = `<div class="play-launch-row">${items}</div>`;
+    }
+
+    // Special rules — clickable chips. Note: field is specialRules (camelCase).
+    const rules = (db.specialRules || []).map(r => (typeof r === 'string' ? r : r.name)).filter(Boolean);
     let rulesHtml = '';
     if (rules.length) {
       const chips = rules.map(rname => {
@@ -7335,17 +7359,17 @@ const App = (() => {
 
     return `<div class="play-ship${isDestroyed ? ' play-ship-destroyed' : ''}">
       <div class="play-ship-nameline">
-        <span class="play-ship-name">${esc(db.name)}</span>
-        ${cripBadge}
-        <div class="play-hull-tracker">
-          <button class="play-hull-btn" onclick="App.playHullChange('${escAttr(ship.id)}',-1)" aria-label="Reduce hull">−</button>
-          <span class="play-hull-val${hullCls}"><span class="play-hull-cur">${cur}</span><span class="play-hull-sep">/</span><span class="play-hull-max">${hullMax}</span></span>
-          <button class="play-hull-btn" onclick="App.playHullChange('${escAttr(ship.id)}',1)" aria-label="Increase hull">+</button>
-        </div>
+        <span class="play-ship-name">${nameHtml}</span>
+        ${isCrippled && !isDestroyed ? '<span class="play-crippled-badge">Crippled</span>' : ''}
       </div>
-      ${hullPips}
+      <div class="play-hull-row">
+        <button class="play-hull-hit" onclick="App.playHullChange('${escAttr(ship.id)}',-1)" title="Take 1 hull damage">Hit</button>
+        <div class="play-hull-pips">${hullPipHtml}${hullNum}</div>
+        <button class="play-hull-fix" onclick="App.playHullChange('${escAttr(ship.id)}',1)" title="Repair 1 hull">Fix</button>
+      </div>
       <div class="play-statline">${statCells}</div>
       ${weaponsHtml}
+      ${launchHtml}
       ${rulesHtml}
       ${cripHtml}
       ${corruptorHtml}
@@ -7431,15 +7455,25 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-09', title: 'Play Mode improvements', items: [
+      'Hull tracker redesigned: Hit/Fix buttons flank the pips inline. Pips now fill left-to-right as damage accumulates (orange = below cripple, red = past it).',
+      'Crippled badge and halved attack dice now correctly appear for Colossal/Super-Heavy (Dreadnoughts) -- previously missing due to wrong tonnage code.',
+      'Activate button now says "Activated" once clicked, not "Activation Finished".',
+      'Pass token (i) button opens full pass-token rules on click, not just a tooltip title.',
+      'Launch assets (drop/assault) are now shown on ships that carry them (e.g. Orpheus Assault Troopship).',
+      'Famous-admiral flagship names (e.g. "Red Notice") shown as primary with ship class in muted parentheses, so you can tell what type of ship it is.',
+      'Spike Sig text (+3" Sig) always reserves its width -- no more layout jump when spikes are added.',
+      'Special rules chips now correctly appear for all ships (was broken due to wrong field name).',
+    ] },
     { date: '2026-07-09', title: 'Play Mode', items: [
       'New Play button in the fleet builder topbar opens a compact in-game companion for your fleet.',
       'Per-ship hull pips (filled/empty dots) for instant damage readout, plus numeric tracker with +/- buttons. Crippled only triggers on Medium/Heavy/Colossal ships (rulebook 7.3.6) -- Light tonnage frigates are never crippled.',
       'When a Capital Ship hits half hull, a cripple threshold mark appears on the pips and all weapon attacks show halved in red.',
       'Spike tracker per battlegroup: 4 large diamond pips. Each filled Spike shows its +3" Sig penalty.',
       'Full crippling effects panel per Capital Ship: On Fire counter (stackable), Defence Systems Offline, Scanners Offline, Weapons Offline, Navigation Offline, Orbital Decay -- each with icon and rules summary on hover.',
-      'Special rules are now tappable chips that open the full in-game rule description.',
-      'Orders picker, Activate / Activation Finished button that dims the battlegroup card.',
-      'Round counter (1-6), Pass token pips with explanatory tooltip, End Round resets activations and pass tokens.',
+      'Special rules are tappable chips that open the full in-game rule description.',
+      'Orders picker, Activate button that dims the battlegroup card once activated.',
+      'Round counter (1-6), Pass token pips with tap-for-rules button, End Round resets activations and pass tokens.',
       'Bioficer ships get a Corruptor counter.',
       'All state persists in localStorage per fleet.',
     ] },
@@ -8605,7 +8639,7 @@ const App = (() => {
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFlagshipLoadout, changeFeature, addSystem, removeSystem, toggleSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
-    openPlayMode, playChangeRound, playEndRound, playTogglePass, playSpikeChange, playSetOrder, playToggleActivation, playHullChange, playCripChange, playCripToggle, playToggleFire, playTogglePower, playCorruptorChange,
+    openPlayMode, showPlayPassInfo, playChangeRound, playEndRound, playTogglePass, playSpikeChange, playSetOrder, playToggleActivation, playHullChange, playCripChange, playCripToggle, playToggleFire, playTogglePower, playCorruptorChange,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText, openLastImported,
     openSettings, openChangelog, toggleSetting, toggleTheme, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, sayName, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal

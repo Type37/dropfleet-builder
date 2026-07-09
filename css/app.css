@@ -7251,23 +7251,30 @@ body[data-view="builder"] .game-info-footer {
   font-size: 13px; font-weight: 700; font-family: var(--font-condensed);
   letter-spacing: 0.03em; color: var(--ink);
 }
-.play-ship-class { font-size: 11px; color: var(--ink-muted); }
-.play-hull-tracker { display: flex; align-items: center; gap: 4px; margin-left: auto; }
-.play-hull-btn {
-  width: 24px; height: 24px; border: 1px solid var(--stroke); background: var(--paper-warm);
-  border-radius: var(--radius-sm); cursor: pointer; font-size: 14px; color: var(--ink);
-  font-family: inherit; display: flex; align-items: center; justify-content: center;
-  line-height: 1; transition: background var(--duration-fast);
+.play-ship-class { font-size: 10px; color: var(--ink-muted); font-weight: 400; margin-left: 2px; }
+/* Hull row: [Hit] [pips + count] [Fix] all inline */
+.play-hull-row { display: flex; align-items: center; gap: 5px; flex-wrap: nowrap; }
+.play-hull-hit, .play-hull-fix {
+  flex-shrink: 0; padding: 3px 9px; border: 1px solid; border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 11px; font-weight: 700; font-family: var(--font-condensed);
+  letter-spacing: 0.04em; text-transform: uppercase; line-height: 1.4;
+  transition: background var(--duration-fast), opacity var(--duration-fast);
 }
-.play-hull-btn:hover { background: var(--paper-alt); }
-.play-hull-val {
-  font-size: 14px; font-weight: 700; font-family: var(--font-condensed);
-  min-width: 44px; text-align: center; color: var(--ink);
+.play-hull-hit {
+  background: rgba(196,60,47,0.08); color: var(--error); border-color: rgba(196,60,47,0.3);
 }
-.play-hull-sep { color: var(--ink-muted); font-weight: 400; }
-.play-hull-max { color: var(--ink-muted); font-size: 11px; font-weight: 400; }
-.play-hull-val.play-crippled .play-hull-cur { color: var(--error); }
-.play-hull-val.play-destroyed .play-hull-cur { color: var(--ink-faint); text-decoration: line-through; }
+.play-hull-hit:hover { background: rgba(196,60,47,0.15); }
+.play-hull-fix {
+  background: rgba(30,120,30,0.07); color: #2e7d32; border-color: rgba(30,120,30,0.25);
+}
+.play-hull-fix:hover { background: rgba(30,120,30,0.14); }
+html[data-theme="dark"] .play-hull-fix { color: #81c784; border-color: rgba(129,199,132,0.3); }
+.play-hull-num {
+  font-size: 12px; font-weight: 700; font-family: var(--font-condensed); color: var(--ink-muted);
+  white-space: nowrap; margin-left: 2px;
+}
+.play-hull-crippled { color: var(--error) !important; }
+.play-hull-dead { color: var(--ink-faint) !important; text-decoration: line-through; }
 .play-crippled-badge {
   font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 20px;
   background: rgba(196,60,47,0.12); color: var(--error);
@@ -7337,20 +7344,20 @@ html[data-theme="dark"] .play-corruptor-label { color: #ce93d8; background: rgba
 .play-pass-label { font-size: 11px; margin-right: 2px; }
 
 /* ── Play: hull pips ── */
-.play-hull-pips { display: flex; gap: 3px; flex-wrap: wrap; margin: 3px 0 2px; }
+.play-hull-pips { display: flex; gap: 3px; flex-wrap: wrap; align-items: center; flex: 1; min-width: 0; }
 .play-pip {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: var(--ink); flex-shrink: 0;
-  transition: background var(--duration-fast);
+  width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+  border: 1.5px solid var(--stroke-strong); background: transparent;
+  transition: background var(--duration-fast), border-color var(--duration-fast);
 }
-.play-pip-crip { background: var(--error); }
-.play-pip-dead { background: transparent; border: 1.5px solid var(--stroke-strong); }
-.play-ship-destroyed .play-pip-dead { border-color: var(--stroke-light); opacity: 0.45; }
-.play-pip-threshold { margin-left: 5px; }
-.play-pip-threshold::before {
+/* filled left→right as damage taken: orange = damage below cripple, red = damage past cripple */
+.play-pip-dmg { background: var(--warning); border-color: var(--warning); }
+.play-pip-crip { background: var(--error); border-color: var(--error); }
+.play-pip-thresh { margin-left: 4px; }
+.play-pip-thresh::before {
   content: ''; display: inline-block; width: 1.5px; height: 10px;
-  background: var(--error); opacity: 0.35; border-radius: 1px;
-  margin-right: 3px; vertical-align: middle;
+  background: var(--error); opacity: 0.45; border-radius: 1px;
+  margin-right: 2px; vertical-align: middle;
 }
 
 /* ── Play: spike row ── */
@@ -7363,8 +7370,11 @@ html[data-theme="dark"] .play-corruptor-label { color: #ce93d8; background: rgba
   font-size: 10px; font-family: var(--font-condensed); font-weight: 600;
   letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted); white-space: nowrap;
 }
-.play-spike-sig { font-weight: 700; color: var(--warning); }
-.play-spike-pips { display: flex; gap: 3px; align-items: center; }
+.play-spike-sig {
+  font-weight: 700; color: var(--warning); font-size: 11px;
+  min-width: 5.5em; display: inline-block;
+}
+.play-spike-pips { display: flex; gap: 3px; align-items: center; margin-left: auto; }
 .play-spike-pip {
   width: 28px; height: 28px;
   border: none; background: transparent; cursor: pointer; padding: 3px;
@@ -7407,3 +7417,27 @@ html[data-theme="dark"] .play-corruptor-label { color: #ce93d8; background: rgba
 .play-crip-icon svg { width: 14px; height: 14px; }
 .play-crip-badge-lbl { white-space: nowrap; }
 .play-crip-count { font-size: 13px; font-weight: 700; font-family: var(--font-condensed); min-width: 14px; text-align: center; }
+
+/* ── Play: launch assets ── */
+.play-launch-row {
+  display: flex; flex-wrap: wrap; gap: 6px; padding: 3px 0;
+  font-size: 11px; align-items: center;
+}
+.play-launch-item { display: flex; align-items: center; gap: 3px; }
+.play-launch-name { color: var(--ink-muted); }
+.play-launch-val {
+  font-weight: 700; font-family: var(--font-condensed); font-size: 12px;
+  color: #1565c0; background: rgba(21,101,192,0.08);
+  padding: 1px 6px; border-radius: 10px; border: 1px solid rgba(21,101,192,0.2);
+}
+html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,181,246,0.1); border-color: rgba(100,181,246,0.25); }
+.play-launch-sp { color: var(--ink-faint); font-size: 10px; }
+
+/* ── Play: pass info button ── */
+.play-pass-info-btn {
+  background: none; border: none; cursor: pointer; padding: 0 2px;
+  font-size: 13px; color: var(--ink-faint); line-height: 1;
+  vertical-align: middle; transition: color var(--duration-fast);
+}
+.play-pass-info-btn:hover { color: var(--ink-muted); }
+.play-pass-pips { display: flex; gap: 4px; align-items: center; }
