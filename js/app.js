@@ -767,6 +767,10 @@ const App = (() => {
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6V2h8v4M4 12H2V7h12v5h-2"/><rect x="4" y="10" width="8" height="4"/></svg>
                 <span class="topbar-action-label">Print preview</span>
               </button>
+              <button class="btn btn-ghost btn-sm topbar-action-btn topbar-play-btn" onclick="App.openPlayMode()" data-tooltip="Play mode">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M3 2.5a.5.5 0 0 1 .765-.424l10 6a.5.5 0 0 1 0 .848l-10 6A.5.5 0 0 1 3 14.5v-12Z"/></svg>
+                <span class="topbar-action-label">Play</span>
+              </button>
               <button class="btn btn-sm topbar-action-btn topbar-settings-btn" onclick="App.openSettings()" data-tooltip="Settings">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></svg>
                 <span class="topbar-action-label">Settings</span>
@@ -787,6 +791,27 @@ const App = (() => {
             return;
           } else {
             showToast('Invalid share link');
+          }
+        }
+        navigate('fleets');
+        break;
+      case 'play':
+        if (param) {
+          const playTarget = fleets.find(f => f.id === param);
+          if (playTarget) {
+            show('view-play');
+            topContext.innerHTML = `<a href="#builder/${param}" class="topbar-back" onclick="App.navigate('builder','${param}'); return false;"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> ${esc(playTarget.name)} <span style="font-size:11px;color:var(--ink-muted);font-family:var(--font-condensed);letter-spacing:0.04em;text-transform:uppercase"> &mdash; Play Mode</span>`;
+            topActions.innerHTML = `<button class="play-end-round-btn" style="margin:0" onclick="App.playEndRound()">End Round</button>`;
+            if (playFleet && playFleet.id === param && playState) {
+              renderPlayMode();
+            } else {
+              playFleet = playTarget;
+              ensureFactionLoaded(playTarget.faction).then(() => {
+                initPlayState(playTarget, playTarget.faction);
+                renderPlayMode();
+              });
+            }
+            return;
           }
         }
         navigate('fleets');
@@ -7041,11 +7066,285 @@ const App = (() => {
     return out.trimEnd();
   }
 
+  // ── Play Mode ──────────────────────────────────────────────────────────────
+  // Per-fleet play state lives in localStorage under 'dfc_play_{fleetId}'.
+  // Tracks round, pass tokens, per-battlegroup orders + activation, and per-ship
+  // hull / status tokens. Hull max is always re-derived from the live shipDB so
+  // stat-modifying refits are reflected correctly.
+
+  let playFleet = null;
+  let playState = null;
+
+  const PLAY_ORDERS = ['Standard', 'Max Thrust', 'Silent Running', 'Station Keeping', 'Weapons Free'];
+  const PLAY_STORAGE_PREFIX = 'dfc_play_';
+
+  function loadPlayState(fleetId) {
+    try { const r = localStorage.getItem(PLAY_STORAGE_PREFIX + fleetId); return r ? JSON.parse(r) : null; } catch { return null; }
+  }
+  function savePlayState() {
+    if (!playFleet || !playState) return;
+    try { localStorage.setItem(PLAY_STORAGE_PREFIX + playFleet.id, JSON.stringify(playState)); } catch {}
+  }
+
+  function initPlayState(fleet, faction) {
+    const ex = loadPlayState(fleet.id) || {};
+    playState = {
+      round: ex.round || 1,
+      passes: ex.passes || [false, false, false],
+      battlegroups: ex.battlegroups || {},
+      ships: ex.ships || {}
+    };
+    for (const bg of (fleet.battleGroups || [])) {
+      if (!playState.battlegroups[bg.id])
+        playState.battlegroups[bg.id] = { order: 'Standard', activated: false };
+      for (const ship of (bg.ships || [])) {
+        if (!playState.ships[ship.id]) {
+          const db = findShipInDB(faction, ship.groupCategory, ship.shipKey);
+          const hull = db ? (parseInt(effectiveStats(db, ship, faction).stats.hull) || 1) : 1;
+          playState.ships[ship.id] = { cur: hull, onFire: false, powerOut: false };
+        }
+      }
+    }
+    savePlayState();
+  }
+
+  function openPlayMode() {
+    if (!currentFleet) return;
+    playFleet = currentFleet;
+    ensureFactionLoaded(playFleet.faction).then(() => {
+      initPlayState(playFleet, playFleet.faction);
+      navigate('play', playFleet.id);
+    });
+  }
+
+  function renderPlayMode() {
+    const el = document.getElementById('view-play');
+    if (!playFleet || !playState) { el.innerHTML = '<div class="play-empty">No fleet loaded.</div>'; return; }
+    const faction = playFleet.faction;
+
+    const passHtml = playState.passes.map((used, i) =>
+      `<span class="play-pass-pip${used ? ' play-pass-used' : ''}" onclick="App.playTogglePass(${i})" title="Pass token ${i + 1}"></span>`
+    ).join('');
+
+    const bgCards = (playFleet.battleGroups || []).map(bg => renderPlayBgCard(bg, faction)).join('');
+
+    el.innerHTML = `
+      <div class="play-header">
+        <div class="play-round-ctrl">
+          <button class="play-round-btn" onclick="App.playChangeRound(-1)" aria-label="Previous round">−</button>
+          <div class="play-round-block">
+            <span class="play-round-label">Round</span>
+            <span class="play-round-num">${playState.round}</span>
+          </div>
+          <button class="play-round-btn" onclick="App.playChangeRound(1)" aria-label="Next round">+</button>
+        </div>
+        <div class="play-pass-tokens"><span>Pass:</span>${passHtml}</div>
+        <div class="play-header-spacer"></div>
+        <button class="play-end-round-btn" onclick="App.playEndRound()">End Round</button>
+      </div>
+      <div class="play-bgs">${bgCards}</div>`;
+  }
+
+  function renderPlayBgCard(bg, faction) {
+    const bgs = playState.battlegroups[bg.id] || { order: 'Standard', activated: false };
+
+    let tonCode = 'M';
+    if (bg.ships && bg.ships.length) {
+      const db0 = findShipInDB(faction, bg.ships[0].groupCategory, bg.ships[0].shipKey);
+      if (db0 && db0.tonnage) tonCode = db0.tonnage;
+    }
+    const tonLabels = { L: 'Light', M: 'Medium', H: 'Heavy', S: 'Super-Heavy' };
+
+    let admiralStr = '';
+    if (playFleet.admirals && playFleet.admirals.length) {
+      const adm = playFleet.admirals.find(a => a.groupId === bg.id);
+      if (adm) admiralStr = ` <span class="play-bg-admiral">&mdash; ${esc(adm.name || 'Admiral')} (${adm.rating || 0})</span>`;
+    }
+
+    const orderChips = PLAY_ORDERS.map(o =>
+      `<button class="play-order-chip${bgs.order === o ? ' play-order-sel' : ''}" onclick="App.playSetOrder('${escAttr(bg.id)}','${escAttr(o)}')">${esc(o)}</button>`
+    ).join('');
+
+    const shipsHtml = (bg.ships || []).map(ship => renderPlayShip(ship, faction)).join('');
+
+    return `<div class="play-bg-card${bgs.activated ? ' play-activated' : ''}">
+      <div class="play-bg-header">
+        <span class="play-ton-badge play-ton-${tonCode}">${tonLabels[tonCode] || tonCode}</span>
+        <span class="play-bg-name">${esc(bg.name || 'Unnamed battlegroup')}${admiralStr}</span>
+        <button class="play-act-btn${bgs.activated ? ' play-done' : ''}" onclick="App.playToggleActivation('${escAttr(bg.id)}')">${bgs.activated ? 'Done' : 'Activate'}</button>
+      </div>
+      <div class="play-orders-row">${orderChips}</div>
+      <div class="play-ships">${shipsHtml}</div>
+    </div>`;
+  }
+
+  function renderPlayShip(ship, faction) {
+    const db = findShipInDB(faction, ship.groupCategory, ship.shipKey);
+    if (!db) return '';
+    const eff = effectiveStats(db, ship, faction);
+    const s = eff.stats;
+    const ss = playState.ships[ship.id] || { cur: parseInt(s.hull) || 1, onFire: false, powerOut: false };
+    const hullMax = parseInt(s.hull) || 1;
+    const cur = Math.max(0, Math.min(hullMax, ss.cur));
+    const isCrippled = cur > 0 && cur <= Math.floor(hullMax / 2);
+    const isDestroyed = cur === 0;
+
+    const hullCls = isDestroyed ? ' play-destroyed' : isCrippled ? ' play-crippled' : '';
+    const badges = [];
+    if (isCrippled && !isDestroyed) badges.push(`<span class="play-crippled-badge">Crippled</span>`);
+    if (ss.onFire) badges.push(`<span class="play-fire-badge">On fire</span>`);
+
+    const statCells = [
+      { k: 'thrust', l: 'Thrust' }, { k: 'scan', l: 'Scan' }, { k: 'sig', l: 'Sig' },
+      { k: 'es', l: 'ES' }, { k: 'ks', l: 'KS' }, { k: 'bs', l: 'BS' }
+    ].filter(c => s[c.k] && s[c.k] !== '-' && s[c.k] !== '--').map(c =>
+      `<div class="play-stat"><span class="play-stat-val">${esc(String(s[c.k]))}</span><span class="play-stat-lbl">${c.l}</span></div>`
+    ).join('');
+
+    // Effective weapons: base + selected loadout option weapons (mirrors renderGroupShipEntry logic).
+    const wpns = Array.isArray(db.weapons) ? [...db.weapons] : [];
+    (Array.isArray(db.loadoutOptions) ? db.loadoutOptions : []).forEach((lo, i) => {
+      const sel = (ship.loadouts && ship.loadouts[i] !== undefined) ? ship.loadouts[i] : 0;
+      const opt = lo.options && lo.options[sel];
+      if (opt && Array.isArray(opt.weapons)) wpns.push(...opt.weapons);
+    });
+
+    let weaponsHtml = '';
+    if (wpns.length) {
+      const rows = wpns.map(w => {
+        const attRaw = parseInt(w.attack || w.att || 0);
+        const attDisplay = isCrippled
+          ? `<span class="play-crippled-atk">${Math.floor(attRaw / 2)}</span>`
+          : (attRaw || '-');
+        const dmgType = w.type || w.t || '';
+        const dmg = w.damage || w.dmg || '-';
+        return `<tr>
+          <td class="play-wt-name">${esc(w.name)}</td>
+          <td class="play-wt-num">${esc(w.arc || '-')}</td>
+          <td class="play-wt-num">${attDisplay}</td>
+          <td class="play-wt-num">${esc(w.lock || w.lk || '-')}</td>
+          <td class="play-wt-num play-dmg-${dmgType}">${esc(String(dmg))}${dmgType ? `<span style="font-size:9px;opacity:.7">${dmgType}</span>` : ''}</td>
+          <td class="play-wt-special">${esc(w.special || w.sp || '-')}</td>
+        </tr>`;
+      }).join('');
+      weaponsHtml = `<table class="play-weapons">
+        <thead><tr><th>Weapon</th><th>Arc</th><th>Att</th><th>Lk</th><th>Dmg</th><th>Special</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+    }
+
+    // Special rule chips (name only, for quick in-game reference).
+    const rules = (db.special_rules || []).map(r => (typeof r === 'string' ? r : r.name)).filter(Boolean);
+    const rulesHtml = rules.length
+      ? `<div class="play-status-tokens">${rules.map(r => `<span class="play-rule-chip">${esc(r)}</span>`).join('')}</div>`
+      : '';
+
+    // Corruptor tracker (Bioficer ships).
+    const hasCorruptor = rules.some(r => /corruptor/i.test(r)) || /corruptor/i.test(s.special || '');
+    const corrCount = ss.corruptor || 0;
+    const corruptorHtml = hasCorruptor ? `<div class="play-corruptor-ctrl">
+      <button class="play-corruptor-btn" onclick="App.playCorruptorChange('${escAttr(ship.id)}',-1)">−</button>
+      <span class="play-corruptor-label">Corruptor &times;${corrCount}</span>
+      <button class="play-corruptor-btn" onclick="App.playCorruptorChange('${escAttr(ship.id)}',1)">+</button>
+    </div>` : '';
+
+    return `<div class="play-ship">
+      <div class="play-ship-nameline">
+        <span class="play-ship-name">${esc(db.name)}</span>
+        ${badges.join('')}
+        <div class="play-hull-tracker">
+          <button class="play-hull-btn" onclick="App.playHullChange('${escAttr(ship.id)}',-1)" aria-label="Reduce hull">−</button>
+          <span class="play-hull-val${hullCls}"><span class="play-hull-cur">${cur}</span><span class="play-hull-sep">/</span><span class="play-hull-max">${hullMax}</span></span>
+          <button class="play-hull-btn" onclick="App.playHullChange('${escAttr(ship.id)}',1)" aria-label="Increase hull">+</button>
+        </div>
+      </div>
+      <div class="play-statline">${statCells}</div>
+      ${weaponsHtml}
+      ${rulesHtml}
+      <div class="play-status-tokens">
+        <button class="play-tok${ss.onFire ? ' play-tok-active' : ''}" onclick="App.playToggleFire('${escAttr(ship.id)}')">On fire</button>
+        <button class="play-tok${ss.powerOut ? ' play-tok-active' : ''}" onclick="App.playTogglePower('${escAttr(ship.id)}')">Power out</button>
+        ${corruptorHtml}
+      </div>
+    </div>`;
+  }
+
+  function playChangeRound(delta) {
+    if (!playState) return;
+    playState.round = Math.max(1, Math.min(6, playState.round + delta));
+    savePlayState(); renderPlayMode();
+  }
+  function playEndRound() {
+    if (!playState) return;
+    Object.values(playState.battlegroups).forEach(b => { b.activated = false; });
+    savePlayState(); renderPlayMode();
+  }
+  function playTogglePass(i) {
+    if (!playState) return;
+    playState.passes[i] = !playState.passes[i];
+    savePlayState(); renderPlayMode();
+  }
+  function playSetOrder(bgId, order) {
+    if (!playState) return;
+    if (!playState.battlegroups[bgId]) playState.battlegroups[bgId] = { order: 'Standard', activated: false };
+    playState.battlegroups[bgId].order = order;
+    savePlayState(); renderPlayMode();
+  }
+  function playToggleActivation(bgId) {
+    if (!playState) return;
+    if (!playState.battlegroups[bgId]) playState.battlegroups[bgId] = { order: 'Standard', activated: false };
+    playState.battlegroups[bgId].activated = !playState.battlegroups[bgId].activated;
+    savePlayState(); renderPlayMode();
+  }
+  function playHullChange(shipId, delta) {
+    if (!playState) return;
+    const ss = playState.ships[shipId];
+    if (!ss) return;
+    let hullMax = 1;
+    if (playFleet) {
+      outer: for (const bg of (playFleet.battleGroups || [])) {
+        for (const ship of (bg.ships || [])) {
+          if (ship.id === shipId) {
+            const db = findShipInDB(playFleet.faction, ship.groupCategory, ship.shipKey);
+            if (db) hullMax = parseInt(effectiveStats(db, ship, playFleet.faction).stats.hull) || 1;
+            break outer;
+          }
+        }
+      }
+    }
+    ss.cur = Math.max(0, Math.min(hullMax, ss.cur + delta));
+    savePlayState(); renderPlayMode();
+  }
+  function playToggleFire(shipId) {
+    if (!playState || !playState.ships[shipId]) return;
+    playState.ships[shipId].onFire = !playState.ships[shipId].onFire;
+    savePlayState(); renderPlayMode();
+  }
+  function playTogglePower(shipId) {
+    if (!playState || !playState.ships[shipId]) return;
+    playState.ships[shipId].powerOut = !playState.ships[shipId].powerOut;
+    savePlayState(); renderPlayMode();
+  }
+  function playCorruptorChange(shipId, delta) {
+    if (!playState || !playState.ships[shipId]) return;
+    const ss = playState.ships[shipId];
+    ss.corruptor = Math.max(0, (ss.corruptor || 0) + delta);
+    savePlayState(); renderPlayMode();
+  }
+
   // ── Settings ──
   // Curated "What's New" log. TTCombat doesn't publish an official changelog, so
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-09', title: 'Play Mode', items: [
+      'New Play button in the fleet builder topbar opens a compact in-game companion view for your fleet.',
+      'Battlegroups shown in a two-column grid, each with an orders picker (Standard / Max Thrust / Silent Running / Station Keeping / Weapons Free) and an Activate button that dims the card when done.',
+      'Per-ship hull tracker with automatic Crippled badge at half hull or below. When crippled, all weapon attack values are shown halved in red.',
+      'Status tokens per ship: On fire and Power out (tap to toggle). Bioficer ships get a Corruptor counter.',
+      'Round counter (1-6), Pass token pips, and End Round button that resets all activation markers.',
+      'Play state (hull damage, orders, activation) persists in localStorage per fleet so you can close the tab and resume.',
+    ] },
     { date: '2026-07-09', title: 'Quieter ship class next to named flagships', items: [
       'A named famous-admiral flagship (e.g. "Fortune\'s Fancy") now shows its ship class in a smaller, muted aside on the same line, e.g. Fortune\'s Fancy (Tribune Battlecruiser), rather than the class competing at full size with the flagship\'s proper name.',
     ] },
@@ -8208,6 +8507,7 @@ const App = (() => {
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFlagshipLoadout, changeFeature, addSystem, removeSystem, toggleSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
+    openPlayMode, playChangeRound, playEndRound, playTogglePass, playSetOrder, playToggleActivation, playHullChange, playToggleFire, playTogglePower, playCorruptorChange,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText, openLastImported,
     openSettings, openChangelog, toggleSetting, toggleTheme, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, sayName, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
