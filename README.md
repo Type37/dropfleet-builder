@@ -47,6 +47,10 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-09 — Admiral initiative wording fix; Bioficer Torpedo Corruptor-2
+- Mobile's generic-admiral picker said an Admiral "adds Level for AP & initiative". The AP half is correct, but initiative isn't additive: per rulebook section 6.3, only the single highest-Level Admiral on the table (or all sides if tied for highest) adds a flat +1 to their initiative roll. Corrected the wording to "adds Level for AP; highest-Level Admiral adds +1 to Initiative".
+- Fixed the Bioficer Torpedo launch asset, which was missing its Corruptor-2 special rule (present on the official stats sheet). Any ship carrying a Torpedo load, e.g. the Bastion Battleship, now shows it correctly.
+
 ### 2026-07-09 — Battlegroup reordering rebuilt on Pointer Events
 - Drag-to-reorder battlegroups (desktop) was built on native HTML5 drag-and-drop, which iOS Safari never fires for touch at all and Android handles inconsistently — it silently didn't work on touchscreens and felt fragile with a mouse. Rebuilt on Pointer Events (`setPointerCapture`), which behave identically for mouse, touch and pen. Same-weight-class-only restriction and insertion indicator are unchanged.
 - Mobile's battlegroup list now auto-buckets by weight class (Colossal > Heavy > Medium > Light > Payload) with a divider between each, matching desktop's overview panel and the printed/shared sheet — previously mobile showed groups in raw insertion order on screen, which could look different from what got printed. Added the same Pointer Events drag handle to reorder within a class.

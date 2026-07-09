@@ -7038,6 +7038,9 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-09', title: 'Bioficer Torpedo missing Corruptor-2', items: [
+      'The Bioficer Torpedo launch asset was missing its Corruptor-2 special rule, so any ship carrying a Torpedo load (e.g. the Bastion Battleship) showed it without that stat. Fixed to match the official stats sheet.',
+    ] },
     { date: '2026-07-09', title: 'Battlegroup reordering fixed (was broken on touch)', items: [
       'Drag-to-reorder battlegroups was built on native browser drag-and-drop, which iOS Safari never fires for touch at all and Android handles inconsistently, so it silently didn\'t work on phones and felt fragile with a mouse. Rebuilt it on Pointer Events instead, which behave identically for mouse, touch and pen.',
       'The insertion indicator, same-weight-class-only restriction and drag-to-reorder behaviour are unchanged, just far more reliable to actually grab and use.',

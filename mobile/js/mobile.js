@@ -2711,7 +2711,7 @@
             <span class="list-row-title">Level ${l.level} Admiral</span>
             <span class="list-row-pts">${l.cost} pts</span>
           </div>
-          <div class="list-row-sub">Take any number, adds Level for AP &amp; initiative</div>
+          <div class="list-row-sub">Take any number, adds Level for AP; highest-Level Admiral adds +1 to Initiative</div>
         </div>
       </div>`).join('');
 
@@ -3304,6 +3304,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-09', title: 'Corrected admiral initiative text; Bioficer Torpedo fix', items: [
+      'The generic-admiral picker said an Admiral "adds Level for AP & initiative" — the AP half is right, but initiative isn\'t additive: per the rulebook (6.3), only the single highest-Level Admiral on the table adds a flat +1 to their side\'s initiative roll (or all sides if tied for highest). Corrected the wording.',
+      'The Bioficer Torpedo launch asset was missing its Corruptor-2 special rule, so any ship carrying a Torpedo load (e.g. the Bastion Battleship) showed it without that stat. Fixed to match the official stats sheet.',
+    ] },
     { date: '2026-07-09', title: 'Battlegroups now sort by weight class + drag to reorder', items: [
       'The battlegroup list now auto-buckets by weight class (Colossal > Heavy > Medium > Light > Payload), with a divider between each, exactly matching desktop and the printed/shared sheet. Previously mobile showed groups in whatever order you added them, which could look different from what got printed or shared.',
       'Added a drag handle to reorder a group among its same-weight-class siblings (built with Pointer Events, so it works reliably with touch).',
