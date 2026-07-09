@@ -2414,7 +2414,7 @@ body.sheet-open .sheet-scrim {
 .play-header {
   position: sticky; top: 0; z-index: 10;
   background: var(--navy); color: #fff;
-  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  display: flex; flex-direction: column; gap: 0;
   padding: 8px var(--sp-m);
   box-shadow: 0 2px 8px rgba(0,0,0,.24);
 }
@@ -2652,6 +2652,47 @@ body.sheet-open .sheet-scrim {
 }
 .play-pass-info-btn:active { opacity: .6; }
 .play-pass-pips { display: flex; gap: 4px; align-items: center; }
+.play-pass-none { font-size: 10px; opacity: .65; font-style: italic; }
+
+/* Header two-row layout */
+.play-header-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; width: 100%; }
+.play-header-bottom { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; width: 100%; padding-top: 6px; border-top: 1px solid rgba(255,255,255,.12); }
+.play-header-spacer { flex: 1; }
+
+/* VP / opp-groups score controls */
+.play-score-ctrl {
+  display: flex; align-items: center; gap: 4px;
+  padding: 3px 7px; border: 1.5px solid rgba(255,255,255,.25); border-radius: var(--radius-md);
+  background: rgba(255,255,255,.1);
+}
+.play-score-label {
+  font-size: 9px; font-weight: var(--weight-bold); text-transform: uppercase;
+  letter-spacing: .06em; color: rgba(255,255,255,.7); white-space: nowrap; margin-right: 2px;
+}
+.play-score-btn {
+  width: 20px; height: 20px; border: none; background: transparent; cursor: pointer;
+  font-size: 15px; font-weight: 300; color: rgba(255,255,255,.9); font-family: inherit;
+  display: flex; align-items: center; justify-content: center; line-height: 1; padding: 0;
+  border-radius: 3px; transition: background var(--duration-fast);
+}
+.play-score-btn:active { background: rgba(255,255,255,.2); }
+.play-score-num {
+  font-size: 15px; font-weight: var(--weight-bold); font-family: var(--font-display);
+  color: #fff; min-width: 18px; text-align: center; line-height: 1;
+}
+.play-opp-groups { border-color: rgba(255,255,255,.15); }
+.play-opp-groups .play-score-num { font-size: 13px; opacity: .85; }
+
+/* Tonnage card left-border accent */
+.play-ton-card-L { border-left: 3px solid #2a6b2a; }
+.play-ton-card-M { border-left: 3px solid #1b3a7a; }
+.play-ton-card-H { border-left: 3px solid #7a4510; }
+.play-ton-card-C { border-left: 3px solid var(--danger); }
+.play-ton-C { background: rgba(196,60,47,.12); color: var(--danger); }
+
+/* Weapons table horizontal scroll */
+.play-weapons-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+.play-weapons { min-width: 340px; }
 
 /* ── 51. Reduced motion ────────────────────────────────────
    Respect the OS "reduce motion" setting: drop slides/transforms,

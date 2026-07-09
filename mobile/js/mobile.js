@@ -3301,7 +3301,15 @@
   }
 
   /* ── Play Mode ─────────────────────────────────────────── */
-  const M_PLAY_ORDERS = ['Standard', 'Max Thrust', 'Silent Running', 'Station Keeping', 'Weapons Free'];
+  const M_PLAY_ORDERS = ['General Quarters', 'Silent Running', 'Weapons Free', 'Course Change', 'Max Thrust', 'Damage Control'];
+  const M_PLAY_ORDER_RULES = {
+    'General Quarters':  'Remove two Spikes from the Group at the beginning of its activation. The Group may turn up to 45 degrees and then must move between half and full Thrust. Each Ship may attack with up to half of its listed Weapons rounded up (a Ship with three Weapons could fire two of them). Each Ship may launch Assets at the end of its Group\'s activation.',
+    'Silent Running':    'Remove all Spikes from the Group at the beginning of its activation. The Group may not turn and must move between half and full Thrust. The Group cannot attack with any Weapons. Each Ship may launch Assets at the end of its Group\'s activation. If it does not, reduce its Signature to 0" until its next activation.',
+    'Weapons Free':      'The Group cannot turn and must move between half and full Thrust. Each Ship may attack with any number of its Weapon Systems. Each Ship may then launch Assets, then the Group gains two Spikes at the end of its activation.',
+    'Course Change':     'The Group may turn up to 45 degrees, must move up to half its Thrust, then make an additional turn up to 45 degrees. Each Ship may only attack with a single Weapon. The Group may forgo one of its allowed turns (either the first or second) to launch Assets at the end of its activation. The Group gains a Spike at the end of its activation.',
+    'Max Thrust':        'The Group may not turn and must move between full and twice its Thrust. The Group cannot attack with any Weapons. The Group gains two Spikes at the end of its activation and cannot launch Assets.',
+    'Damage Control':    'Each Ship recovers 1 lost Hull Point. Ships of H and C tonnage recover D3 lost Hull Points instead. The Group may turn up to 45 degrees then move up to half its Thrust. Each Ship may only attack with a single Close Action Weapon. The Group may not Launch Assets. During the Repair step of the End Phase, roll 2 dice for each Crippling Effect the Group attempts to repair. While rolling to save against Core hits due to Boarding Actions, this ship improves its BS value by 1 or gains a BS of 6+ if it has no BS value listed.',
+  };
   const M_PLAY_CAPITAL = new Set(['M', 'H', 'C']);
   const M_CRIP_EFFECTS = [
     { key: 'fire',        label: 'On Fire',           stackable: true,
@@ -3337,7 +3345,7 @@
   }
   function mInitPlayState(fleet) {
     const ex = mLoadPlayState(fleet.id) || {};
-    mPlayState = { round: ex.round || 1, passes: ex.passes || [false, false, false], battlegroups: ex.battlegroups || {}, ships: ex.ships || {} };
+    mPlayState = { round: ex.round || 1, passes: ex.passes || [], opponentGroups: ex.opponentGroups || 0, vp: ex.vp || 0, oppVp: ex.oppVp || 0, battlegroups: ex.battlegroups || {}, ships: ex.ships || {} };
     for (const bg of (fleet.battleGroups || [])) {
       if (!mPlayState.battlegroups[bg.id]) mPlayState.battlegroups[bg.id] = { order: 'Standard', activated: false, spikes: 0 };
       else if (mPlayState.battlegroups[bg.id].spikes === undefined) mPlayState.battlegroups[bg.id].spikes = 0;
@@ -3373,27 +3381,63 @@
   function renderMobilePlay() {
     const el = document.getElementById('play-content');
     if (!mPlayFleet || !mPlayState) { el.innerHTML = '<div class="play-empty">No fleet loaded.</div>'; return; }
+
+    // Pass token auto-calc from opponent group count.
+    const myGroups = (mPlayFleet.battleGroups || []).length;
+    const oppGroups = mPlayState.opponentGroups || 0;
+    const calcTokens = oppGroups > 0 ? Math.max(0, oppGroups - myGroups - 1) : 0;
+    if (oppGroups > 0) {
+      while (mPlayState.passes.length < calcTokens) mPlayState.passes.push(false);
+      if (mPlayState.passes.length > calcTokens) mPlayState.passes = mPlayState.passes.slice(0, calcTokens);
+    }
     const passes = mPlayState.passes || [];
-    const passHtml = passes.map((used, i) =>
-      `<span class="play-pass-pip${used ? ' play-pass-used' : ''}" onclick="App.mPlayTogglePass(${i})"></span>`
-    ).join('');
+    const passHtml = passes.length
+      ? passes.map((used, i) =>
+          `<span class="play-pass-pip${used ? ' play-pass-used' : ''}" onclick="App.mPlayTogglePass(${i})"></span>`
+        ).join('')
+      : (oppGroups > 0 ? '<span class="play-pass-none">none</span>' : '<span class="play-pass-none">set Opp Groups →</span>');
     const passInfoBtn = `<button class="play-pass-info-btn" onclick="App.mShowPlayPassInfo()" title="Pass token rules">&#9432;</button>`;
+    const vp = mPlayState.vp || 0;
+    const oppVp = mPlayState.oppVp || 0;
     const bgCards = (mPlayFleet.battleGroups || []).map(bg => renderMobilePlayBg(bg)).join('');
     el.innerHTML = `
       <div class="play-header">
-        <div class="play-round-ctrl">
-          <button class="play-round-btn" onclick="App.mPlayChangeRound(-1)" aria-label="Previous round">-</button>
-          <div class="play-round-block">
-            <span class="play-round-label">Round</span>
-            <span class="play-round-num">${mPlayState.round}<span class="play-round-of">/6</span></span>
+        <div class="play-header-top">
+          <div class="play-round-ctrl">
+            <button class="play-round-btn" onclick="App.mPlayChangeRound(-1)" aria-label="Previous round">-</button>
+            <div class="play-round-block">
+              <span class="play-round-label">Round</span>
+              <span class="play-round-num">${mPlayState.round}<span class="play-round-of">/6</span></span>
+            </div>
+            <button class="play-round-btn" onclick="App.mPlayChangeRound(1)" aria-label="Next round">+</button>
           </div>
-          <button class="play-round-btn" onclick="App.mPlayChangeRound(1)" aria-label="Next round">+</button>
+          <div class="play-pass-tokens">
+            <span class="play-pass-label">Pass ${passInfoBtn}</span>
+            <span class="play-pass-pips">${passHtml}</span>
+          </div>
+          <div class="play-header-spacer"></div>
+          <button class="play-end-round-btn" onclick="App.mPlayEndRound()">End Round</button>
         </div>
-        <div class="play-pass-tokens">
-          <span class="play-pass-label">Pass ${passInfoBtn}</span>
-          <span class="play-pass-pips">${passHtml}</span>
+        <div class="play-header-bottom">
+          <div class="play-score-ctrl">
+            <span class="play-score-label">My VP</span>
+            <button class="play-score-btn" onclick="App.mPlayChangeVP(-1)">&#8722;</button>
+            <span class="play-score-num">${vp}</span>
+            <button class="play-score-btn" onclick="App.mPlayChangeVP(1)">+</button>
+          </div>
+          <div class="play-score-ctrl">
+            <span class="play-score-label">Opp VP</span>
+            <button class="play-score-btn" onclick="App.mPlayChangeOppVP(-1)">&#8722;</button>
+            <span class="play-score-num">${oppVp}</span>
+            <button class="play-score-btn" onclick="App.mPlayChangeOppVP(1)">+</button>
+          </div>
+          <div class="play-score-ctrl play-opp-groups">
+            <span class="play-score-label">Opp Groups</span>
+            <button class="play-score-btn" onclick="App.mPlayChangeOppGroups(-1)">&#8722;</button>
+            <span class="play-score-num">${oppGroups > 0 ? oppGroups : '?'}</span>
+            <button class="play-score-btn" onclick="App.mPlayChangeOppGroups(1)">+</button>
+          </div>
         </div>
-        <button class="play-end-round-btn" onclick="App.mPlayEndRound()">End Round</button>
       </div>
       <div class="play-bgs" style="padding:var(--sp-m);padding-bottom:88px">${bgCards}</div>`;
   }
@@ -3414,19 +3458,21 @@
         <svg viewBox="0 0 24 24" fill="${i < spikes ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M12 2l10 10-10 10L2 12Z"/></svg>
       </button>`
     ).join('');
-    const orderChips = M_PLAY_ORDERS.map(o =>
-      `<button class="play-order-chip${bgs.order === o ? ' play-order-sel' : ''}" onclick="App.mPlaySetOrder('${escAttr(bg.id)}','${escAttr(o)}')">${esc(o)}</button>`
-    ).join('');
+    const orderChips = M_PLAY_ORDERS.map(o => {
+      const isActive = bgs.order === o;
+      const desc = escAttr(M_PLAY_ORDER_RULES[o] || '');
+      return `<button class="play-order-chip${isActive ? ' play-order-sel' : ''}" data-rule-desc="${desc}" onclick="App.mPlaySetOrderAndShow(event,'${escAttr(bg.id)}','${escAttr(o)}')">${esc(o)}</button>`;
+    }).join('');
     const famAdmiral = bgAdmiral && bgAdmiral.flagshipName ? bgAdmiral : null;
     const shipsHtml = (bg.ships || []).map((inst, idx) =>
       renderMobilePlayShip(inst, idx === 0 && famAdmiral ? famAdmiral.flagshipName : null)
     ).join('');
     const actDone = bgs.activated;
-    return `<div class="play-bg-card${actDone ? ' play-activated' : ''}">
+    return `<div class="play-bg-card play-ton-card-${tonCode}${actDone ? ' play-activated' : ''}">
       <div class="play-bg-header">
         <span class="play-ton-badge play-ton-${tonCode}">${tonLabels[tonCode] || tonCode}</span>
         <span class="play-bg-name">${esc(bg.name || 'Unnamed battlegroup')}${admiralStr}</span>
-        <button class="play-act-btn${actDone ? ' play-done' : ''}" onclick="App.mPlayToggleActivation('${escAttr(bg.id)}')">${actDone ? 'Activated' : 'Activate'}</button>
+        <button class="play-act-btn${actDone ? ' play-done' : ''}" onclick="App.mPlayToggleActivation('${escAttr(bg.id)}')">${actDone ? '&#10003; Activated' : 'Activate'}</button>
       </div>
       <div class="play-spike-row">
         <span class="play-spike-label">Spikes</span>
@@ -3497,10 +3543,10 @@
           <td class="play-wt-special">${esc(w.special || w.sp || '-')}</td>
         </tr>`;
       }).join('');
-      weaponsHtml = `<table class="play-weapons">
+      weaponsHtml = `<div class="play-weapons-wrap"><table class="play-weapons">
         <thead><tr><th>Weapon</th><th>Arc</th><th>Att</th><th>Lk</th><th>Dmg</th><th>Sp</th></tr></thead>
         <tbody>${rows}</tbody>
-      </table>`;
+      </table></div>`;
     }
     // Launch assets. Note: field is specialRules (camelCase), not special_rules.
     const loads = db.loads || [];
@@ -3579,13 +3625,33 @@
   function mPlayEndRound() {
     if (!mPlayState) return;
     Object.values(mPlayState.battlegroups).forEach(b => { b.activated = false; });
-    mPlayState.passes = [false, false, false];
+    mPlayState.passes = mPlayState.passes.map(() => false);
     mSavePlayState(); renderMobilePlay();
   }
   function mPlayTogglePass(i) {
     if (!mPlayState) return;
     mPlayState.passes[i] = !mPlayState.passes[i];
     mSavePlayState(); renderMobilePlay();
+  }
+  function mPlayChangeVP(delta) {
+    if (!mPlayState) return;
+    mPlayState.vp = Math.max(0, (mPlayState.vp || 0) + delta);
+    mSavePlayState(); renderMobilePlay();
+  }
+  function mPlayChangeOppVP(delta) {
+    if (!mPlayState) return;
+    mPlayState.oppVp = Math.max(0, (mPlayState.oppVp || 0) + delta);
+    mSavePlayState(); renderMobilePlay();
+  }
+  function mPlayChangeOppGroups(delta) {
+    if (!mPlayState) return;
+    mPlayState.opponentGroups = Math.max(0, (mPlayState.opponentGroups || 0) + delta);
+    mSavePlayState(); renderMobilePlay();
+  }
+  function mPlaySetOrderAndShow(event, bgId, order) {
+    mPlaySetOrder(bgId, order);
+    const el = event.currentTarget;
+    showSheet(order, `<p>${M_PLAY_ORDER_RULES[order] || ''}</p>`);
   }
   function mPlaySpikeChange(bgId, delta) {
     if (!mPlayState) return;
@@ -3662,13 +3728,18 @@
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
     { date: '2026-07-09', title: 'Play Mode improvements', items: [
-      'Hull tracker redesigned: Hit/Fix buttons flank the pips inline. Pips now fill left-to-right as damage accumulates (orange = below cripple, red = past it).',
-      'Crippled badge and halved attack dice now correctly appear for Colossal/Super-Heavy ships -- previously missing due to wrong tonnage code.',
-      'Activate button now says "Activated" once tapped, not "Activation Finished".',
+      'VP tracking: My VP and Opp VP counters in the play header. Opp Groups counter auto-calculates your Pass tokens (rulebook 4.3.1).',
+      'Orders now correct per rulebook 2.3.1: General Quarters, Silent Running, Weapons Free, Course Change, Max Thrust, Damage Control. Tap any order chip to set it AND read its full verbatim rules.',
+      'Battlegroup cards get a coloured left-border accent by tonnage class.',
+      'Weapon table now scrolls horizontally on narrow screens instead of spilling off the edge.',
+      'Hull tracker: Hit/Fix buttons replaced with compact -DMG+ pill. - removes damage, + adds it.',
+      'Hull tracker: pips fill left-to-right as damage accumulates (orange = below cripple, red = past it).',
+      'Crippled badge and halved attack dice now correctly appear for Colossal/Super-Heavy ships.',
+      'Activate button now says "Activated" once tapped.',
       'Pass token button now opens full pass-token rules on tap.',
       'Launch assets (drop/assault) shown on ships that carry them.',
       'Famous-admiral flagship names shown as primary; ship class in muted parentheses.',
-      'Spike Sig text always reserves its width -- no more layout jump when spikes are added.',
+      'Spike Sig text always reserves its width -- no more layout jump when spikes change.',
       'Special rules chips now correctly appear for all ships.',
     ] },
     { date: '2026-07-09', title: 'Play Mode', items: [
@@ -4348,7 +4419,7 @@
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,
     overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
     importFleetPrompt, doImportText,
-    openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayTogglePass, mPlaySpikeChange, mPlaySetOrder, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayCorruptorChange,
+    openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayTogglePass, mPlayChangeVP, mPlayChangeOppVP, mPlayChangeOppGroups, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayCorruptorChange,
     openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet, sayName
   };
 

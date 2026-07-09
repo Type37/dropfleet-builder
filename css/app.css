@@ -7148,15 +7148,11 @@ body[data-view="builder"] .game-info-footer {
   min-height: calc(100vh - var(--topbar-h));
 }
 .play-header {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-md);
+  display: flex; flex-direction: column; gap: 8px;
   padding: var(--sp-sm) var(--sp-md);
   background: var(--paper-warm);
-  border: 1px solid var(--stroke);
-  border-radius: var(--radius-lg);
+  border-bottom: 1px solid var(--stroke);
   margin-bottom: var(--sp-md);
-  flex-wrap: wrap;
 }
 .play-round-ctrl { display: flex; align-items: center; gap: var(--sp-sm); }
 .play-round-btn {
@@ -7448,3 +7444,44 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 }
 .play-pass-info-btn:hover { color: var(--ink-muted); }
 .play-pass-pips { display: flex; gap: 4px; align-items: center; }
+
+.play-header-top { display: flex; align-items: center; gap: var(--sp-sm); flex-wrap: wrap; }
+.play-header-bottom { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.play-pass-none { font-size: 10px; color: var(--ink-faint); font-style: italic; }
+
+/* ── Play: VP / opp-groups score controls ── */
+.play-score-ctrl {
+  display: flex; align-items: center; gap: 5px;
+  padding: 3px 8px; border: 1px solid var(--stroke); border-radius: var(--radius-md);
+  background: var(--paper);
+}
+.play-score-label {
+  font-size: 10px; font-weight: 700; font-family: var(--font-condensed);
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint);
+  white-space: nowrap; margin-right: 2px;
+}
+.play-score-btn {
+  width: 20px; height: 20px; border: none; background: transparent; cursor: pointer;
+  font-size: 16px; font-weight: 300; color: var(--ink-muted); font-family: inherit;
+  display: flex; align-items: center; justify-content: center; line-height: 1; padding: 0;
+  border-radius: 3px; transition: background var(--duration-fast), color var(--duration-fast);
+}
+.play-score-btn:hover { background: var(--paper-alt); color: var(--ink); }
+.play-score-num {
+  font-size: 16px; font-weight: 700; font-family: var(--font-condensed);
+  color: var(--ink); min-width: 20px; text-align: center; line-height: 1;
+}
+.play-opp-groups { border-color: var(--stroke-light); }
+.play-opp-groups .play-score-label { color: var(--ink-faint); }
+.play-opp-groups .play-score-num { font-size: 14px; color: var(--ink-muted); }
+
+/* ── Play: tonnage card left-border accent ── */
+.play-ton-card-L { border-left: 3px solid var(--success); }
+.play-ton-card-M { border-left: 3px solid var(--info); }
+.play-ton-card-H { border-left: 3px solid var(--warning); }
+.play-ton-card-C { border-left: 3px solid var(--error); }
+.play-ton-C { background: rgba(196,60,47,0.12); color: var(--error); }
+
+/* ── Play: weapons table horizontal scroll ── */
+.play-weapons-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+.play-weapons { min-width: 340px; }
