@@ -7252,23 +7252,29 @@ body[data-view="builder"] .game-info-footer {
   letter-spacing: 0.03em; color: var(--ink);
 }
 .play-ship-class { font-size: 10px; color: var(--ink-muted); font-weight: 400; margin-left: 2px; }
-/* Hull row: [Hit] [pips + count] [Fix] all inline */
-.play-hull-row { display: flex; align-items: center; gap: 5px; flex-wrap: nowrap; }
-.play-hull-hit, .play-hull-fix {
-  flex-shrink: 0; padding: 3px 9px; border: 1px solid; border-radius: var(--radius-sm);
-  cursor: pointer; font-size: 11px; font-weight: 700; font-family: var(--font-condensed);
-  letter-spacing: 0.04em; text-transform: uppercase; line-height: 1.4;
-  transition: background var(--duration-fast), opacity var(--duration-fast);
+/* Hull row: [pips + count] [−DMG+] all inline */
+.play-hull-row { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; }
+/* −DMG+ pill */
+.play-hull-dmg {
+  display: flex; align-items: stretch; flex-shrink: 0;
+  border: 1px solid var(--stroke); border-radius: var(--radius-sm);
+  background: var(--paper-warm); overflow: hidden;
 }
-.play-hull-hit {
-  background: rgba(196,60,47,0.08); color: var(--error); border-color: rgba(196,60,47,0.3);
+.play-hull-minus, .play-hull-plus {
+  width: 26px; height: 26px; border: none; background: none; cursor: pointer;
+  font-size: 15px; font-weight: 300; color: var(--ink-muted); font-family: inherit;
+  display: flex; align-items: center; justify-content: center; line-height: 1;
+  transition: background var(--duration-fast), color var(--duration-fast);
 }
-.play-hull-hit:hover { background: rgba(196,60,47,0.15); }
-.play-hull-fix {
-  background: rgba(30,120,30,0.07); color: #2e7d32; border-color: rgba(30,120,30,0.25);
+.play-hull-minus:hover { background: rgba(30,120,30,0.1); color: #2e7d32; }
+.play-hull-plus:hover  { background: rgba(196,60,47,0.1); color: var(--error); }
+html[data-theme="dark"] .play-hull-minus:hover { color: #81c784; }
+.play-hull-dmg-lbl {
+  font-size: 8px; font-weight: 700; font-family: var(--font-condensed);
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint);
+  border-left: 1px solid var(--stroke-light); border-right: 1px solid var(--stroke-light);
+  padding: 0 3px; display: flex; align-items: center;
 }
-.play-hull-fix:hover { background: rgba(30,120,30,0.14); }
-html[data-theme="dark"] .play-hull-fix { color: #81c784; border-color: rgba(129,199,132,0.3); }
 .play-hull-num {
   font-size: 12px; font-weight: 700; font-family: var(--font-condensed); color: var(--ink-muted);
   white-space: nowrap; margin-left: 2px;

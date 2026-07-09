@@ -3556,9 +3556,12 @@
         ${isCrippled && !isDestroyed ? '<span class="play-crippled-badge">Crippled</span>' : ''}
       </div>
       <div class="play-hull-row">
-        <button class="play-hull-hit" onclick="App.mPlayHullChange('${escAttr(inst.id)}',-1)" title="Take 1 hull damage">Hit</button>
         <div class="play-hull-pips">${hullPipHtml}${hullNum}</div>
-        <button class="play-hull-fix" onclick="App.mPlayHullChange('${escAttr(inst.id)}',1)" title="Repair 1 hull">Fix</button>
+        <div class="play-hull-dmg">
+          <button class="play-hull-minus" onclick="App.mPlayHullChange('${escAttr(inst.id)}',1)" title="Remove 1 damage">−</button>
+          <span class="play-hull-dmg-lbl">DMG</span>
+          <button class="play-hull-plus" onclick="App.mPlayHullChange('${escAttr(inst.id)}',-1)" title="Add 1 damage">+</button>
+        </div>
       </div>
       <div class="play-statline">${statCells}</div>
       ${weaponsHtml}
