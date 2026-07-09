@@ -4017,6 +4017,14 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+/* A named flagship's own ship-class, e.g. "Fortune's Fancy (Amber Cruiser)" —
+   the class rides inline on the same line, just smaller/quieter than the
+   flagship's proper name so it reads as an aside, not equal billing. */
+.flagship-class-inline {
+  font-size: 0.85em;
+  font-weight: var(--weight-regular);
+  color: var(--ink-muted);
+}
 
 /* ── Battlegroup inline rename ───────────────────────────────── */
 /* Click-to-rename names show a dotted underline on hover so the affordance is

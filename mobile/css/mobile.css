@@ -1805,6 +1805,10 @@ body.sheet-open .sheet-scrim {
 /* A famous admiral's flagship, shown among the groups (its cost lives with the
    admiral, so no pts on this row). Gold accent marks it as the flagship. */
 .flagship-row { border-left: 3px solid var(--gold); }
+/* A named flagship's own ship-class, e.g. "Fortune's Fancy (Amber Cruiser)" —
+   the class rides inline on the same line, just smaller/quieter than the
+   flagship's proper name so it reads as an aside, not equal billing. */
+.flagship-class-inline { font-size: 0.85em; font-weight: 400; color: var(--fg3); }
 .flagship-tag {
   display: inline-block;
   font-size: var(--text-caption2);

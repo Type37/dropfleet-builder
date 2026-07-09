@@ -2340,11 +2340,19 @@ const App = (() => {
   // A famous admiral's flagship label: its proper name when it has one (e.g.
   // "Fortune's Fancy"), optionally with the ship class in parentheses; falls back
   // to the class name. `o` is a famous_admirals ship object.
-  function flagshipLabel(o, withClass) {
+  // asHtml=true wraps the "(Class)" part in a smaller, muted inline span so a
+  // named flagship's proper name reads as the primary text and its class as a
+  // quieter aside — stays on the same line. Plain (asHtml false/omitted) callers
+  // get the same "Name (Class)" as a flat string, unchanged: some feed a plain-text
+  // export (the army-list share text) where HTML markup would be wrong.
+  function flagshipLabel(o, withClass, asHtml) {
     if (!o) return 'Ship';
     const cls = o.ship_name || o.className || (o.tonnage ? tonLabel(o.tonnage) + ' Ship' : 'Ship');
-    if (!o.flagshipName) return cls;
-    return withClass && cls ? `${o.flagshipName} (${cls})` : o.flagshipName;
+    if (!o.flagshipName) return asHtml ? esc(cls) : cls;
+    if (!(withClass && cls)) return asHtml ? esc(o.flagshipName) : o.flagshipName;
+    return asHtml
+      ? `${esc(o.flagshipName)} <span class="flagship-class-inline">(${esc(cls)})</span>`
+      : `${o.flagshipName} (${cls})`;
   }
 
   // Famous-admiral flagships can carry loadoutOptions too (e.g. Havelock's Drive
@@ -4378,7 +4386,7 @@ const App = (() => {
     // with that category so the "click for info" works for them too.
     const cardOnclick = ` onclick="App.openShipDetail('${currentFleet.faction}','${isFamous ? 'famous_admirals' : category}','${key}',true)"`;
     const typeLine = isFamous
-      ? `${esc(flagshipLabel(data, true))} · ${esc(tonLabel(data.tonnage) || catLabel)}`
+      ? `${flagshipLabel(data, true, true)} · ${esc(tonLabel(data.tonnage) || catLabel)}`
       : `${esc(tonLabel(data.tonnage) || catLabel)}`;
     const addBtn = isFamous
       ? `<button class="btn btn-primary btn-sm"${famBlocked ? ` disabled title="${esc(famReason)}"` : ''} onclick="event.stopPropagation(); App.addFamousAdmiralFromPicker('${key}')">+ Add Admiral</button>`
@@ -4788,7 +4796,7 @@ const App = (() => {
     const wpns = a.weapons || [];
     const weaponsHtml = wpns.length ? `<div class="weapon-list" style="margin-top:var(--sp-xs)">${renderWeaponHeader()}${wpns.map(w => renderWeaponRow(w)).join('')}</div>` : '';
     return `<div class="admiral-ship-block">
-      ${a.ship_name ? `<div class="admiral-ship-name">${esc(flagshipLabel(a, true))}${a.tonnage ? ` <span class="ton-tag">${esc(tonLabel(a.tonnage))}</span>` : ''}</div>` : ''}
+      ${a.ship_name ? `<div class="admiral-ship-name">${flagshipLabel(a, true, true)}${a.tonnage ? ` <span class="ton-tag">${esc(tonLabel(a.tonnage))}</span>` : ''}</div>` : ''}
       ${renderStatGrid(a)}${weaponsHtml}
     </div>`;
   }
@@ -4872,7 +4880,7 @@ const App = (() => {
                 <span class="badge badge-gold">${admiral.points} pts</span>
                 ${admiral.ship_cost ? `<span class="badge badge-neutral">Ship: ${admiral.ship_cost} pts</span>` : ''}
               </div>
-              ${admiral.ship_name ? `<div style="margin-top:var(--sp-xs);font-size:var(--text-xs);color:var(--ink-muted)">Ship: ${esc(flagshipLabel(admiral, true))}${admiral.shipCategory ? ', ' + (CATEGORY_LABELS[admiral.shipCategory] || '') : ''}</div>` : ''}
+              ${admiral.ship_name ? `<div style="margin-top:var(--sp-xs);font-size:var(--text-xs);color:var(--ink-muted)">Ship: ${flagshipLabel(admiral, true, true)}${admiral.shipCategory ? ', ' + (CATEGORY_LABELS[admiral.shipCategory] || '') : ''}</div>` : ''}
             </div>
           </div>
           ${admiralShipBlock(admiral)}
@@ -5182,13 +5190,13 @@ const App = (() => {
         const flagship = shipDB[currentFleet.faction]?.groups?.famous_admirals?.ships?.[a.shipKey];
         if (flagship) {
           admiralImgUrl = flagship.image || null;
-          const fsName = flagshipLabel(flagship, true);
+          const fsName = flagshipLabel(flagship, true, true);
           const fsSize = flagship.shipCategory ? (CATEGORY_LABELS[flagship.shipCategory] || '') : '';
           // The flagship is a ship on the table: its card sits in the middle and
           // opens the full datasheet. The admiral card here just links to it.
           flagshipHtml = `<button class="admiral-flagship-link" onclick="App.openShipDetail('${currentFleet.faction}','famous_admirals','${a.shipKey}',false)" title="Open the flagship profile">
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 11l6-8 6 8M3 11h10l-1 3H4z"/></svg>
-            <span>Flagship: <strong>${esc(fsName)}</strong>${fsSize ? `, ${esc(fsSize)}` : ''}</span>
+            <span>Flagship: <strong>${fsName}</strong>${fsSize ? `, ${esc(fsSize)}` : ''}</span>
           </button>`;
         }
       }
@@ -5687,11 +5695,11 @@ const App = (() => {
           if (a.type === 'Famous' && a.shipKey) {
             const fsp = factionInfo?.groups?.famous_admirals?.ships?.[a.shipKey];
             if (fsp) {
-              const fsName = flagshipLabel(fsp, true);
+              const fsName = flagshipLabel(fsp, true, true);
               const fsSize = fsp.shipCategory ? (CATEGORY_LABELS[fsp.shipCategory] || '') : '';
               const wpns = fsp.weapons || [];
               flagshipHtml = `<div class="dp-flagship">
-                <div class="dp-flagship-name">${esc(fsName)}${fsSize ? ', ' + fsSize : ''}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
+                <div class="dp-flagship-name">${fsName}${fsSize ? ', ' + esc(fsSize) : ''}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
                 ${dpStatLine(fsp, null)}
                 ${dpWeaponTable((wpns || []).map(w => ({ ...w })))}
                 ${(fsp.specialRuleDetails || []).filter(r => r.description).length ? `<div class="dp-rules">${fsp.specialRuleDetails.filter(r => r.description).map(r => `<span class="dp-rule"><b>${esc(r.name)}:</b> ${ruleHtml(r.description)}</span>`).join('')}</div>` : ''}
@@ -6448,7 +6456,7 @@ const App = (() => {
                 <div class="shared-ship-top">
                   ${fimg ? `<div class="shared-ship-art"><img src="${esc(thumbUrl(fimg))}" alt="${esc(fdb.ship_name || fdb.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
                   <div class="shared-ship-info">
-                    <div class="shared-ship-name">${esc(flagshipLabel(fdb, true) || fdb.name)}</div>
+                    <div class="shared-ship-name">${flagshipLabel(fdb, true, true) || esc(fdb.name)}</div>
                     <div class="shared-ship-type">${esc(tonLabel(fdb.tonnage) || '')}${fdb.className ? ', ' + esc(fdb.className) : ''}</div>
                   </div>
                 </div>
@@ -7038,6 +7046,9 @@ const App = (() => {
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-09', title: 'Quieter ship class next to named flagships', items: [
+      'A named famous-admiral flagship (e.g. "Fortune\'s Fancy") now shows its ship class in a smaller, muted aside on the same line, e.g. Fortune\'s Fancy (Tribune Battlecruiser), rather than the class competing at full size with the flagship\'s proper name.',
+    ] },
     { date: '2026-07-09', title: 'Six Bioficer ships were missing their Class', items: [
       'Sluice, Source, Syntax, Synthesis, Sierra and Shade showed only a single-word name with no ship Class, unlike every other ship in the roster. Fixed to Sluice Supercruiser, Source Battlecruiser, Syntax Pocket Battleship, Synthesis Pocket Battleship, Sierra Pocket Battleship and Shade Pocket Battleship, matching the official stats sheet.',
       'Also filled in missing tonnage codes and group-size fields for the same six ships, and fixed Shade\'s Torpedo load (was misnamed "Torpedoes", which meant it silently missed its Corruptor-2 stat).',

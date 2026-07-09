@@ -47,6 +47,9 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-09 — Quieter ship class next to named flagships
+- A named famous-admiral flagship (e.g. "Fortune's Fancy") now shows its ship class in a smaller, muted inline aside on the same line — "Fortune's Fancy (Tribune Battlecruiser)" — instead of the class competing at full size with the flagship's proper name. Both apps; `flagshipLabel()` gained a third `asHtml` param so the plain-text army-list export keeps its unstyled "Name (Class)" output unchanged.
+
 ### 2026-07-09 — Six Bioficer ships were missing their Class
 - Sluice, Source, Syntax, Synthesis, Sierra and Shade showed only a single-word name with no ship Class, unlike every other ship in the roster. Verified byte-for-byte against the canonical Bioficer stats sheet and fixed to Sluice Supercruiser, Source Battlecruiser, Syntax Pocket Battleship, Synthesis Pocket Battleship, Sierra Pocket Battleship and Shade Pocket Battleship.
 - Also filled in missing `tonnage`/`groupMin`/`groupMax`/`isRare`/`isUnique` fields for the same six ships (present on every sibling ship but absent here), and fixed Shade's Torpedo load, which was misnamed "Torpedoes" — a naming mismatch that silently dropped its Corruptor-2 stat from the launch-asset lookup.

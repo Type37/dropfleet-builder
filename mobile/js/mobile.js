@@ -1331,7 +1331,7 @@
       return `<div class="list-row flagship-row" onclick="App.openAdmiralDetail(${ai})">
         ${art ? `<div class="ship-thumb"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
-          <div class="list-row-title">${esc(flagshipLabel(fs, true))}</div>
+          <div class="list-row-title">${flagshipLabel(fs, true, true)}</div>
           <div class="list-row-sub">${sizeClass ? esc(sizeClass) + ', ' : ''}flies with ${esc(a.name)}</div>
         </div>
         <span class="list-chevron">›</span>
@@ -2840,11 +2840,19 @@
   }
   // A named flagship reads "Fortune's Fancy (Tribune Battlecruiser)"; an unnamed one
   // just shows its class. `withClass` appends the class in parentheses.
-  function flagshipLabel(fs, withClass) {
+  // asHtml=true wraps the "(Class)" part in a smaller, muted inline span so a
+  // named flagship's proper name reads as the primary text and its class as a
+  // quieter aside — stays on the same line. Matches desktop.
+  function flagshipLabel(fs, withClass, asHtml) {
     if (!fs) return '';
     const cls = fs.name || '';
-    if (fs.flagshipName) return (withClass && cls) ? `${fs.flagshipName} (${cls})` : fs.flagshipName;
-    return cls;
+    if (fs.flagshipName) {
+      if (!(withClass && cls)) return asHtml ? esc(fs.flagshipName) : fs.flagshipName;
+      return asHtml
+        ? `${esc(fs.flagshipName)} <span class="flagship-class-inline">(${esc(cls)})</span>`
+        : `${fs.flagshipName} (${cls})`;
+    }
+    return asHtml ? esc(cls) : cls;
   }
   // Render a flagship's full datasheet (stat grid + weapons + rules), reusing the
   // same components as the group ship detail so it matches desktop parity.
@@ -2879,7 +2887,7 @@
       .split(',').map(s => s.trim()).filter(t => t && !ruleNames.has(t.toLowerCase())).join(', ');
     const artSrc = shipArtPath(fs.name);
     const sizeClass = fs.category ? (CATEGORY_LABELS[fs.category] || '') : '';
-    return `<div class="section-header">${esc(flagshipLabel(fs, true))}${sizeClass ? ', ' + sizeClass : ''}${fs.cost ? `, ${fs.cost} pts` : ''}</div>
+    return `<div class="section-header">${flagshipLabel(fs, true, true)}${sizeClass ? ', ' + esc(sizeClass) : ''}${fs.cost ? `, ${fs.cost} pts` : ''}</div>
       ${artSrc ? `<div class="ship-art-hero">${shopLinkImg(fs.name, `<img src="${artSrc}" alt="${esc(fs.name)}" loading="lazy">`, fs)}</div>` : ''}
       ${statGridMobile(statEntries, false)}
       ${weapons.length ? `<div class="weapon-table">
@@ -3304,6 +3312,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-09', title: 'Quieter ship class next to named flagships', items: [
+      'A named famous-admiral flagship (e.g. "Fortune\'s Fancy") now shows its ship class in a smaller, muted aside on the same line, e.g. Fortune\'s Fancy (Tribune Battlecruiser), rather than the class competing at full size with the flagship\'s proper name.',
+    ] },
     { date: '2026-07-09', title: 'Six Bioficer ships were missing their Class', items: [
       'Sluice, Source, Syntax, Synthesis, Sierra and Shade showed only a single-word name with no ship Class, unlike every other ship in the roster. Fixed to Sluice Supercruiser, Source Battlecruiser, Syntax Pocket Battleship, Synthesis Pocket Battleship, Sierra Pocket Battleship and Shade Pocket Battleship, matching the official stats sheet.',
       'Also filled in missing tonnage codes and group-size fields for the same six ships, and fixed Shade\'s Torpedo load (was misnamed "Torpedoes", which meant it silently missed its Corruptor-2 stat).',
