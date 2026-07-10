@@ -22,9 +22,7 @@ const App = (() => {
       '3. What would make you use it for your next game?\n\n' +
       '4. How long have you played DFC?\n'
     );
-  // The user's combined faction quick-reference sheets (all factions, one PDF).
-  const FACTION_REF_PDF = 'https://jetwong.neocities.org/wargaming/dropfleet-commander/Dropfleet-Faction-References.pdf';
-  let activeGroupId = null;
+let activeGroupId = null;
   let activeFlagship = null;  // admiral index when a famous flagship is selected (shown in the detail panel like a group)
   let shipSort = { key: 'points', dir: 'asc' };  // picker sort (parity w/ mobile: default cheapest-first)
   let activeCategory = 'all';

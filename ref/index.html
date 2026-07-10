@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<title>Faction Quick References · WarLore Wargaming</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700;800&family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #0a0a0a; --paper: #f8f6f0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--paper); color: var(--ink); font-family: 'Barlow Condensed', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 16px; }
+  .wordmark { font-family: 'Jost', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #888; margin-bottom: 24px; }
+  h1 { font-family: 'Jost', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+  .sub { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; color: #666; margin-bottom: 32px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; width: 100%; max-width: 720px; }
+  a.card {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 16px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    border: 1.5px solid currentColor;
+    transition: background 0.12s, color 0.12s;
+  }
+  a.card:hover { color: #fff !important; }
+  a.card .name { font-family: 'Jost', sans-serif; font-weight: 800; font-size: 17px; letter-spacing: 0.04em; text-transform: uppercase; line-height: 1; }
+  a.card .hint { font-size: 12px; opacity: 0.72; letter-spacing: 0.04em; margin-top: 2px; }
+  .ucm    { color: #3e9945; } .ucm:hover    { background: #3e9945; }
+  .phr    { color: #7b3fa0; } .phr:hover    { background: #7b3fa0; }
+  .scourge{ color: #69499d; } .scourge:hover{ background: #69499d; }
+  .shaltari{color: #ef6325;} .shaltari:hover{background: #ef6325;}
+  .resistance{color:#3d8bca;}.resistance:hover{background:#3d8bca;}
+  .bioficer{color:#b2322a;} .bioficer:hover{background:#b2322a;}
+  footer { margin-top: 40px; font-size: 12px; color: #999; }
+</style>
+</head>
+<body>
+<div class="wordmark">WarLore Wargaming</div>
+<h1>Faction Quick References</h1>
+<p class="sub">Dropfleet Commander · printable reference sheets</p>
+<div class="grid">
+  <a class="card ucm"       href="ucm.html"       target="_blank"><span class="name">UCM</span><span class="hint">United Colonies of Mankind</span></a>
+  <a class="card phr"       href="phr.html"       target="_blank"><span class="name">PHR</span><span class="hint">Post-Human Republic</span></a>
+  <a class="card scourge"   href="scourge.html"   target="_blank"><span class="name">Scourge</span><span class="hint">The Scourge</span></a>
+  <a class="card shaltari"  href="shaltari.html"  target="_blank"><span class="name">Shaltari</span><span class="hint">The Shaltari Tribes</span></a>
+  <a class="card resistance"href="resistance.html"target="_blank"><span class="name">Resistance</span><span class="hint">The Resistance</span></a>
+  <a class="card bioficer"  href="bioficer.html"  target="_blank"><span class="name">Bioficer</span><span class="hint">The Bioficer</span></a>
+</div>
+<footer>Print: open any sheet and use your browser's Print (Ctrl/⌘ P), set paper size to Letter, margins to None.</footer>
+</body></html>
