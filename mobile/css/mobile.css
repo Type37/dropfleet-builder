@@ -2538,8 +2538,9 @@ body.sheet-open .sheet-scrim {
   font-size: 18px; font-weight: 300; color: var(--fg2);
   display: flex; align-items: center; justify-content: center; line-height: 1;
 }
-.play-hull-minus:active { background: rgba(30,110,30,0.15); color: #2a7a2a; }
-.play-hull-plus:active  { background: rgba(200,50,40,0.12); color: var(--danger); }
+/* − takes damage (red), + repairs hull (green). */
+.play-hull-minus:active { background: rgba(200,50,40,0.12); color: var(--danger); }
+.play-hull-plus:active  { background: rgba(30,110,30,0.15); color: #2a7a2a; }
 .play-hull-dmg-lbl {
   font-size: 8px; font-weight: var(--weight-bold); letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--fg4);
@@ -2570,9 +2571,28 @@ body.sheet-open .sheet-scrim {
 
 /* Stat line */
 .play-statline { display: flex; flex-wrap: wrap; gap: 6px 10px; margin: 4px 0; }
-.play-stat { display: flex; flex-direction: column; align-items: center; min-width: 32px; }
+.play-stat { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 32px; }
+.play-stat .stat-icon { width: 16px; height: 16px; color: var(--fg2); margin: 0; }
+.play-stat .stat-icon svg { width: 16px; height: 16px; display: block; }
 .play-stat-val { font-family: var(--font-display); font-size: 14px; font-weight: var(--weight-bold); color: var(--fg1); line-height: 1; }
 .play-stat-lbl { font-size: 10px; color: var(--fg3); text-transform: uppercase; letter-spacing: .04em; }
+
+/* Firing-arc glyph in the play weapon table. */
+.play-wt-arc { text-align: center; }
+.play-wt-arc .arc-ico { display: inline-flex; flex-direction: column; align-items: center; gap: 1px; line-height: 1; color: var(--fg2); }
+.play-wt-arc .arc-ico svg { width: 16px; height: 16px; display: block; }
+.play-wt-arc .arc-label { font-size: 8px; font-weight: var(--weight-bold); letter-spacing: .02em; color: var(--fg3); }
+
+/* Order → weapon note above the table, and greyed-out unusable weapons. */
+.play-order-note {
+  font-size: 10px; font-weight: var(--weight-bold); letter-spacing: .02em;
+  padding: 3px 8px; border-radius: var(--radius-sm); margin: 4px 0 2px; display: inline-block;
+}
+.play-order-note-go   { color: #2a7a2a; background: rgba(40,120,40,.1); }
+.play-order-note-half { color: #8b5e1a; background: rgba(180,120,20,.12); }
+.play-order-note-stop { color: var(--danger); background: rgba(200,50,40,.1); }
+.play-wt-off td { opacity: .32; }
+.play-wt-off .play-wt-name { text-decoration: line-through; }
 
 /* Weapon table */
 .play-weapons { width: 100%; border-collapse: collapse; font-size: 11px; margin: 4px 0; }

@@ -47,6 +47,12 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-09 — Play Mode: orders that work, stat/arc symbols, VP tracking
+- **Orders now do something.** Selecting an order greys out the weapons a ship cannot fire under it and shows a plain-language note, driven verbatim from rulebook 2.3.1: Silent Running / Max Thrust fire nothing, Weapons Free fires everything, General Quarters fires up to half (rounded up), Course Change fires one, and Damage Control fires one Close Action weapon only (type-C weapons stay lit, the rest grey out).
+- **Symbols everywhere.** Stat cells (Thrust, Scan, Sig, and the Energy/Kinetic/Backup save shields) and the weapon table's firing arcs now use the same icon language as the rest of the app, reusing the shared `STAT_ICONS`/`ARC_ICONS`.
+- **Hull control fixed.** The pill now reads "HP": − takes a point of damage (red), + repairs a hull point (green) — the polarity was previously backwards.
+- **VP tracking** (My VP / Opp VP) and an Opp Groups counter that auto-calculates Pass tokens (rulebook 4.3.1). Both desktop and mobile.
+
 ### 2026-07-09 — Quieter ship class next to named flagships
 - A named famous-admiral flagship (e.g. "Fortune's Fancy") now shows its ship class in a smaller, muted inline aside on the same line — "Fortune's Fancy (Tribune Battlecruiser)" — instead of the class competing at full size with the flagship's proper name. Both apps; `flagshipLabel()` gained a third `asHtml` param so the plain-text army-list export keeps its unstyled "Name (Class)" output unchanged.
 

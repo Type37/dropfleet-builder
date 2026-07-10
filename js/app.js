@@ -7248,7 +7248,7 @@ let activeGroupId = null;
     // Pass famous admiral flagship name to the first ship in the group.
     const famAdmiral = bgAdmiral && bgAdmiral.flagshipName ? bgAdmiral : null;
     const shipsHtml = (bg.ships || []).map((ship, idx) =>
-      renderPlayShip(ship, faction, idx === 0 && famAdmiral ? famAdmiral.flagshipName : null)
+      renderPlayShip(ship, faction, idx === 0 && famAdmiral ? famAdmiral.flagshipName : null, bgs.order)
     ).join('');
     const actDone = bgs.activated;
 
@@ -7268,7 +7268,22 @@ let activeGroupId = null;
     </div>`;
   }
 
-  function renderPlayShip(ship, faction, flagshipName) {
+  // What an active Order allows a ship to fire this activation (rulebook 2.3.1).
+  // Returns null for the "Standard"/unset default (no restriction shown). canFire
+  // decides whether a given weapon row is greyed out; tone drives the note colour.
+  function playOrderWeaponRule(order, n) {
+    switch (order) {
+      case 'Weapons Free':     return { note: 'Weapons Free — every weapon may fire', tone: 'go',   canFire: () => true };
+      case 'General Quarters': return { note: `General Quarters — fire up to ${Math.ceil(n / 2)} of ${n} weapons`, tone: 'half', canFire: () => true };
+      case 'Course Change':    return { note: 'Course Change — fire 1 weapon only', tone: 'half', canFire: () => true };
+      case 'Silent Running':   return { note: 'Silent Running — no weapons fire', tone: 'stop', canFire: () => false };
+      case 'Max Thrust':       return { note: 'Max Thrust — no weapons fire', tone: 'stop', canFire: () => false };
+      case 'Damage Control':   return { note: 'Damage Control — repair, then fire 1 Close Action weapon only', tone: 'half', canFire: w => (w.type || w.t) === 'C' };
+      default: return null;
+    }
+  }
+
+  function renderPlayShip(ship, faction, flagshipName, order) {
     const db = findShipInDB(faction, ship.groupCategory, ship.shipKey);
     if (!db) return '';
     const eff = effectiveStats(db, ship, faction);
@@ -7300,13 +7315,15 @@ let activeGroupId = null;
     const hullNumCls = isDestroyed ? ' play-hull-dead' : isCrippled ? ' play-hull-crippled' : '';
     const hullNum = `<span class="play-hull-num${hullNumCls}">${cur}/${hullMax}</span>`;
 
-    // Compact stat line.
+    // Compact stat line, each cell led by its icon from the shared icon language.
     const statCells = [
       { k: 'thrust', l: 'Thrust' }, { k: 'scan', l: 'Scan' }, { k: 'sig', l: 'Sig' },
       { k: 'es', l: 'ES' }, { k: 'ks', l: 'KS' }, { k: 'bs', l: 'BS' }
-    ].filter(c => s[c.k] && s[c.k] !== '-' && s[c.k] !== '--').map(c =>
-      `<div class="play-stat"><span class="play-stat-val">${esc(String(s[c.k]))}</span><span class="play-stat-lbl">${c.l}</span></div>`
-    ).join('');
+    ].filter(c => s[c.k] && s[c.k] !== '-' && s[c.k] !== '--').map(c => {
+      const meta = STAT_META[c.k] || {};
+      const cls = meta.cssClass ? ' ' + meta.cssClass : '';
+      return `<div class="play-stat${cls}" title="${escAttr(meta.title || c.l)}">${STAT_ICONS[c.k] ? `<span class="play-stat-icon">${STAT_ICONS[c.k]}</span>` : ''}<span class="play-stat-val">${esc(String(s[c.k]))}</span><span class="play-stat-lbl">${c.l}</span></div>`;
+    }).join('');
 
     // Effective weapons (base + selected loadout).
     const wpns = Array.isArray(db.weapons) ? [...db.weapons] : [];
@@ -7318,23 +7335,30 @@ let activeGroupId = null;
 
     let weaponsHtml = '';
     if (wpns.length) {
+      const fireRule = isDestroyed ? null : playOrderWeaponRule(order, wpns.length);
       const rows = wpns.map(w => {
+        const canFire = !fireRule || fireRule.canFire(w);
         const attRaw = parseInt(w.attack || w.att || 0);
         const attDisplay = isCrippled
           ? `<span class="play-crippled-atk">${Math.floor(attRaw / 2)}</span>`
           : (attRaw || '-');
         const dmgType = w.type || w.t || '';
         const dmg = w.damage || w.dmg || '-';
-        return `<tr>
+        const arc = w.arc || '';
+        const arcCell = ARC_ICONS[arc]
+          ? `<span class="play-arc-ico" title="${escAttr(ARC_LABELS[arc] || arc)}">${ARC_ICONS[arc]}<span class="play-arc-lbl">${esc(arc)}</span></span>`
+          : esc(arc || '-');
+        return `<tr class="${canFire ? '' : 'play-wt-off'}">
           <td class="play-wt-name">${esc(w.name)}</td>
-          <td class="play-wt-num">${esc(w.arc || '-')}</td>
+          <td class="play-wt-arc">${arcCell}</td>
           <td class="play-wt-num">${attDisplay}</td>
           <td class="play-wt-num">${esc(w.lock || w.lk || '-')}</td>
           <td class="play-wt-num play-dmg-${dmgType}">${esc(String(dmg))}${dmgType ? `<span style="font-size:9px;opacity:.7">${dmgType}</span>` : ''}</td>
           <td class="play-wt-special">${esc(w.special || w.sp || '-')}</td>
         </tr>`;
       }).join('');
-      weaponsHtml = `<div class="play-weapons-wrap"><table class="play-weapons">
+      const noteHtml = fireRule ? `<div class="play-order-note play-order-note-${fireRule.tone}">${esc(fireRule.note)}</div>` : '';
+      weaponsHtml = `${noteHtml}<div class="play-weapons-wrap"><table class="play-weapons">
         <thead><tr><th>Weapon</th><th>Arc</th><th>Att</th><th>Lk</th><th>Dmg</th><th>Special</th></tr></thead>
         <tbody>${rows}</tbody>
       </table></div>`;
@@ -7407,9 +7431,9 @@ let activeGroupId = null;
       <div class="play-hull-row">
         <div class="play-hull-pips">${hullPipHtml}${hullNum}</div>
         <div class="play-hull-dmg">
-          <button class="play-hull-minus" onclick="App.playHullChange('${escAttr(ship.id)}',1)" title="Remove 1 damage">−</button>
-          <span class="play-hull-dmg-lbl">DMG</span>
-          <button class="play-hull-plus" onclick="App.playHullChange('${escAttr(ship.id)}',-1)" title="Add 1 damage">+</button>
+          <button class="play-hull-minus" onclick="App.playHullChange('${escAttr(ship.id)}',-1)" title="Take 1 damage">−</button>
+          <span class="play-hull-dmg-lbl">HP</span>
+          <button class="play-hull-plus" onclick="App.playHullChange('${escAttr(ship.id)}',1)" title="Repair 1 hull">+</button>
         </div>
       </div>
       <div class="play-statline">${statCells}</div>
@@ -7521,6 +7545,10 @@ let activeGroupId = null;
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
     { date: '2026-07-09', title: 'Play Mode improvements', items: [
+      'Orders now DO something: picking an order greys out the weapons that cannot fire under it and shows a note (Silent Running / Max Thrust = no weapons; Weapons Free = all; General Quarters = up to half; Course Change = 1; Damage Control = 1 Close Action weapon only).',
+      'Stat symbols added: Thrust, Scan, Sig and the Energy/Kinetic/Backup save shields now show their icons, matching the rest of the app.',
+      'Firing-arc glyphs added to the weapon table (the little arc-on-a-disc diagrams), so you can read an arc at a glance instead of decoding "F/S".',
+      'Hull control fixed: the buttons now read as HP. − takes a point of damage (red), + repairs a hull point (green). No more backwards polarity.',
       'VP tracking: My VP and Opp VP counters in the play header. Opp Groups counter auto-calculates your Pass tokens (rulebook 4.3.1).',
       'Orders now correct per rulebook 2.3.1: General Quarters, Silent Running, Weapons Free, Course Change, Max Thrust, Damage Control. Tap any order chip to set it AND read its full verbatim rules.',
       'Battlegroup cards get a coloured left-border accent by tonnage class (green=Light, blue=Medium, amber=Heavy, red=Super-Heavy).',
