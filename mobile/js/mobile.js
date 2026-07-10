@@ -3459,8 +3459,8 @@
     ).join('');
     const orderChips = M_PLAY_ORDERS.map(o => {
       const isActive = bgs.order === o;
-      const desc = escAttr(M_PLAY_ORDER_RULES[o] || '');
-      return `<button class="play-order-chip${isActive ? ' play-order-sel' : ''}" data-rule-desc="${desc}" onclick="App.mPlaySetOrderAndShow(event,'${escAttr(bg.id)}','${escAttr(o)}')">${esc(o)}</button>`;
+      const bid = escAttr(bg.id), oo = escAttr(o);
+      return `<button class="play-order-chip${isActive ? ' play-order-sel' : ''}" oncontextmenu="return false" onpointerdown="App.mPlayOrderDown(event,'${bid}','${oo}')" onpointermove="App.mPlayOrderMove(event)" onpointerup="App.mPlayOrderUp(event,'${bid}','${oo}')" onpointercancel="App.mPlayOrderCancel()" onpointerleave="App.mPlayOrderCancel()">${esc(o)}</button>`;
     }).join('');
     const famAdmiral = bgAdmiral && bgAdmiral.flagshipName ? bgAdmiral : null;
     const shipsHtml = (bg.ships || []).map((inst, idx) =>
@@ -3479,6 +3479,7 @@
         <div class="play-spike-pips">${spikePips}</div>
       </div>
       <div class="play-orders-row">${orderChips}</div>
+      <div class="play-orders-hint">Tap to set &middot; hold for rules</div>
       <div class="play-ships">${shipsHtml}</div>
     </div>`;
   }
@@ -3554,7 +3555,7 @@
           <td class="play-wt-num">${attDisplay}</td>
           <td class="play-wt-num">${esc(w.lock || w.lk || '-')}</td>
           <td class="play-wt-num play-dmg-${dmgType}">${esc(String(dmg))}${dmgType ? `<span style="font-size:9px;opacity:.7">${dmgType}</span>` : ''}</td>
-          <td class="play-wt-special">${esc(w.special || w.sp || '-')}</td>
+          <td class="play-wt-special">${mPlaySpecialChips(w.special || w.sp)}</td>
         </tr>`;
       }).join('');
       const noteHtml = fireRule ? `<div class="play-order-note play-order-note-${fireRule.tone}">${esc(fireRule.note)}</div>` : '';
@@ -3567,10 +3568,17 @@
     const loads = db.loads || [];
     let launchHtml = '';
     if (loads.length) {
-      const items = loads.map(l =>
-        `<span class="play-launch-item"><span class="play-launch-name">${esc(l.name)}</span> <span class="play-launch-val">Launch ${esc(String(l.launch || '?'))}</span>${l.special && l.special !== '-' ? ` <span class="play-launch-sp">${esc(l.special)}</span>` : ''}</span>`
-      ).join(' ');
-      launchHtml = `<div class="play-launch-row">${items}</div>`;
+      const canLaunch = !isDestroyed && order !== 'Max Thrust' && order !== 'Damage Control';
+      const items = loads.map(l => {
+        const lk = launchRuleKey(l.name);
+        const nameHtml = lk
+          ? `<span class="play-launch-name play-launch-tap" onclick="App.openLaunchRule('${lk}')">${esc(l.name)}</span>`
+          : `<span class="play-launch-name">${esc(l.name)}</span>`;
+        const sp = (l.special && l.special !== '-') ? ` <span class="play-launch-sp">${mPlaySpecialChips(l.special)}</span>` : '';
+        return `<span class="play-launch-item">${nameHtml} <span class="play-launch-val">Launch ${esc(String(l.launch || '?'))}</span>${sp}</span>`;
+      }).join(' ');
+      const offNote = canLaunch ? '' : `<span class="play-launch-off-note">cannot launch (${esc(order)})</span>`;
+      launchHtml = `<div class="play-launch-row${canLaunch ? '' : ' play-launch-off'}">${items}${offNote}</div>`;
     }
     const rules = (db.specialRules || []).map(r => (typeof r === 'string' ? r : r.name)).filter(Boolean);
     let rulesHtml = '';
@@ -3665,8 +3673,43 @@
   }
   function mPlaySetOrderAndShow(event, bgId, order) {
     mPlaySetOrder(bgId, order);
-    const el = event.currentTarget;
-    showSheet(order, `<p>${M_PLAY_ORDER_RULES[order] || ''}</p>`);
+    showSheet(order, `<p>${ruleHtml(M_PLAY_ORDER_RULES[order] || '')}</p>`);
+  }
+  // Split a weapon/launch "special" string into individually tappable rule chips.
+  function mPlaySpecialChips(str) {
+    const parts = String(str || '').split(',').map(x => x.trim()).filter(x => x && x !== '-');
+    if (!parts.length) return '<span class="play-wt-rule-none">-</span>';
+    return parts.map(p => `<span class="play-wt-rule" onclick="App.openRule('${escAttr(p)}')">${esc(p)}</span>`).join(' ');
+  }
+  // Order chips: tap to set the order, hold (~400ms) to preview its rules without
+  // changing the selection. Pointer events so touch + mouse share one path; a move
+  // past 10px cancels (it was a scroll).
+  let _mOrderPress = null;
+  function mPlayOrderDown(ev, bgId, order) {
+    _mOrderPress = { bgId, order, held: false, x: ev.clientX, y: ev.clientY };
+    _mOrderPress.timer = setTimeout(() => {
+      if (!_mOrderPress) return;
+      _mOrderPress.held = true;
+      if (navigator.vibrate) { try { navigator.vibrate(12); } catch (e) {} }
+      showSheet(order, `<p>${ruleHtml(M_PLAY_ORDER_RULES[order] || '')}</p>`);
+    }, 400);
+  }
+  function mPlayOrderMove(ev) {
+    if (!_mOrderPress) return;
+    if (Math.abs(ev.clientX - _mOrderPress.x) > 10 || Math.abs(ev.clientY - _mOrderPress.y) > 10) {
+      clearTimeout(_mOrderPress.timer); _mOrderPress = null;
+    }
+  }
+  function mPlayOrderUp(ev, bgId, order) {
+    if (!_mOrderPress) return;
+    clearTimeout(_mOrderPress.timer);
+    const held = _mOrderPress.held;
+    _mOrderPress = null;
+    if (held) return;           // long-press already showed the rules; don't set
+    mPlaySetOrder(bgId, order); // tap: set the order and re-render
+  }
+  function mPlayOrderCancel() {
+    if (_mOrderPress) { clearTimeout(_mOrderPress.timer); _mOrderPress = null; }
   }
   function mPlaySpikeChange(bgId, delta) {
     if (!mPlayState) return;
@@ -3743,6 +3786,9 @@
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
     { date: '2026-07-09', title: 'Play Mode improvements', items: [
+      'Orders: tap a chip to set it (instant), hold it to read the full rules without changing your pick. No more rules sheet on every tap.',
+      'Launch assets are now interactive: tap an asset name (Fighters & Bombers, Torpedo, etc.) for its verbatim activation rules, and its specials (Limited, Penetrator, Alt) are tappable too. Under Max Thrust and Damage Control the launch row greys out with a "cannot launch" note, since those orders forbid launching.',
+      'Every weapon in the Special column is now a tappable rule chip (Burnthrough, Focused, Fusillade...), matching the ship rules and the builder.',
       'Orders now DO something: picking an order greys out the weapons that cannot fire under it and shows a note (Silent Running / Max Thrust = no weapons; Weapons Free = all; General Quarters = up to half; Course Change = 1; Damage Control = 1 Close Action weapon only).',
       'Stat symbols added: Thrust, Scan, Sig and the Energy/Kinetic/Backup save shields now show their icons, matching the rest of the app.',
       'Firing-arc glyphs added to the weapon table (the little arc-on-a-disc diagrams), so you can read an arc at a glance instead of decoding "F/S".',
@@ -4438,7 +4484,7 @@
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,
     overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
     importFleetPrompt, doImportText,
-    openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayTogglePass, mPlayChangeVP, mPlayChangeOppVP, mPlayChangeOppGroups, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayCorruptorChange,
+    openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayTogglePass, mPlayChangeVP, mPlayChangeOppVP, mPlayChangeOppGroups, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayOrderDown, mPlayOrderMove, mPlayOrderUp, mPlayOrderCancel, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayCorruptorChange,
     openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet, sayName
   };
 

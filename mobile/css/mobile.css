@@ -2502,9 +2502,22 @@ body.sheet-open .sheet-scrim {
   font-size: 11px; border: 1px solid var(--stroke1); border-radius: var(--radius-pill);
   background: var(--paper-alt); color: var(--fg2); padding: 3px 9px; cursor: pointer;
   transition: background var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast);
+  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: manipulation;
 }
 .play-order-chip:active { opacity: .7; }
 .play-order-chip.play-order-sel { background: var(--navy); color: #fff; border-color: var(--navy); }
+.play-orders-hint {
+  font-size: 9px; color: var(--fg4); letter-spacing: .04em; text-transform: uppercase;
+  padding: 3px var(--sp-m) 0;
+}
+/* Tappable rule chips in the weapon Special column and launch specials. */
+.play-wt-rule { color: var(--navy); border-bottom: 1px dotted var(--navy); cursor: pointer; white-space: nowrap; }
+.play-wt-rule-plain, .play-wt-rule-none { color: var(--fg4); }
+/* Tappable launch-asset name + order-forbidden launch state. */
+.play-launch-tap { color: var(--navy); border-bottom: 1px dotted var(--navy); cursor: pointer; }
+.play-launch-off { opacity: .4; }
+.play-launch-off .play-launch-tap { pointer-events: none; border-bottom: none; }
+.play-launch-off-note { font-size: 10px; font-weight: var(--weight-bold); color: var(--danger); letter-spacing: .02em; margin-left: 4px; }
 
 /* Ship list */
 .play-ships { padding: var(--sp-s) 0; }

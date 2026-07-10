@@ -47,6 +47,11 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-09 — Play Mode: tap/hold orders, tappable rules, interactive launch
+- **Orders — tap to set, hold to read.** Tapping an order chip now just sets it (and applies the weapon greying); the full rules open only on a long-press, so switching orders mid-game no longer spams a rules popup. Built on Pointer Events with a movement-cancel so it doesn't fight scrolling.
+- **Launch assets are interactive.** The asset name is tappable for its verbatim activation rules (`LAUNCH_RULES`, ported to desktop for parity), its specials (Limited/Penetrator/Alt) are tappable rule chips, and the whole launch row greys out with a "cannot launch" note under Max Thrust and Damage Control (which forbid launching).
+- **Weapon Special column is now tappable** — each named rule (Burnthrough, Focused, Fusillade…) is a chip that opens its rules, matching the ship special rules and the builder.
+
 ### 2026-07-09 — Play Mode: orders that work, stat/arc symbols, VP tracking
 - **Orders now do something.** Selecting an order greys out the weapons a ship cannot fire under it and shows a plain-language note, driven verbatim from rulebook 2.3.1: Silent Running / Max Thrust fire nothing, Weapons Free fires everything, General Quarters fires up to half (rounded up), Course Change fires one, and Damage Control fires one Close Action weapon only (type-C weapons stay lit, the rest grey out).
 - **Symbols everywhere.** Stat cells (Thrust, Scan, Sig, and the Energy/Kinetic/Backup save shields) and the weapon table's firing arcs now use the same icon language as the rest of the app, reusing the shared `STAT_ICONS`/`ARC_ICONS`.

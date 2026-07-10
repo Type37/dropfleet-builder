@@ -7235,10 +7235,33 @@ body[data-view="builder"] .game-info-footer {
   font-size: 11px; padding: 3px 9px; border-radius: 20px;
   border: 1px solid var(--stroke); background: transparent; color: var(--ink-muted);
   cursor: pointer; font-family: inherit; transition: all var(--duration-fast); white-space: nowrap;
+  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: manipulation;
 }
 .play-order-chip:hover { color: var(--ink); border-color: var(--stroke-strong); }
 .play-order-chip.play-order-sel {
   background: var(--navy); color: var(--paper); border-color: var(--navy); font-weight: 600;
+}
+.play-orders-hint {
+  font-size: 9px; color: var(--ink-faint); font-family: var(--font-condensed);
+  letter-spacing: 0.04em; padding: 2px var(--sp-md) 0; text-transform: uppercase;
+}
+/* Tappable rule chips in the weapon Special column and launch specials. */
+.play-wt-rule {
+  cursor: pointer; color: var(--info); border-bottom: 1px dotted var(--info);
+  white-space: nowrap;
+}
+.play-wt-rule:hover { color: var(--navy); }
+html[data-theme="dark"] .play-wt-rule { color: #7fb0e6; border-bottom-color: #7fb0e6; }
+.play-wt-rule-plain { color: var(--ink-faint); }
+.play-wt-rule-none { color: var(--ink-faint); }
+/* Tappable launch-asset name + order-forbidden launch state. */
+.play-launch-tap { cursor: pointer; border-bottom: 1px dotted var(--ink-muted); }
+.play-launch-tap:hover { color: var(--navy); border-bottom-color: var(--navy); }
+.play-launch-off { opacity: 0.4; }
+.play-launch-off .play-launch-tap { pointer-events: none; border-bottom: none; }
+.play-launch-off-note {
+  font-size: 10px; font-weight: 700; font-family: var(--font-condensed);
+  color: var(--error); letter-spacing: 0.03em; margin-left: 4px;
 }
 .play-ships { padding: var(--sp-sm) var(--sp-md); display: flex; flex-direction: column; }
 .play-ship { display: flex; flex-direction: column; gap: var(--sp-xs); padding: var(--sp-sm) 0; }
