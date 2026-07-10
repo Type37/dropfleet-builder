@@ -7307,6 +7307,28 @@ html[data-theme="dark"] .play-hull-plus:hover { color: #81c784; }
   background: rgba(196,60,47,0.12); color: var(--error);
   letter-spacing: 0.06em; text-transform: uppercase; font-family: var(--font-condensed);
 }
+/* Crippled toggle — sits next to the HP pill, reveals the crippling-effects panel */
+.play-crip-toggle {
+  position: relative; flex-shrink: 0; height: 26px; padding: 0 10px;
+  border: 1px solid var(--stroke); border-radius: var(--radius-sm);
+  background: var(--paper-warm); cursor: pointer;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  font-family: var(--font-condensed); color: var(--ink-muted);
+  display: flex; align-items: center; gap: 4px;
+  transition: background var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast);
+}
+.play-crip-toggle:hover { border-color: var(--stroke-strong); color: var(--ink); }
+.play-crip-toggle.play-crip-toggle-crip {
+  background: rgba(196,60,47,0.12); color: var(--error); border-color: rgba(196,60,47,0.4);
+}
+.play-crip-toggle.play-crip-toggle-open {
+  background: var(--error); color: var(--paper); border-color: var(--error);
+}
+.play-crip-toggle-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--warning);
+  box-shadow: 0 0 0 1.5px var(--paper-warm);
+}
+.play-crip-toggle-crip .play-crip-toggle-dot { box-shadow: 0 0 0 1.5px rgba(255,255,255,0.6); }
 .play-fire-badge {
   font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 20px;
   background: rgba(217,140,31,0.15); color: var(--warning);

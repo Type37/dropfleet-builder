@@ -3588,8 +3588,18 @@
       }).join('');
       rulesHtml = `<div class="play-status-tokens">${chips}</div>`;
     }
+    // Crippling effects — Capital Ships only, tucked behind a "Crippled" toggle
+    // next to the HP pill so a healthy ship isn't cluttered with trackers. The
+    // toggle glows red once crippled, and carries a dot when effects are tracked
+    // while the panel is collapsed (so nothing is forgotten).
+    const cripOpen = !!ss.cripOpen;
+    const hasActiveCrip = isCapital && M_CRIP_EFFECTS.some(e => e.stackable ? (ss[e.key] || 0) > 0 : !!ss[e.key]);
+    let cripToggle = '';
+    if (isCapital && !isDestroyed) {
+      cripToggle = `<button class="play-crip-toggle${isCrippled ? ' play-crip-toggle-crip' : ''}${cripOpen ? ' play-crip-toggle-open' : ''}" onclick="App.mPlayToggleCripPanel('${escAttr(inst.id)}')" aria-expanded="${cripOpen}">Crippled${hasActiveCrip && !cripOpen ? '<span class="play-crip-toggle-dot"></span>' : ''}</button>`;
+    }
     let cripHtml = '';
-    if (isCapital) {
+    if (isCapital && cripOpen) {
       const effs = M_CRIP_EFFECTS.map(ef => {
         if (ef.stackable) {
           const count = ss[ef.key] || 0;
@@ -3622,7 +3632,6 @@
     return `<div class="play-ship${isDestroyed ? ' play-ship-destroyed' : ''}">
       <div class="play-ship-nameline">
         <span class="play-ship-name">${nameHtml}</span>
-        ${isCrippled && !isDestroyed ? '<span class="play-crippled-badge">Crippled</span>' : ''}
       </div>
       <div class="play-hull-row">
         <div class="play-hull-pips">${hullPipHtml}${hullNum}</div>
@@ -3631,6 +3640,7 @@
           <span class="play-hull-dmg-lbl">HP</span>
           <button class="play-hull-plus" onclick="App.mPlayHullChange('${escAttr(inst.id)}',1)" title="Repair 1 hull">+</button>
         </div>
+        ${cripToggle}
       </div>
       <div class="play-statline">${statCells}</div>
       ${weaponsHtml}
@@ -3763,6 +3773,11 @@
     mPlayState.ships[shipId][key] = !mPlayState.ships[shipId][key];
     mSavePlayState(); renderMobilePlay();
   }
+  function mPlayToggleCripPanel(shipId) {
+    if (!mPlayState || !mPlayState.ships[shipId]) return;
+    mPlayState.ships[shipId].cripOpen = !mPlayState.ships[shipId].cripOpen;
+    mSavePlayState(); renderMobilePlay();
+  }
   function mPlayCorruptorChange(shipId, delta) {
     if (!mPlayState || !mPlayState.ships[shipId]) return;
     const ss = mPlayState.ships[shipId];
@@ -3786,6 +3801,7 @@
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
     { date: '2026-07-09', title: 'Play Mode improvements', items: [
+      'Crippling effects (On Fire, systems offline, orbital decay) are now tucked behind a "Crippled" toggle next to the HP pill, so a healthy ship is not cluttered with trackers. The toggle glows red once the ship is actually crippled, and shows a dot if you have effects logged while the panel is collapsed.',
       'Orders: tap a chip to set it (instant), hold it to read the full rules without changing your pick. No more rules sheet on every tap.',
       'Launch assets are now interactive: tap an asset name (Fighters & Bombers, Torpedo, etc.) for its verbatim activation rules, and its specials (Limited, Penetrator, Alt) are tappable too. Under Max Thrust and Damage Control the launch row greys out with a "cannot launch" note, since those orders forbid launching.',
       'Every weapon in the Special column is now a tappable rule chip (Burnthrough, Focused, Fusillade...), matching the ship rules and the builder.',
@@ -4484,7 +4500,7 @@
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,
     overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
     importFleetPrompt, doImportText,
-    openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayTogglePass, mPlayChangeVP, mPlayChangeOppVP, mPlayChangeOppGroups, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayOrderDown, mPlayOrderMove, mPlayOrderUp, mPlayOrderCancel, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayCorruptorChange,
+    openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayTogglePass, mPlayChangeVP, mPlayChangeOppVP, mPlayChangeOppGroups, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayOrderDown, mPlayOrderMove, mPlayOrderUp, mPlayOrderCancel, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayToggleCripPanel, mPlayCorruptorChange,
     openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet, sayName
   };
 

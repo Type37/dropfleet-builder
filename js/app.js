@@ -7084,6 +7084,17 @@ let activeGroupId = null;
   // Rulebook 7.3.6: only Medium/Heavy/Colossal are Capital Ships — Light (frigates) never crip.
   // Data uses 'C' for Colossal/Super-Heavy (not 'S').
   const PLAY_CAPITAL = new Set(['M', 'H', 'C']);
+  // db.tonnage can be a single-letter code ('M') OR the full category word
+  // ('Medium') depending on whether the ship carries its own stats.tonnage
+  // (see the ship-DB builder ~line 550 and dpHullTrack). Normalise to a code so
+  // capital detection, tonnage borders, and badges work in both cases.
+  function playTonCode(t) {
+    const s = String(t || '').trim().toUpperCase();
+    if (!s) return '';
+    if (s.length === 1) return s;
+    if (s[0] === 'S') return 'C';        // Super-Heavy → Colossal code
+    return s[0];                          // Light/Medium/Heavy/Colossal/Payload
+  }
   // LAUNCH_RULES + launchRuleKey (verbatim asset-activation rules) already exist
   // below, defined alongside the launch-table renderer; Play Mode reuses them.
 
@@ -7226,7 +7237,7 @@ let activeGroupId = null;
     let tonCode = 'M';
     if (bg.ships && bg.ships.length) {
       const db0 = findShipInDB(faction, bg.ships[0].groupCategory, bg.ships[0].shipKey);
-      if (db0 && db0.tonnage) tonCode = db0.tonnage;
+      if (db0 && db0.tonnage) tonCode = playTonCode(db0.tonnage);
     }
     const tonLabels = { L: 'Light', M: 'Medium', H: 'Heavy', C: 'Super-Heavy' };
 
@@ -7336,7 +7347,7 @@ let activeGroupId = null;
     if (!db) return '';
     const eff = effectiveStats(db, ship, faction);
     const s = eff.stats;
-    const isCapital = PLAY_CAPITAL.has(db.tonnage);
+    const isCapital = PLAY_CAPITAL.has(playTonCode(db.tonnage));
     const ss = playState.ships[ship.id] || { cur: parseInt(s.hull) || 1, fire: 0 };
     const hullMax = parseInt(s.hull) || 1;
     const cur = Math.max(0, Math.min(hullMax, ss.cur));
@@ -7445,9 +7456,18 @@ let activeGroupId = null;
       rulesHtml = `<div class="play-status-tokens">${chips}</div>`;
     }
 
-    // Crippling effects panel (Capital Ships only).
+    // Crippling effects — Capital Ships only, tucked behind a "Crippled" toggle
+    // next to the HP pill so a healthy ship isn't cluttered with trackers. The
+    // toggle glows red once the ship is actually crippled, and carries a dot when
+    // effects are tracked while the panel is collapsed (so nothing is forgotten).
+    const cripOpen = !!ss.cripOpen;
+    const hasActiveCrip = isCapital && CRIP_EFFECTS.some(e => e.stackable ? (ss[e.key] || 0) > 0 : !!ss[e.key]);
+    let cripToggle = '';
+    if (isCapital && !isDestroyed) {
+      cripToggle = `<button class="play-crip-toggle${isCrippled ? ' play-crip-toggle-crip' : ''}${cripOpen ? ' play-crip-toggle-open' : ''}" onclick="App.playToggleCripPanel('${escAttr(ship.id)}')" aria-expanded="${cripOpen}" title="Crippling effects">Crippled${hasActiveCrip && !cripOpen ? '<span class="play-crip-toggle-dot"></span>' : ''}</button>`;
+    }
     let cripHtml = '';
-    if (isCapital) {
+    if (isCapital && cripOpen) {
       const effs = CRIP_EFFECTS.map(ef => {
         if (ef.stackable) {
           const count = ss[ef.key] || 0;
@@ -7483,7 +7503,6 @@ let activeGroupId = null;
     return `<div class="play-ship${isDestroyed ? ' play-ship-destroyed' : ''}">
       <div class="play-ship-nameline">
         <span class="play-ship-name">${nameHtml}</span>
-        ${isCrippled && !isDestroyed ? '<span class="play-crippled-badge">Crippled</span>' : ''}
       </div>
       <div class="play-hull-row">
         <div class="play-hull-pips">${hullPipHtml}${hullNum}</div>
@@ -7492,6 +7511,7 @@ let activeGroupId = null;
           <span class="play-hull-dmg-lbl">HP</span>
           <button class="play-hull-plus" onclick="App.playHullChange('${escAttr(ship.id)}',1)" title="Repair 1 hull">+</button>
         </div>
+        ${cripToggle}
       </div>
       <div class="play-statline">${statCells}</div>
       ${weaponsHtml}
@@ -7586,6 +7606,11 @@ let activeGroupId = null;
     playState.ships[shipId][key] = !playState.ships[shipId][key];
     savePlayState(); renderPlayMode();
   }
+  function playToggleCripPanel(shipId) {
+    if (!playState || !playState.ships[shipId]) return;
+    playState.ships[shipId].cripOpen = !playState.ships[shipId].cripOpen;
+    savePlayState(); renderPlayMode();
+  }
   // Legacy shims kept so any bookmarked links / old saves don't break.
   function playToggleFire(shipId) { playCripChange(shipId, 'fire', playState?.ships[shipId]?.fire ? -1 : 1); }
   function playTogglePower(shipId) { playCripToggle(shipId, 'weaponsOff'); }
@@ -7602,6 +7627,8 @@ let activeGroupId = null;
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
     { date: '2026-07-09', title: 'Play Mode improvements', items: [
+      'Crippling effects (On Fire, systems offline, orbital decay) are now tucked behind a "Crippled" toggle next to the HP pill, so a healthy ship is not cluttered with trackers. The toggle glows red once the ship is actually crippled, and shows a dot if you have effects logged while the panel is collapsed.',
+      'Fixed (desktop): crippling never triggered for Medium/Heavy ships whose data has no explicit tonnage stat -- they were read as non-capital, so no crippled state, halved dice, or tonnage colours ever showed. Now normalised so both data formats work.',
       'Orders: tap a chip to set it (instant), hold it to read the full rules without changing your pick. No more rules popup on every tap.',
       'Launch assets are now interactive: tap an asset name (Fighters & Bombers, Torpedo, etc.) for its verbatim activation rules, and its specials (Limited, Penetrator, Alt) are tappable too. Under Max Thrust and Damage Control the launch row greys out with a "cannot launch" note, since those orders forbid launching.',
       'Every weapon in the Special column is now a tappable rule chip (Burnthrough, Focused, Fusillade...), matching the ship rules and the builder.',
@@ -8797,7 +8824,7 @@ let activeGroupId = null;
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFlagshipLoadout, changeFeature, addSystem, removeSystem, toggleSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
-    openPlayMode, showPlayPassInfo, playChangeRound, playEndRound, playTogglePass, playChangeVP, playChangeOppVP, playChangeOppGroups, playSpikeChange, playSetOrder, playSetOrderAndShow, playOrderDown, playOrderMove, playOrderUp, playOrderCancel, playToggleActivation, playHullChange, playCripChange, playCripToggle, playToggleFire, playTogglePower, playCorruptorChange,
+    openPlayMode, showPlayPassInfo, playChangeRound, playEndRound, playTogglePass, playChangeVP, playChangeOppVP, playChangeOppGroups, playSpikeChange, playSetOrder, playSetOrderAndShow, playOrderDown, playOrderMove, playOrderUp, playOrderCancel, playToggleActivation, playHullChange, playCripChange, playCripToggle, playToggleCripPanel, playToggleFire, playTogglePower, playCorruptorChange,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText, openLastImported,
     openSettings, openChangelog, toggleSetting, toggleTheme, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, sayName, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal

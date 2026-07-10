@@ -47,6 +47,10 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-09 — Play Mode: Crippled toggle + desktop crippling fix
+- **Crippling effects behind a "Crippled" toggle.** The On Fire / systems-offline / orbital-decay trackers no longer clutter every healthy Capital Ship — they collapse behind a "Crippled" pill next to the HP control. The pill glows red once the ship is genuinely crippled (≤ half hull) and carries a dot when effects are logged while the panel is closed, so nothing gets forgotten.
+- **Fixed: desktop crippling never fired.** Ships whose data has no explicit tonnage stat fall back to the full category word ("Medium") rather than the code ("M"), so `PLAY_CAPITAL` never matched them — no crippled state, no halved dice, no tonnage colours. Now normalised (`playTonCode`) so both representations resolve correctly. Mobile was already using codes and unaffected.
+
 ### 2026-07-09 — Play Mode: tap/hold orders, tappable rules, interactive launch
 - **Orders — tap to set, hold to read.** Tapping an order chip now just sets it (and applies the weapon greying); the full rules open only on a long-press, so switching orders mid-game no longer spams a rules popup. Built on Pointer Events with a movement-cancel so it doesn't fight scrolling.
 - **Launch assets are interactive.** The asset name is tappable for its verbatim activation rules (`LAUNCH_RULES`, ported to desktop for parity), its specials (Limited/Penetrator/Alt) are tappable rule chips, and the whole launch row greys out with a "cannot launch" note under Max Thrust and Damage Control (which forbid launching).

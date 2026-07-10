@@ -2538,6 +2538,26 @@ body.sheet-open .sheet-scrim {
   text-transform: uppercase; letter-spacing: .05em;
   border: 1px solid var(--danger); border-radius: var(--radius-sm); padding: 1px 4px;
 }
+/* Crippled toggle — next to the HP pill, reveals the crippling-effects panel */
+.play-crip-toggle {
+  position: relative; flex-shrink: 0; height: 32px; padding: 0 11px;
+  border: 1px solid var(--stroke1); border-radius: var(--radius-md);
+  background: var(--paper-alt); cursor: pointer;
+  font-size: 10px; font-weight: var(--weight-bold); letter-spacing: .05em; text-transform: uppercase;
+  color: var(--fg3); display: flex; align-items: center; gap: 4px;
+  transition: background var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast);
+}
+.play-crip-toggle.play-crip-toggle-crip {
+  background: rgba(196,60,47,.12); color: var(--danger); border-color: rgba(196,60,47,.4);
+}
+.play-crip-toggle.play-crip-toggle-open {
+  background: var(--danger); color: #fff; border-color: var(--danger);
+}
+.play-crip-toggle-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #d07020;
+  box-shadow: 0 0 0 1.5px var(--paper-alt);
+}
+.play-crip-toggle-crip .play-crip-toggle-dot { box-shadow: 0 0 0 1.5px rgba(255,255,255,.6); }
 /* Hull row: [pips + count] [−DMG+] inline */
 .play-hull-row { display: flex; align-items: center; gap: 6px; margin: 4px 0; flex-wrap: nowrap; }
 /* −DMG+ pill */
