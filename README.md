@@ -47,6 +47,9 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-14 — Play Mode: weapon Special rules always readable
+- **Ship-specific weapon rules are now tappable in Play Mode.** Weapon Special chips already opened their verbatim rules for shared glossary keywords (Burnthrough, Focused, Fusillade…). Now a weapon whose Special names a *ship-specific* rule — Advanced Artillery, Bombardment Spine, Explosive and the like, whose text lives on the ship rather than in the shared glossary — falls back to that ship's own rules, so tapping it shows the rule instead of leaving dead, unreadable text. Both apps.
+
 ### 2026-07-09 — Play Mode: Crippled toggle + desktop crippling fix
 - **Crippling effects behind a "Crippled" toggle.** The On Fire / systems-offline / orbital-decay trackers no longer clutter every healthy Capital Ship — they collapse behind a "Crippled" pill next to the HP control. The pill glows red once the ship is genuinely crippled (≤ half hull) and carries a dot when effects are logged while the panel is closed, so nothing gets forgotten.
 - **Fixed: desktop crippling never fired.** Ships whose data has no explicit tonnage stat fall back to the full category word ("Medium") rather than the code ("M"), so `PLAY_CAPITAL` never matched them — no crippled state, no halved dice, no tonnage colours. Now normalised (`playTonCode`) so both representations resolve correctly. Mobile was already using codes and unaffected.

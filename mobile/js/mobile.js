@@ -531,8 +531,37 @@
     document.getElementById('rule-sheet').classList.add('active');
     document.body.classList.add('sheet-open');
   }
+  // Fall back to a ship-specific rule: many weapon specials name a rule whose
+  // text lives on the ship (e.g. "Advanced Artillery", "Bombardment Spine",
+  // "Explosive") rather than in the shared glossary. Search all loaded factions'
+  // ships for a matching specialRule/feature by name (case-insensitive).
+  function localRuleLookup(name) {
+    if (!name) return null;
+    const target = name.toLowerCase();
+    let hit = null;
+    const scan = arr => (Array.isArray(arr) ? arr : []).forEach(r => {
+      if (hit || !r || typeof r === 'string') return;
+      if (r.name && r.description && r.name.toLowerCase() === target) {
+        hit = { description: r.description, page: r.page || '' };
+      }
+    });
+    const walk = o => {
+      if (hit || !o) return;
+      if (Array.isArray(o)) { o.forEach(walk); return; }
+      if (typeof o === 'object') {
+        scan(o.specialRules); scan(o.features);
+        Object.values(o).forEach(walk);
+      }
+    };
+    Object.values(FACTIONS).forEach(walk);
+    return hit;
+  }
   function openRule(name) {
-    const rule = lookupRule(name);
+    let rule = lookupRule(name);
+    if (!rule.description) {
+      const loc = localRuleLookup(name);
+      if (loc) rule = { name, description: loc.description, page: loc.page };
+    }
     const body = rule.description
       ? `<p>${ruleHtml(rule.description)}</p>`
       : `<p class="rule-sheet-unknown">No rules text on file for this keyword yet.</p>`;
@@ -3800,6 +3829,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-14', title: 'Play Mode: weapon rules always readable', items: [
+      'Tapping a weapon Special in Play Mode now shows its rules even when the rule is ship-specific (Advanced Artillery, Bombardment Spine, Explosive...) rather than a shared keyword, instead of reporting no rules on file.',
+    ]},
     { date: '2026-07-09', title: 'Play Mode improvements', items: [
       'Crippling effects (On Fire, systems offline, orbital decay) are now tucked behind a "Crippled" toggle next to the HP pill, so a healthy ship is not cluttered with trackers. The toggle glows red once the ship is actually crippled, and shows a dot if you have effects logged while the panel is collapsed.',
       'Orders: tap a chip to set it (instant), hold it to read the full rules without changing your pick. No more rules sheet on every tap.',

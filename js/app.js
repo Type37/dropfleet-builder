@@ -7298,12 +7298,39 @@ let activeGroupId = null;
     }
   }
 
+  // Build a name -> description lookup from a ship's OWN special rules (and any
+  // loadout-option rules). Many weapon specials name a ship-specific rule whose
+  // text lives on the ship (e.g. "Advanced Artillery", "Bombardment Spine",
+  // "Explosive") rather than in the shared glossary, so the weapon-chip lookup
+  // can fall back to this. Keyed case-insensitively.
+  function playLocalRuleMap(db, ship) {
+    const map = {};
+    const add = arr => (Array.isArray(arr) ? arr : []).forEach(r => {
+      if (!r) return;
+      const name = typeof r === 'string' ? r : r.name;
+      const desc = typeof r === 'string' ? '' : (r.description || '');
+      if (name && desc) map[name.toLowerCase()] = { description: desc, page: (r && r.page) || '' };
+    });
+    if (db) {
+      add(db.specialRules);
+      add(db.features);
+      (Array.isArray(db.loadoutOptions) ? db.loadoutOptions : []).forEach((lo, i) => {
+        const sel = (ship && ship.loadouts && ship.loadouts[i] !== undefined) ? ship.loadouts[i] : 0;
+        const opt = lo.options && lo.options[sel];
+        if (opt) { add(opt.specialRules); add(opt.features); }
+      });
+    }
+    return map;
+  }
+
   // Split a weapon/launch "special" string into individually tappable rule chips.
-  function playSpecialChips(str) {
+  // localRules (optional) is a name->{description} map of the ship's own rules,
+  // tried when the shared glossary has no entry for a keyword.
+  function playSpecialChips(str, localRules) {
     const parts = String(str || '').split(',').map(x => x.trim()).filter(x => x && x !== '-');
     if (!parts.length) return '<span class="play-wt-rule-none">-</span>';
     return parts.map(p => {
-      const full = lookupRuleFull(p);
+      const full = lookupRuleFull(p) || (localRules && localRules[p.toLowerCase()]);
       if (full && full.description) {
         return `<span class="play-wt-rule" data-rule-desc="${escAttr(full.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(p)}</span>`;
       }
@@ -7392,6 +7419,10 @@ let activeGroupId = null;
       if (opt && Array.isArray(opt.weapons)) wpns.push(...opt.weapons);
     });
 
+    // Ship's own rules, so a weapon/launch special that names a ship-specific
+    // rule (Advanced Artillery, Bombardment Spine, Explosive...) is still tappable.
+    const localRules = playLocalRuleMap(db, ship);
+
     let weaponsHtml = '';
     if (wpns.length) {
       const fireRule = isDestroyed ? null : playOrderWeaponRule(order, wpns.length);
@@ -7413,7 +7444,7 @@ let activeGroupId = null;
           <td class="play-wt-num">${attDisplay}</td>
           <td class="play-wt-num">${esc(w.lock || w.lk || '-')}</td>
           <td class="play-wt-num play-dmg-${dmgType}">${esc(String(dmg))}${dmgType ? `<span style="font-size:9px;opacity:.7">${dmgType}</span>` : ''}</td>
-          <td class="play-wt-special">${playSpecialChips(w.special || w.sp)}</td>
+          <td class="play-wt-special">${playSpecialChips(w.special || w.sp, localRules)}</td>
         </tr>`;
       }).join('');
       const noteHtml = fireRule ? `<div class="play-order-note play-order-note-${fireRule.tone}">${esc(fireRule.note)}</div>` : '';
@@ -7435,7 +7466,7 @@ let activeGroupId = null;
         const nameHtml = lk && LAUNCH_RULES[lk]
           ? `<span class="play-launch-name play-launch-tap" data-rule-desc="${escAttr(LAUNCH_RULES[lk].text)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(l.name)}</span>`
           : `<span class="play-launch-name">${esc(l.name)}</span>`;
-        const sp = (l.special && l.special !== '-') ? ` <span class="play-launch-sp">${playSpecialChips(l.special)}</span>` : '';
+        const sp = (l.special && l.special !== '-') ? ` <span class="play-launch-sp">${playSpecialChips(l.special, localRules)}</span>` : '';
         return `<span class="play-launch-item">${nameHtml} <span class="play-launch-val">Launch ${esc(String(l.launch || '?'))}</span>${sp}</span>`;
       }).join(' ');
       const offNote = canLaunch ? '' : `<span class="play-launch-off-note">cannot launch (${esc(order)})</span>`;
@@ -7626,6 +7657,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-14', title: 'Play Mode: weapon rules always readable', items: [
+      'Every weapon Special in Play Mode is now a tappable rule chip with its verbatim text. If a weapon carries a ship-specific rule (Advanced Artillery, Bombardment Spine, Explosive...) whose text lives on the ship rather than in the shared glossary, tapping it now shows that rule too, instead of leaving it as plain unreadable text. Both apps.',
+    ]},
     { date: '2026-07-09', title: 'Play Mode improvements', items: [
       'Crippling effects (On Fire, systems offline, orbital decay) are now tucked behind a "Crippled" toggle next to the HP pill, so a healthy ship is not cluttered with trackers. The toggle glows red once the ship is actually crippled, and shows a dot if you have effects logged while the panel is collapsed.',
       'Fixed (desktop): crippling never triggered for Medium/Heavy ships whose data has no explicit tonnage stat -- they were read as non-capital, so no crippled state, halved dice, or tonnage colours ever showed. Now normalised so both data formats work.',
