@@ -7184,6 +7184,8 @@ body[data-view="builder"] .game-info-footer {
 }
 .play-pass-pip.play-pass-used { background: var(--gold); border-color: var(--gold); }
 .play-header-spacer { flex: 1; }
+.play-act-count { text-align: center; }
+.play-act-num { font-size: 20px; font-weight: 700; font-family: var(--font-condensed); color: var(--ink); line-height: 1; display: block; }
 .play-end-round-btn {
   padding: 5px 14px; border: 1px solid var(--stroke); background: transparent;
   border-radius: var(--radius-md); cursor: pointer; font-size: 13px;

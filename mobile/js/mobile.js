@@ -3427,6 +3427,7 @@
     const passInfoBtn = `<button class="play-pass-info-btn" onclick="App.mShowPlayPassInfo()" title="Pass token rules">&#9432;</button>`;
     const vp = mPlayState.vp || 0;
     const oppVp = mPlayState.oppVp || 0;
+    const activatedCount = (mPlayFleet.battleGroups || []).filter(bg => mPlayState.battlegroups[bg.id]?.activated).length;
     const bgCards = (mPlayFleet.battleGroups || []).map(bg => renderMobilePlayBg(bg)).join('');
     el.innerHTML = `
       <div class="play-header">
@@ -3444,6 +3445,10 @@
             <span class="play-pass-pips">${passHtml}</span>
           </div>
           <div class="play-header-spacer"></div>
+          <div class="play-act-count" title="Battlegroups activated this round">
+            <span class="play-round-label">Activated</span>
+            <span class="play-act-num">${activatedCount}/${myGroups}</span>
+          </div>
           <button class="play-end-round-btn" onclick="App.mPlayEndRound()">End Round</button>
         </div>
         <div class="play-header-bottom">
@@ -3829,6 +3834,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-15', title: 'Atlas + activation counter', items: [
+      'Bioficer admiral Atlas now shows his passive One Upsmanship rule alongside Emergency Reattachment Protocol.',
+      'Play Mode: "Activated X/Y" counter in the header shows how many of your battlegroups have activated this round.',
+    ]},
     { date: '2026-07-14', title: 'Play Mode: weapon rules always readable', items: [
       'Tapping a weapon Special in Play Mode now shows its rules even when the rule is ship-specific (Advanced Artillery, Bombardment Spine, Explosive...) rather than a shared keyword, instead of reporting no rules on file.',
     ]},

@@ -7186,6 +7186,7 @@ let activeGroupId = null;
 
     const vp = playState.vp || 0;
     const oppVp = playState.oppVp || 0;
+    const activatedCount = (playFleet.battleGroups || []).filter(bg => playState.battlegroups[bg.id]?.activated).length;
     const bgCards = (playFleet.battleGroups || []).map(bg => renderPlayBgCard(bg, playFleet.faction)).join('');
 
     el.innerHTML = `
@@ -7204,6 +7205,10 @@ let activeGroupId = null;
             <span class="play-pass-pips">${passHtml}</span>
           </div>
           <div class="play-header-spacer"></div>
+          <div class="play-act-count" title="Battlegroups activated this round">
+            <span class="play-round-label">Activated</span>
+            <span class="play-act-num">${activatedCount}/${myGroups}</span>
+          </div>
           <button class="play-end-round-btn" onclick="App.playEndRound()">End Round</button>
         </div>
         <div class="play-header-bottom">
@@ -7657,6 +7662,10 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-15', title: 'Atlas + activation counter', items: [
+      'Bioficer admiral Atlas now shows his passive One Upsmanship rule (roll on 4+ to gain 1AP when opponent uses an Ability) alongside Emergency Reattachment Protocol. It was named in the data but never surfaced in the UI.',
+      'Play Mode: "Activated X/Y" counter in the header shows at a glance how many of your battlegroups have activated this round. Resets on End Round.',
+    ]},
     { date: '2026-07-14', title: 'Play Mode: weapon rules always readable', items: [
       'Every weapon Special in Play Mode is now a tappable rule chip with its verbatim text. If a weapon carries a ship-specific rule (Advanced Artillery, Bombardment Spine, Explosive...) whose text lives on the ship rather than in the shared glossary, tapping it now shows that rule too, instead of leaving it as plain unreadable text. Both apps.',
     ]},

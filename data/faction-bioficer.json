@@ -294,6 +294,10 @@
    "special": "One Upsmanship",
    "abilities": [
     {
+     "name": "One Upsmanship",
+     "effect": "If this Admiral is your highest level Admiral, whenever your opponent uses an Ability, roll a dice. On a **4+**, you gain **1AP**."
+    },
+    {
      "name": "Emergency Reattachment Protocol",
      "cost": "2AP",
      "effect": "When an enemy would destroy one of your Payload Ships, it is not destroyed and is instead reattached to a valid Porter Ship within 6”."

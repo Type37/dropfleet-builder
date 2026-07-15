@@ -2711,6 +2711,8 @@ body.sheet-open .sheet-scrim {
 .play-header-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; width: 100%; }
 .play-header-bottom { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; width: 100%; padding-top: 6px; border-top: 1px solid rgba(255,255,255,.12); }
 .play-header-spacer { flex: 1; }
+.play-act-count { text-align: center; }
+.play-act-num { font-family: var(--font-display); font-size: 20px; line-height: 1; color: #fff; display: block; }
 
 /* VP / opp-groups score controls */
 .play-score-ctrl {
