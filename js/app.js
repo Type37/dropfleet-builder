@@ -145,6 +145,117 @@ let activeGroupId = null;
   let PRON = {};
   let PRON_KEYS = [];
 
+  // ── City mini-maps (UCM ships, desktop only) ─────────────────────────────
+  let _worldTopo = null;
+  const _cityMapCache = new Map();
+
+  const SIAM_POLY=[[[99.2,21.2],[100,22],[101.5,22.5],[102.3,22.2],[102.8,21],[103.3,20.5],[104.2,20],[104.8,18.5],[105.2,17.5],[105.5,16.5],[105,15],[104.5,13.5],[103.5,11.5],[102.5,10.5],[101.8,7.5],[101.3,6],[100.7,5.2],[100,5],[99.5,5.5],[99,6.5],[98.5,8],[97.8,9.5],[97.5,12],[97.5,14.5],[97.8,16.5],[98,18],[98.5,19.5],[99,20.5],[99.2,21.2]]];
+
+  const CITY_DATA=[
+    {n:'Washington DC',lo:-77.04,la:38.91},
+    {n:'London',lo:-.13,la:51.51,eu:1},
+    {n:'Delhi',lo:77.21,la:28.61,as:1},
+    {n:'Hanoi',lo:105.85,la:21.03,as:1},
+    {n:'Tokyo',lo:139.69,la:35.69,as:1},
+    {n:'New York',lo:-74.01,la:40.71},
+    {n:'Beijing',lo:116.41,la:39.91,as:1},
+    {n:'Milwaukee',lo:-87.91,la:43.04},
+    {n:'Rotterdam',lo:4.48,la:51.92,eu:1},
+    {n:'Dubai',lo:55.27,la:25.2,as:1},
+    {n:'Hong Kong',lo:114.17,la:22.32,as:1},
+    {n:'Siam',lo:100.5,la:13.75,t:1},
+    {n:'Venice',lo:12.34,la:45.44,eu:1},
+    {n:'Rome',lo:12.5,la:41.9,eu:1},
+    {n:'Perth',lo:115.86,la:-31.95},
+    {n:'Johannesburg',lo:28.04,la:-26.2},
+    {n:'Busan',lo:129.08,la:35.1,as:1},
+    {n:'Yokohama',lo:139.64,la:35.44,as:1},
+    {n:'Las Vegas',lo:-115.14,la:36.17},
+    {n:'Edmonton',lo:-113.49,la:53.54},
+    {n:'Vilnius',lo:25.28,la:54.69,eu:1},
+    {n:'Warsaw',lo:21.01,la:52.23,eu:1},
+    {n:'San Francisco',lo:-122.42,la:37.77},
+    {n:'Mombasa',lo:39.67,la:-4.05},
+    {n:'Seattle',lo:-122.33,la:47.61},
+    {n:'Geneva',lo:6.14,la:46.2,eu:1},
+    {n:'Glasgow',lo:-4.25,la:55.86,eu:1},
+    {n:'Bucharest',lo:26.1,la:44.44,eu:1},
+    {n:'Ulaanbaatar',lo:106.92,la:47.92,z:94},
+    {n:'Bruges',lo:3.22,la:51.21,eu:1},
+    {n:'Madrid',lo:-3.7,la:40.42,eu:1},
+    {n:'Berlin',lo:13.4,la:52.52,eu:1},
+    {n:'Rio de Janeiro',lo:-43.17,la:-22.91,z:113},
+    {n:'Boston',lo:-71.06,la:42.36},
+    {n:'New Cairo',lo:31.47,la:30.01},
+    {n:'Osaka',lo:135.5,la:34.69,as:1},
+    {n:'Caracas',lo:-66.88,la:10.48},
+    {n:'Kyiv',lo:30.52,la:50.45,eu:1},
+    {n:'Vancouver',lo:-123.12,la:49.28},
+    {n:'Havana',lo:-82.38,la:23.13},
+    {n:'Oslo',lo:10.75,la:59.91,eu:1},
+    {n:'Nuuk',lo:-51.74,la:64.18,z:113},
+    {n:'Reykjavik',lo:-21.94,la:64.14,z:113},
+    {n:'Vienna',lo:16.37,la:48.21,eu:1},
+    {n:'Istanbul',lo:28.98,la:41.01,eu:1},
+    {n:'Detroit',lo:-83.05,la:42.33},
+    {n:'Sheffield',lo:-1.47,la:53.38,eu:1},
+    {n:'New Orleans',lo:-90.07,la:29.95},
+    {n:'Lima',lo:-77.04,la:-12.05},
+    {n:'Jakarta',lo:106.85,la:-6.21,as:1},
+    {n:'Taipei',lo:121.56,la:25.04,as:1},
+    {n:'Toulon',lo:5.93,la:43.12,eu:1},
+    {n:'Santiago',lo:-70.67,la:-33.45},
+  ];
+
+  const _cityLookup = (function() {
+    const m = new Map();
+    CITY_DATA.forEach(c => m.set(c.n.toLowerCase(), c));
+    m.set('new dubai', m.get('dubai'));
+    m.set('new mombasa', m.get('mombasa'));
+    m.set('rio', m.get('rio de janeiro'));
+    return m;
+  })();
+
+  function cityForShip(shipName) {
+    if (!shipName || !_worldTopo) return null;
+    const words = shipName.toLowerCase().split(' ');
+    for (let i = words.length; i >= 1; i--) {
+      const key = words.slice(0, i).join(' ');
+      if (_cityLookup.has(key)) return _cityLookup.get(key);
+    }
+    return null;
+  }
+
+  function cityMapHtml(shipName) {
+    if (!_worldTopo || !window.d3 || !window.topojson) return '';
+    if (_cityMapCache.has(shipName)) return _cityMapCache.get(shipName);
+    const city = cityForShip(shipName);
+    if (!city) { _cityMapCache.set(shipName, ''); return ''; }
+    const W = 90, H = 110;
+    const sc = city.z !== undefined ? city.z : (city.t ? 188 : city.eu ? 225 : city.as ? 188 : 150);
+    const proj = d3.geoMercator().center([city.lo, city.la]).scale(sc).translate([W/2, H/2]);
+    const pathGen = d3.geoPath().projection(proj);
+    const countries = topojson.feature(_worldTopo, _worldTopo.objects.countries);
+    let paths = '';
+    for (const f of countries.features) {
+      const d = pathGen(f);
+      if (d) paths += `<path d="${d}" fill="#1b3050" stroke="#2a4870" stroke-width="0.5"/>`;
+    }
+    let siamPath = '';
+    if (city.t) {
+      const sf = { type:'Feature', geometry:{ type:'Polygon', coordinates:SIAM_POLY } };
+      const sd = pathGen(sf);
+      if (sd) siamPath = `<path d="${sd}" fill="#4a6fa5" stroke="#6a8fc5" stroke-width="0.8" opacity="0.65"/>`;
+    }
+    const [px, py] = proj([city.lo, city.la]);
+    const absLa = Math.abs(city.la).toFixed(0), absLo = Math.abs(city.lo).toFixed(0);
+    const coords = `${absLa}${city.la>=0?'N':'S'} ${absLo}${city.lo>=0?'E':'W'}`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block"><rect width="${W}" height="${H}" fill="#091520"/>${paths}${siamPath}<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="3" fill="#f0c84a"/><text x="${W/2}" y="${H-18}" text-anchor="middle" fill="rgba(255,255,255,0.72)" font-size="8" font-family="sans-serif">${esc(city.n)}</text><text x="${W/2}" y="${H-8}" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-size="7" font-family="sans-serif">${coords}</text></svg>`;
+    const html = `<div style="margin-top:var(--sp-md)"><div style="border-radius:7px;border:0.5px solid var(--border-strong);overflow:hidden;display:inline-block;line-height:0">${svg}</div></div>`;
+    _cityMapCache.set(shipName, html);
+    return html;
+  }
+
   async function init() {
     try {
       const res = await fetch('data/fleet-index.json');
@@ -165,6 +276,9 @@ let activeGroupId = null;
     } catch (e) {
       console.error('Failed to load pronunciations:', e);
     }
+
+    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+      .then(r => r.json()).then(d => { _worldTopo = d; }).catch(() => {});
 
     loadSettings();
     applyTheme(settings.theme);
@@ -2460,7 +2574,7 @@ let activeGroupId = null;
           ${fdb.rulesText ? `<div class="ship-rules-block"><div class="ship-rules-block-label">Ship Rules</div><div class="ship-rules-block-text">${esc(fdb.rulesText)}</div></div>` : ''}
           ${renderShipRulesGlossary(fdb, a)}
           ${fdb.admiralLore ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">About ${esc(a.name)}</summary><div class="ship-lore-text">${formatLore(fdb.admiralLore, '', [])}</div></details>` : ''}
-          ${(fdb.lore || namesakeDiv(fdb.namesake, fdb.name)) ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">Flagship lore</summary><div class="ship-lore-text">${fdb.lore ? formatLore(fdb.lore, fdb.famousShipsPrefix, fdb.famousShips) : ''}${namesakeDiv(fdb.namesake, fdb.name)}</div></details>` : ''}
+          ${(fdb.lore || namesakeDiv(fdb.namesake, fdb.name)) ? `<details class="ship-lore no-print"${settings.autoExpandLore ? ' open' : ''}><summary class="ship-lore-toggle">Flagship lore</summary><div class="ship-lore-text">${fdb.lore ? formatLore(fdb.lore, fdb.famousShipsPrefix, fdb.famousShips) : ''}${namesakeDiv(fdb.namesake, fdb.name)}${cityMapHtml(fdb.name)}</div></details>` : ''}
           <div class="text-caption">Flies with ${esc(a.name)}, who is managed in the left rail.</div>
         </div>
       </div>
@@ -4022,7 +4136,7 @@ let activeGroupId = null;
       const openAttr = settings.autoExpandLore ? ' open' : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
-        <div class="ship-lore-text">${formatLore(loreText, dbShip.famousShipsPrefix, dbShip.famousShips)}${nsDiv}</div>
+        <div class="ship-lore-text">${formatLore(loreText, dbShip.famousShipsPrefix, dbShip.famousShips)}${nsDiv}${cityMapHtml(dbShip.name)}</div>
       </details>`;
     } else if (nsDiv) {
       // Namesake flavour even when there's no main lore block
@@ -4030,7 +4144,7 @@ let activeGroupId = null;
       const openAttr = settings.autoExpandLore ? ' open' : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
-        <div class="ship-lore-text">${nsDiv}</div>
+        <div class="ship-lore-text">${nsDiv}${cityMapHtml(dbShip.name)}</div>
       </details>`;
     }
 
@@ -4807,7 +4921,7 @@ let activeGroupId = null;
     const bio = a.admiralLore
       ? `<details class="ship-lore" style="margin-top:var(--sp-sm)"${open}><summary class="ship-lore-toggle">Admiral</summary><div class="ship-lore-text">${admiralBioHtml(a)}</div></details>` : '';
     const ship = (a.lore || namesake)
-      ? `<details class="ship-lore" style="margin-top:var(--sp-sm)"${open}><summary class="ship-lore-toggle">Flagship lore</summary><div class="ship-lore-text">${a.lore ? formatLore(a.lore, a.famousShipsPrefix, a.famousShips) : ''}${namesake}</div></details>` : '';
+      ? `<details class="ship-lore" style="margin-top:var(--sp-sm)"${open}><summary class="ship-lore-toggle">Flagship lore</summary><div class="ship-lore-text">${a.lore ? formatLore(a.lore, a.famousShipsPrefix, a.famousShips) : ''}${namesake}${cityMapHtml(a.ship_name || a.shipName || a.flagship || '')}</div></details>` : '';
     return bio + ship;
   }
 
@@ -7692,6 +7806,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-16', title: 'UCM city mini-maps + Siam namesake', items: [
+      'UCM ship lore panels now show a small 90x110px vector map pinpointing each ship\'s namesake city on the globe. The Siam Battlecruiser\'s map highlights the approximate Siamese dominion at its greatest extent in 1805, following the Burmese-Siamese War.',
+      'Rewrote the Siam Battlecruiser namesake to explain that "Siam" is an exonym, the internal name Ayutthaya, the Prathet Thai renaming in 1939, the layered meaning of Thai ("free"), and the ethnostate complexity.',
+      'Santiago Corvette namesake updated: notes that the Pinochet dictatorship moved the national Congress to Valparaiso in an attempt to decentralise political power.',
+    ]},
     { date: '2026-07-16', title: 'Admiral abilities in shared lists', items: [
       'Shared fleet links now show admiral abilities. Innate abilities appear with a gold border; chosen table picks appear below them. Generic admirals (who have no ability table) are unaffected.',
       'Copied army list text now includes abilities as sub-bullets under each admiral line (innate marked "(innate)", chosen picks listed plain).',
@@ -8599,7 +8718,7 @@ let activeGroupId = null;
     if (dbShip.lore || detailNamesake) {
       loreHtml = `<div class="detail-lore">
         <div class="detail-section-label">Lore</div>
-        <div class="text-rules">${formatLore(dbShip.lore, dbShip.famousShipsPrefix, dbShip.famousShips)}${detailNamesake}</div>
+        <div class="text-rules">${formatLore(dbShip.lore, dbShip.famousShipsPrefix, dbShip.famousShips)}${detailNamesake}${cityMapHtml(dbShip.name)}</div>
       </div>`;
     }
 
