@@ -116,8 +116,8 @@
   /* — Touch targets — */
   --tap-min: 44px;
 
-  /* — Header height — */
-  --header-h: 48px;
+  /* — Header height — accounts for iOS notch/Dynamic Island safe area */
+  --header-h: calc(48px + env(safe-area-inset-top, 0px));
 }
 
 
@@ -161,7 +161,7 @@ button, a, input, select, textarea,
   align-items: center;
   justify-content: center;
   height: var(--header-h);
-  padding: 0 var(--sp-l);
+  padding: env(safe-area-inset-top, 0px) var(--sp-l) 0;
   background: var(--navy);
   color: var(--fg-on-dark);
 }
