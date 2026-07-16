@@ -47,6 +47,10 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-16 — Admiral abilities in shared lists
+- **Shared fleet links now show admiral abilities.** Each admiral card in the shared view now displays innate abilities (gold-bordered chips) and chosen table picks below the name/level/points row. Generic admirals are unaffected.
+- **Copied army list text includes abilities** as sub-bullets under each admiral (innate marked "(innate)", chosen picks listed plain).
+
 ### 2026-07-14 — Play Mode: weapon Special rules always readable
 - **Ship-specific weapon rules are now tappable in Play Mode.** Weapon Special chips already opened their verbatim rules for shared glossary keywords (Burnthrough, Focused, Fusillade…). Now a weapon whose Special names a *ship-specific* rule — Advanced Artillery, Bombardment Spine, Explosive and the like, whose text lives on the ship rather than in the shared glossary — falls back to that ship's own rules, so tapping it shows the rule instead of leaving dead, unreadable text. Both apps.
 

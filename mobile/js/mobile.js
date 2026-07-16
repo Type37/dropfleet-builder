@@ -3834,6 +3834,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-16', title: 'Admiral abilities in shared lists', items: [
+      'Shared fleet links now show admiral abilities alongside the admiral card. Innate abilities (gold border) and chosen table picks are both visible.',
+      'Shared army list text includes abilities as sub-bullets under each admiral line.',
+    ]},
     { date: '2026-07-15', title: 'Atlas + activation counter', items: [
       'Bioficer admiral Atlas now shows his passive One Upsmanship rule alongside Emergency Reattachment Protocol.',
       'Play Mode: "Activated X/Y" counter in the header shows how many of your battlegroups have activated this round.',
@@ -4113,6 +4117,11 @@
           out += `• 1x ${flagName} [${flagCost} pts]\n`;
         } else {
           out += `• 1x ${a.name} [${a.points || 0} pts]\n`;
+        }
+        if (a.type !== 'Generic') {
+          const innate = (src && src.abilities) || [];
+          innate.forEach(ab => { out += `    - ${ab.name} (innate)\n`; });
+          (Array.isArray(a.selectedAbilities) ? a.selectedAbilities : []).forEach(n => { out += `    - ${n}\n`; });
         }
       });
     }

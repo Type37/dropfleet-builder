@@ -6461,13 +6461,34 @@ let activeGroupId = null;
       html += `<div class="shared-section">
         <div class="shared-section-title">Admiral${fleet.admirals.length > 1 ? 's' : ''}</div>
         ${fleet.admirals.map(a => {
-          let admiralHtml = `<div class="shared-admiral-card">
-            <div class="shared-admiral-info">
-              <span class="shared-admiral-name">${esc(a.name)}</span>
-              ${a.type === 'Famous' ? '<span class="ship-badge ship-badge-unique">Famous</span>' : ''}
-              <span class="shared-admiral-level">Level ${a.level || '?'}</span>
+          // Build ability chips: innate (gold border) + chosen table picks
+          let abHtml = '';
+          if (a.type !== 'Generic') {
+            const fdb = shipDB[fleet.faction];
+            let innate = [];
+            if (fdb && a.type === 'Famous' && a.shipKey) {
+              innate = fdb.groups?.famous_admirals?.ships?.[a.shipKey]?.special_abilities || [];
+            } else if (fdb && a.admiralId) {
+              const admDef = (fdb.admirals || []).find(x => x.id === a.admiralId);
+              innate = admDef?.abilities || [];
+            }
+            const selected = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
+            const chips = [
+              ...innate.map(ab => `<span class="shared-ability-chip shared-ability-chip--innate">${esc(ab.name)}</span>`),
+              ...selected.map(n => `<span class="shared-ability-chip">${esc(n)}</span>`)
+            ];
+            if (chips.length) abHtml = `<div class="shared-admiral-abilities">${chips.join('')}</div>`;
+          }
+          let admiralHtml = `<div class="shared-admiral-card${abHtml ? ' shared-admiral-card--stacked' : ''}">
+            <div class="shared-admiral-main">
+              <div class="shared-admiral-info">
+                <span class="shared-admiral-name">${esc(a.name)}</span>
+                ${a.type === 'Famous' ? '<span class="ship-badge ship-badge-unique">Famous</span>' : ''}
+                <span class="shared-admiral-level">Level ${a.level || '?'}</span>
+              </div>
+              <span class="shared-admiral-pts">${a.points} pts</span>
             </div>
-            <span class="shared-admiral-pts">${a.points} pts</span>
+            ${abHtml}
           </div>`;
           // Famous admirals fly a flagship — show its full datasheet like the rest
           // of the fleet (stats/weapons/launch/rules), not just the admiral line.
@@ -7024,6 +7045,15 @@ let activeGroupId = null;
           out += `• 1x ${flagName} [${flagCost} pts]\n`;
         } else {
           out += `• 1x ${a.name} [${a.points || 0} pts]\n`;
+        }
+        if (a.type !== 'Generic') {
+          let innate = fsp ? (fsp.special_abilities || []) : [];
+          if (!fsp && a.admiralId && factionInfo) {
+            const admDef = (factionInfo.admirals || []).find(x => x.id === a.admiralId);
+            innate = admDef?.abilities || [];
+          }
+          innate.forEach(ab => { out += `    - ${ab.name} (innate)\n`; });
+          (Array.isArray(a.selectedAbilities) ? a.selectedAbilities : []).forEach(n => { out += `    - ${n}\n`; });
         }
       });
     }
@@ -7662,6 +7692,10 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-16', title: 'Admiral abilities in shared lists', items: [
+      'Shared fleet links now show admiral abilities. Innate abilities appear with a gold border; chosen table picks appear below them. Generic admirals (who have no ability table) are unaffected.',
+      'Copied army list text now includes abilities as sub-bullets under each admiral line (innate marked "(innate)", chosen picks listed plain).',
+    ]},
     { date: '2026-07-15', title: 'Atlas + activation counter', items: [
       'Bioficer admiral Atlas now shows his passive One Upsmanship rule (roll on 4+ to gain 1AP when opponent uses an Ability) alongside Emergency Reattachment Protocol. It was named in the data but never surfaced in the UI.',
       'Play Mode: "Activated X/Y" counter in the header shows at a glance how many of your battlegroups have activated this round. Resets on End Round.',

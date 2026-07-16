@@ -4773,6 +4773,39 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--weight-bold);
   color: var(--navy);
 }
+.shared-admiral-card--stacked {
+  flex-direction: column;
+  align-items: stretch;
+}
+.shared-admiral-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-md);
+}
+.shared-admiral-abilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px var(--sp-sm);
+  padding-top: var(--sp-xs);
+  margin-top: var(--sp-xs);
+  border-top: 1px solid var(--stroke-light);
+}
+.shared-ability-chip {
+  font-family: var(--font-condensed);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--ink-muted);
+  background: var(--paper);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-sm);
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+.shared-ability-chip--innate {
+  color: var(--ink);
+  border-color: var(--gold);
+}
 .shared-group-ships {
   display: flex;
   flex-direction: column;
