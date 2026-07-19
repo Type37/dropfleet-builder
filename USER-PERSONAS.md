@@ -58,7 +58,6 @@ has strong, specific design taste. Builds lists for real tournament play.
   screenshots, not "should work."
 - **Push after each major change** so there's a testable trail of builds.
 - Edit serially, not in giant parallel batches (they cascade-cancel).
-- Commit messages end with the Claude co-author trailer.
 - Encouraging when things land ("lovely work on the alternative layout — keep it up").
 
 ---

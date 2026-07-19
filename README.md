@@ -47,6 +47,11 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-19 — Crippled ships: rules correction
+- **Removed some halving damage stuff. I'm sorry.**
+- **Crippled no longer halves weapon Attack dice.** Play Mode displayed every weapon's Attack value halved once a Capital Ship became Crippled. That is not a Dropfleet rule and never has been. It was invented, not sourced. Rulebook 7.3.6: a Capital Ship reduced below half its starting Hull rolls 2D6 once on the Crippling Effects table, and nothing else. Weapon profiles are unaffected. Attack values now display unchanged. Both apps.
+- **Crippled threshold corrected.** It triggered at exactly half Hull; the rulebook says *below* half. A Hull 8 ship becomes Crippled at 3 remaining, not 4. Odd Hull values were already correct.
+
 ### 2026-07-16 — Admiral abilities in shared lists
 - **Shared fleet links now show admiral abilities.** Each admiral card in the shared view now displays innate abilities (gold-bordered chips) and chosen table picks below the name/level/points row. Generic admirals are unaffected.
 - **Copied army list text includes abilities** as sub-bullets under each admiral (innate marked "(innate)", chosen picks listed plain).
@@ -56,7 +61,7 @@ Mirrors the in-app "What's New". TTCombat publishes no official changelog, so da
 
 ### 2026-07-09 — Play Mode: Crippled toggle + desktop crippling fix
 - **Crippling effects behind a "Crippled" toggle.** The On Fire / systems-offline / orbital-decay trackers no longer clutter every healthy Capital Ship — they collapse behind a "Crippled" pill next to the HP control. The pill glows red once the ship is genuinely crippled (≤ half hull) and carries a dot when effects are logged while the panel is closed, so nothing gets forgotten.
-- **Fixed: desktop crippling never fired.** Ships whose data has no explicit tonnage stat fall back to the full category word ("Medium") rather than the code ("M"), so `PLAY_CAPITAL` never matched them — no crippled state, no halved dice, no tonnage colours. Now normalised (`playTonCode`) so both representations resolve correctly. Mobile was already using codes and unaffected.
+- **Fixed: desktop crippling never fired.** Ships whose data has no explicit tonnage stat fall back to the full category word ("Medium") rather than the code ("M"), so `PLAY_CAPITAL` never matched them, so no crippled state and no tonnage colours. Now normalised (`playTonCode`) so both representations resolve correctly. Mobile was already using codes and unaffected.
 
 ### 2026-07-09 — Play Mode: tap/hold orders, tappable rules, interactive launch
 - **Orders — tap to set, hold to read.** Tapping an order chip now just sets it (and applies the weapon greying); the full rules open only on a long-press, so switching orders mid-game no longer spams a rules popup. Built on Pointer Events with a movement-cancel so it doesn't fight scrolling.

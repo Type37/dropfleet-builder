@@ -7528,7 +7528,11 @@ let activeGroupId = null;
     const hullMax = parseInt(s.hull) || 1;
     const cur = Math.max(0, Math.min(hullMax, ss.cur));
     const dmgTaken = hullMax - cur;
-    const cripThresh = Math.floor(hullMax / 2);
+    // Rulebook 7.3.6: crippled when damage reduces a Capital Ship to BELOW half its
+    // starting Hull. cripThresh is the highest Hull value that still counts as crippled
+    // (Hull 8 -> 3, Hull 9 -> 4). Being crippled triggers one 2D6 Crippling Effect roll;
+    // it does NOT modify the ship's weapon profiles.
+    const cripThresh = Math.ceil(hullMax / 2) - 1;
     const isCrippled = isCapital && cur > 0 && cur <= cripThresh;
     const isDestroyed = cur === 0;
 
@@ -7578,9 +7582,7 @@ let activeGroupId = null;
       const rows = wpns.map(w => {
         const canFire = !fireRule || fireRule.canFire(w);
         const attRaw = parseInt(w.attack || w.att || 0);
-        const attDisplay = isCrippled
-          ? `<span class="play-crippled-atk">${Math.floor(attRaw / 2)}</span>`
-          : (attRaw || '-');
+        const attDisplay = attRaw || '-';
         const dmgType = w.type || w.t || '';
         const dmg = w.damage || w.dmg || '-';
         const arc = w.arc || '';
@@ -7806,6 +7808,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-19', title: 'Crippled ships: rules correction', items: [
+      'Removed some halving damage stuff. I\'m sorry.',
+      'Play Mode used to show every weapon\'s Attack dice halved once a Capital Ship was Crippled. That is not a Dropfleet rule and never has been. Rulebook 7.3.6 says a Capital Ship reduced below half its starting Hull rolls 2D6 once on the Crippling Effects table, and nothing more. Weapon profiles are unaffected. Attack values now display unchanged.',
+      'Crippled threshold corrected. It triggered at exactly half Hull; the rulebook says below half. A Hull 8 ship now becomes Crippled at 3 remaining, not 4. Odd Hull values were already correct.',
+    ]},
     { date: '2026-07-16', title: 'UCM city mini-maps + Siam namesake', items: [
       'UCM ship lore panels now show a small 90x110px vector map pinpointing each ship\'s namesake city on the globe. The Siam Battlecruiser\'s map highlights the approximate Siamese dominion at its greatest extent in 1805, following the Burmese-Siamese War.',
       'Rewrote the Siam Battlecruiser namesake to explain that "Siam" is an exonym, the internal name Ayutthaya, the Prathet Thai renaming in 1939, the layered meaning of Thai ("free"), and the ethnostate complexity.',
@@ -7838,7 +7845,7 @@ let activeGroupId = null;
       'Weapon table scrolls horizontally on narrow screens instead of spilling off the edge.',
       'Hull tracker: buttons replaced with compact "−DMG+" pill. − removes damage, + adds it.',
       'Hull tracker redesigned: pips fill left-to-right as damage accumulates (orange = below cripple, red = past it).',
-      'Crippled badge and halved attack dice now correctly appear for Colossal/Super-Heavy (Dreadnoughts) -- previously missing due to wrong tonnage code.',
+      'Crippled badge now correctly appears for Colossal/Super-Heavy (Dreadnoughts) -- previously missing due to wrong tonnage code.',
       'Activate button now says "Activated" once clicked.',
       'Pass token (i) button opens full pass-token rules on click.',
       'Launch assets (drop/assault) are now shown on ships that carry them (e.g. Orpheus Assault Troopship).',
@@ -7849,7 +7856,7 @@ let activeGroupId = null;
     { date: '2026-07-09', title: 'Play Mode', items: [
       'New Play button in the fleet builder topbar opens a compact in-game companion for your fleet.',
       'Per-ship hull pips (filled/empty dots) for instant damage readout, plus numeric tracker with +/- buttons. Crippled only triggers on Medium/Heavy/Colossal ships (rulebook 7.3.6) -- Light tonnage frigates are never crippled.',
-      'When a Capital Ship hits half hull, a cripple threshold mark appears on the pips and all weapon attacks show halved in red.',
+      'When a Capital Ship drops below half hull, a cripple threshold mark appears on the pips.',
       'Spike tracker per battlegroup: 4 large diamond pips. Each filled Spike shows its +3" Sig penalty.',
       'Full crippling effects panel per Capital Ship: On Fire counter (stackable), Defence Systems Offline, Scanners Offline, Weapons Offline, Navigation Offline, Orbital Decay -- each with icon and rules summary on hover.',
       'Special rules are tappable chips that open the full in-game rule description.',

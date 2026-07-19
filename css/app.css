@@ -7414,7 +7414,6 @@ html[data-theme="dark"] .play-hull-plus:hover { color: #81c784; }
 html[data-theme="dark"] .play-dmg-K { color: #81c784; }
 html[data-theme="dark"] .play-dmg-E { color: #64b5f6; }
 html[data-theme="dark"] .play-dmg-C { color: #ce93d8; }
-.play-crippled-atk { color: var(--error); font-weight: 700; }
 .play-status-tokens { display: flex; gap: var(--sp-xs); flex-wrap: wrap; }
 .play-tok {
   font-size: 10px; padding: 2px 8px; border: 1px solid var(--stroke); border-radius: 20px;

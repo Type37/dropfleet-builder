@@ -2634,7 +2634,6 @@ body.sheet-open .sheet-scrim {
 .play-wt-name { font-weight: var(--weight-medium); max-width: 100px; word-break: break-word; }
 .play-wt-num { text-align: center; white-space: nowrap; }
 .play-wt-special { color: var(--fg3); font-size: 10px; max-width: 80px; word-break: break-word; }
-.play-crippled-atk { color: var(--danger); font-weight: var(--weight-bold); }
 .play-dmg-D { color: #7a1b1b; }
 .play-dmg-L { color: #1b4a7a; }
 

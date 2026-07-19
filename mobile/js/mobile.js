@@ -387,7 +387,7 @@
     scan:   { label: 'Scan',   desc: 'Scan range. The distance (in inches) at which this ship detects enemies and uses close-range weapons.' },
     sig:    { label: 'Signature', desc: 'How visible this ship is. Enemies must be within their Scan range of your Signature to target you, a low Signature is harder to hit.' },
     thrust: { label: 'Thrust', desc: 'Movement speed, how far (in inches) this ship moves each activation.' },
-    hull:   { label: 'Hull',   desc: 'Hull points. The ship’s structural integrity. It becomes Crippled at half, and is destroyed at zero.' },
+    hull:   { label: 'Hull',   desc: 'Hull points. The ship’s structural integrity. It becomes Crippled below half, and is destroyed at zero.' },
     es:     { label: 'Energy Shield', desc: 'Energy Save. When hit by an Energy (E) weapon, roll this number or higher on a d6 to avoid the damage.' },
     ks:     { label: 'Kinetic Shield', desc: 'Kinetic Save. When hit by a Kinetic (K) weapon, roll this number or higher on a d6 to avoid the damage.' },
     bs:     { label: 'Backup Save', desc: 'Backup Save. A last-resort save used when a ship has no relevant shield, or against certain weapons.' },
@@ -3539,7 +3539,11 @@
     const hullMax = parseInt(getS('hull')) || 1;
     const cur = Math.max(0, Math.min(hullMax, ss.cur));
     const dmgTaken = hullMax - cur;
-    const cripThresh = Math.floor(hullMax / 2);
+    // Rulebook 7.3.6: crippled when damage reduces a Capital Ship to BELOW half its
+    // starting Hull. cripThresh is the highest Hull value that still counts as crippled
+    // (Hull 8 -> 3, Hull 9 -> 4). Being crippled triggers one 2D6 Crippling Effect roll;
+    // it does NOT modify the ship's weapon profiles.
+    const cripThresh = Math.ceil(hullMax / 2) - 1;
     const isCrippled = isCapital && cur > 0 && cur <= cripThresh;
     const isDestroyed = cur === 0;
 
@@ -3580,7 +3584,7 @@
       const rows = wpns.map(w => {
         const canFire = !fireRule || fireRule.canFire(w);
         const attRaw = parseInt(w.attack || w.att || 0);
-        const attDisplay = isCrippled ? `<span class="play-crippled-atk">${Math.floor(attRaw / 2)}</span>` : (attRaw || '-');
+        const attDisplay = attRaw || '-';
         const dmgType = w.type || w.t || '';
         const dmg = w.damage || w.dmg || '-';
         return `<tr class="${canFire ? '' : 'play-wt-off'}">
@@ -3834,6 +3838,11 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-19', title: 'Crippled ships: rules correction', items: [
+      'Removed some halving damage stuff. I\'m sorry.',
+      'Play Mode used to show every weapon\'s Attack dice halved once a Capital Ship was Crippled. That is not a Dropfleet rule and never has been. Rulebook 7.3.6 says a Capital Ship reduced below half its starting Hull rolls 2D6 once on the Crippling Effects table, and nothing more. Weapon profiles are unaffected. Attack values now display unchanged.',
+      'Crippled threshold corrected. It triggered at exactly half Hull; the rulebook says below half. A Hull 8 ship now becomes Crippled at 3 remaining, not 4. Odd Hull values were already correct.',
+    ]},
     { date: '2026-07-16', title: 'Admiral abilities in shared lists', items: [
       'Shared fleet links now show admiral abilities alongside the admiral card. Innate abilities (gold border) and chosen table picks are both visible.',
       'Shared army list text includes abilities as sub-bullets under each admiral line.',
@@ -3860,7 +3869,7 @@
       'Weapon table now scrolls horizontally on narrow screens instead of spilling off the edge.',
       'Hull tracker: Hit/Fix buttons replaced with compact -DMG+ pill. - removes damage, + adds it.',
       'Hull tracker: pips fill left-to-right as damage accumulates (orange = below cripple, red = past it).',
-      'Crippled badge and halved attack dice now correctly appear for Colossal/Super-Heavy ships.',
+      'Crippled badge now correctly appears for Colossal/Super-Heavy ships.',
       'Activate button now says "Activated" once tapped.',
       'Pass token button now opens full pass-token rules on tap.',
       'Launch assets (drop/assault) shown on ships that carry them.',
@@ -3871,7 +3880,7 @@
     { date: '2026-07-09', title: 'Play Mode', items: [
       'New: tap the ... menu on a fleet and choose "Play mode" to open an in-game companion for your fleet.',
       'Per-ship hull pips (filled/empty dots) for instant damage readout, plus numeric tracker. Crippled only triggers on Capital ships (M/H/C tonnage, rulebook 7.3.6) -- Light frigates are never crippled.',
-      'When a Capital Ship hits half hull, a cripple threshold marker appears on the pips and weapon attacks show halved in red.',
+      'When a Capital Ship drops below half hull, a cripple threshold marker appears on the pips.',
       'Spike tracker per battlegroup: 4 diamond pips, each showing +3" Sig penalty.',
       'Full crippling effects panel per Capital Ship: On Fire (stackable counter), Defence Systems Offline, Scanners Offline, Weapons Offline, Navigation Offline, Orbital Decay -- each with icon and rules summary.',
       'Special rules as tappable chips that open the full rule description.',
