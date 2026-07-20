@@ -1484,6 +1484,9 @@
 
     groupsEl.innerHTML = html;
     setupGroupSwipe();
+    // The app-bar points counter is otherwise only refreshed on navigation, so a
+    // re-render after an in-place edit (remove ship, change qty) would leave it stale.
+    updateAppBar('screen-fleet-detail');
   }
 
   // Swipe a group row left to reveal a Remove action (the stepper × stays as the
@@ -2190,6 +2193,7 @@
       </div>
     `;
     bindHeroSwipe();
+    updateAppBar('screen-group-detail');
   }
 
   // Lore/namesake text may carry markdown links: [label](https://...). Convert to
@@ -3018,6 +3022,7 @@
         <button class="btn btn-ghost btn-block" onclick="App.removeActiveAdmiral()" style="color:var(--danger);border-color:var(--danger)">Remove Admiral</button>
       </div>
     `;
+    updateAppBar('screen-admiral-detail');
   }
   function toggleAdmiralAbility(name) {
     const a = activeFleet.admirals[activeAdmiralIdx];
@@ -3838,6 +3843,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-19', title: 'Mobile: live points counter and long ship names', items: [
+      'The points counter in the top bar went stale after removing a ship or group. It only refreshed when you moved between screens, so it disagreed with the fleet total on the page. It now updates the moment anything changes.',
+      'Long ship names no longer run into the points value on the right, and they are never cut off with an ellipsis. Names that do not fit on one line wrap onto a second line instead.',
+    ]},
     { date: '2026-07-19', title: 'Crippled ships: rules correction', items: [
       'Removed some halving damage stuff. I\'m sorry.',
       'Play Mode used to show every weapon\'s Attack dice halved once a Capital Ship was Crippled. That is not a Dropfleet rule and never has been. Rulebook 7.3.6 says a Capital Ship reduced below half its starting Hull rolls 2D6 once on the Crippling Effects table, and nothing more. Weapon profiles are unaffected. Attack values now display unchanged.',

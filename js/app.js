@@ -7808,6 +7808,10 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-19', title: 'Mobile: live points counter and long ship names', items: [
+      'The points counter in the top bar went stale after removing a ship or group. It only refreshed when you moved between screens, so it disagreed with the fleet total on the page. It now updates the moment anything changes.',
+      'Long ship names no longer run into the points value on the right, and they are never cut off with an ellipsis. Names that do not fit on one line wrap onto a second line instead.',
+    ]},
     { date: '2026-07-19', title: 'Crippled ships: rules correction', items: [
       'Removed some halving damage stuff. I\'m sorry.',
       'Play Mode used to show every weapon\'s Attack dice halved once a Capital Ship was Crippled. That is not a Dropfleet rule and never has been. Rulebook 7.3.6 says a Capital Ship reduced below half its starting Hull rolls 2D6 once on the Crippling Effects table, and nothing more. Weapon profiles are unaffected. Attack values now display unchanged.',

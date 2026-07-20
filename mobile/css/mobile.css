@@ -390,9 +390,10 @@ button, a, input, select, textarea,
   font-size: var(--text-body1);
   font-weight: var(--weight-semibold);
   line-height: var(--lh-body1);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* Ship names must never be clipped: long ones wrap onto a second line.
+     padding-right keeps a gutter from the points value on the right. */
+  overflow-wrap: anywhere;
+  padding-right: var(--sp-s);
 }
 
 /* Rank insignia (shared ../js/rank-insignia.js) */
@@ -621,9 +622,8 @@ button, a, input, select, textarea,
 .weapon-name {
   font-weight: var(--weight-semibold);
   color: var(--fg1);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  padding-right: var(--sp-xs);
 }
 
 .weapon-val {
@@ -1510,7 +1510,9 @@ button, a, input, select, textarea,
 /* ── 33. Utility ──────────────────────────────────────── */
 .flex { display: flex; }
 .items-center { align-items: center; }
-.justify-between { justify-content: space-between; }
+/* space-between with no gap lets a long ship name touch the points value on the
+   right when it fills the row, so keep a minimum gutter between the two. */
+.justify-between { justify-content: space-between; gap: var(--sp-s); }
 .gap-xs { gap: var(--sp-xs); }
 .gap-s { gap: var(--sp-s); }
 .gap-m { gap: var(--sp-m); }

@@ -47,6 +47,10 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-19 — Mobile: live points counter and long ship names
+- **Top-bar points counter no longer goes stale.** It was only refreshed by `updateAppBar()` on navigation, so removing a ship or group left it showing the old total while the in-page fleet total updated. The detail renderers now refresh the app bar in place.
+- **Long ship names no longer collide with the points value.** `.list-row-title` was `white-space: nowrap` + `text-overflow: ellipsis` with no right gutter, so long names were both clipped and butted against the points column. Titles now wrap and carry a gutter; `.justify-between` rows gained a minimum gap. Verified at 375px and 320px.
+
 ### 2026-07-19 — Crippled ships: rules correction
 - **Removed some halving damage stuff. I'm sorry.**
 - **Crippled no longer halves weapon Attack dice.** Play Mode displayed every weapon's Attack value halved once a Capital Ship became Crippled. That is not a Dropfleet rule and never has been. It was invented, not sourced. Rulebook 7.3.6: a Capital Ship reduced below half its starting Hull rolls 2D6 once on the Crippling Effects table, and nothing else. Weapon profiles are unaffected. Attack values now display unchanged. Both apps.
