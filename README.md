@@ -47,6 +47,13 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-19 — Clipped-text sweep (both apps)
+- **Weapon names no longer truncate.** `.weapon-col-name` (desktop ship card + picker) and `.calc-weapon-name-lbl` (combat calculator) were `overflow:hidden` + `text-overflow:ellipsis`, cutting gameplay text such as the 39-char "UF-4200 Mass Driver Turret Core Battery". Both now wrap.
+- **Art-carousel sculpt labels no longer truncate** (`.hero-art-label`, both apps).
+- Verified with a live DOM sweep (`scrollWidth > clientWidth` on every clipping leaf node) across builder, ship picker, ship detail and mobile fleet/group screens: **0 clipped elements**.
+- Checked and deliberately left alone: `.group-nav-name` (dead code, `#groups-nav` is not in index.html), `.topbar-context` and `.float-label` (app chrome, not gameplay text; the fleet name is shown in full on the page).
+- Also confirmed the desktop points counters already update correctly on removal (511 → 429 instantly), so the stale-counter bug was mobile-only.
+
 ### 2026-07-19 — Mobile: live points counter and long ship names
 - **Top-bar points counter no longer goes stale.** It was only refreshed by `updateAppBar()` on navigation, so removing a ship or group left it showing the old total while the in-page fleet total updated. The detail renderers now refresh the app bar in place.
 - **Long ship names no longer collide with the points value.** `.list-row-title` was `white-space: nowrap` + `text-overflow: ellipsis` with no right gutter, so long names were both clipped and butted against the points column. Titles now wrap and carry a gutter; `.justify-between` rows gained a minimum gap. Verified at 375px and 320px.

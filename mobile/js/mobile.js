@@ -3843,6 +3843,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-19', title: 'Clipped text sweep', items: [
+      'Audited both apps for text being cut off. Weapon names could be truncated with an ellipsis in the ship picker and the combat calculator, which meant a name like "UF-4200 Mass Driver Turret Core Battery" could not be read in full. Weapon names now wrap instead of being cut off.',
+      'Sculpt labels on the ship art carousel no longer truncate either.',
+    ]},
     { date: '2026-07-19', title: 'Mobile: live points counter and long ship names', items: [
       'The points counter in the top bar went stale after removing a ship or group. It only refreshed when you moved between screens, so it disagreed with the fleet total on the page. It now updates the moment anything changes.',
       'Long ship names no longer run into the points value on the right, and they are never cut off with an ellipsis. Names that do not fit on one line wrap onto a second line instead.',

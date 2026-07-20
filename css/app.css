@@ -2326,12 +2326,15 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--weight-medium);
 }
 
+/* Weapon names are gameplay text and must never be clipped: a long name wraps
+   inside its column rather than ellipsing away (the picker modal used to cut
+   e.g. "Gravitic Hyperlance Battery" mid-word). */
 .weapon-col-name {
   min-width: 0;
   font-weight: var(--weight-semibold);
   color: var(--ink);
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .weapon-col-arc {
@@ -6435,7 +6438,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex; align-items: center; justify-content: space-between; gap: 4px;
   padding: 8px 6px 3px; background: linear-gradient(transparent, rgba(15, 38, 64, 0.72));
 }
-.hero-art-label { color: #fff; font-size: 12px; font-family: var(--font-condensed); font-weight: var(--weight-semibold); letter-spacing: 0.03em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hero-art-label { color: #fff; font-size: 12px; font-family: var(--font-condensed); font-weight: var(--weight-semibold); letter-spacing: 0.03em; white-space: normal; overflow-wrap: anywhere; }
 .hero-art-dots { display: flex; gap: 3px; flex-shrink: 0; }
 .hero-art-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, 0.45); }
 .hero-art-dot.active { background: #fff; }
@@ -7135,7 +7138,7 @@ body[data-view="builder"] .game-info-footer {
 .calc-preset-hint { font-size: 11px; color: var(--ink-faint); margin-top: 3px; }
 .calc-linkbtn { background: none; border: 0; padding: 0; color: var(--gold-dark); font: inherit; font-size: 11px; cursor: pointer; text-decoration: underline; }
 .calc-weapon-compact .calc-weapon-head { gap: 6px; }
-.calc-weapon-compact .calc-weapon-name-lbl { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.calc-weapon-compact .calc-weapon-name-lbl { flex: 1; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
 .calc-compact-stats { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; font-size: var(--text-xs); color: var(--ink-muted); font-family: var(--font-condensed); }
 .calc-compact-stats b { color: var(--navy-dark); font-weight: 700; }
 
