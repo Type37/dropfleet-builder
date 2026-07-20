@@ -47,6 +47,10 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-19 — Report a bug, with a screenshot
+- **"Report a bug" link added to both apps** (desktop Settings, mobile settings + fleet menus). Points at a GitHub issue form (`.github/ISSUE_TEMPLATE/bug_report.yml`) so a screenshot can be pasted or dragged straight in, which the `mailto:` feedback link made awkward. The email link is unchanged for general feedback.
+- GitHub Issues was already enabled on the repo, so nothing needed turning on.
+
 ### 2026-07-19 — Clipped-text sweep (both apps)
 - **Weapon names no longer truncate.** `.weapon-col-name` (desktop ship card + picker) and `.calc-weapon-name-lbl` (combat calculator) were `overflow:hidden` + `text-overflow:ellipsis`, cutting gameplay text such as the 39-char "UF-4200 Mass Driver Turret Core Battery". Both now wrap.
 - **Art-carousel sculpt labels no longer truncate** (`.hero-art-label`, both apps).

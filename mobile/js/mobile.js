@@ -20,6 +20,9 @@
       '3. What would make you use it for your next game?\n\n' +
       '4. How long have you played DFC?\n'
     );
+  // Bug reports go to GitHub Issues rather than the mailto, because a screenshot
+  // can be pasted or dragged straight into the issue form. Mirrored in app.js.
+  const BUG_HREF = 'https://github.com/Type37/dropfleet-builder/issues/new?template=bug_report.yml';
   const FACTIONS = {};         // raw faction JSON keyed by faction key
   let RULES_DB = {};           // shared rules glossary
   let SECONDARY_OBJECTIVES = []; // [{name, description}], pick 2 per game
@@ -3843,6 +3846,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-19', title: 'Report a bug, with a screenshot', items: [
+      'Added a "Report a bug" link (Settings on desktop, the menu on mobile). It opens a short form on GitHub where you can paste or drag a screenshot straight into the report, which the existing email link made awkward.',
+      'The email feedback link is unchanged and still there for general thoughts.',
+    ]},
     { date: '2026-07-19', title: 'Clipped text sweep', items: [
       'Audited both apps for text being cut off. Weapon names could be truncated with an ellipsis in the ship picker and the combat calculator, which meant a name like "UF-4200 Mass Driver Turret Core Battery" could not be read in full. Weapon names now wrap instead of being cut off.',
       'Sculpt labels on the ship art carousel no longer truncate either.',
@@ -3980,6 +3987,7 @@
         action: () => { localStorage.setItem('dfc_print2col', localStorage.getItem('dfc_print2col') === '1' ? '0' : '1'); haptic(HAPTIC.tick); openSettingsSheet(); } },
       { label: "What's New", action: openChangelog },
       { label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
+      { label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
       { label: 'Switch to desktop view', action: viewDesktop }
     ]);
   }
@@ -3994,6 +4002,7 @@
       { label: 'Share', action: shareFleet },
       { label: 'Duplicate fleet', action: duplicateFleet },
       { label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
+      { label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
       { label: 'Delete fleet', danger: true, action: deleteFleetPrompt }
     ]);
   }

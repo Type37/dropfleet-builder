@@ -1,0 +1,44 @@
+name: Bug report
+description: Something in the fleet builder looks wrong or does not work
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. **You can paste or drag a screenshot straight into any box below** — that is usually the fastest way to show the problem.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, and what did you see? A screenshot is worth a lot here.
+      placeholder: e.g. I removed a ship and the points counter at the top did not change.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect instead?
+    validations:
+      required: false
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where did it happen?
+      options:
+        - Mobile (phone or tablet)
+        - Desktop
+        - Both
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and browser
+      description: If you know it. e.g. "iPhone 15, Safari" or "Windows, Chrome".
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        If the problem is a wrong points cost, stat, or rule, please say which ship and which faction so it can be checked against the official PDF.
