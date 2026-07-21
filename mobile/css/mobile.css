@@ -1678,6 +1678,18 @@ body.sheet-open .sheet-scrim {
 }
 .action-sheet-item:active { background: var(--paper-alt); }
 .action-sheet-item.danger { color: var(--danger); }
+.action-sheet-item[disabled] { opacity: 0.45; }
+/* Static explanatory text in a sheet (e.g. the size of the offline download).
+   Left-aligned and full-height: this is prose to read, not a label to scan. */
+.action-sheet-note {
+  padding: var(--sp-m) var(--sp-l);
+  font-size: var(--text-body1);
+  line-height: 1.5;
+  color: var(--fg2);
+  text-align: left;
+}
+.action-sheet-note strong { color: var(--navy); }
+.action-sheet-note .as-warn { color: var(--danger); font-weight: var(--weight-semibold); }
 .action-sheet-cancel {
   display: block;
   width: 100%;

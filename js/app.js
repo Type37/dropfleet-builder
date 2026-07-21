@@ -285,6 +285,9 @@ let activeGroupId = null;
 
     loadSettings();
     applyTheme(settings.theme);
+    // Refresh an already-downloaded offline bundle, silently and only on wifi.
+    // Never starts a first download on its own — see OfflineSync.shouldAutoSync.
+    if (window.OfflineSync) OfflineSync.init((err) => { if (!err) renderOfflinePanel(); });
     loadFleets();
     seedFastplayFleetsIfFirstRun();
     loadCollection();
@@ -7811,6 +7814,13 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-21', title: 'Download the app for offline use', items: [
+      'New "Offline use" section in Settings (and "Offline use..." in the menu on mobile). One button downloads all six factions, every ship stat, rule and admiral, plus all 531 ship artwork thumbnails, so the whole app works at a table with no signal.',
+      'The size is shown before you press anything, and the download only ever starts when you ask for it. If you are on mobile data the app says so first.',
+      'Once downloaded, it refreshes itself in the background when it is over a week old, but only on wifi. On browsers that will not report the connection type (which includes every iPhone) it stays manual rather than guessing.',
+      'A "Delete downloaded data" button frees the space again. Your saved fleets are stored separately and are never touched by either button.',
+      'Previously the app only remembered pages you had already opened, so a faction you had never browsed would simply be missing once you lost signal.',
+    ]},
     { date: '2026-07-19', title: 'Report a bug, with a screenshot', items: [
       'Added a "Report a bug" link (Settings on desktop, the menu on mobile). It opens a short form on GitHub where you can paste or drag a screenshot straight into the report, which the existing email link made awkward.',
       'The email feedback link is unchanged and still there for general thoughts.',
@@ -7993,6 +8003,10 @@ let activeGroupId = null;
         ${tog('showCollection', 'Collection', 'Show an "in collection" chip on ship cards and an In-collection filter, using counts from the Collection tab')}
       </div>
       <div class="settings-group">
+        <div class="settings-group-title">Offline use</div>
+        <div id="offline-panel" class="offline-panel"><p class="settings-note">Checking…</p></div>
+      </div>
+      <div class="settings-group">
         <div class="settings-actions">
           <button class="btn btn-outline btn-sm" onclick="App.exportAllFleets()" title="Download all your fleets as a JSON backup"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg> Export fleets</button>
           <a class="btn btn-outline btn-sm" href="${FEEDBACK_HREF}"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12v8H2zM2 4l6 5 6-5"/></svg> Feedback</a>
@@ -8003,6 +8017,99 @@ let activeGroupId = null;
       </div>
     `;
     openModal('modal-settings');
+    renderOfflinePanel();
+  }
+
+  /* ── Offline use ─────────────────────────────────────────────
+   * Downloads every faction, rule and ship thumbnail so the app works with no
+   * signal at a table. The size is stated up front and the download only ever
+   * starts when the user asks for it (or auto-refreshes an existing bundle on
+   * wifi) — nobody should discover a 28 MB pull on tournament data.
+   */
+  async function renderOfflinePanel() {
+    const el = document.getElementById('offline-panel');
+    if (!el) return;
+    if (!window.OfflineSync || !OfflineSync.supported) {
+      el.innerHTML = `<p class="settings-note">This browser cannot store data for offline use.</p>`;
+      return;
+    }
+    if (OfflineSync.isRunning()) return; // a download is driving the panel
+
+    const s = await OfflineSync.status();
+    const conn = s.connection;
+    const sizeText = s.totalText || 'unknown';
+
+    // State line: what is actually on this device right now.
+    const state = s.downloaded
+      ? `<p class="offline-state offline-state-ok"><strong>Ready to use offline.</strong> ${s.storedFiles} files (${s.storedText}) stored on this device, updated ${s.lastSyncText}.</p>`
+      : `<p class="offline-state"><strong>Not downloaded yet.</strong> Right now the app only remembers pages you have already opened, so factions you have not browsed will be missing with no signal.</p>`;
+
+    // Say plainly what pressing the button does, including the cost.
+    const explain = `<p class="settings-note">Downloading stores all six factions, every ship stat, rule and admiral, plus all ${s.totalFiles || 531} ship artwork thumbnails, about <strong>${sizeText}</strong>. After that the whole app works with no internet. Your saved fleets are stored separately and are never affected.</p>`;
+
+    const connNote = conn === 'offline'
+      ? `<p class="offline-warn">You are offline. Reconnect to download.</p>`
+      : conn === 'cellular' || conn === 'metered'
+        ? `<p class="offline-warn">You are on mobile data. This will use about ${sizeText} of your allowance.</p>`
+        : conn === 'unknown'
+          ? `<p class="settings-note">Automatic updates only run on wifi. This browser does not report the connection type, so updates here are manual.</p>`
+          : `<p class="settings-note">You are on wifi. Once downloaded, this refreshes itself automatically on wifi when it is more than a week old.</p>`;
+
+    el.innerHTML = `
+      ${state}
+      ${explain}
+      ${connNote}
+      <div class="settings-actions">
+        <button class="btn btn-primary btn-sm" id="offline-sync-btn" ${conn === 'offline' ? 'disabled' : ''}>
+          ${s.downloaded ? 'Update data' : `Download for offline use (${sizeText})`}
+        </button>
+        ${s.downloaded ? `<button class="btn btn-outline btn-sm" id="offline-del-btn">Delete downloaded data</button>` : ''}
+      </div>
+      <div id="offline-progress" class="offline-progress" hidden>
+        <div class="offline-bar"><div class="offline-bar-fill" id="offline-bar-fill"></div></div>
+        <p class="settings-note" id="offline-progress-text"></p>
+      </div>
+    `;
+
+    const syncBtn = document.getElementById('offline-sync-btn');
+    if (syncBtn) syncBtn.onclick = runOfflineSync;
+    const delBtn = document.getElementById('offline-del-btn');
+    if (delBtn) delBtn.onclick = deleteOfflineData;
+  }
+
+  async function runOfflineSync() {
+    const box = document.getElementById('offline-progress');
+    const fill = document.getElementById('offline-bar-fill');
+    const text = document.getElementById('offline-progress-text');
+    const btn = document.getElementById('offline-sync-btn');
+    const del = document.getElementById('offline-del-btn');
+    if (box) box.hidden = false;
+    if (btn) { btn.disabled = true; btn.textContent = 'Downloading…'; }
+    if (del) del.disabled = true;
+
+    try {
+      const r = await OfflineSync.sync(p => {
+        if (fill) fill.style.width = p.percent + '%';
+        if (text) text.textContent = `${p.done} of ${p.total} files (${OfflineSync.formatBytes(p.bytes)} of ${OfflineSync.formatBytes(p.totalBytes)})`;
+      });
+      // Partial failures are reported, not swallowed: a fleet list that is
+      // quietly missing three ships is worse than being told about it.
+      showToast(r.failed.length
+        ? `Downloaded ${r.files} of ${r.total} files. ${r.failed.length} failed, try again on a better connection.`
+        : `Ready to use offline. ${r.files} files stored.`);
+    } catch (e) {
+      showToast(e.message || 'Download failed.');
+    } finally {
+      if (box) box.hidden = true;
+      renderOfflinePanel();
+    }
+  }
+
+  async function deleteOfflineData() {
+    if (!confirm('Delete the downloaded offline data?\n\nThe app will need an internet connection again until you download it a second time. Your saved fleets are not affected.')) return;
+    const r = await OfflineSync.remove();
+    showToast(r.freed ? `Deleted ${r.freedText} of offline data.` : 'Offline data deleted.');
+    renderOfflinePanel();
   }
 
   function updateFleetDescription() {
@@ -9046,6 +9153,7 @@ let activeGroupId = null;
     openPlayMode, showPlayPassInfo, playChangeRound, playEndRound, playTogglePass, playChangeVP, playChangeOppVP, playChangeOppGroups, playSpikeChange, playSetOrder, playSetOrderAndShow, playOrderDown, playOrderMove, playOrderUp, playOrderCancel, playToggleActivation, playHullChange, playCripChange, playCripToggle, playToggleCripPanel, playToggleFire, playTogglePower, playCorruptorChange,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText, openLastImported,
-    openSettings, openChangelog, toggleSetting, toggleTheme, updateFleetDescription, exportAllFleets, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, sayName, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
+    openSettings, openChangelog, toggleSetting, toggleTheme, updateFleetDescription, exportAllFleets,
+    renderOfflinePanel, runOfflineSync, deleteOfflineData, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, sayName, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
   };
 })();

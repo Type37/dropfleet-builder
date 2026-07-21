@@ -100,7 +100,12 @@
 
   /* Semantic */
   --success: #3e9945;
+  /* --success is a fill/icon colour: 3.2:1 on paper, which fails AA as text.
+     Use --success-ink whenever green is used for words. 5.4:1 on paper. */
+  --success-ink: #2c6e49;
   --warning: #d98c1f;
+  --warn-ink: #8a5a00;      /* AA on --warn-bg for warning text */
+  --warn-bg: #fdf3e0;
   --error: #c43c2f;
   --info: #2a5080;
 
@@ -178,7 +183,10 @@ html[data-theme="dark"] {
   --faction-bioficer-text: #44b8b8;
 
   --success: #5cc063;
+  --success-ink: #6ecf75;   /* on the dark surface, green must go lighter not darker */
   --warning: #e3ad3e;
+  --warn-ink: #e3ad3e;
+  --warn-bg: #3a2f18;
   --error: #e2685a;
   --info: #74a7e0;
 
@@ -1167,6 +1175,44 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-muted);
   margin-top: var(--sp-sm);
 }
+/* ── Offline use panel (Settings) ──────────────────────────────
+   Status, the honest size of the download, and the two buttons. Text wraps and
+   the container grows: the size and the warning are exactly the information a
+   user must not have clipped from them. */
+.offline-panel .settings-note { margin-top: var(--sp-xs); }
+.offline-state {
+  font-size: var(--text-sm);
+  color: var(--ink);
+  margin: 0 0 var(--sp-xs);
+  line-height: 1.45;
+}
+.offline-state-ok strong { color: var(--success-ink); }
+.offline-warn {
+  font-size: var(--text-xs);
+  color: var(--ink);
+  background: var(--warn-bg);
+  border-left: 3px solid var(--warn-ink);
+  padding: var(--sp-xs) var(--sp-sm);
+  margin: var(--sp-sm) 0;
+  border-radius: 2px;
+  line-height: 1.45;
+}
+.offline-panel .settings-actions { margin-top: var(--sp-sm); }
+.offline-progress { margin-top: var(--sp-sm); }
+.offline-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.offline-bar-fill {
+  height: 100%;
+  width: 0;
+  background: var(--navy, #1b3a5c);
+  transition: width 0.15s linear;
+}
+[data-theme="dark"] .offline-bar-fill { background: var(--gold); }
+
 .settings-toggle input[type="checkbox"] {
   display: none;
 }

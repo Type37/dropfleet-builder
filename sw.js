@@ -3,7 +3,7 @@
 // populating the cache as resources are fetched.
 // Bump this on every deploy so existing clients purge the old cache on activate
 // (the app updates frequently — stale assets must not survive a new build).
-const CACHE = 'dfc-cache-v380';
+const CACHE = 'dfc-cache-v381';
 // Same-origin code/data that MUST be fresh when online. Network-first alone is
 // not enough: fetch() still consults the browser HTTP cache, so a client can
 // keep running a stale app.js for as long as GitHub Pages' cache headers allow.
@@ -17,6 +17,7 @@ const CORE = [
   './css/app.css',
   './css/mobile-fixes.css',
   './js/rank-insignia.js',
+  './js/offline-sync.js',
   './js/calc-engine.js',
   './js/calc-data.js',
   './js/app.js',
@@ -39,10 +40,18 @@ self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE).catch(() => {})));
 });
 
+// The user-initiated offline download (Settings → Offline use) lives in its own
+// unversioned cache. It must SURVIVE the purge below: a deploy silently throwing
+// away a 28 MB bundle someone chose to download would be indefensible. Its
+// contents are still served automatically, because CacheStorage.match() in the
+// fetch handler searches every cache, not just CACHE.
+const KEEP = 'dfc-offline';
+
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
-      .then(() => self.clients.claim())
+    caches.keys().then(keys => Promise.all(
+      keys.filter(k => k !== CACHE && k !== KEEP).map(k => caches.delete(k))
+    )).then(() => self.clients.claim())
   );
 });
 
@@ -73,6 +82,11 @@ self.addEventListener('fetch', (e) => {
         }
         return res;
       })
-      .catch(() => caches.match(req).then(hit => hit || caches.match(offlineShell)))
+      // ignoreVary: the offline bundle is stored by fetch() (Accept: */*) but
+      // replayed for <img> requests (Accept: image/avif,image/webp,…). If the
+      // host ever sends "Vary: Accept", strict matching would miss every
+      // thumbnail the user deliberately downloaded.
+      .catch(() => caches.match(req, { ignoreVary: true })
+        .then(hit => hit || caches.match(offlineShell, { ignoreVary: true })))
   );
 });

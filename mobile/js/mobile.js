@@ -580,13 +580,24 @@
   }
 
   /* ── Action sheet (overflow menu) ──────────────────────── */
+  // An item with note:true renders as static text instead of a button — used to
+  // state things the user must read before choosing (e.g. the size of the
+  // offline download). It is not focusable and has no action.
+  // An item with keepOpen:true runs its action without dismissing the sheet, so
+  // a long-running action can report progress in place.
   function showActionSheet(items) {
     const el = document.getElementById('action-sheet-items');
-    el.innerHTML = items.map((it, i) =>
-      `<button class="action-sheet-item ${it.danger ? 'danger' : ''}" data-idx="${i}">${it.label}</button>`
+    el.innerHTML = items.map((it, i) => it.note
+      ? `<div class="action-sheet-note" ${it.id ? `id="${it.id}"` : ''}>${it.label}</div>`
+      : `<button class="action-sheet-item ${it.danger ? 'danger' : ''}" data-idx="${i}" ${it.disabled ? 'disabled' : ''}>${it.label}</button>`
     ).join('');
-    el.querySelectorAll('.action-sheet-item').forEach((btn, i) => {
-      btn.onclick = () => { closeActionSheet(); items[i].action(); };
+    el.querySelectorAll('.action-sheet-item').forEach((btn) => {
+      const i = +btn.dataset.idx;
+      btn.onclick = () => {
+        if (items[i].keepOpen) { items[i].action(); return; }
+        closeActionSheet();
+        items[i].action();
+      };
     });
     document.getElementById('action-sheet').classList.add('active');
     document.body.classList.add('sheet-open');
@@ -3846,6 +3857,13 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-21', title: 'Download the app for offline use', items: [
+      'New "Offline use..." entry in the menu (and an Offline use section in Settings on desktop). One button downloads all six factions, every ship stat, rule and admiral, plus all 531 ship artwork thumbnails, so the whole app works at a table with no signal.',
+      'The size is shown before you press anything, and the download only ever starts when you ask for it. If you are on mobile data the app says so first.',
+      'Once downloaded, it refreshes itself in the background when it is over a week old, but only on wifi. On browsers that will not report the connection type (which includes every iPhone) it stays manual rather than guessing.',
+      'A "Delete downloaded data" button frees the space again. Your saved fleets are stored separately and are never touched by either button.',
+      'Previously the app only remembered pages you had already opened, so a faction you had never browsed would simply be missing once you lost signal.',
+    ]},
     { date: '2026-07-19', title: 'Report a bug, with a screenshot', items: [
       'Added a "Report a bug" link (Settings on desktop, the menu on mobile). It opens a short form on GitHub where you can paste or drag a screenshot straight into the report, which the existing email link made awkward.',
       'The email feedback link is unchanged and still there for general thoughts.',
@@ -3985,11 +4003,77 @@
       // Misc Ships is a picker filter chip now (its own list), not a global setting.
       { label: `Two-column print  ${localStorage.getItem('dfc_print2col') === '1' ? '✓ On' : 'Off'}`,
         action: () => { localStorage.setItem('dfc_print2col', localStorage.getItem('dfc_print2col') === '1' ? '0' : '1'); haptic(HAPTIC.tick); openSettingsSheet(); } },
+      { label: 'Offline use…', action: openOfflineSheet },
       { label: "What's New", action: openChangelog },
       { label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
       { label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
       { label: 'Switch to desktop view', action: viewDesktop }
     ]);
+  }
+
+  /* ── Offline use ─────────────────────────────────────────────
+   * Phone-first case for this feature: no signal in a games hall. Downloads all
+   * six factions and every ship thumbnail so nothing is missing at the table.
+   * The size is stated before the button, and nothing downloads unasked. */
+  async function openOfflineSheet() {
+    if (!window.OfflineSync || !OfflineSync.supported) {
+      showActionSheet([{ note: true, label: 'This browser cannot store data for offline use.' }]);
+      return;
+    }
+    const s = await OfflineSync.status();
+    const size = s.totalText || 'unknown';
+    const conn = s.connection;
+
+    const state = s.downloaded
+      ? `<strong>Ready to use offline.</strong><br>${s.storedFiles} files (${s.storedText}) on this phone, updated ${s.lastSyncText}.`
+      : `<strong>Not downloaded yet.</strong><br>Only pages you have already opened are saved, so factions you have not browsed will be missing with no signal.`;
+
+    const cost = `Downloading stores all six factions, every ship stat, rule and admiral, plus all ${s.totalFiles || 531} ship artwork thumbnails, about <strong>${size}</strong>. Your saved fleets are stored separately and are never affected.`;
+
+    const warn = conn === 'offline'
+      ? `<span class="as-warn">You are offline. Reconnect to download.</span>`
+      : (conn === 'cellular' || conn === 'metered')
+        ? `<span class="as-warn">You are on mobile data. This will use about ${size} of your allowance.</span>`
+        : conn === 'wifi'
+          ? `On wifi. Once downloaded, this refreshes itself automatically on wifi when it is over a week old.`
+          : `Automatic updates only run on wifi. This browser does not report the connection type, so updates here are manual.`;
+
+    const items = [
+      { note: true, label: state },
+      { note: true, label: cost },
+      { note: true, label: warn, id: 'offline-sheet-status' },
+      { label: s.downloaded ? 'Update data' : `Download for offline use (${size})`,
+        disabled: conn === 'offline', keepOpen: true, action: mobileOfflineSync }
+    ];
+    if (s.downloaded) {
+      items.push({ label: 'Delete downloaded data', danger: true, action: mobileOfflineDelete });
+    }
+    showActionSheet(items);
+  }
+
+  async function mobileOfflineSync() {
+    const status = document.getElementById('offline-sheet-status');
+    const btn = document.querySelector('#action-sheet-items .action-sheet-item');
+    if (btn) { btn.disabled = true; btn.textContent = 'Downloading…'; }
+    try {
+      const r = await OfflineSync.sync(p => {
+        if (status) status.innerHTML = `Downloading… ${p.percent}% — ${p.done} of ${p.total} files (${OfflineSync.formatBytes(p.bytes)} of ${OfflineSync.formatBytes(p.totalBytes)})`;
+      });
+      haptic(HAPTIC.tick);
+      closeActionSheet();
+      showSheet('Offline use', r.failed.length
+        ? `<p>Downloaded ${r.files} of ${r.total} files (${OfflineSync.formatBytes(r.bytes)}).</p><p>${r.failed.length} files failed to download, so a few ship images may be missing offline. Run Update data again on a better connection to finish.</p>`
+        : `<p><strong>Ready to use offline.</strong></p><p>${r.files} files (${OfflineSync.formatBytes(r.bytes)}) stored on this phone. All six factions, every ship stat and rule, and all ship artwork now work with no signal.</p>`);
+    } catch (e) {
+      closeActionSheet();
+      showSheet('Offline use', `<p>${esc(e.message || 'Download failed.')}</p>`);
+    }
+  }
+
+  async function mobileOfflineDelete() {
+    if (!confirm('Delete the downloaded offline data?\n\nThe app will need an internet connection again until you download it a second time. Your saved fleets are not affected.')) return;
+    const r = await OfflineSync.remove();
+    showSheet('Offline use', `<p>Deleted${r.freed ? ' ' + r.freedText + ' of' : ''} offline data.</p><p>The app needs an internet connection again. Your saved fleets are untouched.</p>`);
   }
 
   function fleetOverflow() {
@@ -4533,6 +4617,10 @@
     }).catch(() => {});
 
     loadFleets();
+
+    // Refresh an already-downloaded offline bundle, silently and only on wifi.
+    // Never starts a first download on its own.
+    if (window.OfflineSync) OfflineSync.init();
 
     // Bottom-sheet swipe gestures — wire early so they work even on the
     // share-link path below (which returns before the rest of init runs).
