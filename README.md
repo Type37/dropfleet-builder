@@ -48,13 +48,11 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
 ### 2026-07-21 — Download the app for offline use
-- **Explicit offline download in both apps** (desktop Settings → "Offline use", mobile menu → "Offline use…"). Fetches every file listed in `data/offline-manifest.json` (531 files, ~28 MB: all six factions, lore, pronunciations, the app shell, and all 502 ship/station thumbnails) into a dedicated `dfc-offline` Cache Storage bucket. Previously the service worker only cached pages the user happened to visit, so an unbrowsed faction was simply missing without signal.
-- **Size is stated before the button, and nothing downloads unasked.** A cellular/Data-Saver connection gets an explicit warning first.
-- **Auto-refresh only on wifi**, and only for a bundle the user already chose to download, once it is over a week old. `navigator.connection.type` is Chromium-only, so anything that will not positively report wifi (every iOS browser, Firefox) stays manual rather than guessing — see `connectionType()` in `js/offline-sync.js`.
-- **"Delete downloaded data"** clears the bucket. Saved fleets (localStorage) and the app-shell cache are untouched.
-- `sw.js`: the `dfc-offline` bucket is now exempt from the activate-time purge, so a deploy no longer throws away a 28 MB download the user chose to make. Cache fallback uses `ignoreVary: true` so `<img>` requests match files stored via `fetch()`.
-- New `scripts/gen-offline-manifest.py` regenerates the manifest with real byte sizes. **Re-run it after adding ship art or a faction JSON**, or the new files will not be downloaded for offline use.
-- Accessibility: added `--success-ink` / `--warn-ink` / `--warn-bg` tokens. The existing `--success` (#3e9945) is only 3.2:1 on paper and fails AA as text; `--success-ink` (#2c6e49) measures 6.1:1 light and 9.0:1 dark.
+- **Explicit offline download in both apps** (desktop Settings → "Offline use", mobile menu → "Offline use…"). Fetches every file in `data/offline-manifest.json` (531 files, ~28 MB) into a dedicated `dfc-offline` cache. Before, the service worker only cached pages the user happened to visit, so an unbrowsed faction was missing without signal.
+- Auto-refresh only on positively-identified wifi, only for an already-downloaded bundle over a week old. `navigator.connection.type` is Chromium-only, so iOS and Firefox stay manual by design.
+- `sw.js`: `dfc-offline` is exempt from the activate-time purge, so a deploy no longer discards the download.
+- New `scripts/gen-offline-manifest.py`. **Re-run after adding ship art or a faction JSON**, or new files are silently excluded from offline downloads.
+- a11y: added `--success-ink` / `--warn-ink` / `--warn-bg`. The existing `--success` (#3e9945) is 3.2:1 on paper and fails AA as text; `--success-ink` measures 6.1:1 light, 9.0:1 dark.
 
 ### 2026-07-19 — Report a bug, with a screenshot
 - **"Report a bug" link added to both apps** (desktop Settings, mobile settings + fleet menus). Points at a GitHub issue form (`.github/ISSUE_TEMPLATE/bug_report.yml`) so a screenshot can be pasted or dragged straight in, which the `mailto:` feedback link made awkward. The email link is unchanged for general feedback.

@@ -3858,11 +3858,8 @@
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
     { date: '2026-07-21', title: 'Download the app for offline use', items: [
-      'New "Offline use..." entry in the menu (and an Offline use section in Settings on desktop). One button downloads all six factions, every ship stat, rule and admiral, plus all 531 ship artwork thumbnails, so the whole app works at a table with no signal.',
-      'The size is shown before you press anything, and the download only ever starts when you ask for it. If you are on mobile data the app says so first.',
-      'Once downloaded, it refreshes itself in the background when it is over a week old, but only on wifi. On browsers that will not report the connection type (which includes every iPhone) it stays manual rather than guessing.',
-      'A "Delete downloaded data" button frees the space again. Your saved fleets are stored separately and are never touched by either button.',
-      'Previously the app only remembered pages you had already opened, so a faction you had never browsed would simply be missing once you lost signal.',
+      'The menu now has Offline use... One button downloads every faction, rule and ship image, about 28 MB, so the app works at a table with no signal. Before, only pages you had already opened were saved.',
+      'It refreshes itself on wifi once it is over a week old. Delete downloaded data frees the space; saved fleets are never affected.',
     ]},
     { date: '2026-07-19', title: 'Report a bug, with a screenshot', items: [
       'Added a "Report a bug" link (Settings on desktop, the menu on mobile). It opens a short form on GitHub where you can paste or drag a screenshot straight into the report, which the existing email link made awkward.',
@@ -4025,26 +4022,22 @@
     const conn = s.connection;
 
     const state = s.downloaded
-      ? `<strong>Ready to use offline.</strong><br>${s.storedFiles} files (${s.storedText}) on this phone, updated ${s.lastSyncText}.`
-      : `<strong>Not downloaded yet.</strong><br>Only pages you have already opened are saved, so factions you have not browsed will be missing with no signal.`;
+      ? `<strong>Ready to use offline.</strong><br>${s.storedText}, updated ${s.lastSyncText}.`
+      : `All six factions, stats, rules and ship art. Works with no signal.`;
 
-    const cost = `Downloading stores all six factions, every ship stat, rule and admiral, plus all ${s.totalFiles || 531} ship artwork thumbnails, about <strong>${size}</strong>. Your saved fleets are stored separately and are never affected.`;
-
+    // Only warn when there is something to warn about.
     const warn = conn === 'offline'
       ? `<span class="as-warn">You are offline. Reconnect to download.</span>`
       : (conn === 'cellular' || conn === 'metered')
-        ? `<span class="as-warn">You are on mobile data. This will use about ${size} of your allowance.</span>`
-        : conn === 'wifi'
-          ? `On wifi. Once downloaded, this refreshes itself automatically on wifi when it is over a week old.`
-          : `Automatic updates only run on wifi. This browser does not report the connection type, so updates here are manual.`;
+        ? `<span class="as-warn">On mobile data. This uses ${size}.</span>`
+        : '';
 
     const items = [
-      { note: true, label: state },
-      { note: true, label: cost },
-      { note: true, label: warn, id: 'offline-sheet-status' },
-      { label: s.downloaded ? 'Update data' : `Download for offline use (${size})`,
-        disabled: conn === 'offline', keepOpen: true, action: mobileOfflineSync }
+      { note: true, label: state, id: 'offline-sheet-status' }
     ];
+    if (warn) items.push({ note: true, label: warn });
+    items.push({ label: s.downloaded ? 'Update data' : `Download for offline use (${size})`,
+      disabled: conn === 'offline', keepOpen: true, action: mobileOfflineSync });
     if (s.downloaded) {
       items.push({ label: 'Delete downloaded data', danger: true, action: mobileOfflineDelete });
     }
@@ -4062,8 +4055,8 @@
       haptic(HAPTIC.tick);
       closeActionSheet();
       showSheet('Offline use', r.failed.length
-        ? `<p>Downloaded ${r.files} of ${r.total} files (${OfflineSync.formatBytes(r.bytes)}).</p><p>${r.failed.length} files failed to download, so a few ship images may be missing offline. Run Update data again on a better connection to finish.</p>`
-        : `<p><strong>Ready to use offline.</strong></p><p>${r.files} files (${OfflineSync.formatBytes(r.bytes)}) stored on this phone. All six factions, every ship stat and rule, and all ship artwork now work with no signal.</p>`);
+        ? `<p>Downloaded ${r.files} of ${r.total} files. ${r.failed.length} failed, so some ship art is missing. Run Update data again.</p>`
+        : `<p><strong>Ready to use offline.</strong> ${OfflineSync.formatBytes(r.bytes)} stored.</p>`);
     } catch (e) {
       closeActionSheet();
       showSheet('Offline use', `<p>${esc(e.message || 'Download failed.')}</p>`);
@@ -4071,9 +4064,9 @@
   }
 
   async function mobileOfflineDelete() {
-    if (!confirm('Delete the downloaded offline data?\n\nThe app will need an internet connection again until you download it a second time. Your saved fleets are not affected.')) return;
+    if (!confirm('Delete the downloaded offline data?\n\nYour saved fleets are not affected.')) return;
     const r = await OfflineSync.remove();
-    showSheet('Offline use', `<p>Deleted${r.freed ? ' ' + r.freedText + ' of' : ''} offline data.</p><p>The app needs an internet connection again. Your saved fleets are untouched.</p>`);
+    showSheet('Offline use', `<p>Deleted${r.freed ? ' ' + r.freedText : ''}.</p>`);
   }
 
   function fleetOverflow() {

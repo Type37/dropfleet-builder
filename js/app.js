@@ -7815,11 +7815,8 @@ let activeGroupId = null;
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
     { date: '2026-07-21', title: 'Download the app for offline use', items: [
-      'New "Offline use" section in Settings (and "Offline use..." in the menu on mobile). One button downloads all six factions, every ship stat, rule and admiral, plus all 531 ship artwork thumbnails, so the whole app works at a table with no signal.',
-      'The size is shown before you press anything, and the download only ever starts when you ask for it. If you are on mobile data the app says so first.',
-      'Once downloaded, it refreshes itself in the background when it is over a week old, but only on wifi. On browsers that will not report the connection type (which includes every iPhone) it stays manual rather than guessing.',
-      'A "Delete downloaded data" button frees the space again. Your saved fleets are stored separately and are never touched by either button.',
-      'Previously the app only remembered pages you had already opened, so a faction you had never browsed would simply be missing once you lost signal.',
+      'Settings now has an Offline use section (Offline use... in the menu on mobile). One button downloads every faction, rule and ship image, about 28 MB, so the app works at a table with no signal. Before, only pages you had already opened were saved.',
+      'It refreshes itself on wifi once it is over a week old. Delete downloaded data frees the space; saved fleets are never affected.',
     ]},
     { date: '2026-07-19', title: 'Report a bug, with a screenshot', items: [
       'Added a "Report a bug" link (Settings on desktop, the menu on mobile). It opens a short form on GitHub where you can paste or drag a screenshot straight into the report, which the existing email link made awkward.',
@@ -8039,25 +8036,20 @@ let activeGroupId = null;
     const conn = s.connection;
     const sizeText = s.totalText || 'unknown';
 
-    // State line: what is actually on this device right now.
     const state = s.downloaded
-      ? `<p class="offline-state offline-state-ok"><strong>Ready to use offline.</strong> ${s.storedFiles} files (${s.storedText}) stored on this device, updated ${s.lastSyncText}.</p>`
-      : `<p class="offline-state"><strong>Not downloaded yet.</strong> Right now the app only remembers pages you have already opened, so factions you have not browsed will be missing with no signal.</p>`;
+      ? `<p class="offline-state offline-state-ok"><strong>Ready to use offline.</strong> ${s.storedText}, updated ${s.lastSyncText}.</p>`
+      : `<p class="offline-state">All six factions, stats, rules and ship art. Works with no signal.</p>`;
 
-    // Say plainly what pressing the button does, including the cost.
-    const explain = `<p class="settings-note">Downloading stores all six factions, every ship stat, rule and admiral, plus all ${s.totalFiles || 531} ship artwork thumbnails, about <strong>${sizeText}</strong>. After that the whole app works with no internet. Your saved fleets are stored separately and are never affected.</p>`;
-
+    // Only warn when there is something to warn about. Wifi and unknown
+    // connections get no line at all.
     const connNote = conn === 'offline'
       ? `<p class="offline-warn">You are offline. Reconnect to download.</p>`
-      : conn === 'cellular' || conn === 'metered'
-        ? `<p class="offline-warn">You are on mobile data. This will use about ${sizeText} of your allowance.</p>`
-        : conn === 'unknown'
-          ? `<p class="settings-note">Automatic updates only run on wifi. This browser does not report the connection type, so updates here are manual.</p>`
-          : `<p class="settings-note">You are on wifi. Once downloaded, this refreshes itself automatically on wifi when it is more than a week old.</p>`;
+      : (conn === 'cellular' || conn === 'metered')
+        ? `<p class="offline-warn">On mobile data. This uses ${sizeText}.</p>`
+        : '';
 
     el.innerHTML = `
       ${state}
-      ${explain}
       ${connNote}
       <div class="settings-actions">
         <button class="btn btn-primary btn-sm" id="offline-sync-btn" ${conn === 'offline' ? 'disabled' : ''}>
@@ -8106,7 +8098,8 @@ let activeGroupId = null;
   }
 
   async function deleteOfflineData() {
-    if (!confirm('Delete the downloaded offline data?\n\nThe app will need an internet connection again until you download it a second time. Your saved fleets are not affected.')) return;
+    // The fleets reassurance belongs here, at the only moment it is in doubt.
+    if (!confirm('Delete the downloaded offline data?\n\nYour saved fleets are not affected.')) return;
     const r = await OfflineSync.remove();
     showToast(r.freed ? `Deleted ${r.freedText} of offline data.` : 'Offline data deleted.');
     renderOfflinePanel();
