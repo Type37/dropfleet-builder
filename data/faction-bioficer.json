@@ -557,15 +557,6 @@
       "special": "Arrest-2, Bloom-2"
      },
      {
-      "name": "Gravitic Hyperlance",
-      "arc": "Fn",
-      "attack": "6",
-      "lock": "3+",
-      "damage": "2",
-      "type": "C",
-      "special": "Arrest-2, Bloom-2"
-     },
-     {
       "name": "Scythes",
       "arc": "FN",
       "attack": "8",
@@ -573,24 +564,6 @@
       "damage": "1",
       "type": "E",
       "special": "Anti Wing, Fusillade-3, Reave-1"
-     },
-     {
-      "name": "Scythes",
-      "arc": "FN",
-      "attack": "8",
-      "lock": "4+",
-      "damage": "1",
-      "type": "E",
-      "special": "Anti Wing, Fusillade-3, Reave-1"
-     },
-     {
-      "name": "Thermator",
-      "arc": "F",
-      "attack": "3",
-      "lock": "4+",
-      "damage": "2",
-      "type": "E",
-      "special": "Overcharge, Scald-1"
      },
      {
       "name": "Thermator",
@@ -986,15 +959,6 @@
       "damage": "1",
       "type": "E",
       "special": "Anti Wing, Fusillade-1, Reave-1"
-     },
-     {
-      "name": "Scythe Nodule",
-      "arc": "F",
-      "attack": "4",
-      "lock": "4+",
-      "damage": "1",
-      "type": "E",
-      "special": "Anti Wing, Fusillade-1, Reave-1"
      }
     ],
     "loads": [],
@@ -1069,15 +1033,6 @@
       "damage": "3",
       "type": "E",
       "special": "Calibre-H/C, Crippling, Penetrator, Bloom-2, Focused"
-     },
-     {
-      "name": "Scythe Nodule",
-      "arc": "F",
-      "attack": "4",
-      "lock": "4+",
-      "damage": "1",
-      "type": "E",
-      "special": "Anti Wing, Fusillade-1, Reave-1"
      },
      {
       "name": "Scythe Nodule",
@@ -1317,15 +1272,6 @@
       "damage": "4",
       "type": "K",
       "special": "Reave-2"
-     },
-     {
-      "name": "Barb Launcher",
-      "arc": "FN",
-      "attack": "1",
-      "lock": "2+",
-      "damage": "4",
-      "type": "K",
-      "special": "Reave-2"
      }
     ],
     "loads": [],
@@ -1419,15 +1365,6 @@
      "special": "Porter S-1"
     },
     "weapons": [
-     {
-      "name": "Scythes",
-      "arc": "FN",
-      "attack": "8",
-      "lock": "4+",
-      "damage": "1",
-      "type": "E",
-      "special": "Anti Wing, Fusillade-3, Reave-1"
-     },
      {
       "name": "Scythes",
       "arc": "FN",
