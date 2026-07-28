@@ -160,8 +160,12 @@ button, a, input, select, textarea,
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: var(--sp-s);
   height: var(--header-h);
-  padding: env(safe-area-inset-top, 0px) var(--sp-l) 0;
+  /* Reserve a tap-target's worth of space on each edge for the absolutely
+     positioned back/menu (left) and overflow (right) buttons, so the in-flow
+     title + points never slide underneath them. */
+  padding: env(safe-area-inset-top, 0px) calc(var(--sp-m) + var(--tap-min)) 0;
   background: var(--navy);
   color: var(--fg-on-dark);
 }
@@ -182,6 +186,12 @@ button, a, input, select, textarea,
 .app-bar-back svg { width: 16px; height: 16px; }
 
 .app-bar-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: var(--font-condensed);
   font-size: var(--text-body1);
   font-weight: var(--weight-bold);
@@ -214,10 +224,10 @@ button, a, input, select, textarea,
   letter-spacing: 2px;
 }
 
-/* Points in app bar */
+/* Points in app bar — sits in flow to the right of the title (which truncates
+   with an ellipsis) so the two never collide, however long the ship name. */
 .app-bar-pts {
-  position: absolute;
-  right: 52px;
+  flex: 0 0 auto;
   font-family: var(--font-condensed);
   font-size: var(--text-caption1);
   font-weight: var(--weight-bold);
