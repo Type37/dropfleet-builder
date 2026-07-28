@@ -2798,6 +2798,64 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-soft);
 }
 
+/* Onboarding tip: one-time callout bubble with an arrow pointing at the
+   feature it's introducing. Desktop only (see .desktop-only). */
+.onboard-tip {
+  position: fixed;
+  z-index: var(--z-popover);
+  background: var(--paper);
+  border: 1px solid var(--gold-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: var(--sp-md) var(--sp-lg) var(--sp-md) var(--sp-md);
+  animation: slideUp var(--duration-fast) var(--ease-out);
+}
+.onboard-tip-body {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 260px;
+}
+.onboard-tip-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+.onboard-tip-close:hover { background: var(--gold-subtle); color: var(--ink); }
+
+/* Arrow, positioned by the --tip-arrow-left custom property set in JS. */
+.onboard-tip::before, .onboard-tip::after {
+  content: '';
+  position: absolute;
+  left: var(--tip-arrow-left, 22px);
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+}
+.onboard-tip-below::before { bottom: 100%; border-bottom-color: var(--gold-line); }
+.onboard-tip-below::after  { bottom: 100%; margin-bottom: -1px; border-bottom-color: var(--paper); border-width: 6px; }
+.onboard-tip-above::before { top: 100%; border-top-color: var(--gold-line); }
+.onboard-tip-above::after  { top: 100%; margin-top: -1px; border-top-color: var(--paper); border-width: 6px; }
+
+/* Gold pulse around the element the tip is pointing at. */
+.onboard-tip-target {
+  animation: onboardTipPulse 1.6s ease-in-out 2;
+  border-radius: var(--radius-sm);
+}
+@keyframes onboardTipPulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--gold-subtle); }
+  50% { box-shadow: 0 0 0 5px var(--gold-subtle); }
+}
+
 /* Weapon type colors */
 .weapon-type-k { color: var(--navy); font-weight: var(--weight-bold); }
 .weapon-type-e { color: #8b5e1a; font-weight: var(--weight-bold); }

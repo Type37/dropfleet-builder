@@ -283,6 +283,7 @@ let activeGroupId = null;
     fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
       .then(r => r.json()).then(d => { _worldTopo = d; }).catch(() => {});
 
+    bumpVisitCount();
     loadSettings();
     applyTheme(settings.theme);
     // Refresh an already-downloaded offline bundle, silently and only on wifi.
@@ -3270,6 +3271,8 @@ let activeGroupId = null;
     }
 
     detailEl.innerHTML = html;
+    const renameBtn = detailEl.querySelector('.group-rename-btn');
+    if (renameBtn) setTimeout(() => maybeShowRenameTip(renameBtn), 500);
   }
 
   function renderWeaponHeader(omitName) {
@@ -8924,6 +8927,89 @@ let activeGroupId = null;
       }
     }
     setTimeout(() => document.addEventListener('click', dismiss, true), 10);
+  }
+
+  // ── Onboarding tips: one-time contextual nudges, desktop only ──────────────
+  // `dfc_visit_count` increments once per page load (not per in-app navigation),
+  // so "the Nth visit" means the Nth time the site was actually opened or
+  // reloaded, not the Nth click around the SPA. Each tip fires at most once
+  // per browser (its own localStorage flag) and only once conditions are met,
+  // so it never nags on repeat.
+  const VISIT_COUNT_KEY = 'dfc_visit_count';
+  function bumpVisitCount() {
+    try {
+      const n = (parseInt(localStorage.getItem(VISIT_COUNT_KEY), 10) || 0) + 1;
+      localStorage.setItem(VISIT_COUNT_KEY, String(n));
+      return n;
+    } catch { return 0; }
+  }
+
+  const TIP_RENAME_SEEN_KEY = 'dfc_tip_rename_seen';
+  const TIP_RENAME_MIN_VISITS = 3;
+  const TIP_RENAME_TEXT = 'Did you know that you can rename your individual ships? Click on the name of the group and you can rename it. If you’re looking for inspiration, check the ship’s lore on the right for some known ships of the class.';
+
+  // Points at the group-rename pencil button the first time it's plausible the
+  // player hasn't noticed it: desktop only (mobile's full-screen detail view
+  // makes a pointing callout awkward, and .desktop-only already hides it under
+  // 640px), starting from their 3rd visit so it doesn't compete with the very
+  // first fleet-building session.
+  function maybeShowRenameTip(anchorEl) {
+    if (!anchorEl || window.innerWidth < 640) return;
+    if (localStorage.getItem(TIP_RENAME_SEEN_KEY) === '1') return;
+    const visits = parseInt(localStorage.getItem(VISIT_COUNT_KEY), 10) || 0;
+    if (visits < TIP_RENAME_MIN_VISITS) return;
+    if (!document.body.contains(anchorEl)) return;   // panel may have re-rendered since the delay was scheduled
+    showOnboardingTip(anchorEl, TIP_RENAME_TEXT);
+    try { localStorage.setItem(TIP_RENAME_SEEN_KEY, '1'); } catch {}
+  }
+
+  // Generic one-time callout bubble anchored to `anchorEl`, with an arrow that
+  // tracks the anchor even when the bubble has to shift to stay on-screen.
+  function showOnboardingTip(anchorEl, message) {
+    const existing = document.getElementById('onboard-tip');
+    if (existing) existing.remove();
+
+    const tip = document.createElement('div');
+    tip.id = 'onboard-tip';
+    tip.className = 'onboard-tip desktop-only';
+    tip.innerHTML = `<div class="onboard-tip-body">${esc(message)}</div><button class="onboard-tip-close" aria-label="Dismiss tip">&times;</button>`;
+    document.body.appendChild(tip);
+
+    const rect = anchorEl.getBoundingClientRect();
+    const tipW = Math.min(300, window.innerWidth - 24);
+    tip.style.width = tipW + 'px';
+
+    let left = rect.left + rect.width / 2 - tipW / 2;
+    if (left < 8) left = 8;
+    if (left + tipW > window.innerWidth - 8) left = window.innerWidth - 8 - tipW;
+    tip.style.left = left + 'px';
+
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const below = spaceBelow > 140 || spaceBelow > rect.top;
+    if (below) {
+      tip.classList.add('onboard-tip-below');
+      tip.style.top = (rect.bottom + 10) + 'px';
+    } else {
+      tip.classList.add('onboard-tip-above');
+      tip.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
+    }
+
+    // Arrow tracks the anchor's horizontal center, clamped inside the bubble.
+    const arrowLeft = Math.min(tipW - 22, Math.max(22, rect.left + rect.width / 2 - left));
+    tip.style.setProperty('--tip-arrow-left', arrowLeft + 'px');
+
+    anchorEl.classList.add('onboard-tip-target');
+
+    function cleanup() {
+      tip.remove();
+      anchorEl.classList.remove('onboard-tip-target');
+      document.removeEventListener('click', onDocClick, true);
+      window.removeEventListener('resize', cleanup);
+    }
+    function onDocClick(e) { if (!tip.contains(e.target)) cleanup(); }
+    tip.querySelector('.onboard-tip-close').addEventListener('click', cleanup);
+    setTimeout(() => document.addEventListener('click', onDocClick, true), 10);
+    window.addEventListener('resize', cleanup, { once: true });
   }
 
   // ── Group Enforcement: same ship per group ──
