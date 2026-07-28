@@ -524,6 +524,69 @@
       `<span class="kw-link" onclick="event.stopPropagation();App.openRule('${m.replace(/'/g, "\\'")}')">${m}</span>`);
   }
 
+  /* ── Onboarding tip: one-time nudge toward Offline use ────
+     `dfc_visit_count` is shared with the desktop app (same localStorage,
+     same origin) — a visit counts once per full page load of either app, so
+     switching between /mobile/ and "View Desktop" still adds up to one
+     running total rather than two separate counters. Fires at most once
+     (its own flag), starting from the 3rd visit so it doesn't compete with
+     the very first session. */
+  const TIP_OFFLINE_SEEN_KEY = 'dfc_tip_offline_seen';
+  const TIP_OFFLINE_MIN_VISITS = 3;
+  const TIP_OFFLINE_TEXT = 'Heading somewhere with no signal? Tap here to download all the factions, rules and ship art for offline use.';
+
+  function bumpVisitCount() {
+    try {
+      const n = (parseInt(localStorage.getItem('dfc_visit_count'), 10) || 0) + 1;
+      localStorage.setItem('dfc_visit_count', String(n));
+      return n;
+    } catch { return 0; }
+  }
+
+  function maybeShowOfflineTip() {
+    const anchorEl = document.getElementById('app-bar-menu');
+    if (!anchorEl || anchorEl.classList.contains('hidden')) return;
+    if (localStorage.getItem(TIP_OFFLINE_SEEN_KEY) === '1') return;
+    const visits = parseInt(localStorage.getItem('dfc_visit_count'), 10) || 0;
+    if (visits < TIP_OFFLINE_MIN_VISITS) return;
+    showMobileTip(anchorEl, TIP_OFFLINE_TEXT);
+    try { localStorage.setItem(TIP_OFFLINE_SEEN_KEY, '1'); } catch {}
+  }
+
+  // One-time callout bubble anchored below `anchorEl`, with an arrow pointing
+  // up at it. Dismisses on any outside tap.
+  function showMobileTip(anchorEl, message) {
+    const existing = document.getElementById('mobile-tip');
+    if (existing) existing.remove();
+
+    const tip = document.createElement('div');
+    tip.id = 'mobile-tip';
+    tip.className = 'mobile-tip';
+    tip.innerHTML = `<div class="mobile-tip-body">${esc(message)}</div><button class="mobile-tip-close" aria-label="Dismiss tip">&times;</button>`;
+    document.body.appendChild(tip);
+
+    const rect = anchorEl.getBoundingClientRect();
+    const tipW = Math.min(280, window.innerWidth - 24);
+    tip.style.width = tipW + 'px';
+    let left = rect.left + rect.width / 2 - tipW / 2;
+    if (left < 8) left = 8;
+    if (left + tipW > window.innerWidth - 8) left = window.innerWidth - 8 - tipW;
+    tip.style.left = left + 'px';
+    tip.style.top = (rect.bottom + 10) + 'px';
+    const arrowLeft = Math.min(tipW - 22, Math.max(22, rect.left + rect.width / 2 - left));
+    tip.style.setProperty('--tip-arrow-left', arrowLeft + 'px');
+
+    function cleanup() {
+      tip.remove();
+      document.removeEventListener('click', onDocClick, true);
+      window.removeEventListener('resize', cleanup);
+    }
+    function onDocClick(e) { if (!tip.contains(e.target)) cleanup(); }
+    tip.querySelector('.mobile-tip-close').addEventListener('click', cleanup);
+    setTimeout(() => document.addEventListener('click', onDocClick, true), 10);
+    window.addEventListener('resize', cleanup, { once: true });
+  }
+
   /* ── Bottom sheet ──────────────────────────────────────── */
   function showSheet(title, body, pageRef) {
     document.getElementById('rule-sheet-title').textContent = title;
@@ -4023,7 +4086,7 @@
 
     const state = s.downloaded
       ? `<strong>Ready to use offline.</strong><br>${s.storedText}, updated ${s.lastSyncText}.`
-      : `All six factions, stats, rules and ship art. Works with no signal.`;
+      : `Click to download all the factions, rules, stats, etc. locally, so you can use this site offline.`;
 
     // Only warn when there is something to warn about.
     const warn = conn === 'offline'
@@ -4592,6 +4655,7 @@
 
   /* ── Init ──────────────────────────────────────────────── */
   async function init() {
+    bumpVisitCount();
     // Cold load fetches ONLY the rules glossary (~20K). Faction files (~150K each)
     // load on demand — we never need all six at once. fleet-data.json (1MB) and
     // ship-lore.json (216K) were unused dead weight and are no longer fetched.
@@ -4629,6 +4693,7 @@
 
     renderFleetList();
     navigate('screen-fleet-list', { replace: true });
+    setTimeout(maybeShowOfflineTip, 1200);
 
     const search = document.getElementById('picker-search');
     if (search) search.addEventListener('input', () => renderShipPicker());

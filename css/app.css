@@ -214,14 +214,16 @@ html[data-theme="dark"] .btn-primary:hover { background: #3a7cc6; border-color: 
    dark accent navy is a touch low-contrast; lift to the lighter accent for AA. */
 html[data-theme="dark"] .admiral-flagship-name,
 html[data-theme="dark"] .admiral-ability-cost { color: var(--navy-light); }
-/* Topbar theme toggle */
-.topbar-theme-btn {
+/* Global Settings button — the topbar's only persistent action, present on
+   every view (not just inside a fleet), where the theme switch + offline
+   download panel live. Filled, not ghost, so it reads as a primary control. */
+.topbar-global-settings-btn {
   display: inline-flex; align-items: center; justify-content: center;
   width: 32px; height: 32px; margin-left: var(--sp-xs); padding: 0;
-  background: transparent; border: 1px solid var(--stroke); border-radius: var(--radius-md);
-  color: var(--ink-soft); cursor: pointer; transition: background var(--duration-fast), border-color var(--duration-fast);
+  background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.34); border-radius: var(--radius-md);
+  color: #fff; cursor: pointer; transition: background var(--duration-fast), border-color var(--duration-fast);
 }
-.topbar-theme-btn:hover { background: var(--navy-subtle); border-color: var(--stroke-accent); color: var(--navy); }
+.topbar-global-settings-btn:hover { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.6); }
 
 /* ── 2. Reset & Base ─────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -485,12 +487,6 @@ h1, h2, h3, h4, h5, h6 {
   border-color: rgba(255,255,255,0.55);
 }
 .topbar-actions .topbar-action-btn svg { width: 18px; height: 18px; }
-/* Settings reads as the primary topbar control — filled, not ghost, so it stands out. */
-.topbar-actions .topbar-settings-btn {
-  background: rgba(255,255,255,0.16);
-  border-color: rgba(255,255,255,0.34);
-}
-.topbar-actions .topbar-settings-btn:hover { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.6); }
 .topbar-actions .topbar-action-label {
   font-family: var(--font-body);
   font-size: var(--text-sm);
@@ -1243,6 +1239,38 @@ h1, h2, h3, h4, h5, h6 {
 .settings-toggle input:checked + .settings-toggle-switch::after {
   transform: translateX(18px);
 }
+
+/* Theme switch: a two-button segmented control (Light / Dark), each with an
+   icon + label, the active side filled. Lives in Settings, replacing what
+   used to be a lone icon-only button in the topbar. */
+.theme-switch {
+  display: flex;
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--paper-alt);
+}
+.theme-switch-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+  padding: var(--sp-sm) var(--sp-md);
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+}
+.theme-switch-btn + .theme-switch-btn { border-left: 1px solid var(--stroke); }
+.theme-switch-btn:hover { color: var(--ink); }
+.theme-switch-btn svg { flex-shrink: 0; }
+.theme-switch-btn.active { background: var(--gold-dark); color: #fff; }
+[data-theme="dark"] .theme-switch-btn.active { color: #1c1a17; }
 
 /* ── 8. Cards ────────────────────────────────────────────────── */
 .card {
@@ -2796,6 +2824,64 @@ h1, h2, h3, h4, h5, h6 {
   font-size: var(--text-sm);
   line-height: 1.65;
   color: var(--ink-soft);
+}
+
+/* Onboarding tip: one-time callout bubble with an arrow pointing at the
+   feature it's introducing. Desktop only (see .desktop-only). */
+.onboard-tip {
+  position: fixed;
+  z-index: var(--z-popover);
+  background: var(--paper);
+  border: 1px solid var(--gold-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: var(--sp-md) var(--sp-lg) var(--sp-md) var(--sp-md);
+  animation: slideUp var(--duration-fast) var(--ease-out);
+}
+.onboard-tip-body {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 260px;
+}
+.onboard-tip-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+.onboard-tip-close:hover { background: var(--gold-subtle); color: var(--ink); }
+
+/* Arrow, positioned by the --tip-arrow-left custom property set in JS. */
+.onboard-tip::before, .onboard-tip::after {
+  content: '';
+  position: absolute;
+  left: var(--tip-arrow-left, 22px);
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+}
+.onboard-tip-below::before { bottom: 100%; border-bottom-color: var(--gold-line); }
+.onboard-tip-below::after  { bottom: 100%; margin-bottom: -1px; border-bottom-color: var(--paper); border-width: 6px; }
+.onboard-tip-above::before { top: 100%; border-top-color: var(--gold-line); }
+.onboard-tip-above::after  { top: 100%; margin-top: -1px; border-top-color: var(--paper); border-width: 6px; }
+
+/* Gold pulse around the element the tip is pointing at. */
+.onboard-tip-target {
+  animation: onboardTipPulse 1.6s ease-in-out 2;
+  border-radius: var(--radius-sm);
+}
+@keyframes onboardTipPulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--gold-subtle); }
+  50% { box-shadow: 0 0 0 5px var(--gold-subtle); }
 }
 
 /* Weapon type colors */
@@ -6843,6 +6929,30 @@ h1, h2, h3, h4, h5, h6 {
   .weapon-list { overflow-x: visible; }
   .weapon-row { grid-template-columns: 1fr 32px 28px 28px 36px; min-width: 0; }
   .weapon-col-special { grid-column: 1 / -1; padding-left: 0; margin-top: 2px; }
+
+  /* Systems-picker hardpoint table (e.g. Dreadnought/Frigate Systems) reuses the
+     station-armaments layout, which adds a stepper column past the plain
+     6-column weapon grid above. That extra column has no override at this
+     width, so it inherits the wider desktop-narrow-panel grid (sized for the
+     ~309–380px #builder-detail column on a real desktop) — on an actual phone
+     screen the Special chips and the stepper's "+cost" button end up sharing
+     the same cramped cell and visually overlap. Explicitly place every cell so
+     Special still wraps to its own full-width row, but the stepper keeps a
+     reserved column on row 1 instead of colliding with it. */
+  #builder-detail .station-arm-list .weapon-row.station-arm-row {
+    grid-template-columns: 1fr 26px 22px 22px 30px minmax(66px, auto);
+    align-items: center;
+  }
+  #builder-detail .station-arm-list .weapon-row.station-arm-row .weapon-col-name { grid-row: 1; grid-column: 1; }
+  #builder-detail .station-arm-list .weapon-row.station-arm-row .weapon-col-arc { grid-row: 1; grid-column: 2; }
+  #builder-detail .station-arm-list .weapon-row.station-arm-row .weapon-col-att { grid-row: 1; grid-column: 3; }
+  #builder-detail .station-arm-list .weapon-row.station-arm-row .weapon-col-lock { grid-row: 1; grid-column: 4; }
+  #builder-detail .station-arm-list .weapon-row.station-arm-row .weapon-col-dmg { grid-row: 1; grid-column: 5; }
+  #builder-detail .station-arm-list .weapon-row.station-arm-row .station-arm-qty { grid-row: 1; grid-column: 6; justify-content: flex-end; }
+  #builder-detail .station-arm-list .weapon-row.station-arm-row .weapon-col-special {
+    grid-row: 2; grid-column: 1 / -1; padding-left: 0; margin-top: 2px;
+  }
+  #builder-detail .station-arm-list .weapon-row-header.station-arm-row .weapon-col-special { display: none; }
 
   .load-row { flex-direction: column; align-items: flex-start; }
   .loadout-selector { flex-direction: column; align-items: flex-start; }
