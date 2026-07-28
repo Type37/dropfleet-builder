@@ -1548,6 +1548,58 @@ button, a, input, select, textarea,
 .stat-cell.tappable:active { background: var(--paper-alt); border-radius: var(--radius-md); }
 
 
+/* ── 34b. Onboarding Tip ──────────────────────────────── */
+/* One-time callout bubble, anchored under a control (e.g. the app-bar
+   Settings icon) with an arrow pointing up at it. */
+.mobile-tip {
+  position: fixed;
+  z-index: 310;
+  background: var(--card-bg);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow16);
+  padding: var(--sp-m) var(--sp-xl) var(--sp-m) var(--sp-m);
+  animation: mobileTipIn var(--duration-gentle) var(--ease-decelerate);
+}
+@keyframes mobileTipIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.mobile-tip-body {
+  font-family: var(--font-body);
+  font-size: var(--text-body1);
+  line-height: var(--lh-body1);
+  color: var(--fg2);
+}
+.mobile-tip-close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--fg4);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+.mobile-tip::before, .mobile-tip::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: var(--tip-arrow-left, 22px);
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-bottom-color: var(--gold-dim);
+}
+.mobile-tip::after {
+  margin-bottom: -1px;
+  border-width: 6px;
+  border-bottom-color: var(--card-bg);
+}
+
 /* ── 35. Rule Bottom Sheet ────────────────────────────── */
 .sheet-scrim {
   position: fixed;

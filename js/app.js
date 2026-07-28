@@ -297,6 +297,8 @@ let activeGroupId = null;
     const fb = document.getElementById('footer-feedback');
     if (fb) fb.href = FEEDBACK_HREF;   // upgrade the plain mailto to the guided one
     window.dispatchEvent(new Event('hashchange'));
+    const settingsBtn = document.getElementById('topbar-settings-btn');
+    if (settingsBtn) setTimeout(() => maybeShowOfflineTip(settingsBtn), 1200);
   }
 
   // Find the pronunciation entry whose key appears as a whole word in `name`
@@ -889,10 +891,6 @@ let activeGroupId = null;
               <button class="btn btn-ghost btn-sm topbar-action-btn topbar-play-btn" onclick="App.openPlayMode()" data-tooltip="Play mode">
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M3 2.5a.5.5 0 0 1 .765-.424l10 6a.5.5 0 0 1 0 .848l-10 6A.5.5 0 0 1 3 14.5v-12Z"/></svg>
                 <span class="topbar-action-label">Play</span>
-              </button>
-              <button class="btn btn-sm topbar-action-btn topbar-settings-btn" onclick="App.openSettings()" data-tooltip="Settings">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></svg>
-                <span class="topbar-action-label">Settings</span>
               </button>`;
             ensureFactionLoaded(currentFleet.faction).then(() => renderBuilder());
             return;
@@ -7997,6 +7995,10 @@ let activeGroupId = null;
         </label>`;
     body.innerHTML = `
       <div class="settings-group">
+        <div class="settings-group-title">Appearance</div>
+        ${renderThemeSwitch()}
+      </div>
+      <div class="settings-group">
         <div class="settings-group-title">Builder Display</div>
         ${tog('compactView', 'Compact view', 'Hide weapon tables and launch assets in the fleet builder for a denser overview')}
         ${tog('autoExpandLore', 'Auto-expand lore', 'Automatically show flavour text on ship cards instead of requiring a click')}
@@ -8013,7 +8015,6 @@ let activeGroupId = null;
           <a class="btn btn-outline btn-sm" href="${BUG_HREF}" target="_blank" rel="noopener" title="Opens GitHub, where you can paste a screenshot straight into the report"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3a3 3 0 0 1 3 3v3a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM2 7h3M11 7h3M2.5 11h2.8M10.7 11h2.8M5.5 4.2 4 2.8M10.5 4.2 12 2.8"/></svg> Report a bug</a>
           <button class="btn btn-outline btn-sm" onclick="App.closeModal('modal-settings'); App.openChangelog()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1v14M1 8h14"/></svg> What's New</button>
         </div>
-        <p class="settings-note">Print options live in Print Preview.</p>
       </div>
     `;
     openModal('modal-settings');
@@ -8041,7 +8042,7 @@ let activeGroupId = null;
 
     const state = s.downloaded
       ? `<p class="offline-state offline-state-ok"><strong>Ready to use offline.</strong> ${s.storedText}, updated ${s.lastSyncText}.</p>`
-      : `<p class="offline-state">All six factions, stats, rules and ship art. Works with no signal.</p>`;
+      : `<p class="offline-state">Click to download all the factions, rules, stats, etc. locally, so you can use this site offline.</p>`;
 
     // Only warn when there is something to warn about. Wifi and unknown
     // connections get no line at all.
@@ -8136,22 +8137,29 @@ let activeGroupId = null;
   }
 
   // Dark mode: only the colour tokens flip (data-theme on <html>); print stays light.
-  const THEME_MOON_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>';
-  const THEME_SUN_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  // The switch lives in Settings (a two-button Light/Dark control), not a standalone
+  // topbar icon — applyTheme() just keeps its active state and the browser chrome
+  // colour in sync wherever it's currently rendered.
+  const THEME_MOON_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>';
+  const THEME_SUN_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  function renderThemeSwitch() {
+    const dark = settings.theme === 'dark';
+    return `<div class="theme-switch" role="group" aria-label="Theme">
+      <button type="button" class="theme-switch-btn${dark ? '' : ' active'}" data-theme-choice="light" onclick="App.setTheme('light')">${THEME_SUN_SVG}<span>Light</span></button>
+      <button type="button" class="theme-switch-btn${dark ? ' active' : ''}" data-theme-choice="dark" onclick="App.setTheme('dark')">${THEME_MOON_SVG}<span>Dark</span></button>
+    </div>`;
+  }
   function applyTheme(theme) {
     const dark = theme === 'dark';
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-    const btn = document.getElementById('theme-toggle');
-    if (btn) {
-      btn.innerHTML = dark ? THEME_SUN_SVG : THEME_MOON_SVG;
-      btn.title = dark ? 'Switch to light mode' : 'Switch to dark mode';
-      btn.setAttribute('aria-label', btn.title);
-    }
+    document.querySelectorAll('.theme-switch-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.themeChoice === (dark ? 'dark' : 'light'));
+    });
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute('content', dark ? '#161a1f' : '#1b3a5c');
   }
-  function toggleTheme() {
-    settings.theme = settings.theme === 'dark' ? 'light' : 'dark';
+  function setTheme(theme) {
+    settings.theme = theme === 'dark' ? 'dark' : 'light';
     saveSettings();
     applyTheme(settings.theme);
   }
@@ -8959,19 +8967,43 @@ let activeGroupId = null;
     const visits = parseInt(localStorage.getItem(VISIT_COUNT_KEY), 10) || 0;
     if (visits < TIP_RENAME_MIN_VISITS) return;
     if (!document.body.contains(anchorEl)) return;   // panel may have re-rendered since the delay was scheduled
-    showOnboardingTip(anchorEl, TIP_RENAME_TEXT);
+    showOnboardingTip(anchorEl, TIP_RENAME_TEXT, 'desktop-only');
     try { localStorage.setItem(TIP_RENAME_SEEN_KEY, '1'); } catch {}
+  }
+
+  const TIP_OFFLINE_SEEN_KEY = 'dfc_tip_offline_seen';
+  const TIP_OFFLINE_MIN_VISITS = 3;
+  const TIP_OFFLINE_TEXT = 'Heading somewhere with no signal? Tap here to download all the factions, rules and ship art for offline use.';
+
+  // Points at the (now-global) Settings button, nudging mobile players toward
+  // the offline-download panel inside it. Mobile only — narrow phones never
+  // reach this code at all (index.html redirects them to /mobile/ before
+  // app.js loads); this only fires for the "View Desktop" escape hatch and any
+  // other narrow-width visit, with .mobile-only as a second guard against a
+  // stale check if the window is later widened. Same 3-visits gate and
+  // one-time flag as the rename tip, so the two never compete for attention on
+  // the very first session.
+  function maybeShowOfflineTip(anchorEl) {
+    if (!anchorEl || window.innerWidth >= 640) return;
+    if (localStorage.getItem(TIP_OFFLINE_SEEN_KEY) === '1') return;
+    const visits = parseInt(localStorage.getItem(VISIT_COUNT_KEY), 10) || 0;
+    if (visits < TIP_OFFLINE_MIN_VISITS) return;
+    if (!document.body.contains(anchorEl)) return;
+    showOnboardingTip(anchorEl, TIP_OFFLINE_TEXT, 'mobile-only');
+    try { localStorage.setItem(TIP_OFFLINE_SEEN_KEY, '1'); } catch {}
   }
 
   // Generic one-time callout bubble anchored to `anchorEl`, with an arrow that
   // tracks the anchor even when the bubble has to shift to stay on-screen.
-  function showOnboardingTip(anchorEl, message) {
+  // `viewportClass` re-hides it if a resize crosses the 640px breakpoint after
+  // it's already been created (e.g. 'desktop-only' or 'mobile-only').
+  function showOnboardingTip(anchorEl, message, viewportClass) {
     const existing = document.getElementById('onboard-tip');
     if (existing) existing.remove();
 
     const tip = document.createElement('div');
     tip.id = 'onboard-tip';
-    tip.className = 'onboard-tip desktop-only';
+    tip.className = 'onboard-tip' + (viewportClass ? ' ' + viewportClass : '');
     tip.innerHTML = `<div class="onboard-tip-body">${esc(message)}</div><button class="onboard-tip-close" aria-label="Dismiss tip">&times;</button>`;
     document.body.appendChild(tip);
 
@@ -9232,7 +9264,7 @@ let activeGroupId = null;
     openPlayMode, showPlayPassInfo, playChangeRound, playEndRound, playTogglePass, playChangeVP, playChangeOppVP, playChangeOppGroups, playSpikeChange, playSetOrder, playSetOrderAndShow, playOrderDown, playOrderMove, playOrderUp, playOrderCancel, playToggleActivation, playHullChange, playCripChange, playCripToggle, playToggleCripPanel, playToggleFire, playTogglePower, playCorruptorChange,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText, openLastImported,
-    openSettings, openChangelog, toggleSetting, toggleTheme, updateFleetDescription, exportAllFleets,
+    openSettings, openChangelog, toggleSetting, setTheme, updateFleetDescription, exportAllFleets,
     renderOfflinePanel, runOfflineSync, deleteOfflineData, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, sayName, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
   };
 })();
