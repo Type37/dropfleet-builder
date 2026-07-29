@@ -1,0 +1,316 @@
+/* Fleet Sync — opt-in cross-device sync of the shared `dfc_fleets` list.
+ *
+ * Loaded by BOTH apps (index.html and mobile/index.html), same as offline-sync.js,
+ * so the merge rules can never drift between desktop and phone.
+ *
+ * Design, and why it looks like this:
+ *
+ * - There is no account and no password. A Sync Token is a six-word phrase that
+ *   doubles as the Firestore document ID. Knowing the phrase is the entire
+ *   credential. This is deliberate (the user asked for no sign-in), and the app
+ *   copy says so plainly, because anyone holding the token can read AND edit.
+ *
+ * - Talks to Firestore over its plain REST API rather than the Firebase SDK.
+ *   The SDK is ~400 KB and would have to come from a CDN, which fights this
+ *   app's offline-first service worker. `fetch` costs nothing and keeps the app
+ *   dependency-free with no build step.
+ *
+ * - The whole fleet list travels as ONE JSON string in a single `payload` field.
+ *   Firestore's REST format otherwise requires tagging every value with its type
+ *   ({stringValue}, {integerValue}, nested {mapValue}...), which for deeply
+ *   nested fleet objects would be a lot of pointless conversion code.
+ *
+ * - The API key below is not a secret. Firebase web keys ship in client JS by
+ *   design; they identify the project, they do not authorise anything. Access is
+ *   controlled entirely by firestore.rules in the repo root.
+ *
+ * Merge rules: union by fleet id, newest `updatedAt` wins on a collision, and
+ * deletions travel as tombstones so a fleet deleted on one device does not come
+ * back from the cloud on the next pull. Nothing is ever silently dropped.
+ */
+(function () {
+  'use strict';
+
+  const PROJECT = 'dropfleet-builder';
+  const API_KEY = 'AIzaSyCuVs19-E131IHSZ_smWcLLl52djAZuJ60';
+  const BASE = 'https://firestore.googleapis.com/v1/projects/' + PROJECT +
+               '/databases/(default)/documents/sync/';
+
+  const FLEETS_KEY  = 'dfc_fleets';        // shared with both apps
+  const TOKEN_KEY   = 'dfc_sync_token';
+  const DELETED_KEY = 'dfc_sync_deleted';  // { fleetId: deletedAt }
+  const LASTSYNC_KEY = 'dfc_sync_last';
+
+  const WORDS_PER_TOKEN = 6;
+
+  /* Wordlist for token phrases. Dropfleet/naval flavoured so a token reads like
+   * it belongs to the app. Deliberately avoids near-homophones and words that
+   * are easy to mishear when read aloud to someone.
+   *
+   * Strength: 6 words from these 304 gives 49.5 bits, i.e. ~7.9e14 possible
+   * phrases. Every guess costs an HTTPS round trip, so an attacker managing
+   * 1000 guesses per second would still average ~12,000 years to land one.
+   * Accidental collisions between two users are likewise negligible.
+   * If this list is ever edited, keep it long: shortening it weakens every
+   * token issued afterwards. */
+  const WORDS = (
+    'abyss admiral aegis aether afterburn agile albion amber anchor anvil arc archer ' +
+    'argent armour ashen asteroid atlas augur aurora azure ballast banner barrage basalt ' +
+    'beacon bearing bellows bishop bastion blackout bolt bounty bracket breach bridge ' +
+    'bronze bulwark burner cadence caldera cannon canopy capital captain cargo cascade ' +
+    'catapult cinder cipher citadel cleave cobalt comet compass conduit convoy copper ' +
+    'corona corsair cradle crater crimson crucible cruiser cutter cyclone dagger dawn ' +
+    'deckhand deploy derelict diadem diode dockyard dorsal dreadnought drift driver ' +
+    'dropship dusk dynamo echelon eclipse ember engine ensign epoch equinox escort ' +
+    'exhaust falcon fathom ferrous fission flagship flare flotilla forge foundry ' +
+    'frigate fulcrum furnace gambit gantry garrison gauntlet girder glacier gradient ' +
+    'granite gravity gunnery halcyon hangar harbour harrier hazard helix helmsman ' +
+    'herald hollow horizon hull ignition impulse ingot inland ironside jetty jovian ' +
+    'keel kestrel keystone kiln lancer lantern lattice launch legion lighthouse ' +
+    'lodestar longbow lumen lunar magnet mainsail mantle mariner marker marshal ' +
+    'mercury meridian mesa monolith monsoon mortar muster nadir naval nebula nexus ' +
+    'nickel nimbus nomad northern oculus offshore onyx orbit ordnance outpost ' +
+    'overwatch paladin parallax parapet payload pennant perigee phalanx pilot pinnacle ' +
+    'pioneer piston pivot plating plummet polaris portside prism prospect prow pulsar ' +
+    'quarry quasar quiver radiant rampart ranger ravine reactor redoubt reef regent ' +
+    'relay rescue reserve resolve retinue revenant ridge rifle rigging ripcord river ' +
+    'rocket rudder ruin runway sable salvage sapper scaffold scarlet schooner scout ' +
+    'sentinel sextant shadow shipyard shoal shroud signal silica siren skiff slipway ' +
+    'solar sonar southern spanner sparrow spinnaker spire squall stanchion starboard ' +
+    'stellar steward stockade stratum stronghold summit sundial surge swallow talon ' +
+    'tandem tempest tender terminus thruster tidal timber titan tonnage topsail torrent ' +
+    'trawler tremor trident triumph tundra turbine turret twilight umbra undertow ' +
+    'valiant vanguard vector vellum venture vertex vessel viaduct vigil visor voltage ' +
+    'voyager warden warrant watchman waypoint western wharf whistle winch windward ' +
+    'wireframe wolfpack yardarm zenith zephyr zircon'
+  ).split(' ').filter(Boolean);
+
+  /* ── Local state ─────────────────────────────────────────── */
+  function supported() {
+    try { return !!(window.crypto && crypto.getRandomValues && window.fetch && localStorage); }
+    catch (e) { return false; }
+  }
+  function token()   { try { return localStorage.getItem(TOKEN_KEY) || null; } catch (e) { return null; } }
+  function enabled() { return !!token(); }
+  function lastSync() {
+    const v = parseInt(localStorage.getItem(LASTSYNC_KEY) || '0', 10);
+    return v > 0 ? v : null;
+  }
+
+  function readLocal() {
+    try { const a = JSON.parse(localStorage.getItem(FLEETS_KEY) || '[]'); return Array.isArray(a) ? a : []; }
+    catch (e) { return []; }
+  }
+  function writeLocal(list) {
+    localStorage.setItem(FLEETS_KEY, JSON.stringify(list));
+  }
+  function readDeleted() {
+    try { const o = JSON.parse(localStorage.getItem(DELETED_KEY) || '{}'); return (o && typeof o === 'object') ? o : {}; }
+    catch (e) { return {}; }
+  }
+  function writeDeleted(map) {
+    localStorage.setItem(DELETED_KEY, JSON.stringify(map));
+  }
+
+  /* Both apps call this from their delete-fleet path. Without a tombstone the
+   * next pull would helpfully restore the fleet the user just threw away. */
+  function recordDeleted(id) {
+    if (!id) return;
+    const m = readDeleted();
+    m[id] = Date.now();
+    writeDeleted(m);
+  }
+
+  /* ── Tokens ──────────────────────────────────────────────── */
+  function randomToken() {
+    const buf = new Uint32Array(WORDS_PER_TOKEN);
+    crypto.getRandomValues(buf);
+    const out = [];
+    for (let i = 0; i < WORDS_PER_TOKEN; i++) out.push(WORDS[buf[i] % WORDS.length]);
+    return out.join('-');
+  }
+
+  /* Forgiving on input: users will paste with stray spaces, capitals, curly
+   * punctuation from a messaging app, or commas instead of hyphens. */
+  function normaliseToken(raw) {
+    return String(raw || '').toLowerCase().replace(/[^a-z]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+  function looksLikeToken(raw) {
+    const t = normaliseToken(raw);
+    return t.length >= 24 && t.split('-').filter(Boolean).length >= 4;
+  }
+
+  /* ── Firestore REST ──────────────────────────────────────── */
+  const EMPTY = { fleets: [], deleted: {} };
+
+  async function failure(res) {
+    let detail = '';
+    try {
+      const j = await res.json();
+      detail = (j && j.error && j.error.message) || '';
+    } catch (e) {}
+    if (res.status === 403) return new Error('Sync was refused by the server. ' + detail);
+    if (res.status === 429) return new Error('Sync is busy, try again in a minute.');
+    return new Error(detail || ('Sync failed (HTTP ' + res.status + ').'));
+  }
+
+  async function remoteGet(tok) {
+    const res = await fetch(BASE + encodeURIComponent(tok) + '?key=' + API_KEY, { cache: 'no-store' });
+    if (res.status === 404) return null;          // token has never been used
+    if (!res.ok) throw await failure(res);
+    const doc = await res.json();
+    const raw = doc && doc.fields && doc.fields.payload && doc.fields.payload.stringValue;
+    if (!raw) return EMPTY;
+    try {
+      const p = JSON.parse(raw);
+      return {
+        fleets: Array.isArray(p.fleets) ? p.fleets : [],
+        deleted: (p.deleted && typeof p.deleted === 'object') ? p.deleted : {}
+      };
+    } catch (e) { return EMPTY; }
+  }
+
+  async function remotePut(tok, payload) {
+    const body = {
+      fields: {
+        payload:   { stringValue: JSON.stringify(payload) },
+        updatedAt: { integerValue: String(Date.now()) },
+        version:   { integerValue: '1' }
+      }
+    };
+    // PATCH upserts in the Firestore REST API, so this both creates and updates.
+    const res = await fetch(BASE + encodeURIComponent(tok) + '?key=' + API_KEY, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw await failure(res);
+  }
+
+  /* ── Merge ───────────────────────────────────────────────── */
+  /* Union by id, newest updatedAt wins, tombstones applied last. A fleet with no
+   * updatedAt is treated as age 0 so anything dated beats it. */
+  function mergeWith(remote) {
+    const byId = {};
+    readLocal().forEach(f => { if (f && f.id) byId[f.id] = f; });
+
+    (remote.fleets || []).forEach(f => {
+      if (!f || !f.id) return;
+      const mine = byId[f.id];
+      if (!mine || (f.updatedAt || 0) > (mine.updatedAt || 0)) byId[f.id] = f;
+    });
+
+    // Tombstones from both sides, keeping the later timestamp for each id.
+    const deleted = {};
+    const localDel = readDeleted();
+    [remote.deleted || {}, localDel].forEach(src => {
+      Object.keys(src).forEach(id => {
+        const t = parseInt(src[id], 10) || 0;
+        if (t > (deleted[id] || 0)) deleted[id] = t;
+      });
+    });
+    // A tombstone only wins if the fleet has not been edited since it was set,
+    // so re-creating or editing a fleet on another device resurrects it on purpose.
+    Object.keys(deleted).forEach(id => {
+      const f = byId[id];
+      if (f && (f.updatedAt || 0) <= deleted[id]) delete byId[id];
+    });
+
+    return { fleets: Object.keys(byId).map(k => byId[k]), deleted: deleted };
+  }
+
+  /* ── Public operations ───────────────────────────────────── */
+
+  /* Look at a token without touching anything, so the modal can say
+   * "that token has 6 fleets, this device has 3" before the user commits. */
+  async function preview(raw) {
+    const tok = normaliseToken(raw);
+    const remote = await remoteGet(tok);
+    return {
+      token: tok,
+      exists: remote !== null,
+      remoteCount: remote ? (remote.fleets || []).length : 0,
+      localCount: readLocal().length
+    };
+  }
+
+  /* Adopt a token: pull, merge into local, then push the merged result back so
+   * every device converges on the same list. */
+  async function join(raw) {
+    const tok = normaliseToken(raw);
+    if (!looksLikeToken(tok)) throw new Error('That does not look like a Sync Token.');
+    const remote = (await remoteGet(tok)) || EMPTY;
+    const before = readLocal().length;
+    const merged = mergeWith(remote);
+    writeLocal(merged.fleets);
+    writeDeleted(merged.deleted);
+    localStorage.setItem(TOKEN_KEY, tok);
+    await remotePut(tok, merged);
+    localStorage.setItem(LASTSYNC_KEY, String(Date.now()));
+    return {
+      token: tok,
+      total: merged.fleets.length,
+      fromToken: (remote.fleets || []).length,
+      fromDevice: before
+    };
+  }
+
+  /* Create a brand new token and upload this device's fleets to it. */
+  async function start() {
+    const tok = randomToken();
+    return await join(tok);
+  }
+
+  /* Pull, merge, push. Used on app start and after local edits. Always reads
+   * before writing so a stale device cannot clobber another device's work. */
+  let inFlight = null;
+  async function sync() {
+    const tok = token();
+    if (!tok) return null;
+    if (inFlight) return inFlight;          // coalesce overlapping calls
+    inFlight = (async () => {
+      try {
+        const remote = (await remoteGet(tok)) || EMPTY;
+        const beforeIds = readLocal().map(f => f && f.id).join(',');
+        const merged = mergeWith(remote);
+        writeLocal(merged.fleets);
+        writeDeleted(merged.deleted);
+        await remotePut(tok, merged);
+        localStorage.setItem(LASTSYNC_KEY, String(Date.now()));
+        const changed = merged.fleets.map(f => f && f.id).join(',') !== beforeIds;
+        if (changed && typeof api.onChange === 'function') api.onChange(merged.fleets);
+        return { total: merged.fleets.length, changed: changed };
+      } finally { inFlight = null; }
+    })();
+    return inFlight;
+  }
+
+  /* Debounced sync for "keep both in step" after an edit. Failures are swallowed
+   * on purpose: a background sync must never interrupt list building, and the
+   * next change (or next app start) retries. */
+  let timer = null;
+  function notifyChanged(delay) {
+    if (!enabled()) return;
+    clearTimeout(timer);
+    timer = setTimeout(() => { sync().catch(() => {}); }, delay == null ? 2500 : delay);
+  }
+
+  /* Stop syncing on THIS device only. The token and its cloud copy survive, so
+   * the user can rejoin later or keep using it elsewhere. Local fleets are kept. */
+  function stop() {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(LASTSYNC_KEY);
+    clearTimeout(timer);
+  }
+
+  const api = {
+    supported, enabled, token, lastSync,
+    randomToken, normaliseToken, looksLikeToken,
+    preview, join, start, sync, notifyChanged, stop, recordDeleted,
+    wordCount: WORDS.length,
+    WORDS_PER_TOKEN: WORDS_PER_TOKEN,
+    onChange: null           // apps assign a re-render callback
+  };
+  window.FleetSync = api;
+})();

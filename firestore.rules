@@ -1,0 +1,49 @@
+// Firestore security rules for the Fleet Sync feature.
+//
+// Paste into: Firebase console > Firestore Database > Rules > Publish.
+// Kept in the repo so the deployed rules are reviewable and restorable.
+//
+// The model is "the token IS the key" (a capability, not an account). There is
+// no Firebase Auth here on purpose: a user's Sync Token is a six-word phrase
+// that doubles as the document ID. Knowing it grants read and write to that one
+// document and nothing else.
+//
+// The single most important line below is `allow list: if false`. Without it,
+// anyone could ask Firestore to enumerate the /sync collection and walk every
+// user's fleets without guessing a single token. Denying `list` means a token
+// can only be fetched by naming it exactly.
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /sync/{token} {
+      // Length floor: blocks probing for short/obvious IDs like "test" or "a".
+      // Six hyphenated words always clear this comfortably.
+      function sane() {
+        return token.size() >= 24 && token.size() <= 200;
+      }
+
+      allow get: if sane();
+
+      // The whole fleet list travels as one JSON string, so the schema check is
+      // exact: three known fields, nothing else. The size cap keeps a single
+      // token from being used as free unlimited storage (Firestore's own hard
+      // limit is 1 MiB per document).
+      allow create, update: if sane()
+        && request.resource.data.keys().hasOnly(['payload', 'updatedAt', 'version'])
+        && request.resource.data.payload is string
+        && request.resource.data.payload.size() <= 900000
+        && request.resource.data.updatedAt is int
+        && request.resource.data.version is int;
+
+      // No enumeration, and no remote wipe of someone else's token.
+      allow list, delete: if false;
+    }
+
+    // Everything outside /sync stays closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
