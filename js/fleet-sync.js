@@ -188,6 +188,11 @@
     if (!res.ok) throw await failure(res);
   }
 
+  async function remoteDelete(tok) {
+    const res = await fetch(BASE + encodeURIComponent(tok) + '?key=' + API_KEY, { method: 'DELETE' });
+    if (!res.ok && res.status !== 404) throw await failure(res);
+  }
+
   /* ── Merge ───────────────────────────────────────────────── */
   /* Union by id, newest updatedAt wins, tombstones applied last. A fleet with no
    * updatedAt is treated as age 0 so anything dated beats it. */
@@ -304,10 +309,23 @@
     clearTimeout(timer);
   }
 
+  /* Erase the cloud copy outright, then stop syncing here. Local fleets are
+   * still kept: this deletes the online copy, not the user's work. Any other
+   * device still holding the token keeps its own local fleets too, and would
+   * re-upload them if it syncs again, so the copy on this device going away is
+   * not the same as the token being retired everywhere. */
+  async function deleteRemote() {
+    const tok = token();
+    if (!tok) return false;
+    await remoteDelete(tok);
+    stop();
+    return true;
+  }
+
   const api = {
     supported, enabled, token, lastSync,
     randomToken, normaliseToken, looksLikeToken,
-    preview, join, start, sync, notifyChanged, stop, recordDeleted,
+    preview, join, start, sync, notifyChanged, stop, deleteRemote, recordDeleted,
     wordCount: WORDS.length,
     WORDS_PER_TOKEN: WORDS_PER_TOKEN,
     onChange: null           // apps assign a re-render callback

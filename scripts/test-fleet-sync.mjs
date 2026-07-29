@@ -30,6 +30,10 @@ function makeSandbox() {
         remote.doc = JSON.parse(opts.body);
         return { ok: true, status: 200 };
       }
+      if (opts && opts.method === 'DELETE') {
+        remote.doc = null;
+        return { ok: true, status: 200 };
+      }
       if (!remote.doc) return { ok: false, status: 404, json: async () => ({}) };
       return { ok: true, status: 200, json: async () => remote.doc };
     }
@@ -163,6 +167,18 @@ console.log('\nstop() keeps fleets, drops the token');
   s.FleetSync.stop();
   check('disabled after stop', !s.FleetSync.enabled());
   check('fleets untouched by stop', fleets(s.store.get('dfc_fleets')).length === 2);
+}
+
+console.log('\ndeleteRemote erases the cloud copy but never the local fleets');
+{
+  const s = makeSandbox();
+  s.localStorage.setItem('dfc_fleets', JSON.stringify([{ id: 'A', updatedAt: 1 }, { id: 'B', updatedAt: 1 }]));
+  await s.FleetSync.start();
+  check('cloud doc exists first', s.remote.doc !== null);
+  await s.FleetSync.deleteRemote();
+  check('cloud doc gone', s.remote.doc === null);
+  check('local fleets survive the cloud delete', fleets(s.store.get('dfc_fleets')).length === 2);
+  check('syncing is off afterwards', !s.FleetSync.enabled());
 }
 
 console.log('\n' + pass + ' passed, ' + fail + ' failed');

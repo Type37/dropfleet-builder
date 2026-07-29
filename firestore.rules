@@ -37,8 +37,14 @@ service cloud.firestore {
         && request.resource.data.updatedAt is int
         && request.resource.data.version is int;
 
-      // No enumeration, and no remote wipe of someone else's token.
-      allow list, delete: if false;
+      // Deleting is allowed to whoever holds the token, because it has to be:
+      // without it a user could never remove their fleets from the cloud, only
+      // stop syncing locally. It also costs nothing in security terms, since
+      // anyone who can reach this document can already overwrite its payload.
+      allow delete: if sane();
+
+      // Enumeration stays off. This is the line that matters.
+      allow list: if false;
     }
 
     // Everything outside /sync stays closed.
