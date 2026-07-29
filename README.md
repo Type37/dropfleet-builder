@@ -47,6 +47,12 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-29 — Browser Back dismisses layers instead of leaving the app
+- Both apps park a single `pushState` guard entry (`{dfcGuard:1}`) whenever anything dismissible is showing. `popstate` closes the top layer and re-arms; closing by any other means unwinds the entry via `history.back()` behind a `backGuardSelfPop` flag.
+- Desktop priority: rule tooltip → game-size popover → print preview → topmost `.modal-overlay.active`. View-to-view Back still runs off the hash router.
+- Mobile priority: rule sheet → action sheet → modal → `goBack()` on the screen stack. Back only leaves the app from the fleet list. Note `history` inside `mobile.js` is the local nav stack, so browser calls use `window.history`.
+- A document-level click listener re-syncs the guard on a microtask, so tooltips and popovers created ad hoc by click handlers do not need per-call-site wiring.
+
 ### 2026-07-21 — Download the app for offline use
 - **Explicit offline download in both apps** (desktop Settings → "Offline use", mobile menu → "Offline use…"). Fetches every file in `data/offline-manifest.json` (531 files, ~28 MB) into a dedicated `dfc-offline` cache. Before, the service worker only cached pages the user happened to visit, so an unbrowsed faction was missing without signal.
 - Auto-refresh only on positively-identified wifi, only for an already-downloaded bundle over a week old. `navigator.connection.type` is Chromium-only, so iOS and Firefox stay manual by design.

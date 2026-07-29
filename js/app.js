@@ -6360,7 +6360,7 @@ let activeGroupId = null;
       </div>
       <div class="print-preview-scroll"><div class="print-preview-surface" id="pp-surface">${fleetPrintHTML(currentFleet)}</div></div>`;
     document.body.appendChild(ov);
-    const closePreview = () => { ov.remove(); document.removeEventListener('keydown', onKey); };
+    const closePreview = () => { ov.remove(); document.removeEventListener('keydown', onKey); syncBackGuard(); };
     const onKey = (e) => { if (e.key === 'Escape') closePreview(); };
     document.addEventListener('keydown', onKey);
 
@@ -7815,6 +7815,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-29', title: 'Back button closes what is open', items: [
+      'The phone back gesture (or hardware back key) used to leave the app entirely when a ship card or picker was open. It now closes the top panel, then steps back through the screens you came from, and only leaves once you are at your fleet list.',
+    ]},
     { date: '2026-07-21', title: 'Download the app for offline use', items: [
       'Settings now has an Offline use section (Offline use... in the menu on mobile). One button downloads every faction, rule and ship image, about 28 MB, so the app works at a table with no signal. Before, only pages you had already opened were saved.',
       'It refreshes itself on wifi once it is over a week old. Delete downloaded data frees the space; saved fleets are never affected.',
@@ -8206,6 +8209,7 @@ let activeGroupId = null;
       // mobile, so running points/composition stay glanceable while browsing.
       if (id === 'modal-ship-select') document.body.classList.add('picker-open');
     }
+    syncBackGuard();
   }
 
   function closeModal(id) {
@@ -8215,7 +8219,53 @@ let activeGroupId = null;
       document.body.style.overflow = '';
     }
     if (id === 'modal-ship-select') { pendingGroupCreation = false; document.body.classList.remove('picker-open'); }
+    syncBackGuard();
   }
+
+  // ── Browser Back button ──
+  // Back is the natural "get me out of here" gesture on a phone, but with a
+  // modal open it would leave the app entirely. While anything dismissible is
+  // showing we park one extra history entry so Back closes the top layer
+  // instead of navigating away; view-to-view Back still runs off the hash.
+  let backGuardArmed = false;    // we pushed the entry ourselves (a reload leaves a stale one behind)
+  let backGuardSelfPop = false;
+
+  function topDismissible() {
+    const tooltip = document.getElementById('rule-tooltip');
+    if (tooltip) return () => tooltip.remove();
+    const popover = document.getElementById('game-size-popover');
+    if (popover) return () => popover.remove();
+    const preview = document.getElementById('print-preview-overlay');
+    if (preview) return () => document.getElementById('pp-close')?.click();
+    const modals = document.querySelectorAll('.modal-overlay.active');
+    if (modals.length) { const top = modals[modals.length - 1]; return () => closeModal(top.id); }
+    return null;
+  }
+
+  function syncBackGuard() {
+    const want = !!topDismissible();
+    // A hash navigation while a layer was open buries our entry, so read the
+    // browser's own state rather than trusting a flag.
+    const have = backGuardArmed && !!(history.state && history.state.dfcGuard);
+    if (want === have) return;
+    if (want) {
+      backGuardArmed = true;
+      history.pushState({ dfcGuard: 1 }, '', location.href);
+    } else {
+      backGuardArmed = false;
+      backGuardSelfPop = true;
+      history.back();
+    }
+  }
+
+  window.addEventListener('popstate', () => {
+    // Our own unwind still needs a re-sync: a close-then-open flow can push the
+    // next layer while the traversal is still queued.
+    if (backGuardSelfPop) { backGuardSelfPop = false; syncBackGuard(); return; }
+    const dismiss = topDismissible();   // null on a real view-to-view Back
+    if (dismiss) dismiss();
+    syncBackGuard();
+  });
 
   function confirmAction(title, message, onConfirm) {
     document.getElementById('confirm-title').textContent = title;
@@ -9147,6 +9197,10 @@ let activeGroupId = null;
     }
   });
 
+  // Safety net: tooltips and popovers are created/removed by many click handlers,
+  // so re-check what's on top after every click rather than at each call site.
+  document.addEventListener('click', () => queueMicrotask(syncBackGuard));
+
   // Keyboard shortcuts
   document.addEventListener('keydown', (e) => {
     // Keyboard activation for focusable clickable divs (role="button")
@@ -9164,14 +9218,15 @@ let activeGroupId = null;
         activeModals.forEach(m => m.classList.remove('active'));
         document.body.style.overflow = '';
         pendingGroupCreation = false;
+        syncBackGuard();
         return;
       }
       // Dismiss rule tooltip
       const tooltip = document.getElementById('rule-tooltip');
-      if (tooltip) { tooltip.remove(); return; }
+      if (tooltip) { tooltip.remove(); syncBackGuard(); return; }
       // Dismiss game size popover
       const popover = document.getElementById('game-size-popover');
-      if (popover) { popover.remove(); return; }
+      if (popover) { popover.remove(); syncBackGuard(); return; }
     }
 
     // Ctrl/Cmd+P: print fleet (only in builder view)

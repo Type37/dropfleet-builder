@@ -596,6 +596,7 @@
     else { pageEl.style.display = 'none'; }
     document.getElementById('rule-sheet').classList.add('active');
     document.body.classList.add('sheet-open');
+    syncBackGuard();
   }
   // Fall back to a ship-specific rule: many weapon specials name a rule whose
   // text lives on the ship (e.g. "Advanced Artillery", "Bombardment Spine",
@@ -640,6 +641,7 @@
   function closeRuleSheet() {
     document.getElementById('rule-sheet').classList.remove('active');
     document.body.classList.remove('sheet-open');
+    syncBackGuard();
   }
 
   /* ── Action sheet (overflow menu) ──────────────────────── */
@@ -664,12 +666,14 @@
     });
     document.getElementById('action-sheet').classList.add('active');
     document.body.classList.add('sheet-open');
+    syncBackGuard();
   }
   function closeActionSheet() {
     document.getElementById('action-sheet').classList.remove('active');
     if (!document.getElementById('rule-sheet').classList.contains('active')) {
       document.body.classList.remove('sheet-open');
     }
+    syncBackGuard();
   }
 
   // Swipe-down-to-dismiss for bottom sheets. Drag is allowed from the handle/
@@ -1277,7 +1281,56 @@
     window.scrollTo(0, prev.scroll || 0);
     afterNav(prev.id);
   }
+  // ── Browser Back button ──
+  // Back (gesture or hardware key) should walk back through the app the same
+  // way the app-bar arrow does, not close the tab/PWA. While there's anything
+  // to go back to we park one extra browser-history entry; Back consumes it and
+  // we dismiss the top layer, then re-arm. `history` here is the local nav
+  // stack, so the browser API is always `window.history`.
+  let backGuardArmed = false;    // we pushed the entry ourselves (a reload leaves a stale one behind)
+  let backGuardSelfPop = false;
+
+  function topDismissible() {
+    if (document.getElementById('rule-sheet')?.classList.contains('active')) return closeRuleSheet;
+    if (document.getElementById('action-sheet')?.classList.contains('active')) return closeActionSheet;
+    const modals = document.querySelectorAll('.modal-overlay.active');
+    if (modals.length) {
+      const top = modals[modals.length - 1];
+      return () => top.classList.remove('active');
+    }
+    if (history.length) return goBack;
+    return null;
+  }
+
+  function syncBackGuard() {
+    const want = !!topDismissible();
+    const have = backGuardArmed && !!(window.history.state && window.history.state.dfcGuard);
+    if (want === have) return;
+    if (want) {
+      backGuardArmed = true;
+      window.history.pushState({ dfcGuard: 1 }, '', location.href);
+    } else {
+      backGuardArmed = false;
+      backGuardSelfPop = true;
+      window.history.back();
+    }
+  }
+
+  window.addEventListener('popstate', () => {
+    // Our own unwind still needs a re-sync: a close-then-navigate flow can open
+    // the next screen while the traversal is still queued.
+    if (backGuardSelfPop) { backGuardSelfPop = false; syncBackGuard(); return; }
+    const dismiss = topDismissible();
+    if (dismiss) dismiss();
+    syncBackGuard();
+  });
+
+  // Sheets and modals are opened/closed from many call sites, so re-check what's
+  // on top after every tap rather than wiring each one.
+  document.addEventListener('click', () => queueMicrotask(syncBackGuard));
+
   function afterNav(screenId) {
+    syncBackGuard();
     updateAppBar(screenId);
     const fab = document.getElementById('fab-add-group');
     if (fab) fab.style.display = screenId === 'screen-fleet-detail' ? '' : 'none';
@@ -1750,9 +1803,11 @@
     if (!activeFleet) return;
     renderSecondaryModalBody();
     document.getElementById('modal-secondary').classList.add('active');
+    syncBackGuard();
   }
   function closeSecondaryModal() {
     document.getElementById('modal-secondary').classList.remove('active');
+    syncBackGuard();
   }
 
   /* ── Screen: Ship Picker ───────────────────────────────── */
@@ -3153,9 +3208,11 @@
     activeAdmiralIdx = idx;
     renderAbilityModalBody(idx);
     document.getElementById('modal-abilities').classList.add('active');
+    syncBackGuard();
   }
   function closeAbilityModal() {
     document.getElementById('modal-abilities').classList.remove('active');
+    syncBackGuard();
   }
   function assignAdmiral(groupId) {
     const a = activeFleet.admirals[activeAdmiralIdx];
@@ -3920,6 +3977,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-29', title: 'Back button closes what is open', items: [
+      'The phone back gesture (or hardware back key) used to leave the app entirely when a ship card or picker was open. It now closes the top panel, then steps back through the screens you came from, and only leaves once you are at your fleet list.',
+    ]},
     { date: '2026-07-21', title: 'Download the app for offline use', items: [
       'The menu now has Offline use... One button downloads every faction, rule and ship image, about 28 MB, so the app works at a table with no signal. Before, only pages you had already opened were saved.',
       'It refreshes itself on wifi once it is over a week old. Delete downloaded data frees the space; saved fleets are never affected.',
@@ -4598,6 +4658,7 @@
     document.getElementById('new-fleet-faction').disabled = false;
     populateFleetForm(null);
     document.getElementById('modal-create-fleet').classList.add('active');
+    syncBackGuard();
   }
   function openEditFleet() {
     if (!activeFleet) return;
@@ -4608,13 +4669,14 @@
     document.getElementById('new-fleet-faction').disabled = (activeFleet.battleGroups || []).length > 0;
     populateFleetForm(activeFleet);
     document.getElementById('modal-create-fleet').classList.add('active');
+    syncBackGuard();
   }
   function updateFactionDesc() {
     const k = document.getElementById('new-fleet-faction').value;
     const el = document.getElementById('new-fleet-faction-desc');
     if (el) el.textContent = FACTION_INFO[k]?.desc || '';
   }
-  function closeCreateFleet() { document.getElementById('modal-create-fleet').classList.remove('active'); }
+  function closeCreateFleet() { document.getElementById('modal-create-fleet').classList.remove('active'); syncBackGuard(); }
   async function doCreateFleet() {
     // Fleet names start blank by design (naming UX to be revisited); no auto-default.
     const name = document.getElementById('new-fleet-name').value.trim();
