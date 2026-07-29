@@ -650,11 +650,36 @@
   // offline download). It is not focusable and has no action.
   // An item with keepOpen:true runs its action without dismissing the sheet, so
   // a long-running action can report progress in place.
+  // Material Symbols (outlined, 24px), inlined rather than pulled from Google's
+  // font CDN so the sheets still draw their icons with no signal.
+  const ICON_PATHS = {
+    download: 'M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z',
+    refresh: 'M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z',
+    new_releases: 'm344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z',
+    mail: 'M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z',
+    bug_report: 'M480-200q66 0 113-47t47-113v-160q0-66-47-113t-113-47q-66 0-113 47t-47 113v160q0 66 47 113t113 47Zm-80-120h160v-80H400v80Zm0-160h160v-80H400v80Zm80 40Zm0 320q-65 0-120.5-32T272-240H160v-80h84q-3-20-3.5-40t-.5-40h-80v-80h80q0-20 .5-40t3.5-40h-84v-80h112q14-23 31.5-43t40.5-35l-64-66 56-56 86 86q28-9 57-9t57 9l88-86 56 56-66 66q23 15 41.5 34.5T688-640h112v80h-84q3 20 3.5 40t.5 40h80v80h-80q0 20-.5 40t-3.5 40h84v80H688q-32 56-87.5 88T480-120Z',
+    desktop: 'M320-120v-80h80v-80H160q-33 0-56.5-23.5T80-360v-400q0-33 23.5-56.5T160-840h640q33 0 56.5 23.5T880-760v400q0 33-23.5 56.5T800-280H560v80h80v80H320ZM160-360h640v-400H160v400Zm0 0v-400 400Z',
+    play: 'M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z',
+    copy: 'M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z',
+    code: 'M560-160v-80h120q17 0 28.5-11.5T720-280v-80q0-38 22-69t58-44v-14q-36-13-58-44t-22-69v-80q0-17-11.5-28.5T680-720H560v-80h120q50 0 85 35t35 85v80q0 17 11.5 28.5T840-560h40v160h-40q-17 0-28.5 11.5T800-360v80q0 50-35 85t-85 35H560Zm-280 0q-50 0-85-35t-35-85v-80q0-17-11.5-28.5T120-400H80v-160h40q17 0 28.5-11.5T160-600v-80q0-50 35-85t85-35h120v80H280q-17 0-28.5 11.5T240-680v80q0 38-22 69t-58 44v14q36 13 58 44t22 69v80q0 17 11.5 28.5T280-240h120v80H280Z',
+    pdf: 'M360-460h40v-80h40q17 0 28.5-11.5T480-580v-40q0-17-11.5-28.5T440-660h-80v200Zm40-120v-40h40v40h-40Zm120 120h80q17 0 28.5-11.5T640-500v-120q0-17-11.5-28.5T600-660h-80v200Zm40-40v-120h40v120h-40Zm120 40h40v-80h40v-40h-40v-40h40v-40h-80v200ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z',
+    edit: 'M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z',
+    share: 'M720-80q-50 0-85-35t-35-85q0-7 1-14.5t3-13.5L322-392q-17 15-38 23.5t-44 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q23 0 44 8.5t38 23.5l282-164q-2-6-3-13.5t-1-14.5q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-23 0-44-8.5T638-672L356-508q2 6 3 13.5t1 14.5q0 7-1 14.5t-3 13.5l282 164q17-15 38-23.5t44-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-640q17 0 28.5-11.5T760-760q0-17-11.5-28.5T720-800q-17 0-28.5 11.5T680-760q0 17 11.5 28.5T720-720ZM240-440q17 0 28.5-11.5T280-480q0-17-11.5-28.5T240-520q-17 0-28.5 11.5T200-480q0 17 11.5 28.5T240-440Zm480 280q17 0 28.5-11.5T760-200q0-17-11.5-28.5T720-240q-17 0-28.5 11.5T680-200q0 17 11.5 28.5T720-160Zm0-600ZM240-480Zm480 280Z',
+    duplicate: 'M760-200H320q-33 0-56.5-23.5T240-280v-560q0-33 23.5-56.5T320-920h280l240 240v400q0 33-23.5 56.5T760-200ZM560-640v-200H320v560h440v-360H560ZM160-40q-33 0-56.5-23.5T80-120v-560h80v560h440v80H160Zm160-800v200-200 560-560Z',
+    delete: 'M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z'
+  };
+  function sheetIcon(name) {
+    const d = ICON_PATHS[name];
+    return d ? `<svg class="as-icon" viewBox="0 -960 960 960" aria-hidden="true"><path d="${d}"/></svg>` : '';
+  }
+
   function showActionSheet(items) {
     const el = document.getElementById('action-sheet-items');
+    // An icon on any item indents them all, so a mixed sheet still lines up.
+    const anyIcon = items.some(it => it.icon);
     el.innerHTML = items.map((it, i) => it.note
       ? `<div class="action-sheet-note" ${it.id ? `id="${it.id}"` : ''}>${it.label}</div>`
-      : `<button class="action-sheet-item ${it.danger ? 'danger' : ''}" data-idx="${i}" ${it.disabled ? 'disabled' : ''}>${it.label}</button>`
+      : `<button class="action-sheet-item ${it.danger ? 'danger' : ''}${anyIcon ? ' has-icon' : ''}" data-idx="${i}" ${it.disabled ? 'disabled' : ''}>${anyIcon ? (sheetIcon(it.icon) || '<span class="as-icon"></span>') : ''}<span class="as-label">${it.label}</span></button>`
     ).join('');
     el.querySelectorAll('.action-sheet-item').forEach((btn) => {
       const i = +btn.dataset.idx;
@@ -2809,8 +2834,8 @@
 
   function groupOverflow() {
     showActionSheet([
-      { label: 'Rename battlegroup', action: editGroupName },
-      { label: 'Remove this group', danger: true, action: removeGroup }
+      { icon: 'edit', label: 'Rename battlegroup', action: editGroupName },
+      { icon: 'delete', label: 'Remove this group', danger: true, action: removeGroup }
     ]);
   }
 
@@ -2964,7 +2989,7 @@
   }
   function removeAdmiralPrompt(i) {
     const a = activeFleet.admirals[i];
-    showActionSheet([{ label: `Remove ${a.name}`, danger: true, action: () => {
+    showActionSheet([{ icon: 'delete', label: `Remove ${a.name}`, danger: true, action: () => {
       activeFleet.admirals.splice(i, 1);
       activeFleet.updatedAt = Date.now();
       saveFleets();
@@ -3267,7 +3292,7 @@
   }
   function openStationDetail() { if (activeFleet && activeFleet.spaceStation) navigate('screen-station-detail'); }
   function removeStationPrompt() {
-    showActionSheet([{ label: `Remove ${activeFleet.spaceStation.name}`, danger: true, action: () => {
+    showActionSheet([{ icon: 'delete', label: `Remove ${activeFleet.spaceStation.name}`, danger: true, action: () => {
       activeFleet.spaceStation = null;
       activeFleet.updatedAt = Date.now();
       saveFleets();
@@ -3977,6 +4002,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-29', title: 'Mobile: icons in the menus', items: [
+      'Every button in the options menu, the fleet menu and the battlegroup menu now has an icon, so you can find the one you want without reading every line.',
+      'Removed Two-column print. At phone export sizes the two columns were too cramped to read. Print preview on desktop still offers it.',
+    ]},
     { date: '2026-07-29', title: 'Back button closes what is open', items: [
       'The phone back gesture (or hardware back key) used to leave the app entirely when a ship card or picker was open. It now closes the top panel, then steps back through the screens you came from, and only leaves once you are at your fleet list.',
     ]},
@@ -4121,13 +4150,13 @@
   function openSettingsSheet() {
     showActionSheet([
       // Misc Ships is a picker filter chip now (its own list), not a global setting.
-      { label: `Two-column print  ${localStorage.getItem('dfc_print2col') === '1' ? '✓ On' : 'Off'}`,
-        action: () => { localStorage.setItem('dfc_print2col', localStorage.getItem('dfc_print2col') === '1' ? '0' : '1'); haptic(HAPTIC.tick); openSettingsSheet(); } },
-      { label: 'Offline use…', action: openOfflineSheet },
-      { label: "What's New", action: openChangelog },
-      { label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
-      { label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
-      { label: 'Switch to desktop view', action: viewDesktop }
+      // Two-column print was dropped from mobile: the columns are unreadable at
+      // phone-export sizes. Desktop print preview still offers it.
+      { icon: 'download', label: 'Offline use…', action: openOfflineSheet },
+      { icon: 'new_releases', label: "What's New", action: openChangelog },
+      { icon: 'mail', label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
+      { icon: 'bug_report', label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
+      { icon: 'desktop', label: 'Switch to desktop view', action: viewDesktop }
     ]);
   }
 
@@ -4159,10 +4188,10 @@
       { note: true, label: state, id: 'offline-sheet-status' }
     ];
     if (warn) items.push({ note: true, label: warn });
-    items.push({ label: s.downloaded ? 'Update data' : `Download for offline use (${size})`,
+    items.push({ icon: s.downloaded ? 'refresh' : 'download', label: s.downloaded ? 'Update data' : `Download for offline use (${size})`,
       disabled: conn === 'offline', keepOpen: true, action: mobileOfflineSync });
     if (s.downloaded) {
-      items.push({ label: 'Delete downloaded data', danger: true, action: mobileOfflineDelete });
+      items.push({ icon: 'delete', label: 'Delete downloaded data', danger: true, action: mobileOfflineDelete });
     }
     showActionSheet(items);
   }
@@ -4170,7 +4199,8 @@
   async function mobileOfflineSync() {
     const status = document.getElementById('offline-sheet-status');
     const btn = document.querySelector('#action-sheet-items .action-sheet-item');
-    if (btn) { btn.disabled = true; btn.textContent = 'Downloading…'; }
+    // Swap only the label, or the button loses its icon mid-download.
+    if (btn) { btn.disabled = true; (btn.querySelector('.as-label') || btn).textContent = 'Downloading…'; }
     try {
       const r = await OfflineSync.sync(p => {
         if (status) status.innerHTML = `Downloading… ${p.percent}% — ${p.done} of ${p.total} files (${OfflineSync.formatBytes(p.bytes)} of ${OfflineSync.formatBytes(p.totalBytes)})`;
@@ -4194,20 +4224,20 @@
 
   function fleetOverflow() {
     showActionSheet([
-      { label: 'Play mode', action: openMobilePlay },
-      { label: 'Copy army list', action: copyFleetText },
-      { label: 'Copy as JSON', action: copyFleetJSON },
-      { label: 'Export PDF', action: exportPdf },
-      { label: 'Edit name & size', action: openEditFleet },
-      { label: 'Share', action: shareFleet },
-      { label: 'Duplicate fleet', action: duplicateFleet },
-      { label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
-      { label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
-      { label: 'Delete fleet', danger: true, action: deleteFleetPrompt }
+      { icon: 'play', label: 'Play mode', action: openMobilePlay },
+      { icon: 'copy', label: 'Copy army list', action: copyFleetText },
+      { icon: 'code', label: 'Copy as JSON', action: copyFleetJSON },
+      { icon: 'pdf', label: 'Export PDF', action: exportPdf },
+      { icon: 'edit', label: 'Edit name & size', action: openEditFleet },
+      { icon: 'share', label: 'Share', action: shareFleet },
+      { icon: 'duplicate', label: 'Duplicate fleet', action: duplicateFleet },
+      { icon: 'mail', label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
+      { icon: 'bug_report', label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
+      { icon: 'delete', label: 'Delete fleet', danger: true, action: deleteFleetPrompt }
     ]);
   }
   function deleteFleetPrompt() {
-    showActionSheet([{ label: `Delete “${activeFleet.name}”?`, danger: true, action: () => {
+    showActionSheet([{ icon: 'delete', label: `Delete “${activeFleet.name}”?`, danger: true, action: () => {
       const idx = fleets.indexOf(activeFleet);
       if (idx >= 0) fleets.splice(idx, 1);
       activeFleet = null;
@@ -4583,7 +4613,7 @@
         <div class="pr-title">${esc(f.name || 'Unnamed Fleet')}</div>
         <div class="pr-sub">${info?.name || f.faction} · ${size.label} · ${pts} / ${limit} pts, ${(f.battleGroups || []).length} groups</div>
       </div>
-      <div class="pr-units${localStorage.getItem('dfc_print2col') === '1' ? ' pr-2col' : ''}">${groupsHtml}</div>
+      <div class="pr-units">${groupsHtml}</div>
       ${admiralsHtml ? `<div class="pr-section-title">Admiral</div>${admiralsHtml}` : ''}
       ${stationHtml ? `<div class="pr-section-title">Space Station</div>${stationHtml}` : ''}
       ${secObjsHtml ? `<div class="pr-section-title">Secondary Objectives</div><div class="pr-glossary">${secObjsHtml}</div>` : ''}

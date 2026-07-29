@@ -47,6 +47,13 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-29 — Mobile action-sheet icons; two-column print dropped
+- Material Symbols (outlined, 24px) inlined as an `ICON_PATHS` map in `mobile.js` rather than pulled from Google's font CDN, so the sheets still draw icons offline. `showActionSheet` items take an optional `icon` key.
+- An icon on any item sets `has-icon` on all of them, so a mixed sheet stays aligned. Labels sit in `.as-label` and wrap rather than truncate.
+- Iconed: options menu, fleet menu, battlegroup menu, the offline sub-sheet, and the delete/remove confirm prompts. The starter-fleet list stays iconless (homogeneous faction choices).
+- `mobileOfflineSync` now writes to `.as-label` instead of the button's `textContent`, which would have wiped the icon mid-download.
+- Removed two-column print from mobile: the `dfc_print2col` read in the PDF export and the `.pr-2col` CSS. Desktop print preview is unaffected and still offers it.
+
 ### 2026-07-29 — Browser Back dismisses layers instead of leaving the app
 - Both apps park a single `pushState` guard entry (`{dfcGuard:1}`) whenever anything dismissible is showing. `popstate` closes the top layer and re-arms; closing by any other means unwinds the entry via `history.back()` behind a `backGuardSelfPop` flag.
 - Desktop priority: rule tooltip → game-size popover → print preview → topmost `.modal-overlay.active`. View-to-view Back still runs off the hash router.

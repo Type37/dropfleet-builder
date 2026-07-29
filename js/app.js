@@ -7815,6 +7815,10 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-29', title: 'Mobile: icons in the menus', items: [
+      'Every button in the options menu, the fleet menu and the battlegroup menu now has an icon, so you can find the one you want without reading every line.',
+      'Removed Two-column print. At phone export sizes the two columns were too cramped to read. Print preview on desktop still offers it.',
+    ]},
     { date: '2026-07-29', title: 'Back button closes what is open', items: [
       'The phone back gesture (or hardware back key) used to leave the app entirely when a ship card or picker was open. It now closes the top panel, then steps back through the screens you came from, and only leaves once you are at your fleet list.',
     ]},

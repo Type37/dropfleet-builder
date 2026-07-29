@@ -1731,6 +1731,23 @@ body.sheet-open .sheet-scrim {
 .action-sheet-item:active { background: var(--paper-alt); }
 .action-sheet-item.danger { color: var(--danger); }
 .action-sheet-item[disabled] { opacity: 0.45; }
+/* Iconed rows: icon left, label left-aligned beside it. The label wraps rather
+   than truncating, so a long item stays fully readable. */
+.action-sheet-item.has-icon {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-m);
+  text-align: left;
+}
+.action-sheet-item .as-icon {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  fill: currentColor;
+  opacity: 0.75;
+}
+.action-sheet-item.danger .as-icon { opacity: 1; }
+.action-sheet-item .as-label { flex: 1; min-width: 0; }
 /* Static explanatory text in a sheet (e.g. the size of the offline download).
    Left-aligned and full-height: this is prose to read, not a label to scan. */
 .action-sheet-note {
@@ -2163,9 +2180,6 @@ body.sheet-open .sheet-scrim {
   .pr-sub { font-size: 10pt; color: #444; margin-top: 2px; }
 
   .pr-group { border: 1px solid #ccc; border-radius: 4px; padding: 6px 8px; margin-bottom: 6px; break-inside: avoid; }
-  /* Two-column units layout (Settings toggle) — ~4 units per page. */
-  .pr-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; align-items: start; }
-  .pr-2col .pr-weapons { font-size: 7pt; }
   .pr-group-head { display: flex; justify-content: space-between; align-items: baseline; }
   .pr-group-name { font-size: 12pt; font-weight: 700; }
   .pr-group-pts { font-size: 11pt; font-weight: 700; color: #1b3a5c; }
