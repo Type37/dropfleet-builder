@@ -490,6 +490,18 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="modal-sync">
+  <div class="modal-panel" style="max-width:520px">
+    <div class="modal-header">
+      <h2 class="modal-title">Sync Your Fleets Online</h2>
+      <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-sync')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+    </div>
+    <div class="modal-body" id="sync-body">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-changelog">
   <div class="modal-panel" style="max-width:560px">
     <div class="modal-header">
@@ -523,6 +535,7 @@
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 <script src="js/rank-insignia.js"></script>
 <script src="js/offline-sync.js"></script>
+<script src="js/fleet-sync.js"></script>
 <script src="js/calc-engine.js"></script>
 <script src="js/calc-data.js"></script>
 <script src="js/app.js"></script>

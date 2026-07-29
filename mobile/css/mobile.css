@@ -1773,6 +1773,95 @@ body.sheet-open .sheet-scrim {
 }
 .action-sheet-cancel:active { background: var(--paper-alt); }
 
+/* ── 36b. Sync fleets online (modal) ────────────────────
+   The NOTE gets warning styling because it is the one thing a user must read
+   before opting in: a shared token is a shared, editable fleet list. The token
+   wraps rather than scrolling or truncating, since a half-visible token is
+   useless to type into another device. */
+.m-sync-p {
+  font-size: var(--text-body1);
+  line-height: 1.5;
+  color: var(--fg2);
+  margin: 0 0 var(--sp-m);
+}
+.m-sync-p strong { color: var(--navy); }
+.m-sync-hint { font-size: var(--text-caption1); color: var(--fg3); }
+.m-sync-note {
+  font-size: var(--text-caption1);
+  line-height: 1.5;
+  color: var(--fg2);
+  background: var(--paper-alt);
+  border-left: 3px solid var(--danger);
+  padding: var(--sp-m);
+  border-radius: var(--radius-sm);
+  margin: 0 0 var(--sp-m);
+}
+.m-sync-note strong { color: var(--danger); }
+.m-sync-ok {
+  font-size: var(--text-body1);
+  line-height: 1.5;
+  color: var(--fg2);
+  margin: 0 0 var(--sp-m);
+}
+.m-sync-ok strong { color: var(--navy); }
+.m-sync-flash {
+  font-size: var(--text-caption1);
+  font-weight: var(--weight-semibold);
+  color: var(--navy);
+  background: var(--paper-alt);
+  padding: var(--sp-s) var(--sp-m);
+  border-radius: var(--radius-sm);
+  margin: 0 0 var(--sp-m);
+}
+.m-sync-sub {
+  font-size: var(--text-caption2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg4);
+  margin: var(--sp-l) 0 var(--sp-xs);
+}
+.m-sync-token {
+  display: block;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: var(--text-body1);
+  font-weight: 600;
+  color: var(--navy);
+  background: var(--paper-alt);
+  border: 1px solid var(--stroke1);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-m);
+  margin-bottom: var(--sp-m);
+  overflow-wrap: anywhere;   /* never clip a token; let the box grow */
+  line-height: 1.45;
+}
+.m-sync-input {
+  display: block;
+  width: 100%;
+  min-height: var(--tap-min);
+  font-size: var(--text-body1);
+  padding: var(--sp-s) var(--sp-m);
+  border: 1.5px solid var(--stroke1);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  color: var(--fg1);
+  margin-bottom: var(--sp-s);
+}
+#sync-body .btn { margin-bottom: var(--sp-s); }
+.m-sync-danger { color: var(--danger); border-color: var(--danger); }
+.m-sync-status {
+  font-size: var(--text-caption1);
+  color: var(--fg3);
+  margin: var(--sp-s) 0 0;
+}
+.m-sync-error {
+  font-size: var(--text-caption1);
+  color: var(--danger);
+  font-weight: var(--weight-semibold);
+  line-height: 1.45;
+  margin: var(--sp-s) 0 0;
+}
+#sync-body .as-icon { width: 18px; height: 18px; fill: currentColor; vertical-align: -3px; margin-right: 4px; }
+
 /* ── 37. Add slot (admiral / station empty) ────────────── */
 .add-slot {
   margin: var(--sp-s) var(--sp-l);

@@ -299,6 +299,24 @@ let activeGroupId = null;
     window.dispatchEvent(new Event('hashchange'));
     const settingsBtn = document.getElementById('topbar-settings-btn');
     if (settingsBtn) setTimeout(() => maybeShowOfflineTip(settingsBtn), 1200);
+
+    // Pull anything another device changed while this one was closed. Runs after
+    // the first render so a slow or failed network never delays the app, and stays
+    // silent on failure: the next edit or reload retries.
+    if (window.FleetSync && FleetSync.enabled()) {
+      FleetSync.onChange = () => {
+        loadFleets();
+        renderFleetList();
+        if (currentFleet) {
+          // The open fleet may have been edited or deleted elsewhere.
+          const still = fleets.find(f => f.id === currentFleet.id);
+          if (still) { currentFleet = still; renderBuilder(); }
+          else { currentFleet = null; navigate('fleets'); showToast('That fleet was deleted on another device'); }
+        }
+        renderSyncPanel();
+      };
+      setTimeout(() => { FleetSync.sync().catch(() => {}); }, 800);
+    }
   }
 
   // Find the pronunciation entry whose key appears as a whole word in `name`
@@ -988,7 +1006,12 @@ let activeGroupId = null;
   }
 
   function saveFleets() {
+    // Stamp updatedAt on whatever actually changed BEFORE writing, so the sync
+    // merge can tell a fresh edit from a stale copy. Doing it here rather than at
+    // this function's ~48 call sites is the only way to be sure none are missed.
+    const changed = window.FleetSync ? FleetSync.stampChanged(fleets) : true;
     localStorage.setItem('dfc_fleets', JSON.stringify(fleets));
+    if (changed && window.FleetSync) FleetSync.notifyChanged();
   }
 
   // ── Collection (models you own) ──────────────────────────────
@@ -1566,6 +1589,9 @@ let activeGroupId = null;
     if (!fleet) return;
     confirmAction(`Delete "${fleet.name}"?`, 'This cannot be undone.', () => {
       fleets = fleets.filter(f => f.id !== id);
+      // Tombstone first: without it the next sync would helpfully restore the
+      // fleet the user just deleted, from another device's copy.
+      if (window.FleetSync) FleetSync.recordDeleted(id);
       saveFleets();
       if (currentFleet && currentFleet.id === id) currentFleet = null;
       renderFleetList();
@@ -7815,6 +7841,12 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-29', title: 'Sync your fleets across devices', items: [
+      'New Sync Fleets Online option (Settings on desktop, the menu on mobile). Opting in gives you a Sync Token, a six-word phrase. Put that phrase into any other device and your fleets load there and stay in step.',
+      'There is no account and no password. The token is the only key, so anyone you give it to can read and change your fleets. The app says so before you opt in.',
+      'Entering a token combines both sets of fleets rather than replacing either, and it tells you the counts first. Nothing is overwritten and nothing is lost.',
+      'Deleting a fleet on one device deletes it everywhere instead of reappearing on the next sync. You can stop syncing on one device and keep your fleets, or delete the online copy outright.',
+    ]},
     { date: '2026-07-29', title: 'Mobile: icons in the menus', items: [
       'Every button in the options menu, the fleet menu and the battlegroup menu now has an icon, so you can find the one you want without reading every line.',
       'Removed Two-column print. At phone export sizes the two columns were too cramped to read. Print preview on desktop still offers it.',
@@ -8016,6 +8048,15 @@ let activeGroupId = null;
         <div id="offline-panel" class="offline-panel"><p class="settings-note">Checking…</p></div>
       </div>
       <div class="settings-group">
+        <div class="settings-group-title">Sync</div>
+        <p class="settings-note">${window.FleetSync && FleetSync.enabled()
+          ? 'Syncing is on for this device.'
+          : 'Keep the same fleets on your phone and your computer.'}</p>
+        <div class="settings-actions">
+          <button class="btn btn-outline btn-sm" onclick="App.closeModal('modal-settings'); App.openSyncModal()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5A8 8 0 0 0 6.3 6.3L4 8.5M4 12.5a8 8 0 0 0 13.7 5.2l2.3-2.2"/><path d="M4 4.5v4h4M20 19.5v-4h-4"/></svg> Sync Fleets Online</button>
+        </div>
+      </div>
+      <div class="settings-group">
         <div class="settings-actions">
           <button class="btn btn-outline btn-sm" onclick="App.exportAllFleets()" title="Download all your fleets as a JSON backup"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg> Export fleets</button>
           <a class="btn btn-outline btn-sm" href="${FEEDBACK_HREF}"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12v8H2zM2 4l6 5 6-5"/></svg> Feedback</a>
@@ -8026,6 +8067,229 @@ let activeGroupId = null;
     `;
     openModal('modal-settings');
     renderOfflinePanel();
+  }
+
+  /* ── Sync fleets online ──────────────────────────────────────
+   * Opt-in cross-device sync. There is no account and no password: the Sync
+   * Token IS the credential, and the copy says so plainly because anyone holding
+   * it can read and change the fleets. Engine and merge rules live in
+   * js/fleet-sync.js, shared with the mobile app.
+   *
+   * Merge behaviour is deliberately additive. Entering a token shows the counts
+   * first and then combines both lists, so nobody loses an evening's work to a
+   * surprise overwrite. */
+  function syncBusy(on, label) {
+    const el = document.getElementById('sync-busy');
+    if (el) { el.textContent = on ? (label || 'Working…') : ''; el.hidden = !on; }
+    document.querySelectorAll('#sync-body button, #sync-body input').forEach(b => { b.disabled = !!on; });
+  }
+  function syncError(msg) {
+    const el = document.getElementById('sync-error');
+    if (el) { el.textContent = msg || ''; el.hidden = !msg; }
+  }
+
+  function openSyncModal() {
+    renderSyncPanel();
+    openModal('modal-sync');
+  }
+
+  function renderSyncPanel() {
+    const body = document.getElementById('sync-body');
+    if (!body) return;
+    if (!window.FleetSync || !FleetSync.supported()) {
+      body.innerHTML = `<p class="settings-note">This browser cannot sync fleets online.</p>`;
+      return;
+    }
+
+    body.innerHTML = FleetSync.enabled() ? syncOnHTML() : syncOffHTML();
+
+    const gen = document.getElementById('sync-generate');
+    if (gen) gen.onclick = syncGenerate;
+    const confirm = document.getElementById('sync-confirm');
+    if (confirm) confirm.onclick = syncJoinFromInput;
+    const input = document.getElementById('sync-input');
+    if (input) input.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); syncJoinFromInput(); } };
+    const copy = document.getElementById('sync-copy');
+    if (copy) copy.onclick = syncCopyToken;
+    const now = document.getElementById('sync-now');
+    if (now) now.onclick = syncNow;
+    const stopBtn = document.getElementById('sync-stop');
+    if (stopBtn) stopBtn.onclick = syncStop;
+    const del = document.getElementById('sync-delete');
+    if (del) del.onclick = syncDeleteRemote;
+  }
+
+  // The NOTE is not softened anywhere: it is the one thing a user must read
+  // before opting in, since a shared token is a shared fleet list.
+  function syncNoteHTML() {
+    return `<p class="sync-note"><strong>NOTE:</strong> This is not an account, there is no password.
+      The token is the only key. Anyone you give it to can read and change your fleets.</p>`;
+  }
+
+  function syncOffHTML() {
+    return `
+      <p>You can sync your fleets across devices. (Your fleets stay on your device as well.)
+        Opting in gives you a <strong>Sync Token</strong>.</p>
+      <p>Put this phrase into any device and it will load and sync your current fleets.</p>
+      ${syncNoteHTML()}
+      <div class="settings-actions">
+        <button class="btn btn-primary btn-sm" id="sync-generate">Generate a Sync Token</button>
+      </div>
+      <div class="sync-existing">
+        <div class="settings-group-title">Already have one?</div>
+        <div class="sync-join-row">
+          <input type="text" id="sync-input" class="sync-input" placeholder="Enter your Sync Token…"
+                 autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Sync Token">
+          <button class="btn btn-primary btn-sm" id="sync-confirm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5 5 11-11"/></svg> Confirm
+          </button>
+        </div>
+      </div>
+      <p class="sync-status" id="sync-busy" hidden></p>
+      <p class="sync-error" id="sync-error" hidden></p>`;
+  }
+
+  function syncOnHTML() {
+    const last = FleetSync.lastSync();
+    const when = last ? new Date(last).toLocaleString() : 'not yet';
+    return `
+      <p class="sync-on-state"><strong>Syncing is on for this device.</strong>
+        ${fleets.length} fleet${fleets.length === 1 ? '' : 's'}, last synced ${esc(when)}.</p>
+      <div class="settings-group-title">Your Sync Token</div>
+      <div class="sync-token-row">
+        <code class="sync-token" id="sync-token-text">${esc(FleetSync.token())}</code>
+        <button class="btn btn-outline btn-sm" id="sync-copy">Copy</button>
+      </div>
+      <p class="sync-hint">Put this phrase into any device and it will load and sync your current fleets.</p>
+      ${syncNoteHTML()}
+      <div class="settings-actions">
+        <button class="btn btn-primary btn-sm" id="sync-now">Sync now</button>
+        <button class="btn btn-outline btn-sm" id="sync-stop" title="Keeps your fleets on this device and leaves the online copy alone">Stop syncing here</button>
+        <button class="btn btn-outline btn-sm sync-danger" id="sync-delete" title="Removes the online copy. Your fleets on this device are kept">Delete online copy</button>
+      </div>
+      <p class="sync-status" id="sync-busy" hidden></p>
+      <p class="sync-error" id="sync-error" hidden></p>`;
+  }
+
+  async function syncGenerate() {
+    syncError('');
+    syncBusy(true, 'Creating your Sync Token…');
+    try {
+      const r = await FleetSync.start();
+      renderSyncPanel();
+      showToast(r.total === 1 ? '1 fleet is now syncing' : r.total + ' fleets are now syncing');
+    } catch (e) {
+      syncBusy(false);
+      syncError(e.message || 'Could not create a Sync Token.');
+    }
+  }
+
+  /* Shows the counts before merging, which is the promise the copy makes: you
+   * find out what you are about to combine before it happens. */
+  async function syncJoinFromInput() {
+    const input = document.getElementById('sync-input');
+    if (!input) return;
+    const raw = input.value;
+    syncError('');
+    if (!FleetSync.looksLikeToken(raw)) {
+      syncError('That does not look like a Sync Token. It should be six words.');
+      return;
+    }
+    syncBusy(true, 'Looking up that token…');
+    let info;
+    try {
+      info = await FleetSync.preview(raw);
+    } catch (e) {
+      syncBusy(false);
+      syncError(e.message || 'Could not reach the sync service.');
+      return;
+    }
+    syncBusy(false);
+
+    const proceed = () => syncDoJoin(raw);
+    if (!info.exists) {
+      confirmAction('Start a new sync?',
+        'That token has no fleets saved against it yet. Your ' + info.localCount +
+        ' fleet' + (info.localCount === 1 ? '' : 's') + ' on this device will be uploaded to it.',
+        proceed);
+    } else {
+      confirmAction('Combine these fleets?',
+        'That token has ' + info.remoteCount + ' fleet' + (info.remoteCount === 1 ? '' : 's') +
+        '. This device has ' + info.localCount + '. Both sets are kept, giving you ' +
+        (info.remoteCount + info.localCount) + ' at most (fleets already shared between them are not duplicated).',
+        proceed);
+    }
+  }
+
+  async function syncDoJoin(raw) {
+    syncError('');
+    syncBusy(true, 'Loading fleets…');
+    try {
+      const r = await FleetSync.join(raw);
+      loadFleets();
+      renderFleetList();
+      renderSyncPanel();
+      showToast(r.total + ' fleet' + (r.total === 1 ? '' : 's') + ' now syncing');
+    } catch (e) {
+      syncBusy(false);
+      syncError(e.message || 'Could not load that token.');
+    }
+  }
+
+  async function syncNow() {
+    syncError('');
+    syncBusy(true, 'Syncing…');
+    try {
+      const r = await FleetSync.sync();
+      loadFleets();
+      renderFleetList();
+      renderSyncPanel();
+      showToast(r && r.changed ? 'Fleets updated' : 'Already up to date');
+    } catch (e) {
+      syncBusy(false);
+      syncError(e.message || 'Sync failed.');
+    }
+  }
+
+  async function syncCopyToken() {
+    try {
+      await navigator.clipboard.writeText(FleetSync.token());
+      showToast('Sync Token copied');
+    } catch (e) {
+      // Clipboard can be blocked; select the text so it can be copied by hand.
+      const el = document.getElementById('sync-token-text');
+      if (el) {
+        const r = document.createRange();
+        r.selectNodeContents(el);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(r);
+      }
+      showToast('Select and copy the token');
+    }
+  }
+
+  function syncStop() {
+    confirmAction('Stop syncing on this device?',
+      'Your fleets stay on this device, and the online copy is left alone. You can rejoin any time with the same token.',
+      () => { FleetSync.stop(); renderSyncPanel(); showToast('Syncing stopped on this device'); });
+  }
+
+  function syncDeleteRemote() {
+    confirmAction('Delete the online copy?',
+      'This removes the synced fleets from the server. Your fleets on THIS device are kept. Other devices still holding the token keep their own copies.',
+      async () => {
+        syncError('');
+        syncBusy(true, 'Deleting…');
+        try {
+          await FleetSync.deleteRemote();
+          renderSyncPanel();
+          showToast('Online copy deleted');
+        } catch (e) {
+          syncBusy(false);
+          syncError(e.message || 'Could not delete the online copy.');
+        }
+      });
   }
 
   /* ── Offline use ─────────────────────────────────────────────
@@ -9324,6 +9588,6 @@ let activeGroupId = null;
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText, openLastImported,
     openSettings, openChangelog, toggleSetting, setTheme, updateFleetDescription, exportAllFleets,
-    renderOfflinePanel, runOfflineSync, deleteOfflineData, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, sayName, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
+    renderOfflinePanel, runOfflineSync, deleteOfflineData, openSyncModal, openModal, closeModal, showRuleTooltip, openGameSizeChanger, applyGameSize, setCustomMax, openShipDetail, sayName, cycleShipArt, cycleBuilderArt, saveFleetDesc, toggleSecondaryObjective, openSecondaryModal, openAdmiralAbilityModal
   };
 })();

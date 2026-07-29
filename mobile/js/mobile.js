@@ -666,7 +666,9 @@
     edit: 'M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z',
     share: 'M720-80q-50 0-85-35t-35-85q0-7 1-14.5t3-13.5L322-392q-17 15-38 23.5t-44 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q23 0 44 8.5t38 23.5l282-164q-2-6-3-13.5t-1-14.5q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-23 0-44-8.5T638-672L356-508q2 6 3 13.5t1 14.5q0 7-1 14.5t-3 13.5l282 164q17-15 38-23.5t44-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-640q17 0 28.5-11.5T760-760q0-17-11.5-28.5T720-800q-17 0-28.5 11.5T680-760q0 17 11.5 28.5T720-720ZM240-440q17 0 28.5-11.5T280-480q0-17-11.5-28.5T240-520q-17 0-28.5 11.5T200-480q0 17 11.5 28.5T240-440Zm480 280q17 0 28.5-11.5T760-200q0-17-11.5-28.5T720-240q-17 0-28.5 11.5T680-200q0 17 11.5 28.5T720-160Zm0-600ZM240-480Zm480 280Z',
     duplicate: 'M760-200H320q-33 0-56.5-23.5T240-280v-560q0-33 23.5-56.5T320-920h280l240 240v400q0 33-23.5 56.5T760-200ZM560-640v-200H320v560h440v-360H560ZM160-40q-33 0-56.5-23.5T80-120v-560h80v560h440v80H160Zm160-800v200-200 560-560Z',
-    delete: 'M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z'
+    delete: 'M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z',
+    cloud_sync: 'M160-160v-80h109q-51-44-80-106t-29-134q0-112 68-197.5T400-790v84q-70 25-115 86.5T240-480q0 54 21.5 99.5T320-302v-98h80v240H160Zm440 0q-50 0-85-35t-35-85q0-48 33-82.5t81-36.5q17-36 50.5-58.5T720-480q53 0 91.5 34.5T858-360q42 0 72 29t30 70q0 42-29 71.5T860-160H600Zm116-360q-7-41-27-76t-49-62v98h-80v-240h240v80H691q43 38 70.5 89T797-520h-81ZM600-240h260q8 0 14-6t6-14q0-8-6-14t-14-6h-70v-50q0-29-20.5-49.5T720-400q-29 0-49.5 20.5T650-330v10h-50q-17 0-28.5 11.5T560-280q0 17 11.5 28.5T600-240Zm120-80Z',
+    check: 'M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z'
   };
   function sheetIcon(name) {
     const d = ICON_PATHS[name];
@@ -831,7 +833,12 @@
   /* ── Persistence (shared dfc_fleets) ───────────────────── */
   const STORAGE_KEY = 'dfc_fleets';
   function saveFleets() {
+    // Stamp updatedAt on whatever actually changed BEFORE writing, so the sync
+    // merge can tell a fresh edit from a stale copy. Centralised here rather than
+    // at this function's ~34 call sites so none can be missed.
+    const changed = window.FleetSync ? FleetSync.stampChanged(fleets) : true;
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(fleets)); } catch (e) {}
+    if (changed && window.FleetSync) FleetSync.notifyChanged();
   }
   function loadFleets() {
     try { fleets = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
@@ -4002,6 +4009,12 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-29', title: 'Sync your fleets across devices', items: [
+      'New Sync Fleets Online option (Settings on desktop, the menu on mobile). Opting in gives you a Sync Token, a six-word phrase. Put that phrase into any other device and your fleets load there and stay in step.',
+      'There is no account and no password. The token is the only key, so anyone you give it to can read and change your fleets. The app says so before you opt in.',
+      'Entering a token combines both sets of fleets rather than replacing either, and it tells you the counts first. Nothing is overwritten and nothing is lost.',
+      'Deleting a fleet on one device deletes it everywhere instead of reappearing on the next sync. You can stop syncing on one device and keep your fleets, or delete the online copy outright.',
+    ]},
     { date: '2026-07-29', title: 'Mobile: icons in the menus', items: [
       'Every button in the options menu, the fleet menu and the battlegroup menu now has an icon, so you can find the one you want without reading every line.',
       'Removed Two-column print. At phone export sizes the two columns were too cramped to read. Print preview on desktop still offers it.',
@@ -4152,12 +4165,209 @@
       // Misc Ships is a picker filter chip now (its own list), not a global setting.
       // Two-column print was dropped from mobile: the columns are unreadable at
       // phone-export sizes. Desktop print preview still offers it.
+      { icon: 'cloud_sync', label: window.FleetSync && FleetSync.enabled() ? 'Sync Fleets Online  ✓ On' : 'Sync Fleets Online', action: openSyncModal },
       { icon: 'download', label: 'Offline use…', action: openOfflineSheet },
       { icon: 'new_releases', label: "What's New", action: openChangelog },
       { icon: 'mail', label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
       { icon: 'bug_report', label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
       { icon: 'desktop', label: 'Switch to desktop view', action: viewDesktop }
     ]);
+  }
+
+  /* ── Sync fleets online ──────────────────────────────────────
+   * Opt-in cross-device sync. Engine and merge rules live in ../js/fleet-sync.js,
+   * shared with the desktop app so the two can never disagree about a merge.
+   *
+   * Unlike desktop this keeps the "combine these?" confirmation INSIDE the modal
+   * as its own state, rather than opening an action sheet on top of it. Stacking
+   * a sheet over a modal on a phone is how you end up unable to dismiss either. */
+  function openSyncModal() {
+    renderSyncBody();
+    document.getElementById('modal-sync').classList.add('active');
+    syncBackGuard();
+  }
+  function closeSyncModal() {
+    document.getElementById('modal-sync').classList.remove('active');
+    syncBackGuard();
+  }
+
+  function syncSetBusy(on, label) {
+    const el = document.getElementById('m-sync-busy');
+    if (el) { el.textContent = on ? (label || 'Working…') : ''; el.hidden = !on; }
+    document.querySelectorAll('#sync-body button, #sync-body input').forEach(b => { b.disabled = !!on; });
+  }
+  function syncSetError(msg) {
+    const el = document.getElementById('m-sync-error');
+    if (el) { el.textContent = msg || ''; el.hidden = !msg; }
+  }
+
+  // The NOTE is never softened: a shared token is a shared, editable fleet list.
+  const SYNC_NOTE = `<p class="m-sync-note"><strong>NOTE:</strong> This is not an account, there is no password.
+    The token is the only key. Anyone you give it to can read and change your fleets.</p>`;
+
+  /* Mobile has no toast helper (it reports things with sheets, which would stack
+   * over this modal), so success messages are shown inline and consumed by the
+   * next render. */
+  let syncFlash = '';
+  function renderSyncBody(state) {
+    const body = document.getElementById('sync-body');
+    if (!body) return;
+    if (!window.FleetSync || !FleetSync.supported()) {
+      body.innerHTML = `<p class="m-sync-p">This browser cannot sync fleets online.</p>`;
+      return;
+    }
+    const flash = syncFlash ? `<p class="m-sync-flash">${esc(syncFlash)}</p>` : '';
+    syncFlash = '';
+    if (state && state.mode === 'confirm') body.innerHTML = flash + syncConfirmHTML(state);
+    else if (FleetSync.enabled()) body.innerHTML = flash + syncOnHTML();
+    else body.innerHTML = flash + syncOffHTML();
+  }
+
+  function syncOffHTML() {
+    return `
+      <p class="m-sync-p">You can sync your fleets across devices. (Your fleets stay on your device as well.)
+        Opting in gives you a <strong>Sync Token</strong>.</p>
+      <p class="m-sync-p">Put this phrase into any device and it will load and sync your current fleets.</p>
+      ${SYNC_NOTE}
+      <button class="btn btn-primary btn-block" onclick="App.syncGenerate()">Generate a Sync Token</button>
+      <div class="m-sync-sub">Already have one?</div>
+      <input type="text" id="m-sync-input" class="m-sync-input" placeholder="Enter your Sync Token…"
+             autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Sync Token">
+      <button class="btn btn-primary btn-block m-sync-confirm" onclick="App.syncLookup()">
+        ${sheetIcon('check')} Confirm
+      </button>
+      <p class="m-sync-status" id="m-sync-busy" hidden></p>
+      <p class="m-sync-error" id="m-sync-error" hidden></p>`;
+  }
+
+  function syncConfirmHTML(s) {
+    const msg = s.exists
+      ? `That token has <strong>${s.remoteCount}</strong> fleet${s.remoteCount === 1 ? '' : 's'}.
+         This device has <strong>${s.localCount}</strong>. Both sets are kept, giving you
+         ${s.remoteCount + s.localCount} at most (fleets already shared between them are not duplicated).`
+      : `That token has no fleets saved against it yet. Your ${s.localCount}
+         fleet${s.localCount === 1 ? '' : 's'} on this device will be uploaded to it.`;
+    return `
+      <p class="m-sync-p">${msg}</p>
+      <code class="m-sync-token">${esc(s.token)}</code>
+      <button class="btn btn-primary btn-block" onclick="App.syncDoJoin('${esc(s.token)}')">
+        ${sheetIcon('check')} ${s.exists ? 'Combine fleets' : 'Start syncing'}
+      </button>
+      <button class="btn btn-ghost btn-block" onclick="App.renderSyncBody()">Cancel</button>
+      <p class="m-sync-status" id="m-sync-busy" hidden></p>
+      <p class="m-sync-error" id="m-sync-error" hidden></p>`;
+  }
+
+  function syncOnHTML() {
+    const last = FleetSync.lastSync();
+    const when = last ? new Date(last).toLocaleString() : 'not yet';
+    return `
+      <p class="m-sync-ok"><strong>Syncing is on for this device.</strong>
+        ${fleets.length} fleet${fleets.length === 1 ? '' : 's'}, last synced ${esc(when)}.</p>
+      <div class="m-sync-sub">Your Sync Token</div>
+      <code class="m-sync-token" id="m-sync-token">${esc(FleetSync.token())}</code>
+      <button class="btn btn-primary btn-block" onclick="App.syncCopyToken()">Copy token</button>
+      <p class="m-sync-p m-sync-hint">Put this phrase into any device and it will load and sync your current fleets.</p>
+      ${SYNC_NOTE}
+      <button class="btn btn-primary btn-block" onclick="App.syncNow()">Sync now</button>
+      <button class="btn btn-ghost btn-block" onclick="App.syncStop()">Stop syncing here</button>
+      <button class="btn btn-ghost btn-block m-sync-danger" onclick="App.syncDeleteRemote()">Delete online copy</button>
+      <p class="m-sync-status" id="m-sync-busy" hidden></p>
+      <p class="m-sync-error" id="m-sync-error" hidden></p>`;
+  }
+
+  async function syncGenerate() {
+    syncSetError('');
+    syncSetBusy(true, 'Creating your Sync Token…');
+    try {
+      const r = await FleetSync.start();
+      haptic(HAPTIC.tick);
+      syncFlash = r.total + ' fleet' + (r.total === 1 ? '' : 's') + ' now syncing';
+      renderSyncBody();
+    } catch (e) {
+      syncSetBusy(false);
+      syncSetError(e.message || 'Could not create a Sync Token.');
+    }
+  }
+
+  async function syncLookup() {
+    const input = document.getElementById('m-sync-input');
+    if (!input) return;
+    const raw = input.value;
+    syncSetError('');
+    if (!FleetSync.looksLikeToken(raw)) {
+      syncSetError('That does not look like a Sync Token. It should be six words.');
+      return;
+    }
+    syncSetBusy(true, 'Looking up that token…');
+    try {
+      const info = await FleetSync.preview(raw);
+      renderSyncBody({ mode: 'confirm', ...info });
+    } catch (e) {
+      syncSetBusy(false);
+      syncSetError(e.message || 'Could not reach the sync service.');
+    }
+  }
+
+  async function syncDoJoin(tok) {
+    syncSetError('');
+    syncSetBusy(true, 'Loading fleets…');
+    try {
+      const r = await FleetSync.join(tok);
+      loadFleets();
+      haptic(HAPTIC.tick);
+      syncFlash = r.total + ' fleet' + (r.total === 1 ? '' : 's') + ' now syncing';
+      renderSyncBody();
+      renderFleetList();
+    } catch (e) {
+      syncSetBusy(false);
+      syncSetError(e.message || 'Could not load that token.');
+    }
+  }
+
+  async function syncNow() {
+    syncSetError('');
+    syncSetBusy(true, 'Syncing…');
+    try {
+      const r = await FleetSync.sync();
+      loadFleets();
+      syncFlash = r && r.changed ? 'Fleets updated' : 'Already up to date';
+      renderSyncBody();
+      renderFleetList();
+    } catch (e) {
+      syncSetBusy(false);
+      syncSetError(e.message || 'Sync failed.');
+    }
+  }
+
+  async function syncCopyToken() {
+    try {
+      await navigator.clipboard.writeText(FleetSync.token());
+      haptic(HAPTIC.tick);
+      syncFlash = 'Sync Token copied';
+    } catch (e) {
+      syncFlash = 'Could not copy, select the token instead';
+    }
+    renderSyncBody();
+  }
+
+  function syncStop() {
+    FleetSync.stop();
+    syncFlash = 'Syncing stopped on this device';
+    renderSyncBody();
+  }
+
+  async function syncDeleteRemote() {
+    syncSetError('');
+    syncSetBusy(true, 'Deleting…');
+    try {
+      await FleetSync.deleteRemote();
+      syncFlash = 'Online copy deleted, fleets kept on this device';
+      renderSyncBody();
+    } catch (e) {
+      syncSetBusy(false);
+      syncSetError(e.message || 'Could not delete the online copy.');
+    }
   }
 
   /* ── Offline use ─────────────────────────────────────────────
@@ -4239,6 +4449,9 @@
   function deleteFleetPrompt() {
     showActionSheet([{ icon: 'delete', label: `Delete “${activeFleet.name}”?`, danger: true, action: () => {
       const idx = fleets.indexOf(activeFleet);
+      // Tombstone first: without it the next sync would restore the fleet the
+      // user just deleted, from another device's copy.
+      if (window.FleetSync && activeFleet.id) FleetSync.recordDeleted(activeFleet.id);
       if (idx >= 0) fleets.splice(idx, 1);
       activeFleet = null;
       saveFleets();
@@ -4787,6 +5000,29 @@
     navigate('screen-fleet-list', { replace: true });
     setTimeout(maybeShowOfflineTip, 1200);
 
+    // Pull anything another device changed while this one was closed. Runs after
+    // the first render so a slow network never delays the app, and stays silent on
+    // failure: the next edit or reload retries.
+    if (window.FleetSync && FleetSync.enabled()) {
+      FleetSync.onChange = () => {
+        loadFleets();
+        renderFleetList();
+        // The open fleet may have been edited or deleted on the other device.
+        if (activeFleet) {
+          const still = fleets.find(f => f.id === activeFleet.id);
+          if (still) { activeFleet = still; }
+          else {
+            activeFleet = null;
+            history.length = 0;
+            navigate('screen-fleet-list', { replace: true });
+            showSheet('Fleet removed', '<p>That fleet was deleted on another device.</p>');
+          }
+        }
+        if (document.getElementById('modal-sync').classList.contains('active')) renderSyncBody();
+      };
+      setTimeout(() => { FleetSync.sync().catch(() => {}); }, 800);
+    }
+
     const search = document.getElementById('picker-search');
     if (search) search.addEventListener('input', () => renderShipPicker());
     const fp = document.getElementById('new-fleet-faction');
@@ -4820,6 +5056,7 @@
     overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
     importFleetPrompt, doImportText,
     openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayTogglePass, mPlayChangeVP, mPlayChangeOppVP, mPlayChangeOppGroups, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayOrderDown, mPlayOrderMove, mPlayOrderUp, mPlayOrderCancel, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayToggleCripPanel, mPlayCorruptorChange,
+    openSyncModal, closeSyncModal, renderSyncBody, syncGenerate, syncLookup, syncDoJoin, syncNow, syncCopyToken, syncStop, syncDeleteRemote,
     openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet, sayName
   };
 

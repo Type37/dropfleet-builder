@@ -220,6 +220,16 @@
 </div>
 
 <!-- ═══ Action Sheet (overflow menus) ═══ -->
+<div class="modal-overlay" id="modal-sync">
+  <div class="modal-panel modal-panel-pop">
+    <div class="modal-header">
+      <div class="modal-title">Sync Your Fleets Online</div>
+      <button class="modal-close" onclick="App.closeSyncModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="sync-body"><!-- Populated by JS --></div>
+  </div>
+</div>
+
 <div class="sheet-scrim" id="action-sheet-scrim" onclick="App.closeActionSheet()"></div>
 <div class="action-sheet" id="action-sheet" role="menu">
   <div class="rule-sheet-handle" onclick="App.closeActionSheet()"></div>
@@ -244,6 +254,7 @@
 
 <script src="../js/rank-insignia.js"></script>
 <script src="../js/offline-sync.js"></script>
+<script src="../js/fleet-sync.js"></script>
 <script src="js/mobile.js"></script>
 <script>
   // The /mobile/ app needs its OWN service-worker registration: home-screen PWA

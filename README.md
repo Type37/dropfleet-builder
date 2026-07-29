@@ -47,6 +47,19 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-29 — Fleet Sync: opt-in cross-device sync
+User-facing: **Sync Fleets Online** (desktop Settings, mobile menu). Opting in mints a six-word **Sync Token**; entering it on another device combines both fleet lists after showing the counts. No account, no password.
+
+- **Backend**: Firebase project `dropfleet-builder`, Firestore only, free Spark plan. `firestore.rules` is in the repo and is the source of truth for what is published.
+- **No Firebase SDK.** Plain Firestore REST via `fetch`. The SDK is ~400 KB from a CDN and would fight the offline-first service worker. The fleet list travels as one JSON string in a `payload` field to avoid Firestore's typed-value format for deeply nested objects.
+- **The token IS the credential** (a capability, not an account). It doubles as the document ID. 6 words from a 304-word themed list = 49.5 bits; each guess costs an HTTPS round trip.
+- **`allow list: if false` is load-bearing.** Without it the whole `/sync` collection could be enumerated without guessing any token. `delete` is allowed to token holders: denying it stopped no attack (a holder can already overwrite the payload) while making it impossible to remove your data.
+- **`FleetSync.stampChanged()` is called from `saveFleets()` in both apps.** Desktop had 48 `saveFleets()` call sites and only 4 that set `updatedAt`; since the merge resolves conflicts by `updatedAt`, an unstamped edit could be overwritten by a stale copy. Comparison uses a key-SORTED serialisation, because a false "changed" would let an untouched fleet win a merge it should lose.
+- **Merge**: union by fleet id, newest `updatedAt` wins, deletions travel as tombstones so a deleted fleet is not restored by the next pull. `writeLocal()` re-seeds the change baseline after a merge.
+- Mobile keeps the "combine these?" confirmation *inside* the modal rather than opening an action sheet over it (stacked sheet + modal on a phone is undismissable).
+- `scripts/test-fleet-sync.mjs` runs the real module in a stubbed browser: 35 assertions. Every rule guard was also verified against the live database.
+- **Still to do**: App Check. Free, and stops scripted abuse burning the daily quota. Needs the GitHub Pages domain registered.
+
 ### 2026-07-29 — Mobile action-sheet icons; two-column print dropped
 - Material Symbols (outlined, 24px) inlined as an `ICON_PATHS` map in `mobile.js` rather than pulled from Google's font CDN, so the sheets still draw icons offline. `showActionSheet` items take an optional `icon` key.
 - An icon on any item sets `has-icon` on all of them, so a mixed sheet stays aligned. Labels sit in `.as-label` and wrap rather than truncate.

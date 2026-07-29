@@ -1194,6 +1194,73 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.45;
 }
 .offline-panel .settings-actions { margin-top: var(--sp-sm); }
+
+/* ── Sync fleets online (modal) ────────────────────────────────
+   The NOTE gets warning styling because it is the one thing a user must read
+   before opting in: a shared token is a shared, editable fleet list. The token
+   itself wraps rather than scrolling or truncating, since a half-visible token
+   is useless to type into another device. */
+#sync-body p { font-size: var(--text-sm); line-height: 1.5; margin: 0 0 var(--sp-sm); color: var(--ink); }
+.sync-note {
+  font-size: var(--text-xs);
+  color: var(--ink);
+  background: var(--warn-bg);
+  border-left: 3px solid var(--warn-ink);
+  padding: var(--sp-sm);
+  border-radius: 2px;
+  line-height: 1.5;
+}
+.sync-on-state strong { color: var(--success-ink); }
+.sync-token-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-xs);
+}
+.sync-token {
+  flex: 1 1 260px;
+  min-width: 0;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--paper-alt, rgba(0, 0, 0, .05));
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: var(--sp-sm);
+  overflow-wrap: anywhere;   /* never clip a token; let the box grow */
+  line-height: 1.4;
+}
+.sync-hint { font-size: var(--text-xs) !important; color: var(--ink-muted) !important; }
+.sync-existing { margin-top: var(--sp-lg); }
+.sync-join-row {
+  display: flex;
+  gap: var(--sp-sm);
+  align-items: stretch;
+  flex-wrap: wrap;
+  margin-top: var(--sp-xs);
+}
+.sync-input {
+  flex: 1 1 220px;
+  min-width: 0;
+  font-size: var(--text-sm);
+  padding: var(--sp-sm);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.sync-input:focus { outline: 2px solid var(--accent, #b8932e); outline-offset: 1px; }
+.sync-status { font-size: var(--text-xs) !important; color: var(--ink-muted) !important; margin-top: var(--sp-sm) !important; }
+.sync-error {
+  font-size: var(--text-xs) !important;
+  color: var(--danger) !important;
+  margin-top: var(--sp-sm) !important;
+  line-height: 1.45;
+}
+.sync-danger { color: var(--danger); }
+#sync-body .settings-actions { margin-top: var(--sp-md); }
 .offline-progress { margin-top: var(--sp-sm); }
 .offline-bar {
   height: 6px;

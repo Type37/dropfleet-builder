@@ -33,6 +33,7 @@ CORE_FILES = [
     'js/calc-ui.js',
     'js/app.js',
     'js/offline-sync.js',
+    'js/fleet-sync.js',
     'manifest.webmanifest',
     'mobile/index.html',
     'mobile/css/mobile.css',
