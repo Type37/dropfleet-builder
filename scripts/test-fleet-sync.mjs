@@ -181,5 +181,64 @@ console.log('\ndeleteRemote erases the cloud copy but never the local fleets');
   check('syncing is off afterwards', !s.FleetSync.enabled());
 }
 
+/* The apps have 80+ saveFleets() call sites and almost none set updatedAt, so
+   stampChanged is what actually keeps the merge honest. If it under-stamps, an
+   edit can be overwritten by a stale copy. If it over-stamps, an untouched
+   fleet wins a merge it should have lost. Both lose someone's work. */
+console.log('\nstampChanged detects real edits and ignores non-edits');
+{
+  const s = makeSandbox();
+  const list = [{ id: 'A', name: 'Alpha', updatedAt: 100 }, { id: 'B', name: 'Beta', updatedAt: 100 }];
+  s.localStorage.setItem('dfc_fleets', JSON.stringify(list));
+
+  const noop = s.FleetSync.stampChanged(JSON.parse(JSON.stringify(list)));
+  check('no edit means no change reported', noop === false, String(noop));
+
+  const edited = JSON.parse(JSON.stringify(list));
+  edited[0].name = 'Alpha Renamed';
+  const did = s.FleetSync.stampChanged(edited);
+  check('an edit is reported', did === true);
+  check('the edited fleet is stamped', edited[0].updatedAt > 100, String(edited[0].updatedAt));
+  check('the untouched fleet is NOT stamped', edited[1].updatedAt === 100, String(edited[1].updatedAt));
+
+  // Key order must not count as an edit: a false positive would let this stale
+  // copy beat a genuinely newer one from another device.
+  const reordered = [{ updatedAt: edited[0].updatedAt, name: 'Alpha Renamed', id: 'A' },
+                     { name: 'Beta', updatedAt: 100, id: 'B' }];
+  check('key reordering is not an edit', s.FleetSync.stampChanged(reordered) === false);
+
+  // A deletion counts as a change so the sync gets triggered.
+  check('removing a fleet is reported', s.FleetSync.stampChanged([reordered[0]]) === true);
+
+  // A legacy fleet with no timestamp at all gets one.
+  const legacy = [{ id: 'C', name: 'No timestamp' }];
+  s.FleetSync.stampChanged(legacy);
+  check('legacy fleet gains a timestamp', typeof legacy[0].updatedAt === 'number');
+}
+
+console.log('\na merge does not make every fleet look freshly edited');
+{
+  // Regression guard: after join() rewrites local storage, the change-detection
+  // baseline must be rebuilt, or the next save stamps everything with now() and
+  // this device wins every future conflict.
+  const a = makeSandbox();
+  a.localStorage.setItem('dfc_fleets', JSON.stringify([{ id: 'A', name: 'a', updatedAt: 100 }]));
+  const { token } = await a.FleetSync.start();
+
+  const b = makeSandbox();
+  b.remote.doc = a.remote.doc;
+  b.localStorage.setItem('dfc_fleets', JSON.stringify([{ id: 'B', name: 'b', updatedAt: 200 }]));
+  b.FleetSync.stampChanged(JSON.parse(b.store.get('dfc_fleets')));   // establish baseline
+  await b.FleetSync.join(token);
+
+  const after = fleets(b.store.get('dfc_fleets'));
+  check('merged to 2 fleets', after.length === 2, String(after.length));
+  const restamped = b.FleetSync.stampChanged(after);
+  check('post-merge save reports no spurious edits', restamped === false, String(restamped));
+  check('timestamps survive the merge untouched',
+        after.every(f => f.updatedAt === 100 || f.updatedAt === 200),
+        JSON.stringify(after.map(f => f.updatedAt)));
+}
+
 console.log('\n' + pass + ' passed, ' + fail + ' failed');
 process.exit(fail ? 1 : 0);

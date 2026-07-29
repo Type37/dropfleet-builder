@@ -103,6 +103,11 @@
   }
   function writeLocal(list) {
     localStorage.setItem(FLEETS_KEY, JSON.stringify(list));
+    // A merge rewrites the whole list, so the change-detection baseline has to be
+    // rebuilt from it. Without this the next saveFleets() would see every fleet
+    // as "changed", stamp them all with now(), and let this device win every
+    // future conflict regardless of who actually edited last.
+    if (sigs) seedSigs();
   }
   function readDeleted() {
     try { const o = JSON.parse(localStorage.getItem(DELETED_KEY) || '{}'); return (o && typeof o === 'object') ? o : {}; }
@@ -119,6 +124,61 @@
     const m = readDeleted();
     m[id] = Date.now();
     writeDeleted(m);
+  }
+
+  /* ── Change stamping ─────────────────────────────────────────
+   * The merge decides a conflict with `updatedAt`, so every real edit MUST bump
+   * it. The apps cannot be trusted to do that: between them there are 80+
+   * saveFleets() call sites and only a handful set updatedAt. A fleet edited
+   * without a bump would look old and could be overwritten by a stale copy from
+   * another device, which is exactly the data loss this feature must not cause.
+   *
+   * So instead of stamping at 80 call sites, saveFleets() hands the list here and
+   * we stamp whatever actually changed since the last save.
+   *
+   * Comparison uses a key-sorted serialisation with top-level `updatedAt`
+   * excluded. Sorting matters: plain JSON.stringify would report a change
+   * whenever key order shifted, and a false "this changed" would let an
+   * untouched local fleet win a merge against a genuinely newer remote one. */
+  function stableSig(v, dropUpdatedAt) {
+    if (v === null || typeof v !== 'object') return JSON.stringify(v);
+    if (Array.isArray(v)) return '[' + v.map(x => stableSig(x, false)).join(',') + ']';
+    const keys = Object.keys(v).filter(k => !(dropUpdatedAt && k === 'updatedAt')).sort();
+    return '{' + keys.map(k => JSON.stringify(k) + ':' + stableSig(v[k], false)).join(',') + '}';
+  }
+
+  let sigs = null;
+  function seedSigs() {
+    sigs = {};
+    readLocal().forEach(f => { if (f && f.id) sigs[f.id] = stableSig(f, true); });
+  }
+
+  /* Called at the top of saveFleets() in both apps. Mutates the fleets in place,
+   * setting updatedAt on any that differ from their last-saved content. Returns
+   * true if anything changed, so the caller can skip a pointless network sync. */
+  function stampChanged(list) {
+    if (!sigs) seedSigs();          // seeded from storage at load, so the first
+                                    // save after an edit is correctly detected
+    const now = Date.now();
+    let changed = false;
+    const seen = {};
+    (list || []).forEach(f => {
+      if (!f || !f.id) return;
+      seen[f.id] = true;
+      const sig = stableSig(f, true);
+      if (sigs[f.id] !== sig) {
+        f.updatedAt = now;
+        sigs[f.id] = sig;
+        changed = true;
+      } else if (!f.updatedAt) {
+        f.updatedAt = now;          // legacy fleet that never had a timestamp
+      }
+    });
+    // A fleet that vanished from the list counts as a change (a delete).
+    Object.keys(sigs).forEach(id => {
+      if (!seen[id]) { delete sigs[id]; changed = true; }
+    });
+    return changed;
   }
 
   /* ── Tokens ──────────────────────────────────────────────── */
@@ -326,6 +386,7 @@
     supported, enabled, token, lastSync,
     randomToken, normaliseToken, looksLikeToken,
     preview, join, start, sync, notifyChanged, stop, deleteRemote, recordDeleted,
+    stampChanged,
     wordCount: WORDS.length,
     WORDS_PER_TOKEN: WORDS_PER_TOKEN,
     onChange: null           // apps assign a re-render callback
