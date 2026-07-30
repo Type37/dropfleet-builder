@@ -4014,6 +4014,7 @@
       'There is no account and no password. The token is the only key, so anyone you give it to can read and change your fleets. The app says so before you opt in.',
       'Entering a token combines both sets of fleets rather than replacing either, and it tells you the counts first. Nothing is overwritten and nothing is lost.',
       'Deleting a fleet on one device deletes it everywhere instead of reappearing on the next sync. You can stop syncing on one device and keep your fleets, or delete the online copy outright.',
+      'The Sync Token stays on the device once you enter it, so a phone keeps syncing on its own. It refreshes when you open the app, when you switch back to it, when a lost signal comes back, and after any change you make.',
     ]},
     { date: '2026-07-29', title: 'Mobile: icons in the menus', items: [
       'Every button in the options menu, the fleet menu and the battlegroup menu now has an icon, so you can find the one you want without reading every line.',

@@ -272,5 +272,47 @@ console.log('\nautomatic syncs are rate limited, manual ones are not');
   check('manual sync always goes through', writes === before + 1, 'writes=' + writes);
 }
 
+/* Returning to the app is what makes sync feel continuous: a phone sitting open
+   while you edit on the desktop has no other reason to look again. But it must
+   not turn app-switching into a burst of writes. */
+console.log('\nreturning to the app re-syncs, but not in a burst');
+{
+  const s = makeSandbox();
+  s.localStorage.setItem('dfc_fleets', JSON.stringify([{ id: 'A', updatedAt: 1 }]));
+  await s.FleetSync.start();
+
+  let writes = 0;
+  const realFetch = s.sandbox.fetch;
+  s.sandbox.fetch = async (url, opts) => {
+    if (opts && opts.method === 'PATCH') writes++;
+    return realFetch(url, opts);
+  };
+
+  // Just came back from another app, but a sync happened moments ago.
+  s.FleetSync.maybeAutoSync();
+  await new Promise(r => setTimeout(r, 150));
+  check('does not re-sync straight after syncing', writes === 0, 'writes=' + writes);
+
+  // Now pretend the last sync was long ago: coming back SHOULD refresh.
+  s.localStorage.setItem('dfc_sync_last', String(Date.now() - 120000));
+  s.FleetSync.maybeAutoSync();
+  await new Promise(r => setTimeout(r, 200));
+  check('re-syncs when the data could be stale', writes === 1, 'writes=' + writes);
+
+  // Flicking between apps repeatedly must not stack up writes.
+  for (let i = 0; i < 10; i++) s.FleetSync.maybeAutoSync();
+  await new Promise(r => setTimeout(r, 200));
+  check('ten app switches do not become ten writes', writes === 1, 'writes=' + writes);
+
+  // And it stays quiet entirely when the user never opted in.
+  const off = makeSandbox();
+  let offWrites = 0;
+  const offFetch = off.sandbox.fetch;
+  off.sandbox.fetch = async (u, o) => { if (o && o.method === 'PATCH') offWrites++; return offFetch(u, o); };
+  off.FleetSync.maybeAutoSync();
+  await new Promise(r => setTimeout(r, 150));
+  check('silent when syncing is off', offWrites === 0, 'writes=' + offWrites);
+}
+
 console.log('\n' + pass + ' passed, ' + fail + ' failed');
 process.exit(fail ? 1 : 0);

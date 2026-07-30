@@ -396,10 +396,44 @@
     return true;
   }
 
+  /* ── Staying in step ─────────────────────────────────────────
+   * A device syncs on app start and after its own edits, but that leaves the
+   * obvious gap: a phone sitting open while you edit on the desktop has no
+   * reason to look again, so it quietly shows a stale list.
+   *
+   * Closed with events rather than polling. Polling on a timer would spend the
+   * free tier's daily reads doing nothing useful, and would keep a phone's radio
+   * awake at a table. These three cover what actually happens in practice:
+   *
+   *   visibilitychange  you switch back to the app (the big one on a phone,
+   *                     where you are constantly leaving and returning)
+   *   focus             same idea on a desktop with the app in a background tab
+   *   online            signal came back, which is the games-hall case: the app
+   *                     is already open and reconnects
+   *
+   * All three go through the same MIN_AUTO_GAP floor, so flicking between apps
+   * cannot turn into a burst of writes. */
+  function maybeAutoSync() {
+    if (!enabled()) return;
+    if (Date.now() - (lastSync() || 0) < MIN_AUTO_GAP) return;
+    sync().catch(() => {});
+  }
+  try {
+    if (typeof document !== 'undefined' && document.addEventListener) {
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') maybeAutoSync();
+      });
+    }
+    if (typeof window !== 'undefined' && window.addEventListener) {
+      window.addEventListener('focus', maybeAutoSync);
+      window.addEventListener('online', maybeAutoSync);
+    }
+  } catch (e) { /* non-browser host (the test sandbox); nothing to attach to */ }
+
   const api = {
     supported, enabled, token, lastSync,
     randomToken, normaliseToken, looksLikeToken,
-    preview, join, start, sync, notifyChanged, stop, deleteRemote, recordDeleted,
+    preview, join, start, sync, notifyChanged, maybeAutoSync, stop, deleteRemote, recordDeleted,
     stampChanged,
     wordCount: WORDS.length,
     WORDS_PER_TOKEN: WORDS_PER_TOKEN,

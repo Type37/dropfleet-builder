@@ -47,6 +47,13 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-29 — Fleet Sync stays in step without polling
+A device synced on app start and after its own edits, which left the obvious gap: a phone sitting open while you edit on the desktop had no reason to look again, so it quietly showed a stale list.
+
+Closed with events rather than a timer. Polling would spend the free tier's daily reads doing nothing and keep a phone's radio awake at a table. Three listeners in `fleet-sync.js` cover what actually happens: `visibilitychange` (switching back to the app, the big one on a phone), `focus` (same idea for a background desktop tab), and `online` (signal returning, the games-hall case). All three go through the same `MIN_AUTO_GAP` floor, so flicking between apps cannot become a burst of writes.
+
+Verified end to end: with the app open, the cloud copy was edited from outside, and returning to the app pulled the change and re-rendered the list. Tests now 41, including that ten rapid app switches produce exactly one write and that nothing fires when the user never opted in.
+
 ### 2026-07-29 — Fleet Sync: two visual bugs found in a real two-device test
 Both were invisible to the automated tests, which drove `#confirm-action` programmatically and so never looked at the screen.
 
