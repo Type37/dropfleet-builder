@@ -353,12 +353,26 @@
 
   /* Debounced sync for "keep both in step" after an edit. Failures are swallowed
    * on purpose: a background sync must never interrupt list building, and the
-   * next change (or next app start) retries. */
+   * next change (or next app start) retries.
+   *
+   * Also rate limited. The free Firestore tier has a hard daily write allowance,
+   * and building a list is a burst activity: adding eight ships to a battlegroup
+   * is eight saves. Without a floor between automatic syncs, heavy list building
+   * (or a future bug that calls saveFleets in a loop) could spend the day's quota
+   * and take sync down for everyone until it resets. This is the cheap version of
+   * what App Check would guard against, with no extra dependencies.
+   *
+   * The floor applies ONLY to automatic syncs. "Sync now" is an explicit request
+   * and always goes through immediately. */
+  const MIN_AUTO_GAP = 15000;
   let timer = null;
   function notifyChanged(delay) {
     if (!enabled()) return;
+    const base = delay == null ? 2500 : delay;
+    const since = Date.now() - (lastSync() || 0);
+    const wait = Math.max(base, MIN_AUTO_GAP - since);
     clearTimeout(timer);
-    timer = setTimeout(() => { sync().catch(() => {}); }, delay == null ? 2500 : delay);
+    timer = setTimeout(() => { sync().catch(() => {}); }, wait);
   }
 
   /* Stop syncing on THIS device only. The token and its cloud copy survive, so

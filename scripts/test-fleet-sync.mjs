@@ -41,7 +41,10 @@ function makeSandbox() {
   sandbox.self = sandbox;
   vm.createContext(sandbox);
   vm.runInContext(SRC, sandbox);
-  return { FleetSync: win.FleetSync, store, remote, localStorage };
+  // `sandbox` is returned so a test can wrap its fetch: the module resolves the
+  // global at call time, so patching sandbox.fetch intercepts real traffic.
+  // Patching the returned wrapper object instead would silently do nothing.
+  return { FleetSync: win.FleetSync, store, remote, localStorage, sandbox };
 }
 
 const fleets = j => JSON.parse(j || '[]');
@@ -238,6 +241,35 @@ console.log('\na merge does not make every fleet look freshly edited');
   check('timestamps survive the merge untouched',
         after.every(f => f.updatedAt === 100 || f.updatedAt === 200),
         JSON.stringify(after.map(f => f.updatedAt)));
+}
+
+/* Building a list is bursty: adding eight ships is eight saves. Automatic syncs
+   must be spaced so heavy list building cannot spend the free tier's daily write
+   allowance and take sync down until it resets. */
+console.log('\nautomatic syncs are rate limited, manual ones are not');
+{
+  const s = makeSandbox();
+  s.localStorage.setItem('dfc_fleets', JSON.stringify([{ id: 'A', updatedAt: 1 }]));
+  await s.FleetSync.start();
+
+  // Count writes reaching the network. Must patch the SANDBOX global, not the
+  // returned wrapper, or the module keeps using the original fetch.
+  let writes = 0;
+  const realFetch = s.sandbox.fetch;
+  s.sandbox.fetch = async (url, opts) => {
+    if (opts && opts.method === 'PATCH') writes++;
+    return realFetch(url, opts);
+  };
+
+  // A burst of 20 edits must collapse into far fewer network writes.
+  for (let i = 0; i < 20; i++) s.FleetSync.notifyChanged(1);
+  await new Promise(r => setTimeout(r, 300));
+  check('a 20-edit burst does not become 20 writes', writes <= 1, 'writes=' + writes);
+
+  // An explicit "Sync now" is never delayed.
+  const before = writes;
+  await s.FleetSync.sync();
+  check('manual sync always goes through', writes === before + 1, 'writes=' + writes);
 }
 
 console.log('\n' + pass + ' passed, ' + fail + ' failed');

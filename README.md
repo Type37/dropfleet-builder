@@ -58,7 +58,8 @@ User-facing: **Sync Fleets Online** (desktop Settings, mobile menu). Opting in m
 - **Merge**: union by fleet id, newest `updatedAt` wins, deletions travel as tombstones so a deleted fleet is not restored by the next pull. `writeLocal()` re-seeds the change baseline after a merge.
 - Mobile keeps the "combine these?" confirmation *inside* the modal rather than opening an action sheet over it (stacked sheet + modal on a phone is undismissable).
 - `scripts/test-fleet-sync.mjs` runs the real module in a stubbed browser: 35 assertions. Every rule guard was also verified against the live database.
-- **Still to do**: App Check. Free, and stops scripted abuse burning the daily quota. Needs the GitHub Pages domain registered.
+- **App Check: decided against.** It requires the Firebase JS SDK to mint tokens, a reCAPTCHA v3 registration, and Google's reCAPTCHA script on the page. Enforcement would break the REST implementation outright unless all three are added. That means two CDN dependencies in a deliberately dependency-free offline-first app, plus a tracking script on a site that uses GoatCounter precisely to avoid one. What it buys is protection against scripted quota abuse, but Spark has no card attached so no bill is possible: the worst case is sync pausing until the daily quota resets, and rule-denied reads are not charged anyway. Revisit only if abuse actually happens.
+- **Automatic syncs are rate limited instead** (`MIN_AUTO_GAP`, 15s). List building is bursty (adding eight ships is eight saves), so without a floor heavy use, or a future bug looping `saveFleets`, could spend the daily write allowance. "Sync now" is explicit and never delayed.
 
 ### 2026-07-29 — Mobile action-sheet icons; two-column print dropped
 - Material Symbols (outlined, 24px) inlined as an `ICON_PATHS` map in `mobile.js` rather than pulled from Google's font CDN, so the sheets still draw icons offline. `showActionSheet` items take an optional `icon` key.
