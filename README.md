@@ -47,6 +47,14 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-29 — Fleet Sync: two visual bugs found in a real two-device test
+Both were invisible to the automated tests, which drove `#confirm-action` programmatically and so never looked at the screen.
+
+- **The confirmation dialog rendered BEHIND the sync modal.** Every `.modal-overlay` shares `--z-overlay`, so stacking fell to DOM order, and `#modal-sync` is declared after `#modal-confirm` in index.html. Pressing Confirm appeared to do nothing. Fixed by giving `#modal-confirm` `--z-overlay + 50`: a confirmation must always sit above whatever asked for it, not just above this one modal.
+- **The confirm button said "Delete", in red.** `#modal-confirm` began as the delete confirmer with a hardcoded danger button, so reusing it asked "Combine these fleets?" and offered a red **Delete**. `confirmAction()` now takes `{ label, danger }`; defaults are unchanged so all existing delete callers behave exactly as before.
+
+Verified across two genuinely isolated storages (separate browsers and origins, throwaway data): join merged 2+1=3, the reverse pull worked, and a delete on one device did NOT come back as a zombie on the other. Confirmed the deployed site reaches Firestore, that `/sync` is still not enumerable (403), and that the 22 real fleets on the live site were never touched.
+
 ### 2026-07-29 — Fleet Sync: opt-in cross-device sync
 User-facing: **Sync Fleets Online** (desktop Settings, mobile menu). Opting in mints a six-word **Sync Token**; entering it on another device combines both fleet lists after showing the counts. No account, no password.
 

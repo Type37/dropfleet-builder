@@ -8211,13 +8211,13 @@ let activeGroupId = null;
       confirmAction('Start a new sync?',
         'That token has no fleets saved against it yet. Your ' + info.localCount +
         ' fleet' + (info.localCount === 1 ? '' : 's') + ' on this device will be uploaded to it.',
-        proceed);
+        proceed, { label: 'Start syncing', danger: false });
     } else {
       confirmAction('Combine these fleets?',
         'That token has ' + info.remoteCount + ' fleet' + (info.remoteCount === 1 ? '' : 's') +
         '. This device has ' + info.localCount + '. Both sets are kept, giving you ' +
         (info.remoteCount + info.localCount) + ' at most (fleets already shared between them are not duplicated).',
-        proceed);
+        proceed, { label: 'Combine fleets', danger: false });
     }
   }
 
@@ -8272,7 +8272,8 @@ let activeGroupId = null;
   function syncStop() {
     confirmAction('Stop syncing on this device?',
       'Your fleets stay on this device, and the online copy is left alone. You can rejoin any time with the same token.',
-      () => { FleetSync.stop(); renderSyncPanel(); showToast('Syncing stopped on this device'); });
+      () => { FleetSync.stop(); renderSyncPanel(); showToast('Syncing stopped on this device'); },
+      { label: 'Stop syncing', danger: false });
   }
 
   function syncDeleteRemote() {
@@ -8289,7 +8290,7 @@ let activeGroupId = null;
           syncBusy(false);
           syncError(e.message || 'Could not delete the online copy.');
         }
-      });
+      }, { label: 'Delete online copy' });
   }
 
   /* ── Offline use ─────────────────────────────────────────────
@@ -8535,11 +8536,21 @@ let activeGroupId = null;
     syncBackGuard();
   });
 
-  function confirmAction(title, message, onConfirm) {
+  /* `opts` = { label, danger }. This dialog started life as the delete confirmer,
+   * so its button is hardcoded to a red "Delete" in index.html. Reusing it for
+   * anything else asked the user to confirm "Combine these fleets?" with a red
+   * Delete button, which reads like it is about to destroy the list. Callers that
+   * are not deleting must pass a label and danger:false. Defaults keep every
+   * existing delete call site behaving exactly as before. */
+  function confirmAction(title, message, onConfirm, opts) {
     document.getElementById('confirm-title').textContent = title;
     document.getElementById('confirm-message').textContent = message;
     const btn = document.getElementById('confirm-action');
     const newBtn = btn.cloneNode(true);
+    newBtn.textContent = (opts && opts.label) || 'Delete';
+    const danger = !opts || opts.danger !== false;
+    newBtn.classList.toggle('btn-danger', danger);
+    newBtn.classList.toggle('btn-primary', !danger);
     btn.parentNode.replaceChild(newBtn, btn);
     newBtn.addEventListener('click', () => {
       closeModal('modal-confirm');

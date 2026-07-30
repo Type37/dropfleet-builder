@@ -1413,6 +1413,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 .modal-overlay.active { opacity: 1; visibility: visible; }
 
+/* A confirmation must always sit above whatever asked for it. Every overlay
+   shares --z-overlay, so stacking fell to DOM order: any modal declared after
+   #modal-confirm in index.html would paint over its own confirmation dialog,
+   and the user would press a button and appear to get nothing. Found exactly
+   that with "Combine these fleets?" behind the sync modal. */
+#modal-confirm { z-index: calc(var(--z-overlay) + 50); }
+
 .modal-panel {
   background: var(--paper);
   border: 1px solid var(--stroke);
