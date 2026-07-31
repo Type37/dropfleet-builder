@@ -47,6 +47,11 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-07-31 — The Admiral warning waits until a third of the points are spent
+"Fleet must contain an Admiral" fired the moment the first ship landed, so an almost empty list opened with a red error you could do nothing useful about yet. Most people pick ships first and settle the admiral once the shape of the list is clear.
+
+The check now waits until the fleet is at or past a third of its points limit (`maxPts / 3`, or a third of the bracket minimum for open-ended Reconquest, where the max is the 99999 sentinel). Same rule in `validateFleet` in both apps, using each one's existing custom-limit-aware total, so a custom cap scales the threshold with it. Nothing else about the check changed: it is still an error, and it still appears well before the list is legal.
+
 ### 2026-07-29 — Fleet Sync stays in step without polling
 A device synced on app start and after its own edits, which left the obvious gap: a phone sitting open while you edit on the desktop had no reason to look again, so it quietly showed a stale list.
 

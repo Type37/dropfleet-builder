@@ -1123,8 +1123,11 @@
     const gc = countableGroups(fleet).length;
     if (gc > size.groups) w.push({ t: 'error', m: `Too many groups: ${gc}/${size.groups}` });
 
-    // Admiral required
-    if (!fleet.admirals || fleet.admirals.length === 0) {
+    // Admiral required. Held back until a third of the points budget is spent:
+    // most people pick ships first, so warning on the empty fleet is just noise.
+    // (Open-ended Reconquest has no max, so a third of its floor is used.)
+    const admBudget = (limit && limit !== 99999) ? limit : size.min;
+    if ((!fleet.admirals || fleet.admirals.length === 0) && pts >= admBudget / 3) {
       w.push({ t: 'error', m: 'Fleet must contain an Admiral', fix: 'admiral' });
     }
     // Admiral level cap + un-picked abilities (soft)
@@ -4009,6 +4012,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-07-31', title: 'The Admiral warning waits its turn', items: [
+      'Adding your first ship no longer immediately flags "Fleet must contain an Admiral". The warning now holds off until you have spent a third of your points limit, by which point picking an admiral is a real decision rather than a nag on an almost empty list.',
+    ]},
     { date: '2026-07-29', title: 'Sync your fleets across devices', items: [
       'New Sync Fleets Online option (Settings on desktop, the menu on mobile). Opting in gives you a Sync Token, a six-word phrase. Put that phrase into any other device and your fleets load there and stay in step.',
       'There is no account and no password. The token is the only key, so anyone you give it to can read and change your fleets. The app says so before you opt in.',

@@ -2273,7 +2273,11 @@ let activeGroupId = null;
 
     // 8. Admiral checks
     const admirals = fleet.admirals || [];
-    if (admirals.length === 0 && fleet.battleGroups.length > 0) {
+    // Nagging for an Admiral on the first ship you add is noise: most people pick
+    // ships first and the admiral later. Hold the warning until a third of the
+    // points budget is spent (for an open-ended Reconquest, a third of its floor).
+    const admBudget = (maxPts && maxPts !== 99999) ? maxPts : sizeInfo.min;
+    if (admirals.length === 0 && fleet.battleGroups.length > 0 && pts >= admBudget / 3) {
       warnings.push({ type: 'error', msg: 'Fleet must contain an Admiral' });
     }
     let namedCount = 0;
@@ -7841,6 +7845,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-07-31', title: 'The Admiral warning waits its turn', items: [
+      'Adding your first ship no longer immediately flags "Fleet must contain an Admiral". The warning now holds off until you have spent a third of your points limit, by which point picking an admiral is a real decision rather than a nag on an almost empty list.',
+    ]},
     { date: '2026-07-29', title: 'Sync your fleets across devices', items: [
       'New Sync Fleets Online option (Settings on desktop, the menu on mobile). Opting in gives you a Sync Token, a six-word phrase. Put that phrase into any other device and your fleets load there and stay in step.',
       'There is no account and no password. The token is the only key, so anyone you give it to can read and change your fleets. The app says so before you opt in.',
