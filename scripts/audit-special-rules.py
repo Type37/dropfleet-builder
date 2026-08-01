@@ -12,16 +12,16 @@ catches a second/third rule token sitting in the ship's Special stat column.
 
 Method: these Combined Fleet Stats PDFs reprint a ship special rule's full text
 under EACH ship that carries it, so the rule's name appears as a standalone line
-once inside each owning ship's datasheet. We split the PDF into datasheet spans
+once inside each owning ship's ship card. We split the PDF into ship card spans
 (delimited by the "Thrust Scan Sig Hull ES KS BS G Special" stat header) and,
 for every rule name in a faction's specialRules, compare:
 
-    (# datasheet spans that contain the name as a standalone line)
+    (# ship card spans that contain the name as a standalone line)
     vs
     (# JSON ships whose specialRules include that name)
 
 Splitting on the stat header is what makes this reliable: it ignores the same
-rule name where it appears OUTSIDE a datasheet - a glossary, the admiral-ability
+rule name where it appears OUTSIDE a ship card - a glossary, the admiral-ability
 tables, or deployable-cell rules at the front of the PDF (that is why an earlier
 naive line-count falsely flagged Bioficer "High Velocity Boarding Pods").
 
@@ -41,7 +41,7 @@ try:
 except ImportError:
     print("pip install pdfplumber"); sys.exit(2)
 
-# The stat header that opens every ship datasheet (and nothing else).
+# The stat header that opens every ship ship card (and nothing else).
 STATHEADER = re.compile(r'Thrust\s+Scan\s+Sig\s+Hull\s+ES\s+KS\s+BS\s+G\s+Special', re.I)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -49,8 +49,8 @@ PDFS = {
     'ucm': 'UCM_Combined_Fleet_Stats_260529.pdf',
     'phr': 'PHR_Combined_Fleet_Stats_260626.pdf',
     'scourge': 'Scourge_Combined_Fleet_Stats_260626.pdf',
-    'shaltari': 'Shaltari_Combined_Fleet_Stats_260327.pdf',
-    'resistance': 'Resistance_Combined_Fleet_Stats_260327.pdf',
+    'shaltari': 'Shaltari_Combined_Fleet_Stats_260731.pdf',
+    'resistance': 'Resistance_Combined_Fleet_Stats_260731.pdf',
     'bioficer': 'Bioficer_Combined_Fleet_Stats_260529.pdf',
 }
 
@@ -65,9 +65,9 @@ def norm(s):
     return re.sub(r'\s+', ' ', s).strip()
 
 
-def pdf_datasheet_spans(path):
-    """Return one list of normalised lines per ship datasheet (each span starts at
-    a stat-header line and runs to the next). Lines before the first datasheet -
+def pdf_ship_card_spans(path):
+    """Return one list of normalised lines per ship ship card (each span starts at
+    a stat-header line and runs to the next). Lines before the first ship card -
     cover pages, admiral tables, deployable-cell rules, glossaries - are dropped."""
     raw = []
     with pdfplumber.open(path) as pdf:
@@ -93,19 +93,19 @@ def main():
         if not os.path.exists(jpath):
             print(f"  (skip {fk}: missing faction-{fk}.json)"); continue
 
-        spans = pdf_datasheet_spans(ppath)
+        spans = pdf_ship_card_spans(ppath)
         fac = json.load(open(jpath, encoding='utf-8'))
 
-        # Every JSON datasheet: buildable ships AND famous-admiral flagships. Both
-        # are printed as full datasheets in the PDF, so both must be counted here or
+        # Every JSON ship card: buildable ships AND famous-admiral flagships. Both
+        # are printed as full ship cards in the PDF, so both must be counted here or
         # a flagship-only rule reads as "missing" (Bioficer Ascendant / High Velocity
         # Boarding Pods). See memory: flagships-differ.
         ships = [g.get('ship') or {} for g in fac.get('groups', [])]
         ships += [a['flagship'] for a in fac.get('admirals', []) if a.get('flagship')]
 
         # Universe of real ship special rules for this faction, and how many
-        # datasheets carry each (by specialRules membership - the captured state).
-        json_ships = {}     # rule name (normalised) -> count of datasheets
+        # ship cards carry each (by specialRules membership - the captured state).
+        json_ships = {}     # rule name (normalised) -> count of ship cards
         display = {}        # normalised -> original display name
         for sh in ships:
             names = set()
@@ -120,9 +120,9 @@ def main():
         for nm, jcount in sorted(json_ships.items()):
             if not nm:
                 continue
-            # Number of ship datasheets that print this rule name as a standalone line.
+            # Number of ship ship cards that print this rule name as a standalone line.
             pdf_count = sum(1 for sp in spans if nm in sp)
-            # PDF never prints this name as a datasheet heading -> it lives in a shared
+            # PDF never prints this name as a ship card heading -> it lives in a shared
             # glossary or is inline only; can't infer per-ship ownership. Skip.
             if pdf_count == 0:
                 continue

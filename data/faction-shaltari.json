@@ -4046,6 +4046,70 @@
    }
   },
   {
+   "id": "7c31-9ad4-45e2-b118",
+   "name": "Nefertem of the Dawn - Invisible Night",
+   "category": "light",
+   "ship": {
+    "name": "Nefertem of the Dawn - Invisible Night",
+    "cost": 81,
+    "stats": {
+     "thrust": "12”",
+     "scan": "12”",
+     "sig": "6”",
+     "hull": 7,
+     "es": "5+",
+     "ks": "4+",
+     "bs": "-",
+     "g": "1",
+     "special": "Cloak-2, Hero, Shield-5+, Stealth, Unique"
+    },
+    "weapons": [
+     {
+      "name": "Microwave Crescent",
+      "arc": "F",
+      "attack": "4",
+      "lock": "3+",
+      "damage": "1",
+      "type": "C",
+      "special": "Crippling-2xFire, Sustained Fire"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Cloak-2",
+      "description": "This Group may have a maximum of 2 Spikes."
+     },
+     {
+      "name": "Hero",
+      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet."
+     },
+     {
+      "name": "Shield-5+",
+      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves."
+     },
+     {
+      "name": "Stealth",
+      "description": "This Ship may fire one Weapon while Silent Running."
+     },
+     {
+      "name": "Unique",
+      "description": "You may only take one Group of this Ship."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": true,
+    "tonnage": "L",
+    "famousShipsPrefix": "Only ship of the class:",
+    "famousShips": [
+     "Invisible Night"
+    ],
+    "lore": "Stealth technology and camouflage in all its forms are abhorrent and dishonourable for most Shaltari, but Nefertem chose long ago to reject this notion. Her stance is that subterfuge and surprise attack are time-honoured, central tenets of battle and has chosen to master them. To that end, she commissioned a unique vessel.\n\nInvisible Light demonstrates that, of course, the Shaltari are perfectly capable of matching or exceeding the Scourge in stealth technology if they so wish. Of heavy destroyer tonnage, this vessel’s innocuous-looking additional frontal superstructure arms conceal this cloaking system as well as supporting the additional mass of its only weapons system. The thus-far unique Microwave Crescent is a long range, low-observable variant of typical microwave technology that can reach into the heart of any target, cooking its crew and delicate systems from the inside. Often, the victim has no idea where the burst came from and has little chance of returning fire."
+   }
+  },
+  {
    "id": "1fd6-31e0-548c-cc1e",
    "name": "Pungari Thresher Hive Ship",
    "category": "medium",
@@ -5085,6 +5149,81 @@
     "famousShipsPrefix": "Encountered individual:",
     "famousShips": [
      "Astrofauna HD215152-A"
+    ]
+   }
+  },
+  {
+   "id": "d128-afe7-0f27-374d",
+   "name": "M.A.B. 67 Fuel Transport",
+   "category": "light",
+   "ship": {
+    "name": "M.A.B. 67 Fuel Transport",
+    "cost": 55,
+    "stats": {
+     "thrust": "9\"",
+     "scan": "6\"",
+     "sig": "4\"",
+     "hull": 6,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "6+",
+     "g": "1-2",
+     "special": "Vectored"
+    },
+    "weapons": [
+     {
+      "name": "Deterrence Missiles",
+      "arc": "F/S",
+      "attack": "4",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Alt-1, Close Action"
+     },
+     {
+      "name": "Ignite Reserves",
+      "arc": "F/S/R",
+      "attack": "0",
+      "lock": "2+",
+      "damage": "2",
+      "type": "E",
+      "special": "Alt-1, Close Action, Fusillade-2"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Vectored",
+      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
+     },
+     {
+      "name": "Fuel Transporter",
+      "description": "While a Ship with this rule is on the table, you have access to the following Ability:\n\nFully Fuelled (2AP): At the start of a friendly Group’s activation, if that Group is within 3” and on the same Orbital Layer as a Ship with the Fuel Transporter rule, the friendly Group increases its total movement (after Orders) by 3” this round. If that Group is on the Max Thrust order, it increases its total movement (after Orders) by 6” this round instead.\nIf the friendly Group is C Tonnage, that Group must be within 3” and on the same Orbital Layer as two Ships with the Fuel Transporter rule instead.\nShips with the Fuel Transporter rule are unaffected by this Ability."
+     },
+     {
+      "name": "Ignite Reserves",
+      "description": "After completing an attack with this Weapon, this Ship is destroyed (a weapon with 0 Attack value does not roll to hit, does not cause any saves to be made, and does not inflict damage due to hits).\n\nWhen this Ship is destroyed (for any reason), it explodes with a Fuel Detonation effect and a range of 3”. Ships damaged by this explosion also gain a Fire token."
+     },
+     {
+      "name": "Mercenary",
+      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 2,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "L",
+    "lore": "The Maganum Asset Bureau was once one of the largest civilian infrastructure manufacturers in the colonies prior to the inception of the UCM. Hailing from a relatively quiet colony with a focus on agriculture, the M.A.B. developed and put into service a multitude of logistical vessels. Many were designed to transport Maganum’s bountiful harvests to other colony worlds, such as the M.A.B. 45 and 46, with holds designed to keep live seafood and store masses of frozen produce, keeping the colonies main source of protein moving.\n\nThen there was the M.A.B. 67, arguably, the Bureau’s most successful design. This transport is able to safely carry an exceptional volume of various types of fuel, from Maganum’s simple biofuels, to the hypercompressed metallic hydrogen that keeps the UCM war machine running. Built to exacting standards, the 67 has one of the strongest and most reliable power plants for a ship of its size. As it was never expected to see actual combat, the reactors do not have the automatic shutdown safeties of UCM combat ships, indeed if the ship were to see combat, it is quite possible that any damage to the reactors could cause a major containment breach, flooding compartments with highly volatile plasma.\n\nThe ubiquity of the line meant that they were scattered far and wide at the time of the Scourge invasion, now there are 67’s amongst almost all the major players of the time. The UCM have continued to produce small numbers of this ship, while M.A.B. has dwindled, they still produce original and updated designs and have mostly superseded the 67 with the much more efficient 192, a built for purpose, clearly UCM design. The Scourge have re-purposed many of these ships into water transports and rarely use them for transporting fuel, while the PHR still make use of refit variants for their logistics purposes. Many of these have been seen in resistance hands, several are part of the Vega Scrapfleet and Kalium have seemingly gotten or reverse engineered the designs to produce more ships of the class, though are much more reckless with them than any other faction.",
+    "additional": true,
+    "famousShipsPrefix": "Famous ships of the class:",
+    "famousShips": [
+     "Fire in a Can",
+     "Petrol Pusher (UCM)",
+     "Jugnaut",
+     "Juice Sluice",
+     "Bottle Bearer (Vega Scrapfleet)",
+     "Logistics Vessel KLV-822 (Kalium)"
     ]
    }
   }

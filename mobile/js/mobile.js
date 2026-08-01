@@ -173,10 +173,14 @@
     'painite','platinum','plutonium','ruby','sapphire','scoria','selenium',
     'shedu','silicon','silver','spinel','strontium','thorium','topaz',
     'turquoise','umbra','uranium',
+    'nefertem',
     // Resistance
     'aldrin','armstrong','barbarossa','collins','coloniser','drake','explorer',
     'farragut','galileo','guy','iowa','lexington','musashi','nelson','nimitz',
     'pathfinder','phalanx','senator','seneca','vanguard','yamamoto',
+    // Resistance 260731 edition
+    'actium','cyrus','darius','jutland','midway','retiarius','salamis',
+    'secutor','trafalgar','xerxes',
     // Bioficer
     'binder','blackbird','brutal','cache','cacophony','carronade','cataphract',
     'cavern','charger','choral','cipher','combine','comet','conqueror',
@@ -228,6 +232,7 @@
     'Bishop':'bioficer_battleship_bishop',
     'Callous':'callous','Catastrophe':'catastrophe',
     'Triumvir':'triumvir','Tribune':'tribune','Disciple':'disciple',
+    'M.A.B. 67':'mab_67_fuel_transport',
     'M-Type':'m-type','El Paso':'el_paso'
   };
   const ADMIRAL_ART = {
@@ -321,7 +326,7 @@
     return 'https://ttcombat.com/search?q=' + encodeURIComponent((name || '').trim());
   }
   // Wrap a ship <img> in a TTCombat store link (no icon overlay; the art itself
-  // is the link). Used only on single-ship hero art (group detail + datasheet
+  // is the link). Used only on single-ship hero art (group detail + ship card
   // sheet), not in list/picker thumbnails.
   function shopLinkImg(name, imgTag, ship) {
     if (!imgTag) return '';
@@ -1000,6 +1005,14 @@
     const f = factionFeatures(factionKey).find(x => x.name === featureName);
     return f ? (f.cost || 0) : 0;
   }
+  // A Feature Carrier's chosen features, one per slot. Slot 1 stays on the
+  // original `feature` field so old saves and shared links still load; slot 2 is
+  // `feature2`. Only the Resistance 260731 Battle Carriers (Actium, Salamis)
+  // choose two: "choose two Deployable Features ... (duplicates are allowed)".
+  const FEATURE_SLOT_KEYS = ['feature', 'feature2'];
+  function featureSlotCount(ship) {
+    return Math.min(FEATURE_SLOT_KEYS.length, Math.max(1, (ship && ship.featureSlots) || 1));
+  }
 
   /* ── Systems / Hardpoints (Resistance) ─────────────────── */
   // A ship is "fully modular" when it has a Systems selection and NO fixed
@@ -1092,7 +1105,7 @@
   function recalcShipPoints(factionKey, shipDef, inst) {
     return (shipDef?.cost || 0)
       + shipLoadoutCost(shipDef, inst.loadouts)
-      + featureCost(factionKey, inst.feature)
+      + FEATURE_SLOT_KEYS.reduce((t, k) => t + featureCost(factionKey, inst[k]), 0)
       + systemsCost(factionKey, shipDef, inst);
   }
   function groupPoints(fleet, group) {
@@ -2012,7 +2025,7 @@
     setupPickerLongPress();
   }
 
-  // Long-press a ship row to preview its datasheet (without adding it). Reuses
+  // Long-press a ship row to preview its ship card (without adding it). Reuses
   // the rule bottom-sheet. Bound once via delegation on the persistent list.
   function setupPickerLongPress() {
     const list = document.getElementById('picker-list');
@@ -2039,7 +2052,7 @@
     list.addEventListener('click', e => { if (fired) { e.stopPropagation(); e.preventDefault(); fired = false; } }, true);
   }
 
-  // Compact ship datasheet rendered into the rule bottom sheet.
+  // Compact ship ship card rendered into the rule bottom sheet.
   function showShipSheet(ship) {
     const s = ship.stats || {};
     const stat = [['SCAN', s.scan], ['SIG', s.sig], ['THR', s.thrust], ['HULL', s.hull], ['ES', s.es], ['KS', s.ks], ['BS', s.bs]]
@@ -2185,7 +2198,7 @@
     const loadoutOptions = ship.loadoutOptions || [];
     // Weapon table = base weapons + the currently selected loadout option weapons,
     // so swap options (Laser Refit) and ships whose entire armament is a loadout
-    // (the New York) read right. Each option's datasheet shows only on UNSELECTED
+    // (the New York) read right. Each option's ship card shows only on UNSELECTED
     // cards below (a preview), so nothing is ever listed twice.
     const displayWeapons = [...weapons];
     loadoutOptions.forEach((lo, i) => {
@@ -2218,7 +2231,7 @@
     const carrier = isFeatureCarrier(ship);
     const featReq = false; // Deployable Features are always optional now
     const features = carrier ? factionFeatures(f.faction) : [];
-    const chosenFeature = inst.feature || '';
+    const featSlots = featureSlotCount(ship);
     const sysList = systemsListFor(ship, f.faction);
     const sysSel = ship.systemSelection;
 
@@ -2284,11 +2297,11 @@
           ${lo.options.map((opt, oi) => {
             const sel = inst.loadouts && inst.loadouts[loIdx] != null ? inst.loadouts[loIdx] : 0;
             const on = oi === sel;
-            // Show BOTH options' datasheets so the two guns can be compared under
+            // Show BOTH options' ship cards so the two guns can be compared under
             // their radios (matches desktop), not just the unselected preview.
             const sheet = opt.weapons?.length ? optionWeaponSheet(opt.weapons)
               : (opt.loads?.length ? buildLaunchTable(f.faction, opt.loads) : '');
-            // Don't repeat the option name when its datasheet already shows it.
+            // Don't repeat the option name when its ship card already shows it.
             const redundant = opt.weapons?.length && opt.weapons.every(w => w.name === opt.name);
             return `<div class="loadout-option loadout-radio-opt ${on ? 'selected' : ''}" onclick="App.selectLoadout(${loIdx}, ${oi})">
               <div class="loadout-radio-row">
@@ -2304,11 +2317,16 @@
 
       ${sysList && sysSel ? renderSystemsPicker(f.faction, ship, inst, sysList, sysSel) : ''}
 
-      ${carrier && features.length ? `<div class="loadout-section">
+      ${carrier && features.length ? Array.from({ length: featSlots }, (_, slot) => {
+        const chosenFeature = inst[FEATURE_SLOT_KEYS[slot]] || '';
+        const heading = featSlots > 1
+          ? `Deployable Feature ${slot + 1} of ${featSlots}, optional`
+          : (featReq ? 'Deployable Feature' + (chosenFeature ? '' : ', required') : 'Deployable Feature, optional');
+        return `<div class="loadout-section">
         <div class="section-header" style="padding:0 0 var(--sp-s)">
-          ${featReq ? 'Deployable Feature' + (chosenFeature ? '' : ', required') : 'Deployable Feature, optional'}
+          ${heading}
         </div>
-        <div class="loadout-option loadout-radio-opt ${!chosenFeature ? 'selected' : ''}" onclick="App.selectFeature('')">
+        <div class="loadout-option loadout-radio-opt ${!chosenFeature ? 'selected' : ''}" onclick="App.selectFeature('',${slot})">
           <div class="loadout-radio-row">
             <span class="loadout-radio-dot"></span>
             <span class="loadout-option-name">${featReq ? 'None (choose one)' : 'No feature'}</span>
@@ -2327,8 +2345,13 @@
           const weaponsHtml = (ft.weapons || []).map(w =>
             `<div class="feature-rule">${esc(w.name)} — ${w.scan ? `Scan ${esc(w.scan)}, ` : ''}Att ${esc(w.attack)}, Lock ${esc(w.lock)}, Dmg ${esc(w.damage)} ${esc(w.type || '')}${w.special && w.special !== '-' ? ' ' + renderSpecialChips(w.special) : ''}</div>`
           ).join('');
+          // A feature can also carry a launch bay (the Resistance ICBM Silo
+          // launches Bombardment Torpedoes, Launch 2, Limited-6).
+          const loadsHtml = (ft.loads || []).map(l =>
+            `<div class="feature-rule">Launch ${esc(String(l.launch))} ${esc(String(l.name))}${l.special && l.special !== '-' ? ' ' + renderSpecialChips(l.special) : ''}</div>`
+          ).join('');
           const art = featureArtPath(ft.name);
-          return `<div class="loadout-option loadout-radio-opt ${sel ? 'selected' : ''}" onclick="App.selectFeature('${ft.name.replace(/'/g, "\\'")}')">
+          return `<div class="loadout-option loadout-radio-opt ${sel ? 'selected' : ''}" onclick="App.selectFeature('${ft.name.replace(/'/g, "\\'")}',${slot})">
             <div class="loadout-radio-row">
               <span class="loadout-radio-dot"></span>
               ${art ? `<img class="feature-opt-art" src="${art}" alt="" loading="lazy" onerror="this.remove()">` : ''}
@@ -2337,10 +2360,12 @@
             </div>
             ${detail ? `<div class="loadout-option-desc">${esc(detail)}</div>` : ''}
             ${weaponsHtml}
+            ${loadsHtml}
             ${rulesHtml}
           </div>`;
         }).join('')}
-      </div>` : ''}
+      </div>`;
+      }).join('') : ''}
 
       ${specialText ? `<div class="rule-card">
         <div class="rule-card-name" style="margin-bottom:var(--sp-s)">Special Rules</div>
@@ -2436,15 +2461,15 @@
   }
 
   // Non-weapon detail line (launch loads / passive effect). Weapon options get
-  // the full datasheet via optionWeaponSheet instead.
+  // the full ship card via optionWeaponSheet instead.
   function systemOptionDetail(opt) {
     if (opt.loads && opt.loads.length) return `Launch ${esc(opt.loads[0].launch || '')}`;
     if (opt.effect) return esc(opt.effect);
     return '';
   }
-  // Full mini weapon-datasheet for a hardpoint option that bears weapons — the
+  // Full mini weapon-ship card for a hardpoint option that bears weapons — the
   // same table the ship's own weapons use, so an option reads like a real
-  // datasheet (arc diagram, Lock, Attack, Damage, tappable special rules).
+  // ship card (arc diagram, Lock, Attack, Damage, tappable special rules).
   function optionWeaponSheet(weapons, omitName) {
     if (!weapons || !weapons.length) return '';
     const rows = weapons.map(w => {
@@ -2756,14 +2781,15 @@
     updateAppBar('screen-group-detail');
   }
 
-  function selectFeature(featureName) {
+  function selectFeature(featureName, slot) {
     const f = activeFleet;
     if (!f || activeGroupIdx < 0) return;
     const group = f.battleGroups[activeGroupIdx];
     const inst0 = group.ships[0];
     const ship = findShip(f.faction, inst0.groupCategory, inst0.shipKey);
+    const key = FEATURE_SLOT_KEYS[slot || 0] || FEATURE_SLOT_KEYS[0];
     group.ships.forEach(s => {
-      s.feature = featureName || undefined;
+      s[key] = featureName || undefined;
       s.points = recalcShipPoints(f.faction, ship, s);
     });
     f.updatedAt = Date.now();
@@ -3030,7 +3056,7 @@
       return { id: g.id, name: db?.name || g.name };
     });
   }
-  // Famous admirals fly a named flagship; fetch its datasheet from the faction def.
+  // Famous admirals fly a named flagship; fetch its ship card from the faction def.
   function admiralFlagship(a) {
     if (!a || !a.admiralId) return null;
     const faction = FACTIONS[activeFleet.faction];
@@ -3056,9 +3082,9 @@
     }
     return asHtml ? esc(cls) : cls;
   }
-  // Render a flagship's full datasheet (stat grid + weapons + rules), reusing the
+  // Render a flagship's full ship card (stat grid + weapons + rules), reusing the
   // same components as the group ship detail so it matches desktop parity.
-  function flagshipDatasheet(fs) {
+  function flagshipShipCard(fs) {
     if (!fs) return '';
     // Flagship data carries namesake but not lore — pull the flagship ship's lore
     // (and recorded ships) from the matching regular ship by name so it shows.
@@ -3153,12 +3179,12 @@
       }).join('');
     }
 
-    // Famous admirals fly their own flagship (shown as a datasheet); Generic and
+    // Famous admirals fly their own flagship (shown as a ship card); Generic and
     // Faction admirals instead lead from one of the fleet's Capital ships.
     const fs = admiralFlagship(a);
     let assignHtml;
     if (fs) {
-      assignHtml = flagshipDatasheet(fs);
+      assignHtml = flagshipShipCard(fs);
     } else {
       const caps = capitalShipGroups();
       assignHtml = `<div class="section-header">Assigned to</div>`;
@@ -3316,7 +3342,7 @@
      The three generic stations share the universal Space Station Armaments
      (STATION_ARMAMENTS, from fleet-index). Weapon Systems + Structures fill the
      required armament count (1/2/3 by size); Upgrades are extra (cap 1/1/2).
-     Faction-specific stations are fixed and just display their datasheet. */
+     Faction-specific stations are fixed and just display their ship card. */
   function findStationDef(factionKey, station) {
     const fac = FACTIONS[factionKey];
     if (!fac) return null;
@@ -3383,7 +3409,7 @@
       const opts = byCat[cat];
       // Weapon armaments share ONE table (single header), each weapon a row with
       // its stats, then a compact cost + stepper line — mirrors desktop, no
-      // repeated per-weapon datasheet per option.
+      // repeated per-weapon ship card per option.
       const isWeaponCat = opts.every(o => o.weapons && o.weapons.length);
       if (isWeaponCat) {
         const rows = opts.map(o => {
@@ -3423,7 +3449,7 @@
         const c = counts[o.name] || 0;
         const canAdd = canAddStationOption(station, o, spec);
         // A mixed category (e.g. Upgrades) can still hold a weapon-bearing option
-        // like Defence Grid — keep showing its datasheet here.
+        // like Defence Grid — keep showing its ship card here.
         const sheet = (o.weapons && o.weapons.length) ? optionWeaponSheet(o.weapons)
           : (o.loads && o.loads.length) ? buildLaunchTable(activeFleet.faction, o.loads)
           : (o.effect ? `<div class="loadout-option-desc">${linkKeywords(o.effect)}</div>` : '');
@@ -4012,6 +4038,15 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-08-01', title: 'New Resistance edition, plus two new ships elsewhere', items: [
+      'The Resistance now follow the 31 July stats. Ten new ships join them: the Secutor and Retiarius Grand Cruisers, the Trafalgar, Jutland and Midway Supercruisers, the Xerxes, Darius and Cyrus Battlecruisers, and the Actium and Salamis Battle Carriers.',
+      'Three new Resistance Deployable Features, the ICBM Silo, the Ark Lander and the Scanner Dome, and a new Bombardment Torpedo launch asset.',
+      'The Actium and Salamis choose two Deployable Features each, and may take the same one twice. Both apps now offer a picker per slot instead of one.',
+      'The Cyrus is Rare, so the usual one per Skirmish, two per Clash, three per Battle and four per Reconquest limit is enforced on it.',
+      'Resistance price and gun changes: the Phalanx is 185 pts and its Long Battery splits into a Half and a Full Battery; the Senator is 155 pts and gains a Missile Turret Pair alongside a smaller Salvo; the Tribune is 205 pts, which also drops Hagen to 250. The Centurion and Gladiator can both take a Drive Refit for +25 pts and 3 inches of Thrust, and the Centurion Full Battery now hits with Critical-1 and Fusillade-2.',
+      'Shaltari: Nefertem of the Dawn joins in the Invisible Night, a cloaked heavy destroyer with a Microwave Crescent.',
+      'Every fleet can now hire the M.A.B. 67 Fuel Transport. Its Fuel Transporter rule gives a Group nearby extra movement, and Ignite Reserves lets it go out in a fireball.',
+    ]},
     { date: '2026-07-31', title: 'The Admiral warning waits its turn', items: [
       'Adding your first ship no longer immediately flags "Fleet must contain an Admiral". The warning now holds off until you have spent a third of your points limit, by which point picking an admiral is a real decision rather than a nag on an almost empty list.',
     ]},
@@ -4505,6 +4540,7 @@
           const e = { c: s.groupCategory, k: s.shipKey, p: s.points };
           if (s.loadouts && Object.keys(s.loadouts).length) e.l = s.loadouts;
           if (s.feature) e.ft = s.feature;                       // deployable feature / Genitor Tower
+          if (s.feature2) e.ft2 = s.feature2;                    // second feature (Battle Carriers)
           if (s.systems && s.systems.length) e.sy = s.systems;   // Resistance hardpoints
           return e;
         })
@@ -4543,7 +4579,7 @@
           id: uuid(), name: g.n || 'Group',
           ships: (g.sh || []).map(s => ({
             id: uuid(), groupCategory: s.c, shipKey: s.k, points: s.p, loadouts: s.l || {},
-            feature: s.ft || undefined, systems: s.sy || []
+            feature: s.ft || undefined, feature2: s.ft2 || undefined, systems: s.sy || []
           }))
         })),
         secondaryObjectives: mini.so || [],
@@ -4616,7 +4652,7 @@
       groups.forEach(g => {
         const profs = [];
         g.ships.forEach(s => {
-          const key = s.shipKey + ':' + JSON.stringify(s.loadouts || {}) + ':' + JSON.stringify(s.systems || []) + ':' + (s.feature || '');
+          const key = s.shipKey + ':' + JSON.stringify(s.loadouts || {}) + ':' + JSON.stringify(s.systems || []) + ':' + (s.feature || '') + ':' + (s.feature2 || '');
           let p = profs.find(x => x.key === key);
           if (!p) { p = { key, s, count: 0 }; profs.push(p); }
           p.count++;
@@ -4628,7 +4664,7 @@
           const notes = [];
           (db && db.loadoutOptions || []).forEach((lo, i) => { const o = lo.options[(s.loadouts && s.loadouts[i]) || 0]; if (o && o.cost) notes.push(o.name); });
           if (s.systems && s.systems.length) { const c = {}; s.systems.forEach(n => c[n] = (c[n] || 0) + 1); notes.push(...Object.entries(c).map(([n, k]) => k > 1 ? `${k}x ${n}` : n)); }
-          if (s.feature) notes.push(s.feature);
+          FEATURE_SLOT_KEYS.forEach(k => { if (s[k]) notes.push(s[k]); });
           notes.forEach(n => { out += `    - ${n}\n`; });
         });
       });
@@ -4799,7 +4835,7 @@
         const si = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
         if (lo.options[si] && si !== 0) opts.push('Loadout: ' + lo.options[si].name);
       });
-      if (inst.feature) opts.push('Feature: ' + inst.feature);
+      FEATURE_SLOT_KEYS.forEach(k => { if (inst[k]) opts.push('Feature: ' + inst[k]); });
       if (inst.systems && inst.systems.length) {
         const c = {}; inst.systems.forEach(n => c[n] = (c[n] || 0) + 1);
         opts.push('Systems: ' + Object.entries(c).map(([n, ct]) => ct > 1 ? `${n} ×${ct}` : n).join(', '));

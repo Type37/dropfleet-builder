@@ -256,7 +256,7 @@
    ],
    "flagship": {
     "name": "Tribune Battlecruiser",
-    "cost": 210,
+    "cost": 205,
     "stats": {
      "thrust": "7\"",
      "scan": "6\"",
@@ -1604,7 +1604,7 @@
    "category": "heavy",
    "ship": {
     "name": "Tribune Battlecruiser",
-    "cost": 210,
+    "cost": 205,
     "stats": {
      "thrust": "7\"",
      "scan": "6\"",
@@ -1677,12 +1677,326 @@
    }
   },
   {
+   "id": "55a1-85cc-e794-bc91",
+   "name": "Xerxes Battlecruiser",
+   "category": "heavy",
+   "ship": {
+    "name": "Xerxes Battlecruiser",
+    "cost": 175,
+    "stats": {
+     "thrust": "7\"",
+     "scan": "12\"",
+     "sig": "6\"",
+     "hull": 15,
+     "es": "3+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "Vanguard-3\""
+    },
+    "weapons": [
+     {
+      "name": "NL-9 Laser Turret Pair",
+      "arc": "F/S",
+      "attack": "4",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Flash-2 Focused, Fusillade-2, Reave-1"
+     },
+     {
+      "name": "Heavy Vent Cannons",
+      "arc": "F",
+      "attack": "4",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Fusillade-1, Reave-1"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "SWACS",
+      "description": "Enemy ships within 12” of this ship may be targeted by friendly ships firing Close Action weapons using the firing ship’s normal Weapon Range (Scan + Sig)."
+     },
+     {
+      "name": "Vanguard-3\"",
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H"
+   }
+  },
+  {
+   "id": "a5f8-118d-0bb2-b71f",
+   "name": "Darius Battlecruiser",
+   "category": "heavy",
+   "ship": {
+    "name": "Darius Battlecruiser",
+    "cost": 180,
+    "stats": {
+     "thrust": "7\"",
+     "scan": "6\"",
+     "sig": "6\"",
+     "hull": 15,
+     "es": "3+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "Vanguard-3\""
+    },
+    "weapons": [
+     {
+      "name": "N-11 Artillery Cannon Turret",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "4+",
+      "damage": "1",
+      "type": "K",
+      "special": "Low Power, Fusillade-1"
+     },
+     {
+      "name": "NC-16 Missile Salvo",
+      "arc": "F/S/R",
+      "attack": "4",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Volley-2"
+     },
+     {
+      "name": "NC-16 Missile Bank",
+      "arc": "F/S/R",
+      "attack": "6",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Volley-2"
+     },
+     {
+      "name": "NC-16 Missile Turret Pair",
+      "arc": "F/S/R",
+      "attack": "5",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Volley-2"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Fighters & Bombers",
+      "launch": "2",
+      "special": "-"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Vanguard-3\"",
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H"
+   }
+  },
+  {
+   "id": "f559-ee4b-06d3-5782",
+   "name": "Cyrus Battlecruiser",
+   "category": "heavy",
+   "ship": {
+    "name": "Cyrus Battlecruiser",
+    "cost": 185,
+    "stats": {
+     "thrust": "7\"",
+     "scan": "6\"",
+     "sig": "6\"",
+     "hull": 15,
+     "es": "3+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "Rare, Vanguard-3\""
+    },
+    "weapons": [
+     {
+      "name": "Heavy Vent Cannon Turret",
+      "arc": "F/S",
+      "attack": "2",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Fusillade-1, Overcharge, Reave-1"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Bulk Landers & Fire Ships",
+      "launch": "2",
+      "special": "-"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Rare",
+      "description": "You may only take one Group of this Ship in a Skirmish-sized game, two in a Clash, three in a Battle, and four in a Reconquest."
+     },
+     {
+      "name": "Repair Bay",
+      "description": "Friendly Ships within 6” of this Ship that roll to repair Crippling Effects during the Repair step of the End Phase repair those effects on a roll of a 2+ instead of a 4+.\nFriendly Ships that end their activation within 6” of this Ship on the same Orbital Layer recover 2 lost Hull Points."
+     },
+     {
+      "name": "Box Of Scraps",
+      "description": "At the end of this ship’s activation, pick one friendly ship within 6” in line of sight (including this one). Place a Box Of Scraps token next to that ship. The next time that ship would be destroyed, it isn’t. Instead, before continuing to inflict damage, remove the Box of Scraps token and that ship remains in play with D3 Hull Points remaining, then continue inflicting damage as normal. Box Of Scraps tokens persist through rounds but a ship may only have 1 Box Of Scraps token."
+     },
+     {
+      "name": "Vanguard-3\"",
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": true,
+    "isUnique": false,
+    "tonnage": "H"
+   }
+  },
+  {
+   "id": "ade9-5c7a-8958-e6b7",
+   "name": "Actium Battle Carrier",
+   "category": "heavy",
+   "ship": {
+    "name": "Actium Battle Carrier",
+    "cost": 180,
+    "stats": {
+     "thrust": "6\"",
+     "scan": "6\"",
+     "sig": "6\"",
+     "hull": 15,
+     "es": "3+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "-"
+    },
+    "weapons": [
+     {
+      "name": "N-11 Artillery Cannon Turret",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "4+",
+      "damage": "1",
+      "type": "K",
+      "special": "Low Power, Fusillade-1"
+     },
+     {
+      "name": "N-31 Hybrid Gun Half Battery",
+      "arc": "B",
+      "attack": "3",
+      "lock": "4+",
+      "damage": "1",
+      "type": "K",
+      "special": "Critical-1, Fusillade-1, Volley-2"
+     },
+     {
+      "name": "N-31 Hybrid Gun Full Battery",
+      "arc": "B",
+      "attack": "6",
+      "lock": "4+",
+      "damage": "1",
+      "type": "K",
+      "special": "Critical-1, Fusillade-2, Volley-2"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Feature Carrier",
+      "description": "At the start of the game, before players deploy, choose two Deployable Features from the Resistance Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H",
+    "featureSlots": 2
+   }
+  },
+  {
+   "id": "0759-1908-2e1b-6c76",
+   "name": "Salamis Battle Carrier",
+   "category": "heavy",
+   "ship": {
+    "name": "Salamis Battle Carrier",
+    "cost": 200,
+    "stats": {
+     "thrust": "6\"",
+     "scan": "6\"",
+     "sig": "6\"",
+     "hull": 15,
+     "es": "3+",
+     "ks": "4+",
+     "bs": "5+",
+     "g": "1",
+     "special": "-"
+    },
+    "weapons": [
+     {
+      "name": "NC-16 Missile Turret",
+      "arc": "F/S/R",
+      "attack": "5",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action"
+     },
+     {
+      "name": "Heavy Vent Cannons",
+      "arc": "F",
+      "attack": "4",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Fusillade-1, Reave-1"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Fighters & Bombers",
+      "launch": "2",
+      "special": "-"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Feature Carrier",
+      "description": "At the start of the game, before players deploy, choose two Deployable Features from the Resistance Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "H",
+    "featureSlots": 2
+   }
+  },
+  {
    "id": "c45c-ee98-a6d2-870a",
    "name": "Phalanx Battlecruiser",
    "category": "heavy",
    "ship": {
     "name": "Phalanx Battlecruiser",
-    "cost": 165,
+    "cost": 185,
     "stats": {
      "thrust": "7\"",
      "scan": "6\"",
@@ -1705,13 +2019,22 @@
       "special": "Critical-1, Penetrator, Volley-2"
      },
      {
-      "name": "N-31 Hybrid Gun Long Battery",
+      "name": "N-31 Hybrid Gun Half Battery",
       "arc": "B",
-      "attack": "9",
+      "attack": "3",
       "lock": "4+",
       "damage": "1",
       "type": "K",
-      "special": "Fusillade-3, Volley-2"
+      "special": "Critical-1, Fusillade-1, Volley-2"
+     },
+     {
+      "name": "N-31 Hybrid Gun Full Battery",
+      "arc": "B",
+      "attack": "6",
+      "lock": "4+",
+      "damage": "1",
+      "type": "K",
+      "special": "Critical-1, Fusillade-2, Volley-2"
      }
     ],
     "loads": [],
@@ -1751,7 +2074,7 @@
      "ks": "4+",
      "bs": "5+",
      "g": "1",
-     "special": "Rare, Repair Bay, Box of Scraps, Vanguard-3\""
+     "special": "Rare, Repair Bay, Box Of Scraps, Vanguard-3\""
     },
     "weapons": [],
     "loads": [
@@ -1770,11 +2093,11 @@
      },
      {
       "name": "Repair Bay",
-      "description": "Friendly Ships within 6” of this Ship that roll to repair Crippling Effects during the Repair step of the End Phase repair those effects on a roll of a 2+ instead of a 4+. Friendly Ships that end their activation within 6” of this Ship on the same Orbital Layer recover 2 lost Hull Points."
+      "description": "Friendly Ships within 6” of this Ship that roll to repair Crippling Effects during the Repair step of the End Phase repair those effects on a roll of a 2+ instead of a 4+.\nFriendly Ships that end their activation within 6” of this Ship on the same Orbital Layer recover 2 lost Hull Points."
      },
      {
-      "name": "Box of Scraps",
-      "description": "At the end of this ship’s activation, pick one friendly ship within 6” in line of sight (including this one). Place a Box Of Scraps token next to that ship. The next time that Ship would be destroyed due to damage, it isn’t. Instead, before continuing to inflict damage, remove the Box of Scraps token and that ship remains in play with D3 Hull Points remaining, then continue inflicting damage as normal. Box Of Scraps tokens persist through rounds but a ship may only have 1 Box Of Scraps token."
+      "name": "Box Of Scraps",
+      "description": "At the end of this ship’s activation, pick one friendly ship within 6” in line of sight (including this one). Place a Box Of Scraps token next to that ship. The next time that ship would be destroyed, it isn’t. Instead, before continuing to inflict damage, remove the Box of Scraps token and that ship remains in play with D3 Hull Points remaining, then continue inflicting damage as normal. Box Of Scraps tokens persist through rounds but a ship may only have 1 Box Of Scraps token."
      },
      {
       "name": "Vanguard-3\"",
@@ -1805,7 +2128,7 @@
    "category": "heavy",
    "ship": {
     "name": "Senator Battlecruiser",
-    "cost": 145,
+    "cost": 155,
     "stats": {
      "thrust": "7\"",
      "scan": "12\"",
@@ -1815,7 +2138,7 @@
      "ks": "4+",
      "bs": "5+",
      "g": "1",
-     "special": "Swacs, Vanguard-3\""
+     "special": "Vanguard-3\""
     },
     "weapons": [
      {
@@ -1828,24 +2151,33 @@
       "special": "Bombardment, Limited-3"
      },
      {
-      "name": "NC-16 Missile Salvo",
+      "name": "NC-16 Missile Turret Pair",
       "arc": "F/S/R",
-      "attack": "8",
+      "attack": "5",
       "lock": "3+",
       "damage": "1",
       "type": "K",
-      "special": "Close Action"
+      "special": "Close Action, Volley-2"
+     },
+     {
+      "name": "NC-16 Missile Salvo",
+      "arc": "F/S/R",
+      "attack": "4",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Volley-2"
      }
     ],
     "loads": [],
     "specialRules": [
      {
       "name": "VX Bomb",
-      "description": "This weapon gains the Scald-2 special rule when targeting Cities. If this weapon does damage to a Dropsite, remove all Battalions (friendly and enemy) from that Dropsite and its Features."
+      "description": "This weapon gains the Scald-2 special rule when targeting Cities. If this weapon does damage to a City, remove all Battalions (friendly and enemy) from that City and any of its Features (including deployed Features) in the same City."
      },
      {
-      "name": "Swacs",
-      "description": "Enemy Ships within 12” of this ship may be targeted by friendly Ships firing Close Action weapons using the firing Ship’s normal Weapon Range (Scan + Sig)."
+      "name": "SWACS",
+      "description": "Enemy ships within 12” of this ship may be targeted by friendly ships firing Close Action weapons using the firing ship’s normal Weapon Range (Scan + Sig)."
      },
      {
       "name": "Vanguard-3\"",
@@ -1943,7 +2275,322 @@
      "Vengefire (Kalium)"
     ],
     "namesake": "A [gladiator](https://en.wikipedia.org/wiki/Gladiator), the armed fighter who battled for the crowd's favour in the arenas of ancient Rome.",
-    "storeUrl": "https://ttcombat.com/products/resistance-grand-cruiser-1"
+    "storeUrl": "https://ttcombat.com/products/resistance-grand-cruiser-1",
+    "rulesText": "This Ship may take a Drive Refit for +25 points, increasing its Thrust by 3”.",
+    "loadoutOptions": [
+     {
+      "name": "Drive Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Drive Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Drive Refit (+3\" Thrust)",
+        "cost": 25,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "ca30-97ac-5ee6-90a2",
+   "name": "Secutor Grand Cruiser",
+   "category": "medium",
+   "ship": {
+    "name": "Secutor Grand Cruiser",
+    "cost": 142,
+    "stats": {
+     "thrust": "5\"",
+     "scan": "6\"",
+     "sig": "6\"",
+     "hull": 14,
+     "es": "3+",
+     "ks": "5+",
+     "bs": "5+",
+     "g": "1",
+     "special": "-"
+    },
+    "weapons": [
+     {
+      "name": "NC-16 Missile Turret",
+      "arc": "F/S/R",
+      "attack": "5",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action"
+     },
+     {
+      "name": "NC-16 Missile Bank",
+      "arc": "F/S/R",
+      "attack": "6",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Volley-2"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Fighters & Bombers",
+      "launch": "2",
+      "special": "-"
+     }
+    ],
+    "specialRules": [],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "M",
+    "rulesText": "This Ship may take a Drive Refit for +25 points, increasing its Thrust by 3”.",
+    "loadoutOptions": [
+     {
+      "name": "Drive Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Drive Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Drive Refit (+3\" Thrust)",
+        "cost": 25,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "1705-e507-551f-ce36",
+   "name": "Retiarius Grand Cruiser",
+   "category": "medium",
+   "ship": {
+    "name": "Retiarius Grand Cruiser",
+    "cost": 134,
+    "stats": {
+     "thrust": "5\"",
+     "scan": "6\"",
+     "sig": "6\"",
+     "hull": 14,
+     "es": "3+",
+     "ks": "5+",
+     "bs": "5+",
+     "g": "1",
+     "special": "-"
+    },
+    "weapons": [
+     {
+      "name": "VX Bomb",
+      "arc": "F",
+      "attack": "3",
+      "lock": "4+",
+      "damage": "2",
+      "type": "E",
+      "special": "Bombardment, Limited-3"
+     },
+     {
+      "name": "NL-9 Laser Turret",
+      "arc": "F/S",
+      "attack": "2",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Flash-1, Focused, Fusillade-1, Reave-1"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "VX Bomb",
+      "description": "This weapon gains the Scald-2 special rule when targeting Cities. If this weapon does damage to a City, remove all Battalions (friendly and enemy) from that City and any of its Features (including deployed Features) in the same City."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "M",
+    "rulesText": "This Ship may take a Drive Refit for +25 points, increasing its Thrust by 3”.",
+    "loadoutOptions": [
+     {
+      "name": "Drive Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Drive Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Drive Refit (+3\" Thrust)",
+        "cost": 25,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "dcd0-8f13-e9f2-04b4",
+   "name": "Trafalgar Supercruiser",
+   "category": "medium",
+   "ship": {
+    "name": "Trafalgar Supercruiser",
+    "cost": 122,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "6\"",
+     "sig": "6\"",
+     "hull": 14,
+     "es": "3+",
+     "ks": "5+",
+     "bs": "5+",
+     "g": "1",
+     "special": "-"
+    },
+    "weapons": [
+     {
+      "name": "NC-16 Missile Turret Pair",
+      "arc": "F/S/R",
+      "attack": "5",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Volley-2"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Feature Carrier",
+      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the Resistance Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "M"
+   }
+  },
+  {
+   "id": "a5d6-84e4-f190-a4fe",
+   "name": "Jutland Supercruiser",
+   "category": "medium",
+   "ship": {
+    "name": "Jutland Supercruiser",
+    "cost": 144,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "6\"",
+     "sig": "6\"",
+     "hull": 14,
+     "es": "3+",
+     "ks": "5+",
+     "bs": "5+",
+     "g": "1",
+     "special": "-"
+    },
+    "weapons": [
+     {
+      "name": "N-31 Hybrid Gun Full Battery",
+      "arc": "B",
+      "attack": "6",
+      "lock": "4+",
+      "damage": "1",
+      "type": "K",
+      "special": "Critical-1, Fusillade-2, Volley-2"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Feature Carrier",
+      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the Resistance Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "M"
+   }
+  },
+  {
+   "id": "c067-ec5d-9c29-491c",
+   "name": "Midway Supercruiser",
+   "category": "medium",
+   "ship": {
+    "name": "Midway Supercruiser",
+    "cost": 160,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "6\"",
+     "sig": "6\"",
+     "hull": 14,
+     "es": "3+",
+     "ks": "5+",
+     "bs": "5+",
+     "g": "1",
+     "special": "-"
+    },
+    "weapons": [
+     {
+      "name": "NC-16 Missile Bank",
+      "arc": "F/S/R",
+      "attack": "6",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Volley-2"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Fighters & Bombers",
+      "launch": "2",
+      "special": "-"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Feature Carrier",
+      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the Resistance Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "M"
    }
   },
   {
@@ -3230,17 +3877,22 @@
       "special": "Critical-1, Penetrator"
      },
      {
-      "name": "N-31 Hybrid Gun Battery",
+      "name": "N-31 Hybrid Gun Full Battery",
       "arc": "B",
-      "attack": "8",
+      "attack": "6",
       "lock": "4+",
       "damage": "1",
       "type": "K",
-      "special": "Volley-2"
+      "special": "Critical-1, Fusillade-2, Volley-2"
      }
     ],
     "loads": [],
-    "specialRules": [],
+    "specialRules": [
+     {
+      "name": "Remnant",
+      "description": "This ship may be used in UCM or PHR fleets in addition to Resistance fleets. In UCM and PHR fleets, they gain the Rare special rule."
+     }
+    ],
     "groupMin": 1,
     "groupMax": 1,
     "isRare": false,
@@ -3256,7 +3908,7 @@
       "lore": "The Centurion was the most common standardised vessel of cruiser tonnage in the pre-war EAA Terran Grand Fleet. In those days the definition of Cruiser was somewhat broader; today, such a bulky vessel is designated as a Grand Cruiser, a classification not really in use with the UCMF. In bulk (though not in firepower), it is more akin to a modern Heavy Cruiser. It has truly excellent ceramic armour plating that outclasses all but defence monitors in the modern UCMF. The Centurion also features many of the typical advantages and disadvantages of vintage naval architecture. Originally manufactured by Trident Industrial over Olympus Prime, the design was soon licensed to Earth-based Equatorial Yards Inc. Only the licensed Earth pattern is still built today, by Kalium, though it also operates legacy Olympus Centurions.\n\nIts simple but effective all-gun primary armament provides an excellent blend of destructive power and reliability. The class requires low weapon maintenance – a welcome factor that certainly isn’t the case with some of the more esoteric and experimental armaments in mankind’s pre-war arsenal.\n\nIts primary armament is broadsides of transition mass drivers, alongside an oversized twin pure mass driver turret, more in keeping with modern UCMF gunnery, albeit with much heavier projectiles."
      }
     ],
-    "rulesText": "",
+    "rulesText": "This Ship may take an Engine Refit for +25 points, increasing its Thrust by 3”.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
      "Pilum",
@@ -3266,7 +3918,31 @@
      "Industry",
      "Fist of Iron (Kalium)"
     ],
-    "namesake": "A [centurion](https://en.wikipedia.org/wiki/Centurion), the hardened professional officer who commanded a century of some eighty legionaries in the Roman army."
+    "namesake": "A [centurion](https://en.wikipedia.org/wiki/Centurion), the hardened professional officer who commanded a century of some eighty legionaries in the Roman army.",
+    "loadoutOptions": [
+     {
+      "name": "Drive Refit",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "No Drive Refit",
+        "cost": 0,
+        "weapons": [],
+        "loads": []
+       },
+       {
+        "name": "Drive Refit (+3\" Thrust)",
+        "cost": 25,
+        "weapons": [],
+        "loads": [],
+        "statMods": {
+         "thrust": 3
+        }
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -4180,6 +4856,81 @@
      "Astrofauna HD215152-A"
     ]
    }
+  },
+  {
+   "id": "d128-afe7-0f27-374d",
+   "name": "M.A.B. 67 Fuel Transport",
+   "category": "light",
+   "ship": {
+    "name": "M.A.B. 67 Fuel Transport",
+    "cost": 55,
+    "stats": {
+     "thrust": "9\"",
+     "scan": "6\"",
+     "sig": "4\"",
+     "hull": 6,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "6+",
+     "g": "1-2",
+     "special": "Vectored"
+    },
+    "weapons": [
+     {
+      "name": "Deterrence Missiles",
+      "arc": "F/S",
+      "attack": "4",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Alt-1, Close Action"
+     },
+     {
+      "name": "Ignite Reserves",
+      "arc": "F/S/R",
+      "attack": "0",
+      "lock": "2+",
+      "damage": "2",
+      "type": "E",
+      "special": "Alt-1, Close Action, Fusillade-2"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Vectored",
+      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
+     },
+     {
+      "name": "Fuel Transporter",
+      "description": "While a Ship with this rule is on the table, you have access to the following Ability:\n\nFully Fuelled (2AP): At the start of a friendly Group’s activation, if that Group is within 3” and on the same Orbital Layer as a Ship with the Fuel Transporter rule, the friendly Group increases its total movement (after Orders) by 3” this round. If that Group is on the Max Thrust order, it increases its total movement (after Orders) by 6” this round instead.\nIf the friendly Group is C Tonnage, that Group must be within 3” and on the same Orbital Layer as two Ships with the Fuel Transporter rule instead.\nShips with the Fuel Transporter rule are unaffected by this Ability."
+     },
+     {
+      "name": "Ignite Reserves",
+      "description": "After completing an attack with this Weapon, this Ship is destroyed (a weapon with 0 Attack value does not roll to hit, does not cause any saves to be made, and does not inflict damage due to hits).\n\nWhen this Ship is destroyed (for any reason), it explodes with a Fuel Detonation effect and a range of 3”. Ships damaged by this explosion also gain a Fire token."
+     },
+     {
+      "name": "Mercenary",
+      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 2,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "L",
+    "lore": "The Maganum Asset Bureau was once one of the largest civilian infrastructure manufacturers in the colonies prior to the inception of the UCM. Hailing from a relatively quiet colony with a focus on agriculture, the M.A.B. developed and put into service a multitude of logistical vessels. Many were designed to transport Maganum’s bountiful harvests to other colony worlds, such as the M.A.B. 45 and 46, with holds designed to keep live seafood and store masses of frozen produce, keeping the colonies main source of protein moving.\n\nThen there was the M.A.B. 67, arguably, the Bureau’s most successful design. This transport is able to safely carry an exceptional volume of various types of fuel, from Maganum’s simple biofuels, to the hypercompressed metallic hydrogen that keeps the UCM war machine running. Built to exacting standards, the 67 has one of the strongest and most reliable power plants for a ship of its size. As it was never expected to see actual combat, the reactors do not have the automatic shutdown safeties of UCM combat ships, indeed if the ship were to see combat, it is quite possible that any damage to the reactors could cause a major containment breach, flooding compartments with highly volatile plasma.\n\nThe ubiquity of the line meant that they were scattered far and wide at the time of the Scourge invasion, now there are 67’s amongst almost all the major players of the time. The UCM have continued to produce small numbers of this ship, while M.A.B. has dwindled, they still produce original and updated designs and have mostly superseded the 67 with the much more efficient 192, a built for purpose, clearly UCM design. The Scourge have re-purposed many of these ships into water transports and rarely use them for transporting fuel, while the PHR still make use of refit variants for their logistics purposes. Many of these have been seen in resistance hands, several are part of the Vega Scrapfleet and Kalium have seemingly gotten or reverse engineered the designs to produce more ships of the class, though are much more reckless with them than any other faction.",
+    "additional": true,
+    "famousShipsPrefix": "Famous ships of the class:",
+    "famousShips": [
+     "Fire in a Can",
+     "Petrol Pusher (UCM)",
+     "Jugnaut",
+     "Juice Sluice",
+     "Bottle Bearer (Vega Scrapfleet)",
+     "Logistics Vessel KLV-822 (Kalium)"
+    ]
+   }
   }
  ],
  "launchAssets": [
@@ -4236,6 +4987,15 @@
      "damage": "1",
      "type": "E",
      "special": "-"
+    },
+    {
+     "name": "Bombardment Torpedo",
+     "thrust": "6\"",
+     "attack": "3",
+     "lock": "5+",
+     "damage": "2",
+     "type": "K",
+     "special": "Bombardment"
     }
    ]
   }
@@ -4374,7 +5134,72 @@
    ]
   }
  ],
- "deployableFeatures": [],
+ "deployableFeatures": [
+  {
+   "id": "7b83-a4b9-bb2b-724c",
+   "name": "ICBM Silo",
+   "cost": 0,
+   "features": [
+    {
+     "name": "ICBM Silo",
+     "es": "5+",
+     "ks": "5+",
+     "special": "-"
+    }
+   ],
+   "loads": [
+    {
+     "name": "Bombardment Torpedo",
+     "launch": "2",
+     "special": "Limited-6"
+    }
+   ],
+   "rules": [
+    {
+     "name": "ICBM Silo",
+     "description": "Bombardment Torpedoes launched from this Feature can only attack Cities and cannot attack the Dropsite the launching Feature is deployed to.\nBombardment Torpedoes launched from this Feature become damage Type C when used against Cities at least 6” away from enemy Ships.\nWhen an attacking Group or Asset/s attack would cause this feature to be removed, if it has any remaining Torpedoes, the attacking opponent may remove an additional Feature and any Battalions assigned to it from this Dropsite."
+    }
+   ]
+  },
+  {
+   "id": "f3aa-5aaf-fe13-3b52",
+   "name": "Ark Lander",
+   "cost": 0,
+   "features": [
+    {
+     "name": "Ark Lander",
+     "es": "4+",
+     "ks": "4+",
+     "special": "-"
+    }
+   ],
+   "rules": [
+    {
+     "name": "Ark Lander",
+     "description": "When this feature is deployed to a Dropsite, 4 friendly Battalions are automatically deployed to that Dropsite.\nWhile Activating Dropsites (during 7.5 Activating Dropsites), if you have more Battalions on this feature than any opponent, you count as controlling the Dropsite this Feature is deployed to. If multiple players count as controlling the same Dropsite this way, this effect is ignored."
+    }
+   ]
+  },
+  {
+   "id": "d065-3e0a-c5ac-76b7",
+   "name": "Scanner Dome",
+   "cost": 0,
+   "features": [
+    {
+     "name": "Scanner Dome",
+     "es": "5+",
+     "ks": "5+",
+     "special": "-"
+    }
+   ],
+   "rules": [
+    {
+     "name": "Scanner Dome",
+     "description": "When you assign any weapons to an enemy Ship/Group within 6” of this Dropsite, improve the Lock of those weapons by 1.\nWhen you attack an enemy Descent Ship in Atmosphere within 6” of this Dropsite, instead of the usual penalties for attacking a City or a Descent Ship in Atmosphere (see paragraph 4 of 3.1.2 Atmosphere) that attack always hits on a 5+ and can never cause a critical (instead of a 6+).\ne.g. a weapon with Lock 3+ attacking a target in orbit within 6” of this Dropsite would improve its Lock to 2+. If that weapon was attacking a Descent Ship in Atmosphere within 6” of this Dropsite, it would always hit on a 5+ and will not cause criticals. A weapon with Bombardment attacking the same Descent Ship would hit on its Lock value improved by 1."
+    }
+   ]
+  }
+ ],
  "systemsLists": {
   "Cruiser Systems": {
    "categories": [

@@ -47,6 +47,20 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-08-01: Resistance 260731 edition, plus the Nefertem and the M.A.B. 67
+
+The monthly TTCombat downloads scan found four updated files. PHR was already at 260626, so three needed work.
+
+**Resistance, 260327 to 260731.** Ten new ships: Secutor (142) and Retiarius (134) Grand Cruisers; Trafalgar (122), Jutland (144) and Midway (160) Supercruisers; Xerxes (175), Darius (180) and Cyrus (185) Battlecruisers; Actium (180) and Salamis (200) Battle Carriers. Three new Deployable Features (ICBM Silo, Ark Lander, Scanner Dome, the faction's first) and a Bombardment Torpedo launch asset. Existing ships: Phalanx 165 to 185 with its N-31 Hybrid Gun Long Battery split into a Half and a Full Battery; Senator 145 to 155, its Missile Salvo replaced by a Missile Turret Pair plus a smaller Salvo, VX Bomb text now worded around Cities, "Swacs" respelled SWACS; Tribune 210 to 205, which drops Hagen's flagship to 250 (45 + 205); Centurion's N-31 Hybrid Gun Battery becomes a Full Battery (Att 8 to 6, gains Critical-1 and Fusillade-2) and both it and the Gladiator gain a Drive Refit option (+25 pts, +3" Thrust). The Senator and Xerxes Special column reads only Vanguard-3" in the PDF, so SWACS is carried as a named rule rather than in stats.special, correcting the older data.
+
+**List-building enforcement.** The Cyrus is Rare, which `validateFleet` already scales by game size, verified by building two Cyrus groups at Skirmish and confirming "Cyrus Battlecruiser is Rare, max 1 group at Skirmish", then confirming a one-Cyrus list passes. The Actium and Salamis "choose two Deployable Features ... (duplicates are allowed)", which the single-slot picker could not express: `featureSlots` on the ship data now drives one picker per slot in both apps, stored as `feature` and `feature2` so old saves and shared links still load, and carried through share links, group collapsing, the overview, print and the text export. The Centurion's Remnant rule (usable in UCM and PHR fleets, Rare there) was already enforced in the data but its text was never shown; it is now on the ship card in all three factions. Feature launch bays render too, so the ICBM Silo shows Launch 2 Bombardment Torpedo, Limited-6.
+
+**Shaltari, 260327 to 260731.** One addition: Nefertem of the Dawn in the Invisible Night, 81 pts, heavy destroyer, Cloak-2, Hero, Shield-5+, Stealth, Unique, armed with a Microwave Crescent. Modelled as a Hero group ship like Avram Bei, so no Admiral can be assigned to it.
+
+**Civilian Ships & Scenarios, 260701 to 260801.** One addition: the M.A.B. 67 Fuel Transport, 55 pts, Mercenary, so it is available to every fleet. Carries the Fuel Transporter rule (granting the 2AP Fully Fuelled Ability), Ignite Reserves and Vectored. Boardable and Civilian Transport stay stripped per the v344 removal.
+
+Art cut for all twelve new ships, thumbnails and the offline manifest regenerated, and the special-rule and named-rule audits repointed at the new editions and rerun clean.
+
 ### 2026-07-31 — The Admiral warning waits until a third of the points are spent
 "Fleet must contain an Admiral" fired the moment the first ship landed, so an almost empty list opened with a red error you could do nothing useful about yet. Most people pick ships first and settle the admiral once the shape of the list is clear.
 

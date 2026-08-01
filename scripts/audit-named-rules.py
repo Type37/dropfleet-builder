@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Audit: named weapon-rules present on the official datasheets but MISSING from the
+Audit: named weapon-rules present on the official ship cards but MISSING from the
 ship data.
 
-Root cause this guards against: some rules are spelled out on a datasheet under a
+Root cause this guards against: some rules are spelled out on a ship card under a
 WEAPON's name (e.g. "VX Bomb", "Explosive Detonation", "Spinal Mass Annihilator"),
 not as a token in the ship's Special column. The PDF->JSON ingest only captured
 Special-column tokens and generic weapon keywords (Bombardment, Scald, ...), so a
@@ -29,8 +29,8 @@ PDFS = {
     'ucm': 'UCM_Combined_Fleet_Stats_260529.pdf',
     'phr': 'PHR_Combined_Fleet_Stats_260626.pdf',
     'scourge': 'Scourge_Combined_Fleet_Stats_260626.pdf',
-    'shaltari': 'Shaltari_Combined_Fleet_Stats_260327.pdf',
-    'resistance': 'Resistance_Combined_Fleet_Stats_260327.pdf',
+    'shaltari': 'Shaltari_Combined_Fleet_Stats_260731.pdf',
+    'resistance': 'Resistance_Combined_Fleet_Stats_260731.pdf',
     'bioficer': 'Bioficer_Combined_Fleet_Stats_260529.pdf',
 }
 # A real stat-table row looks like "<arc> <att> <lock> ...": e.g. "F 3 4+ 2 E ...".

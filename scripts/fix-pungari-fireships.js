@@ -2,9 +2,9 @@
 // "always uses Shaltari Fire Ships". Launch-asset stats are resolved by NAME from
 // each faction's launchAssets, so a generic "Fire Ships" load shows no stats in
 // UCM/PHR/Scourge/Bioficer and the WRONG stats in Resistance (which has its own
-// Fire Ships datasheet). Fix, in every faction the Pungari appears in, by:
+// Fire Ships ship card). Fix, in every faction the Pungari appears in, by:
 //   1) renaming the Pungari's load to "Shaltari Fire Ships", and
-//   2) adding a "Shaltari Fire Ships" datasheet (7" 4 5+ 1 K) to launchAssets.
+//   2) adding a "Shaltari Fire Ships" ship card (7" 4 5+ 1 K) to launchAssets.
 // Targeted string surgery preserves the files' \u escaping + CRLF formatting.
 const fs = require('fs');
 const facs = ['ucm', 'phr', 'scourge', 'shaltari', 'resistance', 'bioficer'];
@@ -37,7 +37,7 @@ for (const f of facs) {
     console.log(f.padEnd(11), 'unexpected Fire Ships count', cnt, '- ABORT'); continue;
   }
 
-  // 2) Add the Shaltari Fire Ships datasheet to launchAssets (idempotent).
+  // 2) Add the Shaltari Fire Ships ship card to launchAssets (idempotent).
   const laIdx = s.indexOf('"launchAssets"');
   const assetsIdx = s.indexOf('"assets": [', laIdx);
   if (assetsIdx < 0) { console.log(f.padEnd(11), 'NO assets array - ABORT'); continue; }

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Audit: datasheet text leaked into ship `lore` fields.
+Audit: ship card text leaked into ship `lore` fields.
 
 During PDF->JSON ingest, the launch/weapon/stat tables or refit lines sometimes
 got appended to a ship's lore prose (e.g. Seattle's lore ended with "Load Launch
@@ -8,7 +8,7 @@ Special Fighters & Bombers 2 - ... Minelayer This ship may replace..."). On scre
 this reads as the lore trailing off into table gibberish. Fixed 8 ships 2026-06-29.
 
 This flags any lore field (ship, variant, or famous-admiral flagship) that still
-contains a datasheet signature, so it's caught after future data/edition updates.
+contains a ship card signature, so it's caught after future data/edition updates.
 Exits non-zero if anything is flagged.
 
     python scripts/audit-lore-leak.py
@@ -46,12 +46,12 @@ def main():
             fs = a.get('flagship') or {}
             check(fs.get('lore', ''), '(adm) ' + a.get('name', '?'))
     if flagged:
-        print(f"LORE with leaked datasheet text: {len(flagged)}")
+        print(f"LORE with leaked ship card text: {len(flagged)}")
         for fk, label, hits, snip in flagged:
             print(f"  {fk:10} {label:34} {hits}")
             print(f"        >> {snip!r}")
         sys.exit(1)
-    print("OK - no datasheet text leaked into lore.")
+    print("OK - no ship card text leaked into lore.")
 
 if __name__ == '__main__':
     main()

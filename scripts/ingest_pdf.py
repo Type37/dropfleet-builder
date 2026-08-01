@@ -5,7 +5,7 @@ Stats PDF:
   1. ART     extract the ship art (largest image on each ship page), cut out its
              background to transparent, and save it as assets/art/<slug>.webp.
   2. STATS   parse name / cost / class / tonnage / stat-line / weapons / launch
-             loads / refits from the datasheet table (self-contained parser).
+             loads / refits from the ship card table (self-contained parser).
   3. RULES   collect the verbatim special-rule prose on the page, matched to the
              rule names in the stat line's Special cell.
   4. LORE    capture the lore paragraph + "Famous ships of the class:" line when

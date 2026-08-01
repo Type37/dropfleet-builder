@@ -464,10 +464,14 @@ let activeGroupId = null;
     'painite','platinum','plutonium','ruby','sapphire','scoria','selenium',
     'shedu','silicon','silver','spinel','strontium','thorium','topaz',
     'turquoise','umbra','uranium',
+    'nefertem',
     // Resistance
     'aldrin','armstrong','barbarossa','collins','coloniser','drake','explorer',
     'farragut','galileo','guy','iowa','lexington','musashi','nelson','nimitz',
     'pathfinder','phalanx','senator','seneca','vanguard','yamamoto',
+    // Resistance 260731 edition
+    'actium','cyrus','darius','jutland','midway','retiarius','salamis',
+    'secutor','trafalgar','xerxes',
     // Bioficer
     'binder','blackbird','brutal','cache','cacophony','carronade','cataphract',
     'cavern','charger','choral','cipher','combine','comet','conqueror',
@@ -521,7 +525,8 @@ let activeGroupId = null;
     'Binary':'bioficer_battleship_binary',
     'Bishop':'bioficer_battleship_bishop',
     'Callous':'callous','Catastrophe':'catastrophe',
-    'Triumvir':'triumvir','Tribune':'tribune','Disciple':'disciple'
+    'Triumvir':'triumvir','Tribune':'tribune','Disciple':'disciple',
+    'M.A.B. 67':'mab_67_fuel_transport'
   };
   const ADMIRAL_ART = {
     // PHR
@@ -703,6 +708,10 @@ let activeGroupId = null;
         additional: !!s.additional,
         noAdmiral: !!s.noAdmiral,   // e.g. Argonaut "Mind of its Own": no Admiral may be assigned
         noTonnageCount: !!s.noTonnageCount, // e.g. Argonaut: excluded from the 4.2 tonnage-points budget
+        // How many Deployable Features a Feature Carrier chooses. 1 for every ship
+        // until the Resistance 260731 Battle Carriers (Actium, Salamis), which
+        // "choose two Deployable Features ... (duplicates are allowed)".
+        featureSlots: s.featureSlots || 1,
         loadoutOptions: s.loadoutOptions || [],
         lore: s.lore || '',
         rulesText: s.rulesText || '',
@@ -790,6 +799,7 @@ let activeGroupId = null;
       cost: df.cost || 0,
       features: df.features || [],
       weapons: df.weapons || [],
+      loads: df.loads || [],
       rules: df.rules || []
     }));
 
@@ -1156,6 +1166,7 @@ let activeGroupId = null;
           const entry = { c: s.groupCategory, k: s.shipKey, p: s.points };
           if (s.loadouts && Object.keys(s.loadouts).length > 0) entry.l = s.loadouts;
           if (s.feature) entry.ft = s.feature;
+          if (s.feature2) entry.ft2 = s.feature2;
           if (s.systems && s.systems.length > 0) entry.sy = s.systems;
           return entry;
         })
@@ -1213,6 +1224,7 @@ let activeGroupId = null;
             points: s.p,
             loadouts: s.l || {},
             feature: s.ft || undefined,
+            feature2: s.ft2 || undefined,
             systems: s.sy || []
           }))
         })),
@@ -2507,7 +2519,7 @@ let activeGroupId = null;
   }
 
   // The flagship's detail-panel view: same shape as a battlegroup's (header bar +
-  // ship card with the full datasheet). The admiral character is managed in the
+  // ship card with the full ship card). The admiral character is managed in the
   // left rail; this is the ship on the table.
   // A famous admiral's flagship label: its proper name when it has one (e.g.
   // "Fortune's Fancy"), optionally with the ship class in parentheses; falls back
@@ -2604,7 +2616,7 @@ let activeGroupId = null;
       <div class="group-ship-entry">
         ${img ? `<div class="ship-card-image">${shopLinkImg(shipName, `<img src="${esc(img)}" alt="${esc(shipName)}" loading="lazy" decoding="async" onerror="this.style.display='none'">`, fdb)}</div>` : ''}
         <div class="ship-card-body" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-sm)">
-          ${sharedShipDatasheet(currentFleet, a, fdb)}
+          ${sharedShipCard(currentFleet, a, fdb)}
           ${renderFlagshipLoadout(idx, a, fdb)}
           ${fdb.rulesText ? `<div class="ship-rules-block"><div class="ship-rules-block-label">Ship Rules</div><div class="ship-rules-block-text">${esc(fdb.rulesText)}</div></div>` : ''}
           ${renderShipRulesGlossary(fdb, a)}
@@ -3171,7 +3183,7 @@ let activeGroupId = null;
     if (!currentFleet || !detailEl) return;
 
     // A famous admiral's flagship selected from the overview shows here, exactly
-    // like a normal battlegroup (its full datasheet in the detail panel).
+    // like a normal battlegroup (its full ship card in the detail panel).
     if (activeFlagship != null) {
       const fa = (currentFleet.admirals || [])[activeFlagship];
       const fdb = fa && fa.shipKey ? findShipInDB(currentFleet.faction, 'famous_admirals', fa.shipKey) : null;
@@ -3620,7 +3632,7 @@ let activeGroupId = null;
     const typeLabel = WEAPON_TYPE_LABELS[w.type] || w.type || '?';
     // Critical-on value (Lock + 2) — shown under the Lock only for weapons whose
     // rules actually use criticals (Penetrator, Critical-X, Crippling, Reave-X,
-    // Impel-X, Burnthrough-X). Same logic as the print datasheet.
+    // Impel-X, Burnthrough-X). Same logic as the print ship card.
     const critOn = weaponCritOn(w);
     // Damage carries its type as a colour-coded letter (e.g. 1E, 2K, 1C) — the
     // type is part of the damage, not a separate "special".
@@ -3688,12 +3700,19 @@ let activeGroupId = null;
       `<div class="feature-weapon">${esc(w.name)} — ${w.scan ? `Scan ${esc(w.scan)}, ` : ''}Att ${esc(w.attack)}, Lock ${esc(w.lock)}, Dmg ${esc(w.damage)}${w.type ? `<span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : ''}${w.special && w.special !== '-' ? ` ${renderWeaponSpecialChips(w.special)}` : ''}</div>`
     ).join('');
   }
+  // A feature can also carry a launch bay (the Resistance ICBM Silo launches
+  // Bombardment Torpedoes, Launch 2, Limited-6).
+  function renderFeatureLoads(feat) {
+    return (feat.loads || []).map(l =>
+      `<div class="feature-weapon">Launch ${esc(String(l.launch))} ${esc(String(l.name))}${l.special && l.special !== '-' ? ` ${renderWeaponSpecialChips(l.special)}` : ''}</div>`
+    ).join('');
+  }
   function renderFeatureStats(feat) {
     if (!feat) return '';
     const statLine = (feat.features || []).map(f =>
       `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.special && f.special !== '-' ? `, ${esc(f.special)}` : ''}</span>`
     ).join('');
-    const weapons = renderFeatureWeapons(feat);
+    const weapons = renderFeatureWeapons(feat) + renderFeatureLoads(feat);
     const ruleChips = (feat.rules || []).map(r =>
       r.description
         ? `<span class="rule-chip rule-chip-sm has-tooltip" data-rule-desc="${esc(r.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(r.name)}</span>`
@@ -3702,22 +3721,27 @@ let activeGroupId = null;
     return `${statLine ? `<div class="station-stats" style="margin-top:var(--sp-xs)">${statLine}</div>` : ''}${weapons ? `<div style="margin-top:var(--sp-xs)">${weapons}</div>` : ''}${ruleChips ? `<div style="margin-top:var(--sp-xs)">${ruleChips}</div>` : ''}`;
   }
 
+  // A Feature Carrier's chosen features, one entry per slot. Slot 1 lives on
+  // `ship.feature` (the original single-slot field, kept so old saves and shared
+  // links still load); slot 2 on `ship.feature2`.
+  const FEATURE_SLOT_KEYS = ['feature', 'feature2'];
+  function featureSlotCount(dbShip) {
+    return Math.min(FEATURE_SLOT_KEYS.length, Math.max(1, (dbShip && dbShip.featureSlots) || 1));
+  }
+
   function renderFeatureCarrierBlock(ship, dbShip, groupId) {
     if (!isFeatureCarrier(dbShip)) return '';
     const faction = shipDB[currentFleet.faction];
     const feats = (faction && faction.deployableFeatures) || [];
     if (feats.length === 0) return '';
-    const chosen = ship.feature || '';
-    // Deployable Features are always optional (you can pick/swap one right before
-    // the game), so the picker never marks them required.
-    const label = 'Deployable Feature, optional';
+    const slots = featureSlotCount(dbShip);
     // Radio list (not a dropdown) so every option's full rules are visible while
     // choosing, rather than hidden until selected.
-    const row = (value, name, cost, feat, isChosen) => {
+    const row = (slot, value, name, cost, feat, isChosen) => {
       const costLabel = cost ? ` <span class="feature-radio-cost">+${cost} pts</span>` : '';
       const art = feat ? featureArtPath(feat.name) : null;
       return `<label class="feature-radio${isChosen ? ' selected' : ''}">
-        <input type="radio" name="feat-${ship.id}"${isChosen ? ' checked' : ''} onchange="App.changeFeature('${groupId}','${ship.id}','${value.replace(/'/g, "\\'")}')">
+        <input type="radio" name="feat-${ship.id}-${slot}"${isChosen ? ' checked' : ''} onchange="App.changeFeature('${groupId}','${ship.id}','${value.replace(/'/g, "\\'")}',${slot})">
         ${art ? `<img class="feature-radio-art" src="${art}" alt="" loading="lazy" onerror="this.remove()">` : ''}
         <span class="feature-radio-main">
           <span class="feature-radio-name">${esc(name)}${costLabel}</span>
@@ -3725,15 +3749,22 @@ let activeGroupId = null;
         </span>
       </label>`;
     };
-    // Deployable Features are always optional now, so always offer "No feature"
-    // and never flag the block as unset. (Previously referenced an undefined
-    // `required`, which threw and broke every Porter/feature-carrier ship.)
-    const noneRow = row('', 'No feature', 0, null, chosen === '');
-    const featRows = feats.map(f => row(f.name, f.name, f.cost, f, f.name === chosen)).join('');
-    return `<div class="feature-carrier-block">
-      <div class="feature-carrier-label">${label}</div>
-      <div class="feature-radio-list">${noneRow}${featRows}</div>
-    </div>`;
+    // Deployable Features are always optional (you can pick/swap one right before
+    // the game), so the picker never marks them required and always offers
+    // "No feature". Ships that choose two (the Resistance Battle Carriers) get one
+    // independent list per slot, and duplicates across slots are allowed.
+    const blocks = [];
+    for (let slot = 0; slot < slots; slot++) {
+      const chosen = ship[FEATURE_SLOT_KEYS[slot]] || '';
+      const label = slots > 1
+        ? `Deployable Feature ${slot + 1} of ${slots}, optional`
+        : 'Deployable Feature, optional';
+      const noneRow = row(slot, '', 'No feature', 0, null, chosen === '');
+      const featRows = feats.map(f => row(slot, f.name, f.name, f.cost, f, f.name === chosen)).join('');
+      blocks.push(`<div class="feature-carrier-label">${label}</div>
+        <div class="feature-radio-list">${noneRow}${featRows}</div>`);
+    }
+    return `<div class="feature-carrier-block">${blocks.join('')}</div>`;
   }
 
   // Full inline rules for one Deployable Feature: stat line + every rule's verbatim
@@ -3742,7 +3773,7 @@ let activeGroupId = null;
     const statLine = (feat.features || []).map(f =>
       `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.special && f.special !== '-' ? `, ${esc(f.special)}` : ''}</span>`
     ).join('');
-    const weapons = renderFeatureWeapons(feat);
+    const weapons = renderFeatureWeapons(feat) + renderFeatureLoads(feat);
     const rules = (feat.rules || []).map(r =>
       `<div class="feature-rule">${r.description ? `<b>${esc(r.name)}:</b> ${ruleHtml(r.description)}` : `<b>${esc(r.name)}</b>`}</div>`
     ).join('');
@@ -3940,12 +3971,12 @@ let activeGroupId = null;
         const canAdd = canAddSystem(ship, dbShip, factionKey, o.name);
         const star = o.oncePerShip ? '<span class="sys-opt-star" title="Max one per ship">*</span>' : '';
         // Every modular option shows its FULL statblock: weapon options get the
-        // weapon datasheet, launch options get the launch-asset datasheet (Fighters/
+        // weapon ship card, launch options get the launch-asset ship card (Fighters/
         // Bombers/Mines/Fire Ships stats), and stat-modifier/effect options keep the
         // short effect line (e.g. "Scan +4").
         const isWeapon = o.weapons && o.weapons.length;
         const isLaunch = !isWeapon && o.loads && o.loads.length;
-        // The option name already heads the card, so a single-weapon datasheet
+        // The option name already heads the card, so a single-weapon ship card
         // drops its redundant name column (and the "Weapon" header). Multi-weapon
         // options keep names so each row is identifiable.
         const omitName = isWeapon && o.weapons.length === 1;
@@ -4040,7 +4071,7 @@ let activeGroupId = null;
     // Weapon table = base weapons + the weapons from the currently selected
     // loadout option(s). This shows the ship's real current guns, so swap options
     // (UCM Laser Refit) and ships whose entire armament is a loadout (the New
-    // York) read correctly. Each option's own datasheet appears only on the
+    // York) read correctly. Each option's own ship card appears only on the
     // UNSELECTED option cards below (a preview), so nothing is ever listed twice.
     let weaponsHtml = '';
     const wpns = (dbShip && Array.isArray(dbShip.weapons)) ? [...dbShip.weapons] : [];
@@ -4054,11 +4085,11 @@ let activeGroupId = null;
     }
 
     // Loadout options — an either/or weapon swap (e.g. UCM Laser Refit). Present
-    // BOTH options as radio cards, each with its full weapon datasheet, and pick
+    // BOTH options as radio cards, each with its full weapon ship card, and pick
     // one (replaces the old dropdown so you can compare the guns before choosing).
     let loadoutsHtml = '';
     const loadoutOpts = dbShip && Array.isArray(dbShip.loadoutOptions) ? dbShip.loadoutOptions : [];
-    // Render an option's weapon + launch datasheet. In a multi-option picker we
+    // Render an option's weapon + launch ship card. In a multi-option picker we
     // show this for BOTH the selected and the unselected choices so the two guns
     // can be compared side by side under their radios. (A single fixed option is
     // not a choice, so it stays out of the picker — its stats are in the ship's
@@ -4077,9 +4108,9 @@ let activeGroupId = null;
           const cards = lo.options.map((opt, oi) => {
             const on = oi === selIdx;
             const costLabel = opt.cost > 0 ? `+${opt.cost} pts` : opt.cost < 0 ? `${opt.cost} pts` : 'Included';
-            // Don't repeat the option name when its weapon datasheet already shows
+            // Don't repeat the option name when its weapon ship card already shows
             // it (e.g. option "Cobra Heavy Laser Pair" over a Cobra Heavy Laser Pair
-            // weapon row). The selected option shows no datasheet (it's in the main
+            // weapon row). The selected option shows no ship card (it's in the main
             // table), so always keep its name there so the choice stays labelled.
             const redundant = opt.weapons && opt.weapons.length && opt.weapons.every(w => w.name === opt.name);
             const head = redundant
@@ -4551,12 +4582,12 @@ let activeGroupId = null;
         : '';
     }
 
-    // Famous admirals open no datasheet (handled via the Admiral slot) and use
+    // Famous admirals open no ship card (handled via the Admiral slot) and use
     // the admiral add-flow; the type line names their flagship.
     const sizeInfoSel = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
     const famBlocked = isFamous && (hasFamousAdmiral() || (data.level && data.level > (sizeInfoSel.maxAdmiralLevel || 4)));
     const famReason = !isFamous ? '' : (hasFamousAdmiral() ? 'One named admiral per fleet' : (data.level > (sizeInfoSel.maxAdmiralLevel || 4) ? `Requires ${sizeInfoSel.label}+` : ''));
-    // Famous admirals live under the famous_admirals group — open their datasheet
+    // Famous admirals live under the famous_admirals group — open their ship card
     // with that category so the "click for info" works for them too.
     const cardOnclick = ` onclick="App.openShipDetail('${currentFleet.faction}','${isFamous ? 'famous_admirals' : category}','${key}',true)"`;
     const typeLine = isFamous
@@ -4727,19 +4758,20 @@ let activeGroupId = null;
     scheduleRender(renderGroupsNav, renderActiveGroup);
   }
 
-  function changeFeature(groupId, shipId, featureName) {
+  function changeFeature(groupId, shipId, featureName, slot) {
     if (!currentFleet) return;
     const group = currentFleet.battleGroups.find(g => g.id === groupId);
     if (!group) return;
     const ship = group.ships.find(s => s.id === shipId);
     if (!ship) return;
+    const key = FEATURE_SLOT_KEYS[slot || 0] || FEATURE_SLOT_KEYS[0];
     // Every ship in a group must carry the same options — apply to all copies
     // of this ship type so the collapsed card stays consistent.
     const dbShip = findShipInDB(currentFleet.faction, ship.groupCategory, ship.shipKey);
     group.ships
       .filter(s => s.shipKey === ship.shipKey && s.groupCategory === ship.groupCategory)
       .forEach(s => {
-        s.feature = featureName || undefined;
+        s[key] = featureName || undefined;
         if (dbShip) s.points = recalcShipPoints(s, dbShip, currentFleet.faction);
       });
     saveFleets();
@@ -4761,12 +4793,14 @@ let activeGroupId = null;
         if (o) total += o.cost || 0;
       });
     }
-    // Deployable feature (e.g. a Porter's Genitor Tower) adds its own cost.
-    if (ship.feature) {
-      const feats = (shipDB[factionKey] && shipDB[factionKey].deployableFeatures) || [];
-      const f = feats.find(x => x.name === ship.feature);
+    // Deployable features (e.g. a Porter's Genitor Tower) add their own cost. A
+    // Battle Carrier carries two, so every slot is counted.
+    const feats = (shipDB[factionKey] && shipDB[factionKey].deployableFeatures) || [];
+    FEATURE_SLOT_KEYS.forEach(k => {
+      if (!ship[k]) return;
+      const f = feats.find(x => x.name === ship[k]);
       if (f) total += f.cost || 0;
-    }
+    });
     return total;
   }
 
@@ -5367,7 +5401,7 @@ let activeGroupId = null;
           const fsName = flagshipLabel(flagship, true, true);
           const fsSize = flagship.shipCategory ? (CATEGORY_LABELS[flagship.shipCategory] || '') : '';
           // The flagship is a ship on the table: its card sits in the middle and
-          // opens the full datasheet. The admiral card here just links to it.
+          // opens the full ship card. The admiral card here just links to it.
           flagshipHtml = `<button class="admiral-flagship-link" onclick="App.openShipDetail('${currentFleet.faction}','famous_admirals','${a.shipKey}',false)" title="Open the flagship profile">
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 11l6-8 6 8M3 11h10l-1 3H4z"/></svg>
             <span>Flagship: <strong>${fsName}</strong>${fsSize ? `, ${esc(fsSize)}` : ''}</span>
@@ -5859,12 +5893,12 @@ let activeGroupId = null;
       <!--LAUNCH_REF-->`;
 
     // Admirals — each card carries the admiral header + (for Famous) the flagship
-    // datasheet. Their abilities are NOT listed per-card; instead every ability the
+    // ship card. Their abilities are NOT listed per-card; instead every ability the
     // fleet can use this match is collected into one consolidated table below.
     if (f.admirals && f.admirals.length > 0) {
       html += `<div class="print-section">
         ${f.admirals.map(a => {
-          // Famous admirals: print the flagship datasheet (stats + weapons).
+          // Famous admirals: print the flagship ship card (stats + weapons).
           let flagshipHtml = '';
           if (a.type === 'Famous' && a.shipKey) {
             const fsp = factionInfo?.groups?.famous_admirals?.ships?.[a.shipKey];
@@ -5968,7 +6002,7 @@ let activeGroupId = null;
     printGroups.forEach(g => {
       const seen = new Set();
       g.ships.forEach(ship => {
-        const k = `${ship.shipKey}:${ship.groupCategory}:${JSON.stringify(ship.loadouts || {})}:${JSON.stringify(ship.systems || [])}:${ship.feature || ''}`;
+        const k = `${ship.shipKey}:${ship.groupCategory}:${JSON.stringify(ship.loadouts || {})}:${JSON.stringify(ship.systems || [])}:${ship.feature || ''}:${ship.feature2 || ''}`;
         if (seen.has(k)) return; seen.add(k);
         glossTotalCards++;
         const db = findShipInDB(f.faction, ship.groupCategory, ship.shipKey);
@@ -5997,7 +6031,7 @@ let activeGroupId = null;
     const hoistedGlossNames = Object.keys(ruleDefByName).filter(n => hoistedBases.has(baseRuleName(n))).sort();
     const hoistedWeaponDefs = {}; // full token -> {description, page}, filled while rendering cards
 
-    // Groups — dense, self-contained datasheets that read the same on screen (in the
+    // Groups — dense, self-contained ship cards that read the same on screen (in the
     // preview) as on paper. System/loadout weapons merge into the weapon table.
     const allLaunchAssetNames = new Set();
     let groupsHtml = '';
@@ -6018,7 +6052,7 @@ let activeGroupId = null;
       // Collapse identical ships (same loadout/systems/feature) into one card with N hull tracks.
       const shipBuckets = [];
       g.ships.forEach(ship => {
-        const bucketKey = `${ship.shipKey}:${ship.groupCategory}:${JSON.stringify(ship.loadouts || {})}:${JSON.stringify(ship.systems || [])}:${ship.feature || ''}`;
+        const bucketKey = `${ship.shipKey}:${ship.groupCategory}:${JSON.stringify(ship.loadouts || {})}:${JSON.stringify(ship.systems || [])}:${ship.feature || ''}:${ship.feature2 || ''}`;
         let bucket = shipBuckets.find(b => b.key === bucketKey);
         if (!bucket) { bucket = { key: bucketKey, ship, count: 0 }; shipBuckets.push(bucket); }
         bucket.count++;
@@ -6111,10 +6145,15 @@ let activeGroupId = null;
         const sysHtml = nonWeaponSystems.length
           ? `<div class="dp-systems"><b>${esc(db.systemSelection ? db.systemSelection.listName : 'Systems')}:</b> ${esc(nonWeaponSystems.join('; '))}</div>` : '';
         let featHtml = '';
-        if (ship.feature) {
-          const feat = ((shipDB[f.faction] || {}).deployableFeatures || []).find(df => df.name === ship.feature);
-          const fStat = feat ? (feat.features || []).map(x => `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`).join('; ') : '';
-          featHtml = `<div class="dp-systems"><b>Deployable Feature:</b> ${esc(ship.feature)}${fStat ? ', ' + esc(fStat) : ''}</div>`;
+        const chosenFeats = FEATURE_SLOT_KEYS.map(k => ship[k]).filter(Boolean);
+        if (chosenFeats.length) {
+          const featLines = chosenFeats.map(name => {
+            const feat = ((shipDB[f.faction] || {}).deployableFeatures || []).find(df => df.name === name);
+            const fStat = feat ? (feat.features || []).map(x => `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`).join('; ') : '';
+            return `${esc(name)}${fStat ? ', ' + esc(fStat) : ''}`;
+          });
+          const label = chosenFeats.length > 1 ? 'Deployable Features:' : 'Deployable Feature:';
+          featHtml = `<div class="dp-systems"><b>${label}</b> ${featLines.join(' &middot; ')}</div>`;
         }
         // Selected refits that aren't weapon/load swaps (those already show in the
         // weapon table / launch line) — e.g. a Drive/Engine Refit or a Cloaking Crest.
@@ -6493,7 +6532,7 @@ let activeGroupId = null;
     };
     const updateToggleStates = () => {
       const simple = settings.printSimple, big = settings.printBig, rost = settings.printRoster;
-      // Simple list disables every datasheet option; Roster + Big each force one column.
+      // Simple list disables every ship card option; Roster + Big each force one column.
       const set = (sel, off) => { const el = ov.querySelector(sel); if (el) el.disabled = off; };
       set('#pp-roster', simple);
       set('#pp-big', simple || rost);
@@ -6520,11 +6559,11 @@ let activeGroupId = null;
   }
 
   // ── Shared Fleet Viewer ──
-  // One ship's datasheet body for the shared-fleet preview: effective stats,
+  // One ship's ship card body for the shared-fleet preview: effective stats,
   // weapons (base + selected loadout), launch table, and special rules. Shared by
   // the battle-group ships AND famous-admiral flagships so the flagship lists its
   // full stats like the rest of the fleet.
-  function sharedShipDatasheet(fleet, ship, dbShip) {
+  function sharedShipCard(fleet, ship, dbShip) {
     if (!dbShip) return '';
     let h = '';
     const eff = effectiveStats(dbShip, ship, fleet.faction);
@@ -6641,7 +6680,7 @@ let activeGroupId = null;
             </div>
             ${abHtml}
           </div>`;
-          // Famous admirals fly a flagship — show its full datasheet like the rest
+          // Famous admirals fly a flagship — show its full ship card like the rest
           // of the fleet (stats/weapons/launch/rules), not just the admiral line.
           if (a.type === 'Famous' && a.shipKey) {
             const fdb = findShipInDB(fleet.faction, 'famous_admirals', a.shipKey);
@@ -6655,7 +6694,7 @@ let activeGroupId = null;
                     <div class="shared-ship-type">${esc(tonLabel(fdb.tonnage) || '')}${fdb.className ? ', ' + esc(fdb.className) : ''}</div>
                   </div>
                 </div>
-                ${sharedShipDatasheet(fleet, a, fdb)}
+                ${sharedShipCard(fleet, a, fdb)}
               </div>`;
             }
           }
@@ -6708,7 +6747,7 @@ let activeGroupId = null;
         </div>`;
 
         // Show stats if available
-        if (dbShip) html += sharedShipDatasheet(fleet, ship, dbShip);
+        if (dbShip) html += sharedShipCard(fleet, ship, dbShip);
 
         html += `</div>`;
       });
@@ -7218,7 +7257,7 @@ let activeGroupId = null;
       groups.forEach(g => {
         const profs = [];
         g.ships.forEach(s => {
-          const key = s.shipKey + ':' + JSON.stringify(s.loadouts || {}) + ':' + JSON.stringify(s.systems || []) + ':' + (s.feature || '');
+          const key = s.shipKey + ':' + JSON.stringify(s.loadouts || {}) + ':' + JSON.stringify(s.systems || []) + ':' + (s.feature || '') + ':' + (s.feature2 || '');
           let p = profs.find(x => x.key === key);
           if (!p) { p = { key, s, count: 0 }; profs.push(p); }
           p.count++;
@@ -7230,7 +7269,7 @@ let activeGroupId = null;
           const notes = [];
           (db && db.loadoutOptions || []).forEach((lo, i) => { const o = lo.options[(s.loadouts && s.loadouts[i]) || 0]; if (o && o.cost) notes.push(o.name); });
           if (s.systems && s.systems.length) { const c = {}; s.systems.forEach(n => c[n] = (c[n] || 0) + 1); notes.push(...Object.entries(c).map(([n, k]) => k > 1 ? `${k}x ${n}` : n)); }
-          if (s.feature) notes.push(s.feature);
+          FEATURE_SLOT_KEYS.forEach(k => { if (s[k]) notes.push(s[k]); });
           notes.forEach(n => { out += `    - ${n}\n`; });
         });
       });
@@ -7845,6 +7884,15 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-08-01', title: 'New Resistance edition, plus two new ships elsewhere', items: [
+      'The Resistance now follow the 31 July stats. Ten new ships join them: the Secutor and Retiarius Grand Cruisers, the Trafalgar, Jutland and Midway Supercruisers, the Xerxes, Darius and Cyrus Battlecruisers, and the Actium and Salamis Battle Carriers.',
+      'Three new Resistance Deployable Features, the ICBM Silo, the Ark Lander and the Scanner Dome, and a new Bombardment Torpedo launch asset.',
+      'The Actium and Salamis choose two Deployable Features each, and may take the same one twice. Both apps now offer a picker per slot instead of one.',
+      'The Cyrus is Rare, so the usual one per Skirmish, two per Clash, three per Battle and four per Reconquest limit is enforced on it.',
+      'Resistance price and gun changes: the Phalanx is 185 pts and its Long Battery splits into a Half and a Full Battery; the Senator is 155 pts and gains a Missile Turret Pair alongside a smaller Salvo; the Tribune is 205 pts, which also drops Hagen to 250. The Centurion and Gladiator can both take a Drive Refit for +25 pts and 3 inches of Thrust, and the Centurion Full Battery now hits with Critical-1 and Fusillade-2.',
+      'Shaltari: Nefertem of the Dawn joins in the Invisible Night, a cloaked heavy destroyer with a Microwave Crescent.',
+      'Every fleet can now hire the M.A.B. 67 Fuel Transport. Its Fuel Transporter rule gives a Group nearby extra movement, and Ignite Reserves lets it go out in a fireball.',
+    ]},
     { date: '2026-07-31', title: 'The Admiral warning waits its turn', items: [
       'Adding your first ship no longer immediately flags "Fleet must contain an Admiral". The warning now holds off until you have spent a third of your points limit, by which point picking an admiral is a real decision rather than a nag on an almost empty list.',
     ]},
