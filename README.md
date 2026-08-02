@@ -47,6 +47,10 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-08-02: Fewer ships wrongly offering a Deployable Feature
+
+`isFeatureCarrier()` matched any ship whose rules mentioned "Feature Carrier" or "Deployable Feature" by name, so ships that always carry one fixed feature (the M-Type Barge's Military Outpost, already a Load; the EX-7 Packet Runner's single Hangar Feature) wrongly got a picker offering unrelated faction features (e.g. Bioficer's Gravitational Arc/Ghost Orb Tower). Mobile also had a stray "any Porter S ship" fallback meant for the Genitor Tower that desktop never had, which alone put the picker on every Bioficer Porter S ship (16 of them). Both apps now require the rules to actually say "choose ... Deployable Feature(s)" before showing the picker; verified against every faction's PDF-sourced Feature Carrier text.
+
 ### 2026-08-01: Resistance 260731 edition, plus the Nefertem and the M.A.B. 67
 
 The monthly TTCombat downloads scan found four updated files. PHR was already at 260626, so three needed work.

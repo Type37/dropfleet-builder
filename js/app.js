@@ -7888,6 +7888,10 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-08-02', title: 'Fewer ships wrongly offering a Deployable Feature', items: [
+      'Some ships that always carry one fixed feature, like the M-Type Barge\'s Military Outpost or the EX-7 Packet Runner\'s Hangar Feature, were being offered a picker of unrelated faction features instead. The picker now only appears on ships whose rules genuinely let you choose.',
+      'Mobile also had every Bioficer Porter S ship (16 of them) wrongly showing that picker; that fallback is gone.',
+    ]},
     { date: '2026-08-01', title: 'New Resistance edition, plus two new ships elsewhere', items: [
       'The Resistance now follow the 31 July stats. Ten new ships join them: the Secutor and Retiarius Grand Cruisers, the Trafalgar, Jutland and Midway Supercruisers, the Xerxes, Darius and Cyrus Battlecruisers, and the Actium and Salamis Battle Carriers.',
       'Three new Resistance Deployable Features, the ICBM Silo, the Ark Lander and the Scanner Dome, and a new Bombardment Torpedo launch asset.',
