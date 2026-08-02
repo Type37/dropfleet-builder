@@ -325,14 +325,6 @@ h1, h2, h3, h4, h5, h6 {
 .text-subtitle { font-size: var(--text-lg); font-weight: var(--weight-medium); }
 .text-body { font-size: var(--text-base); }
 .text-caption { font-size: var(--text-sm); color: var(--ink-muted); }
-.text-overline {
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-bold);
-  text-transform: none;
-  letter-spacing: 0.01em;
-  color: var(--ink-muted);
-}
 .text-rules {
   font-family: var(--font-body);
   font-size: var(--text-sm);
@@ -663,10 +655,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* Navy chrome (points sidebar + topbar): secondary/muted text must be light to
    pass WCAG on the dark bg — the beige-tuned dark grays fail there (~2.7:1). */
-.builder-sidebar .text-overline,
 .builder-sidebar .text-caption,
 .builder-sidebar .points-limit,
-.topbar .text-overline,
 .topbar .text-caption { color: #c4bfb5; }
 /* Add-slot placeholders ("Add Admiral", "Add Space Station") sit on the navy-dark
    sidebar — ink-faint (#66615a) only achieves 2.4:1 there (fails AA). Use #c4bfb5
