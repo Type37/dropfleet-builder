@@ -3663,22 +3663,26 @@ let activeGroupId = null;
   // [Faction] Deployable Features List").
   function isFeatureCarrier(dbShip) {
     if (!dbShip) return false;
-    // NB: the DB ship exposes special-rule NAMES as `special_rules` (not
-    // `specialRules`). A ship carries a Deployable Feature only if its rules say so
-    // (a "Feature Carrier" picks one feature to start the game carrying — e.g. the
-    // Bioficer supercruiser/pocket-battleship choice of Gravitational Arc or Ghost
-    // Orb Tower). The Genitor Tower is NOT handled here: it is a Payload S-1 unit in
-    // the Payload tab (consumes Porter S capacity), not a per-Porter upgrade.
-    const ruleNames = (dbShip.special_rules || []).join(' ');
-    const hay = (dbShip.rulesText || '') + ' ' + ruleNames;
-    return /Deployable Feature|Feature Carrier/i.test(hay);
+    // A ship gets the picker only if its rules actually offer a CHOICE — every
+    // real Feature Carrier rule reads "choose ... Deployable Feature(s) ..."
+    // (either "from the [Faction] Deployable Features List", or, for Bioficer,
+    // "from the Gravitational Arc or Ghost Orb Tower Deployable Feature").
+    // Matching on the rule name "Feature Carrier" alone is too broad — some
+    // "Feature Carrier" ships always carry one specific, non-chosen feature (the
+    // M-Type Barge's fixed Military Outpost, already represented as its Load; the
+    // EX-7 Packet Runner's single Hangar Feature, which isn't on any faction's
+    // Deployable Features List at all) and must NOT show a picker of unrelated
+    // faction features. The Genitor Tower is NOT handled here either: it is a
+    // Payload S-1 unit in the Payload tab (consumes Porter S capacity), not a
+    // per-Porter upgrade.
+    const texts = (dbShip.specialRuleDetails || []).map(r => r.description || '');
+    if (dbShip.rulesText) texts.push(dbShip.rulesText);
+    return texts.some(t => /choose[\s\S]*Deployable Feature/i.test(t));
   }
 
   // A genuine "choose one Deployable Feature" ship MUST take one; a Porter MAY.
   function featureRequired(dbShip) {
-    if (!dbShip) return false;
-    const ruleNames = (dbShip.special_rules || []).join(' ');
-    return /Deployable Feature|Feature Carrier/i.test((dbShip.rulesText || '') + ' ' + ruleNames);
+    return isFeatureCarrier(dbShip);
   }
 
   // A ship is "fully modular" when it has a Systems selection and NO fixed

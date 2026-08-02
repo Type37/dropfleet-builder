@@ -979,23 +979,25 @@
   }
 
   /* ── Deployable Features ───────────────────────────────── */
-  function shipRuleNames(ship) {
-    return (ship?.specialRules || []).map(r => r.name).join(' ');
-  }
   function isFeatureCarrier(ship) {
     if (!ship) return false;
-    const names = shipRuleNames(ship);
-    const hay = (ship.rulesText || '') + ' ' + names;
-    // The Genitor Tower is a Payload S-1, so only Porter S ships may carry it (a
-    // Porter L can't take a size-S payload). The porter size lives in the
-    // capacity stat string `stats.special` (e.g. "Porter S-1" / "Porter L-1"),
-    // not the generic "Porter S/L-X" rule name. Hard-codes size S (the only
-    // Bioficer deployable feature today).
-    return /Deployable Feature|Feature Carrier/i.test(hay) || /Porter\s*S\b/i.test(ship.stats?.special || '');
+    // A ship gets the picker only if its rules actually offer a CHOICE — every
+    // real Feature Carrier rule reads "choose ... Deployable Feature(s) ..."
+    // (either "from the [Faction] Deployable Features List", or, for Bioficer,
+    // "from the Gravitational Arc or Ghost Orb Tower Deployable Feature").
+    // Matching on the rule name "Feature Carrier" alone (or on any Porter S ship,
+    // for the Genitor Tower) is too broad — the Genitor Tower is a Payload S-1
+    // unit in the Payload tab (consumes Porter S capacity), not a per-Porter
+    // upgrade, and ships like the M-Type Barge (fixed Military Outpost, already
+    // on its Load list) or EX-7 Packet Runner (a single Hangar Feature, not on
+    // any faction's Deployable Features List) always carry one specific,
+    // non-chosen feature and must not show a picker of unrelated faction features.
+    const texts = (ship.specialRules || []).map(r => r.description || '');
+    if (ship.rulesText) texts.push(ship.rulesText);
+    return texts.some(t => /choose[\s\S]*Deployable Feature/i.test(t));
   }
   function featureRequired(ship) {
-    if (!ship) return false;
-    return /Deployable Feature|Feature Carrier/i.test((ship.rulesText || '') + ' ' + shipRuleNames(ship));
+    return isFeatureCarrier(ship);
   }
   function factionFeatures(factionKey) {
     return (FACTIONS[factionKey]?.deployableFeatures) || [];
