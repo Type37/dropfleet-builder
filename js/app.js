@@ -7895,6 +7895,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-08-11', title: 'My Collection comes to mobile', items: [
+      'Mobile now has the Collection tracker: record how many of each ship you own, per faction, and the ship picker shows an "in collection" chip plus an In-collection filter. It reads and writes the same saved collection as desktop, so what you record on one shows up on the other.',
+    ]},
     { date: '2026-08-11', title: 'Mobile catches up: army-list import, backups, model links', items: [
       'Mobile can now import a New Recruit army list. Paste one into Import and it resolves the faction by ship names, matches loadouts to the weapons listed, and reports anything it could not map rather than importing silently.',
       'Mobile gained "Back up all fleets", which downloads every fleet as one JSON file. Both apps can now restore a backup: pasting the whole file into Import adds its fleets instead of replacing what you already have.',

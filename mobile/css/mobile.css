@@ -2971,3 +2971,64 @@ body.sheet-open .sheet-scrim {
 .import-report-note { font-size: var(--text-caption1); color: var(--fg3); margin-top: 2px; }
 .import-report-ok { margin-top: var(--sp-m); color: var(--success-ink, #1f5c37); font-weight: 600; }
 .import-report-list { margin: 4px 0 0; padding-left: 18px; font-size: var(--text-caption1); }
+
+/* — My Collection —
+   A linear row stack, not desktop's card grid: on a phone a row lets the ship
+   name sit unclipped beside a 44px stepper. Names always wrap, never truncate. */
+.coll-fac-tabs {
+  display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding: var(--sp-s) var(--sp-m); border-bottom: 1px solid var(--stroke2);
+  background: var(--card-bg); position: sticky; top: 0; z-index: 2;
+}
+.coll-fac-tab {
+  flex: none; min-height: 44px; padding: 0 14px;
+  font-family: var(--font-condensed); font-size: var(--text-body1); font-weight: 600;
+  letter-spacing: .03em; text-transform: uppercase;
+  background: transparent; color: var(--fg2);
+  border: 1px solid var(--stroke1); border-radius: var(--radius-md); cursor: pointer;
+}
+.coll-fac-tab.active { background: var(--navy); color: var(--fg-on-dark); border-color: var(--navy); }
+.coll-summary {
+  padding: var(--sp-m); font-family: var(--font-condensed);
+  font-size: var(--text-caption1); color: var(--fg2); background: var(--paper-alt);
+}
+.coll-loading, .coll-empty { padding: var(--sp-l) var(--sp-m); color: var(--fg3); font-size: var(--text-caption1); }
+.coll-cat {
+  padding: var(--sp-m) var(--sp-m) 6px;
+  font-family: var(--font-condensed); font-size: var(--text-caption1); font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--fg3);
+}
+.coll-row {
+  display: flex; align-items: center; gap: var(--sp-s);
+  padding: var(--sp-s) var(--sp-m);
+  border-bottom: 1px solid var(--stroke3); background: var(--card-bg);
+}
+.coll-row.owned { background: rgba(184,147,46,0.07); }
+.coll-art { width: 52px; height: 34px; object-fit: contain; flex: none; }
+.coll-info { flex: 1; min-width: 0; }
+/* No truncation: a long ship name wraps onto a second line. */
+.coll-name { font-size: var(--text-body1); font-weight: 600; color: var(--fg1); overflow-wrap: anywhere; }
+.coll-pts { font-family: var(--font-condensed); font-size: var(--text-caption2); color: var(--fg3); }
+.coll-step { display: flex; align-items: center; gap: 2px; flex: none; }
+.coll-btn {
+  width: 44px; height: 44px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; line-height: 1; color: var(--navy);
+  background: transparent; border: 1px solid var(--stroke1);
+  border-radius: var(--radius-md); cursor: pointer;
+}
+.coll-btn:disabled { color: var(--stroke1); cursor: default; }
+.coll-count {
+  min-width: 30px; text-align: center;
+  font-family: var(--font-condensed); font-size: var(--text-subtitle2); font-weight: 700;
+  color: var(--fg1); font-variant-numeric: tabular-nums;
+}
+
+/* Picker chip showing what you own (opt-in). */
+.coll-badge {
+  display: inline-block; margin-top: 4px;
+  font-family: var(--font-condensed); font-size: var(--text-caption2);
+  letter-spacing: .03em; padding: 1px 7px; border-radius: 9px;
+}
+.coll-badge-ok { color: #1f5c37; background: rgba(31,92,55,0.10); }
+.coll-badge-none { color: var(--fg3); background: var(--paper-alt); }

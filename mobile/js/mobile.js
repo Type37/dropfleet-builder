@@ -40,6 +40,32 @@
   // One-time reset: misc ships default OFF (clears any stale "on" from testing).
   try { if (localStorage.getItem('dfc_misc_off_v1') !== '1') { pickerShowExtra = false; localStorage.setItem('dfc_show_extra', '0'); localStorage.setItem('dfc_misc_off_v1', '1'); } } catch (e) {}
 
+  /* ── Collection (models you own) ──────────────────────────────
+   * { factionKey: { shipKey: count } } under 'dfc_collection'. The schema and the
+   * ship keys are shared with desktop: both key ships by the faction JSON's group
+   * id, so a collection recorded on either app reads correctly on the other.
+   * Opt-in, like desktop: the picker chip and filter stay hidden until the user
+   * turns the feature on, so nobody who does not track models sees the clutter. */
+  let collection = {};
+  let collectionFaction = 'ucm';
+  let collectionFilterOn = false;   // picker "In collection" filter
+  let showCollection = localStorage.getItem('dfc_show_collection') === '1';
+  function loadCollection() {
+    try { collection = JSON.parse(localStorage.getItem('dfc_collection') || '{}'); }
+    catch (e) { collection = {}; }
+  }
+  function saveCollection() {
+    try { localStorage.setItem('dfc_collection', JSON.stringify(collection)); } catch (e) {}
+  }
+  function ownedCount(faction, key) { return (collection[faction] && collection[faction][key]) || 0; }
+  function setOwned(faction, key, n) {
+    n = Math.max(0, Math.floor(n) || 0);
+    if (!collection[faction]) collection[faction] = {};
+    if (n === 0) delete collection[faction][key]; else collection[faction][key] = n;
+    if (collection[faction] && !Object.keys(collection[faction]).length) delete collection[faction];
+    saveCollection();
+  }
+
   // Filled check for selected/active toggle states (replaces the old "✓" text
   // glyph, which rendered as an emoji on some platforms). Inherits colour from
   // the host control via currentColor.
@@ -1308,7 +1334,8 @@
     'screen-admiral-detail': renderAdmiralDetail,
     'screen-station': renderStationPicker,
     'screen-station-detail': renderStationDetail,
-    'screen-play': renderMobilePlay
+    'screen-play': renderMobilePlay,
+    'screen-collection': renderCollection
   };
 
   function navigate(screenId, opts) {
@@ -1449,6 +1476,7 @@
       case 'screen-station': back.classList.remove('hidden'); title.textContent = 'Space Station'; showPts(); break;
       case 'screen-station-detail': back.classList.remove('hidden'); title.textContent = 'Space Station'; showPts(); break;
       case 'screen-play': back.classList.remove('hidden'); title.textContent = (mPlayFleet ? esc(mPlayFleet.name) + ' — Play' : 'Play Mode'); break;
+      case 'screen-collection': back.classList.remove('hidden'); title.textContent = 'My Collection'; break;
     }
   }
 
@@ -1955,10 +1983,16 @@
       { key: 'modular', label: 'Modular', test: s => isFullyModular(s) },
       { key: 'rare',    label: 'Rare',    test: s => s.isRare },
       { key: 'unique',  label: 'Unique',  test: s => s.isUnique },
-      { key: 'famous',  label: 'Famous',  test: s => !!s._famous }
+      { key: 'famous',  label: 'Famous',  test: s => !!s._famous },
+      // Only ships you have recorded in My Collection. Needs the group (for its id,
+      // which is the collection key), so tests take (ship, group).
+      { key: 'owned',   label: 'In collection', test: (s, g) => g && !g._famous && ownedCount(activeFleet.faction, g.id) > 0 }
     ];
     const _hasFamous = (faction.admirals || []).some(a => a.isFamous && a.flagship);
-    const presentAttrs = attrDefs.filter(a => a.key === 'famous' ? _hasFamous : groups.some(g => a.test(g.ship || {})));
+    const presentAttrs = attrDefs.filter(a =>
+      a.key === 'famous' ? _hasFamous
+        : a.key === 'owned' ? showCollection
+          : groups.some(g => a.test(g.ship || {}, g)));
 
     // Famous admirals fly a flagship that's a ship on the table — surface them in
     // the picker too (not just the Admiral screen, where they sit below the fold).
@@ -1986,7 +2020,7 @@
         const hay = ((s.name || g.name) + ' ' + (s.namesake || '')).toLowerCase();
         if (!hay.includes(search)) return false;
       }
-      for (const k of pickerAttrs) { const d = attrDefs.find(a => a.key === k); if (d && !d.test(s)) return false; }
+      for (const k of pickerAttrs) { const d = attrDefs.find(a => a.key === k); if (d && !d.test(s, g)) return false; }
       return true;
     });
 
@@ -2065,6 +2099,13 @@
           <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)}, Group ${gMin}${gMax > gMin ? '–' + gMax : ''}${gMin > 1 ? ` · ${gMin}× ${cost}` : ''}</div>
           ${(() => { const rs = (ship.specialRules || []).map(r => r.name).filter(Boolean).join(', '); return rs ? `<div class="list-row-rules">${renderSpecialChips(rs)}</div>` : ''; })()}
           ${shipLaunchIcons(ship, activeFleet.faction)}
+          ${(() => {
+            // Collection chip — opt-in, matching desktop. Just the owned count; no
+            // fleet-relative maths (desktop dropped that as noise).
+            if (!showCollection) return '';
+            const owned = ownedCount(activeFleet.faction, g.id);
+            return `<div class="coll-badge ${owned > 0 ? 'coll-badge-ok' : 'coll-badge-none'}">${owned > 0 ? `${owned} in collection` : 'not in collection'}</div>`;
+          })()}
         </div>
       </div>`;
     }).join('');
@@ -4085,6 +4126,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-08-11', title: 'My Collection', items: [
+      'Settings now has My Collection: record how many of each ship you own, faction by faction, with a running total of models and points owned. The ship picker gains an "in collection" chip and an In-collection filter so you can build only from what is on your shelf.',
+      'It reads and writes the same saved collection as the desktop app, so anything you already recorded there shows up here.',
+    ]},
     { date: '2026-08-11', title: 'Army-list import, fleet backups and model links', items: [
       'You can now import a New Recruit army list. Paste one into Import and it resolves the faction by ship names, matches loadouts to the weapons listed, and reports anything it could not map rather than importing silently.',
       'Settings gained "Back up all fleets", which downloads every fleet as one JSON file. Pasting that file back into Import restores them, adding to what you already have rather than replacing it.',
@@ -4265,6 +4310,91 @@
       + CHANGELOG.map(e => `<div style="margin-bottom:12px"><div style="font-weight:600;text-transform:uppercase;letter-spacing:.03em;font-size:.85em;border-bottom:1px solid rgba(0,0,0,.12);padding-bottom:2px;margin-bottom:4px">${esc(e.date)} &middot; ${esc(e.title)}</div><ul style="margin:0;padding-left:1.1em">${e.items.map(i => `<li style="margin-bottom:3px">${esc(i)}</li>`).join('')}</ul></div>`).join('');
     showSheet("What's New", body);
   }
+  /* ── Collection screen ──────────────────────────────────────
+   * A linear stack of rows (not desktop's card grid): on a phone a row gives the
+   * name room to sit unclipped next to a 44px stepper, which a grid cell does not. */
+  function openCollection() {
+    if (!showCollection) {
+      showCollection = true;
+      try { localStorage.setItem('dfc_show_collection', '1'); } catch (e) {}
+    }
+    navigate('screen-collection');
+  }
+  function collectionSelectFaction(fk) { collectionFaction = fk; renderCollection(); }
+  function collectionAdjust(faction, key, delta) {
+    setOwned(faction, key, ownedCount(faction, key) + delta);
+    const row = document.querySelector(`.coll-row[data-key="${key}"]`);
+    if (row) {
+      const n = ownedCount(faction, key);
+      const c = row.querySelector('.coll-count');
+      if (c) c.textContent = n;
+      row.classList.toggle('owned', n > 0);
+      const minus = row.querySelector('.coll-btn-minus');
+      if (minus) minus.disabled = n === 0;
+    }
+    updateCollectionSummary();
+    haptic(HAPTIC.tick);
+  }
+  function renderCollection() {
+    const container = document.getElementById('collection-container');
+    if (!container) return;
+    const tabs = Object.keys(FACTION_FILES).map(fk => {
+      const lbl = (FACTIONS[fk] && (FACTIONS[fk].shortName || FACTIONS[fk].name)) || fk.toUpperCase();
+      return `<button class="coll-fac-tab${fk === collectionFaction ? ' active' : ''}" onclick="App.collectionSelectFaction('${fk}')">${esc(lbl)}</button>`;
+    }).join('');
+    container.innerHTML =
+      `<div class="coll-fac-tabs">${tabs}</div>
+       <div class="coll-summary" id="coll-summary"></div>
+       <div class="coll-list" id="coll-list"><div class="coll-loading">Loading…</div></div>`;
+    ensureFaction(collectionFaction).then(renderCollectionList);
+  }
+  function renderCollectionList() {
+    const list = document.getElementById('coll-list');
+    if (!list) return;
+    const fk = collectionFaction;
+    const fac = FACTIONS[fk];
+    if (!fac || !Array.isArray(fac.groups)) { list.innerHTML = '<div class="coll-empty">No ships.</div>'; return; }
+    let html = '';
+    CATEGORY_ORDER.forEach(cat => {
+      const inCat = fac.groups.filter(g => g.category === cat && g.ship);
+      if (!inCat.length) return;
+      html += `<div class="coll-cat">${esc(CATEGORY_LABELS[cat] || cat)}</div>`;
+      inCat.forEach(g => {
+        const s = g.ship;
+        const art = thumbUrl(shipArtPath(s.name));
+        const n = ownedCount(fk, g.id);
+        html += `<div class="coll-row${n > 0 ? ' owned' : ''}" data-key="${esc(g.id)}">
+          ${art ? `<img class="coll-art" src="${esc(art)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<div class="coll-art"></div>'}
+          <div class="coll-info"><div class="coll-name">${esc(s.name)}</div><div class="coll-pts">${s.cost || 0} pts</div></div>
+          <div class="coll-step">
+            <button class="coll-btn coll-btn-minus" ${n === 0 ? 'disabled' : ''} aria-label="Remove one ${esc(s.name)}" onclick="App.collectionAdjust('${fk}','${esc(g.id)}',-1)">&minus;</button>
+            <span class="coll-count">${n}</span>
+            <button class="coll-btn" aria-label="Add one ${esc(s.name)}" onclick="App.collectionAdjust('${fk}','${esc(g.id)}',1)">+</button>
+          </div>
+        </div>`;
+      });
+    });
+    list.innerHTML = html || '<div class="coll-empty">No ships.</div>';
+    updateCollectionSummary();
+  }
+  function shipCostByKey(faction, key) {
+    const fac = FACTIONS[faction];
+    if (!fac || !Array.isArray(fac.groups)) return 0;
+    const g = fac.groups.find(x => x.id === key);
+    return (g && g.ship && g.ship.cost) || 0;
+  }
+  function updateCollectionSummary() {
+    const el = document.getElementById('coll-summary');
+    if (!el) return;
+    const fk = collectionFaction;
+    const c = collection[fk] || {};
+    let total = 0, distinct = 0, pts = 0;
+    Object.entries(c).forEach(([key, n]) => { if (n > 0) { distinct++; total += n; pts += shipCostByKey(fk, key) * n; } });
+    el.textContent = total
+      ? `${total} model${total !== 1 ? 's' : ''} · ${distinct} distinct · ${pts} pts of ships owned`
+      : 'Nothing recorded yet. Punch in what you own below.';
+  }
+
   function openSettingsSheet() {
     showActionSheet([
       // Misc Ships is a picker filter chip now (its own list), not a global setting.
@@ -4274,6 +4404,7 @@
       { icon: 'download', label: 'Offline use…', action: openOfflineSheet },
       { icon: 'copy', label: `Back up all fleets (${fleets.length})`, action: exportAllFleets, disabled: !fleets.length },
       { icon: 'edit', label: 'Restore or import a fleet…', action: importFleetPrompt },
+      { icon: 'duplicate', label: 'My Collection', action: openCollection },
       { icon: 'new_releases', label: "What's New", action: openChangelog },
       { icon: 'mail', label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
       { icon: 'bug_report', label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
@@ -5435,6 +5566,7 @@
     }).catch(() => {});
 
     loadFleets();
+    loadCollection();
 
     // Refresh an already-downloaded offline bundle, silently and only on wifi.
     // Never starts a first download on its own.
@@ -5510,6 +5642,7 @@
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral, closeAbilityModal,
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,
     overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf, exportAllFleets, openLastImported,
+    openCollection, collectionSelectFaction, collectionAdjust,
     importFleetPrompt, doImportText,
     openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayTogglePass, mPlayChangeVP, mPlayChangeOppVP, mPlayChangeOppGroups, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayOrderDown, mPlayOrderMove, mPlayOrderUp, mPlayOrderCancel, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayToggleCripPanel, mPlayCorruptorChange,
     openSyncModal, closeSyncModal, renderSyncBody, syncGenerate, syncLookup, syncDoJoin, syncNow, syncCopyToken, syncStop, syncDeleteRemote,

@@ -47,6 +47,14 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-08-11: My Collection comes to mobile
+
+The Collection tracker, desktop-only since v254, is now on mobile. It shares desktop's `dfc_collection` schema (`{factionKey: {shipKey: count}}`) *and its keys*: desktop's `transformFaction` keys ships by the faction JSON's group id (`groups[cat].ships[g.id]`), which is exactly what mobile uses as `shipKey`, so a collection recorded on either app reads correctly on the other. Verified the storage shape round-trips byte-identically, that zeroing a count deletes the key and prunes an emptied faction, that negative input is clamped, and that the summary maths is right.
+
+The UI is a linear row stack rather than desktop's card grid: on a phone a row gives the ship name room to wrap unclipped beside a 44px stepper, where a grid cell would force truncation. Faction tabs, a summary line (models / distinct / points owned), and per-ship steppers. Reached from Settings → My Collection.
+
+Picker integration mirrors desktop: an opt-in "in collection" chip on ship rows and an In-collection filter chip. Both stay hidden until the feature is used, so anyone who does not track models sees no change. The attribute-filter tests now receive `(ship, group)` rather than just `ship`, since the collection key is the group id. Desktop's over-collection warnings were deliberately **not** ported: desktop removed them as alert-rail noise, and the chip already carries the information.
+
 ### 2026-08-11: Mobile catches up: army-list import, backups, model links
 
 Three desktop features ported to mobile, found by diffing the two apps.
