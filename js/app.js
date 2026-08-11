@@ -7895,6 +7895,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-08-11', title: 'Dropzone armies were turning up in your fleet list', items: [
+      'The Dropzone Commander builder is a page on type37.github.io and so is this one, so a browser treats them as one site and hands them one pile of storage, and both were syncing to the same place under the same name. Turning sync on in either app turned it on in the other, on the same token, and the two games were merged into a single list: armies appeared here as fleets with no ships, and fleets appeared over there as armies with no Groups. Sync carries your list without ever looking inside it, which is exactly why it could not tell one game from the other. That app now has keys and a sync document of its own, so nothing more can cross over. Any armies that already reached your fleet list are removed the first time this app opens, and removed from your synced copy the first time it syncs, so they do not come back on your other devices either. Your token still works and nothing about your fleets changes.',
+    ]},
     { date: '2026-08-11', title: 'My Collection comes to mobile', items: [
       'Mobile now has the Collection tracker: record how many of each ship you own, per faction, and the ship picker shows an "in collection" chip plus an In-collection filter. It reads and writes the same saved collection as desktop, so what you record on one shows up on the other.',
     ]},

@@ -11,8 +11,12 @@ import vm from 'node:vm';
 
 const SRC = readFileSync(new URL('../js/fleet-sync.js', import.meta.url), 'utf8');
 
-function makeSandbox() {
-  const store = new Map();
+/* `seed` is written before the module runs, which is the only way to test what
+   it does at load time -- the eviction of Dropzone armies happens there and
+   nowhere else, because app.js and mobile.js both read the list straight from
+   localStorage after this file has loaded. */
+function makeSandbox(seed) {
+  const store = new Map(Object.entries(seed || {}));
   const remote = { doc: null };     // the single /sync/{token} document
   const localStorage = {
     getItem: k => (store.has(k) ? store.get(k) : null),
@@ -312,6 +316,45 @@ console.log('\nreturning to the app re-syncs, but not in a burst');
   off.FleetSync.maybeAutoSync();
   await new Promise(r => setTimeout(r, 150));
   check('silent when syncing is off', offWrites === 0, 'writes=' + offWrites);
+}
+
+/* The Dropzone Commander builder is a page on type37.github.io and so is this,
+   so they share an origin, one localStorage and -- until that app moved to keys
+   and a document of its own -- one sync document. The merge moves opaque
+   records and never looks inside them, so the two games' lists became one:
+   armies landed in the fleet list here. No more can arrive; these keep out the
+   ones that already did, from both places they are sitting in. */
+console.log('\nDropzone armies stay out of the fleet list');
+{
+  const army = { id: 'A1', name: 'UCM army', faction: 'ucm', groups: [], commanders: [], updatedAt: 500 };
+  const fleet = { id: 'F1', name: 'UCM fleet', faction: 'ucm', battleGroups: [], admirals: [], updatedAt: 100 };
+
+  // Sitting in localStorage from the shared-key days.
+  const s = makeSandbox({ dfc_fleets: JSON.stringify([fleet, army]) });
+  const kept = fleets(s.store.get('dfc_fleets'));
+  check('the army is evicted at load', kept.length === 1, JSON.stringify(kept.map(f => f.id)));
+  check('the fleet is untouched', kept[0].id === 'F1');
+
+  // And sitting in this token's cloud copy, which would hand it back on every
+  // pull. Merging must drop it AND write the cleaned list back up.
+  const c = makeSandbox({ dfc_fleets: JSON.stringify([fleet]) });
+  c.remote.doc = { fields: { payload: { stringValue: JSON.stringify({ fleets: [fleet, army], deleted: {} }) } } };
+  await c.FleetSync.join('anvil-drift-oculus-vessel-amber-forge');
+  const after = fleets(c.store.get('dfc_fleets'));
+  check('a pull does not bring the army back', after.length === 1, JSON.stringify(after.map(f => f.id)));
+  const uploaded = JSON.parse(c.remote.doc.fields.payload.stringValue).fleets;
+  check('and the cloud copy is cleaned too', uploaded.length === 1 && uploaded[0].id === 'F1',
+        JSON.stringify(uploaded.map(f => f.id)));
+}
+
+/* The test is "looks like an army", not "does not look like a fleet". A fleet
+   that somehow lacks battleGroups is still a fleet, and throwing one away would
+   be the same data loss this whole file exists to prevent. */
+console.log('\na fleet missing battleGroups is still a fleet');
+{
+  const odd = { id: 'F2', name: 'half-built', faction: 'scourge', admirals: [], updatedAt: 1 };
+  const s = makeSandbox({ dfc_fleets: JSON.stringify([odd]) });
+  check('it is kept', fleets(s.store.get('dfc_fleets')).length === 1);
 }
 
 console.log('\n' + pass + ' passed, ' + fail + ' failed');

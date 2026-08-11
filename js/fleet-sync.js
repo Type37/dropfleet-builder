@@ -41,6 +41,38 @@
   const DELETED_KEY = 'dfc_sync_deleted';  // { fleetId: deletedAt }
   const LASTSYNC_KEY = 'dfc_sync_last';
 
+  /* ── Keeping the Dropzone builder's armies out ────────────────
+   *
+   * The Dropzone Commander builder is a page on type37.github.io, and so is
+   * this. One origin means one localStorage, so it read this file's TOKEN_KEY
+   * and considered itself switched on the moment sync was switched on here; it
+   * also wrote to the same Firestore document. The merge below moves opaque
+   * {id, updatedAt} records and never looks inside them, which is exactly why
+   * it could not notice, so the two games' lists became one array: armies
+   * turned up in the fleet list here, fleets turned up in the army list there.
+   *
+   * That app has moved to its own keys and its own document, so no more can
+   * arrive. What is left is the armies that already did -- in localStorage, and
+   * in this token's cloud copy, which would otherwise hand them back on every
+   * pull. Both are cleaned below.
+   *
+   * The test is positive rather than "does not look like a fleet": an army has
+   * a `groups` array, which nothing here has ever written. A fleet that somehow
+   * lacks `battleGroups` is still a fleet and is left alone. */
+  function isForeign(f) {
+    return !!f && Array.isArray(f.groups) && !f.battleGroups;
+  }
+
+  // Runs at load, before app.js and mobile.js read the list (both entry points
+  // load this file first), so neither ever sees an army.
+  try {
+    const raw = JSON.parse(localStorage.getItem(FLEETS_KEY) || '[]');
+    if (Array.isArray(raw)) {
+      const clean = raw.filter(f => !isForeign(f));
+      if (clean.length !== raw.length) localStorage.setItem(FLEETS_KEY, JSON.stringify(clean));
+    }
+  } catch (e) { /* unreadable list; loadFleets will reset it */ }
+
   const WORDS_PER_TOKEN = 6;
 
   /* Wordlist for token phrases. Dropfleet/naval flavoured so a token reads like
@@ -262,6 +294,7 @@
 
     (remote.fleets || []).forEach(f => {
       if (!f || !f.id) return;
+      if (isForeign(f)) return;         // an army left in this token's cloud copy
       const mine = byId[f.id];
       if (!mine || (f.updatedAt || 0) > (mine.updatedAt || 0)) byId[f.id] = f;
     });
