@@ -333,6 +333,26 @@
     const url = shipStoreUrl(name, ship);
     return `<a class="shop-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer" title="Find ${esc(name || 'this ship')} on the TTCombat store" onclick="event.stopPropagation()">${imgTag}</a>`;
   }
+  const MODELS_ICON = '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h9v9H2z"/><path d="M5 4V2h9v9h-2"/></svg>';
+  // Alternate-sculpt store links (e.g. the PHR Leonidas kit is an alt Agamemnon).
+  // A ship's `altSculpts` is [{name, url}]; rendered as a small line in the sheet.
+  function altSculptLinks(ship) {
+    const alts = ship && Array.isArray(ship.altSculpts) ? ship.altSculpts : [];
+    if (!alts.length) return '';
+    const links = alts.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${esc(a.name)}</a>`).join(', ');
+    return `<div class="ship-alt-sculpt">${MODELS_ICON} Alternate sculpt: ${links} <span class="ship-alt-sculpt-src">(TTCombat)</span></div>`;
+  }
+  // Buyable model versions for a ship: ship.models = [{label, url}] (e.g. Plastic /
+  // Resin (direct) / Alternate resin: Atlantis). Falls back to the older
+  // altSculpts line for ships not yet given a models list.
+  function renderShipModels(ship) {
+    const models = ship && Array.isArray(ship.models) ? ship.models : [];
+    if (!models.length) return altSculptLinks(ship);
+    const links = models.map(m =>
+      `<a class="ship-model-link" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${esc(m.label)}</a>`
+    ).join('');
+    return `<div class="ship-models"><span class="ship-models-lead">${MODELS_ICON} Models</span>${links}<span class="ship-models-src">TTCombat</span></div>`;
+  }
 
   // Status glyphs for validation rows — clean line icons, no emoji (a skull read
   // as "your fleet is dead" for what is really "add an admiral"). currentColor
@@ -2091,7 +2111,7 @@
     </div>`).join('');
     const ruleNames = (ship.specialRules || []).map(r => r.name).filter(Boolean).join(', ');
     const rules = ruleNames ? `<div class="ss-rules">${renderSpecialChips(ruleNames)}</div>` : '';
-    showSheet(ship.name, `<div class="ss-stats">${stat}</div>${weapons}${rules}`);
+    showSheet(ship.name, `<div class="ss-stats">${stat}</div>${weapons}${rules}${renderShipModels(ship)}`);
   }
 
   function filterShips(cat) { pickerFilter = cat; renderShipPicker(); }
@@ -2284,6 +2304,7 @@
         </div>
         <div class="pts-badge-lg"><div class="pts-badge-value">${gp}</div><div class="pts-badge-label">Points</div></div>
       </div>
+      ${renderShipModels(ship)}
 
       <div class="group-counter">
         <div>
@@ -4064,6 +4085,11 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-08-11', title: 'Army-list import, fleet backups and model links', items: [
+      'You can now import a New Recruit army list. Paste one into Import and it resolves the faction by ship names, matches loadouts to the weapons listed, and reports anything it could not map rather than importing silently.',
+      'Settings gained "Back up all fleets", which downloads every fleet as one JSON file. Pasting that file back into Import restores them, adding to what you already have rather than replacing it.',
+      'Ship cards now show their buyable model versions and alternate sculpts, linked to the TTCombat store, on the 19 ships that have them.',
+    ]},
     { date: '2026-08-11', title: 'Torpedoes and Boarding Pods are separate again', items: [
       'A ship card showed one merged "Torpedoes / Boarding Pods" chip. Those are different things: torpedoes attack, boarding pods board. 67 ships read wrongly because of it, including 18 that carry only Boarding Pods yet looked like they could throw torpedoes, and 43 the other way round. Each launch type now gets its own chip, matching desktop.',
       'Fighters were also merged with Bombers, and Dropships with Drop Pods and Bulk Landers. Those are split too, so the Thebes now correctly reads Boarding Pods, Bulk Landers and Drop Pods.',
@@ -4246,6 +4272,8 @@
       // phone-export sizes. Desktop print preview still offers it.
       { icon: 'cloud_sync', label: window.FleetSync && FleetSync.enabled() ? 'Sync Fleets Online  ✓ On' : 'Sync Fleets Online', action: openSyncModal },
       { icon: 'download', label: 'Offline use…', action: openOfflineSheet },
+      { icon: 'copy', label: `Back up all fleets (${fleets.length})`, action: exportAllFleets, disabled: !fleets.length },
+      { icon: 'edit', label: 'Restore or import a fleet…', action: importFleetPrompt },
       { icon: 'new_releases', label: "What's New", action: openChangelog },
       { icon: 'mail', label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
       { icon: 'bug_report', label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
@@ -4735,11 +4763,32 @@
     } else { show('Select and copy:'); }
   }
 
+  /* ── Back up every fleet to a downloaded JSON file — desktop parity.
+     Produces the same array shape desktop's export does, so a backup taken on
+     either app restores on either app. ─ */
+  function exportAllFleets() {
+    if (!fleets.length) { showSheet('Nothing to back up', `<p>You have no saved fleets yet.</p>`); return; }
+    const data = JSON.stringify(fleets, null, 2);
+    const name = `dropfleet-fleets-${new Date().toISOString().slice(0, 10)}.json`;
+    try {
+      const url = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
+      const a = document.createElement('a');
+      a.href = url; a.download = name;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      haptic();
+    } catch (e) {
+      // Some in-app browsers block programmatic downloads; fall back to copy/paste
+      // so the backup is never simply unreachable.
+      showSheet('Back up fleets', `<p>This browser blocked the download. Copy this and save it somewhere safe:</p><pre class="copy-pre">${esc(data)}</pre>`);
+    }
+  }
+
   /* ── Import a fleet from a pasted link / code / JSON — desktop parity ─ */
   function importFleetPrompt() {
     showSheet('Import a fleet',
-      `<p>Paste a share link, a share code, or fleet JSON, from desktop or another device.</p>
-       <textarea id="import-text" class="import-textarea" rows="5" placeholder="https://…#share/…   or   { fleet JSON }"></textarea>
+      `<p>Paste a share link, a share code, fleet JSON, a whole backup file, or a New Recruit army list.</p>
+       <textarea id="import-text" class="import-textarea" rows="5" placeholder="https://…#share/…   or   { fleet JSON }   or   a pasted army list"></textarea>
        <button class="btn btn-primary btn-block" style="margin-top:var(--sp-m)" onclick="App.doImportText()">Import fleet</button>`);
   }
   async function doImportText() {
@@ -4751,21 +4800,348 @@
     const m = raw.match(/#(?:share\/|fleet=)(.+)$/);
     const code = m ? m[1] : (/^[A-Za-z0-9\-_]+={0,2}$/.test(raw) ? raw : null);
     if (code) fleet = decodeFleet(code);
-    // 2) Raw fleet JSON
+    // 2) Raw fleet JSON, or a whole backup array from "Back up all fleets" on
+    //    either app. Restoring a backup adds every fleet rather than replacing,
+    //    so an import can never silently wipe what is already saved.
     if (!fleet) {
       try {
         const o = JSON.parse(raw);
+        if (Array.isArray(o)) {
+          const valid = o.filter(x => x && x.faction && Array.isArray(x.battleGroups));
+          if (!valid.length) { showSheet('Import failed', `<p>No fleets found in that backup.</p>`); return; }
+          closeRuleSheet();
+          for (const x of valid) {
+            await ensureFaction(x.faction);
+            x.id = uuid(); x.createdAt = x.updatedAt = Date.now();
+            fleets.push(x);
+          }
+          saveFleets();
+          renderFleetList();
+          showSheet('Backup restored', `<p>Added ${valid.length} fleet${valid.length > 1 ? 's' : ''}.</p>`);
+          return;
+        }
         if (o && o.faction && Array.isArray(o.battleGroups)) {
           fleet = o; fleet.id = uuid(); fleet.createdAt = fleet.updatedAt = Date.now();
         }
-      } catch (e) { /* not JSON */ }
+      } catch (e) { /* not JSON — try the plain-text army list below */ }
     }
-    if (!fleet) { showSheet('Import failed', `<p>That doesn’t look like a valid fleet link, code, or JSON.</p>`); return; }
+    // 3) A plain-text army list (New Recruit style, or our own simple export).
+    if (!fleet) {
+      const al = parseArmyListText(raw);
+      if (al) { closeRuleSheet(); await importArmyList(al); return; }
+    }
+    if (!fleet) { showSheet('Import failed', `<p>That doesn’t look like a valid fleet link, code, JSON, or army list.</p>`); return; }
     closeRuleSheet();
     await ensureFaction(fleet.faction);
     fleets.push(fleet);
     saveFleets();
     openFleet(fleets.length - 1);
+  }
+
+  /* ── New Recruit army-list import ────────────────────────────
+   * Ported from desktop. The parser itself is data-model agnostic (it only reads
+   * text), so it is a straight copy; the resolvers below it are rewritten for
+   * mobile's shape: FACTIONS[key].groups is a flat array of {id, category, ship},
+   * not desktop's category->ships object. Ship instances come out identical
+   * ({id, shipKey, groupCategory, points, loadouts}), so an imported fleet is
+   * indistinguishable from a hand-built one and shares/syncs the same way. */
+
+  // Find a buildable ship by name across every category. Tolerant of
+  // singular/plural, since pasted lists name the class ("Medea Strike Carrier")
+  // and our roster may hold the plural ("Medea Strike Carriers").
+  function findShipAnyCategory(factionKey, name) {
+    const f = FACTIONS[factionKey];
+    if (!f || !Array.isArray(f.groups)) return null;
+    const lc = String(name || '').trim().toLowerCase();
+    if (!lc) return null;
+    let fuzzy = null;
+    for (const g of f.groups) {
+      const sn = ((g.ship && g.ship.name) || '').toLowerCase();
+      if (!sn) continue;
+      if (sn === lc || sn === lc + 's' || lc === sn + 's') return { key: g.id, category: g.category, ship: g.ship };
+      if (!fuzzy && sn.length > 3 && (sn.startsWith(lc) || lc.startsWith(sn))) fuzzy = { key: g.id, category: g.category, ship: g.ship };
+    }
+    return fuzzy;
+  }
+
+  // Detect the faction from a pasted army list's text (name or abbreviation).
+  function detectFactionFromText(text) {
+    const t = text.toLowerCase();
+    const map = [['post-human', 'phr'], ['phr', 'phr'], ['united colonies', 'ucm'], ['ucm', 'ucm'],
+      ['scourge', 'scourge'], ['shaltari', 'shaltari'], ['resistance', 'resistance'],
+      ['bioficer', 'bioficer']];
+    for (const [needle, key] of map) if (t.includes(needle)) return key;
+    return null;
+  }
+
+  // Section-header keywords used to re-insert line breaks into comma-collapsed exports.
+  const NR_SECT_KW = /(Light|Medium|Heavy|Super ?heavy|Colossal|Payload) Groups?\s*\[\s*\d+\s*pts?\s*\]|Admirals?\s*\[\s*\d+\s*pts?\s*\]|Space Stations?\s*\[\s*\d+\s*pts?\s*\]/gi;
+  // New Recruit sometimes shares a list collapsed onto one line (commas instead of
+  // newlines). Re-introduce breaks so the line parser can read it. No-op for the
+  // normal multi-line paste.
+  function nrNormalize(text) {
+    if (text.split(/\n/).length > 6) return text;
+    let t = text;
+    t = t.replace(NR_SECT_KW, m => '\n' + m);
+    t = t.replace(/\s*[•]\s*(\d+\s*[x×])/g, '\n• $1');
+    t = t.replace(/(\])\s+(?=(?:\d+\s*[x×]\s*)?[A-Z][A-Za-z0-9'’.\- ]+?\s*\[\s*\d+\s*pts)/g, '$1\n');
+    t = t.replace(/,\s*(?=[A-Z][A-Za-z0-9'’.\- ]+?\s*\[\s*\d+\s*pts)/g, '\n');
+    return t;
+  }
+
+  const NR_SECT = /^#{0,2}\s*(Light|Medium|Heavy|Super ?heavy|Colossal|Payload|Space Station)s?(?:\s+Groups?)?\s*\[\s*(\d+)\s*pts?\s*\]\s*,?\s*(.*)$/i;
+  const NR_ADM  = /^#{0,2}\s*Admirals?\s*\[\s*(\d+)\s*pts?\s*\]\s*,?\s*(.*)$/i;
+  const NR_TON  = { light: 'light', medium: 'medium', heavy: 'heavy', superheavy: 'colossal', colossal: 'colossal', payload: 'payload', spacestation: 'station' };
+
+  // Parse a New-Recruit (or our own) plain-text army list into a structure. Returns
+  // null if it doesn't look like an army list.
+  function parseArmyListText(text) {
+    if (!/##\s|\[\s*\d+\s*pts\s*\]/i.test(text)) return null;
+    text = nrNormalize(text);
+    const lines = text.split(/\r?\n/);
+    const faction = detectFactionFromText(text);   // tentative; re-voted on import
+    let name = (lines.find(l => l.trim()) || 'Imported list').trim()
+      .replace(/\s*\[\s*\d+\s*pts\s*\].*/i, '').replace(/^#+\s*/, '').replace(/\+\+/g, '')
+      .replace(/\s*[-–]\s*[^-–]*$/, '').replace(/\s*[-–]\s*$/, '').trim() || 'Imported list';
+    const sizeM = text.match(/Game Size:\s*(Skirmish|Clash|Battle|Reconquest)/i);
+    const size = sizeM ? sizeM[1].toLowerCase() : null;
+    const totalM = text.match(/\[\s*(\d+)\s*pts\s*\]/i);
+    const totalPts = totalM ? parseInt(totalM[1], 10) : null;
+    const admirals = [], groups = [];
+    let curTon = null, curGroup = null;
+
+    const SHIP = /^(?:[•\-*]\s*)?(\d+)\s*[x×]\s*(.+?)\s*\[\s*(\d+)\s*pts?\s*\]\s*(?::\s*(.*))?$/i;
+    const GROUP_HDR = /\[\s*\d+\s*pts?\s*\]\s*:\s*$/;
+    const SINGLE = /^(.+?)\s*\[\s*(\d+)\s*pts?\s*\]\s*(?::\s*(.*))?$/;
+
+    function handleEntry(line) {
+      line = (line || '').trim(); if (!line) return;
+      if (curTon === 'admirals') {
+        const lvl = line.match(/Lvl\s*(\d+)/i), pm = line.match(/\[\s*(\d+)\s*pts?\s*\]/);
+        const nm = line.split(':')[0]
+          .replace(/\[\s*\d+\s*pts?\s*\]/, '').replace(/\(Lvl\s*\d+\)/i, '')
+          .replace(/^[•\-*]\s*/, '').replace(/^\d+\s*[x×]\s*/, '').replace(/Lvl\s*\d+/i, '')
+          .replace(/^[:,\s]+|[:,\s]+$/g, '').trim();
+        if (pm || lvl) admirals.push({ name: nm, level: lvl ? parseInt(lvl[1], 10) : null, pts: pm ? parseInt(pm[1], 10) : 0 });
+        return;
+      }
+      if (!curTon) return;
+      let m;
+      if ((m = line.match(SHIP))) {
+        const ship = { name: m[2].trim(), count: parseInt(m[1], 10), pts: parseInt(m[3], 10), loadouts: (m[4] || '').split(',').map(s => s.trim()).filter(Boolean) };
+        if (curGroup) curGroup.ships.push(ship); else groups.push({ tonnage: curTon, ships: [ship] });
+        return;
+      }
+      if (GROUP_HDR.test(line)) { curGroup = { tonnage: curTon, ships: [] }; groups.push(curGroup); return; }
+      if ((m = line.match(SINGLE))) {
+        groups.push({ tonnage: curTon, ships: [{ name: m[1].trim(), count: 1, pts: parseInt(m[2], 10), loadouts: (m[3] || '').split(',').map(s => s.trim()).filter(Boolean) }] });
+        curGroup = null;
+      }
+    }
+
+    for (const raw of lines) {
+      const line = raw.trim();
+      if (!line) continue;
+      if (/^\+\+/.test(line)) continue;                       // "++ Fleet ++ …"
+      let m;
+      if ((m = line.match(NR_ADM))) { curTon = 'admirals'; curGroup = null; if (m[2]) handleEntry(m[2]); continue; }
+      if ((m = line.match(NR_SECT))) {
+        curTon = NR_TON[m[1].toLowerCase().replace(/\s+/g, '')] || m[1].toLowerCase();
+        curGroup = null; if (m[3]) handleEntry(m[3]); continue;
+      }
+      if (/^#/.test(line)) { curTon = null; curGroup = null; continue; }  // Configuration / Reference
+      if (curTon === null && /[-–].*\[\s*\d+\s*pts\s*\]/.test(line) && !/:/.test(line)) continue;
+      handleEntry(line);
+    }
+    if (!groups.length) return null;
+    return { faction, name, size, totalPts, admirals, groups };
+  }
+
+  // Best faction for a parsed list: vote by which roster the ship names belong to
+  // (fixes e.g. Bioficer lists whose header reads "Post-Human"). Falls back to the
+  // header guess.
+  function voteFactionFromGroups(parsed) {
+    const names = [];
+    (parsed.groups || []).forEach(g => g.ships.forEach(s => names.push(s.name)));
+    let best = parsed.faction, bestN = -1;
+    for (const fac of Object.keys(FACTIONS)) {
+      if (!FACTIONS[fac] || !Array.isArray(FACTIONS[fac].groups)) continue;
+      let n = 0; for (const nm of names) if (findShipAnyCategory(fac, nm)) n++;
+      if (n > bestN) { bestN = n; best = fac; }
+    }
+    return best || parsed.faction;
+  }
+
+  // Resolve parsed weapon/load names into mobile's loadout selection map
+  // { optGroupIdx: chosenOptionIdx }; defaults to option 0.
+  function resolveLoadoutSelections(dbShip, names) {
+    const out = {}; const lc = (names || []).map(n => n.toLowerCase());
+    (dbShip.loadoutOptions || []).forEach((lo, i) => {
+      out[i] = 0; let best = -1, bestScore = 0;
+      (lo.options || []).forEach((o, j) => {
+        const cand = [o.name, ...(o.weapons || []).map(w => w.name), ...((o.loads || []).map(l => (l && l.name) || l))]
+          .filter(Boolean).map(x => String(x).toLowerCase());
+        let score = 0;
+        for (const c of cand) if (lc.some(n => n === c || n.includes(c) || c.includes(n))) score++;
+        if (score > bestScore) { bestScore = score; best = j; }
+      });
+      if (best >= 0) out[i] = best;
+    });
+    return out;
+  }
+
+  function findStationByName(factionKey, name) {
+    const list = (FACTIONS[factionKey] && FACTIONS[factionKey].spaceStations) || [];
+    const lc = String(name || '').trim().toLowerCase();
+    return list.find(st => {
+      const sn = (st.name || '').toLowerCase();
+      return sn === lc || sn === lc + 's' || lc === sn + 's';
+    }) || null;
+  }
+
+  // Map a parsed admiral {name, level, pts} onto mobile's admiral shape. Famous and
+  // faction admirals both live in FACTIONS[key].admirals here (desktop splits famous
+  // into groups.famous_admirals), so one lookup covers both.
+  function resolveAdmiralFromList(factionKey, a, warnings) {
+    const fac = FACTIONS[factionKey] || {};
+    const nm = (a.name || '').toLowerCase();
+    const match = (fac.admirals || []).find(x => (x.name || '').toLowerCase() === nm);
+    if (match) {
+      const fs = match.flagship;
+      return {
+        name: match.name,
+        points: fs ? (match.cost + fs.cost) : match.cost,
+        admiralId: match.id,
+        level: match.level || a.level || 1,
+        type: match.isFamous ? 'Famous' : 'Faction',
+        shipName: fs ? fs.name : null,
+        selectedAbilities: [],
+        assignedGroupId: null
+      };
+    }
+    if (a.level) {
+      const gen = GENERIC_ADMIRAL_LEVELS.find(l => l.level === a.level);
+      return {
+        name: `Level ${a.level} Admiral`,
+        points: gen ? gen.cost : (a.pts || 0),
+        admiralId: null, level: a.level, type: 'Generic',
+        shipName: null, selectedAbilities: [], assignedGroupId: null
+      };
+    }
+    if (a.name) warnings.admirals.push(a.name);
+    return null;
+  }
+
+  // Smallest bracket whose max covers the points (for lists with no explicit size).
+  function bracketForPoints(pts) {
+    for (const k of ['skirmish', 'clash', 'battle', 'reconquest']) {
+      if (pts <= GAME_SIZES[k].max) return k;
+    }
+    return 'reconquest';
+  }
+
+  const IMPORT_FACTIONS = ['ucm', 'phr', 'scourge', 'shaltari', 'bioficer', 'resistance'];
+
+  async function importArmyList(al) {
+    // Load every roster first so the faction can be voted by ship names.
+    await Promise.all(IMPORT_FACTIONS.map(f => ensureFaction(f).catch(() => {})));
+    const faction = voteFactionFromGroups(al);
+    if (!faction || !FACTIONS[faction]) {
+      showSheet('Import failed', `<p>Could not recognise that faction.</p>`);
+      return true;
+    }
+
+    const warnings = { ships: [], loadouts: [], admirals: [], stations: [] };
+    const battleGroups = [];
+    let spaceStation = null;
+
+    al.groups.forEach(g => {
+      if (g.tonnage === 'station') {
+        g.ships.forEach(sh => {
+          const st = findStationByName(faction, sh.name);
+          if (st && !spaceStation) spaceStation = { name: st.name, baseCost: st.cost || 0, cost: st.cost || 0, stationKey: st.id, systems: [] };
+          else if (!st) warnings.stations.push(sh.name);
+        });
+        return;
+      }
+      g.ships.forEach(sh => {
+        const found = findShipAnyCategory(faction, sh.name);
+        if (!found) { warnings.ships.push(sh.name); return; }
+        const sel = resolveLoadoutSelections(found.ship, sh.loadouts);
+        // Flag a configurable ship whose listed weapons we couldn't place anywhere,
+        // but only when it actually has a non-default choice to get wrong.
+        if ((found.ship.loadoutOptions || []).length && sh.loadouts.length && !Object.values(sel).some(v => v > 0)) {
+          if ((found.ship.loadoutOptions || []).some(lo => (lo.options || []).length > 1))
+            warnings.loadouts.push(`${found.ship.name} (${sh.loadouts.join(', ')})`);
+        }
+        const ships = [];
+        for (let i = 0; i < (sh.count || 1); i++) {
+          const inst = { id: uuid(), shipKey: found.key, groupCategory: found.category, points: 0, loadouts: { ...sel } };
+          inst.points = recalcShipPoints(faction, found.ship, inst);
+          ships.push(inst);
+        }
+        battleGroups.push({ id: uuid(), name: found.ship.name, ships });
+      });
+    });
+    if (!battleGroups.length) {
+      showSheet('Import failed', `<p>No ships matched, so that list could not be imported.</p>`);
+      return true;
+    }
+
+    const size = al.size || (al.totalPts != null ? bracketForPoints(al.totalPts) : 'clash');
+    const gs = GAME_SIZES[size] || GAME_SIZES.clash;
+    const admirals = (al.admirals || []).map(a => resolveAdmiralFromList(faction, a, warnings)).filter(Boolean);
+
+    const fleet = {
+      id: uuid(), name: al.name + ' (imported)', faction,
+      gameSize: size, pointsLimit: (al.totalPts && al.totalPts !== gs.max) ? al.totalPts : gs.max,
+      maxGroups: gs.groups, admirals, battleGroups, spaceStation,
+      createdAt: Date.now(), updatedAt: Date.now()
+    };
+    // Sanity check: a big gap from the list's stated total means something was
+    // dropped or merged (common with single-line collapsed pastes).
+    const computed = fleetPoints(fleet);
+    if (al.totalPts && Math.abs(computed - al.totalPts) > 15) {
+      warnings.points = `List states ${al.totalPts} pts, imported total is ${computed} pts, so a ship or upgrade may be missing.`;
+    }
+    fleets.push(fleet);
+    saveFleets();
+    renderFleetList();
+    showImportReport(fleet, warnings);
+    return true;
+  }
+
+  // After an import, show what came in and, transparently, anything that could not
+  // be mapped 1:1, with a button to open the new fleet.
+  let lastImportedFleetId = null;
+  function showImportReport(fleet, warnings) {
+    lastImportedFleetId = fleet.id;
+    const shipCount = (fleet.battleGroups || []).reduce((t, g) => t + g.ships.length, 0);
+    const pts = fleetPoints(fleet);
+    const w = warnings || { ships: [], loadouts: [], admirals: [], stations: [] };
+    const clean = !w.ships.length && !w.loadouts.length && !w.admirals.length && !w.stations.length && !w.points;
+    const section = (title, items, note) => items && items.length
+      ? `<div class="import-report-sect"><div class="import-report-h">${title}</div>`
+        + (note ? `<div class="import-report-note">${note}</div>` : '')
+        + `<ul class="import-report-list">${items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></div>`
+      : '';
+    showSheet('Import report',
+      `<div class="import-report-name">${esc(fleet.name)}</div>`
+      + `<div class="import-report-note">${esc((FACTIONS[fleet.faction] || {}).name || fleet.faction)} · ${shipCount} ship${shipCount === 1 ? '' : 's'} · ${pts} pts</div>`
+      + (clean
+        ? `<div class="import-report-ok">Imported cleanly, everything mapped.</div>`
+        : `<div class="import-report-sect">Imported, with a few things to check:</div>`)
+      + section('Ships not found (skipped)', w.ships, 'Not in this faction’s roster, or renamed.')
+      + section('Loadouts set to default', w.loadouts, 'Could not match the listed weapons to an option, so pick them manually.')
+      + section('Admirals to re-check', w.admirals)
+      + section('Space stations not found', w.stations)
+      + (w.points ? `<div class="import-report-sect"><div class="import-report-h">Points mismatch</div><div class="import-report-note">${esc(w.points)}</div></div>` : '')
+      + `<button class="btn btn-primary btn-block" style="margin-top:var(--sp-m)" onclick="App.openLastImported()">Open this fleet</button>`);
+  }
+  function openLastImported() {
+    closeRuleSheet();
+    const i = fleets.findIndex(f => f.id === lastImportedFleetId);
+    if (i >= 0) openFleet(i);
   }
 
   // Launch-asset table for the printed sheet. Mirrors the on-screen launch
@@ -5133,7 +5509,7 @@
     openAdmiral, addAdmiral, addGenericAdmiral, removeAdmiralPrompt,
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral, closeAbilityModal,
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,
-    overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf,
+    overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf, exportAllFleets, openLastImported,
     importFleetPrompt, doImportText,
     openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayTogglePass, mPlayChangeVP, mPlayChangeOppVP, mPlayChangeOppGroups, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayOrderDown, mPlayOrderMove, mPlayOrderUp, mPlayOrderCancel, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayToggleCripPanel, mPlayCorruptorChange,
     openSyncModal, closeSyncModal, renderSyncBody, syncGenerate, syncLookup, syncDoJoin, syncNow, syncCopyToken, syncStop, syncDeleteRemote,

@@ -47,6 +47,18 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-08-11: Mobile catches up: army-list import, backups, model links
+
+Three desktop features ported to mobile, found by diffing the two apps.
+
+**New Recruit army-list import.** `parseArmyListText` and `nrNormalize` are copied verbatim (the parser only reads text, so it is data-model agnostic), but the resolvers are rewritten for mobile's shape: `FACTIONS[key].groups` is a flat array of `{id, category, ship}`, not desktop's category→ships object, and mobile keeps famous and faction admirals together in `FACTIONS[key].admirals` rather than splitting famous into `groups.famous_admirals`. Emitted ship instances are identical to hand-built ones (`{id, shipKey, groupCategory, points, loadouts}`), so imported fleets share and sync normally. Verified by executing the ported parser and resolvers against real list text: multi-line and comma-collapsed forms, `4x` counts, loadout matching (Delhi + "Drive Refit" picks the refit option, an empty hint list defaults correctly), famous admirals (resolves with flagship and combined cost), generic admirals by level, and unmatched names landing in the report rather than being dropped silently.
+
+**Fleet backups.** `exportAllFleets` downloads all fleets as one JSON array, matching desktop's format so a backup taken on either app restores on either. Mobile's importer previously accepted only a single fleet object, so it would have rejected its own backups; it now handles the array too. Restores are additive and never replace existing fleets.
+
+**Model / alternate-sculpt links.** `renderShipModels` and `altSculptLinks` ported into the group detail and ship sheet. 19 ships carry this data (5 UCM with a `models` list, 14 with `altSculpts`); confirmed all 19 render. New CSS uses `--gold-dim` (5.8:1 on paper) and `--fg3` (5.4:1), both AA.
+
+Two items from the same audit turned out to be **already present on mobile** and were not ported: the custom points limit (a "Points limit" field in the create/edit fleet form, writing the same `fleet.pointsLimit` desktop uses) and the launch-asset reference (desktop's `renderLaunchAssetReference` is print-only, and mobile's `buildLaunchTable` already renders full launch statblocks on ship cards and in the modular pickers).
+
 ### 2026-08-11: Mobile: Torpedoes and Boarding Pods are separate again
 
 Mobile's `LAUNCH_TYPE_DEFS` was an older 5-bucket version of desktop's 9-type table, and one bucket matched `/torpedo|boarding\s*pod/` under a single "Torpedoes / Boarding Pods" label. Torpedoes attack and are removed after attacking; Boarding Pods board Space Stations and enemy Ships. Running the mobile logic over all six factions, 67 ships with launch chips read wrongly: 18 carry only Boarding Pods (Thebes, Delhi, Ebisu Tackling Cutter, Hiruko Boarding Cutter, Matrix Monitor, Source Battlecruiser, plus the Pungari Thresher Hive Ship and DH-Type Penal Transport in every faction) yet appeared to carry torpedoes, 43 carry only torpedoes and appeared able to board, and 6 Bioficer ships that carry both had them collapsed into one chip. The same bucketing merged Fighters with Bombers and Dropships with Drop Pods and Bulk Landers. Ported desktop's 9-type table across; verified by executing the edited `shipLaunchIcons` against all faction JSON (167 ships with launch chips, 0 merged labels remaining).

@@ -2933,3 +2933,41 @@ body.sheet-open .sheet-scrim {
   .screen.slide-out-right { animation: none; opacity: 0; }
 }
 @keyframes rmFade { from { opacity: 0; } to { opacity: 1; } }
+
+/* — Buyable model versions / alternate sculpts (TTCombat store links) —
+   Ported from desktop. gold-dim is 5.8:1 on paper, fg3 5.4:1, both AA. */
+.ship-alt-sculpt {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 5px;
+  font-size: var(--text-caption1); color: var(--fg2);
+  font-family: var(--font-condensed);
+  margin: var(--sp-s) 0;
+}
+.ship-alt-sculpt svg { color: var(--gold-dim); flex-shrink: 0; }
+.ship-alt-sculpt a { color: var(--gold-dim); font-weight: 600; text-decoration: none; }
+.ship-alt-sculpt-src { color: var(--fg3); }
+
+.ship-models {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+  font-size: var(--text-caption1); color: var(--fg2);
+  font-family: var(--font-condensed);
+  margin: var(--sp-s) 0;
+}
+.ship-models-lead {
+  display: inline-flex; align-items: center; gap: 4px;
+  text-transform: uppercase; letter-spacing: .04em; color: var(--fg3);
+}
+.ship-models-lead svg { color: var(--gold-dim); }
+.ship-model-link {
+  color: var(--gold-dim); font-weight: 600; text-decoration: none;
+  border: 1px solid var(--gold-dim); border-radius: var(--radius-sm);
+  padding: 3px 9px; min-height: 24px; display: inline-flex; align-items: center;
+}
+.ship-models-src { color: var(--fg3); }
+
+/* — Army-list import report — */
+.import-report-name { font-size: var(--text-subtitle2); font-weight: 700; }
+.import-report-sect { margin-top: var(--sp-m); font-size: var(--text-caption1); }
+.import-report-h { font-weight: 600; }
+.import-report-note { font-size: var(--text-caption1); color: var(--fg3); margin-top: 2px; }
+.import-report-ok { margin-top: var(--sp-m); color: var(--success-ink, #1f5c37); font-weight: 600; }
+.import-report-list { margin: 4px 0 0; padding-left: 18px; font-size: var(--text-caption1); }

@@ -7895,6 +7895,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-08-11', title: 'Mobile catches up: army-list import, backups, model links', items: [
+      'Mobile can now import a New Recruit army list. Paste one into Import and it resolves the faction by ship names, matches loadouts to the weapons listed, and reports anything it could not map rather than importing silently.',
+      'Mobile gained "Back up all fleets", which downloads every fleet as one JSON file. Both apps can now restore a backup: pasting the whole file into Import adds its fleets instead of replacing what you already have.',
+      'Ship cards on mobile now show their buyable model versions and alternate sculpts, linked to the TTCombat store, on the 19 ships that have them.',
+    ]},
     { date: '2026-08-11', title: 'Mobile: Torpedoes and Boarding Pods are separate again', items: [
       'On mobile, a ship card showed one merged "Torpedoes / Boarding Pods" chip. Those are different things: torpedoes attack, boarding pods board. 67 ships read wrongly because of it, including 18 that carry only Boarding Pods yet looked like they could throw torpedoes, and 43 the other way round. Mobile now lists each launch type on its own chip, matching desktop.',
       'Mobile also merged Fighters with Bombers, and Dropships with Drop Pods and Bulk Landers. Those are split too, so the Thebes now correctly reads Boarding Pods, Bulk Landers and Drop Pods.',
