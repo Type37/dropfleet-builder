@@ -47,6 +47,14 @@ Fonts: [Jost](https://fonts.google.com/specimen/Jost), [Libre Baskerville](https
 
 Mirrors the in-app "What's New". TTCombat publishes no official changelog, so dated edition notes are the maintainer's interpretation.
 
+### 2026-08-11: Mobile: Torpedoes and Boarding Pods are separate again
+
+Mobile's `LAUNCH_TYPE_DEFS` was an older 5-bucket version of desktop's 9-type table, and one bucket matched `/torpedo|boarding\s*pod/` under a single "Torpedoes / Boarding Pods" label. Torpedoes attack and are removed after attacking; Boarding Pods board Space Stations and enemy Ships. Running the mobile logic over all six factions, 67 ships with launch chips read wrongly: 18 carry only Boarding Pods (Thebes, Delhi, Ebisu Tackling Cutter, Hiruko Boarding Cutter, Matrix Monitor, Source Battlecruiser, plus the Pungari Thresher Hive Ship and DH-Type Penal Transport in every faction) yet appeared to carry torpedoes, 43 carry only torpedoes and appeared able to board, and 6 Bioficer ships that carry both had them collapsed into one chip. The same bucketing merged Fighters with Bombers and Dropships with Drop Pods and Bulk Landers. Ported desktop's 9-type table across; verified by executing the edited `shipLaunchIcons` against all faction JSON (167 ships with launch chips, 0 merged labels remaining).
+
+Mobile was also missing desktop's `hasBaseLaunches` guard, so a ship with fixed launches picked up launch types from its optional systems list. The Zenith and Zodiac Dreadnoughts therefore claimed a Torpedo launch that only comes from an optional Dreadnought Systems pick.
+
+Icons: Bombardment was a circle with four ticks, near-identical to the "Other launch asset" glyph at 13px, now Phosphor `meteor`; Group size was two dots that read as an ellipsis, now Phosphor `circles-three`; Fire Ships was a teardrop blob, now Phosphor `fire-simple`. Phosphor is MIT and the paths are inlined, not CDN-loaded. Mobile's footer also gained the Dropzone builder link desktop already had.
+
 ### 2026-08-02: Fewer ships wrongly offering a Deployable Feature
 
 `isFeatureCarrier()` matched any ship whose rules mentioned "Feature Carrier" or "Deployable Feature" by name, so ships that always carry one fixed feature (the M-Type Barge's Military Outpost, already a Load; the EX-7 Packet Runner's single Hangar Feature) wrongly got a picker offering unrelated faction features (e.g. Bioficer's Gravitational Arc/Ghost Orb Tower). Mobile also had a stray "any Porter S ship" fallback meant for the Genitor Tower that desktop never had, which alone put the picker on every Bioficer Porter S ship (16 of them). Both apps now require the rules to actually say "choose ... Deployable Feature(s)" before showing the picker; verified against every faction's PDF-sourced Feature Carrier text.

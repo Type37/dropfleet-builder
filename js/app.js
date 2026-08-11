@@ -3357,7 +3357,9 @@ let activeGroupId = null;
     { key: 'droppods', re: /drop\s*pod/i, label: 'Drop Pods',
       icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="1.5" width="6" height="9" rx="3" fill="currentColor" stroke="none"/><path d="M5.5 12.5L8 15l2.5-2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
     { key: 'fireships', re: /fire\s*ship/i, label: 'Fire Ships',
-      icon: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5c.5 2.5 3.5 3.5 3.5 7a3.5 3.5 0 0 1-7 0c0-1.4.6-2.3 1.3-3 .1 1 .7 1.4 1.4 1 0-1.9-.8-3.3.8-5z"/></svg>' },
+      // Phosphor "fire-simple" (MIT) — an actual flame silhouette; the old hand-drawn
+      // one read as a teardrop blob at this size.
+      icon: '<svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M143.38,17.85a8,8,0,0,0-12.63,3.41l-22,60.41L84.59,58.26a8,8,0,0,0-11.93.89C51,87.53,40,116.08,40,144a88,88,0,0,0,176,0C216,84.55,165.21,36,143.38,17.85ZM128,216a72.08,72.08,0,0,1-72-72c0-22,8.09-44.79,24.06-67.84l26.37,25.58a8,8,0,0,0,13.09-3l22.27-61.07C164.21,58.08,200,97.91,200,144A72.08,72.08,0,0,1,128,216Z"/></svg>' },
     { key: 'mines', re: /\bmine/i, label: 'Mines',
       icon: '<svg width="14" height="14" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M8 1.6v2.3M8 12.1v2.3M1.6 8h2.3M12.1 8h2.3M3.4 3.4l1.6 1.6M11 11l1.6 1.6M12.6 3.4 11 5M5 11l-1.6 1.6"/></g></svg>' },
   ];
@@ -3388,7 +3390,10 @@ let activeGroupId = null;
   // Bombardment capability tag for ship cards (sibling to the Launches tag).
   function shipBombardmentTag(dbShip) {
     if (!dbShip || !shipHasBombardment(dbShip)) return '';
-    const icon = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1v2.5M8 12.5V15M1 8h2.5M12.5 8H15" stroke-linecap="round"/></svg>';
+    // Phosphor "meteor" (MIT) — a body streaking down with a trail, which reads as
+    // orbital bombardment. The old circle-with-ticks was indistinguishable from the
+    // "Other launch asset" glyph at this size.
+    const icon = '<svg width="13" height="13" viewBox="0 0 256 256" fill="currentColor"><path d="M96,120a40,40,0,1,0,40,40A40,40,0,0,0,96,120Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,96,184Zm125.66-61.66a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32-11.32l48-48A8,8,0,0,1,221.66,122.34ZM160,136a8,8,0,0,1-5.66-13.66l24-24a8,8,0,0,1,11.32,11.32l-24,24A8,8,0,0,1,160,136Zm69.66-66.34-16,16a8,8,0,0,1-11.32-11.32l16-16a8,8,0,0,1,11.32,11.32ZM122.34,90.34l72-72a8,8,0,1,1,11.32,11.32l-72,72a8,8,0,0,1-11.32-11.32ZM146.91,199.6a8,8,0,0,1,0,11.31A72,72,0,1,1,45.09,109.09l82.74-82.75a8,8,0,1,1,11.32,11.32L56.4,120.4a56,56,0,0,0,79.2,79.2A8,8,0,0,1,146.91,199.6Z"/></svg>';
     return `<div class="ship-card-launch ship-card-bombard"><span class="launch-cap-lead">Bombardment</span><span class="launch-type-chip">${icon}<span>Orbital bombardment</span></span></div>`;
   }
 
@@ -3432,7 +3437,9 @@ let activeGroupId = null;
     es:     '<svg width="14" height="14" viewBox="0 0 16 22"><rect fill="#FAECC8" height="24" rx="2.5" width="18" x="-1" y="-1"/><path d="M8,0.5 C8,0.5 0.5,3.5 0.5,3.5L0.5,10.5 C0.5,16 8,21.5 8,21.5 C8,21.5 15.5,16 15.5,10.5L15.5,3.5Z" fill="#1C1A17"/><path d="M8.5,4.5 L5,11 L7.5,11 L6,18.5 L12,9.5 L9,9.5 L11,4.5Z" fill="#FAECC8"/></svg>',
     ks:     '<svg width="14" height="14" viewBox="0 0 16 22"><rect fill="#D0E4FF" height="24" rx="2.5" width="18" x="-1" y="-1"/><path d="M5.5,0 L10.5,0 L10.5,3 L5.5,3Z" fill="#1C1A17"/><path d="M3,3 C1,5 0,8 0,11L0,15 L3,15 L3,18 C3,20 5.5,21.5 8,21.5 C10.5,21.5 13,20 13,18L13,15 L16,15 L16,11 C16,8 15,5 13,3Z" fill="#1C1A17"/><rect fill="#D0E4FF" height="2" rx="0.5" width="7" x="4.5" y="10"/><rect fill="#D0E4FF" height="7" rx="0.5" width="2" x="7" y="10"/></svg>',
     bs:     '<svg width="14" height="14" viewBox="0 0 16 22"><rect fill="#E8E5DF" height="24" rx="2.5" width="18" x="-1" y="-1"/><path d="M8,1 C8,1 1,4 1,4L1,11 C1,16.5 8,21 8,21 C8,21 15,16.5 15,11L15,4Z" fill="none" stroke="#1C1A17" stroke-width="1.5"/><line stroke="#1C1A17" stroke-linecap="round" stroke-width="1.2" x1="4" x2="12" y1="11" y2="11"/></svg>',
-    g:      '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="5" cy="8" r="2.5"/><circle cx="11" cy="8" r="2.5"/></svg>'
+    // Phosphor "circles-three" (MIT) — three grouped bodies, i.e. how many of this
+    // ship form one battle group. Two flat dots read as an ellipsis, not a group.
+    g:      '<svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M172,76a44,44,0,1,0-44,44A44.05,44.05,0,0,0,172,76Zm-44,28a28,28,0,1,1,28-28A28,28,0,0,1,128,104Zm60,24a44,44,0,1,0,44,44A44.05,44.05,0,0,0,188,128Zm0,72a28,28,0,1,1,28-28A28,28,0,0,1,188,200ZM68,128a44,44,0,1,0,44,44A44.05,44.05,0,0,0,68,128Zm0,72a28,28,0,1,1,28-28A28,28,0,0,1,68,200Z"/></svg>'
   };
 
   const STAT_META = {
@@ -7888,6 +7895,13 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-08-11', title: 'Mobile: Torpedoes and Boarding Pods are separate again', items: [
+      'On mobile, a ship card showed one merged "Torpedoes / Boarding Pods" chip. Those are different things: torpedoes attack, boarding pods board. 67 ships read wrongly because of it, including 18 that carry only Boarding Pods yet looked like they could throw torpedoes, and 43 the other way round. Mobile now lists each launch type on its own chip, matching desktop.',
+      'Mobile also merged Fighters with Bombers, and Dropships with Drop Pods and Bulk Landers. Those are split too, so the Thebes now correctly reads Boarding Pods, Bulk Landers and Drop Pods.',
+      'The Zenith and Zodiac Dreadnoughts claimed a Torpedo launch on mobile that they only get from an optional system. Ships with fixed launches no longer advertise optional extras.',
+      'New icons for Bombardment, Group size and Fire Ships. The old Bombardment glyph was near-identical to the "Other launch asset" one, and Group size was two dots that read as an ellipsis.',
+      'Mobile\'s footer now links to the Dropzone builder, as desktop\'s does.',
+    ]},
     { date: '2026-08-02', title: 'Fewer ships wrongly offering a Deployable Feature', items: [
       'Some ships that always carry one fixed feature, like the M-Type Barge\'s Military Outpost or the EX-7 Packet Runner\'s Hangar Feature, were being offered a picker of unrelated faction features instead. The picker now only appears on ships whose rules genuinely let you choose.',
       'Mobile also had every Bioficer Porter S ship (16 of them) wrongly showing that picker; that fallback is gone.',

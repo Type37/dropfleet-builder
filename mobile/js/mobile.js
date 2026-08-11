@@ -1869,14 +1869,32 @@
     if (s) s.value = '';
     navigate('screen-add-group');
   }
-  // Launch-capability icons for picker rows (fighters / fire ships / mines /
-  // dropships / torpedoes / other), detected from the ship's loads.
+  // Launch-capability icons for picker rows, detected from the ship's loads.
+  // Distinct launch-asset types (each its own worded chip). Order matters: the
+  // more specific patterns (drop pod, boarding pod, bulk lander) are listed before
+  // generic ones so e.g. "Drop Pod" never reads as a "Dropship".
+  // Torpedoes and Boarding Pods are separate: torpedoes attack, boarding pods board.
   const LAUNCH_TYPE_DEFS = [
-    { re: /fighter|bomber/i, label: 'Fighters / Bombers', icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l5.5 13L8 11l-5.5 3z"/></svg>' },
-    { re: /fire\s*ship/i, label: 'Fire Ships', icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5c.5 2.5 3.5 3.5 3.5 7a3.5 3.5 0 0 1-7 0c0-1.4.6-2.3 1.3-3 .1 1 .7 1.4 1.4 1 0-1.9-.8-3.3.8-5z"/></svg>' },
-    { re: /\bmine/i, label: 'Mines', icon: '<svg width="13" height="13" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M8 1.6v2.3M8 12.1v2.3M1.6 8h2.3M12.1 8h2.3M3.4 3.4l1.6 1.6M11 11l1.6 1.6M12.6 3.4 11 5M5 11l-1.6 1.6"/></g></svg>' },
-    { re: /dropship|drop\s*pod|bulk\s*lander/i, label: 'Dropships / Landers', icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1.5v8M4.5 6.5L8 10l3.5-3.5M2.5 14h11"/></svg>' },
-    { re: /torpedo|boarding\s*pod/i, label: 'Torpedoes / Boarding Pods', icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><rect x="1.5" y="6" width="9" height="4" rx="2"/><path d="M10.5 8l4-2.2v4.4z"/></svg>' },
+    { re: /fighter/i, label: 'Fighters',
+      icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1l5.5 13L8 11l-5.5 3z"/></svg>' },
+    { re: /bomber/i, label: 'Bombers',
+      icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 15L2.5 3h11z"/></svg>' },
+    { re: /torpedo/i, label: 'Torpedoes',
+      icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><rect x="1.5" y="6" width="9" height="4" rx="2"/><path d="M10.5 8l4-2.2v4.4z"/></svg>' },
+    { re: /boarding\s*pod/i, label: 'Boarding Pods',
+      icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="8" height="12" rx="4"/><circle cx="8" cy="6" r="1.3" fill="currentColor" stroke="none"/></svg>' },
+    { re: /bulk\s*lander/i, label: 'Bulk Landers',
+      icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1.5v8M4.5 6.5L8 10l3.5-3.5M2.5 14h11"/></svg>' },
+    { re: /dropship/i, label: 'Dropships',
+      icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5l5 4 5-4M3 9.5l5 4 5-4"/></svg>' },
+    { re: /drop\s*pod/i, label: 'Drop Pods',
+      icon: '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="1.5" width="6" height="9" rx="3" fill="currentColor" stroke="none"/><path d="M5.5 12.5L8 15l2.5-2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
+    { re: /fire\s*ship/i, label: 'Fire Ships',
+      // Phosphor "fire-simple" (MIT) — an actual flame silhouette; the old hand-drawn
+      // one read as a teardrop blob at this size.
+      icon: '<svg width="13" height="13" viewBox="0 0 256 256" fill="currentColor"><path d="M143.38,17.85a8,8,0,0,0-12.63,3.41l-22,60.41L84.59,58.26a8,8,0,0,0-11.93.89C51,87.53,40,116.08,40,144a88,88,0,0,0,176,0C216,84.55,165.21,36,143.38,17.85ZM128,216a72.08,72.08,0,0,1-72-72c0-22,8.09-44.79,24.06-67.84l26.37,25.58a8,8,0,0,0,13.09-3l22.27-61.07C164.21,58.08,200,97.91,200,144A72.08,72.08,0,0,1,128,216Z"/></svg>' },
+    { re: /\bmine/i, label: 'Mines',
+      icon: '<svg width="13" height="13" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M8 1.6v2.3M8 12.1v2.3M1.6 8h2.3M12.1 8h2.3M3.4 3.4l1.6 1.6M11 11l1.6 1.6M12.6 3.4 11 5M5 11l-1.6 1.6"/></g></svg>' },
   ];
   const LAUNCH_TYPE_OTHER = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1.6v2M8 12.4v2M1.6 8h2M12.4 8h2" stroke-linecap="round"/></svg>';
   function shipLaunchIcons(ship, factionKey) {
@@ -1885,8 +1903,14 @@
     const add = loads => (loads || []).forEach(l => { if (l && l.name) String(l.name).split(/\s*&\s*/).forEach(p => names.add(p.trim().toLowerCase())); });
     add(ship.loads);
     (ship.loadoutOptions || []).forEach(lo => (lo.options || []).forEach(o => add(o.loads)));
-    const list = systemsListFor(ship, factionKey);
-    if (list) (list.options || []).forEach(o => add(o.loads));
+    // Only show system-option launch types for fully-modular ships (no base loads);
+    // ships with fixed launches (like the Zenith) shouldn't show optional extras here.
+    const hasBaseLaunches = (ship.loads && ship.loads.length > 0) ||
+      (ship.loadoutOptions || []).some(lo => (lo.options || []).some(o => o.loads && o.loads.length > 0));
+    if (!hasBaseLaunches) {
+      const list = systemsListFor(ship, factionKey);
+      if (list) (list.options || []).forEach(o => add(o.loads));
+    }
     if (!names.size) return '';
     const arr = [...names];
     const icons = [];
@@ -4040,6 +4064,13 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-08-11', title: 'Torpedoes and Boarding Pods are separate again', items: [
+      'A ship card showed one merged "Torpedoes / Boarding Pods" chip. Those are different things: torpedoes attack, boarding pods board. 67 ships read wrongly because of it, including 18 that carry only Boarding Pods yet looked like they could throw torpedoes, and 43 the other way round. Each launch type now gets its own chip, matching desktop.',
+      'Fighters were also merged with Bombers, and Dropships with Drop Pods and Bulk Landers. Those are split too, so the Thebes now correctly reads Boarding Pods, Bulk Landers and Drop Pods.',
+      'The Zenith and Zodiac Dreadnoughts claimed a Torpedo launch they only get from an optional system. Ships with fixed launches no longer advertise optional extras.',
+      'New icons for Bombardment, Group size and Fire Ships. The old Bombardment glyph was near-identical to the "Other launch asset" one, and Group size was two dots that read as an ellipsis.',
+      'The footer now links to the Dropzone builder, as desktop\'s does.',
+    ]},
     { date: '2026-08-02', title: 'Fewer ships wrongly offering a Deployable Feature', items: [
       'Some ships that always carry one fixed feature, like the M-Type Barge\'s Military Outpost or the EX-7 Packet Runner\'s Hangar Feature, were being offered a picker of unrelated faction features instead. The picker now only appears on ships whose rules genuinely let you choose.',
       'Mobile also had every Bioficer Porter S ship (16 of them) wrongly showing that picker; that fallback is gone.',
