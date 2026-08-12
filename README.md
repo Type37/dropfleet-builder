@@ -8,23 +8,19 @@
 
 </div>
 
-Fleet builder for [Dropfleet Commander](https://www.ttcombat.com/games/dropfleet-commander). Free, no login, and it works offline once downloaded. Fleets save in the browser, and can sync between devices with a six-word token.
+A fleet builder for [Dropfleet Commander](https://www.ttcombat.com/games/dropfleet-commander), all six factions. Free, no login, and it works with no signal.
 
-All six factions (UCM, PHR, Scourge, Shaltari, Resistance, Bioficers), plus stations, civilian and mercenary ships. Full stats and rules text, generic and famous admirals, modular loadouts. Points, tonnage and group limits are checked as you build. Print sheets, share links, New Recruit import, a damage calculator, a collection tracker, and a play mode for running a game.
+**Nothing in it is invented.** Every stat and every rule is quoted from TTCombat's PDFs word for word, never paraphrased. I learned why that matters the hard way: a rule I had half-remembered, that a Crippled ship halves its Attack dice, shipped and survived hundreds of versions before it was caught. It was never a Dropfleet rule. Nothing that affects play goes in now without the page it came from, and audit scripts re-run on every edition ingest so a ship cannot quietly lose a special rule or a group size when TTCombat updates a stats sheet.
 
-Phones get the mobile version, which shares the same saved fleets.
+**Nothing is ever cut off.** No ellipsis, no truncated weapon name, no rule folded away behind a "show more". If it is something you need at the table, it is on screen in full and the box grows to fit it.
 
-## Data
+**It assumes you have no signal.** One button downloads the whole app, every faction and every ship image, instead of trusting a service worker to have happened to cache the right things. Discovering mid-game that your opponent's faction never loaded is not a failure worth risking to save 28 MB.
 
-Stats start from [BSData](https://github.com/BSData/dropfleet-commander), converted to JSON and checked against TTCombat's Combined Fleet Stats PDFs. Rules text is quoted from those PDFs rather than paraphrased.
+**There are no accounts.** Syncing fleets between a phone and a desktop is a six-word phrase, and the phrase is the entire credential. No email, no password, nothing of yours held anywhere that could leak.
 
-## Running it
+**It checks the list so you do not have to.** Points, tonnage, group sizes, Unique and Rare, launch and Porter capacity, the ships that refuse an admiral, the features you have to choose before the list is legal. The rules that are tedious to remember are the ones worth automating.
 
-Plain HTML, CSS and JavaScript, no build step.
-
-```sh
-npx serve .
-```
+Under it: plain HTML, CSS and JavaScript, no framework and no build step. When sync needed a backend I wrote the Firestore calls by hand rather than add a 400 KB SDK to an app whose whole job is to work offline.
 
 ## Links
 
@@ -32,4 +28,4 @@ npx serve .
 
 ## Legal
 
-Code is [MIT](LICENSE). The game data, rules text, ship names and art are TTCombat's and are not covered by that licence. Unofficial fan project, not endorsed by TTCombat.
+Code is [MIT](LICENSE). The game data, rules text, ship names and art are TTCombat's and are not covered by that licence. Ship stats are derived from [BSData](https://github.com/BSData/dropfleet-commander). Unofficial fan project, not endorsed by TTCombat.
