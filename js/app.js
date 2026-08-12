@@ -3067,8 +3067,7 @@ let activeGroupId = null;
           <label class="float-label" for="overview-desc-ta">Add fleet notes</label>
         </div>
         <div class="overview-section">
-          <div class="overview-section-head">
-            <div class="overview-section-label">Battle Groups (${f.battleGroups.length})</div>
+          <div class="overview-section-head is-actions-only">
             <button class="overview-add-group-btn" onclick="App.addGroup()" aria-label="Add a battle group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> Add Group</button>
           </div>
           <div class="overview-groups">${groupCards + flagshipCards}</div>
@@ -3077,9 +3076,9 @@ let activeGroupId = null;
           </div>
         </div>
         <div class="overview-section">
-          <div class="overview-section-head">
-            <div class="overview-section-label">Space Station</div>
-          </div>
+          <div id="admiral-slot"></div>
+        </div>
+        <div class="overview-section">
           <div id="station-slot"></div>
         </div>
         ${secondaryHtml}
@@ -7895,6 +7894,10 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-08-11', title: 'Add Admiral moved into the fleet overview', items: [
+      'The Admiral slot used to live on the left rail. On a narrow screen that rail folds down into a bottom sheet behind a small handle, which put Add Admiral hundreds of pixels below the fold with no ordinary way to scroll to it: on a phone in desktop view it looked as though the app simply had no admirals. It now sits in the middle panel directly above Space Station and scrolls with everything else, at every width.',
+      'The Battle Groups and Space Station headings are gone. The Add Group and Add Space Station buttons underneath them already said what they were, and the fleet reads more quietly without the extra rules and labels.',
+    ]},
     { date: '2026-08-11', title: 'Dropzone armies were turning up in your fleet list', items: [
       'The Dropzone Commander builder is a page on type37.github.io and so is this one, so a browser treats them as one site and hands them one pile of storage, and both were syncing to the same place under the same name. Turning sync on in either app turned it on in the other, on the same token, and the two games were merged into a single list: armies appeared here as fleets with no ships, and fleets appeared over there as armies with no Groups. Sync carries your list without ever looking inside it, which is exactly why it could not tell one game from the other. That app now has keys and a sync document of its own, so nothing more can cross over. Any armies that already reached your fleet list are removed the first time this app opens, and removed from your synced copy the first time it syncs, so they do not come back on your other devices either. Your token still works and nothing about your fleets changes.',
     ]},

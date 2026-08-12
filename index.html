@@ -195,15 +195,10 @@
              it's always visible without scrolling the middle panel. -->
         <div id="sidebar-alerts"></div>
 
-        <!-- Admiral lives on the left rail (highest-ranked first). The flagship is
-             a ship on the table and shows as a clickable card in the middle. -->
-        <div class="sidebar-admiral">
-          <div class="sidebar-section-label">Admiral</div>
-          <div id="admiral-slot"></div>
-        </div>
-
-        <!-- Battle Groups, Station and Secondary Objectives live in the overview
-             (middle) panel. -->
+        <!-- Admiral, Battle Groups, Station and Secondary Objectives all live in
+             the overview (middle) panel. The rail keeps only the alerts, so that
+             below 768px, where the rail collapses to a bottom sheet, nothing you
+             need to build a list is hidden behind the handle. -->
       </aside>
 
       <!-- Overview Panel (always visible) -->

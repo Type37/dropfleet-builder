@@ -5,6 +5,37 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-08-11: Add Admiral moved into the fleet overview
+
+Reported as [#4](https://github.com/Type37/dropfleet-builder/issues/4), "Adrimals not
+on app list", from a phone. No admiral data was missing. `#admiral-slot` lived inside
+`<aside class="builder-sidebar">`, and under `@media (max-width: 768px)` that whole
+rail becomes a fixed bottom sheet at `translateY(calc(100% - 48px))` with
+`overflow: hidden`, so everything in it sits behind a 48px handle. Measured on the
+live site at 375px with a fleet loaded: viewport 812 tall, admiral slot at y 1267 to
+1327, which is 455px past the fold, inside a sheet whose content already overflowed
+its own 60vh box, and below the alerts block, so a fleet with warnings pushed it
+further still. A phone only reaches that layout with `dfc_force_desktop` set, which
+is what the reporter had done.
+
+The slot is now a section of the overview panel, directly above Space Station, so it
+scrolls with the page at every width. This finished a migration that was already
+half done: `renderOverviewPanel()` has been calling `renderAdmiralSlot()` after
+rewriting the overview for some time, and `renderAdmiralSlot` already carried the
+comment "slot now lives in the overview, created lazily". Only the markup had never
+moved. The rail keeps the fleet header and the alerts, which are glanceable rather
+than interactive, so nothing needed to build a list is behind the handle now.
+
+The Battle Groups and Space Station section labels are dropped in the same pass. Both
+sat directly above a button that named the same thing, and the label carried the
+section's bottom rule, so removing them also removes two horizontal lines. The Battle
+Groups head keeps its Add Group button, right-aligned via a new `is-actions-only`
+modifier since the label was the flex partner holding it there. Secondary Objectives
+keeps its label: it labels a choice, not a button. Dead `.sidebar-admiral` and
+`.sidebar-section-label` rules removed.
+
+Mobile is untouched. Admirals have always been on its fleet screen.
+
 ### 2026-08-11: Dropzone armies were turning up in your fleet list
 
 The Dropzone Commander builder is a page on the same GitHub Pages origin as this

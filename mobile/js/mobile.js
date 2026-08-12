@@ -4126,6 +4126,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-08-11', title: 'Add Admiral moved into the fleet overview (desktop)', items: [
+      'On the desktop site the Admiral slot lived on the left rail, which folds into a bottom sheet on a narrow window and hid Add Admiral below the fold. It now sits in the middle panel above Space Station. This app was never affected: admirals have always been on the fleet screen here.',
+    ]},
     { date: '2026-08-11', title: 'My Collection', items: [
       'Settings now has My Collection: record how many of each ship you own, faction by faction, with a running total of models and points owned. The ship picker gains an "in collection" chip and an In-collection filter so you can build only from what is on your shelf.',
       'It reads and writes the same saved collection as the desktop app, so anything you already recorded there shows up here.',
