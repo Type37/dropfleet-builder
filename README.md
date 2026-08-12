@@ -83,4 +83,4 @@ A WarLore project.
 
 ## Legal
 
-Code is MIT, see [LICENSE](LICENSE). Ship art, ship stats and rules text belong to TTCombat / Hawk Wargames and are used here under no claim of ownership. This is an unofficial fan project, not endorsed by or affiliated with TTCombat.
+The [MIT licence](LICENSE) covers the source code in this repository and nothing else. The Dropfleet Commander game data, rules text, ship names, ship art and logos reproduced here are the property of TTCombat / Hawk Wargames, included under no claim of ownership and not relicensed by that file. This is an unofficial fan project, not endorsed by or affiliated with TTCombat.
