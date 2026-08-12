@@ -1,13 +1,9 @@
 # Changelog
 
-Full history for the [Dropfleet Commander Fleet Builder](https://type37.github.io/dropfleet-builder/).
-The short, player-facing version is the *What is New* panel in the app; this file
-keeps the long form, including the reasoning and the data checks behind each change.
+Long form, newest first. The short version is the What's New panel in the app.
 
-TTCombat publishes no official changelog, so dated edition notes are the
-maintainer's interpretation of what changed between stats PDFs.
-
-Newest first.
+TTCombat publishes no official changelog, so dated edition notes are my reading
+of what changed between stats PDFs.
 
 ### 2026-08-11: Dropzone armies were turning up in your fleet list
 
