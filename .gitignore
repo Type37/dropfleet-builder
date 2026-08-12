@@ -59,3 +59,7 @@ scripts/_pdfpages/
 scripts/*-ingest.json
 scripts/__pycache__/
 USER-PERSONAS.md
+
+# Rules/reference PDF working folder and raw text dumps
+Rules-Mechanics-PDFs/
+*_pdf_text.txt
