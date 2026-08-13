@@ -276,16 +276,37 @@
     navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())).catch(() => {});
     if (window.caches) caches.keys().then(ks => ks.forEach(k => caches.delete(k))).catch(() => {});
   } else if ('serviceWorker' in navigator) {
-    if (navigator.serviceWorker.controller) {
-      let reloading = false;
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (reloading) return; reloading = true; window.location.reload();
-      });
-    }
+    /* NOTHING HERE RELOADS THE PAGE, and this is the copy that mattered. A
+     * reader, 2026-08-13, on Firefox for iOS: "Every 1-2 minutes it will
+     * almost refresh the whole thing, taking me out of the list, clearing and
+     * reloading to the list page." They were on a phone, so this sub-app is
+     * what they were looking at.
+     *
+     * The loop, by construction:
+     *
+     *   setInterval(reg.update, 60000)  ->  sw.js install calls skipWaiting()
+     *   ->  activate calls clients.claim()  ->  controllerchange fires
+     *   ->  location.reload()  ->  and the next poll is 60 seconds later.
+     *
+     * Quiet only where update() reliably decides sw.js is byte-identical and
+     * installs nothing. On Firefox for iOS -- WebKit underneath -- nearly
+     * every poll produced a "new" worker, skipWaiting took it live at once,
+     * and the tab reloaded out from under the fleet being built. The
+     * `reloading` guard could not help: it is a page-level variable and the
+     * reload it guards is what resets it.
+     *
+     * Here it ran TWICE. mobile.js registered the worker and added its own
+     * controllerchange reload as well, so this page carried two listeners and
+     * two 60-second polls. That half is deleted; this is the one owner.
+     *
+     * A reload was never needed to be current: FRESH_RE in sw.js fetches
+     * html/js/css/json with cache:'no-store' while online, so an open tab
+     * already runs the live code. The poll stays -- it refreshes the offline
+     * cache -- at half an hour, because on a phone it is a radio wake-up. */
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('../sw.js').then(reg => {
         const check = () => reg.update().catch(() => {});
-        setInterval(check, 60000);
+        setInterval(check, 1800000);
         // iOS throttles background timers, so also check whenever the app
         // regains focus (returning to the home-screen PWA / Safari tab).
         document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });

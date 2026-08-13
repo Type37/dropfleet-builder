@@ -5619,20 +5619,21 @@
     const fp = document.getElementById('new-fleet-faction');
     if (fp) fp.addEventListener('change', updateFactionDesc);
 
-    // Register the root service worker (it controls the whole origin, including
-    // /data/ and /assets/ which sit above /mobile/) so the app works offline.
-    if ('serviceWorker' in navigator) {
-      // Self-update a live tab: reload when a new build takes over + poll while open.
-      if (navigator.serviceWorker.controller) {
-        let reloading = false;
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-          if (reloading) return; reloading = true; window.location.reload();
-        });
-      }
-      navigator.serviceWorker.register('../sw.js').then(reg => {
-        setInterval(() => reg.update().catch(() => {}), 60000);
-      }).catch(() => {});
-    }
+    /* THE SERVICE WORKER IS REGISTERED BY mobile/index.html, NOT HERE.
+     *
+     * This block did it a second time, with its own controllerchange handler
+     * that called location.reload() and its own 60-second update poll -- so
+     * the page ran two registrations, two listeners and two polls, and the
+     * copy here was the poorer of the two (no visibilitychange check, and
+     * localhost was not excluded, so a dev preview registered a worker the
+     * inline script had just spent two lines unregistering).
+     *
+     * The reload is why it is gone rather than merely deduplicated. A reader
+     * on Firefox for iOS, 2026-08-13: "Every 1-2 minutes it will almost
+     * refresh the whole thing, taking me out of the list." skipWaiting takes
+     * each polled update live at once, controllerchange fires, the page
+     * reloads, and sixty seconds later it happens again. The full account is
+     * in mobile/index.html beside the surviving registration. */
   }
 
   /* ── Public API ────────────────────────────────────────── */

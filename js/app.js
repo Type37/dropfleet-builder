@@ -7894,6 +7894,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-08-13', title: 'The app threw you out of your fleet once a minute on Firefox for iOS', items: [
+      'Reported by a reader on an iPhone: "every 1-2 minutes it will almost refresh the whole thing, taking me out of the list, clearing and reloading to the list page." It was a loop the app built for itself. Every 60 seconds it asked whether a new version had been published; the answer arrived as a new worker that took over the page immediately, and taking over triggered a reload. On browsers that decide the file has not changed nothing happens and nobody notices. On Firefox for iOS the answer came back "new" nearly every time, so it reloaded once a minute, forever, out of whatever you were building.',
+      'On mobile it ran twice over: the page asked for updates once in its own markup and again in the mobile script, so there were two reload handlers and two timers racing on one screen. Mobile is where the report came from.',
+      'Nothing reloads the page any more. It was never needed to stay current — the app already fetches its own code and data fresh whenever you are online, so an open tab is running the live version regardless. The version check itself stays, because it is what keeps the offline copy working, but every half hour instead of every minute. On a phone that check is a radio wake-up.',
+    ]},
     { date: '2026-08-11', title: 'Add Admiral moved into the fleet overview', items: [
       'The Admiral slot used to live on the left rail. On a narrow screen that rail folds down into a bottom sheet behind a small handle, which put Add Admiral hundreds of pixels below the fold with no ordinary way to scroll to it: on a phone in desktop view it looked as though the app simply had no admirals. It now sits in the middle panel directly above Space Station and scrolls with everything else, at every width.',
       'The Battle Groups and Space Station headings are gone. The Add Group and Add Space Station buttons underneath them already said what they were, and the fleet reads more quietly without the extra rules and labels.',

@@ -548,18 +548,41 @@
     navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())).catch(() => {});
     if (window.caches) caches.keys().then(ks => ks.forEach(k => caches.delete(k))).catch(() => {});
   } else if ('serviceWorker' in navigator) {
-    // Auto-reload an already-controlled tab when a new build takes over, and poll
-    // for new versions while open — so a live tab self-updates (no hard refresh).
-    if (navigator.serviceWorker.controller) {
-      let reloading = false;
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (reloading) return; reloading = true; window.location.reload();
-      });
-    }
+    /* NOTHING HERE RELOADS THE PAGE. A reader, 2026-08-13, on Firefox for iOS:
+     * "Every 1-2 minutes it will almost refresh the whole thing, taking me out
+     * of the list, clearing and reloading to the list page."
+     *
+     * That was this, and it was a loop by construction:
+     *
+     *   setInterval(reg.update, 60000)  ->  sw.js install calls skipWaiting()
+     *   ->  activate calls clients.claim()  ->  controllerchange fires
+     *   ->  location.reload()  ->  and the next poll is 60 seconds later.
+     *
+     * It only stayed quiet on browsers where update() reliably decides sw.js
+     * is byte-identical and installs nothing. Where it does not -- Firefox on
+     * iOS, which is WebKit underneath -- every poll produced a "new" worker,
+     * took over immediately because of skipWaiting, and reloaded the tab out
+     * from under whatever was being built. Once a minute, forever. The
+     * `reloading` guard could not help: it is a page-level variable and the
+     * reload it guards is what resets it.
+     *
+     * A reload was never needed to be current. Everything that matters --
+     * html, js, css, json -- is fetched cache:'no-store' by the worker while
+     * online (FRESH_RE in sw.js), so an open tab is already running the live
+     * code and the shell picks up the rest on the next navigation. The reload
+     * bought nothing and cost the fleet you were in the middle of.
+     *
+     * The poll stays, because it is what refreshes the offline cache, but at
+     * half an hour rather than a minute: it is a radio wake-up on a phone, and
+     * the visibility check below is what actually catches a new build in
+     * practice.
+     *
+     * Reported against the Dropzone builder and fixed there first (its Build
+     * 451). Both apps carried the same fifteen lines; this is that fix. */
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').then(reg => {
         const check = () => reg.update().catch(() => {});
-        setInterval(check, 60000);
+        setInterval(check, 1800000);
         // iOS throttles background timers, so also check on regaining focus.
         document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });
       }).catch(() => {});
