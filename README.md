@@ -8,7 +8,7 @@
 
 </div>
 
-Assemble and print your fleet in this unofficial fleet builder for [Dropfleet Commander](https://www.ttcombat.com/games/dropfleet-commander), published by TTCombat. Unofficial builder by WarLore.
+Assemble and print your fleet in this unofficial fleet builder for [Dropfleet Commander](https://www.ttcombat.com/games/dropfleet-commander), published by TTCombat. This web app was designed by WarLore.
 
 ## What it does
 

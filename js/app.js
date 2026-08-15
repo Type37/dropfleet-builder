@@ -5127,7 +5127,13 @@ let activeGroupId = null;
 
     saveFleets();
     closeModal('modal-admiral');
-    renderAdmiralSlot();
+    // renderOverviewPanel, not renderAdmiralSlot: the slot alone redraws the
+    // admiral card and leaves the left rail's legality alerts untouched, so
+    // "Fleet must contain an Admiral" stayed on screen over a fleet that now
+    // had one, until some unrelated action forced a full render. The overview
+    // is what runs validateFleet (via renderSidebarAlerts), and it redraws the
+    // slot on the way. Same reason assignAdmiralShip and removeAdmiral call it.
+    renderOverviewPanel();
     updatePoints();
   }
 
@@ -5151,7 +5157,7 @@ let activeGroupId = null;
 
     saveFleets();
     closeModal('modal-admiral');
-    renderAdmiralSlot();
+    renderOverviewPanel();   // see addGenericAdmiral: the alerts live here
     updatePoints();
     promptAdmiralAbilities(currentFleet.admirals.length - 1);
   }

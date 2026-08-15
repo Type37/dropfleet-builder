@@ -83,20 +83,15 @@ const SEED = `
   add.click();
   await wait(800);
   App.closeModal('modal-admiral');
-  await wait(700);
+  await wait(900);
 
-  /* Leave the builder and come back, which is not superstition.
-     Adding an Admiral updates the points total and the AP line but does NOT
-     re-render the validation panel, so "1 issue to fix -- Fleet must contain an
-     Admiral" stays on screen over a fleet that now has one. It clears on the
-     next full render. That is a bug in the app, not in this script; when it is
-     fixed these four lines can go. */
-  const back = location.hash;
-  App.navigate('fleets');
-  await wait(800);
-  location.hash = back;
-  await wait(1600);
-
+  /* Assert the alert cleared without any further navigation.
+     addGenericAdmiral used to call renderAdmiralSlot only, which redraws the
+     admiral card and leaves the left rail alone, so "Fleet must contain an
+     Admiral" sat on screen over a fleet that had one. This script worked around
+     it by leaving the builder and coming back. The workaround is gone because
+     the app calls renderOverviewPanel now; this check is what stops it coming
+     back silently. */
   const stale = [...document.querySelectorAll('*')]
     .some((e) => !e.children.length && /Fleet must contain an Admiral/.test(e.textContent));
   if (stale) throw new Error('validation panel still reports a missing Admiral');
