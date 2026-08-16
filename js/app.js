@@ -7397,27 +7397,34 @@ let activeGroupId = null;
   // A famous admiral's flagship lives on the admiral entry (fleet.admirals), NOT in
   // fleet.battleGroups — the builder renders it as its own overview card. Play Mode
   // walks battleGroups, so without this the flagship never reached the table. Wrap
-  // each famous admiral in a synthetic one-ship group so hull, orders, spikes and
-  // activation persist in playState exactly like a real group's. Ids are derived
-  // from shipKey (one famous admiral per fleet) so they stay stable across sessions.
+  // each famous admiral in a synthetic group so hull, orders, spikes and activation
+  // persist in playState exactly like a real group's. Ids are derived from shipKey
+  // (one famous admiral per fleet) so they stay stable across sessions.
+  //
+  // Usually one hull, but not always: the G stat is the group size, and the Twins of
+  // Aaru are a G-2 pair of Amber Cruisers — 200 pts for two 100-pt hulls, Hull 9 each.
+  // One card there would leave the second ship with nowhere to record damage, so the
+  // group carries one ship per point of G. Ship 0 keeps the original unsuffixed id so
+  // damage already tracked against a flagship survives this change.
   function playFlagshipGroups(fleet) {
     return (fleet.admirals || []).map(a => {
       if (a.type !== 'Famous' || !a.shipKey) return null;
       const db = findShipInDB(fleet.faction, 'famous_admirals', a.shipKey);
       if (!db) return null;
+      const count = Math.max(1, parseInt(db.g, 10) || 1);
       return {
         id: 'flagship-' + a.shipKey,
         name: flagshipLabel(db),
         isFlagship: true,
         admiral: a,
         db,
-        ships: [{
-          id: 'flagship-ship-' + a.shipKey,
+        ships: Array.from({ length: count }, (_, i) => ({
+          id: 'flagship-ship-' + a.shipKey + (i ? '-' + i : ''),
           shipKey: a.shipKey,
           groupCategory: 'famous_admirals',
           loadouts: a.loadouts || {},
           systems: a.systems || []
-        }]
+        }))
       };
     }).filter(Boolean);
   }
@@ -7570,9 +7577,10 @@ let activeGroupId = null;
 
     // A flagship is an ordinary ship profile here; the only extra is its proper
     // name, e.g. "Fortune's Fancy", shown ahead of the class. Not every famous
-    // admiral's ship is named — then the class alone is the title.
-    const shipsHtml = (bg.ships || []).map(ship =>
-      renderPlayShip(ship, faction, bg.isFlagship ? (bg.db.flagshipName || null) : null, bgs.order)
+    // admiral's ship is named — then the class alone is the title. On a G-2 pair
+    // the proper name belongs to the one vessel, so only the first card takes it.
+    const shipsHtml = (bg.ships || []).map((ship, i) =>
+      renderPlayShip(ship, faction, (bg.isFlagship && i === 0) ? (bg.db.flagshipName || null) : null, bgs.order)
     ).join('');
     const actDone = bgs.activated;
 
@@ -7986,6 +7994,7 @@ let activeGroupId = null;
       'A flagship could not be repaired in Play Mode. Damage went in, but the healing button clamped it to 1 Hull, because the code looked for the ship among your battlegroups and a flagship is not in there.',
       'Sharing a fleet quietly dropped the flagship\'s loadout choice while still charging for it, so Havelock arrived at the other end with the standard drive at the refit\'s price. The printed sheet had the same blind spot, printing his base Thrust of 6" next to the 9" the app showed. Both now carry the choice, and so does mobile, which was discarding it on import even though it cannot pick one itself.',
       'Thirteen flagships carry no tonnage of their own, which showed a Dreadnought as Medium and denied it a crippling tracker. They read from their weight class now: the Zenith is Super-Heavy again.',
+      'The Twins of Aaru are two Amber Cruisers — 200 points for two 100-point hulls, Group size 2, Hull 9 each — and Play Mode gave them a single damage track, so the second ship had nowhere to record hits. They now get one hull track each.',
       'An admiral you assign to one of your own Capital ships was meant to have their name and level on that group\'s header in Play Mode. That had never worked. It does now.',
     ]},
     { date: '2026-08-13', title: 'The app threw you out of your fleet once a minute on Firefox for iOS', items: [

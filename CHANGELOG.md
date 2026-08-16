@@ -73,6 +73,16 @@ What this fixed, in rough order of severity:
   mislabelled the Zenith and Coloniser Dreadnoughts and, worse, denied all 13 a
   crippling tracker, since capital detection reads the same field. `buildShip` gives
   them the weight-class fallback line ships already had.
+- **The Twins of Aaru had one damage track for two ships.** Routing flagships
+  through `buildShip` started carrying `groupMin`/`groupMax`, which the old literal
+  dropped — and that surfaced this. Their G stat is 2 (the app's own `STAT_META`
+  defines `g` as "Group size, ships per battle group"), their cost is 200 against
+  the line Amber Cruiser's 100, and Hull 9 is per ship. Play Mode drew one card, so
+  the second cruiser had nowhere to record hits. `playFlagshipGroups` now emits one
+  ship per point of G. Ship 0 keeps the original unsuffixed id, so damage already
+  tracked against any flagship survives the change, and a proper flagship name goes
+  on the first card only. They are the only G-2 flagship in the game; the other 23
+  are unaffected.
 - Two dead-code bugs beside it: the Play Mode battlegroup header looked up its
   admiral by `a.groupId`, which nothing writes (`assignAdmiralShip` sets
   `assignedGroupId`), so an admiral assigned to one of your own Capital ships never
