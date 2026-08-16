@@ -19,6 +19,11 @@ on:
   schedule:
     - cron: '0 7 * * 1'   # 07:00 UTC every Monday
   workflow_dispatch:
+    inputs:
+      test_alert:
+        description: 'Open a test issue to prove the email path works'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -71,13 +76,16 @@ jobs:
           fi
 
       - name: Report
-        if: steps.files.outputs.changed == 'yes' || steps.bsdata.outputs.changed == 'yes'
+        if: steps.files.outputs.changed == 'yes' || steps.bsdata.outputs.changed == 'yes' || inputs.test_alert
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
             const read = f => fs.readFileSync(f, 'utf8').trim();
-            const parts = ['The Dropfleet data needs a look.', ''];
+            const isTest = ${{ inputs.test_alert || false }};
+            const parts = isTest
+              ? ['**Test alert.** Nothing is wrong; this only proves the email path works. Close it.', '']
+              : ['The Dropfleet data needs a look.', ''];
 
             if ('${{ steps.files.outputs.changed }}' === 'yes') {
               parts.push('## TTCombat published something', '', '```', read('files.txt'), '```', '');
@@ -117,10 +125,16 @@ jobs:
                 issue_number: open[0].number, body,
               });
             } else {
-              await github.rest.issues.create({
+              // Assign the repo owner: GitHub emails on assignment under the
+              // default "Participating and @mentions" setting, whereas an issue
+              // merely opened by the Actions bot would not reach the inbox.
+              const { data: issue } = await github.rest.issues.create({
                 owner: context.repo.owner, repo: context.repo.repo,
-                title: `Dropfleet data changed (${new Date().toISOString().slice(0, 10)})`,
+                title: (isTest ? 'Test alert' : 'Dropfleet data changed')
+                  + ` (${new Date().toISOString().slice(0, 10)})`,
                 labels: ['dfc-data'],
+                assignees: [context.repo.owner],
                 body,
               });
+              core.notice(`Opened #${issue.number}: ${issue.html_url}`);
             }
