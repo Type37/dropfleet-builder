@@ -1,17 +1,23 @@
-name: Scan TTCombat DFC downloads
+name: Watch for DFC data changes
 
-# Watches https://ttcombat.com/pages/dropfleet-commander-downloads for new or
-# re-uploaded PDFs and opens an issue when something changes. Detection only:
-# integrating a new edition means reading the PDF, diffing it against the
-# previous one and wiring any list-building rules into both apps, which is a
-# judgement call, not a script. The issue is the prompt to do that work.
+# Two independent tripwires, so a stat change cannot land silently:
 #
-# The manifest is NOT rebaselined here on purpose. It stays stale until the
-# change is actually integrated, so a missed month still shows up next run.
+#   scan-dfc-files.py   watches TTCombat's downloads page for a new or re-uploaded
+#                       PDF. First to know, but only says "something changed".
+#   compare-bsdata.py   diffs our ship data against the BSData community
+#                       catalogues, who transcribe the same PDFs by hand. Slower
+#                       (they publish days later) but says exactly WHICH ship and
+#                       WHICH number, in plain language.
+#
+# Neither edits data. Integrating an edition means reading the PDF and deciding
+# whether a new rule changes what is legal to take, which is a judgement call.
+# The issue this opens is the prompt to do that work, with the diff already laid
+# out. The files manifest is deliberately NOT rebaselined here, so an
+# unintegrated change keeps showing up until it is actually dealt with.
 
 on:
   schedule:
-    - cron: '0 7 1 * *'   # 07:00 UTC on the 1st of each month
+    - cron: '0 7 * * 1'   # 07:00 UTC every Monday
   workflow_dispatch:
 
 permissions:
@@ -19,68 +25,92 @@ permissions:
   issues: write
 
 concurrency:
-  group: dfc-files-scan
+  group: dfc-data-watch
   cancel-in-progress: false
 
 jobs:
-  scan:
+  watch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run the scanner
-        id: scan
+      # Both scripts are stdlib-only and exit 1 on findings, 0 when clean, so
+      # neither needs installs and neither should fail the job on a finding.
+      - name: TTCombat downloads page
+        id: files
         run: |
-          # The scanner exits 1 when it finds changes and 0 when clean, so don't
-          # let a non-zero exit fail the job. Anything else is a real error.
           set +e
-          python scripts/scan-dfc-files.py > report.txt 2>&1
+          python scripts/scan-dfc-files.py > files.txt 2>&1
           code=$?
           set -e
-          cat report.txt
-          if [ "$code" -eq 1 ]; then
-            echo "changed=yes" >> "$GITHUB_OUTPUT"
-          elif [ "$code" -eq 0 ]; then
-            echo "changed=no" >> "$GITHUB_OUTPUT"
-          else
-            echo "scanner failed with exit $code" >&2
+          cat files.txt
+          if [ "$code" -gt 1 ]; then
+            echo "scanner errored with exit $code" >&2
             exit "$code"
+          elif [ "$code" -eq 1 ]; then
+            echo "changed=yes" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=no" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Open an issue when files changed
-        if: steps.scan.outputs.changed == 'yes'
+      - name: Cross-check against BSData
+        id: bsdata
+        run: |
+          set +e
+          python scripts/compare-bsdata.py --quiet > bsdata.txt 2>&1
+          code=$?
+          set -e
+          cat bsdata.txt
+          if [ "$code" -gt 1 ]; then
+            echo "comparator errored with exit $code" >&2
+            exit "$code"
+          elif [ "$code" -eq 1 ]; then
+            echo "changed=yes" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=no" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Report
+        if: steps.files.outputs.changed == 'yes' || steps.bsdata.outputs.changed == 'yes'
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            const report = fs.readFileSync('report.txt', 'utf8').trim();
+            const read = f => fs.readFileSync(f, 'utf8').trim();
+            const parts = ['The Dropfleet data needs a look.', ''];
 
-            // One open issue at a time. If last month's is still open the change
-            // hasn't been integrated yet, so comment on it rather than pile up.
+            if ('${{ steps.files.outputs.changed }}' === 'yes') {
+              parts.push('## TTCombat published something', '', '```', read('files.txt'), '```', '');
+            }
+            if ('${{ steps.bsdata.outputs.changed }}' === 'yes') {
+              parts.push('## We disagree with BSData', '',
+                'Each line is one ship where our number and the community catalogue differ.',
+                'The PDF settles it. If we turn out to be right, add the ship to `ADJUDICATED`',
+                'in `scripts/compare-bsdata.py` with the page reference so it stops reappearing.',
+                '', '```', read('bsdata.txt'), '```', '');
+            }
+            parts.push(
+              '---',
+              'Integrating an edition: download the PDFs into `Rules-Mechanics-PDFs/`, diff them',
+              'page by page against the previous edition, update `data/faction-*.json`, and check',
+              'whether any new rule changes what is LEGAL to take. If it does, wire it into both',
+              '`js/app.js` and `mobile/js/mobile.js`, not just the card text. Then rebaseline with',
+              '`python scripts/scan-dfc-files.py --update`.',
+              '',
+              'A `REVISED` entry means the same date stamp was re-uploaded. Usually cosmetic, but',
+              'not always: on 2026-08-02 a re-upload renamed a ship, so diff the text before',
+              'assuming nothing changed.',
+              '',
+              `_[Run log](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})_`,
+            );
+            const body = parts.join('\n');
+
+            // One open issue at a time. If the last one is still open the change
+            // has not been dealt with, so comment rather than pile up.
             const { data: open } = await github.rest.issues.listForRepo({
               owner: context.repo.owner, repo: context.repo.repo,
-              state: 'open', labels: 'dfc-files',
+              state: 'open', labels: 'dfc-data',
             });
-
-            const body = [
-              'The TTCombat downloads page changed.',
-              '',
-              '```',
-              report,
-              '```',
-              '',
-              '**Next step:** download the changed PDFs into `Rules-Mechanics-PDFs/`, diff them',
-              'page by page against the previous edition, integrate into `data/faction-*.json`,',
-              'enforce any list-building rules in BOTH `js/app.js` and `mobile/js/mobile.js`,',
-              'then rebaseline with `python scripts/scan-dfc-files.py --update`.',
-              '',
-              'A `REVISED` entry means the same date stamp was re-uploaded. Usually cosmetic,',
-              'but not always: on 2026-08-02 a re-upload renamed a ship, so diff the text',
-              'before assuming nothing changed.',
-              '',
-              `_Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}_`,
-            ].join('\n');
-
             if (open.length) {
               await github.rest.issues.createComment({
                 owner: context.repo.owner, repo: context.repo.repo,
@@ -89,8 +119,8 @@ jobs:
             } else {
               await github.rest.issues.create({
                 owner: context.repo.owner, repo: context.repo.repo,
-                title: `DFC downloads changed (${new Date().toISOString().slice(0, 10)})`,
-                labels: ['dfc-files'],
+                title: `Dropfleet data changed (${new Date().toISOString().slice(0, 10)})`,
+                labels: ['dfc-data'],
                 body,
               });
             }
