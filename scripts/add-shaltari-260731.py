@@ -1,5 +1,5 @@
 # Shaltari Combined Fleet Stats 260731: adds the hero ship
-# "Nefertem of the Dawn - Invisible Night" (the only change vs the 260327 edition).
+# "Nefertem of the Dawn - Invisible Light" (the only change vs the 260327 edition).
 # Modelled the same way as Avram Bei / Rhiannon Major: a Hero + Unique group ship,
 # not an entry in admirals[] (the Hero rule forbids assigning an Admiral).
 import json, io
@@ -7,7 +7,7 @@ import json, io
 PATH = 'data/faction-shaltari.json'
 d = json.load(io.open(PATH, encoding='utf-8'))
 
-NAME = 'Nefertem of the Dawn - Invisible Night'
+NAME = 'Nefertem of the Dawn - Invisible Light'
 d['groups'] = [g for g in d['groups'] if g.get('name') != NAME]
 
 group = {
@@ -68,7 +68,7 @@ group = {
         "isUnique": True,
         "tonnage": "L",
         "famousShipsPrefix": "Only ship of the class:",
-        "famousShips": ["Invisible Night"],
+        "famousShips": ["Invisible Light"],
         "lore": (
             "Stealth technology and camouflage in all its forms are abhorrent and dishonourable for most "
             "Shaltari, but Nefertem chose long ago to reject this notion. Her stance is that subterfuge and surprise "

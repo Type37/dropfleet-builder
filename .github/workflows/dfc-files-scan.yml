@@ -1,0 +1,96 @@
+name: Scan TTCombat DFC downloads
+
+# Watches https://ttcombat.com/pages/dropfleet-commander-downloads for new or
+# re-uploaded PDFs and opens an issue when something changes. Detection only:
+# integrating a new edition means reading the PDF, diffing it against the
+# previous one and wiring any list-building rules into both apps, which is a
+# judgement call, not a script. The issue is the prompt to do that work.
+#
+# The manifest is NOT rebaselined here on purpose. It stays stale until the
+# change is actually integrated, so a missed month still shows up next run.
+
+on:
+  schedule:
+    - cron: '0 7 1 * *'   # 07:00 UTC on the 1st of each month
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: dfc-files-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run the scanner
+        id: scan
+        run: |
+          # The scanner exits 1 when it finds changes and 0 when clean, so don't
+          # let a non-zero exit fail the job. Anything else is a real error.
+          set +e
+          python scripts/scan-dfc-files.py > report.txt 2>&1
+          code=$?
+          set -e
+          cat report.txt
+          if [ "$code" -eq 1 ]; then
+            echo "changed=yes" >> "$GITHUB_OUTPUT"
+          elif [ "$code" -eq 0 ]; then
+            echo "changed=no" >> "$GITHUB_OUTPUT"
+          else
+            echo "scanner failed with exit $code" >&2
+            exit "$code"
+          fi
+
+      - name: Open an issue when files changed
+        if: steps.scan.outputs.changed == 'yes'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('report.txt', 'utf8').trim();
+
+            // One open issue at a time. If last month's is still open the change
+            // hasn't been integrated yet, so comment on it rather than pile up.
+            const { data: open } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open', labels: 'dfc-files',
+            });
+
+            const body = [
+              'The TTCombat downloads page changed.',
+              '',
+              '```',
+              report,
+              '```',
+              '',
+              '**Next step:** download the changed PDFs into `Rules-Mechanics-PDFs/`, diff them',
+              'page by page against the previous edition, integrate into `data/faction-*.json`,',
+              'enforce any list-building rules in BOTH `js/app.js` and `mobile/js/mobile.js`,',
+              'then rebaseline with `python scripts/scan-dfc-files.py --update`.',
+              '',
+              'A `REVISED` entry means the same date stamp was re-uploaded. Usually cosmetic,',
+              'but not always: on 2026-08-02 a re-upload renamed a ship, so diff the text',
+              'before assuming nothing changed.',
+              '',
+              `_Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}_`,
+            ].join('\n');
+
+            if (open.length) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: open[0].number, body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title: `DFC downloads changed (${new Date().toISOString().slice(0, 10)})`,
+                labels: ['dfc-files'],
+                body,
+              });
+            }

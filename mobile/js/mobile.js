@@ -4155,7 +4155,7 @@
       'The Actium and Salamis choose two Deployable Features each, and may take the same one twice. Both apps now offer a picker per slot instead of one.',
       'The Cyrus is Rare, so the usual one per Skirmish, two per Clash, three per Battle and four per Reconquest limit is enforced on it.',
       'Resistance price and gun changes: the Phalanx is 185 pts and its Long Battery splits into a Half and a Full Battery; the Senator is 155 pts and gains a Missile Turret Pair alongside a smaller Salvo; the Tribune is 205 pts, which also drops Hagen to 250. The Centurion and Gladiator can both take a Drive Refit for +25 pts and 3 inches of Thrust, and the Centurion Full Battery now hits with Critical-1 and Fusillade-2.',
-      'Shaltari: Nefertem of the Dawn joins in the Invisible Night, a cloaked heavy destroyer with a Microwave Crescent.',
+      'Shaltari: Nefertem of the Dawn joins in the Invisible Light, a cloaked heavy destroyer with a Microwave Crescent.',
       'Every fleet can now hire the M.A.B. 67 Fuel Transport. Its Fuel Transporter rule gives a Group nearby extra movement, and Ignite Reserves lets it go out in a fireball.',
     ]},
     { date: '2026-07-31', title: 'The Admiral warning waits its turn', items: [

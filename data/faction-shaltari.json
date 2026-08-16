@@ -4047,10 +4047,10 @@
   },
   {
    "id": "7c31-9ad4-45e2-b118",
-   "name": "Nefertem of the Dawn - Invisible Night",
+   "name": "Nefertem of the Dawn - Invisible Light",
    "category": "light",
    "ship": {
-    "name": "Nefertem of the Dawn - Invisible Night",
+    "name": "Nefertem of the Dawn - Invisible Light",
     "cost": 81,
     "stats": {
      "thrust": "12”",
@@ -4104,7 +4104,7 @@
     "tonnage": "L",
     "famousShipsPrefix": "Only ship of the class:",
     "famousShips": [
-     "Invisible Night"
+     "Invisible Light"
     ],
     "lore": "Stealth technology and camouflage in all its forms are abhorrent and dishonourable for most Shaltari, but Nefertem chose long ago to reject this notion. Her stance is that subterfuge and surprise attack are time-honoured, central tenets of battle and has chosen to master them. To that end, she commissioned a unique vessel.\n\nInvisible Light demonstrates that, of course, the Shaltari are perfectly capable of matching or exceeding the Scourge in stealth technology if they so wish. Of heavy destroyer tonnage, this vessel’s innocuous-looking additional frontal superstructure arms conceal this cloaking system as well as supporting the additional mass of its only weapons system. The thus-far unique Microwave Crescent is a long range, low-observable variant of typical microwave technology that can reach into the heart of any target, cooking its crew and delicate systems from the inside. Often, the victim has no idea where the burst came from and has little chance of returning fire."
    }
