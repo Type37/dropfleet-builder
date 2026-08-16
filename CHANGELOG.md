@@ -5,6 +5,102 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-08-15: Famous-admiral flagships rebuilt as first-class ships
+
+Reported by LeoDrael: "Famous admiral's ship not display in play mode ship list."
+The immediate cause was narrow. A famous admiral's flagship is not stored as a
+battlegroup — `addFamousAdmiral` pushes an entry onto `fleet.admirals` and the ship
+is read back out of the `famous_admirals` DB group whenever it needs drawing. The
+builder knows this and renders it as its own overview card; `validateFleet` counts
+its cost toward the tonnage limits and its Porter capacity toward the fleet's. Play
+Mode was the one screen that only walked `fleet.battleGroups`, so the flagship had
+no card, no hull track and no activation, on what is usually the most expensive ship
+on the table. Each famous admiral now gets a synthetic one-ship group, ids derived
+from `shipKey` (one famous admiral per fleet, so they are unique and stable across
+sessions) and seeded in `playState` beside the real groups, counted in the
+Activated x/y tally and the pass-token calculation.
+
+Fixing it exposed the real problem, which is a modelling one. The code treated a
+famous admiral as "a line ship with a character aboard" — one DB entry blending the
+person and the hull, with the *admiral's* name in `name` and the ship class demoted
+to `ship_name`. That shape is unlike every other ship, so each renderer needed a
+special case, and the ones that forgot produced exactly the bugs below.
+
+The premise was wrong. A flagship is a hero unit with its own profile. Comparing all
+24 against the class they are named after: 22 differ in stats, weapons, special
+rules, loads or cost. Typhoon Vasquez's "Heavy Cruiser" is 75 pts as a line ship and
+113 as hers, with Scan 10" against 6", ES 3+ against 4+, KS 4+ against 5+, and two
+rules the line ship has never had. Magellan's Coloniser is 265 → 525 with Thrust
+8" against 5". Only Atlas's Catastrophe and Baba Yaga's Daemon are identical, and
+Nguen's Olympus has no line ship of that name at all.
+
+So `transformFaction` now has one `buildShip(s, cat)` used for every ship profile in
+the game, flagships included. A flagship comes out field-for-field identical to a
+line cruiser and the admiral rides alongside as `admiralName`, `admiral_cost`,
+`level`, `special_abilities` — never blended into the ship's own fields. They stay
+keyed by admiral id under `famous_admirals`, so saved fleets and existing share
+links keep resolving with no migration. Play Mode's normalisation shim and the
+`dbOverride` parameter it needed are both gone; a flagship is just a ship now.
+
+What this fixed, in rough order of severity:
+
+- **Six flagships were showing their namesake's rules as their own.** `rulesText`
+  was inherited from the same-named line ship when the flagship had none, and it
+  renders under a "Ship Rules" heading. Agency advertised a +20 pt Torpedo Upgrade,
+  Baba Yaga a Cloaking Keel, Mergen a +35 pt Drive Augmentation, Havelock a Laser
+  Refit — none of which those hero units can take. Typhoon Vasquez and Magellan were
+  told they "must take five/eight options from the Systems list" when their profiles
+  offer no systems whatsoever. Only Ascendant has its own `rulesText`, and it still
+  shows. Lore, namesake and recorded ships still inherit: that is shared flavour,
+  and the hero does use the class's art and aesthetic.
+- **No ship in Play Mode had ever shown its special rules.** `renderPlayShip` read
+  `db.specialRules`; ships carry `special_rules` and `specialRuleDetails`, and only
+  a Space Station has `specialRules`. A 19-group test fleet rendered zero rule chips;
+  it now renders 35, all resolving to full text. `playLocalRuleMap` was reading the
+  same dead field plus `db.features`, which no ship has ever had, so its whole
+  fallback map was always empty. Rules granted by a selected loadout (`gainRules`,
+  e.g. a Faust's Cloaking Keel giving Stealth and Cloak-2) now appear too.
+- **A flagship could not be repaired.** `playHullChange` resolved hull max by
+  scanning `battleGroups`; missing the ship left `hullMax` at 1, and the clamp
+  silently pinned any adjustment to 1 Hull.
+- **Share links dropped the flagship's loadout** while keeping its price, so
+  Havelock arrived with the base drive at the refit's cost. `encodeFleet` carries
+  `a.lo` now — an optional key, so older clients ignore it and links stay compatible
+  both ways.
+- **Print ignored the flagship's loadout too**, printing Havelock's base Thrust 6"
+  beside the 9" on screen. It resolves through `effectiveStats` now, as the screen does.
+- **13 flagships carry no `tonnage`**, only `shipCategory`. The old default of Medium
+  mislabelled the Zenith and Coloniser Dreadnoughts and, worse, denied all 13 a
+  crippling tracker, since capital detection reads the same field. `buildShip` gives
+  them the weight-class fallback line ships already had.
+- Two dead-code bugs beside it: the Play Mode battlegroup header looked up its
+  admiral by `a.groupId`, which nothing writes (`assignAdmiralShip` sets
+  `assignedGroupId`), so an admiral assigned to one of your own Capital ships never
+  appeared; and it printed `a.rating`, which does not exist — the field is `level`.
+
+Verified in the browser across all 24 famous admirals in all six factions: each
+renders in Play Mode with the admiral named on the group header, correct tonnage
+badge, correct ship name (proper flagship name plus class where one exists), hull,
+weapons, rule chips and crippling tracker. Spot-checked that hero stats beat the
+line ship's — Vasquez shows Scan 10"/ES 3+/KS 4+ where her namesake shows 6"/4+/5+,
+Magellan Thrust 8" and BS 4+ where the Coloniser shows 5" and 5+. Havelock's Drive
+Refit moves Thrust 6" → 9" on the play card, survives a share round-trip
+(`loadouts: {0:1}`), and prints. Damage → repair now runs 20 → 15 → 17 instead of
+clamping. Checked the admiral picker still names the person, the army-list export
+still reads "Typhoon Vasquez [45 pts]" then "Red Baron (Heavy Cruiser) [113 pts]",
+and the shared-fleet view and print sheet both show hero stats. Claudia Rhee's
+Heracles shows no rule chips, which is correct — it has none in the data.
+
+Mobile has no Play Mode, and it reads `faction.admirals[].flagship` straight from the
+JSON rather than going through `transformFaction`, so none of the rebuild applies to
+it — checked rather than assumed. It never inherited `rulesText` from a namesake, so
+it never had that bug. It did have one half of the share bug: its own `encodeFleet`
+and `decodeFleet` carried `sa` and `ag` but not `lo`, so a flagship loadout chosen on
+desktop was silently discarded when the link was opened on a phone, and dropped again
+if that fleet was re-shared. Mobile cannot pick a flagship loadout itself, but it now
+carries one through both ways. Verified by importing a desktop-shaped share payload on
+mobile and confirming `loadouts: {0:1}` survives.
+
 ### 2026-08-11: Add Admiral moved into the fleet overview
 
 Reported as [#4](https://github.com/Type37/dropfleet-builder/issues/4), "Adrimals not

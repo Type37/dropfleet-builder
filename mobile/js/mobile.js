@@ -4754,6 +4754,10 @@
       if (a.type) o.t = a.type;
       if (a.selectedAbilities?.length) o.sa = a.selectedAbilities;
       if (a.assignedGroupId) o.ag = a.assignedGroupId;
+      // A famous admiral's flagship keeps its loadout choice on the admiral
+      // (Havelock's Drive Refit). Mobile cannot pick one, but it must not drop
+      // one made on desktop when re-sharing a fleet it received.
+      if (a.loadouts && Object.keys(a.loadouts).length) o.lo = a.loadouts;
       return o;
     });
     if (fleet.spaceStation) {
@@ -4790,7 +4794,8 @@
         // — cross-fall-back so a fleet shared from either device resolves.
         name: a.n, points: a.p || 0, admiralId: a.i || a.k || null, shipKey: a.k || a.i || null,
         level: a.l || 1, type: a.t || 'Generic',
-        shipName: null, selectedAbilities: a.sa || [], assignedGroupId: a.ag || null
+        shipName: null, selectedAbilities: a.sa || [], assignedGroupId: a.ag || null,
+        loadouts: a.lo || {}
       }));
       return fleet;
     } catch (e) { console.warn('decode failed', e); return null; }

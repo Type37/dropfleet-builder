@@ -381,7 +381,9 @@ let activeGroupId = null;
   function admiralBioHtml(a) {
     const html = formatLore(a.admiralLore, '', []);
     if (!html) return html;
-    return weavePronIntoHtml(html, a.name).html;
+    // The bio is the PERSON's, so the pronunciation woven into it is theirs —
+    // `name` on a flagship entry is the ship.
+    return weavePronIntoHtml(html, a.admiralName || a.name).html;
   }
 
   // The complete "Namesake:" line for a ship (or ''). Uses the namesake text when
@@ -686,94 +688,103 @@ let activeGroupId = null;
 
     const groups = {};
 
+    // One builder for every ship profile in the game, so a famous admiral's
+    // flagship comes out field-for-field identical to a line cruiser. `s` is the
+    // raw ship object from the faction JSON; `cat` its weight class. Anything
+    // specific to a flagship (its admiral, cost split, proper name) is layered on
+    // by the caller — never mixed into the ship's own fields.
+    const buildShip = (s, cat) => ({
+      name: s.name,
+      points: s.cost,
+      tonnage: (s.stats?.tonnage && s.stats.tonnage !== '?') ? s.stats.tonnage : (CATEGORY_LABELS[cat] || cat),
+      scan: s.stats?.scan, sig: s.stats?.sig,
+      thrust: s.stats?.thrust, hull: s.stats?.hull,
+      es: s.stats?.es, ks: s.stats?.ks,
+      bs: s.stats?.bs, g: s.stats?.g,
+      special: s.stats?.special,
+      weapons: s.weapons || [],
+      loads: s.loads || [],
+      special_rules: (s.specialRules || []).map(r => r.name),
+      specialRuleDetails: s.specialRules || [],
+      groupMin: s.groupMin, groupMax: s.groupMax,
+      isRare: s.isRare, isUnique: s.isUnique,
+      additional: !!s.additional,
+      noAdmiral: !!s.noAdmiral,   // e.g. Argonaut "Mind of its Own": no Admiral may be assigned
+      noTonnageCount: !!s.noTonnageCount, // e.g. Argonaut: excluded from the 4.2 tonnage-points budget
+      // How many Deployable Features a Feature Carrier chooses. 1 for every ship
+      // until the Resistance 260731 Battle Carriers (Actium, Salamis), which
+      // "choose two Deployable Features ... (duplicates are allowed)".
+      featureSlots: s.featureSlots || 1,
+      loadoutOptions: s.loadoutOptions || [],
+      lore: s.lore || '',
+      rulesText: s.rulesText || '',
+      famousShipsPrefix: s.famousShipsPrefix || '',
+      famousShips: s.famousShips || [],
+      namesake: s.namesake || '',
+      image: shipArtPath(s.name),
+      variants: s.variants || [],
+      systemSelection: s.systemSelection || null,
+      storeUrl: s.storeUrl || null,
+      altSculpts: s.altSculpts || [],
+      models: s.models || []
+    });
+
     (faction.groups || []).forEach(g => {
       const cat = g.category || 'medium';
       if (!groups[cat]) groups[cat] = { ships: {} };
-      const s = g.ship;
-      groups[cat].ships[g.id] = {
-        name: s.name,
-        points: s.cost,
-        tonnage: (s.stats?.tonnage && s.stats.tonnage !== '?') ? s.stats.tonnage : (CATEGORY_LABELS[cat] || cat),
-        scan: s.stats?.scan, sig: s.stats?.sig,
-        thrust: s.stats?.thrust, hull: s.stats?.hull,
-        es: s.stats?.es, ks: s.stats?.ks,
-        bs: s.stats?.bs, g: s.stats?.g,
-        special: s.stats?.special,
-        weapons: s.weapons || [],
-        loads: s.loads || [],
-        special_rules: (s.specialRules || []).map(r => r.name),
-        specialRuleDetails: s.specialRules || [],
-        groupMin: s.groupMin, groupMax: s.groupMax,
-        isRare: s.isRare, isUnique: s.isUnique,
-        additional: !!s.additional,
-        noAdmiral: !!s.noAdmiral,   // e.g. Argonaut "Mind of its Own": no Admiral may be assigned
-        noTonnageCount: !!s.noTonnageCount, // e.g. Argonaut: excluded from the 4.2 tonnage-points budget
-        // How many Deployable Features a Feature Carrier chooses. 1 for every ship
-        // until the Resistance 260731 Battle Carriers (Actium, Salamis), which
-        // "choose two Deployable Features ... (duplicates are allowed)".
-        featureSlots: s.featureSlots || 1,
-        loadoutOptions: s.loadoutOptions || [],
-        lore: s.lore || '',
-        rulesText: s.rulesText || '',
-        famousShipsPrefix: s.famousShipsPrefix || '',
-        famousShips: s.famousShips || [],
-        namesake: s.namesake || '',
-        image: shipArtPath(s.name),
-        variants: s.variants || [],
-        systemSelection: s.systemSelection || null,
-        storeUrl: s.storeUrl || null,
-        altSculpts: s.altSculpts || [],
-        models: s.models || []
-      };
+      groups[cat].ships[g.id] = buildShip(g.ship, cat);
     });
 
     const famous = (faction.admirals || []).filter(a => a.isFamous);
     if (famous.length > 0) {
-      // Flagship data carries namesake but NOT lore/recorded-ships. Pull those
-      // from the matching regular ship by name (built above) so a famous admiral's
-      // flagship shows its lore in the detail panel.
-      const loreByName = {};
+      // A famous admiral's flagship is a hero unit, not "the line ship plus a
+      // character": 22 of the 24 differ from the class they are named after in
+      // stats, weapons, special rules, loads or cost — Typhoon Vasquez's Heavy
+      // Cruiser is 75 pts as a line ship and 113 as hers, with better Scan and
+      // saves and two rules the line ship has never had. So the flagship is built
+      // from its OWN profile by the same builder as every other ship, and inherits
+      // nothing from its namesake that could be mistaken for rules.
+      //
+      // What it does inherit is flavour, because the hero shares the class's
+      // aesthetic: lore, the namesake note and the recorded-ships list. rulesText
+      // is deliberately NOT inherited — it reads as the ship's own rules, and six
+      // flagships were showing their namesake's upgrade options, offering refits
+      // and system picks the hero unit does not have.
+      const flavourByName = {};
       Object.values(groups).forEach(cat => {
         if (cat && cat.ships) Object.values(cat.ships).forEach(sh => {
-          if (sh && sh.name) loreByName[sh.name] = sh;
+          if (sh && sh.name) flavourByName[sh.name] = sh;
         });
       });
       groups.famous_admirals = { ships: {} };
       famous.forEach(a => {
         const fs = a.flagship;
-        const src = (fs && loreByName[fs.name]) || {};
-        groups.famous_admirals.ships[a.id] = {
-          name: a.name,
-          points: fs ? (a.cost + fs.cost) : a.cost,
+        const src = (fs && flavourByName[fs.name]) || {};
+        const ship = buildShip(fs || { name: a.name }, fs?.category || 'medium');
+        groups.famous_admirals.ships[a.id] = Object.assign(ship, {
+          // Ship fields that need the flagship's own framing.
+          points: fs ? (a.cost + fs.cost) : a.cost,   // admiral + hull, as bought
+          className: fs?.className || null,
+          shipCategory: fs?.category || null,
+          image: admiralArtPath(a.name) || shipArtPath(fs?.name),
+          lore: fs?.lore || src.lore || '',
+          namesake: fs?.namesake || src.namesake || '',
+          famousShips: fs?.famousShips || src.famousShips || [],
+          famousShipsPrefix: fs?.famousShipsPrefix || src.famousShipsPrefix || '',
+          // The admiral riding it. Kept beside the ship's fields, not blended into
+          // them: `name` is the SHIP, `admiralName` is the person.
+          admiralName: a.name,
           admiral_cost: a.cost,
           ship_cost: fs ? fs.cost : 0,
           level: a.level,
           type: 'Famous',
           special_abilities: a.abilities || [],
           ability_picks: a.abilityPicks || 1,
-          ship_name: fs?.name || null,
-          className: fs?.className || null,
           flagshipName: a.flagshipName || null,   // proper named flagship, e.g. "Fortune's Fancy"
-          shipCategory: fs?.category || null,
-          scan: fs?.stats?.scan, sig: fs?.stats?.sig,
-          thrust: fs?.stats?.thrust, hull: fs?.stats?.hull,
-          es: fs?.stats?.es, ks: fs?.stats?.ks,
-          bs: fs?.stats?.bs, g: fs?.stats?.g,
-          special: fs?.stats?.special,
-          tonnage: fs?.tonnage || fs?.stats?.tonnage,
-          weapons: fs?.weapons || [],
-          loads: fs?.loads || [],
-          loadoutOptions: fs?.loadoutOptions || [],
-          special_rules: (fs?.specialRules || []).map(r => r.name),
-          specialRuleDetails: fs?.specialRules || [],
-          lore: fs?.lore || src.lore || '',
-          admiralLore: a.bio || a.lore || '',   // the admiral's personal bio (distinct from the ship lore)
-          namesake: fs?.namesake || src.namesake || '',
-          famousShips: fs?.famousShips || src.famousShips || [],
-          famousShipsPrefix: fs?.famousShipsPrefix || src.famousShipsPrefix || '',
-          rulesText: fs?.rulesText || src.rulesText || '',
-          image: admiralArtPath(a.name) || shipArtPath(fs?.name)
-        };
+          admiralLore: a.bio || a.lore || '',     // the admiral's bio, distinct from ship lore
+          // Retained so older callers that read `ship_name` for the class keep working.
+          ship_name: fs?.name || null
+        });
       });
     }
 
@@ -1182,6 +1193,11 @@ let activeGroupId = null;
         if (adm.type) a.t = adm.type;
         if (adm.selectedAbilities && adm.selectedAbilities.length) a.sa = adm.selectedAbilities;
         if (adm.assignedGroupId) a.ag = adm.assignedGroupId;
+        // A famous admiral's flagship keeps its loadout choice on the admiral, not
+        // on a ship entry (Havelock's Drive Refit). Without this the recipient got
+        // the default refit at the chosen refit's price. Optional key: older
+        // clients ignore it, so shared links stay compatible both ways.
+        if (adm.loadouts && Object.keys(adm.loadouts).length) a.lo = adm.loadouts;
         return a;
       });
     }
@@ -1256,7 +1272,8 @@ let activeGroupId = null;
           level: a.l || 1,
           type: a.t || 'Generic',
           selectedAbilities: a.sa || [],
-          assignedGroupId: a.ag || null
+          assignedGroupId: a.ag || null,
+          loadouts: a.lo || {}
         }));
       } else if (mini.a) {
         fleet.admirals = [{
@@ -5090,9 +5107,9 @@ let activeGroupId = null;
         html += `
         <div class="admiral-card${isDisabled ? ' disabled' : ''}" style="${isDisabled ? 'opacity:0.5;' : ''}">
           <div class="flex gap-md items-start">
-            ${admiral.image ? `<div class="ship-card-image"><img src="${esc(thumbUrl(admiral.image))}" alt="${esc(admiral.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : admiralThumb(admiral.level, null)}
+            ${admiral.image ? `<div class="ship-card-image"><img src="${esc(thumbUrl(admiral.image))}" alt="${esc(admiral.admiralName)}" loading="lazy" onerror="this.style.display='none'"></div>` : admiralThumb(admiral.level, null)}
             <div style="flex:1;min-width:0">
-              <div class="admiral-name">${esc(admiral.name)}</div>
+              <div class="admiral-name">${esc(admiral.admiralName)}</div>
               <div class="admiral-level">Level ${admiral.level || '?'} Famous${tooHighLevel ? `, requires ${sizeInfo.label}+` : ''}</div>
               <div class="flex gap-sm flex-wrap" style="margin-top:var(--sp-xs)">
                 <span class="badge badge-gold">${admiral.points} pts</span>
@@ -5185,7 +5202,8 @@ let activeGroupId = null;
 
     currentFleet.admirals.push({
       shipKey,
-      name: admiral.name,
+      // `name` on the DB entry is the SHIP; the person is admiralName.
+      name: admiral.admiralName || admiral.name,
       points: admiral.points || 0,
       level: admiral.level,
       type: 'Famous',
@@ -5921,11 +5939,21 @@ let activeGroupId = null;
             if (fsp) {
               const fsName = flagshipLabel(fsp, true, true);
               const fsSize = fsp.shipCategory ? (CATEGORY_LABELS[fsp.shipCategory] || '') : '';
-              const wpns = fsp.weapons || [];
+              // The flagship's loadout choice lives on the admiral (a.loadouts), so
+              // the printed sheet has to resolve it the same way the screen does —
+              // otherwise Havelock prints Thrust 6" while the app shows the 9" refit
+              // he was actually paid for.
+              const fsEff = effectiveStats(fsp, a, f.faction);
+              const wpns = [...(fsp.weapons || [])];
+              (fsp.loadoutOptions || []).forEach((lo, i) => {
+                const sel = (a.loadouts && a.loadouts[i] !== undefined) ? a.loadouts[i] : 0;
+                const opt = lo.options && lo.options[sel];
+                if (opt && Array.isArray(opt.weapons)) wpns.push(...opt.weapons);
+              });
               flagshipHtml = `<div class="dp-flagship">
                 <div class="dp-flagship-name">${fsName}${fsSize ? ', ' + esc(fsSize) : ''}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
-                ${dpStatLine(fsp, null)}
-                ${dpWeaponTable((wpns || []).map(w => ({ ...w })))}
+                ${dpStatLine(fsEff.stats, fsEff.mods)}
+                ${dpWeaponTable(wpns.map(w => ({ ...w })))}
                 ${(fsp.specialRuleDetails || []).filter(r => r.description).length ? `<div class="dp-rules">${fsp.specialRuleDetails.filter(r => r.description).map(r => `<span class="dp-rule"><b>${esc(r.name)}:</b> ${ruleHtml(r.description)}</span>`).join('')}</div>` : ''}
               </div>`;
             }
@@ -7145,7 +7173,9 @@ let activeGroupId = null;
     const fam = fdb.groups && fdb.groups.famous_admirals && fdb.groups.famous_admirals.ships;
     if (fam) {
       for (const [id, fa] of Object.entries(fam)) {
-        if ((fa.name || '').toLowerCase() === nm) return { id: uuid(), shipKey: id, name: fa.name, points: fa.points || 0, level: fa.level || 1, type: 'Famous', selectedAbilities: [] };
+        // Match on the PERSON: an imported army list names the admiral, and the
+        // entry's `name` is now the ship they fly.
+        if ((fa.admiralName || '').toLowerCase() === nm) return { id: uuid(), shipKey: id, name: fa.admiralName, points: fa.points || 0, level: fa.level || 1, type: 'Famous', selectedAbilities: [] };
       }
     }
     // Named faction rank (Captain, Vice Director, Artificer, …)
@@ -7364,10 +7394,44 @@ let activeGroupId = null;
     try { localStorage.setItem(PLAY_STORAGE_PREFIX + playFleet.id, JSON.stringify(playState)); } catch {}
   }
 
+  // A famous admiral's flagship lives on the admiral entry (fleet.admirals), NOT in
+  // fleet.battleGroups — the builder renders it as its own overview card. Play Mode
+  // walks battleGroups, so without this the flagship never reached the table. Wrap
+  // each famous admiral in a synthetic one-ship group so hull, orders, spikes and
+  // activation persist in playState exactly like a real group's. Ids are derived
+  // from shipKey (one famous admiral per fleet) so they stay stable across sessions.
+  function playFlagshipGroups(fleet) {
+    return (fleet.admirals || []).map(a => {
+      if (a.type !== 'Famous' || !a.shipKey) return null;
+      const db = findShipInDB(fleet.faction, 'famous_admirals', a.shipKey);
+      if (!db) return null;
+      return {
+        id: 'flagship-' + a.shipKey,
+        name: flagshipLabel(db),
+        isFlagship: true,
+        admiral: a,
+        db,
+        ships: [{
+          id: 'flagship-ship-' + a.shipKey,
+          shipKey: a.shipKey,
+          groupCategory: 'famous_admirals',
+          loadouts: a.loadouts || {},
+          systems: a.systems || []
+        }]
+      };
+    }).filter(Boolean);
+  }
+
+  // Everything that is a Group on the table, in the same order the overview lists
+  // them: the fleet's battlegroups, then famous-admiral flagships.
+  function playAllGroups(fleet) {
+    return [...(fleet.battleGroups || []), ...playFlagshipGroups(fleet)];
+  }
+
   function initPlayState(fleet, faction) {
     const ex = loadPlayState(fleet.id) || {};
     playState = { round: ex.round || 1, passes: ex.passes || [], opponentGroups: ex.opponentGroups || 0, vp: ex.vp || 0, oppVp: ex.oppVp || 0, battlegroups: ex.battlegroups || {}, ships: ex.ships || {} };
-    for (const bg of (fleet.battleGroups || [])) {
+    for (const bg of playAllGroups(fleet)) {
       if (!playState.battlegroups[bg.id]) playState.battlegroups[bg.id] = { order: 'Standard', activated: false, spikes: 0 };
       else if (playState.battlegroups[bg.id].spikes === undefined) playState.battlegroups[bg.id].spikes = 0;
       for (const ship of (bg.ships || [])) {
@@ -7404,8 +7468,10 @@ let activeGroupId = null;
     const el = document.getElementById('view-play');
     if (!playFleet || !playState) { el.innerHTML = '<div class="play-empty">No fleet loaded.</div>'; return; }
 
-    // Pass token auto-calc from opponent group count.
-    const myGroups = (playFleet.battleGroups || []).length;
+    // Pass token auto-calc from opponent group count. A famous admiral's flagship
+    // is a Group on the table, so it counts here as well as rendering below.
+    const allBgs = playAllGroups(playFleet);
+    const myGroups = allBgs.length;
     const oppGroups = playState.opponentGroups || 0;
     const calcTokens = oppGroups > 0 ? Math.max(0, oppGroups - myGroups - 1) : 0;
     // Always resize — guards against ghost tokens when opp groups drops back to 0.
@@ -7422,8 +7488,8 @@ let activeGroupId = null;
 
     const vp = playState.vp || 0;
     const oppVp = playState.oppVp || 0;
-    const activatedCount = (playFleet.battleGroups || []).filter(bg => playState.battlegroups[bg.id]?.activated).length;
-    const bgCards = (playFleet.battleGroups || []).map(bg => renderPlayBgCard(bg, playFleet.faction)).join('');
+    const activatedCount = allBgs.filter(bg => playState.battlegroups[bg.id]?.activated).length;
+    const bgCards = allBgs.map(bg => renderPlayBgCard(bg, playFleet.faction)).join('');
 
     el.innerHTML = `
       <div class="play-header">
@@ -7477,14 +7543,16 @@ let activeGroupId = null;
 
     let tonCode = 'M';
     if (bg.ships && bg.ships.length) {
-      const db0 = findShipInDB(faction, bg.ships[0].groupCategory, bg.ships[0].shipKey);
+      const db0 = bg.isFlagship ? bg.db : findShipInDB(faction, bg.ships[0].groupCategory, bg.ships[0].shipKey);
       if (db0 && db0.tonnage) tonCode = playTonCode(db0.tonnage);
     }
     const tonLabels = { L: 'Light', M: 'Medium', H: 'Heavy', C: 'Super-Heavy' };
 
+    // Generic/Faction admirals are attached to a group via assignedGroupId (set by
+    // assignAdmiralShip); a famous admiral flies the synthetic flagship group.
     let admiralStr = '';
-    const bgAdmiral = (playFleet.admirals || []).find(a => a.groupId === bg.id);
-    if (bgAdmiral) admiralStr = ` <span class="play-bg-admiral">&mdash; ${esc(bgAdmiral.name || 'Admiral')} (${bgAdmiral.rating || 0})</span>`;
+    const bgAdmiral = bg.isFlagship ? bg.admiral : (playFleet.admirals || []).find(a => a.assignedGroupId === bg.id);
+    if (bgAdmiral) admiralStr = ` <span class="play-bg-admiral">&mdash; ${esc(bgAdmiral.name || 'Admiral')} (L${bgAdmiral.level || 0})</span>`;
 
     const spikePips = [0,1,2,3].map(i =>
       `<button class="play-spike-pip${i < spikes ? ' play-spike-on' : ''}" onclick="App.playSpikeChange('${escAttr(bg.id)}',${i < spikes ? -1 : 1})" title="${i < spikes ? 'Remove Spike' : 'Add Spike (+3&quot; Sig)'}">
@@ -7500,10 +7568,11 @@ let activeGroupId = null;
       return `<button class="play-order-chip${isActive ? ' play-order-sel' : ''}" data-rule-desc="${desc}" oncontextmenu="return false" onpointerdown="App.playOrderDown(event,'${bid}','${oo}')" onpointermove="App.playOrderMove(event)" onpointerup="App.playOrderUp(event,'${bid}','${oo}')" onpointercancel="App.playOrderCancel()" onpointerleave="App.playOrderCancel()">${esc(o)}</button>`;
     }).join('');
 
-    // Pass famous admiral flagship name to the first ship in the group.
-    const famAdmiral = bgAdmiral && bgAdmiral.flagshipName ? bgAdmiral : null;
-    const shipsHtml = (bg.ships || []).map((ship, idx) =>
-      renderPlayShip(ship, faction, idx === 0 && famAdmiral ? famAdmiral.flagshipName : null, bgs.order)
+    // A flagship is an ordinary ship profile here; the only extra is its proper
+    // name, e.g. "Fortune's Fancy", shown ahead of the class. Not every famous
+    // admiral's ship is named — then the class alone is the title.
+    const shipsHtml = (bg.ships || []).map(ship =>
+      renderPlayShip(ship, faction, bg.isFlagship ? (bg.db.flagshipName || null) : null, bgs.order)
     ).join('');
     const actDone = bgs.activated;
 
@@ -7552,15 +7621,12 @@ let activeGroupId = null;
       const desc = typeof r === 'string' ? '' : (r.description || '');
       if (name && desc) map[name.toLowerCase()] = { description: desc, page: (r && r.page) || '' };
     });
-    if (db) {
-      add(db.specialRules);
-      add(db.features);
-      (Array.isArray(db.loadoutOptions) ? db.loadoutOptions : []).forEach((lo, i) => {
-        const sel = (ship && ship.loadouts && ship.loadouts[i] !== undefined) ? ship.loadouts[i] : 0;
-        const opt = lo.options && lo.options[sel];
-        if (opt) { add(opt.specialRules); add(opt.features); }
-      });
-    }
+    // specialRuleDetails is where the built ship DB keeps rule objects with text —
+    // `specialRules` only ever exists on a Space Station, and `features` on a ship
+    // never existed at all, so this map was always empty. Loadout options grant
+    // rules by NAME (`gainRules`), which carry no local text; those resolve through
+    // the shared glossary in the caller.
+    if (db) add(db.specialRuleDetails);
     return map;
   }
 
@@ -7716,12 +7782,22 @@ let activeGroupId = null;
       launchHtml = `<div class="play-launch-row${canLaunch ? '' : ' play-launch-off'}">${items}${offNote}</div>`;
     }
 
-    // Special rules — clickable chips. Note: field is specialRules (camelCase).
-    const rules = (db.specialRules || []).map(r => (typeof r === 'string' ? r : r.name)).filter(Boolean);
+    // Special rules — clickable chips. The built ship DB stores these as
+    // `special_rules` (names) with the text in `specialRuleDetails`; this used to
+    // read `specialRules`, which only Space Stations have, so no ship ever showed
+    // a rule chip here. Rules granted by the selected loadout (a Faust's Cloaking
+    // Keel gives Stealth and Cloak-2) are named on the option and join the list.
+    const rules = [
+      ...(db.special_rules || (db.specialRuleDetails || []).map(r => r && r.name)),
+      ...loadoutGainedRuleNames(db, ship)
+    ].map(r => (typeof r === 'string' ? r : r && r.name)).filter(Boolean);
     let rulesHtml = '';
     if (rules.length) {
-      const chips = rules.map(rname => {
-        const fullRule = lookupRuleFull(rname);
+      const seenRule = new Set();
+      const chips = rules.filter(r => !seenRule.has(r) && seenRule.add(r)).map(rname => {
+        // Ship-specific rules (Advanced Artillery, Bombardment Spine) carry their
+        // text on the ship rather than in the shared glossary — check both.
+        const fullRule = lookupRuleFull(rname) || localRules[rname.toLowerCase()];
         if (fullRule && fullRule.description) {
           return `<span class="play-rule-chip has-tooltip" data-rule-desc="${escAttr(fullRule.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(rname)}</span>`;
         }
@@ -7854,9 +7930,11 @@ let activeGroupId = null;
     if (!playState) return;
     const ss = playState.ships[shipId];
     if (!ss) return;
+    // Must walk every group on the table, flagships included — a group this misses
+    // keeps hullMax at 1, which silently clamps the ship to 1 Hull.
     let hullMax = 1;
     if (playFleet) {
-      outer: for (const bg of (playFleet.battleGroups || [])) {
+      outer: for (const bg of playAllGroups(playFleet)) {
         for (const ship of (bg.ships || [])) {
           if (ship.id === shipId) {
             const db = findShipInDB(playFleet.faction, ship.groupCategory, ship.shipKey);
@@ -7900,6 +7978,16 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-08-15', title: 'Famous admirals\' flagships are proper hero units now', items: [
+      'Reported by LeoDrael: with a named admiral in the fleet, their ship never appeared in the Play Mode ship list. It does now — as its own Group, with hull tracking, spikes, orders and an Activate button like any other, counted in the activation tally and the pass-token maths.',
+      'Pulling on that thread found the reason. The app had been treating a famous admiral as "a line ship with a character aboard", when a flagship is really its own hero unit. 22 of the 24 differ from the class they are named after: Typhoon Vasquez\'s Heavy Cruiser is 75 points as a line ship and 113 as hers, with better Scan and both saves and two special rules the line ship has never had. Flagships are now built exactly like every other ship in the game, from their own profile, so their real stats show up everywhere the app shows a ship.',
+      'The clearest symptom: six flagships were displaying their namesake\'s upgrade rules as their own. Agency offered a Torpedo Upgrade, Baba Yaga a Cloaking Keel, Mergen a Drive Augmentation — none of which those hero units can buy. Typhoon Vasquez and Magellan were told they "must take five/eight options from the Systems list" when their profiles offer no systems at all. All six now show only their own rules.',
+      'Ship special rules were missing from every ship card in Play Mode, not just flagships — the screen was reading a field that ships do not have, so the rules row was always empty. Rules are back, tappable for their full text, including ones granted by a loadout you picked (a Faust with the Cloaking Keel now shows Stealth and Cloak-2).',
+      'A flagship could not be repaired in Play Mode. Damage went in, but the healing button clamped it to 1 Hull, because the code looked for the ship among your battlegroups and a flagship is not in there.',
+      'Sharing a fleet quietly dropped the flagship\'s loadout choice while still charging for it, so Havelock arrived at the other end with the standard drive at the refit\'s price. The printed sheet had the same blind spot, printing his base Thrust of 6" next to the 9" the app showed. Both now carry the choice, and so does mobile, which was discarding it on import even though it cannot pick one itself.',
+      'Thirteen flagships carry no tonnage of their own, which showed a Dreadnought as Medium and denied it a crippling tracker. They read from their weight class now: the Zenith is Super-Heavy again.',
+      'An admiral you assign to one of your own Capital ships was meant to have their name and level on that group\'s header in Play Mode. That had never worked. It does now.',
+    ]},
     { date: '2026-08-13', title: 'The app threw you out of your fleet once a minute on Firefox for iOS', items: [
       'Reported by a reader on an iPhone: "every 1-2 minutes it will almost refresh the whole thing, taking me out of the list, clearing and reloading to the list page." It was a loop the app built for itself. Every 60 seconds it asked whether a new version had been published; the answer arrived as a new worker that took over the page immediately, and taking over triggered a reload. On browsers that decide the file has not changed nothing happens and nobody notices. On Firefox for iOS the answer came back "new" nearly every time, so it reloaded once a minute, forever, out of whatever you were building.',
       'On mobile it ran twice over: the page asked for updates once in its own markup and again in the mobile script, so there were two reload handlers and two timers racing on one screen. Mobile is where the report came from.',
@@ -7937,7 +8025,7 @@ let activeGroupId = null;
       'The Actium and Salamis choose two Deployable Features each, and may take the same one twice. Both apps now offer a picker per slot instead of one.',
       'The Cyrus is Rare, so the usual one per Skirmish, two per Clash, three per Battle and four per Reconquest limit is enforced on it.',
       'Resistance price and gun changes: the Phalanx is 185 pts and its Long Battery splits into a Half and a Full Battery; the Senator is 155 pts and gains a Missile Turret Pair alongside a smaller Salvo; the Tribune is 205 pts, which also drops Hagen to 250. The Centurion and Gladiator can both take a Drive Refit for +25 pts and 3 inches of Thrust, and the Centurion Full Battery now hits with Critical-1 and Fusillade-2.',
-      'Shaltari: Nefertem of the Dawn joins in the Invisible Night, a cloaked heavy destroyer with a Microwave Crescent.',
+      'Shaltari: Nefertem of the Dawn joins in the Invisible Light, a cloaked heavy destroyer with a Microwave Crescent.',
       'Every fleet can now hire the M.A.B. 67 Fuel Transport. Its Fuel Transporter rule gives a Group nearby extra movement, and Ignite Reserves lets it go out in a fireball.',
     ]},
     { date: '2026-07-31', title: 'The Admiral warning waits its turn', items: [
@@ -9160,7 +9248,11 @@ let activeGroupId = null;
     const dbShip = findShipInDB(faction, category, shipKey);
     if (!dbShip) return;
 
-    document.getElementById('detail-ship-name').textContent = dbShip.name;
+    // A flagship's title is the ship: its proper name and class if it has one
+    // ("Fortune's Fancy (Tribune Battlecruiser)"), the class alone otherwise. The
+    // admiral is named on the Admiral Abilities block further down.
+    document.getElementById('detail-ship-name').textContent =
+      category === 'famous_admirals' ? flagshipLabel(dbShip, true) : dbShip.name;
     const body = document.getElementById('detail-ship-body');
 
     const img = dbShip.image;
@@ -9257,7 +9349,7 @@ let activeGroupId = null;
       ).join('');
       if (picks) inner += `<div class="detail-ability-picks">Also chooses <b>${picks}</b> from the faction Abilities Table (each Ability only once per list).</div>`;
       if (inner) {
-        admiralHtml = `<div class="detail-section-label">Admiral Abilities${dbShip.level ? ` <span class="detail-rule-page">Level ${esc(dbShip.level)}</span>` : ''}</div><div class="detail-rules-list">${inner}</div>`;
+        admiralHtml = `<div class="detail-section-label">${esc(dbShip.admiralName || 'Admiral')}${dbShip.level ? ` <span class="detail-rule-page">Level ${esc(dbShip.level)}</span>` : ''}</div><div class="detail-rules-list">${inner}</div>`;
       }
     }
 
