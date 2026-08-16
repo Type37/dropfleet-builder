@@ -48,7 +48,11 @@ ART_DIR_DEFAULT = "assets/art"
 # wrapped cells re-join deterministically). Extracts name/cost/class/tonnage/
 # stats/weapons/loads/refits/famous-ships. Quotes verbatim; invents nothing.
 # ─────────────────────────────────────────────────────────────────────────────
-ARC_RE = re.compile(r'^[FSRN](?:/?[FSRN])*$')
+# Arcs seen across every faction: F, S, R, N (narrow), B (broadside), and slashed
+# combinations of them (F/S, F/S/R), plus the fixed pairs FN, SL, SR. B was missing
+# here, so every broadside row failed to register as a weapon and its name was
+# swallowed into the row above it.
+ARC_RE = re.compile(r'^[FSRNBL](?:/?[FSRNBL])*$')
 LOCK_RE = re.compile(r'^(\d\+|-)$')
 NUM_RE = re.compile(r'^(\d+|-)$')
 TYPE_RE = re.compile(r'^[KEC]$')
