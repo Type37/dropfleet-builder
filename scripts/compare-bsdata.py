@@ -243,7 +243,7 @@ def main():
     if as_json:
         print(json.dumps({"matched": matched, "diffs": diffs, "unmatched": missing,
                           "adjudicated": [k[0] for k in known]}, indent=1))
-        return 1 if diffs else 0
+        return 1 if (diffs or missing) else 0
 
     print(f"Cross-check vs BSData/dropfleet-commander-2024: {matched} ships matched.\n")
     if diffs:
@@ -272,6 +272,11 @@ def main():
         for fname, name, pts in missing:
             print(f"  {name}  ({pts} pts, {fname})")
         print()
+
+    # The count the report above actually printed, for CI to gate the alert on so
+    # a heading can never assert a finding the block does not list. The workflow
+    # strips this line from the issue body.
+    print(f"#findings={len(diffs) + len(missing)}")
 
     return 1 if (diffs or missing) else 0
 

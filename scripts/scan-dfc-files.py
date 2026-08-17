@@ -103,6 +103,14 @@ def main():
         if not as_json:
             print(f"\nManifest updated: {MANIFEST}")
 
+    # An exit code says "something happened" but not how much, and CI has twice
+    # now announced a finding whose lines were nowhere in the report. The trailer
+    # is the count the report actually printed, so the alert can gate on it and
+    # never claim more than the block below the heading shows. Stripped from the
+    # issue body by the workflow.
+    if not as_json:
+        print(f"#findings={0 if update else n}")
+
     # exit 1 when there are changes (and we didn't just rebaseline) so a scheduler can branch on it
     return 1 if (n and not update) else 0
 

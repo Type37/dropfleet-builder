@@ -41,6 +41,12 @@ jobs:
 
       # Both scripts are stdlib-only and exit 1 on findings, 0 when clean, so
       # neither needs installs and neither should fail the job on a finding.
+      #
+      # The alert gates on the "#findings=N" trailer each report ends with, not
+      # on the exit code. An exit code cannot say how many findings there were,
+      # and a mail that announces findings it does not list is worse than no
+      # mail: #7 and #9 were both that. If the trailer is somehow absent, fall
+      # back to the exit code rather than going quiet about a real change.
       - name: TTCombat downloads page
         id: files
         run: |
@@ -52,11 +58,10 @@ jobs:
           if [ "$code" -gt 1 ]; then
             echo "scanner errored with exit $code" >&2
             exit "$code"
-          elif [ "$code" -eq 1 ]; then
-            echo "changed=yes" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=no" >> "$GITHUB_OUTPUT"
           fi
+          n=$(sed -n 's/^#findings=//p' files.txt | tail -1)
+          sed -i '/^#findings=/d' files.txt
+          echo "findings=${n:-$code}" >> "$GITHUB_OUTPUT"
 
       - name: Cross-check against BSData
         id: bsdata
@@ -69,14 +74,13 @@ jobs:
           if [ "$code" -gt 1 ]; then
             echo "comparator errored with exit $code" >&2
             exit "$code"
-          elif [ "$code" -eq 1 ]; then
-            echo "changed=yes" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=no" >> "$GITHUB_OUTPUT"
           fi
+          n=$(sed -n 's/^#findings=//p' bsdata.txt | tail -1)
+          sed -i '/^#findings=/d' bsdata.txt
+          echo "findings=${n:-$code}" >> "$GITHUB_OUTPUT"
 
       - name: Report
-        if: steps.files.outputs.changed == 'yes' || steps.bsdata.outputs.changed == 'yes' || inputs.test_alert
+        if: steps.files.outputs.findings != '0' || steps.bsdata.outputs.findings != '0' || inputs.test_alert
         uses: actions/github-script@v7
         with:
           script: |
@@ -87,11 +91,14 @@ jobs:
               ? ['**Test alert.** Nothing is wrong; this only proves the email path works. Close it.', '']
               : ['The Dropfleet data needs a look.', ''];
 
-            if ('${{ steps.files.outputs.changed }}' === 'yes') {
-              parts.push('## TTCombat published something', '', '```', read('files.txt'), '```', '');
+            const files = Number('${{ steps.files.outputs.findings }}' || 0);
+            const bsdata = Number('${{ steps.bsdata.outputs.findings }}' || 0);
+
+            if (files) {
+              parts.push(`## TTCombat published something (${files})`, '', '```', read('files.txt'), '```', '');
             }
-            if ('${{ steps.bsdata.outputs.changed }}' === 'yes') {
-              parts.push('## BSData cross-check', '',
+            if (bsdata) {
+              parts.push(`## BSData cross-check (${bsdata})`, '',
                 'Either a ship whose number or rule differs from the community catalogue,',
                 'or one of theirs we have no counterpart for. Read the block: it says which.',
                 '',
