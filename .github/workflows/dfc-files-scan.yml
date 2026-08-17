@@ -91,10 +91,14 @@ jobs:
               parts.push('## TTCombat published something', '', '```', read('files.txt'), '```', '');
             }
             if ('${{ steps.bsdata.outputs.changed }}' === 'yes') {
-              parts.push('## We disagree with BSData', '',
-                'Each line is one ship where our number and the community catalogue differ.',
-                'The PDF settles it. If we turn out to be right, add the ship to `ADJUDICATED`',
-                'in `scripts/compare-bsdata.py` with the page reference so it stops reappearing.',
+              parts.push('## BSData cross-check', '',
+                'Either a ship whose number or rule differs from the community catalogue,',
+                'or one of theirs we have no counterpart for. Read the block: it says which.',
+                '',
+                'The PDF settles a difference. If we turn out to be right, add the ship to',
+                '`ADJUDICATED` in `scripts/compare-bsdata.py` with the page reference so it',
+                'stops reappearing. An unmatched ship is usually a rename on one side or the',
+                'other, and often theirs, since TTCombat re-uploads reach us first.',
                 '', '```', read('bsdata.txt'), '```', '');
             }
             parts.push(

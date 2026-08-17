@@ -70,6 +70,15 @@ ADJUDICATED = {
 }
 
 
+# Ships one side has renamed. Mapping their old name onto ours keeps the stats
+# being compared instead of the ship dropping out as unmatched every week.
+# {BSData name: our name}
+RENAMED = {
+    # TTCombat's Shaltari 260731 re-upload renamed the ship; integrated in 9fe9499.
+    "Nefertem of the Dawn - Invisible Night": "Nefertem of the Dawn - Invisible Light",
+}
+
+
 def norm(s):
     """Compare loosely: BSData writes 7" where we may write 7'' or 7”, and their
     ship names omit the class suffix we append ("Cyrus" vs "Cyrus Battlecruiser")."""
@@ -163,6 +172,7 @@ def find_ours(bs_name, ours, factions):
     """Match "Cyrus" to our "Cyrus Battlecruiser". Prefer an exact hit, else a
     unique ship whose name starts with the BSData name followed by a space."""
     keys = list(factions) if factions else list(ours)
+    bs_name = RENAMED.get(bs_name, bs_name)
     for fk in keys:
         if bs_name in ours[fk]:
             return fk, bs_name, ours[fk][bs_name]
@@ -254,7 +264,9 @@ def main():
                 print(f"      {r}")
         print()
 
-    if missing and not quiet:
+    # Unmatched ships are a finding, not background: they are half of what the
+    # exit code reports, so --quiet must keep them or the alert names no cause.
+    if missing:
         print(f"{len(missing)} BSData ship(s) with no counterpart here "
               f"(new ships, or naming that needs a manual look):")
         for fname, name, pts in missing:
