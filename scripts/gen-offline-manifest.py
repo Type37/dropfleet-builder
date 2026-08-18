@@ -45,6 +45,9 @@ CORE_FILES = [
 DIR_GROUPS = [
     ('core', 'data', ('.json',)),
     ('core', 'assets/logos', ('.png', '.webp', '.svg', '.ico')),
+    # Play Mode's Spike and Crippling-Effect counters. Tiny, and Play Mode is the
+    # one screen most likely to be used with no signal, so they belong in core.
+    ('core', 'assets/tokens', ('.svg',)),
     ('art', 'assets/art/thumb', ('.webp',)),
     ('art', 'assets/art/stations', ('.webp',)),
 ]

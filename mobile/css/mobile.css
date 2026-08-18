@@ -2633,6 +2633,7 @@ body.sheet-open .sheet-scrim {
 .play-ton-M { background: #e8eef8; color: #1b3a7a; }
 .play-ton-H { background: #fdf3e7; color: #7a4510; }
 .play-ton-S { background: #f5e8f5; color: #6a1b6a; }
+.play-ton-P { background: rgba(106,76,156,.12); color: #6a4c9c; }
 .play-bg-name { font-weight: var(--weight-semibold); font-size: 13px; flex: 1; }
 .play-bg-admiral { color: var(--fg3); font-weight: var(--weight-regular); font-size: 11px; }
 .play-act-btn {
@@ -2653,14 +2654,32 @@ body.sheet-open .sheet-scrim {
   color: var(--danger); font-weight: var(--weight-semibold); font-size: 12px;
   min-width: 5.5em; display: inline-block;
 }
-.play-spike-pips { display: flex; gap: 4px; margin-left: auto; }
-.play-spike-pip {
-  width: 32px; height: 32px; border: none; background: none; padding: 4px; cursor: pointer;
-  color: var(--fg3); display: flex; align-items: center; justify-content: center;
+/* Official token art. Full colour, so an inactive state is shown by dimming the
+   whole token rather than by recolouring a glyph. */
+.tok { display: block; width: 100%; height: 100%; object-fit: contain; }
+
+/* Spike counter: one token that fills as Spikes accumulate, flanked by -/+. */
+.play-spike-ctrl { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.play-spike-btn {
+  width: 32px; height: 32px; border: 1px solid var(--stroke1); background: var(--paper-alt);
+  color: var(--fg2); border-radius: var(--radius-md); font-size: 16px; line-height: 1;
+  cursor: pointer; padding: 0; flex-shrink: 0;
 }
-.play-spike-pip svg { width: 22px; height: 22px; }
-.play-spike-pip.play-spike-on { color: var(--gold); }
-.play-spike-pip:active { opacity: .6; }
+.play-spike-btn:disabled { opacity: .3; cursor: default; }
+.play-spike-btn:active:not(:disabled) { background: var(--navy); color: #fff; }
+.play-spike-token {
+  position: relative; width: 38px; height: 38px; padding: 0; border: none;
+  background: none; cursor: pointer; flex-shrink: 0;
+}
+.play-spike-token:active { transform: scale(.94); }
+.play-spike-token.play-spike-none .play-spike-art { opacity: .22; }
+.play-spike-count {
+  position: absolute; right: -2px; bottom: -2px; min-width: 16px; height: 16px;
+  border-radius: 8px; background: var(--navy); color: #fff; font-size: 10px;
+  font-weight: var(--weight-bold); line-height: 16px; text-align: center;
+  padding: 0 3px; box-shadow: 0 0 0 1.5px var(--card-bg);
+}
+.play-spike-none .play-spike-count { background: var(--fg4); }
 
 /* Orders row */
 .play-orders-row {
@@ -2675,10 +2694,6 @@ body.sheet-open .sheet-scrim {
 }
 .play-order-chip:active { opacity: .7; }
 .play-order-chip.play-order-sel { background: var(--navy); color: #fff; border-color: var(--navy); }
-.play-orders-hint {
-  font-size: 9px; color: var(--fg4); letter-spacing: .04em; text-transform: uppercase;
-  padding: 3px var(--sp-m) 0;
-}
 /* Tappable rule chips in the weapon Special column and launch specials. */
 .play-wt-rule { color: var(--navy); border-bottom: 1px dotted var(--navy); cursor: pointer; white-space: nowrap; }
 .play-wt-rule-plain, .play-wt-rule-none { color: var(--fg4); }
@@ -2687,6 +2702,64 @@ body.sheet-open .sheet-scrim {
 .play-launch-off { opacity: .4; }
 .play-launch-off .play-launch-tap { pointer-events: none; border-bottom: none; }
 .play-launch-off-note { font-size: 10px; font-weight: var(--weight-bold); color: var(--danger); letter-spacing: .02em; margin-left: 4px; }
+.play-launch-block { padding: 4px 0 2px; }
+.play-launch-block .weapon-table { margin-top: 2px; }
+.play-launch-block { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+
+/* Play-mode toolbar: reorder + collapse-all, above the group cards. */
+.play-toolbar {
+  display: flex; gap: var(--sp-s); align-items: center;
+  padding: var(--sp-s) var(--sp-m) 0;
+}
+.play-tool-btn {
+  font-size: 12px; font-weight: var(--weight-semibold); border-radius: var(--radius-pill);
+  border: 1px solid var(--stroke1); background: var(--paper-alt); color: var(--fg2);
+  padding: 5px 12px; cursor: pointer; min-height: 32px;
+}
+.play-tool-btn:active { opacity: .7; }
+.play-tool-btn.play-tool-on { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+/* Collapse chevron + the mini summary a folded card keeps showing. */
+.play-collapse-btn {
+  border: none; background: none; padding: 2px; margin: -2px 0 -2px -4px; cursor: pointer;
+  color: var(--fg3); display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; flex-shrink: 0;
+}
+.play-collapse-btn svg { width: 18px; height: 18px; transition: transform var(--duration-fast); }
+.play-bg-collapsed .play-bg-header { border-bottom: none; }
+.play-bg-mini {
+  display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center;
+  padding: 6px var(--sp-m) 8px; font-size: 11px; color: var(--fg3);
+}
+.play-mini-order {
+  font-weight: var(--weight-semibold); color: var(--navy);
+  background: var(--paper-alt); border-radius: var(--radius-pill); padding: 2px 8px;
+}
+.play-mini-spikes { color: var(--gold); font-weight: var(--weight-semibold); }
+.play-mini-hull { color: var(--fg2); }
+.play-mini-hull b { font-variant-numeric: tabular-nums; }
+.play-mini-hull.play-mini-crip b { color: var(--gold); }
+.play-mini-hull.play-mini-dead { text-decoration: line-through; opacity: .55; }
+
+/* Reorder arrows, shown only while the Reorder mode is on. */
+.play-reorder { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; margin: -4px 2px -4px 0; }
+.play-reorder-btn {
+  border: 1px solid var(--stroke1); background: var(--paper-alt); color: var(--fg2);
+  border-radius: var(--radius-sm); width: 30px; height: 22px; font-size: 10px;
+  line-height: 1; cursor: pointer; padding: 0;
+}
+.play-reorder-btn:disabled { opacity: .3; cursor: default; }
+.play-reorder-btn:active:not(:disabled) { background: var(--navy); color: #fff; }
+
+/* Payload Ships: a card for hull tracking, but never an activation. */
+.play-payload-tag {
+  font-size: 11px; font-weight: var(--weight-semibold); color: #6a4c9c;
+  background: rgba(106,76,156,.1); border-radius: var(--radius-pill); padding: 3px 9px; white-space: nowrap;
+}
+.play-payload-note {
+  font-size: 11px; color: var(--fg3); line-height: 1.4;
+  padding: 6px var(--sp-m); border-bottom: 1px solid var(--stroke3);
+}
 
 /* Ship list */
 .play-ships { padding: var(--sp-s) 0; }
@@ -2834,8 +2907,11 @@ body.sheet-open .sheet-scrim {
   color: var(--fg2); padding: 0; display: flex; align-items: center; justify-content: center;
 }
 .play-crip-adj:active { opacity: .6; }
-.play-crip-icon { width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; }
-.play-crip-icon svg { width: 14px; height: 14px; }
+.play-crip-icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.play-crip-icon svg { width: 18px; height: 18px; }
+/* Token art is full colour; an untracked effect reads as a dimmed counter. */
+.play-crip-tok .tok, .play-crip-counter .tok { opacity: .45; filter: grayscale(.7); transition: opacity var(--duration-fast), filter var(--duration-fast); }
+.play-crip-on .tok { opacity: 1; filter: none; }
 .play-crip-badge-lbl { font-size: 10px; white-space: nowrap; }
 .play-crip-count { font-weight: var(--weight-bold); min-width: 12px; text-align: center; }
 /* Active states */
@@ -2911,6 +2987,7 @@ body.sheet-open .sheet-scrim {
 .play-ton-card-M { border-left: 3px solid #1b3a7a; }
 .play-ton-card-H { border-left: 3px solid #7a4510; }
 .play-ton-card-C { border-left: 3px solid var(--danger); }
+.play-ton-card-P { border-left: 3px solid #6a4c9c; }
 .play-ton-C { background: rgba(196,60,47,.12); color: var(--danger); }
 
 /* Weapons table horizontal scroll */

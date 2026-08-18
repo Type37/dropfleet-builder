@@ -3,7 +3,7 @@
 // populating the cache as resources are fetched.
 // Bump this on every deploy so existing clients purge the old cache on activate
 // (the app updates frequently — stale assets must not survive a new build).
-const CACHE = 'dfc-cache-v398';
+const CACHE = 'dfc-cache-v399';
 // Same-origin code/data that MUST be fresh when online. Network-first alone is
 // not enough: fetch() still consults the browser HTTP cache, so a client can
 // keep running a stale app.js for as long as GitHub Pages' cache headers allow.
@@ -27,6 +27,25 @@ const CORE = [
   './assets/logos/dfc_logo.webp',
   './assets/logos/dfc_logo_text.webp',
   './manifest.webmanifest',
+  // Play Mode counters (Spikes + Crippling Effects). ~33 KB of vector all told,
+  // and Play Mode is the screen most likely to be open with no signal.
+  './assets/tokens/dropsite-city.svg',
+  './assets/tokens/dropsite-comms-station.svg',
+  './assets/tokens/dropsite-hangar.svg',
+  './assets/tokens/dropsite-military-outpost.svg',
+  './assets/tokens/dropsite-orbital-defence-gun.svg',
+  './assets/tokens/dropsite-power-plant.svg',
+  './assets/tokens/spike-1.svg',
+  './assets/tokens/spike-2.svg',
+  './assets/tokens/spike-3.svg',
+  './assets/tokens/spike-4.svg',
+  './assets/tokens/status-defence-systems-offline.svg',
+  './assets/tokens/status-fire.svg',
+  './assets/tokens/status-in-atmosphere.svg',
+  './assets/tokens/status-navigation-offline.svg',
+  './assets/tokens/status-orbital-decay.svg',
+  './assets/tokens/status-scanners-offline.svg',
+  './assets/tokens/status-weapons-offline.svg',
   // Mobile sub-app shell (so /mobile/ works offline too)
   './mobile/',
   './mobile/index.html',

@@ -153,7 +153,7 @@
             ? rows(n).map((y, i) => MARK.phr(y, i, n, c)).join('')
             : rows(n).map((y, i) => mark(y, i, n, c)).join('');
     return `<svg class="rank-insignia rank-${faction}" viewBox="0 0 24 24" width="${s}" height="${s}" ` +
-      `role="img" aria-label="${LABEL[faction] || faction} rank — Level ${n}" ` +
+      `role="img" aria-label="${LABEL[faction] || faction} rank, Level ${n}" ` +
       `xmlns="http://www.w3.org/2000/svg">${marks}</svg>`;
   }
 

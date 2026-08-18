@@ -45,17 +45,31 @@ let activeGroupId = null;
   // you may take any number of admirals per Section 4.2.1).
   // Level 5 Famous Admirals count as Level 4 for game-size restrictions.
   const GAME_SIZES = {
-    skirmish:   { label: 'Skirmish',   min: 501,  max: 1000,  groups: 16, maxAdmiralLevel: 2, colossalMax: 0, time: '1-1.5 hrs', desc: '501-1000 pts' },
-    clash:      { label: 'Clash',      min: 1001, max: 2000,  groups: 20, maxAdmiralLevel: 3, colossalMax: 1, time: '2-3 hrs',   desc: '1001-2000 pts' },
-    battle:     { label: 'Battle',     min: 2001, max: 3000,  groups: 24, maxAdmiralLevel: 4, colossalMax: 2, time: '3-4 hrs',   desc: '2001-3000 pts' },
+    skirmish:   { label: 'Skirmish',   min: 501,  max: 1000,  groups: 16, maxAdmiralLevel: 2, colossalMax: 0, time: '1–1.5 hrs', desc: '501–1000 pts' },
+    clash:      { label: 'Clash',      min: 1001, max: 2000,  groups: 20, maxAdmiralLevel: 3, colossalMax: 1, time: '2–3 hrs',   desc: '1001–2000 pts' },
+    battle:     { label: 'Battle',     min: 2001, max: 3000,  groups: 24, maxAdmiralLevel: 4, colossalMax: 2, time: '3–4 hrs',   desc: '2001–3000 pts' },
     reconquest: { label: 'Reconquest', min: 3001, max: 99999, groups: 28, maxAdmiralLevel: 5, colossalMax: 3, time: '4+ hrs',    desc: '3001+ pts' }
   };
 
+  // Rulebook 4.2: Reconquest is the one open-ended bracket - 28 Groups at 3001 points,
+  // then +4 Groups for every full 1000 points above that (so 32 at 5000). The other
+  // three brackets have a fixed cap, and a custom points limit inside one of those
+  // does not move it.
+  function maxGroupsFor(fleet) {
+    const size = GAME_SIZES[fleet && fleet.gameSize] || GAME_SIZES.clash;
+    if (size.max < 99999) return size.groups;
+    // 99999 is the "no custom limit" sentinel, not a 99999-point game - an
+    // open-ended Reconquest keeps the printed baseline of 28.
+    const limit = (fleet && fleet.pointsLimit) || size.min;
+    if (limit <= size.min || limit >= size.max) return size.groups;
+    return size.groups + 4 * Math.floor((limit - size.min) / 1000);
+  }
+
   // Three-line size summary (rulebook 4.2): points range / group caps / admiral range.
   function gameSizeLines(s) {
-    const pts = s.max >= 99999 ? `${s.min}+ points` : `${s.min}-${s.max} points`;
-    const groups = `≤ ${s.groups} Groups${s.colossalMax > 0 ? `, ≤ ${s.colossalMax} Colossal Group${s.colossalMax === 1 ? '' : 's'}` : ''}`;
-    return [pts, groups, `Admiral Level 1-${s.maxAdmiralLevel}`];
+    const pts = s.max >= 99999 ? `${s.min}+ points` : `${s.min}–${s.max} points`;
+    const groups = `≤ ${s.groups} Groups${s.max >= 99999 ? ` (+4 per 1000 over ${s.min})` : ''}${s.colossalMax > 0 ? `, ≤ ${s.colossalMax} Colossal Group${s.colossalMax === 1 ? '' : 's'}` : ''}`;
+    return [pts, groups, `Admiral Level 1–${s.maxAdmiralLevel}`];
   }
 
   // Escalating game-size indicator: 4 blocks that fill clockwise (TL, TR, BR, BL)
@@ -1425,7 +1439,7 @@ let activeGroupId = null;
             onclick="event.stopPropagation()" oninput="App.setCustomMax(this.value)">
           <span class="game-size-custom-unit">pts</span>
         </div>
-        <span class="game-size-custom-hint">e.g. 1500 — overrides the bracket cap; blank = default</span>
+        <span class="game-size-custom-hint">e.g. 1500. Overrides the bracket cap; blank uses the bracket default</span>
       </div>`;
 
     // Position near the badge
@@ -1451,7 +1465,7 @@ let activeGroupId = null;
     currentFleet.gameSize = key;
     const sizeInfo = GAME_SIZES[key];
     currentFleet.pointsLimit = sizeInfo.max;
-    currentFleet.maxGroups = sizeInfo.groups;
+    currentFleet.maxGroups = maxGroupsFor(currentFleet);
     saveFleets();
 
     // Remove popover
@@ -1486,7 +1500,7 @@ let activeGroupId = null;
       faction,
       gameSize,
       pointsLimit,
-      maxGroups: sizeInfo.groups,
+      maxGroups: maxGroupsFor({ gameSize, pointsLimit }),
       admirals: [],
       battleGroups: [],
       createdAt: Date.now(),
@@ -1533,7 +1547,8 @@ let activeGroupId = null;
     const rareCap = Math.max(1, Math.floor(limit / 1000) + 1);
     const weighted = ['light', 'light', 'light', 'medium', 'medium', 'medium', 'heavy', 'heavy'];
     let guard = 0;
-    while (pts < limit * 0.9 && battleGroups.length < sizeInfo.groups && guard++ < 500) {
+    const genGroupCap = maxGroupsFor({ gameSize: sizeKey, pointsLimit: limit });
+    while (pts < limit * 0.9 && battleGroups.length < genGroupCap && guard++ < 500) {
       let cat = pick(weighted);
       if (Math.random() < 0.07 && colossalUsed < sizeInfo.colossalMax && pools.colossal.length) cat = 'colossal';
       const pool = pools[cat];
@@ -2066,7 +2081,7 @@ let activeGroupId = null;
 
     const groupCount = countableGroups(f).length;
     const gcEl = document.getElementById('groups-count');
-    if (gcEl) gcEl.textContent = `${groupCount} / ${sizeInfo.groups} groups`;
+    if (gcEl) gcEl.textContent = `${groupCount} / ${maxGroupsFor(f)} groups`;
     const glEl = document.getElementById('groups-limit');
     if (glEl) glEl.textContent = '';
 
@@ -2158,8 +2173,9 @@ let activeGroupId = null;
 
     // 2. Group count
     const groupTally = countableGroups(fleet).length;
-    if (groupTally > sizeInfo.groups) {
-      warnings.push({ type: 'error', msg: `Too many groups: ${groupTally}/${sizeInfo.groups}` });
+    const groupCap = maxGroupsFor(fleet);
+    if (groupTally > groupCap) {
+      warnings.push({ type: 'error', msg: `Too many groups: ${groupTally}/${groupCap}` });
     }
 
     // 3. Colossal group limit
@@ -2392,18 +2408,29 @@ let activeGroupId = null;
   function renderCompositionBar() {
     const container = document.getElementById('fleet-composition');
     if (!container || !currentFleet) { if (container) container.innerHTML = ''; return; }
-    if (currentFleet.battleGroups.length === 0) { container.innerHTML = ''; return; }
 
     const catCounts = {};
     let totalPts = 0;
+    const tally = (cat, pts, ships) => {
+      if (!catCounts[cat]) catCounts[cat] = { pts: 0, ships: 0 };
+      catCounts[cat].pts += pts;
+      catCounts[cat].ships += ships;
+      totalPts += pts;
+    };
     currentFleet.battleGroups.forEach(g => {
-      g.ships.forEach(s => {
-        const cat = s.groupCategory || 'medium';
-        if (!catCounts[cat]) catCounts[cat] = { pts: 0, ships: 0 };
-        catCounts[cat].pts += s.points || 0;
-        catCounts[cat].ships++;
-        totalPts += s.points || 0;
-      });
+      g.ships.forEach(s => tally(s.groupCategory || 'medium', s.points || 0, 1));
+    });
+    // A famous admiral's flagship is a ship on the table, so it belongs in the
+    // composition like any other hull. Only the hull's own cost counts - the admiral
+    // riding it is not a ship and has no weight class. G is the hull count: the Twins
+    // of Aaru are 200 pts for two Amber Cruisers, so they read as two Medium ships.
+    (currentFleet.admirals || []).forEach(a => {
+      if (!a.shipKey) return;
+      const db = findShipInDB(currentFleet.faction, 'famous_admirals', a.shipKey);
+      if (!db) return;
+      const cat = (db.shipCategory || '').toLowerCase();
+      if (!cat) return;
+      tally(cat, db.ship_cost || 0, Math.max(1, parseInt(db.g, 10) || 1));
     });
 
     if (totalPts === 0) { container.innerHTML = ''; return; }
@@ -2501,7 +2528,7 @@ let activeGroupId = null;
   function addGroup() {
     if (!currentFleet) return;
     const sizeInfo = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
-    if (countableGroups(currentFleet).length >= sizeInfo.groups) {
+    if (countableGroups(currentFleet).length >= maxGroupsFor(currentFleet)) {
       showToast('Maximum groups reached for ' + sizeInfo.label);
       return;
     }
@@ -2675,7 +2702,7 @@ let activeGroupId = null;
     const isPayload = s.groupCategory === 'payload';
 
     // Group-count limit (payloads don't count toward it).
-    if (!isPayload && countableGroups(currentFleet).length >= sizeInfo.groups) {
+    if (!isPayload && countableGroups(currentFleet).length >= maxGroupsFor(currentFleet)) {
       showToast('Maximum groups reached for ' + sizeInfo.label);
       return;
     }
@@ -3278,7 +3305,7 @@ let activeGroupId = null;
         const atMin = group.ships.length <= groupMin;
         qtyStepper = `
         <div class="group-qty-stepper" title="${groupMin}–${groupMax} per group">
-          <button class="group-qty-btn" onclick="App.removeLastShip('${group.id}')" ${atMin ? 'disabled' : ''} aria-label="Remove one">−</button>
+          <button class="group-qty-btn" onclick="App.removeLastShip('${group.id}')" ${atMin ? 'disabled' : ''} aria-label="Remove one">&minus;</button>
           <span class="group-qty-num">×${group.ships.length}</span>
           <button class="group-qty-btn" onclick="App.addSameShip('${group.id}')" ${atMax ? 'disabled' : ''} aria-label="Add one more">+</button>
         </div>`;
@@ -3424,7 +3451,7 @@ let activeGroupId = null;
     'SL': 'Side Left',
     'SR': 'Side Right',
     'R': 'Rear',
-    '*': 'Shuriken Arcs — 5 unique 72° arcs (see Disintegrator Bank)'
+    '*': 'Shuriken Arcs: 5 unique 72° arcs (see Disintegrator Bank)'
   };
 
   // Firing-arc glyphs, tuned for legibility at ~16px in weapon rows: bow points up,
@@ -3724,7 +3751,7 @@ let activeGroupId = null;
   // Skybane Oculus Array). Feature weapons fire by Scan range, not Arc.
   function renderFeatureWeapons(feat) {
     return (feat.weapons || []).map(w =>
-      `<div class="feature-weapon">${esc(w.name)} — ${w.scan ? `Scan ${esc(w.scan)}, ` : ''}Att ${esc(w.attack)}, Lock ${esc(w.lock)}, Dmg ${esc(w.damage)}${w.type ? `<span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : ''}${w.special && w.special !== '-' ? ` ${renderWeaponSpecialChips(w.special)}` : ''}</div>`
+      `<div class="feature-weapon">${esc(w.name)}: ${w.scan ? `Scan ${esc(w.scan)}, ` : ''}Att ${esc(w.attack)}, Lock ${esc(w.lock)}, Dmg ${esc(w.damage)}${w.type ? `<span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : ''}${w.special && w.special !== '-' ? ` ${renderWeaponSpecialChips(w.special)}` : ''}</div>`
     ).join('');
   }
   // A feature can also carry a launch bay (the Resistance ICBM Silo launches
@@ -3934,7 +3961,7 @@ let activeGroupId = null;
     // snap toggle for Structures (you only ever have 0 or 1 of each).
     const esq = n => esc(n).replace(/'/g, "\\'");
     const sysStepper = (o, c, canAdd) => `<div class="sys-opt-step">
-      <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeSystem('${groupId}','${ship.id}','${esq(o.name)}')">−</button>
+      <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeSystem('${groupId}','${ship.id}','${esq(o.name)}')">&minus;</button>
       <span class="sys-opt-count" aria-label="${c} selected">${c}</span>
       <button class="sys-step-btn sys-step-add" aria-label="Add one ${esc(o.name)}${o.cost ? ', ' + o.cost + ' points' : ''}" ${canAdd ? '' : 'disabled'} onclick="App.addSystem('${groupId}','${ship.id}','${esq(o.name)}')">+${o.cost > 0 ? o.cost : ''}</button>
     </div>`;
@@ -5705,7 +5732,7 @@ let activeGroupId = null;
     const byCat = {};
     spec.options.forEach(o => { (byCat[o.category] = byCat[o.category] || []).push(o); });
     const stepper = (o, c, canAdd) => `<div class="sys-opt-step">
-            <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeStationSystem('${esc(o.name).replace(/'/g, "\\'")}')">−</button>
+            <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeStationSystem('${esc(o.name).replace(/'/g, "\\'")}')">&minus;</button>
             <span class="sys-opt-count">${c}</span>
             <button class="sys-step-btn" aria-label="Add one ${esc(o.name)}" ${canAdd ? '' : 'disabled'} onclick="App.addStationSystem('${esc(o.name).replace(/'/g, "\\'")}')">+</button>
           </div>`;
@@ -7350,6 +7377,7 @@ let activeGroupId = null;
   // Rulebook 7.3.6: only Medium/Heavy/Colossal are Capital Ships — Light (frigates) never crip.
   // Data uses 'C' for Colossal/Super-Heavy (not 'S').
   const PLAY_CAPITAL = new Set(['M', 'H', 'C']);
+  const CAT_TON_CODE = { light: 'L', medium: 'M', heavy: 'H', colossal: 'C', payload: 'P' };
   // db.tonnage can be a single-letter code ('M') OR the full category word
   // ('Medium') depending on whether the ship carries its own stats.tonnage
   // (see the ship-DB builder ~line 550 and dpHullTrack). Normalise to a code so
@@ -7365,24 +7393,32 @@ let activeGroupId = null;
   // below, defined alongside the launch-table renderer; Play Mode reuses them.
 
   // Crippling effects (2D6 table, rulebook 7.3.6). Fire is stackable; others are boolean.
+  // Official token art, cut from TTCombat's downloadable token sheet by
+  // scripts/extract-tokens.py. Deliberately full colour rather than a themed glyph:
+  // these are the counters sitting on the table, so recognising one should not
+  // require reading its label.
+  function tokenImg(name, cls) {
+    return `<img class="tok${cls ? ' ' + cls : ''}" src="assets/tokens/${name}.svg" alt="" loading="lazy">`;
+  }
+
   const CRIP_EFFECTS = [
     { key: 'fire',        label: 'On Fire',             stackable: true,
-      icon: '<svg viewBox="0 0 20 24" fill="currentColor"><path d="M10 0C10 0 6 5 6 10c0 1.6.4 3 1 4.2C5.2 13.1 4 11 4 8.5 4 8.5 1 11 1 16a9 9 0 0 0 18 0C19 8 10 0 10 0Zm0 21a5 5 0 0 1-5-5c0-2.5 1.7-4.5 3-5.5.2 1 .8 2 1.7 2.5C9 10.5 10 8 10 8c0 0 3 2.5 3 6a3 3 0 0 1-3 3Z"/></svg>',
+      icon: tokenImg('status-fire'),
       color: 'err', title: '1 damage per token at start of End Phase. Repairable on 4+.' },
     { key: 'defSysOff',   label: 'Def. Sys. Offline',   stackable: false,
-      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2Z"/><line x1="8" y1="8" x2="16" y2="16"/><line x1="16" y1="8" x2="8" y2="16"/></svg>',
+      icon: tokenImg('status-defence-systems-offline'),
       color: 'warn', title: 'All saves -1. Can be targeted as Focused ignoring Formation. Repairable 4+.' },
     { key: 'scannersOff', label: 'Scanners Offline',     stackable: false,
-      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="8"/><line x1="4" y1="4" x2="20" y2="20" stroke-width="2.5"/></svg>',
+      icon: tokenImg('status-scanners-offline'),
       color: 'warn', title: 'Scan reduced to 1". Repairable on 4+.' },
     { key: 'weaponsOff',  label: 'Weapons Offline',      stackable: false,
-      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><line x1="12" y1="3" x2="12" y2="10"/><line x1="4" y1="4" x2="20" y2="20" stroke-width="2.5"/></svg>',
+      icon: tokenImg('status-weapons-offline'),
       color: 'warn', title: 'Cannot use Weapons or launch Assets. Repairable on 4+.' },
     { key: 'navOff',      label: 'Nav. Offline',         stackable: false,
-      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8l-3 8 3-2 3 2-3-8Z" fill="currentColor" stroke="none"/><line x1="4" y1="4" x2="20" y2="20" stroke-width="2.5"/></svg>',
+      icon: tokenImg('status-navigation-offline'),
       color: 'warn', title: 'Movement capped at 2". Cannot turn or change Orbital Layer. Repairable on 4+.' },
     { key: 'orbDecay',    label: 'Orbital Decay',        stackable: false,
-      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M12 12v8"/><path d="M8 18l4 4 4-4"/></svg>',
+      icon: tokenImg('status-orbital-decay'),
       color: 'err', title: 'Falls into Atmosphere. Cannot return to Orbit. Repairable on 6+.' },
   ];
 
@@ -7435,9 +7471,32 @@ let activeGroupId = null;
     return [...(fleet.battleGroups || []), ...playFlagshipGroups(fleet)];
   }
 
+  // Play-mode running order. Held as a list of Group ids in playState, so it is a
+  // per-game arrangement and the fleet's own list order is never touched. A group the
+  // order has no entry for (added after the order was set) falls in at the end.
+  function playOrderedGroups(fleet) {
+    const all = playAllGroups(fleet);
+    const order = (playState && playState.order) || [];
+    if (!order.length) return all;
+    const rank = new Map(order.map((id, i) => [id, i]));
+    return all
+      .map((bg, i) => ({ bg, r: rank.has(bg.id) ? rank.get(bg.id) : order.length + i }))
+      .sort((a, b) => a.r - b.r)
+      .map(x => x.bg);
+  }
+
+  // Payload Ships (Bioficer Cells, Genitor Towers) are not a Group that activates:
+  // they may not activate until detached, and once detached they activate as part of
+  // their Porter's activation and always follow General Quarters. So they keep a card
+  // for hull tracking but lose the Activate button and the Orders row, and they stay
+  // out of both the activation tally and the Pass-token maths.
+  function playIsPayload(fleet, bg) {
+    return !bg.isFlagship && isPayloadGroup(fleet, bg);
+  }
+
   function initPlayState(fleet, faction) {
     const ex = loadPlayState(fleet.id) || {};
-    playState = { round: ex.round || 1, passes: ex.passes || [], opponentGroups: ex.opponentGroups || 0, vp: ex.vp || 0, oppVp: ex.oppVp || 0, battlegroups: ex.battlegroups || {}, ships: ex.ships || {} };
+    playState = { round: ex.round || 1, passes: ex.passes || [], opponentGroups: ex.opponentGroups || 0, vp: ex.vp || 0, oppVp: ex.oppVp || 0, battlegroups: ex.battlegroups || {}, ships: ex.ships || {}, order: ex.order || [] };
     for (const bg of playAllGroups(fleet)) {
       if (!playState.battlegroups[bg.id]) playState.battlegroups[bg.id] = { order: 'Standard', activated: false, spikes: 0 };
       else if (playState.battlegroups[bg.id].spikes === undefined) playState.battlegroups[bg.id].spikes = 0;
@@ -7477,8 +7536,10 @@ let activeGroupId = null;
 
     // Pass token auto-calc from opponent group count. A famous admiral's flagship
     // is a Group on the table, so it counts here as well as rendering below.
-    const allBgs = playAllGroups(playFleet);
-    const myGroups = allBgs.length;
+    // Payload Ships are not a Group that activates, so they do not.
+    const allBgs = playOrderedGroups(playFleet);
+    const actBgs = allBgs.filter(bg => !playIsPayload(playFleet, bg));
+    const myGroups = actBgs.length;
     const oppGroups = playState.opponentGroups || 0;
     const calcTokens = oppGroups > 0 ? Math.max(0, oppGroups - myGroups - 1) : 0;
     // Always resize — guards against ghost tokens when opp groups drops back to 0.
@@ -7495,14 +7556,19 @@ let activeGroupId = null;
 
     const vp = playState.vp || 0;
     const oppVp = playState.oppVp || 0;
-    const activatedCount = allBgs.filter(bg => playState.battlegroups[bg.id]?.activated).length;
-    const bgCards = allBgs.map(bg => renderPlayBgCard(bg, playFleet.faction)).join('');
+    const activatedCount = actBgs.filter(bg => playState.battlegroups[bg.id]?.activated).length;
+    const bgCards = allBgs.map((bg, i) => renderPlayBgCard(bg, playFleet.faction, i, allBgs.length)).join('');
+    const anyOpen = allBgs.some(bg => !(playState.battlegroups[bg.id] || {}).collapsed);
+    const toolbar = `<div class="play-toolbar">
+      <button class="play-tool-btn${_playReorder ? ' play-tool-on' : ''}" onclick="App.playToggleReorder()">${_playReorder ? 'Done reordering' : 'Reorder'}</button>
+      <button class="play-tool-btn" onclick="App.playCollapseAll()">${anyOpen ? 'Collapse all' : 'Expand all'}</button>
+    </div>`;
 
     el.innerHTML = `
       <div class="play-header">
         <div class="play-header-top">
           <div class="play-round-ctrl">
-            <button class="play-round-btn" onclick="App.playChangeRound(-1)" aria-label="Previous round">−</button>
+            <button class="play-round-btn" onclick="App.playChangeRound(-1)" aria-label="Previous round">&minus;</button>
             <div class="play-round-block">
               <span class="play-round-label">Round</span>
               <span class="play-round-num">${playState.round}<span class="play-round-of">/6</span></span>
@@ -7523,49 +7589,79 @@ let activeGroupId = null;
         <div class="play-header-bottom">
           <div class="play-score-ctrl">
             <span class="play-score-label">My VP</span>
-            <button class="play-score-btn" onclick="App.playChangeVP(-1)">−</button>
+            <button class="play-score-btn" onclick="App.playChangeVP(-1)">&minus;</button>
             <span class="play-score-num">${vp}</span>
             <button class="play-score-btn" onclick="App.playChangeVP(1)">+</button>
           </div>
           <div class="play-score-ctrl">
             <span class="play-score-label">Opp VP</span>
-            <button class="play-score-btn" onclick="App.playChangeOppVP(-1)">−</button>
+            <button class="play-score-btn" onclick="App.playChangeOppVP(-1)">&minus;</button>
             <span class="play-score-num">${oppVp}</span>
             <button class="play-score-btn" onclick="App.playChangeOppVP(1)">+</button>
           </div>
           <div class="play-score-ctrl play-opp-groups">
             <span class="play-score-label">Opp Groups</span>
-            <button class="play-score-btn" onclick="App.playChangeOppGroups(-1)">−</button>
+            <button class="play-score-btn" onclick="App.playChangeOppGroups(-1)">&minus;</button>
             <span class="play-score-num">${oppGroups > 0 ? oppGroups : '?'}</span>
             <button class="play-score-btn" onclick="App.playChangeOppGroups(1)">+</button>
           </div>
         </div>
       </div>
+      ${toolbar}
       <div class="play-bgs">${bgCards}</div>`;
   }
 
-  function renderPlayBgCard(bg, faction) {
+  // Reorder is a transient editing mode, not part of the saved game state.
+  let _playReorder = false;
+  function playToggleReorder() { _playReorder = !_playReorder; renderPlayMode(); }
+  function playMoveGroup(bgId, delta) {
+    if (!playState || !playFleet) return;
+    const ids = playOrderedGroups(playFleet).map(bg => bg.id);
+    const i = ids.indexOf(bgId), j = i + delta;
+    if (i < 0 || j < 0 || j >= ids.length) return;
+    ids.splice(j, 0, ids.splice(i, 1)[0]);
+    playState.order = ids;
+    savePlayState(); renderPlayMode();
+  }
+  function playBgState(bgId) {
+    return playState.battlegroups[bgId] || (playState.battlegroups[bgId] = { order: 'Standard', activated: false, spikes: 0 });
+  }
+  function playToggleCollapse(bgId) {
+    if (!playState) return;
+    const b = playBgState(bgId);
+    b.collapsed = !b.collapsed;
+    savePlayState(); renderPlayMode();
+  }
+  function playCollapseAll() {
+    if (!playState || !playFleet) return;
+    const groups = playAllGroups(playFleet);
+    const collapse = groups.some(bg => !(playState.battlegroups[bg.id] || {}).collapsed);
+    groups.forEach(bg => { playBgState(bg.id).collapsed = collapse; });
+    savePlayState(); renderPlayMode();
+  }
+
+  function renderPlayBgCard(bg, faction, idx, total) {
     const bgs = playState.battlegroups[bg.id] || { order: 'Standard', activated: false, spikes: 0 };
     const spikes = bgs.spikes || 0;
+    const isPayload = playIsPayload(playFleet, bg);
+    const collapsed = !!bgs.collapsed;
 
+    // Some profiles (the Genitor Tower, several famous-admiral flagships) carry an
+    // empty `tonnage` but a real category, so the badge falls back to the category.
     let tonCode = 'M';
     if (bg.ships && bg.ships.length) {
       const db0 = bg.isFlagship ? bg.db : findShipInDB(faction, bg.ships[0].groupCategory, bg.ships[0].shipKey);
-      if (db0 && db0.tonnage) tonCode = playTonCode(db0.tonnage);
+      tonCode = (db0 && playTonCode(db0.tonnage)) || CAT_TON_CODE[bg.ships[0].groupCategory] || 'M';
     }
-    const tonLabels = { L: 'Light', M: 'Medium', H: 'Heavy', C: 'Super-Heavy' };
+    const tonLabels = { L: 'Light', M: 'Medium', H: 'Heavy', C: 'Super-Heavy', P: 'Payload' };
 
     // Generic/Faction admirals are attached to a group via assignedGroupId (set by
     // assignAdmiralShip); a famous admiral flies the synthetic flagship group.
     let admiralStr = '';
     const bgAdmiral = bg.isFlagship ? bg.admiral : (playFleet.admirals || []).find(a => a.assignedGroupId === bg.id);
-    if (bgAdmiral) admiralStr = ` <span class="play-bg-admiral">&mdash; ${esc(bgAdmiral.name || 'Admiral')} (L${bgAdmiral.level || 0})</span>`;
+    if (bgAdmiral) admiralStr = ` <span class="play-bg-admiral">&middot; ${esc(bgAdmiral.name || 'Admiral')} (L${bgAdmiral.level || 0})</span>`;
 
-    const spikePips = [0,1,2,3].map(i =>
-      `<button class="play-spike-pip${i < spikes ? ' play-spike-on' : ''}" onclick="App.playSpikeChange('${escAttr(bg.id)}',${i < spikes ? -1 : 1})" title="${i < spikes ? 'Remove Spike' : 'Add Spike (+3&quot; Sig)'}">
-        <svg viewBox="0 0 24 24" fill="${i < spikes ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M12 2l10 10-10 10L2 12Z"/></svg>
-      </button>`
-    ).join('');
+    const spikeCtrl = playSpikeCtrl(bg.id, spikes);
 
     // Order chips: tap to set, hold to read the rules (see playOrderDown/Up).
     const orderChips = PLAY_ORDERS.map(o => {
@@ -7580,38 +7676,78 @@ let activeGroupId = null;
     // admiral's ship is named — then the class alone is the title. On a G-2 pair
     // the proper name belongs to the one vessel, so only the first card takes it.
     const shipsHtml = (bg.ships || []).map((ship, i) =>
-      renderPlayShip(ship, faction, (bg.isFlagship && i === 0) ? (bg.db.flagshipName || null) : null, bgs.order)
+      renderPlayShip(ship, faction, (bg.isFlagship && i === 0) ? (bg.db.flagshipName || null) : null, isPayload ? 'General Quarters' : bgs.order)
     ).join('');
     const actDone = bgs.activated;
 
-    return `<div class="play-bg-card play-ton-card-${tonCode}${actDone ? ' play-activated' : ''}">
-      <div class="play-bg-header">
-        <span class="play-ton-badge play-ton-${tonCode}">${tonLabels[tonCode] || tonCode}</span>
-        <span class="play-bg-name">${esc(bg.name || 'Unnamed battlegroup')}${admiralStr}</span>
-        <button class="play-act-btn${actDone ? ' play-done' : ''}" onclick="App.playToggleActivation('${escAttr(bg.id)}')">${actDone ? '✓ Activated' : 'Activate'}</button>
-      </div>
+    // A collapsed card still carries everything needed to pick the next activation --
+    // the Order, the Spike count and every hull track. Only the controls fold away.
+    let miniHtml = '';
+    if (collapsed) {
+      const hulls = (bg.ships || []).map(ship => {
+        const db = bg.isFlagship ? bg.db : findShipInDB(faction, ship.groupCategory, ship.shipKey);
+        if (!db) return '';
+        const hullMax = parseInt(effectiveStats(db, ship, faction).stats.hull) || 1;
+        const ss = playState.ships[ship.id] || {};
+        const cur = Math.max(0, Math.min(hullMax, ss.cur == null ? hullMax : ss.cur));
+        const cls = cur === 0 ? ' play-mini-dead' : (cur <= Math.ceil(hullMax / 2) - 1 ? ' play-mini-crip' : '');
+        return `<span class="play-mini-hull${cls}">${esc(db.name)} <b>${cur}/${hullMax}</b></span>`;
+      }).join('');
+      miniHtml = `<div class="play-bg-mini">
+        <span class="play-mini-order">${isPayload ? 'Payload' : esc(bgs.order || 'Standard')}</span>
+        ${spikes ? `<span class="play-mini-spikes">${spikes} Spike${spikes === 1 ? '' : 's'}</span>` : ''}
+        ${hulls}
+      </div>`;
+    }
+
+    const reorderHtml = _playReorder
+      ? `<div class="play-reorder">
+          <button class="play-reorder-btn" onclick="App.playMoveGroup('${escAttr(bg.id)}',-1)"${idx === 0 ? ' disabled' : ''} aria-label="Move up">▲</button>
+          <button class="play-reorder-btn" onclick="App.playMoveGroup('${escAttr(bg.id)}',1)"${idx === total - 1 ? ' disabled' : ''} aria-label="Move down">▼</button>
+        </div>` : '';
+
+    const actHtml = isPayload
+      ? '<span class="play-payload-tag">With Porter</span>'
+      : `<button class="play-act-btn${actDone ? ' play-done' : ''}" onclick="App.playToggleActivation('${escAttr(bg.id)}')">${actDone ? '✓ Activated' : 'Activate'}</button>`;
+
+    const bodyHtml = collapsed ? miniHtml : `
       <div class="play-spike-row">
         <span class="play-spike-label">Spikes</span>
         <span class="play-spike-sig">${spikes ? `+${spikes * 3}" Sig` : ''}</span>
-        <div class="play-spike-pips">${spikePips}</div>
+        ${spikeCtrl}
       </div>
-      <div class="play-orders-row">${orderChips}</div>
-      <div class="play-orders-hint">Tap to set &middot; hold for rules</div>
-      <div class="play-ships">${shipsHtml}</div>
+      ${isPayload
+        ? `<div class="play-payload-note">${esc(PAYLOAD_ACTIVATION_NOTE)}</div>`
+        : `<div class="play-orders-row">${orderChips}</div>`}
+      <div class="play-ships">${shipsHtml}</div>`;
+
+    return `<div class="play-bg-card play-ton-card-${tonCode}${actDone ? ' play-activated' : ''}${collapsed ? ' play-bg-collapsed' : ''}${isPayload ? ' play-bg-payload' : ''}">
+      <div class="play-bg-header">
+        ${reorderHtml}
+        <button class="play-collapse-btn" onclick="App.playToggleCollapse('${escAttr(bg.id)}')" aria-expanded="${!collapsed}" aria-label="${collapsed ? 'Expand' : 'Collapse'} group">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="transform:rotate(${collapsed ? -90 : 0}deg)"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <span class="play-ton-badge play-ton-${tonCode}">${tonLabels[tonCode] || tonCode}</span>
+        <span class="play-bg-name">${esc(bg.name || 'Unnamed battlegroup')}${admiralStr}</span>
+        ${actHtml}
+      </div>
+      ${bodyHtml}
     </div>`;
   }
+
+  const PAYLOAD_ACTIVATION_NOTE = 'Payload Ships do not activate on their own. They detach and activate as part of their Porter\'s activation, and always follow General Quarters.';
 
   // What an active Order allows a ship to fire this activation (rulebook 2.3.1).
   // Returns null for the "Standard"/unset default (no restriction shown). canFire
   // decides whether a given weapon row is greyed out; tone drives the note colour.
   function playOrderWeaponRule(order, n) {
     switch (order) {
-      case 'Weapons Free':     return { note: 'Weapons Free — every weapon may fire', tone: 'go',   canFire: () => true };
-      case 'General Quarters': return { note: `General Quarters — fire up to ${Math.ceil(n / 2)} of ${n} weapons`, tone: 'half', canFire: () => true };
-      case 'Course Change':    return { note: 'Course Change — fire 1 weapon only', tone: 'half', canFire: () => true };
-      case 'Silent Running':   return { note: 'Silent Running — no weapons fire', tone: 'stop', canFire: () => false };
-      case 'Max Thrust':       return { note: 'Max Thrust — no weapons fire', tone: 'stop', canFire: () => false };
-      case 'Damage Control':   return { note: 'Damage Control — repair, then fire 1 Close Action weapon only', tone: 'half', canFire: w => (w.type || w.t) === 'C' };
+      case 'Weapons Free':     return { note: 'Weapons Free: every weapon may fire', tone: 'go',   canFire: () => true };
+      case 'General Quarters': return { note: `General Quarters: fire up to ${Math.ceil(n / 2)} of ${n} weapons`, tone: 'half', canFire: () => true };
+      case 'Course Change':    return { note: 'Course Change: fire 1 weapon only', tone: 'half', canFire: () => true };
+      case 'Silent Running':   return { note: 'Silent Running: no weapons fire', tone: 'stop', canFire: () => false };
+      case 'Max Thrust':       return { note: 'Max Thrust: no weapons fire', tone: 'stop', canFire: () => false };
+      case 'Damage Control':   return { note: 'Damage Control: repair, then fire 1 Close Action weapon only', tone: 'half', canFire: w => (w.type || w.t) === 'C' };
       default: return null;
     }
   }
@@ -7689,7 +7825,7 @@ let activeGroupId = null;
     if (!db) return '';
     const eff = effectiveStats(db, ship, faction);
     const s = eff.stats;
-    const isCapital = PLAY_CAPITAL.has(playTonCode(db.tonnage));
+    const isCapital = PLAY_CAPITAL.has(playTonCode(db.tonnage) || CAT_TON_CODE[ship.groupCategory] || 'M');
     const ss = playState.ships[ship.id] || { cur: parseInt(s.hull) || 1, fire: 0 };
     const hullMax = parseInt(s.hull) || 1;
     const cur = Math.max(0, Math.min(hullMax, ss.cur));
@@ -7771,23 +7907,18 @@ let activeGroupId = null;
       </table></div>`;
     }
 
-    // Launch assets. Name is tappable for its verbatim activation rules; specials
-    // are tappable rule chips. Max Thrust and Damage Control forbid launching, so
-    // the row greys out with a note under those orders.
-    const loads = db.loads || [];
+    // Launch assets, as the same full stat table the ship card shows (Launch / Load /
+    // Range / Thrust / Att / Lock / Dmg / Special) - the old row gave only a name and a
+    // launch value, so fighter, bomber and torpedo profiles meant leaving the game sheet
+    // to look them up. renderLaunchTable also picks up bays granted by the selected
+    // loadout and systems, which that row missed entirely. Max Thrust and Damage Control
+    // forbid launching, so the block greys out with a note under those orders.
+    const launchTable = renderLaunchTable(faction, db, ship);
     let launchHtml = '';
-    if (loads.length) {
+    if (launchTable) {
       const canLaunch = !isDestroyed && order !== 'Max Thrust' && order !== 'Damage Control';
-      const items = loads.map(l => {
-        const lk = launchRuleKey(l.name);
-        const nameHtml = lk && LAUNCH_RULES[lk]
-          ? `<span class="play-launch-name play-launch-tap" data-rule-desc="${escAttr(LAUNCH_RULES[lk].text)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(l.name)}</span>`
-          : `<span class="play-launch-name">${esc(l.name)}</span>`;
-        const sp = (l.special && l.special !== '-') ? ` <span class="play-launch-sp">${playSpecialChips(l.special, localRules)}</span>` : '';
-        return `<span class="play-launch-item">${nameHtml} <span class="play-launch-val">Launch ${esc(String(l.launch || '?'))}</span>${sp}</span>`;
-      }).join(' ');
-      const offNote = canLaunch ? '' : `<span class="play-launch-off-note">cannot launch (${esc(order)})</span>`;
-      launchHtml = `<div class="play-launch-row${canLaunch ? '' : ' play-launch-off'}">${items}${offNote}</div>`;
+      const offNote = canLaunch ? '' : `<div class="play-launch-off-note">Cannot launch (${esc(order)})</div>`;
+      launchHtml = `<div class="play-launch-block${canLaunch ? '' : ' play-launch-off'}">${offNote}${launchTable}</div>`;
     }
 
     // Special rules — clickable chips. The built ship DB stores these as
@@ -7830,7 +7961,7 @@ let activeGroupId = null;
         if (ef.stackable) {
           const count = ss[ef.key] || 0;
           return `<div class="play-crip-counter${count ? ' play-crip-on play-crip-' + ef.color : ''}">
-            <button class="play-crip-adj" onclick="App.playCripChange('${escAttr(ship.id)}','${ef.key}',-1)">−</button>
+            <button class="play-crip-adj" onclick="App.playCripChange('${escAttr(ship.id)}','${ef.key}',-1)">&minus;</button>
             <span class="play-crip-icon">${ef.icon}</span>
             <span class="play-crip-badge-lbl">${esc(ef.label)}</span>
             <span class="play-crip-count">${count}</span>
@@ -7852,7 +7983,7 @@ let activeGroupId = null;
     if (hasCorruptor) {
       const cc = ss.corruptor || 0;
       corruptorHtml = `<div class="play-status-tokens"><div class="play-corruptor-ctrl">
-        <button class="play-corruptor-btn" onclick="App.playCorruptorChange('${escAttr(ship.id)}',-1)">−</button>
+        <button class="play-corruptor-btn" onclick="App.playCorruptorChange('${escAttr(ship.id)}',-1)">&minus;</button>
         <span class="play-corruptor-label">Corruptor &times;${cc}</span>
         <button class="play-corruptor-btn" onclick="App.playCorruptorChange('${escAttr(ship.id)}',1)">+</button>
       </div></div>`;
@@ -7865,7 +7996,7 @@ let activeGroupId = null;
       <div class="play-hull-row">
         <div class="play-hull-pips">${hullPipHtml}${hullNum}</div>
         <div class="play-hull-dmg">
-          <button class="play-hull-minus" onclick="App.playHullChange('${escAttr(ship.id)}',-1)" title="Take 1 damage">−</button>
+          <button class="play-hull-minus" onclick="App.playHullChange('${escAttr(ship.id)}',-1)" title="Take 1 damage">&minus;</button>
           <span class="play-hull-dmg-lbl">HP</span>
           <button class="play-hull-plus" onclick="App.playHullChange('${escAttr(ship.id)}',1)" title="Repair 1 hull">+</button>
         </div>
@@ -7915,6 +8046,20 @@ let activeGroupId = null;
   function playSetOrderAndShow(event, bgId, order) {
     playSetOrder(bgId, order);
     showRuleTooltip(event, event.currentTarget);
+  }
+  // The Spike counter is one token that fills from the bottom, a band per Spike,
+  // matching the physical counter. Click the token to add a Spike, the minus to take
+  // one back; 4 is the app's ceiling, so the + greys out there.
+  function playSpikeCtrl(bgId, spikes) {
+    const id = escAttr(bgId);
+    const art = tokenImg('spike-' + Math.max(1, Math.min(4, spikes)), 'play-spike-art');
+    return `<div class="play-spike-ctrl">
+      <button class="play-spike-btn" onclick="App.playSpikeChange('${id}',-1)"${spikes ? '' : ' disabled'} title="Remove a Spike">&minus;</button>
+      <button class="play-spike-token${spikes ? '' : ' play-spike-none'}" onclick="App.playSpikeChange('${id}',1)" title="${spikes} Spike${spikes === 1 ? '' : 's'} (+${spikes * 3}&quot; Sig). Click to add one">
+        ${art}<span class="play-spike-count">${spikes}</span>
+      </button>
+      <button class="play-spike-btn" onclick="App.playSpikeChange('${id}',1)"${spikes >= 4 ? ' disabled' : ''} title="Add a Spike (+3&quot; Sig)">+</button>
+    </div>`;
   }
   function playSpikeChange(bgId, delta) {
     if (!playState) return;
@@ -7986,6 +8131,21 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-08-18', title: 'Real counter art in Play Mode, and a Spike token you can tap', items: [
+      'Play Mode now uses TTCombat\'s own counter art. The Spike and Crippling Effect glyphs were hand-drawn approximations; they are now the real tokens, cut straight out of the official token sheet as vector, so what is on the screen matches what is on the table. Seventeen counters for 33 KB all told, cached for offline use.',
+      'The Spike tracker is one token that fills from the bottom, a band per Spike, exactly like the physical counter. Tap it to add a Spike, or use the minus to take one back. It replaces the four diamond pips, which needed you to work out which pip to hit for the count you wanted.',
+      'An untracked Crippling Effect now reads as a dimmed, greyed counter and lights up in full colour when you set it, so a glance at a ship tells you what it is carrying without reading six labels.',
+      'The “Tap to set · hold for rules” line under the Orders row is gone. Tapping an Order still sets it and holding one still shows its rules.',
+      'Punctuation pass over every string in both apps. Order notes read “Weapons Free: every weapon may fire” rather than using a dash as a colon; the group header separates a Group from its Admiral with a middot, as the rest of the app already did; and points, group-size and play-time ranges use a proper en dash everywhere instead of the mix of hyphens, spaced dashes and closed dashes the two apps had drifted into. Every stepper button now draws the same true minus sign — mobile\'s Play Mode had an ASCII hyphen on the round control and a real minus on the score controls one row below it.',
+    ]},
+    { date: '2026-08-18', title: 'Play Mode: flagships, launch stats, payloads, and a list you can fold up', items: [
+      'A famous admiral\'s flagship was missing from the fleet\'s weight-class totals. Mobile left its cost out of the rulebook 4.2 tonnage check entirely, so Atlas\'s Catastrophe contributed nothing and the fleet read “Medium points (0)” with a 110-point Medium cruiser on the table; desktop counted it there but left it out of the composition bar, which showed a fleet as 100% Heavy while ignoring its most expensive Medium hull. Both now count the flagship\'s own cost (not the admiral\'s, who is not a ship) in its class, and the Twins of Aaru read as two Medium ships.',
+      'Reported after a game on a phone: the mobile app\'s Play Mode never showed a famous admiral\'s ship. Desktop was fixed for this in August; mobile walks its own fleet data and was missed. Atlas\'s Catastrophe, Havelock\'s Carpe Noctum and the rest now appear as their own Group, with a hull track, spikes, orders and an Activate button, counted in the activation tally and the pass-token maths. The Twins of Aaru get one hull track each, as on desktop.',
+      'Play Mode listed only a launch bay\'s name and its Launch value, so checking what a Fighter, Bomber or Torpedo actually does meant leaving the game sheet and going back to the roster. Every ship now carries the full launch table it has on its ship card — Range, Thrust, Attack, Lock, Damage and special rules per asset. It also picks up bays granted by a loadout or a system, which the old row missed entirely: a Bishop with the Torpedo Upgrade showed no torpedo at all.',
+      'Genitor Towers and Bioficer Cells were listed as Groups you could activate. They are Payload Ships: they cannot activate on their own, they detach and act as part of their Porter\'s activation, and they always follow General Quarters. They keep a card for hull tracking, but the Activate button and the Orders row are gone, and they no longer inflate the Activated x/y count or the pass-token calculation.',
+      'Play Mode gains Reorder and Collapse all. Reorder puts up/down arrows on each Group so the list matches the order you intend to activate in; collapsing folds a Group down to its name, Order, Spike count and every ship\'s hull, so a big fleet fits on a phone screen without endless scrolling. Both are saved with the game, and the running order is per-game — your fleet\'s own list order is untouched.',
+      'A custom points limit above 3001 now raises the Group cap the way the rulebook does: 28 Groups at Reconquest, plus 4 more for every full 1000 points above 3001, so a 5000-point game allows 32.',
+    ]},
     { date: '2026-08-15', title: 'Famous admirals\' flagships are proper hero units now', items: [
       'Reported by LeoDrael: with a named admiral in the fleet, their ship never appeared in the Play Mode ship list. It does now — as its own Group, with hull tracking, spikes, orders and an Activate button like any other, counted in the activation tally and the pass-token maths.',
       'Pulling on that thread found the reason. The app had been treating a famous admiral as "a line ship with a character aboard", when a flagship is really its own hero unit. 22 of the 24 differ from the class they are named after: Typhoon Vasquez\'s Heavy Cruiser is 75 points as a line ship and 113 as hers, with better Scan and both saves and two special rules the line ship has never had. Flagships are now built exactly like every other ship in the game, from their own profile, so their real stats show up everywhere the app shows a ship.',
@@ -9594,8 +9754,7 @@ let activeGroupId = null;
       const firstShip = group.ships[0];
       if (firstShip.shipKey !== shipKey || firstShip.groupCategory !== category) {
         // Different ship — create a new group and add there
-        const sizeInfo = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
-        if (countableGroups(currentFleet).length >= sizeInfo.groups) {
+        if (countableGroups(currentFleet).length >= maxGroupsFor(currentFleet)) {
           showToast('Maximum groups reached');
           return;
         }
@@ -9799,7 +9958,7 @@ let activeGroupId = null;
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFlagshipLoadout, changeFeature, addSystem, removeSystem, toggleSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
-    openPlayMode, showPlayPassInfo, playChangeRound, playEndRound, playTogglePass, playChangeVP, playChangeOppVP, playChangeOppGroups, playSpikeChange, playSetOrder, playSetOrderAndShow, playOrderDown, playOrderMove, playOrderUp, playOrderCancel, playToggleActivation, playHullChange, playCripChange, playCripToggle, playToggleCripPanel, playToggleFire, playTogglePower, playCorruptorChange,
+    openPlayMode, playToggleReorder, playMoveGroup, playToggleCollapse, playCollapseAll, showPlayPassInfo, playChangeRound, playEndRound, playTogglePass, playChangeVP, playChangeOppVP, playChangeOppGroups, playSpikeChange, playSetOrder, playSetOrderAndShow, playOrderDown, playOrderMove, playOrderUp, playOrderCancel, playToggleActivation, playHullChange, playCripChange, playCripToggle, playToggleCripPanel, playToggleFire, playTogglePower, playCorruptorChange,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText, openLastImported,
     openSettings, openChangelog, toggleSetting, setTheme, updateFleetDescription, exportAllFleets,
