@@ -3758,7 +3758,7 @@
 
   function mInitPlayState(fleet) {
     const ex = mLoadPlayState(fleet.id) || {};
-    mPlayState = { round: ex.round || 1, passes: ex.passes || [], opponentGroups: ex.opponentGroups || 0, vp: ex.vp || 0, oppVp: ex.oppVp || 0, battlegroups: ex.battlegroups || {}, ships: ex.ships || {}, order: ex.order || [] };
+    mPlayState = { round: ex.round || 1, vp: ex.vp || 0, oppVp: ex.oppVp || 0, battlegroups: ex.battlegroups || {}, ships: ex.ships || {}, order: ex.order || [] };
     for (const bg of mPlayAllGroups(fleet)) {
       if (!mPlayState.battlegroups[bg.id]) mPlayState.battlegroups[bg.id] = { order: 'Standard', activated: false, spikes: 0 };
       else if (mPlayState.battlegroups[bg.id].spikes === undefined) mPlayState.battlegroups[bg.id].spikes = 0;
@@ -3795,23 +3795,13 @@
     const el = document.getElementById('play-content');
     if (!mPlayFleet || !mPlayState) { el.innerHTML = '<div class="play-empty">No fleet loaded.</div>'; return; }
 
-    // Pass token auto-calc from opponent group count. A famous admiral's flagship is a
-    // Group on the table so it counts; Payload Ships are not, so they don't.
     const allBgs = mPlayOrderedGroups(mPlayFleet);
     const actBgs = allBgs.filter(bg => !mPlayIsPayload(bg));
     const myGroups = actBgs.length;
-    const oppGroups = mPlayState.opponentGroups || 0;
-    const calcTokens = oppGroups > 0 ? Math.max(0, oppGroups - myGroups - 1) : 0;
-    // Always resize — guards against ghost tokens when opp groups drops back to 0.
-    while (mPlayState.passes.length < calcTokens) mPlayState.passes.push(false);
-    if (mPlayState.passes.length > calcTokens) mPlayState.passes = mPlayState.passes.slice(0, calcTokens);
-    const passes = mPlayState.passes || [];
-    const passHtml = passes.length
-      ? passes.map((used, i) =>
-          `<span class="play-pass-pip${used ? ' play-pass-used' : ''}" onclick="App.mPlayTogglePass(${i})"></span>`
-        ).join('')
-      : (oppGroups > 0 ? '<span class="play-pass-none">none</span>' : '<span class="play-pass-none">&#x2193; groups</span>');
-    const passInfoBtn = `<button class="play-pass-info-btn" onclick="App.mShowPlayPassInfo()" title="Pass token rules">&#9432;</button>`;
+    // Pass tokens are worked out at the table from BOTH fleets, which the app cannot
+    // see — the old auto-calc needed an "Opp Groups" counter nobody set. Just the
+    // rules, behind one info button.
+    const passInfoBtn = `<button class="play-pass-info-btn" onclick="App.mShowPlayPassInfo()" title="Pass token rules">Pass tokens &#9432;</button>`;
     const vp = mPlayState.vp || 0;
     const oppVp = mPlayState.oppVp || 0;
     const activatedCount = actBgs.filter(bg => mPlayState.battlegroups[bg.id]?.activated).length;
@@ -3832,18 +3822,10 @@
             </div>
             <button class="play-round-btn" onclick="App.mPlayChangeRound(1)" aria-label="Next round">+</button>
           </div>
-          <div class="play-pass-tokens">
-            <span class="play-pass-label">Pass ${passInfoBtn}</span>
-            <span class="play-pass-pips">${passHtml}</span>
-          </div>
-          <div class="play-header-spacer"></div>
           <div class="play-act-count" title="Battlegroups activated this round">
             <span class="play-round-label">Activated</span>
             <span class="play-act-num">${activatedCount}/${myGroups}</span>
           </div>
-          <button class="play-end-round-btn" onclick="App.mPlayEndRound()">End Round</button>
-        </div>
-        <div class="play-header-bottom">
           <div class="play-score-ctrl">
             <span class="play-score-label">My VP</span>
             <button class="play-score-btn" onclick="App.mPlayChangeVP(-1)">&minus;</button>
@@ -3856,12 +3838,9 @@
             <span class="play-score-num">${oppVp}</span>
             <button class="play-score-btn" onclick="App.mPlayChangeOppVP(1)">+</button>
           </div>
-          <div class="play-score-ctrl play-opp-groups">
-            <span class="play-score-label">Opp Groups</span>
-            <button class="play-score-btn" onclick="App.mPlayChangeOppGroups(-1)">&minus;</button>
-            <span class="play-score-num">${oppGroups > 0 ? oppGroups : '?'}</span>
-            <button class="play-score-btn" onclick="App.mPlayChangeOppGroups(1)">+</button>
-          </div>
+          ${passInfoBtn}
+          <div class="play-header-spacer"></div>
+          <button class="play-end-round-btn" onclick="App.mPlayEndRound()">End Round</button>
         </div>
       </div>
       ${toolbar}
@@ -4170,12 +4149,6 @@
   function mPlayEndRound() {
     if (!mPlayState) return;
     Object.values(mPlayState.battlegroups).forEach(b => { b.activated = false; });
-    mPlayState.passes = mPlayState.passes.map(() => false);
-    mSavePlayState(); renderMobilePlay();
-  }
-  function mPlayTogglePass(i) {
-    if (!mPlayState) return;
-    mPlayState.passes[i] = !mPlayState.passes[i];
     mSavePlayState(); renderMobilePlay();
   }
   function mPlayChangeVP(delta) {
@@ -4186,11 +4159,6 @@
   function mPlayChangeOppVP(delta) {
     if (!mPlayState) return;
     mPlayState.oppVp = Math.max(0, (mPlayState.oppVp || 0) + delta);
-    mSavePlayState(); renderMobilePlay();
-  }
-  function mPlayChangeOppGroups(delta) {
-    if (!mPlayState) return;
-    mPlayState.opponentGroups = Math.max(0, (mPlayState.opponentGroups || 0) + delta);
     mSavePlayState(); renderMobilePlay();
   }
   function mPlaySetOrderAndShow(event, bgId, order) {
@@ -4326,20 +4294,15 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
-    { date: '2026-08-18', title: 'Real counter art in Play Mode, and a Spike token you can tap', items: [
-      'Play Mode now uses TTCombat\'s own counter art. The Spike and Crippling Effect glyphs were hand-drawn approximations; they are now the real tokens, cut straight out of the official token sheet as vector, so what is on the screen matches what is on the table. Seventeen counters for 33 KB all told, cached for offline use.',
-      'The Spike tracker is one token that fills from the bottom, a band per Spike, exactly like the physical counter. Tap it to add a Spike, or use the minus to take one back. It replaces the four diamond pips, which needed you to work out which pip to hit for the count you wanted.',
-      'An untracked Crippling Effect now reads as a dimmed, greyed counter and lights up in full colour when you set it, so a glance at a ship tells you what it is carrying without reading six labels.',
-      'The “Tap to set · hold for rules” line under the Orders row is gone. Tapping an Order still sets it and holding one still shows its rules.',
-      'Punctuation pass over every string in both apps. Order notes read “Weapons Free: every weapon may fire” rather than using a dash as a colon; the group header separates a Group from its Admiral with a middot, as the rest of the app already did; and points, group-size and play-time ranges use a proper en dash everywhere instead of the mix of hyphens, spaced dashes and closed dashes the two apps had drifted into. Every stepper button now draws the same true minus sign — mobile\'s Play Mode had an ASCII hyphen on the round control and a real minus on the score controls one row below it.',
-    ]},
-    { date: '2026-08-18', title: 'Play Mode: flagships, launch stats, payloads, and a list you can fold up', items: [
-      'A famous admiral\'s flagship was missing from the fleet\'s weight-class totals. Mobile left its cost out of the rulebook 4.2 tonnage check entirely, so Atlas\'s Catastrophe contributed nothing and the fleet read “Medium points (0)” with a 110-point Medium cruiser on the table; desktop counted it there but left it out of the composition bar, which showed a fleet as 100% Heavy while ignoring its most expensive Medium hull. Both now count the flagship\'s own cost (not the admiral\'s, who is not a ship) in its class, and the Twins of Aaru read as two Medium ships.',
-      'Reported after a game on a phone: the mobile app\'s Play Mode never showed a famous admiral\'s ship. Desktop was fixed for this in August; mobile walks its own fleet data and was missed. Atlas\'s Catastrophe, Havelock\'s Carpe Noctum and the rest now appear as their own Group, with a hull track, spikes, orders and an Activate button, counted in the activation tally and the pass-token maths. The Twins of Aaru get one hull track each, as on desktop.',
-      'Play Mode listed only a launch bay\'s name and its Launch value, so checking what a Fighter, Bomber or Torpedo actually does meant leaving the game sheet and going back to the roster. Every ship now carries the full launch table it has on its ship card — Range, Thrust, Attack, Lock, Damage and special rules per asset. It also picks up bays granted by a loadout or a system, which the old row missed entirely: a Bishop with the Torpedo Upgrade showed no torpedo at all.',
-      'Genitor Towers and Bioficer Cells were listed as Groups you could activate. They are Payload Ships: they cannot activate on their own, they detach and act as part of their Porter\'s activation, and they always follow General Quarters. They keep a card for hull tracking, but the Activate button and the Orders row are gone, and they no longer inflate the Activated x/y count or the pass-token calculation.',
-      'Play Mode gains Reorder and Collapse all. Reorder puts up/down arrows on each Group so the list matches the order you intend to activate in; collapsing folds a Group down to its name, Order, Spike count and every ship\'s hull, so a big fleet fits on a phone screen without endless scrolling. Both are saved with the game, and the running order is per-game — your fleet\'s own list order is untouched.',
-      'A custom points limit above 3001 now raises the Group cap the way the rulebook does: 28 Groups at Reconquest, plus 4 more for every full 1000 points above 3001, so a 5000-point game allows 32.',
+    { date: '2026-08-18', title: 'Play Mode fixes from table feedback', items: [
+      'Famous admirals\' ships now appear in mobile Play Mode, with their own hull track — damage syncs between phone and desktop.',
+      'Flagship costs now count toward their weight-class totals and the composition bar (mobile read “Medium points (0)” with a Catastrophe on the table).',
+      'Play Mode shows full Fighter/Bomber/Torpedo stats on every ship, including launch granted by a loadout or system.',
+      'Genitor Towers and Bioficer Cells no longer activate as Groups — they keep a hull card, per the Payload rules.',
+      'Reorder your Groups and collapse them in Play Mode; collapsed cards keep Order, Spikes and hulls visible.',
+      'Official TTCombat token art for Spikes and Crippling Effects. The Spike tracker is one tappable token that fills up.',
+      'The Opp Groups counter and pass-token auto-calc are gone — the rules stay behind the Pass tokens button, and the header fits one row.',
+      'A custom Reconquest points limit now raises the Group cap: +4 per full 1000 over 3001, so 5000 pts allows 32.',
     ]},
     { date: '2026-08-11', title: 'Add Admiral moved into the fleet overview (desktop)', items: [
       'On the desktop site the Admiral slot lived on the left rail, which folds into a bottom sheet on a narrow window and hid Add Admiral below the fold. It now sits in the middle panel above Space Station. This app was never affected: admirals have always been on the fleet screen here.',
@@ -4991,7 +4954,7 @@
       const fleet = {
         id: uuid(), name: mini.n || 'Shared Fleet', description: mini.d || '',
         faction: mini.f, gameSize: mini.s || 'clash',
-        pointsLimit: mini.pl != null ? mini.pl : size.max, maxGroups: size.groups,
+        pointsLimit: mini.pl != null ? mini.pl : size.max, maxGroups: maxGroupsFor({ gameSize: mini.s, pointsLimit: mini.pl }),
         admirals: [], spaceStation: null,
         battleGroups: (mini.g || []).map(g => ({
           id: uuid(), name: g.n || 'Group',
@@ -5868,7 +5831,7 @@
     overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf, exportAllFleets, openLastImported,
     openCollection, collectionSelectFaction, collectionAdjust,
     importFleetPrompt, doImportText,
-    openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayTogglePass, mPlayChangeVP, mPlayChangeOppVP, mPlayChangeOppGroups, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayOrderDown, mPlayOrderMove, mPlayOrderUp, mPlayOrderCancel, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayToggleCripPanel, mPlayCorruptorChange,
+    openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayChangeVP, mPlayChangeOppVP, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayOrderDown, mPlayOrderMove, mPlayOrderUp, mPlayOrderCancel, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayToggleCripPanel, mPlayCorruptorChange,
     mPlayToggleReorder, mPlayMoveGroup, mPlayToggleCollapse, mPlayCollapseAll,
     openSyncModal, closeSyncModal, renderSyncBody, syncGenerate, syncLookup, syncDoJoin, syncNow, syncCopyToken, syncStop, syncDeleteRemote,
     openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet, sayName

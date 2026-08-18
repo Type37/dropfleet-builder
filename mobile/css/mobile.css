@@ -2599,14 +2599,6 @@ body.sheet-open .sheet-scrim {
 .play-round-label { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; opacity: .7; line-height: 1; }
 .play-round-num { font-family: var(--font-display); font-size: 22px; line-height: 1.1; color: #fff; }
 .play-round-of { font-size: 12px; opacity: .55; }
-.play-pass-tokens { display: flex; align-items: center; gap: 5px; flex: 1; min-width: 0; }
-.play-pass-label { font-size: 11px; opacity: .8; white-space: nowrap; }
-.play-pass-pip {
-  width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.5);
-  background: rgba(255,255,255,.15); cursor: pointer; transition: background var(--duration-fast);
-  flex-shrink: 0;
-}
-.play-pass-pip.play-pass-used { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.2); opacity: .4; }
 .play-end-round-btn {
   background: var(--gold); color: #fff; border: none; border-radius: var(--radius-md);
   font-family: var(--font-body); font-weight: var(--weight-semibold); font-size: 12px;
@@ -2942,18 +2934,16 @@ body.sheet-open .sheet-scrim {
 }
 .play-launch-sp { font-size: 10px; color: var(--fg4); }
 
-/* Pass info button */
+/* Pass-token rules button */
 .play-pass-info-btn {
-  background: none; border: none; cursor: pointer; padding: 0 2px;
-  font-size: 14px; color: var(--fg4); line-height: 1; vertical-align: middle;
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.35);
+  border-radius: var(--radius-pill); cursor: pointer; padding: 4px 10px;
+  font-size: 11px; color: #fff; white-space: nowrap; line-height: 1;
 }
 .play-pass-info-btn:active { opacity: .6; }
-.play-pass-pips { display: flex; gap: 4px; align-items: center; }
-.play-pass-none { font-size: 10px; opacity: .65; font-style: italic; white-space: nowrap; }
 
 /* Header two-row layout */
 .play-header-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; width: 100%; }
-.play-header-bottom { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; width: 100%; padding-top: 6px; border-top: 1px solid rgba(255,255,255,.12); }
 .play-header-spacer { flex: 1; }
 .play-act-count { text-align: center; }
 .play-act-num { font-family: var(--font-display); font-size: 20px; line-height: 1; color: #fff; display: block; }
@@ -2979,8 +2969,6 @@ body.sheet-open .sheet-scrim {
   font-size: 15px; font-weight: var(--weight-bold); font-family: var(--font-display);
   color: #fff; min-width: 18px; text-align: center; line-height: 1;
 }
-.play-opp-groups { border-color: rgba(255,255,255,.15); }
-.play-opp-groups .play-score-num { font-size: 13px; opacity: .85; }
 
 /* Tonnage card left-border accent */
 .play-ton-card-L { border-left: 3px solid #2a6b2a; }

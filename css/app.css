@@ -7431,17 +7431,6 @@ body[data-view="builder"] .game-info-footer {
   font-size: 24px; font-weight: 700; font-family: var(--font-condensed);
   color: var(--ink); line-height: 1; min-width: 24px; display: block; text-align: center;
 }
-.play-pass-tokens {
-  display: flex; align-items: center; gap: var(--sp-xs);
-  font-size: 11px; color: var(--ink-muted); font-family: var(--font-condensed);
-  letter-spacing: 0.04em;
-}
-.play-pass-pip {
-  width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--stroke);
-  cursor: pointer; flex-shrink: 0;
-  transition: background var(--duration-fast), border-color var(--duration-fast);
-}
-.play-pass-pip.play-pass-used { background: var(--gold); border-color: var(--gold); }
 .play-header-spacer { flex: 1; }
 .play-act-count { text-align: center; }
 .play-act-num { font-size: 20px; font-weight: 700; font-family: var(--font-condensed); color: var(--ink); line-height: 1; display: block; }
@@ -7842,18 +7831,16 @@ html[data-theme="dark"] .play-corruptor-label { color: #ce93d8; background: rgba
 html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,181,246,0.1); border-color: rgba(100,181,246,0.25); }
 .play-launch-sp { color: var(--ink-faint); font-size: 10px; }
 
-/* ── Play: pass info button ── */
+/* ── Play: pass-token rules button ── */
 .play-pass-info-btn {
-  background: none; border: none; cursor: pointer; padding: 0 2px;
-  font-size: 13px; color: var(--ink-faint); line-height: 1;
-  vertical-align: middle; transition: color var(--duration-fast);
+  background: none; border: 1px solid var(--stroke); border-radius: 20px;
+  cursor: pointer; padding: 3px 10px; font-size: 11px; color: var(--ink-muted);
+  font-family: var(--font-condensed); letter-spacing: 0.04em; white-space: nowrap;
+  transition: color var(--duration-fast), border-color var(--duration-fast);
 }
-.play-pass-info-btn:hover { color: var(--ink-muted); }
-.play-pass-pips { display: flex; gap: 4px; align-items: center; }
+.play-pass-info-btn:hover { color: var(--ink); border-color: var(--stroke-strong); }
 
 .play-header-top { display: flex; align-items: center; gap: var(--sp-sm); flex-wrap: wrap; }
-.play-header-bottom { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.play-pass-none { font-size: 10px; color: var(--ink-faint); font-style: italic; }
 
 /* ── Play: VP / opp-groups score controls ── */
 .play-score-ctrl {
@@ -7877,9 +7864,6 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
   font-size: 16px; font-weight: 700; font-family: var(--font-condensed);
   color: var(--ink); min-width: 20px; text-align: center; line-height: 1;
 }
-.play-opp-groups { border-color: var(--stroke-light); }
-.play-opp-groups .play-score-label { color: var(--ink-faint); }
-.play-opp-groups .play-score-num { font-size: 14px; color: var(--ink-muted); }
 
 /* ── Play: tonnage card left-border accent ── */
 .play-ton-card-L { border-left: 3px solid var(--success); }

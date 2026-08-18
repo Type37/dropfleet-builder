@@ -5,142 +5,31 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
-### 2026-08-18: Real counter art, a tappable Spike token, and a punctuation pass
+### 2026-08-18: Play Mode fixes from table feedback
 
-**The counters are the real ones now.** Play Mode's Spike and Crippling Effect glyphs
-were hand-drawn SVG approximations of tokens nobody had actually looked at. TTCombat
-publishes the counters as `Dropfleet_Downloadable_Tokens.pdf`, which
-`scripts/dfc-files-manifest.json` has tracked by URL all along, and it turns out to be
-pure vector on a regular 8x12 grid. `scripts/extract-tokens.py` cuts it into one SVG
-per counter: seventeen files, 33 KB total, real Bezier paths with the sheet's own fill
-colours rather than a screenshot, so they stay crisp at any size.
-
-Two things about that script are worth recording, because the obvious approach fails.
-PyMuPDF's `show_pdf_page` + `get_svg_image` looks like exactly the right tool and is
-not: it embeds the *whole* source page behind a clip, so every one-token file came out
-at 300 KB carrying all 534 of the sheet's drawings. So the script walks
-`page.get_drawings()` and re-emits the path data itself. And the shapes cannot be
-selected by containment — the City and Atmosphere counters draw their art larger than
-the disc and let the PDF's clip path trim it, so a "wholly inside the cell" test threw
-away four of their five shapes and left a bare circle. Shapes are claimed by their
-centre instead, and the disc is re-applied as an SVG `clipPath`.
-
-**The Spike tracker is the token.** The sheet's Spike counter is a single disc that
-fills from the bottom, one coloured band per Spike, which is a far better control than
-the four diamond pips the app had — with pips you have to work out which one to hit for
-the count you want. It is now one token showing the current count: tap it to add a
-Spike, minus to take one back, plus greys out at the app's ceiling of 4. Crippling
-Effects use the same art, dimmed and desaturated when untracked and full colour when
-set, so a ship's state reads at a glance instead of via six labels.
-
-Also extracted while the sheet was open, and not yet wired to anything: the six
-Dropsite Feature counters (Military Outpost, Orbital Defence Gun, Comms Station,
-Hangar, Power Plant, City). The app has no Dropsite model to hang them on, so they sit
-in `assets/tokens/` waiting for one rather than being forced into the fleet list.
-
-**Dropped the Orders hint.** "Tap to set · hold for rules" is gone from under the
-Orders row. Both behaviours are unchanged.
-
-**Punctuation pass.** An audit of every dash in both builds, against Chicago, the
-Microsoft Writing Style Guide and Google's developer style guide (all three agree on
-the closed-up em dash for US software copy; AP's spaced em dash and Oxford's spaced en
-dash are newspaper and British-publishing conventions and not what UI text uses). 213
-of the em dashes turned out to be in source comments, which nobody reads in the app;
-of the ones that ship, the defects were:
-
-- *A dash doing a colon's job.* The six Order notes read "Weapons Free — every weapon
-  may fire": an item followed by its description, which Google's guide calls out
-  specifically ("Instead, use a colon or a period"). Now "Weapons Free: every weapon
-  may fire". Same for the Shuriken Arcs note, the Feature weapon lines and the
-  custom-points hint.
-- *A dash doing a separator's job.* The Play Mode group header joined a Group to its
-  Admiral with an em dash, and the app bar read "Fleet — Play", while everywhere else
-  in the app already used a middot for metadata. Now consistent.
-- *Range notation drifting apart.* The same game-size strings were written three ways:
-  desktop had ASCII hyphens (`501-1000 pts`, `1-1.5 hrs`), mobile had a spaced en dash
-  (`501 – 1000 points`) in one place and closed-up en dashes elsewhere. All closed-up
-  en dashes now, which is what a range takes.
-- *Three different minus signs on adjacent buttons.* Mobile's Play Mode header drew an
-  ASCII hyphen on the round stepper and a true minus on the score steppers one row
-  below — the hyphen sits higher and shorter, so two controls a centimetre apart looked
-  different. Every stepper in both apps now emits `&minus;`.
-- *A dash inside a spoken label.* The rank insignia's `aria-label` read "UCM rank —
-  Level 3"; screen readers announce a dash inconsistently, so it is a comma now.
-
-Em dashes in real prose — changelog entries, import warnings, toast sentences — were
-left alone. They are correct there, and the fix for a bad em dash is usually a
-different mark rather than no mark.
-
-### 2026-08-18: Play Mode after a real game on a phone
-
-Four things reported from a table, plus one rule the builder never implemented.
-
-**The famous admiral's ship was missing again.** The 15 August entry below fixed
-exactly this — and fixed it in `js/app.js`. The mobile app is a separate build with
-its own fleet model: it reads `data/faction-*.json` directly rather than the
-`transformFaction` ship DB, keeps a famous admiral as `{admiralId}` on `fleet.admirals`
-with the profile living at `faction.admirals[].flagship`, and `findShip()` only resolves
-entries in `faction.groups`. So `mInitPlayState` and `renderMobilePlay` walked
-`fleet.battleGroups` and the flagship was never in there. Mobile now builds the same
-synthetic Group desktop does, except each ship carries its profile inline as `_db` and
-`mPlayShipDB()` prefers that over the group lookup. Ids derive from the admiral id, so
-hull damage survives a reload, and because both builds write play state to
-`dfc_play_<fleetId>`, a game started on the phone opens on the laptop with the same
-damage on the same ship.
-
-Two follow-ons the same lookup had been hiding: `mPlayHullChange` searched only
-`battleGroups`, so a flagship could take damage but never be repaired; and thirteen
-flagships carry an empty `tonnage` string with a real `category`, which showed a
-Dreadnought as Medium and denied it the Crippling Effects panel. Both read from the
-category now.
-
-**Launch assets were a name and a number.** Play Mode printed `Boarding Pods Launch 1`
-and nothing else, so a fighter's Thrust or a torpedo's Lock meant leaving the game sheet
-mid-turn. Both builds already had a `renderLaunchTable()` that produces the full
-statblock from the faction's `launchAssets`, and Play Mode simply wasn't calling it. It
-does now. That also closed a silent gap: the hand-rolled row read `db.loads` alone, so
-launch bays granted by a selected loadout or system never appeared at all — a Bishop
-with the Torpedo Upgrade showed no torpedo, and a fully modular Resistance ship, whose
-launch comes entirely from chosen options, showed nothing.
-
-**Genitor Towers were activating.** Payload S/L Ships "may not activate or be targeted
-until detached", then "activate together immediately as part of the Porter Ship's
-activation", and "always follow General Quarters Orders". The builder already knew this
-— `countableGroups()` has excluded payloads from the Group cap for months — but Play
-Mode did not, so a Bioficer fleet's Activated tally counted cells and towers as Groups
-and the pass-token maths inherited the error. Payload groups keep their card, because
-they have hulls that take damage, and lose the Activate button and the Orders row in
-favour of a note saying why. Worth recording that the Genitor Tower is the one payload
-in the game whose profile has no `tonnage` field, so the tonnage-based payload test
-desktop uses would have missed it; both builds key off `groupCategory === 'payload'`.
-
-**A fleet is a lot of scrolling on a 375px screen.** Play Mode gains a two-button
-toolbar. Reorder puts up/down arrows on each Group header; the resulting order is stored
-as a list of ids in the play state, so it is a per-game running order and the fleet's own
-list order is never touched. Collapse folds a Group to its header plus a line carrying
-its Order, its Spike count and every ship's current hull — the things you read to decide
-what activates next — and Collapse all folds the lot. Both persist with the game.
-
-**Flagships were missing from the weight-class totals.** Rulebook 4.2 budgets a fleet
-by Tonnage points, and a famous admiral's flagship is a Ship on the table with no
-exemption written for it. Mobile's `validateFleet` never added it: a Bioficer fleet
-with Atlas and one Bishop reported "Heavy points (265) can't exceed Medium points (0)"
-while a 110-point Medium cruiser sat in the list. Desktop counted it in the 4.2 check
-but not in `renderCompositionBar`, which read the same fleet as 100% Heavy. Both now
-tally the flagship's own cost into its category — the admiral riding it is not a ship
-and belongs to no class — and the bar uses the flagship's G for its hull count, so the
-Twins of Aaru read as two Medium ships for 200 points rather than one. Also fixed while
-in there: mobile's `admiralFlagship()` resolved against `activeFleet` rather than the
-fleet it was handed, so `validateFleet` found no flagship at all when validating any
-other fleet, which the Porter-capacity check depended on too.
-
-**Reconquest's Group cap never scaled.** Rulebook 4.2 makes Reconquest open-ended: 28
-Groups at 3001 points, then four more for every full 1000 above that, so a 5000-point
-game allows 32. Both builds hard-coded 28 for every Reconquest fleet no matter what
-points limit you typed. `maxGroupsFor(fleet)` now derives the cap, and every site that
-enforced or displayed one uses it. The other three brackets are unchanged: they have a
-fixed cap, and a custom limit inside one of them does not move it. `pointsLimit` defaults
-to the bracket max, so 99999 is read as "no custom limit" and keeps the printed 28.
+- **Famous admirals' ships now appear in mobile Play Mode** — their own Group with a
+  hull track; damage syncs with desktop. Repair worked too after that, and tonnage-less
+  flagships get their Crippled panel back.
+- **Flagship costs now count toward their weight class** — mobile's 4.2 tonnage check
+  ignored them entirely ("Medium points (0)" with a Catastrophe on the table); desktop's
+  composition bar did the same. Both fixed; the Twins of Aaru read as two Medium ships.
+- **Full launch-asset stats in Play Mode** — the roster's Fighter/Bomber/Torpedo table
+  on every ship card, including bays granted by a loadout or system.
+- **Payload Ships no longer activate as Groups** — Genitor Towers and Cells keep a hull
+  card but lose the Activate button and Orders, per Payload S/L.
+- **Reorder and Collapse in Play Mode** — set your activation order, fold groups down
+  to name + Order + Spikes + hulls. Saved per game.
+- **Custom Reconquest limits scale the Group cap** — 28 at 3001, +4 per full 1000 above
+  (32 at 5000), everywhere the cap is shown or enforced, shared fleets included.
+- **Official TTCombat counter art** — Spikes and Crippling Effects are the real tokens,
+  extracted as vector by `scripts/extract-tokens.py` (Dropsite Features extracted too,
+  not yet wired). The Spike tracker is now one tappable token that fills up.
+- **Opp Groups counter and pass-token auto-calc removed** — the calc needs both fleets,
+  which the app can't see; the pass-token rules stay behind one button. Header is one
+  row now.
+- **Punctuation pass** — colons where dashes played colon, en dashes for ranges, middots
+  for separators, one true minus sign on every stepper.
+- Dropped the "Tap to set · hold for rules" hint; both behaviours unchanged.
 
 ### 2026-08-15: Famous-admiral flagships rebuilt as first-class ships
 
