@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Monthly scan of TTCombat's Dropfleet Commander downloads page.
+"""Weekly scan of TTCombat's Dropfleet Commander downloads page.
+
+Runs from .github/workflows/dfc-files-scan.yml, 07:00 UTC every Monday.
 
 Fetches https://ttcombat.com/pages/dropfleet-commander-downloads, extracts every
 linked PDF/XLSX on the TTCombat Shopify CDN, and diffs it against the committed
@@ -9,6 +11,11 @@ baseline (scripts/dfc-files-manifest.json) to surface:
   UPDATED  a date-stamped family whose date changed (a new edition, e.g.
            Civilian_Ships_Scenarios_260501 -> _260701)
   REVISED  same date stamp but the ?v= cache-buster changed (file re-uploaded)
+  RESIZED  filename, date stamp and ?v= all unchanged but the file's byte length
+           moved — TTCombat overwrote it in place. Nothing in the URL changes
+           when they do that, so a HEAD request for Content-Length is the only
+           way to see it: the 260731 Resistance stats were silently re-cut this
+           way (a VX Bomb wording fix) and every string-level check read clean.
   REMOVED  a family that disappeared from the page
 
 Stdlib only (urllib + re + json) so it runs in any environment with no installs.
@@ -32,7 +39,19 @@ def fetch(url):
         return r.read().decode("utf-8", "replace")
 
 
-def parse(html):
+def head_bytes(url):
+    """Content-Length via HEAD. Returns None if the CDN won't say — the caller
+    treats an unknown length as "no opinion" rather than as a change."""
+    req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "Mozilla/5.0 (DFC-file-scan)"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            n = r.headers.get("Content-Length")
+            return int(n) if n and n.isdigit() else None
+    except Exception:
+        return None
+
+
+def parse(html, with_bytes=True):
     """Return {family: {filename, date, version, url}} for every CDN file on the page."""
     out = {}
     for url in sorted(set(CDN_RE.findall(html))):
@@ -48,11 +67,13 @@ def parse(html):
         # strip trailing Shopify uuid suffixes so a re-upload keeps the same family
         family = re.sub(r'_[0-9a-f]{8}-[0-9a-f-]{20,}$', '', family)
         out[family] = {"filename": filename, "date": date, "version": query, "url": url}
+        if with_bytes:
+            out[family]["bytes"] = head_bytes(url)
     return out
 
 
 def diff(old, new):
-    changes = {"NEW": [], "UPDATED": [], "REVISED": [], "REMOVED": []}
+    changes = {"NEW": [], "UPDATED": [], "REVISED": [], "RESIZED": [], "REMOVED": []}
     for fam, cur in new.items():
         prev = old.get(fam)
         if prev is None:
@@ -61,6 +82,9 @@ def diff(old, new):
             changes["UPDATED"].append((fam, prev, cur))
         elif cur.get("version") != prev.get("version"):
             changes["REVISED"].append((fam, prev, cur))
+        elif (prev.get("bytes") is not None and cur.get("bytes") is not None
+              and prev["bytes"] != cur["bytes"]):
+            changes["RESIZED"].append((fam, prev, cur))
     for fam, prev in old.items():
         if fam not in new:
             changes["REMOVED"].append((fam, prev))
@@ -70,13 +94,16 @@ def diff(old, new):
 def main():
     update = "--update" in sys.argv
     as_json = "--json" in sys.argv
+    # 28 HEAD requests catch in-place overwrites; --no-head skips them when the
+    # network is the expensive part and a filename-level check will do.
+    with_bytes = "--no-head" not in sys.argv
 
     old = {}
     if os.path.exists(MANIFEST):
         old = json.load(open(MANIFEST, encoding="utf-8")).get("files", {})
 
     html = fetch(PAGE)
-    new = parse(html)
+    new = parse(html, with_bytes=with_bytes)
     changes = diff(old, new)
     n = sum(len(v) for v in changes.values())
 
@@ -93,6 +120,8 @@ def main():
                 print(f"  UPDATED  {fam}: {prev.get('date')} -> {cur.get('date')}  ({cur['filename']})\n           {cur['url']}")
             for fam, prev, cur in changes["REVISED"]:
                 print(f"  REVISED  {cur['filename']} (re-uploaded; date stamp unchanged)\n           {cur['url']}")
+            for fam, prev, cur in changes["RESIZED"]:
+                print(f"  RESIZED  {cur['filename']} (overwritten in place: {prev['bytes']} -> {cur['bytes']} bytes)\n           {cur['url']}")
             for fam, prev in changes["REMOVED"]:
                 print(f"  REMOVED  {prev['filename']}")
             print(f"\n{n} change(s). Review, download updated PDFs into Rules-Mechanics-PDFs/, and integrate.")

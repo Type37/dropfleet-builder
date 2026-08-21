@@ -1,6 +1,6 @@
 name: Watch for DFC data changes
 
-# Two independent tripwires, so a stat change cannot land silently:
+# Four independent tripwires, so a stat change cannot land silently:
 #
 #   scan-dfc-files.py   watches TTCombat's downloads page for a new or re-uploaded
 #                       PDF. First to know, but only says "something changed".
@@ -8,8 +8,19 @@ name: Watch for DFC data changes
 #                       catalogues, who transcribe the same PDFs by hand. Slower
 #                       (they publish days later) but says exactly WHICH ship and
 #                       WHICH number, in plain language.
+#   audit-cards.py      downloads the current stat cards and diffs every cost,
+#                       stat and weapon COUNT against data/faction-*.json. The
+#                       only one pointed at US rather than upstream, and the only
+#                       one that would have caught 66bbad0, where we deleted a
+#                       weapon from four Bioficer ships and nothing upstream moved.
+#                       Having the bytes, it also hashes them, so an in-place
+#                       re-cut under an unchanged URL cannot hide (the 260731
+#                       Resistance stats were re-cut exactly that way).
+#   gen-fleet-data.py   proves data/fleet-data.json is still a faithful merge of
+#                       the faction files. It drifted 19 ships behind once, and a
+#                       session then trusted it over the PDF.
 #
-# Neither edits data. Integrating an edition means reading the PDF and deciding
+# None of them edit data. Integrating an edition means reading the PDF and deciding
 # whether a new rule changes what is legal to take, which is a judgement call.
 # The issue this opens is the prompt to do that work, with the diff already laid
 # out. The files manifest is deliberately NOT rebaselined here, so an
@@ -79,8 +90,46 @@ jobs:
           sed -i '/^#findings=/d' bsdata.txt
           echo "findings=${n:-$code}" >> "$GITHUB_OUTPUT"
 
+      # audit-cards.py is the one step with dependencies: it parses the PDFs. It
+      # reuses the card parser from ingest_pdf.py, which imports Pillow for the art
+      # extraction this audit never runs — install it anyway or the import exits.
+      - name: Install the PDF parser
+        run: pip install --quiet pymupdf pillow
+
+      # Downloads ~60 MB of stat cards each run. That is the price of checking our
+      # numbers against the source rather than against another copy of ourselves,
+      # which is precisely the shortcut that lost four Bioficer weapons for 25 days.
+      - name: Cards vs our data
+        id: cards
+        run: |
+          set +e
+          python scripts/audit-cards.py > cards.txt 2>&1
+          code=$?
+          set -e
+          cat cards.txt
+          if [ "$code" -gt 1 ]; then
+            echo "card audit errored with exit $code" >&2
+            exit "$code"
+          fi
+          n=$(sed -n 's/^#findings=//p' cards.txt | tail -1)
+          sed -i '/^#findings=/d' cards.txt
+          echo "findings=${n:-$code}" >> "$GITHUB_OUTPUT"
+
+      # Cheap, no network: regenerate the mirror and see whether anything moved.
+      # A diff here means someone hand-edited a generated file.
+      - name: Mirror is still generated, not hand-patched
+        id: mirror
+        run: |
+          python scripts/gen-fleet-data.py > /dev/null
+          if git diff --quiet -- data/fleet-data.json; then
+            echo "findings=0" >> "$GITHUB_OUTPUT"
+          else
+            git --no-pager diff --stat -- data/fleet-data.json | tee mirror.txt
+            echo "findings=1" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Report
-        if: steps.files.outputs.findings != '0' || steps.bsdata.outputs.findings != '0' || inputs.test_alert
+        if: steps.files.outputs.findings != '0' || steps.bsdata.outputs.findings != '0' || steps.cards.outputs.findings != '0' || steps.mirror.outputs.findings != '0' || inputs.test_alert
         uses: actions/github-script@v7
         with:
           script: |
@@ -93,6 +142,8 @@ jobs:
 
             const files = Number('${{ steps.files.outputs.findings }}' || 0);
             const bsdata = Number('${{ steps.bsdata.outputs.findings }}' || 0);
+            const cards = Number('${{ steps.cards.outputs.findings }}' || 0);
+            const mirror = Number('${{ steps.mirror.outputs.findings }}' || 0);
 
             if (files) {
               parts.push(`## TTCombat published something (${files})`, '', '```', read('files.txt'), '```', '');
@@ -107,6 +158,25 @@ jobs:
                 'stops reappearing. An unmatched ship is usually a rename on one side or the',
                 'other, and often theirs, since TTCombat re-uploads reach us first.',
                 '', '```', read('bsdata.txt'), '```', '');
+            }
+            if (cards) {
+              parts.push(`## The cards and our data disagree (${cards})`, '',
+                'This one is about us, not TTCombat. Either a ship drifted from its card,',
+                'or a card was re-cut in place under an unchanged URL.',
+                '',
+                'Open the PDF and read the block. If the data is wrong, fix it. If the parser',
+                'is wrong, confirm it against the card and move the line into `accepted` in',
+                '`scripts/card-audit-baseline.json` — that bucket is a claim someone read it.',
+                '', '```', read('cards.txt'), '```', '');
+            }
+            if (mirror) {
+              parts.push('## `data/fleet-data.json` was hand-edited', '',
+                'It is generated. Regenerating it changed it, which means an edit went into',
+                'the mirror instead of into the `faction-*.json` file the app actually loads —',
+                'so the edit is not live, and the mirror now disagrees with the app.',
+                '',
+                'Put the change in the faction file, then run `python scripts/gen-fleet-data.py`.',
+                '', '```', read('mirror.txt'), '```', '');
             }
             parts.push(
               '---',

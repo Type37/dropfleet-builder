@@ -5,6 +5,25 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-08-21: Four Bioficer ships get their second weapon back
+
+- **Binary, Brutal, Carronade and Cacophony each fire twice again** — two Scythe Nodules,
+  two Scythe Nodules, two Barb Launchers, two Scythes, all printed twice on their cards.
+- **A regression, not an old bug** — `66bbad0` deleted them in July after checking
+  `data/fleet-data.json`, a mirror no app code loads.
+- **The Binder keeps one of each** — its card wraps oddly; three weapons, not six.
+- **The Melter fires both Thermator Cage profiles** — only Long Range was in the data.
+- **VX Bomb reads "and any Features"** — TTCombat re-cut the 260731 Resistance PDF in
+  place, same name, same date, same `?v=`.
+- **`data/fleet-data.json` is generated again** — `scripts/gen-fleet-data.py`; it was
+  19 ships and six shared rules behind.
+- **The downloads scan is weekly, not monthly** — the docstring was wrong, the cron
+  never was.
+- **New tripwire: `scripts/audit-cards.py`** — diffs every cost, stat and weapon count
+  against the cards each Monday, and sha256s the PDFs so an in-place re-cut cannot hide.
+- **New tripwire: the mirror must regenerate clean** — a hand-edit to `fleet-data.json`
+  now fails the workflow.
+
 ### 2026-08-18: Play Mode fixes from table feedback
 
 - **Famous admirals' ships now appear in mobile Play Mode** — their own Group with a

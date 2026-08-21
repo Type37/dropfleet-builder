@@ -2173,7 +2173,7 @@
     "specialRules": [
      {
       "name": "VX Bomb",
-      "description": "This weapon gains the Scald-2 special rule when targeting Cities. If this weapon does damage to a City, remove all Battalions (friendly and enemy) from that City and any of its Features (including deployed Features) in the same City."
+      "description": "This weapon gains the Scald-2 special rule when targeting Cities. If this weapon does damage to a City, remove all Battalions (friendly and enemy) from that City and any Features (including deployed Features) in the same City."
      },
      {
       "name": "SWACS",
@@ -2423,7 +2423,7 @@
     "specialRules": [
      {
       "name": "VX Bomb",
-      "description": "This weapon gains the Scald-2 special rule when targeting Cities. If this weapon does damage to a City, remove all Battalions (friendly and enemy) from that City and any of its Features (including deployed Features) in the same City."
+      "description": "This weapon gains the Scald-2 special rule when targeting Cities. If this weapon does damage to a City, remove all Battalions (friendly and enemy) from that City and any Features (including deployed Features) in the same City."
      }
     ],
     "groupMin": 1,

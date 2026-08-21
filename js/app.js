@@ -8097,6 +8097,12 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-08-21', title: 'Four Bioficer ships get their second weapon back', items: [
+      'The Binary and Brutal Battleships each show two Scythe Nodules again, the Carronade two Barb Launchers, and the Cacophony two Scythes — all four are printed twice on their stat cards.',
+      'These were removed in July as a suspected double-firepower bug. The check used a data file the app does not load, which still held the collapsed values an earlier audit had already fixed against the PDFs.',
+      'The Melter now fires both its Thermator Cage profiles; only the Long Range one was listed.',
+      'The Resistance VX Bomb rule matches the wording TTCombat now uses. They re-issued the stats PDF without changing its name, date or version, so the monthly downloads check could not see it.',
+    ]},
     { date: '2026-08-18', title: 'Play Mode fixes from table feedback', items: [
       'Famous admirals\' ships now appear in mobile Play Mode, with their own hull track — damage syncs between phone and desktop.',
       'Flagship costs now count toward their weight-class totals and the composition bar (mobile read “Medium points (0)” with a Catastrophe on the table).',
