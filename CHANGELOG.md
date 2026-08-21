@@ -24,6 +24,12 @@ of what changed between stats PDFs.
 - **New tripwire: the mirror must regenerate clean** — a hand-edit to `fleet-data.json`
   now fails the workflow.
 
+- **Four card-parser bugs fixed, found by reading the cards** — a `*` Lock, a name
+  welded to its Arc, a card whose first column says "Type" not "Name", and four
+  spellings of the flagship sub-line.
+- **The card audit is down to four disagreements, all read and signed off** — Bioficer,
+  PHR, Shaltari and UCM are clean; nothing is baselined unread.
+
 ### 2026-08-18: Play Mode fixes from table feedback
 
 - **Famous admirals' ships now appear in mobile Play Mode** — their own Group with a

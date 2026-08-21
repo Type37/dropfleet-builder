@@ -113,6 +113,11 @@ def app_ships(faction_key):
         fs = a.get("flagship")
         if fs:
             out[_vnorm("%s - %s" % (a.get("name", ""), fs.get("name", "")))] = fs
+            # Also under the admiral alone. An admiral has exactly one flagship, so
+            # the name is a unique handle — and it is the only handle that works
+            # when the card titles the hull differently from the data: the Twins of
+            # Aaru's card says "Amber x 2" where the data says "Amber Cruiser".
+            out.setdefault(_vnorm(a.get("name", "")), fs)
     return out
 
 
@@ -145,12 +150,34 @@ def weapon_counts(ship):
     return collections.Counter(_vnorm(w.get("name", "")) for w in wl)
 
 
-def match(card_name, app):
-    nm = _vnorm(card_name)
-    if nm in app:
-        return app[nm]
-    cand = [v for k, v in app.items() if k.startswith(nm) or nm.startswith(k)]
-    return cand[0] if len(cand) == 1 else None
+def match(card, app):
+    """The app entry a card describes, or None.
+
+    A flagship card titles itself with the hull ("Bastion Battleship") and names
+    the admiral in the line beneath, so on the card alone it is indistinguishable
+    from the line ship it is named after. It is not the same ship: 22 of the 24
+    differ in cost, stats or weapons. Try the admiral-qualified name first, and
+    only fall back to the bare hull for cards with no admiral on them.
+    """
+    names = []
+    fa = card.get("famousAdmiral") or {}
+    if fa.get("admiral"):
+        names.append("%s - %s" % (fa["admiral"], card["name"]))
+    names.append(card["name"])
+    if fa.get("admiral"):
+        names.append(fa["admiral"])
+
+    for name in names:
+        nm = _vnorm(name)
+        if nm in app:
+            return app[nm]
+        # Dedupe by identity, not by count: one ship is reachable under several
+        # keys (a flagship answers to "Atom", "Atom - Scion" and its hull name), and
+        # counting keys instead of ships made an unambiguous match look ambiguous.
+        cand = [v for k, v in app.items() if k.startswith(nm) or nm.startswith(k)]
+        if cand and len({id(v) for v in cand}) == 1:
+            return cand[0]
+    return None
 
 
 def audit_faction(key, pdf_path):
@@ -158,7 +185,7 @@ def audit_faction(key, pdf_path):
     app = app_ships(key)
     findings = []
     for card in card_ships(pdf_path):
-        data = match(card["name"], app)
+        data = match(card, app)
         if data is None:
             findings.append((card["name"], "on the card, no ship in the data matches it"))
             continue

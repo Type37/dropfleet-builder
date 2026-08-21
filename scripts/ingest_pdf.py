@@ -53,12 +53,25 @@ ART_DIR_DEFAULT = "assets/art"
 # here, so every broadside row failed to register as a weapon and its name was
 # swallowed into the row above it.
 ARC_RE = re.compile(r'^[FSRNBL](?:/?[FSRNBL])*$')
-LOCK_RE = re.compile(r'^(\d\+|-)$')
+# A Burnthrough weapon prints its Lock as "*" (it rolls against the target's
+# armour instead of a fixed number). Without the star here the row fails to
+# register as a weapon, the parser gives up on the rest of that card's table, and
+# the whole ship reads as having no weapons at all — which is how the Shaltari
+# Uranium, Citrine and Mercury all looked disarmed next to correct data.
+LOCK_RE = re.compile(r'^(\d\+|\*|-)$')
 NUM_RE = re.compile(r'^(\d+|-)$')
 TYPE_RE = re.compile(r'^[KEC]$')
 PTS_RE = re.compile(r'^(\d+)\s*pts(?:\s*\((\d+)\s*\+\s*(\d+)\s*pts\))?', re.I)
 TON_RE = re.compile(r'^([LMHCS])\s*/\s*(\d+)mm$')
-FAMOUS_RE = re.compile(r'^Famous Admiral Level\s*(\d+)\s*&\s*(.+)$', re.I)
+# The sub-line under a flagship's title. TTCombat writes it four ways across the
+# six PDFs — with and without "Famous", joined by "&" or by "+", and once as
+# "Levlel" (PHR Pompeius, 260626). Miss it and the card still parses, but as a
+# plain ship: its cost stays the admiral-plus-hull total, so every flagship reads
+# 25-105 points more expensive than the hull the app charges for.
+FAMOUS_RE = re.compile(r'^(?:Famous\s+)?Admirals?\s+Lev(?:el|lel)\s*(\d+)\s*[&+]\s*(.+)$', re.I)
+# The title splits the admiral from the hull on a hyphen or an en dash, depending
+# on the PDF: "Atom - Scion" but "Helena of Asgard – Pompeius".
+NAME_SPLIT_RE = re.compile(r'\s+[-–—]\s+')
 
 def canon(s):
     s = str(s).replace('”', '"').replace('“', '"').replace("'", '"')
@@ -88,17 +101,42 @@ def is_break(l):
         return True
     return len(l) > 50
 
+def split_trailing_arc(line):
+    """('Oculus Beams F/S') -> ('Oculus Beams', 'F/S'), else (line, None).
+
+    On a one-weapon table the name cell and the arc cell sometimes come back
+    welded into a single fragment. The arc then never appears as a token of its
+    own, the row fails to register, and — being the only row — the ship reads as
+    unarmed. That is the whole reason the Harpy, Gargoyle and Citrine looked like
+    they had lost every gun they own.
+    """
+    name, sep, tail = line.rpartition(' ')
+    if sep and ARC_RE.match(tail):
+        return name.strip(), tail
+    return line, None
+
+
 def parse_weapons(lines, start):
     weapons, j = [], start
     while j < len(lines):
         if is_break(lines[j]):
             break
-        name_parts = []
+        name_parts, welded_arc = [], None
         while j < len(lines) and not ARC_RE.match(lines[j]) and not is_break(lines[j]):
-            name_parts.append(lines[j]); j += 1
-        if j + 5 >= len(lines) or not ARC_RE.match(lines[j]):
-            break
-        arc, att, lock, dmg, typ, special = lines[j:j+6]
+            head, welded_arc = split_trailing_arc(lines[j])
+            name_parts.append(head); j += 1
+            if welded_arc:
+                break
+        if welded_arc:
+            if j + 4 >= len(lines):
+                break
+            arc = welded_arc
+            att, lock, dmg, typ, special = lines[j:j+5]
+            j -= 1  # the row consumed five tokens after the name, not six
+        else:
+            if j + 5 >= len(lines) or not ARC_RE.match(lines[j]):
+                break
+            arc, att, lock, dmg, typ, special = lines[j:j+6]
         if not (NUM_RE.match(att) and LOCK_RE.match(lock) and NUM_RE.match(dmg) and TYPE_RE.match(typ)):
             break
         weapons.append({"name": ' '.join(name_parts).strip(), "arc": arc, "attack": att,
@@ -136,7 +174,8 @@ def parse_page(text):
     ton = lines[pts_idx + 2] if pts_idx + 2 < len(lines) else ''
     fm = FAMOUS_RE.match(cls)
     if fm and m.group(2):
-        adm, _, flagship = name.partition(' - ')
+        parts = NAME_SPLIT_RE.split(name, 1)
+        adm, flagship = (parts[0], parts[1]) if len(parts) == 2 else (name, '')
         ship["famousAdmiral"] = {"admiral": adm.strip(), "level": int(fm.group(1)),
                                  "admiralCost": int(m.group(2)), "shipCost": int(m.group(3))}
         ship["name"] = flagship.strip() or name
@@ -169,7 +208,10 @@ def parse_page(text):
     stats['special'] = ' '.join(sp).strip() if sp else '-'
     ship["stats"] = stats
     try:
-        wh = next(i for i in range(len(lines) - 1) if lines[i] == 'Name' and lines[i+1] == 'Arc')
+        # Anchor on 'Arc', not on 'Name': the Shaltari Citrine's card labels its
+        # first weapon column "Type" instead of "Name", and looking for 'Name'
+        # meant the whole table went unread and the ship parsed as unarmed.
+        wh = next(i for i in range(1, len(lines)) if lines[i] == 'Arc') - 1
         ship["weapons"], _ = parse_weapons(lines, wh + 7)
     except StopIteration:
         ship["weapons"] = []

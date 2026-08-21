@@ -9,6 +9,12 @@
   "UCM_Combined_Fleet_Stats_260529.pdf": "1f2e9d73b4eadeb8bfaaf608716bf9a7457b3eb89ffb1e8501d50c34bca04540"
  },
  "accepted": {
+  "resistance": {
+   "Armstrong": [
+    "hf8clearancelaserwide card=0 app=1",
+    "lmmaulerhf8clearancelaserwide card=1 app=0"
+   ]
+  },
   "scourge": {
    "Daemon": [
     "cost card=210 app=215"
@@ -19,101 +25,11 @@
   }
  },
  "unreviewed": {
-  "bioficer": {
-   "Scion": [
-    "godraylightviceantiship card=1 app=0",
-    "godraylightvicebombardment card=1 app=0",
-    "hyperlightvice card=0 app=1"
-   ],
-   "Bastion Battleship": [
-    "cost card=245 app=225",
-    "bs card=4+ app=5+",
-    "gravitichyperlance card=0 app=1",
-    "gravitichyperspear card=1 app=0"
-   ]
-  },
-  "phr": {
-   "Javelin - Achilles": [
-    "on the card, no ship in the data matches it"
-   ],
-   "Helena of Asgard - Pompeius": [
-    "cost card=200 app=140"
-   ],
-   "Claudia Rhee - Heracles": [
-    "cost card=310 app=235"
-   ],
-   "Gaius Chau - Romulus": [
-    "cost card=555 app=450"
-   ]
-  },
-  "resistance": {
-   "Heavy Cruiser": [
-    "cost card=113 app=75",
-    "scan card=10\" app=6\"",
-    "es card=3+ app=4+",
-    "ks card=4+ app=5+",
-    "n11artillerycannonturret card=2 app=0",
-    "n8artillerycannonbank card=2 app=0"
-   ],
-   "Olympus": [
-    "on the card, no ship in the data matches it"
-   ],
-   "Coloniser": [
-    "cost card=525 app=265",
-    "thrust card=8\" app=5\"",
-    "bs card=4+ app=5+",
-    "10kmassdriverturret card=2 app=0",
-    "heavydualventcannonturret card=2 app=0"
-   ],
-   "Armstrong": [
-    "hf8clearancelaserfocused card=0 app=1",
-    "hf8clearancelaserwide card=0 app=1"
-   ]
-  },
-  "scourge": {
-   "Shadow": [
-    "magnetonlash card=0 app=1",
-    "plasmatempest card=0 app=1",
-    "magnetonlash card=0 app=1",
-    "plasmatempest card=0 app=1"
-   ],
-   "Harpy": [
-    "oculusbeams card=0 app=1"
-   ],
-   "Gargoyle": [
-    "oculusrays card=0 app=1"
-   ],
-   "Rusalka": [
-    "magnetonlash card=0 app=1"
-   ],
-   "Melusine": [
-    "magnetonlash card=0 app=1"
-   ]
-  },
-  "shaltari": {
-   "Twins of Aaru - Amber x 2": [
-    "on the card, no ship in the data matches it"
-   ],
-   "Quetzalcoatl - Uranium": [
-    "cost card=495 app=410",
-    "disintegratorbattery card=0 app=2",
-    "harpoondeluge card=0 app=1",
-    "microwavearrayturret card=0 app=1",
-    "pulseioniserbattery card=0 app=1"
-   ],
-   "Mercury": [
-    "pulseioniserbank card=0 app=1"
-   ],
-   "Citrine": [
-    "disintegratorbattery card=0 app=2"
-   ],
-   "Uranium": [
-    "disintegratorbattery card=0 app=2",
-    "harpoondeluge card=0 app=1",
-    "microwavearrayturret card=0 app=1",
-    "pulseioniserbattery card=0 app=1"
-   ]
-  },
+  "bioficer": {},
+  "phr": {},
+  "resistance": {},
+  "scourge": {},
+  "shaltari": {},
   "ucm": {}
  }
 }
