@@ -30,11 +30,11 @@
    "bytes": 6254994
   },
   "Civilian_Ships_Scenarios": {
-   "filename": "Civilian_Ships_Scenarios_260801.pdf",
-   "date": "260801",
-   "version": "v=1785492208",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Civilian_Ships_Scenarios_260801.pdf?v=1785492208",
-   "bytes": 6132743
+   "filename": "Civilian_Ships_Scenarios_260901.pdf",
+   "date": "260901",
+   "version": "v=1787931568",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Civilian_Ships_Scenarios_260901.pdf?v=1787931568",
+   "bytes": 4252628
   },
   "Clusters_and_Debris_Sheets": {
    "filename": "Clusters_and_Debris_Sheets.pdf",
@@ -114,11 +114,11 @@
    "bytes": 1829887
   },
   "Fleet_Space_Stations": {
-   "filename": "Fleet_Space_Stations_250818.pdf",
-   "date": "250818",
-   "version": "v=1755254974",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Fleet_Space_Stations_250818.pdf?v=1755254974",
-   "bytes": 8268571
+   "filename": "Fleet_Space_Stations_250828.pdf",
+   "date": "250828",
+   "version": "v=1787908199",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Fleet_Space_Stations_250828.pdf?v=1787908199",
+   "bytes": 8953639
   },
   "LSO_Moon": {
    "filename": "LSO_Moon.pdf",
@@ -142,18 +142,18 @@
    "bytes": 3654223
   },
   "PHR_Combined_Fleet_Stats": {
-   "filename": "PHR_Combined_Fleet_Stats_260626.pdf",
-   "date": "260626",
-   "version": "v=1782457120",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/PHR_Combined_Fleet_Stats_260626.pdf?v=1782457120",
-   "bytes": 16236649
+   "filename": "PHR_Combined_Fleet_Stats_260828.pdf",
+   "date": "260828",
+   "version": "v=1787907744",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/PHR_Combined_Fleet_Stats_260828.pdf?v=1787907744",
+   "bytes": 16512114
   },
   "Resistance_Combined_Fleet_Stats": {
    "filename": "Resistance_Combined_Fleet_Stats_260731.pdf",
    "date": "260731",
-   "version": "v=1785507584",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Resistance_Combined_Fleet_Stats_260731.pdf?v=1785507584",
-   "bytes": 5859549
+   "version": "v=1787325876",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Resistance_Combined_Fleet_Stats_260731.pdf?v=1787325876",
+   "bytes": 4567743
   },
   "Scenario_Expansion_1": {
    "filename": "Scenario_Expansion_1_250818.pdf",
@@ -191,11 +191,11 @@
    "bytes": 233470
   },
   "UCM_Combined_Fleet_Stats": {
-   "filename": "UCM_Combined_Fleet_Stats_260529.pdf",
-   "date": "260529",
-   "version": "v=1780043490",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/UCM_Combined_Fleet_Stats_260529.pdf?v=1780043490",
-   "bytes": 6822034
+   "filename": "UCM_Combined_Fleet_Stats_260828.pdf",
+   "date": "260828",
+   "version": "v=1787908175",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/UCM_Combined_Fleet_Stats_260828.pdf?v=1787908175",
+   "bytes": 20083785
   }
  }
 }

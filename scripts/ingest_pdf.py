@@ -74,7 +74,10 @@ FAMOUS_RE = re.compile(r'^(?:Famous\s+)?Admirals?\s+Lev(?:el|lel)\s*(\d+)\s*[&+]
 NAME_SPLIT_RE = re.compile(r'\s+[-–—]\s+')
 
 def canon(s):
-    s = str(s).replace('”', '"').replace('“', '"').replace("'", '"')
+    # Inch marks come through as four different characters across the PDFs — curly
+    # quotes, an apostrophe, and (Resistance 260731 re-cut, Trafalgar) a real double
+    # prime. They all mean inches, so flatten them to the straight quote the data uses.
+    s = str(s).replace('”', '"').replace('“', '"').replace("'", '"').replace('″', '"').replace('′', '"')
     while '""' in s:
         s = s.replace('""', '"')
     return s.strip()

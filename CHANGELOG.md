@@ -5,6 +5,36 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-08-29: UCM 260828, PHR 260828, Civilian 260901, Stations 250828
+
+TTCombat republished four sheets. Page-diffing each against the edition it
+replaces gives four new cards and one spelling fix, and proves nothing else moved.
+
+- **UCM 260828 p44: Frances Mendoza - Flying Dutchman, 136 pts** - M/40mm heavy
+  cruiser, Hero, Vectored, Unique. Cobra Heavy Laser Pair (FN) and two Arowana
+  Missile Turrets.
+- **PHR 260828 p41: Camilla Felix - Nanomatrix, 146 pts** - M/40mm heavy cruiser,
+  Hero, Regenerate-3, Unique. Glaive Lance and Black Nano Drones, plus Repair
+  Nanomachines, which is printed on the card but not in the Special column.
+- **Civilian 260901 p6: MK Mass Transporter, 41 pts** - Mercenary, so it is in all
+  six faction files. Groups of 1-2, Descent and Rare, and the Bulk Lighter ability.
+  Boardable is stripped from its Special column like every other civilian hull.
+- **Stations 250828 p11: Bioficer Hypershredder (220) and Hypersummoner (200)** -
+  the faction's first space stations. Both are Large, Hull 22.
+- **UCM Kyiv lore now spells the class "Kyiv"** - the group name and namesake
+  already did; the prose said Kiev twice.
+- **Resistance 260731 was re-cut in place again** - the only change is Trafalgar's
+  Thrust printed as `8″` instead of `8"`. `canon()` in `scripts/ingest_pdf.py` now
+  folds the prime characters into the straight quote, so this class of false
+  positive cannot come back.
+- **`scripts/audit-extra-ships.js` was reading five superseded PDFs** - repointed to
+  the canonical editions, which drops its report from 39 unmatched ships to 0. Its
+  name heuristic also skipped any ship whose first word is under three letters.
+- **`data/fleet-index.json` ship counts were a stale snapshot** - the landing page
+  chips read 12 to 18 ships low per faction. They are the real group counts now.
+- **New: `scripts/add-260828-content.py`** - the ingest, reusing each faction's own
+  wording for shared rules rather than retyping them.
+
 ### 2026-08-21: Four Bioficer ships get their second weapon back
 
 - **Binary, Brutal, Carronade and Cacophony each fire twice again** — two Scythe Nodules,

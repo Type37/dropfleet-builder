@@ -4901,6 +4901,79 @@
    }
   },
   {
+   "id": "4c7c-0212-db53-efe8",
+   "name": "Camilla Felix - Nanomatrix Heavy Cruiser",
+   "category": "medium",
+   "ship": {
+    "name": "Camilla Felix - Nanomatrix Heavy Cruiser",
+    "cost": 146,
+    "stats": {
+     "thrust": "9\"",
+     "scan": "8\"",
+     "sig": "6\"",
+     "hull": 13,
+     "es": "3+",
+     "ks": "4+",
+     "bs": "6+",
+     "g": "1",
+     "special": "Hero, Regenerate-3, Unique"
+    },
+    "weapons": [
+     {
+      "name": "Glaive Lance",
+      "arc": "FN",
+      "attack": "3",
+      "lock": "2+",
+      "damage": "2",
+      "type": "E",
+      "special": "Overcharge"
+     },
+     {
+      "name": "Black Nano Drones",
+      "arc": "F/S/R",
+      "attack": "8",
+      "lock": "4+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Penetrator"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Hero",
+      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet."
+     },
+     {
+      "name": "Regenerate-3",
+      "description": "This Ship recovers 3 lost Hull Points at the end of its activation.",
+      "page": "37",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Unique",
+      "description": "You may only take one Group of this Ship.",
+      "page": "37",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Repair Nanomachines",
+      "description": "Friendly Ships within 6” of this Ship that roll to repair Crippling Effects during the Repair step of the End Phase improve the results of those rolls by 2. Other friendly Ships that end their activation within 6” of this Ship on the same Orbital Layer recover 2 lost Hull Points."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": true,
+    "tonnage": "M",
+    "famousShipsPrefix": "Only ship of the class:",
+    "famousShips": [
+     "Nanomatrix"
+    ],
+    "lore": "Camilla Felix is the younger sister of renowned war leader and, to some, heretic, Aurellia Felix. Just as charismatic but more hot-headed, which limited her advancement in a Grand Fleet naval career, Camilla is known for her individualism, humanity, and skill in war. When Aurellia declared her intention to schism along with her forces, Camilla was among a flotilla of ardent followers of the White Sphere. Given her sister’s actions, an arrest was apparently attempted, but Camilla’s crew stood with her, repelled the boarders, and helped her masterfully shoot her way out of newly hostile space in the first widely documented PHR-on-PHR combat.\n\nShe brought with her the Nanomatrix, an apparently unique vessel of heavy cruiser tonnage. A more advanced design than regular classes, this ship features an additional primary engine, a sleeker hull, and a prow-mounted energy glaive supported by a state-of-the-art power core. The vessel’s main feature however is a grossly oversized nanomachine hive, enabling both repair and offensive actions with storms of ultra-advanced nanomachines. The presumably huge cost of all this may have limited this class to one example, budget must trouble the Grand Fleet as it does the UCMF."
+   }
+  },
+  {
    "id": "cacb-5021-ad92-6e86",
    "name": "EX-7 Packet Runner",
    "category": "light",
@@ -5113,6 +5186,67 @@
      "Bottle Bearer (Vega Scrapfleet)",
      "Logistics Vessel KLV-822 (Kalium)"
     ]
+   }
+  },
+  {
+   "id": "7e64-95e3-4eb7-6630",
+   "name": "MK Mass Transporters",
+   "category": "light",
+   "ship": {
+    "name": "MK Mass Transporter",
+    "cost": 41,
+    "stats": {
+     "thrust": "10\"",
+     "scan": "4\"",
+     "sig": "4\"",
+     "hull": 5,
+     "es": "5+",
+     "ks": "6+",
+     "bs": "N/A",
+     "g": "1-2",
+     "special": "Descent, Rare"
+    },
+    "weapons": [
+     {
+      "name": "Deterrence Missiles",
+      "arc": "F/S",
+      "attack": "4",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Descent",
+      "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+      "page": "36",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Rare",
+      "description": "You may only take one Group of this Ship in a Skirmish-sized game, two in a Clash, three in a Battle, and four in a Reconquest.",
+      "page": "37",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Mercenary",
+      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable rule."
+     },
+     {
+      "name": "Bulk Lighter",
+      "description": "While a Ship with this rule is on the table, you have access to the following Ability:\n\nBattalion Support (1AP): Once per activation, when you deploy Battalions from a Group on any Orbital Layer within 6” of a friendly Ship with the Bulk Lighter rule, choose one of the launching Asset types. If the chosen Asset is either Dropships or Drop Pods, place an additional Battalion. If the chosen Asset is Bulk Landers, place an additional two Battalions. Other Launch Assets are unaffected by this Ability."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 2,
+    "isRare": true,
+    "isUnique": false,
+    "tonnage": "L",
+    "additional": true,
+    "lore": "It’s a tough, thankless job hauling cargo from ground to space, but the Maganum Kinematics Mass Transporter takes it all in its stride. This reliable workhorse can be frequently seen flitting between orbit and atmosphere collecting and dispensing valuable cargo. During the reconquest, the durable, yet lightly armoured spaceframe of this vessel was used as a second line support vessel assisting troopships in setting up forward operating bases. Full of prefabricated barricades, fire-support bunkers, and even command centres, this small hauler vastly improves the efficiency of troops deployed to combat zones. Keeping the war machine well equipped, well stocked, and with a relatively comfortable, if cramped base to strike out at Scourge targets from.\n\nEven though their primary contracts are with the UCM, Maganum Kinematics have sold many of these to other non government organisations. Various shipping magnates operate at least one of these reliable ships at each of their destinations. More surprisingly, even other factions have been making use of these vessels. The PHR stationed at Earth have requisitioned a pair of these ships, as well as Kalium counting no fewer than four of these vessels amongst its fleet, though only two have been seen operating in the vicinity of Earth."
    }
   }
  ],

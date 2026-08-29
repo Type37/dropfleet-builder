@@ -9,15 +9,18 @@
 const fs = require('fs');
 const PT = 'scripts/_pdftext';
 
+// Canonical editions — repoint these on every edition bump, or the audit checks a
+// superseded sheet and reports every newly published ship as an unofficial extra.
 const FACTION_PDF = {
-  ucm:        'UCM_Combined_Fleet_Stats_260327.txt',
-  scourge:    'Scourge_Combined_Fleet_Stats_260327.txt',
-  phr:        'PHR_Combined_Fleet_Stats_260429.txt',
-  shaltari:   'Shaltari_Combined_Fleet_Stats_260327.txt',
-  resistance: 'Resistance_Combined_Fleet_Stats_260327.txt',
-  bioficer:   'Bioficer_Combined_Fleet_Stats_260429.txt',
+  ucm:        'UCM_Combined_Fleet_Stats_260828.txt',
+  scourge:    'Scourge_Combined_Fleet_Stats_260626.txt',
+  phr:        'PHR_Combined_Fleet_Stats_260828.txt',
+  shaltari:   'Shaltari_Combined_Fleet_Stats_260731.txt',
+  resistance: 'Resistance_Combined_Fleet_Stats_260731.txt',
+  bioficer:   'Bioficer_Combined_Fleet_Stats_260529.txt',
 };
-const SHARED = ['Misc_Combined_Ship_Stats_250822.txt', 'Civilian_Ships_Scenarios_260501.txt'];
+const SHARED = ['Misc_Combined_Ship_Stats_250822.txt', 'Civilian_Ships_Scenarios_260901.txt',
+                'Fleet_Space_Stations_250828.txt'];
 
 const norm = s => (s || '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]/g, '');
 const read = f => { try { return norm(fs.readFileSync(`${PT}/${f}`, 'utf8')); } catch { return ''; } };
@@ -36,6 +39,9 @@ function nameKeys(name) {
   // Multi-word proper nouns: "San Francisco", "New York", "Hong Kong",
   // "Yi Sun-sin", "Guy Fawkes", "Las Vegas", "New Mombasa"...
   if (COMMON_PREFIX.test(head.toLowerCase()) && words[1]) head = words[0] + words[1];
+  // A two-letter maker's mark ("MK Mass Transporter") leaves nothing long enough
+  // to search for on its own, so carry the next word with it.
+  if (norm(head).length < 3 && words[1]) head = head + words[1];
   return [norm(head)].filter(k => k.length >= 3);
 }
 

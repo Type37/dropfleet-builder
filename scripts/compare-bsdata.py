@@ -67,6 +67,10 @@ ADJUDICATED = {
             'A counts-as ship: Misc 250822 p19 makes it "a Resistance Light Cruiser with one '
             'Vent Cannon Turret and two Fighters & Bombers", i.e. 45 + 10 + 30 + 30 = 115. '
             'BSData price the bare 45 pt hull.'},
+    "MK Mass Transporter": {
+        "BS":
+            'Civilian Ships & Scenarios 260901 p6 prints "N/A" in the BS column, not the "-" '
+            'every other ship uses. BSData normalised it to "-"; we quote the card.'},
 }
 
 

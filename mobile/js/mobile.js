@@ -181,7 +181,7 @@
     // PHR
     'achilles','agamemnon','agrippa','ajax','amphion','andromeda','antigonus',
     'antony','ariadne','augustus','avram','bellerophon','brutus','cadmus','caesar',
-    'calypso','castor','cato','chrysaor','echo','electra','europa','ganymede',
+    'calypso','camilla','castor','cato','chrysaor','echo','electra','europa','ganymede',
     'harpocrates','hector','heracles','ikarus','jason','kairos','leonnatus',
     'medea','meleager','memnon','minos','octavius','odysseus','orion','orpheus',
     'otera','ourania','pandora','pegasus','perseus','philonoe','pollux',
@@ -189,7 +189,7 @@
     'seleucus','sysyphus','teucer','theseus','trajan',
     // UCM
     'babylon','beijing','berlin','boston','bruges','bucharest','busan','byzantium',
-    'caracas','carthage','centurion','delhi','detroit','edmonton','geneva',
+    'caracas','carthage','centurion','delhi','detroit','edmonton','frances','geneva',
     'gladiator','glasgow','halsey','hanoi','havana','havelock','istanbul',
     'jakarta','johannesburg','kyiv','lima','london','lysander','madrid',
     'milwaukee','newton','osaka','oslo','perth','reykjavik','rhiannon','rio','rome',
@@ -272,6 +272,7 @@
     'Callous':'callous','Catastrophe':'catastrophe',
     'Triumvir':'triumvir','Tribune':'tribune','Disciple':'disciple',
     'M.A.B. 67':'mab_67_fuel_transport',
+    'MK Mass Transporter':'mk_mass_transporter',
     'M-Type':'m-type','El Paso':'el_paso'
   };
   const ADMIRAL_ART = {
@@ -322,6 +323,7 @@
   // generic Small/Medium/Large Space Stations have no dedicated art (kept blank
   // rather than showing the wrong faction's model). Mirrors desktop js/app.js.
   const STATION_NAME_ART = {
+    'Hypershredder': 'bioficer-hypershredder', 'Hypersummoner': 'bioficer-hypersummoner',
     'Defence Halo': 'phr-defence-halo', 'Orbital Picket': 'phr-orbital-picket',
     'Orbital Outpost': 'phr-orbital-outpost', 'Orbital Spire': 'phr-orbital-spire',
     'Grand Station': 'resistance-grand-station', 'Astrobotanical Outpost': 'resistance-astrobotanical-outpost',
@@ -4294,6 +4296,12 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-08-29', title: 'Two hero cruisers, a civilian hauler and the first Bioficer stations', items: [
+      'UCM: Frances Mendoza and the Flying Dutchman, 136 pts. A Vectored heavy cruiser with a Cobra Heavy Laser Pair and two Arowana Missile Turrets.',
+      'PHR: Camilla Felix and the Nanomatrix, 146 pts. Regenerate-3, a Glaive Lance, and Repair Nanomachines, which helps friendly ships within 6" repair crippling effects and recover hull.',
+      'Any fleet can hire the MK Mass Transporter, 41 pts. Its Bulk Lighter ability adds a Battalion to a nearby drop, or two if they come down in Bulk Landers.',
+      'Bioficers get their first two space stations: the Hypershredder at 220 pts, whose Dimensional Hypershredder picks Energy or Kinetic as it fires, and the Hypersummoner at 200 pts, which places Wings anywhere within 18".',
+    ]},
     { date: '2026-08-21', title: 'Four Bioficer ships get their second weapon back', items: [
       'The Binary and Brutal Battleships each show two Scythe Nodules again, the Carronade two Barb Launchers, and the Cacophony two Scythes — all four are printed twice on their stat cards.',
       'These were removed in July as a suspected double-firepower bug. The check used a data file the app does not load, which still held the collapsed values an earlier audit had already fixed against the PDFs.',
