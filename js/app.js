@@ -3092,8 +3092,30 @@ let activeGroupId = null;
     // (#sidebar-alerts, filled by renderSidebarAlerts) so it's always in view.
     // Here we keep only the legal-check icon + pts pill in the overview header.
 
+    // Sticky tallies row: Groups X/cap plus a per-weight-class count, Colossal
+    // shown against its cap. These are the same numbers the left-rail tracker and
+    // the composition bar use (countableGroups / maxGroupsFor / colossalMax), just
+    // pinned to the top of the scrolling list so they never leave view.
+    const totalGroupCap = maxGroupsFor(f);
+    const groupTally = countableGroups(f).length;
+    const colCap = sizeInfo.colossalMax ?? 0;
+    const classChips = ['light', 'medium', 'heavy', 'colossal']
+      .filter(c => (ovClassCounts[c] || 0) > 0 || (c === 'colossal' && colCap > 0))
+      .map(c => {
+        const n = ovClassCounts[c] || 0;
+        const label = CATEGORY_LABELS[c] || c;
+        const cap = c === 'colossal' ? `/${colCap}` : '';
+        const over = c === 'colossal' && n > colCap;
+        return `<span class="tally-chip tally-${c}${over ? ' is-over' : ''}"><span class="tally-dot"></span>${esc(label)} <b>${n}${cap}</b></span>`;
+      }).join('');
+    const talliesHtml = `<div class="overview-tallies">
+      <span class="tally-chip tally-groups${groupTally > totalGroupCap ? ' is-over' : ''}">Groups <b>${groupTally}/${totalGroupCap}</b></span>
+      ${classChips}
+    </div>`;
+
     return `
       <div class="fleet-overview">
+        <div class="overview-topbar">
         <div class="overview-header">
           <div class="overview-header-left">
             ${fIcon ? `<img src="${fIcon}" alt="" class="overview-faction-icon">` : ''}
@@ -3107,6 +3129,8 @@ let activeGroupId = null;
               : `<span class="overview-legal-check is-illegal" title="${esc(warnTitle)}"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><line x1="10" y1="5.6" x2="10" y2="10.6"/><circle cx="10" cy="13.9" r="0.95" fill="currentColor" stroke="none"/></svg></span>`}
             ${effMax(f) !== 99999 ? (pts > effMax(f) ? `<span class="overview-legal-pill is-illegal">${pts - effMax(f)} pts over</span>` : `<span class="overview-legal-pill is-ok">${effMax(f) - pts} pts left</span>`) : ''}
           </div>
+        </div>
+        ${talliesHtml}
         </div>
         <div class="overview-desc float-field" onclick="this.querySelector('.overview-desc-input')?.focus()">
           <textarea class="overview-desc-input" id="overview-desc-ta" placeholder=" " rows="2" onblur="App.saveFleetDesc(this.value)" onkeydown="if(event.key==='Escape'){this.blur()}">${esc(f.description || '')}</textarea>

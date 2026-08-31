@@ -6084,14 +6084,59 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 720px;
   margin: 0 auto;
 }
+/* Sticky top summary: the points header + a tallies row, pinned to the top of
+   the scrolling overview so pts/groups/weight-class caps never leave view. The
+   negative margins let its background bleed to the panel edges (the panel has
+   its own padding), so scrolled content passes cleanly underneath. */
+.overview-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  background: var(--paper-warm);
+  margin: calc(var(--sp-lg) * -1) calc(var(--sp-xl) * -1) var(--sp-xl);
+  padding: var(--sp-lg) var(--sp-xl) var(--sp-md);
+  border-bottom: 2px solid var(--navy);
+}
 .overview-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--sp-xl);
-  padding-bottom: var(--sp-lg);
-  border-bottom: 2px solid var(--navy);
+  margin-bottom: var(--sp-md);
 }
+.overview-tallies {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-xs) var(--sp-sm);
+}
+.tally-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--text-xs);
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+.tally-chip b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.tally-chip.tally-groups {
+  padding: 2px 8px;
+  border: 1px solid var(--line, var(--border, rgba(120,110,95,.3)));
+  border-radius: 999px;
+}
+.tally-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--tally-color, var(--ink-muted));
+}
+.tally-light  { --tally-color: #5b9bd5; }
+.tally-medium { --tally-color: #3e9945; }
+.tally-heavy  { --tally-color: #d98c1f; }
+.tally-colossal { --tally-color: #c43c2f; }
+.tally-chip.is-over b { color: var(--danger, #c43c2f); }
+.tally-chip.is-over.tally-groups { border-color: var(--danger, #c43c2f); }
 .overview-header-left {
   display: flex;
   align-items: center;
