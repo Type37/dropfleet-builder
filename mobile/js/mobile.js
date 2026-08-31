@@ -5144,8 +5144,8 @@
   /* ── Import a fleet from a pasted link / code / JSON — desktop parity ─ */
   function importFleetPrompt() {
     showSheet('Import a fleet',
-      `<p>Paste a share link, a share code, fleet JSON, a whole backup file, or a New Recruit army list.</p>
-       <textarea id="import-text" class="import-textarea" rows="5" placeholder="https://…#share/…   or   { fleet JSON }   or   a pasted army list"></textarea>
+      `<p><strong>Works with New Recruit.</strong> Paste a New Recruit army list, or a share link, code, fleet JSON, or backup file.</p>
+       <textarea id="import-text" class="import-textarea" rows="5" placeholder="a New Recruit army list   or   https://…#share/…   or   { fleet JSON }"></textarea>
        <button class="btn btn-primary btn-block" style="margin-top:var(--sp-m)" onclick="App.doImportText()">Import fleet</button>`);
   }
   async function doImportText() {
