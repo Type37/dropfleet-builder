@@ -355,7 +355,7 @@ let activeGroupId = null;
   // The subtle "(thee-syoos)" respelling shown after a namesake; tap to hear it.
   function pronSpan(p) {
     const say = esc(p.say), word = esc(p.word);
-    const tip = p.ipa ? `IPA /${esc(p.ipa)}/ · tap to hear ${word}` : `Tap to hear ${word}`;
+    const tip = p.ipa ? `IPA /${esc(p.ipa)}/, tap to hear ${word}` : `Tap to hear ${word}`;
     return `(<span class="lore-pron" role="button" tabindex="0" onclick="event.stopPropagation();App.sayName(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();App.sayName(this)}" data-word="${word}" data-say="${say}" title="${tip}">${say}</span>)`;
   }
 
@@ -1154,7 +1154,7 @@ let activeGroupId = null;
     let total = 0, distinct = 0, pts = 0;
     Object.entries(c).forEach(([key, n]) => { if (n > 0) { distinct++; total += n; pts += shipPointsByKey(fk, key) * n; } });
     el.textContent = total
-      ? `${total} model${total !== 1 ? 's' : ''} · ${distinct} distinct · ${pts} pts of ships owned`
+      ? `${total} model${total !== 1 ? 's' : ''}, ${distinct} distinct, ${pts} pts of ships owned`
       : 'Nothing recorded yet. Punch in what you own below.';
   }
 
@@ -1391,7 +1391,7 @@ let activeGroupId = null;
         <div class="game-size-info">
           <div class="game-size-name">${size.label}</div>
           <div class="game-size-details">${lines[0]}</div>
-          <div class="game-size-details game-size-sub">${lines[1]} · ${lines[2]}</div>
+          <div class="game-size-details game-size-sub">${lines[1]}, ${lines[2]}</div>
         </div>
       </div>`;
     }).join('');
@@ -1428,7 +1428,7 @@ let activeGroupId = null;
         <div class="game-size-visual">${bars}</div>
         <div>
           <span class="game-size-popover-name">${size.label}</span>
-          <span class="game-size-popover-desc">${lines[0]} · ${lines[1]}</span>
+          <span class="game-size-popover-desc">${lines[0]}, ${lines[1]}</span>
         </div>
       </button>`;
     }).join('') + `
@@ -3950,7 +3950,7 @@ let activeGroupId = null;
     if (opt.weapons && opt.weapons.length) {
       const w = opt.weapons[0];
       const typeTag = w.type ? ` <span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : '';
-      return `<span class="sys-opt-detail">${esc(w.arc || '')} · ${esc(w.attack || '')}/${esc(w.lock || '')}/${esc(w.damage || '')}${typeTag}${w.special && w.special !== '-' ? ' · ' + esc(w.special) : ''}</span>`;
+      return `<span class="sys-opt-detail">${esc(w.arc || '')}, ${esc(w.attack || '')}/${esc(w.lock || '')}/${esc(w.damage || '')}${typeTag}${w.special && w.special !== '-' ? ', ' + esc(w.special) : ''}</span>`;
     }
     if (opt.loads && opt.loads.length) {
       const l = opt.loads[0];
@@ -4671,7 +4671,7 @@ let activeGroupId = null;
     // with that category so the "click for info" works for them too.
     const cardOnclick = ` onclick="App.openShipDetail('${currentFleet.faction}','${isFamous ? 'famous_admirals' : category}','${key}',true)"`;
     const typeLine = isFamous
-      ? `${flagshipLabel(data, true, true)} · ${esc(tonLabel(data.tonnage) || catLabel)}`
+      ? `${flagshipLabel(data, true, true)}, ${esc(tonLabel(data.tonnage) || catLabel)}`
       : `${esc(tonLabel(data.tonnage) || catLabel)}`;
     const addBtn = isFamous
       ? `<button class="btn btn-primary btn-sm"${famBlocked ? ` disabled title="${esc(famReason)}"` : ''} onclick="event.stopPropagation(); App.addFamousAdmiralFromPicker('${key}')">+ Add Admiral</button>`
@@ -6141,12 +6141,12 @@ let activeGroupId = null;
       const gCat = g.ships.length > 0 ? (g.ships[0].groupCategory || 'medium') : 'medium';
       const gCatLabel = CATEGORY_LABELS[gCat] || gCat;
       if (roster) {
-        groupsHtml += `<tr class="rt-group dp-group-cat-${gCat}"><td colspan="13">${esc(g.name)} <span class="rt-gcat">${gCatLabel}</span> <span class="rt-gpts">${gPts} pts · ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span></td></tr>`;
+        groupsHtml += `<tr class="rt-group dp-group-cat-${gCat}"><td colspan="13">${esc(g.name)} <span class="rt-gcat">${gCatLabel}</span> <span class="rt-gpts">${gPts} pts, ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span></td></tr>`;
       } else {
         groupsHtml += `<div class="dp-group">
         <div class="dp-group-head">
           <span class="dp-group-name">${esc(g.name)} <span class="dp-group-cat dp-group-cat-${gCat}">${gCatLabel}</span></span>
-          <span class="dp-group-pts">${gPts} pts · ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
+          <span class="dp-group-pts">${gPts} pts, ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
         </div>`;
       }
 
@@ -7263,7 +7263,7 @@ let activeGroupId = null;
     if (body) {
       body.innerHTML =
         `<div style="font-size:var(--text-md)"><strong>${esc(fleet.name)}</strong></div>`
-        + `<div class="text-caption" style="margin-top:2px">${(factionData[fleet.faction] || {}).name || fleet.faction} · ${shipCount} ship${shipCount === 1 ? '' : 's'} · ${pts} pts</div>`
+        + `<div class="text-caption" style="margin-top:2px">${(factionData[fleet.faction] || {}).name || fleet.faction}, ${shipCount} ship${shipCount === 1 ? '' : 's'}, ${pts} pts</div>`
         + (clean
           ? `<div style="margin-top:var(--sp-md);color:var(--success,#2e7d32)">Imported cleanly — everything mapped.</div>`
           : `<div style="margin-top:var(--sp-md)">Imported, with a few things to check:</div>`)

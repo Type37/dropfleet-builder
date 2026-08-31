@@ -841,7 +841,7 @@
   }
   function pronSpan(p) {
     const say = esc(p.say), word = esc(p.word);
-    const tip = p.ipa ? `IPA /${esc(p.ipa)}/ · tap to hear ${word}` : `Tap to hear ${word}`;
+    const tip = p.ipa ? `IPA /${esc(p.ipa)}/, tap to hear ${word}` : `Tap to hear ${word}`;
     return `(<span class="lore-pron" role="button" tabindex="0" onclick="event.stopPropagation();App.sayName(this)" data-word="${word}" data-say="${say}" title="${tip}">${say}</span>)`;
   }
   function namesakePron(namesakeText, shipName) {
@@ -1481,7 +1481,7 @@
       let txt = `${pts} / ${limit === 99999 ? '∞' : limit} pts`;
       if (limit !== 99999) {
         const rem = limit - pts;
-        txt += ` · ${rem >= 0 ? rem + ' left' : Math.abs(rem) + ' over'}`;
+        txt += `, ${rem >= 0 ? rem + ' left' : Math.abs(rem) + ' over'}`;
       }
       ptsEl.textContent = txt;
       const over = limit !== 99999 && pts > limit;
@@ -1501,7 +1501,7 @@
       case 'screen-admiral-detail': back.classList.remove('hidden'); title.textContent = 'Admiral'; showPts(); break;
       case 'screen-station': back.classList.remove('hidden'); title.textContent = 'Space Station'; showPts(); break;
       case 'screen-station-detail': back.classList.remove('hidden'); title.textContent = 'Space Station'; showPts(); break;
-      case 'screen-play': back.classList.remove('hidden'); title.textContent = (mPlayFleet ? esc(mPlayFleet.name) + ' · Play' : 'Play Mode'); break;
+      case 'screen-play': back.classList.remove('hidden'); title.textContent = (mPlayFleet ? esc(mPlayFleet.name) + ', Play' : 'Play Mode'); break;
       case 'screen-collection': back.classList.remove('hidden'); title.textContent = 'My Collection'; break;
     }
   }
@@ -1531,7 +1531,7 @@
         ${icon ? `<img src="${icon}" alt="" class="faction-icon" loading="lazy">` : ''}
         <div class="list-row-content">
           <div class="list-row-title">${esc(f.name || 'Unnamed Fleet')}</div>
-          <div class="list-row-sub">${pts} / ${limit} pts · ${gc} group${gc !== 1 ? 's' : ''}, ${(GAME_SIZES[f.gameSize] || {}).label || ''}</div>
+          <div class="list-row-sub">${pts} / ${limit} pts, ${gc} group${gc !== 1 ? 's' : ''}, ${(GAME_SIZES[f.gameSize] || {}).label || ''}</div>
           <div class="fleet-row-bar"><div class="fleet-row-bar-fill ${over ? 'over' : ''}" style="width:${pct}%"></div></div>
         </div>
       </div>`;
@@ -1559,7 +1559,7 @@
 
     document.getElementById('fleet-detail-name').textContent = f.name || 'Unnamed Fleet';
     document.getElementById('fleet-detail-sub').textContent =
-      `${info?.name || f.faction} · ${size.label}, ${(f.battleGroups || []).length} group${(f.battleGroups || []).length !== 1 ? 's' : ''}`;
+      `${info?.name || f.faction}, ${size.label}, ${(f.battleGroups || []).length} group${(f.battleGroups || []).length !== 1 ? 's' : ''}`;
 
     const pct = Math.min(100, (pts / limit) * 100);
     const over = pts > limit;
@@ -1747,7 +1747,7 @@
       if (chosen.length) {
         html += `<div class="list-row" onclick="App.openSecondaryModal()">
           <div class="list-row-content">
-            <div class="list-row-title">${chosen.map(o => esc(o.name)).join(' · ')}</div>
+            <div class="list-row-title">${chosen.map(o => esc(o.name)).join(', ')}</div>
             <div class="list-row-sub">${sel.length}/2 chosen, tap to edit</div>
           </div>
           <span class="list-chevron">›</span>
@@ -2143,7 +2143,7 @@
             <span class="list-row-title">${esc(ship.name)} ${tags.join('')}</span>
             <span class="list-row-pts">${gMin > 1 ? cost * gMin : cost}<span class="pts-unit">pts</span></span>
           </div>
-          <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)}, Group ${gMin}${gMax > gMin ? '–' + gMax : ''}${gMin > 1 ? ` · ${gMin}× ${cost}` : ''}</div>
+          <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)}, Group ${gMin}${gMax > gMin ? '–' + gMax : ''}${gMin > 1 ? `, ${gMin}× ${cost}` : ''}</div>
           ${(() => { const rs = (ship.specialRules || []).map(r => r.name).filter(Boolean).join(', '); return rs ? `<div class="list-row-rules">${renderSpecialChips(rs)}</div>` : ''; })()}
           ${shipLaunchIcons(ship, activeFleet.faction)}
           ${(() => {
@@ -2194,7 +2194,7 @@
       .map(([l, v]) => `<span class="ss-stat"><b>${esc(String(v))}</b> ${l}</span>`).join('');
     const weapons = (ship.weapons || []).map(w => `<div class="ss-weapon">
       <div class="ss-wname">${esc(w.name)}</div>
-      <div class="ss-wline">${w.arc ? arcCell(w.arc) + ' ' : ''}Lock ${esc(String(w.lock || '-'))} · ${esc(String(w.attack || '-'))} Att · ${esc(String(w.damage || '-'))}${w.type ? ' ' + esc(w.type) : ''}</div>
+      <div class="ss-wline">${w.arc ? arcCell(w.arc) + ' ' : ''}Lock ${esc(String(w.lock || '-'))}, ${esc(String(w.attack || '-'))} Att, ${esc(String(w.damage || '-'))}${w.type ? ' ' + esc(w.type) : ''}</div>
       ${renderSpecialChips(w.special)}
     </div>`).join('');
     const ruleNames = (ship.specialRules || []).map(r => r.name).filter(Boolean).join(', ');
@@ -2388,7 +2388,7 @@
       <div class="detail-header">
         <div>
           <div class="detail-name detail-name-editable" onclick="App.editGroupName()" title="Rename battlegroup">${esc((group.name && group.name !== ship.name) ? group.name : ship.name)}${ship.isUnique ? ' <span class="ship-tag ship-tag-unique">Unique</span>' : ship.isRare ? ' <span class="ship-tag ship-tag-rare">Rare</span>' : ''}</div>
-          <div class="detail-type">${(group.name && group.name !== ship.name) ? esc(ship.name) + ' · ' : ''}${tonLabel(ship.tonnage) || CATEGORY_LABELS[inst.groupCategory] || ''}</div>
+          <div class="detail-type">${(group.name && group.name !== ship.name) ? esc(ship.name) + ', ' : ''}${tonLabel(ship.tonnage) || CATEGORY_LABELS[inst.groupCategory] || ''}</div>
         </div>
         <div class="pts-badge-lg"><div class="pts-badge-value">${gp}</div><div class="pts-badge-label">Points</div></div>
       </div>
@@ -2471,7 +2471,7 @@
         ${features.map(ft => {
           const sel = ft.name === chosenFeature;
           const stat = (ft.features && ft.features[0]) ? ft.features[0] : null;
-          const detail = stat ? `ES ${stat.es || '-'} · KS ${stat.ks || '-'}${stat.special && stat.special !== '-' ? ' · ' + stat.special : ''}` : '';
+          const detail = stat ? `ES ${stat.es || '-'}, KS ${stat.ks || '-'}${stat.special && stat.special !== '-' ? ', ' + stat.special : ''}` : '';
           // Show every option's full rules inline so they can be compared before picking.
           const rulesHtml = (ft.rules || []).map(r =>
             `<div class="feature-rule">${r.description ? `<b>${esc(r.name)}:</b> ${ruleHtml(r.description)}` : `<b>${esc(r.name)}</b>`}</div>`
@@ -4612,7 +4612,7 @@
     let total = 0, distinct = 0, pts = 0;
     Object.entries(c).forEach(([key, n]) => { if (n > 0) { distinct++; total += n; pts += shipCostByKey(fk, key) * n; } });
     el.textContent = total
-      ? `${total} model${total !== 1 ? 's' : ''} · ${distinct} distinct · ${pts} pts of ships owned`
+      ? `${total} model${total !== 1 ? 's' : ''}, ${distinct} distinct, ${pts} pts of ships owned`
       : 'Nothing recorded yet. Punch in what you own below.';
   }
 
@@ -4872,7 +4872,7 @@
     if (btn) { btn.disabled = true; (btn.querySelector('.as-label') || btn).textContent = 'Downloading…'; }
     try {
       const r = await OfflineSync.sync(p => {
-        if (status) status.innerHTML = `Downloading… ${p.percent}% · ${p.done} of ${p.total} files (${OfflineSync.formatBytes(p.bytes)} of ${OfflineSync.formatBytes(p.totalBytes)})`;
+        if (status) status.innerHTML = `Downloading… ${p.percent}%, ${p.done} of ${p.total} files (${OfflineSync.formatBytes(p.bytes)} of ${OfflineSync.formatBytes(p.totalBytes)})`;
       });
       haptic(HAPTIC.tick);
       closeActionSheet();
@@ -5484,7 +5484,7 @@
       : '';
     showSheet('Import report',
       `<div class="import-report-name">${esc(fleet.name)}</div>`
-      + `<div class="import-report-note">${esc((FACTIONS[fleet.faction] || {}).name || fleet.faction)} · ${shipCount} ship${shipCount === 1 ? '' : 's'} · ${pts} pts</div>`
+      + `<div class="import-report-note">${esc((FACTIONS[fleet.faction] || {}).name || fleet.faction)}, ${shipCount} ship${shipCount === 1 ? '' : 's'}, ${pts} pts</div>`
       + (clean
         ? `<div class="import-report-ok">Imported cleanly, everything mapped.</div>`
         : `<div class="import-report-sect">Imported, with a few things to check:</div>`)
@@ -5637,7 +5637,7 @@
     document.getElementById('print-root').innerHTML = `
       <div class="pr-header">
         <div class="pr-title">${esc(f.name || 'Unnamed Fleet')}</div>
-        <div class="pr-sub">${info?.name || f.faction} · ${size.label} · ${pts} / ${limit} pts, ${(f.battleGroups || []).length} groups</div>
+        <div class="pr-sub">${info?.name || f.faction}, ${size.label}, ${pts} / ${limit} pts, ${(f.battleGroups || []).length} groups</div>
       </div>
       <div class="pr-units">${groupsHtml}</div>
       ${admiralsHtml ? `<div class="pr-section-title">Admiral</div>${admiralsHtml}` : ''}
@@ -5702,7 +5702,7 @@
           <span class="size-card-name">${s.label}</span>
           <span class="size-card-sub">${lines[0]}</span>
           <span class="size-card-sub">${lines[1]}</span>
-          <span class="size-card-sub">${lines[2]} · ${s.time}</span>
+          <span class="size-card-sub">${lines[2]}, ${s.time}</span>
         </span>
       </button>`;
     }).join('');
