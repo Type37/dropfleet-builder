@@ -1571,6 +1571,27 @@
     fill.style.width = pct + '%';
     fill.classList.toggle('over', over);
 
+    // Tallies row: Groups X/cap plus a per-weight-class group count (Colossal
+    // against its cap). Same numbers as validateFleet / the group list, pinned to
+    // the top with the points bar so caps are always in view while you scroll.
+    const tallyEl = document.getElementById('fleet-tallies');
+    if (tallyEl) {
+      const totalGroupCap = maxGroupsFor(f);
+      const groupTally = countableGroups(f).length;
+      const colCap = size.colossalMax ?? 0;
+      const classCount = {};
+      (f.battleGroups || []).forEach(g => { const c = groupCatOf(g); classCount[c] = (classCount[c] || 0) + 1; });
+      const chips = ['light', 'medium', 'heavy', 'colossal']
+        .filter(c => (classCount[c] || 0) > 0 || (c === 'colossal' && colCap > 0))
+        .map(c => {
+          const n = classCount[c] || 0;
+          const cap = c === 'colossal' ? `/${colCap}` : '';
+          const isOver = c === 'colossal' && n > colCap;
+          return `<span class="tally-chip tally-${c}${isOver ? ' is-over' : ''}"><span class="tally-dot"></span>${esc(CATEGORY_LABELS[c] || c)} <b>${n}${cap}</b></span>`;
+        }).join('');
+      tallyEl.innerHTML = `<span class="tally-chip tally-groups${groupTally > totalGroupCap ? ' is-over' : ''}">Groups <b>${groupTally}/${totalGroupCap}</b></span>${chips}`;
+    }
+
     // Warnings — tappable when they have a fix
     const warns = validateFleet(f);
     const warnEl = document.getElementById('fleet-warnings');
@@ -4296,6 +4317,11 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-08-30', title: 'Fleet totals pinned to the top of the list', items: [
+      'The points total, Groups used against the cap, and a per-weight-class count (Light, Medium, Heavy, Colossal) now sit in a bar pinned below the header, so they stay in view as you scroll through your groups.',
+      'Colossal shows against its limit and the tally turns red if you go over a cap.',
+      'The numbers match the ones the app already uses to validate the fleet, so nothing drifts between them.',
+    ]},
     { date: '2026-08-29', title: 'Two hero cruisers, a civilian hauler and the first Bioficer stations', items: [
       'UCM: Frances Mendoza and the Flying Dutchman, 136 pts. A Vectored heavy cruiser with a Cobra Heavy Laser Pair and two Arowana Missile Turrets.',
       'PHR: Camilla Felix and the Nanomatrix, 146 pts. Regenerate-3, a Glaive Lance, and Repair Nanomachines, which helps friendly ships within 6" repair crippling effects and recover hull.',

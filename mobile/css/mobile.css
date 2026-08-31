@@ -896,11 +896,52 @@ button, a, input, select, textarea,
 
 
 /* ── 16. Points Summary Bar ───────────────────────────── */
+/* The fleet name + points + tallies pin below the sticky app-bar so the totals
+   never leave view as the group list scrolls. */
+.fleet-sticky {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 20;
+  background: var(--paper);
+}
 .points-bar {
   padding: var(--sp-m-nudge) var(--sp-l);
   background: var(--paper);
   border-bottom: 1px solid var(--stroke1);
 }
+.points-tallies {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-xs) var(--sp-s);
+  margin-top: var(--sp-xs);
+}
+.points-tallies .tally-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--text-caption2);
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: var(--fg3);
+  white-space: nowrap;
+}
+.points-tallies .tally-chip b { color: var(--fg1); font-variant-numeric: tabular-nums; }
+.points-tallies .tally-groups {
+  padding: 1px 8px;
+  border: 1px solid var(--stroke1, #d8d2c8);
+  border-radius: 999px;
+}
+.points-tallies .tally-dot {
+  width: 8px; height: 8px; border-radius: 2px;
+  background: var(--tally-color, var(--fg3));
+}
+.points-tallies .tally-light  { --tally-color: #5b9bd5; }
+.points-tallies .tally-medium { --tally-color: #3e9945; }
+.points-tallies .tally-heavy  { --tally-color: #d98c1f; }
+.points-tallies .tally-colossal { --tally-color: #c43c2f; }
+.points-tallies .tally-chip.is-over b { color: var(--danger, #c43c2f); }
+.points-tallies .tally-chip.is-over.tally-groups { border-color: var(--danger, #c43c2f); }
 
 .points-bar-row {
   display: flex;

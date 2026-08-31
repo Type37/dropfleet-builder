@@ -85,17 +85,20 @@
 
 <!-- Fleet Detail -->
 <main class="screen screen-padded" id="screen-fleet-detail">
-  <div class="fleet-header">
-    <div class="fleet-header-name" id="fleet-detail-name">Fleet Name</div>
-    <div class="fleet-header-sub" id="fleet-detail-sub">Faction</div>
-  </div>
-  <div class="points-bar">
-    <div class="points-bar-row">
-      <span id="fleet-pts-current">0 / 1500 pts</span>
-      <span id="fleet-pts-remaining" style="color:var(--fg3)">1500 remaining</span>
+  <div class="fleet-sticky">
+    <div class="fleet-header">
+      <div class="fleet-header-name" id="fleet-detail-name">Fleet Name</div>
+      <div class="fleet-header-sub" id="fleet-detail-sub">Faction</div>
     </div>
-    <div class="points-track">
-      <div class="points-fill" id="fleet-pts-fill" style="width:0%"></div>
+    <div class="points-bar">
+      <div class="points-bar-row">
+        <span id="fleet-pts-current">0 / 1500 pts</span>
+        <span id="fleet-pts-remaining" style="color:var(--fg3)">1500 remaining</span>
+      </div>
+      <div class="points-track">
+        <div class="points-fill" id="fleet-pts-fill" style="width:0%"></div>
+      </div>
+      <div class="points-tallies" id="fleet-tallies"></div>
     </div>
   </div>
   <div class="warning-bar hidden" id="fleet-warnings">

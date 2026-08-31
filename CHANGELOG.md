@@ -5,6 +5,19 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-08-30: Fleet totals pinned to the top of the list
+
+Both apps. The points total lived in a side rail (desktop) or a bottom-sheet
+handle (mobile); players asked for the totals and tallies at the top of the
+list. The fleet header is now a sticky bar carrying points, Groups used against
+the cap, and a per-weight-class group count (Light / Medium / Heavy / Colossal),
+Colossal shown against its cap and turning red on any cap breach.
+
+- Desktop: the overview header is `position: sticky` inside the scroll pane.
+- Mobile: the fleet header + points bar pin below the app-bar.
+- The tallies reuse `countableGroups` / `maxGroupsFor` / `colossalMax` and
+  re-render with the list, so they can't disagree with validation.
+
 ### 2026-08-29: UCM 260828, PHR 260828, Civilian 260901, Stations 250828
 
 TTCombat republished four sheets. Page-diffing each against the edition it

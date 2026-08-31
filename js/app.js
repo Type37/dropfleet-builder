@@ -8127,6 +8127,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-08-30', title: 'Fleet totals pinned to the top of the list', items: [
+      'The points total, Groups used against the cap, and a per-weight-class count (Light, Medium, Heavy, Colossal) now sit in a bar pinned to the top of the fleet, so they stay in view as you scroll through your groups.',
+      'Colossal shows against its limit and the tally turns red if you go over a cap.',
+      'The numbers are the same ones the tracker and composition bar already use, so nothing drifts between them.',
+    ]},
     { date: '2026-08-29', title: 'Two hero cruisers, a civilian hauler and the first Bioficer stations', items: [
       'UCM: Frances Mendoza and the Flying Dutchman, 136 pts. A Vectored heavy cruiser with a Cobra Heavy Laser Pair and two Arowana Missile Turrets.',
       'PHR: Camilla Felix and the Nanomatrix, 146 pts. Regenerate-3, a Glaive Lance, and Repair Nanomachines, which helps friendly ships within 6" repair crippling effects and recover hull.',
