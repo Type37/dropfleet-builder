@@ -112,6 +112,13 @@
         <h2 class="tool-card-title">Mission Maker</h2>
         <p class="tool-card-desc">Randomized scenarios with deployment zones and objectives.</p>
       </div>
+      <div class="tool-card tool-card--rules card-deco" onclick="App.navigate('rules')">
+        <div class="tool-card-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v15H6.5A2.5 2.5 0 0 0 4 19.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20"/><path d="M9 7h7M9 10.5h7"/></svg>
+        </div>
+        <h2 class="tool-card-title">How to Play</h2>
+        <p class="tool-card-desc">Look up any special rule, and jump to the official rulebook.</p>
+      </div>
       <div class="tool-card tool-card--calc card-deco" onclick="App.navigate('calc')">
         <div class="tool-card-icon">
           <svg width="32" height="32" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="2" width="16" height="20" rx="2.5" stroke="currentColor" stroke-width="1.6"/><line x1="4" y1="8" x2="20" y2="8" stroke="currentColor" stroke-width="1.6"/><g fill="currentColor"><circle cx="9" cy="12.5" r="1.1"/><circle cx="15" cy="12.5" r="1.1"/><circle cx="9" cy="16.5" r="1.1"/><circle cx="15" cy="16.5" r="1.1"/></g></svg>
@@ -237,6 +244,11 @@
   <!-- ── Combat Calculator (standalone tool) ── -->
   <section class="hidden calc-view" id="view-calc">
     <!-- Rendered by js/calc-ui.js -->
+  </section>
+
+  <!-- ── How to Play (rules reference) ── -->
+  <section class="hidden rules-view" id="view-rules">
+    <!-- Rendered by renderRules() in js/app.js -->
   </section>
 
   <!-- ── Play Mode ── -->

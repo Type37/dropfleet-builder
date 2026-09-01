@@ -993,6 +993,11 @@ let activeGroupId = null;
         topContext.innerHTML = `<a href="#landing" class="topbar-back" onclick="App.navigate('landing'); return false;"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> Combat Calculator`;
         if (window.Calc) Calc.openStandalone(param);
         break;
+      case 'rules':
+        show('view-rules');
+        topContext.innerHTML = `<a href="#landing" class="topbar-back" onclick="App.navigate('landing'); return false;"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> How to Play`;
+        renderRules();
+        break;
       default:
         show('view-landing');
     }
@@ -1000,6 +1005,112 @@ let activeGroupId = null;
 
   function show(id) {
     document.getElementById(id).classList.remove('hidden');
+  }
+
+  // ── How to Play (rules reference) ─────────────────────────────────────────
+  // A reference, not a copy of the rulebook. Two sections carry real content the
+  // app already owns and may show: the Card Breakdown legend (the stat/column
+  // vocabulary the builder already labels) and the Special Rules glossary (the
+  // verbatim keyword text already shipped in data/fleet-index.json's sharedRules,
+  // the same text the keyword tooltips use). Every other section is a signpost to
+  // TTCombat's own free rulebook — we point at the source rather than rehost it.
+  const RULEBOOK_URL = 'https://ttcombat.com/pages/dropfleet-commander-downloads';
+  const RULES_SECTIONS = [
+    { n: 1,  id: 'card-breakdown',   title: 'Card Breakdown',     kind: 'legend' },
+    { n: 2,  id: 'the-basics',       title: 'The Basics' },
+    { n: 3,  id: 'core-concepts',    title: 'Core Concepts' },
+    { n: 4,  id: 'preparation',      title: 'Preparation' },
+    { n: 5,  id: 'game-rounds',      title: 'Game Rounds' },
+    { n: 6,  id: 'planning-phase',   title: 'Planning Phase' },
+    { n: 7,  id: 'activation-phase', title: 'Activation Phase' },
+    { n: 8,  id: 'asset-phase',      title: 'Asset Phase' },
+    { n: 9,  id: 'end-phase',        title: 'End Phase' },
+    { n: 10, id: 'scenery',          title: 'Scenery' },
+    { n: 11, id: 'dropsites',        title: 'Dropsites' },
+    { n: 12, id: 'scenarios',        title: 'Scenarios' },
+    { n: 13, id: 'competitive-play', title: 'Competitive Play' },
+    { n: 14, id: 'special-rules',    title: 'Special Rules',      kind: 'glossary' },
+    { n: 15, id: 'scenario-expansion-1', title: 'Scenario Expansion 1' },
+  ];
+
+  function rulesLegendHtml() {
+    // The game's own abbreviations, expanded. Functional vocabulary the builder
+    // already displays (STAT_META / ARC_LABELS / WEAPON_TYPE_LABELS), gathered in
+    // one place so a new player can read a ship card. No rules prose.
+    const row = (k, v) => `<div class="rules-legend-row"><span class="rules-legend-key">${esc(k)}</span><span class="rules-legend-val">${esc(v)}</span></div>`;
+    const stats = Object.values(STAT_META).map(s => row(s.label, s.title)).join('');
+    const arcs = ['F', 'S', 'R', 'FN', 'F/S', 'F/S/R', 'B'].filter(a => ARC_LABELS[a]).map(a => row(a, ARC_LABELS[a])).join('');
+    const types = Object.entries(WEAPON_TYPE_LABELS).map(([k, v]) => row(k, `${v} damage`)).join('');
+    const tons = [['L', 'Light'], ['M', 'Medium'], ['H', 'Heavy'], ['C', 'Colossal']].map(([k, v]) => row(k, `${v} tonnage`)).join('');
+    return `
+      <div class="rules-legend-grid">
+        <div><div class="rules-legend-head">Ship stats</div>${stats}</div>
+        <div><div class="rules-legend-head">Weapon arcs</div>${arcs}</div>
+        <div><div class="rules-legend-head">Damage type</div>${types}<div class="rules-legend-head" style="margin-top:var(--sp-md)">Tonnage</div>${tons}</div>
+      </div>`;
+  }
+
+  function rulesGlossaryHtml() {
+    // Every keyword in the shared glossary, verbatim — the home the tap/hover
+    // tooltips never had. Base "-X" names shown with the X placeholder intact.
+    const names = Object.keys(sharedRulesDB || {}).sort((a, b) => a.localeCompare(b));
+    if (!names.length) return '<p class="text-caption">Rules are still loading.</p>';
+    return `<div class="rules-glossary" id="rules-glossary-list">` + names.map(name => {
+      const r = sharedRulesDB[name] || {};
+      const page = r.page ? `<span class="rules-kw-page">rulebook p.${esc(r.page)}</span>` : '';
+      const desc = (r.description || '').split('\n').map(line => `<p>${esc(line)}</p>`).join('');
+      return `<div class="rules-kw" data-kw="${esc(name.toLowerCase())} ${esc((r.description || '').toLowerCase())}">
+        <div class="rules-kw-head"><span class="rules-kw-name">${esc(name)}</span>${page}</div>
+        <div class="rules-kw-desc">${desc}</div>
+      </div>`;
+    }).join('') + `</div>`;
+  }
+
+  function renderRules() {
+    const el = document.getElementById('view-rules');
+    if (!el) return;
+
+    const pills = RULES_SECTIONS.map(s =>
+      `<button class="rules-pill" onclick="App.jumpRules('${s.id}')"><span class="rules-pill-n">${s.n}</span>${esc(s.title)}</button>`
+    ).join('');
+
+    const sections = RULES_SECTIONS.map(s => {
+      let body;
+      if (s.kind === 'legend') {
+        body = rulesLegendHtml();
+      } else if (s.kind === 'glossary') {
+        body = `<input class="rules-search" type="search" placeholder="Search special rules…" oninput="App.filterRules(this.value)" aria-label="Search special rules">${rulesGlossaryHtml()}`;
+      } else {
+        body = `<a class="rules-rulebook-link" href="${RULEBOOK_URL}" target="_blank" rel="noopener">Read this in TTCombat's rulebook
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h7v7"/><path d="M13 3 6 10"/><path d="M11 13H3V5"/></svg></a>`;
+      }
+      return `<section class="rules-section" id="rules-sec-${s.id}">
+        <h2 class="rules-section-title"><span class="rules-section-n">${s.n}</span>${esc(s.title)}</h2>
+        ${body}
+      </section>`;
+    }).join('');
+
+    el.innerHTML = `
+      <div class="rules-wrap">
+        <div class="rules-intro">
+          <p>Look up any special rule below. For the full rules, the official Dropfleet Commander rulebook is a free download from TTCombat.</p>
+          <a class="btn btn-outline" href="${RULEBOOK_URL}" target="_blank" rel="noopener">TTCombat downloads</a>
+        </div>
+        <div class="rules-pills">${pills}</div>
+        ${sections}
+      </div>`;
+  }
+
+  function jumpRules(id) {
+    const t = document.getElementById('rules-sec-' + id);
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function filterRules(q) {
+    const term = (q || '').trim().toLowerCase();
+    document.querySelectorAll('#rules-glossary-list .rules-kw').forEach(card => {
+      card.style.display = (!term || (card.dataset.kw || '').includes(term)) ? '' : 'none';
+    });
   }
 
   // ── Persistence ──
@@ -8175,6 +8286,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-01', title: 'How to Play: a searchable special-rules reference', items: [
+      'A new How to Play tool on the home screen. It opens a Card Breakdown legend, what every stat, arc, damage type and tonnage letter on a ship card means, and a searchable list of every special rule, each with its rulebook page.',
+      'Type in the search box to filter the rules instantly, or use the numbered section jumps at the top.',
+      'For the full rules, each section links straight to the official Dropfleet Commander rulebook, a free download from TTCombat.',
+    ]},
     { date: '2026-09-01', title: 'Sign in with Google', items: [
       'You can now sign in with Google instead of carrying a six-word Sync Token between devices. Sign in on your computer, sign in with the same account on your phone, and your fleets are there. Nothing to type, nothing to copy.',
       'The Sync Token has not gone anywhere. It is still there under the sign-in button, for anyone who wants sync without an account, and every token already in use keeps working exactly as before.',
@@ -10111,6 +10227,7 @@ let activeGroupId = null;
   // ── Public API ──
   return {
     navigate, ensureFactionLoaded,
+    jumpRules, filterRules,
     // Data hooks for the Combat Calculator (Calc, js/calc-ui.js).
     getCalcData: () => ({ shipDB, factionData, FACTION_LABELS, CATEGORY_ORDER, CATEGORY_LABELS, currentFaction: currentFleet ? currentFleet.faction : null }),
     openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,

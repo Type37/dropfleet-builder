@@ -113,6 +113,19 @@ Medium Torpedo (Limited-1, Penetrator). Reworded the lore to match the card. A
 sweep of every faction for lore that names a weapon count found no others (Rome
 Battlecruiser checks out at two Heavy Torpedoes).
 
+### 2026-09-01: How to Play, a searchable special-rules reference (desktop)
+
+A new "How to Play" tool on the home screen. Deliberately a reference, not a
+copy of the rulebook: it surfaces only content the app already owns and shows,
+and signposts the rest to the source.
+
+- **Card Breakdown** legend built from the app's own stat/arc/type/tonnage
+  vocabulary (`STAT_META` / `ARC_LABELS` / `WEAPON_TYPE_LABELS`).
+- **Special Rules** glossary: every keyword in `sharedRules`, verbatim, with its
+  rulebook page and a live search box. Same text the keyword tooltips already use.
+- The other 13 sections are signposts that link to TTCombat's official rulebook
+  (a free download) rather than reproducing it. Mobile port to follow.
+
 ### 2026-08-30: Fleet totals pinned to the top of the list
 
 Both apps. The points total lived in a side rail (desktop) or a bottom-sheet

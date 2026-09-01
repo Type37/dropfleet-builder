@@ -7973,3 +7973,38 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 /* ── Play: weapons table horizontal scroll ── */
 .play-weapons-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
 .play-weapons { min-width: 340px; }
+
+/* ── How to Play (rules reference, renderRules in js/app.js) ── */
+.rules-view { max-width: 900px; margin: 0 auto; padding: var(--sp-xl) var(--sp-lg) var(--sp-2xl); }
+.rules-wrap { display: flex; flex-direction: column; gap: var(--sp-lg); }
+.rules-intro { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-md); flex-wrap: wrap; }
+.rules-intro p { margin: 0; color: var(--ink-soft); max-width: 60ch; }
+.rules-pills { display: flex; flex-wrap: wrap; gap: var(--sp-xs); position: sticky; top: 0; z-index: 4; background: var(--paper-warm); padding: var(--sp-sm) 0; border-bottom: 1px solid var(--line, rgba(120,110,95,.25)); }
+.rules-pill { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-xs); padding: 4px 10px; border: 1px solid var(--line, rgba(120,110,95,.3)); border-radius: 999px; background: var(--paper); color: var(--ink-soft); cursor: pointer; }
+.rules-pill:hover { border-color: var(--navy); color: var(--navy); }
+.rules-pill-n { font-variant-numeric: tabular-nums; color: var(--ink-faint); font-weight: 600; }
+.rules-section { scroll-margin-top: 56px; padding-top: var(--sp-sm); }
+.rules-section-title { display: flex; align-items: baseline; gap: var(--sp-sm); font-family: var(--font-display); font-size: var(--text-xl); color: var(--ink); margin: 0 0 var(--sp-md); padding-bottom: var(--sp-xs); border-bottom: 2px solid var(--navy); }
+.rules-section-n { font-size: var(--text-sm); color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.rules-rulebook-link { display: inline-flex; align-items: center; gap: 6px; color: var(--navy); text-decoration: none; font-size: var(--text-sm); }
+.rules-rulebook-link:hover { text-decoration: underline; }
+
+.rules-legend-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-lg); }
+.rules-legend-head { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); margin-bottom: var(--sp-xs); }
+.rules-legend-row { display: flex; gap: var(--sp-sm); padding: 3px 0; font-size: var(--text-sm); }
+.rules-legend-key { flex: 0 0 44px; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+.rules-legend-val { color: var(--ink-soft); }
+
+.rules-search { width: 100%; padding: 8px 12px; margin-bottom: var(--sp-md); border: 1px solid var(--line, rgba(120,110,95,.3)); border-radius: var(--radius-md, 8px); background: var(--paper); color: var(--ink); font-size: var(--text-sm); }
+.rules-glossary { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-md); }
+.rules-kw { border: 1px solid var(--line, rgba(120,110,95,.2)); border-radius: var(--radius-md, 8px); padding: var(--sp-md); background: var(--paper); }
+.rules-kw-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-sm); margin-bottom: 4px; }
+.rules-kw-name { font-family: var(--font-display); font-weight: 700; color: var(--ink); }
+.rules-kw-page { font-size: var(--text-xs); color: var(--ink-faint); white-space: nowrap; }
+.rules-kw-desc p { margin: 0 0 4px; font-size: var(--text-sm); line-height: 1.5; color: var(--ink-soft); }
+.rules-kw-desc p:last-child { margin-bottom: 0; }
+
+@media (max-width: 700px) {
+  .rules-legend-grid { grid-template-columns: 1fr; }
+  .rules-glossary { grid-template-columns: 1fr; }
+}
