@@ -3176,3 +3176,28 @@ body.sheet-open .sheet-scrim {
 }
 .coll-badge-ok { color: #1f5c37; background: rgba(31,92,55,0.10); }
 .coll-badge-none { color: var(--fg3); background: var(--paper-alt); }
+
+/* ── How to Play (rules reference, renderMobileRules in mobile.js) ── */
+#screen-rules { padding: var(--sp-l); }
+.rules-intro p { margin: 0 0 var(--sp-s); color: var(--fg2); }
+.rules-pills { display: flex; flex-wrap: wrap; gap: var(--sp-xs); position: sticky; top: var(--header-h); z-index: 15; background: var(--paper); padding: var(--sp-s) 0; margin: 0 calc(var(--sp-l) * -1); padding-left: var(--sp-l); padding-right: var(--sp-l); border-bottom: 1px solid var(--stroke1); }
+.rules-pill { display: inline-flex; align-items: center; gap: 5px; font-size: var(--text-caption2); padding: 4px 9px; border: 1px solid var(--stroke1); border-radius: 999px; background: var(--paper); color: var(--fg2); }
+.rules-pill-n { color: var(--fg3); font-weight: 700; font-variant-numeric: tabular-nums; }
+.rules-section { scroll-margin-top: calc(var(--header-h) + 44px); padding-top: var(--sp-m); }
+.rules-section-title { display: flex; align-items: baseline; gap: var(--sp-s); font-family: var(--font-display); font-size: var(--text-title3, 1.2rem); color: var(--fg1); margin: 0 0 var(--sp-s); padding-bottom: var(--sp-xs); border-bottom: 2px solid var(--navy); }
+.rules-section-n { font-size: var(--text-caption1); color: var(--fg3); font-variant-numeric: tabular-nums; }
+.rules-rulebook-link { display: inline-flex; align-items: center; gap: 6px; color: var(--navy); text-decoration: none; font-size: var(--text-caption1); }
+
+.rules-legend-head { font-size: var(--text-caption2); text-transform: uppercase; letter-spacing: .04em; color: var(--fg3); margin: var(--sp-m) 0 var(--sp-xs); }
+.rules-legend-row { display: flex; gap: var(--sp-s); width: 100%; padding: 7px 0; font-size: var(--text-caption1); text-align: left; background: none; border: none; border-bottom: 1px solid var(--stroke1); color: inherit; }
+.rules-legend-row.static { pointer-events: none; }
+.rules-legend-key { flex: 0 0 46px; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+.rules-legend-val { color: var(--fg2); }
+
+.rules-search { width: 100%; padding: 9px 12px; margin-bottom: var(--sp-s); border: 1px solid var(--stroke1); border-radius: var(--radius-md); background: var(--paper); color: var(--fg1); font-size: var(--text-caption1); }
+.rules-kw-list { display: flex; flex-direction: column; }
+.rules-kw-row { display: flex; align-items: center; gap: var(--sp-s); width: 100%; padding: 12px 2px; text-align: left; background: none; border: none; border-bottom: 1px solid var(--stroke1); color: inherit; }
+.rules-kw-name { font-weight: 600; color: var(--fg1); flex: 1 1 auto; }
+.rules-kw-page { font-size: var(--text-caption2); color: var(--fg3); }
+.rules-kw-chev { color: var(--fg3); font-size: 1.2em; }
+.rules-note { color: var(--fg3); font-size: var(--text-caption1); }

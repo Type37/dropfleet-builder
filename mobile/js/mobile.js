@@ -710,6 +710,102 @@
     syncBackGuard();
   }
 
+  /* ── How to Play (rules reference) ───────────────────────
+     A reference, not a copy of the rulebook. Two sections carry content the app
+     already owns and shows — the Card Breakdown legend (STAT_META / ARC_LABELS)
+     and the Special Rules glossary (RULES_DB, the verbatim keyword text the rule
+     sheet already opens). Every other section signposts TTCombat's own free
+     rulebook rather than reproducing it. Mirrors desktop's renderRules(). */
+  const RULEBOOK_URL = 'https://ttcombat.com/pages/dropfleet-commander-downloads';
+  const RULES_SECTIONS = [
+    { n: 1,  id: 'card-breakdown',       title: 'Card Breakdown', kind: 'legend' },
+    { n: 2,  id: 'the-basics',           title: 'The Basics' },
+    { n: 3,  id: 'core-concepts',        title: 'Core Concepts' },
+    { n: 4,  id: 'preparation',          title: 'Preparation' },
+    { n: 5,  id: 'game-rounds',          title: 'Game Rounds' },
+    { n: 6,  id: 'planning-phase',       title: 'Planning Phase' },
+    { n: 7,  id: 'activation-phase',     title: 'Activation Phase' },
+    { n: 8,  id: 'asset-phase',          title: 'Asset Phase' },
+    { n: 9,  id: 'end-phase',            title: 'End Phase' },
+    { n: 10, id: 'scenery',              title: 'Scenery' },
+    { n: 11, id: 'dropsites',            title: 'Dropsites' },
+    { n: 12, id: 'scenarios',            title: 'Scenarios' },
+    { n: 13, id: 'competitive-play',     title: 'Competitive Play' },
+    { n: 14, id: 'special-rules',        title: 'Special Rules', kind: 'glossary' },
+    { n: 15, id: 'scenario-expansion-1', title: 'Scenario Expansion 1' },
+  ];
+
+  function mobileLegendHtml() {
+    // Functional vocabulary the app already labels, gathered so a new player can
+    // read a ship card. Stat rows open the fuller sheet (openStat); arcs, damage
+    // types and tonnage are plain label rows.
+    const statRows = Object.keys(STAT_META).map(k =>
+      `<button class="rules-legend-row" onclick="App.openStat('${k}')"><span class="rules-legend-key">${esc(k.toUpperCase())}</span><span class="rules-legend-val">${esc(STAT_META[k].label)}</span></button>`).join('');
+    const arcRows = ['F', 'S', 'R', 'FN', 'F/S', 'F/S/R', 'B'].filter(a => ARC_LABELS[a]).map(a =>
+      `<div class="rules-legend-row static"><span class="rules-legend-key">${esc(a)}</span><span class="rules-legend-val">${esc(ARC_LABELS[a])}</span></div>`).join('');
+    const typeRows = [['K', 'Kinetic damage'], ['E', 'Energy damage'], ['C', 'Core damage']].map(([k, v]) =>
+      `<div class="rules-legend-row static"><span class="rules-legend-key">${esc(k)}</span><span class="rules-legend-val">${esc(v)}</span></div>`).join('');
+    const tonRows = [['L', 'Light tonnage'], ['M', 'Medium tonnage'], ['H', 'Heavy tonnage'], ['C', 'Colossal tonnage']].map(([k, v]) =>
+      `<div class="rules-legend-row static"><span class="rules-legend-key">${esc(k)}</span><span class="rules-legend-val">${esc(v)}</span></div>`).join('');
+    return `
+      <div class="rules-legend-head">Ship stats</div>${statRows}
+      <div class="rules-legend-head">Weapon arcs</div>${arcRows}
+      <div class="rules-legend-head">Damage type</div>${typeRows}
+      <div class="rules-legend-head">Tonnage</div>${tonRows}`;
+  }
+
+  function mobileGlossaryHtml() {
+    // Every keyword in the shared glossary as a tappable row; tapping opens the
+    // existing rule sheet with the verbatim text. Base "-X" names shown intact.
+    const names = Object.keys(RULES_DB || {}).sort((a, b) => a.localeCompare(b));
+    if (!names.length) return '<p class="rules-note">Rules are still loading.</p>';
+    return `<input class="rules-search" type="search" placeholder="Search special rules…" oninput="App.filterMobileRules(this.value)" aria-label="Search special rules">
+      <div class="rules-kw-list" id="rules-kw-list">` + names.map(name => {
+      const r = RULES_DB[name] || {};
+      const page = r.page ? `<span class="rules-kw-page">p.${esc(r.page)}</span>` : '';
+      return `<button class="rules-kw-row" data-kw="${esc(name.toLowerCase())} ${esc((r.description || '').toLowerCase())}" onclick="App.openRule('${name.replace(/'/g, "\\'")}')">
+        <span class="rules-kw-name">${esc(name)}</span>${page}
+        <span class="rules-kw-chev">›</span>
+      </button>`;
+    }).join('') + `</div>`;
+  }
+
+  function renderMobileRules() {
+    const el = document.getElementById('rules-container');
+    if (!el) return;
+    const pills = RULES_SECTIONS.map(s =>
+      `<button class="rules-pill" onclick="App.jumpMobileRules('${s.id}')"><span class="rules-pill-n">${s.n}</span>${esc(s.title)}</button>`).join('');
+    const sections = RULES_SECTIONS.map(s => {
+      let body;
+      if (s.kind === 'legend') body = mobileLegendHtml();
+      else if (s.kind === 'glossary') body = mobileGlossaryHtml();
+      else body = `<a class="rules-rulebook-link" href="${RULEBOOK_URL}" target="_blank" rel="noopener">Read this in TTCombat's rulebook
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h7v7"/><path d="M13 3 6 10"/><path d="M11 13H3V5"/></svg></a>`;
+      return `<section class="rules-section" id="rules-sec-${s.id}">
+        <h2 class="rules-section-title"><span class="rules-section-n">${s.n}</span>${esc(s.title)}</h2>
+        ${body}
+      </section>`;
+    }).join('');
+    el.innerHTML = `
+      <div class="rules-intro">
+        <p>Look up any special rule below. For the full rules, the official Dropfleet Commander rulebook is a free download from TTCombat.</p>
+        <a class="btn btn-outline btn-block" href="${RULEBOOK_URL}" target="_blank" rel="noopener">TTCombat downloads</a>
+      </div>
+      <div class="rules-pills">${pills}</div>
+      ${sections}`;
+  }
+
+  function jumpMobileRules(id) {
+    const t = document.getElementById('rules-sec-' + id);
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function filterMobileRules(q) {
+    const term = (q || '').trim().toLowerCase();
+    document.querySelectorAll('#rules-kw-list .rules-kw-row').forEach(row => {
+      row.style.display = (!term || (row.dataset.kw || '').includes(term)) ? '' : 'none';
+    });
+  }
+
   /* ── Action sheet (overflow menu) ──────────────────────── */
   // An item with note:true renders as static text instead of a button — used to
   // state things the user must read before choosing (e.g. the size of the
@@ -734,7 +830,8 @@
     duplicate: 'M760-200H320q-33 0-56.5-23.5T240-280v-560q0-33 23.5-56.5T320-920h280l240 240v400q0 33-23.5 56.5T760-200ZM560-640v-200H320v560h440v-360H560ZM160-40q-33 0-56.5-23.5T80-120v-560h80v560h440v80H160Zm160-800v200-200 560-560Z',
     delete: 'M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z',
     cloud_sync: 'M160-160v-80h109q-51-44-80-106t-29-134q0-112 68-197.5T400-790v84q-70 25-115 86.5T240-480q0 54 21.5 99.5T320-302v-98h80v240H160Zm440 0q-50 0-85-35t-35-85q0-48 33-82.5t81-36.5q17-36 50.5-58.5T720-480q53 0 91.5 34.5T858-360q42 0 72 29t30 70q0 42-29 71.5T860-160H600Zm116-360q-7-41-27-76t-49-62v98h-80v-240h240v80H691q43 38 70.5 89T797-520h-81ZM600-240h260q8 0 14-6t6-14q0-8-6-14t-14-6h-70v-50q0-29-20.5-49.5T720-400q-29 0-49.5 20.5T650-330v10h-50q-17 0-28.5 11.5T560-280q0 17 11.5 28.5T600-240Zm120-80Z',
-    check: 'M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z'
+    check: 'M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z',
+    menu_book: 'M480-320q54-45 114-67.5T720-410q28 0 54.5 4.5T828-392v-380q-25-12-52.5-18t-55.5-6q-56 0-108.5 21.5T480-708v388Zm0 100q-9 0-17.5-2t-16.5-7q-46-32-98.5-51.5T240-300q-42 0-82.5 11T80-259q-23 12-41.5-1T20-296v-436q0-13 6.5-25t18.5-18q46-24 96-35t102-11q58 0 113.5 15T480-756q51-30 106.5-45T700-816q52 0 102 11t96 35q12 6 18.5 18t6.5 25v436q0 24-18.5 37t-41.5 1q-38-20-78.5-31T720-300q-56 0-108.5 19.5T513-229q-8 5-16.5 7t-16.5 2Zm-40-408Z'
   };
   function sheetIcon(name) {
     const d = ICON_PATHS[name];
@@ -1361,7 +1458,8 @@
     'screen-station': renderStationPicker,
     'screen-station-detail': renderStationDetail,
     'screen-play': renderMobilePlay,
-    'screen-collection': renderCollection
+    'screen-collection': renderCollection,
+    'screen-rules': renderMobileRules
   };
 
   function navigate(screenId, opts) {
@@ -1503,6 +1601,7 @@
       case 'screen-station-detail': back.classList.remove('hidden'); title.textContent = 'Space Station'; showPts(); break;
       case 'screen-play': back.classList.remove('hidden'); title.textContent = (mPlayFleet ? esc(mPlayFleet.name) + ', Play' : 'Play Mode'); break;
       case 'screen-collection': back.classList.remove('hidden'); title.textContent = 'My Collection'; break;
+      case 'screen-rules': back.classList.remove('hidden'); title.textContent = 'How to Play'; break;
     }
   }
 
@@ -4351,6 +4450,11 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-01', title: 'How to Play: a searchable special-rules reference', items: [
+      'Settings now has How to Play. It opens a Card Breakdown legend, what every stat, arc, damage type and tonnage letter on a ship card means, and a searchable list of every special rule. Tap any rule to read it.',
+      'Type in the search box to filter the rules instantly, or use the numbered section jumps at the top.',
+      'For the full rules, each section links straight to the official Dropfleet Commander rulebook, a free download from TTCombat.',
+    ]},
     { date: '2026-09-01', title: 'Sign in with Google', items: [
       'You can now sign in with Google instead of carrying a six-word Sync Token between devices. Sign in here and on your computer with the same account, and your fleets are on both.',
       'The Sync Token stays, under the sign-in button, for anyone who wants sync without an account. Every token already in use keeps working.',
@@ -4672,6 +4776,7 @@
       { icon: 'copy', label: `Back up all fleets (${fleets.length})`, action: exportAllFleets, disabled: !fleets.length },
       { icon: 'edit', label: 'Restore or import a fleet…', action: importFleetPrompt },
       { icon: 'duplicate', label: 'My Collection', action: openCollection },
+      { icon: 'menu_book', label: 'How to Play', action: () => navigate('screen-rules') },
       { icon: 'new_releases', label: "What's New", action: openChangelog },
       { icon: 'mail', label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
       { icon: 'bug_report', label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
@@ -6044,7 +6149,8 @@
     mPlayToggleReorder, mPlayMoveGroup, mPlayToggleCollapse, mPlayCollapseAll,
     openSyncModal, closeSyncModal, renderSyncBody, syncGenerate, syncLookup, syncDoJoin, syncNow, syncCopyToken, syncStop, syncDeleteRemote,
     syncSignOut, syncAdoptToken,
-    openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet, sayName
+    openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet, sayName,
+    renderMobileRules, jumpMobileRules, filterMobileRules
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

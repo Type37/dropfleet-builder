@@ -113,6 +113,14 @@ Medium Torpedo (Limited-1, Penetrator). Reworded the lore to match the card. A
 sweep of every faction for lore that names a weapon count found no others (Rome
 Battlecruiser checks out at two Heavy Torpedoes).
 
+### 2026-09-01: How to Play on mobile
+
+The desktop How to Play reference now has a mobile twin, reachable from Settings.
+Same scope and sourcing: a Card Breakdown legend from the app's own vocabulary,
+a searchable Special Rules list, and rulebook signposts for the rest. Each
+keyword row opens the app's existing rule sheet (verbatim text it already
+carries), so no rules prose is duplicated. Sticky section pills, live search.
+
 ### 2026-09-01: How to Play, a searchable special-rules reference (desktop)
 
 A new "How to Play" tool on the home screen. Deliberately a reference, not a
