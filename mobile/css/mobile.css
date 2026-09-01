@@ -1854,6 +1854,44 @@ body.sheet-open .sheet-scrim {
   border-radius: var(--radius-sm);
   margin: 0 0 var(--sp-m);
 }
+/* Account sign-in sits above the Sync Token flow: it is the easier road, and
+   the "or" rule makes clear the two are alternatives rather than steps. */
+.m-sync-account { margin-bottom: var(--sp-m); }
+.m-sync-google {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--sp-s);
+  min-height: 44px;
+}
+.m-sync-or {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+  margin: var(--sp-m) 0;
+  color: var(--fg4);
+  font-size: var(--text-caption2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.m-sync-or::before, .m-sync-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  /* currentColor rather than a palette token, so it is right in both themes. */
+  background: currentColor;
+  opacity: 0.3;
+}
+.m-sync-account-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+  margin-bottom: var(--sp-s);
+}
+.m-sync-avatar { width: 36px; height: 36px; border-radius: 50%; flex: none; }
+.m-sync-account-who { flex: 1; min-width: 0; }
+.m-sync-account-name { font-weight: 700; }
+.m-sync-account-mail { font-size: var(--text-caption2); color: var(--fg4); }
+
 .m-sync-sub {
   font-size: var(--text-caption2);
   text-transform: uppercase;

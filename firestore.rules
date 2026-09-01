@@ -47,7 +47,33 @@ service cloud.firestore {
       allow list: if false;
     }
 
-    // Everything outside /sync stays closed.
+    // Signed-in accounts (Google). Same one-JSON-string payload as /sync, but
+    // the door is a Firebase Auth uid instead of a guessable phrase, so these
+    // documents need no length floor and no "deny list" trick: a request can
+    // only ever touch the one document whose name is its own uid.
+    match /users/{uid} {
+      function mine() {
+        return request.auth != null && request.auth.uid == uid;
+      }
+
+      allow get: if mine();
+
+      allow create, update: if mine()
+        && request.resource.data.keys().hasOnly(['payload', 'updatedAt', 'version'])
+        && request.resource.data.payload is string
+        && request.resource.data.payload.size() <= 900000
+        && request.resource.data.updatedAt is int
+        && request.resource.data.version is int;
+
+      // "Delete online copy" has to work here for the same reason it does for a
+      // token: without it there is no way to remove your fleets from the cloud.
+      allow delete: if mine();
+
+      // Enumeration stays off here too. Nobody needs to list the accounts.
+      allow list: if false;
+    }
+
+    // Everything outside /sync and /users stays closed.
     match /{document=**} {
       allow read, write: if false;
     }

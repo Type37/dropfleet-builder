@@ -33,8 +33,31 @@
 
   const PROJECT = 'dropfleet-builder';
   const API_KEY = 'AIzaSyCuVs19-E131IHSZ_smWcLLl52djAZuJ60';
-  const BASE = 'https://firestore.googleapis.com/v1/projects/' + PROJECT +
-               '/databases/(default)/documents/sync/';
+  const DOCS = 'https://firestore.googleapis.com/v1/projects/' + PROJECT +
+               '/databases/(default)/documents/';
+
+  /* Two ways to sync, one merge engine.
+   *
+   *   token   -> /sync/{six-word-phrase}   the phrase IS the credential
+   *   account -> /users/{uid}              a Google sign-in, no phrase to carry
+   *
+   * Signing in does not retire anybody's token: the token document is left
+   * exactly where it is, so another device still holding it keeps working. It
+   * only stops being THIS device's sync channel, because writing both would
+   * make two documents race over one list. FleetSync.adoptToken() folds a
+   * token's fleets into the account once, for the person who had a token first.
+   */
+  function signedInUid() {
+    try {
+      const u = window.FleetAuth && FleetAuth.user();
+      return u ? u.uid : null;
+    } catch (e) { return null; }
+  }
+  function mode() {
+    if (signedInUid()) return 'account';
+    if (token()) return 'token';
+    return null;
+  }
 
   const FLEETS_KEY  = 'dfc_fleets';        // shared with both apps
   const TOKEN_KEY   = 'dfc_sync_token';
@@ -123,7 +146,7 @@
     catch (e) { return false; }
   }
   function token()   { try { return localStorage.getItem(TOKEN_KEY) || null; } catch (e) { return null; } }
-  function enabled() { return !!token(); }
+  function enabled() { return mode() !== null; }
   function lastSync() {
     const v = parseInt(localStorage.getItem(LASTSYNC_KEY) || '0', 10);
     return v > 0 ? v : null;
@@ -247,9 +270,34 @@
     return new Error(detail || ('Sync failed (HTTP ' + res.status + ').'));
   }
 
-  async function remoteGet(tok) {
-    const res = await fetch(BASE + encodeURIComponent(tok) + '?key=' + API_KEY, { cache: 'no-store' });
-    if (res.status === 404) return null;          // token has never been used
+  /* Where this device syncs right now, and what it must send to be let in.
+   * Account mode carries a Firebase ID token; token mode carries nothing,
+   * because in that model the document name is the whole credential. */
+  async function target() {
+    const uid = signedInUid();
+    if (uid) {
+      const t = await FleetAuth.idToken();
+      if (t) return { path: 'users/' + uid, bearer: t };
+      // Signed in but the token could not be refreshed (offline, most likely).
+      // Fall through to the token path rather than syncing to nothing.
+    }
+    const tok = token();
+    return tok ? { path: 'sync/' + tok, bearer: null } : null;
+  }
+  function tokenTarget(tok) { return { path: 'sync/' + tok, bearer: null }; }
+
+  function docUrl(t) {
+    return DOCS + t.path.split('/').map(encodeURIComponent).join('/') + '?key=' + API_KEY;
+  }
+  function authHeaders(t, extra) {
+    const h = Object.assign({}, extra || {});
+    if (t.bearer) h.Authorization = 'Bearer ' + t.bearer;
+    return h;
+  }
+
+  async function remoteGet(t) {
+    const res = await fetch(docUrl(t), { cache: 'no-store', headers: authHeaders(t) });
+    if (res.status === 404) return null;          // never been written to
     if (!res.ok) throw await failure(res);
     const doc = await res.json();
     const raw = doc && doc.fields && doc.fields.payload && doc.fields.payload.stringValue;
@@ -263,7 +311,7 @@
     } catch (e) { return EMPTY; }
   }
 
-  async function remotePut(tok, payload) {
+  async function remotePut(t, payload) {
     const body = {
       fields: {
         payload:   { stringValue: JSON.stringify(payload) },
@@ -272,16 +320,16 @@
       }
     };
     // PATCH upserts in the Firestore REST API, so this both creates and updates.
-    const res = await fetch(BASE + encodeURIComponent(tok) + '?key=' + API_KEY, {
+    const res = await fetch(docUrl(t), {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeaders(t, { 'Content-Type': 'application/json' }),
       body: JSON.stringify(body)
     });
     if (!res.ok) throw await failure(res);
   }
 
-  async function remoteDelete(tok) {
-    const res = await fetch(BASE + encodeURIComponent(tok) + '?key=' + API_KEY, { method: 'DELETE' });
+  async function remoteDelete(t) {
+    const res = await fetch(docUrl(t), { method: 'DELETE', headers: authHeaders(t) });
     if (!res.ok && res.status !== 404) throw await failure(res);
   }
 
@@ -324,7 +372,7 @@
    * "that token has 6 fleets, this device has 3" before the user commits. */
   async function preview(raw) {
     const tok = normaliseToken(raw);
-    const remote = await remoteGet(tok);
+    const remote = await remoteGet(tokenTarget(tok));
     return {
       token: tok,
       exists: remote !== null,
@@ -338,13 +386,13 @@
   async function join(raw) {
     const tok = normaliseToken(raw);
     if (!looksLikeToken(tok)) throw new Error('That does not look like a Sync Token.');
-    const remote = (await remoteGet(tok)) || EMPTY;
+    const remote = (await remoteGet(tokenTarget(tok))) || EMPTY;
     const before = readLocal().length;
     const merged = mergeWith(remote);
     writeLocal(merged.fleets);
     writeDeleted(merged.deleted);
     localStorage.setItem(TOKEN_KEY, tok);
-    await remotePut(tok, merged);
+    await remotePut(tokenTarget(tok), merged);
     localStorage.setItem(LASTSYNC_KEY, String(Date.now()));
     return {
       token: tok,
@@ -364,17 +412,18 @@
    * before writing so a stale device cannot clobber another device's work. */
   let inFlight = null;
   async function sync() {
-    const tok = token();
-    if (!tok) return null;
+    if (!enabled()) return null;
     if (inFlight) return inFlight;          // coalesce overlapping calls
     inFlight = (async () => {
       try {
-        const remote = (await remoteGet(tok)) || EMPTY;
+        const t = await target();
+        if (!t) return null;
+        const remote = (await remoteGet(t)) || EMPTY;
         const beforeIds = readLocal().map(f => f && f.id).join(',');
         const merged = mergeWith(remote);
         writeLocal(merged.fleets);
         writeDeleted(merged.deleted);
-        await remotePut(tok, merged);
+        await remotePut(t, merged);
         localStorage.setItem(LASTSYNC_KEY, String(Date.now()));
         const changed = merged.fleets.map(f => f && f.id).join(',') !== beforeIds;
         if (changed && typeof api.onChange === 'function') api.onChange(merged.fleets);
@@ -422,11 +471,36 @@
    * re-upload them if it syncs again, so the copy on this device going away is
    * not the same as the token being retired everywhere. */
   async function deleteRemote() {
-    const tok = token();
-    if (!tok) return false;
-    await remoteDelete(tok);
-    stop();
+    const t = await target();
+    if (!t) return false;
+    await remoteDelete(t);
+    // Signing out is the user's own decision, so an account keeps its session
+    // and simply has nothing stored online any more. A token has no meaning
+    // once its document is gone, so that one is dropped from this device.
+    if (mode() === 'token') stop();
+    else localStorage.removeItem(LASTSYNC_KEY);
     return true;
+  }
+
+  /* One-time merge for somebody who used a Sync Token before they signed in.
+   * Reads the token's document, folds it into the local list, pushes the result
+   * to the account, and stops this device syncing on the token. The token's own
+   * document is left alone: other devices still holding it keep working. */
+  async function adoptToken(raw) {
+    if (mode() !== 'account') throw new Error('Sign in first.');
+    const tok = normaliseToken(raw || token() || '');
+    if (!looksLikeToken(tok)) throw new Error('That does not look like a Sync Token.');
+    const remote = (await remoteGet(tokenTarget(tok))) || EMPTY;
+    const before = readLocal().length;
+    const merged = mergeWith(remote);
+    writeLocal(merged.fleets);
+    writeDeleted(merged.deleted);
+    localStorage.removeItem(TOKEN_KEY);
+    const t = await target();
+    if (t) await remotePut(t, merged);
+    localStorage.setItem(LASTSYNC_KEY, String(Date.now()));
+    if (typeof api.onChange === 'function') api.onChange(merged.fleets);
+    return { total: merged.fleets.length, fromToken: (remote.fleets || []).length, fromDevice: before };
   }
 
   /* ── Staying in step ─────────────────────────────────────────
@@ -466,7 +540,8 @@
   const api = {
     supported, enabled, token, lastSync,
     randomToken, normaliseToken, looksLikeToken,
-    preview, join, start, sync, notifyChanged, maybeAutoSync, stop, deleteRemote, recordDeleted,
+    mode, preview, join, start, sync, notifyChanged, maybeAutoSync, stop, deleteRemote, recordDeleted,
+    adoptToken,
     stampChanged,
     wordCount: WORDS.length,
     WORDS_PER_TOKEN: WORDS_PER_TOKEN,

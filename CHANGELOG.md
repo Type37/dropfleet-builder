@@ -5,6 +5,52 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-01: Sign in with Google
+
+Asked for after seeing warcomp.app's Google/Discord sign-in. Google is shipped;
+Discord cannot be, for a reason worth writing down.
+
+**Why Google needed no backend.** Firebase Auth speaks Google natively, and the
+whole exchange is two documented REST endpoints, so this stays in the app's
+existing style: no SDK, no build step, no CDN bundle fighting the offline-first
+service worker. `js/fleet-auth.js` posts the Google ID token to
+`identitytoolkit.googleapis.com/v1/accounts:signInWithIdp` and refreshes through
+`securetoken.googleapis.com`. The only external script is Google Identity
+Services, and it loads lazily on first open of the Sync panel, never on app
+start, because the app has to work with no network and signing in is the one
+action that cannot.
+
+**Why Discord could not come along.** Discord publishes no
+`.well-known/openid-configuration` and issues no `id_token`, only an access
+token, so Firebase has nothing to verify. It needs a server endpoint holding the
+Discord client secret that exchanges the code and mints a Firebase custom token.
+A free Cloudflare Worker is the cheapest home for it. Noted in
+`docs/AUTH-SETUP.md`, not built.
+
+**Two doors, one merge engine.** `fleet-sync.js` had `/sync/{token}` hardcoded
+into its base URL. It now resolves a target per call:
+
+- `token`   -> `/sync/{six-word-phrase}`, unauthenticated, the phrase is the key
+- `account` -> `/users/{uid}`, `Authorization: Bearer <Firebase ID token>`
+
+`FleetSync.mode()` says which is live, and a device is only ever in one. Writing
+both would put two documents in a race over one list. Signing in therefore parks
+the token rather than retiring it: the token's document is untouched, so another
+device still holding it keeps working, and `FleetSync.adoptToken()` folds its
+fleets into the account once for the person who had a token first.
+
+**Rules.** New `/users/{uid}` block in `firestore.rules`, same payload schema and
+900 KB cap as `/sync`, gated on `request.auth.uid == uid`. It needs no length
+floor and no deny-list trick, because a request can only ever name its own uid.
+
+**Shipped inert.** `GOOGLE_CLIENT_ID` in `js/fleet-auth.js` is empty until the
+Firebase console side is done, and while it is empty `FleetAuth.configured()` is
+false, no sign-in button renders in either app, and the Sync Token flow is
+byte-for-byte what it was. Setup is five console steps in `docs/AUTH-SETUP.md`.
+Worth knowing: `type37.github.io` is not yet an authorized domain on the Firebase
+project, and the Firebase authorized-domain list and the OAuth client's
+JavaScript origins are two separate settings that both have to include it.
+
 ### 2026-08-31: Printing, Command Ship AP, and finding the Sync Token
 
 Four reports from the feedback form.

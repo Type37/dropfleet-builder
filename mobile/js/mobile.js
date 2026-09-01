@@ -4351,6 +4351,11 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-01', title: 'Sign in with Google', items: [
+      'You can now sign in with Google instead of carrying a six-word Sync Token between devices. Sign in here and on your computer with the same account, and your fleets are on both.',
+      'The Sync Token stays, under the sign-in button, for anyone who wants sync without an account. Every token already in use keeps working.',
+      'If you had a token before signing in, the sheet offers to bring those fleets into your account, combining the two lists rather than replacing either.',
+    ]},
     { date: '2026-08-31', title: 'Printing, and a flagship on the printed sheet', items: [
       'A famous admiral\'s ship is now on the printed sheet, with its stats, weapons, launch assets and rules like any other group. It showed on the fleet screen and in Play Mode but the printout listed only the admiral\'s name, so a Resistance list with Magellan printed without the Coloniser.',
       'Printing from the browser rather than Export PDF used to send a blank page: the print stylesheet hides everything except a sheet that had not been built yet. It is built now for whoever starts the print, and cleared afterwards so a later print can never send a fleet you have since left.',
@@ -4718,9 +4723,82 @@
     }
     const flash = syncFlash ? `<p class="m-sync-flash">${esc(syncFlash)}</p>` : '';
     syncFlash = '';
-    if (state && state.mode === 'confirm') body.innerHTML = flash + syncConfirmHTML(state);
-    else if (FleetSync.enabled()) body.innerHTML = flash + syncOnHTML();
-    else body.innerHTML = flash + syncOffHTML();
+    if (state && state.mode === 'confirm') { body.innerHTML = flash + syncConfirmHTML(state); return; }
+    const acct = window.FleetAuth && FleetAuth.user();
+    body.innerHTML = flash + syncAccountHTML() + (FleetSync.enabled() ? syncOnHTML() : syncOffHTML());
+    // Google's rendered button, mounted lazily: the GIS script only loads when
+    // this sheet is actually opened, never on app start.
+    const slot = document.getElementById('m-sync-google');
+    if (slot && window.FleetAuth && FleetAuth.configured() && !acct) {
+      FleetAuth.mountGoogleButton(slot, { theme: settings.theme === 'dark' ? 'filled_black' : 'outline', width: 280 })
+        .then(async () => {
+          syncSetBusy(true, 'Loading your fleets…');
+          try {
+            await FleetSync.sync();
+            syncFlash = 'Signed in, your fleets are syncing';
+            renderSyncBody();
+          } catch (e) {
+            syncSetBusy(false);
+            renderSyncBody();
+            syncSetError(e.message || 'Signed in, but the first sync failed.');
+          }
+        })
+        .catch(e => { if (e && e.message) syncSetError(e.message); });
+    }
+  }
+
+  /* Account block. Google sign-in is the easy road (nothing to carry between
+   * devices); the Sync Token below it stays for anyone who wants sync without an
+   * account. With no client ID configured in the build this renders nothing, so
+   * the token flow is exactly what it was. */
+  function syncAccountHTML() {
+    if (!(window.FleetAuth && FleetAuth.configured())) return '';
+    const u = FleetAuth.user();
+    if (!u) {
+      return `<div class="m-sync-account">
+        <p class="m-sync-p">Sign in and your fleets follow you to every device you use, with no phrase to type.</p>
+        <div id="m-sync-google" class="m-sync-google"></div>
+      </div>
+      <div class="m-sync-or"><span>or</span></div>`;
+    }
+    const tok = FleetSync.token();
+    const adopt = tok
+      ? `<button class="btn btn-outline btn-block" onclick="App.syncAdoptToken()">Bring your Sync Token fleets in</button>`
+      : '';
+    return `<div class="m-sync-account">
+      <div class="m-sync-account-row">
+        ${u.picture ? `<img class="m-sync-avatar" src="${esc(u.picture)}" alt="" referrerpolicy="no-referrer">` : ''}
+        <div class="m-sync-account-who">
+          <div class="m-sync-account-name">${esc(u.name)}</div>
+          ${u.email ? `<div class="m-sync-account-mail">${esc(u.email)}</div>` : ''}
+        </div>
+      </div>
+      ${adopt}
+      <button class="btn btn-ghost btn-block" onclick="App.syncSignOut()">Sign out</button>
+    </div>`;
+  }
+
+  /* Signing out leaves every fleet on the device, and the account's cloud copy
+   * is untouched, so signing back in picks up where it left off. */
+  function syncSignOut() {
+    FleetAuth.signOut();
+    syncFlash = 'Signed out';
+    renderSyncBody();
+  }
+
+  async function syncAdoptToken() {
+    syncSetError('');
+    syncSetBusy(true, 'Combining your fleets…');
+    try {
+      const r = await FleetSync.adoptToken();
+      fleets = loadFleets();
+      syncFlash = r.total === 1 ? '1 fleet in your account' : r.total + ' fleets in your account';
+      renderSyncBody();
+      renderFleetList();
+    } catch (e) {
+      syncSetBusy(false);
+      syncSetError(e.message || 'Could not combine those fleets.');
+    }
   }
 
   function syncOffHTML() {
@@ -4761,16 +4839,21 @@
   function syncOnHTML() {
     const last = FleetSync.lastSync();
     const when = last ? new Date(last).toLocaleString() : 'not yet';
-    return `
-      <p class="m-sync-ok"><strong>Syncing is on for this device.</strong>
-        ${fleets.length} fleet${fleets.length === 1 ? '' : 's'}, last synced ${esc(when)}.</p>
+    // In account mode there is no phrase to show, and no "stop syncing here":
+    // Sign out is that button, and it lives in the account block above.
+    const account = FleetSync.mode() === 'account';
+    const tokenPart = account ? '' : `
       <div class="m-sync-sub">Your Sync Token</div>
       <code class="m-sync-token" id="m-sync-token">${esc(FleetSync.token())}</code>
       <button class="btn btn-primary btn-block" onclick="App.syncCopyToken()">Copy token</button>
       <p class="m-sync-p m-sync-hint">Put this phrase into any device and it will load and sync your current fleets.</p>
-      ${SYNC_NOTE}
+      ${SYNC_NOTE}`;
+    return `
+      <p class="m-sync-ok"><strong>Syncing is on for this device.</strong>
+        ${fleets.length} fleet${fleets.length === 1 ? '' : 's'}, last synced ${esc(when)}.</p>
+      ${tokenPart}
       <button class="btn btn-primary btn-block" onclick="App.syncNow()">Sync now</button>
-      <button class="btn btn-ghost btn-block" onclick="App.syncStop()">Stop syncing here</button>
+      ${account ? '' : `<button class="btn btn-ghost btn-block" onclick="App.syncStop()">Stop syncing here</button>`}
       <button class="btn btn-ghost btn-block m-sync-danger" onclick="App.syncDeleteRemote()">Delete online copy</button>
       <p class="m-sync-status" id="m-sync-busy" hidden></p>
       <p class="m-sync-error" id="m-sync-error" hidden></p>`;
@@ -5960,6 +6043,7 @@
     openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayChangeVP, mPlayChangeOppVP, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayOrderDown, mPlayOrderMove, mPlayOrderUp, mPlayOrderCancel, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayToggleCripPanel, mPlayCorruptorChange,
     mPlayToggleReorder, mPlayMoveGroup, mPlayToggleCollapse, mPlayCollapseAll,
     openSyncModal, closeSyncModal, renderSyncBody, syncGenerate, syncLookup, syncDoJoin, syncNow, syncCopyToken, syncStop, syncDeleteRemote,
+    syncSignOut, syncAdoptToken,
     openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet, sayName
   };
 

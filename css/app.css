@@ -1233,6 +1233,49 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.4;
 }
 .sync-hint { font-size: var(--text-xs) !important; color: var(--ink-muted) !important; }
+/* Account sign-in sits above the Sync Token flow: it is the easier road, and
+   the "or" rule makes clear the two are alternatives rather than steps. */
+.sync-account { margin-bottom: var(--sp-md); }
+.sync-google-btn {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--sp-sm);
+  min-height: 44px;
+}
+.sync-or {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  margin: var(--sp-md) 0;
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.sync-or::before, .sync-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  /* currentColor, not a palette token: the app defines no divider colour, and
+     inheriting the muted text colour keeps this right in both themes. */
+  background: currentColor;
+  opacity: 0.3;
+}
+.sync-account-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+}
+.sync-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex: none;
+}
+.sync-account-who { flex: 1; min-width: 0; }
+.sync-account-name { font-weight: 700; }
+.sync-account-mail { font-size: var(--text-sm); color: var(--ink-muted); }
+
 .sync-existing { margin-top: var(--sp-lg); }
 .sync-join-row {
   display: flex;

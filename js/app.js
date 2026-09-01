@@ -8175,6 +8175,12 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-01', title: 'Sign in with Google', items: [
+      'You can now sign in with Google instead of carrying a six-word Sync Token between devices. Sign in on your computer, sign in with the same account on your phone, and your fleets are there. Nothing to type, nothing to copy.',
+      'The Sync Token has not gone anywhere. It is still there under the sign-in button, for anyone who wants sync without an account, and every token already in use keeps working exactly as before.',
+      'If you had a token before signing in, the panel offers to bring those fleets into your account. It combines the two lists the same way entering a token always has, so nothing is overwritten. The token itself is left alone, so another device still holding it carries on.',
+      'Signing out leaves every fleet on the device and leaves your online copy alone, so signing back in picks up where you left off.',
+    ]},
     { date: '2026-08-31', title: 'Printing, Command Ship AP, and finding the Sync Token', items: [
       'Printing from anywhere other than the Print button in the app sent a blank sheet. The print stylesheet hides every part of the page except the sheet it builds, and the File > Print in your browser, a Ctrl+P the app did not catch, or a Share > Print on a phone never asked it to build one. The sheet is now built for whoever starts the print. Ctrl+P inside Print Preview prints as well, instead of rebuilding the preview, and the sheet is no longer torn down before slower browsers have finished rendering it.',
       'Command Ship-X now raises the Level of the admiral aboard that hull, which is what the rule says: "Increase the Level of any Admiral assigned to this Ship by X." The bonus follows the Aboard assignment, so a second admiral on a second Command Ship earns their own, and a famous admiral finally gets it: Magellan flies a Command Ship-2 Coloniser and had been showing Level 3 instead of 5. The fleet card, Play Mode and the printed sheet all show the raised Level and where it came from.',
@@ -8523,7 +8529,33 @@ let activeGroupId = null;
       return;
     }
 
-    body.innerHTML = FleetSync.enabled() ? syncOnHTML() : syncOffHTML();
+    const acct = window.FleetAuth && FleetAuth.user();
+    body.innerHTML = syncAccountHTML() +
+      (FleetSync.enabled() && FleetSync.mode() ? syncOnHTML() : syncOffHTML());
+
+    // Google's rendered button, mounted lazily: the GIS script only loads when
+    // this panel is actually opened, never on app start.
+    const slot = document.getElementById('sync-google-btn');
+    if (slot && window.FleetAuth && FleetAuth.configured() && !acct) {
+      FleetAuth.mountGoogleButton(slot, { theme: settings.theme === 'dark' ? 'filled_black' : 'outline' })
+        .then(async () => {
+          syncBusy(true, 'Loading your fleets…');
+          try {
+            await FleetSync.sync();
+            renderSyncPanel();
+            showToast('Signed in, your fleets are syncing');
+          } catch (e) {
+            syncBusy(false);
+            renderSyncPanel();
+            syncError(e.message || 'Signed in, but the first sync failed.');
+          }
+        })
+        .catch(e => { if (e && e.message) syncError(e.message); });
+    }
+    const out = document.getElementById('sync-signout');
+    if (out) out.onclick = syncSignOut;
+    const adopt = document.getElementById('sync-adopt');
+    if (adopt) adopt.onclick = syncAdoptToken;
 
     const gen = document.getElementById('sync-generate');
     if (gen) gen.onclick = syncGenerate;
@@ -8539,6 +8571,38 @@ let activeGroupId = null;
     if (stopBtn) stopBtn.onclick = syncStop;
     const del = document.getElementById('sync-delete');
     if (del) del.onclick = syncDeleteRemote;
+  }
+
+  /* Account block. Google sign-in is the easy road (nothing to carry between
+   * devices); the Sync Token below it stays for anyone who wants sync without an
+   * account. When the build has no client ID configured yet, this renders
+   * nothing at all, so the token flow is exactly what it was. */
+  function syncAccountHTML() {
+    if (!(window.FleetAuth && FleetAuth.configured())) return '';
+    const u = FleetAuth.user();
+    if (!u) {
+      return `<div class="sync-account">
+        <p>Sign in and your fleets follow you to every device you use, with no phrase to type.</p>
+        <div id="sync-google-btn" class="sync-google-btn"></div>
+      </div>
+      <div class="sync-or"><span>or</span></div>`;
+    }
+    // Signed in, and this device still holds a token: offer the one-time fold-in.
+    const tok = FleetSync.token();
+    const adopt = tok ? `<div class="settings-actions">
+        <button class="btn btn-outline btn-sm" id="sync-adopt">Bring your Sync Token fleets in</button>
+      </div>` : '';
+    return `<div class="sync-account sync-account-on">
+      <div class="sync-account-row">
+        ${u.picture ? `<img class="sync-avatar" src="${esc(u.picture)}" alt="" referrerpolicy="no-referrer">` : ''}
+        <div class="sync-account-who">
+          <div class="sync-account-name">${esc(u.name)}</div>
+          ${u.email ? `<div class="sync-account-mail">${esc(u.email)}</div>` : ''}
+        </div>
+        <button class="btn btn-outline btn-sm" id="sync-signout">Sign out</button>
+      </div>
+      ${adopt}
+    </div>`;
   }
 
   // The NOTE is not softened anywhere: it is the one thing a user must read
@@ -8574,23 +8638,52 @@ let activeGroupId = null;
   function syncOnHTML() {
     const last = FleetSync.lastSync();
     const when = last ? new Date(last).toLocaleString() : 'not yet';
-    return `
-      <p class="sync-on-state"><strong>Syncing is on for this device.</strong>
-        ${fleets.length} fleet${fleets.length === 1 ? '' : 's'}, last synced ${esc(when)}.</p>
+    const account = FleetSync.mode() === 'account';
+    // In account mode there is no phrase to show, and no "stop syncing here"
+    // either: signing out is that button, and it lives in the account block.
+    const tokenPart = account ? '' : `
       <div class="settings-group-title">Your Sync Token</div>
       <div class="sync-token-row">
         <code class="sync-token" id="sync-token-text">${esc(FleetSync.token())}</code>
         <button class="btn btn-outline btn-sm" id="sync-copy">Copy</button>
       </div>
       <p class="sync-hint">Put this phrase into any device and it will load and sync your current fleets.</p>
-      ${syncNoteHTML()}
+      ${syncNoteHTML()}`;
+    const stopBtn = account ? '' :
+      `<button class="btn btn-outline btn-sm" id="sync-stop" title="Keeps your fleets on this device and leaves the online copy alone">Stop syncing here</button>`;
+    return `
+      <p class="sync-on-state"><strong>Syncing is on for this device.</strong>
+        ${fleets.length} fleet${fleets.length === 1 ? '' : 's'}, last synced ${esc(when)}.</p>
+      ${tokenPart}
       <div class="settings-actions">
         <button class="btn btn-primary btn-sm" id="sync-now">Sync now</button>
-        <button class="btn btn-outline btn-sm" id="sync-stop" title="Keeps your fleets on this device and leaves the online copy alone">Stop syncing here</button>
+        ${stopBtn}
         <button class="btn btn-outline btn-sm sync-danger" id="sync-delete" title="Removes the online copy. Your fleets on this device are kept">Delete online copy</button>
       </div>
       <p class="sync-status" id="sync-busy" hidden></p>
       <p class="sync-error" id="sync-error" hidden></p>`;
+  }
+
+  /* Signing out leaves every fleet on the device. The account's cloud copy is
+   * untouched, so signing back in picks up exactly where it left off. */
+  function syncSignOut() {
+    confirmAction('Sign out?', 'Your fleets stay on this device, and your online copy is kept. Sign in again any time to sync them.',
+      () => { FleetAuth.signOut(); renderSyncPanel(); showToast('Signed out'); },
+      { label: 'Sign out', danger: false });
+  }
+
+  async function syncAdoptToken() {
+    syncError('');
+    syncBusy(true, 'Combining your fleets…');
+    try {
+      const r = await FleetSync.adoptToken();
+      renderSyncPanel();
+      renderFleetList();
+      showToast(r.total === 1 ? '1 fleet in your account' : r.total + ' fleets in your account');
+    } catch (e) {
+      syncBusy(false);
+      syncError(e.message || 'Could not combine those fleets.');
+    }
   }
 
   async function syncGenerate() {
