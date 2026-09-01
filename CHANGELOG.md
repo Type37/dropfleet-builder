@@ -5,6 +5,57 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-08-31: Printing, Command Ship AP, and finding the Sync Token
+
+Four reports from the feedback form.
+
+**Printing sent a blank sheet.** `@media print` in both apps hides every child of
+`<body>` except the sheet the app builds (`#print-container` on desktop,
+`#print-root` on mobile), and that sheet was only ever built by the app's own
+Print / Export PDF button. Any other route into printing (the browser's File >
+Print, a Ctrl+P the keyboard handler skipped because the user was on the fleet
+list or in Play Mode or had a modal open, Share > Print on a phone) reached a
+page with nothing left visible.
+
+- Both apps now build the sheet on `beforeprint`, so it exists for whoever
+  started the print, and clear it on `afterprint`.
+- Desktop no longer removes `#print-container` on the line after `window.print()`.
+  That call returns before the sheet is rasterised on WebKit and on Chrome's
+  system-dialog path, which is a second way to print nothing.
+- Ctrl+P with Print Preview open now prints. It used to call `printFleet()`,
+  which rebuilt the preview and looked like nothing had happened.
+
+**Command Ship-X did not raise the admiral's Level.** The rule (p.36) reads
+"Increase the Level of any Admiral assigned to this Ship by X". The old
+`fleetCommandShipBonus` took the best Command Ship value anywhere in the fleet
+and added it once, walking only `fleet.battleGroups`.
+
+- Replaced with `commandShipBonusFor(fleet, admiral)` / `admiralEffectiveLevel`,
+  which read the group the admiral is assigned to via `assignedGroupId`.
+- A famous admiral is aboard their own flagship, which is not a battlegroup: it
+  hangs off the admiral entry, so the old code could never see it. Magellan
+  (Level 3, Command Ship-2 Coloniser) and "Granite" Halsey were both showing
+  their base Level.
+- AP/turn, the fleet admiral card, the Play Mode group header and the printed
+  admiral card all show the effective Level, annotated "Lv3 +2 Command Ship" so
+  the number is traceable.
+
+**A famous admiral's ship was missing from the mobile printout.** `exportPdf`
+mapped `f.battleGroups` only and printed admirals as a one-line name and cost, so
+a Resistance list with Magellan printed no Coloniser. Flagships now go through
+the same group-card renderer, showing the hull cost the way the desktop sheet
+does (their cost is already inside the admiral's points).
+
+**Sync Token was hard to find.** It sat behind Settings > Sync > Sync Fleets
+Online > "Already have one?". Added a Sync button to the fleet list header beside
+Import and New Fleet, which is the screen you land on with a token in hand, and
+relabelled the join field "Enter a Sync Token from another device" in both apps.
+
+**Data.** New Mombasa lore said "two light torpedoes"; its profile carries one
+Medium Torpedo (Limited-1, Penetrator). Reworded the lore to match the card. A
+sweep of every faction for lore that names a weapon count found no others (Rome
+Battlecruiser checks out at two Heavy Torpedoes).
+
 ### 2026-08-30: Fleet totals pinned to the top of the list
 
 Both apps. The points total lived in a side rail (desktop) or a bottom-sheet

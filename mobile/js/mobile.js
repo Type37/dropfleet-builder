@@ -4317,6 +4317,12 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-08-31', title: 'Printing, and a flagship on the printed sheet', items: [
+      'A famous admiral\'s ship is now on the printed sheet, with its stats, weapons, launch assets and rules like any other group. It showed on the fleet screen and in Play Mode but the printout listed only the admiral\'s name, so a Resistance list with Magellan printed without the Coloniser.',
+      'Printing from the browser rather than Export PDF used to send a blank page: the print stylesheet hides everything except a sheet that had not been built yet. It is built now for whoever starts the print, and cleared afterwards so a later print can never send a fleet you have since left.',
+      'The field you paste a Sync Token into is labelled "Enter a Sync Token from another device" rather than "Already have one?".',
+      'New Mombasa lore said two light torpedoes; its ship card carries one Medium Torpedo. The lore now matches the card.',
+    ]},
     { date: '2026-08-30', title: 'Fleet totals pinned to the top of the list', items: [
       'The points total, Groups used against the cap, and a per-weight-class count (Light, Medium, Heavy, Colossal) now sit in a bar pinned below the header, so they stay in view as you scroll through your groups.',
       'Colossal shows against its limit and the tally turns red if you go over a cap.',
@@ -4689,7 +4695,7 @@
       <p class="m-sync-p">Put this phrase into any device and it will load and sync your current fleets.</p>
       ${SYNC_NOTE}
       <button class="btn btn-primary btn-block" onclick="App.syncGenerate()">Generate a Sync Token</button>
-      <div class="m-sync-sub">Already have one?</div>
+      <div class="m-sync-sub">Enter a Sync Token from another device</div>
       <input type="text" id="m-sync-input" class="m-sync-input" placeholder="Enter your Sync Token…"
              autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Sync Token">
       <button class="btn btn-primary btn-block m-sync-confirm" onclick="App.syncLookup()">
@@ -5546,8 +5552,21 @@
   }
 
   /* ── Export as PDF (printable view → browser "Save as PDF") ─ */
+  // buildPrintSheet() fills #print-root; exportPdf() fills it and prints.
+  // They are split because the print CSS hides every other child of <body>, so a
+  // print started from the browser itself (the Share sheet's Print, a keyboard
+  // Ctrl+P, Chrome's menu) used to find #print-root empty and send a blank sheet.
+  // The `beforeprint` hook at the end of this file fills it first.
   function exportPdf() {
+    buildPrintSheet();
+    document.body.classList.add('printing');
+    window.print();
+    setTimeout(() => document.body.classList.remove('printing'), 300);
+  }
+
+  function buildPrintSheet() {
     const f = activeFleet;
+    if (!f) return;
     const size = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
     const limit = f.pointsLimit || size.max;
     const pts = fleetPoints(f);
@@ -5560,10 +5579,33 @@
     };
     const laMap = getLaunchAssetMap(f.faction);
 
-    const groupsHtml = sortGroupsByWeight(f.battleGroups).map(g => {
+    // A famous admiral's flagship is a ship on the table, so the printed sheet has
+    // to carry its ship card like any other group -- it was showing on the fleet
+    // screen and in Play Mode but the printout listed only the admiral's name.
+    // Its cost already sits inside the admiral's points, so the card shows the hull
+    // cost the way the desktop sheet does rather than adding to the group totals.
+    const flagshipGroups = (f.admirals || []).map(a => {
+      const fs = admiralFlagship(a);
+      if (!fs) return null;
+      const count = Math.max(1, parseInt((fs.stats || {}).g, 10) || 1);
+      return {
+        _flagshipDb: fs,
+        _label: `${flagshipLabel(fs, true, true)} <span class="pr-group-class">flies with ${esc(a.name)}</span>`,
+        _pts: fs.cost || 0,
+        ships: Array.from({ length: count }, () => ({
+          shipKey: null,
+          groupCategory: fs.category || 'medium',
+          loadouts: a.loadouts || {},
+          systems: a.systems || [],
+          points: 0
+        }))
+      };
+    }).filter(Boolean);
+
+    const groupsHtml = [...sortGroupsByWeight(f.battleGroups), ...flagshipGroups].map(g => {
       const inst = g.ships[0];
       if (!inst) return '';
-      const db = findShip(f.faction, inst.groupCategory, inst.shipKey);
+      const db = g._flagshipDb || findShip(f.faction, inst.groupCategory, inst.shipKey);
       if (!db) return '';
       const st = db.stats || {};
       const qty = g.ships.length;
@@ -5610,9 +5652,11 @@
         const c = {}; inst.systems.forEach(n => c[n] = (c[n] || 0) + 1);
         opts.push('Systems: ' + Object.entries(c).map(([n, ct]) => ct > 1 ? `${n} ×${ct}` : n).join(', '));
       }
-      const prLabel = (g.name && g.name !== db.name) ? `${esc(g.name)} <span class="pr-group-class">(${qty}× ${esc(db.name)})</span>` : `${qty}× ${esc(db.name)}`;
+      const prLabel = g._label
+        ? g._label
+        : (g.name && g.name !== db.name) ? `${esc(g.name)} <span class="pr-group-class">(${qty}× ${esc(db.name)})</span>` : `${qty}× ${esc(db.name)}`;
       return `<div class="pr-group">
-        <div class="pr-group-head"><span class="pr-group-name">${prLabel}</span><span class="pr-group-pts">${groupPoints(f, g)} pts</span></div>
+        <div class="pr-group-head"><span class="pr-group-name">${prLabel}</span><span class="pr-group-pts">${g._pts != null ? g._pts : groupPoints(f, g)} pts</span></div>
         <div class="pr-stats">${statCells}</div>
         ${weapons ? `<table class="pr-weapons"><thead><tr><th>Weapon</th><th>Lk</th><th>At</th><th>Dm</th><th>Arc</th><th>Special</th></tr></thead><tbody>${weapons}</tbody></table>` : ''}
         ${printLaunchTable(laMap, db)}
@@ -5646,10 +5690,17 @@
       ${glossary ? `<div class="pr-section-title">Rules Glossary</div><div class="pr-glossary">${glossary}</div>` : ''}
       <div class="pr-foot">type37.github.io/dropfleet-builder</div>
     `;
-    document.body.classList.add('printing');
-    window.print();
-    setTimeout(() => document.body.classList.remove('printing'), 300);
   }
+
+  window.addEventListener('beforeprint', () => {
+    if (activeFleet) buildPrintSheet();
+  });
+  // Clear it afterwards so a later browser-initiated print can never send the
+  // sheet of a fleet the user has since left.
+  window.addEventListener('afterprint', () => {
+    const root = document.getElementById('print-root');
+    if (root) root.innerHTML = '';
+  });
 
   function shareFleet() {
     // Default share = the simple army list (New Recruit style text). The import link

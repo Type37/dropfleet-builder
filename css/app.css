@@ -3817,6 +3817,15 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-muted);
 }
 
+/* "Lv3 +2 Command Ship" -- says where the raised Level came from, so an admiral
+   aboard a Command Ship-X hull does not look like the app got their Level wrong. */
+.admiral-level-boost {
+  display: block;
+  font-size: var(--text-xs, 11px);
+  font-weight: 600;
+  color: var(--success-ink, #2e6b34);
+}
+
 /* Admiral lives on the left rail. Label is light-on-navy; the card itself keeps
    its light paper background so it reads fine against the navy sidebar. */
 /* Compact flagship link inside the (light) admiral card -> opens its ship card. */

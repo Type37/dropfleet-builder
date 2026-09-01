@@ -2046,18 +2046,36 @@ let activeGroupId = null;
     renderActiveGroup();
   }
 
-  // Best "Command Ship-X" value among the fleet's ships. An Admiral assigned to a
-  // Command Ship has their Level (and thus AP/turn) raised by X; a player puts their
-  // admiral on the strongest one, so we surface that single best bonus.
-  function fleetCommandShipBonus(f) {
-    let best = 0;
-    (f.battleGroups || []).forEach(g => (g.ships || []).forEach(s => {
-      const db = findShipInDB(f.faction, s.groupCategory, s.shipKey);
-      const sp = db ? (db.special || '') : '';
-      const m = String(sp).match(/Command Ship-(\d+)/i);
-      if (m) best = Math.max(best, parseInt(m[1], 10));
-    }));
-    return best;
+  // Command Ship-X (rulebook p.36): "Increase the Level of any Admiral assigned to
+  // this Ship by X." So the bonus belongs to the ONE admiral aboard that hull, not
+  // to the fleet: it is read from the group the admiral is assigned to, and a
+  // second admiral on a second Command Ship earns their own.
+  //
+  // A Famous admiral is aboard their own flagship, which is not one of the fleet's
+  // battlegroups -- it hangs off the admiral entry. Reading only the battlegroups
+  // meant Magellan (Level 3, in a Command Ship-2 Coloniser) and "Granite" Halsey
+  // both showed their base Level with no bonus at all.
+  function commandShipValue(db) {
+    const m = String((db && db.special) || '').match(/Command Ship-(\d+)/i);
+    return m ? parseInt(m[1], 10) : 0;
+  }
+
+  function commandShipBonusFor(f, admiral) {
+    if (!f || !admiral) return 0;
+    if (admiral.type === 'Famous' && admiral.shipKey) {
+      return commandShipValue(findShipInDB(f.faction, 'famous_admirals', admiral.shipKey));
+    }
+    if (!admiral.assignedGroupId) return 0;
+    const g = (f.battleGroups || []).find(x => x.id === admiral.assignedGroupId);
+    const s = g && g.ships && g.ships[0];
+    if (!s) return 0;
+    return commandShipValue(findShipInDB(f.faction, s.groupCategory, s.shipKey));
+  }
+
+  // An admiral's Level after the Command Ship they are aboard, which is the Level
+  // the game actually uses (AP per turn, and the Level printed on the sheet).
+  function admiralEffectiveLevel(f, admiral) {
+    return (admiral.level || 0) + commandShipBonusFor(f, admiral);
   }
 
   function updatePoints() {
@@ -2087,12 +2105,9 @@ let activeGroupId = null;
     const glEl = document.getElementById('groups-limit');
     if (glEl) glEl.textContent = '';
 
-    // AP/turn = the admiral's Level. A "Command Ship-X" ship raises the Level of the
-    // Admiral assigned to it by X, so the admiral placed on the best Command Ship in
-    // the fleet gets that bonus (e.g. Las Vegas Command Carrier = +1).
-    const baseAP = (f.admirals || []).reduce((t, a) => t + (a.level || 0), 0);
-    const cmdBonus = (f.admirals && f.admirals.length) ? fleetCommandShipBonus(f) : 0;
-    const totalAP = baseAP + cmdBonus;
+    // AP/turn = the sum of your admirals' Levels, each already raised by the
+    // Command Ship-X of the hull that admiral is assigned to.
+    const totalAP = (f.admirals || []).reduce((t, a) => t + admiralEffectiveLevel(f, a), 0);
     const apEl = document.getElementById('fleet-ap-per-turn');
     if (apEl) apEl.textContent = totalAP > 0 ? `${totalAP} AP/turn` : '';
 
@@ -5502,7 +5517,10 @@ let activeGroupId = null;
             ${admiralThumb(a.level, admiralImgUrl)}
             <div style="min-width:0">
               <div class="admiral-name">${esc(a.name)}</div>
-              <div class="admiral-level">Level ${a.level || '?'}${a.type !== 'Generic' ? ', ' + a.type : ''}</div>
+              <div class="admiral-level">Level ${admiralEffectiveLevel(currentFleet, a) || '?'}${a.type !== 'Generic' ? ', ' + a.type : ''}${(() => {
+                const b = commandShipBonusFor(currentFleet, a);
+                return b > 0 ? `<span class="admiral-level-boost">Lv${a.level} +${b} Command Ship</span>` : '';
+              })()}</div>
             </div>
           </div>
           <span class="badge badge-gold">${a.points} pts</span>
@@ -6017,7 +6035,10 @@ let activeGroupId = null;
           }
           return `<div class="print-admiral-card">
             <div class="print-admiral-header">
-              <span class="print-admiral-name">${esc(a.name)}, Level ${a.level || '?'}${a.type === 'Famous' ? ' (Famous)' : ''}</span>
+              <span class="print-admiral-name">${esc(a.name)}, Level ${admiralEffectiveLevel(f, a) || '?'}${(() => {
+                const b = admiralEffectiveLevel(f, a) - (a.level || 0);
+                return b > 0 ? ` (Lv${a.level} +${b} Command Ship)` : '';
+              })()}${a.type === 'Famous' ? ' (Famous)' : ''}</span>
               <span class="print-admiral-pts">${a.points} pts</span>
             </div>
             ${flagshipHtml}
@@ -6483,18 +6504,39 @@ let activeGroupId = null;
   }
 
   // Print uses a #print-container the @media print CSS targets.
-  function doPrintNow() {
-    if (!currentFleet) return;
-    // @media print hides everything except #print-container, so the preview
-    // overlay can stay open underneath.
+  //
+  // That CSS hides every other child of <body>, so a print started ANY other way
+  // than our own button -- the browser's File > Print, the Ctrl+P the app does not
+  // catch (fleet list, Play Mode, a modal), a phone's Share > Print -- used to hit
+  // a page with no #print-container at all and send one blank sheet to the printer.
+  // buildPrintContainer() is therefore also wired to `beforeprint` below, so the
+  // sheet exists no matter who asked for the print.
+  function buildPrintContainer() {
+    if (!currentFleet) return null;
     document.getElementById('print-container')?.remove();
     const printDiv = document.createElement('div');
     printDiv.id = 'print-container';
     printDiv.innerHTML = fleetPrintHTML(currentFleet);
     document.body.appendChild(printDiv);
-    window.print();
-    printDiv.remove();
+    return printDiv;
   }
+
+  function doPrintNow() {
+    if (!currentFleet) return;
+    // The preview overlay can stay open underneath; @media print hides it.
+    buildPrintContainer();
+    window.print();
+    // Do NOT remove the container here: window.print() returns before the sheet is
+    // rendered on WebKit and on Chrome's system-dialog path, which printed blank.
+    // `afterprint` clears it instead.
+  }
+
+  window.addEventListener('beforeprint', () => {
+    if (!document.getElementById('print-container')) buildPrintContainer();
+  });
+  window.addEventListener('afterprint', () => {
+    document.getElementById('print-container')?.remove();
+  });
 
   // Print Preview: choose options (Simple / 2-column) and see the output before
   // sending it to the browser's print dialog.
@@ -7667,7 +7709,13 @@ let activeGroupId = null;
     // assignAdmiralShip); a famous admiral flies the synthetic flagship group.
     let admiralStr = '';
     const bgAdmiral = bg.isFlagship ? bg.admiral : (playFleet.admirals || []).find(a => a.assignedGroupId === bg.id);
-    if (bgAdmiral) admiralStr = ` <span class="play-bg-admiral">&middot; ${esc(bgAdmiral.name || 'Admiral')} (L${bgAdmiral.level || 0})</span>`;
+    if (bgAdmiral) {
+      // The Level shown is the one the game uses: base Level plus the Command
+      // Ship-X of the hull they are aboard.
+      const lvl = admiralEffectiveLevel(playFleet, bgAdmiral);
+      const boost = lvl - (bgAdmiral.level || 0);
+      admiralStr = ` <span class="play-bg-admiral">${esc(bgAdmiral.name || 'Admiral')} (L${lvl}${boost > 0 ? `, Lv${bgAdmiral.level || 0} +${boost} Command Ship` : ''})</span>`;
+    }
 
     const spikeCtrl = playSpikeCtrl(bg.id, spikes);
 
@@ -8127,6 +8175,12 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-08-31', title: 'Printing, Command Ship AP, and finding the Sync Token', items: [
+      'Printing from anywhere other than the Print button in the app sent a blank sheet. The print stylesheet hides every part of the page except the sheet it builds, and the File > Print in your browser, a Ctrl+P the app did not catch, or a Share > Print on a phone never asked it to build one. The sheet is now built for whoever starts the print. Ctrl+P inside Print Preview prints as well, instead of rebuilding the preview, and the sheet is no longer torn down before slower browsers have finished rendering it.',
+      'Command Ship-X now raises the Level of the admiral aboard that hull, which is what the rule says: "Increase the Level of any Admiral assigned to this Ship by X." The bonus follows the Aboard assignment, so a second admiral on a second Command Ship earns their own, and a famous admiral finally gets it: Magellan flies a Command Ship-2 Coloniser and had been showing Level 3 instead of 5. The fleet card, Play Mode and the printed sheet all show the raised Level and where it came from.',
+      'Sync now has a button on the fleet list beside Import and New Fleet. It was only behind the Settings gear, which is not where you look on a fresh device with a Sync Token in hand. The field you paste the token into is labelled "Enter a Sync Token from another device" rather than "Already have one?".',
+      'New Mombasa lore said two light torpedoes; its ship card carries one Medium Torpedo. The lore now matches the card.',
+    ]},
     { date: '2026-08-30', title: 'Fleet totals pinned to the top of the list', items: [
       'The points total, Groups used against the cap, and a per-weight-class count (Light, Medium, Heavy, Colossal) now sit in a bar pinned to the top of the fleet, so they stay in view as you scroll through your groups.',
       'Colossal shows against its limit and the tally turns red if you go over a cap.',
@@ -8504,7 +8558,7 @@ let activeGroupId = null;
         <button class="btn btn-primary btn-sm" id="sync-generate">Generate a Sync Token</button>
       </div>
       <div class="sync-existing">
-        <div class="settings-group-title">Already have one?</div>
+        <div class="settings-group-title">Enter a Sync Token from another device</div>
         <div class="sync-join-row">
           <input type="text" id="sync-input" class="sync-input" placeholder="Enter your Sync Token…"
                  autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Sync Token">
@@ -9879,9 +9933,15 @@ let activeGroupId = null;
       if (popover) { popover.remove(); syncBackGuard(); return; }
     }
 
-    // Ctrl/Cmd+P: print fleet (only in builder view)
+    // Ctrl/Cmd+P: open Print Preview from the builder. With the preview already
+    // open it prints for real -- pressing Ctrl+P there used to rebuild the preview
+    // and look like nothing happened. Anywhere else the browser's own print runs,
+    // and the `beforeprint` hook builds the sheet for it.
     if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
-      if (currentFleet && !document.querySelector('.modal-overlay.active')) {
+      if (document.getElementById('print-preview-overlay')) {
+        e.preventDefault();
+        doPrintNow();
+      } else if (currentFleet && !document.querySelector('.modal-overlay.active')) {
         e.preventDefault();
         printFleet();
       }
