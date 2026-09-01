@@ -1711,7 +1711,7 @@
           ${admiralThumb(f.faction, a.level, art)}
           <div class="list-row-content">
             <div class="list-row-title">${esc(a.name)}</div>
-            <div class="list-row-sub">${a.points} pts, Level ${a.level || '?'}${a.shipName ? ', ' + esc(a.shipName) : ''}</div>
+            <div class="list-row-sub">${a.points} pts, Level ${admiralEffectiveLevel(f, a) || '?'}${commandShipBonusFor(f, a) ? `, Lv${a.level} +${commandShipBonusFor(f, a)} Command Ship` : ''}${a.shipName ? ', ' + esc(a.shipName) : ''}</div>
           </div>
           <span class="list-chevron">›</span>
         </div>`;
@@ -3191,6 +3191,36 @@
       return { id: g.id, name: db?.name || g.name };
     });
   }
+  // Command Ship-X (rulebook p.36): "Increase the Level of any Admiral assigned to
+  // this Ship by X." The bonus belongs to the one admiral aboard that hull, so it
+  // is read from the group they are assigned to; a Famous admiral is aboard their
+  // own flagship, which is not one of the fleet's battlegroups. Kept identical to
+  // the desktop app (js/app.js) so the shared fleet data can never be scored two
+  // different ways on the two screens.
+  function commandShipValue(db) {
+    const sp = (db && (db.special || (db.stats && db.stats.special))) || '';
+    const m = String(sp).match(/Command Ship-(\d+)/i);
+    return m ? parseInt(m[1], 10) : 0;
+  }
+
+  function commandShipBonusFor(fleet, a) {
+    const f = fleet || activeFleet;
+    if (!f || !a) return 0;
+    const fs = admiralFlagship(a, f);
+    if (fs) return commandShipValue(fs);
+    if (!a.assignedGroupId) return 0;
+    const g = (f.battleGroups || []).find(x => x.id === a.assignedGroupId);
+    const inst = g && g.ships && g.ships[0];
+    if (!inst) return 0;
+    return commandShipValue(findShip(f.faction, inst.groupCategory, inst.shipKey));
+  }
+
+  // An admiral's Level after the Command Ship they are aboard, which is the Level
+  // the game actually uses (AP per turn, and the Level printed on the sheet).
+  function admiralEffectiveLevel(fleet, a) {
+    return (a.level || 0) + commandShipBonusFor(fleet, a);
+  }
+
   // Famous admirals fly a named flagship; fetch its ship card from the faction def.
   function admiralFlagship(a, fleet) {
     const f = fleet || activeFleet;
@@ -3343,7 +3373,7 @@
         ${admiralThumb(f.faction, a.level, art, true)}
         <div style="flex:1;margin-left:var(--sp-m)">
           <div class="detail-name">${esc(a.name)}</div>
-          <div class="detail-type">Level ${a.level || '?'}${a.shipName ? ', ' + esc(a.shipName) : ''}</div>
+          <div class="detail-type">Level ${admiralEffectiveLevel(activeFleet, a) || '?'}${commandShipBonusFor(activeFleet, a) ? `, Lv${a.level} +${commandShipBonusFor(activeFleet, a)} Command Ship` : ''}${a.shipName ? ', ' + esc(a.shipName) : ''}</div>
         </div>
         <div class="pts-badge-lg"><div class="pts-badge-value">${a.points}</div><div class="pts-badge-label">Points</div></div>
       </div>
@@ -3923,7 +3953,11 @@
     // A famous admiral rides the synthetic flagship group; a Generic/Faction admiral is
     // attached to one of the fleet's own groups through assignedGroupId.
     const bgAdmiral = bg.isFlagship ? bg.admiral : (mPlayFleet.admirals || []).find(a => a.assignedGroupId === bg.id);
-    if (bgAdmiral) admiralStr = ` <span class="play-bg-admiral">&middot; ${esc(bgAdmiral.name || 'Admiral')} (L${bgAdmiral.level || 0})</span>`;
+    if (bgAdmiral) {
+      const _lvl = admiralEffectiveLevel(mPlayFleet, bgAdmiral);
+      const _boost = _lvl - (bgAdmiral.level || 0);
+      admiralStr = ` <span class="play-bg-admiral">${esc(bgAdmiral.name || 'Admiral')} (L${_lvl}${_boost > 0 ? `, Lv${bgAdmiral.level || 0} +${_boost} Command Ship` : ''})</span>`;
+    }
     const spikeCtrl = mPlaySpikeCtrl(bg.id, spikes);
     const orderChips = M_PLAY_ORDERS.map(o => {
       const isActive = bgs.order === o;
@@ -4321,6 +4355,7 @@
       'A famous admiral\'s ship is now on the printed sheet, with its stats, weapons, launch assets and rules like any other group. It showed on the fleet screen and in Play Mode but the printout listed only the admiral\'s name, so a Resistance list with Magellan printed without the Coloniser.',
       'Printing from the browser rather than Export PDF used to send a blank page: the print stylesheet hides everything except a sheet that had not been built yet. It is built now for whoever starts the print, and cleared afterwards so a later print can never send a fleet you have since left.',
       'The field you paste a Sync Token into is labelled "Enter a Sync Token from another device" rather than "Already have one?".',
+      'Command Ship-X now raises the Level of the admiral aboard that hull here too, matching the desktop app: "Increase the Level of any Admiral assigned to this Ship by X." The fleet screen, the admiral page, Play Mode and the printed sheet all show the raised Level and where it came from.',
       'New Mombasa lore said two light torpedoes; its ship card carries one Medium Torpedo. The lore now matches the card.',
     ]},
     { date: '2026-08-30', title: 'Fleet totals pinned to the top of the list', items: [
@@ -5666,7 +5701,7 @@
     }).join('');
 
     const admiralsHtml = (f.admirals || []).map(a =>
-      `<div class="pr-line"><b>${esc(a.name)}</b> (Lv ${a.level || '?'}), ${a.points} pts${a.selectedAbilities?.length ? ', ' + esc(a.selectedAbilities.join(', ')) : ''}</div>`).join('');
+      `<div class="pr-line"><b>${esc(a.name)}</b> (Lv ${admiralEffectiveLevel(f, a) || '?'}${commandShipBonusFor(f, a) ? `, Lv${a.level} +${commandShipBonusFor(f, a)} Command Ship` : ''}), ${a.points} pts${a.selectedAbilities?.length ? ', ' + esc(a.selectedAbilities.join(', ')) : ''}</div>`).join('');
     const stationHtml = f.spaceStation ? `<div class="pr-line"><b>${esc(f.spaceStation.name)}</b>, ${f.spaceStation.cost} pts${(f.spaceStation.systems && f.spaceStation.systems.length) ? ' (' + f.spaceStation.systems.map(esc).join(', ') + ')' : ''}</div>` : '';
 
     // Secondary objectives (the two chosen for the game), spelled out.

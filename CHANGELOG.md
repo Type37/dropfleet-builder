@@ -51,6 +51,17 @@ Online > "Already have one?". Added a Sync button to the fleet list header besid
 Import and New Fleet, which is the screen you land on with a token in hand, and
 relabelled the join field "Enter a Sync Token from another device" in both apps.
 
+**Both apps score it the same way.** The Command Ship calc was ported to mobile
+(`commandShipValue` / `commandShipBonusFor` / `admiralEffectiveLevel`, same shape
+as desktop), because the two apps share the `dfc_fleets` schema and must not
+score one fleet two ways. Mobile shows the effective Level on the fleet screen,
+the admiral page, the Play Mode group header and the printed sheet. The Play Mode
+admiral badge also lost its leftover middot separator on both apps.
+
+Audited while in there, both clean, no change needed: no special-rule description
+in any faction file is filler or placeholder text, and no ship special rule is
+missing its description.
+
 **Data.** New Mombasa lore said "two light torpedoes"; its profile carries one
 Medium Torpedo (Limited-1, Penetrator). Reworded the lore to match the card. A
 sweep of every faction for lore that names a weapon count found no others (Rome
