@@ -5,6 +5,53 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-09: The scenario generator moves in
+
+The Dropfleet scenario generator lived as a lone untracked `index.html` in a
+folder outside every repo, deployed by hand to neocities. It is now
+`scenarios/dropfleet/index.html`, under version control, ahead of unifying it
+with the Dropzone scenario tool on a shared shell.
+
+**Two rules errors.** The Survey tooltip said each Dropsite could be surveyed
+"once each per game"; the rulebook says "once per player per game", which is
+twice the VP in a two-player game. And the Standard Scoring card labelled a term
+**Ties** while the sentence under it defined Kill Points. Both now match 12.1.5
+and 12.4. The card bodies were already verbatim; it was the summaries that had
+drifted.
+
+**Contrast.** White text on `#009fe3` is 2.97:1, and that pairing was the
+Generate button and every selected tile, so the app's primary action failed AA.
+Split the token: `--cobalt` stays an accent on dark navy, where it passes at
+5.71, and a new `--action` (`#0072a8`, 5.29:1) carries white text. Four other
+failures went with it: the tip's rules citation at 2.28, the footer link at
+2.39, the empty-state label at 1.49, and competitive mode's struck-out tiles at
+1.52 — those last are still meaningful, so they now use a dashed border and a
+legible `--nc` rather than fading to nothing.
+
+**Focus.** There was not one `:focus` rule in the file, and the radios are
+`opacity:0;width:0;height:0`, so the browser drew its ring on a zero-by-zero
+box. Thirty-eight tiles and the toggle had no keyboard affordance at all.
+
+**Tooltips.** Each tile carried its own absolutely-positioned tip inside
+`.ctrl`, which is `overflow-x:hidden` — so three of them, including two map
+previews, were clipped off the right edge. Rebuilt as one viewport-fixed
+element that flips above or below and clamps into the viewport. It now opens on
+focus as well as hover, which is what makes the map previews reachable by
+keyboard and on a phone at all.
+
+**Copy.** The generated mission title was a five-slot mad-lib ("In-Atmo Counter
+Encirclement Extraction at the Lunar Fields") built from invented vocabulary —
+In-Atmo, Networked, Converging, the Lunar Fields — none of it in any PDF. It is
+now the five rolled results named exactly as the tables name them. Also gone:
+four tooltips reading "Roll randomly for X" on tiles labelled RANDOM, an empty
+state captioned "Roll to Generate" beside a button reading Generate Scenario,
+and a font stack listing Arkhip three times.
+
+Dead code out: `scnSection()`, `dst()`, a `.ctrl-action-row` rule with no
+element, and an empty section header.
+
+Not yet live — deploying still needs the neocities key.
+
 ### 2026-09-01: Sign in with Google
 
 Asked for after seeing warcomp.app's Google/Discord sign-in. Google is shipped;
