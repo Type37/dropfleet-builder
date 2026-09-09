@@ -1027,11 +1027,32 @@ let activeGroupId = null;
     { n: 9,  id: 'end-phase',        title: 'End Phase' },
     { n: 10, id: 'scenery',          title: 'Scenery' },
     { n: 11, id: 'dropsites',        title: 'Dropsites' },
-    { n: 12, id: 'scenarios',        title: 'Scenarios' },
-    { n: 13, id: 'competitive-play', title: 'Competitive Play' },
-    { n: 14, id: 'special-rules',    title: 'Special Rules',      kind: 'glossary' },
-    { n: 15, id: 'scenario-expansion-1', title: 'Scenario Expansion 1' },
+    { n: 12, id: 'tokens',           title: 'Tokens', kind: 'tokens' },
+    { n: 13, id: 'scenarios',        title: 'Scenarios' },
+    { n: 14, id: 'competitive-play', title: 'Competitive Play' },
+    { n: 15, id: 'special-rules',    title: 'Special Rules',      kind: 'glossary' },
+    { n: 16, id: 'scenario-expansion-1', title: 'Scenario Expansion 1' },
   ];
+
+  function rulesTokensHtml() {
+    // Vector, cut from TTCombat's downloadable token sheet by
+    // scripts/extract-tokens.py. Each <img> is its own document, which also
+    // keeps the tokens' identical clipPath ids from colliding.
+    const G = [
+      {t:'Spikes',sub:null,i:[{s:'spike-1',l:'1 Spike',r:''},{s:'spike-2',l:'2 Spikes',r:''},{s:'spike-3',l:'3 Spikes',r:''},{s:'spike-4',l:'4 Spikes',r:''}]},
+      {t:'Crippling Effects',sub:'2D6, rulebook 7.3.6',i:[{s:'status-fire',l:'Fire',r:'6'},{s:'status-defence-systems-offline',l:'Defence Systems Offline',r:'7'},{s:'status-scanners-offline',l:'Scanners Offline',r:'8'},{s:'status-weapons-offline',l:'Weapons Offline',r:'9'},{s:'status-navigation-offline',l:'Navigation Offline',r:'10'},{s:'status-orbital-decay',l:'Orbital Decay',r:'11+'}]},
+      {t:'Atmosphere',sub:null,i:[{s:'status-in-atmosphere',l:'In Atmosphere',r:''}]},
+      {t:'Dropsites and Features',sub:null,i:[{s:'dropsite-military-outpost',l:'Military Outpost',r:''},{s:'dropsite-orbital-defence-gun',l:'Orbital Defence Gun',r:''},{s:'dropsite-comms-station',l:'Comms Station',r:''},{s:'dropsite-hangar',l:'Hangar',r:''},{s:'dropsite-power-plant',l:'Power Plant',r:''},{s:'dropsite-city',l:'City',r:''}]},
+    ];
+    return G.map(g => `<div class="rules-tok-grp">
+        <div class="rules-tok-head">${esc(g.t)}${g.sub ? `<span class="rules-tok-sub">${esc(g.sub)}</span>` : ''}</div>
+        <ul class="rules-tok-list">${g.i.map(k => `<li class="rules-tok">
+          <img src="assets/tokens/${k.s}.svg" alt="" width="40" height="40" loading="lazy">
+          <span class="rules-tok-nm">${esc(k.l)}</span>
+          ${k.r ? `<span class="rules-tok-roll">${esc(k.r)}</span>` : ''}
+        </li>`).join('')}</ul>
+      </div>`).join('');
+  }
 
   function rulesLegendHtml() {
     // The game's own abbreviations, expanded. Functional vocabulary the builder
@@ -1078,6 +1099,8 @@ let activeGroupId = null;
       let body;
       if (s.kind === 'legend') {
         body = rulesLegendHtml();
+      } else if (s.kind === 'tokens') {
+        body = rulesTokensHtml();
       } else if (s.kind === 'glossary') {
         body = `<input class="rules-search" type="search" placeholder="Search special rules…" oninput="App.filterRules(this.value)" aria-label="Search special rules">${rulesGlossaryHtml()}`;
       } else {
@@ -8286,6 +8309,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-09', title: 'How to Play: the tokens, as they look on the table', items: [
+      'How to Play has a new Tokens section showing every counter off the official downloadable token sheet: Spikes, the six Crippling Effects, the Atmosphere marker, and the Dropsite Features and City.',
+      'Each Crippling Effect shows the 2D6 result that causes it, so you can read the whole table off the pictures.',
+      'They are the real tokens, traced as vector from the official sheet, so they are the same shapes sitting in front of you.',
+    ]},
     { date: '2026-09-01', title: 'How to Play: a searchable special-rules reference', items: [
       'A new How to Play tool on the home screen. It opens a Card Breakdown legend, what every stat, arc, damage type and tonnage letter on a ship card means, and a searchable list of every special rule, each with its rulebook page.',
       'Type in the search box to filter the rules instantly, or use the numbered section jumps at the top.',

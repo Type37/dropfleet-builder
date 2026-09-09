@@ -3184,6 +3184,17 @@ body.sheet-open .sheet-scrim {
 .rules-pill { display: inline-flex; align-items: center; gap: 5px; font-size: var(--text-caption2); padding: 4px 9px; border: 1px solid var(--stroke1); border-radius: 999px; background: var(--paper); color: var(--fg2); }
 .rules-pill-n { color: var(--fg3); font-weight: 700; font-variant-numeric: tabular-nums; }
 .rules-section { scroll-margin-top: calc(var(--header-h) + 44px); padding-top: var(--sp-m); }
+/* ── How to Play: the token plate ─────────────────────────────────────────
+   Names wrap under the art instead of truncating; "Defence Systems Offline"
+   is the longest and has to read in full on a phone. */
+.rules-tok-grp { margin-bottom: var(--sp-m, 16px); }
+.rules-tok-head { font-size: var(--text-caption, .78rem); text-transform: uppercase; letter-spacing: .04em; color: var(--fg3); margin-bottom: var(--sp-xs); display: flex; align-items: baseline; gap: var(--sp-xs); flex-wrap: wrap; }
+.rules-tok-sub { text-transform: none; letter-spacing: 0; }
+.rules-tok-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: var(--sp-s, 10px); }
+.rules-tok { display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; height: 100%; }
+.rules-tok img { width: 40px; height: 40px; display: block; }
+.rules-tok-nm { font-size: var(--text-caption, .78rem); line-height: 1.3; color: var(--fg2); }
+.rules-tok-roll { margin-top: auto; font-size: var(--text-caption, .78rem); font-variant-numeric: tabular-nums; color: var(--fg3); border: 1px solid var(--rule); padding: 0 5px; }
 .rules-section-title { display: flex; align-items: baseline; gap: var(--sp-s); font-family: var(--font-display); font-size: var(--text-title3, 1.2rem); color: var(--fg1); margin: 0 0 var(--sp-s); padding-bottom: var(--sp-xs); border-bottom: 2px solid var(--navy); }
 .rules-section-n { font-size: var(--text-caption1); color: var(--fg3); font-variant-numeric: tabular-nums; }
 .rules-rulebook-link { display: inline-flex; align-items: center; gap: 6px; color: var(--navy); text-decoration: none; font-size: var(--text-caption1); }

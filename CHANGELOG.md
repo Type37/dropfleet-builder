@@ -5,6 +5,29 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-09: How to Play shows the tokens
+
+How to Play named the Crippling Effects in prose and never showed the counter
+you put on the ship. It now has a Tokens section, `n: 12`, between Dropsites and
+Scenarios, in both the desktop and mobile references.
+
+Grouped the way the rulebook groups them: Spikes are listed apart because 7.3.6
+says "Spikes are not a Crippling Effect" in as many words, and each of the six
+Crippling Effects carries the 2D6 result that causes it (Fire on 6 through
+Orbital Decay on 11+), so the table can be read off the pictures.
+
+Rendered as `<img src="assets/tokens/*.svg">` rather than inlined. Every token
+ships with `clipPath id="tk"`, and separate documents cannot collide - the same
+trap the generator's legend had to work around by renaming them.
+
+Names wrap under the art instead of truncating; "Defence Systems Offline" is the
+longest and has to read in full at phone width. Where a name wraps, its roll pill
+is pushed to the bottom with `margin-top:auto` so the pills stay on one line
+across the row.
+
+Service worker to `dfc-cache-v412` and the offline manifest regenerated, so the
+17 token files are cached with everything else.
+
 ### 2026-09-09: The Features legend shows the actual token
 
 The legend drew each Dropsite Feature as an abstract shape - an orange diamond
