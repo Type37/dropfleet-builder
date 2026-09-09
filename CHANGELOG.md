@@ -5,6 +5,27 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-09: Every published Dropfleet scenario, transcribed
+
+Load Scenario shipped with eight entries and was never deployed. It now carries
+all 35 published scenarios plus the Fauna rules page: 6 from the rulebook's 12.2,
+14 from Scenario Expansion 1, and 15 from Civilian Ships & Scenarios.
+
+**Method.** The flattened PDF text interleaves the columns, which is how a
+scenario ends up with another scenario's Scenery line. Everything here was
+re-extracted with PyMuPDF `get_text('blocks')` and sorted by block position, so
+each brief is read out of its own column. Smart quotes arrive as U+FFFD; after a
+digit that is an inch mark and everywhere else an apostrophe, which is the only
+transformation applied to the text.
+
+Two schema additions: a **Variant** row, which Orbital Support needs, and
+support for more than one table, which Supply Run needs - it prints a Launch
+table and a weapon profile. Tables now scroll in their own container.
+
+**Left verbatim, and it looks wrong.** Mandatory Festivities prints
+"Scoring: Raise." Every other scenario in the pack says Raze. It is quoted as
+printed rather than silently corrected.
+
 ### 2026-09-09: The scenario generator moves in
 
 The Dropfleet scenario generator lived as a lone untracked `index.html` in a
