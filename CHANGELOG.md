@@ -5,6 +5,26 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-09: The Features legend shows the actual token
+
+The legend drew each Dropsite Feature as an abstract shape - an orange diamond
+for Military Outpost, a green square for the Orbital Defence Gun - so the card
+described a thing rather than showing it. The token you physically put on the
+table is on TTCombat's sheet, and `scripts/extract-tokens.py` already cuts it to
+vector. The legend now shows that.
+
+Every token ships with `clipPath id="tk"`, so five in one document collided and
+four of them clipped against the first one's outline. Each is renamed on the way
+in.
+
+The map's own markers are deliberately left as flat shapes: at 200x200 for a 48"
+table they are positional dots, and token art there is a smudge.
+
+Also cut eight more tokens off the sheet - rows 8 to 11, which nothing had
+touched. Only Battalion is named; the sheet carries no text and rulebook 7.4
+lists the eight Asset types without pairing a name to a picture, so the other
+seven are held unnamed rather than guessed.
+
 ### 2026-09-09: Every published Dropfleet scenario, transcribed
 
 Load Scenario shipped with eight entries and was never deployed. It now carries
