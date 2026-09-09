@@ -21,11 +21,6 @@
 <style>
 @font-face{font-family:'Terminal Grotesque Open';src:url('../../assets/fonts/terminal-grotesque-open.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
 @font-face{font-family:'Arkhip';src:url('../../assets/fonts/Arkhip_font.woff2') format('woff2');font-weight:normal;font-style:normal;}
-@font-face{
-  font-family:'VCR OSD Mono';
-  src:url('../../assets/fonts/VCR_OSD_MONO.woff2') format('woff2');
-  font-weight:normal;font-style:normal;
-}
 :root{
   --gold:#B8952F;--glt:#C9A94A;--gdk:#5A4710;--ch:#0E0C08;--wg:#3D3834;
   --cobalt:#009fe3;--cobalt-dk:#007ab8;--cobalt-bg:#0a1e2e;
@@ -136,14 +131,6 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 .ctrl-back{display:block;text-align:center;font-family:'Jost','Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#8fa6b4;text-decoration:none;padding:0 0 10px;}
 .ctrl-back:hover{color:var(--cobalt);}
 .ctrl-back:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
-.site-footer{flex-shrink:0;background:var(--cobalt-bg);border-top:1px solid rgba(0,159,227,.12);padding:8px 16px;}
-.site-footer-inner{display:flex;align-items:flex-start;gap:4px;flex-direction:column;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;color:var(--ink-muted);flex-wrap:wrap;}
-.site-footer strong{color:var(--cobalt);font-family:'VCR OSD Mono',monospace;font-size:.65rem;}
-.footer-sep{display:none;}
-.site-footer a{color:rgba(180,210,240,.4);text-decoration:none;}
-.site-footer a:hover{color:var(--cobalt);}
-.warlore-link{color:var(--cobalt);text-decoration:none;font-family:'VCR OSD Mono',monospace;font-size:.65rem;}
-.warlore-link:hover{color:#009fe3;text-decoration:underline;}
 
 .wrap{flex:1;overflow-y:auto;padding:20px;background:var(--paper);}
 .card{background:#fff;position:relative;overflow:hidden;width:100%;max-width:10in;margin:0 auto;}
@@ -268,7 +255,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 @media print{
   @page{size:letter landscape;margin:3mm;}
   html,body{height:auto;overflow:visible;display:block;background:#fff !important;}
-  .ctrl,.site-footer,.game-info-footer{display:none !important;}
+  .ctrl,.game-info-footer{display:none !important;}
   .app-row{display:block;}
   .sd,.sd-l,.sd-r{display:none !important;visibility:hidden !important;height:0 !important;width:0 !important;overflow:hidden !important;}
   .wrap{height:auto;overflow:visible;padding:0;}
@@ -1028,7 +1015,7 @@ const OB=[
   {name:"Attrition",cls:"sp-att",std:true,b:["Players are awarded <vp>2VP</vp> at the end of the game for every <b>500 points</b> of Ships and Admirals they have destroyed."]},
   {name:"Survey",cls:"sp-surv",std:true,b:["Players are awarded <vp>1VP</vp> whenever they Survey Dropsites. Any Capital Ship within 6\" of the Dropsite and able to fire Weapons may substitute all attacking and launching that round to Survey it. Each Dropsite may be Surveyed once per player per game."]},
   {name:"Extract",cls:"sp-ext",std:false,b:["Place 1 Recon Operative token on Small Dropsites, 2 tokens on Medium Dropsites, and 3 tokens on Large Dropsites. If a Ship may launch Assets to deploy a Battalion token to that Dropsite, they may instead Extract Recon Operatives from that Dropsite equal to the number of Battalions that would be placed. The Extracting Ship gains those Recon Operatives. A Ship cannot Extract more Recon Operatives than the Dropsite has.","Players are awarded <vp>2VP</vp> at the end of the game for each Recon Operative token left aboard their Ships.","Players are awarded <vp>1VP</vp> at the end of the game for each enemy Ship they have destroyed with any number of Recon Operatives.","Once onboard a Ship, Recon Operatives cannot be removed. Recon Operatives on Payload Ships are transferred to a Porter Ship when the Payload Ship attaches to it."]},
-  {name:"Protect",cls:"sp-prot",std:true,b:["At the end of the first Planning Phase, you nominate a Dropsite. You are awarded additional Standard Scoring for controlling/contesting your nominated Dropsite if it is not Levelled or Ruined. At the end of the game, you are subtracted Standard Scoring if your Dropsite has been levelled."]},
+  {name:"Protect",cls:"sp-prot",std:true,b:["At the start of the game, after determining Initiative, each player nominates a single different Dropsite in Initiative order. You are awarded additional Standard Scoring for controlling/contesting your nominated Dropsite if it is not Levelled or Ruined. At the end of the game, you are subtracted Standard Scoring if your Dropsite has been levelled."]},
   {name:"Breakthrough",cls:"sp-brk",std:false,b:["Red Players may permanently fly Ships off the board in any opponent's Deployment Zone. For every <b>200pts</b> in Ships Players fly off, they are awarded <vp>1VP</vp> at the end of the game.","Other Players are awarded <vp>2VP</vp> at the end of the game for every <b>500 points</b> of Ships and Admirals they have destroyed."]},
   {name:"Raze",cls:"sp-raze",std:true,b:["At the end of the game, players are awarded <b>double Standard Scoring</b> for each Dropsite that has been Levelled or Ruined that is <b>24\" or more</b> away from their Deployment Zone, regardless of who Levelled or Ruined it. Players are also awarded <vp>2 VP</vp> for every <b>500 points</b> of Ships and Admirals they have destroyed."]},
 ];
@@ -1200,7 +1187,7 @@ ${varH}
     <div class="leg">${legH}</div>
   
 <div style="margin-top:12px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;color:#444;padding:0 8px 20px;line-height:1.8;">
-Tool made by <a href="https://linktr.ee/warlore" target="_blank" style="color:#333;text-decoration:none;font-family:'VCR OSD Mono',monospace;">WarLore Wargaming</a><br>
+Tool made by <a class="warlore-mark" href="https://linktr.ee/warlore" target="_blank" rel="noopener">War<span class="wl-lore">Lore</span></a><br>
 <a href="https://ttcombat.com/collections/dropfleet-commander" target="_blank" style="color:#444;text-decoration:none;">Dropfleet Commander</a> &copy; <a href="https://ttcombat.com" target="_blank" style="color:#444;text-decoration:none;">TT Combat Ltd</a>. Not affiliated with or endorsed by TT Combat.
 </div>
 </div>
