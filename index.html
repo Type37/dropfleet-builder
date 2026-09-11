@@ -79,7 +79,14 @@
     <img src="assets/logos/dfc_logo_text.webp" alt="Dropfleet Commander" class="topbar-logo">
   </a>
   <div class="topbar-sep desktop-only"></div>
-  <span class="topbar-context" id="topbar-context">Fleet Builder</span>
+  <!-- "Unofficial" is the load-bearing word. Dropfleet Commander, its rules and
+       every faction name belong to TTCombat; this is a fan tool built on the
+       PDFs they publish free. Saying so in the chrome rather than only in a
+       footer nobody scrolls to is the honest place for it. -->
+  <span class="topbar-title">Unofficial<span class="topbar-title-rest"> Fleet Builder</span></span>
+  <div class="topbar-sep desktop-only"></div>
+  <!-- Filled in by showView: the way back, and what it goes back to. -->
+  <span class="topbar-context" id="topbar-context"></span>
   <div class="topbar-actions" id="topbar-actions"></div>
   <button class="topbar-global-settings-btn" id="topbar-settings-btn" type="button" onclick="App.openSettings()" aria-label="Settings" title="Settings">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/></svg>
@@ -553,12 +560,13 @@
 <footer class="game-info-footer">
   <div class="gif-inner">
     <span class="gif-title">Dropfleet Commander</span>
+    <span class="gif-sep">·</span>
     <span>by <a href="https://www.ttcombat.com/games/dropfleet-commander" target="_blank" rel="noopener">TTCombat</a></span>
-    <a href="ref/index.html" target="_blank" rel="noopener">Faction References</a>
     <span class="gif-builder">Fleet builder by <a class="warlore-mark warlore-mark-inline" href="https://linktr.ee/warlore" target="_blank" rel="noopener" title="WarLore">War<span class="wl-lore">Lore</span></a></span>
     <!-- The other WarLore builder. The Dropzone footer carries the mirror. -->
     <a href="https://type37.github.io/dropzone-3e-army-builder/" target="_blank" rel="noopener">Dropzone</a>
     <a id="footer-feedback" href="mailto:warlore1@outlook.com">Send Feedback</a>
+    <span class="gif-sep">·</span>
     <a href="https://github.com/Type37/dropfleet-builder" target="_blank" rel="noopener">Source on GitHub</a>
   </div>
 </footer>
