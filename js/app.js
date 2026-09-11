@@ -1357,7 +1357,7 @@ let activeGroupId = null;
       ? document.getElementById('rules-' + id)
       : document.getElementById('rules-sec-' + id);
     if (!t) return;
-    t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    t.scrollIntoView({ behavior: 'instant', block: 'start' });
     // A brief highlight so the eye finds the target it jumped to.
     t.classList.remove('rules-hit');
     void t.offsetWidth;

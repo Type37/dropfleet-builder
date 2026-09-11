@@ -151,15 +151,20 @@ def build(page, cell, label, square=False):
         body.append('<path %s d="%s"/>' % (' '.join(attrs), d))
 
     size = num(cell.width)
-    # Clip to the token's own outline, so overhanging art is trimmed the way the sheet
-    # trims it. Round tokens take a circle, the square ones a rounded rect.
-    ox, oy = bg.x0 - cell.x0, bg.y0 - cell.y0
-    if not square and abs(bg.width - bg.height) < 2 and bg.width > cell.width * 0.7:
-        outline = '<circle cx="%s" cy="%s" r="%s"/>' % (
-            num(ox + bg.width / 2), num(oy + bg.height / 2), num(bg.width / 2))
-    else:
+    # Clip to the token's own outline, so overhanging art is trimmed the way the
+    # sheet trims it. The COLOURED tokens (spikes, crippling effects, atmosphere,
+    # dropsite features, City) are round discs, so they always clip to a circle
+    # filling the cell — some, like the City and Atmosphere, draw their art wider
+    # than the disc and let the clip do the trimming, so the disc must NOT be
+    # inferred from the largest shape (that gave the City a square). The black
+    # markers (Battalion, Launch assets, turn tokens) are rounded squares.
+    r = cell.width / 2
+    if square:
+        ox, oy = bg.x0 - cell.x0, bg.y0 - cell.y0
         outline = '<rect x="%s" y="%s" width="%s" height="%s" rx="%s"/>' % (
             num(ox), num(oy), num(bg.width), num(bg.height), num(bg.width * 0.12))
+    else:
+        outline = '<circle cx="%s" cy="%s" r="%s"/>' % (num(r), num(r), num(r))
     cid = 'tk'
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %s %s" role="img" aria-label="%s">'
