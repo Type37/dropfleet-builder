@@ -895,7 +895,11 @@ let activeGroupId = null;
   function setupRouting() {
     window.addEventListener('hashchange', () => {
       const hash = location.hash.slice(1) || 'landing';
-      const [view, param] = hash.split('/');
+      const parts = hash.split('/');
+      const view = parts[0];
+      // Rejoin the rest: a rulebook deep link is #rules/<id> and an id can carry
+      // dots or a slash ("12.1.1/1-line"), so param is everything after view.
+      const param = parts.slice(1).join('/');
       showView(view, param);
     });
   }
@@ -997,7 +1001,7 @@ let activeGroupId = null;
       case 'rules':
         show('view-rules');
         topContext.innerHTML = `<a href="#landing" class="topbar-back" onclick="App.navigate('landing'); return false;"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> How to Play`;
-        renderRules();
+        renderRules(param);
         break;
       default:
         show('view-landing');
@@ -1078,16 +1082,79 @@ let activeGroupId = null;
       const r = sharedRulesDB[name] || {};
       const page = r.page ? `<span class="rules-kw-page">rulebook p.${esc(r.page)}</span>` : '';
       const desc = (r.description || '').split('\n').map(line => `<p>${esc(line)}</p>`).join('');
-      return `<div class="rules-kw" data-kw="${esc(name.toLowerCase())} ${esc((r.description || '').toLowerCase())}">
+      return `<div class="rules-kw" id="rules-kw-${esc(rulesSlug(name))}" data-kw="${esc(name.toLowerCase())} ${esc((r.description || '').toLowerCase())}">
         <div class="rules-kw-head"><span class="rules-kw-name">${esc(name)}</span>${page}</div>
         <div class="rules-kw-desc">${desc}</div>
       </div>`;
     }).join('') + `</div>`;
   }
 
-  // Runs -> HTML, keeping the book's bold. A run is {t, b?}.
+  // Runs -> HTML, keeping the book's bold and turning every cross-reference into
+  // a link. A run is {t, b?}.
   function wikiRuns(runs) {
-    return (runs || []).map(r => r.b ? `<strong>${esc(r.t)}</strong>` : esc(r.t)).join('');
+    return (runs || []).map(r => {
+      const html = linkifyRules(esc(r.t));
+      return r.b ? `<strong>${html}</strong>` : html;
+    }).join('');
+  }
+
+  // Make the rulebook link as densely as the book cross-references itself. Three
+  // kinds of reference become a link to their target section, and the target is
+  // a real #rules/<id> hash, so the browser Back button returns you where you
+  // were:
+  //   * a section number the book prints inline ("7.3.1", "12.1.5");
+  //   * the NAME of a chapter or section ("the Scenery section", "Line of Sight");
+  //   * any defined keyword in the Special Rules glossary ("Burnthrough",
+  //     "Dense Debris Field"), which links to its glossary entry.
+  const RULES_LINK_STOP = new Set([
+    'move', 'ships', 'ship', 'the table', 'name', 'type', 'special', 'assets',
+  ]);
+  let _rulesIdx = null;
+  function rulesSlug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+
+  function rulesIndex() {
+    if (_rulesIdx) return _rulesIdx;
+    const numbers = new Set();
+    const termMap = {};
+    const phrases = [];
+    const seen = new Set();
+    const add = (phrase, target) => {
+      const key = (phrase || '').toLowerCase().trim();
+      if (key.length < 4 || RULES_LINK_STOP.has(key) || seen.has(key)) return;
+      seen.add(key);
+      termMap[key] = target;
+      phrases.push(phrase);
+    };
+    (function walk(ns) {
+      for (const n of ns) {
+        if (n.number) numbers.add(n.number);
+        if (n.heading) add(n.heading, n.id);
+        walk(n.children || []);
+      }
+    })((rulesWiki && rulesWiki.chapters) || []);
+    Object.keys(sharedRulesDB || {}).forEach(name => add(name, 'kw-' + rulesSlug(name)));
+    phrases.sort((a, b) => b.length - a.length);   // most specific match wins
+    const alt = phrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+    const re = new RegExp('\\b(?:\\d+(?:\\.\\d+)+' + (alt ? '|' + alt : '') + ')\\b', 'gi');
+    _rulesIdx = { numbers, termMap, re };
+    return _rulesIdx;
+  }
+
+  function linkifyRules(escaped) {
+    const idx = rulesIndex();
+    // Input is a run's already-escaped text: no tags yet (bold is wrapped after),
+    // so one pass cannot nest a link inside another.
+    return escaped.replace(idx.re, (m) => {
+      let target;
+      if (/^\d+(?:\.\d+)+$/.test(m)) {
+        if (!idx.numbers.has(m)) return m;
+        target = m;
+      } else {
+        target = idx.termMap[m.toLowerCase()];
+        if (!target) return m;
+      }
+      return `<a class="rules-xref" href="#rules/${target}">${m}</a>`;
+    });
   }
 
   // A section's body: paragraphs, bulleted lists (consecutive li folded into one
@@ -1181,7 +1248,9 @@ let activeGroupId = null;
       ${rulesLegendHtml()}`;
   }
 
-  async function renderRules() {
+  // Built once; a deep link (#rules/<id>) only scrolls, so following a
+  // cross-reference never rebuilds the whole book and the Back button just works.
+  async function renderRules(targetId) {
     const el = document.getElementById('view-rules');
     if (!el) return;
 
@@ -1196,33 +1265,39 @@ let activeGroupId = null;
       }
     }
 
-    const chapters = rulesWiki.chapters || [];
-    // Nav: every chapter, plus the Tokens reference that has no chapter of its own.
-    const nav = chapters.map(ch =>
-      `<button class="rules-nav-item" data-target="rules-sec-${esc(ch.id)}" onclick="App.jumpRules('${esc(ch.id)}')"><span class="rules-nav-n">${esc(ch.number)}</span><span class="rules-nav-t">${esc(ch.heading)}</span></button>`
-    ).join('') +
-      `<button class="rules-nav-item" data-target="rules-sec-tokens" onclick="App.jumpRules('tokens')"><span class="rules-nav-n"></span><span class="rules-nav-t">Tokens</span></button>`;
+    if (el.dataset.built !== '1') {
+      const chapters = rulesWiki.chapters || [];
+      // Nav: every chapter, plus the Tokens reference with no chapter of its own.
+      // Each is a #rules/<id> hash so it lands in history like any cross-reference.
+      const nav = chapters.map(ch =>
+        `<a class="rules-nav-item" data-target="rules-sec-${esc(ch.id)}" href="#rules/${esc(ch.id)}"><span class="rules-nav-n">${esc(ch.number)}</span><span class="rules-nav-t">${esc(ch.heading)}</span></a>`
+      ).join('') +
+        `<a class="rules-nav-item" data-target="rules-sec-tokens" href="#rules/tokens"><span class="rules-nav-n"></span><span class="rules-nav-t">Tokens</span></a>`;
 
-    const doc = chapters.map(wikiChapter).join('') +
-      `<section class="rules-chapter" id="rules-sec-tokens">
-        <h2 class="rules-chapter-title"><span class="rules-chapter-n"></span>Tokens</h2>
-        ${rulesTokensHtml()}
-      </section>`;
+      const doc = chapters.map(wikiChapter).join('') +
+        `<section class="rules-chapter" id="rules-sec-tokens">
+          <h2 class="rules-chapter-title"><span class="rules-chapter-n"></span>Tokens</h2>
+          ${rulesTokensHtml()}
+        </section>`;
 
-    el.innerHTML = `
-      <div class="rules-layout">
-        <nav class="rules-nav" aria-label="Rulebook contents">${nav}</nav>
-        <div class="rules-doc">
-          <div class="rules-intro">
-            <p>The Dropfleet Commander rulebook${rulesWiki.edition ? `, edition ${esc(rulesWiki.edition)}` : ''}, reproduced from TTCombat's free download.</p>
-            <a class="btn btn-outline" href="${RULEBOOK_URL}" target="_blank" rel="noopener">TTCombat downloads</a>
+      el.innerHTML = `
+        <div class="rules-layout">
+          <nav class="rules-nav" aria-label="Rulebook contents">${nav}</nav>
+          <div class="rules-doc">
+            <div class="rules-intro">
+              <p>The Dropfleet Commander rulebook${rulesWiki.edition ? `, edition ${esc(rulesWiki.edition)}` : ''}, reproduced from TTCombat's free download.</p>
+              <a class="btn btn-outline" href="${RULEBOOK_URL}" target="_blank" rel="noopener">TTCombat downloads</a>
+            </div>
+            ${doc}
           </div>
-          ${doc}
-        </div>
-      </div>`;
+        </div>`;
 
-    setupRulesSpy();
-    setupRulesWheel();
+      el.dataset.built = '1';
+      setupRulesSpy();
+      setupRulesWheel();
+    }
+
+    if (targetId) requestAnimationFrame(() => jumpRules(targetId));
   }
 
   // The rulebook is one very long page, so the wheel is geared up and eased: each
@@ -1277,8 +1352,18 @@ let activeGroupId = null;
   }
 
   function jumpRules(id) {
-    const t = document.getElementById('rules-sec-' + id);
-    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!id) return;
+    // A glossary keyword target is "kw-<slug>" (its element is rules-kw-<slug>);
+    // everything else is a section id (element rules-sec-<id>).
+    const t = id.indexOf('kw-') === 0
+      ? document.getElementById('rules-' + id)
+      : document.getElementById('rules-sec-' + id);
+    if (!t) return;
+    t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // A brief highlight so the eye finds the target it jumped to.
+    t.classList.remove('rules-hit');
+    void t.offsetWidth;
+    t.classList.add('rules-hit');
   }
 
   function filterRules(q) {
@@ -3817,10 +3902,10 @@ let activeGroupId = null;
     sig:    { label: 'Sig',    title: 'Signature, how visible the ship is' },
     thrust: { label: 'Thrust', title: 'Thrust, movement speed' },
     hull:   { label: 'Hull',   title: 'Hull points, structural integrity' },
-    es:     { label: 'ES',     title: 'Energy Shield, save vs Energy weapons', cssClass: 'stat-cell-es' },
-    ks:     { label: 'KS',     title: 'Kinetic Shield, save vs Kinetic weapons', cssClass: 'stat-cell-ks' },
-    bs:     { label: 'BS',     title: 'Backup Save, last-resort save', cssClass: 'stat-cell-bs' },
-    g:      { label: 'G',      title: 'Group size, ships per battle group' }
+    es:     { label: 'ES',     title: 'Energy Save, defence save against Energy hits', cssClass: 'stat-cell-es' },
+    ks:     { label: 'KS',     title: 'Kinetic Save, defence save against Kinetic hits', cssClass: 'stat-cell-ks' },
+    bs:     { label: 'BS',     title: 'Backup Save, a last line of defence save', cssClass: 'stat-cell-bs' },
+    g:      { label: 'G',      title: 'Group Size, how many of this ship may operate together as a Group' }
   };
 
   // Adjust the numeric part of a stat value by a signed delta, keeping its suffix
@@ -8467,6 +8552,7 @@ let activeGroupId = null;
       'Chapter 1 opens with the example ship card from page 5 and the legend that names every stat, arc, damage type and tonnage letter on it.',
       'The book’s diagrams are in too: Base Contact, Coherency, the weapon Arcs, Move and the Explosion chain, each sitting with the rule it illustrates.',
       'The Tokens section now explains the Launch assets too, Fighters, Bombers, Fire Ships, Torpedoes, Mines and Battalions, plus the Activation and Pass tokens, each with the real counter beside it.',
+      'It cross-links like the book does. Every section number, rule name and keyword in the text is a link to where it is defined, and the Back button takes you straight back to where you were reading.',
     ]},
     { date: '2026-09-09', title: 'How to Play: the tokens, as they look on the table', items: [
       'How to Play has a new Tokens section showing every counter off the official downloadable token sheet: Spikes, the six Crippling Effects, the Atmosphere marker, and the Dropsite Features and City.',
