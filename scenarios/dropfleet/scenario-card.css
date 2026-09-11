@@ -168,7 +168,7 @@ vp{font-family:'Roboto Slab',serif;font-weight:700;font-size:inherit;color:var(-
 .pss-wide{grid-column:1/-1;}
 .pss-cell .ico-stat{flex-shrink:0;}
 .pss-v{font-family:'Roboto Slab',Georgia,serif;font-weight:700;font-size:10.5pt;line-height:1;color:var(--ch);font-variant-numeric:tabular-nums lining-nums;}
-.pss-l{font-family:'Jost',sans-serif;font-size:6.5pt;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:#8A8172;margin-left:auto;white-space:nowrap;}
+.pss-l{font-family:'Jost',sans-serif;font-size:7.5pt;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:#5D5850;margin-left:auto;white-space:nowrap;}
 .pss-es{border-bottom:.5mm solid #7A6200;} .pss-es .pss-v{color:#7A6200;}
 .pss-ks{border-bottom:.5mm solid var(--navy,#2B4A6F);} .pss-ks .pss-v{color:var(--navy,#2B4A6F);}
 .pss-bs{border-bottom:.5mm solid var(--gold);} .pss-bs .pss-v{color:var(--gdk);}
