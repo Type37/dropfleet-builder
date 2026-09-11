@@ -21,7 +21,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .sec{display:flex;flex-direction:column;gap:.7mm;flex-shrink:0;}
 .sh{display:flex;align-items:center;gap:1.5mm;}
 .dm{width:12px;height:12px;flex-shrink:0;}
-.sl{font-family:'Roboto Slab',Georgia,serif;font-size:8.5pt;font-weight:700;color:var(--ch);line-height:1.2;margin:0;text-transform:uppercase;letter-spacing:.05em;}
+.sl{font-family:'Roboto Slab',Georgia,serif;font-size:8.5pt;font-weight:700;color:var(--ch);line-height:1.2;margin:0;text-transform:uppercase;}
 
 .spill-row{display:flex;align-items:center;gap:1.5mm;margin-top:1.5mm;margin-bottom:.4mm;}
 .si{font-size:6pt;color:var(--gold);flex-shrink:0;line-height:1;}
