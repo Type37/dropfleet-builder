@@ -65,7 +65,7 @@ main{flex:1;width:100%;}
 .trk output{min-width:2.2ch;text-align:center;font-family:'Roboto Slab',Georgia,serif;font-weight:700;font-size:1.1rem;display:inline-flex;align-items:center;justify-content:center;gap:3px;}
 .trk output .vp-dm{width:9px;height:9px;}
 .trk .trk-plain{width:auto;padding:0 10px;font-size:.85rem;font-weight:500;}
-.sheet{max-width:10in;margin:0 auto;padding:4mm 0 10mm;}
+.sheet{max-width:1180px;margin:0 auto;padding:4mm 0 10mm;}
 
 /* Footer */
 .foot{background:#f3f1ec;padding:10px 20px;font-size:.78rem;color:#5d5850;}
