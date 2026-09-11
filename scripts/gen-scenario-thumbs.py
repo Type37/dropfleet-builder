@@ -18,6 +18,19 @@ OUT = os.path.join(SRC, 'thumb')
 SIZE = 192
 
 
+def without_variants(path):
+    """The map as the book prints it. A Variant's layer is display="none", which MuPDF ignores,
+    so it is taken out before rendering."""
+    import xml.etree.ElementTree as ET
+    ET.register_namespace('', 'http://www.w3.org/2000/svg')
+    ET.register_namespace('xlink', 'http://www.w3.org/1999/xlink')
+    root = ET.parse(path).getroot()
+    for parent in root.iter():
+        for child in [c for c in parent if 'data-v' in c.attrib]:
+            parent.remove(child)
+    return ET.tostring(root)
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     total = 0
@@ -27,7 +40,7 @@ def main():
         svg = path[:-5] + '.svg'
         if os.path.exists(svg):   # a redrawn map wins over the book's small picture
             import fitz
-            page = fitz.open(svg)[0]
+            page = fitz.open(stream=without_variants(svg), filetype='svg')[0]
             zoom = SIZE * 2 / page.rect.width
             pix = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom))
             im = Image.frombytes('RGB', (pix.width, pix.height), pix.samples)

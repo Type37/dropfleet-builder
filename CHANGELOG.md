@@ -5,6 +5,19 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-11: Scenario pages read like the Dropzone ones; Orbital Support's Variant
+
+- **Index:** the Deployment and Scoring columns put commas between the rules
+  they name.
+- **Named rules lead their paragraph.** Close, Standard Scoring, Survey and the
+  rest are bold lead-ins, the way the Dropzone scenario pages set theirs,
+  instead of white text in dark labels.
+- **Orbital Support** was drawn with its Variant already applied: Hangars on
+  the Medium Space Station. The base map now has its two Military Outposts, and
+  the Variant is a toggle that swaps them for Hangars, on the map and in the
+  hover stats. `scripts/draw-rulebook-maps.js` draws a Variant as a hidden
+  layer; `build-scenario-hotspots.py` carries the layer onto each spot.
+
 ### 2026-09-11: How to Play, centred read and Dropsite icons
 
 - **Centred reading column.** The rulebook text now sits as a centred 74ch

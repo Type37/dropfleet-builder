@@ -8678,6 +8678,8 @@ let activeGroupId = null;
       'Mandatory Festivities reads Raze, where the book misprints Raise.',
       'A switch in the header takes you to the Dropzone Commander scenarios.',
       'The scenario list puts commas between the deployments and scoring it names.',
+      'A scenario page names its deployment and scoring rules in bold at the start of their paragraphs, the way the Dropzone pages do, instead of in dark labels.',
+      'Orbital Support’s map shows the Medium Space Station with its Military Outposts. Turn its Variant on and they become Hangars on the map, stats included.',
     ]},
     { date: '2026-09-11', title: 'How to Play: the whole rulebook, on one page', items: [
       'How to Play now carries the entire Dropfleet Commander rulebook, verbatim, not just a legend and a glossary. Every chapter, section and table is there to read in the app.',

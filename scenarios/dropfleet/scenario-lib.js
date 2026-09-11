@@ -613,8 +613,30 @@ function pubShips(text){
 const SPOT_NAME=k=>{ const [kind,id]=[k.slice(0,k.indexOf(':')),k.slice(k.indexOf(':')+1)]; return kind==='ds'?DS[+id].nm:kind==='ship'?SCN_SHIPS[id].name:id; };
 function mapSpots(id){
   const spots=typeof SCN_HOTSPOTS!=='undefined'&&SCN_HOTSPOTS[id];
-  return spots?spots.map(([tip,x,y,r])=>`<span class="hs" tabindex="0" role="img" aria-label="${SPOT_NAME(tip)}" data-tip="${tip}" style="left:${x-r}%;top:${y-r}%;width:${2*r}%;height:${2*r}%"></span>`).join(''):'';
+  // a fifth entry is the Variant layer a spot belongs to: {v} shown with it, {hideV} hidden by it
+  const layer=l=>l?(l.v?` data-v="${l.v}"`:'')+(l.hideV?` data-hide-v="${l.hideV}"`:''):'';
+  return spots?spots.map(([tip,x,y,r,l])=>`<span class="hs" tabindex="0" role="img" aria-label="${SPOT_NAME(tip)}" data-tip="${tip}"${layer(l)} style="left:${x-r}%;top:${y-r}%;width:${2*r}%;height:${2*r}%"></span>`).join(''):'';
 }
+// A redrawn map is inlined once fetched, so its Variant layers can follow the toggle
+const PUB_SVG={};
+async function pubInlineMaps(){
+  for(const el of document.querySelectorAll('.map-svg[data-src]')){
+    const src=el.dataset.src, alt=el.querySelector('img').alt;
+    el.removeAttribute('data-src');
+    try{ PUB_SVG[src]=PUB_SVG[src]||await fetch(src).then(r=>{ if(!r.ok) throw new Error(r.status); return r.text(); }); }
+    catch(e){ continue; }
+    el.innerHTML=PUB_SVG[src].replace('<svg ',`<svg role="img" aria-label="${alt}" `);
+  }
+}
+const pubVariantKey=id=>`dfc-scenario-variant:${id}`;
+if(typeof document!=='undefined'&&document.addEventListener) document.addEventListener('click',e=>{
+  const b=e.target.closest&&e.target.closest('.scenario.pub [data-set-v]'), card=b&&b.closest('.scenario');
+  if(!card) return;
+  const v=card.dataset.v===b.dataset.setV?'0':b.dataset.setV;
+  card.dataset.v=v;
+  try{ localStorage.setItem(pubVariantKey(card.dataset.scn),v); }catch(err){}
+  card.querySelectorAll('[data-set-v]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.setV===v)));
+});
 function renderScenario(s){
   const J=pubJoin;
   const rulesText=[s.players,s.deployment,s.scoring,s.variant,s.special].map(J).join(' ');
@@ -628,12 +650,16 @@ function renderScenario(s){
   const ships=pubShips(allText);
   const hasMap=SCENARIO_MAPS.has(s.id);
   const fauna=s.id!=='fauna-rules'&&/\bFauna\b/.test(allText)?`<button class="abtn pub-fauna" onclick="pubOpen('fauna-rules')">Fauna Rules</button>`:'';
+  let on='0';
+  try{ if(s.variant&&localStorage.getItem(pubVariantKey(s.id))==='1') on='1'; }catch(e){}
+  const mapSrc=`${SCN_ASSETS}scenarios/dropfleet/${s.id}.${SCENARIO_MAP_SVG.has(s.id)?'svg':'webp'}`, mapImg=`<img src="${mapSrc}" alt="${s.name} map">`;
+  if(SCENARIO_MAP_SVG.has(s.id)) setTimeout(pubInlineMaps);
   const right=hasMap?`<div class="map-col">
-      <div class="map-frame"><img src="${SCN_ASSETS}scenarios/dropfleet/${s.id}.${SCENARIO_MAP_SVG.has(s.id)?'svg':'webp'}" alt="${s.name} map">${mapSpots(s.id)}</div>
+      <div class="map-frame">${SCENARIO_MAP_SVG.has(s.id)?`<div class="map-svg" data-src="${mapSrc}">${mapImg}</div>`:mapImg}${mapSpots(s.id)}</div>
       ${sec('Scenery',scenery)}
       <div class="leg">${pubFeatures(allText)}${pubDropsites()}</div>
     </div>`:'';
-  return `<div class="scenario pub${hasMap?'':' no-map'}">
+  return `<div class="scenario pub${hasMap?'':' no-map'}" data-scn="${s.id}" data-v="${on}">
     <div class="rules-col">
       <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.src}</div></div>
       ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
@@ -641,7 +667,7 @@ function renderScenario(s){
       ${sec('Players',s.players?pubParas(s.players):'')}
       ${sec('Deployment',deploy)}
       ${sec('Scoring',score)}
-      ${sec('Variant',s.variant?pubParas(s.variant):'')}
+      ${sec('Variants',s.variant?`<ul class="pub-vlist"><li><button type="button" class="pub-vbtn" data-set-v="1" aria-pressed="${on==='1'}">Variant</button><div>${pubParas(s.variant)}</div></li></ul>`:'')}
       ${sec('Special Rules',special)}
       ${hasMap?'':sec('Scenery',scenery)}
       ${sec('Terms',pubTerms(rulesText))}

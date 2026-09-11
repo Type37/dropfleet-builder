@@ -137,12 +137,14 @@ const MAPS = {
       ['LC', 6, 12, 0, ['out', 'out'], ''],
       ['SC', 24, 12, 0, ['out', 'odg'], ''],
       ['LC', 42, 12, 0, ['out', 'out'], 'NE'],
-      // "The Medium Space Station replaces its two Military Outposts with two Hangars."
-      ['MS', 24, 24, 0, ['han', 'han'], ''],
+      ['MS', 24, 24, 0, ['out', 'out'], ''],
       ['LC', 6, 36, 0, ['out', 'out'], 'WS'],
       ['SC', 24, 36, 0, ['odg', 'out'], ''],
       ['LC', 42, 36, 0, ['out', 'out'], ''],
     ],
+    // "The Medium Space Station replaces its two Military Outposts with two Hangars."
+    // Drawn as a hidden layer (site = index in sites) the scenarios page shows when the Variant is on.
+    variants: { 1: { site: 3, feats: ['han', 'han'] } },
   },
   'entrapmoont': {
     zones: () => zone.redCorners(8) + zone.blueDisc(24, 24, 18) +
@@ -170,17 +172,26 @@ for (const [id, m] of Object.entries(MAPS)) {
   const GR = `<line x1="99" y1="0" x2="99" y2="200" stroke="#B8952F" stroke-width=".4" opacity=".22"/><line x1="101" y1="0" x2="101" y2="200" stroke="#B8952F" stroke-width=".4" opacity=".22"/><line x1="0" y1="99" x2="200" y2="99" stroke="#B8952F" stroke-width=".4" opacity=".22"/><line x1="0" y1="101" x2="200" y2="101" stroke="#B8952F" stroke-width=".4" opacity=".22"/>`;
   let dims = '', sites = '', toks = '';
   const spots = [];
-  for (const [t, xi, yi, rot, feats, edges, shifts] of m.sites) {
+  for (const [si, [t, xi, yi, rot, feats, edges, shifts]] of m.sites.entries()) {
     const x = _i(xi), y = _i(yi);
     for (const e of edges) dims += edgeLine(e, xi, yi, shifts && shifts[e]);
     sites += plain(t === 'LC' ? mkLC(x, y) : t === 'MC' ? mkMC(x, y, rot) : t === 'SC' ? mkSC(x, y, rot)
       : mkStn(x, y, t[0], t === 'SS' ? 7 : 9));
     spots.push({ t: t.toLowerCase(), x: pct(x), y: pct(y), r: SITE_R[t] });
-    feats.forEach((k, i) => {
-      const [px, py] = tokenSpot(t, x, y, rot, i, false);
-      toks += token(k, px, py);
-      spots.push({ t: FEAT_KEY[k], x: pct(px), y: pct(py), r: +((TOKEN / 2 + 0.8) / 2).toFixed(1) });
-    });
+    // A site's Features, wrapped in a layer when a Variant swaps them (v: shown with it, hideV: hidden by it)
+    const layer = (list, attrs, tag) => {
+      let out = '';
+      list.forEach((k, i) => {
+        const [px, py] = tokenSpot(t, x, y, rot, i, false);
+        out += token(k, px, py);
+        spots.push({ t: FEAT_KEY[k], x: pct(px), y: pct(py), r: +((TOKEN / 2 + 0.8) / 2).toFixed(1), ...tag });
+      });
+      return attrs ? `<g${attrs}>${out}</g>` : out;
+    };
+    const swaps = Object.entries(m.variants || {}).filter(([, v]) => v.site === si);
+    const hide = swaps.map(([n]) => n).join(' ');
+    toks += hide ? layer(feats, ` data-hide-v="${hide}"`, { hideV: hide }) : layer(feats, '', {});
+    for (const [n, v] of swaps) toks += layer(v.feats, ` data-v="${n}" display="none"`, { v: n });
   }
   for (const [lx, ly, d] of m.los || []) spots.push({ t: 'lo', x: pct(_i(lx)), y: pct(_i(ly)), r: pct(_i(d / 2)) });
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="1000" height="1000">` +
