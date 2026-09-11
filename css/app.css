@@ -1645,7 +1645,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .landing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--sp-lg);
   max-width: 800px;
   width: 100%;
@@ -1666,6 +1666,22 @@ h1, h2, h3, h4, h5, h6 {
   border-color: var(--navy);
   box-shadow: var(--shadow-lg);
 }
+
+/* Faint screenshot of the destination, revealed on hover behind the label. */
+.tool-card-shot {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: top center;
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out);
+  pointer-events: none;
+  z-index: 0;
+}
+.tool-card:hover .tool-card-shot { opacity: 0.16; }
+.tool-card-icon,
+.tool-card-title,
+.tool-card-desc { position: relative; z-index: 1; }
 
 .tool-card-icon {
   width: 48px;
@@ -8024,7 +8040,7 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 .rules-loading { padding: var(--sp-xl); color: var(--ink-faint); }
 
 .rules-nav { position: sticky; top: 56px; max-height: calc(100vh - 72px); overflow-y: auto; display: flex; flex-direction: column; gap: 1px; padding-right: var(--sp-sm); border-right: 1px solid var(--line, rgba(120,110,95,.25)); }
-.rules-nav-item { display: flex; align-items: baseline; gap: 8px; width: 100%; text-align: left; padding: 6px 10px; border: 0; border-radius: var(--radius-md, 8px); background: none; color: var(--ink-soft); cursor: pointer; font-size: var(--text-sm); line-height: 1.3; }
+.rules-nav-item { display: flex; align-items: baseline; gap: 8px; width: 100%; text-align: left; padding: 6px 10px; border: 0; border-radius: var(--radius-md, 8px); background: none; color: var(--ink-soft); cursor: pointer; font-size: var(--text-sm); line-height: 1.3; text-decoration: none; }
 .rules-nav-item:hover { background: var(--paper); color: var(--ink); }
 .rules-nav-item.active { background: var(--paper); color: var(--navy); font-weight: 600; box-shadow: inset 3px 0 0 var(--navy); }
 .rules-nav-n { flex: 0 0 1.4em; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-faint); font-weight: 600; }
@@ -8037,7 +8053,7 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 .rules-chapter-n { font-size: var(--text-lg); color: var(--ink-faint); font-variant-numeric: tabular-nums; }
 .rules-chapter-n:empty { display: none; }
 
-.rules-sub { scroll-margin-top: 12px; margin-top: var(--sp-lg); }
+.rules-sub { scroll-margin-top: 60px; margin-top: var(--sp-lg); }
 .rules-sub-d2 { margin-left: var(--sp-md); }
 .rules-sub-d3, .rules-sub-d4 { margin-left: calc(var(--sp-md) * 2); }
 .rules-h { display: flex; align-items: baseline; gap: var(--sp-sm); font-family: var(--font-display); color: var(--ink); margin: 0 0 var(--sp-sm); line-height: 1.25; }
@@ -8049,6 +8065,14 @@ h5.rules-h, h6.rules-h { font-size: var(--text-sm); text-transform: uppercase; l
 
 .rules-p { margin: 0 0 var(--sp-md); font-size: var(--text-md, 1rem); line-height: 1.6; color: var(--ink-soft); }
 .rules-p strong { color: var(--ink); font-weight: 700; }
+
+/* Cross-reference links: dense, so kept quiet — a dotted underline in the ink
+   colour, going solid navy on hover. */
+.rules-xref { color: inherit; text-decoration: underline; text-decoration-style: dotted; text-decoration-color: var(--navy); text-underline-offset: 2px; cursor: pointer; }
+.rules-xref:hover { color: var(--navy); text-decoration-style: solid; }
+/* Brief flash on the section a link jumps to. */
+@keyframes rules-hit { from { background: var(--gold-faint, rgba(184,147,46,.28)); } to { background: transparent; } }
+.rules-hit { animation: rules-hit 1.4s ease-out; border-radius: var(--radius-md, 8px); }
 .rules-ul { margin: 0 0 var(--sp-md); padding-left: 1.2em; }
 .rules-ul li { margin: 0 0 4px; font-size: var(--text-md, 1rem); line-height: 1.55; color: var(--ink-soft); }
 .rules-caption { margin: 0 0 var(--sp-md); font-size: var(--text-sm); color: var(--ink-muted); font-style: italic; }
