@@ -234,3 +234,9 @@ vp{font-family:'Roboto Slab',serif;font-weight:700;font-size:inherit;color:var(-
   .st .ico-feat{width:11px;height:11px;}
   .st .ico-ds{width:11px;height:11px;}
 }
+
+/* Spots over a published map's symbols */
+.map-frame .hs{position:absolute;border-radius:50%;cursor:help;z-index:3;}
+@media (hover:hover){ .map-frame .hs:hover{box-shadow:0 0 0 2px #B8952F,0 0 0 4px rgba(255,255,255,.7);} }
+.map-frame .hs:focus-visible{outline:2px solid #B86C0A;outline-offset:1px;}
+@media print{ .map-frame .hs{display:none;} }

@@ -33,6 +33,24 @@ bold kept).
   since the book is one very long page.
 - Desktop only for now; the mobile How to Play is unchanged.
 
+### 2026-09-11: Stats on the book's maps, tables, real tokens
+
+- **Published maps:** hover, tap or tab to any symbol on a scenario's map (a
+  Space Station, a city, a Feature shape, a Large Object, a named Civilian
+  ship) to see its stats. 360 symbols across the 30 maps that have them,
+  marked against the rulebook's map key and checked by overlay. Data in
+  `data/scenario-hotspots/`, built by `scripts/build-scenario-hotspots.py`.
+  Orbital Support's station shows Hangars and Moonbreaker's yellow spots show
+  Small Cities, as those scenarios' own rules say. Retrieving Intelligence and
+  Shipyard Raid only say "Civilian Ship", so their ships have no card to show.
+- **Tables:** Features and Dropsite Reference are tables with the builder's stat
+  symbols as headers; each Feature's weapon is a small table of its own. The
+  Hangar entry is now the rulebook's Launch table and footnote (it had been
+  paraphrased).
+- **Generator map:** real Feature tokens on dropsite corners, a map that takes
+  half the card, and stats on hover for every dropsite and token.
+- The old Neocities Mission Maker address redirects to the generator here.
+
 ### 2026-09-11: Scenarios page, separate from the generator
 
 `/scenarios/dropfleet/` is now a reference for every published scenario, in the

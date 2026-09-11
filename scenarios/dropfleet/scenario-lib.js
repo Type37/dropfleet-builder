@@ -571,6 +571,12 @@ function pubShips(text){
   }).join('');
 }
 
+// Invisible spots over the book's map symbols (scenario-hotspots.js), each opening its stats
+const SPOT_NAME=k=>{ const [kind,id]=[k.slice(0,k.indexOf(':')),k.slice(k.indexOf(':')+1)]; return kind==='ds'?DS[+id].nm:kind==='ship'?SCN_SHIPS[id].name:id; };
+function mapSpots(id){
+  const spots=typeof SCN_HOTSPOTS!=='undefined'&&SCN_HOTSPOTS[id];
+  return spots?spots.map(([tip,x,y,r])=>`<span class="hs" tabindex="0" role="img" aria-label="${SPOT_NAME(tip)}" data-tip="${tip}" style="left:${x-r}%;top:${y-r}%;width:${2*r}%;height:${2*r}%"></span>`).join(''):'';
+}
 function renderScenario(s){
   const J=pubJoin;
   const rulesText=[s.players,s.deployment,s.scoring,s.variant,s.special].map(J).join(' ');
@@ -585,7 +591,7 @@ function renderScenario(s){
   const hasMap=SCENARIO_MAPS.has(s.id);
   const fauna=s.id!=='fauna-rules'&&/\bFauna\b/.test(allText)?`<button class="abtn pub-fauna" onclick="pubOpen('fauna-rules')">Fauna Rules</button>`:'';
   const right=hasMap?`<div class="map-col">
-      <div class="map-frame"><img src="${SCN_ASSETS}scenarios/dropfleet/${s.id}.webp" alt="${s.name} map"></div>
+      <div class="map-frame"><img src="${SCN_ASSETS}scenarios/dropfleet/${s.id}.webp" alt="${s.name} map">${mapSpots(s.id)}</div>
       ${sec('Scenery',scenery)}
       <div class="leg">${pubFeatures(allText)}${pubDropsites()}</div>
     </div>`:'';
@@ -617,6 +623,9 @@ function tipHTML(key){
   if(kind==='feat'){ const f=FS[id]; if(!f) return ''; const w=f.weapon;
     const more=w?`<b>${w.name}</b> ${G.iScan}${w.scan}, Att ${w.att}, Lock ${w.lock}, Dmg ${w.dmg}${w.type}, ${w.special}`:f.launch?`Launch ${f.launch.launch}: ${f.launch.type}<br>${f.note}`:f.special;
     return `<div class="scn-tip-h">${f.ico}<b>${id}</b></div><div class="scn-tip-st">${G.iES}<span class="sv-e">${f.es}</span>${G.iKS}<span class="sv-k">${f.ks}</span></div><div>${more}</div>`; }
+  if(kind==='scen'){ const x=SR[id]; return x?`<div class="scn-tip-h"><b>${id}</b></div><div>${x.rules.join(' ')}</div>`:''; }
+  if(kind==='ship'){ const x=SCN_SHIPS[id]; if(!x) return ''; const st=x.stats;
+    return `<div class="scn-tip-h"><b>${x.name}</b></div><div>${x.tonnage}, ${x.cost} pts</div><div class="scn-tip-st">${G.iThrust}${st.thrust} ${G.iScan}${st.scan} ${G.iSig}${st.sig} ${G.iHull}${st.hull} ${G.iES}<span class="sv-e">${st.es}</span>${G.iKS}<span class="sv-k">${st.ks}</span>${G.iBS}${st.bs} ${G.iG}${st.g}</div>${x.rules.map(r=>`<div><b>${r.name}</b></div>`).join('')}`; }
   if(kind==='wtype'){ return WTYPE[id]?`<b>${id}</b> ${WTYPE[id]}`:''; }
   if(kind==='ds'){ const d=DS[+id]; return d?`<div class="scn-tip-h">${d.ico()}<b>${d.nm}</b></div><div class="scn-tip-st">${G.iScan}${d.sc} ${G.iSig}${d.sg} ${G.iHull}${d.h} ${G.iES}<span class="sv-e">${d.es}</span>${G.iKS}<span class="sv-k">${d.ks}</span></div>`:''; }
   return '';
