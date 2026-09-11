@@ -99,7 +99,7 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 .pick-tile input:focus-visible + .tile-inner,
 .comp-lbl input:focus-visible,
 .gbtn:focus-visible,.abtn:focus-visible,.info-btn:focus-visible,
-.scen-select:focus-visible,.ctrl a:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+.ctrl a:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
 /* Competitive mode dims nc-only tiles */
 body.competitive .pick-tile.nc .tile-inner{color:var(--nc);border-color:var(--nc);border-style:dashed;text-decoration:line-through;}
 body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);border-color:var(--nc);color:#fff;text-decoration:line-through;}
@@ -195,9 +195,9 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 }
 /* ── Scenario loader ─────────────────────────────── */
 .ctrl-scen-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:10px 0 0;}
-.scen-select{font-family:'Jost',system-ui,sans-serif;font-size:.88rem;letter-spacing:.01em;color:var(--cobalt-dk);background:#fff;border:1.5px solid var(--cobalt-dk);padding:8px 10px;max-width:300px;cursor:pointer;}
-.scen-select optgroup{font-style:normal;font-weight:700;color:var(--cobalt-dk);}
-.scen-load-btn{font-size:.85rem;padding:9px 18px;}
+.scen-ref-link{font-family:'Jost',system-ui,sans-serif;font-size:.95rem;font-weight:600;color:var(--action);text-decoration:underline;text-underline-offset:3px;padding:4px 2px;}
+.scen-ref-link:hover{color:var(--action-dk);}
+.scen-ref-link:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
 
 /* Phones: panel above the scenario instead of beside it */
 @media screen and (max-width:800px){
@@ -251,8 +251,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
       <button class="abtn" id="sb" onclick="savePNG()" disabled>Save Image</button>
     </div>
     <div class="ctrl-scen-row">
-      <select id="scenSel" class="scen-select" aria-label="Choose a published scenario"></select>
-      <button class="gbtn scen-load-btn" id="scenLoadBtn" onclick="loadScenario();showCard()">Load Scenario</button>
+      <a class="scen-ref-link" href="../">Published scenarios</a>
     </div>
     <div class="picks" id="picks-root">
       <!-- Filled by buildPicks() on load -->
@@ -1117,36 +1116,9 @@ function getPickVal(name){
 // ─── PUBLISHED SCENARIOS ──────────────────────────────────────────────────
 // Full verbatim briefs, loaded on demand (as opposed to the random generator).
 // Text is transcribed verbatim from the official PDFs.
-function pubOpen(id){ document.getElementById('scenSel').value=id; loadScenario(); }
-
-function loadScenario(){
-  const sel=document.getElementById('scenSel');
-  const s=SCENARIOS.find(x=>x.id===sel.value);
-  if(!s) return;
-  document.getElementById('content').innerHTML=renderScenario(s);
-  document.getElementById('card').style.display='block';
-  const es=document.getElementById('empty-state'); if(es) es.style.display='none';
-  document.getElementById('pb').removeAttribute('disabled');
-  document.getElementById('sb').removeAttribute('disabled');
-  document.querySelector('.wrap').scrollTop=0;
-}
-function buildScenarioSelect(){
-  const sel=document.getElementById('scenSel'); if(!sel) return;
-  const bySrc={};
-  SCENARIOS.forEach(s=>{ (bySrc[s.src]=bySrc[s.src]||[]).push(s); });
-  let html='';
-  Object.keys(bySrc).forEach(src=>{
-    html+=`<optgroup label="${src}">`;
-    bySrc[src].forEach(s=>{ html+=`<option value="${s.id}">${s.name}</option>`; });
-    html+='</optgroup>';
-  });
-  sel.innerHTML=html;
-}
-
 document.addEventListener('DOMContentLoaded',()=>{
   buildPicks();
-  buildScenarioSelect();
-  loadScenario();
+  gen();
   const cm=document.getElementById('cm');
   cm.addEventListener('change',()=>document.body.classList.toggle('competitive',cm.checked));
   document.querySelector('.ctrl-tray').addEventListener('scroll',ttHide);

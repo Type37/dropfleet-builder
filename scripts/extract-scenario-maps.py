@@ -11,7 +11,7 @@ resolution the book shipped: 1123px square in Scenario Expansion 1, 562px in
 Civilian Ships & Scenarios, and only 240px in the rulebook.
 
 A map is paired with its scenario by the title printed above it, matched against
-the names already transcribed into scenarios/dropfleet/generator/index.html. Anything that
+the names already transcribed into scenarios/dropfleet/scenario-lib.js. Anything that
 fails to pair is reported rather than guessed.
 """
 import io
@@ -27,7 +27,7 @@ except ImportError:
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PDFS = os.path.join(ROOT, 'Rules-Mechanics-PDFs')
 OUT = os.path.join(ROOT, 'assets', 'scenarios', 'dropfleet')
-GEN = os.path.join(ROOT, 'scenarios', 'dropfleet', 'generator', 'index.html')
+GEN = os.path.join(ROOT, 'scenarios', 'dropfleet', 'scenario-lib.js')
 
 SOURCES = [
     ('A5_Dropfleet_Rulebook_2.3.1_Print_Friendly.pdf', 'Rulebook'),

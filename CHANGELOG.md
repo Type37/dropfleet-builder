@@ -5,6 +5,24 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-11: Scenarios page, separate from the generator
+
+`/scenarios/dropfleet/` is now a reference for every published scenario, in the
+spirit of Mission Geist for Infinity. The generator moved to
+`/scenarios/dropfleet/generator/` and only rolls; it links to the scenarios page
+instead of carrying its own Load Scenario picker.
+
+- **Index:** scenarios grouped by book, each with its map, players, deployment
+  and scoring in columns. Search and a Random button.
+- **Scenario:** the book's map with every rule it names explained (the same
+  renderer the generator used), a round and VP tracker kept per scenario on
+  this device, share and print. On phones the tracker sits at the bottom.
+- Scenario data, rules tables and card styles now live in
+  `scenarios/dropfleet/scenario-lib.js` and `scenario-card.css`, shared by both
+  pages. Map thumbnails come from `scripts/gen-scenario-thumbs.py`.
+- The builder's landing card opens the generator on GitHub instead of the old
+  Neocities Mission Maker.
+
 ### 2026-09-11: Scenario generator without the stock styling
 
 The scenario page had the look of every generated app: capitals everywhere,
