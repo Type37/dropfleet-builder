@@ -2,7 +2,8 @@
 :root{--gold:#B8952F;--glt:#C9A94A;--gdk:#5A4710;--ch:#0E0C08;--wg:#3D3834;
   /* Screen type scale (one step ≈ major third). Print keeps its own point sizes. */
   --fs-display:30px;   /* h2 mission / scenario title */
-  --fs-heading:17px;   /* h3 section + legend headings */
+  --fs-section:21px;   /* h3 main section headings (SCORING, DEPLOYMENT…) */
+  --fs-heading:17px;   /* legend headings in the map column */
   --fs-body:14px;      /* reading text, table cells, stat values */
   --fs-label:12px;     /* pills, roll tags, captions, table headers */
 }
@@ -20,7 +21,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .sec{display:flex;flex-direction:column;gap:.7mm;flex-shrink:0;}
 .sh{display:flex;align-items:center;gap:1.5mm;}
 .dm{width:12px;height:12px;flex-shrink:0;}
-.sl{font-family:'Roboto Slab',Georgia,serif;font-size:8.5pt;font-weight:400;color:var(--ch);line-height:1.2;margin:0;}
+.sl{font-family:'Roboto Slab',Georgia,serif;font-size:8.5pt;font-weight:700;color:var(--ch);line-height:1.2;margin:0;text-transform:uppercase;letter-spacing:.05em;}
 
 .spill-row{display:flex;align-items:center;gap:1.5mm;margin-top:1.5mm;margin-bottom:.4mm;}
 .si{font-size:6pt;color:var(--gold);flex-shrink:0;line-height:1;}
@@ -81,7 +82,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .ico-feat{width:18px;height:18px;display:inline-block;vertical-align:middle;flex-shrink:0;}
 .sv-e{color:#7A6200;font-weight:700;font-size:8pt;}
 .sv-k{color:#6B6B6B;font-weight:700;font-size:7pt;}
-.roll-tag{font-family:'Jost',system-ui,sans-serif;font-size:7.5pt;color:#6b6660;margin-left:4px;}
+.roll-tag{font-family:'Jost',system-ui,sans-serif;font-size:7.5pt;color:#6b6660;margin-left:4px;text-transform:none;letter-spacing:normal;font-weight:400;}
 .pg-footer{padding:2mm 13mm;display:flex;justify-content:space-between;align-items:center;}
 .pg-fl{font-family:'Jost',system-ui,sans-serif;font-size:7.5pt;font-weight:700;color:var(--wg);}
 .pg-fr{font-family:'Jost',system-ui,sans-serif;font-size:7.5pt;color:var(--gold);text-decoration:none;}
@@ -229,8 +230,9 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
   .pub-src { font-size: var(--fs-body); }
   .sh { gap: 8px; }
   .dm { width: 14px; height: 14px; }
-  .sl, .lhdr { font-family: 'Roboto Slab', Georgia, serif; font-size: var(--fs-heading); font-weight: 700; color: var(--ch); line-height: 1.25; }
-  .lhdr { margin-top: 3mm; }
+  .sl, .lhdr { font-family: 'Roboto Slab', Georgia, serif; font-weight: 700; color: var(--ch); line-height: 1.25; }
+  .sl { font-size: var(--fs-section); }
+  .lhdr { font-size: var(--fs-heading); margin-top: 3mm; }
   .roll-tag { font-family: 'Jost', system-ui, sans-serif; font-size: var(--fs-label); font-weight: 400; }
   .rule-text, .rule-bullets li, .sbox p, .sc-def, .sc-note, .term, .lds, .pub-body p, .st, .st-rule, .st-sub { font-size: var(--fs-body); line-height: 1.5; }
   .rule-text b, .rule-bullets li b { font-size: inherit; }
