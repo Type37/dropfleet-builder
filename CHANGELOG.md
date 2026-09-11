@@ -31,6 +31,13 @@ bold kept).
   same ground as the example card and legend above it.
 - The chapter rail pins below the topbar and the wheel is geared up and eased,
   since the book is one very long page.
+- **Cross-links everywhere.** Every section number, chapter/section name and
+  glossary keyword in the text links to its target, as a real `#rules/<id>`
+  hash, so the browser Back button returns you to where you were reading. The
+  chapter rail links the same way. `linkifyRules()` in `js/app.js`.
+- The Dropsites stats table (chapter 11) came out of the extractor as stranded
+  captions and paragraphs; `scripts/patch-rules-wiki.py` rebuilds it as a real
+  table from those same verbatim values, and is re-runnable after any re-extract.
 - Desktop only for now; the mobile How to Play is unchanged.
 
 ### 2026-09-11: Stats on the book's maps, tables, real tokens
