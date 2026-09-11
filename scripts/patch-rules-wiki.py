@@ -70,6 +70,82 @@ def fix_dropsites(ch):
     return True
 
 
+Q = "”"   # the book's right double quote, used for inches
+APOS = "’"
+
+
+def cell(*parts):
+    """A table cell. A str is a plain run; a (label, rest) tuple bolds the label,
+    the way the book bolds a Feature's rule name ("Comms Uplink:")."""
+    runs = []
+    for p in parts:
+        if isinstance(p, tuple):
+            runs.append({"t": p[0], "b": True})
+            if len(p) > 1 and p[1]:
+                runs.append({"t": p[1]})
+        else:
+            runs.append({"t": p})
+    return runs
+
+
+def row(*cells):
+    return list(cells)
+
+
+def find(node, number):
+    if node.get("number") == number:
+        return node
+    for c in node.get("children", []):
+        r = find(c, number)
+        if r:
+            return r
+    return None
+
+
+def fix_features(ch):
+    """Chapter 11.3 Features: the per-Feature cards (a stat line, a weapon or
+    launch line, and a rule) flattened into one broken table with the weapon
+    stats mis-split. Rebuild as clean tables, values read from page 27."""
+    sec = find(ch, "11.3")
+    if not sec:
+        return False
+    if any(it["kind"] == "table" and it.get("header", [""])[0] == "Feature"
+           for it in sec["body"]):
+        return False  # already repaired
+
+    intro = next((it for it in sec["body"]
+                  if it["kind"] == "p" and "".join(r["t"] for r in it["runs"]).startswith("Features are")), None)
+    foot = next((it for it in sec["body"]
+                 if it["kind"] == "p" and "".join(r["t"] for r in it["runs"]).lstrip().startswith("*")), None)
+
+    stats = {"kind": "table", "header": ["Feature", "ES", "KS", "Special"], "rows": [
+        row(cell("Military Outpost"), cell("3+"), cell("5+"), cell("-")),
+        row(cell("Orbital Defence Gun"), cell("5+"), cell("3+"), cell("-")),
+        row(cell("Comms Station"), cell("5+"), cell("4+"),
+            cell(("Comms Uplink:", " If you control this Dropsite, increase the amount of Ability Points you generate by 1. You can only be affected by Comms Uplink once each round."))),
+        row(cell("Power Plant"), cell("4+"), cell("5+"),
+            cell(("Volatile:", " When this Feature is destroyed, all Groups within 3" + Q + " gain a Spike and this Feature" + APOS + "s Dropsite takes an additional 2D3 damage."))),
+        row(cell("Hangar"), cell("4+"), cell("4+"), cell("-")),
+    ]}
+    weapons = {"kind": "table",
+               "header": ["Feature", "Weapon", "Scan", "Att", "Lock", "Dmg", "Type", "Special"], "rows": [
+                   row(cell("Military Outpost"), cell("Missile Halo"), cell("6" + Q), cell("1"), cell("2+"), cell("2"), cell("K"), cell("Close Action, Escape Velocity")),
+                   row(cell("Orbital Defence Gun"), cell("Orbital Gun"), cell("6" + Q), cell("3"), cell("3+"), cell("1"), cell("E"), cell("Burnthrough-1, Escape Velocity")),
+               ]}
+    launch = {"kind": "table", "header": ["Feature", "Asset", "Launch", "Special"], "rows": [
+        row(cell("Hangar"), cell("Fighters & Bombers*"), cell("2"), cell("-")),
+    ]}
+
+    body = []
+    if intro:
+        body.append(intro)
+    body += [stats, weapons, launch]
+    if foot:
+        body.append(foot)
+    sec["body"] = body
+    return True
+
+
 def main():
     with open(OUT, encoding="utf-8") as fh:
         doc = json.load(fh)
@@ -79,9 +155,10 @@ def main():
         if ch.get("number") == "11":
             if fix_dropsites(ch):
                 changed += 1
-                print("patched 11 Dropsites: stats table rebuilt (%d rows)"
-                      % len(ch["body"][-1].get("rows", []) if False else
-                            next(i for i in ch["body"] if i["kind"] == "table")["rows"]))
+                print("patched 11 Dropsites: stats table rebuilt")
+            if fix_features(ch):
+                changed += 1
+                print("patched 11.3 Features: stats/weapons/launch tables rebuilt")
 
     if not changed:
         print("nothing to patch (already applied, or source shape changed)")

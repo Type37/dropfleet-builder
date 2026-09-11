@@ -4466,15 +4466,13 @@
       {
        "kind": "table",
        "header": [
-        "",
-        "Type",
+        "Feature",
         "ES",
         "KS",
         "Special"
        ],
        "rows": [
         [
-         [],
          [
           {
            "t": "Military Outpost"
@@ -4497,76 +4495,6 @@
          ]
         ],
         [
-         [],
-         [
-          {
-           "t": "Weapon Scan"
-          }
-         ],
-         [
-          {
-           "t": "Att"
-          }
-         ],
-         [
-          {
-           "t": "Lock"
-          }
-         ],
-         [
-          {
-           "t": "Dmg Type Special"
-          }
-         ]
-        ],
-        [
-         [],
-         [
-          {
-           "t": "Missile Halo 6”"
-          }
-         ],
-         [
-          {
-           "t": "1"
-          }
-         ],
-         [
-          {
-           "t": "2+"
-          }
-         ],
-         [
-          {
-           "t": "2 K Close Action, Escape Velocity"
-          }
-         ]
-        ],
-        [
-         [],
-         [
-          {
-           "t": "Type"
-          }
-         ],
-         [
-          {
-           "t": "ES"
-          }
-         ],
-         [
-          {
-           "t": "KS"
-          }
-         ],
-         [
-          {
-           "t": "Special"
-          }
-         ]
-        ],
-        [
-         [],
          [
           {
            "t": "Orbital Defence Gun"
@@ -4589,76 +4517,6 @@
          ]
         ],
         [
-         [],
-         [
-          {
-           "t": "Weapon Scan"
-          }
-         ],
-         [
-          {
-           "t": "Att"
-          }
-         ],
-         [
-          {
-           "t": "Lock"
-          }
-         ],
-         [
-          {
-           "t": "Dmg Type Special"
-          }
-         ]
-        ],
-        [
-         [],
-         [
-          {
-           "t": "Orbital Gun 6”"
-          }
-         ],
-         [
-          {
-           "t": "3"
-          }
-         ],
-         [
-          {
-           "t": "3+"
-          }
-         ],
-         [
-          {
-           "t": "1 E Burnthrough-1, Escape Velocity"
-          }
-         ]
-        ],
-        [
-         [],
-         [
-          {
-           "t": "Type"
-          }
-         ],
-         [
-          {
-           "t": "ES"
-          }
-         ],
-         [
-          {
-           "t": "KS"
-          }
-         ],
-         [
-          {
-           "t": "Special"
-          }
-         ]
-        ],
-        [
-         [],
          [
           {
            "t": "Comms Station"
@@ -4685,30 +4543,6 @@
          ]
         ],
         [
-         [],
-         [
-          {
-           "t": "Type"
-          }
-         ],
-         [
-          {
-           "t": "ES"
-          }
-         ],
-         [
-          {
-           "t": "KS"
-          }
-         ],
-         [
-          {
-           "t": "Special"
-          }
-         ]
-        ],
-        [
-         [],
          [
           {
            "t": "Power Plant"
@@ -4726,39 +4560,15 @@
          ],
          [
           {
-           "t": "Volatile: ",
+           "t": "Volatile:",
            "b": true
           },
           {
-           "t": "When this Feature is destroyed, all Groups within 3” gain a Spike and this Feature’s Dropsite takes an additional 2D3 damage."
+           "t": " When this Feature is destroyed, all Groups within 3” gain a Spike and this Feature’s Dropsite takes an additional 2D3 damage."
           }
          ]
         ],
         [
-         [],
-         [
-          {
-           "t": "Type"
-          }
-         ],
-         [
-          {
-           "t": "ES"
-          }
-         ],
-         [
-          {
-           "t": "KS"
-          }
-         ],
-         [
-          {
-           "t": "Special"
-          }
-         ]
-        ],
-        [
-         [],
          [
           {
            "t": "Hangar"
@@ -4779,34 +4589,128 @@
            "t": "-"
           }
          ]
-        ],
+        ]
+       ]
+      },
+      {
+       "kind": "table",
+       "header": [
+        "Feature",
+        "Weapon",
+        "Scan",
+        "Att",
+        "Lock",
+        "Dmg",
+        "Type",
+        "Special"
+       ],
+       "rows": [
         [
-         [],
          [
           {
-           "t": "Type"
+           "t": "Military Outpost"
           }
          ],
          [
           {
-           "t": "Launch"
+           "t": "Missile Halo"
           }
          ],
-         [],
          [
           {
-           "t": "Special"
+           "t": "6”"
+          }
+         ],
+         [
+          {
+           "t": "1"
+          }
+         ],
+         [
+          {
+           "t": "2+"
+          }
+         ],
+         [
+          {
+           "t": "2"
+          }
+         ],
+         [
+          {
+           "t": "K"
+          }
+         ],
+         [
+          {
+           "t": "Close Action, Escape Velocity"
           }
          ]
         ],
         [
          [
           {
+           "t": "Orbital Defence Gun"
+          }
+         ],
+         [
+          {
+           "t": "Orbital Gun"
+          }
+         ],
+         [
+          {
+           "t": "6”"
+          }
+         ],
+         [
+          {
+           "t": "3"
+          }
+         ],
+         [
+          {
+           "t": "3+"
+          }
+         ],
+         [
+          {
+           "t": "1"
+          }
+         ],
+         [
+          {
+           "t": "E"
+          }
+         ],
+         [
+          {
+           "t": "Burnthrough-1, Escape Velocity"
+          }
+         ]
+        ]
+       ]
+      },
+      {
+       "kind": "table",
+       "header": [
+        "Feature",
+        "Asset",
+        "Launch",
+        "Special"
+       ],
+       "rows": [
+        [
+         [
+          {
+           "t": "Hangar"
+          }
+         ],
+         [
+          {
            "t": "Fighters & Bombers*"
           }
          ],
-         [],
-         [],
          [
           {
            "t": "2"

@@ -8059,7 +8059,7 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 
 .rules-doc { min-width: 0; display: flex; flex-direction: column; gap: var(--sp-xl); max-width: 74ch; }
 .rules-chapter { scroll-margin-top: 60px; }
-.rules-chapter-title { display: flex; align-items: baseline; gap: var(--sp-md); font-family: var(--font-display); font-weight: 800; font-size: 32px; line-height: 1.15; color: var(--ink); margin: 0 0 var(--sp-lg); padding-bottom: var(--sp-sm); border-bottom: 2px solid var(--navy); }
+.rules-chapter-title { display: flex; align-items: baseline; gap: var(--sp-md); font-family: var(--font-display); font-weight: 800; font-size: 34px; line-height: 1.12; letter-spacing: -.01em; color: var(--ink); margin: 0 0 var(--sp-lg); padding-bottom: var(--sp-sm); border-bottom: 4px solid var(--navy); }
 .rules-chapter-n { font-size: var(--text-lg); color: var(--ink-faint); font-variant-numeric: tabular-nums; }
 .rules-chapter-n:empty { display: none; }
 
@@ -8070,11 +8070,15 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
    Third), capped at three sizes. Depth past a subsection is NEVER shrunk below
    body — deeper headings read as a bold navy label, the section number carrying
    the hierarchy the way the book itself does. */
-.rules-h { display: flex; align-items: baseline; gap: var(--sp-sm); font-family: var(--font-display); font-weight: 700; color: var(--ink); margin: var(--sp-lg) 0 var(--sp-sm); line-height: 1.2; }
-h3.rules-h { font-size: 24px; }
-h4.rules-h { font-size: 20px; }
-h5.rules-h, h6.rules-h { font-size: 18px; font-family: var(--font-body); text-transform: uppercase; letter-spacing: .045em; color: var(--navy); }
-.rules-h-n { font-variant-numeric: tabular-nums; color: var(--ink-faint); font-weight: 600; font-size: .8em; }
+.rules-h { display: flex; align-items: baseline; gap: var(--sp-sm); font-family: var(--font-display); font-weight: 700; color: var(--ink); line-height: 1.2; }
+/* Section (h3): a full 2px navy bar under it, generous space above. */
+h3.rules-h { font-size: 25px; color: var(--navy); margin: var(--sp-2xl) 0 var(--sp-md); padding-bottom: 5px; border-bottom: 2px solid var(--navy); }
+/* Subsection (h4): a thin hairline under it. */
+h4.rules-h { font-size: 20px; margin: var(--sp-xl) 0 var(--sp-sm); padding-bottom: 3px; border-bottom: 1px solid var(--line, rgba(120,110,95,.4)); }
+/* Deeper (h5/h6): body size, bold navy uppercase label, no bar. */
+h5.rules-h, h6.rules-h { font-size: 18px; font-family: var(--font-body); font-weight: 700; text-transform: uppercase; letter-spacing: .045em; color: var(--navy); margin: var(--sp-lg) 0 var(--sp-xs); }
+/* The section number leads each heading in a faint navy chip, sized to its level. */
+.rules-h-n { font-variant-numeric: tabular-nums; color: var(--navy); font-weight: 700; font-size: .72em; opacity: .55; }
 .rules-h-extra { margin-top: var(--sp-lg); }
 
 .rules-p { margin: 0 0 var(--sp-md); font-size: 18px; line-height: 1.65; color: var(--ink-soft); }
