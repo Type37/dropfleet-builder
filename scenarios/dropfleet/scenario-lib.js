@@ -156,7 +156,7 @@ const DS=[
   {ico:()=>DI.LC,     nm:"Large City",          sc:'6"',sg:'0"',h:'25',es:'5+',ks:'5+'},
 ];
 
-function sh(label){return `<div class="sh"><svg class="dm" viewBox="0 0 16 16"><polygon points="8,1 15,8 8,15 1,8" fill="none" stroke="#B8952F" stroke-width="1.5"/><polygon points="8,5 11,8 8,11 5,8" fill="#B8952F" opacity="0.28"/></svg><span class="sl">${label}</span></div>`;}
+function sh(label){return `<div class="sh"><svg class="dm" viewBox="0 0 16 16"><polygon points="8,1 15,8 8,15 1,8" fill="none" stroke="#B8952F" stroke-width="1.5"/><polygon points="8,5 11,8 8,11 5,8" fill="#B8952F" opacity="0.28"/></svg><h3 class="sl">${label}</h3></div>`;}
 function pill(label,cls){return `<div class="spill-row"><span class="spill ${cls}">${label}</span></div>`;}
 function stdScoring(){
   return `${pill("Standard Scoring<span class=\"spill-sub\">Rounds 4 &amp; 6</span>","sp-std")}<table class="stbl"><thead><tr><th>Dropsite</th><th>Control</th><th>Contested / Ruined</th></tr></thead><tbody><tr><td>Small</td><td><vp>2 VP</vp></td><td><vp>0 VP</vp></td></tr><tr><td>Medium</td><td><vp>3 VP</vp></td><td><vp>1 VP</vp></td></tr><tr><td>Large</td><td><vp>4 VP</vp></td><td><vp>2 VP</vp></td></tr></tbody></table><div class="terms"><div class="term"><b>Control:</b> Only you have Battalions and/or deployed Features on the Dropsite.</div><div class="term"><b>Contest:</b> You and an opponent both have Battalions and/or deployed Features on it.</div><div class="term"><b>Kill Points:</b> the total points in Admirals and Ships you have destroyed. In the event of a tie in VP, the victor is determined by who has the most Kill Points.</div></div>`;
@@ -488,7 +488,7 @@ function scnParas(v){ return (Array.isArray(v)?v:[v]).map(p=>`<p>${p}</p>`).join
 const SCENARIO_MAPS=new Set(['a-rocky-runaround','almost-nothing-at-all','down-with-the-cities','entrapmoont','erupting-battlefront','erupting-quarters','grind-to-dust','hatching-grounds','lagrange-points','latitudinal-lanes','make-the-rendezvous','mandatory-festivities','mass-exodus','moonbreaker','moonguard','moonshot','moonskipper','moonswipe','moonwreck','on-the-clock','one-with-almost-nothing','orbital-support','power-grab','ready-salted-earth','retrieving-intelligence','sacred-moon','scrap-collection','shipyard-raid','shock-and-yaw','stop-the-terraformer','supply-run','take-and-hold','tug-of-war','very-important-moon','when-backfields-meet']);
 // The rulebook prints these six at 240px; scripts/draw-rulebook-maps.js redraws them as SVG.
 const SCENARIO_MAP_SVG=new Set(['take-and-hold','erupting-battlefront','power-grab','shock-and-yaw','orbital-support','entrapmoont']);
-function pubHead(label){return `<div class="sh"><svg class="dm" viewBox="0 0 16 16"><polygon points="8,1 15,8 8,15 1,8" fill="none" stroke="#B8952F" stroke-width="1.5"/><polygon points="8,5 11,8 8,11 5,8" fill="#B8952F" opacity="0.28"/></svg><span class="sl">${label}</span></div>`;}
+function pubHead(label){return `<div class="sh"><svg class="dm" viewBox="0 0 16 16"><polygon points="8,1 15,8 8,15 1,8" fill="none" stroke="#B8952F" stroke-width="1.5"/><polygon points="8,5 11,8 8,11 5,8" fill="#B8952F" opacity="0.28"/></svg><h3 class="sl">${label}</h3></div>`;}
 
 /* A published scenario names rules without explaining them. Every explanation
    here is verbatim: arrival modes, objectives, scenery, Features and dropsites

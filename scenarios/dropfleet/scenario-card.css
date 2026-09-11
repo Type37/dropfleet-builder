@@ -1,5 +1,11 @@
 /* Dropfleet Commander scenario card, shared by the references page and the generator. */
-:root{--gold:#B8952F;--glt:#C9A94A;--gdk:#5A4710;--ch:#0E0C08;--wg:#3D3834;}
+:root{--gold:#B8952F;--glt:#C9A94A;--gdk:#5A4710;--ch:#0E0C08;--wg:#3D3834;
+  /* Screen type scale (one step ≈ major third). Print keeps its own point sizes. */
+  --fs-display:30px;   /* h2 mission / scenario title */
+  --fs-heading:17px;   /* h3 section + legend headings */
+  --fs-body:14px;      /* reading text, table cells, stat values */
+  --fs-label:12px;     /* pills, roll tags, captions, table headers */
+}
 /* A VP amount stays in the sentence's own face, just bold */
 vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 
@@ -8,17 +14,17 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .scenario{display:flex;flex-direction:row;position:relative;z-index:5;padding:5mm 13mm 3mm 13mm;gap:6mm;}
 .rules-col{flex:1;display:flex;flex-direction:column;gap:1.5mm;min-width:0;}
 .sc-header{flex-shrink:0;margin-bottom:.3mm;}
-.sc-num{font-family:'Roboto Slab',Georgia,serif;font-size:7pt;font-weight:400;color:var(--glt);letter-spacing:.01em;display:block;}
-.sc-name{font-family:'Roboto Slab',Georgia,serif;font-size:10pt;font-weight:700;color:var(--ch);line-height:1.2;letter-spacing:.01em;}
+.sc-num{font-family:'Roboto Slab',Georgia,serif;font-size:7pt;font-weight:400;color:var(--glt);display:block;}
+.sc-name{font-family:'Roboto Slab',Georgia,serif;font-size:10pt;font-weight:700;color:var(--ch);line-height:1.2;margin:0;}
 
 .sec{display:flex;flex-direction:column;gap:.7mm;flex-shrink:0;}
 .sh{display:flex;align-items:center;gap:1.5mm;}
 .dm{width:12px;height:12px;flex-shrink:0;}
-.sl{font-family:'Roboto Slab',Georgia,serif;font-size:8.5pt;font-weight:400;color:var(--ch);letter-spacing:.01em;line-height:1.2;}
+.sl{font-family:'Roboto Slab',Georgia,serif;font-size:8.5pt;font-weight:400;color:var(--ch);line-height:1.2;margin:0;}
 
 .spill-row{display:flex;align-items:center;gap:1.5mm;margin-top:1.5mm;margin-bottom:.4mm;}
 .si{font-size:6pt;color:var(--gold);flex-shrink:0;line-height:1;}
-.spill{font-family:'Jost',system-ui,sans-serif;font-size:7pt;font-weight:700;color:#fff;padding:.5mm 3mm;letter-spacing:.01em;}
+.spill{font-family:'Jost',system-ui,sans-serif;font-size:7pt;font-weight:700;color:#fff;padding:.5mm 3mm;}
 .sp-std{background:#2C3140;}.sp-surv{background:#1A4A5E;}.sp-raze{background:#5A1A1A;}
 .sp-att{background:#2A3050;}.sp-prot{background:#3A2050;}.sp-ext{background:#2A4A2A;}
 .sp-brk{background:#4A2A2A;}
@@ -27,7 +33,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 /* Standard Scoring banner (booklet style) */
 .spill-row:has(.sp-std){margin-top:.5mm;margin-bottom:.5mm;gap:0;}
 /* .si removed from pill() */
-.spill.sp-std{letter-spacing:.01em;}
+.spill.sp-std{}
 .spill-sub{font-weight:400;margin-left:2mm;}
 .sec-body{padding-left:10px;display:flex;flex-direction:column;gap:1.2mm;}
 .rule-text{font-family:'Jost',system-ui,sans-serif;font-size:8pt;color:var(--ch);line-height:1.48;}
@@ -38,8 +44,8 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .rule-bullets li b{font-weight:700;color:inherit;}
 .sside{display:flex;gap:3mm;align-items:flex-start;}
 .stbl-w{flex-shrink:0;}.sdefs{flex:1;min-width:0;}
-.stbl{border-collapse:collapse;font-family:'Barlow Condensed',sans-serif;font-size:7.5pt;}
-.stbl th{font-family:'Barlow Condensed',sans-serif;font-size:7.5pt;font-weight:400;color:var(--ch);padding:.25mm 3mm;text-align:center;}
+.stbl{border-collapse:collapse;font-family:'Jost',system-ui,sans-serif;font-size:7.5pt;}
+.stbl th{font-family:'Jost',system-ui,sans-serif;font-size:7.5pt;font-weight:400;color:var(--ch);padding:.25mm 3mm;text-align:center;}
 .stbl th:first-child{text-align:left;font-style:italic;color:var(--gdk);}
 .stbl td{padding:.2mm 3mm;text-align:center;color:var(--ch);font-weight:500;}
 .stbl td:first-child{text-align:left;font-weight:600;}
@@ -59,7 +65,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .map-frame::after{content:'';position:absolute;inset:.8mm;border:.12mm solid rgba(184,149,47,.28);z-index:2;pointer-events:none;}
 .map-frame svg{width:100%;height:100%;display:block;}
 .leg{padding:1mm 0;display:flex;flex-direction:column;gap:.4mm;}
-.lhdr{font-family:'Jost',system-ui,sans-serif;font-size:8pt;font-weight:700;color:var(--gdk);letter-spacing:.01em;margin-top:.5mm;}
+.lhdr{font-family:'Jost',system-ui,sans-serif;font-size:8pt;font-weight:700;color:var(--gdk);margin-top:.5mm;}
 .lhdr:first-child{margin-top:0;}
 .lds-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:.35mm;}
 .lds{display:flex;align-items:flex-start;gap:1.5mm;font-family:'Jost',system-ui,sans-serif;font-size:8pt;color:var(--ch);line-height:1.3;flex-wrap:wrap;}
@@ -75,14 +81,14 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .ico-feat{width:18px;height:18px;display:inline-block;vertical-align:middle;flex-shrink:0;}
 .sv-e{color:#7A6200;font-weight:700;font-size:8pt;}
 .sv-k{color:#6B6B6B;font-weight:700;font-size:7pt;}
-.roll-tag{font-family:'Jost',system-ui,sans-serif;font-size:7.5pt;color:#6b6660;letter-spacing:.01em;margin-left:4px;}
+.roll-tag{font-family:'Jost',system-ui,sans-serif;font-size:7.5pt;color:#6b6660;margin-left:4px;}
 .pg-footer{padding:2mm 13mm;display:flex;justify-content:space-between;align-items:center;}
-.pg-fl{font-family:'Jost',system-ui,sans-serif;font-size:7.5pt;font-weight:700;color:var(--wg);letter-spacing:.01em;}
-.pg-fr{font-family:'Jost',system-ui,sans-serif;font-size:7.5pt;color:var(--gold);letter-spacing:.01em;text-decoration:none;}
+.pg-fl{font-family:'Jost',system-ui,sans-serif;font-size:7.5pt;font-weight:700;color:var(--wg);}
+.pg-fr{font-family:'Jost',system-ui,sans-serif;font-size:7.5pt;color:var(--gold);text-decoration:none;}
 
 
 /* Published scenarios: the card's layout with the book's map. No caps, no rules. */
-.scenario.pub .sc-name,.scenario.pub .sl{font-family:'Roboto Slab',Georgia,serif;text-transform:none;letter-spacing:.01em;}
+.scenario.pub .sc-name,.scenario.pub .sl{font-family:'Roboto Slab',Georgia,serif;text-transform:none;}
 .scenario.pub .sc-name::after{display:none;}
 .scenario.pub .sl{white-space:normal;}
 .scenario.pub .sr{display:none;}
@@ -92,14 +98,14 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .pub-body p:last-child{margin-bottom:0;}
 .pub-body b{color:inherit;}
 .pub-tbl-wrap{overflow-x:auto;margin-top:1mm;}
-.pub-tbl{border-collapse:collapse;font-family:'Barlow Condensed',sans-serif;font-size:10pt;}
+.pub-tbl{border-collapse:collapse;font-family:'Jost',system-ui,sans-serif;font-size:10pt;}
 .pub-tbl th{text-align:left;font-weight:700;color:var(--gdk);padding:.6mm 4mm .6mm 0;}
 .pub-tbl td{padding:.6mm 4mm .6mm 0;color:var(--ch);}
 
 /* Weapon table modelled on the builder's: a bordered list, header row, arc,
    attack-with-die, crit-on note, colour-coded damage type, special-rule chips.
    Free to run wider than the capped stat strip above it. */
-.pw-list{border:1px solid #E1D6BE;border-radius:1.4mm;overflow:hidden;margin-top:1mm;font-family:'Barlow Condensed',sans-serif;}
+.pw-list{border:1px solid #E1D6BE;border-radius:1.4mm;overflow:hidden;margin-top:1mm;font-family:'Jost',system-ui,sans-serif;}
 .pw-row{display:grid;grid-template-columns:minmax(70px,1.5fr) 34px 30px 34px 36px minmax(64px,1.4fr);align-items:baseline;padding:.7mm 2.4mm;background:#FCF8EE;border-bottom:1px solid #EFE7D4;font-size:10pt;line-height:1.35;}
 .pw-row:last-child{border-bottom:none;}
 .pw-head{background:#EFE7D4;font-family:'Jost',sans-serif;font-size:7pt;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#6C6456;padding:.6mm 2.4mm;}
@@ -132,7 +138,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .scenario.pub .map-col{display:flex;flex-direction:column;gap:3mm;}
 .pub-term b{color:inherit;}
 .pub-fauna{align-self:flex-start;margin-top:2mm;}
-.pub-ships .sl{font-family:'Roboto Slab',Georgia,serif;text-transform:none;letter-spacing:.01em;white-space:normal;}
+.pub-ships .sl{font-family:'Roboto Slab',Georgia,serif;text-transform:none;white-space:normal;}
 .pub-ships .sr{display:none;}
 .pub-fauna{text-transform:none;letter-spacing:.02em;}
 .pub-ships{max-width:1180px;margin:0 auto;padding:0 14mm 8mm;display:flex;flex-direction:column;gap:2mm;}
@@ -178,7 +184,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .st th,.st td{padding:.6mm 1.2mm;text-align:left;vertical-align:middle;font-weight:400;}
 .st thead th{font-size:7pt;color:#5d5850;font-weight:500;padding-bottom:.4mm;}
 .st .c{text-align:center;white-space:nowrap;}
-.st td.c{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:9pt;}
+.st td.c{font-family:'Jost',system-ui,sans-serif;font-weight:600;font-size:9pt;}
 .st thead .tip-t{justify-content:center;}
 .st-name{display:inline-flex;align-items:center;gap:1.5mm;font-weight:600;}
 .st-ds tbody tr:nth-child(odd),.st-feat tr.st-main{background:rgba(184,149,47,.09);}
@@ -212,28 +218,28 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 @media print{ .map-frame .hs{display:none;} }
 
 /* ── SCREEN TYPE SCALE ──────────────────────────────────────────────
-   Five sizes on screen: 28 title, 16 headings, 14 reading text, 12 labels,
-   and the stat numbers at 14. Print keeps its own point sizes. Last in the file so it wins over the base rules. */
+   Four steps, driven by the --fs-* tokens in :root (display / heading / body /
+   label). Print keeps its own point sizes. Last in the file so it wins. */
 @media screen {
   .scenario { padding: 6mm 14mm 4mm 14mm; gap: 7mm; }
   .rules-col { gap: 5mm; }
   .sec { gap: 2mm; }
   .sec-body { gap: 2.4mm; }
-  .sc-name { font-size: 28px; line-height: 1.15; }
-  .pub-src { font-size: 14px; }
+  .sc-name { font-size: var(--fs-display); line-height: 1.12; }
+  .pub-src { font-size: var(--fs-body); }
   .sh { gap: 8px; }
-  .dm { width: 13px; height: 13px; }
-  .sl, .lhdr { font-family: 'Roboto Slab', Georgia, serif; font-size: 16px; font-weight: 700; color: var(--ch); line-height: 1.25; }
+  .dm { width: 14px; height: 14px; }
+  .sl, .lhdr { font-family: 'Roboto Slab', Georgia, serif; font-size: var(--fs-heading); font-weight: 700; color: var(--ch); line-height: 1.25; }
   .lhdr { margin-top: 3mm; }
-  .roll-tag { font-family: 'Jost', system-ui, sans-serif; font-size: 12px; font-weight: 400; }
-  .rule-text, .rule-bullets li, .sbox p, .sc-def, .sc-note, .term, .lds, .pub-body p, .st, .st-rule, .st-sub { font-size: 14px; line-height: 1.5; }
+  .roll-tag { font-family: 'Jost', system-ui, sans-serif; font-size: var(--fs-label); font-weight: 400; }
+  .rule-text, .rule-bullets li, .sbox p, .sc-def, .sc-note, .term, .lds, .pub-body p, .st, .st-rule, .st-sub { font-size: var(--fs-body); line-height: 1.5; }
   .rule-text b, .rule-bullets li b { font-size: inherit; }
-  .sc-flavor, .pub-intro { font-size: 14px; line-height: 1.5; }
-  .spill { font-size: 12px; font-weight: 600; padding: 2px 8px; }
-  .stbl th, .st thead th, .st-sub thead th { font-size: 12px; }
-  .stbl td, .st td.c, .st-sub td.c, .pub-tbl { font-size: 14px; }
-  .st-note, .st-spec-l, .pub-ship-h span { font-size: 12px; }
-  .pub-ship-h { font-size: 16px; }
+  .sc-flavor, .pub-intro { font-size: var(--fs-body); line-height: 1.5; }
+  .spill { font-size: var(--fs-label); font-weight: 600; padding: 2px 8px; }
+  .stbl th, .st thead th, .st-sub thead th { font-size: var(--fs-label); }
+  .stbl td, .st td.c, .st-sub td.c, .pub-tbl { font-size: var(--fs-body); }
+  .st-note, .st-spec-l, .pub-ship-h span { font-size: var(--fs-label); }
+  .pub-ship-h { font-size: var(--fs-heading); }
   .map-col { flex: 0 0 46%; min-width: 0; }
   .map-frame { width: 100%; height: auto; aspect-ratio: 1 / 1; }
   .ico-stat { width: 14px; height: 14px; }

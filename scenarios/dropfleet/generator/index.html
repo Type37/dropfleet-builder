@@ -16,7 +16,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dropfleet Commander: Scenario Generator</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital@0;1&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital@0;1&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
 <link rel="stylesheet" href="../scenario-card.css">
 <style>
@@ -47,7 +47,7 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 .ctrl-inner{padding:16px 18px 0;flex-shrink:0;}
 .ctrl-lockup{display:flex;flex-direction:column;align-items:center;gap:0;margin-bottom:0;}
 .ctrl-logo{height:56px;width:auto;display:block;margin:0 auto;filter:drop-shadow(0 2px 8px rgba(0,159,227,.3));}
-.ctrl-sub{font-family:'Jost',system-ui,sans-serif;font-weight:500;font-size:14px;letter-spacing:.01em;color:#8fa6b4;margin-top:8px;}
+.ctrl-sub{font-family:'Roboto Slab',Georgia,serif;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:#a9c0ce;margin-top:9px;}
 
 
 /* TRAY inside left panel */
@@ -61,17 +61,17 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 
 
 
-.gbtn{font-family:'Roboto Slab',Georgia,serif;font-size:16px;font-weight:600;letter-spacing:.01em;color:#fff;background:var(--action);border:2px solid var(--action);padding:11px 32px;cursor:pointer;transition:background .15s,transform .1s;display:inline-flex;align-items:center;gap:9px;}
+.gbtn{font-family:'Roboto Slab',Georgia,serif;font-size:16px;font-weight:600;color:#fff;background:var(--action);border:2px solid var(--action);padding:11px 32px;cursor:pointer;transition:background .15s,transform .1s;display:inline-flex;align-items:center;gap:9px;}
 .gbtn:hover{background:var(--action-dk);}
 .gbtn:active{transform:scale(.97);}
 
-.abtn{font-family:'Jost',system-ui,sans-serif;font-size:14px;letter-spacing:.01em;color:var(--cobalt-dk);background:transparent;border:1.5px solid var(--cobalt-dk);padding:7px 12px;cursor:pointer;transition:all .15s;}
+.abtn{font-family:'Jost',system-ui,sans-serif;font-size:14px;color:var(--cobalt-dk);background:transparent;border:1.5px solid var(--cobalt-dk);padding:7px 12px;cursor:pointer;transition:all .15s;}
 .abtn:hover:not([disabled]){background:var(--action);color:#fff;border-color:var(--action);}
 .abtn[disabled]{color:var(--nc);border-color:#b9c3c9;cursor:not-allowed;}
 
 /* Competitive toggle */
 .comp-wrap{display:flex;align-items:center;gap:6px;position:relative;}
-.comp-lbl{font-family:'Jost',system-ui,sans-serif;font-size:14px;letter-spacing:.01em;color:var(--cobalt-dk);display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;}
+.comp-lbl{font-family:'Jost',system-ui,sans-serif;font-size:14px;color:var(--cobalt-dk);display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;}
 .comp-lbl input[type=checkbox]{width:17px;height:17px;margin:0;accent-color:var(--action);}
 
 
@@ -88,12 +88,12 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 /* PICKS inside tray */
 .picks{display:flex;flex-direction:column;gap:8px;}
 .pick-section{display:flex;flex-direction:column;gap:5px;}
-.pick-section-lbl{font-family:'Jost',system-ui,sans-serif;font-size:14px;font-weight:600;color:#0a1e2e;}
+.pick-section-lbl{font-family:'Roboto Slab',Georgia,serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0a1e2e;}
 .pick-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;}
 #row-players{grid-template-columns:repeat(3,minmax(0,1fr));}
 .pick-tile{position:relative;display:block;cursor:pointer;}
 .pick-tile input[type=radio]{position:absolute;opacity:0;width:0;height:0;}
-.tile-inner{font-family:'Jost',system-ui,sans-serif;font-size:14px;letter-spacing:.01em;color:var(--cobalt-dk);background:#fff;border:1.5px solid var(--cobalt-dk);padding:7px 9px;transition:background .12s,color .12s,border-color .12s;display:flex;align-items:center;gap:6px;min-height:36px;line-height:1.2;}
+.tile-inner{font-family:'Jost',system-ui,sans-serif;font-size:14px;color:var(--cobalt-dk);background:#fff;border:1.5px solid var(--cobalt-dk);padding:7px 9px;transition:background .12s,color .12s,border-color .12s;display:flex;align-items:center;gap:6px;min-height:36px;line-height:1.2;}
 .pick-tile input:checked + .tile-inner{background:#e3eff6;color:#0a1e2e;border-color:var(--action);box-shadow:inset 0 0 0 1.5px var(--action);font-weight:600;}
 .pick-tile:hover .tile-inner{border-color:var(--cobalt);background:rgba(0,159,227,.08);}
 .pick-tile input:focus-visible + .tile-inner,
@@ -111,7 +111,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 #tt.below #tt-arrow{border-right:none;border-bottom:none;border-left:1.5px solid var(--cobalt);border-top:1.5px solid var(--cobalt);}
 #tt svg{display:block;width:130px;height:130px;}
 #tt .tip-text{font-family:'Jost',system-ui,sans-serif;font-size:12px;color:#d5dde2;line-height:1.4;padding:4px 6px;min-width:160px;max-width:200px;}
-#tt .tip-name{font-family:'Jost',system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.01em;color:var(--cobalt);margin-bottom:3px;}
+#tt .tip-name{font-family:'Jost',system-ui,sans-serif;font-size:12px;font-weight:600;color:var(--cobalt);margin-bottom:3px;}
 
 /* Footer inside left panel */
 .game-info-footer{flex-shrink:0;background:#f3f1ec;padding:10px 20px;font-size:12px;color:#6b6660;font-family:'Jost',system-ui,sans-serif;}
@@ -127,7 +127,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 .game-info-footer a:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
 @media (max-width:600px){.gif-inner{justify-content:center;gap:4px 10px;}.gif-builder{margin-left:0;flex-basis:100%;text-align:center;margin-top:4px;}}
 /* back to the builder, where most people arrive from */
-.ctrl-back{display:block;text-align:center;font-family:'Jost',system-ui,sans-serif;font-size:14px;letter-spacing:.01em;color:#8fa6b4;text-decoration:none;padding:0 0 10px;}
+.ctrl-back{display:block;text-align:center;font-family:'Jost',system-ui,sans-serif;font-size:14px;color:#8fa6b4;text-decoration:none;padding:0 0 10px;}
 .ctrl-back:hover{color:var(--cobalt);}
 .ctrl-back:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
 
@@ -149,17 +149,17 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
   .sec{gap:.4mm;}
   .sec-body{gap:.6mm;padding-left:8px;}
   .sh{gap:1mm;}
-  .sl{font-size:7.5pt;letter-spacing:.01em;}
-  .sc-num{font-size:6pt;letter-spacing:.01em;}
-  .sc-name{font-size:9pt;letter-spacing:.01em;font-weight:700;}
+  .sl{font-size:7.5pt;}
+  .sc-num{font-size:6pt;}
+  .sc-name{font-size:9pt;font-weight:700;}
 
   .rule-text{font-size:7pt;line-height:1.3;}
   .rule-bullets{gap:.3mm;}
   .rule-bullets li{font-size:7pt;line-height:1.28;padding-left:3mm;}
-  .spill{font-size:6.5pt;padding:.4mm 2.5mm;letter-spacing:.01em;}
+  .spill{font-size:6.5pt;padding:.4mm 2.5mm;}
   .spill-row{margin-top:1mm;margin-bottom:.2mm;}
   .spill-row:has(.sp-std){margin-top:.3mm;margin-bottom:.3mm;}
-  .spill.sp-std{padding:1mm 2.5mm;font-size:6.5pt;letter-spacing:.01em;}
+  .spill.sp-std{padding:1mm 2.5mm;font-size:6.5pt;}
   .stbl{font-size:6.5pt;}
   .stbl th{font-size:6pt;padding:.2mm 2mm;}
   .stbl td{padding:.15mm 2mm;font-size:6.5pt;}
@@ -175,14 +175,14 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 
   .map-col{flex:0 0 2.45in;gap:.6mm;}
   .map-frame{width:2.45in;height:2.45in;}
-  .lhdr{font-size:6.5pt;margin-top:.3mm;letter-spacing:.01em;color:var(--gdk);}
+  .lhdr{font-size:6.5pt;margin-top:.3mm;color:var(--gdk);}
   .lds{font-size:7pt;gap:1mm;}
   .fh{font-size:7pt;}
   .fb{font-size:6.5pt;line-height:1.28;}
   .leg{padding:.8mm 0;gap:.3mm;}
   .pg-footer{padding:1mm 5mm;}
-  .pg-fl{font-size:6pt;letter-spacing:.01em;}
-  .pg-fr{font-size:6pt;letter-spacing:.01em;}
+  .pg-fl{font-size:6pt;}
+  .pg-fr{font-size:6pt;}
   .sc-def{font-size:7pt;line-height:1.35;}
   .sc-note{font-size:6.5pt;line-height:1.35;}
   .sc-flavor{font-size:6pt;font-family:'Libre Baskerville',Georgia,serif;}
@@ -227,7 +227,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
     <a class="ctrl-back" href="../../../index.html">← Fleet Builder</a>
     <div class="ctrl-lockup">
       <img class="ctrl-logo" src="../../../assets/logos/dfc_logo.webp" alt="Dropfleet Commander">
-      <div class="ctrl-sub">Scenario Generator</div>
+      <h1 class="ctrl-sub">Scenario Generator</h1>
     </div>
   </div>
 <div class="ctrl-tray">
