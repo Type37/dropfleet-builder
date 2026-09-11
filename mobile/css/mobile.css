@@ -3230,16 +3230,21 @@ h5.rules-h, h6.rules-h { font-size: 16px; font-family: var(--font-body, inherit)
 
 .rules-p { margin: 0 0 var(--sp-s); font-size: 16px; line-height: 1.6; color: var(--fg2); }
 .rules-p strong { color: var(--fg1); font-weight: 700; }
+.rules-eg { font-style: italic; font-size: 15px; color: var(--fg3); background: var(--navy-wash, rgba(27,58,92,.05)); border-left: 3px solid var(--navy); padding: var(--sp-s) var(--sp-m); border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+.rules-eg strong { font-style: normal; }
 .rules-ul { margin: 0 0 var(--sp-s); padding-left: 1.2em; }
 .rules-ul li { margin: 0 0 5px; font-size: 16px; line-height: 1.55; color: var(--fg2); }
 
 .rules-table-wrap { overflow-x: auto; margin: 0 0 var(--sp-s); -webkit-overflow-scrolling: touch; }
-.rules-table { border-collapse: collapse; width: 100%; font-size: 13px; }
-.rules-table th, .rules-table td { border: 1px solid var(--stroke1); padding: 5px 7px; text-align: left; vertical-align: top; color: var(--fg2); }
-.rules-table th { background: var(--navy-wash, rgba(27,58,92,.06)); color: var(--fg1); font-family: var(--font-display); font-weight: 700; }
+.rules-table { border-collapse: collapse; width: 100%; font-size: 13px; border: 1px solid var(--fg1, #1c1a17); }
+.rules-table th, .rules-table td { border: 1px solid var(--stroke1); padding: 6px 7px; text-align: left; vertical-align: top; color: var(--fg2); }
+.rules-table th { background: var(--fg1, #1c1a17); color: #fff; font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; font-size: .82em; text-align: center; border-color: var(--fg1, #1c1a17); }
+.rules-table th:first-child { text-align: left; }
+.rules-table td:not(:first-child):not(:last-child) { text-align: center; }
+.rules-table tbody tr:nth-child(even) td { background: var(--navy-wash, rgba(27,58,92,.04)); }
 
 .rules-fig { margin: var(--sp-s) 0 var(--sp-m); }
-.rules-fig img { display: block; max-width: 100%; max-height: 440px; width: auto; height: auto; border-radius: var(--radius-md); border: 1px solid var(--stroke1); background: #fff; }
+.rules-fig img { display: block; max-width: 100%; max-height: 640px; width: auto; height: auto; border-radius: var(--radius-md); border: 1px solid var(--stroke1); background: #fff; }
 .rules-cardfig { margin: 0 0 var(--sp-m); }
 .rules-cardfig img { display: block; max-width: 100%; border-radius: var(--radius-md); border: 1px solid var(--stroke1); }
 

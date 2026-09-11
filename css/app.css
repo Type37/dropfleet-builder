@@ -8083,6 +8083,9 @@ h5.rules-h, h6.rules-h { font-size: 18px; font-family: var(--font-body); font-we
 
 .rules-p { margin: 0 0 var(--sp-md); font-size: 18px; line-height: 1.65; color: var(--ink-soft); }
 .rules-p strong { color: var(--ink); font-weight: 700; }
+/* A worked example, set apart as an aside: navy-ruled, tinted, italic. */
+.rules-eg { font-style: italic; font-size: 16px; color: var(--ink-muted); background: var(--paper, rgba(27,58,92,.04)); border-left: 3px solid var(--navy); padding: var(--sp-md) var(--sp-lg); border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0; }
+.rules-eg strong { font-style: normal; }
 
 /* Cross-reference links: dense, so kept quiet — a dotted underline in the ink
    colour, going solid navy on hover. */
@@ -8096,15 +8099,22 @@ h5.rules-h, h6.rules-h { font-size: 18px; font-family: var(--font-body); font-we
 .rules-caption { margin: 0 0 var(--sp-md); font-size: var(--text-sm); color: var(--ink-muted); font-style: italic; }
 
 .rules-table-wrap { overflow-x: auto; margin: 0 0 var(--sp-md); }
-.rules-table { border-collapse: collapse; width: 100%; font-size: var(--text-sm); }
-.rules-table th, .rules-table td { border: 1px solid var(--line, rgba(120,110,95,.3)); padding: 6px 10px; text-align: left; vertical-align: top; color: var(--ink-soft); }
-.rules-table th { background: var(--paper); color: var(--ink); font-family: var(--font-display); font-weight: 700; }
+/* Tables in the rulebook's own idiom: a solid black header bar with white,
+   all-caps Roboto Slab column names, over cream cells split by hairlines. */
+.rules-table { border-collapse: collapse; width: 100%; font-size: var(--text-sm); border: 1px solid var(--ink, #1c1a17); }
+.rules-table th, .rules-table td { border: 1px solid var(--line, rgba(120,110,95,.3)); padding: 7px 10px; text-align: left; vertical-align: top; color: var(--ink-soft); }
+.rules-table th { background: var(--ink, #1c1a17); color: #fff; font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; font-size: .82em; text-align: center; border-color: var(--ink, #1c1a17); }
+.rules-table th:first-child { text-align: left; }
+/* Short stat columns read centred like the book; the wide first name column and
+   any prose Special column stay left. */
+.rules-table td:not(:first-child):not(:last-child) { text-align: center; }
+.rules-table tbody tr:nth-child(even) td { background: var(--paper, rgba(0,0,0,.02)); }
 
 .rules-cardfig { margin: 0 0 var(--sp-lg); }
-.rules-cardfig img { display: block; max-width: 440px; width: 100%; border-radius: var(--radius-md, 8px); border: 1px solid var(--line, rgba(120,110,95,.3)); }
+.rules-cardfig img { display: block; max-width: 100%; width: 100%; border-radius: var(--radius-md, 8px); border: 1px solid var(--line, rgba(120,110,95,.3)); }
 
 .rules-fig { margin: var(--sp-md) 0 var(--sp-lg); }
-.rules-fig img { display: block; max-width: min(360px, 100%); max-height: 560px; width: auto; height: auto; border-radius: var(--radius-md, 8px); border: 1px solid var(--line, rgba(120,110,95,.3)); background: #fff; }
+.rules-fig img { display: block; max-width: 100%; max-height: 760px; width: auto; height: auto; border-radius: var(--radius-md, 8px); border: 1px solid var(--line, rgba(120,110,95,.3)); background: #fff; }
 
 /* A token strip shown inline with the rule that calls on it (in addition to the
    full Tokens reference at the end). Set off from the prose with a faint rule. */

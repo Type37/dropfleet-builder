@@ -39,16 +39,20 @@ OUT = os.path.join(ROOT, "assets", "rules")
 
 # name, section id, kind, spec.
 #   raster: spec = xref;  vector: spec = (page, x0, y0, x1, y1) in PDF points.
+# Everything is rendered from the page at high scale (crisp at large display
+# sizes), clipped to the diagram's own rect. The raster diagrams (Base Contact,
+# Explosion) are single embedded images, so their rect is the image placement;
+# the vector diagrams are clipped to their blue frame.
 FIGURES = [
-    ("fig-base-contact", "2.3.1.1", "raster", 134),
+    ("fig-base-contact", "2.3.1.1", "vector", (8,  22,  17, 395, 291)),
     ("fig-coherency",    "3.2.1.2", "vector", (10, 214, 211, 395, 470)),
     ("fig-arcs",         "3.4",     "vector", (11, 214,  17, 395, 221)),
     ("fig-move",         "7.2",     "vector", (16,  22, 192, 203, 573)),
-    ("fig-explosion",    "7.3.7",   "raster", 344),
+    ("fig-explosion",    "7.3.7",   "vector", (19,  22, 402, 395, 574)),
 ]
 
-PAD = 3          # points of margin around a vector frame
-SCALE = 3        # render scale for vector crops
+PAD = 2          # points of margin around a diagram rect
+SCALE = 3        # render scale (3x -> crisp when shown large)
 
 
 def save_raster(doc, xref, path):

@@ -861,7 +861,9 @@
       if (it.kind === 'li') { const lis = []; while (i < items.length && items[i].kind === 'li') { lis.push(`<li>${mRuns(items[i].runs)}</li>`); i++; } html += `<ul class="rules-ul">${lis.join('')}</ul>`; continue; }
       if (it.kind === 'table') { html += mTable(it); i++; continue; }
       if (it.kind === 'caption') { i++; continue; }
-      html += `<p class="rules-p">${mRuns(it.runs)}</p>`; i++;
+      const plain = (it.runs || []).map(r => r.t).join('');
+      const isEg = /^\s*(e\.g\.|for example\b)/i.test(plain);
+      html += `<p class="rules-p${isEg ? ' rules-eg' : ''}">${mRuns(it.runs)}</p>`; i++;
     }
     return html;
   }

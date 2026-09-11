@@ -1220,7 +1220,11 @@ let activeGroupId = null;
       // table column heads; on their own in the text they are noise, and the
       // diagram that carries them is placed by wikiFigure. Dropped.
       if (it.kind === 'caption') { i++; continue; }
-      html += `<p class="rules-p">${wikiRuns(it.runs)}</p>`; i++;
+      // A worked example ("E.g. …" / "For example …") is set apart as a callout
+      // so it reads as an illustration, not another rule.
+      const plain = (it.runs || []).map(r => r.t).join('');
+      const isEg = /^\s*(e\.g\.|for example\b)/i.test(plain);
+      html += `<p class="rules-p${isEg ? ' rules-eg' : ''}">${wikiRuns(it.runs)}</p>`; i++;
     }
     return html;
   }
