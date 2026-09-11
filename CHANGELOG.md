@@ -37,7 +37,9 @@ bold kept).
 - The Dropsites stats table (chapter 11) came out of the extractor as stranded
   captions and paragraphs; `scripts/patch-rules-wiki.py` rebuilds it as a real
   table from those same verbatim values, and is re-runnable after any re-extract.
-- Desktop only for now; the mobile How to Play is unchanged.
+- Mobile How to Play now carries the same full rulebook (linear stack, chapter
+  pills, inline tokens, cross-links, glossary), reading from the shared
+  data/rules-wiki.json.
 
 ### 2026-09-11: Scenario type scale and hierarchy
 

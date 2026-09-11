@@ -25,6 +25,7 @@
   const BUG_HREF = 'https://github.com/Type37/dropfleet-builder/issues/new?template=bug_report.yml';
   const FACTIONS = {};         // raw faction JSON keyed by faction key
   let RULES_DB = {};           // shared rules glossary
+  let rulesWiki = null;        // verbatim rulebook tree from ../data/rules-wiki.json (lazy)
   let SECONDARY_OBJECTIVES = []; // [{name, description}], pick 2 per game
   let STATION_ARMAMENTS = null;  // universal Fleet Space Station armaments/upgrades
   let fleets = [];
@@ -717,43 +718,61 @@
      sheet already opens). Every other section signposts TTCombat's own free
      rulebook rather than reproducing it. Mirrors desktop's renderRules(). */
   const RULEBOOK_URL = 'https://ttcombat.com/pages/dropfleet-commander-downloads';
-  const RULES_SECTIONS = [
-    { n: 1,  id: 'card-breakdown',       title: 'Card Breakdown', kind: 'legend' },
-    { n: 2,  id: 'the-basics',           title: 'The Basics' },
-    { n: 3,  id: 'core-concepts',        title: 'Core Concepts' },
-    { n: 4,  id: 'preparation',          title: 'Preparation' },
-    { n: 5,  id: 'game-rounds',          title: 'Game Rounds' },
-    { n: 6,  id: 'planning-phase',       title: 'Planning Phase' },
-    { n: 7,  id: 'activation-phase',     title: 'Activation Phase' },
-    { n: 8,  id: 'asset-phase',          title: 'Asset Phase' },
-    { n: 9,  id: 'end-phase',            title: 'End Phase' },
-    { n: 10, id: 'scenery',              title: 'Scenery' },
-    { n: 11, id: 'dropsites',            title: 'Dropsites' },
-    { n: 12, id: 'tokens',               title: 'Tokens', kind: 'tokens' },
-    { n: 13, id: 'scenarios',            title: 'Scenarios' },
-    { n: 14, id: 'competitive-play',     title: 'Competitive Play' },
-    { n: 15, id: 'special-rules',        title: 'Special Rules', kind: 'glossary' },
-    { n: 16, id: 'scenario-expansion-1', title: 'Scenario Expansion 1' },
-  ];
 
-  function mobileTokensHtml() {
-    // Vector, cut from TTCombat's downloadable token sheet by
-    // scripts/extract-tokens.py. Each <img> is its own document, which also
-    // keeps the tokens' identical clipPath ids from colliding.
-    const G = [
-      {t:'Spikes',sub:null,i:[{s:'spike-1',l:'1 Spike',r:''},{s:'spike-2',l:'2 Spikes',r:''},{s:'spike-3',l:'3 Spikes',r:''},{s:'spike-4',l:'4 Spikes',r:''}]},
-      {t:'Crippling Effects',sub:'2D6, rulebook 7.3.6',i:[{s:'status-fire',l:'Fire',r:'6'},{s:'status-defence-systems-offline',l:'Defence Systems Offline',r:'7'},{s:'status-scanners-offline',l:'Scanners Offline',r:'8'},{s:'status-weapons-offline',l:'Weapons Offline',r:'9'},{s:'status-navigation-offline',l:'Navigation Offline',r:'10'},{s:'status-orbital-decay',l:'Orbital Decay',r:'11+'}]},
-      {t:'Atmosphere',sub:null,i:[{s:'status-in-atmosphere',l:'In Atmosphere',r:''}]},
-      {t:'Dropsites and Features',sub:null,i:[{s:'dropsite-military-outpost',l:'Military Outpost',r:''},{s:'dropsite-orbital-defence-gun',l:'Orbital Defence Gun',r:''},{s:'dropsite-comms-station',l:'Comms Station',r:''},{s:'dropsite-hangar',l:'Hangar',r:''},{s:'dropsite-power-plant',l:'Power Plant',r:''},{s:'dropsite-city',l:'City',r:''}]},
-    ];
-    return G.map(g => `<div class="rules-tok-grp">
+  // Token groups, keyed so each can appear inline with the rule that uses it and
+  // in the Tokens reference. Mirrors desktop app.js TOKEN_GROUPS (paths ../).
+  const TOKEN_GROUPS = [
+    {key:'spikes',t:'Spikes',sub:null,i:[{s:'spike-1',l:'1 Spike',r:''},{s:'spike-2',l:'2 Spikes',r:''},{s:'spike-3',l:'3 Spikes',r:''},{s:'spike-4',l:'4 Spikes',r:''}]},
+    {key:'crippling',t:'Crippling Effects',sub:'2D6, rulebook 7.3.6',i:[{s:'status-fire',l:'Fire',r:'6'},{s:'status-defence-systems-offline',l:'Defence Systems Offline',r:'7'},{s:'status-scanners-offline',l:'Scanners Offline',r:'8'},{s:'status-weapons-offline',l:'Weapons Offline',r:'9'},{s:'status-navigation-offline',l:'Navigation Offline',r:'10'},{s:'status-orbital-decay',l:'Orbital Decay',r:'11+'}]},
+    {key:'atmosphere',t:'Atmosphere',sub:null,i:[{s:'status-in-atmosphere',l:'In Atmosphere',r:''}]},
+    {key:'dropsites',t:'Dropsites and Features',sub:null,i:[{s:'dropsite-military-outpost',l:'Military Outpost',r:''},{s:'dropsite-orbital-defence-gun',l:'Orbital Defence Gun',r:''},{s:'dropsite-comms-station',l:'Comms Station',r:''},{s:'dropsite-hangar',l:'Hangar',r:''},{s:'dropsite-power-plant',l:'Power Plant',r:''},{s:'dropsite-city',l:'City',r:''}]},
+    {key:'launch',t:'Launch Assets',sub:'rulebook 7.4',i:[
+      {s:'launch-fighters',l:'Fighters',d:'A squadron. Duels enemy Fighter and Bomber Wings in base contact, and can lend re-rolls in defence.'},
+      {s:'launch-bombers',l:'Bombers',d:'A squadron. Attacks any Group or Space Station it is in base contact with.'},
+      {s:'launch-fire-ship',l:'Fire Ship',d:'A type of Bomber.'},
+      {s:'launch-torpedo',l:'Torpedo',d:'A single craft. Makes one attack in base contact, then is removed.'},
+      {s:'launch-mine',l:'Mine',d:'Left in place once launched. Attacks an enemy Ship that moves through its Thrust, then is removed.'},
+      {s:'launch-battalion',l:'Battalion',d:'Ground troops. Deployed onto a Dropsite or one of its Features.'},
+    ]},
+    {key:'turn',t:'Turn Tokens',sub:null,i:[
+      {s:'token-activation',l:'Activation',d:'Marks a Group that has activated this phase.'},
+      {s:'token-pass',l:'Pass',d:'Used in place of activating a Group. You earn one through Pass Token Generation.'},
+    ]},
+  ];
+  const SECTION_TOKENS = {
+    '3.1.2': ['atmosphere'], '3.3': ['spikes'], '7': ['turn'],
+    '7.3.6': ['crippling'], '7.4': ['launch'], '11': ['dropsites'], '2.3.4': ['dropsites'],
+  };
+  const SECTION_TOKEN_ITEMS = { '8.1': ['launch-battalion'] };
+  const RULES_FIGURES = {
+    '2.3.1.1': { src: 'fig-base-contact', alt: 'Base Contact: Fig A ships in base contact; Fig B overlapping, moved back; Fig C moved back into base contact.' },
+    '3.2.1.2': { src: 'fig-coherency', alt: 'Coherency: Ships A, B and C within 3 inches are in coherency; Ship D at 6 inches is out.' },
+    '3.4':     { src: 'fig-arcs', alt: 'Weapon arcs: Front Narrow, Front, Side, Broadside, Rear and Rear Narrow.' },
+    '7.2':     { src: 'fig-move', alt: 'A group moving straight and turning to keep in coherency.' },
+    '7.3.7':   { src: 'fig-explosion', alt: 'An exploding ship damages ships in range, which may explode in turn.' },
+  };
+
+  function mRenderTokenGroups(groups) {
+    return groups.map(g => `<div class="rules-tok-grp">
         <div class="rules-tok-head">${esc(g.t)}${g.sub ? `<span class="rules-tok-sub">${esc(g.sub)}</span>` : ''}</div>
-        <ul class="rules-tok-list">${g.i.map(k => `<li class="rules-tok">
+        <ul class="rules-tok-list${g.i.some(k => k.d) ? ' rules-tok-list--wide' : ''}">${g.i.map(k => `<li class="rules-tok${k.d ? ' rules-tok--desc' : ''}">
           <img src="../assets/tokens/${k.s}.svg" alt="" width="40" height="40" loading="lazy">
           <span class="rules-tok-nm">${esc(k.l)}</span>
           ${k.r ? `<span class="rules-tok-roll">${esc(k.r)}</span>` : ''}
+          ${k.d ? `<span class="rules-tok-desc">${mLinkify(esc(k.d))}</span>` : ''}
         </li>`).join('')}</ul>
       </div>`).join('');
+  }
+  function mobileTokensHtml() { return mRenderTokenGroups(TOKEN_GROUPS); }
+  function mSectionTokens(number) {
+    const groups = (SECTION_TOKENS[number] || []).map(k => TOKEN_GROUPS.find(g => g.key === k)).filter(Boolean);
+    const picks = SECTION_TOKEN_ITEMS[number];
+    if (picks) {
+      const items = [];
+      TOKEN_GROUPS.forEach(g => g.i.forEach(k => { if (picks.includes(k.s)) items.push(k); }));
+      if (items.length) groups.push({ t: items.length === 1 ? items[0].l : 'Tokens', sub: null, i: items });
+    }
+    return groups.length ? `<div class="rules-tok-inline">${mRenderTokenGroups(groups)}</div>` : '';
   }
 
   function mobileLegendHtml() {
@@ -791,35 +810,120 @@
     }).join('') + `</div>`;
   }
 
-  function renderMobileRules() {
+  /* ── Wiki rendering (verbatim rulebook from ../data/rules-wiki.json) ─────── */
+  const RULES_SKIP = new Set(['1.1']);        // covered by the card + legend
+  const RULES_EXTERNAL = { '12': 'ext:../scenarios/dropfleet/' };
+  const RULES_LINK_STOP = new Set(['ships', 'ship', 'the table', 'name', 'type', 'special', 'assets']);
+  let _mIdx = null;
+  function mSlug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+
+  function mIndex() {
+    if (_mIdx) return _mIdx;
+    const numbers = new Set(), termMap = {}, kwMap = {}, prio = {};
+    const add = (phrase, target, p, isKw) => {
+      const key = (phrase || '').toLowerCase().trim();
+      if (key.length < 4 || RULES_LINK_STOP.has(key)) return;
+      if (key in termMap && prio[key] <= p) return;
+      termMap[key] = target; prio[key] = p;
+      if (isKw) kwMap[key] = phrase;   // remember the original keyword name for openRule
+    };
+    (function walk(ns) {
+      for (const n of ns) { if (n.number) numbers.add(n.number); if (n.heading) add(n.heading, RULES_EXTERNAL[n.number] || ('sec:' + n.id), n.number ? n.number.split('.').length : 90, false); }
+      for (const n of ns) walk(n.children || []);
+    })((rulesWiki && rulesWiki.chapters) || []);
+    Object.keys(RULES_DB || {}).forEach(name => add(name, 'kw:' + name, 50, true));
+    const phrases = Object.keys(termMap).sort((a, b) => b.length - a.length);
+    const alt = phrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+    const re = new RegExp('\\b(?:\\d+(?:\\.\\d+)+' + (alt ? '|' + alt : '') + ')\\b', 'gi');
+    _mIdx = { numbers, termMap, kwMap, re };
+    return _mIdx;
+  }
+
+  function mLinkify(escaped) {
+    const idx = mIndex();
+    return escaped.replace(idx.re, (m) => {
+      let target;
+      if (/^\d+(?:\.\d+)+$/.test(m)) { if (!idx.numbers.has(m)) return m; target = 'sec:' + m; }
+      else { target = idx.termMap[m.toLowerCase()]; if (!target) return m; }
+      if (target.indexOf('ext:') === 0) return `<a class="rules-xref" href="${target.slice(4)}" target="_blank" rel="noopener">${m}</a>`;
+      if (target.indexOf('kw:') === 0) return `<span class="rules-xref" onclick="App.openRule('${target.slice(3).replace(/'/g, "\\'")}')">${m}</span>`;
+      return `<span class="rules-xref" onclick="App.jumpMobileRules('${target.slice(4)}')">${m}</span>`;
+    });
+  }
+
+  function mRuns(runs) {
+    return (runs || []).map(r => { const h = mLinkify(esc(r.t)); return r.b ? `<strong>${h}</strong>` : h; }).join('');
+  }
+  function mBody(body) {
+    let html = '', i = 0; const items = body || [];
+    while (i < items.length) {
+      const it = items[i];
+      if (it.kind === 'li') { const lis = []; while (i < items.length && items[i].kind === 'li') { lis.push(`<li>${mRuns(items[i].runs)}</li>`); i++; } html += `<ul class="rules-ul">${lis.join('')}</ul>`; continue; }
+      if (it.kind === 'table') { html += mTable(it); i++; continue; }
+      if (it.kind === 'caption') { i++; continue; }
+      html += `<p class="rules-p">${mRuns(it.runs)}</p>`; i++;
+    }
+    return html;
+  }
+  function mTable(t) {
+    const head = t.header ? `<thead><tr>${t.header.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>` : '';
+    const rows = (t.rows || []).map(row => `<tr>${row.map(c => `<td>${mRuns(c)}</td>`).join('')}</tr>`).join('');
+    return `<div class="rules-table-wrap"><table class="rules-table">${head}<tbody>${rows}</tbody></table></div>`;
+  }
+  function mFigure(number) {
+    const f = RULES_FIGURES[number];
+    return f ? `<figure class="rules-fig"><img src="../assets/rules/${f.src}.png" alt="${escAttr(f.alt)}" loading="lazy"></figure>` : '';
+  }
+  function mSection(node, depth) {
+    const lvl = Math.min(depth + 2, 6);
+    const num = node.number ? `<span class="rules-h-n">${esc(node.number)}</span>` : '';
+    const kids = (node.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => mSection(c, depth + 1)).join('');
+    return `<div class="rules-sub rules-sub-d${depth}" id="rules-sec-${esc(node.id)}">
+      <h${lvl} class="rules-h">${num}${esc(node.heading)}</h${lvl}>
+      ${mBody(node.body)}${mFigure(node.number)}${mSectionTokens(node.number)}${kids}
+    </div>`;
+  }
+  function mChapter(ch) {
+    const top = ch.number === '1'
+      ? `<figure class="rules-cardfig"><img src="../assets/rules/ship-card-example.png" alt="An example Dropfleet ship card: the Lysander, a Stealth Lighter." loading="lazy"></figure>${mobileLegendHtml()}`
+      : '';
+    const end = ch.number === '14'
+      ? `<div class="rules-glossary-block"><h3 class="rules-h rules-h-extra">Special Rules glossary</h3>${mobileGlossaryHtml()}</div>`
+      : '';
+    return `<section class="rules-chapter" id="rules-sec-${esc(ch.id)}">
+      <h2 class="rules-chapter-title"><span class="rules-chapter-n">${esc(ch.number)}</span>${esc(ch.heading)}</h2>
+      ${top}${mBody(ch.body)}${mSectionTokens(ch.number)}
+      ${(ch.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => mSection(c, 1)).join('')}
+      ${end}
+    </section>`;
+  }
+
+  async function renderMobileRules() {
     const el = document.getElementById('rules-container');
     if (!el) return;
-    const pills = RULES_SECTIONS.map(s =>
-      `<button class="rules-pill" onclick="App.jumpMobileRules('${s.id}')"><span class="rules-pill-n">${s.n}</span>${esc(s.title)}</button>`).join('');
-    const sections = RULES_SECTIONS.map(s => {
-      let body;
-      if (s.kind === 'legend') body = mobileLegendHtml();
-      else if (s.kind === 'tokens') body = mobileTokensHtml();
-      else if (s.kind === 'glossary') body = mobileGlossaryHtml();
-      else body = `<a class="rules-rulebook-link" href="${RULEBOOK_URL}" target="_blank" rel="noopener">Read this in TTCombat's rulebook
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h7v7"/><path d="M13 3 6 10"/><path d="M11 13H3V5"/></svg></a>`;
-      return `<section class="rules-section" id="rules-sec-${s.id}">
-        <h2 class="rules-section-title"><span class="rules-section-n">${s.n}</span>${esc(s.title)}</h2>
-        ${body}
-      </section>`;
-    }).join('');
+    if (!rulesWiki) {
+      el.innerHTML = `<p class="rules-note">Loading the rulebook…</p>`;
+      try { rulesWiki = await (await fetch('../data/rules-wiki.json')).json(); }
+      catch (e) { console.error('rules wiki load failed', e); rulesWiki = { chapters: [], edition: '' }; }
+    }
+    const chapters = rulesWiki.chapters || [];
+    const pills = chapters.map(ch =>
+      `<button class="rules-pill" onclick="App.jumpMobileRules('${esc(ch.id)}')"><span class="rules-pill-n">${esc(ch.number)}</span>${esc(ch.heading)}</button>`).join('')
+      + `<button class="rules-pill" onclick="App.jumpMobileRules('tokens')"><span class="rules-pill-n"></span>Tokens</button>`;
+    const doc = chapters.map(mChapter).join('')
+      + `<section class="rules-chapter" id="rules-sec-tokens"><h2 class="rules-chapter-title"><span class="rules-chapter-n"></span>Tokens</h2>${mobileTokensHtml()}</section>`;
     el.innerHTML = `
       <div class="rules-intro">
-        <p>Look up any special rule below. For the full rules, the official Dropfleet Commander rulebook is a free download from TTCombat.</p>
+        <p>The Dropfleet Commander rulebook${rulesWiki.edition ? `, edition ${esc(rulesWiki.edition)}` : ''}, reproduced from TTCombat's free download.</p>
         <a class="btn btn-outline btn-block" href="${RULEBOOK_URL}" target="_blank" rel="noopener">TTCombat downloads</a>
       </div>
       <div class="rules-pills">${pills}</div>
-      ${sections}`;
+      ${doc}`;
   }
 
   function jumpMobileRules(id) {
     const t = document.getElementById('rules-sec-' + id);
-    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (t) t.scrollIntoView({ behavior: 'instant', block: 'start' });
   }
   function filterMobileRules(q) {
     const term = (q || '').trim().toLowerCase();
@@ -4472,6 +4576,12 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-11', title: 'How to Play: the whole rulebook', items: [
+      'How to Play now carries the entire Dropfleet Commander rulebook, verbatim, the same as the desktop app. Every chapter, section and table is there to read.',
+      'The example ship card and the legend open chapter 1; the book’s diagrams (Base Contact, Coherency, weapon Arcs, Move, the Explosion chain) sit with the rule they show; the searchable Special Rules glossary lives under chapter 14.',
+      'It cross-links: tap a section number, a rule name or a keyword to jump to where it is defined. Tap Scenarios to open the full Scenario Reference.',
+      'The token counters appear inline with the rule that uses them (Atmosphere, Spikes, Crippling Effects, Launch assets, Dropsite features, Battalion, Activation and Pass), plus the full Tokens reference at the end.',
+    ]},
     { date: '2026-09-09', title: 'How to Play: the tokens, as they look on the table', items: [
       'How to Play has a new Tokens section showing every counter off the official downloadable token sheet: Spikes, the six Crippling Effects, the Atmosphere marker, and the Dropsite Features and City.',
       'Each Crippling Effect shows the 2D6 result that causes it, so you can read the whole table off the pictures.',

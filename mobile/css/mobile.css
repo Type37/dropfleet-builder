@@ -3212,3 +3212,42 @@ body.sheet-open .sheet-scrim {
 .rules-kw-page { font-size: var(--text-caption2); color: var(--fg3); }
 .rules-kw-chev { color: var(--fg3); font-size: 1.2em; }
 .rules-note { color: var(--fg3); font-size: var(--text-caption1); }
+
+/* ── How to Play: full rulebook wiki (mobile) ─────────────────────────────── */
+.rules-chapter { scroll-margin-top: calc(var(--header-h) + 48px); margin-bottom: var(--sp-xl, 22px); }
+.rules-chapter-title { display: flex; align-items: baseline; gap: var(--sp-s); font-family: var(--font-display); font-weight: 800; font-size: 24px; line-height: 1.15; text-transform: uppercase; letter-spacing: .01em; color: var(--fg1); margin: 0 0 var(--sp-m); padding-bottom: var(--sp-xs); border-bottom: 3px solid var(--navy); }
+.rules-chapter-n { font-size: .62em; color: var(--navy); opacity: .55; font-weight: 700; font-variant-numeric: tabular-nums; }
+.rules-chapter-n:empty { display: none; }
+
+.rules-sub { scroll-margin-top: calc(var(--header-h) + 48px); }
+.rules-sub-d2 { margin-left: var(--sp-s); }
+.rules-h { display: flex; align-items: baseline; gap: var(--sp-xs); font-family: var(--font-display); font-weight: 700; color: var(--fg1); line-height: 1.2; }
+h3.rules-h { font-size: 19px; color: var(--navy); margin: var(--sp-l) 0 var(--sp-s); padding-bottom: 4px; border-bottom: 2px solid var(--navy); }
+h4.rules-h { font-size: 17px; margin: var(--sp-m) 0 var(--sp-xs); padding-bottom: 2px; border-bottom: 1px solid var(--stroke1); }
+h5.rules-h, h6.rules-h { font-size: 16px; font-family: var(--font-body, inherit); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--navy); margin: var(--sp-m) 0 var(--sp-xxs); }
+.rules-h-n { font-variant-numeric: tabular-nums; color: var(--navy); opacity: .55; font-weight: 700; font-size: .72em; }
+.rules-h-extra { margin-top: var(--sp-l); }
+
+.rules-p { margin: 0 0 var(--sp-s); font-size: 16px; line-height: 1.6; color: var(--fg2); }
+.rules-p strong { color: var(--fg1); font-weight: 700; }
+.rules-ul { margin: 0 0 var(--sp-s); padding-left: 1.2em; }
+.rules-ul li { margin: 0 0 5px; font-size: 16px; line-height: 1.55; color: var(--fg2); }
+
+.rules-table-wrap { overflow-x: auto; margin: 0 0 var(--sp-s); -webkit-overflow-scrolling: touch; }
+.rules-table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.rules-table th, .rules-table td { border: 1px solid var(--stroke1); padding: 5px 7px; text-align: left; vertical-align: top; color: var(--fg2); }
+.rules-table th { background: var(--navy-wash, rgba(27,58,92,.06)); color: var(--fg1); font-family: var(--font-display); font-weight: 700; }
+
+.rules-fig { margin: var(--sp-s) 0 var(--sp-m); }
+.rules-fig img { display: block; max-width: 100%; max-height: 440px; width: auto; height: auto; border-radius: var(--radius-md); border: 1px solid var(--stroke1); background: #fff; }
+.rules-cardfig { margin: 0 0 var(--sp-m); }
+.rules-cardfig img { display: block; max-width: 100%; border-radius: var(--radius-md); border: 1px solid var(--stroke1); }
+
+.rules-xref { color: inherit; text-decoration: underline; text-decoration-style: dotted; text-decoration-color: var(--navy); text-underline-offset: 2px; cursor: pointer; }
+
+.rules-tok-inline { margin: var(--sp-s) 0 var(--sp-m); padding-top: var(--sp-s); border-top: 1px solid var(--stroke1); }
+.rules-tok-list--wide { grid-template-columns: 1fr; gap: var(--sp-s); }
+.rules-tok--desc { display: grid; grid-template-columns: 40px 1fr; gap: 3px var(--sp-s); text-align: left; align-items: center; height: auto; }
+.rules-tok--desc img { grid-row: span 2; align-self: start; }
+.rules-tok--desc .rules-tok-nm { font-weight: 700; color: var(--fg1); align-self: end; }
+.rules-tok-desc { font-size: 12px; line-height: 1.45; color: var(--fg3); }
