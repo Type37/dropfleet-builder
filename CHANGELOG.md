@@ -29,8 +29,7 @@ bold kept).
   The floating labels those diagrams carry ("A", "B", `3"`), which the extractor
   left stranded in the text, are dropped. 1.1 Stats Bar is hidden, being the
   same ground as the example card and legend above it.
-- The chapter rail pins below the topbar and the wheel is geared up and eased,
-  since the book is one very long page.
+- The chapter rail pins below the topbar.
 - **Cross-links everywhere.** Every section number, chapter/section name and
   glossary keyword in the text links to its target, as a real `#rules/<id>`
   hash, so the browser Back button returns you to where you were reading. The

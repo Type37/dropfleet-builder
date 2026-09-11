@@ -926,11 +926,13 @@ let activeGroupId = null;
     switch (view) {
       case 'landing':
         show('view-landing');
-        topContext.textContent = 'Fleet Builder';
+        // Left empty: the static "Unofficial Fleet Builder" title already names
+        // the app, and repeating "Fleet Builder" here would say it twice.
+        topContext.textContent = '';
         break;
       case 'fleets':
         show('view-fleets');
-        topContext.textContent = 'Your Fleets';
+        topContext.innerHTML = `<a href="#landing" class="topbar-back" onclick="App.navigate('landing'); return false;" aria-label="Back"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> <span class="topbar-back-label">Your Fleets</span>`;
         renderFleetList();
         break;
       case 'builder':
@@ -1294,44 +1296,9 @@ let activeGroupId = null;
 
       el.dataset.built = '1';
       setupRulesSpy();
-      setupRulesWheel();
     }
 
     if (targetId) requestAnimationFrame(() => jumpRules(targetId));
-  }
-
-  // The rulebook is one very long page, so the wheel is geared up and eased: each
-  // notch travels ~3x further and the page glides to it instead of jumping. Only
-  // while How to Play is the open view; every other screen keeps native scroll.
-  let _rulesWheelOn = false;
-  function setupRulesWheel() {
-    if (_rulesWheelOn) return;
-    _rulesWheelOn = true;
-    const SPEED = 3, EASE = 0.22;
-    let target = 0, animating = false, last = 0;
-    function maxY() { return Math.max(0, document.documentElement.scrollHeight - window.innerHeight); }
-    function step() {
-      const cur = window.scrollY, d = target - cur;
-      if (Math.abs(d) < 0.5) { window.scrollTo(0, target); animating = false; return; }
-      window.scrollTo(0, cur + d * EASE);
-      requestAnimationFrame(step);
-    }
-    window.addEventListener('wheel', (e) => {
-      const view = document.getElementById('view-rules');
-      if (!view || view.classList.contains('hidden')) return;      // other screens
-      if (e.ctrlKey || e.defaultPrevented) return;                 // pinch-zoom etc.
-      // A gesture that has paused re-syncs to where the page actually is, so a
-      // scrollbar drag or a chapter jump is never fought.
-      const now = performance.now();
-      if (!animating || now - last > 140) target = window.scrollY;
-      last = now;
-      let dy = e.deltaY;
-      if (e.deltaMode === 1) dy *= 16;        // lines -> px
-      else if (e.deltaMode === 2) dy *= window.innerHeight;  // pages -> px
-      target = Math.max(0, Math.min(maxY(), target + dy * SPEED));
-      e.preventDefault();
-      if (!animating) { animating = true; requestAnimationFrame(step); }
-    }, { passive: false });
   }
 
   // Highlight the chapter the reader is in as they scroll the document.
