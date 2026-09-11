@@ -16,6 +16,7 @@
      randomPool: s => true,                     // which scenarios Random may land on
      render: s => html,                         // the scenario card
      markRound: (s, round) => true/false,       // gold mark on the round counter (a scoring round)
+     views: { d66: { label, title, render: () => html } },  // optional extra pages, linked from the index, routed by #key
    }
    Markup expected on the page: <main id="app"></main>. */
 const ScenarioShell = (() => {
@@ -58,6 +59,7 @@ const ScenarioShell = (() => {
         <div class="idx-tools">
           <input id="q" type="search" placeholder="Search" aria-label="Search scenarios" autocomplete="off" value="${esc(query)}">
           <button class="btn" id="rand">${ICON.die}Random</button>
+          ${Object.entries(G.views || {}).map(([k, v]) => `<a class="btn btn-quiet" href="#${k}">${v.label}</a>`).join('')}
         </div>
       </div>
       <div id="books">${groupsHTML()}</div>
@@ -142,10 +144,24 @@ const ScenarioShell = (() => {
     });
   }
 
+  /* ── An extra page a game supplies, such as a printable chart ── */
+  function renderView(v) {
+    document.title = `${v.title}: ${G.titleSuffix}`;
+    document.body.classList.remove('has-trk');
+    app.innerHTML = `<div class="bar"><div class="bar-in">
+        <a class="bar-back" href="#">← All scenarios</a>
+        <span></span>
+        <div class="acts"><button class="icon-btn" id="print" aria-label="Print">${ICON.print}</button></div>
+      </div></div>
+      <article class="sheet">${v.render()}</article>`;
+    document.getElementById('print').addEventListener('click', () => window.print());
+  }
+
   function route() {
     const id = decodeURIComponent(location.hash.slice(1));
     const s = id && all().find(x => G.id(x) === id);
-    if (s) renderOne(s); else renderIndex();
+    const v = id && G.views && G.views[id];
+    if (s) renderOne(s); else if (v) renderView(v); else renderIndex();
     window.scrollTo(0, 0);
   }
 
