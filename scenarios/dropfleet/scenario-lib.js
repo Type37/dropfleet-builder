@@ -178,7 +178,7 @@ const SCENARIOS=[
    players:`2.`,
    scenery:`2 Micrometeor Clouds, 4 Debris Fields.`,
    deployment:`Close Enough.`,
-   scoring:[`Raise.`,
+   scoring:[`Raze.`,   // the book prints "Raise.", a misprint of the Raze objective (Jet, 2026-09-11)
             `At the end of the game, players gain 2VP for each of the listed Space Stations in their opponent's board half with a Party Feature.`],
    special:[`Each player starts the game with a Hyperyacht Somniferum, as if it were part of their Fleet. When attacking a Space Station, if the attack successfully inflicts damage, place a Party Feature on that Space Station. Party Features confer no special rules and do not modify saves, but can be removed as normal for Features.`]},
 
