@@ -1331,7 +1331,12 @@ let activeGroupId = null;
     // click to open that scenario in the Scenario Reference (map + full rules).
     const scnSlug = typeof node.id === 'string' && node.id.indexOf('12.2/') === 0 ? node.id.slice(5) : '';
     if (scnSlug) {
-      const rows = (node.body || []).filter(it => it.kind === 'p').map(it => `<span class="rsb-row">${plainRuns(it.runs)}</span>`).join('');
+      // The book repeats "Players:" at the head and foot of each block; show each
+      // distinct detail line once.
+      const seen = new Set();
+      const rows = (node.body || []).filter(it => it.kind === 'p').map(it => plainRuns(it.runs))
+        .filter(t => { const k = t.replace(/<[^>]+>/g, '').trim(); if (!k || seen.has(k)) return false; seen.add(k); return true; })
+        .map(t => `<span class="rsb-row">${t}</span>`).join('');
       return `<a class="rules-scn-btn" id="rules-sec-${esc(node.id)}" href="scenarios/dropfleet/#${esc(scnSlug)}" target="_blank" rel="noopener">
         <span class="rules-scn-btn-nm">${esc(node.heading)}<svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></span>
         <span class="rsb-rows">${rows}</span>
