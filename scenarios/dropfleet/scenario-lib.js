@@ -450,6 +450,8 @@ const SCENARIOS=[
 function scnParas(v){ return (Array.isArray(v)?v:[v]).map(p=>`<p>${p}</p>`).join(''); }
 // Maps pulled from the PDFs at native size by scripts/extract-scenario-maps.py.
 const SCENARIO_MAPS=new Set(['a-rocky-runaround','almost-nothing-at-all','down-with-the-cities','entrapmoont','erupting-battlefront','erupting-quarters','grind-to-dust','hatching-grounds','lagrange-points','latitudinal-lanes','make-the-rendezvous','mandatory-festivities','mass-exodus','moonbreaker','moonguard','moonshot','moonskipper','moonswipe','moonwreck','on-the-clock','one-with-almost-nothing','orbital-support','power-grab','ready-salted-earth','retrieving-intelligence','sacred-moon','scrap-collection','shipyard-raid','shock-and-yaw','stop-the-terraformer','supply-run','take-and-hold','tug-of-war','very-important-moon','when-backfields-meet']);
+// The rulebook prints these six at 240px; scripts/draw-rulebook-maps.js redraws them as SVG.
+const SCENARIO_MAP_SVG=new Set(['take-and-hold','erupting-battlefront','power-grab','shock-and-yaw','orbital-support','entrapmoont']);
 function pubHead(label){return `<div class="sh"><svg class="dm" viewBox="0 0 16 16"><polygon points="8,1 15,8 8,15 1,8" fill="none" stroke="#B8952F" stroke-width="1.5"/><polygon points="8,5 11,8 8,11 5,8" fill="#B8952F" opacity="0.28"/></svg><span class="sl">${label}</span></div>`;}
 
 /* A published scenario names rules without explaining them. Every explanation
@@ -591,7 +593,7 @@ function renderScenario(s){
   const hasMap=SCENARIO_MAPS.has(s.id);
   const fauna=s.id!=='fauna-rules'&&/\bFauna\b/.test(allText)?`<button class="abtn pub-fauna" onclick="pubOpen('fauna-rules')">Fauna Rules</button>`:'';
   const right=hasMap?`<div class="map-col">
-      <div class="map-frame"><img src="${SCN_ASSETS}scenarios/dropfleet/${s.id}.webp" alt="${s.name} map">${mapSpots(s.id)}</div>
+      <div class="map-frame"><img src="${SCN_ASSETS}scenarios/dropfleet/${s.id}.${SCENARIO_MAP_SVG.has(s.id)?'svg':'webp'}" alt="${s.name} map">${mapSpots(s.id)}</div>
       ${sec('Scenery',scenery)}
       <div class="leg">${pubFeatures(allText)}${pubDropsites()}</div>
     </div>`:'';

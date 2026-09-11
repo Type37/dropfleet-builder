@@ -24,8 +24,16 @@ def main():
     paths = sorted(glob.glob(os.path.join(SRC, '*.webp')))
     for path in paths:
         dest = os.path.join(OUT, os.path.basename(path))
-        with Image.open(path) as im:
-            im.convert('RGB').resize((SIZE, SIZE), Image.LANCZOS).save(dest, 'WEBP', quality=82, method=6)
+        svg = path[:-5] + '.svg'
+        if os.path.exists(svg):   # a redrawn map wins over the book's small picture
+            import fitz
+            page = fitz.open(svg)[0]
+            zoom = SIZE * 2 / page.rect.width
+            pix = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom))
+            im = Image.frombytes('RGB', (pix.width, pix.height), pix.samples)
+        else:
+            im = Image.open(path)
+        im.convert('RGB').resize((SIZE, SIZE), Image.LANCZOS).save(dest, 'WEBP', quality=82, method=6)
         total += os.path.getsize(dest)
     print('%d thumbnails, %d KB -> %s' % (len(paths), total // 1024, os.path.relpath(OUT, ROOT)))
 

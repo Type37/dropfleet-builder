@@ -39,6 +39,16 @@ bold kept).
   table from those same verbatim values, and is re-runnable after any re-extract.
 - Desktop only for now; the mobile How to Play is unchanged.
 
+### 2026-09-11: The rulebook's six scenario maps, redrawn
+
+The 2.3.1 rulebook only carries its scenario maps as 240px pictures. Take and
+Hold, Erupting Battlefront, Power Grab, Shock and Yaw, Orbital Support and
+Entrapmoont are now crisp SVGs in the generator's map style: its zones,
+dropsites, measurement lines and real Feature tokens, placed from the inches
+printed on the book's maps. Their hover spots come from the same drawing.
+`scripts/draw-rulebook-maps.js` draws them; thumbnails prefer the redraw.
+Mandatory Festivities now reads "Raze." where the book misprints "Raise.".
+
 ### 2026-09-11: Stats on the book's maps, tables, real tokens
 
 - **Published maps:** hover, tap or tab to any symbol on a scenario's map (a
