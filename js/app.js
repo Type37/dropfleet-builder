@@ -8,6 +8,7 @@ const App = (() => {
   let shipDB = {};
   let factionData = {};
   let sharedRulesDB = {};  // Global rules lookup from BSData (ship + weapon rules)
+  let rulesWiki = null;    // Verbatim rulebook tree from data/rules-wiki.json (lazy)
   let fleets = [];
   let currentFleet = null;
 
@@ -1007,32 +1008,16 @@ let activeGroupId = null;
     document.getElementById(id).classList.remove('hidden');
   }
 
-  // ── How to Play (rules reference) ─────────────────────────────────────────
-  // A reference, not a copy of the rulebook. Two sections carry real content the
-  // app already owns and may show: the Card Breakdown legend (the stat/column
-  // vocabulary the builder already labels) and the Special Rules glossary (the
-  // verbatim keyword text already shipped in data/fleet-index.json's sharedRules,
-  // the same text the keyword tooltips use). Every other section is a signpost to
-  // TTCombat's own free rulebook — we point at the source rather than rehost it.
+  // ── How to Play (rulebook) ────────────────────────────────────────────────
+  // The whole A5 rulebook, verbatim, lifted into data/rules-wiki.json by
+  // scripts/extract-rules-wiki.py (a tree of chapter -> section -> subsection,
+  // each carrying its number, heading, paragraphs and tables, with bold runs
+  // kept). Rendered here as a style-guide-style page: a sticky left rail of
+  // chapters, the book itself on the right. Three blocks the app already owns
+  // are woven in: the Card Breakdown legend and the page-5 example card at the
+  // head of chapter 1, the searchable Special Rules glossary under chapter 14,
+  // and a Tokens reference of every counter off the official token sheet.
   const RULEBOOK_URL = 'https://ttcombat.com/pages/dropfleet-commander-downloads';
-  const RULES_SECTIONS = [
-    { n: 1,  id: 'card-breakdown',   title: 'Card Breakdown',     kind: 'legend' },
-    { n: 2,  id: 'the-basics',       title: 'The Basics' },
-    { n: 3,  id: 'core-concepts',    title: 'Core Concepts' },
-    { n: 4,  id: 'preparation',      title: 'Preparation' },
-    { n: 5,  id: 'game-rounds',      title: 'Game Rounds' },
-    { n: 6,  id: 'planning-phase',   title: 'Planning Phase' },
-    { n: 7,  id: 'activation-phase', title: 'Activation Phase' },
-    { n: 8,  id: 'asset-phase',      title: 'Asset Phase' },
-    { n: 9,  id: 'end-phase',        title: 'End Phase' },
-    { n: 10, id: 'scenery',          title: 'Scenery' },
-    { n: 11, id: 'dropsites',        title: 'Dropsites' },
-    { n: 12, id: 'tokens',           title: 'Tokens', kind: 'tokens' },
-    { n: 13, id: 'scenarios',        title: 'Scenarios' },
-    { n: 14, id: 'competitive-play', title: 'Competitive Play' },
-    { n: 15, id: 'special-rules',    title: 'Special Rules',      kind: 'glossary' },
-    { n: 16, id: 'scenario-expansion-1', title: 'Scenario Expansion 1' },
-  ];
 
   function rulesTokensHtml() {
     // Vector, cut from TTCombat's downloadable token sheet by
@@ -1043,13 +1028,26 @@ let activeGroupId = null;
       {t:'Crippling Effects',sub:'2D6, rulebook 7.3.6',i:[{s:'status-fire',l:'Fire',r:'6'},{s:'status-defence-systems-offline',l:'Defence Systems Offline',r:'7'},{s:'status-scanners-offline',l:'Scanners Offline',r:'8'},{s:'status-weapons-offline',l:'Weapons Offline',r:'9'},{s:'status-navigation-offline',l:'Navigation Offline',r:'10'},{s:'status-orbital-decay',l:'Orbital Decay',r:'11+'}]},
       {t:'Atmosphere',sub:null,i:[{s:'status-in-atmosphere',l:'In Atmosphere',r:''}]},
       {t:'Dropsites and Features',sub:null,i:[{s:'dropsite-military-outpost',l:'Military Outpost',r:''},{s:'dropsite-orbital-defence-gun',l:'Orbital Defence Gun',r:''},{s:'dropsite-comms-station',l:'Comms Station',r:''},{s:'dropsite-hangar',l:'Hangar',r:''},{s:'dropsite-power-plant',l:'Power Plant',r:''},{s:'dropsite-city',l:'City',r:''}]},
+      {t:'Launch Assets',sub:'rulebook 7.4',i:[
+        {s:'launch-fighters',l:'Fighters',d:'A squadron. Duels enemy Fighter and Bomber Wings in base contact, and can lend re-rolls in defence.'},
+        {s:'launch-bombers',l:'Bombers',d:'A squadron. Attacks any Group or Space Station it is in base contact with.'},
+        {s:'launch-fire-ship',l:'Fire Ship',d:'A type of Bomber.'},
+        {s:'launch-torpedo',l:'Torpedo',d:'A single craft. Makes one attack in base contact, then is removed.'},
+        {s:'launch-mine',l:'Mine',d:'Left in place once launched. Attacks an enemy Ship that moves through its Thrust, then is removed.'},
+        {s:'launch-battalion',l:'Battalion',d:'Ground troops. Deployed onto a Dropsite or one of its Features.'},
+      ]},
+      {t:'Turn Tokens',sub:null,i:[
+        {s:'token-activation',l:'Activation',d:'Marks a Group that has activated this phase.'},
+        {s:'token-pass',l:'Pass',d:'Used in place of activating a Group.'},
+      ]},
     ];
     return G.map(g => `<div class="rules-tok-grp">
         <div class="rules-tok-head">${esc(g.t)}${g.sub ? `<span class="rules-tok-sub">${esc(g.sub)}</span>` : ''}</div>
-        <ul class="rules-tok-list">${g.i.map(k => `<li class="rules-tok">
+        <ul class="rules-tok-list${g.i.some(k => k.d) ? ' rules-tok-list--wide' : ''}">${g.i.map(k => `<li class="rules-tok${k.d ? ' rules-tok--desc' : ''}">
           <img src="assets/tokens/${k.s}.svg" alt="" width="40" height="40" loading="lazy">
           <span class="rules-tok-nm">${esc(k.l)}</span>
           ${k.r ? `<span class="rules-tok-roll">${esc(k.r)}</span>` : ''}
+          ${k.d ? `<span class="rules-tok-desc">${esc(k.d)}</span>` : ''}
         </li>`).join('')}</ul>
       </div>`).join('');
   }
@@ -1087,41 +1085,136 @@ let activeGroupId = null;
     }).join('') + `</div>`;
   }
 
-  function renderRules() {
+  // Runs -> HTML, keeping the book's bold. A run is {t, b?}.
+  function wikiRuns(runs) {
+    return (runs || []).map(r => r.b ? `<strong>${esc(r.t)}</strong>` : esc(r.t)).join('');
+  }
+
+  // A section's body: paragraphs, bulleted lists (consecutive li folded into one
+  // ul), captions, and tables. Verbatim; nothing is reordered or reworded.
+  function wikiBody(body) {
+    let html = '', i = 0;
+    const items = body || [];
+    while (i < items.length) {
+      const it = items[i];
+      if (it.kind === 'li') {
+        const lis = [];
+        while (i < items.length && items[i].kind === 'li') { lis.push(`<li>${wikiRuns(items[i].runs)}</li>`); i++; }
+        html += `<ul class="rules-ul">${lis.join('')}</ul>`;
+        continue;
+      }
+      if (it.kind === 'table') { html += wikiTable(it); i++; continue; }
+      if (it.kind === 'caption') { html += `<p class="rules-caption">${wikiRuns(it.runs)}</p>`; i++; continue; }
+      html += `<p class="rules-p">${wikiRuns(it.runs)}</p>`; i++;
+    }
+    return html;
+  }
+
+  function wikiTable(t) {
+    const head = t.header
+      ? `<thead><tr>${t.header.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>` : '';
+    const rows = (t.rows || []).map(row =>
+      `<tr>${row.map(cell => `<td>${wikiRuns(cell)}</td>`).join('')}</tr>`).join('');
+    return `<div class="rules-table-wrap"><table class="rules-table">${head}<tbody>${rows}</tbody></table></div>`;
+  }
+
+  // A numbered subsection and everything nested under it. depth 1 = e.g. 2.1,
+  // depth 2 = 2.1.1, and so on; the heading level and indent track it.
+  function wikiSection(node, depth) {
+    const lvl = Math.min(depth + 2, 6);
+    const num = node.number ? `<span class="rules-h-n">${esc(node.number)}</span>` : '';
+    const kids = (node.children || []).map(c => wikiSection(c, depth + 1)).join('');
+    return `<div class="rules-sub rules-sub-d${depth}" id="rules-sec-${esc(node.id)}">
+      <h${lvl} class="rules-h">${num}${esc(node.heading)}</h${lvl}>
+      ${wikiBody(node.body)}${kids}
+    </div>`;
+  }
+
+  // One top-level chapter, with the app-owned extras woven in where they belong.
+  function wikiChapter(ch) {
+    const extraTop = ch.number === '1' ? rulesCardBreakdownHtml() : '';
+    const extraEnd = ch.number === '14'
+      ? `<div class="rules-glossary-block">
+           <h3 class="rules-h rules-h-extra">Special Rules glossary</h3>
+           <input class="rules-search" type="search" placeholder="Search special rules…" oninput="App.filterRules(this.value)" aria-label="Search special rules">
+           ${rulesGlossaryHtml()}
+         </div>` : '';
+    return `<section class="rules-chapter" id="rules-sec-${esc(ch.id)}">
+      <h2 class="rules-chapter-title"><span class="rules-chapter-n">${esc(ch.number)}</span>${esc(ch.heading)}</h2>
+      ${extraTop}
+      ${wikiBody(ch.body)}
+      ${(ch.children || []).map(c => wikiSection(c, 1)).join('')}
+      ${extraEnd}
+    </section>`;
+  }
+
+  // The page-5 example ship card (extracted to assets/rules) above the legend
+  // that names every abbreviation on it.
+  function rulesCardBreakdownHtml() {
+    return `<figure class="rules-cardfig">
+        <img src="assets/rules/ship-card-example.png" alt="An example Dropfleet ship card: the Lysander, a Stealth Lighter." loading="lazy">
+      </figure>
+      ${rulesLegendHtml()}`;
+  }
+
+  async function renderRules() {
     const el = document.getElementById('view-rules');
     if (!el) return;
 
-    const pills = RULES_SECTIONS.map(s =>
-      `<button class="rules-pill" onclick="App.jumpRules('${s.id}')"><span class="rules-pill-n">${s.n}</span>${esc(s.title)}</button>`
-    ).join('');
-
-    const sections = RULES_SECTIONS.map(s => {
-      let body;
-      if (s.kind === 'legend') {
-        body = rulesLegendHtml();
-      } else if (s.kind === 'tokens') {
-        body = rulesTokensHtml();
-      } else if (s.kind === 'glossary') {
-        body = `<input class="rules-search" type="search" placeholder="Search special rules…" oninput="App.filterRules(this.value)" aria-label="Search special rules">${rulesGlossaryHtml()}`;
-      } else {
-        body = `<a class="rules-rulebook-link" href="${RULEBOOK_URL}" target="_blank" rel="noopener">Read this in TTCombat's rulebook
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h7v7"/><path d="M13 3 6 10"/><path d="M11 13H3V5"/></svg></a>`;
+    if (!rulesWiki) {
+      el.innerHTML = `<div class="rules-loading">Loading the rulebook…</div>`;
+      try {
+        const res = await fetch('data/rules-wiki.json');
+        rulesWiki = await res.json();
+      } catch (e) {
+        console.error('Failed to load rules wiki:', e);
+        rulesWiki = { chapters: [], edition: '' };
       }
-      return `<section class="rules-section" id="rules-sec-${s.id}">
-        <h2 class="rules-section-title"><span class="rules-section-n">${s.n}</span>${esc(s.title)}</h2>
-        ${body}
+    }
+
+    const chapters = rulesWiki.chapters || [];
+    // Nav: every chapter, plus the Tokens reference that has no chapter of its own.
+    const nav = chapters.map(ch =>
+      `<button class="rules-nav-item" data-target="rules-sec-${esc(ch.id)}" onclick="App.jumpRules('${esc(ch.id)}')"><span class="rules-nav-n">${esc(ch.number)}</span><span class="rules-nav-t">${esc(ch.heading)}</span></button>`
+    ).join('') +
+      `<button class="rules-nav-item" data-target="rules-sec-tokens" onclick="App.jumpRules('tokens')"><span class="rules-nav-n"></span><span class="rules-nav-t">Tokens</span></button>`;
+
+    const doc = chapters.map(wikiChapter).join('') +
+      `<section class="rules-chapter" id="rules-sec-tokens">
+        <h2 class="rules-chapter-title"><span class="rules-chapter-n"></span>Tokens</h2>
+        ${rulesTokensHtml()}
       </section>`;
-    }).join('');
 
     el.innerHTML = `
-      <div class="rules-wrap">
-        <div class="rules-intro">
-          <p>Look up any special rule below. For the full rules, the official Dropfleet Commander rulebook is a free download from TTCombat.</p>
-          <a class="btn btn-outline" href="${RULEBOOK_URL}" target="_blank" rel="noopener">TTCombat downloads</a>
+      <div class="rules-layout">
+        <nav class="rules-nav" aria-label="Rulebook contents">${nav}</nav>
+        <div class="rules-doc">
+          <div class="rules-intro">
+            <p>The Dropfleet Commander rulebook${rulesWiki.edition ? `, edition ${esc(rulesWiki.edition)}` : ''}, reproduced from TTCombat's free download.</p>
+            <a class="btn btn-outline" href="${RULEBOOK_URL}" target="_blank" rel="noopener">TTCombat downloads</a>
+          </div>
+          ${doc}
         </div>
-        <div class="rules-pills">${pills}</div>
-        ${sections}
       </div>`;
+
+    setupRulesSpy();
+  }
+
+  // Highlight the chapter the reader is in as they scroll the document.
+  let _rulesSpy = null;
+  function setupRulesSpy() {
+    if (_rulesSpy) { _rulesSpy.disconnect(); _rulesSpy = null; }
+    const nav = document.querySelector('.rules-nav');
+    if (!nav || !('IntersectionObserver' in window)) return;
+    const items = [...nav.querySelectorAll('.rules-nav-item')];
+    const secs = items.map(b => document.getElementById(b.dataset.target)).filter(Boolean);
+    _rulesSpy = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        items.forEach(b => b.classList.toggle('active', b.dataset.target === en.target.id));
+      });
+    }, { rootMargin: '-8% 0px -80% 0px', threshold: 0 });
+    secs.forEach(s => _rulesSpy.observe(s));
   }
 
   function jumpRules(id) {
@@ -8309,6 +8402,12 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-11', title: 'How to Play: the whole rulebook, on one page', items: [
+      'How to Play now carries the entire Dropfleet Commander rulebook, verbatim, not just a legend and a glossary. Every chapter, section and table is there to read in the app.',
+      'A chapter list runs down the left, the way a style guide reads. Pick a chapter to jump to it; the list follows you as you scroll.',
+      'Chapter 1 opens with the example ship card from page 5 and the legend that names every stat, arc, damage type and tonnage letter on it.',
+      'The Tokens section now explains the Launch assets too, Fighters, Bombers, Fire Ships, Torpedoes, Mines and Battalions, plus the Activation and Pass tokens, each with the real counter beside it.',
+    ]},
     { date: '2026-09-09', title: 'How to Play: the tokens, as they look on the table', items: [
       'How to Play has a new Tokens section showing every counter off the official downloadable token sheet: Spikes, the six Crippling Effects, the Atmosphere marker, and the Dropsite Features and City.',
       'Each Crippling Effect shows the 2D6 result that causes it, so you can read the whole table off the pictures.',

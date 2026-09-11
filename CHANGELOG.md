@@ -5,6 +5,26 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-11: How to Play carries the whole rulebook
+
+How to Play was a legend, a token board and a glossary that signposted the PDF
+for everything else. It now holds the entire A5 rulebook, verbatim, lifted out
+of the PDF by `scripts/extract-rules-wiki.py` into `data/rules-wiki.json` (a
+tree of chapter -> section -> subsection, paragraphs and tables, with the book's
+bold kept).
+
+- **Left rail, document on the right**, in the manner of a style guide. The top
+  pill bar became a sticky chapter list that highlights the chapter you are in
+  as you scroll; on phones it lies flat across the top and scrolls sideways.
+- **Chapter 1** opens with the page-5 example ship card (extracted to
+  `assets/rules/ship-card-example.png`) above the legend that names every
+  abbreviation on it. **Chapter 14** keeps the searchable Special Rules glossary
+  under the book's own Special Rules text.
+- **Tokens** now explains the Launch assets (Fighters, Bombers, Fire Ships,
+  Torpedoes, Mines, Battalions) and the Activation and Pass tokens, each traced
+  as vector from the official token sheet by `scripts/extract-tokens.py`.
+- Desktop only for now; the mobile How to Play is unchanged.
+
 ### 2026-09-11: Scenarios page, separate from the generator
 
 `/scenarios/dropfleet/` is now a reference for every published scenario, in the

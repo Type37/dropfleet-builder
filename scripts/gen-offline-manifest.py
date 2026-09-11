@@ -48,6 +48,8 @@ DIR_GROUPS = [
     # Play Mode's Spike and Crippling-Effect counters. Tiny, and Play Mode is the
     # one screen most likely to be used with no signal, so they belong in core.
     ('core', 'assets/tokens', ('.svg',)),
+    # How-to-Play rulebook illustrations (the page-5 example ship card).
+    ('core', 'assets/rules', ('.png', '.webp', '.svg')),
     ('art', 'assets/art/thumb', ('.webp',)),
     ('art', 'assets/art/stations', ('.webp',)),
 ]

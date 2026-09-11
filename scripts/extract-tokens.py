@@ -55,6 +55,17 @@ WANTED = [
     (5, 5, 'dropsite-hangar', 'Hangar'),
     (5, 6, 'dropsite-power-plant', 'Power Plant'),
     (5, 7, 'dropsite-city', 'City'),
+    # Launch assets (rounded-square markers) and turn tokens. Rows 8-11 of the
+    # sheet. Bombers (row 9) show three craft, Fighters (row 10) five smaller;
+    # the Mine is the spiked disc, the Torpedo the single elongated body.
+    (8, 0, 'launch-battalion', 'Battalion'),
+    (9, 0, 'launch-bombers', 'Bombers'),
+    (10, 0, 'launch-fighters', 'Fighters'),
+    (9, 5, 'launch-fire-ship', 'Fire Ship'),
+    (9, 6, 'launch-mine', 'Mine'),
+    (9, 7, 'launch-torpedo', 'Torpedo'),
+    (11, 0, 'token-activation', 'Activation'),
+    (11, 6, 'token-pass', 'Pass'),
 ]
 
 
