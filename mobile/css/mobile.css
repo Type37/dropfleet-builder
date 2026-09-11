@@ -3230,7 +3230,7 @@ h5.rules-h, h6.rules-h { font-size: 13px; font-family: var(--font-body, inherit)
 
 .rules-p { margin: 0 0 var(--sp-m); font-size: 16px; line-height: 1.65; color: var(--fg2); }
 .rules-p strong { color: var(--fg1); font-weight: 700; }
-.rules-eg { font-style: italic; font-size: 15px; color: var(--fg3); background: var(--navy-wash, rgba(27,58,92,.05)); border-left: 3px solid var(--navy); padding: var(--sp-s) var(--sp-m); border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+.rules-eg { font-style: italic; font-size: 15px; color: var(--fg3); background: var(--navy-wash, rgba(27,58,92,.05)); padding: var(--sp-s) var(--sp-m); border-radius: var(--radius-md); }
 .rules-eg strong { font-style: normal; }
 .rules-ul { margin: 0 0 var(--sp-s); padding-left: 1.2em; }
 .rules-ul li { margin: 0 0 5px; font-size: 16px; line-height: 1.55; color: var(--fg2); }

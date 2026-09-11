@@ -1032,14 +1032,15 @@ let activeGroupId = null;
     {key:'spikes',t:'Spikes',sub:null,i:[{s:'spike-1',l:'1 Spike',r:''},{s:'spike-2',l:'2 Spikes',r:''},{s:'spike-3',l:'3 Spikes',r:''},{s:'spike-4',l:'4 Spikes',r:''}]},
     {key:'crippling',t:'Crippling Effects',sub:'2D6, rulebook 7.3.6',i:[{s:'status-fire',l:'Fire',r:'6'},{s:'status-defence-systems-offline',l:'Defence Systems Offline',r:'7'},{s:'status-scanners-offline',l:'Scanners Offline',r:'8'},{s:'status-weapons-offline',l:'Weapons Offline',r:'9'},{s:'status-navigation-offline',l:'Navigation Offline',r:'10'},{s:'status-orbital-decay',l:'Orbital Decay',r:'11+'}]},
     {key:'atmosphere',t:'Atmosphere',sub:null,i:[{s:'status-in-atmosphere',l:'In Atmosphere',r:''}]},
-    {key:'dropsites',t:'Dropsites and Features',sub:null,i:[{s:'dropsite-military-outpost',l:'Military Outpost',r:''},{s:'dropsite-orbital-defence-gun',l:'Orbital Defence Gun',r:''},{s:'dropsite-comms-station',l:'Comms Station',r:''},{s:'dropsite-hangar',l:'Hangar',r:''},{s:'dropsite-power-plant',l:'Power Plant',r:''},{s:'dropsite-city',l:'City',r:''}]},
+    {key:'dropsites',t:'Dropsites',sub:null,i:[{s:'dropsite-city',l:'City',r:''}]},
+    {key:'features',t:'Features',sub:null,i:[{s:'dropsite-military-outpost',l:'Military Outpost',r:''},{s:'dropsite-orbital-defence-gun',l:'Orbital Defence Gun',r:''},{s:'dropsite-comms-station',l:'Comms Station',r:''},{s:'dropsite-hangar',l:'Hangar',r:''},{s:'dropsite-power-plant',l:'Power Plant',r:''}]},
     {key:'launch',t:'Launch Assets',sub:'rulebook 7.4',i:[
       {s:'launch-fighters',l:'Fighters',d:'A squadron. Duels enemy Fighter and Bomber Wings in base contact, and can lend re-rolls in defence.'},
       {s:'launch-bombers',l:'Bombers',d:'A squadron. Attacks any Group or Space Station it is in base contact with.'},
       {s:'launch-fire-ship',l:'Fire Ship',d:'A type of Bomber.'},
       {s:'launch-torpedo',l:'Torpedo',d:'A single craft. Makes one attack in base contact, then is removed.'},
       {s:'launch-mine',l:'Mine',d:'Left in place once launched. Attacks an enemy Ship that moves through its Thrust, then is removed.'},
-      {s:'launch-battalion',l:'Battalion',d:'Ground troops. Deployed onto a Dropsite or one of its Features.'},
+      {s:'launch-battalion',l:'Battalion',d:'Ground troops, deployed onto a Dropsite or one of its Features. Each Battalion token represents a ground force as seen in Dropzone Commander, but on a grand scale: around 300 troops plus armoured support.'},
     ]},
     {key:'turn',t:'Turn Tokens',sub:null,i:[
       {s:'token-activation',l:'Activation',d:'Marks a Group that has activated this phase.'},
@@ -1055,7 +1056,7 @@ let activeGroupId = null;
     '7':     ['turn'],
     '7.3.6': ['crippling'],
     '7.4':   ['launch'],
-    '11':    ['dropsites'],
+    '11':    ['dropsites', 'features'],
     '2.3.4': ['dropsites'],
   };
 
@@ -1069,6 +1070,16 @@ let activeGroupId = null;
     '8.3.5':   ['launch-torpedo'],
     '8.3.6':   ['launch-mine'],
   };
+
+  // Editorial NB notes woven into a section, keyed by its number. Rendered as a
+  // small aside after the section's own text.
+  const SECTION_NOTES = {
+    '11': ['Measure to the center of the dropsite.'],
+  };
+  function wikiSectionNote(number) {
+    const notes = SECTION_NOTES[number];
+    return notes ? notes.map(n => `<p class="rules-nb"><b>NB:</b> ${esc(n)}</p>`).join('') : '';
+  }
 
   function renderTokenGroups(groups) {
     return groups.map(g => `<div class="rules-tok-grp">
@@ -1234,11 +1245,35 @@ let activeGroupId = null;
     return html;
   }
 
+  // A cell that names a token (a Feature, or a Crippling Effect) gets that
+  // token's counter drawn inline before its text, so the reference tables show
+  // the same art the token strips do. Matched on the name up to its colon.
+  const TABLE_TOK = {
+    'Military Outpost': 'dropsite-military-outpost',
+    'Orbital Defence Gun': 'dropsite-orbital-defence-gun',
+    'Comms Station': 'dropsite-comms-station',
+    'Hangar': 'dropsite-hangar',
+    'Power Plant': 'dropsite-power-plant',
+    'City': 'dropsite-city',
+    'Fire': 'status-fire',
+    'Defence Systems Offline': 'status-defence-systems-offline',
+    'Scanners Offline': 'status-scanners-offline',
+    'Weapons Offline': 'status-weapons-offline',
+    'Navigation Offline': 'status-navigation-offline',
+    'Orbital Decay': 'status-orbital-decay',
+  };
+  function cellPlain(cell) { return Array.isArray(cell) ? cell.map(r => (r && r.t) || '').join('') : String(cell || ''); }
+  function cellTok(cell) {
+    const name = cellPlain(cell).split(':')[0].trim();
+    const s = TABLE_TOK[name];
+    return s ? `<img class="rules-tbl-tok" src="assets/tokens/${s}.svg" alt="" width="26" height="26" loading="lazy">` : '';
+  }
+
   function wikiTable(t) {
     const head = t.header
       ? `<thead><tr>${t.header.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>` : '';
     const rows = (t.rows || []).map(row =>
-      `<tr>${row.map(cell => `<td>${wikiRuns(cell)}</td>`).join('')}</tr>`).join('');
+      `<tr>${row.map(cell => { const tok = cellTok(cell); return `<td${tok ? ' class="rules-td-tok"' : ''}>${tok}${wikiRuns(cell)}</td>`; }).join('')}</tr>`).join('');
     return `<div class="rules-table-wrap"><table class="rules-table">${head}<tbody>${rows}</tbody></table></div>`;
   }
 
@@ -1271,23 +1306,18 @@ let activeGroupId = null;
     const kids = (node.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => wikiSection(c, depth + 1)).join('');
     return `<div class="rules-sub rules-sub-d${depth}" id="rules-sec-${esc(node.id)}">
       <h${lvl} class="rules-h">${num}${esc(node.heading)}</h${lvl}>
-      ${wikiBody(node.body)}${wikiFigure(node.number)}${wikiSectionTokens(node.number)}${kids}
+      ${wikiBody(node.body)}${wikiSectionNote(node.number)}${wikiFigure(node.number)}${wikiSectionTokens(node.number)}${kids}
     </div>`;
   }
 
   // One top-level chapter, with the app-owned extras woven in where they belong.
   function wikiChapter(ch) {
     const extraTop = ch.number === '1' ? rulesCardBreakdownHtml() : '';
-    const extraEnd = ch.number === '14'
-      ? `<div class="rules-glossary-block">
-           <h3 class="rules-h rules-h-extra">Special Rules glossary</h3>
-           <input class="rules-search" type="search" placeholder="Search special rules…" oninput="App.filterRules(this.value)" aria-label="Search special rules">
-           ${rulesGlossaryHtml()}
-         </div>` : '';
+    const extraEnd = '';
     return `<section class="rules-chapter" id="rules-sec-${esc(ch.id)}">
       <h2 class="rules-chapter-title"><span class="rules-chapter-n">${esc(ch.number)}</span>${esc(ch.heading)}</h2>
       ${extraTop}
-      ${wikiBody(ch.body)}${wikiSectionTokens(ch.number)}
+      ${wikiBody(ch.body)}${wikiSectionNote(ch.number)}${wikiSectionTokens(ch.number)}
       ${(ch.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => wikiSection(c, 1)).join('')}
       ${extraEnd}
     </section>`;

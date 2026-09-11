@@ -8086,8 +8086,15 @@ h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-we
 
 .rules-p { margin: 0 0 var(--sp-lg); font-size: 18px; line-height: 1.7; color: var(--ink-soft); }
 .rules-p strong { color: var(--ink); font-weight: 700; }
-/* A worked example, set apart as an aside: navy-ruled, tinted, italic. */
-.rules-eg { font-style: italic; font-size: 16px; color: var(--ink-muted); background: var(--paper, rgba(27,58,92,.04)); border-left: 3px solid var(--navy); padding: var(--sp-md) var(--sp-lg); border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0; }
+/* A small editorial NB, set in the muted body colour with a navy label. */
+.rules-nb { margin: calc(-1 * var(--sp-sm)) 0 var(--sp-lg); font-size: 15px; line-height: 1.6; color: var(--ink-muted); }
+.rules-nb b { color: var(--navy); font-weight: 700; }
+/* A token counter drawn inline in the reference tables (Features, Crippling). */
+.rules-tbl-tok { vertical-align: -6px; margin-right: 7px; }
+.rules-td-tok { white-space: normal; }
+/* A worked example, set apart as an aside by a soft tint and italic — no rule
+   bar (it read as clutter next to the section bars). */
+.rules-eg { font-style: italic; font-size: 16px; color: var(--ink-muted); background: var(--paper, rgba(27,58,92,.04)); padding: var(--sp-md) var(--sp-lg); border-radius: var(--radius-md, 8px); }
 .rules-eg strong { font-style: normal; }
 
 /* Cross-reference links: dense, so kept quiet — a dotted underline in the ink
