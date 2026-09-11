@@ -1025,29 +1025,42 @@ let activeGroupId = null;
   // and a Tokens reference of every counter off the official token sheet.
   const RULEBOOK_URL = 'https://ttcombat.com/pages/dropfleet-commander-downloads';
 
-  function rulesTokensHtml() {
-    // Vector, cut from TTCombat's downloadable token sheet by
-    // scripts/extract-tokens.py. Each <img> is its own document, which also
-    // keeps the tokens' identical clipPath ids from colliding.
-    const G = [
-      {t:'Spikes',sub:null,i:[{s:'spike-1',l:'1 Spike',r:''},{s:'spike-2',l:'2 Spikes',r:''},{s:'spike-3',l:'3 Spikes',r:''},{s:'spike-4',l:'4 Spikes',r:''}]},
-      {t:'Crippling Effects',sub:'2D6, rulebook 7.3.6',i:[{s:'status-fire',l:'Fire',r:'6'},{s:'status-defence-systems-offline',l:'Defence Systems Offline',r:'7'},{s:'status-scanners-offline',l:'Scanners Offline',r:'8'},{s:'status-weapons-offline',l:'Weapons Offline',r:'9'},{s:'status-navigation-offline',l:'Navigation Offline',r:'10'},{s:'status-orbital-decay',l:'Orbital Decay',r:'11+'}]},
-      {t:'Atmosphere',sub:null,i:[{s:'status-in-atmosphere',l:'In Atmosphere',r:''}]},
-      {t:'Dropsites and Features',sub:null,i:[{s:'dropsite-military-outpost',l:'Military Outpost',r:''},{s:'dropsite-orbital-defence-gun',l:'Orbital Defence Gun',r:''},{s:'dropsite-comms-station',l:'Comms Station',r:''},{s:'dropsite-hangar',l:'Hangar',r:''},{s:'dropsite-power-plant',l:'Power Plant',r:''},{s:'dropsite-city',l:'City',r:''}]},
-      {t:'Launch Assets',sub:'rulebook 7.4',i:[
-        {s:'launch-fighters',l:'Fighters',d:'A squadron. Duels enemy Fighter and Bomber Wings in base contact, and can lend re-rolls in defence.'},
-        {s:'launch-bombers',l:'Bombers',d:'A squadron. Attacks any Group or Space Station it is in base contact with.'},
-        {s:'launch-fire-ship',l:'Fire Ship',d:'A type of Bomber.'},
-        {s:'launch-torpedo',l:'Torpedo',d:'A single craft. Makes one attack in base contact, then is removed.'},
-        {s:'launch-mine',l:'Mine',d:'Left in place once launched. Attacks an enemy Ship that moves through its Thrust, then is removed.'},
-        {s:'launch-battalion',l:'Battalion',d:'Ground troops. Deployed onto a Dropsite or one of its Features.'},
-      ]},
-      {t:'Turn Tokens',sub:null,i:[
-        {s:'token-activation',l:'Activation',d:'Marks a Group that has activated this phase.'},
-        {s:'token-pass',l:'Pass',d:'Used in place of activating a Group.'},
-      ]},
-    ];
-    return G.map(g => `<div class="rules-tok-grp">
+  // Vector, cut from TTCombat's downloadable token sheet by
+  // scripts/extract-tokens.py. Each group has a key so it can appear both in the
+  // Tokens reference at the end AND inline in the section that calls on it.
+  const TOKEN_GROUPS = [
+    {key:'spikes',t:'Spikes',sub:null,i:[{s:'spike-1',l:'1 Spike',r:''},{s:'spike-2',l:'2 Spikes',r:''},{s:'spike-3',l:'3 Spikes',r:''},{s:'spike-4',l:'4 Spikes',r:''}]},
+    {key:'crippling',t:'Crippling Effects',sub:'2D6, rulebook 7.3.6',i:[{s:'status-fire',l:'Fire',r:'6'},{s:'status-defence-systems-offline',l:'Defence Systems Offline',r:'7'},{s:'status-scanners-offline',l:'Scanners Offline',r:'8'},{s:'status-weapons-offline',l:'Weapons Offline',r:'9'},{s:'status-navigation-offline',l:'Navigation Offline',r:'10'},{s:'status-orbital-decay',l:'Orbital Decay',r:'11+'}]},
+    {key:'atmosphere',t:'Atmosphere',sub:null,i:[{s:'status-in-atmosphere',l:'In Atmosphere',r:''}]},
+    {key:'dropsites',t:'Dropsites and Features',sub:null,i:[{s:'dropsite-military-outpost',l:'Military Outpost',r:''},{s:'dropsite-orbital-defence-gun',l:'Orbital Defence Gun',r:''},{s:'dropsite-comms-station',l:'Comms Station',r:''},{s:'dropsite-hangar',l:'Hangar',r:''},{s:'dropsite-power-plant',l:'Power Plant',r:''},{s:'dropsite-city',l:'City',r:''}]},
+    {key:'launch',t:'Launch Assets',sub:'rulebook 7.4',i:[
+      {s:'launch-fighters',l:'Fighters',d:'A squadron. Duels enemy Fighter and Bomber Wings in base contact, and can lend re-rolls in defence.'},
+      {s:'launch-bombers',l:'Bombers',d:'A squadron. Attacks any Group or Space Station it is in base contact with.'},
+      {s:'launch-fire-ship',l:'Fire Ship',d:'A type of Bomber.'},
+      {s:'launch-torpedo',l:'Torpedo',d:'A single craft. Makes one attack in base contact, then is removed.'},
+      {s:'launch-mine',l:'Mine',d:'Left in place once launched. Attacks an enemy Ship that moves through its Thrust, then is removed.'},
+      {s:'launch-battalion',l:'Battalion',d:'Ground troops. Deployed onto a Dropsite or one of its Features.'},
+    ]},
+    {key:'turn',t:'Turn Tokens',sub:null,i:[
+      {s:'token-activation',l:'Activation',d:'Marks a Group that has activated this phase.'},
+      {s:'token-pass',l:'Pass',d:'Used in place of activating a Group.'},
+    ]},
+  ];
+
+  // Which token groups belong inline with which section (by number). They still
+  // all appear together in the Tokens reference at the end of How to Play.
+  const SECTION_TOKENS = {
+    '3.1.2': ['atmosphere'],
+    '3.3':   ['spikes'],
+    '7':     ['turn'],
+    '7.3.6': ['crippling'],
+    '7.4':   ['launch'],
+    '11':    ['dropsites'],
+    '2.3.4': ['dropsites'],
+  };
+
+  function renderTokenGroups(groups) {
+    return groups.map(g => `<div class="rules-tok-grp">
         <div class="rules-tok-head">${esc(g.t)}${g.sub ? `<span class="rules-tok-sub">${esc(g.sub)}</span>` : ''}</div>
         <ul class="rules-tok-list${g.i.some(k => k.d) ? ' rules-tok-list--wide' : ''}">${g.i.map(k => `<li class="rules-tok${k.d ? ' rules-tok--desc' : ''}">
           <img src="assets/tokens/${k.s}.svg" alt="" width="40" height="40" loading="lazy">
@@ -1056,6 +1069,17 @@ let activeGroupId = null;
           ${k.d ? `<span class="rules-tok-desc">${esc(k.d)}</span>` : ''}
         </li>`).join('')}</ul>
       </div>`).join('');
+  }
+
+  function rulesTokensHtml() { return renderTokenGroups(TOKEN_GROUPS); }
+
+  // Inline token strip for the section that references these counters.
+  function wikiSectionTokens(number) {
+    const keys = SECTION_TOKENS[number];
+    if (!keys) return '';
+    const groups = TOKEN_GROUPS.filter(g => keys.includes(g.key));
+    if (!groups.length) return '';
+    return `<div class="rules-tok-inline">${renderTokenGroups(groups)}</div>`;
   }
 
   function rulesLegendHtml() {
@@ -1111,6 +1135,9 @@ let activeGroupId = null;
   const RULES_LINK_STOP = new Set([
     'move', 'ships', 'ship', 'the table', 'name', 'type', 'special', 'assets',
   ]);
+  // Chapters that live in a fuller tool of their own: link out there instead of
+  // to the book's thin summary. The value is the page, "ext:" marking it external.
+  const RULES_EXTERNAL = { '12': 'ext:scenarios/dropfleet/' };
   let _rulesIdx = null;
   function rulesSlug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
 
@@ -1118,24 +1145,25 @@ let activeGroupId = null;
     if (_rulesIdx) return _rulesIdx;
     const numbers = new Set();
     const termMap = {};
-    const phrases = [];
-    const seen = new Set();
-    const add = (phrase, target) => {
+    const prio = {};   // lower wins, so a duplicated name resolves to the shallower section
+    const add = (phrase, target, p) => {
       const key = (phrase || '').toLowerCase().trim();
-      if (key.length < 4 || RULES_LINK_STOP.has(key) || seen.has(key)) return;
-      seen.add(key);
+      if (key.length < 4 || RULES_LINK_STOP.has(key)) return;
+      if (key in termMap && prio[key] <= p) return;
       termMap[key] = target;
-      phrases.push(phrase);
+      prio[key] = p;
     };
     (function walk(ns) {
       for (const n of ns) {
         if (n.number) numbers.add(n.number);
-        if (n.heading) add(n.heading, n.id);
-        walk(n.children || []);
+        // A chapter's own name (e.g. "Scenery", one dot-segment) beats a deep
+        // subsection that happens to share it (e.g. 2.3.5 Scenery).
+        if (n.heading) add(n.heading, RULES_EXTERNAL[n.number] || n.id, n.number ? n.number.split('.').length : 90);
       }
+      for (const n of ns) walk(n.children || []);
     })((rulesWiki && rulesWiki.chapters) || []);
-    Object.keys(sharedRulesDB || {}).forEach(name => add(name, 'kw-' + rulesSlug(name)));
-    phrases.sort((a, b) => b.length - a.length);   // most specific match wins
+    Object.keys(sharedRulesDB || {}).forEach(name => add(name, 'kw-' + rulesSlug(name), 50));
+    const phrases = Object.keys(termMap).sort((a, b) => b.length - a.length);  // most specific wins
     const alt = phrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
     const re = new RegExp('\\b(?:\\d+(?:\\.\\d+)+' + (alt ? '|' + alt : '') + ')\\b', 'gi');
     _rulesIdx = { numbers, termMap, re };
@@ -1154,6 +1182,9 @@ let activeGroupId = null;
       } else {
         target = idx.termMap[m.toLowerCase()];
         if (!target) return m;
+      }
+      if (target.indexOf('ext:') === 0) {
+        return `<a class="rules-xref" href="${target.slice(4)}" target="_blank" rel="noopener">${m}</a>`;
       }
       return `<a class="rules-xref" href="#rules/${target}">${m}</a>`;
     });
@@ -1219,7 +1250,7 @@ let activeGroupId = null;
     const kids = (node.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => wikiSection(c, depth + 1)).join('');
     return `<div class="rules-sub rules-sub-d${depth}" id="rules-sec-${esc(node.id)}">
       <h${lvl} class="rules-h">${num}${esc(node.heading)}</h${lvl}>
-      ${wikiBody(node.body)}${wikiFigure(node.number)}${kids}
+      ${wikiBody(node.body)}${wikiFigure(node.number)}${wikiSectionTokens(node.number)}${kids}
     </div>`;
   }
 
@@ -1235,7 +1266,7 @@ let activeGroupId = null;
     return `<section class="rules-chapter" id="rules-sec-${esc(ch.id)}">
       <h2 class="rules-chapter-title"><span class="rules-chapter-n">${esc(ch.number)}</span>${esc(ch.heading)}</h2>
       ${extraTop}
-      ${wikiBody(ch.body)}
+      ${wikiBody(ch.body)}${wikiSectionTokens(ch.number)}
       ${(ch.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => wikiSection(c, 1)).join('')}
       ${extraEnd}
     </section>`;

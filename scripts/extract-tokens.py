@@ -116,8 +116,10 @@ def path_d(items, close, ox, oy):
     return ''.join(out)
 
 
-def build(page, cell, label):
-    """Emit the SVG for one grid cell."""
+def build(page, cell, label, square=False):
+    """Emit the SVG for one grid cell. `square` forces a rounded-rect clip for the
+    Launch/Battalion/turn tokens, whose background is a square the same size as a
+    disc, so the round-vs-square guess below would wrongly clip them to a circle."""
     # Own a shape by its CENTRE, not by containment. The City and Atmosphere tokens
     # draw their art larger than the disc and let the PDF's clip path trim it, so a
     # "wholly inside" test threw four of their five shapes away and left a bare
@@ -152,7 +154,7 @@ def build(page, cell, label):
     # Clip to the token's own outline, so overhanging art is trimmed the way the sheet
     # trims it. Round tokens take a circle, the square ones a rounded rect.
     ox, oy = bg.x0 - cell.x0, bg.y0 - cell.y0
-    if abs(bg.width - bg.height) < 2 and bg.width > cell.width * 0.7:
+    if not square and abs(bg.width - bg.height) < 2 and bg.width > cell.width * 0.7:
         outline = '<circle cx="%s" cy="%s" r="%s"/>' % (
             num(ox + bg.width / 2), num(oy + bg.height / 2), num(bg.width / 2))
     else:
@@ -178,7 +180,8 @@ def main():
     for row, col, name, label in WANTED:
         cx, cy = COL_X[col], ROW_Y[row]
         cell = fitz.Rect(cx - HALF, cy - HALF, cx + HALF, cy + HALF)
-        svg = build(page, cell, label)
+        # Rows 8-11 are the rounded-square markers; rows 0-7 are round discs.
+        svg = build(page, cell, label, square=row >= 8)
         path = os.path.join(OUT, name + '.svg')
         with open(path, 'w', encoding='utf-8', newline='\n') as f:
             f.write(svg)

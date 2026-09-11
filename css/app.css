@@ -8046,11 +8046,11 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 .rules-kw-desc p:last-child { margin-bottom: 0; }
 
 /* ── Rulebook: left rail + document ─────────────────────────────────────── */
-.rules-layout { display: grid; grid-template-columns: 232px minmax(0, 1fr); gap: var(--sp-xl); align-items: start; }
+.rules-layout { display: grid; grid-template-columns: 248px minmax(0, 1fr); gap: var(--sp-2xl); align-items: start; }
 .rules-loading { padding: var(--sp-xl); color: var(--ink-faint); }
 
 .rules-nav { position: sticky; top: 56px; max-height: calc(100vh - 72px); overflow-y: auto; display: flex; flex-direction: column; gap: 1px; padding-right: var(--sp-sm); border-right: 1px solid var(--line, rgba(120,110,95,.25)); }
-.rules-nav-item { display: flex; align-items: baseline; gap: 8px; width: 100%; text-align: left; padding: 6px 10px; border: 0; border-radius: var(--radius-md, 8px); background: none; color: var(--ink-soft); cursor: pointer; font-size: var(--text-sm); line-height: 1.3; text-decoration: none; }
+.rules-nav-item { display: flex; align-items: baseline; gap: 8px; width: 100%; text-align: left; padding: 7px 10px; border: 0; border-radius: var(--radius-md, 8px); background: none; color: var(--ink-soft); cursor: pointer; font-size: 16px; line-height: 1.3; text-decoration: none; }
 .rules-nav-item:hover { background: var(--paper); color: var(--ink); }
 .rules-nav-item.active { background: var(--paper); color: var(--navy); font-weight: 600; box-shadow: inset 3px 0 0 var(--navy); }
 .rules-nav-n { flex: 0 0 1.4em; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-faint); font-weight: 600; }
@@ -8059,21 +8059,25 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 
 .rules-doc { min-width: 0; display: flex; flex-direction: column; gap: var(--sp-xl); max-width: 74ch; }
 .rules-chapter { scroll-margin-top: 60px; }
-.rules-chapter-title { display: flex; align-items: baseline; gap: var(--sp-md); font-family: var(--font-display); font-size: var(--text-2xl, 1.7rem); color: var(--ink); margin: 0 0 var(--sp-lg); padding-bottom: var(--sp-sm); border-bottom: 2px solid var(--navy); }
+.rules-chapter-title { display: flex; align-items: baseline; gap: var(--sp-md); font-family: var(--font-display); font-weight: 800; font-size: 32px; line-height: 1.15; color: var(--ink); margin: 0 0 var(--sp-lg); padding-bottom: var(--sp-sm); border-bottom: 2px solid var(--navy); }
 .rules-chapter-n { font-size: var(--text-lg); color: var(--ink-faint); font-variant-numeric: tabular-nums; }
 .rules-chapter-n:empty { display: none; }
 
 .rules-sub { scroll-margin-top: 60px; margin-top: var(--sp-lg); }
 .rules-sub-d2 { margin-left: var(--sp-md); }
 .rules-sub-d3, .rules-sub-d4 { margin-left: calc(var(--sp-md) * 2); }
-.rules-h { display: flex; align-items: baseline; gap: var(--sp-sm); font-family: var(--font-display); color: var(--ink); margin: 0 0 var(--sp-sm); line-height: 1.25; }
-h3.rules-h { font-size: var(--text-lg); }
-h4.rules-h { font-size: var(--text-md, 1.05rem); }
-h5.rules-h, h6.rules-h { font-size: var(--text-sm); text-transform: uppercase; letter-spacing: .03em; color: var(--ink-soft); }
-.rules-h-n { font-variant-numeric: tabular-nums; color: var(--ink-faint); font-weight: 600; font-size: .82em; }
+/* Rulebook heading ladder: a modular scale off the 18px body (~1.25 Major
+   Third), capped at three sizes. Depth past a subsection is NEVER shrunk below
+   body — deeper headings read as a bold navy label, the section number carrying
+   the hierarchy the way the book itself does. */
+.rules-h { display: flex; align-items: baseline; gap: var(--sp-sm); font-family: var(--font-display); font-weight: 700; color: var(--ink); margin: var(--sp-lg) 0 var(--sp-sm); line-height: 1.2; }
+h3.rules-h { font-size: 24px; }
+h4.rules-h { font-size: 20px; }
+h5.rules-h, h6.rules-h { font-size: 18px; font-family: var(--font-body); text-transform: uppercase; letter-spacing: .045em; color: var(--navy); }
+.rules-h-n { font-variant-numeric: tabular-nums; color: var(--ink-faint); font-weight: 600; font-size: .8em; }
 .rules-h-extra { margin-top: var(--sp-lg); }
 
-.rules-p { margin: 0 0 var(--sp-md); font-size: var(--text-md, 1rem); line-height: 1.6; color: var(--ink-soft); }
+.rules-p { margin: 0 0 var(--sp-md); font-size: 18px; line-height: 1.65; color: var(--ink-soft); }
 .rules-p strong { color: var(--ink); font-weight: 700; }
 
 /* Cross-reference links: dense, so kept quiet — a dotted underline in the ink
@@ -8084,7 +8088,7 @@ h5.rules-h, h6.rules-h { font-size: var(--text-sm); text-transform: uppercase; l
 @keyframes rules-hit { from { background: var(--gold-faint, rgba(184,147,46,.28)); } to { background: transparent; } }
 .rules-hit { animation: rules-hit 1.4s ease-out; border-radius: var(--radius-md, 8px); }
 .rules-ul { margin: 0 0 var(--sp-md); padding-left: 1.2em; }
-.rules-ul li { margin: 0 0 4px; font-size: var(--text-md, 1rem); line-height: 1.55; color: var(--ink-soft); }
+.rules-ul li { margin: 0 0 6px; font-size: 18px; line-height: 1.6; color: var(--ink-soft); }
 .rules-caption { margin: 0 0 var(--sp-md); font-size: var(--text-sm); color: var(--ink-muted); font-style: italic; }
 
 .rules-table-wrap { overflow-x: auto; margin: 0 0 var(--sp-md); }
@@ -8098,7 +8102,11 @@ h5.rules-h, h6.rules-h { font-size: var(--text-sm); text-transform: uppercase; l
 .rules-fig { margin: var(--sp-md) 0 var(--sp-lg); }
 .rules-fig img { display: block; max-width: min(360px, 100%); max-height: 560px; width: auto; height: auto; border-radius: var(--radius-md, 8px); border: 1px solid var(--line, rgba(120,110,95,.3)); background: #fff; }
 
-.rules-tok-desc { font-size: var(--text-xs); line-height: 1.4; color: var(--ink-muted); }
+/* A token strip shown inline with the rule that calls on it (in addition to the
+   full Tokens reference at the end). Set off from the prose with a faint rule. */
+.rules-tok-inline { margin: var(--sp-md) 0 var(--sp-lg); padding: var(--sp-md) 0 0; border-top: 1px solid var(--line, rgba(120,110,95,.2)); }
+.rules-tok-inline .rules-tok-grp:last-child { margin-bottom: 0; }
+.rules-tok-desc { font-size: 13px; line-height: 1.45; color: var(--ink-muted); }
 .rules-tok-list--wide { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
 .rules-tok--desc { display: grid; grid-template-columns: 40px 1fr; gap: 4px var(--sp-sm); text-align: left; align-items: center; height: auto; }
 .rules-tok--desc img { grid-row: span 2; align-self: start; }
