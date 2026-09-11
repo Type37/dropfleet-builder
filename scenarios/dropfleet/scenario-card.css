@@ -123,17 +123,20 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .pub-ship-body{display:flex;flex-direction:column;gap:1.2mm;min-width:0;}
 .pub-ship-h{display:flex;flex-wrap:wrap;gap:1mm 4mm;align-items:baseline;font-family:'Roboto Slab',Georgia,serif;font-size:12pt;}
 .pub-ship-h span{font-family:'Jost',sans-serif;font-size:9.5pt;color:#5d5850;}
-/* Ship stats laid out like the builder's block: boxed cells two to a row
-   (Thrust|KS, Scan|ES, Sig|BS), Hull and Group Size full-width beneath. */
-.pub-ship-stats{display:grid;grid-template-columns:1fr 1fr;gap:1.2mm;max-width:78mm;}
-.pss-cell{display:flex;align-items:center;gap:1.6mm;background:#FBF6EA;border:.2mm solid #E4DAC4;border-radius:1mm;padding:.9mm 1.8mm;overflow:hidden;}
-.pss-wide{grid-column:1/-1;}
-.pss-cell .ico-stat{flex-shrink:0;}
-.pss-v{font-family:'Roboto Slab',Georgia,serif;font-weight:700;font-size:10.5pt;line-height:1;color:var(--ch);font-variant-numeric:tabular-nums lining-nums;}
-.pss-l{font-family:'Jost',sans-serif;font-size:7.5pt;font-weight:600;color:#5D5850;margin-left:auto;white-space:nowrap;}
-.pss-es{border-bottom:.5mm solid #7A6200;} .pss-es .pss-v{color:#7A6200;}
-.pss-ks{border-bottom:.5mm solid var(--navy,#2B4A6F);} .pss-ks .pss-v{color:var(--navy,#2B4A6F);}
-.pss-bs{border-bottom:.5mm solid var(--gold);} .pss-bs .pss-v{color:var(--gdk);}
+/* Ship stat datasheet strip: a row of segmented cells (label over icon+value)
+   that reflows to fit -- one row on a wide card, three or four on a narrow one.
+   The 1px grid gap over a warm ground draws hairline dividers between cells; the
+   three saves carry a coloured top accent so the defence cluster reads at a
+   glance without another table. */
+.pub-ship-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(54px,1fr));gap:1px;background:#E1D6BE;border:1px solid #E1D6BE;border-radius:1.4mm;overflow:hidden;margin:.3mm 0 .6mm;}
+.pss-cell{display:flex;flex-direction:column;align-items:center;gap:.5mm;padding:1.4mm .6mm 1.3mm;background:#FCF8EE;}
+.pss-l{font-family:'Jost',sans-serif;font-size:7pt;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#6C6456;line-height:1;}
+.pss-row{display:flex;align-items:center;gap:1.1mm;}
+.pss-row .ico-stat{flex-shrink:0;opacity:.85;}
+.pss-v{font-family:'Roboto Slab',Georgia,serif;font-weight:700;font-size:11pt;line-height:1;color:var(--ch);font-variant-numeric:tabular-nums lining-nums;}
+.pss-es{box-shadow:inset 0 2.2px 0 #7A6200;} .pss-es .pss-v{color:#7A6200;}
+.pss-ks{box-shadow:inset 0 2.2px 0 var(--navy,#2B4A6F);} .pss-ks .pss-v{color:var(--navy,#2B4A6F);}
+.pss-bs{box-shadow:inset 0 2.2px 0 var(--gold);} .pss-bs .pss-v{color:var(--gdk);}
 .pss-none .pss-v{opacity:.4;}
 @media (max-width:760px){.pub-ships{padding:0 3mm 6mm;}.pub-ship{grid-template-columns:80px minmax(0,1fr);}.pub-ship-art{width:80px;}}
 

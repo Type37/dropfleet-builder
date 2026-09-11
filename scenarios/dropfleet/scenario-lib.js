@@ -33,22 +33,21 @@ const STAT_META={
 // A symbol you can hover, tap or focus to see what it is
 const tipped=(key,inner)=>`<span class="tip-t" tabindex="0" data-tip="${key}">${inner}</span>`;
 const statIcon=k=>tipped('stat:'+k,G[STAT_META[k].icon]);
-// A ship stat cell, laid out like the builder's: icon, value, label, saves
-// colour-coded. Paired two to a row (Thrust|KS, Scan|ES, Sig|BS), Hull and
-// Group Size span the full width beneath.
+// A ship stat cell for the datasheet strip: a small label over the value with
+// its icon, saves colour-accented. The strip flows to fit its width, so the
+// cells reflow from one row on a wide card to three or four on a narrow one.
 const PSS_LBL={thrust:'Thrust',scan:'Scan',sig:'Sig',hull:'Hull',es:'ES',ks:'KS',bs:'BS',g:'G'};
 function pssCell(k,v,cls){
   if(v===undefined||v===null||v==='') return '';
   const none=(k==='bs'&&(v==='-'||v==='--'))?' pss-none':'';
-  return `<div class="pss-cell ${cls}${none}">${statIcon(k)}<span class="pss-v">${v}</span><span class="pss-l">${PSS_LBL[k]}</span></div>`;
+  return `<div class="pss-cell ${cls}${none}"><span class="pss-l">${PSS_LBL[k]}</span><span class="pss-row">${statIcon(k)}<span class="pss-v">${v}</span></span></div>`;
 }
 function shipStatGrid(st){
+  // Movement/sensors/hull first, the three saves grouped as a defence cluster, G last.
   return `<div class="pub-ship-stats">`
-    + pssCell('thrust',st.thrust,'') + pssCell('ks',st.ks,'pss-ks')
-    + pssCell('scan',st.scan,'')    + pssCell('es',st.es,'pss-es')
-    + pssCell('sig',st.sig,'')      + pssCell('bs',st.bs,'pss-bs')
-    + pssCell('hull',st.hull,'pss-wide')
-    + pssCell('g',st.g,'pss-wide')
+    + pssCell('thrust',st.thrust,'') + pssCell('scan',st.scan,'') + pssCell('sig',st.sig,'') + pssCell('hull',st.hull,'')
+    + pssCell('es',st.es,'pss-es') + pssCell('ks',st.ks,'pss-ks') + pssCell('bs',st.bs,'pss-bs')
+    + pssCell('g',st.g,'')
     + `</div>`;
 }
 // DStat line helper
