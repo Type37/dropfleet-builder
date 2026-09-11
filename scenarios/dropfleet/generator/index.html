@@ -173,8 +173,8 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
   .sc-note{font-size:6pt;}
   .dm{width:10px;height:10px;}
 
-  .map-col{flex:0 0 2.6in;gap:.6mm;}
-  .map-frame{width:2.6in;height:2.6in;}
+  .map-col{flex:0 0 2.45in;gap:.6mm;}
+  .map-frame{width:2.45in;height:2.45in;}
   .lhdr{font-size:6.5pt;margin-top:.3mm;letter-spacing:.01em;color:var(--gdk);}
   .lds{font-size:7pt;gap:1mm;}
   .fh{font-size:7pt;}
@@ -196,6 +196,8 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 /* ── Scenario loader ─────────────────────────────── */
 .ctrl-scen-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:10px 0 0;}
 .scen-ref-link{font-family:'Jost',system-ui,sans-serif;font-size:.95rem;font-weight:600;color:var(--action);text-decoration:underline;text-underline-offset:3px;padding:4px 2px;}
+.gen-credit{margin-top:3mm;font-family:'Jost',system-ui,sans-serif;font-size:.72rem;color:#5d5850;line-height:1.8;}
+.gen-credit a:not(.warlore-mark){color:#5d5850;text-decoration:none;}
 .scen-ref-link:hover{color:var(--action-dk);}
 .scen-ref-link:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
 
@@ -820,15 +822,8 @@ function gen(){
   L.sc.forEach(s=>{legH+=`<li class="lds"><span style="color:var(--gold);font-size:6pt">◆</span>&nbsp;${s}</li>`;});
   legH+=`</ol>`;
 
-  if(V.ft.length){
-    legH+=`<div class="lhdr">Features Added</div><ul class="lf-list">`;
-    V.ft.forEach(fn=>{ if(FS[fn]) legH+=featLine(fn); });
-    legH+=`</ul>`;
-  }
-
-  legH+=`<div class="lhdr">Dropsite Reference</div><ol class="lds-list">`;
-  DS.forEach((d,i)=>{legH+=dsLine(d,i);});
-  legH+=`</ol>`;
+  if(V.ft.length) legH+=`<div class="lhdr">Features Added</div>${featTable(V.ft)}`;
+  legH+=`<div class="lhdr">Dropsite Reference</div>${dsTable()}`;
 
   const tag=(r)=>`<span class="roll-tag">(result: ${r})</span>`;
   const comp_note = comp?' · Competitive':'';
@@ -865,16 +860,16 @@ function gen(){
 ${varH}
       </div>
     </div>
+    <div class="gen-credit">
+Tool made by <a class="warlore-mark" href="https://linktr.ee/warlore" target="_blank" rel="noopener">War<span class="wl-lore">Lore</span></a><br>
+<a href="https://ttcombat.com/collections/dropfleet-commander" target="_blank" style="color:#444;text-decoration:none;">Dropfleet Commander</a> &copy; <a href="https://ttcombat.com" target="_blank" style="color:#444;text-decoration:none;">TT Combat Ltd</a>. Not affiliated with or endorsed by TT Combat.
+</div>
   </div>
 
   <div class="map-col">
     <div class="map-frame">${makeMap(dep.roll, L.name, parseInt(getPickVal('players'))||2, vari.roll)}</div>
     <div class="leg">${legH}</div>
   
-<div style="margin-top:12px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;color:#444;padding:0 8px 20px;line-height:1.8;">
-Tool made by <a class="warlore-mark" href="https://linktr.ee/warlore" target="_blank" rel="noopener">War<span class="wl-lore">Lore</span></a><br>
-<a href="https://ttcombat.com/collections/dropfleet-commander" target="_blank" style="color:#444;text-decoration:none;">Dropfleet Commander</a> &copy; <a href="https://ttcombat.com" target="_blank" style="color:#444;text-decoration:none;">TT Combat Ltd</a>. Not affiliated with or endorsed by TT Combat.
-</div>
 </div>
 </div>`;
 

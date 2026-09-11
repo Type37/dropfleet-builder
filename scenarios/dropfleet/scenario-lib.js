@@ -103,12 +103,13 @@ const OB=[
   {name:"Breakthrough",cls:"sp-brk",std:false,b:["Red Players may permanently fly Ships off the board in any opponent's Deployment Zone. For every <b>200pts</b> in Ships Players fly off, they are awarded <vp>1VP</vp> at the end of the game.","Other Players are awarded <vp>2VP</vp> at the end of the game for every <b>500 points</b> of Ships and Admirals they have destroyed."]},
   {name:"Raze",cls:"sp-raze",std:true,b:["At the end of the game, players are awarded <b>double Standard Scoring</b> for each Dropsite that has been Levelled or Ruined that is <b>24\" or more</b> away from their Deployment Zone, regardless of who Levelled or Ruined it. Players are also awarded <vp>2 VP</vp> for every <b>500 points</b> of Ships and Admirals they have destroyed."]},
 ];
+// Rulebook 2.3.1, 11.3 Features (p27), verbatim
 const FS={
-  "Military Outpost":{ico:FI.out,es:"3+",ks:"5+",body:'Weapon: <b>Missile Halo</b> &middot; 6" &middot; Att 1 &middot; Lock 2+ &middot; Dmg 2K &middot; Close Action, Escape Velocity'},
-  "Orbital Defence Gun":{ico:FI.odg,es:"5+",ks:"3+",body:'Weapon: <b>Orbital Gun</b> &middot; 6" &middot; Att 3 &middot; Lock 3+ &middot; Dmg 1E &middot; Burnthrough-1, Escape Velocity'},
-  "Comms Station":{ico:FI.com,es:"5+",ks:"4+",body:"<b>Comms Uplink:</b> If you control this Dropsite, increase the amount of Ability Points you generate by 1. You can only be affected by Comms Uplink once each round."},
-  "Power Plant":{ico:FI.pow,es:"4+",ks:"5+",body:"<b>Volatile:</b> When this Feature is destroyed, all Groups within 3\" gain a Spike and this Feature's Dropsite takes an additional 2D3 damage."},
-  "Hangar":{ico:FI.han,es:"4+",ks:"4+",body:"<b>Launch 2:</b> Fighters &amp; Bombers (use your faction's asset profile)."},
+  "Military Outpost":{ico:FI.out,es:"3+",ks:"5+",weapon:{name:"Missile Halo",scan:'6"',att:"1",lock:"2+",dmg:"2",type:"K",special:"Close Action, Escape Velocity"}},
+  "Orbital Defence Gun":{ico:FI.odg,es:"5+",ks:"3+",weapon:{name:"Orbital Gun",scan:'6"',att:"3",lock:"3+",dmg:"1",type:"E",special:"Burnthrough-1, Escape Velocity"}},
+  "Comms Station":{ico:FI.com,es:"5+",ks:"4+",special:"<b>Comms Uplink:</b> If you control this Dropsite, increase the amount of Ability Points you generate by 1. You can only be affected by Comms Uplink once each round."},
+  "Power Plant":{ico:FI.pow,es:"4+",ks:"5+",special:"<b>Volatile:</b> When this Feature is destroyed, all Groups within 3\" gain a Spike and this Feature's Dropsite takes an additional 2D3 damage."},
+  "Hangar":{ico:FI.han,es:"4+",ks:"4+",launch:{type:"Fighters &amp; Bombers*",launch:"2",special:"-"},note:"*This Feature's Fighters &amp; Bombers use the Controlling players' Fighters &amp; Bombers."},
 };
 const DS=[
   {ico:()=>DI.SS('S'),nm:"Small Space Station", sc:'6"',sg:'4"',h:'10',es:'4+',ks:'4+'},
@@ -530,17 +531,29 @@ function pubScenery(text){
   return out.join('');
 }
 
-function featLine(fn){
-  const f=FS[fn];
-  return `<li class="lf"><div class="fh">${tipped('feat:'+fn,f.ico)} <b>${fn}</b>&thinsp;${statIcon('es')}<span class="sv-e">${f.es}</span>&thinsp;${statIcon('ks')}<span class="sv-k">${f.ks}</span></div><div class="fb">${f.body}</div></li>`;
+// Weapon damage types, as the builder names them (js/app.js WEAPON_TYPE_LABELS)
+const WTYPE={K:'Kinetic',E:'Energy',C:'Core'};
+const hidden=t=>`<span class="vh">${t}</span>`;
+const statHead=k=>`<th scope="col" class="c">${statIcon(k)}${hidden(STAT_META[k].label)}</th>`;
+// What a Feature does beyond its saves: its weapon, launch, or special rule
+function featDetail(f){
+  if(f.weapon){ const w=f.weapon; return `<table class="st st-sub"><thead><tr><th scope="col">Weapon</th>${statHead('scan')}<th scope="col" class="c">Att</th><th scope="col" class="c">Lock</th><th scope="col" class="c">Dmg</th><th scope="col" class="c">Type</th></tr></thead><tbody><tr><td><b>${w.name}</b></td><td class="c">${w.scan}</td><td class="c">${w.att}</td><td class="c">${w.lock}</td><td class="c">${w.dmg}</td><td class="c"><span class="tip-t" tabindex="0" data-tip="wtype:${w.type}">${w.type}</span></td></tr><tr><td colspan="6" class="st-spec"><span class="st-spec-l">Special</span> ${w.special}</td></tr></tbody></table>`; }
+  if(f.launch){ const l=f.launch; return `<table class="st st-sub"><thead><tr><th scope="col">Type</th><th scope="col" class="c">Launch</th><th scope="col">Special</th></tr></thead><tbody><tr><td>${l.type}</td><td class="c">${l.launch}</td><td>${l.special}</td></tr></tbody></table><p class="st-note">${f.note}</p>`; }
+  return f.special?`<p class="st-rule">${f.special}</p>`:'';
 }
-const dsLine=(d,i)=>`<li class="lds">${tipped('ds:'+i,d.ico())} ${d.nm}${dss(d.sc,d.sg,d.h,d.es,d.ks)}</li>`;
+function featTable(names){
+  const list=names.filter(n=>FS[n]);
+  if(!list.length) return '';
+  return `<table class="st st-feat"><thead><tr><th scope="col">Feature</th>${statHead('es')}${statHead('ks')}</tr></thead><tbody>${list.map(n=>{const f=FS[n]; return `<tr class="st-main"><th scope="row"><span class="st-name">${tipped('feat:'+n,f.ico)}${n}</span></th><td class="c sv-e">${f.es}</td><td class="c sv-k">${f.ks}</td></tr><tr class="st-more"><td colspan="3">${featDetail(f)}</td></tr>`;}).join('')}</tbody></table>`;
+}
+function dsTable(){
+  return `<table class="st st-ds"><thead><tr><th scope="col">Dropsite</th>${statHead('scan')}${statHead('sig')}${statHead('hull')}${statHead('es')}${statHead('ks')}</tr></thead><tbody>${DS.map((d,i)=>`<tr><th scope="row"><span class="st-name">${tipped('ds:'+i,d.ico())}${d.nm}</span></th><td class="c">${d.sc}</td><td class="c">${d.sg}</td><td class="c">${d.h}</td><td class="c sv-e">${d.es}</td><td class="c sv-k">${d.ks}</td></tr>`).join('')}</tbody></table>`;
+}
 function pubFeatures(text){
-  const kinds=Object.keys(FS).filter(n=>text.includes(n));
-  if(!kinds.length) return '';
-  return `<div class="lhdr">Features</div><ul class="lf-list">${kinds.map(featLine).join('')}</ul>`;
+  const html=featTable(Object.keys(FS).filter(n=>text.includes(n)));
+  return html?`<div class="lhdr">Features</div>${html}`:'';
 }
-const pubDropsites=()=>`<div class="lhdr">Dropsite Reference</div><ol class="lds-list">${DS.map(dsLine).join('')}</ol>`;
+const pubDropsites=()=>`<div class="lhdr">Dropsite Reference</div>${dsTable()}`;
 
 function pubShips(text){
   return Object.keys(SCN_SHIPS).filter(k=>text.includes(k)).map(k=>{
@@ -601,7 +614,10 @@ function renderScenario(s){
 function tipHTML(key){
   const [kind,id]=[key.slice(0,key.indexOf(':')),key.slice(key.indexOf(':')+1)];
   if(kind==='stat'){ const m=STAT_META[id]; return m?`<div class="scn-tip-h">${G[m.icon]}<b>${m.label}</b></div><div>${m.title}</div>`:''; }
-  if(kind==='feat'){ const f=FS[id]; return f?`<div class="scn-tip-h">${f.ico}<b>${id}</b></div><div class="scn-tip-st">${G.iES}<span class="sv-e">${f.es}</span>${G.iKS}<span class="sv-k">${f.ks}</span></div><div>${f.body}</div>`:''; }
+  if(kind==='feat'){ const f=FS[id]; if(!f) return ''; const w=f.weapon;
+    const more=w?`<b>${w.name}</b> ${G.iScan}${w.scan}, Att ${w.att}, Lock ${w.lock}, Dmg ${w.dmg}${w.type}, ${w.special}`:f.launch?`Launch ${f.launch.launch}: ${f.launch.type}<br>${f.note}`:f.special;
+    return `<div class="scn-tip-h">${f.ico}<b>${id}</b></div><div class="scn-tip-st">${G.iES}<span class="sv-e">${f.es}</span>${G.iKS}<span class="sv-k">${f.ks}</span></div><div>${more}</div>`; }
+  if(kind==='wtype'){ return WTYPE[id]?`<b>${id}</b> ${WTYPE[id]}`:''; }
   if(kind==='ds'){ const d=DS[+id]; return d?`<div class="scn-tip-h">${d.ico()}<b>${d.nm}</b></div><div class="scn-tip-st">${G.iScan}${d.sc} ${G.iSig}${d.sg} ${G.iHull}${d.h} ${G.iES}<span class="sv-e">${d.es}</span>${G.iKS}<span class="sv-k">${d.ks}</span></div>`:''; }
   return '';
 }
