@@ -3188,7 +3188,7 @@ body.sheet-open .sheet-scrim {
    Names wrap under the art instead of truncating; "Defence Systems Offline"
    is the longest and has to read in full on a phone. */
 .rules-tok-grp { margin-bottom: var(--sp-m, 16px); }
-.rules-tok-head { font-size: var(--text-caption, .78rem); text-transform: uppercase; letter-spacing: .04em; color: var(--fg3); margin-bottom: var(--sp-xs); display: flex; align-items: baseline; gap: var(--sp-xs); flex-wrap: wrap; }
+.rules-tok-head { font-size: var(--text-caption, .78rem); text-transform: uppercase; letter-spacing: .04em; color: var(--navy); font-weight: 700; margin-bottom: var(--sp-xs); display: flex; align-items: baseline; gap: var(--sp-xs); flex-wrap: wrap; }
 .rules-tok-sub { text-transform: none; letter-spacing: 0; }
 .rules-tok-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: var(--sp-s, 10px); }
 .rules-tok { display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; height: 100%; }
@@ -3216,7 +3216,7 @@ body.sheet-open .sheet-scrim {
 /* ── How to Play: full rulebook wiki (mobile) ─────────────────────────────── */
 .rules-chapter { scroll-margin-top: calc(var(--header-h) + 48px); margin-bottom: var(--sp-xl, 22px); }
 .rules-chapter-title { display: flex; align-items: baseline; gap: var(--sp-s); font-family: var(--font-display); font-weight: 800; font-size: 24px; line-height: 1.15; text-transform: uppercase; letter-spacing: .01em; color: var(--fg1); margin: 0 0 var(--sp-m); padding-bottom: var(--sp-xs); border-bottom: 3px solid var(--navy); }
-.rules-chapter-n { font-size: .62em; color: var(--navy); opacity: .55; font-weight: 700; font-variant-numeric: tabular-nums; }
+.rules-chapter-n { font-size: .68em; color: var(--navy); font-weight: 800; font-variant-numeric: tabular-nums; }
 .rules-chapter-n:empty { display: none; }
 
 .rules-sub { scroll-margin-top: calc(var(--header-h) + 48px); }
@@ -3225,7 +3225,7 @@ body.sheet-open .sheet-scrim {
 h3.rules-h { font-size: 20px; color: var(--navy); margin: var(--sp-l) 0 var(--sp-s); padding-bottom: 4px; border-bottom: 2px solid var(--navy); }
 h4.rules-h { font-size: 17px; font-weight: 800; margin: var(--sp-m) 0 var(--sp-xs); }
 h5.rules-h, h6.rules-h { font-size: 13px; font-family: var(--font-body, inherit); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--navy); margin: var(--sp-l) 0 var(--sp-xxs); }
-.rules-h-n { font-variant-numeric: tabular-nums; color: var(--navy); opacity: .55; font-weight: 700; font-size: .72em; }
+.rules-h-n { font-variant-numeric: tabular-nums; color: var(--navy); font-weight: 800; font-size: .86em; }
 .rules-h-extra { margin-top: var(--sp-l); }
 
 .rules-p { margin: 0 0 var(--sp-m); font-size: 16px; line-height: 1.65; color: var(--fg2); }
@@ -3250,7 +3250,7 @@ h5.rules-h, h6.rules-h { font-size: 13px; font-family: var(--font-body, inherit)
 
 .rules-xref { color: inherit; text-decoration: underline; text-decoration-style: dotted; text-decoration-color: var(--navy); text-underline-offset: 2px; cursor: pointer; }
 
-.rules-tok-inline { margin: var(--sp-s) 0 var(--sp-m); padding-top: var(--sp-s); border-top: 1px solid var(--stroke1); }
+.rules-tok-inline { margin: var(--sp-s) 0 var(--sp-m); }
 .rules-tok-list--wide { grid-template-columns: 1fr; gap: var(--sp-s); }
 .rules-tok--desc { display: grid; grid-template-columns: 40px 1fr; gap: 3px var(--sp-s); text-align: left; align-items: center; height: auto; }
 .rules-tok--desc img { grid-row: span 2; align-self: start; }

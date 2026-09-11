@@ -1032,7 +1032,6 @@ let activeGroupId = null;
     {key:'spikes',t:'Spikes',sub:null,i:[{s:'spike-1',l:'1 Spike',r:''},{s:'spike-2',l:'2 Spikes',r:''},{s:'spike-3',l:'3 Spikes',r:''},{s:'spike-4',l:'4 Spikes',r:''}]},
     {key:'crippling',t:'Crippling Effects',sub:'2D6, rulebook 7.3.6',i:[{s:'status-fire',l:'Fire',r:'6'},{s:'status-defence-systems-offline',l:'Defence Systems Offline',r:'7'},{s:'status-scanners-offline',l:'Scanners Offline',r:'8'},{s:'status-weapons-offline',l:'Weapons Offline',r:'9'},{s:'status-navigation-offline',l:'Navigation Offline',r:'10'},{s:'status-orbital-decay',l:'Orbital Decay',r:'11+'}]},
     {key:'atmosphere',t:'Atmosphere',sub:null,i:[{s:'status-in-atmosphere',l:'In Atmosphere',r:''}]},
-    {key:'dropsites',t:'Dropsites',sub:null,i:[{s:'dropsite-city',l:'City',r:''}]},
     {key:'features',t:'Features',sub:null,i:[{s:'dropsite-military-outpost',l:'Military Outpost',r:''},{s:'dropsite-orbital-defence-gun',l:'Orbital Defence Gun',r:''},{s:'dropsite-comms-station',l:'Comms Station',r:''},{s:'dropsite-hangar',l:'Hangar',r:''},{s:'dropsite-power-plant',l:'Power Plant',r:''}]},
     {key:'launch',t:'Launch Assets',sub:'rulebook 7.4',i:[
       {s:'launch-fighters',l:'Fighters',d:'A squadron. Duels enemy Fighter and Bomber Wings in base contact, and can lend re-rolls in defence.'},
@@ -1056,8 +1055,7 @@ let activeGroupId = null;
     '7':     ['turn'],
     '7.3.6': ['crippling'],
     '7.4':   ['launch'],
-    '11':    ['dropsites', 'features'],
-    '2.3.4': ['dropsites'],
+    '11':    ['features'],
   };
 
   // Single tokens shown inline with a section, pulled by filename from the groups
@@ -1076,6 +1074,11 @@ let activeGroupId = null;
   const SECTION_NOTES = {
     '11': ['Measure to the center of the dropsite.'],
   };
+  // Paragraphs the book writes as scene-setting rather than rules — set in the
+  // flavour face. Matched on a distinctive fragment of the paragraph.
+  const RULES_FLAVOR = [
+    'a lot of space above planets',
+  ];
   function wikiSectionNote(number) {
     const notes = SECTION_NOTES[number];
     return notes ? notes.map(n => `<p class="rules-nb"><b>NB:</b> ${esc(n)}</p>`).join('') : '';
@@ -1252,7 +1255,8 @@ let activeGroupId = null;
       // so it reads as an illustration, not another rule.
       const plain = (it.runs || []).map(r => r.t).join('');
       const isEg = /^\s*(e\.g\.|for example\b)/i.test(plain);
-      html += `<p class="rules-p${isEg ? ' rules-eg' : ''}">${wikiRuns(it.runs)}</p>`; i++;
+      const isFlavor = RULES_FLAVOR.some(sig => plain.indexOf(sig) !== -1);
+      html += `<p class="rules-p${isEg ? ' rules-eg' : ''}${isFlavor ? ' rules-flavor' : ''}">${wikiRuns(it.runs)}</p>`; i++;
     }
     return html;
   }
@@ -1266,7 +1270,6 @@ let activeGroupId = null;
     'Comms Station': 'dropsite-comms-station',
     'Hangar': 'dropsite-hangar',
     'Power Plant': 'dropsite-power-plant',
-    'City': 'dropsite-city',
     'Fire': 'status-fire',
     'Defence Systems Offline': 'status-defence-systems-offline',
     'Scanners Offline': 'status-scanners-offline',
@@ -1315,18 +1318,30 @@ let activeGroupId = null;
 
   // A numbered subsection and everything nested under it. depth 1 = e.g. 2.1,
   // depth 2 = 2.1.1, and so on; the heading level and indent track it.
+  // Runs -> HTML keeping bold, but WITHOUT cross-reference links (for use inside
+  // a button, where a nested link would be invalid and unwanted).
+  function plainRuns(runs) {
+    return (runs || []).map(r => r.b ? `<b>${esc(r.t)}</b>` : esc(r.t)).join('');
+  }
+
   function wikiSection(node, depth) {
     const lvl = Math.min(depth + 2, 6);
     const num = node.number ? `<span class="rules-h-n">${esc(node.number)}</span>` : '';
-    const kids = (node.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => wikiSection(c, depth + 1)).join('');
-    // A Standard Scenario (12.2/<slug>) links its heading to that scenario in the
-    // Scenario Reference, so the reader can jump to the map and full breakdown.
+    // A Standard Scenario (12.2/<slug>) is one big button: name + its details,
+    // click to open that scenario in the Scenario Reference (map + full rules).
     const scnSlug = typeof node.id === 'string' && node.id.indexOf('12.2/') === 0 ? node.id.slice(5) : '';
-    const heading = scnSlug
-      ? `<a class="rules-scn-link" href="scenarios/dropfleet/#${esc(scnSlug)}" target="_blank" rel="noopener">${esc(node.heading)}</a>`
-      : esc(node.heading);
+    if (scnSlug) {
+      const rows = (node.body || []).filter(it => it.kind === 'p').map(it => `<span class="rsb-row">${plainRuns(it.runs)}</span>`).join('');
+      return `<a class="rules-scn-btn" id="rules-sec-${esc(node.id)}" href="scenarios/dropfleet/#${esc(scnSlug)}" target="_blank" rel="noopener">
+        <span class="rules-scn-btn-nm">${esc(node.heading)}<svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></span>
+        <span class="rsb-rows">${rows}</span>
+      </a>`;
+    }
+    let kids = (node.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => wikiSection(c, depth + 1)).join('');
+    // Standard Scenarios sit in a button grid rather than as stacked subsections.
+    if (node.number === '12.2') kids = `<div class="rules-scn-grid">${kids}</div>`;
     return `<div class="rules-sub rules-sub-d${depth}" id="rules-sec-${esc(node.id)}">
-      <h${lvl} class="rules-h">${num}${heading}</h${lvl}>
+      <h${lvl} class="rules-h">${num}${esc(node.heading)}</h${lvl}>
       ${wikiBody(node.body)}${wikiSectionNote(node.number)}${wikiSectionCta(node.number)}${wikiFigure(node.number)}${wikiSectionTokens(node.number)}${kids}
     </div>`;
   }

@@ -8020,7 +8020,7 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
    wrap rather than truncate: "Defence Systems Offline" is the longest and it
    must read in full. */
 .rules-tok-grp { margin-bottom: var(--sp-lg); }
-.rules-tok-head { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); margin-bottom: var(--sp-sm); display: flex; align-items: baseline; gap: var(--sp-sm); flex-wrap: wrap; }
+.rules-tok-head { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .04em; color: var(--navy); font-weight: 700; margin-bottom: var(--sp-sm); display: flex; align-items: baseline; gap: var(--sp-sm); flex-wrap: wrap; }
 .rules-tok-sub { text-transform: none; letter-spacing: 0; color: var(--ink-muted); }
 .rules-tok-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: var(--sp-md); }
 .rules-tok { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; height: 100%; }
@@ -8060,7 +8060,7 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 .rules-doc { min-width: 0; display: flex; flex-direction: column; gap: var(--sp-xl); max-width: 74ch; }
 .rules-chapter { scroll-margin-top: 60px; }
 .rules-chapter-title { display: flex; align-items: baseline; gap: var(--sp-md); font-family: var(--font-display); font-weight: 800; font-size: 34px; line-height: 1.12; text-transform: uppercase; letter-spacing: .01em; color: var(--ink); margin: 0 0 var(--sp-lg); padding-bottom: var(--sp-sm); border-bottom: 4px solid var(--navy); }
-.rules-chapter-n { font-size: var(--text-lg); color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.rules-chapter-n { font-size: var(--text-lg); color: var(--navy); font-weight: 800; font-variant-numeric: tabular-nums; }
 .rules-chapter-n:empty { display: none; }
 
 .rules-sub { scroll-margin-top: 60px; margin-top: var(--sp-lg); }
@@ -8081,7 +8081,7 @@ h4.rules-h { font-size: 21px; font-weight: 800; margin: var(--sp-xl) 0 var(--sp-
 /* Deeper (h5/h6): body size, bold navy uppercase label, no bar. */
 h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--navy); margin: var(--sp-xl) 0 var(--sp-xs); }
 /* The section number leads each heading in a faint navy chip, sized to its level. */
-.rules-h-n { font-variant-numeric: tabular-nums; color: var(--navy); font-weight: 700; font-size: .72em; opacity: .55; }
+.rules-h-n { font-variant-numeric: tabular-nums; color: var(--navy); font-weight: 800; font-size: .86em; }
 .rules-h-extra { margin-top: var(--sp-lg); }
 
 .rules-p { margin: 0 0 var(--sp-lg); font-size: 18px; line-height: 1.7; color: var(--ink-soft); }
@@ -8092,9 +8092,20 @@ h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-we
 /* A token counter drawn inline in the reference tables (Features, Crippling). */
 .rules-tbl-tok { vertical-align: -6px; margin-right: 7px; }
 .rules-td-tok { white-space: normal; }
+/* A scene-setting paragraph, set in the flavour face (warm, not grey). */
+.rules-flavor { font-family: 'Libre Baskerville', Georgia, serif; font-style: italic; color: var(--ink-soft); }
 /* A Standard Scenario heading that jumps to the Scenario Reference. */
 .rules-scn-link { color: var(--navy); text-decoration: none; }
 .rules-scn-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* Standard Scenarios as big clickable buttons: name + details, straight to the
+   scenario in the Scenario Reference. */
+.rules-scn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--sp-md); margin: 0 0 var(--sp-lg); }
+.rules-scn-btn { display: flex; flex-direction: column; gap: var(--sp-sm); padding: var(--sp-lg); background: var(--paper-alt); border: 1px solid var(--stroke); border-radius: var(--radius-md, 8px); text-decoration: none; color: var(--ink); transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out); }
+.rules-scn-btn:hover { border-color: var(--navy); box-shadow: var(--shadow-md, 0 4px 14px -8px rgba(14,12,8,.4)); }
+.rules-scn-btn-nm { display: flex; align-items: center; gap: var(--sp-sm); font-family: var(--font-display); font-weight: 800; font-size: var(--text-xl); color: var(--navy); }
+.rules-scn-btn-nm svg { margin-left: auto; flex-shrink: 0; opacity: .6; }
+.rsb-rows { display: flex; flex-direction: column; gap: 3px; font-size: var(--text-sm); line-height: 1.4; }
+.rsb-row b { color: var(--ink-muted); font-weight: 700; margin-right: 5px; }
 /* Big call-to-action (the Scenario Generator in place of the manual tables). */
 .rules-cta { display: flex; align-items: center; gap: var(--sp-md); margin: 0 0 var(--sp-lg); padding: var(--sp-lg); background: var(--navy); color: #fff; border-radius: var(--radius-md, 8px); text-decoration: none; transition: filter var(--duration-fast) var(--ease-out); }
 .rules-cta:hover { filter: brightness(1.12); }
@@ -8138,7 +8149,7 @@ h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-we
 
 /* A token strip shown inline with the rule that calls on it (in addition to the
    full Tokens reference at the end). Set off from the prose with a faint rule. */
-.rules-tok-inline { margin: var(--sp-md) 0 var(--sp-lg); padding: var(--sp-md) 0 0; border-top: 1px solid var(--line, rgba(120,110,95,.2)); }
+.rules-tok-inline { margin: var(--sp-md) 0 var(--sp-lg); }
 .rules-tok-inline .rules-tok-grp:last-child { margin-bottom: 0; }
 .rules-tok-desc { font-size: 13px; line-height: 1.45; color: var(--ink-muted); }
 .rules-tok-list--wide { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }

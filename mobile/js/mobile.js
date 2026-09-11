@@ -725,7 +725,7 @@
     {key:'spikes',t:'Spikes',sub:null,i:[{s:'spike-1',l:'1 Spike',r:''},{s:'spike-2',l:'2 Spikes',r:''},{s:'spike-3',l:'3 Spikes',r:''},{s:'spike-4',l:'4 Spikes',r:''}]},
     {key:'crippling',t:'Crippling Effects',sub:'2D6, rulebook 7.3.6',i:[{s:'status-fire',l:'Fire',r:'6'},{s:'status-defence-systems-offline',l:'Defence Systems Offline',r:'7'},{s:'status-scanners-offline',l:'Scanners Offline',r:'8'},{s:'status-weapons-offline',l:'Weapons Offline',r:'9'},{s:'status-navigation-offline',l:'Navigation Offline',r:'10'},{s:'status-orbital-decay',l:'Orbital Decay',r:'11+'}]},
     {key:'atmosphere',t:'Atmosphere',sub:null,i:[{s:'status-in-atmosphere',l:'In Atmosphere',r:''}]},
-    {key:'dropsites',t:'Dropsites and Features',sub:null,i:[{s:'dropsite-military-outpost',l:'Military Outpost',r:''},{s:'dropsite-orbital-defence-gun',l:'Orbital Defence Gun',r:''},{s:'dropsite-comms-station',l:'Comms Station',r:''},{s:'dropsite-hangar',l:'Hangar',r:''},{s:'dropsite-power-plant',l:'Power Plant',r:''},{s:'dropsite-city',l:'City',r:''}]},
+    {key:'features',t:'Features',sub:null,i:[{s:'dropsite-military-outpost',l:'Military Outpost',r:''},{s:'dropsite-orbital-defence-gun',l:'Orbital Defence Gun',r:''},{s:'dropsite-comms-station',l:'Comms Station',r:''},{s:'dropsite-hangar',l:'Hangar',r:''},{s:'dropsite-power-plant',l:'Power Plant',r:''}]},
     {key:'launch',t:'Launch Assets',sub:'rulebook 7.4',i:[
       {s:'launch-fighters',l:'Fighters',d:'A squadron. Duels enemy Fighter and Bomber Wings in base contact, and can lend re-rolls in defence.'},
       {s:'launch-bombers',l:'Bombers',d:'A squadron. Attacks any Group or Space Station it is in base contact with.'},
@@ -741,7 +741,7 @@
   ];
   const SECTION_TOKENS = {
     '3.1.2': ['atmosphere'], '3.3': ['spikes'], '7': ['turn'],
-    '7.3.6': ['crippling'], '7.4': ['launch'], '11': ['dropsites'], '2.3.4': ['dropsites'],
+    '7.3.6': ['crippling'], '7.4': ['launch'], '11': ['features'],
   };
   const SECTION_TOKEN_ITEMS = {
     '8.1': ['launch-battalion'], '8.3.3': ['launch-fighters'], '8.3.4': ['launch-bombers'],
