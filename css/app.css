@@ -23,7 +23,7 @@
   --font-reading: var(--font-lore);
   --font-condensed: "Barlow Condensed", "Arial Narrow", sans-serif;
   --font-lore: "Libre Baskerville", "Georgia", serif;
-  --font-mono: Consolas, "Courier New", monospace;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, monospace;
 
   /* Font Sizes */
   --text-xs: 13px;
@@ -439,12 +439,21 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(255,255,255,0.2);
 }
 
+.topbar-title {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: rgba(255,255,255,0.82);
+  white-space: nowrap;
+}
+
 .topbar-context {
   font-family: var(--font-body);
   font-size: var(--text-sm);
   color: rgba(255,255,255,0.88);
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* No ellipsis. These are a couple of words naming where the chevron goes, and
+     a clipped one reads as a different destination. If the bar runs out of room
+     the title beside it gives way first (below). */
   white-space: nowrap;
   display: flex;
   align-items: center;
@@ -6881,6 +6890,7 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 768px) {
   .topbar { padding: 0 var(--sp-lg); }
+  .topbar-title-rest { display: none; }
   .topbar-context { display: none; }
   .topbar-brand { font-size: var(--text-sm); }
   .topbar-action-label { display: none; }
