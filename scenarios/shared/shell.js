@@ -34,7 +34,7 @@ const ScenarioShell = (() => {
 
   /* ── Index ── */
   function cell(label, vals) {
-    return `<span class="scn-f">${vals.length ? `<span class="scn-fl">${label}</span>` : ''}${vals.map(v => `<span>${v}</span>`).join('')}</span>`;
+    return `<span class="scn-f">${vals.length ? `<span class="scn-fl">${label}</span>` : ''}${vals.map((v, i) => `<span>${v}${i < vals.length - 1 ? ',' : ''}</span>`).join('')}</span>`;
   }
   function groupsHTML() {
     const q = query.trim().toLowerCase();

@@ -4634,6 +4634,7 @@
       'The Scenario Generator moved here from Neocities and now only rolls. Its map uses the real Feature tokens, the Features and Dropsite Reference are tables, and the type is easier to read.',
       'Mandatory Festivities reads Raze, where the book misprints Raise.',
       'A switch in the header takes you to the Dropzone Commander scenarios.',
+      'The scenario list puts commas between the deployments and scoring it names.',
     ]},
     { date: '2026-09-11', title: 'How to Play: the whole rulebook', items: [
       'How to Play now carries the entire Dropfleet Commander rulebook, verbatim, the same as the desktop app. Every chapter, section and table is there to read.',
