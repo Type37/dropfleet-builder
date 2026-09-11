@@ -5,6 +5,30 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-11: Scenario generator without the stock styling
+
+The scenario page had the look of every generated app: capitals everywhere,
+chamfered buttons, gold bars down the side of boxes, lines across the page,
+a phone-style switch, a faded die filling the empty screen. All gone.
+
+- **Type:** normal case throughout. Roboto Slab for headings and the main
+  button, Jost for rules text, Libre Baskerville for flavour, Barlow Condensed
+  only in stat tables. The Arkhip display face is no longer loaded.
+- **Controls:** plain square buttons, a real checkbox for Competitive, and
+  disabled buttons that stay readable instead of fading. Each option group has
+  its label above it; Random spans the row and the six results are numbered
+  1 to 6 like the die they stand for. The die now sits inside Generate and
+  tumbles when you roll.
+- **Opening:** the page opens on the selected published scenario instead of an
+  empty screen.
+- **Phones:** below 800px the scenario used to collapse to nothing beside the
+  panel. The panel now stacks above it, the order is title, map, rules, and
+  Generate or Load scrolls you to the result.
+- **Print:** the map is larger (2.6in, was 2.2in), which also balances the two
+  columns. The longest of 120 random cards uses 93% of a letter page.
+- Small card labels (layout, Features Added, roll results, table heads) are
+  larger on screen; the print sizes are unchanged.
+
 ### 2026-09-11: Loaded scenarios explain every rule they name
 
 A published scenario says "All players Imminent", "Demolish Scoring", "Focal
