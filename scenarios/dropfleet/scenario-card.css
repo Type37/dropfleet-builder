@@ -175,20 +175,8 @@ vp{font-family:'Roboto Slab',serif;font-weight:700;font-size:inherit;color:var(-
   .map-frame{width:100%;height:auto;aspect-ratio:1/1;}
 }
 
-/* Symbols with stats behind them */
-@media screen{
-  .tip-t{display:inline-flex;align-items:center;cursor:help;}
-  .tip-t:focus-visible{outline:2px solid #B86C0A;outline-offset:1px;}
-  .map-frame [data-tip]{cursor:help;}
-}
-#scn-tip{position:fixed;z-index:500;max-width:300px;background:#0a1e2e;color:#eef2f4;padding:9px 11px;font:400 13px/1.45 'Jost',system-ui,sans-serif;box-shadow:0 8px 24px -8px rgba(0,0,0,.5);pointer-events:none;}
-#scn-tip b{color:#fff;font-weight:600;}
-#scn-tip .scn-tip-h{display:flex;align-items:center;gap:7px;margin-bottom:4px;font-size:14px;}
-#scn-tip .scn-tip-h svg{width:20px;height:20px;flex:0 0 20px;}
-#scn-tip .scn-tip-st{display:flex;flex-wrap:wrap;align-items:center;gap:3px 6px;margin-bottom:4px;}
-#scn-tip .ico-stat{width:14px;height:14px;}
-#scn-tip .sv-e,#scn-tip .sv-k{color:#f3d98a;font-size:13px;}
-@media print{#scn-tip{display:none !important;}}
+/* Symbols with stats behind them (tooltip styles in ../shared/tooltip.js) */
+@media screen{ .map-frame [data-tip]{cursor:help;} }
 
 /* Stat tables: Features and Dropsite Reference. Banded rows, no rules. */
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}

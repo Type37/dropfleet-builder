@@ -33,6 +33,24 @@ const STAT_META={
 // A symbol you can hover, tap or focus to see what it is
 const tipped=(key,inner)=>`<span class="tip-t" tabindex="0" data-tip="${key}">${inner}</span>`;
 const statIcon=k=>tipped('stat:'+k,G[STAT_META[k].icon]);
+// A ship stat cell, laid out like the builder's: icon, value, label, saves
+// colour-coded. Paired two to a row (Thrust|KS, Scan|ES, Sig|BS), Hull and
+// Group Size span the full width beneath.
+const PSS_LBL={thrust:'Thrust',scan:'Scan',sig:'Sig',hull:'Hull',es:'ES',ks:'KS',bs:'BS',g:'G'};
+function pssCell(k,v,cls){
+  if(v===undefined||v===null||v==='') return '';
+  const none=(k==='bs'&&(v==='-'||v==='--'))?' pss-none':'';
+  return `<div class="pss-cell ${cls}${none}">${statIcon(k)}<span class="pss-v">${v}</span><span class="pss-l">${PSS_LBL[k]}</span></div>`;
+}
+function shipStatGrid(st){
+  return `<div class="pub-ship-stats">`
+    + pssCell('thrust',st.thrust,'') + pssCell('ks',st.ks,'pss-ks')
+    + pssCell('scan',st.scan,'')    + pssCell('es',st.es,'pss-es')
+    + pssCell('sig',st.sig,'')      + pssCell('bs',st.bs,'pss-bs')
+    + pssCell('hull',st.hull,'pss-wide')
+    + pssCell('g',st.g,'pss-wide')
+    + `</div>`;
+}
 // DStat line helper
 function dss(sc,sg,h,es,ks){return `<span class="ds-st">${statIcon('scan')}${sc}&nbsp;${statIcon('sig')}${sg}&nbsp;${statIcon('hull')}${h}&nbsp;${statIcon('es')}<span class="sv-e">${es}</span>&nbsp;${statIcon('ks')}<span class="sv-k">${ks}</span></span>`;}
 
@@ -616,9 +634,8 @@ function renderScenario(s){
   ${ships?`<div class="pub-ships">${pubHead('Ships')}<div class="pub-ship-grid">${ships}</div></div>`:''}`;
 }
 
-/* ── Hover, tap or focus a symbol to see its stats ─────────────────────────
-   Any element with data-tip="stat:scan", "feat:Power Plant" or "ds:3" opens one
-   shared tooltip: on hover with a mouse, on tap on touch, on keyboard focus. */
+/* ── What a data-tip key shows (shared/tooltip.js opens it) ──────────────────
+   "stat:scan", "feat:Power Plant", "ds:3", "scen:Large Object", "ship:Tugboat", "wtype:K". */
 function tipHTML(key){
   const [kind,id]=[key.slice(0,key.indexOf(':')),key.slice(key.indexOf(':')+1)];
   if(kind==='stat'){ const m=STAT_META[id]; return m?`<div class="scn-tip-h">${G[m.icon]}<b>${m.label}</b></div><div>${m.title}</div>`:''; }
@@ -632,25 +649,3 @@ function tipHTML(key){
   if(kind==='ds'){ const d=DS[+id]; return d?`<div class="scn-tip-h">${d.ico()}<b>${d.nm}</b></div><div class="scn-tip-st">${G.iScan}${d.sc} ${G.iSig}${d.sg} ${G.iHull}${d.h} ${G.iES}<span class="sv-e">${d.es}</span>${G.iKS}<span class="sv-k">${d.ks}</span></div>`:''; }
   return '';
 }
-(function(){
-  let tip=null, owner=null, pinned=false;
-  const el=()=>tip||(tip=Object.assign(document.body.appendChild(document.createElement('div')),{id:'scn-tip',role:'tooltip',hidden:true}));
-  function show(t){
-    const html=tipHTML(t.dataset.tip); if(!html) return;
-    const box=el(); box.innerHTML=html; box.hidden=false; owner=t;
-    const r=t.getBoundingClientRect(), w=box.offsetWidth, h=box.offsetHeight, m=8;
-    let x=Math.min(Math.max(m,r.left+r.width/2-w/2),innerWidth-w-m);
-    let y=r.top-h-10; if(y<m) y=r.bottom+10;
-    box.style.left=x+'px'; box.style.top=Math.min(y,innerHeight-h-m)+'px';
-  }
-  function hide(){ if(tip) tip.hidden=true; owner=null; pinned=false; }
-  const target=e=>e.target.closest&&e.target.closest('[data-tip]');
-  document.addEventListener('pointerover',e=>{ if(e.pointerType!=='mouse'||pinned) return; const t=target(e); if(t&&t!==owner) show(t); });
-  document.addEventListener('pointerout',e=>{ if(e.pointerType!=='mouse'||pinned) return; const t=target(e); if(t&&!t.contains(e.relatedTarget)) hide(); });
-  document.addEventListener('click',e=>{ const t=target(e); if(t){ if(owner===t&&pinned) hide(); else { show(t); pinned=true; } } else if(!(tip&&tip.contains(e.target))) hide(); });
-  document.addEventListener('focusin',e=>{ const t=target(e); if(t) show(t); });
-  document.addEventListener('focusout',e=>{ if(target(e)&&!pinned) hide(); });
-  document.addEventListener('keydown',e=>{ if(e.key==='Escape') hide(); });
-  addEventListener('scroll',()=>{ if(owner) hide(); },true);
-  addEventListener('resize',hide);
-})();
