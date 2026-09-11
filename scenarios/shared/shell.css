@@ -36,17 +36,18 @@ main{flex:1;width:100%;}
 .book{margin-top:30px;}
 .book-h{display:flex;align-items:center;gap:8px;font-family:'Roboto Slab',Georgia,serif;font-weight:700;font-size:1.25rem;margin-bottom:10px;}
 .book-h svg{width:14px;height:14px;flex:0 0 14px;}
-.scn-list{list-style:none;}
-.scn,.scn-cols{display:grid;grid-template-columns:72px minmax(170px,1.3fr) repeat(var(--cols,3),minmax(120px,1fr));gap:16px;align-items:center;}
-.scn-cols{padding:0 8px 4px;margin:0 -8px;font-size:.8rem;color:var(--muted);}
-.scn-cols span:first-child{grid-column:2;}
-.scn{padding:8px;margin:0 -8px;color:inherit;text-decoration:none;}
+/* Two scenarios to a row on a wide screen, one when it narrows. Each is a
+   compact card -- thumbnail, name, then its facts labelled beneath -- so the
+   row fills the width instead of stretching four short columns across the page. */
+.scn-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:2px 24px;}
+.scn-cols{display:none;}
+.scn{display:grid;grid-template-columns:72px minmax(0,1fr);gap:1px 14px;align-items:start;padding:8px;color:inherit;text-decoration:none;}
 .scn:hover{background:var(--hover);}
-.scn-map{width:72px;height:72px;display:block;background:#e6dfcf;border:1px solid #cdbf98;object-fit:cover;}
-.scn-name{font-family:'Roboto Slab',Georgia,serif;font-weight:600;font-size:1.05rem;line-height:1.25;}
-.scn-f{font-size:.9rem;line-height:1.35;color:var(--ink);}
-.scn-f span{display:block;}
-.scn-f .scn-fl{display:none;}
+.scn-map{width:72px;height:72px;grid-row:span 6;display:block;background:#e6dfcf;border:1px solid #cdbf98;object-fit:cover;}
+.scn-name{font-family:'Roboto Slab',Georgia,serif;font-weight:600;font-size:1.05rem;line-height:1.25;margin-bottom:2px;}
+.scn-f{font-size:.9rem;line-height:1.35;color:var(--ink);display:flex;flex-wrap:wrap;gap:0 6px;}
+.scn-f span{display:inline;}
+.scn-f .scn-fl{display:inline;color:var(--muted);}
 
 /* Scenario view */
 .bar{position:sticky;top:0;z-index:20;background:var(--page);box-shadow:0 6px 14px -10px rgba(14,12,8,.35);}

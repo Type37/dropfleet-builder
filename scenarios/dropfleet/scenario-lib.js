@@ -25,10 +25,10 @@ const STAT_META={
   sig:{label:'Sig',title:'Signature, how visible the ship is',icon:'iSig'},
   thrust:{label:'Thrust',title:'Thrust, movement speed',icon:'iThrust'},
   hull:{label:'Hull',title:'Hull points, structural integrity',icon:'iHull'},
-  es:{label:'ES',title:'Energy Shield, save vs Energy weapons',icon:'iES'},
-  ks:{label:'KS',title:'Kinetic Shield, save vs Kinetic weapons',icon:'iKS'},
-  bs:{label:'BS',title:'Backup Save, last-resort save',icon:'iBS'},
-  g:{label:'G',title:'Group size, ships per battle group',icon:'iG'},
+  es:{label:'ES',title:'Energy Save, defence save against Energy hits',icon:'iES'},
+  ks:{label:'KS',title:'Kinetic Save, defence save against Kinetic hits',icon:'iKS'},
+  bs:{label:'BS',title:'Backup Save, a last line of defence save',icon:'iBS'},
+  g:{label:'G',title:'Group Size, how many of this ship may operate together as a Group',icon:'iG'},
 };
 // A symbol you can hover, tap or focus to see what it is
 const tipped=(key,inner)=>`<span class="tip-t" tabindex="0" data-tip="${key}">${inner}</span>`;
