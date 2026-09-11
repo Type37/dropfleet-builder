@@ -5,6 +5,32 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-10: Published scenarios show their maps
+
+Load Scenario rendered every published scenario as text alone, so the part that
+matters most for setting up a table was missing. All 35 now show the book's own
+map beside the rules: the 6 from the rulebook, 14 from Scenario Expansion 1 and
+15 from Civilian Ships & Scenarios. Fauna Rules is a rules page and has none.
+
+**Where the maps come from.** Each scenario page prints its map as one embedded
+picture with the setup already drawn in: zones, dropsites and their Features,
+scenery, measurement arrows and inch labels. Nothing on top is vector, so there
+is no drawing to lift. `scripts/extract-scenario-maps.py` pulls each picture out
+at the resolution the book shipped (1123px square in Scenario Expansion 1, 562px
+in Civilian, 240px in the rulebook) and pairs it with its scenario by the title
+printed above it. Six pairings were checked by eye against the transcribed
+scenery lists (Entrapmoont, Supply Run, Moonswipe, Moonskipper, Retrieving
+Intelligence, Tug of War); none were swapped.
+
+**Layout.** The scenario now uses the generator card's structure, rules on the
+left and map on the right, instead of the old navy header band. The headings
+are Roboto Slab without capitals, the tables lose their rules, and the map takes
+46% of the width so the inch labels stay readable.
+
+**Still soft.** The rulebook's six maps are only 240px in the PDF. They are
+readable but blurry on a large screen, and are the first candidates to redraw
+with the generator's own map engine.
+
 ### 2026-09-09: How to Play shows the tokens
 
 How to Play named the Crippling Effects in prose and never showed the counter
