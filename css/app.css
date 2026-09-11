@@ -8064,24 +8064,25 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 .rules-chapter-n:empty { display: none; }
 
 .rules-sub { scroll-margin-top: 60px; margin-top: var(--sp-lg); }
-.rules-sub-d2 { margin-left: var(--sp-md); }
-.rules-sub-d3, .rules-sub-d4 { margin-left: calc(var(--sp-md) * 2); }
+/* Nested rules sit in an indented lane with a faint rail, so the eye can see
+   how deep a clause is in dense, many-levelled text. */
+.rules-sub-d2, .rules-sub-d3, .rules-sub-d4, .rules-sub-d5 { margin-left: var(--sp-md); padding-left: var(--sp-lg); border-left: 2px solid var(--line, rgba(120,110,95,.22)); }
 /* Rulebook heading ladder: a modular scale off the 18px body (~1.25 Major
    Third), capped at three sizes. Depth past a subsection is NEVER shrunk below
    body — deeper headings read as a bold navy label, the section number carrying
    the hierarchy the way the book itself does. */
 .rules-h { display: flex; align-items: baseline; gap: var(--sp-sm); font-family: var(--font-display); font-weight: 700; color: var(--ink); line-height: 1.2; }
 /* Section (h3): a full 2px navy bar under it, generous space above. */
-h3.rules-h { font-size: 25px; color: var(--navy); margin: var(--sp-2xl) 0 var(--sp-md); padding-bottom: 5px; border-bottom: 2px solid var(--navy); }
+h3.rules-h { font-size: 26px; color: var(--navy); margin: var(--sp-2xl) 0 var(--sp-md); padding-bottom: 5px; border-bottom: 2px solid var(--navy); }
 /* Subsection (h4): a thin hairline under it. */
-h4.rules-h { font-size: 20px; margin: var(--sp-xl) 0 var(--sp-sm); padding-bottom: 3px; border-bottom: 1px solid var(--line, rgba(120,110,95,.4)); }
+h4.rules-h { font-size: 21px; font-weight: 800; margin: var(--sp-xl) 0 var(--sp-sm); padding-bottom: 3px; border-bottom: 1px solid var(--line, rgba(120,110,95,.4)); }
 /* Deeper (h5/h6): body size, bold navy uppercase label, no bar. */
-h5.rules-h, h6.rules-h { font-size: 18px; font-family: var(--font-body); font-weight: 700; text-transform: uppercase; letter-spacing: .045em; color: var(--navy); margin: var(--sp-lg) 0 var(--sp-xs); }
+h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--navy); margin: var(--sp-xl) 0 var(--sp-xs); }
 /* The section number leads each heading in a faint navy chip, sized to its level. */
 .rules-h-n { font-variant-numeric: tabular-nums; color: var(--navy); font-weight: 700; font-size: .72em; opacity: .55; }
 .rules-h-extra { margin-top: var(--sp-lg); }
 
-.rules-p { margin: 0 0 var(--sp-md); font-size: 18px; line-height: 1.65; color: var(--ink-soft); }
+.rules-p { margin: 0 0 var(--sp-lg); font-size: 18px; line-height: 1.7; color: var(--ink-soft); }
 .rules-p strong { color: var(--ink); font-weight: 700; }
 /* A worked example, set apart as an aside: navy-ruled, tinted, italic. */
 .rules-eg { font-style: italic; font-size: 16px; color: var(--ink-muted); background: var(--paper, rgba(27,58,92,.04)); border-left: 3px solid var(--navy); padding: var(--sp-md) var(--sp-lg); border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0; }

@@ -3220,15 +3220,15 @@ body.sheet-open .sheet-scrim {
 .rules-chapter-n:empty { display: none; }
 
 .rules-sub { scroll-margin-top: calc(var(--header-h) + 48px); }
-.rules-sub-d2 { margin-left: var(--sp-s); }
+.rules-sub-d2, .rules-sub-d3, .rules-sub-d4, .rules-sub-d5 { margin-left: 4px; padding-left: var(--sp-s); border-left: 2px solid var(--stroke1); }
 .rules-h { display: flex; align-items: baseline; gap: var(--sp-xs); font-family: var(--font-display); font-weight: 700; color: var(--fg1); line-height: 1.2; }
-h3.rules-h { font-size: 19px; color: var(--navy); margin: var(--sp-l) 0 var(--sp-s); padding-bottom: 4px; border-bottom: 2px solid var(--navy); }
-h4.rules-h { font-size: 17px; margin: var(--sp-m) 0 var(--sp-xs); padding-bottom: 2px; border-bottom: 1px solid var(--stroke1); }
-h5.rules-h, h6.rules-h { font-size: 16px; font-family: var(--font-body, inherit); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--navy); margin: var(--sp-m) 0 var(--sp-xxs); }
+h3.rules-h { font-size: 20px; color: var(--navy); margin: var(--sp-l) 0 var(--sp-s); padding-bottom: 4px; border-bottom: 2px solid var(--navy); }
+h4.rules-h { font-size: 17px; font-weight: 800; margin: var(--sp-m) 0 var(--sp-xs); padding-bottom: 2px; border-bottom: 1px solid var(--stroke1); }
+h5.rules-h, h6.rules-h { font-size: 13px; font-family: var(--font-body, inherit); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--navy); margin: var(--sp-l) 0 var(--sp-xxs); }
 .rules-h-n { font-variant-numeric: tabular-nums; color: var(--navy); opacity: .55; font-weight: 700; font-size: .72em; }
 .rules-h-extra { margin-top: var(--sp-l); }
 
-.rules-p { margin: 0 0 var(--sp-s); font-size: 16px; line-height: 1.6; color: var(--fg2); }
+.rules-p { margin: 0 0 var(--sp-m); font-size: 16px; line-height: 1.65; color: var(--fg2); }
 .rules-p strong { color: var(--fg1); font-weight: 700; }
 .rules-eg { font-style: italic; font-size: 15px; color: var(--fg3); background: var(--navy-wash, rgba(27,58,92,.05)); border-left: 3px solid var(--navy); padding: var(--sp-s) var(--sp-m); border-radius: 0 var(--radius-md) var(--radius-md) 0; }
 .rules-eg strong { font-style: normal; }
