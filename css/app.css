@@ -8066,16 +8066,18 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 .rules-sub { scroll-margin-top: 60px; margin-top: var(--sp-lg); }
 /* Nested rules sit in an indented lane with a faint rail, so the eye can see
    how deep a clause is in dense, many-levelled text. */
-.rules-sub-d2, .rules-sub-d3, .rules-sub-d4, .rules-sub-d5 { margin-left: var(--sp-md); padding-left: var(--sp-lg); border-left: 2px solid var(--line, rgba(120,110,95,.22)); }
+.rules-sub-d2, .rules-sub-d3, .rules-sub-d4, .rules-sub-d5 { margin-left: var(--sp-sm); padding-left: var(--sp-md); }
 /* Rulebook heading ladder: a modular scale off the 18px body (~1.25 Major
    Third), capped at three sizes. Depth past a subsection is NEVER shrunk below
    body — deeper headings read as a bold navy label, the section number carrying
    the hierarchy the way the book itself does. */
 .rules-h { display: flex; align-items: baseline; gap: var(--sp-sm); font-family: var(--font-display); font-weight: 700; color: var(--ink); line-height: 1.2; }
-/* Section (h3): a full 2px navy bar under it, generous space above. */
+/* Section (h3): the one heading rule kept — a navy bar marking each major
+   section so the eye catches them when flipping through. */
 h3.rules-h { font-size: 26px; color: var(--navy); margin: var(--sp-2xl) 0 var(--sp-md); padding-bottom: 5px; border-bottom: 2px solid var(--navy); }
-/* Subsection (h4): a thin hairline under it. */
-h4.rules-h { font-size: 21px; font-weight: 800; margin: var(--sp-xl) 0 var(--sp-sm); padding-bottom: 3px; border-bottom: 1px solid var(--line, rgba(120,110,95,.4)); }
+/* Subsection (h4): no underline — size, weight and the section number carry it,
+   so the page isn't a ladder of rules to scan past. */
+h4.rules-h { font-size: 21px; font-weight: 800; margin: var(--sp-xl) 0 var(--sp-sm); }
 /* Deeper (h5/h6): body size, bold navy uppercase label, no bar. */
 h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--navy); margin: var(--sp-xl) 0 var(--sp-xs); }
 /* The section number leads each heading in a faint navy chip, sized to its level. */
