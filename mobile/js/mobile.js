@@ -820,6 +820,26 @@
   let _mIdx = null;
   function mSlug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
 
+  // Token counters drawn inline in the Feature and Crippling Effect tables.
+  const M_TABLE_TOK = {
+    'Military Outpost': 'dropsite-military-outpost', 'Orbital Defence Gun': 'dropsite-orbital-defence-gun',
+    'Comms Station': 'dropsite-comms-station', 'Hangar': 'dropsite-hangar', 'Power Plant': 'dropsite-power-plant',
+    'Fire': 'status-fire', 'Defence Systems Offline': 'status-defence-systems-offline', 'Scanners Offline': 'status-scanners-offline',
+    'Weapons Offline': 'status-weapons-offline', 'Navigation Offline': 'status-navigation-offline', 'Orbital Decay': 'status-orbital-decay',
+  };
+  function mCellTok(cell) {
+    const name = (Array.isArray(cell) ? cell.map(r => (r && r.t) || '').join('') : String(cell || '')).split(':')[0].trim();
+    const s = M_TABLE_TOK[name];
+    return s ? `<img class="rules-tbl-tok" src="../assets/tokens/${s}.svg" alt="" width="24" height="24" loading="lazy">` : '';
+  }
+  // Editorial NB notes, keyed by section number.
+  const M_SECTION_NOTES = { '11': ['Measure to the center of the dropsite.'] };
+  function mSectionNote(number) {
+    const n = M_SECTION_NOTES[number];
+    return n ? n.map(t => `<p class="rules-nb"><b>NB:</b> ${esc(t)}</p>`).join('') : '';
+  }
+  const M_FLAVOR = ['a lot of space above planets'];
+
   function mIndex() {
     if (_mIdx) return _mIdx;
     const numbers = new Set(), termMap = {}, kwMap = {}, prio = {};
@@ -835,6 +855,12 @@
       for (const n of ns) walk(n.children || []);
     })((rulesWiki && rulesWiki.chapters) || []);
     Object.keys(RULES_DB || {}).forEach(name => add(name, 'kw:' + name, 50, true));
+    // Core terms the book explains in a section, not the glossary.
+    add('Kill Points', 'sec:12.4', 1, false);
+    add('Backup Save', 'sec:7.3.4', 1, false);
+    add('Backup Saves', 'sec:7.3.4', 1, false);
+    add('Core hits', 'sec:7.3.5', 1, false);
+    add('Core hit', 'sec:7.3.5', 1, false);
     const phrases = Object.keys(termMap).sort((a, b) => b.length - a.length);
     const alt = phrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
     const re = new RegExp('\\b(?:\\d+(?:\\.\\d+)+' + (alt ? '|' + alt : '') + ')\\b', 'gi');
@@ -866,13 +892,14 @@
       if (it.kind === 'caption') { i++; continue; }
       const plain = (it.runs || []).map(r => r.t).join('');
       const isEg = /^\s*(e\.g\.|for example\b)/i.test(plain);
-      html += `<p class="rules-p${isEg ? ' rules-eg' : ''}">${mRuns(it.runs)}</p>`; i++;
+      const isFlavor = M_FLAVOR.some(sig => plain.indexOf(sig) !== -1);
+      html += `<p class="rules-p${isEg ? ' rules-eg' : ''}${isFlavor ? ' rules-flavor' : ''}">${mRuns(it.runs)}</p>`; i++;
     }
     return html;
   }
   function mTable(t) {
     const head = t.header ? `<thead><tr>${t.header.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>` : '';
-    const rows = (t.rows || []).map(row => `<tr>${row.map(c => `<td>${mRuns(c)}</td>`).join('')}</tr>`).join('');
+    const rows = (t.rows || []).map(row => `<tr>${row.map(c => { const tok = mCellTok(c); return `<td${tok ? ' class="rules-td-tok"' : ''}>${tok}${mRuns(c)}</td>`; }).join('')}</tr>`).join('');
     return `<div class="rules-table-wrap"><table class="rules-table">${head}<tbody>${rows}</tbody></table></div>`;
   }
   function mFigure(number) {
@@ -905,7 +932,7 @@
     if (node.number === '12.2') kids = `<div class="rules-scn-grid">${kids}</div>`;
     return `<div class="rules-sub rules-sub-d${depth}" id="rules-sec-${esc(node.id)}">
       <h${lvl} class="rules-h">${num}${esc(node.heading)}</h${lvl}>
-      ${mBody(node.body)}${mSectionCta(node.number)}${mFigure(node.number)}${mSectionTokens(node.number)}${kids}
+      ${mBody(node.body)}${mSectionNote(node.number)}${mSectionCta(node.number)}${mFigure(node.number)}${mSectionTokens(node.number)}${kids}
     </div>`;
   }
   function mChapter(ch) {
@@ -917,7 +944,7 @@
       : '';
     return `<section class="rules-chapter" id="rules-sec-${esc(ch.id)}">
       <h2 class="rules-chapter-title"><span class="rules-chapter-n">${esc(ch.number)}</span>${esc(ch.heading)}</h2>
-      ${top}${mBody(ch.body)}${mSectionTokens(ch.number)}
+      ${top}${mBody(ch.body)}${mSectionNote(ch.number)}${mSectionTokens(ch.number)}
       ${(ch.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => mSection(c, 1)).join('')}
       ${end}
     </section>`;

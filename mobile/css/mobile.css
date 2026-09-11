@@ -3233,6 +3233,11 @@ h5.rules-h, h6.rules-h { font-size: 13px; font-family: var(--font-body, inherit)
 .rules-eg { font-style: italic; font-size: 15px; color: var(--fg3); background: var(--navy-wash, rgba(27,58,92,.05)); padding: var(--sp-s) var(--sp-m); border-radius: var(--radius-md); }
 .rules-eg strong { font-style: normal; }
 .rules-flavor { font-family: 'Libre Baskerville', Georgia, serif; font-style: italic; color: var(--fg2); }
+.rules-nb { margin: calc(-1 * var(--sp-xs)) 0 var(--sp-m); font-size: 14px; line-height: 1.55; color: var(--fg2); }
+.rules-nb b { color: var(--navy); font-weight: 700; }
+.rules-tbl-tok { vertical-align: -6px; margin-right: 6px; clip-path: circle(47%); }
+.rules-td-tok { white-space: normal; }
+.rules-tok img { clip-path: circle(47%); }
 /* Scenario Generator CTA + Standard Scenario buttons (mobile) */
 .rules-cta { display: flex; align-items: center; gap: var(--sp-m); margin: 0 0 var(--sp-m); padding: var(--sp-m); background: var(--navy); color: #fff; border-radius: var(--radius-md); text-decoration: none; }
 .rules-cta svg { flex-shrink: 0; }

@@ -8089,8 +8089,10 @@ h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-we
 /* A small editorial NB, set in the muted body colour with a navy label. */
 .rules-nb { margin: calc(-1 * var(--sp-sm)) 0 var(--sp-lg); font-size: 15px; line-height: 1.6; color: var(--ink-muted); }
 .rules-nb b { color: var(--navy); font-weight: 700; }
-/* A token counter drawn inline in the reference tables (Features, Crippling). */
-.rules-tbl-tok { vertical-align: -6px; margin-right: 7px; }
+/* A token counter drawn inline in the reference tables (Features, Crippling).
+   clip-path crops the transparent margin the token art carries, so no light ring. */
+.rules-tbl-tok { vertical-align: -6px; margin-right: 7px; clip-path: circle(47%); }
+.rules-tok img { clip-path: circle(47%); }
 .rules-td-tok { white-space: normal; }
 /* A scene-setting paragraph, set in the flavour face (warm, not grey). */
 .rules-flavor { font-family: 'Libre Baskerville', Georgia, serif; font-style: italic; color: var(--ink-soft); }

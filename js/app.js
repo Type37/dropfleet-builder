@@ -1206,6 +1206,13 @@ let activeGroupId = null;
       for (const n of ns) walk(n.children || []);
     })((rulesWiki && rulesWiki.chapters) || []);
     Object.keys(sharedRulesDB || {}).forEach(name => add(name, 'kw-' + rulesSlug(name), 50));
+    // Core game terms the book explains in a section rather than the glossary.
+    // Low priority number so they win the phrase.
+    add('Kill Points', '12.4', 1);
+    add('Backup Save', '7.3.4', 1);
+    add('Backup Saves', '7.3.4', 1);
+    add('Core hits', '7.3.5', 1);
+    add('Core hit', '7.3.5', 1);
     const phrases = Object.keys(termMap).sort((a, b) => b.length - a.length);  // most specific wins
     const alt = phrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
     const re = new RegExp('\\b(?:\\d+(?:\\.\\d+)+' + (alt ? '|' + alt : '') + ')\\b', 'gi');
@@ -1354,7 +1361,12 @@ let activeGroupId = null;
   // One top-level chapter, with the app-owned extras woven in where they belong.
   function wikiChapter(ch) {
     const extraTop = ch.number === '1' ? rulesCardBreakdownHtml() : '';
-    const extraEnd = '';
+    const extraEnd = ch.number === '14'
+      ? `<div class="rules-glossary-block">
+           <h3 class="rules-h rules-h-extra">Special Rules glossary</h3>
+           <input class="rules-search" type="search" placeholder="Search special rules…" oninput="App.filterRules(this.value)" aria-label="Search special rules">
+           ${rulesGlossaryHtml()}
+         </div>` : '';
     return `<section class="rules-chapter" id="rules-sec-${esc(ch.id)}">
       <h2 class="rules-chapter-title"><span class="rules-chapter-n">${esc(ch.number)}</span>${esc(ch.heading)}</h2>
       ${extraTop}
