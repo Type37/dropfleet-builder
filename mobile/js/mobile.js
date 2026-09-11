@@ -814,7 +814,7 @@
   }
 
   /* ── Wiki rendering (verbatim rulebook from ../data/rules-wiki.json) ─────── */
-  const RULES_SKIP = new Set(['1.1']);        // covered by the card + legend
+  const RULES_SKIP = new Set(['1.1', '12.1.1', '12.1.2', '12.1.3', '12.1.4']);  // card+legend; generation tables -> generator link
   const RULES_EXTERNAL = { '12': 'ext:../scenarios/dropfleet/' };
   const RULES_LINK_STOP = new Set(['ships', 'ship', 'the table', 'name', 'type', 'special', 'assets']);
   let _mIdx = null;
@@ -879,13 +879,33 @@
     const f = RULES_FIGURES[number];
     return f ? `<figure class="rules-fig"><img src="../assets/rules/${f.src}.png" alt="${escAttr(f.alt)}" loading="lazy"></figure>` : '';
   }
+  function mPlainRuns(runs) { return (runs || []).map(r => r.b ? `<b>${esc(r.t)}</b>` : esc(r.t)).join(''); }
+  // The Scenario Generator, in place of the manual generation tables.
+  function mSectionCta(number) {
+    if (number !== '12.1') return '';
+    return `<a class="rules-cta" href="../scenarios/dropfleet/generator/" target="_blank" rel="noopener">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17"/><circle cx="8.3" cy="8.3" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.7" cy="8.3" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="8.3" cy="15.7" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.7" cy="15.7" r="1.5" fill="currentColor" stroke="none"/></svg>
+      <span class="rules-cta-tx"><span class="rules-cta-t">Generate a scenario</span><span class="rules-cta-s">Roll every table at once in the Scenario Generator.</span></span></a>`;
+  }
   function mSection(node, depth) {
     const lvl = Math.min(depth + 2, 6);
     const num = node.number ? `<span class="rules-h-n">${esc(node.number)}</span>` : '';
-    const kids = (node.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => mSection(c, depth + 1)).join('');
+    // A Standard Scenario is a big button linking to that scenario in the reference.
+    const scnSlug = typeof node.id === 'string' && node.id.indexOf('12.2/') === 0 ? node.id.slice(5) : '';
+    if (scnSlug) {
+      const seen = new Set();
+      const rows = (node.body || []).filter(it => it.kind === 'p').map(it => mPlainRuns(it.runs))
+        .filter(t => { const k = t.replace(/<[^>]+>/g, '').trim(); if (!k || seen.has(k)) return false; seen.add(k); return true; })
+        .map(t => `<span class="rsb-row">${t}</span>`).join('');
+      return `<a class="rules-scn-btn" id="rules-sec-${esc(node.id)}" href="../scenarios/dropfleet/#${esc(scnSlug)}" target="_blank" rel="noopener">
+        <span class="rules-scn-btn-nm">${esc(node.heading)}<svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></span>
+        <span class="rsb-rows">${rows}</span></a>`;
+    }
+    let kids = (node.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => mSection(c, depth + 1)).join('');
+    if (node.number === '12.2') kids = `<div class="rules-scn-grid">${kids}</div>`;
     return `<div class="rules-sub rules-sub-d${depth}" id="rules-sec-${esc(node.id)}">
       <h${lvl} class="rules-h">${num}${esc(node.heading)}</h${lvl}>
-      ${mBody(node.body)}${mFigure(node.number)}${mSectionTokens(node.number)}${kids}
+      ${mBody(node.body)}${mSectionCta(node.number)}${mFigure(node.number)}${mSectionTokens(node.number)}${kids}
     </div>`;
   }
   function mChapter(ch) {
