@@ -1043,7 +1043,7 @@ let activeGroupId = null;
     ]},
     {key:'turn',t:'Turn Tokens',sub:null,i:[
       {s:'token-activation',l:'Activation',d:'Marks a Group that has activated this phase.'},
-      {s:'token-pass',l:'Pass',d:'Used in place of activating a Group.'},
+      {s:'token-pass',l:'Pass',d:'Used in place of activating a Group. You earn one through Pass Token Generation.'},
     ]},
   ];
 
@@ -1059,6 +1059,12 @@ let activeGroupId = null;
     '2.3.4': ['dropsites'],
   };
 
+  // Single tokens shown inline with a section, pulled by filename from the groups
+  // above. Battalion Combat wants just the Battalion marker, not the Launch set.
+  const SECTION_TOKEN_ITEMS = {
+    '8.1': ['launch-battalion'],
+  };
+
   function renderTokenGroups(groups) {
     return groups.map(g => `<div class="rules-tok-grp">
         <div class="rules-tok-head">${esc(g.t)}${g.sub ? `<span class="rules-tok-sub">${esc(g.sub)}</span>` : ''}</div>
@@ -1066,18 +1072,24 @@ let activeGroupId = null;
           <img src="assets/tokens/${k.s}.svg" alt="" width="40" height="40" loading="lazy">
           <span class="rules-tok-nm">${esc(k.l)}</span>
           ${k.r ? `<span class="rules-tok-roll">${esc(k.r)}</span>` : ''}
-          ${k.d ? `<span class="rules-tok-desc">${esc(k.d)}</span>` : ''}
+          ${k.d ? `<span class="rules-tok-desc">${linkifyRules(esc(k.d))}</span>` : ''}
         </li>`).join('')}</ul>
       </div>`).join('');
   }
 
   function rulesTokensHtml() { return renderTokenGroups(TOKEN_GROUPS); }
 
-  // Inline token strip for the section that references these counters.
+  // Inline token strip for the section that references these counters, from whole
+  // groups (SECTION_TOKENS) and/or individual tokens picked by filename
+  // (SECTION_TOKEN_ITEMS).
   function wikiSectionTokens(number) {
-    const keys = SECTION_TOKENS[number];
-    if (!keys) return '';
-    const groups = TOKEN_GROUPS.filter(g => keys.includes(g.key));
+    const groups = (SECTION_TOKENS[number] || []).map(k => TOKEN_GROUPS.find(g => g.key === k)).filter(Boolean);
+    const picks = SECTION_TOKEN_ITEMS[number];
+    if (picks) {
+      const items = [];
+      TOKEN_GROUPS.forEach(g => g.i.forEach(k => { if (picks.includes(k.s)) items.push(k); }));
+      if (items.length) groups.push({ t: items.length === 1 ? items[0].l : 'Tokens', sub: null, i: items, _bare: true });
+    }
     if (!groups.length) return '';
     return `<div class="rules-tok-inline">${renderTokenGroups(groups)}</div>`;
   }
@@ -1133,7 +1145,7 @@ let activeGroupId = null;
   //   * any defined keyword in the Special Rules glossary ("Burnthrough",
   //     "Dense Debris Field"), which links to its glossary entry.
   const RULES_LINK_STOP = new Set([
-    'move', 'ships', 'ship', 'the table', 'name', 'type', 'special', 'assets',
+    'ships', 'ship', 'the table', 'name', 'type', 'special', 'assets',
   ]);
   // Chapters that live in a fuller tool of their own: link out there instead of
   // to the book's thin summary. The value is the page, "ext:" marking it external.
