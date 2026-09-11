@@ -39,6 +39,23 @@ bold kept).
   table from those same verbatim values, and is re-runnable after any re-extract.
 - Desktop only for now; the mobile How to Play is unchanged.
 
+### 2026-09-11: Scenario type scale and hierarchy
+
+The generator and scenarios pages used 19 font sizes between 8px and 24px, with
+headings barely larger than the rules under them. On screen they now use one
+scale: 28px titles, 16px bold headings, 14px reading text and table numbers,
+12px labels. Flavour text went from 8px to 14px.
+
+- The generator's title is the rolled objective; the other four results head
+  their own sections, so the slash-joined five-result title is gone.
+- Objective and arrival labels are small; Standard Scoring is a label like the
+  rest instead of a full-width black bar.
+- Bold terms and VP amounts stay in the sentence's own font and colour.
+- In the panel a chosen option is outlined rather than filled, so Generate is
+  the only solid blue button.
+- The scenario bar spans the page width so the tracker stays on one row.
+- Moonstruck's map now draws its 12" Large Object at the table centre.
+
 ### 2026-09-11: The rulebook's six scenario maps, redrawn
 
 The 2.3.1 rulebook only carries its scenario maps as 240px pictures. Take and
