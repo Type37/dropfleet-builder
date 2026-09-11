@@ -583,7 +583,7 @@ function pubShips(text){
       <img class="pub-ship-art" src="${SCN_ASSETS}art/thumb/${x.art}" alt="${x.name}">
       <div class="pub-ship-body">
         <div class="pub-ship-h"><b>${x.name}</b><span>${x.tonnage}, ${x.cost} pts</span></div>
-        <div class="pub-ship-stats"><span>${statIcon('thrust')} ${st.thrust}</span><span>${statIcon('scan')} ${st.scan}</span><span>${statIcon('sig')} ${st.sig}</span><span>${statIcon('hull')} ${st.hull}</span><span>${statIcon('es')}<span class="sv-e">${st.es}</span></span><span>${statIcon('ks')}<span class="sv-k">${st.ks}</span></span><span>${statIcon('bs')} ${st.bs}</span><span>${statIcon('g')} ${st.g}</span></div>
+        ${shipStatGrid(st)}
         ${w}
         ${x.rules.map(r=>`<p class="rule-text"><b>${r.name}:</b> ${r.text}</p>`).join('')}
       </div>
