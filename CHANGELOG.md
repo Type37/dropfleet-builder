@@ -5,6 +5,36 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-11: Loaded scenarios explain every rule they name
+
+A published scenario says "All players Imminent", "Demolish Scoring", "Focal
+Point" or "SLM-9 Resupply Hauler" and leaves the player to find out what that
+means. Load Scenario now puts the definition beside the scenario, laid out the
+way the generator card does it, and every word is the book's or the ship card's.
+
+- **Deployment:** each arrival mode gets its pill and full rule. Close, Distant
+  and Directly Deploy come from the generator's own table; Close Enough, Column
+  and Standoff resolve through the Approach Type table (12.1.2); Imminent,
+  Backline and Staggered come from Scenario Expansion 1.
+- **Scoring:** the scenario's lines as bullets, then the method it names:
+  Standard Scoring with its table, or Scenario Expansion 1's Normal, Demolish,
+  Focal Points (with the High and Low Value table), Kill Points and Assess.
+- **Terms:** Control, Contest, Levelled and Ruined (11.1), and Secondary
+  Objectives with Annihilate, Take Prizes and Decapitate (12.3).
+- **Beside the map:** the rules for each scenery type named, the Features named
+  with their saves and weapons, and the Dropsite Reference.
+- **Ships:** any Civilian ship a scenario uses, with its art, stats, weapons and
+  every special rule, from the builder's own ship data.
+
+Definitions are generated into `scenarios/dropfleet/scenario-terms.js` by
+`scripts/build-scenario-terms.py`, which reads `data/rules-wiki.json` for the
+rulebook sections.
+
+**Left unexplained on purpose.** Mandatory Festivities prints "Scoring: Raise."
+and is not mapped to Raze. No printed definition was found for "Heavy" on a Large
+Object (Entrapmoont), for "Crippled" as used with Low Value, or for the Scanners
+Offline token in Shock And Yaw, so those are not explained rather than guessed.
+
 ### 2026-09-10: Published scenarios show their maps
 
 Load Scenario rendered every published scenario as text alone, so the part that

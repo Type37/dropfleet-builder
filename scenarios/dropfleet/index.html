@@ -338,6 +338,32 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
   .scenario.pub{flex-direction:column;padding:4mm 3mm;}
   .scenario.pub .map-col{flex:none;width:100%;}
 }
+
+/* Explained scenarios: pills and tables in the card's own style, no caps, no rules */
+.scenario.pub .spill,.scenario.pub .lhdr,.scenario.pub .roll-tag{text-transform:none;letter-spacing:.02em;}
+.scenario.pub .spill{font-size:9.5pt;}
+.scenario.pub .lhdr{font-size:9pt;color:var(--gdk);}
+.scenario.pub .sbox{border-left:0;}
+.scenario.pub .stbl th,.scenario.pub .stbl td{border-bottom:0;}
+.scenario.pub .leg{border-top:0;border-bottom:0;}
+.sp-imm{background:#4A2A5A;}.sp-back{background:#1F4A4A;}.sp-stag{background:#5A3A12;}
+.scenario.pub .sec-body{gap:1.6mm;}
+.scenario.pub .map-col{display:flex;flex-direction:column;gap:3mm;}
+.pub-term b{color:var(--gdk);}
+.pub-fauna{align-self:flex-start;margin-top:2mm;}
+.pub-ships .sl{font-family:'Roboto Slab',Georgia,serif;text-transform:none;letter-spacing:.01em;white-space:normal;}
+.pub-ships .sr{display:none;}
+.pub-fauna{text-transform:none;letter-spacing:.02em;}
+.pub-ships{max-width:10in;margin:0 auto;padding:0 14mm 8mm;display:flex;flex-direction:column;gap:2mm;}
+.pub-ship-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:6mm;}
+.pub-ship{display:grid;grid-template-columns:110px minmax(0,1fr);gap:4mm;align-items:start;}
+.pub-ship-art{width:110px;height:auto;display:block;}
+.pub-ship-body{display:flex;flex-direction:column;gap:1.2mm;min-width:0;}
+.pub-ship-h{display:flex;flex-wrap:wrap;gap:1mm 4mm;align-items:baseline;font-family:'Roboto Slab',Georgia,serif;font-size:12pt;}
+.pub-ship-h span{font-family:'Jost',sans-serif;font-size:9.5pt;color:#5d5850;}
+.pub-ship-stats{display:flex;flex-wrap:wrap;gap:1mm 3.5mm;align-items:center;font-family:'Barlow Condensed',sans-serif;font-size:10pt;}
+.pub-ship-stats > span{display:inline-flex;align-items:center;gap:1mm;}
+@media (max-width:760px){.pub-ships{padding:0 3mm 6mm;}.pub-ship{grid-template-columns:80px minmax(0,1fr);}.pub-ship-art{width:80px;}}
 </style>
 </head>
 <body>
@@ -434,6 +460,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
   </div>
 </footer>
 
+<script src="scenario-terms.js"></script>
 <script>
 const G={
   gold:'#B8952F',
@@ -1695,24 +1722,146 @@ function scnParas(v){ return (Array.isArray(v)?v:[v]).map(p=>`<p>${p}</p>`).join
 // Maps pulled from the PDFs at native size by scripts/extract-scenario-maps.py.
 const SCENARIO_MAPS=new Set(['a-rocky-runaround','almost-nothing-at-all','down-with-the-cities','entrapmoont','erupting-battlefront','erupting-quarters','grind-to-dust','hatching-grounds','lagrange-points','latitudinal-lanes','make-the-rendezvous','mandatory-festivities','mass-exodus','moonbreaker','moonguard','moonshot','moonskipper','moonswipe','moonwreck','on-the-clock','one-with-almost-nothing','orbital-support','power-grab','ready-salted-earth','retrieving-intelligence','sacred-moon','scrap-collection','shipyard-raid','shock-and-yaw','stop-the-terraformer','supply-run','take-and-hold','tug-of-war','very-important-moon','when-backfields-meet']);
 function pubHead(label){return `<div class="sh"><svg class="dm" viewBox="0 0 16 16"><polygon points="8,1 15,8 8,15 1,8" fill="none" stroke="#B8952F" stroke-width="1.5"/><polygon points="8,5 11,8 8,11 5,8" fill="#B8952F" opacity="0.28"/></svg><span class="sl">${label}</span></div>`;}
+
+/* A published scenario names rules without explaining them. Every explanation
+   here is verbatim: arrival modes, objectives, scenery, Features and dropsites
+   from this page's own tables, the rest from scenario-terms.js. */
+const PUB_MODE={'Close':'sp-close','Distant':'sp-dist','Directly Deploy':'sp-dir','Imminent':'sp-imm','Backline':'sp-back','Staggered':'sp-stag'};
+const pubJoin=v=>v?(Array.isArray(v)?v.join(' '):String(v)):'';
+const pubVP=h=>String(h).replace(/(?<!<vp>)\b(\d+)\s?VP\b/g,'<vp>$1VP</vp>');
+const pubParas=v=>(Array.isArray(v)?v:[v]).map(p=>`<p class="rule-text">${pubVP(p)}</p>`).join('');
+const pubBullets=v=>`<ul class="rule-bullets">${(Array.isArray(v)?v:[v]).map(p=>`<li>${pubVP(p)}</li>`).join('')}</ul>`;
+const pubTable=t=>`<div class="pub-tbl-wrap"><table class="pub-tbl"><thead><tr>${t.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${t.rows.map(r=>`<tr>${r.map(c=>`<td>${pubVP(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+const pubSE1=name=>{const d=SCN_SE1[name]; return pubParas(d.body)+(d.table?pubTable(d.table):'')+(d.after?pubParas(d.after):'');};
+
+/* Explanations follow the order the terms appear in the scenario's own text. */
+function pubFind(text,detectors){
+  return detectors.map(d=>({d,m:text.match(d.re)})).filter(x=>x.m).sort((a,b)=>a.m.index-b.m.index).map(x=>x.d);
+}
+
+function pubModes(dep){
+  const out=[], shown=new Set();
+  const mode=(m,label)=>{ if(shown.has(m)) return; shown.add(m); out.push(pill(label||m,PUB_MODE[m])+`<p class="rule-text">${DM[m]}</p>`); };
+  const at=name=>{ const a=AT.find(x=>x.name===name); mode(a.r,`${name}: All Players ${a.r}`); };
+  const se1=name=>{ if(shown.has(name)) return; shown.add(name); out.push(pill(name,PUB_MODE[name])+pubSE1(name)); };
+  pubFind(dep,[
+    {re:/\bClose Enough\b/,run:()=>at('Close Enough')},
+    {re:/\bColumn\b/,run:()=>at('Column')},
+    {re:/\bStandoff\b/,run:()=>at('Standoff')},
+    {re:/\bImminent\b/,run:()=>se1('Imminent')},
+    {re:/\bStaggered\b/,run:()=>se1('Staggered')},
+    {re:/\bBackline\b/,run:()=>se1('Backline')},
+    {re:/\bDirectly Deploy/,run:()=>mode('Directly Deploy')},
+    {re:/\bClose\b(?! Enough)/,run:()=>mode('Close')},
+    {re:/\bDistant\b/,run:()=>mode('Distant')},
+  ]).forEach(d=>d.run());
+  return out.join('');
+}
+
+function pubScoring(text){
+  const out=[]; let std=false;
+  const stdOnce=()=>{ if(!std){ std=true; out.push(stdScoring()); } };
+  const se1=(name,cls)=>()=>out.push(pill(name,cls)+pubSE1(name));
+  pubFind(text,[
+    {re:/\bStandard Scoring\b/,run:stdOnce},
+    {re:/\bNormal Scoring\b/,run:se1('Normal Scoring','sp-std')},
+    {re:/\bDemolish/,run:se1('Demolish Scoring','sp-raze')},
+    {re:/\bFocal [Pp]oint/,run:se1('Focal Points Scoring','sp-surv')},
+    {re:/\bKill Points\b/,run:se1('Kill Points Scoring','sp-att')},
+    {re:/\bAssess/,run:se1('Assess Scoring','sp-surv')},
+    ...OB.map(o=>({re:new RegExp('\\b'+o.name+'\\b'),run:()=>{ if(o.std) stdOnce(); out.push(pill(o.name,o.cls)+pubBullets(o.b)); }})),
+  ]).forEach(d=>d.run());
+  return out.join('');
+}
+
+function pubTerms(text){
+  const rb=SCN_RULEBOOK, out=[];
+  const line=(name,html)=>out.push(`<p class="rule-text pub-term"><b>${name}:</b> ${html}</p>`);
+  pubFind(text,[
+    {re:/\bcontrol/i,run:()=>line('Control',rb['11.1'].body[0])},
+    {re:/\bcontest/i,run:()=>line('Contest',rb['11.1'].body[1])},
+    {re:/\bLevelled\b|\bDemolish/,run:()=>line('Levelled',rb['11.1'].body[2])},
+    {re:/\bRuined\b|\bDemolish/,run:()=>line('Ruined',rb['11.1'].body[3])},
+    {re:/\bSecondary Objective/,run:()=>line('Secondary Objectives',rb['12.3'].body.join(' '))},
+    {re:/\bAnnihilate\b/,run:()=>line('Annihilate',rb['12.3.4'].body.join(' '))},
+    {re:/\bTake Prizes\b/,run:()=>line('Take Prizes',rb['12.3.5'].body.join(' '))},
+    {re:/\bDecapitate\b/,run:()=>line('Decapitate',rb['12.3.7'].body.join(' '))},
+  ]).forEach(d=>d.run());
+  return out.join('');
+}
+
+function pubScenery(text){
+  const out=[];
+  const sr=n=>{ const x=SR[n]; out.push(`<div class="sc-def"><b>${n}:</b> ${x.rules.join(' ')}</div><div class="sc-flavor">${x.desc}</div>`); };
+  pubFind(text,[
+    {re:/Micrometeor/,run:()=>sr('Micrometeor Cloud')},
+    {re:/Debris Field|Dense Field/,run:()=>sr('Dense Debris Field')},
+    {re:/Large Object/,run:()=>sr('Large Object')},
+    {re:/Planetary Ring/,run:()=>sr('Planetary Ring')},
+  ]).forEach(d=>d.run());
+  return out.join('');
+}
+
+function pubFeatures(text){
+  const kinds=Object.keys(FS).filter(n=>text.includes(n));
+  if(!kinds.length) return '';
+  return `<div class="lhdr">Features</div><ul class="lf-list">${kinds.map(fn=>{const f=FS[fn]; return `<li class="lf"><div class="fh">${f.ico} <b>${fn}</b>&thinsp;${G.iES}<span class="sv-e">${f.es}</span>&thinsp;${G.iKS}<span class="sv-k">${f.ks}</span></div><div class="fb">${f.body}</div></li>`;}).join('')}</ul>`;
+}
+const pubDropsites=()=>`<div class="lhdr">Dropsite Reference</div><ol class="lds-list">${DS.map(d=>`<li class="lds">${d.ico()} ${d.nm}${dss(d.sc,d.sg,d.h,d.es,d.ks)}</li>`).join('')}</ol>`;
+
+function pubShips(text){
+  return Object.keys(SCN_SHIPS).filter(k=>text.includes(k)).map(k=>{
+    const x=SCN_SHIPS[k], st=x.stats;
+    const w=x.weapons.length?`<div class="pub-tbl-wrap"><table class="pub-tbl"><thead><tr><th>Weapon</th><th>Arc</th><th>Att</th><th>Lock</th><th>Dmg</th><th>Type</th><th>Special</th></tr></thead><tbody>${x.weapons.map(v=>`<tr><td>${v.name}</td><td>${v.arc}</td><td>${v.attack}</td><td>${v.lock}</td><td>${v.damage}</td><td>${v.type}</td><td>${v.special||''}</td></tr>`).join('')}</tbody></table></div>`:'';
+    return `<div class="pub-ship">
+      <img class="pub-ship-art" src="../../assets/art/thumb/${x.art}" alt="${x.name}">
+      <div class="pub-ship-body">
+        <div class="pub-ship-h"><b>${x.name}</b><span>${x.tonnage}, ${x.cost} pts</span></div>
+        <div class="pub-ship-stats"><span>Thrust ${st.thrust}</span><span>${G.iScan} ${st.scan}</span><span>${G.iSig} ${st.sig}</span><span>${G.iHull} ${st.hull}</span><span>${G.iES}<span class="sv-e">${st.es}</span></span><span>${G.iKS}<span class="sv-k">${st.ks}</span></span><span>BS ${st.bs}</span><span>G ${st.g}</span></div>
+        ${w}
+        ${x.rules.map(r=>`<p class="rule-text"><b>${r.name}:</b> ${r.text}</p>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
 function renderScenario(s){
-  const sec=(label,v)=>v?`<div class="sec">${pubHead(label)}<div class="sec-body pub-body">${scnParas(v)}</div></div>`:'';
-  const tbls=(s.tables||(s.table?[s.table]:[])).map(t=>
-    `<div class="pub-tbl-wrap"><table class="pub-tbl"><thead><tr>${t.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${t.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`).join('');
-  const map=SCENARIO_MAPS.has(s.id)
-    ?`<div class="map-col"><div class="map-frame"><img src="../../assets/scenarios/dropfleet/${s.id}.webp" alt="${s.name} map"></div></div>`:'';
-  return `<div class="scenario pub${map?'':' no-map'}">
+  const J=pubJoin;
+  const rulesText=[s.players,s.deployment,s.scoring,s.variant,s.special].map(J).join(' ');
+  const allText=[s.intro,s.body,s.scenery,rulesText].map(J).join(' ');
+  const sec=(label,html)=>html?`<div class="sec">${pubHead(label)}<div class="sec-body">${html}</div></div>`:'';
+  const deploy=s.deployment?pubParas(s.deployment)+pubModes(J(s.deployment)):'';
+  const score=s.scoring?pubBullets(s.scoring)+pubScoring([s.scoring,s.special,s.variant].map(J).join(' ')):'';
+  const tbls=(s.tables||(s.table?[s.table]:[])).map(pubTable).join('');
+  const special=(s.special?pubBullets(s.special):'')+tbls;
+  const scenery=s.scenery?pubParas(s.scenery)+pubScenery([s.scenery,s.special,s.scoring].map(J).join(' ')):'';
+  const ships=pubShips(allText);
+  const hasMap=SCENARIO_MAPS.has(s.id);
+  const fauna=s.id!=='fauna-rules'&&/\bFauna\b/.test(allText)?`<button class="abtn pub-fauna" onclick="pubOpen('fauna-rules')">Fauna Rules</button>`:'';
+  const right=hasMap?`<div class="map-col">
+      <div class="map-frame"><img src="../../assets/scenarios/dropfleet/${s.id}.webp" alt="${s.name} map"></div>
+      ${sec('Scenery',scenery)}
+      <div class="leg">${pubFeatures(allText)}${pubDropsites()}</div>
+    </div>`:'';
+  return `<div class="scenario pub${hasMap?'':' no-map'}">
     <div class="rules-col">
       <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.src}</div></div>
       ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
-      ${s.body?`<div class="sec"><div class="sec-body pub-body">${scnParas(s.body)}</div></div>`:''}
-      ${sec('Players',s.players)}${sec('Scenery',s.scenery)}${sec('Deployment',s.deployment)}
-      ${sec('Scoring',s.scoring)}${sec('Variant',s.variant)}${sec('Special Rules',s.special)}
-      ${tbls}
+      ${s.body?pubParas(s.body):''}
+      ${sec('Players',s.players?pubParas(s.players):'')}
+      ${sec('Deployment',deploy)}
+      ${sec('Scoring',score)}
+      ${sec('Variant',s.variant?pubParas(s.variant):'')}
+      ${sec('Special Rules',special)}
+      ${hasMap?'':sec('Scenery',scenery)}
+      ${sec('Terms',pubTerms(rulesText))}
+      ${fauna}
     </div>
-    ${map}
-  </div>`;
+    ${right}
+  </div>
+  ${ships?`<div class="pub-ships">${pubHead('Ships')}<div class="pub-ship-grid">${ships}</div></div>`:''}`;
 }
+function pubOpen(id){ document.getElementById('scenSel').value=id; loadScenario(); }
 
 function loadScenario(){
   const sel=document.getElementById('scenSel');
