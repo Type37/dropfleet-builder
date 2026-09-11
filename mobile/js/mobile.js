@@ -743,7 +743,10 @@
     '3.1.2': ['atmosphere'], '3.3': ['spikes'], '7': ['turn'],
     '7.3.6': ['crippling'], '7.4': ['launch'], '11': ['dropsites'], '2.3.4': ['dropsites'],
   };
-  const SECTION_TOKEN_ITEMS = { '8.1': ['launch-battalion'] };
+  const SECTION_TOKEN_ITEMS = {
+    '8.1': ['launch-battalion'], '8.3.3': ['launch-fighters'], '8.3.4': ['launch-bombers'],
+    '8.3.4.1': ['launch-fire-ship'], '8.3.5': ['launch-torpedo'], '8.3.6': ['launch-mine'],
+  };
   const RULES_FIGURES = {
     '2.3.1.1': { src: 'fig-base-contact', alt: 'Base Contact: Fig A ships in base contact; Fig B overlapping, moved back; Fig C moved back into base contact.' },
     '3.2.1.2': { src: 'fig-coherency', alt: 'Coherency: Ships A, B and C within 3 inches are in coherency; Ship D at 6 inches is out.' },
@@ -4578,6 +4581,13 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-11', title: 'Scenarios: every published scenario, and a separate generator', items: [
+      'A Scenarios page lists every published Dropfleet scenario by book. Open one to see its map with every rule it names explained word for word, and keep score with the round and VP tracker.',
+      'Tap a station, city, Feature, Large Object or named Civilian ship on a scenario map to see its stats. The rulebook’s six small maps are redrawn crisp.',
+      'The Scenario Generator moved here from Neocities and now only rolls. Its map uses the real Feature tokens, the Features and Dropsite Reference are tables, and the type is easier to read.',
+      'Mandatory Festivities reads Raze, where the book misprints Raise.',
+      'A switch in the header takes you to the Dropzone Commander scenarios.',
+    ]},
     { date: '2026-09-11', title: 'How to Play: the whole rulebook', items: [
       'How to Play now carries the entire Dropfleet Commander rulebook, verbatim, the same as the desktop app. Every chapter, section and table is there to read.',
       'The example ship card and the legend open chapter 1; the book’s diagrams (Base Contact, Coherency, weapon Arcs, Move, the Explosion chain) sit with the rule they show; the searchable Special Rules glossary lives under chapter 14.',

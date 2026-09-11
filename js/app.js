@@ -1062,7 +1062,12 @@ let activeGroupId = null;
   // Single tokens shown inline with a section, pulled by filename from the groups
   // above. Battalion Combat wants just the Battalion marker, not the Launch set.
   const SECTION_TOKEN_ITEMS = {
-    '8.1': ['launch-battalion'],
+    '8.1':     ['launch-battalion'],
+    '8.3.3':   ['launch-fighters'],
+    '8.3.4':   ['launch-bombers'],
+    '8.3.4.1': ['launch-fire-ship'],
+    '8.3.5':   ['launch-torpedo'],
+    '8.3.6':   ['launch-mine'],
   };
 
   function renderTokenGroups(groups) {
@@ -8560,6 +8565,13 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-11', title: 'Scenarios: every published scenario, and a separate generator', items: [
+      'A Scenarios page lists every published Dropfleet scenario by book. Open one to see its map with every rule it names explained word for word, and keep score with the round and VP tracker.',
+      'Hover or tap a station, city, Feature, Large Object or named Civilian ship on a scenario map to see its stats. The rulebook’s six small maps are redrawn crisp.',
+      'The Scenario Generator moved here from Neocities and now only rolls. Its map uses the real Feature tokens, the Features and Dropsite Reference are tables, and the type is easier to read.',
+      'Mandatory Festivities reads Raze, where the book misprints Raise.',
+      'A switch in the header takes you to the Dropzone Commander scenarios.',
+    ]},
     { date: '2026-09-11', title: 'How to Play: the whole rulebook, on one page', items: [
       'How to Play now carries the entire Dropfleet Commander rulebook, verbatim, not just a legend and a glossary. Every chapter, section and table is there to read in the app.',
       'A chapter list runs down the left, the way a style guide reads. Pick a chapter to jump to it; the list follows you as you scroll.',
