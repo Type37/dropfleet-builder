@@ -1118,6 +1118,10 @@ let activeGroupId = null;
     return `<div class="rules-table-wrap"><table class="rules-table">${head}<tbody>${rows}</tbody></table></div>`;
   }
 
+  // Sections skipped in the document because an app-owned block already covers
+  // them: 1.1 Stats Bar is the same ground as the example card + legend above it.
+  const RULES_SKIP = new Set(['1.1']);
+
   // A numbered subsection and everything nested under it. depth 1 = e.g. 2.1,
   // depth 2 = 2.1.1, and so on; the heading level and indent track it.
   function wikiSection(node, depth) {
@@ -1198,6 +1202,41 @@ let activeGroupId = null;
       </div>`;
 
     setupRulesSpy();
+    setupRulesWheel();
+  }
+
+  // The rulebook is one very long page, so the wheel is geared up and eased: each
+  // notch travels ~3x further and the page glides to it instead of jumping. Only
+  // while How to Play is the open view; every other screen keeps native scroll.
+  let _rulesWheelOn = false;
+  function setupRulesWheel() {
+    if (_rulesWheelOn) return;
+    _rulesWheelOn = true;
+    const SPEED = 3, EASE = 0.22;
+    let target = 0, animating = false, last = 0;
+    function maxY() { return Math.max(0, document.documentElement.scrollHeight - window.innerHeight); }
+    function step() {
+      const cur = window.scrollY, d = target - cur;
+      if (Math.abs(d) < 0.5) { window.scrollTo(0, target); animating = false; return; }
+      window.scrollTo(0, cur + d * EASE);
+      requestAnimationFrame(step);
+    }
+    window.addEventListener('wheel', (e) => {
+      const view = document.getElementById('view-rules');
+      if (!view || view.classList.contains('hidden')) return;      // other screens
+      if (e.ctrlKey || e.defaultPrevented) return;                 // pinch-zoom etc.
+      // A gesture that has paused re-syncs to where the page actually is, so a
+      // scrollbar drag or a chapter jump is never fought.
+      const now = performance.now();
+      if (!animating || now - last > 140) target = window.scrollY;
+      last = now;
+      let dy = e.deltaY;
+      if (e.deltaMode === 1) dy *= 16;        // lines -> px
+      else if (e.deltaMode === 2) dy *= window.innerHeight;  // pages -> px
+      target = Math.max(0, Math.min(maxY(), target + dy * SPEED));
+      e.preventDefault();
+      if (!animating) { animating = true; requestAnimationFrame(step); }
+    }, { passive: false });
   }
 
   // Highlight the chapter the reader is in as they scroll the document.
