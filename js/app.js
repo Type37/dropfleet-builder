@@ -1291,11 +1291,30 @@ let activeGroupId = null;
     return s ? `<img class="rules-tbl-tok" src="assets/tokens/${s}.svg" alt="" width="26" height="26" loading="lazy">` : '';
   }
 
+  // The Dropsites stat table (ch.11) prints an Icon column that is image-only, so
+  // the extractor leaves it out. Restore it at render time from the six icons cut
+  // from rulebook page 26, matched on the Dropsite name in the first cell.
+  const DROPSITE_ICON = {
+    'Small Space Station': 'dropsite-small-station',
+    'Medium Space Station': 'dropsite-medium-station',
+    'Large Space Station': 'dropsite-large-station',
+    'Small City': 'dropsite-small-city',
+    'Medium City': 'dropsite-medium-city',
+    'Large City': 'dropsite-large-city',
+  };
+
   function wikiTable(t) {
+    const dsIcons = !!(t.header && t.header[0] === 'Dropsite');
     const head = t.header
-      ? `<thead><tr>${t.header.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>` : '';
-    const rows = (t.rows || []).map(row =>
-      `<tr>${row.map(cell => { const tok = cellTok(cell); return `<td${tok ? ' class="rules-td-tok"' : ''}>${tok}${wikiRuns(cell)}</td>`; }).join('')}</tr>`).join('');
+      ? `<thead><tr>${dsIcons ? '<th>Icon</th>' : ''}${t.header.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>` : '';
+    const rows = (t.rows || []).map(row => {
+      let iconTd = '';
+      if (dsIcons) {
+        const s = DROPSITE_ICON[cellPlain(row[0]).trim()];
+        iconTd = `<td class="rules-td-dsicon">${s ? `<img class="rules-dsicon" src="assets/rules/${s}.png" alt="" loading="lazy">` : ''}</td>`;
+      }
+      return `<tr>${iconTd}${row.map(cell => { const tok = cellTok(cell); return `<td${tok ? ' class="rules-td-tok"' : ''}>${tok}${wikiRuns(cell)}</td>`; }).join('')}</tr>`;
+    }).join('');
     return `<div class="rules-table-wrap"><table class="rules-table">${head}<tbody>${rows}</tbody></table></div>`;
   }
 
@@ -8648,6 +8667,10 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-11', title: 'How to Play: a centred read, and the Dropsite icons', items: [
+      'The rulebook now reads as a centred column down the middle of the page, with the chapter list out in the left margin.',
+      'The Dropsites table shows each type’s icon, the S, M and L station discs and the city blocks, lifted from the rulebook page.',
+    ]},
     { date: '2026-09-11', title: 'Scenarios: every published scenario, and a separate generator', items: [
       'A Scenarios page lists every published Dropfleet scenario by book. Open one to see its map with every rule it names explained word for word, and keep score with the round and VP tracker.',
       'Hover or tap a station, city, Feature, Large Object or named Civilian ship on a scenario map to see its stats. The rulebook’s six small maps are redrawn crisp.',

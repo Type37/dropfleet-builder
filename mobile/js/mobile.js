@@ -832,6 +832,12 @@
     const s = M_TABLE_TOK[name];
     return s ? `<img class="rules-tbl-tok" src="../assets/tokens/${s}.svg" alt="" width="24" height="24" loading="lazy">` : '';
   }
+  // Dropsite icons (ch.11), restored into the Icon column dropped by the extractor.
+  const M_DROPSITE_ICON = {
+    'Small Space Station': 'dropsite-small-station', 'Medium Space Station': 'dropsite-medium-station',
+    'Large Space Station': 'dropsite-large-station', 'Small City': 'dropsite-small-city',
+    'Medium City': 'dropsite-medium-city', 'Large City': 'dropsite-large-city',
+  };
   // Editorial NB notes, keyed by section number.
   const M_SECTION_NOTES = { '11': ['Measure to the center of the dropsite.'] };
   function mSectionNote(number) {
@@ -898,8 +904,17 @@
     return html;
   }
   function mTable(t) {
-    const head = t.header ? `<thead><tr>${t.header.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>` : '';
-    const rows = (t.rows || []).map(row => `<tr>${row.map(c => { const tok = mCellTok(c); return `<td${tok ? ' class="rules-td-tok"' : ''}>${tok}${mRuns(c)}</td>`; }).join('')}</tr>`).join('');
+    const dsIcons = !!(t.header && t.header[0] === 'Dropsite');
+    const head = t.header ? `<thead><tr>${dsIcons ? '<th>Icon</th>' : ''}${t.header.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>` : '';
+    const rows = (t.rows || []).map(row => {
+      let iconTd = '';
+      if (dsIcons) {
+        const nm = (Array.isArray(row[0]) ? row[0].map(r => (r && r.t) || '').join('') : String(row[0] || '')).trim();
+        const s = M_DROPSITE_ICON[nm];
+        iconTd = `<td class="rules-td-dsicon">${s ? `<img class="rules-dsicon" src="../assets/rules/${s}.png" alt="" loading="lazy">` : ''}</td>`;
+      }
+      return `<tr>${iconTd}${row.map(c => { const tok = mCellTok(c); return `<td${tok ? ' class="rules-td-tok"' : ''}>${tok}${mRuns(c)}</td>`; }).join('')}</tr>`;
+    }).join('');
     return `<div class="rules-table-wrap"><table class="rules-table">${head}<tbody>${rows}</tbody></table></div>`;
   }
   function mFigure(number) {
@@ -4628,6 +4643,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-11', title: 'How to Play: the Dropsite icons', items: [
+      'The Dropsites table shows each type’s icon, the S, M and L station discs and the city blocks, lifted from the rulebook page.',
+    ]},
     { date: '2026-09-11', title: 'Scenarios: every published scenario, and a separate generator', items: [
       'A Scenarios page lists every published Dropfleet scenario by book. Open one to see its map with every rule it names explained word for word, and keep score with the round and VP tracker.',
       'Tap a station, city, Feature, Large Object or named Civilian ship on a scenario map to see its stats. The rulebook’s six small maps are redrawn crisp.',

@@ -8143,6 +8143,11 @@ h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-we
 .rules-table td:not(:first-child):not(:last-child) { text-align: center; }
 .rules-table tbody tr:nth-child(even) td { background: var(--paper, rgba(0,0,0,.02)); }
 
+/* Dropsite icons (ch.11), cut from the rulebook page. Black linework, so they
+   sit on a fixed light tile to read in either theme. */
+.rules-td-dsicon { width: 84px; text-align: center; vertical-align: middle; }
+.rules-dsicon { display: inline-block; height: 30px; width: auto; padding: 3px 6px; background: #ecebe4; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(120,110,95,.35); }
+
 .rules-cardfig { margin: 0 0 var(--sp-lg); }
 .rules-cardfig img { display: block; max-width: 100%; width: 100%; border-radius: var(--radius-md, 8px); border: 1px solid var(--line, rgba(120,110,95,.3)); }
 

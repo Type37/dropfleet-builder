@@ -5,6 +5,20 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-11: How to Play, centred read and Dropsite icons
+
+- **Centred reading column.** The rulebook text now sits as a centred 74ch
+  column with the chapter nav pinned out in the left margin (a three-track grid,
+  symmetric side tracks; `.rules-view` widened 900 -> 1360). Phones keep the
+  single-column stack. Desktop only.
+- **Dropsite icons.** The rulebook's chapter 11 Dropsites table prints an
+  image-only Icon column that the extractor drops. The six icons (Small/Medium/
+  Large Space Station discs and City blocks) are cut as vector from rulebook
+  page 26 into `assets/rules/dropsite-*.png` and injected back into that table at
+  render time, matched on the Dropsite name, in both apps. Verbatim JSON is not
+  touched; the icons sit on a fixed light tile so their black linework reads in
+  either theme.
+
 ### 2026-09-11: How to Play carries the whole rulebook
 
 How to Play was a legend, a token board and a glossary that signposted the PDF

@@ -3261,6 +3261,10 @@ h5.rules-h, h6.rules-h { font-size: 13px; font-family: var(--font-body, inherit)
 .rules-table td:not(:first-child):not(:last-child) { text-align: center; }
 .rules-table tbody tr:nth-child(even) td { background: var(--navy-wash, rgba(27,58,92,.04)); }
 
+/* Dropsite icons (ch.11) on a fixed light tile so black linework reads in either theme. */
+.rules-td-dsicon { text-align: center; vertical-align: middle; }
+.rules-dsicon { display: inline-block; height: 26px; width: auto; padding: 3px 5px; background: #ecebe4; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(120,110,95,.35); }
+
 .rules-fig { margin: var(--sp-s) 0 var(--sp-m); }
 .rules-fig img { display: block; max-width: 100%; max-height: 640px; width: auto; height: auto; border-radius: var(--radius-md); border: 1px solid var(--stroke1); background: #fff; }
 .rules-cardfig { margin: 0 0 var(--sp-m); }
