@@ -95,6 +95,25 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .pub-tbl{border-collapse:collapse;font-family:'Barlow Condensed',sans-serif;font-size:10pt;}
 .pub-tbl th{text-align:left;font-weight:700;color:var(--gdk);padding:.6mm 4mm .6mm 0;}
 .pub-tbl td{padding:.6mm 4mm .6mm 0;color:var(--ch);}
+
+/* Weapon table modelled on the builder's: a bordered list, header row, arc,
+   attack-with-die, crit-on note, colour-coded damage type, special-rule chips.
+   Free to run wider than the capped stat strip above it. */
+.pw-list{border:1px solid #E1D6BE;border-radius:1.4mm;overflow:hidden;margin-top:1mm;font-family:'Barlow Condensed',sans-serif;}
+.pw-row{display:grid;grid-template-columns:minmax(70px,1.5fr) 34px 30px 34px 36px minmax(64px,1.4fr);align-items:baseline;padding:.7mm 2.4mm;background:#FCF8EE;border-bottom:1px solid #EFE7D4;font-size:10pt;line-height:1.35;}
+.pw-row:last-child{border-bottom:none;}
+.pw-head{background:#EFE7D4;font-family:'Jost',sans-serif;font-size:7pt;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#6C6456;padding:.6mm 2.4mm;}
+.pw-c{white-space:nowrap;color:var(--ch);}
+.pw-head .pw-c{color:#6C6456;}
+.pw-name{white-space:normal;overflow-wrap:anywhere;font-family:'Roboto Slab',Georgia,serif;font-weight:600;font-size:9pt;}
+.pw-arc{text-align:center;font-weight:600;color:var(--gdk);}
+.pw-att,.pw-lock,.pw-dmg{text-align:center;font-weight:700;}
+.pw-die{width:.8em;height:.8em;vertical-align:-.08em;margin-left:.6px;opacity:.55;}
+.pw-crit{display:block;font-size:6.5pt;font-weight:700;color:var(--gdk);line-height:1;margin-top:.3mm;}
+.pw-dt{font-weight:700;font-size:.82em;margin-left:.6px;}
+.pw-dt-K{color:#0057A3;}.pw-dt-E{color:#8A5000;}.pw-dt-C{color:#B23A2E;}
+.pw-special{display:flex;flex-wrap:wrap;gap:1mm;padding-left:1mm;}
+.pw-chip{display:inline-block;padding:.2mm 1.6mm;border-radius:1mm;font-family:'Jost',sans-serif;font-size:6.8pt;font-weight:600;background:#F3ECDC;color:#5A5245;border:.5px solid #DFD3B8;white-space:nowrap;}
 .scenario.pub .map-col{flex:0 0 46%;}
 .scenario.pub .map-frame{width:100%;height:auto;aspect-ratio:1/1;}
 .scenario.pub .map-frame img{display:block;width:100%;height:100%;}

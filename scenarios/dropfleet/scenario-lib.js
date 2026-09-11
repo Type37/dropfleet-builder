@@ -50,6 +50,25 @@ function shipStatGrid(st){
     + pssCell('g',st.g,'')
     + `</div>`;
 }
+
+// Weapon table, modelled on the Dropfleet builder's: a bordered list with a
+// header, the Attack count trailed by a die, a critical-on note under the Lock
+// where the weapon's rules use criticals, the damage type as a colour-coded
+// letter on the damage, and each special rule as its own chip.
+const WPN_DIE='<svg class="pw-die" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10.998 1.58a2 2 0 0 1 2.004 0l7.5 4.342a2 2 0 0 1 .998 1.731v8.694a2 2 0 0 1-.998 1.73l-7.5 4.343a2 2 0 0 1-2.004 0l-7.5-4.342a2 2 0 0 1-.998-1.731V7.653a2 2 0 0 1 .998-1.73zM5.25 8.092a.5.5 0 0 0-.751.433v6.669a2 2 0 0 0 .998 1.73l5.751 3.33a.5.5 0 0 0 .751-.432v-6.669a2 2 0 0 0-.998-1.73zm10.517-2.575c-.478-.276-1.254-.276-1.732 0s-.478.724 0 1s1.254.276 1.732 0s.478-.724 0-1m-5.8 0c-.478-.276-1.254-.276-1.732 0s-.478.724 0 1s1.254.276 1.732 0c.479-.276.479-.724 0-1m7.025 10.328c.597-.345 1.082-1.184 1.082-1.875c0-.69-.485-.97-1.082-.625S15.91 14.53 15.91 15.22s.485.97 1.082.625M6.365 12.2c.478.277.866.053.866-.5c0-.552-.388-1.223-.866-1.5s-.866-.052-.866.5c0 .553.388 1.224.866 1.5m4.33 5.498c0 .552-.389.776-.867.5s-.866-.948-.866-1.5s.388-.776.866-.5s.866.948.866 1.5M7.231 15.7c0 .553-.388.777-.866.5c-.478-.276-.866-.947-.866-1.5c0-.552.388-.776.866-.5c.478.277.866.948.866 1.5m3.463-2c0 .553-.388.777-.866.5c-.479-.275-.866-.947-.866-1.5c0-.551.387-.775.866-.5c.478.277.866.949.866 1.5"/></svg>';
+const wpnCritOn=w=>/\b(Penetrator|Critical|Crippling|Reave|Impel|Burnthrough)\b/i.test(w.special||'')?(parseInt(w.lock,10)+2)+'+':'';
+const wpnAtt=a=>/^\d+$/.test(String(a))?String(a)+WPN_DIE:(a||'');
+const wpnChips=s=>(!s||s==='-')?'':s.split(',').map(t=>t.trim()).filter(Boolean).map(t=>`<span class="pw-chip">${t}</span>`).join('');
+function weaponList(weps){
+  if(!weps||!weps.length) return '';
+  const head=`<div class="pw-row pw-head"><span class="pw-c pw-name">Weapon</span><span class="pw-c pw-arc">Arc</span><span class="pw-c pw-att">Att</span><span class="pw-c pw-lock">Lk</span><span class="pw-c pw-dmg">Dmg</span><span class="pw-c pw-special">Special</span></div>`;
+  const rows=weps.map(w=>{
+    const co=wpnCritOn(w);
+    const dt=w.type?`<span class="pw-dt pw-dt-${w.type}">${w.type}</span>`:'';
+    return `<div class="pw-row"><span class="pw-c pw-name">${w.name}</span><span class="pw-c pw-arc">${w.arc||''}</span><span class="pw-c pw-att">${wpnAtt(w.attack)}</span><span class="pw-c pw-lock">${w.lock}${co?`<span class="pw-crit">crit ${co}</span>`:''}</span><span class="pw-c pw-dmg">${w.damage}${dt}</span><span class="pw-c pw-special">${wpnChips(w.special)}</span></div>`;
+  }).join('');
+  return `<div class="pw-list">${head}${rows}</div>`;
+}
 // DStat line helper
 function dss(sc,sg,h,es,ks){return `<span class="ds-st">${statIcon('scan')}${sc}&nbsp;${statIcon('sig')}${sg}&nbsp;${statIcon('hull')}${h}&nbsp;${statIcon('es')}<span class="sv-e">${es}</span>&nbsp;${statIcon('ks')}<span class="sv-k">${ks}</span></span>`;}
 
@@ -577,7 +596,7 @@ const pubDropsites=()=>`<div class="lhdr">Dropsite Reference</div>${dsTable()}`;
 function pubShips(text){
   return Object.keys(SCN_SHIPS).filter(k=>text.includes(k)).map(k=>{
     const x=SCN_SHIPS[k], st=x.stats;
-    const w=x.weapons.length?`<div class="pub-tbl-wrap"><table class="pub-tbl"><thead><tr><th>Weapon</th><th>Arc</th><th>Att</th><th>Lock</th><th>Dmg</th><th>Type</th><th>Special</th></tr></thead><tbody>${x.weapons.map(v=>`<tr><td>${v.name}</td><td>${v.arc}</td><td>${v.attack}</td><td>${v.lock}</td><td>${v.damage}</td><td>${v.type}</td><td>${v.special||''}</td></tr>`).join('')}</tbody></table></div>`:'';
+    const w=weaponList(x.weapons);
     return `<div class="pub-ship">
       <img class="pub-ship-art" src="${SCN_ASSETS}art/thumb/${x.art}" alt="${x.name}">
       <div class="pub-ship-body">
