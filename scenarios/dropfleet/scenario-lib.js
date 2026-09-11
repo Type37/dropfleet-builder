@@ -7,16 +7,34 @@ const SCN_ASSETS=new URL('../../assets/',document.currentScript.src).href;
 
 const G={
   gold:'#B8952F',
-  // ─ SVG icons ─
-  iScan:'<svg class="ico-stat" viewBox="0 0 20 20"><circle cx="10" cy="16.5" r="1.3" fill="#807870"/><path d="M6.5,13 A4.5,4.5 0 0,1 13.5,13" fill="none" stroke="#807870" stroke-width="1.5" stroke-linecap="round"/><path d="M3,9.5 A8.5,8.5 0 0,1 17,9.5" fill="none" stroke="#807870" stroke-width="1.5" stroke-linecap="round"/><path d="M0.5,6 A12,12 0 0,1 19.5,6" fill="none" stroke="#807870" stroke-width="1.3" stroke-linecap="round"/></svg>',
-  iSig:'<svg class="ico-stat" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" fill="none" stroke="#807870" stroke-width="1.2"/><circle cx="10" cy="10" r="3.5" fill="none" stroke="#807870" stroke-width="1"/><circle cx="10" cy="10" r="1.2" fill="#807870"/></svg>',
-  iHull:'<svg class="ico-stat" viewBox="0 0 20 20"><path d="M10,2 L17.5,6.5 L17.5,14.5 L10,18.5 L2.5,14.5 L2.5,6.5 Z" fill="none" stroke="#807870" stroke-width="1.4"/></svg>',
-  iES:'<svg class="ico-stat" viewBox="0 0 20 20"><path d="M3,3 L17,3 L17,11.5 Q17,17 10,19.5 Q3,17 3,11.5 Z" fill="none" stroke="#9A7A00" stroke-width="1.8"/><path d="M11.5,6 L8.5,11 L11,11 L8.5,15.5" fill="none" stroke="#9A7A00" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  iKS:'<svg class="ico-stat" viewBox="0 0 20 20"><path d="M3,3 L17,3 L17,11.5 Q17,17 10,19.5 Q3,17 3,11.5 Z" fill="none" stroke="#6B6B6B" stroke-width="1.8"/><circle cx="10" cy="11" r="2" fill="#6B6B6B"/></svg>',
+  // The fleet builder's stat symbols (js/app.js STAT_ICONS), so a stat looks the same everywhere
+  iScan:'<svg class="ico-stat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3,12 A9,9 0 0,1 21,12"/><path d="M7,12 A5,5 0 0,1 17,12"/><circle cx="12" cy="12" fill="currentColor" r="1.5" stroke="none"/></svg>',
+  iSig:'<svg class="ico-stat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="11"/></svg>',
+  iThrust:'<svg class="ico-stat" viewBox="0 0 24 24"><polygon fill="currentColor" points="4,4 20,12 4,20 8,12"/></svg>',
+  iHull:'<svg class="ico-stat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8"/></svg>',
+  iES:'<svg class="ico-stat" viewBox="0 0 16 22"><rect fill="#FAECC8" height="24" rx="2.5" width="18" x="-1" y="-1"/><path d="M8,0.5 C8,0.5 0.5,3.5 0.5,3.5L0.5,10.5 C0.5,16 8,21.5 8,21.5 C8,21.5 15.5,16 15.5,10.5L15.5,3.5Z" fill="#1C1A17"/><path d="M8.5,4.5 L5,11 L7.5,11 L6,18.5 L12,9.5 L9,9.5 L11,4.5Z" fill="#FAECC8"/></svg>',
+  iKS:'<svg class="ico-stat" viewBox="0 0 16 22"><rect fill="#D0E4FF" height="24" rx="2.5" width="18" x="-1" y="-1"/><path d="M5.5,0 L10.5,0 L10.5,3 L5.5,3Z" fill="#1C1A17"/><path d="M3,3 C1,5 0,8 0,11L0,15 L3,15 L3,18 C3,20 5.5,21.5 8,21.5 C10.5,21.5 13,20 13,18L13,15 L16,15 L16,11 C16,8 15,5 13,3Z" fill="#1C1A17"/><rect fill="#D0E4FF" height="2" rx="0.5" width="7" x="4.5" y="10"/><rect fill="#D0E4FF" height="7" rx="0.5" width="2" x="7" y="10"/></svg>',
+  iBS:'<svg class="ico-stat" viewBox="0 0 16 22"><rect fill="#E8E5DF" height="24" rx="2.5" width="18" x="-1" y="-1"/><path d="M8,1 C8,1 1,4 1,4L1,11 C1,16.5 8,21 8,21 C8,21 15,16.5 15,11L15,4Z" fill="none" stroke="#1C1A17" stroke-width="1.5"/><line stroke="#1C1A17" stroke-linecap="round" stroke-width="1.2" x1="4" x2="12" y1="11" y2="11"/></svg>',
+  iG:'<svg class="ico-stat" viewBox="0 0 256 256" fill="currentColor"><path d="M172,76a44,44,0,1,0-44,44A44.05,44.05,0,0,0,172,76Zm-44,28a28,28,0,1,1,28-28A28,28,0,0,1,128,104Zm60,24a44,44,0,1,0,44,44A44.05,44.05,0,0,0,188,128Zm0,72a28,28,0,1,1,28-28A28,28,0,0,1,188,200ZM68,128a44,44,0,1,0,44,44A44.05,44.05,0,0,0,68,128Zm0,72a28,28,0,1,1,28-28A28,28,0,0,1,68,200Z"/></svg>',
 };
 
 // DStat line helper
-function dss(sc,sg,h,es,ks){return `<span class="ds-st">${G.iScan}${sc}&nbsp;${G.iSig}${sg}&nbsp;${G.iHull}${h}&nbsp;${G.iES}<span class="sv-e">${es}</span>&nbsp;${G.iKS}<span class="sv-k">${ks}</span></span>`;}
+// Stat names as the builder labels them (js/app.js STAT_META)
+const STAT_META={
+  scan:{label:'Scan',title:'Scan range, detection distance',icon:'iScan'},
+  sig:{label:'Sig',title:'Signature, how visible the ship is',icon:'iSig'},
+  thrust:{label:'Thrust',title:'Thrust, movement speed',icon:'iThrust'},
+  hull:{label:'Hull',title:'Hull points, structural integrity',icon:'iHull'},
+  es:{label:'ES',title:'Energy Shield, save vs Energy weapons',icon:'iES'},
+  ks:{label:'KS',title:'Kinetic Shield, save vs Kinetic weapons',icon:'iKS'},
+  bs:{label:'BS',title:'Backup Save, last-resort save',icon:'iBS'},
+  g:{label:'G',title:'Group size, ships per battle group',icon:'iG'},
+};
+// A symbol you can hover, tap or focus to see what it is
+const tipped=(key,inner)=>`<span class="tip-t" tabindex="0" data-tip="${key}">${inner}</span>`;
+const statIcon=k=>tipped('stat:'+k,G[STAT_META[k].icon]);
+// DStat line helper
+function dss(sc,sg,h,es,ks){return `<span class="ds-st">${statIcon('scan')}${sc}&nbsp;${statIcon('sig')}${sg}&nbsp;${statIcon('hull')}${h}&nbsp;${statIcon('es')}<span class="sv-e">${es}</span>&nbsp;${statIcon('ks')}<span class="sv-k">${ks}</span></span>`;}
 
 // Inline SVGs for feature icons
 const FI={
@@ -512,12 +530,17 @@ function pubScenery(text){
   return out.join('');
 }
 
+function featLine(fn){
+  const f=FS[fn];
+  return `<li class="lf"><div class="fh">${tipped('feat:'+fn,f.ico)} <b>${fn}</b>&thinsp;${statIcon('es')}<span class="sv-e">${f.es}</span>&thinsp;${statIcon('ks')}<span class="sv-k">${f.ks}</span></div><div class="fb">${f.body}</div></li>`;
+}
+const dsLine=(d,i)=>`<li class="lds">${tipped('ds:'+i,d.ico())} ${d.nm}${dss(d.sc,d.sg,d.h,d.es,d.ks)}</li>`;
 function pubFeatures(text){
   const kinds=Object.keys(FS).filter(n=>text.includes(n));
   if(!kinds.length) return '';
-  return `<div class="lhdr">Features</div><ul class="lf-list">${kinds.map(fn=>{const f=FS[fn]; return `<li class="lf"><div class="fh">${f.ico} <b>${fn}</b>&thinsp;${G.iES}<span class="sv-e">${f.es}</span>&thinsp;${G.iKS}<span class="sv-k">${f.ks}</span></div><div class="fb">${f.body}</div></li>`;}).join('')}</ul>`;
+  return `<div class="lhdr">Features</div><ul class="lf-list">${kinds.map(featLine).join('')}</ul>`;
 }
-const pubDropsites=()=>`<div class="lhdr">Dropsite Reference</div><ol class="lds-list">${DS.map(d=>`<li class="lds">${d.ico()} ${d.nm}${dss(d.sc,d.sg,d.h,d.es,d.ks)}</li>`).join('')}</ol>`;
+const pubDropsites=()=>`<div class="lhdr">Dropsite Reference</div><ol class="lds-list">${DS.map(dsLine).join('')}</ol>`;
 
 function pubShips(text){
   return Object.keys(SCN_SHIPS).filter(k=>text.includes(k)).map(k=>{
@@ -527,7 +550,7 @@ function pubShips(text){
       <img class="pub-ship-art" src="${SCN_ASSETS}art/thumb/${x.art}" alt="${x.name}">
       <div class="pub-ship-body">
         <div class="pub-ship-h"><b>${x.name}</b><span>${x.tonnage}, ${x.cost} pts</span></div>
-        <div class="pub-ship-stats"><span>Thrust ${st.thrust}</span><span>${G.iScan} ${st.scan}</span><span>${G.iSig} ${st.sig}</span><span>${G.iHull} ${st.hull}</span><span>${G.iES}<span class="sv-e">${st.es}</span></span><span>${G.iKS}<span class="sv-k">${st.ks}</span></span><span>BS ${st.bs}</span><span>G ${st.g}</span></div>
+        <div class="pub-ship-stats"><span>${statIcon('thrust')} ${st.thrust}</span><span>${statIcon('scan')} ${st.scan}</span><span>${statIcon('sig')} ${st.sig}</span><span>${statIcon('hull')} ${st.hull}</span><span>${statIcon('es')}<span class="sv-e">${st.es}</span></span><span>${statIcon('ks')}<span class="sv-k">${st.ks}</span></span><span>${statIcon('bs')} ${st.bs}</span><span>${statIcon('g')} ${st.g}</span></div>
         ${w}
         ${x.rules.map(r=>`<p class="rule-text"><b>${r.name}:</b> ${r.text}</p>`).join('')}
       </div>
@@ -571,3 +594,36 @@ function renderScenario(s){
   </div>
   ${ships?`<div class="pub-ships">${pubHead('Ships')}<div class="pub-ship-grid">${ships}</div></div>`:''}`;
 }
+
+/* ── Hover, tap or focus a symbol to see its stats ─────────────────────────
+   Any element with data-tip="stat:scan", "feat:Power Plant" or "ds:3" opens one
+   shared tooltip: on hover with a mouse, on tap on touch, on keyboard focus. */
+function tipHTML(key){
+  const [kind,id]=[key.slice(0,key.indexOf(':')),key.slice(key.indexOf(':')+1)];
+  if(kind==='stat'){ const m=STAT_META[id]; return m?`<div class="scn-tip-h">${G[m.icon]}<b>${m.label}</b></div><div>${m.title}</div>`:''; }
+  if(kind==='feat'){ const f=FS[id]; return f?`<div class="scn-tip-h">${f.ico}<b>${id}</b></div><div class="scn-tip-st">${G.iES}<span class="sv-e">${f.es}</span>${G.iKS}<span class="sv-k">${f.ks}</span></div><div>${f.body}</div>`:''; }
+  if(kind==='ds'){ const d=DS[+id]; return d?`<div class="scn-tip-h">${d.ico()}<b>${d.nm}</b></div><div class="scn-tip-st">${G.iScan}${d.sc} ${G.iSig}${d.sg} ${G.iHull}${d.h} ${G.iES}<span class="sv-e">${d.es}</span>${G.iKS}<span class="sv-k">${d.ks}</span></div>`:''; }
+  return '';
+}
+(function(){
+  let tip=null, owner=null, pinned=false;
+  const el=()=>tip||(tip=Object.assign(document.body.appendChild(document.createElement('div')),{id:'scn-tip',role:'tooltip',hidden:true}));
+  function show(t){
+    const html=tipHTML(t.dataset.tip); if(!html) return;
+    const box=el(); box.innerHTML=html; box.hidden=false; owner=t;
+    const r=t.getBoundingClientRect(), w=box.offsetWidth, h=box.offsetHeight, m=8;
+    let x=Math.min(Math.max(m,r.left+r.width/2-w/2),innerWidth-w-m);
+    let y=r.top-h-10; if(y<m) y=r.bottom+10;
+    box.style.left=x+'px'; box.style.top=Math.min(y,innerHeight-h-m)+'px';
+  }
+  function hide(){ if(tip) tip.hidden=true; owner=null; pinned=false; }
+  const target=e=>e.target.closest&&e.target.closest('[data-tip]');
+  document.addEventListener('pointerover',e=>{ if(e.pointerType!=='mouse'||pinned) return; const t=target(e); if(t&&t!==owner) show(t); });
+  document.addEventListener('pointerout',e=>{ if(e.pointerType!=='mouse'||pinned) return; const t=target(e); if(t&&!t.contains(e.relatedTarget)) hide(); });
+  document.addEventListener('click',e=>{ const t=target(e); if(t){ if(owner===t&&pinned) hide(); else { show(t); pinned=true; } } else if(!(tip&&tip.contains(e.target))) hide(); });
+  document.addEventListener('focusin',e=>{ const t=target(e); if(t) show(t); });
+  document.addEventListener('focusout',e=>{ if(target(e)&&!pinned) hide(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') hide(); });
+  addEventListener('scroll',()=>{ if(owner) hide(); },true);
+  addEventListener('resize',hide);
+})();

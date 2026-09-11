@@ -581,132 +581,74 @@ function depZone(roll, players){
 
 
 // ─── VARIANT MAP OVERLAYS ────────────────────────────────────────────────────
-const FC={out:'#D4611A',odg:'#2A7A2A',com:'#C04020',pow:'#8C5A00',han:'#888'};
+// Features are drawn with their real tokens, one per corner of the dropsite they
+// belong to, so each token reads as part of that building.
+const TOKEN=8;
+const FEAT_NAME={out:'Military Outpost',odg:'Orbital Defence Gun',com:'Comms Station',pow:'Power Plant',han:'Hangar'};
+const DS_INDEX={SS:0,MS:1,LS:2,SC:3,MC:4,LC:5};
 
-// Position-based hash for deterministic slot selection (no random per-call chaos)
-function posSlot(x,y,n){ return Math.abs(Math.round(x*31+y*17))%n; }
-
-function citySlots(type,x,y){
-  switch(type){
-    case 'SC': return [[x-3,y],[x+3,y]];
-    case 'MC': return [[x,y-3],[x-4,y+3.5],[x+4,y+3.5]];
-    case 'LC': return [[x-3.5,y-3.5],[x+3.5,y-3.5],[x-3.5,y+3.5],[x+3.5,y+3.5]];
-    default:   return null;
-  }
+function tokenSpot(t,x,y,rot,i,asStation){
+  let hw,hh,round=false;
+  if(asStation||t[1]==='S'){ hw=hh=(t==='SS'&&!asStation)?7:9; round=true; }
+  else if(t==='SC'){ [hw,hh]=(rot%180)?[4.5,8.5]:[8.5,4.5]; }
+  else { hw=t==='MC'?9.2:9; hh=t==='MC'?8:9; }
+  const [cx,cy]=[[1,-1],[-1,-1],[1,1],[-1,1]][i%4];
+  const d=round?(hw+TOKEN*0.18)/Math.SQRT2:0;
+  const dx=round?cx*d:cx*(hw+1.6), dy=round?cy*d:cy*(hh+1.6);
+  const h=TOKEN/2;
+  return [Math.max(h,Math.min(200-h,x+dx)), Math.max(h,Math.min(200-h,y+dy))];
 }
-
-// Draw a feature shape at a specific city-circle slot position
-function onSlot(type,x,y,slot,color,shape){
-  const slots=citySlots(type,x,y);
-  if(!slots||slot>=slots.length) return offIcon(x,y,slot,color,shape);
-  return shapeAt(slots[slot][0],slots[slot][1],color,shape);
-}
-
-// Draw a small icon offset from a station centre
-const OFF=[[7,-5],[-8,-5],[7,5],[-8,5]];
-function offIcon(x,y,slot,color,shape){
-  const [ox,oy]=OFF[slot%4];
-  return shapeAt(x+ox,y+oy,color,shape);
-}
-
-// Draw the chosen shape at (cx,cy)
-function shapeAt(cx,cy,color,shape){
-  switch(shape){
-    case 'diamond': { const r=3.2; return `<polygon points="${cx},${cy-r} ${cx+r},${cy} ${cx},${cy+r} ${cx-r},${cy}" fill="${color}" stroke="rgba(0,0,0,.3)" stroke-width=".4"/>`; }
-    case 'square':  { const r=2.5; return `<rect x="${cx-r}" y="${cy-r}" width="${r*2}" height="${r*2}" rx=".8" fill="${color}" stroke="rgba(0,0,0,.3)" stroke-width=".4"/>`; }
-    case 'ring':    return `<circle cx="${cx}" cy="${cy}" r="2.7" fill="none" stroke="${color}" stroke-width="1.8"/>`;
-    case 'bolt':    { const b=3.8,w=2.2,n=1.0; return `<polygon points="${cx+w},${cy-b} ${cx-w},${cy-n} ${cx+n},${cy-n} ${cx-w},${cy+b} ${cx+w},${cy+n} ${cx-n},${cy+n}" fill="${color}" stroke="rgba(0,0,0,.3)" stroke-width=".5"/>`; }
-    case 'triangle':{ const r=3; return `<polygon points="${cx},${cy-r} ${cx+r*1.1},${cy+r*0.7} ${cx-r*1.1},${cy+r*0.7}" fill="${color}" stroke="rgba(0,0,0,.25)" stroke-width=".4"/>`; }
-    default:        return `<circle cx="${cx}" cy="${cy}" r="2.7" fill="${color}" stroke="rgba(0,0,0,.3)" stroke-width=".4"/>`;
-  }
+function token(key,px,py){
+  const h=TOKEN/2, name=FEAT_NAME[key];
+  const art=FI[key].replace(/^<svg class="ico-feat"/,`<svg x="${(px-h).toFixed(1)}" y="${(py-h).toFixed(1)}" width="${TOKEN}" height="${TOKEN}"`);
+  return `<g data-tip="feat:${name}"><circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${(h+.8).toFixed(1)}" fill="#f4efe8"/>${art}</g>`;
 }
 
 // Overlay a space station icon on top of a city
 function stationOver(x,y,letter){
   const r=9;
-  return `<circle cx="${x}" cy="${y}" r="${r}" fill="#d2ccc4" stroke="#888" stroke-width=".9"/>` +
-         `<text x="${x}" y="${y+3}" text-anchor="middle" font-size="10.5" fill="#444" font-family="sans-serif" font-weight="bold">${letter}</text>`;
+  return `<g data-tip="ds:${DS_INDEX[letter+'S']}"><circle cx="${x}" cy="${y}" r="${r}" fill="#d2ccc4" stroke="#888" stroke-width=".9"/>` +
+         `<text x="${x}" y="${y+3}" text-anchor="middle" font-size="10.5" fill="#444" font-family="sans-serif" font-weight="bold">${letter}</text></g>`;
 }
 
 function variantOverlay(sites,variantRoll){
   if(!variantRoll||variantRoll<1) return '';
   let out='';
   const isLarge=t=>t==='LC'||t==='LS';
-  const isMed=t=>t==='MC'||t==='MS';
   const isCity=t=>t==='SC'||t==='MC'||t==='LC';
 
   sites.forEach(e=>{
     const t=e[0];
     if(t==='R'||t==='LO') return;
-    const x=_i(e[1]),y=_i(e[2]);
+    const x=_i(e[1]),y=_i(e[2]),rot=e[3]||0;
+    let n=0, asStation=false, stn='', mine='';
+    const tk=key=>{ const [px,py]=tokenSpot(t,x,y,rot,n++,asStation); mine+=token(key,px,py); };
+    const toStation=letter=>{ stn=stationOver(x,y,letter); asStation=true; };
 
     switch(variantRoll){
-
-      case 1: // GUARDED SECTORS: all get Outpost; Large also get ODG
-        if(isCity(t)){
-          const n=citySlots(t,x,y).length;
-          out+=onSlot(t,x,y,posSlot(x,y,n),FC.out,'diamond');
-          if(isLarge(t)) out+=onSlot(t,x,y,(posSlot(x,y,n)+1)%n,FC.odg,'square');
-        } else {
-          out+=offIcon(x,y,0,FC.out,'diamond');
-          if(isLarge(t)) out+=offIcon(x,y,1,FC.odg,'square');
-        }
+      case 1: // GUARDED SECTORS: every Dropsite gets an Outpost; Large ones also an ODG
+        tk('out'); if(isLarge(t)) tk('odg');
         break;
-
-      case 2: // SECURE COMMS ARRAY
-        // MC → Comms Station ring on one blue circle slot
-        if(t==='MC'){
-          const slot=posSlot(x,y,3);
-          out+=onSlot(t,x,y,slot,FC.com,'ring');
-        }
-        // LC → LS (overlay station), then ODG + Power Plant as offset icons
-        if(t==='LC'){
-          out+=stationOver(x,y,'L');
-          out+=offIcon(x,y,0,FC.odg,'square');
-          out+=offIcon(x,y,1,FC.pow,'bolt');
-        }
+      case 2: // SECURE COMMS ARRAY: Medium Cities gain Comms; Large Cities become Large Stations with ODG + Power Plant
+        if(t==='MC') tk('com');
+        if(t==='LC'){ toStation('L'); tk('odg'); tk('pow'); }
         break;
-
-      case 3: // BATTLESCARRED: MC + MS each get 2x Power Plants
-        if(t==='MC'){
-          out+=onSlot(t,x,y,0,FC.pow,'bolt');
-          out+=onSlot(t,x,y,1,FC.pow,'bolt');
-        }
-        if(t==='MS'){
-          out+=offIcon(x,y,0,FC.pow,'bolt');
-          out+=offIcon(x,y,1,FC.pow,'bolt');
-        }
+      case 3: // BATTLESCARRED: Medium Cities and Medium Stations gain two Power Plants
+        if(t==='MC'||t==='MS'){ tk('pow'); tk('pow'); }
         break;
-
-      case 4: // GRIDLOCKED
-        // Every dropsite gets a Power Plant; cities use last slot, stations get offset icon
-        if(t==='SC'){ out+=onSlot(t,x,y,1,FC.pow,'bolt'); }
-        else if(t==='MC'){ out+=onSlot(t,x,y,2,FC.pow,'bolt'); }
-        else if(t==='LC'){ out+=onSlot(t,x,y,3,FC.pow,'bolt'); }
-        else { out+=offIcon(x,y,0,FC.pow,'bolt'); }
-        // MC → MS visual overlay
-        if(t==='MC'){
-          out+=stationOver(x,y,'M');
-          out+=offIcon(x,y,1,FC.out,'diamond');
-          out+=offIcon(x,y,2,FC.odg,'square');
-          out+=offIcon(x,y,3,FC.han,'triangle');
-        }
-        // All MS (existing + converted) get Outpost + ODG + Hangar
-        if(t==='MS'){
-          out+=offIcon(x,y,1,FC.out,'diamond');
-          out+=offIcon(x,y,2,FC.odg,'square');
-          out+=offIcon(x,y,3,FC.han,'triangle');
-        }
+      case 4: // GRIDLOCKED: every Dropsite gains a Power Plant; Medium Cities become Medium Stations with Outpost, ODG, Hangar
+        if(t==='MC') toStation('M');
+        tk('pow');
+        if(t==='MC'||t==='MS'){ tk('out'); tk('odg'); tk('han'); }
         break;
-
       case 5: break; // Expansive Atmosphere: player-placed, no fixed overlay
-
-      case 6: // ORBITAL COMPLEX: Cities → Space Stations + Military Outpost
-        if(t==='SC'){ out+=stationOver(x,y,'S'); out+=offIcon(x,y,0,FC.out,'diamond'); }
-        if(t==='MC'){ out+=stationOver(x,y,'M'); out+=offIcon(x,y,0,FC.out,'diamond'); }
-        if(t==='LC'){ out+=stationOver(x,y,'L'); out+=offIcon(x,y,0,FC.out,'diamond'); }
+      case 6: // ORBITAL COMPLEX: Cities become Space Stations; each Station gains an Outpost
+        if(isCity(t)) toStation(t[0]);
+        tk('out');
         break;
     }
+    // the station disc goes under this site's tokens, not over them
+    out+=stn+mine;
   });
   return out;
 }
@@ -775,12 +717,14 @@ ${tk}
     else if(t==='LO'){los+=mkLO(e[1],e[2],e[3]);}
     else{
       const x=_i(e[1]),y=_i(e[2]);
-      if(t==='LC')sites+=mkLC(x,y);
-      else if(t==='MC')sites+=mkMC(x,y,e[3]||0);
-      else if(t==='SC')sites+=mkSC(x,y,e[3]||0);
-      else if(t==='SS')sites+=mkStn(x,y,'S',7);
-      else if(t==='MS')sites+=mkStn(x,y,'M',9);
-      else if(t==='LS')sites+=mkStn(x,y,'L',9);
+      let g='';
+      if(t==='LC')g=mkLC(x,y);
+      else if(t==='MC')g=mkMC(x,y,e[3]||0);
+      else if(t==='SC')g=mkSC(x,y,e[3]||0);
+      else if(t==='SS')g=mkStn(x,y,'S',7);
+      else if(t==='MS')g=mkStn(x,y,'M',9);
+      else if(t==='LS')g=mkStn(x,y,'L',9);
+      if(g) sites+=`<g data-tip="ds:${DS_INDEX[t]}">${g}</g>`;
     }
   });
   const vOverlay=variantRoll?variantOverlay(items,variantRoll):'';
@@ -878,15 +822,12 @@ function gen(){
 
   if(V.ft.length){
     legH+=`<div class="lhdr">Features Added</div><ul class="lf-list">`;
-    V.ft.forEach(fn=>{
-      const f=FS[fn]; if(!f)return;
-      legH+=`<li class="lf"><div class="fh">${f.ico} <b>${fn}</b>&thinsp;${G.iES}<span class="sv-e">${f.es}</span>&thinsp;${G.iKS}<span class="sv-k">${f.ks}</span></div><div class="fb">${f.body}</div></li>`;
-    });
+    V.ft.forEach(fn=>{ if(FS[fn]) legH+=featLine(fn); });
     legH+=`</ul>`;
   }
 
   legH+=`<div class="lhdr">Dropsite Reference</div><ol class="lds-list">`;
-  DS.forEach(d=>{legH+=`<li class="lds">${d.ico()} ${d.nm}${dss(d.sc,d.sg,d.h,d.es,d.ks)}</li>`;});
+  DS.forEach((d,i)=>{legH+=dsLine(d,i);});
   legH+=`</ol>`;
 
   const tag=(r)=>`<span class="roll-tag">(result: ${r})</span>`;
