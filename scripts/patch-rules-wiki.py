@@ -174,11 +174,43 @@ def fix_flavor(ch):
     return changed
 
 
+# Single words the PDF broke across a line inside a table head, which the
+# extractor left hyphenated ("Re-sult"). Rejoined; these are not real compounds.
+HYPHEN_FIX = {"Re-sult": "Result", "Deploy-ment": "Deployment"}
+
+
+def fix_hyphens(nodes):
+    changed = 0
+    for n in nodes:
+        for it in n["body"]:
+            if it["kind"] != "table":
+                continue
+            if it.get("header"):
+                for i, h in enumerate(it["header"]):
+                    for bad, good in HYPHEN_FIX.items():
+                        if bad in h:
+                            it["header"][i] = h.replace(bad, good)
+                            changed += 1
+            for r_ in it["rows"]:
+                for c in r_:
+                    for run in c:
+                        for bad, good in HYPHEN_FIX.items():
+                            if bad in run["t"]:
+                                run["t"] = run["t"].replace(bad, good)
+                                changed += 1
+        changed += fix_hyphens(n["children"])
+    return changed
+
+
 def main():
     with open(OUT, encoding="utf-8") as fh:
         doc = json.load(fh)
 
     changed = 0
+    h = fix_hyphens(doc["chapters"])
+    if h:
+        changed += 1
+        print("patched %d hyphenated table head(s) -> Result / Deployment" % h)
     for ch in doc["chapters"]:
         if ch.get("number") == "11":
             if fix_dropsites(ch):

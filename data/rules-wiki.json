@@ -5001,10 +5001,10 @@
         {
          "kind": "table",
          "header": [
-          "D6 Re-sult",
+          "D6 Result",
           "Approach Type",
-          "Red Team Deploy-ment",
-          "Blue Team Deploy-ment"
+          "Red Team Deployment",
+          "Blue Team Deployment"
          ],
          "rows": [
           [
@@ -5473,7 +5473,7 @@
         {
          "kind": "table",
          "header": [
-          "D6 Re-sult",
+          "D6 Result",
           "Variant",
           "Effect"
          ],
@@ -5732,7 +5732,7 @@
           {
            "kind": "table",
            "header": [
-            "D6 Re-sult",
+            "D6 Result",
             "Variant",
             "Effect"
            ],
