@@ -464,14 +464,14 @@ function depZone(roll, players){
     case 1: // LINE: full-width base-contact strips (~7px = almost nothing)
       if(p === 2){
         return `<rect x="0" y="0" width="200" height="7" ${B}/><rect x="0" y="193" width="200" height="7" ${R}/>
-<text x="100" y="17" ${f} ${bf}>BLUE</text><text x="100" y="188" ${f} ${rf}>RED</text>`;
+<text x="100" y="17" ${f} ${bf}>Blue</text><text x="100" y="188" ${f} ${rf}>Red</text>`;
       } else {
         return `<rect x="0" y="0" width="200" height="7" ${B}/>
 <rect x="0" y="193" width="200" height="7" ${R}/>
 <rect x="0" y="0" width="7" height="200" ${G}/>
 <rect x="193" y="0" width="7" height="200" ${Y}/>
-<text x="100" y="17" ${f} ${bf}>BLUE</text>
-<text x="100" y="188" ${f} ${rf}>RED</text>`;
+<text x="100" y="17" ${f} ${bf}>Blue</text>
+<text x="100" y="188" ${f} ${rf}>Red</text>`;
       }
 
     case 2: // TABLE CORNERS: L-shape: 12"(50px) along each adjacent edge from corner
@@ -484,8 +484,8 @@ function depZone(roll, players){
 <!-- Red L: SE corner -->
 <rect x="150" y="193" width="50" height="7" ${R}/>
 <rect x="193" y="150" width="7" height="50" ${R}/>
-<text x="25" y="17" ${f} ${bf}>BLUE</text>
-<text x="175" y="188" ${f} ${rf}>RED</text>
+<text x="25" y="17" ${f} ${bf}>Blue</text>
+<text x="175" y="188" ${f} ${rf}>Red</text>
 <!-- dim callouts -->
 <line x1="0" y1="12" x2="50" y2="12" stroke="#1E7AA8" stroke-width=".7" opacity=".7"/>
 <text x="25" y="22" ${f} font-size="5.5" font-family="sans-serif" fill="#1E7AA8">12"</text>
@@ -506,8 +506,8 @@ function depZone(roll, players){
         return `<clipPath id="cmc"><rect x="0" y="0" width="200" height="200"/></clipPath>
 <circle cx="100" cy="0" r="33" ${B} clip-path="url(#cmc)"/>
 <circle cx="100" cy="200" r="33" ${R} clip-path="url(#cmc)"/>
-<text x="100" y="20" ${f} ${bf}>BLUE</text>
-<text x="100" y="184" ${f} ${rf}>RED</text>
+<text x="100" y="20" ${f} ${bf}>Blue</text>
+<text x="100" y="184" ${f} ${rf}>Red</text>
 <!-- 8" radius dim lines -->
 <line x1="100" y1="0" x2="100" y2="33" stroke="#1E7AA8" stroke-width=".8" opacity=".6"/>
 <text x="112" y="18" ${fs} fill="#1E7AA8">8"</text>
