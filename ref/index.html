@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <title>Faction Quick References · WarLore Wargaming</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700;800&family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700;800&family=Barlow+Condensed:wght@400;500;600&family=VT323&display=swap" rel="stylesheet">
 <style>
   :root { --ink: #14110c; --paper: #f5f1e8; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,7 +48,16 @@
   .phr:hover img { filter: brightness(0); }
   .phr:hover .name { color: var(--ink); }
   .phr:hover .hint { color: rgba(20,17,12,0.7); }
-  footer { margin-top: 40px; font-family: 'Jost', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #9a8f7a; }
+  .foot {
+    margin-top: 44px; width: 100%; max-width: 840px;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px;
+    padding-top: 4px; border-top: 1px solid var(--ink); position: relative;
+  }
+  .foot::before { content: ''; position: absolute; left: 0; right: 0; top: 2px; border-top: 1px solid var(--ink); }
+  .foot .left, .foot .right { font-family: 'VT323', monospace; font-size: 15px; color: #444; }
+  .foot .right { text-align: right; }
+  .foot a { color: inherit; text-decoration: none; }
+  .foot a:hover { color: var(--ink); }
 </style>
 </head>
 <body>
@@ -63,5 +72,9 @@
   <a class="card resistance" href="resistance.html" target="_blank"><img src="../assets/factions/resistance.webp" alt=""><span class="name">Resistance</span></a>
   <a class="card bioficer"   href="bioficer.html"   target="_blank"><img src="../assets/factions/bioficer.webp"   alt=""><span class="name">Bioficer</span></a>
 </div>
-<footer>WarLore Wargaming</footer>
+<footer class="foot">
+  <div class="left"><a href="https://linktr.ee/warlore" target="_blank" rel="noopener">linktr.ee/warlore</a></div>
+  <div class="center"></div>
+  <div class="right">QRS by WarLore</div>
+</footer>
 </body></html>
