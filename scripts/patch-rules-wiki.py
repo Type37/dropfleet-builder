@@ -146,6 +146,34 @@ def fix_features(ch):
     return True
 
 
+# Fiction that bled in from a facing page. How to Play carries rules only, so
+# these narrative paragraphs are dropped (matched by their opening words).
+FLAVOR_STRIP = {
+    "13.1": [
+        "I skid over the blood-slicked deck",
+        "Three of those armoured PHR",
+        "But there, through the smoke",
+    ],
+}
+
+
+def fix_flavor(ch):
+    changed = False
+    for number, openers in FLAVOR_STRIP.items():
+        sec = find(ch, number)
+        if not sec:
+            continue
+        kept = []
+        for it in sec["body"]:
+            t = "".join(r["t"] for r in it.get("runs", [])).strip() if it["kind"] != "table" else ""
+            if any(t.startswith(o) for o in openers):
+                changed = True
+                continue
+            kept.append(it)
+        sec["body"] = kept
+    return changed
+
+
 def main():
     with open(OUT, encoding="utf-8") as fh:
         doc = json.load(fh)
@@ -159,6 +187,10 @@ def main():
             if fix_features(ch):
                 changed += 1
                 print("patched 11.3 Features: stats/weapons/launch tables rebuilt")
+        if ch.get("number") == "13":
+            if fix_flavor(ch):
+                changed += 1
+                print("patched 13.1: stripped leaked fiction paragraphs")
 
     if not changed:
         print("nothing to patch (already applied, or source shape changed)")
