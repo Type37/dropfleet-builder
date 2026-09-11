@@ -1081,6 +1081,18 @@ let activeGroupId = null;
     return notes ? notes.map(n => `<p class="rules-nb"><b>NB:</b> ${esc(n)}</p>`).join('') : '';
   }
 
+  // A prominent call-to-action link woven into a section (e.g. the Scenario
+  // Generator in place of the manual generation tables).
+  const SECTION_CTA = {
+    '12.1': { href: 'scenarios/dropfleet/generator/', label: 'Generate a scenario', sub: 'Roll every table at once in the Scenario Generator.' },
+  };
+  function wikiSectionCta(number) {
+    const c = SECTION_CTA[number];
+    return c ? `<a class="rules-cta" href="${c.href}" target="_blank" rel="noopener">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17"/><circle cx="8.3" cy="8.3" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.7" cy="8.3" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="8.3" cy="15.7" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.7" cy="15.7" r="1.5" fill="currentColor" stroke="none"/></svg>
+      <span class="rules-cta-tx"><span class="rules-cta-t">${esc(c.label)}</span><span class="rules-cta-s">${esc(c.sub)}</span></span></a>` : '';
+  }
+
   function renderTokenGroups(groups) {
     return groups.map(g => `<div class="rules-tok-grp">
         <div class="rules-tok-head">${esc(g.t)}${g.sub ? `<span class="rules-tok-sub">${esc(g.sub)}</span>` : ''}</div>
@@ -1279,7 +1291,10 @@ let activeGroupId = null;
 
   // Sections skipped in the document because an app-owned block already covers
   // them: 1.1 Stats Bar is the same ground as the example card + legend above it.
-  const RULES_SKIP = new Set(['1.1']);
+  // 1.1 is the app's own card legend. 12.1.1–12.1.4 are the manual
+  // scenario-generation tables — replaced by a link to the Scenario Generator
+  // (SECTION_CTA['12.1']), so the reader isn't rolling on D6 tables by hand.
+  const RULES_SKIP = new Set(['1.1', '12.1.1', '12.1.2', '12.1.3', '12.1.4']);
 
   // The book's instructional diagrams, cut out by scripts/extract-rules-figures.py
   // and keyed to the section each one illustrates. Rendered after that section's
@@ -1304,9 +1319,15 @@ let activeGroupId = null;
     const lvl = Math.min(depth + 2, 6);
     const num = node.number ? `<span class="rules-h-n">${esc(node.number)}</span>` : '';
     const kids = (node.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => wikiSection(c, depth + 1)).join('');
+    // A Standard Scenario (12.2/<slug>) links its heading to that scenario in the
+    // Scenario Reference, so the reader can jump to the map and full breakdown.
+    const scnSlug = typeof node.id === 'string' && node.id.indexOf('12.2/') === 0 ? node.id.slice(5) : '';
+    const heading = scnSlug
+      ? `<a class="rules-scn-link" href="scenarios/dropfleet/#${esc(scnSlug)}" target="_blank" rel="noopener">${esc(node.heading)}</a>`
+      : esc(node.heading);
     return `<div class="rules-sub rules-sub-d${depth}" id="rules-sec-${esc(node.id)}">
-      <h${lvl} class="rules-h">${num}${esc(node.heading)}</h${lvl}>
-      ${wikiBody(node.body)}${wikiSectionNote(node.number)}${wikiFigure(node.number)}${wikiSectionTokens(node.number)}${kids}
+      <h${lvl} class="rules-h">${num}${heading}</h${lvl}>
+      ${wikiBody(node.body)}${wikiSectionNote(node.number)}${wikiSectionCta(node.number)}${wikiFigure(node.number)}${wikiSectionTokens(node.number)}${kids}
     </div>`;
   }
 

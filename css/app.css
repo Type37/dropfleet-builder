@@ -8092,6 +8092,16 @@ h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-we
 /* A token counter drawn inline in the reference tables (Features, Crippling). */
 .rules-tbl-tok { vertical-align: -6px; margin-right: 7px; }
 .rules-td-tok { white-space: normal; }
+/* A Standard Scenario heading that jumps to the Scenario Reference. */
+.rules-scn-link { color: var(--navy); text-decoration: none; }
+.rules-scn-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* Big call-to-action (the Scenario Generator in place of the manual tables). */
+.rules-cta { display: flex; align-items: center; gap: var(--sp-md); margin: 0 0 var(--sp-lg); padding: var(--sp-lg); background: var(--navy); color: #fff; border-radius: var(--radius-md, 8px); text-decoration: none; transition: filter var(--duration-fast) var(--ease-out); }
+.rules-cta:hover { filter: brightness(1.12); }
+.rules-cta svg { flex-shrink: 0; }
+.rules-cta-tx { display: flex; flex-direction: column; gap: 3px; }
+.rules-cta-t { font-family: var(--font-display); font-weight: 800; font-size: var(--text-xl); line-height: 1; }
+.rules-cta-s { color: rgba(255,255,255,0.82); font-size: var(--text-sm); }
 /* A worked example, set apart as an aside by a soft tint and italic — no rule
    bar (it read as clutter next to the section bars). */
 .rules-eg { font-style: italic; font-size: 16px; color: var(--ink-muted); background: var(--paper, rgba(27,58,92,.04)); padding: var(--sp-md) var(--sp-lg); border-radius: var(--radius-md, 8px); }

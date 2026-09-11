@@ -4762,14 +4762,6 @@
        "kind": "p",
        "runs": [
         {
-         "t": "Tables will use a D6 to determine the results. To generate a scenario, roll once for each table in order. Follow the results of each roll to determine each aspect of the Scenario."
-        }
-       ]
-      },
-      {
-       "kind": "p",
-       "runs": [
-        {
          "t": "Scenarios Generated using this method have a game length of 6 rounds. Once the 6th round has been completed, the game is over and a winner is determined by the players’ accumulated Victory Points."
         }
        ]
