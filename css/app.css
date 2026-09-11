@@ -8001,7 +8001,7 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 .play-weapons { min-width: 340px; }
 
 /* ── How to Play (rules reference, renderRules in js/app.js) ── */
-.rules-view { max-width: 900px; margin: 0 auto; padding: var(--sp-xl) var(--sp-lg) var(--sp-2xl); }
+.rules-view { max-width: 1360px; margin: 0 auto; padding: var(--sp-xl) var(--sp-lg) var(--sp-2xl); }
 .rules-wrap { display: flex; flex-direction: column; gap: var(--sp-lg); }
 .rules-intro { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-md); flex-wrap: wrap; }
 .rules-intro p { margin: 0; color: var(--ink-soft); max-width: 60ch; }
@@ -8046,10 +8046,10 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 .rules-kw-desc p:last-child { margin-bottom: 0; }
 
 /* ── Rulebook: left rail + document ─────────────────────────────────────── */
-.rules-layout { display: grid; grid-template-columns: 248px minmax(0, 1fr); gap: var(--sp-2xl); align-items: start; }
+.rules-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 74ch) minmax(0, 1fr); gap: var(--sp-2xl); align-items: start; }
 .rules-loading { padding: var(--sp-xl); color: var(--ink-faint); }
 
-.rules-nav { position: sticky; top: 56px; max-height: calc(100vh - 72px); overflow-y: auto; display: flex; flex-direction: column; gap: 1px; padding-right: var(--sp-sm); border-right: 1px solid var(--line, rgba(120,110,95,.25)); }
+.rules-nav { justify-self: start; width: min(240px, 100%); position: sticky; top: 56px; max-height: calc(100vh - 72px); overflow-y: auto; display: flex; flex-direction: column; gap: 1px; padding-right: var(--sp-sm); border-right: 1px solid var(--line, rgba(120,110,95,.25)); }
 .rules-nav-item { display: flex; align-items: baseline; gap: 8px; width: 100%; text-align: left; padding: 7px 10px; border: 0; border-radius: var(--radius-md, 8px); background: none; color: var(--ink-soft); cursor: pointer; font-size: 16px; line-height: 1.3; text-decoration: none; }
 .rules-nav-item:hover { background: var(--paper); color: var(--ink); }
 .rules-nav-item.active { background: var(--paper); color: var(--navy); font-weight: 600; box-shadow: inset 3px 0 0 var(--navy); }
@@ -8161,7 +8161,7 @@ h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-we
 
 @media (max-width: 860px) {
   .rules-layout { grid-template-columns: 1fr; gap: var(--sp-md); }
-  .rules-nav { position: sticky; top: 48px; z-index: 4; flex-direction: row; flex-wrap: nowrap; overflow-x: auto; max-height: none; padding: var(--sp-xs) 0; border-right: 0; border-bottom: 1px solid var(--line, rgba(120,110,95,.25)); background: var(--paper-warm); }
+  .rules-nav { width: auto; justify-self: stretch; position: sticky; top: 48px; z-index: 4; flex-direction: row; flex-wrap: nowrap; overflow-x: auto; max-height: none; padding: var(--sp-xs) 0; border-right: 0; border-bottom: 1px solid var(--line, rgba(120,110,95,.25)); background: var(--paper-warm); }
   .rules-nav-item { width: auto; white-space: nowrap; }
   .rules-nav-item.active { box-shadow: inset 0 -3px 0 var(--navy); }
   .rules-doc { max-width: none; }
