@@ -128,7 +128,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
    The 1px grid gap over a warm ground draws hairline dividers between cells; the
    three saves carry a coloured top accent so the defence cluster reads at a
    glance without another table. */
-.pub-ship-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(54px,1fr));gap:1px;background:#E1D6BE;border:1px solid #E1D6BE;border-radius:1.4mm;overflow:hidden;margin:.3mm 0 .6mm;}
+.pub-ship-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;max-width:96mm;background:#E1D6BE;border:1px solid #E1D6BE;border-radius:1.4mm;overflow:hidden;margin:.3mm 0 .6mm;}
 .pss-cell{display:flex;flex-direction:column;align-items:center;gap:.5mm;padding:1.4mm .6mm 1.3mm;background:#FCF8EE;}
 .pss-l{font-family:'Jost',sans-serif;font-size:7pt;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#6C6456;line-height:1;}
 .pss-row{display:flex;align-items:center;gap:1.1mm;}
