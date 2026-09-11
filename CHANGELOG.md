@@ -23,6 +23,14 @@ bold kept).
 - **Tokens** now explains the Launch assets (Fighters, Bombers, Fire Ships,
   Torpedoes, Mines, Battalions) and the Activation and Pass tokens, each traced
   as vector from the official token sheet by `scripts/extract-tokens.py`.
+- **Diagrams**, cut out by `scripts/extract-rules-figures.py` into
+  `assets/rules/`: Base Contact (2.3.1.1), Coherency (3.2.1.2), the weapon Arcs
+  (3.4), Move (7.2) and the Explosion chain (7.3.7), each placed with its rule.
+  The floating labels those diagrams carry ("A", "B", `3"`), which the extractor
+  left stranded in the text, are dropped. 1.1 Stats Bar is hidden, being the
+  same ground as the example card and legend above it.
+- The chapter rail pins below the topbar and the wheel is geared up and eased,
+  since the book is one very long page.
 - Desktop only for now; the mobile How to Play is unchanged.
 
 ### 2026-09-11: Scenarios page, separate from the generator

@@ -1104,7 +1104,10 @@ let activeGroupId = null;
         continue;
       }
       if (it.kind === 'table') { html += wikiTable(it); i++; continue; }
-      if (it.kind === 'caption') { html += `<p class="rules-caption">${wikiRuns(it.runs)}</p>`; i++; continue; }
+      // Captions are the labels lifted off a diagram ("A", "B", "3\"") or stray
+      // table column heads; on their own in the text they are noise, and the
+      // diagram that carries them is placed by wikiFigure. Dropped.
+      if (it.kind === 'caption') { i++; continue; }
       html += `<p class="rules-p">${wikiRuns(it.runs)}</p>`; i++;
     }
     return html;
@@ -1122,15 +1125,32 @@ let activeGroupId = null;
   // them: 1.1 Stats Bar is the same ground as the example card + legend above it.
   const RULES_SKIP = new Set(['1.1']);
 
+  // The book's instructional diagrams, cut out by scripts/extract-rules-figures.py
+  // and keyed to the section each one illustrates. Rendered after that section's
+  // text. Splash art, photos, scenario maps and the token sheet are not here.
+  const RULES_FIGURES = {
+    '2.3.1.1': { src: 'fig-base-contact', alt: 'Base Contact: Fig A, all ships in base contact; Fig B, overlapping ships moved back the minimum distance; Fig C, moved back into base contact.' },
+    '3.2.1.2': { src: 'fig-coherency', alt: 'Coherency: Ships A, B and C, each within 3 inches of another, are in coherency; Ship D at 6 inches is out of coherency.' },
+    '3.4':     { src: 'fig-arcs', alt: 'Weapon arcs around a ship base: Front Narrow, Front, Side, Broadside, Rear and Rear Narrow.' },
+    '7.2':     { src: 'fig-move', alt: 'A group of ships moving straight forward and turning to keep in coherency.' },
+    '7.3.7':   { src: 'fig-explosion', alt: 'An exploding ship damages ships within range, which may then explode in turn, affecting ships on the same layer.' },
+  };
+
+  function wikiFigure(number) {
+    const f = RULES_FIGURES[number];
+    if (!f) return '';
+    return `<figure class="rules-fig"><img src="assets/rules/${f.src}.png" alt="${esc(f.alt)}" loading="lazy"></figure>`;
+  }
+
   // A numbered subsection and everything nested under it. depth 1 = e.g. 2.1,
   // depth 2 = 2.1.1, and so on; the heading level and indent track it.
   function wikiSection(node, depth) {
     const lvl = Math.min(depth + 2, 6);
     const num = node.number ? `<span class="rules-h-n">${esc(node.number)}</span>` : '';
-    const kids = (node.children || []).map(c => wikiSection(c, depth + 1)).join('');
+    const kids = (node.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => wikiSection(c, depth + 1)).join('');
     return `<div class="rules-sub rules-sub-d${depth}" id="rules-sec-${esc(node.id)}">
       <h${lvl} class="rules-h">${num}${esc(node.heading)}</h${lvl}>
-      ${wikiBody(node.body)}${kids}
+      ${wikiBody(node.body)}${wikiFigure(node.number)}${kids}
     </div>`;
   }
 
@@ -1147,7 +1167,7 @@ let activeGroupId = null;
       <h2 class="rules-chapter-title"><span class="rules-chapter-n">${esc(ch.number)}</span>${esc(ch.heading)}</h2>
       ${extraTop}
       ${wikiBody(ch.body)}
-      ${(ch.children || []).map(c => wikiSection(c, 1)).join('')}
+      ${(ch.children || []).filter(c => !RULES_SKIP.has(c.number)).map(c => wikiSection(c, 1)).join('')}
       ${extraEnd}
     </section>`;
   }
@@ -8445,6 +8465,7 @@ let activeGroupId = null;
       'How to Play now carries the entire Dropfleet Commander rulebook, verbatim, not just a legend and a glossary. Every chapter, section and table is there to read in the app.',
       'A chapter list runs down the left, the way a style guide reads. Pick a chapter to jump to it; the list follows you as you scroll.',
       'Chapter 1 opens with the example ship card from page 5 and the legend that names every stat, arc, damage type and tonnage letter on it.',
+      'The book’s diagrams are in too: Base Contact, Coherency, the weapon Arcs, Move and the Explosion chain, each sitting with the rule it illustrates.',
       'The Tokens section now explains the Launch assets too, Fighters, Bombers, Fire Ships, Torpedoes, Mines and Battalions, plus the Activation and Pass tokens, each with the real counter beside it.',
     ]},
     { date: '2026-09-09', title: 'How to Play: the tokens, as they look on the table', items: [
