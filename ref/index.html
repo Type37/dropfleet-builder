@@ -10,37 +10,49 @@
     background: var(--paper); color: var(--ink);
     font-family: 'Barlow Condensed', sans-serif;
     min-height: 100vh; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; padding: 48px 20px;
+    align-items: center; justify-content: center; padding: 88px 20px 40px;
   }
-  .wordmark { font-family: 'Jost', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #9a8f7a; margin-bottom: 18px; }
-  h1 { font-family: 'Jost', sans-serif; font-weight: 800; font-size: 46px; letter-spacing: -0.01em; line-height: 0.95; text-align: center; }
-  .sub { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 18px; letter-spacing: 0.02em; text-transform: uppercase; color: #6b6252; margin-top: 8px; margin-bottom: 40px; }
-  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; width: 100%; max-width: 840px; }
-  @media (max-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } h1 { font-size: 34px; } }
+  .back {
+    position: fixed; top: 24px; left: 24px;
+    font-family: 'Jost', sans-serif; font-weight: 700; font-size: 22px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: #6b6252; text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .back:hover { color: var(--ink); }
+  h1 { font-family: 'Jost', sans-serif; font-weight: 800; font-size: 78px; letter-spacing: -0.01em; line-height: 0.95; text-align: center; }
+  .sub { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 40px; letter-spacing: 0.02em; text-transform: uppercase; color: #6b6252; margin-top: 12px; margin-bottom: 52px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; width: 100%; max-width: 1120px; }
+  @media (max-width: 760px) { .grid { grid-template-columns: repeat(2, 1fr); } h1 { font-size: 54px; } .sub { font-size: 30px; } }
   a.card {
-    display: flex; flex-direction: column; align-items: center; gap: 14px;
-    padding: 28px 20px 22px;
-    border-radius: 6px;
+    display: flex; flex-direction: column; align-items: center; gap: 18px;
+    padding: 36px 24px 30px;
+    border-radius: 8px;
     text-decoration: none;
     color: inherit;
     background: #fff;
-    border: 2px solid var(--c);
+    border: 3px solid var(--c);
     box-shadow: 0 1px 0 rgba(20,17,12,0.04);
     transition: background 0.14s, transform 0.14s, box-shadow 0.14s;
   }
   a.card:hover { background: var(--c); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(20,17,12,0.16); }
-  a.card img { width: 84px; height: 84px; object-fit: contain; transition: filter 0.14s; }
+  a.card img { width: 120px; height: 120px; object-fit: contain; transition: filter 0.14s; }
   a.card:hover img { filter: brightness(0) invert(1); }
-  a.card .name { font-family: 'Jost', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.02em; text-transform: uppercase; line-height: 1; color: var(--c); transition: color 0.14s; }
+  a.card .name { font-family: 'Jost', sans-serif; font-weight: 800; font-size: 46px; letter-spacing: 0.02em; text-transform: uppercase; line-height: 1; color: var(--t, var(--c)); transition: color 0.14s; }
   a.card:hover .name { color: #fff; }
-  a.card .hint { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; letter-spacing: 0.02em; color: #7a7060; transition: color 0.14s; text-align: center; }
+  a.card .hint { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; letter-spacing: 0.02em; color: #7a7060; transition: color 0.14s; text-align: center; }
   a.card:hover .hint { color: rgba(255,255,255,0.85); }
-  .ucm{--c:#3e9945} .phr{--c:#7b3fa0} .scourge{--c:#69499d}
+  .ucm{--c:#3e9945} .phr{--c:#e8c400;--t:#6f5300} .scourge{--c:#69499d}
   .shaltari{--c:#ef6325} .resistance{--c:#3d8bca} .bioficer{--c:#b2322a}
+  /* PHR: yellow reads on white only with dark ink, not white */
+  .phr:hover img { filter: brightness(0); }
+  .phr:hover .name { color: var(--ink); }
+  .phr:hover .hint { color: rgba(20,17,12,0.7); }
+  footer { margin-top: 56px; font-family: 'Jost', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 0.14em; text-transform: uppercase; color: #9a8f7a; }
 </style>
 </head>
 <body>
-<div class="wordmark">WarLore Wargaming</div>
+<a class="back" href="../">&larr; Fleet Builder</a>
 <h1>Dropfleet Commander</h1>
 <p class="sub">Faction Quick References</p>
 <div class="grid">
@@ -51,4 +63,5 @@
   <a class="card resistance" href="resistance.html" target="_blank"><img src="../assets/factions/resistance.webp" alt=""><span class="name">Resistance</span></a>
   <a class="card bioficer"   href="bioficer.html"   target="_blank"><img src="../assets/factions/bioficer.webp"   alt=""><span class="name">Bioficer</span></a>
 </div>
+<footer>WarLore Wargaming</footer>
 </body></html>
