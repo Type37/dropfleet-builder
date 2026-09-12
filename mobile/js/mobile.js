@@ -6053,7 +6053,8 @@
           : '';
         if (a.special && a.special !== '-' && collectRule) a.special.split(',').forEach(s => collectRule(s.trim()));
         if (a.ksReroll != null && collectRule) collectRule('Close Protection');
-        const special = [i === 0 ? loadSpecial : '', assetSpecial].filter(Boolean).join(', ');
+        // A keyword on both the bay and the asset (Torpedo: Penetrator) prints once.
+        const special = [...new Set([i === 0 ? loadSpecial : '', assetSpecial].join(',').split(',').map(s => s.trim()).filter(Boolean))].join(', ');
         rows += `<tr>
           <td>${i === 0 ? esc(load.launch || '-') : ''}</td>
           <td>${esc(part)}</td>
