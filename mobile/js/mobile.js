@@ -4654,6 +4654,7 @@
       'A switch in the header takes you to the Dropzone Commander scenarios.',
       'The scenario list puts commas between the deployments and scoring it names.',
       'A scenario page names its deployment and scoring rules in bold at the start of their paragraphs, the way the Dropzone pages do, instead of in dark labels.',
+      'A generated scenario no longer repeats the WarLore credit that is already in the footer.',
       'Orbital Support’s map shows the Medium Space Station with its Military Outposts. Turn its Variant on and they become Hangars on the map, stats included.',
     ]},
     { date: '2026-09-11', title: 'How to Play: the whole rulebook', items: [
