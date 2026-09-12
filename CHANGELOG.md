@@ -5,6 +5,13 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-12: Print preview, Text size removed
+
+- **Text size (Large/Small) is gone.** Small only shrank card text by about 1pt,
+  missed the launch, abilities and table text, and saved no pages in Big cards.
+  The sheet always uses the larger size (`.pf-comfortable` rules now apply to
+  `.print-fleet`; `.pf-compact` and `printDensity` removed).
+
 ### 2026-09-12: Print audit, both apps
 
 Every PDF below was printed from real fleets in Chrome (all six factions, plus

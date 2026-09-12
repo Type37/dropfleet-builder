@@ -33,7 +33,7 @@ let activeGroupId = null;
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true, printRoster: false, printNoRules: false, printNoObjectives: false, printPaper: '', showCollection: false, theme: 'light' };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printInk: true, printBig: true, printRoster: false, printNoRules: false, printNoObjectives: false, printPaper: '', showCollection: false, theme: 'light' };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -6485,9 +6485,8 @@ let activeGroupId = null;
     const layout = printLayoutMode();
     const roster = layout === 'table';
     const big = layout === 'big';
-    const densityClass = settings.printDensity === 'compact' ? 'pf-compact' : 'pf-comfortable';
     const twoCol = layout === 'cards' && settings.print2col; // big/roster are one column
-    let html = `<div class="print-fleet${twoCol ? ' print-2col' : ''} ${densityClass}${settings.printInk ? ' pf-inksaver' : ''}${big ? ' pf-big' : ''}${roster ? ' pf-roster' : ''}" data-fleet-name="${escAttr(f.name)}">
+    let html = `<div class="print-fleet${twoCol ? ' print-2col' : ''}${settings.printInk ? ' pf-inksaver' : ''}${big ? ' pf-big' : ''}${roster ? ' pf-roster' : ''}" data-fleet-name="${escAttr(f.name)}">
       <div class="print-header">
         <div class="print-header-top">
           ${fIcon ? `<img src="${fIcon}" alt="" class="print-faction-icon">` : ''}
@@ -7116,7 +7115,6 @@ let activeGroupId = null;
         <span class="pp-pagecount" id="pp-pagecount"></span>
         ${seg('pp-layout', 'Layout', [['cards', 'Cards'], ['big', 'Big cards'], ['table', 'Table'], ['text', 'Text list']], printLayoutMode())}
         ${seg('pp-cols', 'Columns', [['1', '1'], ['2', '2']], settings.print2col ? '2' : '1')}
-        ${seg('pp-size', 'Text size', [['comfortable', 'Large'], ['compact', 'Small']], settings.printDensity === 'compact' ? 'compact' : 'comfortable')}
         ${seg('pp-paper', 'Paper', [['a4', 'A4'], ['letter', 'Letter']], printPaperKey())}
         <label class="print-preview-opt" id="pp-colour-opt"><input type="checkbox" id="pp-colour" ${settings.printInk ? '' : 'checked'}> Colour</label>
         <label class="print-preview-opt" id="pp-rules-opt"><input type="checkbox" id="pp-rules" ${settings.printNoRules ? '' : 'checked'}> Rules text</label>
@@ -7237,7 +7235,6 @@ let activeGroupId = null;
       const layout = printLayoutMode();
       const text = layout === 'text';
       ov.querySelector('#pp-cols').hidden = layout !== 'cards';
-      ov.querySelector('#pp-size').hidden = text;
       ov.querySelector('#pp-colour-opt').hidden = text;
       ov.querySelector('#pp-rules-opt').hidden = text;
     };
@@ -7256,7 +7253,6 @@ let activeGroupId = null;
       settings.printBig = v === 'big';
     });
     onSeg('pp-cols', v => { settings.print2col = v === '2'; });
-    onSeg('pp-size', v => { settings.printDensity = v; });
     onSeg('pp-paper', v => { settings.printPaper = v; });
     ov.querySelector('#pp-colour').onchange = (e) => { settings.printInk = !e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-rules').onchange = (e) => { settings.printNoRules = !e.target.checked; saveSettings(); refresh(); };
@@ -8747,7 +8743,7 @@ let activeGroupId = null;
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
     { date: '2026-09-12', title: 'Print: clear controls and a complete sheet', items: [
-      'The print preview has plain controls: Layout (Cards, Big cards, Table, Text list), Columns, Text size, Paper, Colour, Rules text and Secondary objectives. Options that don’t apply to a layout aren’t shown.',
+      'The print preview has plain controls: Layout (Cards, Big cards, Table, Text list), Columns, Paper, Colour, Rules text and Secondary objectives. Options that don’t apply to a layout aren’t shown.',
       'Paper is a real setting: A4 or Letter sets the printed page size and the page count.',
       'Famous flagships print as full ship cards, with hull boxes (two tracks for the Twins of Aaru), launch, refit and rules.',
       'Space stations print their chosen armaments and upgrades, and every rule in full.',

@@ -5976,29 +5976,19 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
 }
 
-/* ── Density tiers (preview toggle) ──────────────────────────────
-   Comfortable = arm's-length readable at the table (default). Compact = max
-   density / fewest pages. Both stay 2-column when 2 columns is on. */
-.pf-comfortable .dp-group-name { font-size: 11.5pt; }
-.pf-comfortable .dp-name { font-size: 10.4pt; }
-.pf-comfortable .dp-pts { font-size: 9.2pt; }
-.pf-comfortable .dp-sc-val { font-size: 9.6pt; }
-.pf-comfortable .dp-weapons { font-size: 8.8pt; }
-.pf-comfortable .dp-weapons th { font-size: 7.6pt; }
-.pf-comfortable .dp-loads, .pf-comfortable .dp-systems { font-size: 8.8pt; }
-.pf-comfortable .dp-rules { font-size: 8.5pt; line-height: 1.4; }
-.pf-comfortable .dp-ship { padding: 5px 8px; }
-.pf-comfortable .dp-thumb { width: 58px; height: 58px; }
-.pf-comfortable .dp-box { width: 10px; height: 10px; }
+/* ── Sheet type sizes: arm's-length readable at the table ─────── */
+.print-fleet .dp-group-name { font-size: 11.5pt; }
+.print-fleet .dp-name { font-size: 10.4pt; }
+.print-fleet .dp-pts { font-size: 9.2pt; }
+.print-fleet .dp-sc-val { font-size: 9.6pt; }
+.print-fleet .dp-weapons { font-size: 8.8pt; }
+.print-fleet .dp-weapons th { font-size: 7.6pt; }
+.print-fleet .dp-loads, .print-fleet .dp-systems { font-size: 8.8pt; }
+.print-fleet .dp-rules { font-size: 8.5pt; line-height: 1.4; }
+.print-fleet .dp-ship { padding: 5px 8px; }
+.print-fleet .dp-thumb { width: 58px; height: 58px; }
+.print-fleet .dp-box { width: 10px; height: 10px; }
 
-.pf-compact .dp-group-name { font-size: 10pt; }
-.pf-compact .dp-name { font-size: 9.2pt; }
-.pf-compact .dp-sc-val { font-size: 8.3pt; }
-.pf-compact .dp-weapons { font-size: 7.6pt; }
-.pf-compact .dp-loads, .pf-compact .dp-systems { font-size: 7.6pt; }
-.pf-compact .dp-rules { font-size: 7.4pt; line-height: 1.28; }
-.pf-compact .dp-ship { padding: 3px 6px; margin-bottom: 5px; }
-.pf-compact .dp-thumb { width: 42px; height: 42px; }
 
 /* ── Ink-saver (preview toggle) ──────────────────────────────────
    Strip the ink-heavy fills (navy weapon header, zebra striping) to white with
@@ -6022,7 +6012,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* Faction Rules glossary at the end of the sheet. */
 .dp-glossary { break-inside: avoid; margin-top: 8px; border-top: 1.5px solid #1b3a5c; padding-top: 4px; }
-.pf-comfortable .dp-hoist-chip { font-size: 8pt; }
+.print-fleet .dp-hoist-chip { font-size: 8pt; }
 .pf-inksaver .dp-hoist-chip { background: #fff !important; color: #000 !important; border-color: #999; }
 .pf-inksaver .dp-glossary { border-top-color: #000; }
 
@@ -6086,7 +6076,7 @@ h1, h2, h3, h4, h5, h6 {
 .pf-inksaver .dp-sc-icon, .pf-inksaver .dp-arc { color: #000; }
 .pf-inksaver .dp-sc-icon svg, .pf-inksaver .dp-arc svg { filter: grayscale(1); }
 .pf-inksaver .dp-statcell { background: #fff !important; }
-.pf-comfortable .dp-sc-icon svg, .pf-comfortable .dp-arc svg { width: 13px; height: 13px; }
+.print-fleet .dp-sc-icon svg, .print-fleet .dp-arc svg { width: 13px; height: 13px; }
 
 /* ── Big mode ────────────────────────────────────────────────────
    Art + stat grid in a compact top row, then weapons and rules flow full-width
