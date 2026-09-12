@@ -514,7 +514,9 @@
     const mods = {};
     const add = (sm) => { if (sm) Object.entries(sm).forEach(([k, d]) => { mods[k] = (mods[k] || 0) + d; }); };
     (ship.loadoutOptions || []).forEach((lo, i) => {
-      const sel = inst && inst.loadouts ? inst.loadouts[i] : undefined;
+      // Unset = option 0, the same default the weapon table, launch table and
+      // gained rules use, so a default option's stat changes never go missing.
+      const sel = inst && inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
       const opt = lo.options && lo.options[sel];
       if (opt) add(opt.statMods);
     });
@@ -3108,19 +3110,9 @@
   }
 
   function renderLaunchTable(factionKey, ship, inst) {
-    const loads = [...(ship.loads || [])];
     // Selected loadout options and systems/hardpoints can grant launch (Resistance
     // modular ships build their launch entirely from chosen options).
-    (ship.loadoutOptions || []).forEach((lo, i) => {
-      const sel = inst && inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
-      const opt = lo.options && lo.options[sel];
-      if (opt && opt.loads) loads.push(...opt.loads);
-    });
-    if (inst && Array.isArray(inst.systems) && inst.systems.length) {
-      const list = systemsListFor(ship, factionKey);
-      if (list) inst.systems.forEach(n => { const o = findSystemOption(list, n); if (o && o.loads) loads.push(...o.loads); });
-    }
-    return buildLaunchTable(factionKey, loads);
+    return buildLaunchTable(factionKey, shipLoadsFor(ship, inst, factionKey));
   }
 
   // A group is "×N of one ship". Resolve the allowed N range (groupMin/Max,
@@ -4643,6 +4635,15 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-12', title: 'Export PDF: the full sheet', items: [
+      'Space stations print their stats, hull boxes, weapons, chosen armaments and upgrades, and every rule in full.',
+      'Admiral abilities print as a table with AP cost and effect, including each admiral’s own ability and the Core Abilities.',
+      'Launch assets include bays from refits and systems, and rules granted by refits and system effects are printed.',
+      'Every secondary objective prints as a checklist, with your picks ticked.',
+      'Hull tick boxes, per-ship points, tonnage and the fleet description are on the sheet.',
+      'Printing from the fleet list no longer prints the last fleet you opened.',
+      'A shared fleet link can no longer put markup or script onto the sheet, and its points are recalculated from the ship data.',
+    ]},
     { date: '2026-09-11', title: 'How to Play: the Dropsite icons', items: [
       'The Dropsites table shows each type’s icon, the S, M and L station discs and the city blocks, lifted from the rulebook page.',
     ]},
@@ -5432,35 +5433,68 @@
     if (fleet.secondaryObjectives?.length) mini.so = fleet.secondaryObjectives;
     return b64FromStr(JSON.stringify(mini)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   }
+  // A share link / pasted JSON is untrusted: numbers must be real finite numbers
+  // (a string there would land raw in the print sheet and break the totals).
+  function finiteNum(v, fallback) {
+    const n = typeof v === 'number' ? v : (typeof v === 'string' && v.trim() !== '' ? Number(v) : NaN);
+    return Number.isFinite(n) ? n : fallback;
+  }
+  // Once the faction file is loaded, recompute every cost the DB can price, so an
+  // imported fleet never trusts the points it was handed.
+  function sanitizeImportedFleet(fleet) {
+    if (!fleet) return fleet;
+    const faction = FACTIONS[fleet.faction];
+    fleet.pointsLimit = finiteNum(fleet.pointsLimit, 0) > 0 ? finiteNum(fleet.pointsLimit, 0) : (GAME_SIZES[fleet.gameSize] || GAME_SIZES.clash).max;
+    (fleet.battleGroups || []).forEach(g => (g.ships || []).forEach(s => {
+      const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
+      s.points = db ? recalcShipPoints(fleet.faction, db, s) : finiteNum(s.points, 0);
+    }));
+    (fleet.admirals || []).forEach(a => {
+      a.level = Math.max(1, Math.round(finiteNum(a.level, 1)));
+      const def = faction && (faction.admirals || []).find(x => x.id === a.admiralId);
+      if (def) a.points = (def.cost || 0) + (def.flagship ? (def.flagship.cost || 0) : 0);
+      else if (a.type === 'Generic') { const gen = GENERIC_ADMIRAL_LEVELS.find(l => l.level === a.level); a.points = gen ? gen.cost : finiteNum(a.points, 0); }
+      else a.points = finiteNum(a.points, 0);
+    });
+    if (fleet.spaceStation) {
+      fleet.spaceStation.cost = finiteNum(fleet.spaceStation.cost, 0);
+      if (fleet.spaceStation.baseCost != null) fleet.spaceStation.baseCost = finiteNum(fleet.spaceStation.baseCost, 0);
+      if (faction) recalcStation(fleet.faction, fleet.spaceStation);
+    }
+    return fleet;
+  }
   function decodeFleet(encoded) {
     try {
       let b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
       while (b64.length % 4) b64 += '=';
       const mini = JSON.parse(strFromB64(b64));
-      const size = GAME_SIZES[mini.s] || GAME_SIZES.clash;
+      const size = GAME_SIZES[mini.s] ? mini.s : 'clash';
+      const str = v => (v == null ? '' : String(v));
+      const arr = v => (Array.isArray(v) ? v.map(str) : []);
+      const pl = finiteNum(mini.pl, 0);
       const fleet = {
-        id: uuid(), name: mini.n || 'Shared Fleet', description: mini.d || '',
-        faction: mini.f, gameSize: mini.s || 'clash',
-        pointsLimit: mini.pl != null ? mini.pl : size.max, maxGroups: maxGroupsFor({ gameSize: mini.s, pointsLimit: mini.pl }),
+        id: uuid(), name: str(mini.n) || 'Shared Fleet', description: str(mini.d),
+        faction: str(mini.f), gameSize: size,
+        pointsLimit: pl > 0 ? pl : GAME_SIZES[size].max, maxGroups: maxGroupsFor({ gameSize: size, pointsLimit: pl > 0 ? pl : 0 }),
         admirals: [], spaceStation: null,
-        battleGroups: (mini.g || []).map(g => ({
-          id: uuid(), name: g.n || 'Group',
-          ships: (g.sh || []).map(s => ({
-            id: uuid(), groupCategory: s.c, shipKey: s.k, points: s.p, loadouts: s.l || {},
-            feature: s.ft || undefined, feature2: s.ft2 || undefined, systems: s.sy || []
+        battleGroups: (Array.isArray(mini.g) ? mini.g : []).map(g => ({
+          id: uuid(), name: str(g && g.n) || 'Group',
+          ships: (Array.isArray(g && g.sh) ? g.sh : []).map(s => ({
+            id: uuid(), groupCategory: str(s.c), shipKey: str(s.k), points: finiteNum(s.p, 0), loadouts: (s.l && typeof s.l === 'object') ? s.l : {},
+            feature: s.ft ? str(s.ft) : undefined, feature2: s.ft2 ? str(s.ft2) : undefined, systems: arr(s.sy)
           }))
         })),
-        secondaryObjectives: mini.so || [],
+        secondaryObjectives: arr(mini.so),
         createdAt: Date.now(), updatedAt: Date.now()
       };
-      if (mini.ss) fleet.spaceStation = { name: mini.ss.n, cost: mini.ss.c || 0, stationKey: mini.ss.k || null, systems: mini.ss.sy || [] };
-      if (mini.as) fleet.admirals = mini.as.map(a => ({
+      if (mini.ss) fleet.spaceStation = { name: str(mini.ss.n), cost: finiteNum(mini.ss.c, 0), stationKey: mini.ss.k ? str(mini.ss.k) : null, systems: arr(mini.ss.sy) };
+      if (Array.isArray(mini.as)) fleet.admirals = mini.as.map(a => ({
         // Famous admirals are keyed by id; desktop stores it as `k`, mobile as `i`
         // — cross-fall-back so a fleet shared from either device resolves.
-        name: a.n, points: a.p || 0, admiralId: a.i || a.k || null, shipKey: a.k || a.i || null,
-        level: a.l || 1, type: a.t || 'Generic',
-        shipName: null, selectedAbilities: a.sa || [], assignedGroupId: a.ag || null,
-        loadouts: a.lo || {}
+        name: str(a.n), points: finiteNum(a.p, 0), admiralId: str(a.i || a.k) || null, shipKey: str(a.k || a.i) || null,
+        level: Math.max(1, Math.round(finiteNum(a.l, 1))), type: ['Generic', 'Faction', 'Famous'].includes(a.t) ? a.t : 'Generic',
+        shipName: null, selectedAbilities: arr(a.sa), assignedGroupId: a.ag ? str(a.ag) : null,
+        loadouts: (a.lo && typeof a.lo === 'object') ? a.lo : {}
       }));
       return fleet;
     } catch (e) { console.warn('decode failed', e); return null; }
@@ -5473,6 +5507,7 @@
     window.history.replaceState(null, '', location.pathname); // clear hash (local `history` is the nav stack)
     if (!fleet) return false;
     await ensureFaction(fleet.faction);   // shared fleet may be a faction we haven't loaded
+    sanitizeImportedFleet(fleet);
     fleets.push(fleet);
     saveFleets();
     openFleet(fleets.length - 1);
@@ -5616,6 +5651,7 @@
           closeRuleSheet();
           for (const x of valid) {
             await ensureFaction(x.faction);
+            sanitizeImportedFleet(x);
             x.id = uuid(); x.createdAt = x.updatedAt = Date.now();
             fleets.push(x);
           }
@@ -5637,6 +5673,7 @@
     if (!fleet) { showSheet('Import failed', `<p>That doesn’t look like a valid fleet link, code, JSON, or army list.</p>`); return; }
     closeRuleSheet();
     await ensureFaction(fleet.faction);
+    sanitizeImportedFleet(fleet);
     fleets.push(fleet);
     saveFleets();
     openFleet(fleets.length - 1);
@@ -5948,16 +5985,53 @@
     if (i >= 0) openFleet(i);
   }
 
+  // Everything a built ship launches: base loads + the chosen loadout option +
+  // chosen systems/hardpoints. Shared by the on-screen launch table and the print
+  // sheet so the two can never disagree.
+  function shipLoadsFor(ship, inst, factionKey) {
+    const loads = [...((ship && ship.loads) || [])];
+    ((ship && ship.loadoutOptions) || []).forEach((lo, i) => {
+      const sel = inst && inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
+      const opt = lo.options && lo.options[sel];
+      if (opt && opt.loads) loads.push(...opt.loads);
+    });
+    if (inst && Array.isArray(inst.systems) && inst.systems.length) {
+      const list = systemsListFor(ship, factionKey);
+      if (list) inst.systems.forEach(n => { const o = findSystemOption(list, n); if (o && o.loads) loads.push(...o.loads); });
+    }
+    return loads;
+  }
+  // Rule names a chosen loadout option grants (a Cloaking Crest's Cloak-2 + Stealth).
+  function loadoutGainedRuleNames(ship, inst) {
+    const out = [];
+    ((ship && ship.loadoutOptions) || []).forEach((lo, i) => {
+      const sel = inst && inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
+      const opt = lo.options && lo.options[sel];
+      if (opt && Array.isArray(opt.gainRules)) opt.gainRules.forEach(n => out.push(n));
+    });
+    return out;
+  }
+
+  // Core Abilities (rulebook 4.2.1.1), available to every player. Same verbatim
+  // text as the desktop CORE_ABILITIES table.
+  const CORE_ABILITIES = [
+    { name: 'AP Re-roll', cost: '*AP', effect: 'Once per Group, Asset, or Dropsite activation, after you roll any dice, you can re-roll any number of those dice. You must re-roll at least one dice, spending 1AP for each dice re-rolled.' },
+    { name: 'Brace for Impact', cost: '2AP', effect: 'When a player would roll for Crippling Effects, instead of rolling, make the result of a Crippling Effect roll (for you or your opponent) a 4.' },
+    { name: 'Contain Reactor', cost: '2AP', effect: 'When a player would roll for Explosion, instead of rolling, make the result of an Explosion roll (for you or your opponent) a 2.' },
+    { name: 'Time to Target', cost: '2AP', effect: 'After moving a Wing of your Fighters or Bombers, you may move that Wing a second time with a Thrust of 6" in any direction. The Wing cannot divide into or form larger Wings due to this movement.' }
+  ];
+
   // Launch-asset table for the printed sheet. Mirrors the on-screen launch
   // table (same data + deploy ranges) so printed docs carry full launch info.
-  function printLaunchTable(map, db) {
-    const loads = db.loads || [];
-    if (!loads.length) return '';
+  // Fixed column widths (colgroup + table-layout: fixed) so every launch table on
+  // the sheet lines up with the next.
+  function printLaunchTable(map, loads, collectRule) {
+    if (!loads || !loads.length) return '';
     // Sum identical launch bays so "Launch 4" prints once, not two "Launch 2" rows.
     const grouped = [];
     const byKey = new Map();
     loads.forEach(load => {
-      if (!load.name) return;
+      if (!load || !load.name) return;
       const n = parseInt(load.launch, 10);
       const key = Number.isFinite(n) ? `${load.name}|${load.special ?? ''}` : null;
       if (key && byKey.has(key)) { const g = byKey.get(key); g._n += n; g.launch = String(g._n); }
@@ -5965,17 +6039,21 @@
     });
     let rows = '';
     grouped.forEach(load => {
-      if (!load.name) return;
-      const parts = load.name.split(/\s*&\s*/).map(p => p.trim()).filter(Boolean);
+      const parts = String(load.name).split(/\s*&\s*/).map(p => p.trim()).filter(Boolean);
+      const loadSpecial = (load.special && load.special !== '-') ? load.special : '';
+      if (loadSpecial && collectRule) loadSpecial.split(',').forEach(s => collectRule(s.trim()));
       parts.forEach((part, i) => {
         const a = map[part.toLowerCase()] || { name: part };
         const has = a.attack != null;
         const t = (a.type || '').toUpperCase();
         const isBattalion = DEPLOY_RANGE[part.toLowerCase()] !== undefined;
         const range = isBattalion ? DEPLOY_RANGE[part.toLowerCase()] : '6"';
-        const special = (a.special && a.special !== '-') ? a.special
+        const assetSpecial = (a.special && a.special !== '-') ? a.special
           : a.ksReroll != null ? `Close Protection (re-roll ${a.ksReroll})`
           : '';
+        if (a.special && a.special !== '-' && collectRule) a.special.split(',').forEach(s => collectRule(s.trim()));
+        if (a.ksReroll != null && collectRule) collectRule('Close Protection');
+        const special = [i === 0 ? loadSpecial : '', assetSpecial].filter(Boolean).join(', ');
         rows += `<tr>
           <td>${i === 0 ? esc(load.launch || '-') : ''}</td>
           <td>${esc(part)}</td>
@@ -5983,165 +6061,310 @@
           <td>${esc(a.thrust || '-')}</td>
           <td>${has ? esc(a.attack) : '-'}</td>
           <td>${has ? esc(a.lock) : '-'}</td>
-          <td>${has ? `${esc(a.damage)}${t}` : '-'}</td>
+          <td>${has ? `${esc(a.damage)}${esc(t)}` : '-'}</td>
           <td>${esc(special)}</td>
         </tr>`;
       });
     });
-    return `<div class="pr-launch-label">Launch Assets</div>
-      <table class="pr-weapons pr-launch"><thead><tr><th>Launch</th><th>Load</th><th>Rng</th><th>Thr</th><th>At</th><th>Lk</th><th>Dm</th><th>Special</th></tr></thead><tbody>${rows}</tbody></table>`;
+    if (!rows) return '';
+    return `<div class="pr-keep"><div class="pr-launch-label">Launch Assets</div>
+      <table class="pr-weapons pr-launch"><colgroup><col class="pr-c-launch"><col class="pr-c-load"><col class="pr-c-n"><col class="pr-c-n"><col class="pr-c-n"><col class="pr-c-n"><col class="pr-c-n"><col class="pr-c-lspec"></colgroup><thead><tr><th>Launch</th><th>Load</th><th>Rng</th><th>Thr</th><th>At</th><th>Lk</th><th>Dm</th><th>Special</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  }
+
+  // Weapon table for the printed sheet, fixed column widths like the launch table.
+  function printWeaponTable(wlist, collectRule) {
+    if (!wlist.length) return '';
+    const rows = wlist.map(w => {
+      if (w.special && w.special !== '-') w.special.split(',').forEach(s => collectRule(s.trim()));
+      return `<tr><td>${esc(w.name)}</td><td>${esc(w.lock || '')}</td><td>${esc(w.attack || '')}</td><td>${esc(w.damage || '')}${esc(w.type || '')}</td><td>${esc(w.arc || '')}</td><td>${esc(w.special && w.special !== '-' ? w.special : '')}</td></tr>`;
+    }).join('');
+    return `<table class="pr-weapons"><colgroup><col class="pr-c-wname"><col class="pr-c-n"><col class="pr-c-n"><col class="pr-c-n"><col class="pr-c-arc"><col class="pr-c-wspec"></colgroup><thead><tr><th>Weapon</th><th>Lk</th><th>At</th><th>Dm</th><th>Arc</th><th>Special</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+
+  // Pen-markable hull boxes, one row per ship, in fives. Capital ships (not Light
+  // or Payload) get the half-hull box outlined heavier, as on the desktop sheet.
+  function printHullTrack(hull, count, tonnage) {
+    const h = parseInt(hull, 10);
+    if (!h || h <= 0) return '';
+    const noCrip = /^(L|P|Light|Payload)$/i.test(String(tonnage || ''));
+    const crip = noCrip ? -1 : Math.ceil(h / 2);
+    let grouped = '';
+    for (let i = 0; i < h; i += 5) {
+      let grp = '';
+      for (let j = i; j < Math.min(h, i + 5); j++) grp += `<span class="pr-box${j + 1 === crip ? ' pr-box-crip' : ''}"></span>`;
+      grouped += `<span class="pr-hull-grp">${grp}</span>`;
+    }
+    const track = label => `<div class="pr-hull"><span class="pr-hull-lab">${esc(label)}</span><span class="pr-hull-boxes">${grouped}</span></div>`;
+    if (count <= 1) return track('Hull');
+    return Array.from({ length: count }, (_, i) => track('#' + (i + 1))).join('');
   }
 
   /* ── Export as PDF (printable view → browser "Save as PDF") ─ */
   // buildPrintSheet() fills #print-root; exportPdf() fills it and prints.
-  // They are split because the print CSS hides every other child of <body>, so a
-  // print started from the browser itself (the Share sheet's Print, a keyboard
-  // Ctrl+P, Chrome's menu) used to find #print-root empty and send a blank sheet.
-  // The `beforeprint` hook at the end of this file fills it first.
+  // They are split because a print started from the browser itself (the Share
+  // sheet's Print, a keyboard Ctrl+P, Chrome's menu) goes through the
+  // `beforeprint` hook below instead. iOS may never fire that event, so the Export
+  // PDF path always builds the sheet itself before calling print.
   function exportPdf() {
     buildPrintSheet();
-    document.body.classList.add('printing');
     window.print();
-    setTimeout(() => document.body.classList.remove('printing'), 300);
+  }
+
+  // Screens that belong to one fleet. A print from anywhere else (the fleet list,
+  // settings, rules) is not a print of `activeFleet`, which is only the last fleet
+  // opened, so it must fall through to the normal page.
+  const FLEET_SCOPED_SCREENS = new Set(['screen-fleet-detail', 'screen-add-group', 'screen-group-detail',
+    'screen-admiral', 'screen-admiral-detail', 'screen-station', 'screen-station-detail']);
+  function clearPrintSheet() {
+    const root = document.getElementById('print-root');
+    if (root) root.innerHTML = '';
+    document.body.classList.remove('has-print-sheet');
   }
 
   function buildPrintSheet() {
     const f = activeFleet;
-    if (!f) return;
+    const root = document.getElementById('print-root');
+    if (!f || !root) { clearPrintSheet(); return; }
     const size = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
-    const limit = f.pointsLimit || size.max;
+    const limit = finiteNum(f.pointsLimit, 0) || size.max;
     const pts = fleetPoints(f);
+    const num = v => finiteNum(v, 0);
     const info = FACTION_INFO[f.faction];
     const usedRules = new Map();  // keyword -> description (for the glossary)
 
     const collectRule = name => {
+      if (!name || usedRules.has(name)) return;
       const r = lookupRule(name);
-      if (r.description && !usedRules.has(name)) usedRules.set(name, r.description);
+      if (r.description) usedRules.set(name, r.description);
+    };
+    const addRuleText = (name, description) => {
+      if (name && description && !usedRules.has(name)) usedRules.set(name, description);
     };
     const laMap = getLaunchAssetMap(f.faction);
 
-    // A famous admiral's flagship is a ship on the table, so the printed sheet has
-    // to carry its ship card like any other group -- it was showing on the fleet
-    // screen and in Play Mode but the printout listed only the admiral's name.
-    // Its cost already sits inside the admiral's points, so the card shows the hull
-    // cost the way the desktop sheet does rather than adding to the group totals.
-    const flagshipGroups = (f.admirals || []).map(a => {
-      const fs = admiralFlagship(a);
-      if (!fs) return null;
-      const count = Math.max(1, parseInt((fs.stats || {}).g, 10) || 1);
-      return {
-        _flagshipDb: fs,
-        _label: `${flagshipLabel(fs, true, true)} <span class="pr-group-class">flies with ${esc(a.name)}</span>`,
-        _pts: fs.cost || 0,
-        ships: Array.from({ length: count }, () => ({
-          shipKey: null,
-          groupCategory: fs.category || 'medium',
-          loadouts: a.loadouts || {},
-          systems: a.systems || [],
-          points: 0
-        }))
-      };
-    }).filter(Boolean);
-
-    const groupsHtml = [...sortGroupsByWeight(f.battleGroups), ...flagshipGroups].map(g => {
-      const inst = g.ships[0];
-      if (!inst) return '';
-      const db = g._flagshipDb || findShip(f.faction, inst.groupCategory, inst.shipKey);
-      if (!db) return '';
+    // One ship card: stats, hull boxes, weapons, launch, special rules, choices.
+    // `opt.label` is trusted HTML (already escaped by the caller).
+    const shipCard = (db, inst, qty, opt) => {
       const st = db.stats || {};
-      const qty = g.ships.length;
       const mods = loadoutStatMods(db, inst, f.faction);
       const statCells = [['Scan', 'scan', st.scan], ['Sig', 'sig', st.sig], ['Thrust', 'thrust', st.thrust], ['Hull', 'hull', st.hull],
         ['ES', 'es', st.es], ['KS', 'ks', st.ks], ['BS', 'bs', st.bs], ['PD', 'pd', st.pd]]
         .filter(([, , v]) => v != null && v !== '-' && v !== '')
         .map(([lab, key, v]) => `<span class="pr-stat${mods[key] ? ' pr-stat-mod' : ''}"><b>${lab}</b> ${esc(mods[key] ? adjustStatVal(v, mods[key]) : v)}</span>`).join('');
+      const hullVal = mods.hull ? adjustStatVal(st.hull, mods.hull) : st.hull;
+      const tonnage = db.tonnage || st.tonnage || '';
+      const tonText = tonLabel(tonnage) || CATEGORY_LABELS[db.category || inst.groupCategory] || '';
+
       // Merge base + selected loadout + selected system/hardpoint weapons into one
       // table, so "systems that are weapons" read as weapon rows on the print sheet.
       const wlist = (db.weapons || []).map(w => ({ ...w }));
       (db.loadoutOptions || []).forEach((lo, i) => {
         const si = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
-        const o = lo.options[si];
+        const o = lo.options && lo.options[si];
         if (o && o.weapons) o.weapons.forEach(w => wlist.push({ ...w }));
       });
-      const sysListW = systemsListFor(db, f.faction);
-      if (sysListW && inst.systems) {
+      const sysList = systemsListFor(db, f.faction);
+      const sysLines = [];
+      if (sysList && Array.isArray(inst.systems) && inst.systems.length) {
         const cnts = {}; inst.systems.forEach(n => cnts[n] = (cnts[n] || 0) + 1);
-        Object.entries(cnts).forEach(([nm, c]) => { const o = findSystemOption(sysListW, nm); if (o && o.weapons) o.weapons.forEach(w => wlist.push({ ...w, name: (c > 1 ? c + '× ' : '') + (w.name || nm) })); });
-      }
-      const weapons = wlist.map(w => {
-        if (w.special && w.special !== '-') w.special.split(',').forEach(s => collectRule(s.trim()));
-        return `<tr><td>${esc(w.name)}</td><td>${esc(w.lock || '')}</td><td>${esc(w.attack || '')}</td><td>${esc(w.damage || '')}${esc(w.type || '')}</td><td>${esc(w.arc || '')}</td><td>${esc(w.special && w.special !== '-' ? w.special : '')}</td></tr>`;
-      }).join('');
-      // launch-asset special keywords also feed the glossary
-      (db.loads || []).forEach(load => {
-        if (!load.name) return;
-        load.name.split(/\s*&\s*/).forEach(part => {
-          const a = laMap[part.trim().toLowerCase()];
-          if (a && a.special && a.special !== '-') a.special.split(',').forEach(s => collectRule(s.trim()));
+        Object.entries(cnts).forEach(([nm, c]) => {
+          const o = findSystemOption(sysList, nm);
+          if (o && o.weapons && o.weapons.length) o.weapons.forEach(w => wlist.push({ ...w, name: (c > 1 ? c + '× ' : '') + (w.name || nm) }));
+          const hasKit = o && ((o.weapons && o.weapons.length) || (o.loads && o.loads.length));
+          sysLines.push(`${c > 1 ? c + '× ' : ''}${nm}${o && o.effect && !hasKit ? ', ' + o.effect : ''}`);
         });
-      });
-      // ship special rules (full text inline)
-      (db.specialRules || []).forEach(r => { if (r.description && !usedRules.has(r.name)) usedRules.set(r.name, r.description); });
-      const rulesInline = (db.specialRules || []).map(r => esc(r.name)).join(', ');
-      const opts = [];
+      }
+      const weapons = printWeaponTable(wlist, collectRule);
+      const launch = printLaunchTable(laMap, shipLoadsFor(db, inst, f.faction), collectRule);
+
+      // Special line: the ship's rules, rules granted by the chosen refit, and any
+      // Special-column keyword that has no rule entry (the screen shows those too).
+      const shipRules = (db.specialRules || []).filter(r => r && r.name);
+      shipRules.forEach(r => addRuleText(r.name, r.description));
+      // Compare names with curly and straight quotes treated alike, so "Vanguard-6”"
+      // in the Special column and "Vanguard-6"" as a rule are one keyword.
+      const ruleKey = s => String(s).toLowerCase().replace(/[”“″]/g, '"').replace(/[’‘]/g, "'").trim();
+      const known = new Set();
+      const specialNames = [];
+      const addName = n => { const k = ruleKey(n); if (!n || known.has(k)) return false; known.add(k); specialNames.push(n); return true; };
+      shipRules.forEach(r => addName(r.name));
+      loadoutGainedRuleNames(db, inst).forEach(n => { if (addName(n)) collectRule(n); });
+      (st.special && st.special !== '-' ? String(st.special) : '')
+        .split(',').map(s => s.trim()).forEach(t => { if (addName(t)) collectRule(t); });
+
+      const lines = [];
       (db.loadoutOptions || []).forEach((lo, i) => {
         const si = inst.loadouts && inst.loadouts[i] != null ? inst.loadouts[i] : 0;
-        if (lo.options[si] && si !== 0) opts.push('Loadout: ' + lo.options[si].name);
+        const o = lo.options && lo.options[si];
+        // A "No <refit>" option is the nothing-taken default (desktop treats it the same).
+        if (!o || !o.name || /^No\b/i.test(o.name)) return;
+        // "Engine Refit (+2" Thrust)" already names its slot; don't repeat "Engine Refit:".
+        if (lo.name && ruleKey(o.name).startsWith(ruleKey(lo.name))) lines.push([o.name, '']);
+        else lines.push([lo.name || 'Loadout', esc(o.name)]);
       });
-      FEATURE_SLOT_KEYS.forEach(k => { if (inst[k]) opts.push('Feature: ' + inst[k]); });
-      if (inst.systems && inst.systems.length) {
-        const c = {}; inst.systems.forEach(n => c[n] = (c[n] || 0) + 1);
-        opts.push('Systems: ' + Object.entries(c).map(([n, ct]) => ct > 1 ? `${n} ×${ct}` : n).join(', '));
-      }
-      const prLabel = g._label
-        ? g._label
-        : (g.name && g.name !== db.name) ? `${esc(g.name)} <span class="pr-group-class">(${qty}× ${esc(db.name)})</span>` : `${qty}× ${esc(db.name)}`;
-      return `<div class="pr-group">
-        <div class="pr-group-head"><span class="pr-group-name">${prLabel}</span><span class="pr-group-pts">${g._pts != null ? g._pts : groupPoints(f, g)} pts</span></div>
+      if (sysLines.length) lines.push([(db.systemSelection && db.systemSelection.listName) || 'Systems', esc(sysLines.join('; '))]);
+      const feats = FEATURE_SLOT_KEYS.map(k => inst[k]).filter(Boolean);
+      feats.forEach(name => {
+        const feat = factionFeatures(f.faction).find(x => x.name === name);
+        const parts = [esc(name)];
+        if (feat) {
+          (feat.features || []).forEach(x => {
+            const bits = [x.es ? `ES ${x.es}` : '', x.ks ? `KS ${x.ks}` : '', x.special && x.special !== '-' ? x.special : ''].filter(Boolean).join(', ');
+            if (bits) parts.push(esc(bits));
+            if (x.special && x.special !== '-') x.special.split(',').forEach(s => collectRule(s.trim()));
+          });
+          (feat.loads || []).forEach(l => {
+            parts.push(esc(`Launch ${l.name} (${l.launch}${l.special && l.special !== '-' ? ', ' + l.special : ''})`));
+            if (l.special && l.special !== '-') l.special.split(',').forEach(s => collectRule(s.trim()));
+          });
+          (feat.rules || []).forEach(r => addRuleText(r.name, r.description));
+        }
+        lines.push(['Deployable Feature', parts.join(', ')]);
+      });
+
+      const hullHtml = printHullTrack(hullVal, qty, tonnage || tonText);
+      const tags = `${tonText ? ` <span class="pr-ton">${esc(tonText)}</span>` : ''}${db.isUnique ? ' <span class="pr-badge">Unique</span>' : ''}`;
+      return `<div class="pr-group${opt.flagship ? ' pr-flagship' : ''}">
+        <div class="pr-group-head"><span class="pr-group-name">${opt.label}${tags}</span>${opt.ptsHtml ? `<span class="pr-group-pts">${opt.ptsHtml}</span>` : ''}</div>
         <div class="pr-stats">${statCells}</div>
-        ${weapons ? `<table class="pr-weapons"><thead><tr><th>Weapon</th><th>Lk</th><th>At</th><th>Dm</th><th>Arc</th><th>Special</th></tr></thead><tbody>${weapons}</tbody></table>` : ''}
-        ${printLaunchTable(laMap, db)}
-        ${rulesInline ? `<div class="pr-rules-line"><b>Special:</b> ${rulesInline}</div>` : ''}
-        ${opts.length ? `<div class="pr-opts">${opts.map(esc).join(', ')}</div>` : ''}
+        ${hullHtml}
+        ${weapons}
+        ${launch}
+        ${specialNames.length ? `<div class="pr-rules-line"><b>Special:</b> ${specialNames.map(esc).join(', ')}</div>` : ''}
+        ${lines.map(([k, v]) => `<div class="pr-opts"><b>${esc(k)}${v ? ':' : ''}</b>${v ? ' ' + v : ''}</div>`).join('')}
+      </div>`;
+    };
+
+    const groupsHtml = sortGroupsByWeight(f.battleGroups).map(g => {
+      const inst = g.ships[0];
+      if (!inst) return '';
+      const db = findShip(f.faction, inst.groupCategory, inst.shipKey);
+      if (!db) return '';
+      const qty = g.ships.length;
+      const gp = groupPoints(f, g);
+      const each = num(inst.points);
+      const sameEach = g.ships.every(s => num(s.points) === each);
+      const label = (g.name && g.name !== db.name)
+        ? `${esc(g.name)} <span class="pr-group-class">(${qty}× ${esc(db.name)})</span>`
+        : `${qty}× ${esc(db.name)}`;
+      const ptsHtml = qty > 1 && sameEach ? `${esc(gp)} pts <span class="pr-each">(${esc(each)} ea)</span>` : `${esc(gp)} pts`;
+      return shipCard(db, inst, qty, { label, ptsHtml });
+    }).join('');
+
+    // Admirals. A famous admiral's flagship is a ship on the table, so its full
+    // card prints inside the admiral block; its cost is already part of the
+    // admiral's points, so it shows in parentheses there and adds nothing.
+    const admiralsHtml = (f.admirals || []).map(a => {
+      const bonus = commandShipBonusFor(f, a);
+      const lvl = admiralEffectiveLevel(f, a) || '?';
+      const fs = admiralFlagship(a, f);
+      let flagshipHtml = '';
+      if (fs) {
+        const count = Math.max(1, parseInt((fs.stats || {}).g, 10) || 1);
+        const inst = { shipKey: null, groupCategory: fs.category || 'medium', loadouts: a.loadouts || {}, systems: [] };
+        const label = `${flagshipLabel(fs, true, true)}${fs.cost ? ` <span class="pr-group-class">(${esc(fs.cost)} pts)</span>` : ''}`;
+        flagshipHtml = shipCard(fs, inst, count, { label, ptsHtml: '', flagship: true });
+      }
+      return `<div class="pr-admiral">
+        <div class="pr-group-head"><span class="pr-group-name">${esc(a.name)}, Level ${esc(lvl)}${bonus ? ` <span class="pr-group-class">(Lv${esc(a.level)} +${esc(bonus)} Command Ship)</span>` : ''}</span><span class="pr-group-pts">${esc(num(a.points))} pts</span></div>
+        ${flagshipHtml}
       </div>`;
     }).join('');
 
-    const admiralsHtml = (f.admirals || []).map(a =>
-      `<div class="pr-line"><b>${esc(a.name)}</b> (Lv ${admiralEffectiveLevel(f, a) || '?'}${commandShipBonusFor(f, a) ? `, Lv${a.level} +${commandShipBonusFor(f, a)} Command Ship` : ''}), ${a.points} pts${a.selectedAbilities?.length ? ', ' + esc(a.selectedAbilities.join(', ')) : ''}</div>`).join('');
-    const stationHtml = f.spaceStation ? `<div class="pr-line"><b>${esc(f.spaceStation.name)}</b>, ${f.spaceStation.cost} pts${(f.spaceStation.systems && f.spaceStation.systems.length) ? ' (' + f.spaceStation.systems.map(esc).join(', ') + ')' : ''}</div>` : '';
+    // Every ability the fleet can use this game: each admiral's own abilities and
+    // chosen table abilities (deduped by name), then the Core Abilities.
+    let abilitiesHtml = '';
+    if ((f.admirals || []).length) {
+      const seen = new Set();
+      const list = [];
+      f.admirals.forEach(a => {
+        const ai = getAdmiralInfo(a);
+        if (!ai) return;
+        (ai.innate || []).forEach(ab => { if (ab && ab.name && !seen.has(ab.name)) { seen.add(ab.name); list.push(ab); } });
+        (a.selectedAbilities || []).forEach(n => {
+          const ab = (ai.table || []).find(t => t.name === n);
+          if (ab && !seen.has(ab.name)) { seen.add(ab.name); list.push(ab); }
+        });
+      });
+      const row = ab => `<tr><td><b>${esc(ab.name)}</b></td><td>${esc(ab.cost || '')}</td><td>${ruleHtml(ab.effect || '')}</td></tr>`;
+      const groupRow = label => `<tr class="pr-abil-group"><td colspan="3">${esc(label)}</td></tr>`;
+      const body = (list.length ? groupRow('Admiral Abilities') + list.map(row).join('') : '')
+        + groupRow('Core Abilities') + CORE_ABILITIES.map(row).join('');
+      abilitiesHtml = `<table class="pr-weapons pr-abilities"><colgroup><col class="pr-c-abil"><col class="pr-c-ap"><col></colgroup><thead><tr><th>Ability</th><th>AP</th><th>Effect</th></tr></thead><tbody>${body}</tbody></table>`;
+    }
 
-    // Secondary objectives (the two chosen for the game), spelled out.
-    const secObjsHtml = (f.secondaryObjectives || []).map(n => {
-      const o = (SECONDARY_OBJECTIVES || []).find(x => x.name === n) || { name: n, description: '' };
-      return `<div class="pr-gloss"><b>${esc(o.name)}</b>${o.description ? ': ' + ruleHtml(o.description) : ''}</div>`;
-    }).join('');
+    // Space station: full card, like a ship.
+    let stationHtml = '';
+    const ss = f.spaceStation;
+    if (ss) {
+      const def = findStationDef(f.faction, ss) || {};
+      const st = def.stats || {};
+      const statCells = [['Scan', st.scan], ['Sig', st.sig], ['Hull', st.hull], ['ES', st.es], ['KS', st.ks], ['BS', st.bs]]
+        .filter(([, v]) => v != null && v !== '-' && v !== '')
+        .map(([lab, v]) => `<span class="pr-stat"><b>${lab}</b> ${esc(v)}</span>`).join('');
+      const wlist = (def.weapons || []).map(w => ({ ...w }));
+      const loads = [...(def.loads || [])];
+      const armLines = [], upgLines = [];
+      const counts = {};
+      (ss.systems || []).forEach(n => { counts[n] = (counts[n] || 0) + 1; });
+      Object.entries(counts).forEach(([nm, c]) => {
+        const o = stationOpt(nm);
+        const pre = c > 1 ? c + '× ' : '';
+        if (o && o.weapons) o.weapons.forEach(w => wlist.push({ ...w, name: pre + (w.name || nm) }));
+        if (o && o.loads) for (let i = 0; i < c; i++) loads.push(...o.loads);
+        const text = `<b>${esc(pre + nm)}</b>${o && o.effect ? ': ' + ruleHtml(o.effect) : ''}`;
+        (o && o.category === 'Upgrades' ? upgLines : armLines).push(text);
+      });
+      const stRules = [];
+      const stSeen = new Set();
+      (def.stationRules || []).forEach(r => { if (r && r.name && !stSeen.has(r.name)) { stSeen.add(r.name); stRules.push([r.name, r.effect || '']); } });
+      (def.specialRules || []).forEach(r => { if (r && r.name && !stSeen.has(r.name)) { stSeen.add(r.name); stRules.push([r.name, r.description || '']); } });
+      stationHtml = `<div class="pr-group">
+        <div class="pr-group-head"><span class="pr-group-name">${esc(ss.name)}</span><span class="pr-group-pts">${esc(num(ss.cost))} pts</span></div>
+        ${statCells ? `<div class="pr-stats">${statCells}</div>` : ''}
+        ${printHullTrack(st.hull, 1, '')}
+        ${printWeaponTable(wlist, collectRule)}
+        ${printLaunchTable(laMap, loads, collectRule)}
+        ${armLines.length ? `<div class="pr-opts"><b>Armaments:</b> ${armLines.join('; ')}</div>` : ''}
+        ${upgLines.map(t => `<div class="pr-opts"><b>Upgrade:</b> ${t}</div>`).join('')}
+        ${stRules.map(([n, d]) => `<div class="pr-gloss pr-inline-rule"><b>${esc(n)}</b>${d ? ': ' + ruleHtml(d) : ''}</div>`).join('')}
+      </div>`;
+    }
+
+    // Secondary objectives: every option as a checklist, chosen ones pre-ticked.
+    const chosen = new Set(f.secondaryObjectives || []);
+    const allObjs = [...(SECONDARY_OBJECTIVES || [])];
+    chosen.forEach(n => { if (!allObjs.some(o => o.name === n)) allObjs.push({ name: n, description: '' }); });
+    const secObjsHtml = allObjs.map(o => `<div class="pr-gloss pr-check-row"><span class="pr-check${chosen.has(o.name) ? ' on' : ''}" aria-hidden="true">${chosen.has(o.name) ? '✓' : ''}</span><span><b>${esc(o.name)}</b>${o.description ? ': ' + ruleHtml(o.description) : ''}</span></div>`).join('');
 
     const glossary = [...usedRules.entries()].sort((a, b) => a[0].localeCompare(b[0]))
       .map(([n, d]) => `<div class="pr-gloss"><b>${esc(n)}</b>: ${ruleHtml(d)}</div>`).join('');
 
-    document.getElementById('print-root').innerHTML = `
+    root.innerHTML = `
       <div class="pr-header">
         <div class="pr-title">${esc(f.name || 'Unnamed Fleet')}</div>
-        <div class="pr-sub">${info?.name || f.faction}, ${size.label}, ${pts} / ${limit} pts, ${(f.battleGroups || []).length} groups</div>
+        <div class="pr-sub">${esc(info?.name || f.faction)}, ${esc(size.label)}, ${esc(pts)} / ${esc(limit)} pts</div>
       </div>
+      ${f.description ? `<div class="pr-desc">${esc(f.description)}</div>` : ''}
       <div class="pr-units">${groupsHtml}</div>
       ${admiralsHtml ? `<div class="pr-section-title">Admiral</div>${admiralsHtml}` : ''}
+      ${abilitiesHtml ? `<div class="pr-section-title">Admiral Abilities</div>${abilitiesHtml}` : ''}
       ${stationHtml ? `<div class="pr-section-title">Space Station</div>${stationHtml}` : ''}
       ${secObjsHtml ? `<div class="pr-section-title">Secondary Objectives</div><div class="pr-glossary">${secObjsHtml}</div>` : ''}
       ${glossary ? `<div class="pr-section-title">Rules Glossary</div><div class="pr-glossary">${glossary}</div>` : ''}
       <div class="pr-foot">type37.github.io/dropfleet-builder</div>
     `;
+    document.body.classList.add('has-print-sheet');
   }
 
   window.addEventListener('beforeprint', () => {
-    if (activeFleet) buildPrintSheet();
+    const screen = document.querySelector('.screen.active');
+    if (activeFleet && screen && FLEET_SCOPED_SCREENS.has(screen.id)) buildPrintSheet();
+    else clearPrintSheet();   // not on a fleet: let the normal page print
   });
   // Clear it afterwards so a later browser-initiated print can never send the
   // sheet of a fleet the user has since left.
-  window.addEventListener('afterprint', () => {
-    const root = document.getElementById('print-root');
-    if (root) root.innerHTML = '';
-  });
+  window.addEventListener('afterprint', clearPrintSheet);
 
   function shareFleet() {
     // Default share = the simple army list (New Recruit style text). The import link

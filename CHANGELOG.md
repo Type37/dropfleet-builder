@@ -5,6 +5,76 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-12: Print audit, both apps
+
+Every PDF below was printed from real fleets in Chrome (all six factions, plus
+test fleets with a famous flagship, the Twins of Aaru, stations with modules,
+refits, Resistance systems and a Battle Carrier's two features) and read page by
+page.
+
+**Desktop print preview**
+- **Controls say what they do.** Seven overlapping checkboxes (Simple list,
+  Roster (2-3 pg), Big mode, 2 columns, Ink-saver, Skip rules/obj., Text) are
+  now: Layout (Cards / Big cards / Table / Text list), Columns (Cards only),
+  Text size (Large / Small), Paper (A4 / Letter), Colour, Rules text and
+  Secondary objectives. Options that do nothing for the chosen layout are not
+  shown, instead of sitting there disabled. "2 columns" used to be disabled by
+  default because Big mode was on. Old settings carry over; anyone who had
+  Skip rules/obj. on keeps both rules and objectives hidden.
+- **Paper is real.** A4/Letter sets `@page size` for the print and the preview's
+  page height and width. Unset, it follows the browser language (US, Canada,
+  Mexico, Philippines get Letter).
+- **Page count** keeps whole groups together like the printer does
+  (`break-inside: avoid` on `.dp-group`) and no longer inserts spacers inside the
+  two-column objectives list.
+
+**Desktop sheet**
+- **Famous flagships** share the ship-card renderer (`shipCardHtml`): hull boxes
+  with one track per hull (Twins of Aaru: two), launch line and launch reference,
+  refit, weapon rules, rules from loadouts, and the Rules text toggle.
+- **Space stations** print base weapons plus every chosen module's weapons, the
+  modules with their effect text, launch, and station rules in full (Gate Node,
+  Mothership, weapon specials). Before, a generic station printed no weapons.
+- **Big cards** print the Refit line (it was never added to Big mode, the
+  default), so Drive Refit / Cloaking Keel show why a stat is green.
+- **Rules text off** keeps every ship rule named on its card as a chip. Before,
+  rules that weren't hoisted to the end glossary vanished.
+- **Table layout** prints systems, deployable features and refits, and every rule
+  (including ones from loadouts and system weapons) reaches the Rules glossary.
+- **Dark mode** no longer leaks: the sheet pins the light colour tokens, so
+  launch-asset and ability names aren't pale grey on white.
+- **Stale or blank prints:** `beforeprint` rebuilds every time, and only on the
+  builder or Play Mode; the page is only hidden while a sheet exists, so a print
+  from the fleet list prints the fleet list. Sheet images are no longer
+  `loading="lazy"`.
+- **Share links:** points, costs, levels and limits are coerced to numbers, and
+  `data-fleet-name` uses `escAttr`; a fleet name with a `"` could inject an
+  attribute into the preview.
+- **Legibility:** keywords (`.dp-kw`) and arcs don't split across lines, table
+  arcs stack icon over label, `#777`/`#999` labels darkened to pass AA, wide
+  letter-spacing removed, the printed "pick two for your game" hint removed.
+- Rare badge no longer prints (it has no in-game meaning); Unique stays.
+- Removed dead print CSS (`.print-ship`, `.print-dmg-*`, `.sp-*`,
+  `.dp-flagship`) and unused glossary/summary variables.
+
+**Mobile Export PDF**
+- Space stations: stats, hull boxes, base and chosen-armament weapons, launch,
+  upgrades with effect text, station rules in full.
+- Admiral abilities table (innate + chosen + Core Abilities) with AP and effect.
+- Launch table includes refit and system bays (`shipLoadsFor`, also used on the
+  group screen); refit-granted rules, Special-column keywords, system effects and
+  deployable feature stats all print.
+- All secondary objectives as a checklist; hull boxes; "(N ea)"; tonnage; Unique;
+  description; no "N groups" count; footer contrast fixed; section titles never
+  orphaned; fixed table column widths.
+- Imports (`sanitizeImportedFleet`) coerce numbers and recalculate ship, admiral
+  and station points from the faction data.
+- `beforeprint` only builds the sheet on a fleet screen, and the page is only
+  hidden while the sheet has content.
+
+Kept on purpose: the "like— tonnage" em-dash in the Payload rule is verbatim
+from the rulebook, and "crit 7+" on a 5+ Lock is what rule 7.3.4 gives.
+
 ### 2026-09-11: Scenario pages read like the Dropzone ones; Orbital Support's Variant
 
 - **Index:** the Deployment and Scoring columns put commas between the rules

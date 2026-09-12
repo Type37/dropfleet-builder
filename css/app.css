@@ -2826,6 +2826,8 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
 }
 .dp-abilities { break-inside: auto; }
+.dp-abilities-short { width: auto; min-width: 50%; }
+.dp-abilities-short .dp-abil-name { width: auto; }
 .pf-inksaver .dp-abilities-table .dp-abil-grouprow td { background: #fff !important; color: #000 !important; border-top: 1px solid #999; }
 
 /* Loadout selectors */
@@ -5203,9 +5205,10 @@ h1, h2, h3, h4, h5, h6 {
     margin: 12mm;
   }
 
-  /* Hide everything except the print container */
+  /* Hide everything except the print container, only while it exists: a print
+     from a screen with no fleet prints that screen instead of a blank sheet. */
   body { background: white !important; color: black !important; font-size: 10pt; }
-  body > *:not(#print-container) { display: none !important; }
+  body:has(> #print-container) > *:not(#print-container) { display: none !important; }
   #print-container { display: block !important; }
 
   /* macOS/WebKit fix: <body> is a column flexbox (display:flex on screen). In a
@@ -5228,72 +5231,31 @@ h1, h2, h3, h4, h5, h6 {
     transform: none !important;
   }
 
-  /* Stat grid — compact for print */
-  .stat-grid { gap: 0; }
-  .stat-cell {
-    border-color: #999;
-    background: #f5f5f5;
-    padding: 2px 4px;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  .stat-cell-label { font-size: 7pt; gap: 1px; }
-  .stat-cell-label svg { width: 8px; height: 8px; opacity: 0.7; }
-  .stat-cell-value { font-size: 11pt; }
-  .stat-cell-warn { background: #fff3e0; color: #8a5810; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .stat-cell-good { color: #2e7d32; }
-
-  /* Weapons — tight rows */
-  .weapon-list { margin-top: 3px; }
-  .weapon-row { background: #fafafa; border-color: #bbb; padding: 1px 6px; min-height: auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .weapon-header { background: #eee; padding: 1px 6px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .weapon-col-type svg { opacity: 0.9; }
-  .weapon-special-chip { background: #eee; color: #333; border-color: #bbb; font-size: 7pt; padding: 0 4px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
   /* Launch ref */
   .launch-ref { border-color: #999; break-inside: avoid; margin-top: 8px; }
   .launch-ref-header { background: #f5f5f5; border-color: #bbb; font-size: 8pt; padding: 3px 8px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .launch-ref-row { border-color: #bbb; padding: 1px 6px; }
   .launch-ref-row-header { background: #f5f5f5; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
-  /* Ship card print overrides */
-  .print-ship { border-color: #999; border-left-color: #1b3a5c; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .print-ship-art { border-color: #bbb; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .print-dmg-box { border-color: #777; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .print-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
-  /* Warnings */
-  .print-warnings { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .print-warning-error { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
-  /* Group category badges */
-  .print-group-cat { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
-  /* Cripple markers */
-  .print-dmg-cripple { border-color: #c43c2f; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .print-dmg-cripple-label { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
-  /* Description */
   .print-desc { border-left-color: #b8932e; background: #faf8f5; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
-  /* Totals */
-  .print-totals { break-inside: avoid; }
-
-  /* Page break hints */
-  .print-group { break-inside: avoid; }
-  .print-ship { break-inside: avoid; }
-  .print-glossary { break-before: auto; }
   .print-header { break-after: avoid; }
-  .print-group-header { break-after: avoid; }
 
-  /* Two-column units layout (Settings toggle) — packs ~4 units per page. The
-     group header spans both columns; ships flow into two columns; tall groups
-     may break across pages (they can't fit one column). Weapon rows tighten. */
-  .print-2col .print-group { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; align-items: start; break-inside: auto; }
-  .print-2col .print-group-header { grid-column: 1 / -1; }
-  .print-2col .print-ship { break-inside: avoid; }
-  .print-2col .print-ship .weapon-row { grid-template-columns: minmax(64px, 1.2fr) 26px 22px 22px 28px minmax(50px, 1.5fr); font-size: 7.5pt; }
 
+}
+/* The sheet only exists on screen for the moment a print is running. */
+@media screen { #print-container { display: none; } }
+
+/* The sheet is always paper: pin the colour tokens it reads to the light theme,
+   so dark mode never reaches the preview or the printer. */
+.print-fleet {
+  --paper: #ffffff; --paper-warm: #faf8f5; --paper-alt: #f3f1ec; --surface: #f4f1ea; --warm: #f3f1ec;
+  --ink: #1c1a17; --ink-soft: #3a3834; --ink-muted: #6b6660; --ink-faint: #66615a;
+  --navy: #1b3a5c; --navy-light: #2a5080; --navy-dark: #0f2640; --navy-subtle: rgba(27, 58, 92, 0.08); --navy-wash: rgba(27, 58, 92, 0.04);
+  --gold: #b8932e; --gold-light: #d4ad4a; --gold-dark: #785e17; --gold-subtle: rgba(184, 147, 46, 0.10); --gold-line: rgba(184, 147, 46, 0.35); --accent: #b8932e;
+  --faction-ucm-text: #287030; --faction-shaltari-text: #946010; --faction-bioficer-text: #1f7070;
+  --success: #3e9945; --success-ink: #2c6e49; --warning: #d98c1f; --warn-ink: #8a5a00; --warn-bg: #fdf3e0; --error: #c43c2f; --info: #2a5080;
+  --stroke: #d8d4cc; --stroke-light: #e8e5df; --stroke-strong: #b8b2a8; --stroke-accent: rgba(27, 58, 92, 0.25);
+  color: #1c1a17;
+  background: #fff;
 }
 
 /* Print Preview overlay — pick options + see the output before the print dialog. */
@@ -5326,13 +5288,21 @@ h1, h2, h3, h4, h5, h6 {
   padding: 12mm; box-shadow: 0 4px 24px rgba(0,0,0,0.4); border-radius: 2px;
 }
 /* Page-count readout + density select in the preview bar. */
-.pp-pagecount { font-size: var(--text-sm); color: #cdd6e0; font-variant-numeric: tabular-nums; }
-.pp-density-sel {
-  background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.4);
-  border-radius: 4px; padding: 1px 4px; font-size: var(--text-sm); cursor: pointer;
+.pp-pagecount { font-size: var(--text-sm); color: #cdd6e0; font-variant-numeric: tabular-nums; min-width: 5.5em; }
+.print-preview-bar [hidden] { display: none !important; }
+.print-preview-opt input { accent-color: #ffcc00; }
+.pp-group { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-sm); }
+.pp-label { color: #dbe3ec; }
+.pp-seg { display: inline-flex; border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 4px; }
+.pp-seg-btn {
+  background: transparent; color: #fff; border: 0; border-left: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 2px 9px; font: inherit; cursor: pointer; line-height: 1.5;
 }
-.pp-density-sel option { color: #1c1a17; }
-.pp-density-sel:disabled, .print-preview-opt input:disabled { opacity: 0.4; cursor: default; }
+.pp-seg-btn:first-child { border-left: 0; border-radius: 3px 0 0 3px; }
+.pp-seg-btn:last-child { border-radius: 0 3px 3px 0; }
+.pp-seg-btn:hover { background: rgba(255, 255, 255, 0.14); }
+.pp-seg-btn[aria-pressed="true"] { background: #fff; color: #1b3a5c; font-weight: var(--weight-bold); }
+.pp-seg-btn:focus-visible { outline: 2px solid #ffcc00; outline-offset: 1px; }
 /* Estimated page boundary on the continuous preview sheet (screen only). */
 .pp-page-break {
   position: absolute; left: 0; right: 0; height: 0;
@@ -5341,18 +5311,8 @@ h1, h2, h3, h4, h5, h6 {
 .pp-page-break-label {
   position: absolute; right: 0; top: 2px;
   background: #b04a3a; color: #fff; font-size: 8pt; font-weight: 700;
-  letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 6px; border-radius: 0 0 3px 3px;
+  text-transform: uppercase; padding: 1px 6px; border-radius: 0 0 3px 3px;
 }
-/* Simple Print View — compact roster list (screen + print). */
-.print-simple { font-family: 'Jost', sans-serif; color: #1c1a17; font-size: 11pt; }
-.print-simple .sp-head { font-size: 13pt; border-bottom: 2px solid #1c1a17; padding-bottom: 4px; margin-bottom: 8px; }
-.print-simple .sp-section { margin-bottom: 10px; }
-.print-simple .sp-row { display: flex; align-items: baseline; gap: 6px; padding: 2px 0; border-bottom: 1px dotted #bbb; }
-.print-simple .sp-qty { font-weight: 700; min-width: 26px; }
-.print-simple .sp-name { font-weight: 600; }
-.print-simple .sp-note { color: #555; font-size: 9.5pt; }
-.print-simple .sp-pts { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 700; }
-.print-simple .sp-adm .sp-name { font-style: italic; }
 /* Simple Print View renders the plain-text army list in a clean readable block. */
 .print-simple-text {
   font-family: 'Jost', 'Segoe UI', sans-serif;
@@ -5904,7 +5864,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .dp-group-name { font-weight: 700; font-size: 10.5pt; color: #1b3a5c; }
 .dp-group-cat {
-  font-weight: 600; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.04em;
+  font-weight: 600; font-size: 7.5pt; text-transform: uppercase;
   border: 1px solid currentColor; border-radius: 3px; padding: 0 3px; margin-left: 4px;
 }
 .dp-group-cat-light { color: #2f6ba0; }
@@ -5925,13 +5885,13 @@ h1, h2, h3, h4, h5, h6 {
 .dp-statgrid, .dp-big-top { break-inside: avoid; page-break-inside: avoid; }
 .dp-ship-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .dp-name { font-weight: 700; font-size: 9.5pt; color: #1c1a17; }
-.dp-ton { font-weight: 600; font-size: 7.5pt; color: #777; text-transform: uppercase; letter-spacing: 0.03em; }
+.dp-ton { font-weight: 600; font-size: 7.5pt; color: #5f5f5f; text-transform: uppercase; }
 .dp-badge {
   font-size: 7pt; font-weight: 700; text-transform: uppercase; border: 1px solid #b83828;
   color: #b83828; border-radius: 3px; padding: 0 3px; margin-left: 3px;
 }
 .dp-pts { font-size: 8.5pt; font-weight: 700; color: #1b3a5c; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.dp-each { font-weight: 400; color: #777; font-size: 7.5pt; }
+.dp-each { font-weight: 400; color: #5f5f5f; font-size: 7.5pt; }
 
 /* Stat grid (echoes the on-screen stat cells): icon | value over label, packed
    into an aligned grid instead of a loose flowing line. */
@@ -5939,7 +5899,7 @@ h1, h2, h3, h4, h5, h6 {
    on-screen stat grid. width:max-content keeps the block compact, not stretched. */
 .dp-statgrid { display: grid; grid-template-columns: repeat(2, minmax(46px, 78px)); gap: 2px; margin: 3px 0; width: max-content; max-width: 100%; }
 .dp-sc-wide { grid-column: 1 / -1; }
-.dp-sc-none { opacity: 0.5; }
+.dp-sc-none .dp-sc-val, .dp-sc-none .dp-sc-lab, .dp-sc-none .dp-sc-icon { color: #6b6660; }
 /* Hull tracking boxes occupy the Hull slot of the stat grid (replacing the number). */
 .dp-statgrid .dp-sc-hull .dp-hull { margin-top: 0; }
 .dp-statcell {
@@ -5950,20 +5910,21 @@ h1, h2, h3, h4, h5, h6 {
 .dp-sc-icon { grid-row: 1 / 3; display: inline-flex; color: #1b3a5c; }
 .dp-sc-icon svg { width: 12px; height: 12px; display: block; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 .dp-sc-val { font-weight: 700; font-size: 9pt; color: #1c1a17; line-height: 1.05; }
-.dp-sc-lab { font-size: 6pt; text-transform: uppercase; letter-spacing: 0.02em; color: #777; line-height: 1; }
+.dp-sc-lab { font-size: 6pt; text-transform: uppercase; color: #5f5f5f; line-height: 1; }
 .dp-statcell.dp-stat-mod .dp-sc-val, .dp-statcell.dp-stat-mod .dp-sc-icon { color: #2e7d32; }
 /* Firing-arc icon in the print weapon table (the little arc diagram + its label). */
 .dp-w-arc { white-space: nowrap; }
 .dp-arc { display: inline-flex; align-items: center; justify-content: center; gap: 2px; color: #1b3a5c; }
 .dp-arc svg { width: 12px; height: 12px; display: block; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-.dp-arc-lab { font-size: 6.8pt; color: #555; }
+.dp-arc-lab { font-size: 6.8pt; color: #555; white-space: nowrap; }
+.dp-kw { white-space: nowrap; }
 
 .dp-weapons { width: 100%; border-collapse: collapse; margin: 3px 0; font-size: 8pt; }
 .dp-weapons th {
   /* Dark text on a light tint + a dark underline — readable even if the printer
      drops background fills (no white-on-navy). */
   text-align: center; background: #e7ebf0; color: #1b3a5c; font-weight: 700; padding: 1px 4px;
-  font-size: 7pt; text-transform: uppercase; letter-spacing: 0.02em;
+  font-size: 7pt; text-transform: uppercase;
   border-bottom: 1.5px solid #1b3a5c;
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
 }
@@ -5974,10 +5935,9 @@ h1, h2, h3, h4, h5, h6 {
 /* Critical-on value under the Lock, only for weapons whose rules use criticals. */
 .dp-w-crit {
   display: block; font-size: 6.8pt; font-weight: 700; line-height: 1.1;
-  color: #8a6d1e; letter-spacing: 0.02em; white-space: nowrap; margin-top: 1px;
+  color: #8a6d1e; white-space: nowrap; margin-top: 1px;
 }
 /* Secondary-objective checklist: every option with a tickbox to pick at the table. */
-.dp-secobj-hint { font-weight: 400; font-style: italic; color: #8a6d1e; font-size: 0.82em; text-transform: none; letter-spacing: 0; }
 /* Secondary-objective checklist is ALWAYS two columns for readability, regardless
    of the sheet's column/big/roster mode (the list is long and reads better split). */
 .dp-secobj .dp-rules { column-count: 2; column-gap: 18px; }
@@ -5993,7 +5953,7 @@ h1, h2, h3, h4, h5, h6 {
 .dp-rule b { color: #1b3a5c; }
 
 .dp-hull { display: flex; align-items: center; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
-.dp-hull-lab { font-size: 7pt; font-weight: 700; text-transform: uppercase; color: #777; }
+.dp-hull-lab { font-size: 7pt; font-weight: 700; text-transform: uppercase; color: #5f5f5f; }
 .dp-hull-num { font-size: 8.5pt; font-weight: 800; color: #1b3a5c; font-variant-numeric: tabular-nums; }
 .dp-hull-boxes { display: inline-flex; flex-wrap: wrap; gap: 2px 6px; }
 .dp-hull-grp { display: inline-flex; gap: 1.5px; }
@@ -6005,12 +5965,6 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #c43c2f; border-width: 1.5px;
   background: repeating-linear-gradient(45deg, transparent, transparent 2px, #f3c0bb 2px, #f3c0bb 3px);
 }
-
-.dp-flagship {
-  margin-top: 4px; padding: 3px 7px; border: 1px dashed #b8932e; border-radius: 3px;
-  background: #faf8f5; -webkit-print-color-adjust: exact; print-color-adjust: exact;
-}
-.dp-flagship-name { font-weight: 700; font-size: 8.5pt; color: #1b3a5c; margin-bottom: 2px; }
 
 /* Per-ship thumbnail — sits left of the ship name so the sheet can be matched to
    the model on the table. Sized by the density tier below. */
@@ -6053,12 +6007,11 @@ h1, h2, h3, h4, h5, h6 {
 .pf-inksaver .dp-weapons tr:nth-child(even) td { background: #fff !important; }
 .pf-inksaver .dp-group-name, .pf-inksaver .dp-pts, .pf-inksaver .dp-group-pts,
 .pf-inksaver .dp-w-name, .pf-inksaver .dp-loads b, .pf-inksaver .dp-systems b,
-.pf-inksaver .dp-rule b, .pf-inksaver .dp-flagship-name { color: #000 !important; }
+.pf-inksaver .dp-rule b { color: #000 !important; }
 .pf-inksaver .dp-group-head { border-bottom-color: #000 !important; }
 .pf-inksaver .dp-ship { border-left-color: #000 !important; }
 .pf-inksaver .dp-group-cat { color: #000 !important; }
-.pf-inksaver .dp-flagship { background: #fff !important; border-color: #777; }
-.pf-inksaver .dp-statline, .pf-inksaver .dp-rules,
+.pf-inksaver .dp-rules,
 .pf-inksaver .dp-loads, .pf-inksaver .dp-systems { color: #000; }
 /* Hoisted faction-rule keyword chips on a card (full text is in the end glossary). */
 .dp-hoist-chips { display: flex; flex-wrap: wrap; gap: 3px; margin: 3px 0; }
@@ -6084,7 +6037,7 @@ h1, h2, h3, h4, h5, h6 {
 .roster-table th:nth-child(11), .roster-table th:nth-child(12), .roster-table th:nth-child(13) { width: 4%; }
 .roster-table th {
   background: #e7ebf0; color: #1b3a5c; font-size: 6.5pt; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.02em; padding: 2px 3px;
+  text-transform: uppercase; padding: 2px 3px;
   border-bottom: 1.5px solid #1b3a5c; text-align: center;
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
 }
@@ -6106,17 +6059,21 @@ h1, h2, h3, h4, h5, h6 {
 .rt-gcat { font-size: 6.5pt; text-transform: uppercase; border: 1px solid currentColor; border-radius: 3px; padding: 0 3px; margin-left: 4px; }
 .rt-gpts { font-weight: 400; color: #555; font-size: 7pt; margin-left: 6px; }
 .rt-shipname { font-weight: 700; color: #1c1a17; line-height: 1.2; }
-.rt-ton { font-weight: 600; font-size: 6.5pt; color: #777; text-transform: uppercase; letter-spacing: 0.03em; }
+.rt-ton { font-weight: 600; font-size: 6.5pt; color: #5f5f5f; text-transform: uppercase; }
 .rt-pts { font-weight: 400; color: #1b3a5c; font-size: 7pt; }
 .rt-rules { font-size: 6.8pt; color: #555; line-height: 1.3; margin-top: 1px; }
 .rt-rules::before { content: 'Rules: '; color: #1b3a5c; font-weight: 700; }
 .rt-hull { margin-top: 2px; }
+.roster-table .dp-systems { font-size: 6.8pt; margin: 1px 0; line-height: 1.3; }
 .pf-roster .rt-hull .dp-hull-lab { display: none; }
 .pf-roster .rt-hull .dp-hull { margin-top: 0; gap: 2px; }
 .pf-roster .dp-box { width: 8px; height: 8px; }
 .rt-wsp { color: #666; font-size: 7pt; }
 .rt-load { color: #1b3a5c; font-size: 7.5pt; }
-.rt-none { color: #999; font-style: italic; }
+.rt-none { color: #5f5f5f; font-style: italic; }
+/* Arc icon over its label, so "F/S/R" fits the narrow column without splitting. */
+.roster-table td.rt-arc { overflow-wrap: normal; }
+.rt-arc .dp-arc { flex-direction: column; gap: 0; }
 .roster-table tr.rt-first > td { border-top: 1px solid #c9c2b4; }
 /* Page transitions: a ship's row(s) never split across a page, and a group header
    row never lands alone at the foot of a page away from its first ship. */
@@ -6152,7 +6109,7 @@ h1, h2, h3, h4, h5, h6 {
 .pf-big .dp-big-below > .dp-loads:first-child,
 .pf-big .dp-big-below > .dp-systems:first-child { margin-top: 0; }
 .pf-big .dp-hull { margin-top: 6px; border-top: 1px dotted #ccc; padding-top: 4px; }
-.pf-big .dp-zone-empty { font-size: 8pt; color: #999; font-style: italic; }
+.pf-big .dp-zone-empty { font-size: 8pt; color: #5f5f5f; font-style: italic; }
 /* On very narrow paper / preview overflow, stack art above the stats. */
 @media (max-width: 560px) { .pf-big .dp-big-top { flex-direction: column; } .pf-big .dp-big-art-wrap { flex-basis: auto; max-width: 220px; } }
 

@@ -33,7 +33,7 @@ let activeGroupId = null;
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true, printRoster: false, printNoRules: false, showCollection: false, theme: 'light' };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printDensity: 'comfortable', printInk: true, printBig: true, printRoster: false, printNoRules: false, printNoObjectives: false, printPaper: '', showCollection: false, theme: 'light' };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -1735,8 +1735,8 @@ let activeGroupId = null;
         description: mini.d || '',
         faction: mini.f,
         gameSize: mini.s || 'clash',
-        pointsLimit: mini.pl != null ? mini.pl : (GAME_SIZES[mini.s] || GAME_SIZES.clash).max,
-        maxGroups: maxGroupsFor({ gameSize: mini.s, pointsLimit: mini.pl }),
+        pointsLimit: Number(mini.pl) > 0 ? Number(mini.pl) : (GAME_SIZES[mini.s] || GAME_SIZES.clash).max,
+        maxGroups: maxGroupsFor({ gameSize: mini.s, pointsLimit: Number(mini.pl) > 0 ? Number(mini.pl) : undefined }),
         admirals: [],
         battleGroups: (mini.g || []).map(g => ({
           id: uuid(),
@@ -1745,7 +1745,7 @@ let activeGroupId = null;
             id: uuid(),
             groupCategory: s.c,
             shipKey: s.k,
-            points: s.p,
+            points: Number(s.p) || 0,
             loadouts: s.l || {},
             feature: s.ft || undefined,
             feature2: s.ft2 || undefined,
@@ -1763,7 +1763,7 @@ let activeGroupId = null;
         fleet.spaceStation = {
           id: mini.ss.k || null,
           name: mini.ss.n,
-          cost: mini.ss.c || 0,
+          cost: Number(mini.ss.c) || 0,
           stationKey: mini.ss.k || null,
           systems: mini.ss.sy || []
         };
@@ -1773,11 +1773,11 @@ let activeGroupId = null;
       if (mini.as && mini.as.length > 0) {
         fleet.admirals = mini.as.map(a => ({
           name: a.n,
-          points: a.p || 0,
+          points: Number(a.p) || 0,
           // Famous-admiral id: desktop stores `k`, mobile stores `i` — cross-fall-back.
           admiralId: a.i || a.k || null,
           shipKey: a.k || a.i || null,
-          level: a.l || 1,
+          level: Math.max(1, parseInt(a.l, 10) || 1),
           type: a.t || 'Generic',
           selectedAbilities: a.sa || [],
           assignedGroupId: a.ag || null,
@@ -1786,10 +1786,10 @@ let activeGroupId = null;
       } else if (mini.a) {
         fleet.admirals = [{
           name: mini.a.n,
-          points: mini.a.p || 0,
+          points: Number(mini.a.p) || 0,
           admiralId: mini.a.i || null,
           shipKey: mini.a.k || null,
-          level: mini.a.l || 1
+          level: Math.max(1, parseInt(mini.a.l, 10) || 1)
         }];
       }
 
@@ -6412,11 +6412,17 @@ let activeGroupId = null;
     if (!m) return null;
     return (parseInt(m[1], 10) + 2) + '+';
   }
+  // A Special column's keywords, each kept whole on one line ("Fusillade-2" never
+  // splits into "Fusillade-" / "2"); the list itself still wraps between keywords.
+  function specialKeywordsHtml(special) {
+    return String(special).split(',').map(s => s.trim()).filter(Boolean)
+      .map(s => `<span class="dp-kw">${esc(s)}</span>`).join(', ');
+  }
   function dpWeaponTable(weapons) {
     if (!weapons.length) return '';
     const body = weapons.map(w => {
       const dmg = `${esc(w.damage || '')}${w.type ? ' ' + esc(w.type) : ''}`;
-      const special = (w.special && w.special !== '-') ? esc(w.special) : '';
+      const special = (w.special && w.special !== '-') ? specialKeywordsHtml(w.special) : '';
       const nm = `${w.qty > 1 ? w.qty + '× ' : ''}${esc(w.name || '')}`;
       const arc = ARC_ICONS[w.arc]
         ? `<span class="dp-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${ARC_ICONS[w.arc]}<span class="dp-arc-lab">${esc(w.arc || '')}</span></span>`
@@ -6449,19 +6455,22 @@ let activeGroupId = null;
     return Array.from({ length: count }, (_, i) => track('#' + (i + 1))).join('');
   }
 
+  // The print layout the preview's Layout control picked. Stored as the older
+  // boolean settings so existing users keep the sheet they had.
+  function printLayoutMode() {
+    if (settings.printSimple) return 'text';
+    if (settings.printRoster) return 'table';
+    if (settings.printBig) return 'big';
+    return 'cards';
+  }
+
   function buildFullPrintHTML(f) {
     const fName = (factionData[f.faction] || {}).name || f.faction.toUpperCase();
     const pts = calcFleetPoints(f);
     const sizeInfo = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
     const factionInfo = shipDB[f.faction];
-
-    // Collect all special rules used across the fleet for the rules glossary
-    const rulesGlossary = {};
-
-    // Fleet composition summary
-    const totalShips = f.battleGroups.reduce((t, g) => t + g.ships.length, 0);
-    const totalGroups = f.battleGroups.length;
-    const admCount = (f.admirals || []).length;
+    const noRules = !!settings.printNoRules;
+    const noObjectives = !!settings.printNoObjectives;
 
     // Validation warnings are a build-time aid only — kept in the on-screen builder
     // (sidebar alerts), never printed on the final army-list sheet.
@@ -6473,10 +6482,12 @@ let activeGroupId = null;
       ? `<div class="print-desc">${esc(f.description)}</div>`
       : '';
 
+    const layout = printLayoutMode();
+    const roster = layout === 'table';
+    const big = layout === 'big';
     const densityClass = settings.printDensity === 'compact' ? 'pf-compact' : 'pf-comfortable';
-    const roster = settings.printRoster;
-    const twoCol = settings.print2col && !settings.printBig && !roster; // big/roster are one column
-    let html = `<div class="print-fleet${twoCol ? ' print-2col' : ''} ${densityClass}${settings.printInk ? ' pf-inksaver' : ''}${(settings.printBig && !roster) ? ' pf-big' : ''}${roster ? ' pf-roster' : ''}" data-fleet-name="${esc(f.name)}">
+    const twoCol = layout === 'cards' && settings.print2col; // big/roster are one column
+    let html = `<div class="print-fleet${twoCol ? ' print-2col' : ''} ${densityClass}${settings.printInk ? ' pf-inksaver' : ''}${big ? ' pf-big' : ''}${roster ? ' pf-roster' : ''}" data-fleet-name="${escAttr(f.name)}">
       <div class="print-header">
         <div class="print-header-top">
           ${fIcon ? `<img src="${fIcon}" alt="" class="print-faction-icon">` : ''}
@@ -6485,44 +6496,357 @@ let activeGroupId = null;
             <div class="print-fleet-meta">${esc(fName)}, ${sizeInfo.label}</div>
           </div>
           <div class="print-header-points">
-            <div class="print-points-big">${pts}</div>
-            <div class="print-points-cap">${effMax(f) !== 99999 ? '/ ' + effMax(f) : ''} pts</div>
+            <div class="print-points-big">${esc(String(pts))}</div>
+            <div class="print-points-cap">${effMax(f) !== 99999 ? '/ ' + esc(String(effMax(f))) : ''} pts</div>
           </div>
         </div>
       </div>
       ${descHtml}
-      <!--LAUNCH_REF-->`;
+      <!--LAUNCH_REF-->
+      <!--ADMIRALS-->
+      <!--STATION-->`;
+    // Launch reference, admirals and station print above the groups, but are filled
+    // in after the groups are built: a flagship card shares the ship-card renderer
+    // (and its rules glossary), and every card feeds the launch reference.
 
-    // Admirals — each card carries the admiral header + (for Famous) the flagship
-    // ship card. Their abilities are NOT listed per-card; instead every ability the
-    // fleet can use this match is collected into one consolidated table below.
+    // Faction-wide rules glossary: spell a ship special rule out ONCE at the end
+    // instead of on every card when it's shared across the fleet (e.g. Shaltari
+    // "Shield"). A rule on a single card stays in place; the card always keeps the
+    // keyword (with its per-ship value, e.g. "Shield-3+") so you know it has it.
+    // Decide by BASE name (Shield-3+/4+/5+ all count as "Shield") so a faction-wide
+    // rule is recognised even when its value varies. Cards show the value chip.
+    // Also hoist common WEAPON specials (Close Action, Scald, Crippling, …): those
+    // repeat hardest and matter most for paper (fewer pages). The keyword stays in
+    // the weapon table's Special column, so the card still shows what the gun does;
+    // only the spelled-out text moves to the end glossary.
+    const baseRuleName = nm => String(nm).replace(/[-\s](?:\d+\+?"?|X"?|[0-9]+x\S*)$/, '').trim();
+    const baseCardCount = {};
+    const wBaseCardCount = {};
+    let glossTotalCards = 0;
+    // Print in the same weight-class order as the on-screen builder (heaviest first).
+    const printGroups = sortGroupsByWeight(f.battleGroups);
+    printGroups.forEach(g => {
+      const seen = new Set();
+      g.ships.forEach(ship => {
+        const k = `${ship.shipKey}:${ship.groupCategory}:${JSON.stringify(ship.loadouts || {})}:${JSON.stringify(ship.systems || [])}:${ship.feature || ''}:${ship.feature2 || ''}`;
+        if (seen.has(k)) return; seen.add(k);
+        glossTotalCards++;
+        const db = findShipInDB(f.faction, ship.groupCategory, ship.shipKey);
+        if (!db) return;
+        const bases = new Set();
+        (db.specialRuleDetails || []).forEach(r => { if (r.description) bases.add(baseRuleName(r.name)); });
+        bases.forEach(b => { baseCardCount[b] = (baseCardCount[b] || 0) + 1; });
+        const wbases = new Set();
+        (db.weapons || []).forEach(w => {
+          if (!w.special || w.special === '-') return;
+          w.special.split(',').forEach(s => { const t = s.trim(); if (t) wbases.add(baseRuleName(t)); });
+        });
+        wbases.forEach(b => { wBaseCardCount[b] = (wBaseCardCount[b] || 0) + 1; });
+      });
+    });
+    // Hoist when a rule (by base) is on a meaningful share of the fleet (faction-wide),
+    // min 3 cards so a small list doesn't send a 2-ship rule to the back.
+    // Roster mode keeps rows tiny by sending EVERY rule's text to the glossary,
+    // including rules that only arrive with a refit, system or loadout weapon.
+    const glossThreshold = Math.max(3, Math.ceil(glossTotalCards * 0.4));
+    const hoistedBases = new Set(Object.keys(baseCardCount).filter(b => baseCardCount[b] >= glossThreshold));
+    const hoistedWeaponBases = new Set(Object.keys(wBaseCardCount).filter(b => wBaseCardCount[b] >= glossThreshold));
+    const isHoistedShipRule = n => roster || hoistedBases.has(baseRuleName(n));
+    const isHoistedWeaponRule = n => roster || hoistedWeaponBases.has(baseRuleName(n));
+    // full name -> {description, page}, filled while rendering cards
+    const hoistedShipDefs = {};
+    const hoistedWeaponDefs = {};
+    const allLaunchAssetNames = new Set();
+    const ruleSpan = ([n, d, p]) => `<span class="dp-rule"><b>${esc(n)}${p ? ` p.${esc(p)}` : ''}:</b> ${ruleHtml(d)}</span>`;
+    const chipsHtml = names => names.length
+      ? `<div class="dp-hoist-chips">${names.map(n => `<span class="dp-hoist-chip">${esc(n)}</span>`).join('')}</div>` : '';
+
+    // One ship card: dense and self-contained, reading the same in the preview as on
+    // paper. System/loadout weapons merge into the weapon table. `ship` carries the
+    // player's picks (loadouts, systems, features); a famous flagship passes its
+    // admiral, which is where its picks live. In roster mode this returns table rows
+    // unless opts.card asks for a card (the flagship sits outside the table).
+    const shipCardHtml = (db, ship, count, opts = {}) => {
+      const asRoster = roster && !opts.card;
+      const name = db.name;
+      const eff = effectiveStats(db, ship, f.faction);
+      let out = '';
+
+      // Weapons: base + selected loadout + selected system/hardpoint weapons, all
+      // merged into one table (so "systems that are weapons" read as weapon rows).
+      const weaponRows = (db.weapons || []).map(w => ({ ...w }));
+      (db.loadoutOptions || []).forEach((lo, loIdx) => {
+        const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
+        const selOpt = lo.options[selIdx];
+        if (selOpt && selOpt.weapons) selOpt.weapons.forEach(w => weaponRows.push({ ...w }));
+      });
+      // Loads: base + selected loadout. Launch capacity adds up: merge identical
+      // loads (name+special) and sum their numeric launch values, so a ship with two
+      // base "Fighters & Bombers" bays prints one Launch 4 line, not two Launch 2 lines.
+      const allLoads = [];
+      const _loadKeys = new Map();
+      const _pushLoad = l => {
+        if (!l || !l.name) return;
+        const n = parseInt(l.launch, 10);
+        const key = Number.isFinite(n) ? `${l.name}|${l.special ?? ''}` : null;
+        if (key && _loadKeys.has(key)) { const g = _loadKeys.get(key); g._n += n; g.launch = String(g._n); }
+        else { const g = { ...l, _n: Number.isFinite(n) ? n : null }; if (key) _loadKeys.set(key, g); allLoads.push(g); }
+      };
+      (db.loads || []).forEach(_pushLoad);
+      (db.loadoutOptions || []).forEach((lo, loIdx) => {
+        const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
+        const selOpt = lo.options[selIdx];
+        if (selOpt && selOpt.loads) selOpt.loads.forEach(_pushLoad);
+      });
+      // Selected systems: weapon options → the weapon table, load options → launch,
+      // everything else → a short note line.
+      const nonWeaponSystems = [];
+      const sysList = systemsListFor(db, f.faction);
+      if (sysList && ship.systems && ship.systems.length) {
+        const counts = {};
+        ship.systems.forEach(n => { counts[n] = (counts[n] || 0) + 1; });
+        Object.entries(counts).forEach(([nm, c]) => {
+          const o = findSystemOption(sysList, nm);
+          if (!o) return;
+          if (o.weapons && o.weapons.length) o.weapons.forEach(w => weaponRows.push({ ...w, name: w.name || nm, qty: c }));
+          else if (o.loads && o.loads.length) o.loads.forEach(l => {
+            // Launch capacity adds up: a launch bay taken c times is Launch (val×c),
+            // merged with any other identical load (via _pushLoad) rather than shown
+            // as "c× <name>". Fall back to the count prefix only when the launch
+            // value isn't numeric (can't be summed).
+            const n = parseInt(l.launch, 10);
+            _pushLoad(Number.isFinite(n) && c > 1
+              ? { ...l, launch: String(n * c) }
+              : { ...l, name: (c > 1 ? c + '× ' : '') + l.name });
+          });
+          else nonWeaponSystems.push(`${c > 1 ? c + '× ' : ''}${nm}${o.effect ? ', ' + o.effect : ''}`);
+        });
+      }
+
+      // Every weapon special (incl. system and loadout weapons), spelled out.
+      const weaponSpecials = {};
+      weaponRows.forEach(w => {
+        if (!w.special || w.special === '-') return;
+        w.special.split(',').forEach(s => {
+          const t = s.trim(); if (!t) return;
+          const full = lookupRuleFull(t);
+          if (full) weaponSpecials[t] = { description: full.description, page: full.page || '' };
+        });
+      });
+      // (High Power is not injected from Overcharge here — see the note in the ship
+      // detail renderer; the Overcharge chip tooltip carries it contextually.)
+
+      // Launch line + feed the fleet launch-asset reference.
+      let loadsHtml = '';
+      if (allLoads.length) {
+        loadsHtml = `<div class="dp-loads"><b>Launch:</b> ${allLoads.map(l => {
+          allLaunchAssetNames.add(String(l.name).replace(/^\d+×\s*/, ''));
+          return `${esc(String(l.name))} (${esc(String(l.launch))}${l.special && l.special !== '-' ? ', ' + esc(l.special) : ''})`;
+        }).join('; ')}</div>`;
+      }
+      const sysHtml = nonWeaponSystems.length
+        ? `<div class="dp-systems"><b>${esc(db.systemSelection ? db.systemSelection.listName : 'Systems')}:</b> ${esc(nonWeaponSystems.join('; '))}</div>` : '';
+      let featHtml = '';
+      const chosenFeats = FEATURE_SLOT_KEYS.map(k => ship[k]).filter(Boolean);
+      if (chosenFeats.length) {
+        const featLines = chosenFeats.map(name => {
+          const feat = ((shipDB[f.faction] || {}).deployableFeatures || []).find(df => df.name === name);
+          const fStat = feat ? (feat.features || []).map(x => `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`).join('; ') : '';
+          return `${esc(name)}${fStat ? ', ' + esc(fStat) : ''}`;
+        });
+        const label = chosenFeats.length > 1 ? 'Deployable Features:' : 'Deployable Feature:';
+        featHtml = `<div class="dp-systems"><b>${label}</b> ${featLines.join(' &middot; ')}</div>`;
+      }
+      // Selected refits that aren't weapon/load swaps (those already show in the
+      // weapon table / launch line) — e.g. a Drive/Engine Refit or a Cloaking Crest.
+      // Surfacing the option name is the only place a stat-only or rule-only refit
+      // (Cloaking gains Cloak-2/Stealth) is visible on the sheet.
+      const refitNotes = [];
+      (db.loadoutOptions || []).forEach((lo, loIdx) => {
+        const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
+        const selOpt = lo.options[selIdx];
+        if (!selOpt) return;
+        if ((selOpt.weapons && selOpt.weapons.length) || (selOpt.loads && selOpt.loads.length)) return;
+        if (/^No\b/i.test(selOpt.name)) return; // the "No <refit>" default = nothing taken
+        refitNotes.push(selOpt.name);
+      });
+      const refitHtml = refitNotes.length
+        ? `<div class="dp-systems"><b>Refit:</b> ${esc(refitNotes.join('; '))}</div>` : '';
+
+      // Spelled-out rules, split into SHIP rules and WEAPON ("gun") abilities so
+      // Big mode can keep gun abilities next to the guns and ship rules separate.
+      // Faction-wide ship rules (e.g. Shield) are hoisted to the end glossary: the
+      // card shows just the keyword (with its per-ship value) instead of the text.
+      const gainedRuleEntries = loadoutGainedRuleNames(db, ship).map(n => {
+        const def = lookupRuleFull(n) || { description: '', page: '' };
+        return [n, def.description, def.page || ''];
+      }).filter(e => e[1]);
+      const shipRuleEntriesAll = [...(db.specialRuleDetails || []).filter(r => r.description).map(r => [r.name, r.description, r.page || '']), ...gainedRuleEntries];
+      const shipRuleEntries = shipRuleEntriesAll.filter(e => !isHoistedShipRule(e[0]));
+      const hoistedHere = shipRuleEntriesAll.filter(e => isHoistedShipRule(e[0]));
+      hoistedHere.forEach(([n, d, p]) => { hoistedShipDefs[n] = { description: d, page: p }; });
+      const shipRuleNames = new Set(shipRuleEntriesAll.map(e => e[0]));
+      const gunRuleEntries = [];
+      Object.entries(weaponSpecials).forEach(([n, e]) => {
+        if (shipRuleNames.has(n)) return;
+        if (isHoistedWeaponRule(n)) { hoistedWeaponDefs[n] = { description: e.description, page: e.page || '' }; return; }
+        gunRuleEntries.push([n, e.description, e.page || '']);
+      });
+      // Without rules text a card still names every ship rule it has (as keyword
+      // chips); weapon rules stay named in the weapon table's Special column.
+      const renderRules = entries => (entries.length && !noRules)
+        ? `<div class="dp-rules">${entries.map(ruleSpan).join('')}</div>` : '';
+      const shipRulesHtml = renderRules(shipRuleEntries);
+      const gunRulesHtml = renderRules(gunRuleEntries);
+      const rulesHtml = renderRules([...shipRuleEntries, ...gunRuleEntries]); // combined (normal mode)
+      const hoistChips = chipsHtml((noRules ? shipRuleEntriesAll : hoistedHere).map(e => e[0]));
+
+      const tonnageLabel = tonLabel(db.tonnage) || CATEGORY_LABELS[ship.groupCategory] || '';
+      // A small Unique pill (label only — no rule text needed on the sheet).
+      const badge = db.isUnique ? ' <span class="dp-badge">Unique</span>' : '';
+      const qtyPrefix = count > 1 ? `${count}× ` : '';
+      const shipPts = Number(ship.points) || 0;
+      const totalPts = shipPts * count;
+      const artSrc = db.image || shipArtPath(db.name);
+      // Small thumbnail (normal mode) so the sheet can be matched to the model.
+      // Never lazy: the sheet is built and printed at once, before a lazy image loads.
+      const thumbSrc = thumbUrl(artSrc);
+      const thumbHtml = (thumbSrc && !big) ? `<img class="dp-thumb" src="${esc(thumbSrc)}" alt="" onerror="this.remove()">` : '';
+
+      // Hull tracking boxes replace the numeric Hull cell inside the stat grid.
+      const hullHtml = dpHullTrack(db.hull, count, db.tonnage);
+      const statHtml = dpStatLine(eff.stats, eff.mods, hullHtml);
+      const weaponsHtml = dpWeaponTable(weaponRows);
+      const abilHtml = `${loadsHtml}${sysHtml}${featHtml}${refitHtml}${rulesHtml}`;
+      const nameHtml = opts.nameHtml || `${esc(qtyPrefix)}${esc(name)}`;
+      const ptsHtml = opts.ptsHtml !== undefined ? opts.ptsHtml
+        : (count > 1 ? `${totalPts} pts <span class="dp-each">(${shipPts} ea)</span>` : `${shipPts} pts`);
+      const headHtml = `<div class="dp-ship-head">
+            <span class="dp-name-wrap">${thumbHtml}<span class="dp-name">${nameHtml}${tonnageLabel ? ` <span class="dp-ton">${esc(tonnageLabel)}</span>` : ''}${badge}</span></span>
+            <span class="dp-pts">${ptsHtml}</span>
+          </div>`;
+
+      if (asRoster) {
+        // Compact roster: one row-block per ship — stats in columns, weapons as
+        // sub-rows, hull as a small box strip in the ship cell, all rule text in
+        // the end glossary (keywords stay on the row).
+        const wr = weaponRows;
+        const rowCount = Math.max(1, wr.length + (allLoads.length ? 1 : 0));
+        const ruleKw = shipRuleEntriesAll.length ? `<div class="rt-rules">${shipRuleEntriesAll.map(e => esc(e[0])).join(', ')}</div>` : '';
+        const ptsStr = count > 1 ? `${totalPts} pts (${shipPts} ea)` : `${shipPts} pts`;
+        const nameCell = `<div class="rt-shipname">${esc(qtyPrefix)}${esc(name)}${tonnageLabel ? ` <span class="rt-ton">${esc(tonnageLabel)}</span>` : ''}${badge} <span class="rt-pts">${ptsStr}</span></div>${ruleKw}${sysHtml}${featHtml}${refitHtml}<div class="rt-hull">${hullHtml}</div>`;
+        const sc = k => { const v = eff.stats[k]; return (v === undefined || v === null) ? '' : esc(String(v)); };
+        const statCells = `<td rowspan="${rowCount}">${sc('scan')}</td><td rowspan="${rowCount}">${sc('sig')}</td><td rowspan="${rowCount}">${sc('thrust')}</td><td rowspan="${rowCount}">${eff.stats.hull || ''}</td><td rowspan="${rowCount}">${sc('es')}</td><td rowspan="${rowCount}">${sc('ks')}</td><td rowspan="${rowCount}">${sc('bs')}</td>`;
+        const wCell = w => {
+          const dmg = `${esc(w.damage || '')}${w.type ? ` <span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : ''}`;
+          const sp = (w.special && w.special !== '-') ? ` <span class="rt-wsp">${specialKeywordsHtml(w.special)}</span>` : '';
+          const nm = `${w.qty > 1 ? w.qty + '× ' : ''}${esc(w.name || '')}`;
+          const arcCell = ARC_ICONS[w.arc]
+            ? `<span class="dp-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${ARC_ICONS[w.arc]}<span class="dp-arc-lab">${esc(w.arc || '')}</span></span>`
+            : esc(w.arc || '');
+          return `<td class="rt-w">${nm}${sp}</td><td class="rt-arc">${arcCell}</td><td>${attackHtml(w.attack)}</td><td>${esc(w.lock || '')}</td><td>${dmg}</td>`;
+        };
+        if (wr.length === 0 && allLoads.length === 0) {
+          out += `<tr class="rt-ship rt-first"><td class="rt-name">${nameCell}</td>${statCells}<td class="rt-w" colspan="5"><span class="rt-none">No weapons</span></td></tr>`;
+        } else {
+          wr.forEach((w, i) => {
+            out += `<tr class="rt-ship${i === 0 ? ' rt-first' : ''}">`;
+            if (i === 0) out += `<td class="rt-name" rowspan="${rowCount}">${nameCell}</td>${statCells}`;
+            out += wCell(w) + `</tr>`;
+          });
+          if (allLoads.length) {
+            const loads = allLoads.map(l => `${esc(String(l.name))} (${esc(String(l.launch))}${l.special && l.special !== '-' ? ', ' + esc(l.special) : ''})`).join('; ');
+            out += `<tr class="rt-ship${wr.length === 0 ? ' rt-first' : ''}">`;
+            if (wr.length === 0) out += `<td class="rt-name">${nameCell}</td>${statCells}`;
+            out += `<td class="rt-w rt-load" colspan="5">Launch: ${loads}</td></tr>`;
+          }
+        }
+      } else if (big) {
+        // "Big mode": art + stat grid in a compact top row, then weapons and all
+        // rules flow FULL-WIDTH beneath, so the card height matches its content
+        // (no empty side gap on weapon-heavy ships).
+        const bigArt = artSrc ? `<img class="dp-big-art" src="${esc(artSrc)}" alt="" onerror="(this.closest('.dp-big-art-wrap')||this).remove()">` : '';
+        const belowHtml = `${weaponsHtml || '<span class="dp-zone-empty">No weapons</span>'}${gunRulesHtml}${loadsHtml}${shipRulesHtml}${sysHtml}${featHtml}${refitHtml}`;
+        out += `<div class="dp-ship dp-ship-big">
+            ${headHtml}
+            <div class="dp-big-top">
+              ${bigArt ? `<div class="dp-big-art-wrap">${bigArt}</div>` : ''}
+              <div class="dp-big-stats">${statHtml}${hoistChips}</div>
+            </div>
+            <div class="dp-big-below">${belowHtml}</div>
+          </div>`;
+      } else {
+        out += `<div class="dp-ship">
+            ${headHtml}
+            ${statHtml}
+            ${hoistChips}
+            ${weaponsHtml}
+            ${abilHtml}
+          </div>`;
+      }
+      return out;
+    };
+
+    let groupsHtml = '';
+    printGroups.forEach(g => {
+      const gPts = g.ships.reduce((t, s) => t + (Number(s.points) || 0), 0);
+      const gCat = g.ships.length > 0 ? (g.ships[0].groupCategory || 'medium') : '';
+      const gCatLabel = gCat ? (CATEGORY_LABELS[gCat] || gCat) : '';
+      const gShips = g.ships.length ? `, ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}` : '';
+      if (roster) {
+        groupsHtml += `<tr class="rt-group${gCat ? ` dp-group-cat-${gCat}` : ''}"><td colspan="13">${esc(g.name)}${gCat ? ` <span class="rt-gcat">${gCatLabel}</span>` : ''} <span class="rt-gpts">${gPts} pts${gShips}</span></td></tr>`;
+      } else {
+        groupsHtml += `<div class="dp-group">
+        <div class="dp-group-head">
+          <span class="dp-group-name">${esc(g.name)}${gCat ? ` <span class="dp-group-cat dp-group-cat-${gCat}">${gCatLabel}</span>` : ''}</span>
+          <span class="dp-group-pts">${gPts} pts${gShips}</span>
+        </div>`;
+      }
+
+      // Collapse identical ships (same loadout/systems/feature) into one card with N hull tracks.
+      const shipBuckets = [];
+      g.ships.forEach(ship => {
+        const bucketKey = `${ship.shipKey}:${ship.groupCategory}:${JSON.stringify(ship.loadouts || {})}:${JSON.stringify(ship.systems || [])}:${ship.feature || ''}:${ship.feature2 || ''}`;
+        let bucket = shipBuckets.find(b => b.key === bucketKey);
+        if (!bucket) { bucket = { key: bucketKey, ship, count: 0 }; shipBuckets.push(bucket); }
+        bucket.count++;
+      });
+      shipBuckets.forEach(({ ship, count }) => {
+        const db = findShipInDB(f.faction, ship.groupCategory, ship.shipKey);
+        if (db) groupsHtml += shipCardHtml(db, ship, count);
+      });
+
+      if (!roster) groupsHtml += '</div>';
+    });
+    if (roster) {
+      html += `<table class="roster-table"><thead><tr>
+        <th class="rt-name">Ship</th><th>Scan</th><th>Sig</th><th>Thr</th><th>Hull</th><th>ES</th><th>KS</th><th>BS</th>
+        <th class="rt-w">Weapon</th><th>Arc</th><th>A</th><th>Lk</th><th>Dmg</th>
+      </tr></thead><tbody>${groupsHtml}</tbody></table>`;
+    } else {
+      html += `<div class="dp-groups${twoCol ? ' dp-2col' : ''}">${groupsHtml}</div>`;
+    }
+
+    // Admirals — each card carries the admiral header + (for Famous) the flagship,
+    // printed as a full ship card: stats, hull boxes (one track per hull, so the
+    // Twins of Aaru get two), weapons, launch, refit and rules. Abilities are NOT
+    // listed per-card; every ability the fleet can use is collected into one table.
+    let admiralsHtml = '';
     if (f.admirals && f.admirals.length > 0) {
-      html += `<div class="print-section">
+      admiralsHtml += `<div class="print-section">
         ${f.admirals.map(a => {
-          // Famous admirals: print the flagship ship card (stats + weapons).
           let flagshipHtml = '';
           if (a.type === 'Famous' && a.shipKey) {
             const fsp = factionInfo?.groups?.famous_admirals?.ships?.[a.shipKey];
             if (fsp) {
-              const fsName = flagshipLabel(fsp, true, true);
-              const fsSize = fsp.shipCategory ? (CATEGORY_LABELS[fsp.shipCategory] || '') : '';
+              const fsCount = Math.max(1, parseInt(fsp.g, 10) || 1);
               // The flagship's loadout choice lives on the admiral (a.loadouts), so
-              // the printed sheet has to resolve it the same way the screen does —
-              // otherwise Havelock prints Thrust 6" while the app shows the 9" refit
-              // he was actually paid for.
-              const fsEff = effectiveStats(fsp, a, f.faction);
-              const wpns = [...(fsp.weapons || [])];
-              (fsp.loadoutOptions || []).forEach((lo, i) => {
-                const sel = (a.loadouts && a.loadouts[i] !== undefined) ? a.loadouts[i] : 0;
-                const opt = lo.options && lo.options[sel];
-                if (opt && Array.isArray(opt.weapons)) wpns.push(...opt.weapons);
+              // the card resolves it the same way the screen does.
+              flagshipHtml = shipCardHtml(fsp, { ...a, groupCategory: fsp.shipCategory || 'medium' }, fsCount, {
+                card: true,
+                nameHtml: `${fsCount > 1 ? fsCount + '× ' : ''}${flagshipLabel(fsp, true, true)}`,
+                ptsHtml: fsp.ship_cost ? `(${fsp.ship_cost} pts)` : ''
               });
-              flagshipHtml = `<div class="dp-flagship">
-                <div class="dp-flagship-name">${fsName}${fsSize ? ', ' + esc(fsSize) : ''}${fsp.ship_cost ? ` (${fsp.ship_cost} pts)` : ''}</div>
-                ${dpStatLine(fsEff.stats, fsEff.mods)}
-                ${dpWeaponTable(wpns.map(w => ({ ...w })))}
-                ${(fsp.specialRuleDetails || []).filter(r => r.description).length ? `<div class="dp-rules">${fsp.specialRuleDetails.filter(r => r.description).map(r => `<span class="dp-rule"><b>${esc(r.name)}:</b> ${ruleHtml(r.description)}</span>`).join('')}</div>` : ''}
-              </div>`;
             }
           }
           return `<div class="print-admiral-card">
@@ -6531,7 +6855,7 @@ let activeGroupId = null;
                 const b = admiralEffectiveLevel(f, a) - (a.level || 0);
                 return b > 0 ? ` (Lv${a.level} +${b} Command Ship)` : '';
               })()}${a.type === 'Famous' ? ' (Famous)' : ''}</span>
-              <span class="print-admiral-pts">${a.points} pts</span>
+              <span class="print-admiral-pts">${Number(a.points) || 0} pts</span>
             </div>
             ${flagshipHtml}
           </div>`;
@@ -6554,359 +6878,82 @@ let activeGroupId = null;
           if (ab && !seenAbil.has(ab.name)) { seenAbil.add(ab.name); admiralAbilities.push(ab); }
         });
       });
-      const abilRow = ab => `<tr><td class="dp-abil-name">${esc(ab.name)}</td><td class="dp-abil-cost">${esc(ab.cost || '')}</td><td class="dp-abil-effect">${ruleHtml(ab.effect || '')}</td></tr>`;
-      const abilGroupRow = label => `<tr class="dp-abil-grouprow"><td colspan="3">${esc(label)}</td></tr>`;
+      const cols = noRules ? 2 : 3;
+      const abilRow = ab => `<tr><td class="dp-abil-name">${esc(ab.name)}</td><td class="dp-abil-cost">${esc(ab.cost || '')}</td>${noRules ? '' : `<td class="dp-abil-effect">${ruleHtml(ab.effect || '')}</td>`}</tr>`;
+      const abilGroupRow = label => `<tr class="dp-abil-grouprow"><td colspan="${cols}">${esc(label)}</td></tr>`;
       let abilBody = '';
       if (admiralAbilities.length) abilBody += abilGroupRow('Admiral Abilities') + admiralAbilities.map(abilRow).join('');
       abilBody += abilGroupRow('Core Abilities (available to all)') + CORE_ABILITIES.map(abilRow).join('');
-      html += `<div class="print-section dp-abilities">
+      admiralsHtml += `<div class="print-section dp-abilities">
         <div class="print-section-title">Admiral Abilities</div>
-        <table class="launch-ref-table dp-abilities-table">
-          <thead><tr><th class="dp-abil-name">Ability</th><th class="dp-abil-cost">AP</th><th class="dp-abil-effect">Effect</th></tr></thead>
+        <table class="launch-ref-table dp-abilities-table${noRules ? ' dp-abilities-short' : ''}">
+          <thead><tr><th class="dp-abil-name">Ability</th><th class="dp-abil-cost">AP</th>${noRules ? '' : '<th class="dp-abil-effect">Effect</th>'}</tr></thead>
           <tbody>${abilBody}</tbody>
         </table>
       </div>`;
     }
 
-    // Space Station
+    // Space Station: stats, hull, its own weapons plus the weapons of every chosen
+    // module, the chosen modules' effects, launch, and each rule's full text in place.
+    let stationHtml = '';
     if (f.spaceStation) {
       const ss = f.spaceStation;
       // Shared/mobile stations store no inline stats/weapons — fall back to the def.
       const ssDef = stationDefFor(ss);
       const ssStats = ss.stats || (ssDef && ssDef.stats) || {};
-      const ssRules = ((ss.specialRules && ss.specialRules.length ? ss.specialRules : (ssDef && ssDef.specialRules) || [])).map(r => esc(r.name || '')).filter(Boolean).join(', ');
-      const ssWeaponsList = (ss.weapons && ss.weapons.length) ? ss.weapons : ((ssDef && ssDef.weapons) || []);
-      const ssWeaponsHtml = ssWeaponsList.length ? dpWeaponTable(ssWeaponsList.map(w => ({ ...w }))) : '';
-      html += `<div class="print-section">
+      const ssRules = (ss.specialRules && ss.specialRules.length) ? ss.specialRules : ((ssDef && ssDef.specialRules) || []);
+      const ssWeapons = ((ss.weapons && ss.weapons.length) ? ss.weapons : ((ssDef && ssDef.weapons) || [])).map(w => ({ ...w }));
+      const moduleLines = [];
+      const modCounts = {};
+      (ss.systems || []).forEach(n => { modCounts[n] = (modCounts[n] || 0) + 1; });
+      Object.entries(modCounts).forEach(([n, c]) => {
+        const o = stationOpt(n);
+        const label = `${c > 1 ? c + '× ' : ''}${n}`;
+        if (!o) { moduleLines.push([label, '']); return; }
+        const hasWeapons = o.weapons && o.weapons.length;
+        if (hasWeapons) o.weapons.forEach(w => ssWeapons.push({ ...w, qty: c > 1 ? c : w.qty }));
+        if (!hasWeapons || o.category === 'Upgrades') moduleLines.push([label, o.effect || '']);
+      });
+      const ssLoads = (ss.loads && ss.loads.length) ? ss.loads : ((ssDef && ssDef.loads) || []);
+      ssLoads.forEach(l => { if (l && l.name) allLaunchAssetNames.add(String(l.name)); });
+      const ssLoadsHtml = ssLoads.length
+        ? `<div class="dp-loads"><b>Launch:</b> ${ssLoads.map(l => `${esc(String(l.name))} (${esc(String(l.launch))}${l.special && l.special !== '-' ? ', ' + esc(l.special) : ''})`).join('; ')}</div>` : '';
+      const ruleEntries = [];
+      const seenRule = new Set();
+      const addRule = (n, d, p) => { if (!n || seenRule.has(n)) return; seenRule.add(n); ruleEntries.push([n, d || '', p || '']); };
+      ssRules.forEach(r => { const nm = r.name || ''; addRule(nm, r.description || (lookupRuleFull(nm) || {}).description, r.page); });
+      ((ssDef && ssDef.stationRules) || []).forEach(r => addRule(r.name, r.effect));
+      ssWeapons.forEach(w => {
+        if (!w.special || w.special === '-') return;
+        w.special.split(',').forEach(s => {
+          const t = s.trim(); const full = t && lookupRuleFull(t);
+          if (full && full.description) addRule(t, full.description, full.page);
+        });
+      });
+      const withText = noRules ? [] : ruleEntries.filter(e => e[1]);
+      const ssRulesHtml = chipsHtml(ruleEntries.filter(e => noRules || !e[1]).map(e => e[0]))
+        + (withText.length ? `<div class="dp-rules">${withText.map(ruleSpan).join('')}</div>` : '');
+      const modulesHtml = moduleLines.length
+        ? `<div class="dp-systems"><b>Modules:</b> ${moduleLines.map(([n, e]) => `${esc(n)}${e && !noRules ? ', ' + esc(e) : ''}`).join('; ')}</div>` : '';
+      stationHtml = `<div class="print-section">
         <div class="print-section-title">Space Station</div>
         <div class="dp-ship">
           <div class="dp-ship-head">
             <span class="dp-name">${esc(ss.name)}</span>
-            <span class="dp-pts">${ss.cost} pts</span>
+            <span class="dp-pts">${Number(ss.cost) || 0} pts</span>
           </div>
-          ${dpStatLine(ssStats, null)}
-          ${ssWeaponsHtml}
-          ${ssRules ? `<div class="dp-systems"><b>Rules:</b> ${ssRules}</div>` : ''}
-          ${dpHullTrack(ssStats.hull, 1)}
+          ${dpStatLine(ssStats, null, dpHullTrack(ssStats.hull, 1))}
+          ${dpWeaponTable(ssWeapons)}
+          ${modulesHtml}
+          ${ssLoadsHtml}
+          ${ssRulesHtml}
         </div>
       </div>`;
-      // Collect station rules for glossary
-      (ss.specialRules || []).forEach(r => {
-        if (r.description) rulesGlossary[r.name] = { description: r.description, page: r.page || '' };
-      });
-    }
-
-    // Faction-wide rules glossary: spell a ship special rule out ONCE at the end
-    // instead of on every card when it's shared across the fleet (e.g. Shaltari
-    // "Shield"). A rule on a single card stays in place; the card always keeps the
-    // keyword (with its per-ship value, e.g. "Shield-3+") so you know it has it.
-    // Decide by BASE name (Shield-3+/4+/5+ all count as "Shield") so a faction-wide
-    // rule is recognised even when its value varies; but keep each value-variant
-    // verbatim in the glossary (no text rewriting). Cards show the value chip.
-    // Also hoist common WEAPON specials (Close Action, Scald, Crippling, …): those
-    // repeat hardest and matter most for paper (fewer pages). The keyword stays in
-    // the weapon table's Special column, so the card still shows what the gun does;
-    // only the spelled-out text moves to the end glossary.
-    const baseRuleName = nm => String(nm).replace(/[-\s](?:\d+\+?"?|X"?|[0-9]+x\S*)$/, '').trim();
-    const baseCardCount = {}, ruleDefByName = {};
-    const wBaseCardCount = {};
-    let glossTotalCards = 0;
-    // Print in the same weight-class order as the on-screen builder (heaviest first).
-    const printGroups = sortGroupsByWeight(f.battleGroups);
-    printGroups.forEach(g => {
-      const seen = new Set();
-      g.ships.forEach(ship => {
-        const k = `${ship.shipKey}:${ship.groupCategory}:${JSON.stringify(ship.loadouts || {})}:${JSON.stringify(ship.systems || [])}:${ship.feature || ''}:${ship.feature2 || ''}`;
-        if (seen.has(k)) return; seen.add(k);
-        glossTotalCards++;
-        const db = findShipInDB(f.faction, ship.groupCategory, ship.shipKey);
-        if (!db) return;
-        const bases = new Set();
-        (db.specialRuleDetails || []).forEach(r => {
-          if (!r.description) return;
-          ruleDefByName[r.name] = { description: r.description, page: r.page || '' };
-          bases.add(baseRuleName(r.name));
-        });
-        bases.forEach(b => { baseCardCount[b] = (baseCardCount[b] || 0) + 1; });
-        const wbases = new Set();
-        (db.weapons || []).forEach(w => {
-          if (!w.special || w.special === '-') return;
-          w.special.split(',').forEach(s => { const t = s.trim(); if (t) wbases.add(baseRuleName(t)); });
-        });
-        wbases.forEach(b => { wBaseCardCount[b] = (wBaseCardCount[b] || 0) + 1; });
-      });
-    });
-    // Hoist when a rule (by base) is on a meaningful share of the fleet (faction-wide),
-    // min 3 cards so a small list doesn't send a 2-ship rule to the back.
-    // Roster mode keeps rows tiny by sending EVERY rule's text to the glossary.
-    const glossThreshold = settings.printRoster ? 1 : Math.max(3, Math.ceil(glossTotalCards * 0.4));
-    const hoistedBases = new Set(Object.keys(baseCardCount).filter(b => baseCardCount[b] >= glossThreshold));
-    const hoistedWeaponBases = new Set(Object.keys(wBaseCardCount).filter(b => wBaseCardCount[b] >= glossThreshold));
-    const hoistedGlossNames = Object.keys(ruleDefByName).filter(n => hoistedBases.has(baseRuleName(n))).sort();
-    const hoistedWeaponDefs = {}; // full token -> {description, page}, filled while rendering cards
-
-    // Groups — dense, self-contained ship cards that read the same on screen (in the
-    // preview) as on paper. System/loadout weapons merge into the weapon table.
-    const allLaunchAssetNames = new Set();
-    let groupsHtml = '';
-    printGroups.forEach(g => {
-      const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
-      const gCat = g.ships.length > 0 ? (g.ships[0].groupCategory || 'medium') : 'medium';
-      const gCatLabel = CATEGORY_LABELS[gCat] || gCat;
-      if (roster) {
-        groupsHtml += `<tr class="rt-group dp-group-cat-${gCat}"><td colspan="13">${esc(g.name)} <span class="rt-gcat">${gCatLabel}</span> <span class="rt-gpts">${gPts} pts, ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span></td></tr>`;
-      } else {
-        groupsHtml += `<div class="dp-group">
-        <div class="dp-group-head">
-          <span class="dp-group-name">${esc(g.name)} <span class="dp-group-cat dp-group-cat-${gCat}">${gCatLabel}</span></span>
-          <span class="dp-group-pts">${gPts} pts, ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}</span>
-        </div>`;
-      }
-
-      // Collapse identical ships (same loadout/systems/feature) into one card with N hull tracks.
-      const shipBuckets = [];
-      g.ships.forEach(ship => {
-        const bucketKey = `${ship.shipKey}:${ship.groupCategory}:${JSON.stringify(ship.loadouts || {})}:${JSON.stringify(ship.systems || [])}:${ship.feature || ''}:${ship.feature2 || ''}`;
-        let bucket = shipBuckets.find(b => b.key === bucketKey);
-        if (!bucket) { bucket = { key: bucketKey, ship, count: 0 }; shipBuckets.push(bucket); }
-        bucket.count++;
-      });
-
-      shipBuckets.forEach(({ ship, count }) => {
-        const db = findShipInDB(f.faction, ship.groupCategory, ship.shipKey);
-        if (!db) return;
-        const name = db.name;
-        const eff = effectiveStats(db, ship, f.faction);
-
-        // Weapons: base + selected loadout + selected system/hardpoint weapons, all
-        // merged into one table (so "systems that are weapons" read as weapon rows).
-        const weaponRows = (db.weapons || []).map(w => ({ ...w }));
-        (db.loadoutOptions || []).forEach((lo, loIdx) => {
-          const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
-          const selOpt = lo.options[selIdx];
-          if (selOpt && selOpt.weapons) selOpt.weapons.forEach(w => weaponRows.push({ ...w }));
-        });
-        // Loads: base + selected loadout. Launch capacity adds up: merge identical
-        // loads (name+special) and sum their numeric launch values, so a ship with two
-        // base "Fighters & Bombers" bays prints one Launch 4 line, not two Launch 2 lines.
-        const allLoads = [];
-        const _loadKeys = new Map();
-        const _pushLoad = l => {
-          if (!l || !l.name) return;
-          const n = parseInt(l.launch, 10);
-          const key = Number.isFinite(n) ? `${l.name}|${l.special ?? ''}` : null;
-          if (key && _loadKeys.has(key)) { const g = _loadKeys.get(key); g._n += n; g.launch = String(g._n); }
-          else { const g = { ...l, _n: Number.isFinite(n) ? n : null }; if (key) _loadKeys.set(key, g); allLoads.push(g); }
-        };
-        (db.loads || []).forEach(_pushLoad);
-        (db.loadoutOptions || []).forEach((lo, loIdx) => {
-          const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
-          const selOpt = lo.options[selIdx];
-          if (selOpt && selOpt.loads) selOpt.loads.forEach(_pushLoad);
-        });
-        // Selected systems: weapon options → the weapon table, load options → launch,
-        // everything else → a short note line.
-        const nonWeaponSystems = [];
-        const sysList = systemsListFor(db, f.faction);
-        if (sysList && ship.systems && ship.systems.length) {
-          const counts = {};
-          ship.systems.forEach(n => { counts[n] = (counts[n] || 0) + 1; });
-          Object.entries(counts).forEach(([nm, c]) => {
-            const o = findSystemOption(sysList, nm);
-            if (!o) return;
-            if (o.weapons && o.weapons.length) o.weapons.forEach(w => weaponRows.push({ ...w, name: w.name || nm, qty: c }));
-            else if (o.loads && o.loads.length) o.loads.forEach(l => {
-              // Launch capacity adds up: a launch bay taken c times is Launch (val×c),
-              // merged with any other identical load (via _pushLoad) rather than shown
-              // as "c× <name>". Fall back to the count prefix only when the launch
-              // value isn't numeric (can't be summed).
-              const n = parseInt(l.launch, 10);
-              _pushLoad(Number.isFinite(n) && c > 1
-                ? { ...l, launch: String(n * c) }
-                : { ...l, name: (c > 1 ? c + '× ' : '') + l.name });
-            });
-            else nonWeaponSystems.push(`${c > 1 ? c + '× ' : ''}${nm}${o.effect ? ', ' + o.effect : ''}`);
-          });
-        }
-
-        // Glossary + spelled-out rules. Ship rules + every weapon special (incl.
-        // system weapons); plus High Power whenever a weapon carries Overcharge.
-        (db.specialRuleDetails || []).forEach(r => { if (r.description) rulesGlossary[r.name] = { description: r.description, page: r.page || '' }; });
-        const weaponSpecials = {};
-        weaponRows.forEach(w => {
-          if (!w.special || w.special === '-') return;
-          w.special.split(',').forEach(s => {
-            const t = s.trim(); if (!t) return;
-            const full = lookupRuleFull(t);
-            if (full) {
-              const baseKey = t.replace(/-?\d+$/, '').replace(/\s+\d+$/, '').trim() || t;
-              rulesGlossary[baseKey] = { description: full.description, page: full.page || '' };
-              weaponSpecials[t] = { description: full.description, page: full.page || '' };
-            }
-          });
-        });
-        // (High Power is not injected from Overcharge here — see the note in the ship
-        // detail renderer; the Overcharge chip tooltip carries it contextually.)
-
-        // Launch line + feed the fleet launch-asset reference.
-        let loadsHtml = '';
-        if (allLoads.length) {
-          loadsHtml = `<div class="dp-loads"><b>Launch:</b> ${allLoads.map(l => {
-            allLaunchAssetNames.add(String(l.name).replace(/^\d+×\s*/, ''));
-            return `${esc(String(l.name))} (${esc(String(l.launch))}${l.special && l.special !== '-' ? ', ' + esc(l.special) : ''})`;
-          }).join('; ')}</div>`;
-        }
-        const sysHtml = nonWeaponSystems.length
-          ? `<div class="dp-systems"><b>${esc(db.systemSelection ? db.systemSelection.listName : 'Systems')}:</b> ${esc(nonWeaponSystems.join('; '))}</div>` : '';
-        let featHtml = '';
-        const chosenFeats = FEATURE_SLOT_KEYS.map(k => ship[k]).filter(Boolean);
-        if (chosenFeats.length) {
-          const featLines = chosenFeats.map(name => {
-            const feat = ((shipDB[f.faction] || {}).deployableFeatures || []).find(df => df.name === name);
-            const fStat = feat ? (feat.features || []).map(x => `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`).join('; ') : '';
-            return `${esc(name)}${fStat ? ', ' + esc(fStat) : ''}`;
-          });
-          const label = chosenFeats.length > 1 ? 'Deployable Features:' : 'Deployable Feature:';
-          featHtml = `<div class="dp-systems"><b>${label}</b> ${featLines.join(' &middot; ')}</div>`;
-        }
-        // Selected refits that aren't weapon/load swaps (those already show in the
-        // weapon table / launch line) — e.g. a Drive/Engine Refit or a Cloaking Crest.
-        // Surfacing the option name is the only place a stat-only or rule-only refit
-        // (Cloaking gains Cloak-2/Stealth) is visible on the sheet.
-        const refitNotes = [];
-        (db.loadoutOptions || []).forEach((lo, loIdx) => {
-          const selIdx = (ship.loadouts && ship.loadouts[loIdx] !== undefined) ? ship.loadouts[loIdx] : 0;
-          const selOpt = lo.options[selIdx];
-          if (!selOpt) return;
-          if ((selOpt.weapons && selOpt.weapons.length) || (selOpt.loads && selOpt.loads.length)) return;
-          if (/^No\b/i.test(selOpt.name)) return; // the "No <refit>" default = nothing taken
-          refitNotes.push(selOpt.name);
-        });
-        const refitHtml = refitNotes.length
-          ? `<div class="dp-systems"><b>Refit:</b> ${esc(refitNotes.join('; '))}</div>` : '';
-
-        // Spelled-out rules, split into SHIP rules and WEAPON ("gun") abilities so
-        // Big mode can keep gun abilities next to the guns and ship rules separate.
-        // Faction-wide ship rules (e.g. Shield) are hoisted to the end glossary: the
-        // card shows just the keyword (with its per-ship value) instead of the text.
-        const gainedRuleEntries = loadoutGainedRuleNames(db, ship).map(n => {
-          const f = lookupRuleFull(n) || { description: '', page: '' };
-          return [n, f.description, f.page || ''];
-        }).filter(e => e[1]);
-        const shipRuleEntriesAll = [...(db.specialRuleDetails || []).filter(r => r.description).map(r => [r.name, r.description, r.page || '']), ...gainedRuleEntries];
-        const shipRuleEntries = shipRuleEntriesAll.filter(e => !hoistedBases.has(baseRuleName(e[0])));
-        const hoistedHere = shipRuleEntriesAll.filter(e => hoistedBases.has(baseRuleName(e[0])));
-        const shipRuleNames = new Set(shipRuleEntriesAll.map(e => e[0]));
-        const gunRuleEntries = [];
-        Object.entries(weaponSpecials).forEach(([n, e]) => {
-          if (shipRuleNames.has(n)) return;
-          if (hoistedWeaponBases.has(baseRuleName(n))) { hoistedWeaponDefs[n] = { description: e.description, page: e.page || '' }; return; }
-          gunRuleEntries.push([n, e.description, e.page || '']);
-        });
-        // "Skip rules/obj." hides all spelled-out rule text (the keyword chips and
-        // the weapon Special column still name the rules, so the sheet stays usable).
-        const renderRules = entries => (entries.length && !settings.printNoRules)
-          ? `<div class="dp-rules">${entries.map(([n, d, p]) => `<span class="dp-rule"><b>${esc(n)}${p ? ` p.${esc(p)}` : ''}:</b> ${ruleHtml(d)}</span>`).join('')}</div>` : '';
-        const shipRulesHtml = renderRules(shipRuleEntries);
-        const gunRulesHtml = renderRules(gunRuleEntries);
-        const rulesHtml = renderRules([...shipRuleEntries, ...gunRuleEntries]); // combined (normal mode)
-        const hoistChips = hoistedHere.length
-          ? `<div class="dp-hoist-chips">${hoistedHere.map(([n]) => `<span class="dp-hoist-chip">${esc(n)}</span>`).join('')}</div>` : '';
-
-        const tonnageLabel = tonLabel(db.tonnage) || CATEGORY_LABELS[ship.groupCategory] || '';
-        // A small Unique/Rare pill (label only — no rule text needed on the sheet).
-        const badge = db.isUnique ? ' <span class="dp-badge">Unique</span>' : db.isRare ? ' <span class="dp-badge">Rare</span>' : '';
-        const qtyPrefix = count > 1 ? `${count}× ` : '';
-        const totalPts = ship.points * count;
-        const artSrc = db.image || shipArtPath(db.name);
-        // Small thumbnail (normal mode) so the sheet can be matched to the model.
-        const thumbSrc = thumbUrl(artSrc);
-        const thumbHtml = (thumbSrc && !settings.printBig) ? `<img class="dp-thumb" src="${esc(thumbSrc)}" alt="" loading="lazy" onerror="this.remove()">` : '';
-
-        // Hull tracking boxes replace the numeric Hull cell inside the stat grid.
-        const hullHtml = dpHullTrack(db.hull, count, db.tonnage);
-        const statHtml = dpStatLine(eff.stats, eff.mods, hullHtml);
-        const weaponsHtml = dpWeaponTable(weaponRows);
-        const abilHtml = `${loadsHtml}${sysHtml}${featHtml}${refitHtml}${rulesHtml}`;
-        const headHtml = `<div class="dp-ship-head">
-            <span class="dp-name-wrap">${thumbHtml}<span class="dp-name">${esc(qtyPrefix)}${esc(name)}${tonnageLabel ? ` <span class="dp-ton">${esc(tonnageLabel)}</span>` : ''}${badge}</span></span>
-            <span class="dp-pts">${count > 1 ? `${totalPts} pts <span class="dp-each">(${ship.points} ea)</span>` : `${ship.points} pts`}</span>
-          </div>`;
-
-        if (roster) {
-          // Compact roster: one row-block per ship — stats in columns, weapons as
-          // sub-rows, hull as a small box strip in the ship cell, all rule text in
-          // the end glossary (keywords stay on the row). Aims for 2-3 pages.
-          const wr = weaponRows;
-          const rowCount = Math.max(1, wr.length + (allLoads.length ? 1 : 0));
-          const ruleKw = shipRuleEntriesAll.length ? `<div class="rt-rules">${shipRuleEntriesAll.map(e => esc(e[0])).join(', ')}</div>` : '';
-          const ptsStr = count > 1 ? `${totalPts} pts (${ship.points} ea)` : `${ship.points} pts`;
-          const nameCell = `<div class="rt-shipname">${esc(qtyPrefix)}${esc(name)}${tonnageLabel ? ` <span class="rt-ton">${esc(tonnageLabel)}</span>` : ''}${badge} <span class="rt-pts">${ptsStr}</span></div>${ruleKw}<div class="rt-hull">${hullHtml}</div>`;
-          const sc = k => { const v = eff.stats[k]; return (v === undefined || v === null) ? '' : esc(String(v)); };
-          const statCells = `<td rowspan="${rowCount}">${sc('scan')}</td><td rowspan="${rowCount}">${sc('sig')}</td><td rowspan="${rowCount}">${sc('thrust')}</td><td rowspan="${rowCount}">${eff.stats.hull || ''}</td><td rowspan="${rowCount}">${sc('es')}</td><td rowspan="${rowCount}">${sc('ks')}</td><td rowspan="${rowCount}">${sc('bs')}</td>`;
-          const wCell = w => {
-            const dmg = `${esc(w.damage || '')}${w.type ? ` <span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : ''}`;
-            const sp = (w.special && w.special !== '-') ? ` <span class="rt-wsp">${esc(w.special)}</span>` : '';
-            const nm = `${w.qty > 1 ? w.qty + '× ' : ''}${esc(w.name || '')}`;
-            const arcCell = ARC_ICONS[w.arc]
-              ? `<span class="dp-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${ARC_ICONS[w.arc]}<span class="dp-arc-lab">${esc(w.arc || '')}</span></span>`
-              : esc(w.arc || '');
-            return `<td class="rt-w">${nm}${sp}</td><td class="rt-arc">${arcCell}</td><td>${attackHtml(w.attack)}</td><td>${esc(w.lock || '')}</td><td>${dmg}</td>`;
-          };
-          if (wr.length === 0 && allLoads.length === 0) {
-            groupsHtml += `<tr class="rt-ship rt-first"><td class="rt-name">${nameCell}</td>${statCells}<td class="rt-w" colspan="5"><span class="rt-none">No weapons</span></td></tr>`;
-          } else {
-            wr.forEach((w, i) => {
-              groupsHtml += `<tr class="rt-ship${i === 0 ? ' rt-first' : ''}">`;
-              if (i === 0) groupsHtml += `<td class="rt-name" rowspan="${rowCount}">${nameCell}</td>${statCells}`;
-              groupsHtml += wCell(w) + `</tr>`;
-            });
-            if (allLoads.length) {
-              const loads = allLoads.map(l => `${esc(String(l.name))} (${esc(String(l.launch))}${l.special && l.special !== '-' ? ', ' + esc(l.special) : ''})`).join('; ');
-              groupsHtml += `<tr class="rt-ship${wr.length === 0 ? ' rt-first' : ''}">`;
-              if (wr.length === 0) groupsHtml += `<td class="rt-name">${nameCell}</td>${statCells}`;
-              groupsHtml += `<td class="rt-w rt-load" colspan="5">Launch: ${loads}</td></tr>`;
-            }
-          }
-        } else if (settings.printBig) {
-          // "Big mode": art + stat grid in a compact top row, then weapons and all
-          // rules flow FULL-WIDTH beneath, so the card height matches its content
-          // (no empty side gap on weapon-heavy ships).
-          const bigArt = artSrc ? `<img class="dp-big-art" src="${esc(artSrc)}" alt="" loading="lazy" onerror="(this.closest('.dp-big-art-wrap')||this).remove()">` : '';
-          const belowHtml = `${weaponsHtml || '<span class="dp-zone-empty">No weapons</span>'}${gunRulesHtml}${loadsHtml}${shipRulesHtml}${sysHtml}${featHtml}`;
-          groupsHtml += `<div class="dp-ship dp-ship-big">
-            ${headHtml}
-            <div class="dp-big-top">
-              ${bigArt ? `<div class="dp-big-art-wrap">${bigArt}</div>` : ''}
-              <div class="dp-big-stats">${statHtml}${hoistChips}</div>
-            </div>
-            <div class="dp-big-below">${belowHtml}</div>
-          </div>`;
-        } else {
-          groupsHtml += `<div class="dp-ship">
-            ${headHtml}
-            ${statHtml}
-            ${hoistChips}
-            ${weaponsHtml}
-            ${abilHtml}
-          </div>`;
-        }
-      });
-
-      if (!roster) groupsHtml += '</div>';
-    });
-    if (roster) {
-      html += `<table class="roster-table"><thead><tr>
-        <th class="rt-name">Ship</th><th>Scan</th><th>Sig</th><th>Thr</th><th>Hull</th><th>ES</th><th>KS</th><th>BS</th>
-        <th class="rt-w">Weapon</th><th>Arc</th><th>A</th><th>Lk</th><th>Dmg</th>
-      </tr></thead><tbody>${groupsHtml}</tbody></table>`;
-    } else {
-      html += `<div class="dp-groups${twoCol ? ' dp-2col' : ''}">${groupsHtml}</div>`;
     }
 
     // Launch asset reference for the whole fleet. Rendered at the TOP of the sheet
     // via the <!--LAUNCH_REF--> placeholder; computed here because the load names
-    // are only known once the groups have been built.
+    // are only known once the cards have been built.
     let launchRefHtml = '';
     if (factionInfo && factionInfo.launchAssets && allLaunchAssetNames.size > 0) {
       const relevantAssets = [];
@@ -6925,7 +6972,7 @@ let activeGroupId = null;
       }
     }
 
-    // Faction Rules glossary — rules shared across the fleet, defined once here
+    // Rules glossary — rules shared across the fleet, defined once here
     // (the cards show the keyword + per-ship value, e.g. "Shield-3+").
     // Numeric/measurement value families (Vanguard-4", Reave-2, Critical-2 ...) collapse
     // to a single generic "<base>-X" entry — the value already shows on each ship card,
@@ -6947,30 +6994,21 @@ let activeGroupId = null;
       return out;
     };
     const glossEntries = collapseGloss([
-      ...hoistedGlossNames.map(n => [n, ruleDefByName[n]]),
+      ...Object.keys(hoistedShipDefs).sort().map(n => [n, hoistedShipDefs[n]]),
       ...Object.keys(hoistedWeaponDefs).sort().map(n => [n, hoistedWeaponDefs[n]])
     ]);
-    if (glossEntries.length && !settings.printNoRules) {
-      const items = glossEntries.map(([n, def]) =>
-        `<span class="dp-rule"><b>${esc(n)}${def.page ? ` p.${esc(def.page)}` : ''}:</b> ${ruleHtml(def.description)}</span>`
-      ).join('');
+    if (glossEntries.length && !noRules) {
+      const items = glossEntries.map(([n, def]) => ruleSpan([n, def.description, def.page])).join('');
       html += `<div class="print-section dp-glossary"><div class="print-section-title">Rules</div><div class="dp-rules">${items}</div></div>`;
     }
-
-    // (Fleet Summary totals block removed — the total points already show in the
-    // print header, and the per-group breakdown was redundant on the printout.)
-
-    // No separate rules glossary: every rule is already spelled out on each ship card
-    // above, so the player reads it in place (no page-flipping) and the sheet stays
-    // to a few pages. `rulesGlossary` is still collected for potential future use.
 
     // Secondary objectives — print EVERY option with a checkbox so you can pick/check
     // them off at the table. Options already chosen in the builder are pre-ticked.
     const allSecObjs = (rawFleetData && rawFleetData.secondaryObjectives) || [];
     const chosenSec = new Set(f.secondaryObjectives || []);
-    if (allSecObjs.length && !settings.printNoRules) {
+    if (allSecObjs.length && !noObjectives) {
       html += `<div class="print-section dp-secobj">
-        <div class="print-section-title">Secondary Objectives <span class="dp-secobj-hint">pick two for your game</span></div>
+        <div class="print-section-title">Secondary Objectives</div>
         <div class="dp-rules">${allSecObjs.map(o => {
           const on = chosenSec.has(o.name);
           return `<span class="dp-rule dp-secobj-row${on ? ' dp-secobj-on' : ''}"><span class="dp-checkbox" aria-hidden="true">${on ? '☑' : '☐'}</span> <b>${esc(o.name)}:</b> ${o.description ? ruleHtml(o.description) : ''}</span>`;
@@ -6979,7 +7017,11 @@ let activeGroupId = null;
     }
 
     html += '</div>';
-    return html.replace('<!--LAUNCH_REF-->', launchRefHtml || '');
+    // Function replacers: a "$&" or "$'" in rules text must not be read as a pattern.
+    return html
+      .replace('<!--LAUNCH_REF-->', () => launchRefHtml)
+      .replace('<!--ADMIRALS-->', () => admiralsHtml)
+      .replace('<!--STATION-->', () => stationHtml);
   }
 
   // "Simple Print View" = the plain-text army list (the same New-Recruit-style export
@@ -6987,8 +7029,8 @@ let activeGroupId = null;
   function buildSimplePrintHTML(f) {
     const secObjs = (f.secondaryObjectives || []);
     let txt = generateFleetText(f);
-    if (secObjs.length) txt += `\n\n## Secondary Objectives\n${secObjs.map(o => '• ' + o).join('\n')}`;
-    return `<div class="print-fleet print-simple" data-fleet-name="${esc(f.name)}"><pre class="print-simple-text">${esc(txt)}</pre></div>`;
+    if (secObjs.length && !settings.printNoObjectives) txt += `\n\n## Secondary Objectives\n${secObjs.map(o => '• ' + o).join('\n')}`;
+    return `<div class="print-fleet print-simple" data-fleet-name="${escAttr(f.name)}"><pre class="print-simple-text">${esc(txt)}</pre></div>`;
   }
 
   function fleetPrintHTML(f) {
@@ -6997,18 +7039,40 @@ let activeGroupId = null;
 
   // Print uses a #print-container the @media print CSS targets.
   //
-  // That CSS hides every other child of <body>, so a print started ANY other way
-  // than our own button -- the browser's File > Print, the Ctrl+P the app does not
-  // catch (fleet list, Play Mode, a modal), a phone's Share > Print -- used to hit
-  // a page with no #print-container at all and send one blank sheet to the printer.
-  // buildPrintContainer() is therefore also wired to `beforeprint` below, so the
-  // sheet exists no matter who asked for the print.
+  // That CSS hides every other child of <body> while the container exists, so a
+  // print started ANY other way than our own button -- the browser's File > Print,
+  // a Ctrl+P the app does not catch, a phone's Share > Print -- still gets the sheet:
+  // buildPrintContainer() is also wired to `beforeprint` below. It only builds on a
+  // screen that shows a fleet (builder, Play Mode); elsewhere currentFleet can be a
+  // fleet you left, so the page prints as itself instead.
+  const PRINT_PAPER = {
+    a4: { label: 'A4', w: 210, h: 297, css: 'A4' },
+    letter: { label: 'Letter', w: 215.9, h: 279.4, css: 'letter' }
+  };
+  const PRINT_MARGIN_MM = 12;
+  function printPaperKey() {
+    if (PRINT_PAPER[settings.printPaper]) return settings.printPaper;
+    // Unset: US/Canada/Mexico/Philippines default to Letter, everywhere else A4.
+    const lang = String(navigator.language || '').toLowerCase();
+    return /^(en-us|en-ca|fr-ca|es-mx|es-us|en-ph)\b/.test(lang) ? 'letter' : 'a4';
+  }
+  function applyPrintPageSize() {
+    let st = document.getElementById('print-page-size');
+    if (!st) { st = document.createElement('style'); st.id = 'print-page-size'; document.head.appendChild(st); }
+    st.textContent = `@page { size: ${PRINT_PAPER[printPaperKey()].css}; margin: ${PRINT_MARGIN_MM}mm; }`;
+  }
+  function fleetOnScreen() {
+    const view = (location.hash.slice(1) || 'landing').split('/')[0];
+    return currentFleet && (view === 'builder' || view === 'play') ? currentFleet : null;
+  }
   function buildPrintContainer() {
-    if (!currentFleet) return null;
     document.getElementById('print-container')?.remove();
+    const fleet = fleetOnScreen();
+    if (!fleet) return null;
+    applyPrintPageSize();
     const printDiv = document.createElement('div');
     printDiv.id = 'print-container';
-    printDiv.innerHTML = fleetPrintHTML(currentFleet);
+    printDiv.innerHTML = fleetPrintHTML(fleet);
     document.body.appendChild(printDiv);
     return printDiv;
   }
@@ -7023,15 +7087,15 @@ let activeGroupId = null;
     // `afterprint` clears it instead.
   }
 
-  window.addEventListener('beforeprint', () => {
-    if (!document.getElementById('print-container')) buildPrintContainer();
-  });
+  // Always rebuild, so a browser that skipped `afterprint` last time can't print an
+  // old fleet or old options.
+  window.addEventListener('beforeprint', buildPrintContainer);
   window.addEventListener('afterprint', () => {
     document.getElementById('print-container')?.remove();
   });
 
-  // Print Preview: choose options (Simple / 2-column) and see the output before
-  // sending it to the browser's print dialog.
+  // Print Preview: choose the layout and options and see the sheet before sending
+  // it to the browser's print dialog.
   function printFleet() {
     if (!currentFleet) return;
     openPrintPreview();
@@ -7039,6 +7103,10 @@ let activeGroupId = null;
   function openPrintPreview() {
     if (!currentFleet) return;
     document.getElementById('print-preview-overlay')?.remove();
+    const seg = (id, label, opts, current) => `<div class="pp-group" id="${id}" role="group" aria-label="${label}">
+          <span class="pp-label">${label}</span>
+          <span class="pp-seg">${opts.map(([v, l]) => `<button type="button" class="pp-seg-btn" data-value="${v}" aria-pressed="${v === current}">${l}</button>`).join('')}</span>
+        </div>`;
     const ov = document.createElement('div');
     ov.id = 'print-preview-overlay';
     ov.className = 'print-preview-overlay';
@@ -7046,19 +7114,14 @@ let activeGroupId = null;
       <div class="print-preview-bar">
         <span class="print-preview-title">Print preview</span>
         <span class="pp-pagecount" id="pp-pagecount"></span>
+        ${seg('pp-layout', 'Layout', [['cards', 'Cards'], ['big', 'Big cards'], ['table', 'Table'], ['text', 'Text list']], printLayoutMode())}
+        ${seg('pp-cols', 'Columns', [['1', '1'], ['2', '2']], settings.print2col ? '2' : '1')}
+        ${seg('pp-size', 'Text size', [['comfortable', 'Large'], ['compact', 'Small']], settings.printDensity === 'compact' ? 'compact' : 'comfortable')}
+        ${seg('pp-paper', 'Paper', [['a4', 'A4'], ['letter', 'Letter']], printPaperKey())}
+        <label class="print-preview-opt" id="pp-colour-opt"><input type="checkbox" id="pp-colour" ${settings.printInk ? '' : 'checked'}> Colour</label>
+        <label class="print-preview-opt" id="pp-rules-opt"><input type="checkbox" id="pp-rules" ${settings.printNoRules ? '' : 'checked'}> Rules text</label>
+        <label class="print-preview-opt" id="pp-obj-opt"><input type="checkbox" id="pp-obj" ${settings.printNoObjectives ? '' : 'checked'}> Secondary objectives</label>
         <span class="print-preview-spacer"></span>
-        <label class="print-preview-opt"><input type="checkbox" id="pp-simple" ${settings.printSimple ? 'checked' : ''}> Simple list</label>
-        <label class="print-preview-opt"><input type="checkbox" id="pp-roster" ${settings.printRoster ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Roster (2-3 pg)</label>
-        <label class="print-preview-opt"><input type="checkbox" id="pp-big" ${settings.printBig ? 'checked' : ''} ${(settings.printSimple || settings.printRoster) ? 'disabled' : ''}> Big mode</label>
-        <label class="print-preview-opt"><input type="checkbox" id="pp-2col" ${settings.print2col ? 'checked' : ''} ${(settings.printSimple || settings.printBig || settings.printRoster) ? 'disabled' : ''}> 2 columns</label>
-        <label class="print-preview-opt"><input type="checkbox" id="pp-ink" ${settings.printInk ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Ink-saver</label>
-        <label class="print-preview-opt" title="Hide all rules text and the secondary-objective list (saves paper when you reprint a list whose rules you already have)"><input type="checkbox" id="pp-norules" ${settings.printNoRules ? 'checked' : ''} ${settings.printSimple ? 'disabled' : ''}> Skip rules/obj.</label>
-        <label class="print-preview-opt">Text
-          <select id="pp-density" class="pp-density-sel" ${settings.printSimple ? 'disabled' : ''}>
-            <option value="comfortable" ${settings.printDensity !== 'compact' ? 'selected' : ''}>Comfortable</option>
-            <option value="compact" ${settings.printDensity === 'compact' ? 'selected' : ''}>Compact</option>
-          </select>
-        </label>
         <button class="btn btn-outline btn-sm pp-close-btn" id="pp-close" type="button">Close</button>
         <button class="btn btn-primary btn-sm" id="pp-print" type="button">Print</button>
       </div>
@@ -7069,52 +7132,55 @@ let activeGroupId = null;
     document.addEventListener('keydown', onKey);
 
     // Mark page boundaries on the continuous "paper" surface and report the page
-    // count. Print keeps certain blocks whole (CSS break-inside: avoid — ship and
-    // admiral cards, the launch/abilities references, the glossary), so a naive
-    // "every 273mm" split would draw breaks mid-card that the printer won't make.
-    // Instead we find those atomic blocks and, when one would straddle a boundary,
-    // insert a spacer that pushes it to the next page — exactly how print resolves
-    // it — so the preview's breaks and page count match the real output. Spacers
-    // and break lines are preview-only; doPrintNow rebuilds clean HTML to print.
-    // A4 content area (210x297mm, 12mm margins) = 186x273mm.
+    // count. Print keeps certain blocks whole (CSS break-inside: avoid — a whole
+    // group when it fits on a page, else each ship card; admiral cards, the launch
+    // reference, the glossary), so a naive "every page height" split would draw
+    // breaks the printer won't make. Instead we find those atomic blocks and, when
+    // one would straddle a boundary, insert a spacer that pushes it to the next page
+    // — how print resolves it. Spacers and break lines are preview-only; doPrintNow
+    // rebuilds clean HTML to print.
     let pageTimer = null;
     const paginate = () => {
       const s = document.getElementById('pp-surface');
       const label = document.getElementById('pp-pagecount');
       if (!s) return;
       s.querySelectorAll('.pp-page-break, .pp-page-spacer').forEach(el => el.remove());
+      const paper = PRINT_PAPER[printPaperKey()];
+      s.style.width = paper.w + 'mm';
       const cs = getComputedStyle(s);
       const padTop = parseFloat(cs.paddingTop) || 0;
       const padBot = parseFloat(cs.paddingBottom) || 0;
-      const pxPerMm = s.getBoundingClientRect().width / 210; // surface is 210mm wide
-      const pageContentPx = 273 * pxPerMm;
+      const pxPerMm = s.getBoundingClientRect().width / paper.w;
+      const pageContentPx = (paper.h - 2 * PRINT_MARGIN_MM) * pxPerMm;
       if (!(pageContentPx > 0)) return;
 
       // 1-column layouts stack as a simple vertical run, so we can push straddling
-      // cards down. The roster table and 2-column grid don't, so they keep the plain
+      // blocks down. The roster table and 2-column grid don't, so they keep the plain
       // height estimate. Guarded so a measurement hiccup falls back, never blanks.
-      const oneColumn = !s.querySelector('.roster-table, .dp-2col, .print-2col');
+      const oneColumn = !s.querySelector('.roster-table, .dp-2col, .print-2col, .print-simple');
       if (oneColumn) {
         try {
           const sTop = s.getBoundingClientRect().top;
-          // Glue each group header to its first ship card into one atom, so a header
-          // never lands alone at the foot of a page while its ships flow to the next.
-          const rawEls = [...s.querySelectorAll('.print-header, .launch-ref, .print-admiral-card, .dp-group-head, .dp-ship, .dp-glossary, .dp-secobj-row, .dp-abilities')];
           const measured = [];
-          for (let i = 0; i < rawEls.length; i++) {
-            const el = rawEls[i];
+          const add = (el, h, breakable) => {
             const r = el.getBoundingClientRect();
-            if (el.classList.contains('dp-group-head')) {
-              const nxt = rawEls[i + 1];
-              if (nxt && nxt.classList.contains('dp-ship')) {
-                const nr = nxt.getBoundingClientRect();
-                measured.push({ el, top: r.top - sTop - padTop, h: nr.bottom - r.top, breakable: false });
-                i++; // the first ship is now part of this glued header block
-                continue;
-              }
-            }
-            measured.push({ el, top: r.top - sTop - padTop, h: r.height, breakable: el.classList.contains('dp-abilities') });
-          }
+            measured.push({ el, top: r.top - sTop - padTop, h: h === undefined ? r.height : h, breakable: !!breakable });
+          };
+          s.querySelectorAll('.print-header, .launch-ref, .print-admiral-card, .print-section > .dp-ship').forEach(el => add(el));
+          s.querySelectorAll('.dp-abilities, .dp-secobj').forEach(el => add(el, undefined, true));
+          s.querySelectorAll('.dp-glossary').forEach(el => add(el));
+          s.querySelectorAll('.dp-group').forEach(g => {
+            const gh = g.getBoundingClientRect().height;
+            if (gh < pageContentPx) { add(g); return; }
+            // Too tall for one page: it breaks between ships, but the header stays
+            // glued to its first ship.
+            const head = g.querySelector('.dp-group-head');
+            const ships = [...g.querySelectorAll(':scope > .dp-ship')];
+            if (head && ships[0]) {
+              add(head, ships[0].getBoundingClientRect().bottom - head.getBoundingClientRect().top);
+              ships.slice(1).forEach(el => add(el));
+            } else add(g, undefined, true);
+          });
           const blocks = measured.filter(b => b.h > 0).sort((a, b) => a.top - b.top);
           let offset = 0;            // total spacer height added above the current block
           let pageLimit = pageContentPx;
@@ -7123,7 +7189,7 @@ let activeGroupId = null;
             const top = b.top + offset;
             const bottom = top + b.h;
             // A block that may break (the abilities table) or is taller than a whole
-            // page just advances the boundary past it — print splits it between rows.
+            // page just advances the boundary past it — print splits it inside.
             if (b.breakable || b.h >= pageContentPx) { while (pageLimit < bottom) pageLimit += pageContentPx; return; }
             if (bottom > pageLimit) {                 // would straddle → push to next page
               const gap = pageLimit - top;
@@ -7165,28 +7231,41 @@ let activeGroupId = null;
       s.querySelectorAll('img').forEach(img => { img.addEventListener('load', schedulePaginate); img.addEventListener('error', schedulePaginate); });
       schedulePaginate();
     };
-    const updateToggleStates = () => {
-      const simple = settings.printSimple, big = settings.printBig, rost = settings.printRoster;
-      // Simple list disables every ship card option; Roster + Big each force one column.
-      const set = (sel, off) => { const el = ov.querySelector(sel); if (el) el.disabled = off; };
-      set('#pp-roster', simple);
-      set('#pp-big', simple || rost);
-      set('#pp-2col', simple || big || rost);
-      set('#pp-ink', simple);
-      set('#pp-density', simple);
-      set('#pp-norules', simple);
+    // Only the options that change the chosen layout are offered: Columns only
+    // exists for Cards; the Text list takes paper and objectives, nothing else.
+    const updateControls = () => {
+      const layout = printLayoutMode();
+      const text = layout === 'text';
+      ov.querySelector('#pp-cols').hidden = layout !== 'cards';
+      ov.querySelector('#pp-size').hidden = text;
+      ov.querySelector('#pp-colour-opt').hidden = text;
+      ov.querySelector('#pp-rules-opt').hidden = text;
     };
-    ov.querySelector('#pp-simple').onchange = (e) => { settings.printSimple = e.target.checked; saveSettings(); updateToggleStates(); refresh(); };
-    ov.querySelector('#pp-roster').onchange = (e) => { settings.printRoster = e.target.checked; saveSettings(); updateToggleStates(); refresh(); };
-    ov.querySelector('#pp-big').onchange = (e) => { settings.printBig = e.target.checked; saveSettings(); updateToggleStates(); refresh(); };
-    ov.querySelector('#pp-2col').onchange = (e) => { settings.print2col = e.target.checked; saveSettings(); refresh(); };
-    ov.querySelector('#pp-ink').onchange = (e) => { settings.printInk = e.target.checked; saveSettings(); refresh(); };
-    ov.querySelector('#pp-norules').onchange = (e) => { settings.printNoRules = e.target.checked; saveSettings(); refresh(); };
-    ov.querySelector('#pp-density').onchange = (e) => { settings.printDensity = e.target.value; saveSettings(); refresh(); };
+    const onSeg = (id, apply) => {
+      ov.querySelectorAll(`#${id} .pp-seg-btn`).forEach(btn => {
+        btn.addEventListener('click', () => {
+          ov.querySelectorAll(`#${id} .pp-seg-btn`).forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+          apply(btn.dataset.value);
+          saveSettings(); updateControls(); refresh();
+        });
+      });
+    };
+    onSeg('pp-layout', v => {
+      settings.printSimple = v === 'text';
+      settings.printRoster = v === 'table';
+      settings.printBig = v === 'big';
+    });
+    onSeg('pp-cols', v => { settings.print2col = v === '2'; });
+    onSeg('pp-size', v => { settings.printDensity = v; });
+    onSeg('pp-paper', v => { settings.printPaper = v; });
+    ov.querySelector('#pp-colour').onchange = (e) => { settings.printInk = !e.target.checked; saveSettings(); refresh(); };
+    ov.querySelector('#pp-rules').onchange = (e) => { settings.printNoRules = !e.target.checked; saveSettings(); refresh(); };
+    ov.querySelector('#pp-obj').onchange = (e) => { settings.printNoObjectives = !e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-close').addEventListener('click', closePreview);
     ov.querySelector('#pp-print').addEventListener('click', doPrintNow);
     // Click on the dark backdrop (outside the page surface) also closes.
     ov.querySelector('.print-preview-scroll').addEventListener('click', (e) => { if (e.target === e.currentTarget) closePreview(); });
+    updateControls();
     // Initial pagination (the surface is already populated from innerHTML above).
     const surf0 = document.getElementById('pp-surface');
     if (surf0) surf0.querySelectorAll('img').forEach(img => { img.addEventListener('load', schedulePaginate); img.addEventListener('error', schedulePaginate); });
@@ -8667,6 +8746,17 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-12', title: 'Print: clear controls and a complete sheet', items: [
+      'The print preview has plain controls: Layout (Cards, Big cards, Table, Text list), Columns, Text size, Paper, Colour, Rules text and Secondary objectives. Options that don’t apply to a layout aren’t shown.',
+      'Paper is a real setting: A4 or Letter sets the printed page size and the page count.',
+      'Famous flagships print as full ship cards, with hull boxes (two tracks for the Twins of Aaru), launch, refit and rules.',
+      'Space stations print their chosen armaments and upgrades, and every rule in full.',
+      'Big cards show the Refit line again, and with Rules text off every card still names its rules.',
+      'The Table layout prints systems, deployable features and refits.',
+      'Dark mode no longer turns text pale on the printout, and printing from a screen with no fleet open prints that screen instead of an old fleet.',
+      'A shared fleet link can no longer put markup or script onto the print sheet.',
+      'Keywords like Fusillade-2 no longer split across lines, and faint labels are darker.',
+    ]},
     { date: '2026-09-11', title: 'How to Play: a centred read, and the Dropsite icons', items: [
       'The rulebook now reads as a centred column down the middle of the page, with the chapter list out in the left margin.',
       'The Dropsites table shows each type’s icon, the S, M and L station discs and the city blocks, lifted from the rulebook page.',
@@ -9486,7 +9576,13 @@ let activeGroupId = null;
   function loadSettings() {
     try {
       const saved = localStorage.getItem('dfc_settings');
-      if (saved) Object.assign(settings, JSON.parse(saved));
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        Object.assign(settings, parsed);
+        // "Skip rules/obj." used to hide the objectives too; it is two toggles now,
+        // so anyone who had it on keeps both hidden.
+        if (parsed.printNoObjectives === undefined && parsed.printNoRules) settings.printNoObjectives = true;
+      }
       // One-time reset: misc/additional ships default OFF. Clears any stale "on"
       // left from earlier testing; future toggles still persist normally.
       if (localStorage.getItem('dfc_misc_off_v1') !== '1') {
