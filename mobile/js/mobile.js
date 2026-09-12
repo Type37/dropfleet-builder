@@ -1171,7 +1171,7 @@
   }
   // Rule/description text: escape everything, then re-allow our own <b> emphasis
   // (rules text stores verbatim bold via <b> tags) and turn newlines into breaks.
-  function ruleHtml(s) { return esc(s).replace(/&lt;(\/?)b&gt;/g, '<$1b>').replace(/\n/g, '<br>'); }
+  function ruleHtml(s) { return esc(s).replace(/&lt;(\/?)b&gt;/g, '<$1b>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>'); }
 
   const CATEGORY_ORDER = ['light', 'medium', 'heavy', 'colossal', 'payload'];
   const CATEGORY_LABELS = { light: 'Light', medium: 'Medium', heavy: 'Heavy', colossal: 'Colossal', payload: 'Payload', famous_admirals: 'Famous Admiral' };
@@ -3457,7 +3457,7 @@
   function getAdmiralInfo(a) {
     const faction = FACTIONS[activeFleet.faction];
     if (!faction) return null;
-    const def = (faction.admirals || []).find(x => x.id === a.admiralId);
+    const def = (faction.admirals || []).find(x => x.id === (a.admiralId || a.shipKey));
     if (!def) return null;
     return { innate: def.abilities || [], table: faction.abilitiesTable || [], picks: def.abilityPicks || 0 };
   }
@@ -4656,6 +4656,7 @@
       'The scenario list puts commas between the deployments and scoring it names.',
       'A scenario page names its deployment and scoring rules in bold at the start of their paragraphs, the way the Dropzone pages do, instead of in dark labels.',
       'A generated scenario no longer repeats the WarLore credit that is already in the footer.',
+      'Tap a Micrometeor Cloud, Dense Debris Field, Planetary Ring or Large Object, on a map or in the scenery text, to read its rules. That text is now the rulebook’s own, word for word: Large Objects had been reworded, and bold the book does not print had been added.',
       'Orbital Support’s map shows the Medium Space Station with its Military Outposts. Turn its Variant on and they become Hangars on the map, stats included.',
     ]},
     { date: '2026-09-11', title: 'How to Play: the whole rulebook', items: [
@@ -6015,11 +6016,77 @@
   // Core Abilities (rulebook 4.2.1.1), available to every player. Same verbatim
   // text as the desktop CORE_ABILITIES table.
   const CORE_ABILITIES = [
-    { name: 'AP Re-roll', cost: '*AP', effect: 'Once per Group, Asset, or Dropsite activation, after you roll any dice, you can re-roll any number of those dice. You must re-roll at least one dice, spending 1AP for each dice re-rolled.' },
+    { name: 'AP Re-roll', cost: '*AP', effect: 'Once per Group, Asset, or Dropsite activation, after you roll any dice, you can re-roll any number of those dice. You may re-roll multiple dice in a single roll this way but must re-roll at least one dice, spending 1AP for each dice re-rolled.' },
     { name: 'Brace for Impact', cost: '2AP', effect: 'When a player would roll for Crippling Effects, instead of rolling, make the result of a Crippling Effect roll (for you or your opponent) a 4.' },
     { name: 'Contain Reactor', cost: '2AP', effect: 'When a player would roll for Explosion, instead of rolling, make the result of an Explosion roll (for you or your opponent) a 2.' },
-    { name: 'Time to Target', cost: '2AP', effect: 'After moving a Wing of your Fighters or Bombers, you may move that Wing a second time with a Thrust of 6" in any direction. The Wing cannot divide into or form larger Wings due to this movement.' }
+    { name: 'Time to Target', cost: '2AP', effect: 'After moving a Wing of your Fighters or Bombers, you may move that Wing (or the Wing it combined into) a second time with a Thrust of 6” in any direction. The Wing cannot divide into smaller Wings or form/be formed into larger Wings due to this additional movement.' }
   ];
+
+  // An Ability written inside a ship rule: "Name (2AP): effect", as in UCMA
+  // Battlenet or Fuel Transporter. Lines after an Ability's first line (bullets, a
+  // second paragraph) belong to it. Text is kept verbatim. Mirrors desktop.
+  const RULE_ABILITY_RE = /^(.+?) \(([0-9X*]+AP)\):\s*(.*)$/;
+  function abilitiesInRuleText(text) {
+    const out = [];
+    String(text || '').split('\n').forEach(line => {
+      const m = line.match(RULE_ABILITY_RE);
+      if (m) out.push({ name: m[1].trim(), cost: m[2], effect: m[3] });
+      else if (out.length && line.trim()) out[out.length - 1].effect += '\n' + line;
+    });
+    return out;
+  }
+
+  // Every Ability this fleet can use, grouped by source: each Faction/Famous
+  // Admiral's own Abilities and chosen table picks; the rest of the Abilities Table
+  // while picks are still to be made (rows carry pick: 'on' | 'off'); Abilities from
+  // ship, flagship and station rules; the Core Abilities. Mirrors desktop.
+  function fleetAbilityGroups(f) {
+    const groups = [];
+    const chosenAll = new Set();
+    let openTable = null;
+    (f.admirals || []).forEach(a => {
+      const info = getAdmiralInfo(a);
+      if (!info) return;
+      const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
+      const table = info.table || [];
+      const open = table.length > 0 && info.picks > sel.length;
+      const rows = (info.innate || []).filter(ab => ab && ab.name).map(ab => ({ ...ab }));
+      table.filter(ab => sel.includes(ab.name)).forEach(ab => {
+        chosenAll.add(ab.name);
+        rows.push(open ? { ...ab, pick: 'on' } : { ...ab });
+      });
+      if (open) openTable = table;
+      if (rows.length) groups.push({ label: a.name, rows });
+    });
+    if (openTable) {
+      const rest = openTable.filter(ab => !chosenAll.has(ab.name)).map(ab => ({ ...ab, pick: 'off' }));
+      if (rest.length) groups.push({ label: 'Abilities Table', rows: rest });
+    }
+    const seenRule = new Set();
+    const fromRules = (rules, holder) => (rules || []).forEach(r => {
+      if (!r || !r.name || !r.description || seenRule.has(r.name)) return;
+      const rows = abilitiesInRuleText(r.description);
+      if (!rows.length) return;
+      seenRule.add(r.name);
+      groups.push({ label: `${r.name} (${holder})`, rows });
+    });
+    (f.battleGroups || []).forEach(g => {
+      const s = g.ships && g.ships[0];
+      const db = s && findShip(f.faction, s.groupCategory, s.shipKey);
+      if (db) fromRules(db.specialRules, db.name);
+    });
+    (f.admirals || []).forEach(a => {
+      const fs = a.type === 'Famous' ? admiralFlagship(a, f) : null;
+      if (fs) fromRules(fs.specialRules, fs.name);
+    });
+    if (f.spaceStation) {
+      const ss = f.spaceStation;
+      const def = findStationDef(f.faction, ss);
+      fromRules((ss.specialRules && ss.specialRules.length) ? ss.specialRules : (def && def.specialRules), ss.name);
+    }
+    groups.push({ label: 'Core Abilities', rows: CORE_ABILITIES.map(ab => ({ ...ab })) });
+    return groups;
+  }
 
   // Launch-asset table for the printed sheet. Mirrors the on-screen launch
   // table (same data + deploy ranges) so printed docs carry full launch info.
@@ -6272,27 +6339,12 @@
       </div>`;
     }).join('');
 
-    // Every ability the fleet can use this game: each admiral's own abilities and
-    // chosen table abilities (deduped by name), then the Core Abilities.
-    let abilitiesHtml = '';
-    if ((f.admirals || []).length) {
-      const seen = new Set();
-      const list = [];
-      f.admirals.forEach(a => {
-        const ai = getAdmiralInfo(a);
-        if (!ai) return;
-        (ai.innate || []).forEach(ab => { if (ab && ab.name && !seen.has(ab.name)) { seen.add(ab.name); list.push(ab); } });
-        (a.selectedAbilities || []).forEach(n => {
-          const ab = (ai.table || []).find(t => t.name === n);
-          if (ab && !seen.has(ab.name)) { seen.add(ab.name); list.push(ab); }
-        });
-      });
-      const row = ab => `<tr><td><b>${esc(ab.name)}</b></td><td>${esc(ab.cost || '')}</td><td>${ruleHtml(ab.effect || '')}</td></tr>`;
-      const groupRow = label => `<tr class="pr-abil-group"><td colspan="3">${esc(label)}</td></tr>`;
-      const body = (list.length ? groupRow('Admiral Abilities') + list.map(row).join('') : '')
-        + groupRow('Core Abilities') + CORE_ABILITIES.map(row).join('');
-      abilitiesHtml = `<table class="pr-weapons pr-abilities"><colgroup><col class="pr-c-abil"><col class="pr-c-ap"><col></colgroup><thead><tr><th>Ability</th><th>AP</th><th>Effect</th></tr></thead><tbody>${body}</tbody></table>`;
-    }
+    // Every Ability this fleet can use (fleetAbilityGroups), with full effect text.
+    const abilBox = r => r.pick ? `<span class="pr-check">${r.pick === 'on' ? '☑' : '☐'}</span> ` : '';
+    const abilitiesHtml = `<table class="pr-weapons pr-abilities"><colgroup><col class="pr-c-abil"><col class="pr-c-ap"><col></colgroup><thead><tr><th>Ability</th><th>AP</th><th>Effect</th></tr></thead><tbody>${
+      fleetAbilityGroups(f).map(g => `<tr class="pr-abil-group"><td colspan="3">${esc(g.label)}</td></tr>`
+        + g.rows.map(r => `<tr${r.pick === 'on' ? ' class="pr-abil-on"' : ''}><td>${abilBox(r)}<b>${esc(r.name)}</b></td><td>${esc(r.cost || '')}</td><td>${ruleHtml(r.effect || '')}</td></tr>`).join('')).join('')
+    }</tbody></table>`;
 
     // Space station: full card, like a ship.
     let stationHtml = '';
@@ -6349,7 +6401,7 @@
       ${f.description ? `<div class="pr-desc">${esc(f.description)}</div>` : ''}
       <div class="pr-units">${groupsHtml}</div>
       ${admiralsHtml ? `<div class="pr-section-title">Admiral</div>${admiralsHtml}` : ''}
-      ${abilitiesHtml ? `<div class="pr-section-title">Admiral Abilities</div>${abilitiesHtml}` : ''}
+      ${abilitiesHtml ? `<div class="pr-section-title">Abilities</div>${abilitiesHtml}` : ''}
       ${stationHtml ? `<div class="pr-section-title">Space Station</div>${stationHtml}` : ''}
       ${secObjsHtml ? `<div class="pr-section-title">Secondary Objectives</div><div class="pr-glossary">${secObjsHtml}</div>` : ''}
       ${glossary ? `<div class="pr-section-title">Rules Glossary</div><div class="pr-glossary">${glossary}</div>` : ''}

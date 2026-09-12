@@ -717,8 +717,8 @@ ${tk}
 
   items.forEach(e=>{
     const t=e[0];
-    if(t==='R'){rings+=mkRing(e[1]);}
-    else if(t==='LO'){los+=mkLO(e[1],e[2],e[3]);}
+    if(t==='R'){rings+=`<g data-tip="scen:Planetary Ring">${mkRing(e[1])}</g>`;}
+    else if(t==='LO'){los+=`<g data-tip="scen:Large Object">${mkLO(e[1],e[2],e[3])}</g>`;}
     else{
       const x=_i(e[1]),y=_i(e[2]);
       let g='';
@@ -813,16 +813,16 @@ function gen(){
     if(seen.has(t))return; seen.add(t);
     const s=SR[t]; if(!s) return;
     const count=L.sc.find(x=>x.toLowerCase().indexOf(t.split(' ').pop().toLowerCase())>-1)||t;
-    scenH+=`<div class="sc-def"><b>${count}:</b> ${s.rules.join(' ')}</div><div class="sc-flavor" style="margin-top:.5mm;margin-bottom:.5mm;">${s.desc}</div>`;
+    scenH+=`<div class="sc-def"><b>${scenTips(count)}:</b> ${s.rules.join(' ')}</div><div class="sc-flavor" style="margin-top:.5mm;margin-bottom:.5mm;">${s.desc}</div>`;
   });
-  scenH+=`<div class="sbox" style="margin-top:1mm"><p><b>Placement:</b> Players alternate placing Micrometeor Clouds and Dense Debris Fields, at least 4" from table edges, Deployment Zones, and other scenery. Planetary Rings and Large Objects are placed as shown in the layout diagram.</p></div></div>`;
+  scenH+=`<div class="sbox" style="margin-top:1mm">${SCENERY_PLACEMENT.map(p=>`<p>${p}</p>`).join('')}</div></div>`;
 
   // VARIANT
   const varH=`<div class="sbox"><p>${V.ef}</p></div>`;
 
   // RIGHT COL LEGEND
   let legH=`<div class="lhdr">Layout: ${L.name}</div><ol class="lds-list">`;
-  L.sc.forEach(s=>{legH+=`<li class="lds"><span style="color:var(--gold);font-size:6pt">◆</span>&nbsp;${s}</li>`;});
+  L.sc.forEach(s=>{legH+=`<li class="lds"><span style="color:var(--gold);font-size:6pt">◆</span>&nbsp;${scenTips(s)}</li>`;});
   legH+=`</ol>`;
 
   if(V.ft.length) legH+=`<div class="lhdr">Features Added</div>${featTable(V.ft)}`;

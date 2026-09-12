@@ -5,6 +5,26 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-12: Scenery rules on hover, verbatim
+
+- **Hover or tap any scenery.** Planetary Rings and Large Objects on the
+  generator's map, and every Micrometeor Cloud, Dense Debris Field, Planetary
+  Ring and Large Object named in a layout's scenery list or a published
+  scenario's Scenery line, open that scenery's rules.
+- **Word for word from rulebook section 10.** The scenery text was typed by
+  hand and had drifted: Large Objects read "orbital plates; vast
+  installations" where the book prints "orbital plates—vast instillations",
+  and dice results and hits were bolded where the book sets no bold. It is now
+  read from `data/rules-wiki.json` by `scripts/build-scenario-terms.py`
+  (sections 10, 10.1-10.4 and 12.1.3). The sanctioned "Dense Debris Field"
+  name is the only change.
+- **Placement** was a paraphrase with an invented clause. It is now 12.1.3's
+  "Players alternate placing..." and section 10's 4” distance rule, as printed.
+- **Layout scenery lists** read as 12.1.3 prints them ("2 8” Large Objects",
+  "as shown in orange.").
+- **CI:** GitHub Actions moved off the deprecated Node 20 (checkout v7, Pages
+  actions v6/v5/v5, github-script v9).
+
 ### 2026-09-12: Print preview, Text size removed
 
 - **Text size (Large/Small) is gone.** Small only shrank card text by about 1pt,

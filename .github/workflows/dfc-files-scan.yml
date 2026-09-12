@@ -48,7 +48,7 @@ jobs:
   watch:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Both scripts are stdlib-only and exit 1 on findings, 0 when clean, so
       # neither needs installs and neither should fail the job on a finding.
@@ -130,7 +130,7 @@ jobs:
 
       - name: Report
         if: steps.files.outputs.findings != '0' || steps.bsdata.outputs.findings != '0' || steps.cards.outputs.findings != '0' || steps.mirror.outputs.findings != '0' || inputs.test_alert
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require('fs');

@@ -112,17 +112,32 @@ const DM={
 const LY=[
   {name:"Diagonal",nc:false,sc:["4-6 Micrometeor Clouds","4 Dense Debris Fields"],ty:["Micrometeor Cloud","Dense Debris Field"]},
   {name:"Edge Case",nc:false,sc:["4 Micrometeor Clouds","6 Dense Debris Fields"],ty:["Micrometeor Cloud","Dense Debris Field"]},
-  {name:"Eruption",nc:false,sc:["1 Planetary Ring across the centre of the table","4-6 Micrometeor Clouds"],ty:["Planetary Ring","Micrometeor Cloud"]},
-  {name:"Gatecrash",nc:true,sc:["2 Planetary Rings as shown","4 Micrometeor Clouds","2 Dense Debris Fields"],ty:["Planetary Ring","Micrometeor Cloud","Dense Debris Field"]},
-  {name:"Moonlight",nc:true,sc:['2 × 8" Large Objects',"2 Micrometeor Clouds","2 Dense Debris Fields"],ty:["Large Object","Micrometeor Cloud","Dense Debris Field"]},
-  {name:"Moonstruck",nc:true,sc:['1 × 12" Large Object',"6 Micrometeor Clouds"],ty:["Large Object","Micrometeor Cloud"]},
+  {name:"Eruption",nc:false,sc:["1 Planetary Ring across the centre of the table as shown in orange.","4-6 Micrometeor Clouds"],ty:["Planetary Ring","Micrometeor Cloud"]},
+  {name:"Gatecrash",nc:true,sc:["2 Planetary Rings as shown in orange.","4 Micrometeor Clouds","2 Dense Debris Fields"],ty:["Planetary Ring","Micrometeor Cloud","Dense Debris Field"]},
+  {name:"Moonlight",nc:true,sc:['2 8” Large Objects',"2 Micrometeor Clouds","2 Dense Debris Fields"],ty:["Large Object","Micrometeor Cloud","Dense Debris Field"]},
+  {name:"Moonstruck",nc:true,sc:['1 12” Large Object',"6 Micrometeor Clouds"],ty:["Large Object","Micrometeor Cloud"]},
 ];
-const SR={
-  "Planetary Ring":{desc:'Planetary rings are ice, dust, and pebbles encircling a planet. They are represented by a line with no thickness that runs across the table.',rules:["Ignore the target's Spikes when attacking through this.","After you move or place Assets into or through this, roll a dice. For each result of a <b>2+,</b> remove one of those Assets (placing any Battalions after rolling).","Assets deploying Battalions to a Dropsite with its centre underneath a Planetary Ring ignore the Planetary Ring."]},
-  "Micrometeor Cloud":{desc:'These are usually areas of micrometeors or the remnants of annihilated spacecraft. They typically measure around 6" by 3" but can be much larger.',rules:["Ignore the target's Spikes when attacking through Micrometeor Clouds.","Each Ship moved through this suffers <b>2 Kinetic hits.</b>","After you move or place assets into or through this, roll a dice. For each result of a <b>3+,</b> remove one of those assets."]},
-  "Dense Debris Field":{desc:'These are usually chaotic expanses of tumbling chunks, from asteroids to shipwrecks. Occasionally, one might represent the scaffolding matrix of orbital shipyards. These typically measure around 6" by 3".',rules:["Ignore the target's Spikes and Signature when attacking through Dense Debris Fields.","Each Ship moved through this suffers <b>2 Core hits.</b>","After you move or place assets into or through this, roll a dice. For each result of a <b>5+,</b> remove one of those assets."]},
-  "Large Object":{desc:'These are moons, massive asteroids, or even orbital plates; vast installations only seen over densely developed worlds. They are usually circular and 6-12" in diameter.',rules:["These block Line of Sight.","If any Ship or Asset is placed or moved onto a Large Object, it is destroyed."]},
-};
+// Scenery, word for word from rulebook section 10 (scenario-terms.js): the first paragraph
+// describes it, the rest are its rules. The one change is the sanctioned name: the book's
+// "Dense Field" reads "Dense Debris Field".
+const denseDebris=t=>t.replace(/\bDense Field/g,'Dense Debris Field');
+const SR_SECTION={"Planetary Ring":"10.1","Micrometeor Cloud":"10.2","Dense Debris Field":"10.3","Large Object":"10.4"};
+const SR=typeof SCN_RULEBOOK==='undefined'?{}:Object.fromEntries(Object.entries(SR_SECTION).map(([name,num])=>{
+  const body=SCN_RULEBOOK[num].body.map(denseDebris);
+  return [name,{desc:body[0],rules:body.slice(1)}];
+}));
+// How a layout's scenery goes on the table: 12.1.3, then the distance rule from 10
+const SCENERY_PLACEMENT=typeof SCN_RULEBOOK==='undefined'?[]:[
+  ...SCN_RULEBOOK['12.1.3'].body.filter(p=>/^Players alternate/.test(p)).map(denseDebris),
+  ...SCN_RULEBOOK['10'].body.filter(p=>/^When placing/.test(p)),
+];
+// Every scenery name in a piece of text opens that scenery's rules on hover or tap
+function scenTips(text){
+  return String(text).replace(/\b(Planetary Rings?|Micrometeor Clouds?|Dense (?:Debris )?Fields?|Debris Fields?|Large Objects?)\b/g,m=>{
+    const name=/Ring/.test(m)?'Planetary Ring':/Micrometeor/.test(m)?'Micrometeor Cloud':/Field/.test(m)?'Dense Debris Field':'Large Object';
+    return `<span class="tip-t" tabindex="0" data-tip="scen:${name}">${m}</span>`;
+  });
+}
 const VA=[
   {name:"Guarded Sectors",ef:"Each Dropsite gains a <b>Military Outpost</b> and each Large Dropsite also gains an <b>Orbital Defence Gun.</b><br><br>If the Deployment type uses a Defender, the Defender may place an additional Military Outpost in any Dropsite.",ft:["Military Outpost","Orbital Defence Gun"]},
   {name:"Secure Comms Array",ef:"Each Medium City (or Small Cities if the scenario has no Medium Cities) gains a <b>Comms Station.</b><br><br>Replace each Large City with a Large Space Station containing an <b>Orbital Defence Gun</b> and a <b>Power Plant.</b>",ft:["Comms Station","Orbital Defence Gun","Power Plant"]},
@@ -646,7 +661,7 @@ function renderScenario(s){
   const score=s.scoring?pubBullets(s.scoring)+pubScoring([s.scoring,s.special,s.variant].map(J).join(' ')):'';
   const tbls=(s.tables||(s.table?[s.table]:[])).map(pubTable).join('');
   const special=(s.special?pubBullets(s.special):'')+tbls;
-  const scenery=s.scenery?pubParas(s.scenery)+pubScenery([s.scenery,s.special,s.scoring].map(J).join(' ')):'';
+  const scenery=s.scenery?pubParas([].concat(s.scenery).map(scenTips))+pubScenery([s.scenery,s.special,s.scoring].map(J).join(' ')):'';
   const ships=pubShips(allText);
   const hasMap=SCENARIO_MAPS.has(s.id);
   const fauna=s.id!=='fauna-rules'&&/\bFauna\b/.test(allText)?`<button class="abtn pub-fauna" onclick="pubOpen('fauna-rules')">Fauna Rules</button>`:'';
@@ -686,7 +701,7 @@ function tipHTML(key){
   if(kind==='feat'){ const f=FS[id]; if(!f) return ''; const w=f.weapon;
     const more=w?`<b>${w.name}</b> ${G.iScan}${w.scan}, Att ${w.att}, Lock ${w.lock}, Dmg ${w.dmg}${w.type}, ${w.special}`:f.launch?`Launch ${f.launch.launch}: ${f.launch.type}<br>${f.note}`:f.special;
     return `<div class="scn-tip-h">${f.ico}<b>${id}</b></div><div class="scn-tip-st">${G.iES}<span class="sv-e">${f.es}</span>${G.iKS}<span class="sv-k">${f.ks}</span></div><div>${more}</div>`; }
-  if(kind==='scen'){ const x=SR[id]; return x?`<div class="scn-tip-h"><b>${id}</b></div><div>${x.rules.join(' ')}</div>`:''; }
+  if(kind==='scen'){ const x=SR[id]; return x?`<div class="scn-tip-h"><b>${id}</b></div><div>${x.desc}</div><div>${x.rules.join(' ')}</div>`:''; }
   if(kind==='ship'){ const x=SCN_SHIPS[id]; if(!x) return ''; const st=x.stats;
     return `<div class="scn-tip-h"><b>${x.name}</b></div><div>${x.tonnage}, ${x.cost} pts</div><div class="scn-tip-st">${G.iThrust}${st.thrust} ${G.iScan}${st.scan} ${G.iSig}${st.sig} ${G.iHull}${st.hull} ${G.iES}<span class="sv-e">${st.es}</span>${G.iKS}<span class="sv-k">${st.ks}</span>${G.iBS}${st.bs} ${G.iG}${st.g}</div>${x.rules.map(r=>`<div><b>${r.name}</b></div>`).join('')}`; }
   if(kind==='wtype'){ return WTYPE[id]?`<b>${id}</b> ${WTYPE[id]}`:''; }

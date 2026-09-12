@@ -33,7 +33,7 @@ let activeGroupId = null;
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printInk: true, printBig: true, printRoster: false, printNoRules: false, printNoObjectives: false, printPaper: '', showCollection: false, theme: 'light' };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printInk: true, printBig: true, printRoster: false, printNoRules: false, printNoObjectives: false, printNoAbilities: false, printPaper: '', showCollection: false, theme: 'light' };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -5551,14 +5551,86 @@ let activeGroupId = null;
     { level: 4, cost: 60 }
   ];
 
-  // Core player abilities (rulebook 4.2.1.1) — available to every player each round
-  // regardless of admiral. Shown on generic-admiral cards so the player has them to hand.
+  // Core player abilities (rulebook 4.2.1.1, verbatim) — available to every player
+  // each round regardless of admiral.
   const CORE_ABILITIES = [
-    { name: 'AP Re-roll', cost: '*AP', effect: 'Once per Group, Asset, or Dropsite activation, after you roll any dice, you can re-roll any number of those dice. You must re-roll at least one dice, spending 1AP for each dice re-rolled.' },
+    { name: 'AP Re-roll', cost: '*AP', effect: 'Once per Group, Asset, or Dropsite activation, after you roll any dice, you can re-roll any number of those dice. You may re-roll multiple dice in a single roll this way but must re-roll at least one dice, spending 1AP for each dice re-rolled.' },
     { name: 'Brace for Impact', cost: '2AP', effect: 'When a player would roll for Crippling Effects, instead of rolling, make the result of a Crippling Effect roll (for you or your opponent) a 4.' },
     { name: 'Contain Reactor', cost: '2AP', effect: 'When a player would roll for Explosion, instead of rolling, make the result of an Explosion roll (for you or your opponent) a 2.' },
-    { name: 'Time to Target', cost: '2AP', effect: 'After moving a Wing of your Fighters or Bombers, you may move that Wing a second time with a Thrust of 6" in any direction. The Wing cannot divide into or form larger Wings due to this movement.' }
+    { name: 'Time to Target', cost: '2AP', effect: 'After moving a Wing of your Fighters or Bombers, you may move that Wing (or the Wing it combined into) a second time with a Thrust of 6” in any direction. The Wing cannot divide into smaller Wings or form/be formed into larger Wings due to this additional movement.' }
   ];
+
+  // An Ability written inside a ship rule: "Name (2AP): effect", as in UCMA
+  // Battlenet ("An admiral assigned to this ship gains the following Command
+  // Abilities:") or Fuel Transporter ("While a Ship with this rule is on the table,
+  // you have access to the following Ability:"). Lines after an Ability's first line
+  // (bullets, a second paragraph) belong to it. Text is kept verbatim.
+  const RULE_ABILITY_RE = /^(.+?) \(([0-9X*]+AP)\):\s*(.*)$/;
+  function abilitiesInRuleText(text) {
+    const out = [];
+    String(text || '').split('\n').forEach(line => {
+      const m = line.match(RULE_ABILITY_RE);
+      if (m) out.push({ name: m[1].trim(), cost: m[2], effect: m[3] });
+      else if (out.length && line.trim()) out[out.length - 1].effect += '\n' + line;
+    });
+    return out;
+  }
+
+  // Every Ability this fleet can use, grouped by where it comes from:
+  //  - each Faction or Famous Admiral's own Abilities (passive bonuses included)
+  //    and the Abilities Table picks chosen for it;
+  //  - while picks are still to be made, the rest of the Abilities Table to pick
+  //    from at the table (rows then carry pick: 'on' | 'off');
+  //  - Abilities granted by ship, flagship and station rules;
+  //  - the Core Abilities every player has (4.2.1.1).
+  function fleetAbilityGroups(f) {
+    const groups = [];
+    const chosenAll = new Set();
+    let openTable = null;
+    (f.admirals || []).forEach(a => {
+      const info = getAdmiralAbilityInfo(a);
+      if (!info) return;
+      const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
+      const table = info.table || [];
+      const open = table.length > 0 && info.picks > sel.length;
+      const rows = (info.innate || []).filter(ab => ab && ab.name).map(ab => ({ ...ab }));
+      table.filter(ab => sel.includes(ab.name)).forEach(ab => {
+        chosenAll.add(ab.name);
+        rows.push(open ? { ...ab, pick: 'on' } : { ...ab });
+      });
+      if (open) openTable = table;
+      if (rows.length) groups.push({ label: a.name, rows });
+    });
+    if (openTable) {
+      const rest = openTable.filter(ab => !chosenAll.has(ab.name)).map(ab => ({ ...ab, pick: 'off' }));
+      if (rest.length) groups.push({ label: 'Abilities Table', rows: rest });
+    }
+    const seenRule = new Set();
+    const fromRules = (rules, holder) => (rules || []).forEach(r => {
+      if (!r || !r.name || !r.description || seenRule.has(r.name)) return;
+      const rows = abilitiesInRuleText(r.description);
+      if (!rows.length) return;
+      seenRule.add(r.name);
+      groups.push({ label: `${r.name} (${holder})`, rows });
+    });
+    (f.battleGroups || []).forEach(g => {
+      const s = g.ships && g.ships[0];
+      const db = s && findShipInDB(f.faction, s.groupCategory, s.shipKey);
+      if (db) fromRules(db.specialRuleDetails, db.name);
+    });
+    (f.admirals || []).forEach(a => {
+      const key = a.type === 'Famous' && (a.shipKey || a.admiralId);
+      const db = key && findShipInDB(f.faction, 'famous_admirals', key);
+      if (db) fromRules(db.specialRuleDetails, db.name);
+    });
+    if (f.spaceStation) {
+      const ss = f.spaceStation;
+      const def = stationDefFor(ss);
+      fromRules((ss.specialRules && ss.specialRules.length) ? ss.specialRules : (def && def.specialRules), ss.name);
+    }
+    groups.push({ label: 'Core Abilities', rows: CORE_ABILITIES.map(ab => ({ ...ab })) });
+    return groups;
+  }
 
   // The portrait-thumbnail slot for an admiral: the portrait when one exists
   // (famous admirals), otherwise the rank insignia fills the whole square
@@ -6471,6 +6543,7 @@ let activeGroupId = null;
     const factionInfo = shipDB[f.faction];
     const noRules = !!settings.printNoRules;
     const noObjectives = !!settings.printNoObjectives;
+    const noAbilities = !!settings.printNoAbilities;
 
     // Validation warnings are a build-time aid only — kept in the on-screen builder
     // (sidebar alerts), never printed on the final army-list sheet.
@@ -6861,32 +6934,20 @@ let activeGroupId = null;
         }).join('')}
       </div>`;
 
-      // Consolidated "abilities you can use this match" table: every admiral's
-      // innate + chosen abilities (deduped by name) plus the universal Core
-      // Abilities (4.2.1.1). One table beats hunting across admiral cards mid-game.
-      const seenAbil = new Set();
-      const admiralAbilities = [];
-      f.admirals.forEach(a => {
-        const info = getAdmiralAbilityInfo(a);
-        if (!info) return;
-        (info.innate || []).forEach(ab => {
-          if (ab && ab.name && !seenAbil.has(ab.name)) { seenAbil.add(ab.name); admiralAbilities.push(ab); }
-        });
-        (a.selectedAbilities || []).forEach(n => {
-          const ab = (info.table || []).find(t => t.name === n);
-          if (ab && !seenAbil.has(ab.name)) { seenAbil.add(ab.name); admiralAbilities.push(ab); }
-        });
-      });
-      const cols = noRules ? 2 : 3;
-      const abilRow = ab => `<tr><td class="dp-abil-name">${esc(ab.name)}</td><td class="dp-abil-cost">${esc(ab.cost || '')}</td>${noRules ? '' : `<td class="dp-abil-effect">${ruleHtml(ab.effect || '')}</td>`}</tr>`;
-      const abilGroupRow = label => `<tr class="dp-abil-grouprow"><td colspan="${cols}">${esc(label)}</td></tr>`;
-      let abilBody = '';
-      if (admiralAbilities.length) abilBody += abilGroupRow('Admiral Abilities') + admiralAbilities.map(abilRow).join('');
-      abilBody += abilGroupRow('Core Abilities (available to all)') + CORE_ABILITIES.map(abilRow).join('');
+    }
+
+    // Abilities: everything this fleet can use (fleetAbilityGroups), always with the
+    // full effect text whatever the Rules text setting, since they're played from here.
+    if (!noAbilities) {
+      const box = r => r.pick ? `<span class="dp-checkbox" aria-hidden="true">${r.pick === 'on' ? '☑' : '☐'}</span> ` : '';
+      const abilBody = fleetAbilityGroups(f).map(g =>
+        `<tr class="dp-abil-grouprow"><td colspan="3">${esc(g.label)}</td></tr>`
+        + g.rows.map(r => `<tr${r.pick === 'on' ? ' class="dp-abil-on"' : ''}><td class="dp-abil-name">${box(r)}${esc(r.name)}</td><td class="dp-abil-cost">${esc(r.cost || '')}</td><td class="dp-abil-effect">${ruleHtml(r.effect || '')}</td></tr>`).join('')
+      ).join('');
       admiralsHtml += `<div class="print-section dp-abilities">
-        <div class="print-section-title">Admiral Abilities</div>
-        <table class="launch-ref-table dp-abilities-table${noRules ? ' dp-abilities-short' : ''}">
-          <thead><tr><th class="dp-abil-name">Ability</th><th class="dp-abil-cost">AP</th>${noRules ? '' : '<th class="dp-abil-effect">Effect</th>'}</tr></thead>
+        <div class="print-section-title">Abilities</div>
+        <table class="launch-ref-table dp-abilities-table">
+          <thead><tr><th class="dp-abil-name">Ability</th><th class="dp-abil-cost">AP</th><th class="dp-abil-effect">Effect</th></tr></thead>
           <tbody>${abilBody}</tbody>
         </table>
       </div>`;
@@ -7118,6 +7179,7 @@ let activeGroupId = null;
         ${seg('pp-paper', 'Paper', [['a4', 'A4'], ['letter', 'Letter']], printPaperKey())}
         <label class="print-preview-opt" id="pp-colour-opt"><input type="checkbox" id="pp-colour" ${settings.printInk ? '' : 'checked'}> Colour</label>
         <label class="print-preview-opt" id="pp-rules-opt"><input type="checkbox" id="pp-rules" ${settings.printNoRules ? '' : 'checked'}> Rules text</label>
+        <label class="print-preview-opt" id="pp-abil-opt"><input type="checkbox" id="pp-abil" ${settings.printNoAbilities ? '' : 'checked'}> Abilities</label>
         <label class="print-preview-opt" id="pp-obj-opt"><input type="checkbox" id="pp-obj" ${settings.printNoObjectives ? '' : 'checked'}> Secondary objectives</label>
         <span class="print-preview-spacer"></span>
         <button class="btn btn-outline btn-sm pp-close-btn" id="pp-close" type="button">Close</button>
@@ -7237,6 +7299,7 @@ let activeGroupId = null;
       ov.querySelector('#pp-cols').hidden = layout !== 'cards';
       ov.querySelector('#pp-colour-opt').hidden = text;
       ov.querySelector('#pp-rules-opt').hidden = text;
+      ov.querySelector('#pp-abil-opt').hidden = text;
     };
     const onSeg = (id, apply) => {
       ov.querySelectorAll(`#${id} .pp-seg-btn`).forEach(btn => {
@@ -7256,6 +7319,7 @@ let activeGroupId = null;
     onSeg('pp-paper', v => { settings.printPaper = v; });
     ov.querySelector('#pp-colour').onchange = (e) => { settings.printInk = !e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-rules').onchange = (e) => { settings.printNoRules = !e.target.checked; saveSettings(); refresh(); };
+    ov.querySelector('#pp-abil').onchange = (e) => { settings.printNoAbilities = !e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-obj').onchange = (e) => { settings.printNoObjectives = !e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-close').addEventListener('click', closePreview);
     ov.querySelector('#pp-print').addEventListener('click', doPrintNow);
@@ -8766,6 +8830,7 @@ let activeGroupId = null;
       'The scenario list puts commas between the deployments and scoring it names.',
       'A scenario page names its deployment and scoring rules in bold at the start of their paragraphs, the way the Dropzone pages do, instead of in dark labels.',
       'A generated scenario no longer repeats the WarLore credit that is already in the footer.',
+      'Hover or tap a Micrometeor Cloud, Dense Debris Field, Planetary Ring or Large Object, on a map or in the scenery text, to read its rules. That text is now the rulebook’s own, word for word: Large Objects had been reworded, and bold the book does not print had been added.',
       'Orbital Support’s map shows the Medium Space Station with its Military Outposts. Turn its Variant on and they become Hangars on the map, stats included.',
     ]},
     { date: '2026-09-11', title: 'How to Play: the whole rulebook, on one page', items: [
@@ -10043,7 +10108,7 @@ let activeGroupId = null;
 
   // Rule/description text: escape everything, then re-allow our own <b> emphasis
   // (rules text stores verbatim bold via <b> tags) and turn newlines into breaks.
-  function ruleHtml(str) { return esc(str).replace(/&lt;(\/?)b&gt;/g, '<$1b>').replace(/\n/g, '<br>'); }
+  function ruleHtml(str) { return esc(str).replace(/&lt;(\/?)b&gt;/g, '<$1b>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>'); }
 
   // Fighters' defensive value is the Close Protection re-roll count (per faction).
   // Render it as a tooltip chip carrying the verbatim §8.3.3.1 rule. Note: the

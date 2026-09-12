@@ -58,7 +58,9 @@ SE1 = {
         'While on General Quarters, any Capital Ship within 6” of a Scenario Dropsite may choose to Assess that Dropsite before or after its movement. If it does, it cannot attack and cannot launch assets. Each Dropsite can only be Assessed by each player once and each Dropsite Assessed awards the Assessing player 1VP.']},
 }
 
-RULEBOOK = ['11.1', '11.2', '12.3', '12.3.4', '12.3.5', '12.3.7', '12.4']
+# 10 and 10.1-10.4: Scenery and its four types; 12.1.3: how a layout's scenery is placed
+RULEBOOK = ['10', '10.1', '10.2', '10.3', '10.4', '11.1', '11.2', '12.1.3', '12.3', '12.3.4', '12.3.5',
+            '12.3.7', '12.4']
 
 SHIPS = {
     'Terminus Harvester': ('Type-87 Terminus Harvester', 'type_87_terminus_harvester.webp'),
