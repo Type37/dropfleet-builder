@@ -2647,19 +2647,30 @@ body.sheet-open .sheet-scrim {
 
 /* ── 50. Site footer (uniform across WarLore builders) ─── */
 .m-footer {
-  padding: var(--sp-l);
+  padding: var(--sp-s) var(--sp-l);
   text-align: center;
   font-size: var(--text-caption1);
-  line-height: 1.7;
+  line-height: 1.5;
   color: var(--fg3);
   border-top: 1px solid var(--stroke2);
   margin-top: var(--sp-s);
+  background: var(--paper);
+  /* Rides just above the fixed Create Fleet bar (156px tall, plus any
+     safe-area inset beyond its own padding) while you scroll, then settles
+     above the WarLore footer once you reach it. Matches desktop. */
+  position: sticky;
+  bottom: calc(156px + max(0px, env(safe-area-inset-bottom, 0px) - var(--sp-m)));
+  z-index: 40;
 }
 /* The shared WarLore footer sits below the credits. The host clears the fixed
    bottom-action (Create + 2 text links, about 156px) so neither is hidden
    behind it. The host lives inside #screen-fleet-list, so it is gone with that
    screen; the rule below is a guard if it is ever mounted elsewhere. */
-.m-wlf-host { padding-bottom: calc(160px + env(safe-area-inset-bottom, 0px)); }
+.m-wlf-host { padding-bottom: calc(160px + env(safe-area-inset-bottom, 0px)); isolation: isolate; }
+/* will-change: transform makes a screen the containing block for position:fixed,
+   so on a long fleet list the Create Fleet bar sat at the end of the screen and
+   never pinned. At rest the fleet list drops the hint; slides keep it. */
+#screen-fleet-list.active:not(.slide-in-right):not(.slide-in-left) { will-change: auto; }
 .screen:not(#screen-fleet-list) .wlf { display: none; }
 .m-footer-title { font-family: var(--font-display); font-weight: var(--weight-bold); color: var(--fg2); }
 .m-footer a { color: var(--navy); text-decoration: none; }

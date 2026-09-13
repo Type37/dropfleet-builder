@@ -4639,6 +4639,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Credits stay in view on the fleet list', items: [
+      'The credits line rides just above the Create Fleet bar as you scroll the fleet list, and settles above the WarLore footer when you reach it.',
+    ]},
     { date: '2026-09-13', title: 'WarLore footer on the phone app', items: [
       'The fleet list ends with the WarLore footer, linking the other WarLore tools and channels. It does not appear on any other screen.',
     ]},

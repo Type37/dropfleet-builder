@@ -5,6 +5,15 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Sticky credits footer on the phone fleet list
+
+`.m-footer` in `mobile/css/mobile.css` is `position: sticky`, `bottom` = the fixed
+Create Fleet bar's 156px, with tighter padding, so it rides above the bar and
+settles above the WarLore footer at the end. Also fixes the bar itself: `.screen`'s
+`will-change: transform` made it the containing block for `position: fixed`, so on
+a long fleet list the Create Fleet bar sat at the end of the screen. The resting
+fleet list now drops the hint. Cache `dfc-cache-v484`.
+
 ### 2026-09-13: WarLore footer on the phone app
 
 `mobile/index.html` loads the shared footer (`type37.github.io/warlore-footer/footer.js`,
