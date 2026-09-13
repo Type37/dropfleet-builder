@@ -718,6 +718,8 @@ if(typeof document!=='undefined'&&document.addEventListener) document.addEventLi
   try{ localStorage.setItem(pubVariantKey(card.dataset.scn),v); }catch(err){}
   card.querySelectorAll('[data-set-v]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.setV===v)));
 });
+// "2." is every standard game; a Players section that only says that is left out
+const TWO_PLAYERS=/^2\.?$/;
 function renderScenario(s){
   const J=pubJoin;
   const rulesText=[s.players,s.deployment,s.scoring,s.variant,s.special].map(J).join(' ');
@@ -768,7 +770,7 @@ function renderScenario(s){
     <div class="rules-col">
       <div class="sc-header"><h2 class="sc-name">${s.name}</h2>${s.note?`<p class="pub-note">${s.note}</p>`:''}</div>
       ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
-      ${s.sections.map(([h,b,o={}])=>sec(h,(o.paras?pubParas(b):pubBullets(b||s.scoring))+(o.list?pubBullets(o.list):'')+(o.table?pubTable(o.table):'')+(o.after?pubParas(o.after):''))).join('')}
+      ${s.sections.filter(([h,b])=>!(h==='Players'&&b&&b.length===1&&TWO_PLAYERS.test(String(b[0]).trim()))).map(([h,b,o={}])=>sec(h,(o.paras?pubParas(b):pubBullets(b||s.scoring))+(o.list?pubBullets(o.list):'')+(o.table?pubTable(o.table):'')+(o.after?pubParas(o.after):''))).join('')}
     </div>
     ${right}
   </div>
@@ -778,7 +780,7 @@ function renderScenario(s){
       <div class="sc-header"><h2 class="sc-name">${s.name}</h2>${s.note?`<p class="pub-note">${s.note}</p>`:''}</div>
       ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
       ${s.body?pubParas(s.body):''}
-      ${sec('Players',s.players?pubParas(s.players):'')}
+      ${sec('Players',s.players&&!TWO_PLAYERS.test(pubJoin(s.players).trim())?pubParas(s.players):'')}
       ${sec('Deployment',deploy)}
       ${sec('Scoring',score)}
       ${sec('Variants',s.variant?`<ul class="pub-vlist"><li><button type="button" class="pub-vbtn" data-set-v="1" aria-pressed="${on==='1'}">Variant</button><div>${pubParas(s.variant)}</div></li></ul>`:'')}

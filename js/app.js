@@ -8828,6 +8828,7 @@ let activeGroupId = null;
       'Dragonslayer’s rules for how the Ether Drake activates, moves and attacks sit with its card, under Controlling the Drake.',
       'Dragonslayer says who fires the Space Stations’ Armaments: the player who Controls the station, at the end of the Activation Phase.',
       'The score sheet lines up its Control and Contest counters in columns beside each rule instead of pushing them to the far edge, and scenarios no longer repeat Control, Contest, Levelled and Ruined under Terms when Standard Scoring already defines them.',
+      'Scenario pages leave out a Players section that only says 2, draw bigger list bullets, and table headings are no longer half italic.',
     ]},
     { date: '2026-09-12', title: 'Fleets open again', items: [
       'Opening a fleet had stopped showing the builder: the fleet list stayed on screen. Fixed.',
