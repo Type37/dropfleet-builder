@@ -5,6 +5,21 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: No horizontal scrolling on the phone app
+
+Audited every mobile screen, sheet and modal (six Fast Play fleets with long
+names, admirals, stations, play mode expanded, Collection per faction, How to
+Play) at 320 to 1280px. The page itself never scrolled sideways; four inner
+containers did and now reflow in `mobile/css/mobile.css`: `.chip-row` and
+`.filter-row` (ship picker filters) and `.coll-fac-tabs` wrap, and the How to
+Play tables fit: cells tighten to 4px side padding, headers lose their wide
+tracking, and `overflow-wrap: anywhere` only catches a stray long string. The
+8-column Feature weapons table is the one that could not fit a phone without
+breaking words, so `mTable` gives every cell a `data-label` and tables of 8+
+columns (`.rules-table-stack`) stack into label/value rows below 480px.
+`body { overflow-x: hidden }` stays only to hide the slide transitions' brief
+translateX; the audit ran with it switched off and found nothing to mask.
+
 ### 2026-09-13: Sticky credits footer on the phone fleet list
 
 `.m-footer` in `mobile/css/mobile.css` is `position: sticky`, `bottom` = the fixed

@@ -8933,6 +8933,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Phone app: nothing scrolls sideways', items: [
+      'On the phone app the ship picker filters and Collection faction tabs wrap onto more lines, and How to Play tables fit the screen.',
+    ]},
     { date: '2026-09-13', title: 'Phone app: credits stay in view', items: [
       'On the phone app’s fleet list the credits line rides just above the Create Fleet bar, and settles above the WarLore footer when you reach it.',
     ]},

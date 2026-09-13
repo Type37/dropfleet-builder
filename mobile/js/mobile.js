@@ -908,16 +908,21 @@
   function mTable(t) {
     const dsIcons = !!(t.header && t.header[0] === 'Dropsite');
     const head = t.header ? `<thead><tr>${dsIcons ? '<th>Icon</th>' : ''}${t.header.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>` : '';
+    // Each cell carries its column name so a wide table can stack into
+    // label/value rows on a narrow phone instead of scrolling sideways.
+    const labels = t.header ? t.header.map(h => esc(h)) : [];
+    const lab = j => (labels[j] ? ` data-label="${labels[j]}"` : '');
     const rows = (t.rows || []).map(row => {
       let iconTd = '';
       if (dsIcons) {
         const nm = (Array.isArray(row[0]) ? row[0].map(r => (r && r.t) || '').join('') : String(row[0] || '')).trim();
         const s = M_DROPSITE_ICON[nm];
-        iconTd = `<td class="rules-td-dsicon">${s ? `<img class="rules-dsicon" src="../assets/rules/${s}.png" alt="" loading="lazy">` : ''}</td>`;
+        iconTd = `<td class="rules-td-dsicon" data-label="Icon">${s ? `<img class="rules-dsicon" src="../assets/rules/${s}.png" alt="" loading="lazy">` : ''}</td>`;
       }
-      return `<tr>${iconTd}${row.map(c => { const tok = mCellTok(c); return `<td${tok ? ' class="rules-td-tok"' : ''}>${tok}${mRuns(c)}</td>`; }).join('')}</tr>`;
+      return `<tr>${iconTd}${row.map((c, j) => { const tok = mCellTok(c); return `<td${tok ? ' class="rules-td-tok"' : ''}${lab(j)}>${tok}${mRuns(c)}</td>`; }).join('')}</tr>`;
     }).join('');
-    return `<div class="rules-table-wrap"><table class="rules-table">${head}<tbody>${rows}</tbody></table></div>`;
+    const cols = (t.header ? t.header.length : 0) + (dsIcons ? 1 : 0);
+    return `<div class="rules-table-wrap"><table class="rules-table${cols >= 8 ? ' rules-table-stack' : ''}">${head}<tbody>${rows}</tbody></table></div>`;
   }
   function mFigure(number) {
     const f = RULES_FIGURES[number];
@@ -4639,6 +4644,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Nothing scrolls sideways', items: [
+      'The ship picker filters and the Collection faction tabs wrap onto more lines, and How to Play tables fit the screen, so no part of the phone app scrolls sideways.',
+    ]},
     { date: '2026-09-13', title: 'Credits stay in view on the fleet list', items: [
       'The credits line rides just above the Create Fleet bar as you scroll the fleet list, and settles above the WarLore footer when you reach it.',
     ]},

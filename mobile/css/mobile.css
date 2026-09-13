@@ -657,17 +657,16 @@ button, a, input, select, textarea,
 
 
 /* ── 13. Chips / Toggles ──────────────────────────────── */
+/* Chips wrap onto more lines rather than scroll sideways (no horizontal
+   scrolling anywhere on the phone app). */
 .chip-row {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--sp-xs);
   padding: var(--sp-s) var(--sp-l);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
   background: var(--white);
   border-bottom: 1px solid var(--stroke2);
 }
-.chip-row::-webkit-scrollbar { display: none; }
 
 .chip {
   flex-shrink: 0;
@@ -713,12 +712,10 @@ button, a, input, select, textarea,
 }
 .filter-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--sp-xs);
-  overflow-x: auto;
-  scrollbar-width: none;
 }
-.filter-row::-webkit-scrollbar { display: none; }
 .filter-label {
   flex-shrink: 0;
   width: 58px;
@@ -3180,7 +3177,7 @@ body.sheet-open .sheet-scrim {
    A linear row stack, not desktop's card grid: on a phone a row lets the ship
    name sit unclipped beside a 44px stepper. Names always wrap, never truncate. */
 .coll-fac-tabs {
-  display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  display: flex; flex-wrap: wrap; gap: 6px;
   padding: var(--sp-s) var(--sp-m); border-bottom: 1px solid var(--stroke2);
   background: var(--card-bg); position: sticky; top: 0; z-index: 2;
 }
@@ -3315,9 +3312,22 @@ h5.rules-h, h6.rules-h { font-size: 13px; font-family: var(--font-body, inherit)
 
 .rules-table-wrap { overflow-x: auto; margin: 0 0 var(--sp-s); -webkit-overflow-scrolling: touch; }
 .rules-table { border-collapse: collapse; width: 100%; font-size: 13px; border: 1px solid var(--fg1, #1c1a17); }
-.rules-table th, .rules-table td { border: 1px solid var(--stroke1); padding: 6px 7px; text-align: left; vertical-align: top; color: var(--fg2); }
-.rules-table th { background: var(--fg1, #1c1a17); color: #fff; font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; font-size: .82em; text-align: center; border-color: var(--fg1, #1c1a17); }
+.rules-table th, .rules-table td { border: 1px solid var(--stroke1); padding: 6px 4px; text-align: left; vertical-align: top; color: var(--fg2); overflow-wrap: anywhere; }
+.rules-table th { background: var(--fg1, #1c1a17); color: #fff; font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: normal; font-size: .82em; text-align: center; border-color: var(--fg1, #1c1a17); }
 .rules-table th:first-child { text-align: left; }
+/* Tables of 8+ columns (Feature weapons) can't fit a phone without breaking
+   words, so each row stacks into label/value lines. The header row stays for
+   screen readers; every cell repeats its column name. */
+@media (max-width: 480px) {
+  .rules-table-stack thead { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .rules-table-stack, .rules-table-stack tbody, .rules-table-stack tr, .rules-table-stack td { display: block; width: 100%; }
+  .rules-table-stack tr { border-bottom: 2px solid var(--fg1, #1c1a17); }
+  .rules-table-stack tr:last-child { border-bottom: 0; }
+  .rules-table-stack td,
+  .rules-table-stack td:not(:first-child):not(:last-child) { position: relative; border: 0; border-bottom: 1px solid var(--stroke1); padding: 5px 6px 5px calc(5.5em + 12px); text-align: left; overflow-wrap: break-word; }
+  .rules-table-stack td:last-child { border-bottom: 0; }
+  .rules-table-stack td::before { content: attr(data-label); position: absolute; left: 6px; top: 5px; width: 5.5em; font-family: var(--font-display); font-weight: 700; text-transform: uppercase; font-size: .82em; line-height: 1.6; color: var(--fg1); }
+}
 .rules-table td:not(:first-child):not(:last-child) { text-align: center; }
 .rules-table tbody tr:nth-child(even) td { background: var(--navy-wash, rgba(27,58,92,.04)); }
 
