@@ -85,7 +85,7 @@ const ScenarioShell = (() => {
       <article class="sheet">${G.render(s)}</article>`;
     current = s;
     if (G.scoreRows && window.ScoreSheet) {
-      score = ScoreSheet.mount(document.getElementById('score'), { key: `${G.storageKey}-score:${G.id(s)}`, rows: G.scoreRows(s), markRound: r => !!(G.markRound && G.markRound(s, r)) });
+      score = ScoreSheet.mount(document.getElementById('score'), { key: `${G.storageKey}-score:${G.id(s)}`, rows: G.scoreRows(s), players: G.players ? G.players(s) : 2, markRound: r => !!(G.markRound && G.markRound(s, r)) });
     }
     document.getElementById('print').addEventListener('click', () => window.print());
     document.getElementById('share').addEventListener('click', async e => {

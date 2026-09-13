@@ -321,6 +321,12 @@ vp{font-family:inherit;font-weight:600;font-size:inherit;color:inherit;}
 .scenario.pub[data-v="1"] svg [data-v="1"]{display:inline;}
 .scenario.pub[data-v="1"] [data-hide-v~="1"]{display:none;}
 .scenario.pub:not([data-v="1"]) .pub-v-only{display:none;}
+/* Players and game size, side by side above the map */
+.pub-opts{display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;margin-bottom:2mm;}
+.pub-opts .seg.pub-size{margin-bottom:0;flex:1 1 auto;}
+.pub-opts .pub-players{flex:0 1 auto;}
+.pub-opts .pub-players button{min-width:0;grid-template-columns:auto auto;}
+.pub-players-n{display:inline-flex;align-items:center;padding:7px 12px;font-family:'Jost',system-ui,sans-serif;font-size:16px;font-weight:600;border:1.5px solid #0E0C08;}
 /* Sides: red and blue words, run-in labels and objective highlights, in the map's deployment colours */
 .side{font-weight:600;}
 .side-red{color:#B23A1C;}

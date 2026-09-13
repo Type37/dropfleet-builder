@@ -90,6 +90,8 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 .pick-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
 .pick-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;}
 #row-players{grid-template-columns:repeat(3,minmax(0,1fr));}
+/* Players is chosen on the card, beside the map */
+.pick-section:has(#row-players){display:none;}
 .pick-tile{position:relative;display:block;cursor:pointer;}
 .pick-tile input[type=radio]{position:absolute;opacity:0;width:0;height:0;}
 .tile-inner{font-family:'Jost',system-ui,sans-serif;font-size:16px;color:var(--cobalt-dk);background:transparent;padding:6px 8px;transition:background .12s,color .12s;display:flex;align-items:center;gap:8px;min-height:36px;line-height:1.2;}
@@ -802,14 +804,14 @@ function gen(keep){
   // APPROACH TYPE
   let appH='';
   if(A.r===A.b){
-    appH=runIn(`All Players: ${A.r}`,DM[A.r]);
+    appH=pill(`All Players: ${A.r}`,'sp-std')+`<p class="rule-text">${DM[A.r]}</p>`;
     // If both sides Directly Deploy, add multi-player clause
     if(A.r==="Directly Deploy"){
       appH+=`<p class="rule-text">If multiple players must Directly Deploy, all red players deploy these Groups, then all blue players deploy these Groups. Groups not deployed cannot be activated during the 1st round. From the 2nd round onwards, players that Directly Deploy may activate Groups not on the table.</p>`;
     }
   } else {
-    appH=runIn(`Red (Attackers): ${A.r}`,DM[A.r]);
-    appH+=A.b!==A.r?runIn(`Blue (Defenders): ${A.b}`,DM[A.b]):`<p class="rule-text"><b class="run-in">Blue (Defenders): ${A.b}.</b></p>`;
+    appH=pill(`Red Player: ${A.r}`,'side-red')+`<p class="rule-text">${DM[A.r]}</p>`;
+    appH+=pill(`Blue Player: ${A.b}`,'side-blue')+(A.b!==A.r?`<p class="rule-text">${DM[A.b]}</p>`:'');
   }
 
   // SCENERY
@@ -874,6 +876,7 @@ ${varH}
   </div>
 
   <div class="map-col">
+    <div class="pub-opts"><div class="seg pub-size pub-players" role="group" aria-label="Players">${[2,3,4].map(n=>`<button type="button" data-gen-players="${n}" aria-pressed="${n===numPlayers}">${tablerIcon('pub-size-tick','<path d="M5 12l5 5L20 7"/>')}<span class="pub-size-name">${n} Players</span></button>`).join('')}</div></div>
     <div class="map-frame">${makeMap(dep.roll, L.name, parseInt(getPickVal('players'))||2, vari.roll)}</div>
     <div class="leg">${legH}</div>
   
@@ -882,7 +885,7 @@ ${varH}
 
   document.getElementById('content').innerHTML=html;
   // A new roll starts a fresh score; a new player count keeps it
-  ScoreSheet.mount(document.getElementById('score'),{key:'dfc-generator-score',rows:genScoreRows(O),markRound:r=>O.std&&(r===4||r===6),reset:!keep});
+  ScoreSheet.mount(document.getElementById('score'),{key:'dfc-generator-score',rows:genScoreRows(O),players:numPlayers,markRound:r=>O.std&&(r===4||r===6),reset:!keep});
   document.getElementById('card').style.display='block';
   const es=document.getElementById('empty-state'); if(es) es.style.display='none';
 
@@ -1067,6 +1070,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   const cm=document.getElementById('cm');
   cm.addEventListener('change',()=>document.body.classList.toggle('competitive',cm.checked));
   document.querySelectorAll('input[name=players]').forEach(r=>r.addEventListener('change',()=>gen(true)));
+  // The Players buttons on the card set the (hidden) panel pick
+  document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('[data-gen-players]'); if(!b) return; const r=document.querySelector(`input[name=players][value="${b.dataset.genPlayers}"]`); if(r&&!r.checked){ r.checked=true; r.dispatchEvent(new Event('change')); } });
   document.querySelector('.ctrl-tray').addEventListener('scroll',ttHide);
   window.addEventListener('resize',ttHide);
 });

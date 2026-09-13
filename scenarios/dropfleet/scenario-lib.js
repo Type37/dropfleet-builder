@@ -618,6 +618,27 @@ function pubModes(dep){
   return out.join('');
 }
 
+// "Blue Directly Deploys, Red Deploys Close." -> each side's deployment, when every clause names a side and a mode.
+// Shown as "Red Player: Close" highlighted in red, then that mode's rule, red first.
+const MODE_RE=/\b(Directly Deploy|Close|Distant|Staggered|Imminent|Backline)s?\b/i;
+function sideModes(dep,att){
+  const clauses=String(dep).split(/[.,;]\s*/).map(c=>c.trim()).filter(Boolean);
+  const list=[];
+  for(const c of clauses){
+    const sm=c.match(/^(Red|Blue|Attackers?|Defenders?|Attacking team|Defending team)\b/i), mm=c.match(MODE_RE);
+    if(!sm||!mm) return null;
+    const w=sm[1].toLowerCase(), side=w==='red'?'red':w==='blue'?'blue':/^attack/.test(w)?att:(att==='red'?'blue':'red');
+    const m=mm[1].toLowerCase(), mode=m==='directly deploy'?'Directly Deploy':m[0].toUpperCase()+m.slice(1);
+    list.push({side,mode});
+  }
+  return list.length?list.sort((a,b)=>a.side===b.side?0:a.side==='red'?-1:1):null;
+}
+const modeRule=m=>DM[m]?`<p class="rule-text">${DM[m]}</p>`:SCN_SE1[m]?pubSE1(m):'';
+function sideModesHTML(list){
+  const seen=new Set();
+  return list.map(({side,mode})=>{ const text=seen.has(mode)?'':modeRule(mode); seen.add(mode); return pill(`${side==='red'?'Red':'Blue'} Player: ${mode}`,'side-'+side)+text; }).join('');
+}
+
 function pubScoring(text,sides={}){
   const out=[]; let std=false;
   const stdOnce=()=>{ if(!std){ std=true; out.push(stdScoring()); } };
@@ -629,7 +650,7 @@ function pubScoring(text,sides={}){
     {re:/\bFocal [Pp]oint/,run:se1('Focal Points Scoring','sp-surv')},
     {re:/\bKill Points\b/,run:se1('Kill Points Scoring','sp-att')},
     {re:/\bAssess/,run:se1('Assess Scoring','sp-surv')},
-    ...OB.map(o=>({re:new RegExp('\\b'+o.name+'\\b'),run:()=>{ out.push(pill(o.name,o.cls+(sides[o.name]?' side-'+sides[o.name]:''))+pubParas(o.b)); if(o.std) stdOnce(); }})),
+    ...OB.map(o=>({re:new RegExp('\\b'+o.name+'\\b'),run:()=>{ out.push(pill(o.name+(sides[o.name]?` - ${sides[o.name]==='red'?'Red':'Blue'} Player`:''),o.cls+(sides[o.name]?' side-'+sides[o.name]:''))+pubParas(o.b)); if(o.std) stdOnce(); }})),
   ]).forEach(d=>d.run());
   return out.join('');
 }
@@ -669,7 +690,10 @@ const WTYPE={K:'Kinetic',E:'Energy',C:'Core'};
 const hidden=t=>`<span class="vh">${t}</span>`;
 const statHead=k=>`<th scope="col" class="c">${statIcon(k)}${hidden(STAT_META[k].label)}</th>`;
 // What a Feature does beyond its saves: its weapon, launch, or special rule
-function featDetail(f){
+// A Feature's weapon rules written out under it (rulebook 14.2), so nothing named is left undefined
+const ruleDefs=special=>String(special||'').split(',').map(t=>t.trim()).filter(t=>t&&t!=='-').map(ruleText).filter(Boolean).map(r=>`<p class="st-rule"><b class="run-in">${r.name}.</b> ${r.text}</p>`).join('');
+function featDetail(f){ const html=featDetailBase(f); return f.weapon?html+ruleDefs(f.weapon.special):html; }
+function featDetailBase(f){
   if(f.weapon){ const w=f.weapon; return `<table class="st st-sub"><thead><tr><th scope="col">Weapon</th>${statHead('scan')}<th scope="col" class="c">Att</th><th scope="col" class="c">Lock</th><th scope="col" class="c">Dmg</th><th scope="col" class="c">Type</th></tr></thead><tbody><tr><td><b>${w.name}</b></td><td class="c">${w.scan}</td><td class="c">${w.att}</td><td class="c">${w.lock}</td><td class="c">${w.dmg}</td><td class="c"><span class="tip-t" tabindex="0" data-tip="wtype:${w.type}">${w.type}</span></td></tr><tr><td colspan="6" class="st-spec"><span class="st-spec-l">Special</span> ${w.special}</td></tr></tbody></table>`; }
   if(f.launch){ const l=f.launch; return `<table class="st st-sub"><thead><tr><th scope="col">Type</th><th scope="col" class="c">Launch</th><th scope="col">Special</th></tr></thead><tbody><tr><td>${l.type}</td><td class="c">${l.launch}</td><td>${l.special}</td></tr></tbody></table><p class="st-note">${f.note}</p>`; }
   return f.special?`<p class="st-rule">${f.special}</p>`:'';
@@ -750,6 +774,31 @@ if(typeof document!=='undefined'&&document.addEventListener) document.addEventLi
 });
 // "2." is every standard game; a Players section that only says that is left out
 const TWO_PLAYERS=/^2\.?$/;
+const PUB_PLAYERS_KEY='dfc-scenario-players';
+// "2-4 players, 1 attacking team in red..." -> {min:2,max:4,rest:'1 attacking team in red...'}; no leading count -> 2 players, all text kept
+function playerCount(s){
+  // a count only when it is the whole text or says "players" ("1 attacker in red" is not a count)
+  const p=pubJoin(s.players).trim(), m=p.match(/^(\d)(?:\s*-\s*(\d))?(?:\s+players?\b|(?=\s*\.?\s*$))\s*[.,]?\s*/i);
+  if(!m) return {min:2,max:2,rest:p};
+  return {min:+m[1],max:+(m[2]||m[1]),rest:p.slice(m[0].length).trim()};
+}
+// The count this scenario is shown for: the last choice if the scenario allows it, else its lowest
+function currentPlayers(s){ const c=playerCount(s); let n=c.min; try{ const v=+localStorage.getItem(PUB_PLAYERS_KEY); if(v>=c.min&&v<=c.max) n=v; }catch(e){} return n; }
+function playersControl(s){
+  const c=playerCount(s);
+  if(c.max===c.min) return `<span class="pub-players-n">${c.min} Players</span>`;
+  const n=currentPlayers(s);
+  const opts=[]; for(let i=c.min;i<=c.max;i++) opts.push(i);
+  return `<div class="seg pub-size pub-players" role="group" aria-label="Players">${opts.map(i=>`<button type="button" data-set-players="${i}" aria-pressed="${i===n}">${tablerIcon('pub-size-tick','<path d="M5 12l5 5L20 7"/>')}<span class="pub-size-name">${i} Players</span></button>`).join('')}</div>`;
+}
+if(typeof document!=='undefined'&&document.addEventListener) document.addEventListener('click',e=>{
+  const b=e.target.closest&&e.target.closest('.scenario.pub [data-set-players]'), card=b&&b.closest('.scenario');
+  if(!card) return;
+  card.dataset.players=b.dataset.setPlayers;
+  try{ localStorage.setItem(PUB_PLAYERS_KEY,b.dataset.setPlayers); }catch(err){}
+  card.querySelectorAll('[data-set-players]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  document.dispatchEvent(new CustomEvent('scenario-players',{detail:+b.dataset.setPlayers}));
+});
 function renderScenario(s){
   const J=pubJoin;
   const rulesText=[s.players,s.deployment,s.scoring,s.variant,s.special].map(J).join(' ');
@@ -759,7 +808,8 @@ function renderScenario(s){
   const vOnly=Object.keys(FS).filter(n=>!baseText.includes(n)&&J(s.variant).includes(n.replace(/s$/,'')));
   const sec=(label,html)=>html?`<div class="sec">${pubHead(label)}<div class="sec-body">${html}</div></div>`:'';
   const att=attackerSide(s), SW=h=>sideWords(h,att);
-  const deploy=s.deployment?SW(pubParas(s.deployment))+pubModes(J(s.deployment)):'';
+  const sm=s.deployment&&sideModes(J(s.deployment),att);
+  const deploy=!s.deployment?'':sm?sideModesHTML(sm):SW(pubParas(s.deployment))+pubModes(J(s.deployment));
   // A sentence that only names a scoring method ("Standard Scoring.", "Kill Points.") is dropped: that method is
   // written out in full just below. Sentences with the scenario's own rules stay, as paragraphs.
   const METHODS='Standard Scoring|Normal Scoring|Demolish Scoring|Kill Points|Assess|Focal Points|Attrition|Survey|Protect|Raze|Extract|Breakthrough';
@@ -786,7 +836,7 @@ function renderScenario(s){
   const mapSrc=`${SCN_ASSETS}scenarios/dropfleet/${s.id}.${SCENARIO_MAP_SVG.has(s.id)?'svg':'webp'}`, mapImg=`<img src="${mapSrc}" alt="${s.name} map">`;
   if(SCENARIO_MAP_SVG.has(s.id)) setTimeout(pubInlineMaps);
   const own=!!s.sections;
-  const right=hasMap?`<div class="map-col">${sizeSeg}
+  const right=hasMap?`<div class="map-col"><div class="pub-opts">${playersControl(s)}${sizeSeg}</div>
       <div class="map-frame">${SCENARIO_MAP_SVG.has(s.id)?`<div class="map-svg" data-src="${mapSrc}">${mapImg}</div>`:mapImg}${mapSpots(s.id)}</div>
       ${own&&s.key?`<img class="pub-key" src="${SCN_ASSETS}scenarios/dropfleet/key/${s.key}" alt="${s.keyAlt}">`:''}
       ${own?'':`${sec('Scenery',scenery)}
@@ -829,7 +879,8 @@ function renderScenario(s){
       <div class="sc-header"><h2 class="sc-name">${s.name}</h2>${s.note?`<p class="pub-note">${s.note}</p>`:''}</div>
       ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
       ${s.body?pubParas(s.body):''}
-      ${sec('Players',s.players&&!TWO_PLAYERS.test(pubJoin(s.players).trim())?SW(pubParas(s.players)):'')}
+      ${!hasMap?`<div class="pub-opts">${playersControl(s)}</div>`:''}
+      ${playerCount(s).rest?SW(pubParas(playerCount(s).rest)):''}
       ${sec('Deployment',deploy)}
       ${sec('Scoring',score)}
       ${sec('Variants',s.variant?`<ul class="pub-vlist"><li><button type="button" class="pub-vbtn" data-set-v="1" aria-pressed="${on==='1'}">Variant</button><div>${pubParas(s.variant)}${s.variantWeapons?weaponList(s.variantWeapons):''}</div></li></ul>`:'')}

@@ -83,6 +83,9 @@ window.ScoreSheet = (function () {
     const load = () => { try { const s = JSON.parse(localStorage.getItem(cfg.key)); if (s && Array.isArray(s.players)) return s; } catch (e) {} return null; };
     const fresh = () => ({ round: 1, active: 0, open: true, players: [{ c: {} }, { c: {} }] });
     let st = (!cfg.reset && load()) || fresh();
+    // The page's player count sets how many players the sheet scores (a scenario's Players selector)
+    const setCount = n => { n = Math.max(2, Math.min(4, +n || 2)); while (st.players.length < n) st.players.push({ c: {} }); st.players.length = n; st.active = Math.min(st.active, n - 1); };
+    setCount(cfg.players || 2);
     if (cfg.reset) { const old = load(); if (old) st.open = old.open; }
     const save = () => { try { localStorage.setItem(cfg.key, JSON.stringify(st)); } catch (e) {} };
 
@@ -118,7 +121,7 @@ window.ScoreSheet = (function () {
           <button type="button" class="ss-toggle" aria-expanded="${st.open}"><svg class="ss-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="${CHEV}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="ss-title">Score</span></button>
           <div class="ss-bar">
             <div class="ss-seg" role="group" aria-label="Round"><span class="ss-l">Round</span>${Array.from({ length: rounds }, (_, i) => i + 1).map(r => `<button type="button" data-round="${r}" aria-pressed="${r === st.round}"${cfg.markRound && cfg.markRound(r) ? ' class="mark"' : ''}>${r}</button>`).join('')}</div>
-            <div class="ss-seg" role="group" aria-label="Player">${st.players.map((_, i) => `<button type="button" class="ss-p ss-p-${i % 2 ? 'blue' : 'red'}" data-player="${i}" aria-pressed="${i === st.active}">${playerName(i, st.players.length)}<span class="ss-n">${scores[i]}VP</span></button>`).join('')}${st.players.length < 4 ? `<button type="button" data-add aria-label="Add a player">${PLUS}</button>` : ''}${st.players.length > 2 ? `<button type="button" data-remove aria-label="Remove the last player">${MINUS}</button>` : ''}</div>
+            <div class="ss-seg" role="group" aria-label="Player">${st.players.map((_, i) => `<button type="button" class="ss-p ss-p-${i % 2 ? 'blue' : 'red'}" data-player="${i}" aria-pressed="${i === st.active}">${playerName(i, st.players.length)}<span class="ss-n">${scores[i]}VP</span></button>`).join('')}</div>
           </div>
           <button type="button" class="ss-clear">Clear</button>
         </div>
@@ -129,6 +132,10 @@ window.ScoreSheet = (function () {
       </section>`;
       el.querySelectorAll('.ss-seg button svg,.ss-step svg').forEach(s => { s.style.width = '14px'; s.style.height = '14px'; });
     }
+    // A Players selector elsewhere on the page announces its count
+    if (el._ssCount) document.removeEventListener('scenario-players', el._ssCount);
+    el._ssCount = e => { setCount(e.detail); save(); draw(); };
+    document.addEventListener('scenario-players', el._ssCount);
     function refocus(sel) { const t = sel && el.querySelector(sel); if (t) t.focus(); }
     // mounting again on the same element (a new roll) replaces the old sheet's listeners
     if (el._ssOff) el._ssOff();
@@ -141,8 +148,6 @@ window.ScoreSheet = (function () {
       else if (b.classList.contains('ss-clear')) { const open = st.open; st = fresh(); st.open = open; focus = '.ss-clear'; }
       else if (b.dataset.round) { st.round = +b.dataset.round; focus = `[data-round="${b.dataset.round}"]`; }
       else if (b.dataset.player) { st.active = +b.dataset.player; focus = `[data-player="${b.dataset.player}"]`; }
-      else if (b.hasAttribute('data-add')) { st.players.push({ c: {} }); st.active = st.players.length - 1; focus = `[data-player="${st.active}"]`; }
-      else if (b.hasAttribute('data-remove')) { st.players.pop(); st.active = Math.min(st.active, st.players.length - 1); focus = '[data-add]'; }
       else if (b.dataset.step) { const id = b.dataset.id; p.c[id] = Math.max(id === 'other' ? -999 : 0, (+(p.c[id] || 0)) + (+b.dataset.step)); focus = `[data-id="${id}"][data-step="${b.dataset.step}"]`; }
       else return;
       save(); draw(); refocus(focus);

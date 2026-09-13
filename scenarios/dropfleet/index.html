@@ -7,7 +7,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://type37.github.io/dropfleet-builder/scenarios/dropfleet/">
 <meta property="og:title" content="Dropfleet Commander Scenarios">
-<meta property="og:description" content="Every published Dropfleet Commander scenario with its map and every rule it names explained, verbatim from the books.">
+<meta property="og:description" content="Dropfleet Commander scenarios: maps and rules.">
 <meta property="og:image" content="https://type37.github.io/dropfleet-builder/assets/og/scenario-generator.png">
 <meta name="twitter:card" content="summary_large_image">
 <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital@0;1&family=Roboto+Slab:wght@600;700;800&display=swap" rel="stylesheet">
@@ -86,6 +86,7 @@ ScenarioShell.start({
   name:s=>s.name,
   // The Scenario Generator card above the books already rolls a scenario
   random:false,
+  players:s=>currentPlayers(s),
   lead:`<a class="gen-card" href="generator/"><span class="gen-card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17"/><circle cx="8.3" cy="8.3" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.7" cy="8.3" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="8.3" cy="15.7" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.7" cy="15.7" r="1.5" fill="currentColor" stroke="none"/></svg></span><span class="gen-card-name">Scenario Generator</span></a>`,
   thumb:s=>SCENARIO_MAPS.has(s.id)?`${SCN_ASSETS}scenarios/dropfleet/thumb/${s.id}.webp`:'',
   columns:[
