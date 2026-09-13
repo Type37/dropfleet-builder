@@ -294,7 +294,7 @@ vp{font-family:inherit;font-weight:600;font-size:inherit;color:inherit;}
    Labels  Jost 400/600, 14px           table headers, Rounds 4 & 6, chips
    Jost has two weights, 400 and 600. Libre Baskerville italic stays for flavour text. */
 @media screen{
-  .sc-name { font-size: var(--fs-display); font-weight: 800; text-transform: uppercase; letter-spacing: normal; }
+  .sc-name, .scenario.pub .sc-name { font-size: var(--fs-display); font-weight: 800; text-transform: uppercase; letter-spacing: normal; }
   .sl, .pub-ships .sl { font-family: 'Roboto Slab', Georgia, serif; font-weight: 600; font-size: var(--fs-section); line-height: 1.2; text-transform: none; }
   .lhdr, .scenario .spill, .pub-ship-h b { font-family: 'Jost', system-ui, sans-serif; font-weight: 600; font-size: var(--fs-heading); line-height: 1.3; color: var(--ch); letter-spacing: normal; }
   .lhdr { display: table; margin-top: 5mm; }
