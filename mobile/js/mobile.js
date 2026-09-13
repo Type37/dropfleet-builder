@@ -4652,6 +4652,7 @@
       'Standard Scoring matches the rulebook table: Dropsite Size, Control / Levelled, Contest / Ruined.',
       'Scenario weapon tables are only as wide as their columns, spell out Attack, Lock and Damage, and each rule chip (Scald, Burnthrough, Close Action…) opens its rulebook text.',
       'Scenario pages drop the source line under the title and the hover text on scenery names, and list bullets are bigger.',
+      'Scenario pages use one type scale that follows your browser’s font size: ship cards, weapon tables and stat labels are no longer smaller than the rules around them, with 12px as the smallest text.',
     ]},
     { date: '2026-09-12', title: 'Lore: hull length and displacement', items: [
       'The Armstrong Destroyer, Aldrin Colony Ship, Collins Support Carrier, Helium Voidflyer, Harpocrates Guerrilla Lighter, Hiruko Boarding Cutter, Seneca Detonator, Newton Kill-Sat, Galileo Orbital Telescope and Pungari Thresher Hive Ship show their Length and Displacement under their lore, and the Pungari its Beam and Height too.',

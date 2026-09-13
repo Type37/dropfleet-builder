@@ -19,6 +19,15 @@ generator built on a d66 chart. The Dropzone rulebook has no such chart and no
 random setup (players choose the Scenario, 3.3), so both came out the same day.
 Dropzone keeps its Scenario Reference, still linked from the reference switch.
 
+### 2026-09-12: Scenario pages: one screen type scale
+
+A font audit found 14 distinct sizes and the ship cards still at print sizes (weapon headers, chips,
+stat labels and crit notes at 9-11px beside 14px rules). `scenario-card.css` tokens are now rem:
+display 30, section 20, heading 16, body 15, small 13, label 12 (the floor), applied in the screen block
+to ship cards, weapon rows, stat strips, the note and famous-ship line; tracked capitals on column labels
+are gone. Print sizes are untouched. `scenarios/shared/score.js` is left as is because it is synced into
+the Dropzone repo.
+
 ### 2026-09-12: Scenario pages: rulebook scoring table, rule chips, tidier weapon tables
 
 Standard Scoring's table was checked against the rulebook page (12.1.5.1, page 33): headings now read

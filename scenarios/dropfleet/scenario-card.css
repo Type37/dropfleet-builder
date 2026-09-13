@@ -1,11 +1,13 @@
 /* Dropfleet Commander scenario card, shared by the references page and the generator. */
 :root{--gold:#B8952F;--glt:#C9A94A;--gdk:#5A4710;--ch:#0E0C08;--wg:#3D3834;
   /* Screen type scale (one step ≈ major third). Print keeps its own point sizes. */
-  --fs-display:30px;   /* h2 mission / scenario title */
-  --fs-section:18px;   /* h3 main section headings (SCORING, DEPLOYMENT…) */
-  --fs-heading:17px;   /* legend headings in the map column */
-  --fs-body:14px;      /* reading text, table cells, stat values */
-  --fs-label:12px;     /* pills, roll tags, captions, table headers */
+  /* rem, so text follows the reader's browser font size */
+  --fs-display:1.875rem; /* 30px  scenario title */
+  --fs-section:1.25rem;  /* 20px  section headings (Players, Scoring…) */
+  --fs-heading:1rem;     /* 16px  subheadings: map-column headings, objective names, ship names */
+  --fs-body:.9375rem;    /* 15px  reading text, table cells, weapon rows, stat values */
+  --fs-small:.8125rem;   /* 13px  secondary text beside a heading, table headers */
+  --fs-label:.75rem;     /* 12px  the floor: column labels, rule chips, crit notes */
 }
 /* A VP amount stays in the sentence's own face, just bold */
 vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
@@ -250,16 +252,22 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
   .rule-text b, .rule-bullets li b { font-size: inherit; }
   .sc-flavor, .pub-intro { font-size: var(--fs-body); line-height: 1.5; }
   .spill { font-size: var(--fs-label); font-weight: 600; padding: 2px 8px; }
-  .stbl th, .st thead th, .st-sub thead th { font-size: var(--fs-label); }
+  .stbl th, .st thead th, .st-sub thead th { font-size: var(--fs-small); }
   .stbl td, .st td.c, .st-sub td.c, .pub-tbl { font-size: var(--fs-body); }
-  .st-note, .st-spec-l, .pub-ship-h span { font-size: var(--fs-label); }
+  .st-note, .st-spec-l, .pub-ship-h span { font-size: var(--fs-small); }
   .pub-ship-h { font-size: var(--fs-heading); }
+  /* Ship cards and weapon lists were still at their print sizes (9-11px) */
+  .pub-note, .pub-lev-famous, .pw-row, .pss-v { font-size: var(--fs-body); }
+  .pw-name { font-size: inherit; }
+  .pw-head, .pss-l, .pw-chip, .pw-crit { font-size: var(--fs-label); letter-spacing: normal; text-transform: none; }
+  .pw-dt { font-size: var(--fs-label); }
+  .scenario.pub .spill, .scenario.pub .lhdr { letter-spacing: normal; }
   .map-col { flex: 0 0 46%; min-width: 0; }
   .map-frame { width: 100%; height: auto; aspect-ratio: 1 / 1; }
   .ico-stat { width: 14px; height: 14px; }
   .ico-feat, .st .ico-feat { width: 22px; height: 22px; }
   .ico-ds, .st .ico-ds { width: 18px; height: 18px; }
-  .sv-e, .sv-k { font-size: 14px; }
+  .sv-e, .sv-k { font-size: var(--fs-body); }
 }
 
 /* A named rule leads its paragraph in bold, as on the Dropzone pages. Not a filled label:
@@ -269,7 +277,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
    section heading and the bold term labels in the text */
 .scenario .spill{background:none;color:var(--ch);padding:0;font-family:'Roboto Slab',Georgia,serif;font-size:inherit;font-weight:700;letter-spacing:0;}
 .scenario .spill-sub{font-family:'Jost',system-ui,sans-serif;font-weight:400;color:#5d5850;margin-left:8px;}
-@media screen{ .scenario .spill{font-size:16px;} .scenario .spill-sub{font-size:14px;} .scenario .spill-row{margin-top:3mm;} }
+@media screen{ .scenario .spill{font-size:var(--fs-heading);} .scenario .spill-sub{font-size:var(--fs-small);} .scenario .spill-row{margin-top:3mm;} }
 /* The rolled die beside a heading */
 .sh-die{width:1.1em;height:1.1em;vertical-align:-.18em;color:#5d5850;}
 /* A table keeps its own width; stretched to the column it spread three columns across the card */

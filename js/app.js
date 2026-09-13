@@ -8822,6 +8822,7 @@ let activeGroupId = null;
       'Standard Scoring matches the rulebook table: Dropsite Size, Control / Levelled, Contest / Ruined.',
       'Scenario weapon tables are only as wide as their columns, spell out Attack, Lock and Damage, and each rule chip (Scald, Burnthrough, Close Action…) opens its rulebook text.',
       'Scenario pages drop the source line under the title and the hover text on scenery names, and list bullets are bigger.',
+      'Scenario pages use one type scale that follows your browser’s font size: ship cards, weapon tables and stat labels are no longer smaller than the rules around them, with 12px as the smallest text.',
     ]},
     { date: '2026-09-12', title: 'Fleets open again', items: [
       'Opening a fleet had stopped showing the builder: the fleet list stayed on screen. Fixed.',
