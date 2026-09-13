@@ -511,7 +511,8 @@ const SCENARIOS=[
   // 4-6 Dense Fields (the counts Shock And Yaw prints, 12.2); Medium Clusters -> Medium Space Stations
   // under Standard Scoring (12.1.5); roundup phase -> End Phase (9); "activated second" -> 2nd initiative (6.3).
   // Station weapons: Space Station Armaments, Fleet_Space_Stations_250828.pdf page 2.
-  {id:'dragonslayer', name:'Dragonslayer', src:'The Ether Drake', srcLabel:'The Ether Drake, updated for the current edition by WarLore', leviathan:'Ether Drake',
+  {id:'dragonslayer', name:'Dragonslayer', src:'The Ether Drake', leviathan:'Ether Drake',
+   note:`NB: I converted this from 1st edition's rules. Let me know what you think via <a href="mailto:warlore1@outlook.com">email</a> if you want.`,
    intro:`An Ether Drake has made one of the Cradle World systems its home! Drive the Ether Drake and your opponent away and claim this system.`,
    players:`2.`,
    scenery:`2-5 Micrometeor Clouds, 4-6 Dense Debris Fields.`,
@@ -528,15 +529,16 @@ const SCENARIOS=[
 ];
 
 // The Ether Drake (Ether_Drake.pdf page 1). Its rules are reworded into current terms: Crippling Effect (7.3.6),
-// explodes (7.3.7), criticals (7.3.3), Regenerate-X (13.1). The stat line is still the page's own (A and PD)
-// until its current saves are settled.
+// explodes (7.3.7), criticals (7.3.3), Regenerate-X (13.1). No source converts its A 2+ / PD 5 or numbers its
+// Flash and Scald, so these are Jet's call (2026-09-12): ES 3+ KS 3+ BS 5+ (the Bioficer Battleships' saves,
+// the current Heavy ships with Hull 17), PD dropped, both breaths E, Flash-1 and Scald-1.
 const SCN_LEVIATHANS={'Ether Drake':{
   title:'The Ether Drake', kind:'Leviathan', art:'ether_drake.webp',
-  stats:{head:['Name','Scan','Sig','Thrust','Hull','A','PD','G','T','Special'],
-         rows:[['Ether Drake','8"','8"','8"','17','2+','5','1','H','Fauna, Regenerate-2, Dragonscale Armour']]},
-  weapons:{head:['Type','Lock','Attack','Damage','Arc','Special'],
-           rows:[['Dragon’s Breath (Beam)','2+','6','2','F','Flash, Scald'],
-                 ['Dragon’s Breath (Wide)','2+','4','2','F/S','Close Action']]},
+  current:{thrust:'8"',scan:'8"',sig:'8"',hull:17,es:'3+',ks:'3+',bs:'5+',g:'1'},
+  special:'Fauna, Regenerate-2, Dragonscale Armour',
+  weapons:{head:['Type','Lock','Attack','Damage','Arc','Special','Dmg Type'],
+           rows:[['Dragon’s Breath (Beam)','2+','6','2','F','Flash-1, Scald-1','E'],
+                 ['Dragon’s Breath (Wide)','2+','4','2','F/S','Close Action','E']]},
   rules:[['Fauna','This Ship does not suffer a Crippling Effect when damage reduces it below half of its starting Hull value. It is removed from play once it has no Hull points remaining, and does not explode.'],
          ['Regenerate-2','This Ship recovers 2 lost Hull Points at the end of its activation.'],
          ['Dragonscale Armour','Attacks against this Ship cannot score criticals. This Ship’s saves cannot be modified. This Ship suffers no damage from Bombers.']],
@@ -726,16 +728,16 @@ function renderScenario(s){
   const lev=s.leviathan&&SCN_LEVIATHANS[s.leviathan];
   // The builder's ship card: stat strip (icons where the stat has one; A, PD and T as the page labels them),
   // Special as chips, weapon rows
-  const levVal=h=>lev.stats.rows[0][lev.stats.head.indexOf(h)];
+  const levVal=h=>lev.special&&h==='Special'?lev.special:lev.stats.rows[0][lev.stats.head.indexOf(h)];
   const levCell=h=>{ const k={Scan:'scan',Sig:'sig',Thrust:'thrust',Hull:'hull',G:'g'}[h];
     return `<div class="pss-cell"><span class="pss-l">${h}</span><span class="pss-row">${k?statIcon(k):''}<span class="pss-v">${levVal(h)}</span></span></div>`; };
   const leviathan=lev?`<div class="pub-ships">${pubHead('Ships')}<div class="pub-ship-grid"><div class="pub-ship">
       <img class="pub-ship-art" src="${SCN_ASSETS}art/thumb/${lev.art}" alt="${lev.title}">
       <div class="pub-ship-body">
         <div class="pub-ship-h"><b>${lev.title}</b><span>${lev.kind}</span></div>
-        <div class="pub-ship-stats">${['Thrust','Scan','Sig','Hull','A','PD','G','T'].map(levCell).join('')}</div>
+        ${lev.current?shipStatGrid(lev.current):`<div class="pub-ship-stats">${['Thrust','Scan','Sig','Hull','A','PD','G','T'].map(levCell).join('')}</div>`}
         <div class="pub-lev-special">${wpnChips(levVal('Special'))}</div>
-        ${weaponList(lev.weapons.rows.map(([name,lock,attack,damage,arc,special])=>({name,lock,attack,damage,arc,special})))}
+        ${weaponList(lev.weapons.rows.map(([name,lock,attack,damage,arc,special,type])=>({name,lock,attack,damage,arc,special,type})))}
         ${lev.rules.map(([n,t])=>`<p class="rule-text"><b>${n}:</b> ${t}</p>`).join('')}
         <p class="pub-lev-famous"><b>${lev.famousLabel}</b> <i>${lev.famous}</i></p>
         ${lev.lore.map(p=>`<p class="sc-flavor">${p}</p>`).join('')}
@@ -743,7 +745,7 @@ function renderScenario(s){
     </div></div>`:'';
   if(own) return `<div class="scenario pub${hasMap?'':' no-map'}" data-scn="${s.id}" data-v="0">
     <div class="rules-col">
-      <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.srcLabel||s.src}</div></div>
+      <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.srcLabel||s.src}</div>${s.note?`<p class="pub-note">${s.note}</p>`:''}</div>
       ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
       ${s.sections.map(([h,b])=>sec(h,pubBullets(b||s.scoring))).join('')}
     </div>
@@ -752,7 +754,7 @@ function renderScenario(s){
   ${leviathan}`;
   return `<div class="scenario pub${hasMap?'':' no-map'}" data-scn="${s.id}" data-v="${on}">
     <div class="rules-col">
-      <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.srcLabel||s.src}</div></div>
+      <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.srcLabel||s.src}</div>${s.note?`<p class="pub-note">${s.note}</p>`:''}</div>
       ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
       ${s.body?pubParas(s.body):''}
       ${sec('Players',s.players?pubParas(s.players):'')}

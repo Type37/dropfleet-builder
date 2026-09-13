@@ -31,8 +31,11 @@ The end of the roundup phase became the End Phase's Cleanup step (9.3), and "act
 became 2nd initiative (6.3). The Mass Driver and Laser Armaments come from
 Fleet_Space_Stations_250828.pdf page 2. The Drake's rules use current terms (Crippling
 Effect 7.3.6, explodes 7.3.7, criticals 7.3.3, Regenerate-2 from 13.1). Its stat line
-(Armour 2+, PD 5) and its Flash and Scald values have no current source and still show
-as printed until Jet settles them. The scenario is labelled as a WarLore update.
+has no current source, so Jet approved these (2026-09-12): ES 3+, KS 3+, BS 5+ (the
+saves of the Bioficer Battleships, the current Heavy ships with Hull 17); PD dropped (no
+current stat; Dragonscale Armour already ignores Bombers); both Dragon's Breath
+weapons E; Flash-1 and Scald-1. The page carries Jet's own note that it was converted
+from 1st edition.
 
 ### 2026-09-12: Dragonslayer scenario and the Ether Drake
 
