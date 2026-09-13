@@ -4640,7 +4640,7 @@
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
     { date: '2026-09-12', title: 'Lore: hull length and displacement', items: [
-      'The Armstrong Destroyer, Aldrin Colony Ship and Collins Support Carrier show their Length and Displacement under their lore.',
+      'The Armstrong Destroyer, Aldrin Colony Ship, Collins Support Carrier and Helium Voidflyer show their Length and Displacement under their lore.',
     ]},
     { date: '2026-09-12', title: 'How to Play: four tables put back together', items: [
       'Four rulebook tables that had come through as loose lines are proper tables again: the Tonnage restrictions, the core Ability costs, the Game Round phases, and the Battalion deployment targets. Same words as the book, in their grid.',

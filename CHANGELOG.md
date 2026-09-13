@@ -11,7 +11,14 @@ New optional `specs: {length, displacement}` on a ship in the faction JSON, show
 under Namesake in the lore section on desktop (card + detail pane) and mobile.
 Filled for three Resistance ships from their spec cards: Armstrong Destroyer
 (651m, 13,058,000m³), Aldrin Colony Ship (651m, 11,745,000m³), Collins Support
-Carrier (470m, 3,441,000m³).
+Carrier (470m, 3,441,000m³). Shaltari Helium Voidflyer (504m, 1,628,000m³).
+
+### 2026-09-12: Desktop fleets would not open
+
+`6427e8e` removed the Dropzone Scenarios landing card but left its extra `</div>`,
+which closed `#app` right after the landing section. Every other view fell outside
+`#app`, so `showView`'s `#app > section` hide loop never hid the fleet list and the
+builder rendered below it, off screen.
 
 ### 2026-09-12: How to Play, four flattened tables rebuilt
 
