@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WarLore footer draft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:"TG Open";src:url("../assets/fonts/terminal-grotesque-open.woff2") format("woff2");font-display:swap}
+:root{
+  --amber:#FFCC00; --black:#000000; --teal:#16E0BD;
+  --accent:#EF476F; --tape:#F1ECE1;
+  --osd:"VT323",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--tape);color:var(--black);min-height:100vh;display:flex;flex-direction:column}
+.page-stub{flex:1}
+
+/* draft-only palette switch */
+.vcr[data-palette="flame"]{--accent:#FF5714}
+.vcr[data-palette="olive"]{--accent:#918B76}
+.swatch-pick{position:fixed;top:12px;left:12px;z-index:10;display:flex;gap:6px}
+.swatch-pick button{font:1.2rem/1 var(--osd);padding:6px 10px;border:2px solid #000;background:var(--tape);cursor:pointer}
+.swatch-pick button[aria-pressed="true"]{background:#000;color:var(--amber)}
+
+.vcr{position:relative;background:var(--black);color:var(--tape);border-top:4px solid var(--accent)}
+.vcr::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,rgba(255,255,255,.03) 0 1px,transparent 1px 3px)}
+.vcr-inner{max-width:1200px;margin:0 auto;padding:20px 24px;display:grid;grid-template-columns:auto 1fr;gap:12px 40px;align-items:center}
+
+.wl-mark{grid-row:span 2;color:var(--amber);text-decoration:none;font-family:"TG Open",sans-serif;font-size:4.5rem;line-height:.9;padding:0 .08em}
+.wl-mark:hover,.wl-mark:focus-visible{background:var(--amber);color:var(--black);outline:none}
+
+.row{display:flex;flex-wrap:wrap;gap:4px 16px;font:1.35rem/1.1 var(--osd);text-transform:uppercase}
+.row a{color:var(--tape);text-decoration:none}
+.row a:hover,.row a:focus-visible{color:var(--amber);outline:none}
+.row a[aria-current="page"]{color:var(--amber)}
+.row a[aria-current="page"]::before{content:"\25B6\00a0"}
+.row.small{font-size:1.2rem}
+.row.small a{color:var(--teal)}
+.row.small span{margin-left:auto;color:#9a968d}
+
+@media (max-width:720px){
+  .vcr-inner{grid-template-columns:1fr}
+  .wl-mark{grid-row:auto;justify-self:start;font-size:3.5rem}
+  .row.small span{margin-left:0}
+}
+</style>
+</head>
+<body>
+<div class="page-stub"></div>
+<div class="swatch-pick">
+  <button data-p="" aria-pressed="true">Bubblegum</button>
+  <button data-p="flame">Flame</button>
+  <button data-p="olive">Olive</button>
+</div>
+
+<footer class="vcr">
+  <div class="vcr-inner">
+    <a class="wl-mark" href="https://linktr.ee/warlore" target="_blank" rel="noopener">WarLore</a>
+
+    <nav class="row" aria-label="WarLore tools">
+      <a href="https://type37.github.io/dropfleet-builder/" aria-current="page">Dropfleet</a>
+      <a href="https://type37.github.io/dropzone-3e-army-builder/">Dropzone</a>
+      <a href="https://type37.github.io/a-billion-suns-shipyard/">A Billion Suns</a>
+      <a href="https://jetwong.neocities.org/wargaming/historicals/pacific-command-builder-2">Pacific Command</a>
+      <a href="https://type37.github.io/dragon-rampant-2e-warband-builder/">Dragon Rampant</a>
+      <a href="https://type37.github.io/xenos-rampant-force-builder/">Xenos Rampant</a>
+      <a href="#">Warcrow</a>
+    </nav>
+
+    <div class="row small">
+      <a href="https://youtube.com/@WarLore" target="_blank" rel="noopener">YouTube</a>
+      <a href="#" target="_blank" rel="noopener">Patreon</a>
+      <a href="https://ko-fi.com/jetwong" target="_blank" rel="noopener">Ko-fi</a>
+      <a href="mailto:warlore1@outlook.com">Feedback</a>
+      <span>Unofficial</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.swatch-pick button').forEach(b => b.onclick = () => {
+    const f = document.querySelector('.vcr');
+    b.dataset.p ? f.dataset.palette = b.dataset.p : delete f.dataset.palette;
+    document.querySelectorAll('.swatch-pick button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  });
+</script>
+</body>
+</html>

@@ -63,3 +63,6 @@ USER-PERSONAS.md
 # Rules/reference PDF working folder and raw text dumps
 Rules-Mechanics-PDFs/
 *_pdf_text.txt
+
+# Rulebook extraction (local only)
+rulebook-extract/
