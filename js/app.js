@@ -8817,6 +8817,7 @@ let activeGroupId = null;
       'Dragonslayer was an older-edition scenario, so it now uses current rules: both players Close from opposite edges, Micrometeor Clouds and Dense Debris Fields, Standard Scoring with Medium Space Stations, and the Drake activating in the End Phase.',
       'The Ether Drake has current stats: ES 3+, KS 3+, BS 5+, Energy Dragon’s Breath with Flash-1 and Scald-1.',
       'Dragonslayer’s map is redrawn in the same style as the other scenario maps.',
+      'The Ether Drake’s weapons sit beside its stats, and its rule names are no longer repeated as chips above their text.',
     ]},
     { date: '2026-09-12', title: 'Fleets open again', items: [
       'Opening a fleet had stopped showing the builder: the fleet list stayed on screen. Fixed.',

@@ -164,6 +164,10 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .pss-bs{box-shadow:inset 0 2.2px 0 var(--gold);} .pss-bs .pss-v{color:var(--gdk);}
 .pss-none .pss-v{opacity:.4;}
 .pub-lev-special{display:flex;flex-wrap:wrap;gap:1mm;}
+.pub-lev-top{display:grid;grid-template-columns:minmax(0,96mm) minmax(0,1fr);gap:4mm;align-items:start;}
+.pub-lev-top .pub-ship-stats{margin:0;}
+.pub-lev-top .pw-list{margin-top:0;}
+@media (max-width:900px){.pub-lev-top{grid-template-columns:minmax(0,1fr);}}
 .pub-note{font-family:'Jost',system-ui,sans-serif;font-size:10pt;line-height:1.45;color:var(--ch);margin:1mm 0 0;}
 .pub-note a{color:inherit;text-decoration:underline;}
 .pub-lev-famous{font-family:'Jost',system-ui,sans-serif;font-size:10pt;color:var(--ch);margin-top:2mm;}

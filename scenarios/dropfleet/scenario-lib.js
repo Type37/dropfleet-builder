@@ -735,9 +735,12 @@ function renderScenario(s){
       <img class="pub-ship-art" src="${SCN_ASSETS}art/thumb/${lev.art}" alt="${lev.title}">
       <div class="pub-ship-body">
         <div class="pub-ship-h"><b>${lev.title}</b><span>${lev.kind}</span></div>
-        ${lev.current?shipStatGrid(lev.current):`<div class="pub-ship-stats">${['Thrust','Scan','Sig','Hull','A','PD','G','T'].map(levCell).join('')}</div>`}
+        ${lev.current
+          // Stats beside the weapons; its special rules are written out below, so no chips repeat them
+          ?`<div class="pub-lev-top">${shipStatGrid(lev.current)}${weaponList(lev.weapons.rows.map(([name,lock,attack,damage,arc,special,type])=>({name,lock,attack,damage,arc,special,type})))}</div>`
+          :`<div class="pub-ship-stats">${['Thrust','Scan','Sig','Hull','A','PD','G','T'].map(levCell).join('')}</div>
         <div class="pub-lev-special">${wpnChips(levVal('Special'))}</div>
-        ${weaponList(lev.weapons.rows.map(([name,lock,attack,damage,arc,special,type])=>({name,lock,attack,damage,arc,special,type})))}
+        ${weaponList(lev.weapons.rows.map(([name,lock,attack,damage,arc,special,type])=>({name,lock,attack,damage,arc,special,type})))}`}
         ${lev.rules.map(([n,t])=>`<p class="rule-text"><b>${n}:</b> ${t}</p>`).join('')}
         <p class="pub-lev-famous"><b>${lev.famousLabel}</b> <i>${lev.famous}</i></p>
         ${lev.lore.map(p=>`<p class="sc-flavor">${p}</p>`).join('')}
