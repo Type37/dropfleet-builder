@@ -156,13 +156,13 @@
   // Dragonslayer (scenario-lib.js) is converted from 1st edition too
   SCENARIOS.forEach(s=>{ if(s.id==='dragonslayer') s.converted=true; });
 
-  // Automated_Dreadnought.pdf, page 1, put into current terms the way the Ether Drake was. Saves: Jet's call (2026-09-13),
+  // Automated_Dreadnought.pdf, page 1, put into current terms the way the Ether Drake was. Saves and Sig 10" (1st edition printed 10"/20"): Jet's call (2026-09-13),
   // taken from current Heavy Ships with Hull 15. PD 8 has no current stat. Weapons: Scald -> Scald-1 (14.2.26) on
   // Energy plasma; Particle ("always inflict Critical Hits ... passive saves may not be taken") -> Core (C), the
   // current type only Shield and Backup saves stop (7.3.4); Close Action stays. Regenerate (2) -> Regenerate-2 (14.1.15).
   SCN_LEVIATHANS['Automated Dreadnought']={
     title:'Automated Dreadnought', kind:'Leviathan, H Tonnage', art:'automated_dreadnought.webp',
-    current:{thrust:'8"',scan:'12"',sig:'10"/20"',hull:15,es:'3+',ks:'4+',bs:'5+',g:'1'},
+    current:{thrust:'8"',scan:'12"',sig:'10"',hull:15,es:'3+',ks:'4+',bs:'5+',g:'1'},
     special:'Regenerate-2, Reinforced Armour',
     weapons:{head:['Type','Lock','Attack','Damage','Arc','Special','Dmg Type'],
              rows:[['Small Plasma Cannons','3+','3','2','F/S(L)','Scald-1','E'],
