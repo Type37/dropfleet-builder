@@ -45,7 +45,7 @@ const ScenarioShell = (() => {
         <div class="scn-cols" aria-hidden="true"><span>Scenario</span>${cols.map(c => `<span>${c.label}</span>`).join('')}</div>
         <ul class="scn-list">${list.map(s => {
           const t = G.thumb(s);
-          return `<li><a class="scn" href="#${G.id(s)}">${t ? `<img class="scn-map" src="${t}" alt="" loading="lazy" width="72" height="72">` : '<span class="scn-map"></span>'}<span class="scn-name">${G.name(s)}</span>${cols.map(c => cell(c.label, c.values(s))).join('')}</a></li>`;
+          return `<li><a class="scn" href="#${G.id(s)}">${t ? `<img class="scn-map" src="${t}" alt="" loading="lazy" width="72" height="72">` : '<span class="scn-map"></span>'}<span class="scn-name">${G.name(s)}${G.tag && G.tag(s) ? ` <i class="scn-tag">${G.tag(s)}</i>` : ''}</span>${cols.map(c => cell(c.label, c.values(s))).join('')}</a></li>`;
         }).join('')}</ul></section>`;
     }).join('');
   }

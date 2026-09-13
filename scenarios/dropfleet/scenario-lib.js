@@ -515,7 +515,7 @@ const SCENARIOS=[
   // 4-6 Dense Fields (the counts Shock And Yaw prints, 12.2); Medium Clusters -> Medium Space Stations
   // under Standard Scoring (12.1.5); roundup phase -> End Phase (9); "activated second" -> 2nd initiative (6.3).
   // Station weapons: Space Station Armaments, Fleet_Space_Stations_250828.pdf page 2.
-  {id:'dragonslayer', name:'Dragonslayer', src:'The Ether Drake', leviathan:'Ether Drake',
+  {id:'dragonslayer', name:'Dragonslayer', src:'The Ether Drake (1st edition)', leviathan:'Ether Drake',
    note:`NB: I converted this from 1st edition's rules. Let me know what you think via <a href="mailto:warlore1@outlook.com">email</a> if you want.`,
    intro:`An Ether Drake has made one of the Cradle World systems its home! Drive the Ether Drake and your opponent away and claim this system.`,
    players:`2.`,
@@ -561,10 +561,10 @@ const SCN_SOURCES={
   'Rulebook':'https://cdn.shopify.com/s/files/1/0965/1274/files/A5_Dropfleet_Rulebook_2.3.1_Print_Friendly.pdf?v=1774605669',
   'Scenario Expansion 1':'https://cdn.shopify.com/s/files/1/0965/1274/files/Scenario_Expansion_1_250818.pdf?v=1755254981',
   'Civilian Ships & Scenarios':'https://cdn.shopify.com/s/files/1/0965/1274/files/Civilian_Ships_Scenarios_260901.pdf?v=1787931568',
-  'The Ether Drake':'https://cdn.shopify.com/s/files/1/0965/1274/files/Ether_Drake.pdf?439',
-  'Automated Dreadnought':'https://cdn.shopify.com/s/files/1/0965/1274/files/Automated_Dreadnought.pdf?444',
-  'Advent Scenarios':'https://cdn.shopify.com/s/files/1/0965/1274/files/Advent_Scenarios.pdf?525',
-  'Core Scenarios':'https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_Core_Scenarios_2704ae6b-ad65-48af-a5e2-109efd0e5109.pdf?v=1661442291',
+  'The Ether Drake (1st edition)':'https://cdn.shopify.com/s/files/1/0965/1274/files/Ether_Drake.pdf?439',
+  'Automated Dreadnought (1st edition)':'https://cdn.shopify.com/s/files/1/0965/1274/files/Automated_Dreadnought.pdf?444',
+  'Advent Scenarios (1st edition)':'https://cdn.shopify.com/s/files/1/0965/1274/files/Advent_Scenarios.pdf?525',
+  'Core Scenarios (1st edition)':'https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_Core_Scenarios_2704ae6b-ad65-48af-a5e2-109efd0e5109.pdf?v=1661442291',
 };
 
 function scnParas(v){ return (Array.isArray(v)?v:[v]).map(p=>`<p>${p}</p>`).join(''); }
@@ -759,7 +759,7 @@ function renderScenario(s){
   // Game size: one setting for every scenario; the map's data-size layers follow it
   let gsize='battle';
   try{ gsize=localStorage.getItem(PUB_SIZE_KEY)||'battle'; }catch(e){}
-  const sizeSeg=s.sizes?`<div class="seg pub-size" role="group" aria-label="Game size">${['Skirmish','Clash','Battle'].map(z=>`<button type="button" data-set-size="${z.toLowerCase()}" aria-pressed="${z.toLowerCase()===gsize}">${z}</button>`).join('')}</div>`:'';
+  const sizeSeg=s.sizes?`<div class="seg pub-size" role="group" aria-label="Game size">${[['Skirmish','501-1000'],['Clash','1001-2000'],['Battle','2001-3000']].map(([z,pts])=>`<button type="button" data-set-size="${z.toLowerCase()}" aria-pressed="${z.toLowerCase()===gsize}">${tablerIcon('pub-size-tick','<path d="M5 12l5 5L20 7"/>')}<span class="pub-size-name">${z}</span><span class="pub-size-pts">${pts} pts</span></button>`).join('')}</div>`:'';
   const mapSrc=`${SCN_ASSETS}scenarios/dropfleet/${s.id}.${SCENARIO_MAP_SVG.has(s.id)?'svg':'webp'}`, mapImg=`<img src="${mapSrc}" alt="${s.name} map">`;
   if(SCENARIO_MAP_SVG.has(s.id)) setTimeout(pubInlineMaps);
   const own=!!s.sections;
@@ -854,7 +854,8 @@ function pubScoreRows(s){
   if(own.length) rows.push({heading:'Scenario'},...own);
   if(has(/\bNormal Scoring\b/)) rows.push(...SCORE_TABLE('Normal Scoring','Rounds 4 & 6',['High Scoring','Low Scoring']));
   if(has(/\bDemolish/)) rows.push(...SCORE_TABLE('Demolish Scoring','',['Levelled','Ruined']));
-  if(has(/\bFocal [Pp]oint/)) add('Focal Points','Rounds 4 & 6',asCounts(vpRows(SCN_SE1['Focal Points Scoring'].body.join(' '))));
+  // Short labels; the full Focal Points rule is written out on the card
+  if(has(/\bFocal [Pp]oint/)) add('Focal Points','Rounds 4 & 6',[{text:'Highest value in range',parts:[{kind:'count',vp:3}]},{text:'At least half that value',parts:[{kind:'count',vp:1}]}]);
   if(has(/\bKill Points\b/)) add('Kill Points','',vpRows(SCN_SE1['Kill Points Scoring'].body.join(' ')));
   if(has(/\bAssess/)) add('Assess','',asCounts(vpRows(SCN_SE1['Assess Scoring'].body.join(' '))));
   if(std||has(/\bStandard Scoring\b/)) rows.push(...SCORE_TABLE('Standard Scoring','Rounds 4 & 6',['Control','Contest']));

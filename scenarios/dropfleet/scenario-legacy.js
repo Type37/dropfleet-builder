@@ -38,7 +38,7 @@
   const add=s=>LIST.push({converted:true, note:NOTE, ...s});
 
   /* ── Automated_Dreadnought.pdf, page 2 ── */
-  add({id:'the-ancient-relic', name:'The Ancient Relic', src:'Automated Dreadnought', leviathan:'Automated Dreadnought',
+  add({id:'the-ancient-relic', name:'The Ancient Relic', src:'Automated Dreadnought (1st edition)', leviathan:'Automated Dreadnought',
    intro:`A mysterious Automated Dreadnought wandered into an area of conflict. All attempts to contact it have failed, and its withering firepower has left a trail of destruction in its wake. You have the order to capture this vessel and use it to turn the tide of battle to your favour - a prize like this does not often present itself.`,
    players:`2`,
    scenery:`2-5 Micrometeor Clouds, 4-6 Dense Debris Fields, placed away from the centre line of the table.`,
@@ -55,7 +55,7 @@
      `At the end of each round, if only one player has Battalions on the Automated Dreadnought, that player takes control of it. Remove all Battalions from it; it becomes a Ship in that player's Fleet in a Group of its own, and activates after all other Groups have activated.`]});
 
   /* ── Advent_Scenarios.pdf, pages 2-4 ── */
-  add({id:'resistance-spearhead', sizes:true, features:['Military Outpost', 'Power Plant'], name:'Resistance Spearhead', src:'Advent Scenarios',
+  add({id:'resistance-spearhead', sizes:true, features:['Military Outpost', 'Power Plant'], name:'Resistance Spearhead', src:'Advent Scenarios (1st edition)',
    intro:`The forces of the Resistance have rallied against the enemy. They’ve jumped into system with barely a moment’s notice, and are on the way to make planetfall. The gung-ho approach is shocking, but their limited resources will be their downfall.`,
    players:`1 attacker in red, 1 defender in blue. The Resistance player is the attacker.`,
    scenery:DEBRIS,
@@ -64,7 +64,7 @@
             `Defender: can only Contest Dropsites, even when they Control them, and every Dropsite scores as a Medium Dropsite. The defender gains 1VP for every enemy Group destroyed, and loses 1VP when a Dropsite is Ruined and a further 3VP when it is Levelled.`],
    variant:[`Turf War: both players play as Resistance, and every City is replaced with a Space Station of the same size.`]});
 
-  add({id:'heavy-convoy', name:'Heavy Convoy', src:'Advent Scenarios',
+  add({id:'heavy-convoy', name:'Heavy Convoy', src:'Advent Scenarios (1st edition)',
    intro:`There’s little that can attract an enemy fleet to an empty area of space quite like the prize of a planet’s worth of resources. The enemy are trying to move a massive convoy, spearheaded by 2 Dreadnoughts. Destroying them will cripple the fleet, and leave plenty of supplies for the victors.`,
    players:`1 attacker in red, 1 defender in blue. The defender must take 2 Dreadnoughts; the attacker cannot take any. Recommended 1300 points.`,
    scenery:DEBRIS,
@@ -75,7 +75,7 @@
             `Each other Group destroyed gains the destroying player 1VP.`],
    variant:[`David & Goliath: the attacker cannot take any Ships of H or C Tonnage.`]});
 
-  add({id:'monitoring-the-situation', sizes:true, features:['Orbital Defence Gun', 'Military Outpost'], name:'Monitoring the Situation', src:'Advent Scenarios',
+  add({id:'monitoring-the-situation', sizes:true, features:['Orbital Defence Gun', 'Military Outpost'], name:'Monitoring the Situation', src:'Advent Scenarios (1st edition)',
    intro:`A well defended country is the best place to make planetfall. Although the opposition is proving to be strong, this critical point on the map will make an excellent beach head for the incoming assault. Break through the defences and secure the location. If the entrenched orbital batteries can be turned on the defenders, all the better for a swift victory.`,
    players:`1 attacker in blue, 1 defender in red. The defender must take 3 Groups of Monitors in a Skirmish or Clash, and 5 in a Battle.`,
    scenery:`1 Planetary Ring as shown, 4 Micrometeor Clouds, 4 Dense Debris Fields.`,
@@ -87,14 +87,14 @@
    weapons:[ARM.laser]});
 
   /* ── Dropfleet_Core_Scenarios.pdf, pages 2-9 ── */
-  add({id:'core-take-and-hold', sizes:true, features:['Military Outpost', 'Power Plant'], name:'Take & Hold (1st edition)', src:'Core Scenarios',
+  add({id:'core-take-and-hold', sizes:true, features:['Military Outpost', 'Power Plant'], name:'Take & Hold', src:'Core Scenarios (1st edition)',
    intro:`Your forces advance, ready to take the fight to the enemy on the surface and in the space above. But they are just as determined to hold the key strategic areas on this war-torn planet. Take the important landing sites and destroy their ships before they do the same to you!`,
    players:`2`, scenery:DEBRIS,
    deployment:`All players Staggered, from opposite table edges as shown.`,
    scoring:[`Standard Scoring.`, FOCAL],
    variant:[`Double Down: the two Cities either side of the centre City along the centre line, and their Focal Points, are worth double VP.`]});
 
-  add({id:'core-mixed-engagement', sizes:true, features:['Military Outpost', 'Power Plant'], name:'Mixed Engagement', src:'Core Scenarios',
+  add({id:'core-mixed-engagement', sizes:true, features:['Military Outpost', 'Power Plant'], name:'Mixed Engagement', src:'Core Scenarios (1st edition)',
    intro:`Hostilities over this world are centred around militarily significant space stations and their ground based supply clusters. Capture these stations and their support clusters before the enemy can, and turn the stations’ guns on the enemy fleet.`,
    players:`2`, scenery:DEBRIS,
    deployment:`All players Distant, from opposite table edges as shown.`,
@@ -103,7 +103,7 @@
    weapons:[ARM.laser, ARM.missile],
    variant:[`Valuable Supplies: the Focal Points on the two Cities are worth double VP.`]});
 
-  add({id:'core-erupting-battlefront', sizes:true, features:['Military Outpost', 'Power Plant'], name:'Erupting Battlefront (1st edition)', src:'Core Scenarios',
+  add({id:'core-erupting-battlefront', sizes:true, features:['Military Outpost', 'Power Plant'], name:'Erupting Battlefront', src:'Core Scenarios (1st edition)',
    intro:`What seemed like a Recon skirmish was in reality the prelude to a fleet sized engagement, with the foe making a play for key sectors on the surface. Capture and hold them quickly; your reinforcements are en-route, but so are the enemy’s...`,
    players:`2`,
    scenery:`1 Planetary Ring across the centre of the table as shown.`,
@@ -114,7 +114,7 @@
    special:[`Each Space Station is a Medium Space Station.`],
    variant:[`Punching Up: the C City's Power Plant and its plain dot become 2 Orbital Defence Guns; it keeps its Military Outposts.`]});
 
-  add({id:'core-station-assault', name:'Station Assault', src:'Core Scenarios',
+  add({id:'core-station-assault', name:'Station Assault', src:'Core Scenarios (1st edition)',
    intro:`This planet sports a highly complex and deadly set of orbital defences that are ready to be turned against the enemy. Seize them and put their fearsome weaponry to good use against the oncoming foe before they can return the favour!`,
    players:`2`, scenery:DEBRIS,
    deployment:`All players Close, from opposite table corners as shown.`,
@@ -123,7 +123,7 @@
    variant:[`Armed Space Stations!: each A Space Station is armed with a Mass Driver Armament and a Missile Armament, and each B Space Station with a Laser Armament and a Missile Armament. ${FIRE}`],
    weapons:[ARM.mass, ARM.laser, ARM.missile]});
 
-  add({id:'core-grid-control', sizes:true, features:['Military Outpost', 'Orbital Defence Gun', 'Power Plant'], name:'Grid Control', src:'Core Scenarios',
+  add({id:'core-grid-control', sizes:true, features:['Military Outpost', 'Orbital Defence Gun', 'Power Plant'], name:'Grid Control', src:'Core Scenarios (1st edition)',
    intro:`Central to command’s plan for the region and holding onto this planet is a complex grid of defence weapons, manufacturing areas and military complexes. Approach these important clusters and either control them or pound them to dust to deny them to the enemy.`,
    players:`2`, scenery:DEBRIS,
    deployment:`All players Staggered, from opposite table edges as shown.`,
@@ -132,7 +132,7 @@
    variant:[`Orbital Installation: replace the centre City with a Large Space Station armed with 4 Laser Armaments, and the two Medium Cities with Medium Space Stations armed with 2 Mass Driver Armaments each. ${FIRE}`],
    weapons:[ARM.laser, ARM.mass]});
 
-  add({id:'core-power-grab', features:['Power Plant', 'Military Outpost'], name:'Power Grab (1st edition)', src:'Core Scenarios',
+  add({id:'core-power-grab', features:['Power Plant', 'Military Outpost'], name:'Power Grab', src:'Core Scenarios (1st edition)',
    intro:`This region’s main weakness is intermittent and shifting power supply, often generated by unstable power sources. Holding these generators could deliver the whole region, but denying them to the opposing forces is the long term aim, one way or another.`,
    players:`2`,
    scenery:`2-8 Micrometeor Clouds, 6-10 Dense Debris Fields.`,
@@ -141,7 +141,7 @@
             `The two Large Cities award double Standard Scoring, and no Standard Scoring once one of their Power Plants is destroyed.`],
    variant:[`Bifurcate: use no Micrometeor Clouds or Dense Debris Fields. Place a Planetary Ring through the centre of the table, from the centre of the north table edge to the centre of the south table edge.`]});
 
-  add({id:'core-defence-relay', sizes:true, features:['Comms Station', 'Military Outpost', 'Power Plant'], name:'Defence Relay', src:'Core Scenarios',
+  add({id:'core-defence-relay', sizes:true, features:['Comms Station', 'Military Outpost', 'Power Plant'], name:'Defence Relay', src:'Core Scenarios (1st edition)',
    intro:`The heavily defended Defence Relay in the area grants a huge advantage to opposing fleets, not least because of the highly advanced comms sectors interlinked with its systems. Capture them and the associated space stations to gain the upper hand in this region of space over the planet.`,
    players:`2`, scenery:DEBRIS,
    deployment:`All players Staggered, from opposite table edges as shown.`,
