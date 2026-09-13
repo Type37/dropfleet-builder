@@ -186,7 +186,11 @@ function sh(label,roll){return `<div class="sh"><h3 class="sl">${label}${roll?` 
 // An H2: the highlighted name, then any note beside it ("Rounds 4 & 6") outside the highlight
 function pill(label,cls){const m=String(label).match(/^(.*?)(<span class="spill-sub">.*)$/);return `<div class="spill-row"><span class="spill ${cls}">${m?m[1]:label}</span>${m?m[2]:''}</div>`;}
 // An H3: a named rule in bold leading its own text
-function runIn(name,html){const h=String(html);return /^<p class="rule-text">/.test(h)?h.replace(/^<p class="rule-text">/,`<p class="rule-text"><b class="run-in">${name}.</b> `):`<div class="rule-text"><b class="run-in">${name}.</b> ${h}</div>`;}
+function runIn(name,html){const h=String(html),c=/^Red\b/.test(name)?' side-red':/^Blue\b/.test(name)?' side-blue':'';return /^<p class="rule-text">/.test(h)?h.replace(/^<p class="rule-text">/,`<p class="rule-text"><b class="run-in${c}">${name}.</b> `):`<div class="rule-text"><b class="run-in${c}">${name}.</b> ${h}</div>`;}
+// Attackers and defenders in their side's colour. Which colour attacks comes from the scenario ("1 attacker in blue"), red unless it says
+const SIDE_WORD=/\b(?:attackers?|defenders?|attacking team|defending team|red players?|blue players?)\b/gi;
+function attackerSide(s){const t=[s.players,s.deployment].map(pubJoin).join(' ');const a=t.match(/attack\w*[^.;]*?\b(red|blue)\b/i);if(a)return a[1].toLowerCase();const d=t.match(/defend\w*[^.;]*?\b(red|blue)\b/i);return d?(d[1].toLowerCase()==='red'?'blue':'red'):'red';}
+function sideWords(html,att){const def=att==='red'?'blue':'red';return String(html).split(/(<[^>]+>)/).map(part=>part.startsWith('<')?part:part.replace(SIDE_WORD,w=>`<span class="side side-${/^red/i.test(w)?'red':/^blue/i.test(w)?'blue':/^attack/i.test(w)?att:def}">${w}</span>`)).join('');}
 function stdScoring(){
   return `${pill("Standard Scoring<span class=\"spill-sub\">Rounds 4 &amp; 6</span>","sp-std")}<table class="stbl"><thead><tr><th>Dropsite Size</th><th>Control / Levelled</th><th>Contest / Ruined</th></tr></thead><tbody><tr><td>Small</td><td><vp>2VP</vp></td><td><vp>0VP</vp></td></tr><tr><td>Medium</td><td><vp>3VP</vp></td><td><vp>1VP</vp></td></tr><tr><td>Large</td><td><vp>4VP</vp></td><td><vp>2VP</vp></td></tr></tbody></table><div class="terms"><div class="term"><b>Control:</b> Only you have Battalions and/or deployed Features on the Dropsite.</div><div class="term"><b>Contest:</b> You and an opponent both have Battalions and/or deployed Features on it.</div><div class="term"><b>Levelled:</b> Players that destroy a Dropsite have Levelled it.</div><div class="term"><b>Ruined:</b> Dropsites that have less than half of their Hull Points remaining are Ruined.</div><div class="term"><b>Kill Points:</b> the total points in Admirals and Ships you have destroyed. In the event of a tie in VP, the victor is determined by who has the most Kill Points.</div></div>`;
 }
@@ -614,7 +618,7 @@ function pubModes(dep){
   return out.join('');
 }
 
-function pubScoring(text){
+function pubScoring(text,sides={}){
   const out=[]; let std=false;
   const stdOnce=()=>{ if(!std){ std=true; out.push(stdScoring()); } };
   const se1=(name,cls)=>()=>out.push(pill(name,cls)+pubSE1(name));
@@ -625,7 +629,7 @@ function pubScoring(text){
     {re:/\bFocal [Pp]oint/,run:se1('Focal Points Scoring','sp-surv')},
     {re:/\bKill Points\b/,run:se1('Kill Points Scoring','sp-att')},
     {re:/\bAssess/,run:se1('Assess Scoring','sp-surv')},
-    ...OB.map(o=>({re:new RegExp('\\b'+o.name+'\\b'),run:()=>{ out.push(pill(o.name,o.cls)+pubParas(o.b)); if(o.std) stdOnce(); }})),
+    ...OB.map(o=>({re:new RegExp('\\b'+o.name+'\\b'),run:()=>{ out.push(pill(o.name,o.cls+(sides[o.name]?' side-'+sides[o.name]:''))+pubParas(o.b)); if(o.std) stdOnce(); }})),
   ]).forEach(d=>d.run());
   return out.join('');
 }
@@ -754,14 +758,21 @@ function renderScenario(s){
   const baseText=[s.intro,s.body,s.scenery,s.players,s.deployment,s.scoring,s.special,s.features].map(J).join(' ');
   const vOnly=Object.keys(FS).filter(n=>!baseText.includes(n)&&J(s.variant).includes(n.replace(/s$/,'')));
   const sec=(label,html)=>html?`<div class="sec">${pubHead(label)}<div class="sec-body">${html}</div></div>`:'';
-  const deploy=s.deployment?pubParas(s.deployment)+pubModes(J(s.deployment)):'';
+  const att=attackerSide(s), SW=h=>sideWords(h,att);
+  const deploy=s.deployment?SW(pubParas(s.deployment))+pubModes(J(s.deployment)):'';
   // A sentence that only names a scoring method ("Standard Scoring.", "Kill Points.") is dropped: that method is
   // written out in full just below. Sentences with the scenario's own rules stay, as paragraphs.
-  const METHOD_ONLY=/^(?:Standard Scoring|Normal Scoring|Demolish Scoring|Kill Points|Assess|Focal Points|Attrition|Survey|Protect|Raze|Extract|Breakthrough)\.?$/;
+  const METHODS='Standard Scoring|Normal Scoring|Demolish Scoring|Kill Points|Assess|Focal Points|Attrition|Survey|Protect|Raze|Extract|Breakthrough';
+  const SIDE_LBL='(?:Attackers?|Defenders?|Red(?: players?)?|Blue(?: players?)?)';
+  // A sentence that only names methods, or hands them to sides ("Attackers-Raze, Defenders-Protect."), is dropped: each method is
+  // written out in full just below, highlighted in its side's colour. Sentences with the scenario's own rules stay, as paragraphs.
+  const METHOD_ONLY=new RegExp(`^(?:(?:${SIDE_LBL}\\s*[-–:]\\s*)?(?:${METHODS})\\s*[,.]?\\s*)+$`,'i');
+  const scoreText=[s.scoring,s.special,s.variant].map(J).join(' ');
+  const sides={}; OB.forEach(o=>{ const m=scoreText.match(new RegExp(`\\b(${SIDE_LBL})\\s*[-–:]\\s*${o.name}\\b`,'i')); if(m) sides[o.name]=/^red/i.test(m[1])?'red':/^blue/i.test(m[1])?'blue':/^attack/i.test(m[1])?att:(att==='red'?'blue':'red'); });
   const ownScoring=[].concat(s.scoring||[]).map(p=>String(p).split(/(?<=\.)\s+(?=[A-Z])/).filter(x=>!METHOD_ONLY.test(x.trim())).join(' ')).filter(p=>p.trim());
-  const score=s.scoring?(ownScoring.length?pubParas(ownScoring):'')+pubScoring([s.scoring,s.special,s.variant].map(J).join(' ')):'';
+  const score=s.scoring?(ownScoring.length?SW(pubParas(ownScoring)):'')+pubScoring(scoreText,sides):'';
   const tbls=(s.tables||(s.table?[s.table]:[])).map(pubTable).join('');
-  const special=(s.special?pubBullets(s.special):'')+tbls+(s.weapons?weaponList(s.weapons):'');
+  const special=(s.special?SW(pubBullets(s.special)):'')+tbls+(s.weapons?weaponList(s.weapons):'');
   const scenery=s.scenery?pubParas([].concat(s.scenery).map(scenTips))+pubScenery([s.scenery,s.special,s.scoring].map(J).join(' ')):'';
   const ships=pubShips(allText);
   const hasMap=SCENARIO_MAPS.has(s.id);
@@ -818,7 +829,7 @@ function renderScenario(s){
       <div class="sc-header"><h2 class="sc-name">${s.name}</h2>${s.note?`<p class="pub-note">${s.note}</p>`:''}</div>
       ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
       ${s.body?pubParas(s.body):''}
-      ${sec('Players',s.players&&!TWO_PLAYERS.test(pubJoin(s.players).trim())?pubParas(s.players):'')}
+      ${sec('Players',s.players&&!TWO_PLAYERS.test(pubJoin(s.players).trim())?SW(pubParas(s.players)):'')}
       ${sec('Deployment',deploy)}
       ${sec('Scoring',score)}
       ${sec('Variants',s.variant?`<ul class="pub-vlist"><li><button type="button" class="pub-vbtn" data-set-v="1" aria-pressed="${on==='1'}">Variant</button><div>${pubParas(s.variant)}${s.variantWeapons?weaponList(s.variantWeapons):''}</div></li></ul>`:'')}

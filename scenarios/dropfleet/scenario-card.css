@@ -321,6 +321,14 @@ vp{font-family:inherit;font-weight:600;font-size:inherit;color:inherit;}
 .scenario.pub[data-v="1"] svg [data-v="1"]{display:inline;}
 .scenario.pub[data-v="1"] [data-hide-v~="1"]{display:none;}
 .scenario.pub:not([data-v="1"]) .pub-v-only{display:none;}
+/* Sides: red and blue words, run-in labels and objective highlights, in the map's deployment colours */
+.side{font-weight:600;}
+.side-red{color:#B23A1C;}
+.side-blue{color:#1A6A94;}
+@media screen{
+  .scenario .spill.side-red{color:var(--ch);background:linear-gradient(transparent 45%,#f4c4b3 45%,#f4c4b3 92%,transparent 92%);}
+  .scenario .spill.side-blue{color:var(--ch);background:linear-gradient(transparent 45%,#c2dcec 45%,#c2dcec 92%,transparent 92%);}
+}
 /* Beside a Variant button the weapon list is narrow: names wrap rather than run under the next column */
 .pub-vlist .pw-list .pw-name{white-space:normal;}
 .pub-vlist .pw-list{width:auto;}
