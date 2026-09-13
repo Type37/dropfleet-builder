@@ -622,7 +622,7 @@ function pubScoring(text){
     {re:/\bFocal [Pp]oint/,run:se1('Focal Points Scoring','sp-surv')},
     {re:/\bKill Points\b/,run:se1('Kill Points Scoring','sp-att')},
     {re:/\bAssess/,run:se1('Assess Scoring','sp-surv')},
-    ...OB.map(o=>({re:new RegExp('\\b'+o.name+'\\b'),run:()=>{ out.push(pill(o.name,o.cls)+pubBullets(o.b)); if(o.std) stdOnce(); }})),
+    ...OB.map(o=>({re:new RegExp('\\b'+o.name+'\\b'),run:()=>{ out.push(pill(o.name,o.cls)+pubParas(o.b)); if(o.std) stdOnce(); }})),
   ]).forEach(d=>d.run());
   return out.join('');
 }

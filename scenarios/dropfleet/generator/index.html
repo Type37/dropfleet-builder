@@ -779,7 +779,7 @@ function gen(keep){
 
   // SCORING
   let scoreH=pill(O.name,O.cls);
-  if(O.b.length) scoreH+=`<ul class="rule-bullets">${O.b.map(b=>`<li>${b}</li>`).join('')}</ul>`;
+  if(O.b.length) scoreH+=O.b.map(b=>`<p class="rule-text">${b}</p>`).join('');
   if(O.std) scoreH+=stdScoring();
 
   // DEPLOYMENT TYPE
