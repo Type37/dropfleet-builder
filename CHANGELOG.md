@@ -18,7 +18,8 @@ New optional `specs: {length, displacement}` on a ship in the faction JSON, show
 under Namesake in the lore section on desktop (card + detail pane) and mobile.
 Filled for three Resistance ships from their spec cards: Armstrong Destroyer
 (651m, 13,058,000m³), Aldrin Colony Ship (651m, 11,745,000m³), Collins Support
-Carrier (470m, 3,441,000m³). Shaltari Helium Voidflyer (504m, 1,628,000m³). Scourge Hiruko Boarding Cutter
+Carrier (470m, 3,441,000m³). Shaltari Helium Voidflyer (504m, 1,628,000m³). PHR Harpocrates Guerrilla Lighter
+(429m, 1,854,000m³). Scourge Hiruko Boarding Cutter
 (454m, 1,800,000m³). Resistance Seneca Detonator (470m, 3,441,000m³), Newton
 Kill-Sat (643m, 4,245,000m³), Galileo Orbital Telescope (468m, 3,775,000m³).
 Pungari Thresher Hive Ship, in every faction file (741m, Beam 387m, Height 388m,

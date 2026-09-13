@@ -3647,6 +3647,7 @@
    "category": "light",
    "ship": {
     "name": "Harpocrates Guerrilla Lighter",
+    "specs": {"length": "429m", "displacement": "1,854,000m³"},
     "cost": 20,
     "stats": {
      "thrust": "10\"",
