@@ -28,8 +28,8 @@ main{flex:1;width:100%;}
 /* Index */
 .idx{max-width:1180px;margin:0 auto;padding:28px 20px 48px;}
 .idx-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:14px 24px;margin-bottom:8px;}
-/* Type: Title 36 Slab, H1 28 Slab, H2 20, body 16, labels 14 (scenario-card.css has the full list) */
-.idx-h{font-family:'Roboto Slab',Georgia,serif;font-weight:700;font-size:2.25rem;line-height:1.1;}
+/* Type: Title 36 Slab 800 caps, H1 28 Slab 600, H2 20, body 16, labels 14 (scenario-card.css has the full list) */
+.idx-h{font-family:'Roboto Slab',Georgia,serif;font-weight:800;font-size:2.25rem;line-height:1.1;text-transform:uppercase;}
 .idx-tools{display:flex;gap:8px;flex-wrap:wrap;}
 .idx-tools input{font:inherit;font-size:1rem;color:var(--ink);background:#fff;border:1.5px solid #8a8378;padding:8px 12px;width:240px;max-width:100%;}
 .btn{font-family:'Jost',system-ui,sans-serif;font-size:1rem;font-weight:600;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1.5px solid var(--action);background:var(--action);color:#fff;cursor:pointer;}
@@ -37,7 +37,7 @@ main{flex:1;width:100%;}
 .btn-quiet{background:transparent;color:var(--action-dk);text-decoration:none;}
 .btn-quiet:hover{background:var(--hover);color:var(--action-dk);border-color:var(--action-dk);}
 .book{margin-top:30px;}
-.book-h{display:flex;align-items:center;gap:8px;font-family:'Roboto Slab',Georgia,serif;font-weight:700;font-size:1.75rem;line-height:1.2;margin-bottom:10px;}
+.book-h{display:flex;align-items:center;gap:8px;font-family:'Roboto Slab',Georgia,serif;font-weight:600;font-size:1.75rem;line-height:1.2;margin-bottom:10px;}
 /* Two scenarios to a row on a wide screen, one when it narrows. Each is a
    compact card -- thumbnail, name, then its facts labelled beneath -- so the
    row fills the width instead of stretching four short columns across the page. */

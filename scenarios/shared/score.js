@@ -16,7 +16,7 @@ window.ScoreSheet = (function () {
 .ss-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;padding:10px 16px;}
 .ss-head .ss-clear{margin-left:auto;}
 .ss-toggle{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:none;border:0;padding:0;cursor:pointer;text-align:left;color:inherit;font:inherit;}
-.ss-title{font:700 28px/1.2 'Roboto Slab',Georgia,serif;color:#0E0C08;}
+.ss-title{font:600 28px/1.2 'Roboto Slab',Georgia,serif;color:#0E0C08;}
 .ss-chev{width:18px;height:18px;color:#5d5850;transition:transform .15s;}
 .ss.closed .ss-chev{transform:rotate(-90deg);}
 .ss-clear{font:600 14px/1 'Jost',system-ui,sans-serif;color:#6b5210;background:none;border:1.5px solid #8a6a12;padding:5px 10px;cursor:pointer;}
