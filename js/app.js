@@ -8837,7 +8837,7 @@ let activeGroupId = null;
       'A switch in the header takes you to the Dropzone Commander scenarios.',
       'The scenario list puts commas between the deployments and scoring it names.',
       'A scenario page names its deployment and scoring rules in bold at the start of their paragraphs, the way the Dropzone pages do, instead of in dark labels.',
-      'A generated scenario no longer repeats the WarLore credit that is already in the footer.',
+      'A generated scenario no longer carries credit or copyright lines under it; the footer already has them.',
       'Hover or tap a Micrometeor Cloud, Dense Debris Field, Planetary Ring or Large Object, on a map or in the scenery text, to read its rules. That text is now the rulebook’s own, word for word: Large Objects had been reworded, and bold the book does not print had been added.',
       'Orbital Support’s map shows the Medium Space Station with its Military Outposts. Turn its Variant on and they become Hangars on the map, stats included.',
     ]},

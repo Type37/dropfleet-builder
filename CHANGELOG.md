@@ -40,6 +40,8 @@ the shared `data/rules-wiki.json`, so no app-code change was needed.
   "Players alternate placing..." and section 10's 4” distance rule, as printed.
 - **Layout scenery lists** read as 12.1.3 prints them ("2 8” Large Objects",
   "as shown in orange.").
+- **Generator card:** the TT Combat copyright line under a generated scenario
+  is gone, as the WarLore credit before it; the page footer carries both.
 - **CI:** GitHub Actions moved off the deprecated Node 20 (checkout v7, Pages
   actions v6/v5/v5, github-script v9).
 
