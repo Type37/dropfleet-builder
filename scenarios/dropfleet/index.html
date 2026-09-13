@@ -39,6 +39,13 @@
 /* a weapon's Special chips wrap inside a narrow column instead of running past the card's edge */
 @media (max-width:760px){.pw-special{min-width:0;}.pw-special .pw-chip{white-space:normal;overflow-wrap:anywhere;}}
 @media print{.pub-civ-pick{display:none;}}
+/* The four game sizes two by two, each size's points on one line (as the Dropzone page lays them out) */
+.pub-opts .seg.pub-size[aria-label="Game size"]{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
+.pub-opts .seg.pub-size[aria-label="Game size"] .pub-size-pts{white-space:nowrap;}
+/* with a Players selector, the sizes take their own row under it */
+.pub-opts .seg.pub-size[aria-label="Game size"]{flex-basis:100%;}
+/* a Variant's weapons in a narrow column: names wrap by word, Special chips drop to their own line */
+@media (max-width:1100px){.pub-vlist .pw-name{overflow-wrap:normal;word-break:normal;}.pub-vlist .pw-special{grid-column:1/-1;padding-left:0;}}
 /* Staggered's X follows the game size switch: its number in the steps, its size marked in the X line */
 .scenario.pub .xv{display:none;}
 .scenario.pub[data-size="skirmish"] .xv-skirmish,.scenario.pub[data-size="clash"] .xv-clash,.scenario.pub[data-size="battle"] .xv-battle,.scenario.pub[data-size="reconquest"] .xv-reconquest{display:inline;}
@@ -124,5 +131,6 @@ ScenarioShell.start({
   markRound:(s,r)=>(r===4||r===6)&&(s.sections?vpRows(scoringText(s)):pubScoreRows(s)).some(x=>x.sub==='Rounds 4 & 6'),
 });
 </script>
+<script src="https://type37.github.io/warlore-footer/footer.js" data-current="dropfleet" defer></script>
 </body>
 </html>

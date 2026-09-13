@@ -9030,6 +9030,11 @@ let activeGroupId = null;
       'Open any ship for its full ship card: points, stats, weapons, launch table, every loadout option with its guns, the hardpoint list, the Deployable Features a carrier can take, the Ship Rules and the full text of every rule it uses. Search finds ships by name, weapon or rule.',
       'Each faction and each ship has its own link (#units/ucm, #units/ucm/new-york) you can share.',
     ]},
+    { date: '2026-09-13', title: 'Scenario refs laid out like the Dropzone page', items: [
+      'The game sizes sit two by two under the Players selector, each size with its points on one line.',
+      'A Variant’s weapons in a narrow window wrap by word, with their special rules on their own line, so nothing is cut off.',
+      'The scenario pages end with the WarLore footer, as the Dropzone scenario page does.',
+    ]},
     { date: '2026-09-13', title: 'Game size switch on Staggered scenarios', items: [
       'Scenarios that use Staggered Deployment get the game size switch, now with Reconquest. Staggered shows how many Groups X is for the size you pick.',
     ]},

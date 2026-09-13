@@ -4655,6 +4655,11 @@
     { date: '2026-09-13', title: 'Desktop app: Unit Reference', items: [
       'The desktop app has a new Unit Reference on its home screen: every ship each faction fields, grouped by weight class, with flagships, Misc ships and space stations, and each ship’s full ship card and rules.',
     ]},
+    { date: '2026-09-13', title: 'Scenario refs laid out like the Dropzone page', items: [
+      'The game sizes sit two by two under the Players selector, each size with its points on one line.',
+      'A Variant’s weapons in a narrow window wrap by word, with their special rules on their own line, so nothing is cut off.',
+      'The scenario pages end with the WarLore footer, as the Dropzone scenario page does.',
+    ]},
     { date: '2026-09-13', title: 'Game size switch on Staggered scenarios', items: [
       'Scenarios that use Staggered Deployment get the game size switch, now with Reconquest. Staggered shows how many Groups X is for the size you pick.',
     ]},
