@@ -36,7 +36,7 @@ and a 2+ on turn 3, all by turn 4. Dragonslayer's deployment changed from Close 
 current type that feeds a fleet in over rounds. The same page's Cluster table (Medium: Hold 3VP, Contest 1VP,
 scored at the end of the Roundup Phase on turns 4 and 6) matches the Medium Space Station under Standard
 Scoring, so that conversion stands. Specs added: New York Battleship (Length 1293m, Beam 421m, Height 383m,
-Displacement 25,253,000m² as read from the card), Shenlong Heavy Cruiser, Ganymede Assault Troopship. The New
+Displacement 25,253,000m³), Shenlong Heavy Cruiser, Ganymede Assault Troopship. The New
 York famous-admiral flagship is left alone.
 
 ### 2026-09-12: Dragonslayer: who fires the station Armaments
