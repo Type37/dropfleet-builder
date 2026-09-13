@@ -255,7 +255,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .scenario .spill-sub{font-weight:400;color:#5d5850;margin-left:6px;}
 @media screen{ .scenario .spill{font-size:var(--fs-body);} }
 /* The rolled die beside a heading */
-.sh-die{width:1.15em;height:1.15em;flex:0 0 auto;color:#5d5850;}
+.sh-die{width:1.1em;height:1.1em;vertical-align:-.18em;color:#5d5850;}
 /* A table keeps its own width; stretched to the column it spread three columns across the card */
 .stbl{align-self:flex-start;}
 
