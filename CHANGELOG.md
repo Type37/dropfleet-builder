@@ -74,7 +74,8 @@ the shared `data/rules-wiki.json`, so no app-code change was needed.
   every colour black, weight class and Unique as plain words, no divider lines
   (header, table header and row rules, ability group rules, section titles),
   light zebra weapon rows, and ability tick boxes drawn like the objectives
-  checklist instead of a box round a ballot-box character.
+  checklist instead of a box round a ballot-box character. Hull no longer prints
+  twice (stat line and hull track), and a single ship no longer reads "1×".
 
 ### 2026-09-12: Print sheet, said once and in black
 

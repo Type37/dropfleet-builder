@@ -1796,7 +1796,7 @@
       case 'screen-station-detail': back.classList.remove('hidden'); title.textContent = 'Space Station'; showPts(); break;
       case 'screen-play': back.classList.remove('hidden'); title.textContent = (mPlayFleet ? esc(mPlayFleet.name) + ', Play' : 'Play Mode'); break;
       case 'screen-collection': back.classList.remove('hidden'); title.textContent = 'My Collection'; break;
-      case 'screen-rules': back.classList.remove('hidden'); title.textContent = 'How to Play'; break;
+      case 'screen-rules': back.classList.remove('hidden'); title.textContent = 'Rules Reference'; break;
     }
   }
 
@@ -4638,6 +4638,10 @@
     { date: '2026-09-12', title: 'How to Play: four tables put back together', items: [
       'Four rulebook tables that had come through as loose lines are proper tables again: the Tonnage restrictions, the core Ability costs, the Game Round phases, and the Battalion deployment targets. Same words as the book, in their grid.',
     ]},
+    { date: '2026-09-12', title: 'Export PDF: cleaner sheet', items: [
+      'Stat numbers are bigger, all text is black, and the divider lines are gone.',
+      'The hull number shows once, beside its boxes, and a single ship no longer reads “1×”.',
+    ]},
     { date: '2026-09-12', title: 'Export PDF: every Ability you can use', items: [
       'The Abilities table lists everything your fleet can use: each admiral’s own Abilities and chosen picks, Command Abilities from ships like the Rotterdam and Venice, ship Abilities like Fully Fuelled and Battalion Support, and the Core Abilities.',
       'While an admiral still has picks to make, the rest of its Abilities Table prints with tick boxes.',
@@ -5009,7 +5013,7 @@
       { icon: 'copy', label: `Back up all fleets (${fleets.length})`, action: exportAllFleets, disabled: !fleets.length },
       { icon: 'edit', label: 'Restore or import a fleet…', action: importFleetPrompt },
       { icon: 'duplicate', label: 'My Collection', action: openCollection },
-      { icon: 'menu_book', label: 'How to Play', action: () => navigate('screen-rules') },
+      { icon: 'menu_book', label: 'Rules Reference', action: () => navigate('screen-rules') },
       { icon: 'new_releases', label: "What's New", action: openChangelog },
       { icon: 'mail', label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
       { icon: 'bug_report', label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
@@ -6175,9 +6179,11 @@
       for (let j = i; j < Math.min(h, i + 5); j++) grp += `<span class="pr-box${j + 1 === crip ? ' pr-box-crip' : ''}"></span>`;
       grouped += `<span class="pr-hull-grp">${grp}</span>`;
     }
-    const track = label => `<div class="pr-hull"><span class="pr-hull-lab">${esc(label)}</span><span class="pr-hull-boxes">${grouped}</span></div>`;
-    if (count <= 1) return track('Hull');
-    return Array.from({ length: count }, (_, i) => track('#' + (i + 1))).join('');
+    // The hull number shows once; each ship in the group gets its own row of boxes.
+    const head = `<span class="pr-hull-lab">Hull</span><span class="pr-hull-num">${h}</span>`;
+    const boxes = `<span class="pr-hull-boxes">${grouped}</span>`;
+    if (count <= 1) return `<div class="pr-hull">${head}${boxes}</div>`;
+    return `<div class="pr-hull">${head}</div>` + Array.from({ length: count }, () => `<div class="pr-hull">${boxes}</div>`).join('');
   }
 
   /* ── Export as PDF (printable view → browser "Save as PDF") ─ */
@@ -6228,7 +6234,7 @@
     const shipCard = (db, inst, qty, opt) => {
       const st = db.stats || {};
       const mods = loadoutStatMods(db, inst, f.faction);
-      const statCells = [['Scan', 'scan', st.scan], ['Sig', 'sig', st.sig], ['Thrust', 'thrust', st.thrust], ['Hull', 'hull', st.hull],
+      const statCells = [['Scan', 'scan', st.scan], ['Sig', 'sig', st.sig], ['Thrust', 'thrust', st.thrust],
         ['ES', 'es', st.es], ['KS', 'ks', st.ks], ['BS', 'bs', st.bs], ['PD', 'pd', st.pd]]
         .filter(([, , v]) => v != null && v !== '-' && v !== '')
         .map(([lab, key, v]) => `<span class="pr-stat${mods[key] ? ' pr-stat-mod' : ''}"><b>${lab}</b> ${esc(mods[key] ? adjustStatVal(v, mods[key]) : v)}</span>`).join('');
@@ -6326,8 +6332,8 @@
       const each = num(inst.points);
       const sameEach = g.ships.every(s => num(s.points) === each);
       const label = (g.name && g.name !== db.name)
-        ? `${esc(g.name)} <span class="pr-group-class">(${qty}× ${esc(db.name)})</span>`
-        : `${qty}× ${esc(db.name)}`;
+        ? `${esc(g.name)} <span class="pr-group-class">(${qty > 1 ? qty + '× ' : ''}${esc(db.name)})</span>`
+        : `${qty > 1 ? qty + '× ' : ''}${esc(db.name)}`;
       const ptsHtml = qty > 1 && sameEach ? `${esc(gp)} pts <span class="pr-each">(${esc(each)} ea)</span>` : `${esc(gp)} pts`;
       return shipCard(db, inst, qty, { label, ptsHtml });
     }).join('');
@@ -6353,7 +6359,7 @@
     }).join('');
 
     // Every Ability this fleet can use (fleetAbilityGroups), with full effect text.
-    const abilBox = r => r.pick ? `<span class="pr-check">${r.pick === 'on' ? '☑' : '☐'}</span> ` : '';
+    const abilBox = r => r.pick ? `<span class="pr-check pr-check-inline${r.pick === 'on' ? ' on' : ''}" aria-hidden="true">${r.pick === 'on' ? '✓' : ''}</span> ` : '';
     const abilitiesHtml = `<table class="pr-weapons pr-abilities"><colgroup><col class="pr-c-abil"><col class="pr-c-ap"><col></colgroup><thead><tr><th>Ability</th><th>AP</th><th>Effect</th></tr></thead><tbody>${
       fleetAbilityGroups(f).map(g => `<tr class="pr-abil-group"><td colspan="3">${esc(g.label)}</td></tr>`
         + g.rows.map(r => `<tr${r.pick === 'on' ? ' class="pr-abil-on"' : ''}><td>${abilBox(r)}<b>${esc(r.name)}</b></td><td>${esc(r.cost || '')}</td><td>${ruleHtml(r.effect || '')}</td></tr>`).join('')).join('')

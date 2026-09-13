@@ -5938,6 +5938,7 @@ h1, h2, h3, h4, h5, h6 {
 .dp-hull { display: flex; align-items: center; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
 .dp-hull-lab { font-size: 7pt; font-weight: 700; text-transform: uppercase; color: #000; }
 .dp-hull-num { font-size: 11pt; font-weight: 800; color: #000; font-variant-numeric: tabular-nums; }
+.dp-hull.dp-hull-row { margin-top: 2px; }
 .dp-hull-boxes { display: inline-flex; flex-wrap: wrap; gap: 2px 6px; }
 .dp-hull-grp { display: inline-flex; gap: 1.5px; }
 .dp-box {

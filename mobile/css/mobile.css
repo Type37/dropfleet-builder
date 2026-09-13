@@ -2340,29 +2340,29 @@ body.sheet-open .sheet-scrim {
 
   #print-root {
     font-family: Georgia, 'Times New Roman', serif;
-    color: #1a1a1a;
+    color: #000;
     padding: 0;
     max-width: 100%;
   }
-  .pr-header { border-bottom: 2px solid #1b3a5c; padding-bottom: 6px; margin-bottom: 10px; }
-  .pr-title { font-size: 20pt; font-weight: 700; color: #1b3a5c; }
-  .pr-sub { font-size: 10pt; color: #444; margin-top: 2px; }
-  .pr-desc { font-size: 9.5pt; color: #333; margin: 0 0 10px; white-space: pre-wrap; }
+  .pr-header { padding-bottom: 6px; margin-bottom: 10px; }
+  .pr-title { font-size: 20pt; font-weight: 700; color: #000; }
+  .pr-sub { font-size: 10pt; color: #000; margin-top: 2px; }
+  .pr-desc { font-size: 9.5pt; color: #000; margin: 0 0 10px; white-space: pre-wrap; }
 
   .pr-group { border: 1px solid #ccc; border-radius: 4px; padding: 6px 8px; margin-bottom: 6px; break-inside: avoid; }
   .pr-group-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
   .pr-group-name { font-size: 12pt; font-weight: 700; }
-  .pr-group-pts { font-size: 11pt; font-weight: 700; color: #1b3a5c; flex: 0 0 auto; }
-  .pr-each { font-size: 9pt; font-weight: 400; color: #555; }
-  .pr-ton { font-size: 8.5pt; font-weight: 400; color: #555; }
-  .pr-badge { font-size: 7pt; font-weight: 700; color: #1b3a5c; border: 1px solid #1b3a5c; border-radius: 3px; padding: 0 3px; vertical-align: middle; }
-  .pr-stats { font-size: 8.5pt; color: #333; margin: 3px 0; }
+  .pr-group-pts { font-size: 11pt; font-weight: 700; color: #000; flex: 0 0 auto; }
+  .pr-each { font-size: 9pt; font-weight: 400; color: #000; }
+  .pr-ton { font-size: 8.5pt; font-weight: 700; color: #000; text-transform: uppercase; }
+  .pr-badge { font-size: 7pt; font-weight: 700; color: #b83828; text-transform: uppercase; }
+  .pr-stats { font-size: 12pt; font-weight: 700; color: #000; margin: 3px 0; }
   .pr-stat { display: inline-block; margin-right: 10px; }
-  .pr-stat b { color: #1b3a5c; }
+  .pr-stat b { font-size: 8pt; color: #000; }
   /* Stat changed by a selected upgrade (e.g. Drive Refit +3" Thrust). */
   .pr-stat-mod, .pr-stat-mod b { color: #2e7d32; font-weight: 700; }
   /* Ship class shown in lighter weight after a custom battlegroup name. */
-  .pr-group-class { font-weight: 400; color: #555; }
+  .pr-group-class { font-weight: 400; color: #000; }
 
   /* Admiral block; a famous admiral's flagship card sits inside it. */
   .pr-admiral { margin-bottom: 6px; }
@@ -2371,7 +2371,8 @@ body.sheet-open .sheet-scrim {
 
   /* Pen-markable hull boxes, one row per ship, in fives. */
   .pr-hull { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 8pt; margin: 2px 0; }
-  .pr-hull-lab { font-weight: 700; color: #444; min-width: 24px; }
+  .pr-hull-lab { font-weight: 700; color: #000; }
+  .pr-hull-num { font-size: 11pt; font-weight: 800; color: #000; min-width: 18px; }
   .pr-hull-boxes { display: inline-flex; flex-wrap: wrap; gap: 5px; }
   .pr-hull-grp { display: inline-flex; gap: 2px; }
   .pr-box { display: inline-block; box-sizing: border-box; width: 12px; height: 12px; border: 1px solid #333; background: #fff; }
@@ -2379,8 +2380,9 @@ body.sheet-open .sheet-scrim {
 
   /* Fixed column widths so every weapon table (and every launch table) lines up. */
   .pr-weapons { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 8pt; margin: 3px 0; }
-  .pr-weapons th { text-align: left; border-bottom: 1px solid #999; padding: 1px 4px; color: #555; }
-  .pr-weapons td { padding: 1px 4px; border-bottom: 1px solid #eee; vertical-align: top; }
+  .pr-weapons th { text-align: left; padding: 1px 4px; color: #000; }
+  .pr-weapons td { padding: 2px 4px; vertical-align: top; color: #000; }
+  .pr-weapons tbody tr:nth-child(even) td { background: #f2f2f2; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .pr-weapons th, .pr-weapons td { overflow-wrap: anywhere; }
   .pr-weapons thead { display: table-header-group; }
   .pr-weapons tr { break-inside: avoid; }
@@ -2392,25 +2394,25 @@ body.sheet-open .sheet-scrim {
   .pr-c-abil { width: 22%; }
   .pr-c-ap { width: 8%; }
   .pr-abilities { font-size: 8pt; }
-  .pr-abil-group td { font-weight: 700; color: #1b3a5c; border-bottom: 1px solid #999; padding-top: 4px; }
+  .pr-abil-group td { font-weight: 700; color: #000; padding-top: 5px; background: #fff !important; }
   .pr-keep { break-inside: avoid; }
-  .pr-launch-label { font-size: 8pt; font-weight: 700; color: #555; margin-top: 3px; break-after: avoid; }
+  .pr-launch-label { font-size: 8pt; font-weight: 700; color: #000; margin-top: 3px; break-after: avoid; }
 
   .pr-rules-line, .pr-opts { font-size: 8.5pt; margin-top: 2px; }
-  .pr-opts { color: #444; }
-  .pr-opts b { color: #1b3a5c; }
+  .pr-opts { color: #000; }
+  .pr-opts b { color: #000; }
   .pr-inline-rule { font-size: 8pt; margin-top: 2px; }
 
-  .pr-section-title { font-size: 12pt; font-weight: 700; color: #1b3a5c; margin: 10px 0 4px; border-bottom: 1px solid #ccc; break-after: avoid; }
+  .pr-section-title { font-size: 12pt; font-weight: 700; color: #000; margin: 12px 0 4px; break-after: avoid; }
   .pr-line { font-size: 10pt; margin: 2px 0; }
 
   .pr-glossary { columns: 2; column-gap: 16px; }
   .pr-gloss { font-size: 7.5pt; line-height: 1.35; margin-bottom: 4px; break-inside: avoid; }
-  .pr-gloss b { color: #1b3a5c; }
+  .pr-gloss b { color: #000; }
   .pr-check-row { display: flex; align-items: flex-start; gap: 5px; }
   .pr-check { flex: 0 0 auto; box-sizing: border-box; width: 12px; height: 12px; margin-top: 1px; border: 1px solid #333; font-size: 9px; line-height: 10px; font-weight: 700; text-align: center; color: #000; }
 
-  .pr-foot { margin-top: 12px; font-size: 7.5pt; color: #595959; text-align: center; }
+  .pr-foot { margin-top: 12px; font-size: 7.5pt; color: #000; text-align: center; }
 
   @page { margin: 12mm; }
 }
@@ -3316,5 +3318,5 @@ h5.rules-h, h6.rules-h { font-size: 13px; font-family: var(--font-body, inherit)
 .rules-tok-desc { font-size: 12px; line-height: 1.45; color: var(--fg3); }
 
 /* Abilities Table rows still to pick from on the printed sheet. */
-.pr-check { font-size: 1.3em; line-height: 1; vertical-align: -0.12em; }
+.pr-check-inline { display: inline-block; vertical-align: -1px; }
 .pr-abil-on td { background: rgba(184, 147, 46, 0.08); -webkit-print-color-adjust: exact; print-color-adjust: exact; }

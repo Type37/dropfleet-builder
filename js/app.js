@@ -6522,9 +6522,11 @@ let activeGroupId = null;
     // Show the starting hull NUMBER alongside the boxes so you can read it at a glance
     // without counting. Kept as a sibling of the label (not inside it) so it still
     // shows in roster mode, where the "Hull" label itself is hidden.
-    const track = (label) => `<div class="dp-hull"><span class="dp-hull-lab">${esc(label)}</span><span class="dp-hull-num">${h}</span><span class="dp-hull-boxes">${grouped}</span></div>`;
-    if (count <= 1) return track('Hull');
-    return Array.from({ length: count }, (_, i) => track('#' + (i + 1))).join('');
+    // The hull number shows once; each ship in the group gets its own row of boxes.
+    const head = `<span class="dp-hull-lab">Hull</span><span class="dp-hull-num">${h}</span>`;
+    const boxRow = `<span class="dp-hull-boxes">${grouped}</span>`;
+    if (count <= 1) return `<div class="dp-hull">${head}${boxRow}</div>`;
+    return `<div class="dp-hull">${head}</div>` + Array.from({ length: count }, () => `<div class="dp-hull dp-hull-row">${boxRow}</div>`).join('');
   }
 
   // The print layout the preview's Layout control picked. Stored as the older
@@ -8807,7 +8809,7 @@ let activeGroupId = null;
       'While an admiral still has picks to make, the rest of its Abilities Table prints with tick boxes.',
       'Core Abilities print even without an admiral, and their text now matches the rulebook word for word.',
       'The print preview has an Abilities switch, and Abilities keep their full text when Rules text is off.',
-      'A group of identical ships prints as one card, with its name, weight class and points said once.',
+      'A group of identical ships prints as one card, with its name, weight class, points and hull number said once.',
       'In Cards the picture, stats and hull boxes sit side by side, stat numbers are bigger, and all the text on the sheet is black.',
       'No divider lines, left bars, dashed page lines or clickable chips on the print sheet.',
       'Cards always print in two columns. The one-column option is gone: Big cards already covers a single wide card per ship.',
