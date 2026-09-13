@@ -260,8 +260,8 @@ const SCENARIOS=[
             `The attacker scores 3VP if the Supply Hauler has been removed from the game.`],
    special:[`The Defender deploys a single SLM-9 Resupply Hauler during either the 1st or 2nd round with 6 friendly Battalions on it.`,
             `Each Space Station has the following Launch Assets:`],
-   tables:[{head:['Load','Launch','Special'],rows:[['Light Torpedo','1','Limited-2']]},
-           {head:['Load','Thrust','Att','Lock','DMG','Type','Special'],rows:[['Light Torpedo','6"','4','3+','1','K','Penetrator']]}]},
+   // The PDF's two tables (launch, then the asset's profile) as one row per Load
+   tables:[{head:['Load','Launch','Thrust','Att','Lock','DMG','Type','Special'],rows:[['Light Torpedo','1','6"','4','3+','1','K','Limited-2, Penetrator']]}]},
 
   {id:'on-the-clock', name:'On the Clock', src:'Civilian Ships & Scenarios',
    players:`2.`,

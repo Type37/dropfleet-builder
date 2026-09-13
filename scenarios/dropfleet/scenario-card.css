@@ -101,6 +101,8 @@ vp{font-family:inherit;font-weight:600;font-size:inherit;color:inherit;}
 .pub-body p:last-child{margin-bottom:0;}
 .pub-body b{color:inherit;}
 .pub-tbl-wrap{overflow-x:auto;margin-top:1mm;}
+/* Print: tables never scroll or clip, and the references use the page's own (narrow) margins */
+@media print{.pub-tbl-wrap{overflow:visible;}.pub-tbl{width:100%;}.pub-tbl th,.pub-tbl td{padding-right:2.5mm;}.scenario.pub{padding:1mm 0 0;}}
 .pub-tbl{border-collapse:collapse;font-family:'Jost',system-ui,sans-serif;font-size:10pt;}
 .pub-tbl th{text-align:left;font-weight:700;color:var(--gdk);padding:.6mm 4mm .6mm 0;}
 .pub-tbl td{padding:.6mm 4mm .6mm 0;color:var(--ch);}
