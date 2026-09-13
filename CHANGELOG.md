@@ -28,6 +28,17 @@ generator built on a d66 chart. The Dropzone rulebook has no such chart and no
 random setup (players choose the Scenario, 3.3), so both came out the same day.
 Dropzone keeps its Scenario Reference, still linked from the reference switch.
 
+### 2026-09-13: Dragonslayer checked against the 1st edition rulebook; three more ship specs
+
+Jet supplied the 1st edition rulebook (Desktop Dropfleet Rulebook v1.1, now in Rules-Mechanics-PDFs, untracked).
+Page 36 defines Rapid Response: one Battlegroup of your choice on turn 1, each remaining one on a 4+ on turn 2
+and a 2+ on turn 3, all by turn 4. Dragonslayer's deployment changed from Close (a guess) to Staggered, the
+current type that feeds a fleet in over rounds. The same page's Cluster table (Medium: Hold 3VP, Contest 1VP,
+scored at the end of the Roundup Phase on turns 4 and 6) matches the Medium Space Station under Standard
+Scoring, so that conversion stands. Specs added: New York Battleship (Length 1293m, Beam 421m, Height 383m,
+Displacement 25,253,000m² as read from the card), Shenlong Heavy Cruiser, Ganymede Assault Troopship. The New
+York famous-admiral flagship is left alone.
+
 ### 2026-09-12: Dragonslayer: who fires the station Armaments
 
 The old page armed its stations but never said who fires them. Nobody pays for these stations, so the player

@@ -1515,6 +1515,7 @@
       "category": "heavy",
       "ship": {
         "name": "New York Battleship",
+        "specs": {"length": "1293m", "beam": "421m", "height": "383m", "displacement": "25,253,000m²"},
         "cost": 245,
         "stats": {
           "thrust": "6\"",

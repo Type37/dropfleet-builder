@@ -1868,6 +1868,7 @@
    "category": "medium",
    "ship": {
     "name": "Ganymede Assault Troopship",
+    "specs": {"length": "990m", "beam": "262m (variable)", "height": "321m (variable)", "displacement": "9,587,000m³"},
     "cost": 165,
     "stats": {
      "thrust": "7\"",

@@ -520,7 +520,9 @@ const SCENARIOS=[
    intro:`An Ether Drake has made one of the Cradle World systems its home! Drive the Ether Drake and your opponent away and claim this system.`,
    players:`2.`,
    scenery:`2-5 Micrometeor Clouds, 4-6 Dense Debris Fields.`,
-   deployment:`Both Players Close, from opposite table edges as shown. The Ether Drake is deployed in the centre of the table.`,
+   // 1st edition Rapid Response (Desktop Dropfleet Rulebook v1.1 p36): one Battlegroup of your choice on turn 1,
+   // the rest arriving on 4+ then 2+ rolls, all by turn 4. Staggered is the current type that feeds a fleet in over rounds.
+   deployment:`Both Players Staggered, from opposite table edges as shown. The Ether Drake is deployed in the centre of the table.`,
    scoring:[`Standard Scoring.`,
             `The player that deals the final point of damage to the Ether Drake scores 12VP.`],
    // Who fires them: no player owns these stations, so the controlling player does; the timing is the

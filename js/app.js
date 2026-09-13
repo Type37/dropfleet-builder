@@ -8843,6 +8843,8 @@ let activeGroupId = null;
       'Scenario pages leave out a Players section that only says 2, draw bigger list bullets, and table headings are no longer half italic.',
       'The Ether Drake’s lore reads like ship lore in the fleet builder: a Lore heading, its text, then the Recognised Ether Drakes as a list.',
       'Each scenario links its source book on TTCombat’s site (Source: book name) in the top bar, and on phones the score sheet puts each rule and its counters on one line.',
+      'Dragonslayer now deploys both players Staggered, the current match for the 1st edition’s Rapid Response (one Battlegroup on turn 1, the rest over the next turns).',
+      'The New York Battleship, Shenlong Heavy Cruiser and Ganymede Assault Troopship show their Length, Beam, Height and Displacement under their lore.',
     ]},
     { date: '2026-09-12', title: 'Fleets open again', items: [
       'Opening a fleet had stopped showing the builder: the fleet list stayed on screen. Fixed.',

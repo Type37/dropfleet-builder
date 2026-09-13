@@ -1974,6 +1974,7 @@
    "category": "medium",
    "ship": {
     "name": "Shenlong Heavy Cruiser",
+    "specs": {"length": "1,007m", "beam": "401m (variable)", "height": "354m (variable)", "displacement": "8,843,000m³"},
     "cost": 135,
     "stats": {
      "thrust": "8\"",
