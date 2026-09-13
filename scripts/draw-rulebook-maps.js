@@ -188,14 +188,17 @@ const MAPS = {
       ['MS', 42, 32, 0, [], ''],
     ],
   },
+  // Features list the City's dots in the generator's order, '' for a dot with no Feature:
+  // Large [top-left, top-right, bottom-left, bottom-right]; Medium [top, bottom-left, bottom-right] turned
+  // with the rotation (180 = two dots on top); Small [left, right]. Each is the 1st edition Sector's own dot.
   'resistance-spearhead': {
     zones: () => zone.edges(),
     sites: [
-      ['LC', 16, 16, 0, ['out', 'out'], 'NW'],
-      ['LC', 32, 16, 0, ['out', 'out'], ''],
+      ['LC', 16, 16, 0, ['', 'out', 'out', ''], 'NW'],
+      ['LC', 32, 16, 0, ['out', '', '', 'out'], ''],
       ['MC', 24, 24, 0, [], ''],
-      ['LC', 16, 32, 0, ['out', 'out'], ''],
-      ['LC', 32, 32, 0, ['out', 'out'], ''],
+      ['LC', 16, 32, 0, ['out', '', '', 'out'], ''],
+      ['LC', 32, 32, 0, ['', 'out', 'out', ''], ''],
     ],
     cb: [2],
   },
@@ -207,11 +210,11 @@ const MAPS = {
     zones: () => `<rect x="0" y="0" width="200" height="${STRIP}" ${RED}/><rect x="0" y="${200 - STRIP}" width="200" height="${STRIP}" ${BLUE}/>`,
     extra: () => ring(30),
     sites: [
-      ['MC', 6, 24, 0, ['odg'], ''],
-      ['MC', 15, 24, 0, ['out', 'out', 'out'], ''],
-      ['MC', 24, 24, 0, ['odg'], ''],
+      ['MC', 6, 24, 180, ['', 'odg', ''], ''],
+      ['MC', 15, 24, 180, ['out', 'out', 'out'], ''],
+      ['MC', 24, 24, 270, ['', 'odg', ''], ''],
       ['MC', 33, 24, 0, ['out', 'out', 'out'], ''],
-      ['MC', 42, 24, 0, ['odg'], ''],
+      ['MC', 42, 24, 0, ['odg', '', ''], ''],
     ],
     // this page's blue-marked Clusters are "only used in Battles"
     battle: [1, 3],
@@ -219,11 +222,11 @@ const MAPS = {
   'core-take-and-hold': {
     zones: () => zone.edges(),
     sites: [
-      ['LC', 4, 24, 0, ['out'], ''],
-      ['MC', 36, 18, 0, ['out'], 'N'],
-      ['LC', 24, 24, 0, ['out', 'out'], ''],
-      ['MC', 12, 30, 0, ['out'], 'WS'],
-      ['LC', 44, 24, 0, ['out'], 'E'],
+      ['LC', 4, 24, 0, ['', '', 'out', ''], ''],
+      ['MC', 36, 18, 180, ['out', '', ''], 'N'],
+      ['LC', 24, 24, 0, ['out', '', '', 'out'], ''],
+      ['MC', 12, 30, 180, ['', 'out', ''], 'WS'],
+      ['LC', 44, 24, 0, ['out', '', '', ''], 'E'],
     ],
     cb: [1, 3],
   },
@@ -231,9 +234,9 @@ const MAPS = {
     zones: () => zone.edges(),
     sites: [
       ['MS', 24, 12, 0, [], ''],
-      ['LC', 4, 24, 0, ['out'], ''],
+      ['LC', 4, 24, 0, ['', '', 'out', ''], ''],
       ['MS', 24, 24, 0, [], ''],
-      ['LC', 44, 24, 0, ['out'], 'E'],
+      ['LC', 44, 24, 0, ['out', '', '', ''], 'E'],
       ['MS', 24, 36, 0, [], 'S'],
     ],
     cb: [2],
@@ -242,18 +245,18 @@ const MAPS = {
     zones: () => zone.edges(),
     extra: () => ring(24),
     sites: [
-      ['MC', 12, 12, 0, ['out'], ''],
-      ['MC', 36, 12, 0, ['out'], ''],
+      ['MC', 12, 12, 180, ['out', '', ''], ''],
+      ['MC', 36, 12, 180, ['', 'out', ''], ''],
       ['MS', 24, 18, 0, [], 'N'],
-      ['LC', 24, 24, 0, ['out', 'out'], ''],
+      ['LC', 24, 24, 0, ['out', '', '', 'out'], ''],
       ['MS', 24, 30, 0, [], ''],
-      ['MC', 12, 36, 0, ['out'], ''],
-      ['MC', 36, 36, 0, ['out'], 'ES'],
+      ['MC', 12, 36, 180, ['out', '', ''], ''],
+      ['MC', 36, 36, 180, ['', '', 'out'], 'ES'],
     ],
     labels: [[12, 12, 'B'], [36, 12, 'B'], [12, 36, 'A'], [36, 36, 'A'], [24, 24, 'C']],
     cb: [2, 4],
-    // Punching Up: the centre City gains 2 Orbital Defence Guns
-    variants: { 1: { site: 3, feats: ['out', 'out', 'odg', 'odg'] } },
+    // Punching Up: 2 of the centre City's Sectors become Orbital Guns; the two with no Feature take them
+    variants: { 1: { site: 3, feats: ['out', 'odg', 'odg', 'out'] } },
   },
   'core-station-assault': {
     zones: () => zone.cornerLs(12),
@@ -281,20 +284,20 @@ const MAPS = {
     zones: () => zone.cornerLs(12),
     sites: [
       ['MC', 42, 6, 0, [], 'NE'],
-      ['LC', 30, 18, 0, ['pow'], ''],
-      ['MC', 24, 24, 0, ['out', 'out', 'out'], ''],
-      ['LC', 18, 30, 0, ['pow'], 'WS'],
-      ['MC', 6, 42, 0, [], ''],
+      ['LC', 30, 18, 0, ['', '', 'pow', ''], ''],
+      ['MC', 24, 24, 180, ['out', 'out', 'out'], ''],
+      ['LC', 18, 30, 0, ['', 'pow', '', ''], 'WS'],
+      ['MC', 6, 42, 180, [], ''],
     ],
   },
   'core-defence-relay': {
     zones: () => zone.edges(),
     sites: [
       ['MS', 24, 18, 0, [], 'N'],
-      ['SC', 4, 24, 0, ['com'], ''],
-      ['LC', 18, 24, 0, ['out', 'out'], ''],
-      ['LC', 30, 24, 0, ['out', 'out'], 'E'],
-      ['SC', 44, 24, 0, ['com'], ''],
+      ['SC', 4, 24, 0, ['', 'com'], ''],
+      ['LC', 18, 24, 0, ['', 'out', 'out', ''], ''],
+      ['LC', 30, 24, 0, ['out', '', '', 'out'], 'E'],
+      ['SC', 44, 24, 0, ['com', ''], ''],
       ['MS', 24, 30, 0, [], ''],
     ],
     cb: [0, 5],
@@ -337,6 +340,7 @@ for (const [id, m] of Object.entries(MAPS)) {
     const layer = (list, attrs, tag) => {
       let out = '';
       list.forEach((k, i) => {
+        if (!k) return;
         const onDot = ON_DOTS.has(id) && DOTS[t], size = onDot ? DOT_TOKEN : TOKEN;
         const [px, py] = onDot ? dotSpot(t, x, y, rot, i) : tokenSpot(t, x, y, rot, i, false);
         out += token(k, px, py, size);
