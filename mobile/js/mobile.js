@@ -4639,6 +4639,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Printed Abilities table: group names down the side', items: [
+      'Each group in the printed Abilities table (your admiral’s, Core Abilities) is named down the left edge beside its own rows, with a rule between groups, instead of a grey heading row. The table no longer has an Abilities title above it.',
+    ]},
     { date: '2026-09-13', title: 'Crit values on every printed sheet', items: [
       'The crit value (2 over Lock, for weapons whose rules use criticals) now prints in the Table layout too. It was only on Cards and Big cards.',
       'Launch assets show their crit value, on screen and on the sheet, when the asset or its bay has a rule that uses criticals, such as Penetrator torpedoes.',
@@ -6414,9 +6417,9 @@
 
     // Every Ability this fleet can use (fleetAbilityGroups), with full effect text.
     const abilBox = r => r.pick ? `<span class="pr-check pr-check-inline${r.pick === 'on' ? ' on' : ''}" aria-hidden="true">${r.pick === 'on' ? '✓' : ''}</span> ` : '';
-    const abilitiesHtml = `<table class="pr-weapons pr-abilities"><colgroup><col class="pr-c-abil"><col class="pr-c-ap"><col></colgroup><thead><tr><th>Ability</th><th>AP</th><th>Effect</th></tr></thead><tbody>${
-      fleetAbilityGroups(f).map(g => `<tr class="pr-abil-group"><td colspan="3">${esc(g.label)}</td></tr>`
-        + g.rows.map(r => `<tr${r.pick === 'on' ? ' class="pr-abil-on"' : ''}><td>${abilBox(r)}<b>${esc(r.name)}</b></td><td>${esc(r.cost || '')}</td><td>${ruleHtml(r.effect || '')}</td></tr>`).join('')).join('')
+    // Each group's label runs up the left edge beside its own rows. Mirrors desktop.
+    const abilitiesHtml = `<table class="pr-weapons pr-abilities"><colgroup><col class="pr-c-agroup"><col class="pr-c-abil"><col class="pr-c-ap"><col></colgroup><thead><tr><th></th><th>Ability</th><th>AP</th><th>Effect</th></tr></thead><tbody>${
+      fleetAbilityGroups(f).map(g => g.rows.map((r, i) => `<tr class="${i === 0 ? 'pr-abil-first' : ''}${r.pick === 'on' ? ' pr-abil-on' : ''}">${i === 0 ? `<th class="pr-abil-group" rowspan="${g.rows.length}" scope="rowgroup"><span>${esc(g.label)}</span></th>` : ''}<td>${abilBox(r)}<b>${esc(r.name)}</b></td><td>${esc(r.cost || '')}</td><td>${ruleHtml(r.effect || '')}</td></tr>`).join('')).join('')
     }</tbody></table>`;
 
     // Space station: full card, like a ship.
@@ -6474,7 +6477,7 @@
       ${f.description ? `<div class="pr-desc">${esc(f.description)}</div>` : ''}
       <div class="pr-units">${groupsHtml}</div>
       ${admiralsHtml ? `<div class="pr-section-title">Admiral</div>${admiralsHtml}` : ''}
-      ${abilitiesHtml ? `<div class="pr-section-title">Abilities</div>${abilitiesHtml}` : ''}
+      ${abilitiesHtml}
       ${stationHtml ? `<div class="pr-section-title">Space Station</div>${stationHtml}` : ''}
       ${secObjsHtml ? `<div class="pr-section-title">Secondary Objectives</div><div class="pr-glossary">${secObjsHtml}</div>` : ''}
       ${glossary ? `<div class="pr-section-title">Rules Glossary</div><div class="pr-glossary">${glossary}</div>` : ''}

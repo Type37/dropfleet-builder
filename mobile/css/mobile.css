@@ -2395,7 +2395,11 @@ body.sheet-open .sheet-scrim {
   .pr-c-abil { width: 22%; }
   .pr-c-ap { width: 8%; }
   .pr-abilities { font-size: 8pt; }
-  .pr-abil-group td { font-weight: 700; color: #000; padding-top: 5px; background: #fff !important; }
+  .pr-c-agroup { width: 5%; }
+  .pr-abilities th.pr-abil-group { padding: 4px 1px; vertical-align: middle; text-align: center; background: #fff !important; border-right: 1.5px solid #000; overflow-wrap: normal; }
+  .pr-abilities th.pr-abil-group span { display: inline-block; writing-mode: vertical-rl; transform: rotate(180deg); font-weight: 700; line-height: 1; color: #000; white-space: nowrap; }
+  .pr-abilities tr.pr-abil-first > * { border-top: 1.5px solid #000; }
+  .pr-abilities tbody tr.pr-abil-first:first-child > * { border-top: 0; }
   .pr-keep { break-inside: avoid; }
   .pr-launch-label { font-size: 8pt; font-weight: 700; color: #000; margin-top: 3px; break-after: avoid; }
 

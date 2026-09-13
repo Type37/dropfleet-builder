@@ -6968,12 +6968,12 @@ let activeGroupId = null;
     // full effect text whatever the Rules text setting, since they're played from here.
     if (!noAbilities) {
       const box = r => r.pick ? `<span class="dp-checkbox" aria-hidden="true">${r.pick === 'on' ? '☑' : '☐'}</span> ` : '';
+      // Each group's label (Captain, Core Abilities…) runs up the left edge beside
+      // its own rows, so the groups read apart without a heading row between them.
       const abilBody = fleetAbilityGroups(f).map(g =>
-        `<tr class="dp-abil-grouprow"><td colspan="3">${esc(g.label)}</td></tr>`
-        + g.rows.map(r => `<tr${r.pick === 'on' ? ' class="dp-abil-on"' : ''}><td class="dp-abil-name">${box(r)}${esc(r.name)}</td><td class="dp-abil-cost">${esc(r.cost || '')}</td><td class="dp-abil-effect">${ruleHtml(r.effect || '')}</td></tr>`).join('')
+        g.rows.map((r, i) => `<tr class="${i === 0 ? 'dp-abil-first' : ''}${r.pick === 'on' ? ' dp-abil-on' : ''}">${i === 0 ? `<th class="dp-abil-group" rowspan="${g.rows.length}" scope="rowgroup"><span>${esc(g.label)}</span></th>` : ''}<td class="dp-abil-name">${box(r)}${esc(r.name)}</td><td class="dp-abil-cost">${esc(r.cost || '')}</td><td class="dp-abil-effect">${ruleHtml(r.effect || '')}</td></tr>`).join('')
       ).join('');
       admiralsHtml += `<div class="print-section dp-abilities">
-        <div class="print-section-title">Abilities</div>
         <table class="launch-ref-table dp-abilities-table">
           <tbody>${abilBody}</tbody>
         </table>
@@ -8816,6 +8816,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Printed Abilities table: group names down the side', items: [
+      'Each group in the printed Abilities table (your admiral’s, Core Abilities) is named down the left edge beside its own rows, with a rule between groups, instead of a grey heading row. The table no longer has an Abilities title above it.',
+    ]},
     { date: '2026-09-13', title: 'Crit values on every printed sheet', items: [
       'The crit value (2 over Lock, for weapons whose rules use criticals) now prints in the Table layout too. It was only on Cards and Big cards.',
       'Launch assets show their crit value, on screen and on the sheet, when the asset or its bay has a rule that uses criticals, such as Penetrator torpedoes.',

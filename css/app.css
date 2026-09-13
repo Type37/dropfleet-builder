@@ -2813,23 +2813,35 @@ h1, h2, h3, h4, h5, h6 {
 .dp-abilities-table .dp-abil-name { text-align: left; font-weight: var(--weight-bold); color: var(--ink); white-space: normal; width: 22%; }
 .dp-abilities-table .dp-abil-cost { width: 7%; white-space: nowrap; }
 .dp-abilities-table .dp-abil-effect { text-align: left; font-weight: var(--weight-regular); line-height: 1.35; }
-.dp-abilities-table .dp-abil-grouprow td {
-  text-align: left;
-  background: var(--warm);
+/* Group label runs bottom-to-top down the left of its rows. */
+.dp-abilities-table th.dp-abil-group {
+  width: 1.9em;
+  padding: 4px 2px;
+  vertical-align: middle;
+  text-align: center;
+  background: #fff;
+  border-right: 1.5px solid #000;
+}
+.dp-abilities-table th.dp-abil-group span {
+  display: inline-block;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
   font-family: var(--font-header);
   font-weight: var(--weight-bold);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  color: var(--ink-muted);
-  padding: 2px 6px;
-  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  font-size: 10.5px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  color: #000;
+  white-space: nowrap;
 }
+.dp-abilities-table tr.dp-abil-first > * { border-top: 1.5px solid #000; }
+.dp-abilities-table tr.dp-abil-first:first-child > * { border-top: 0; }
 .dp-abilities { break-inside: auto; }
 .dp-abilities .dp-checkbox { font-family: var(--font-stat); font-size: 1.5em; line-height: 1; vertical-align: -0.15em; color: #1b3a5c; }
 .dp-abilities .dp-abil-on td { background: rgba(184, 147, 46, 0.08); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 .dp-abilities .dp-abil-on .dp-checkbox { color: #8a6d1e; }
-.pf-inksaver .dp-abilities-table .dp-abil-grouprow td { background: #fff !important; color: #000 !important; }
+.pf-inksaver .dp-abilities-table th.dp-abil-group { background: #fff !important; color: #000 !important; }
 
 /* Loadout selectors */
 .loadout-selector {

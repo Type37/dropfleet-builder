@@ -5,6 +5,14 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Printed Abilities table groups named down the side
+
+Both apps. The group heading rows (`dp-abil-grouprow` / `pr-abil-group`) are
+gone: each group's first row carries a `th` with `rowspan` = its row count,
+the label set bottom-to-top (`writing-mode: vertical-rl` + 180deg), a rule
+right of it and above each group after the first. The "Abilities" section
+title is dropped on both sheets.
+
 ### 2026-09-13: Crit values on every printed sheet
 
 `weaponCritOn` (Lock + 2, rulebook 7.3.4, only for Penetrator / Critical /
