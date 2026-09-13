@@ -17,7 +17,6 @@ window.ScoreSheet = (function () {
 .ss-head .ss-clear{margin-left:auto;}
 .ss-toggle{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:none;border:0;padding:0;cursor:pointer;text-align:left;color:inherit;}
 .ss-title{font:700 18px/1.2 'Roboto Slab',Georgia,serif;text-transform:uppercase;color:#5A4710;}
-.ss-sum{font:400 14px/1.3 'Jost',system-ui,sans-serif;color:#5d5850;}
 .ss-chev{width:18px;height:18px;color:#5d5850;transition:transform .15s;}
 .ss.closed .ss-chev{transform:rotate(-90deg);}
 .ss-clear{font:600 12px/1 'Jost',system-ui,sans-serif;text-transform:uppercase;color:#6b5210;background:none;border:1.5px solid #8a6a12;padding:5px 10px;cursor:pointer;}
@@ -53,8 +52,6 @@ window.ScoreSheet = (function () {
 .ss-step svg{width:14px;height:14px;}
 .ss-step output{min-width:2.4ch;text-align:center;font-weight:700;}
 .ss-vp{font-weight:700;color:#a14a07;white-space:nowrap;}
-.ss-total{display:flex;align-items:baseline;gap:16px;padding-top:12px;font-size:15px;color:#5d5850;}
-.ss-total b{font:700 30px/1 'Jost',system-ui,sans-serif;color:#a14a07;}
 .ss button:focus-visible,.ss-box:focus-visible{outline:2px solid #B86C0A;outline-offset:2px;}
 /* phones: a rule's name and its counters share a line, counters stacked on the right, so the sheet stays short */
 @media (max-width:640px){.ss-head,.ss-body{padding-left:12px;padding-right:12px;}.ss-row{grid-template-columns:minmax(0,1fr) max-content;gap:4px 10px;padding:4px 0;font-size:14px;}.ss-parts{grid-template-columns:max-content;gap:4px;}.ss-part{grid-template-columns:auto 84px 3.2em;gap:6px;}.ss-each{display:none;}.ss-step button{width:26px;height:28px;}.ss-h{padding-top:10px;}}
@@ -108,19 +105,17 @@ window.ScoreSheet = (function () {
       const scores = st.players.map(total);
       el.innerHTML = `<section class="ss${st.open ? '' : ' closed'}" aria-label="Score">
         <div class="ss-head">
-          <button type="button" class="ss-toggle" aria-expanded="${st.open}"><svg class="ss-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="${CHEV}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="ss-title">Score</span>${st.open ? '' : `<span class="ss-sum">Round ${st.round} · ${scores.map(s => s + 'VP').join('–')}</span>`}</button>
-          ${st.open ? `<div class="ss-bar">
+          <button type="button" class="ss-toggle" aria-expanded="${st.open}"><svg class="ss-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="${CHEV}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="ss-title">Score</span></button>
+          <div class="ss-bar">
             <div class="ss-seg" role="group" aria-label="Round"><span class="ss-l">Round</span>${Array.from({ length: rounds }, (_, i) => i + 1).map(r => `<button type="button" data-round="${r}" aria-pressed="${r === st.round}"${cfg.markRound && cfg.markRound(r) ? ' class="mark"' : ''}>${r}</button>`).join('')}</div>
             <div class="ss-seg" role="group" aria-label="Player">${st.players.map((_, i) => `<button type="button" data-player="${i}" aria-pressed="${i === st.active}">Player ${i + 1}<span class="ss-n">${scores[i]}VP</span></button>`).join('')}${st.players.length < 4 ? `<button type="button" data-add aria-label="Add a player">${PLUS}</button>` : ''}${st.players.length > 2 ? `<button type="button" data-remove aria-label="Remove the last player">${MINUS}</button>` : ''}</div>
-          </div>` : ''}
+          </div>
           <button type="button" class="ss-clear">Clear</button>
         </div>
         <div class="ss-body">
           <ul class="ss-rows">${rows.map(rowHTML).join('')}
             <li class="ss-row"><span class="ss-t">Other VP</span><span class="ss-parts"><span class="ss-part"><span class="ss-pl"></span><span class="ss-step"><button type="button" data-step="-1" data-id="other" aria-label="One fewer">${MINUS}</button><output>${other}</output><button type="button" data-step="1" data-id="other" aria-label="One more">${PLUS}</button></span></span></span></li>
-          </ul>
-          <div class="ss-total"><span>VP scored, Player ${st.active + 1}</span><b>${scores[st.active]}</b></div>
-        </div>
+          </ul>        </div>
       </section>`;
       el.querySelectorAll('.ss-seg button svg,.ss-step svg').forEach(s => { s.style.width = '14px'; s.style.height = '14px'; });
     }
