@@ -175,8 +175,8 @@ const MAPS = {
   },
   // ── 1st edition scenarios converted to the current edition (scenario-legacy.js). Read off the
   // 1st edition maps: Clusters of 2/3/4 Sectors -> Small/Medium/Large Cities, Sector colours -> Features
-  // (tan Military -> out, green Orbital Defence -> odg, orange Power Plant -> pow, pink Comms Station -> com;
-  // blue Commercial and yellow Industrial carry none). `cb` / `battle` put a Dropsite in the Clash-and-Battle / Battle-only game size layer.
+  // (tan Military -> out, green Orbital Defence -> odg, orange Power Plant -> pow, pink Comms Station -> com,
+  // yellow Industrial -> pow on Jet's call (2026-09-13); blue Commercial carries none). `cb` / `battle` put a Dropsite in the Clash-and-Battle / Battle-only game size layer.
   'the-ancient-relic': {
     zones: () => zone.edges(),
     // No measurements are printed; positions read off the map's grid
@@ -194,11 +194,11 @@ const MAPS = {
   'resistance-spearhead': {
     zones: () => zone.edges(),
     sites: [
-      ['LC', 16, 16, 0, ['', 'out', 'out', ''], 'NW'],
-      ['LC', 32, 16, 0, ['out', '', '', 'out'], ''],
+      ['LC', 16, 16, 0, ['pow', 'out', 'out', 'pow'], 'NW'],
+      ['LC', 32, 16, 0, ['out', 'pow', 'pow', 'out'], ''],
       ['MC', 24, 24, 0, [], ''],
-      ['LC', 16, 32, 0, ['out', '', '', 'out'], ''],
-      ['LC', 32, 32, 0, ['', 'out', 'out', ''], ''],
+      ['LC', 16, 32, 0, ['out', 'pow', 'pow', 'out'], ''],
+      ['LC', 32, 32, 0, ['pow', 'out', 'out', 'pow'], ''],
     ],
     cb: [2],
   },
@@ -222,11 +222,11 @@ const MAPS = {
   'core-take-and-hold': {
     zones: () => zone.edges(),
     sites: [
-      ['LC', 4, 24, 0, ['', '', 'out', ''], ''],
-      ['MC', 36, 18, 180, ['out', '', ''], 'N'],
-      ['LC', 24, 24, 0, ['out', '', '', 'out'], ''],
-      ['MC', 12, 30, 180, ['', 'out', ''], 'WS'],
-      ['LC', 44, 24, 0, ['out', '', '', ''], 'E'],
+      ['LC', 4, 24, 0, ['', 'pow', 'out', ''], ''],
+      ['MC', 36, 18, 180, ['out', 'pow', ''], 'N'],
+      ['LC', 24, 24, 0, ['out', '', 'pow', 'out'], ''],
+      ['MC', 12, 30, 180, ['pow', 'out', ''], 'WS'],
+      ['LC', 44, 24, 0, ['out', '', '', 'pow'], 'E'],
     ],
     cb: [1, 3],
   },
@@ -234,9 +234,9 @@ const MAPS = {
     zones: () => zone.edges(),
     sites: [
       ['MS', 24, 12, 0, [], ''],
-      ['LC', 4, 24, 0, ['', '', 'out', ''], ''],
+      ['LC', 4, 24, 0, ['', 'pow', 'out', ''], ''],
       ['MS', 24, 24, 0, [], ''],
-      ['LC', 44, 24, 0, ['out', '', '', ''], 'E'],
+      ['LC', 44, 24, 0, ['out', '', '', 'pow'], 'E'],
       ['MS', 24, 36, 0, [], 'S'],
     ],
     cb: [2],
@@ -245,17 +245,17 @@ const MAPS = {
     zones: () => zone.edges(),
     extra: () => ring(24),
     sites: [
-      ['MC', 12, 12, 180, ['out', '', ''], ''],
-      ['MC', 36, 12, 180, ['', 'out', ''], ''],
+      ['MC', 12, 12, 180, ['out', 'pow', ''], ''],
+      ['MC', 36, 12, 180, ['pow', 'out', ''], ''],
       ['MS', 24, 18, 0, [], 'N'],
-      ['LC', 24, 24, 0, ['out', '', '', 'out'], ''],
+      ['LC', 24, 24, 0, ['out', '', 'pow', 'out'], ''],
       ['MS', 24, 30, 0, [], ''],
-      ['MC', 12, 36, 180, ['out', '', ''], ''],
-      ['MC', 36, 36, 180, ['', '', 'out'], 'ES'],
+      ['MC', 12, 36, 180, ['out', '', 'pow'], ''],
+      ['MC', 36, 36, 180, ['', 'pow', 'out'], 'ES'],
     ],
     labels: [[12, 12, 'B'], [36, 12, 'B'], [12, 36, 'A'], [36, 36, 'A'], [24, 24, 'C']],
     cb: [2, 4],
-    // Punching Up: 2 of the centre City's Sectors become Orbital Guns; the two with no Feature take them
+    // Punching Up: 2 of the centre City's Sectors become Orbital Guns; the two that are not Military take them
     variants: { 1: { site: 3, feats: ['out', 'odg', 'odg', 'out'] } },
   },
   'core-station-assault': {
@@ -272,32 +272,32 @@ const MAPS = {
   'core-grid-control': {
     zones: () => zone.edges(),
     sites: [
-      ['MC', 24, 12, 180, [], ''],
+      ['MC', 24, 12, 180, ['', 'pow', 'pow'], ''],
       ['SC', 4, 24, 0, ['out', 'odg'], ''],
       ['LC', 24, 24, 0, ['out', 'out', 'out', 'out'], ''],
       ['SC', 44, 24, 0, ['odg', 'out'], 'E'],
-      ['MC', 24, 36, 0, [], 'S'],
+      ['MC', 24, 36, 0, ['', 'pow', 'pow'], 'S'],
     ],
     cb: [0, 4],
   },
   'core-power-grab': {
     zones: () => zone.cornerLs(12),
     sites: [
-      ['MC', 42, 6, 0, [], 'NE'],
-      ['LC', 30, 18, 0, ['', '', 'pow', ''], ''],
+      ['MC', 42, 6, 0, ['pow', 'pow', ''], 'NE'],
+      ['LC', 30, 18, 0, ['pow', 'pow', 'pow', 'pow'], ''],
       ['MC', 24, 24, 180, ['out', 'out', 'out'], ''],
-      ['LC', 18, 30, 0, ['', 'pow', '', ''], 'WS'],
-      ['MC', 6, 42, 180, [], ''],
+      ['LC', 18, 30, 0, ['pow', 'pow', 'pow', 'pow'], 'WS'],
+      ['MC', 6, 42, 180, ['pow', 'pow', ''], ''],
     ],
   },
   'core-defence-relay': {
     zones: () => zone.edges(),
     sites: [
       ['MS', 24, 18, 0, [], 'N'],
-      ['SC', 4, 24, 0, ['', 'com'], ''],
-      ['LC', 18, 24, 0, ['', 'out', 'out', ''], ''],
-      ['LC', 30, 24, 0, ['out', '', '', 'out'], 'E'],
-      ['SC', 44, 24, 0, ['com', ''], ''],
+      ['SC', 4, 24, 0, ['pow', 'com'], ''],
+      ['LC', 18, 24, 0, ['pow', 'out', 'out', ''], ''],
+      ['LC', 30, 24, 0, ['out', '', 'pow', 'out'], 'E'],
+      ['SC', 44, 24, 0, ['com', 'pow'], ''],
       ['MS', 24, 30, 0, [], ''],
     ],
     cb: [0, 5],
