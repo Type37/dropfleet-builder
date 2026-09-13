@@ -33,7 +33,7 @@ window.ScoreSheet = (function () {
 .ss-seg button.mark{box-shadow:inset 0 -3px 0 #8a6a12;}
 .ss-seg .ss-n{font-weight:700;margin-left:8px;}
 .ss-rows{list-style:none;margin:0;padding:0;}
-.ss-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px 18px;padding:7px 0;font-size:15px;line-height:1.45;}
+.ss-row{display:grid;grid-template-columns:minmax(0,26em) max-content;justify-content:start;align-items:center;gap:6px 32px;padding:6px 0;font-size:15px;line-height:1.45;}
 .ss-row .ss-t{flex:1;min-width:0;}
 .ss-row b{font-weight:700;}
 .ss-h{padding:14px 0 2px;font:700 16px/1.3 'Roboto Slab',Georgia,serif;}
@@ -42,8 +42,10 @@ window.ScoreSheet = (function () {
 .ss-box{appearance:none;-webkit-appearance:none;width:18px;height:18px;flex:0 0 18px;margin:3px 0 0;border:1.5px solid #b08a3e;background:#f7f1e6;cursor:pointer;}
 .ss-box:checked{background:#8a5a12 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12l5 5L20 7' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat;border-color:#8a5a12;}
 .ss-check:has(.ss-box:checked) .ss-t{text-decoration:line-through;color:#6b6660;}
-.ss-parts{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px 16px;max-width:60%;}
-.ss-part{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;}
+/* every counter is the same width, so Control and Contest line up down the sheet */
+.ss-parts{display:grid;grid-template-columns:repeat(2,max-content);align-items:center;gap:6px 28px;}
+.ss-part{display:grid;grid-template-columns:4.2em 92px 6em;align-items:center;gap:8px;white-space:nowrap;}
+.ss-part .ss-pl{text-align:right;}
 .ss-part .ss-pl{color:#3d3834;}
 .ss-step{display:inline-flex;align-items:center;border:1px solid #d8ccb4;}
 .ss-step button{width:28px;height:28px;display:grid;place-items:center;border:0;background:#f7f1e6;color:#3d3834;cursor:pointer;padding:0;}
@@ -51,10 +53,10 @@ window.ScoreSheet = (function () {
 .ss-step svg{width:14px;height:14px;}
 .ss-step output{min-width:2.4ch;text-align:center;font-weight:700;}
 .ss-vp{font-weight:700;color:#a14a07;white-space:nowrap;}
-.ss-total{display:flex;align-items:baseline;justify-content:space-between;padding-top:12px;font-size:15px;color:#5d5850;}
+.ss-total{display:flex;align-items:baseline;gap:16px;padding-top:12px;font-size:15px;color:#5d5850;}
 .ss-total b{font:700 30px/1 'Jost',system-ui,sans-serif;color:#a14a07;}
 .ss button:focus-visible,.ss-box:focus-visible{outline:2px solid #B86C0A;outline-offset:2px;}
-@media (max-width:640px){.ss-row{flex-direction:column;}.ss-parts{max-width:none;justify-content:flex-start;}}
+@media (max-width:640px){.ss-row{grid-template-columns:minmax(0,1fr);}.ss-parts{grid-template-columns:max-content;}}
 @media print{.ss{display:none !important;}}`;
   const style = document.createElement('style');
   style.textContent = css;
@@ -86,7 +88,7 @@ window.ScoreSheet = (function () {
       const control = (r, part, j) => {
         const id = idOf(r, j), n = +(p.c[id] || 0);
         if (part.kind === 'check') return '';
-        return `<span class="ss-part">${part.label ? `<span class="ss-pl">${part.label}</span>` : ''}<span class="ss-step"><button type="button" data-step="-1" data-id="${id}" aria-label="One fewer">${MINUS}</button><output>${n}</output><button type="button" data-step="1" data-id="${id}" aria-label="One more">${PLUS}</button></span><span class="ss-vp">${vpText(part)}</span></span>`;
+        return `<span class="ss-part"><span class="ss-pl">${part.label || ''}</span><span class="ss-step"><button type="button" data-step="-1" data-id="${id}" aria-label="One fewer">${MINUS}</button><output>${n}</output><button type="button" data-step="1" data-id="${id}" aria-label="One more">${PLUS}</button></span><span class="ss-vp">${vpText(part)}</span></span>`;
       };
       const rowHTML = r => {
         if (r.heading) return `<li class="ss-h">${r.heading}${r.sub ? `<span>${r.sub}</span>` : ''}</li>`;
@@ -97,7 +99,7 @@ window.ScoreSheet = (function () {
           return `<li class="ss-row"><label class="ss-check"><input class="ss-box" type="checkbox" data-id="${id}"${p.c[id] ? ' checked' : ''}><span class="ss-t">${r.text}</span></label><span class="ss-vp">${vpText(parts[0])}</span></li>`;
         }
         const boxes = parts.map((part, j) => part.kind === 'check'
-          ? `<span class="ss-part"><input class="ss-box" type="checkbox" data-id="${idOf(r, j)}" aria-label="${part.vp} VP"${p.c[idOf(r, j)] ? ' checked' : ''}><span class="ss-vp">${vpText(part)}</span></span>`
+          ? `<span class="ss-part"><span class="ss-pl"></span><input class="ss-box" type="checkbox" data-id="${idOf(r, j)}" aria-label="${part.vp} VP"${p.c[idOf(r, j)] ? ' checked' : ''}><span class="ss-vp">${vpText(part)}</span></span>`
           : control(r, part, j)).join('');
         return `<li class="ss-row"><span class="ss-t">${r.text}</span><span class="ss-parts">${boxes}</span></li>`;
       };
@@ -114,7 +116,7 @@ window.ScoreSheet = (function () {
         </div>
         <div class="ss-body">
           <ul class="ss-rows">${rows.map(rowHTML).join('')}
-            <li class="ss-row"><span class="ss-t">Other VP</span><span class="ss-parts"><span class="ss-part"><span class="ss-step"><button type="button" data-step="-1" data-id="other" aria-label="One fewer">${MINUS}</button><output>${other}</output><button type="button" data-step="1" data-id="other" aria-label="One more">${PLUS}</button></span></span></span></li>
+            <li class="ss-row"><span class="ss-t">Other VP</span><span class="ss-parts"><span class="ss-part"><span class="ss-pl"></span><span class="ss-step"><button type="button" data-step="-1" data-id="other" aria-label="One fewer">${MINUS}</button><output>${other}</output><button type="button" data-step="1" data-id="other" aria-label="One more">${PLUS}</button></span></span></span></li>
           </ul>
           <div class="ss-total"><span>VP scored, Player ${st.active + 1}</span><b>${scores[st.active]}</b></div>
         </div>

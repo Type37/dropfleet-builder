@@ -614,7 +614,9 @@ function pubScoring(text){
 
 function pubTerms(text){
   const rb=SCN_RULEBOOK, out=[];
-  const line=(name,html)=>out.push(`<p class="rule-text pub-term"><b>${name}:</b> ${html}</p>`);
+  // Standard Scoring's own block already defines Control, Contest, Levelled and Ruined; don't say them twice
+  const std=/\bStandard Scoring\b/.test(text), dup=new Set(['Control','Contest','Levelled','Ruined']);
+  const line=(name,html)=>{ if(!(std&&dup.has(name))) out.push(`<p class="rule-text pub-term"><b>${name}:</b> ${html}</p>`); };
   pubFind(text,[
     {re:/\bcontrol/i,run:()=>line('Control',rb['11.1'].body[0])},
     {re:/\bcontest/i,run:()=>line('Contest',rb['11.1'].body[1])},
