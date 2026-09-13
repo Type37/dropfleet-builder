@@ -146,6 +146,122 @@ def fix_features(ch):
     return True
 
 
+def _plainset(body):
+    """Every non-table block's text, stripped, for verbatim-source checks."""
+    return {plain(it).strip() for it in body if it["kind"] != "table"}
+
+
+def _require(cond, where):
+    if not cond:
+        sys.exit("patch-rules-wiki: %s — source shape changed, refusing to "
+                 "invent. Re-check the extractor." % where)
+
+
+def fix_tonnage(ch):
+    """4.2 Build Your Fleet: the Tonnage/Restriction table (page 12) lost its
+    grid; its heads became captions and its rows scattered (the Colossal label
+    split from its restriction). Rebuilt verbatim from those same strings."""
+    sec = find(ch, "4.2")
+    if not sec or any(it["kind"] == "table" for it in sec["body"]):
+        return False
+    src = _plainset(sec["body"])
+    light = next((s for s in src if s.startswith("Light ")), None)
+    heavy = next((s for s in src if s.startswith("Heavy ")), None)
+    colossal = next((s for s in src if s.startswith("Skirmish: 0 Groups")), None)
+    _require(light and heavy and colossal and "Colossal" in src, "4.2 Tonnage")
+    table = {"kind": "table", "header": ["Tonnage", "Restriction"], "rows": [
+        row(cell(("Light",)), cell(light[len("Light "):])),
+        row(cell(("Heavy",)), cell(heavy[len("Heavy "):])),
+        row(cell(("Colossal",)), cell(colossal)),
+    ]}
+    keep = [it for it in sec["body"]
+            if it["kind"] != "caption"
+            and plain(it).strip() not in (light, heavy, colossal, "Colossal")]
+    at = next((i + 1 for i, it in enumerate(keep)
+               if it["kind"] == "p" and plain(it).startswith("The combined points")), 0)
+    keep.insert(at, table)
+    sec["body"] = keep
+    return True
+
+
+def fix_abilities(ch):
+    """4.2.1.1 Abilities and Ability Points: the four core Abilities (page 13)
+    are a Cost/Effect table. Rebuilt from the same paragraphs, reusing their
+    runs so the bold Ability names survive."""
+    sec = find(ch, "4.2.1.1")
+    if not sec or any(it["kind"] == "table" for it in sec["body"]):
+        return False
+    names = ("AP Re-roll:", "Brace for Impact:", "Contain Reactor:", "Time to Target:")
+    is_eff = lambda it: it["kind"] == "p" and plain(it).lstrip().startswith(names)
+    is_cost = lambda it: it["kind"] == "p" and re.fullmatch(r"\*?\d*AP", plain(it).strip())
+    effs = [it for it in sec["body"] if is_eff(it)]
+    costs = [it for it in sec["body"] if is_cost(it)]
+    _require(len(effs) == 4 and len(costs) == 4, "4.2.1.1 Abilities")
+    table = {"kind": "table", "header": ["Cost", "Effect"],
+             "rows": [[c["runs"], e["runs"]] for e, c in zip(effs, costs)]}
+    consumed = set(id(it) for it in effs + costs)
+    keep = [it for it in sec["body"]
+            if it["kind"] != "caption" and id(it) not in consumed]
+    at = next((i + 1 for i, it in enumerate(keep)
+               if it["kind"] == "p" and plain(it).startswith("Players have access")), len(keep))
+    keep.insert(at, table)
+    sec["body"] = keep
+    return True
+
+
+def fix_game_rounds(ch):
+    """5 Game Rounds: the round structure (page 14) is a four-column table, one
+    phase per column with its steps stacked. Rebuilt by assigning each stranded
+    step to its phase (from page 14), so column interleaving can't misplace one."""
+    sec = ch if ch.get("number") == "5" else find(ch, "5")
+    if not sec or any(it["kind"] == "table" for it in sec["body"]):
+        return False
+    phases = [
+        ("Planning Phase", ["Ability Point Generation.", "Pass Token Generation.", "Determine Initiative."]),
+        ("Activation Phase", ["Players alternate activating Groups.", "Players alternate activating Dropsites."]),
+        ("Asset Phase", ["Battalion Combat.", "Boarding Actions.", "Asset Combat."]),
+        ("End Phase", ["Repair.", "Victory Points.", "Cleanup."]),
+    ]
+    src = _plainset(sec["body"])
+    steps = [s for _, ss in phases for s in ss]
+    _require(all(s in src for s in steps), "5 Game Rounds")
+    table = {"kind": "table", "header": [h for h, _ in phases],
+             "rows": [[cell(" ".join(ss)) for _, ss in phases]]}
+    keep = [it for it in sec["body"]
+            if it["kind"] != "caption" and plain(it).strip() not in steps]
+    at = next((i + 1 for i, it in enumerate(keep)
+               if it["kind"] == "p" and plain(it).startswith("Dropfleet is played over")), 0)
+    keep.insert(at, table)
+    sec["body"] = keep
+    return True
+
+
+def fix_battalions(ch):
+    """7.4.1 Deploying Battalions: the Type/Target/Range table (page 20) badly
+    interleaved (type labels split from their rows, ranges stranded). Rebuilt
+    verbatim from page 20; every cell string is checked against the source."""
+    sec = find(ch, "7.4.1")
+    if not sec or any(it["kind"] == "table" for it in sec["body"]):
+        return False
+    rows_txt = [
+        ("Bulk Landers", "Dropsites on any orbital layer. If that Dropsite or its Features have enemy Battalions on them, 2 Bulk Landers are needed to place 1 Batallion.", "6" + Q),
+        ("Dropships", "Dropsites on the same orbital layer.", "3" + Q),
+        ("Boarding Pods", "Space Stations and enemy Ships in the same Orbital Layer.", "3" + Q),
+        ("Drop Pods", "Cities.", "3" + Q),
+    ]
+    blob = " ".join(plain(it) for it in sec["body"])
+    for typ, tgt, rng in rows_txt:
+        _require(typ in blob and tgt in blob, "7.4.1 Battalions: " + typ)
+    table = {"kind": "table", "header": ["Type", "Target", "Range"],
+             "rows": [row(cell((typ,)), cell(tgt), cell(rng)) for typ, tgt, rng in rows_txt]}
+    keep = [it for it in sec["body"] if it["kind"] == "p" and (
+        plain(it).startswith("Battalions are deployed")
+        or plain(it).startswith("When you deploy Battalions to Dropsites"))]
+    keep.append(table)
+    sec["body"] = keep
+    return True
+
+
 # Fiction that bled in from a facing page. How to Play carries rules only, so
 # these narrative paragraphs are dropped (matched by their opening words).
 FLAVOR_STRIP = {
@@ -212,6 +328,21 @@ def main():
         changed += 1
         print("patched %d hyphenated table head(s) -> Result / Deployment" % h)
     for ch in doc["chapters"]:
+        if ch.get("number") == "4":
+            if fix_tonnage(ch):
+                changed += 1
+                print("patched 4.2: Tonnage/Restriction table rebuilt")
+            if fix_abilities(ch):
+                changed += 1
+                print("patched 4.2.1.1 Abilities: Cost/Effect table rebuilt")
+        if ch.get("number") == "5":
+            if fix_game_rounds(ch):
+                changed += 1
+                print("patched 5 Game Rounds: phase table rebuilt")
+        if ch.get("number") == "7":
+            if fix_battalions(ch):
+                changed += 1
+                print("patched 7.4.1 Battalions: Type/Target/Range table rebuilt")
         if ch.get("number") == "11":
             if fix_dropsites(ch):
                 changed += 1

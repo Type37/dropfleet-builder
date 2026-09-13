@@ -1341,60 +1341,51 @@
        ]
       },
       {
-       "kind": "caption",
-       "runs": [
-        {
-         "t": "Tonnage"
-        }
-       ]
-      },
-      {
-       "kind": "caption",
-       "runs": [
-        {
-         "t": "Restriction"
-        }
-       ]
-      },
-      {
-       "kind": "p",
-       "runs": [
-        {
-         "t": "Light ",
-         "b": true
-        },
-        {
-         "t": "Up to the combined points of all your Medium Ships and Heavy Ships."
-        }
-       ]
-      },
-      {
-       "kind": "p",
-       "runs": [
-        {
-         "t": "Heavy ",
-         "b": true
-        },
-        {
-         "t": "No more points of Heavy Ships than Medium Ships."
-        }
-       ]
-      },
-      {
-       "kind": "p",
-       "runs": [
-        {
-         "t": "Skirmish: 0 Groups. Clash: 1 Group total. Battle: 2 Groups total. Reconquest: 3 Groups total."
-        }
-       ]
-      },
-      {
-       "kind": "p",
-       "runs": [
-        {
-         "t": "Colossal",
-         "b": true
-        }
+       "kind": "table",
+       "header": [
+        "Tonnage",
+        "Restriction"
+       ],
+       "rows": [
+        [
+         [
+          {
+           "t": "Light",
+           "b": true
+          }
+         ],
+         [
+          {
+           "t": "Up to the combined points of all your Medium Ships and Heavy Ships."
+          }
+         ]
+        ],
+        [
+         [
+          {
+           "t": "Heavy",
+           "b": true
+          }
+         ],
+         [
+          {
+           "t": "No more points of Heavy Ships than Medium Ships."
+          }
+         ]
+        ],
+        [
+         [
+          {
+           "t": "Colossal",
+           "b": true
+          }
+         ],
+         [
+          {
+           "t": "Skirmish: 0 Groups. Clash: 1 Group total. Battle: 2 Groups total. Reconquest: 3 Groups total."
+          }
+         ]
+        ]
        ]
       },
       {
@@ -1556,103 +1547,80 @@
            ]
           },
           {
-           "kind": "caption",
-           "runs": [
-            {
-             "t": "Cost"
-            }
-           ]
-          },
-          {
-           "kind": "caption",
-           "runs": [
-            {
-             "t": "Effect"
-            }
-           ]
-          },
-          {
-           "kind": "p",
-           "runs": [
-            {
-             "t": "AP Re-roll:",
-             "b": true
-            },
-            {
-             "t": " Once per Group, Asset, or Dropsite activation, after you roll any dice, you can re-roll any number of those dice. You may re-roll multiple dice in a single roll this way but must re-roll at least one dice, spending 1AP for each dice re-rolled."
-            }
-           ]
-          },
-          {
-           "kind": "p",
-           "runs": [
-            {
-             "t": "*AP",
-             "b": true
-            }
-           ]
-          },
-          {
-           "kind": "p",
-           "runs": [
-            {
-             "t": "Brace for Impact:",
-             "b": true
-            },
-            {
-             "t": " When a player would roll for Crippling Effects, instead of rolling, make the result of a Crippling Effect roll (for you or your opponent) a 4."
-            }
-           ]
-          },
-          {
-           "kind": "p",
-           "runs": [
-            {
-             "t": "2AP",
-             "b": true
-            }
-           ]
-          },
-          {
-           "kind": "p",
-           "runs": [
-            {
-             "t": "Contain Reactor:",
-             "b": true
-            },
-            {
-             "t": " When a player would roll for Explosion, instead of rolling, make the result of an Explosion roll (for you or your opponent) a 2."
-            }
-           ]
-          },
-          {
-           "kind": "p",
-           "runs": [
-            {
-             "t": "2AP",
-             "b": true
-            }
-           ]
-          },
-          {
-           "kind": "p",
-           "runs": [
-            {
-             "t": "Time to Target:",
-             "b": true
-            },
-            {
-             "t": " After moving a Wing of your Fighters or Bombers, you may move that Wing (or the Wing it combined into) a second time with a Thrust of 6” in any direction. The Wing cannot divide into smaller Wings or form/be formed into larger Wings due to this additional movement."
-            }
-           ]
-          },
-          {
-           "kind": "p",
-           "runs": [
-            {
-             "t": "2AP",
-             "b": true
-            }
+           "kind": "table",
+           "header": [
+            "Cost",
+            "Effect"
+           ],
+           "rows": [
+            [
+             [
+              {
+               "t": "*AP",
+               "b": true
+              }
+             ],
+             [
+              {
+               "t": "AP Re-roll:",
+               "b": true
+              },
+              {
+               "t": " Once per Group, Asset, or Dropsite activation, after you roll any dice, you can re-roll any number of those dice. You may re-roll multiple dice in a single roll this way but must re-roll at least one dice, spending 1AP for each dice re-rolled."
+              }
+             ]
+            ],
+            [
+             [
+              {
+               "t": "2AP",
+               "b": true
+              }
+             ],
+             [
+              {
+               "t": "Brace for Impact:",
+               "b": true
+              },
+              {
+               "t": " When a player would roll for Crippling Effects, instead of rolling, make the result of a Crippling Effect roll (for you or your opponent) a 4."
+              }
+             ]
+            ],
+            [
+             [
+              {
+               "t": "2AP",
+               "b": true
+              }
+             ],
+             [
+              {
+               "t": "Contain Reactor:",
+               "b": true
+              },
+              {
+               "t": " When a player would roll for Explosion, instead of rolling, make the result of an Explosion roll (for you or your opponent) a 2."
+              }
+             ]
+            ],
+            [
+             [
+              {
+               "t": "2AP",
+               "b": true
+              }
+             ],
+             [
+              {
+               "t": "Time to Target:",
+               "b": true
+              },
+              {
+               "t": " After moving a Wing of your Fighters or Bombers, you may move that Wing (or the Wing it combined into) a second time with a Thrust of 6” in any direction. The Wing cannot divide into smaller Wings or form/be formed into larger Wings due to this additional movement."
+              }
+             ]
+            ]
            ]
           },
           {
@@ -1748,123 +1716,36 @@
      ]
     },
     {
-     "kind": "caption",
-     "runs": [
-      {
-       "t": "Planning Phase"
-      }
-     ]
-    },
-    {
-     "kind": "caption",
-     "runs": [
-      {
-       "t": "Activation Phase"
-      }
-     ]
-    },
-    {
-     "kind": "p",
-     "runs": [
-      {
-       "t": "Ability Point Generation."
-      }
-     ]
-    },
-    {
-     "kind": "p",
-     "runs": [
-      {
-       "t": "Players alternate activating Groups."
-      }
-     ]
-    },
-    {
-     "kind": "p",
-     "runs": [
-      {
-       "t": "Pass Token Generation."
-      }
-     ]
-    },
-    {
-     "kind": "p",
-     "runs": [
-      {
-       "t": "Players alternate activating Dropsites."
-      }
-     ]
-    },
-    {
-     "kind": "p",
-     "runs": [
-      {
-       "t": "Determine Initiative."
-      }
-     ]
-    },
-    {
-     "kind": "caption",
-     "runs": [
-      {
-       "t": "Asset Phase"
-      }
-     ]
-    },
-    {
-     "kind": "caption",
-     "runs": [
-      {
-       "t": "End Phase"
-      }
-     ]
-    },
-    {
-     "kind": "p",
-     "runs": [
-      {
-       "t": "Repair."
-      }
-     ]
-    },
-    {
-     "kind": "p",
-     "runs": [
-      {
-       "t": "Battalion Combat."
-      }
-     ]
-    },
-    {
-     "kind": "p",
-     "runs": [
-      {
-       "t": "Victory Points."
-      }
-     ]
-    },
-    {
-     "kind": "p",
-     "runs": [
-      {
-       "t": "Boarding Actions."
-      }
-     ]
-    },
-    {
-     "kind": "p",
-     "runs": [
-      {
-       "t": "Asset Combat."
-      }
-     ]
-    },
-    {
-     "kind": "p",
-     "runs": [
-      {
-       "t": "Cleanup."
-      }
+     "kind": "table",
+     "header": [
+      "Planning Phase",
+      "Activation Phase",
+      "Asset Phase",
+      "End Phase"
+     ],
+     "rows": [
+      [
+       [
+        {
+         "t": "Ability Point Generation. Pass Token Generation. Determine Initiative."
+        }
+       ],
+       [
+        {
+         "t": "Players alternate activating Groups. Players alternate activating Dropsites."
+        }
+       ],
+       [
+        {
+         "t": "Battalion Combat. Boarding Actions. Asset Combat."
+        }
+       ],
+       [
+        {
+         "t": "Repair. Victory Points. Cleanup."
+        }
+       ]
+      ]
      ]
     }
    ],
@@ -3151,93 +3032,85 @@
          ]
         },
         {
-         "kind": "caption",
-         "runs": [
-          {
-           "t": "Type"
-          }
-         ]
-        },
-        {
-         "kind": "caption",
-         "runs": [
-          {
-           "t": "Target"
-          }
-         ]
-        },
-        {
-         "kind": "caption",
-         "runs": [
-          {
-           "t": "Range"
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "Dropsites on any orbital layer. If that Dropsite or its Features have enemy Battalions on them, 2 Bulk Landers are needed to place 1 Batallion."
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "Bulk Landers",
-           "b": true
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "6”"
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "Dropships ",
-           "b": true
-          },
-          {
-           "t": "Dropsites on the same orbital layer. 3”"
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "Space Stations and enemy Ships in the same Orbital Layer. 3”"
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "Boarding Pods",
-           "b": true
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "Drop Pods ",
-           "b": true
-          },
-          {
-           "t": "Cities. 3”"
-          }
+         "kind": "table",
+         "header": [
+          "Type",
+          "Target",
+          "Range"
+         ],
+         "rows": [
+          [
+           [
+            {
+             "t": "Bulk Landers",
+             "b": true
+            }
+           ],
+           [
+            {
+             "t": "Dropsites on any orbital layer. If that Dropsite or its Features have enemy Battalions on them, 2 Bulk Landers are needed to place 1 Batallion."
+            }
+           ],
+           [
+            {
+             "t": "6”"
+            }
+           ]
+          ],
+          [
+           [
+            {
+             "t": "Dropships",
+             "b": true
+            }
+           ],
+           [
+            {
+             "t": "Dropsites on the same orbital layer."
+            }
+           ],
+           [
+            {
+             "t": "3”"
+            }
+           ]
+          ],
+          [
+           [
+            {
+             "t": "Boarding Pods",
+             "b": true
+            }
+           ],
+           [
+            {
+             "t": "Space Stations and enemy Ships in the same Orbital Layer."
+            }
+           ],
+           [
+            {
+             "t": "3”"
+            }
+           ]
+          ],
+          [
+           [
+            {
+             "t": "Drop Pods",
+             "b": true
+            }
+           ],
+           [
+            {
+             "t": "Cities."
+            }
+           ],
+           [
+            {
+             "t": "3”"
+            }
+           ]
+          ]
          ]
         }
        ],

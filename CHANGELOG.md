@@ -5,6 +5,24 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-12: How to Play, four flattened tables rebuilt
+
+The rulebook extractor recovers a table only where the PDF draws a ruled grid.
+Four tables have none, so they came through as stranded column heads (captions)
+and loose paragraphs, sometimes with the columns interleaved. `scripts/patch-rules-wiki.py`
+now rebuilds them, verbatim, from those same strings, checked against the source
+page so nothing is invented:
+
+- **4.2 Tonnage / Restriction** (page 12) — Light, Heavy, Colossal.
+- **4.2.1.1 Cost / Effect** (page 13) — the four Core Abilities; the bold Ability
+  names are kept.
+- **5 Game Rounds** (page 14) — the four phases and their steps, one column each.
+- **7.4.1 Type / Target / Range** (page 20) — the four Battalion delivery Assets.
+
+Re-run after `extract-rules-wiki.py`; the patch is idempotent and refuses to run
+if the source strings it expects are no longer there. Both apps render these from
+the shared `data/rules-wiki.json`, so no app-code change was needed.
+
 ### 2026-09-12: Scenery rules on hover, verbatim
 
 - **Hover or tap any scenery.** Planetary Rings and Large Objects on the

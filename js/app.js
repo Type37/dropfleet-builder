@@ -8806,6 +8806,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-12', title: 'How to Play: four tables put back together', items: [
+      'Four rulebook tables that had come through as loose lines are proper tables again: the Tonnage restrictions, the core Ability costs, the Game Round phases, and the Battalion deployment targets. Same words as the book, in their grid.',
+    ]},
     { date: '2026-09-12', title: 'Print: every Ability you can use', items: [
       'The printed Abilities table lists everything your fleet can use: each admiral’s own Abilities and chosen picks, Command Abilities from ships like the Rotterdam and Venice, ship Abilities like Fully Fuelled and Battalion Support, and the Core Abilities.',
       'While an admiral still has picks to make, the rest of its Abilities Table prints with tick boxes.',
