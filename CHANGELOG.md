@@ -5,6 +5,12 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Scenario Generator Share Link
+
+A Share Link button beside Print and Save Image. The address carries the five
+results and the player count (`#d2a3l4v5o6p3`), so a shared link opens the same
+scenario instead of rolling a new one.
+
 ### 2026-09-13: Game Summary link on the rules
 
 The top of Interactive Rules (desktop and phone) links to Andrew Yep's Game

@@ -251,6 +251,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
       </div>
       <button class="abtn" id="pb" onclick="window.print()" disabled>Print / PDF</button>
       <button class="abtn" id="sb" onclick="savePNG()" disabled>Save Image</button>
+      <button class="abtn" id="shb" onclick="shareLink()" disabled>Share Link</button>
     </div>
     <div class="ctrl-scen-row">
       <a class="scen-ref-link" href="../">Published scenarios</a>
@@ -890,6 +891,26 @@ ${varH}
 
   document.getElementById('pb').removeAttribute('disabled');
   document.getElementById('sb').removeAttribute('disabled');
+  document.getElementById('shb').removeAttribute('disabled');
+  // The address carries this scenario's five results and player count, so the link opens the same scenario
+  history.replaceState(null,'',`#d${dep.roll}a${app.roll}l${lay.roll}v${vari.roll}o${obj.roll}p${numPlayers}`);
+}
+
+// A shared link (#d1a2l3v4o5p2) opens that scenario instead of rolling a new one
+function fromLink(){
+  const m=location.hash.match(/^#d([1-6])a([1-6])l([1-6])v([1-6])o([1-6])p([2-4])$/);
+  if(!m) return false;
+  const at=(t,r)=>({item:t[r-1],roll:r});
+  LAST={dep:at(DT,+m[1]),app:at(AT,+m[2]),lay:at(LY,+m[3]),vari:at(VA,+m[4]),obj:at(OB,+m[5])};
+  const r=document.querySelector(`input[name=players][value="${m[6]}"]`); if(r) r.checked=true;
+  return true;
+}
+async function shareLink(){
+  const b=document.getElementById('shb'), url=location.href;
+  try{
+    if(navigator.share) await navigator.share({title:document.querySelector('.sc-name')?.textContent||document.title,url});
+    else{ await navigator.clipboard.writeText(url); b.textContent='Link Copied'; setTimeout(()=>{b.textContent='Share Link';},1600); }
+  }catch(e){}
 }
 
 function savePNG(){
@@ -1065,7 +1086,7 @@ function getPickVal(name){
 // Text is transcribed verbatim from the official PDFs.
 document.addEventListener('DOMContentLoaded',()=>{
   buildPicks();
-  gen();
+  gen(fromLink());
   const cm=document.getElementById('cm');
   cm.addEventListener('change',()=>document.body.classList.toggle('competitive',cm.checked));
   document.querySelectorAll('input[name=players]').forEach(r=>r.addEventListener('change',()=>gen(true)));
