@@ -8809,6 +8809,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-12', title: 'UCM: Francis Mendoza', items: [
+      'TTCombat corrected the Flying Dutchman captain’s name in the UCM stats PDF, from Frances to Francis. The ship, its lore and the printed sheet now match.',
+    ]},
     { date: '2026-09-12', title: 'Scenarios: Dragonslayer and the Ether Drake', items: [
       'The Scenario Reference has Dragonslayer, with its map and rules word for word, and the Ether Drake’s stats, weapons, rules and lore under it.',
     ]},

@@ -2,7 +2,7 @@
 """Ingest the 28 Aug / 1 Sep 2026 TTCombat releases.
 
 Sources (all in Rules-Mechanics-PDFs/, downloaded from the official downloads page):
-  UCM_Combined_Fleet_Stats_260828.pdf      p44  Frances Mendoza - Flying Dutchman
+  UCM_Combined_Fleet_Stats_260828.pdf      p44  Francis Mendoza - Flying Dutchman
   PHR_Combined_Fleet_Stats_260828.pdf      p41  Camilla Felix - Nanomatrix
   Civilian_Ships_Scenarios_260901.pdf      p6   MK Mass Transporter
   Fleet_Space_Stations_250828.pdf          p11  Bioficer Hypershredder + Hypersummoner
@@ -75,9 +75,9 @@ def rule(gloss, name, description=None, after=None):
 
 
 # -- UCM_Combined_Fleet_Stats_260828.pdf p44 --------------------------------
-DUTCHMAN_NAME = "Frances Mendoza - Flying Dutchman Heavy Cruiser"
+DUTCHMAN_NAME = "Francis Mendoza - Flying Dutchman Heavy Cruiser"
 DUTCHMAN_LORE = (
-    "Captain Frances Mendoza has destroyed more enemy tonnage in his career than any other colonial "
+    "Captain Francis Mendoza has destroyed more enemy tonnage in his career than any other colonial "
     "officer of his rank. He famously captained the light cruiser Crimson Heart throughout the 1st "
     "Battle of Olympus to nine capital ship kills before his vessel was crippled. Before and since he "
     "has built a reputation for single-minded, ruthless lethality. His steely disregard for the wider "

@@ -5,6 +5,13 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-12: UCM 260828 silent re-upload, Francis Mendoza
+
+TTCombat overwrote `UCM_Combined_Fleet_Stats_260828.pdf` in place (same name,
+9 bytes smaller). Only page 44 changed: "Frances Mendoza" is now "Francis
+Mendoza" in the Flying Dutchman title and lore. Fixed in `faction-ucm.json`,
+`fleet-data.json` and `add-260828-content.py`; manifest rebaselined.
+
 ### 2026-09-12: Scenario Generator gets the Dropzone switch
 
 The Dropfleet generator's control panel carries the same Dropfleet/Dropzone
