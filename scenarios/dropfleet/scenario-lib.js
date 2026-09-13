@@ -855,7 +855,12 @@ function pubScoreRows(s){
   if(has(/\bNormal Scoring\b/)) rows.push(...SCORE_TABLE('Normal Scoring','Rounds 4 & 6',['High Scoring','Low Scoring']));
   if(has(/\bDemolish/)) rows.push(...SCORE_TABLE('Demolish Scoring','',['Levelled','Ruined']));
   // Short labels; the full Focal Points rule is written out on the card
-  if(has(/\bFocal [Pp]oint/)) add('Focal Points','Rounds 4 & 6',[{text:'Highest value in range',parts:[{kind:'count',vp:3}]},{text:'At least half that value',parts:[{kind:'count',vp:1}]}]);
+  if(has(/\bFocal [Pp]oint/)){
+    // The range each scenario gives its Focal Points, e.g. 6" or 8"
+    const ranges=[...new Set([...text.matchAll(/Focal Points?,? (?:with a range of|\(range) (\d+)["”]/g)].map(m=>m[1]+'"'))];
+    const within=ranges.length?` within ${ranges.join(' or ')}`:'';
+    add('Focal Points','Rounds 4 & 6',[{text:`Highest Ship value${within}`,parts:[{kind:'count',vp:3}]},{text:`At least half that value${within}`,parts:[{kind:'count',vp:1}]}]);
+  }
   if(has(/\bKill Points\b/)) add('Kill Points','',vpRows(SCN_SE1['Kill Points Scoring'].body.join(' ')));
   if(has(/\bAssess/)) add('Assess','',asCounts(vpRows(SCN_SE1['Assess Scoring'].body.join(' '))));
   if(std||has(/\bStandard Scoring\b/)) rows.push(...SCORE_TABLE('Standard Scoring','Rounds 4 & 6',['Control','Contest']));

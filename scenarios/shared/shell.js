@@ -56,14 +56,14 @@ const ScenarioShell = (() => {
         <h1 class="idx-h">${G.indexTitle}</h1>
         <div class="idx-tools">
           <input id="q" type="search" placeholder="Search" aria-label="Search scenarios" autocomplete="off" value="${esc(query)}">
-          <button class="btn" id="rand">${ICON.die}Random</button>
+          ${G.random === false ? '' : `<button class="btn" id="rand">${ICON.die}Random</button>`}
           ${Object.entries(G.views || {}).map(([k, v]) => `<a class="btn btn-quiet" href="#${k}">${v.label}</a>`).join('')}
         </div>
       </div>
       <div id="books">${groupsHTML()}</div>
     </div>`;
     document.getElementById('q').addEventListener('input', e => { query = e.target.value; document.getElementById('books').innerHTML = groupsHTML(); });
-    document.getElementById('rand').addEventListener('click', () => {
+    document.getElementById('rand')?.addEventListener('click', () => {
       const pool = all().filter(G.randomPool || (() => true));
       location.hash = G.id(pool[Math.floor(Math.random() * pool.length)]);
     });

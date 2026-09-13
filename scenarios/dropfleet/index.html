@@ -75,7 +75,9 @@ ScenarioShell.start({
   groups:['Rulebook','Scenario Expansion 1','Civilian Ships & Scenarios','The Ether Drake (1st edition)','Automated Dreadnought (1st edition)','Advent Scenarios (1st edition)','Core Scenarios (1st edition)'].map(name=>({name,items:SCENARIOS.filter(s=>s.src===name)})),
   id:s=>s.id,
   name:s=>s.name,
-  tag:s=>s.converted?'1st edition':'',
+  tag:s=>s.converted?'Converted from 1e':'',
+  // The Scenario Generator in the header already rolls a scenario
+  random:false,
   thumb:s=>SCENARIO_MAPS.has(s.id)?`${SCN_ASSETS}scenarios/dropfleet/thumb/${s.id}.webp`:'',
   columns:[
     {label:'Players',values:players},
