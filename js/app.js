@@ -8933,6 +8933,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'WarLore footer on the phone app', items: [
+      'The phone app’s fleet list ends with the WarLore footer too. It does not appear on any other phone screen.',
+    ]},
     { date: '2026-09-13', title: 'Fuller printed pages, rulebook section numbers', items: [
       'Cards print two columns that fill each page: groups run down the left column then the right, the two kept even, and a later group of the same weight class fills a gap at the bottom of a page. No more space beside a tall card or a blank half page before a break. The preview shows the same page breaks.',
       'Rules on the printed sheet end with their rulebook section number in small grey type (Aegis-X 14.1.1, Penetrator 14.2.24) in place of a page number after the name. Rules that are only in a faction’s stats have no rulebook section and show none.',

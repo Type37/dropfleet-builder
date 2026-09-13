@@ -4639,6 +4639,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'WarLore footer on the phone app', items: [
+      'The fleet list ends with the WarLore footer, linking the other WarLore tools and channels. It does not appear on any other screen.',
+    ]},
     { date: '2026-09-13', title: 'Rulebook section numbers on the printed sheet', items: [
       'Rules on the printed sheet end with their rulebook section number in small grey type (Aegis-X 14.1.1, Penetrator 14.2.24). Rules that are only in a faction’s stats have no rulebook section and show none.',
     ]},

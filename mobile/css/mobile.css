@@ -2647,9 +2647,7 @@ body.sheet-open .sheet-scrim {
 
 /* ── 50. Site footer (uniform across WarLore builders) ─── */
 .m-footer {
-  /* Clear the fixed bottom-action (Create + 2 text links ≈ 156px) so the
-     attribution isn't hidden behind it. */
-  padding: var(--sp-l) var(--sp-l) calc(160px + env(safe-area-inset-bottom, 0px));
+  padding: var(--sp-l);
   text-align: center;
   font-size: var(--text-caption1);
   line-height: 1.7;
@@ -2657,6 +2655,12 @@ body.sheet-open .sheet-scrim {
   border-top: 1px solid var(--stroke2);
   margin-top: var(--sp-s);
 }
+/* The shared WarLore footer sits below the credits. The host clears the fixed
+   bottom-action (Create + 2 text links, about 156px) so neither is hidden
+   behind it. The host lives inside #screen-fleet-list, so it is gone with that
+   screen; the rule below is a guard if it is ever mounted elsewhere. */
+.m-wlf-host { padding-bottom: calc(160px + env(safe-area-inset-bottom, 0px)); }
+.screen:not(#screen-fleet-list) .wlf { display: none; }
 .m-footer-title { font-family: var(--font-display); font-weight: var(--weight-bold); color: var(--fg2); }
 .m-footer a { color: var(--navy); text-decoration: none; }
 .m-footer a:active { text-decoration: underline; }

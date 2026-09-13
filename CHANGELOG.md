@@ -5,6 +5,15 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: WarLore footer on the phone app
+
+`mobile/index.html` loads the shared footer (`type37.github.io/warlore-footer/footer.js`,
+`data-current="dropfleet"`) into a `[data-warlore-footer]` host inside
+`#screen-fleet-list`, below the credits footer. Screens are shown and hidden with
+`display`, so the footer only exists on the fleet list. The host carries the
+160px clearance for the fixed Create Fleet bar that the credits footer used to
+carry. Cache `dfc-cache-v483`.
+
 ### 2026-09-13: 1st edition scenarios converted to the current edition
 
 Replaces the verbatim older-edition pages of 2026-09-12. Eleven scenarios in
