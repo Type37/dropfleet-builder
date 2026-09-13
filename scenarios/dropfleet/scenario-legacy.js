@@ -138,7 +138,7 @@
    scenery:`2-8 Micrometeor Clouds, 6-10 Dense Debris Fields.`,
    deployment:`All players Staggered, from opposite table corners as shown.`,
    scoring:[`Standard Scoring.`, FOCAL,
-            `Cities with a Power Plant award double Standard Scoring, and no Standard Scoring once their Power Plant is destroyed.`],
+            `The two Large Cities award double Standard Scoring, and no Standard Scoring once one of their Power Plants is destroyed.`],
    variant:[`Bifurcate: use no Micrometeor Clouds or Dense Debris Fields. Place a Planetary Ring through the centre of the table, from the centre of the north table edge to the centre of the south table edge.`]});
 
   add({id:'core-defence-relay', sizes:true, features:['Comms Station', 'Military Outpost', 'Power Plant'], name:'Defence Relay', src:'Core Scenarios',
