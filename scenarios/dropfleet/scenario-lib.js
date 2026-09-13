@@ -181,7 +181,7 @@ const shuffleIcon=cls=>tablerIcon(cls,'<path d="m18 4l3 3l-3 3m0 10l3-3l-3-3"/><
 function sh(label,roll){return `<div class="sh"><h3 class="sl">${label}${roll?` ${dieIcon(roll,'sh-die',`Result ${roll}`)}`:''}</h3></div>`;}
 function pill(label,cls){return `<div class="spill-row"><span class="spill ${cls}">${label}</span></div>`;}
 function stdScoring(){
-  return `${pill("Standard Scoring<span class=\"spill-sub\">Rounds 4 &amp; 6</span>","sp-std")}<table class="stbl"><thead><tr><th>Dropsite</th><th>Control</th><th>Contested / Ruined</th></tr></thead><tbody><tr><td>Small</td><td><vp>2 VP</vp></td><td><vp>0 VP</vp></td></tr><tr><td>Medium</td><td><vp>3 VP</vp></td><td><vp>1 VP</vp></td></tr><tr><td>Large</td><td><vp>4 VP</vp></td><td><vp>2 VP</vp></td></tr></tbody></table><div class="terms"><div class="term"><b>Control:</b> Only you have Battalions and/or deployed Features on the Dropsite.</div><div class="term"><b>Contest:</b> You and an opponent both have Battalions and/or deployed Features on it.</div><div class="term"><b>Kill Points:</b> the total points in Admirals and Ships you have destroyed. In the event of a tie in VP, the victor is determined by who has the most Kill Points.</div></div>`;
+  return `${pill("Standard Scoring<span class=\"spill-sub\">Rounds 4 &amp; 6</span>","sp-std")}<table class="stbl"><thead><tr><th>Dropsite Size</th><th>Control / Levelled</th><th>Contest / Ruined</th></tr></thead><tbody><tr><td>Small</td><td><vp>2VP</vp></td><td><vp>0VP</vp></td></tr><tr><td>Medium</td><td><vp>3VP</vp></td><td><vp>1VP</vp></td></tr><tr><td>Large</td><td><vp>4VP</vp></td><td><vp>2VP</vp></td></tr></tbody></table><div class="terms"><div class="term"><b>Control:</b> Only you have Battalions and/or deployed Features on the Dropsite.</div><div class="term"><b>Contest:</b> You and an opponent both have Battalions and/or deployed Features on it.</div><div class="term"><b>Levelled:</b> Players that destroy a Dropsite have Levelled it.</div><div class="term"><b>Ruined:</b> Dropsites that have less than half of their Hull Points remaining are Ruined.</div><div class="term"><b>Kill Points:</b> the total points in Admirals and Ships you have destroyed. In the event of a tie in VP, the victor is determined by who has the most Kill Points.</div></div>`;
 }
 function modePill(m){
   const cls=m==="Close"?"sp-close":m==="Distant"?"sp-dist":"sp-dir";
@@ -517,7 +517,7 @@ const SCENARIOS=[
    players:`2.`,
    scenery:`2-5 Micrometeor Clouds, 4-6 Dense Debris Fields.`,
    deployment:`Both Players Close, from opposite table edges as shown. The Ether Drake is deployed in the centre of the table.`,
-   scoring:[`Standard Scoring. Each Space Station is a Medium Space Station.`,
+   scoring:[`Standard Scoring, using the four Medium Space Stations as the Dropsites.`,
             `The player that deals the final point of damage to the Ether Drake scores 12VP.`],
    special:[`Each Space Station is armed with a Mass Driver Armament and a Laser Armament.`,
             `The Ether Drake does not follow the normal activation order. It activates during the Cleanup step of the End Phase, and the player with 2nd initiative that round activates it.`,
@@ -794,7 +794,7 @@ function vpRows(html){
 const asCounts=rows=>rows.map(r=>({...r,parts:r.parts.map(p=>({...p,kind:'count'}))}));
 // The generator: the rolled objective, then the Standard Scoring it uses
 function genScoreRows(O){
-  return [{heading:O.name},...vpRows(O.b.join(' ')),...(O.std?SCORE_TABLE('Standard Scoring','Rounds 4 & 6',['Control','Contested / Ruined']):[])];
+  return [{heading:O.name},...vpRows(O.b.join(' ')),...(O.std?SCORE_TABLE('Standard Scoring','Rounds 4 & 6',['Control','Contest']):[])];
 }
 // A published scenario: its objectives and its own scoring sentences, then the scoring methods it names
 function pubScoreRows(s){
@@ -810,7 +810,7 @@ function pubScoreRows(s){
   if(has(/\bFocal [Pp]oint/)) add('Focal Points','Rounds 4 & 6',asCounts(vpRows(SCN_SE1['Focal Points Scoring'].body.join(' '))));
   if(has(/\bKill Points\b/)) add('Kill Points','',vpRows(SCN_SE1['Kill Points Scoring'].body.join(' ')));
   if(has(/\bAssess/)) add('Assess','',asCounts(vpRows(SCN_SE1['Assess Scoring'].body.join(' '))));
-  if(std||has(/\bStandard Scoring\b/)) rows.push(...SCORE_TABLE('Standard Scoring','Rounds 4 & 6',['Control','Contested / Ruined']));
+  if(std||has(/\bStandard Scoring\b/)) rows.push(...SCORE_TABLE('Standard Scoring','Rounds 4 & 6',['Control','Contest']));
   return rows;
 }
 
