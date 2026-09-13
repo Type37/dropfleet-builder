@@ -18,6 +18,13 @@
 .sheet .pub-fauna{font-family:'Jost',system-ui,sans-serif;font-size:.95rem;font-weight:600;padding:7px 12px;border:1.5px solid var(--action);background:transparent;color:var(--action-dk);cursor:pointer;}
 .sheet .pub-fauna:hover{background:var(--action);color:#fff;}
 @media print{.sheet .pub-fauna{display:none;}}
+/* The Scenario Generator, as a card above the books */
+.gen-card{display:inline-grid;grid-template-columns:72px auto;align-items:center;gap:16px;margin-top:24px;padding:10px 24px 10px 10px;background:#fff;border:1.5px solid #cdbf98;color:var(--ink);text-decoration:none;}
+.gen-card:hover{background:var(--hover);border-color:#8a6a12;}
+.gen-card-ico{width:72px;height:72px;display:grid;place-items:center;background:#0a1e2e;color:#c9d6de;}
+.gen-card-ico svg{width:40px;height:40px;}
+.gen-card-name{font-family:'Jost',system-ui,sans-serif;font-size:1.25rem;font-weight:600;}
+@media print{.gen-card{display:none;}}
 </style>
 </head>
 <body>
@@ -26,7 +33,6 @@
     <a href="../../index.html">← Fleet Builder</a>
     <a class="top-logo" href="#"><img src="../../assets/logos/dfc_logo.webp" alt="Dropfleet Commander scenarios"></a>
     <nav class="top-links">
-      <a href="generator/"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17"/><circle cx="8.3" cy="8.3" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.7" cy="8.3" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="8.3" cy="15.7" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.7" cy="15.7" r="1.5" fill="currentColor" stroke="none"/></svg>Scenario Generator</a>
       <span class="game-switch"><a href="./" aria-current="page">Dropfleet</a><a href="/dropzone-3e-army-builder/scenarios/">Dropzone</a></span>
     </nav>
   </div>
@@ -78,8 +84,9 @@ ScenarioShell.start({
     .map(([name,srcs])=>({name,items:srcs.flatMap(src=>SCENARIOS.filter(s=>s.src===src))})),
   id:s=>s.id,
   name:s=>s.name,
-  // The Scenario Generator in the header already rolls a scenario
+  // The Scenario Generator card above the books already rolls a scenario
   random:false,
+  lead:`<a class="gen-card" href="generator/"><span class="gen-card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17"/><circle cx="8.3" cy="8.3" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.7" cy="8.3" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="8.3" cy="15.7" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.7" cy="15.7" r="1.5" fill="currentColor" stroke="none"/></svg></span><span class="gen-card-name">Scenario Generator</span></a>`,
   thumb:s=>SCENARIO_MAPS.has(s.id)?`${SCN_ASSETS}scenarios/dropfleet/thumb/${s.id}.webp`:'',
   columns:[
     {label:'Players',values:players},

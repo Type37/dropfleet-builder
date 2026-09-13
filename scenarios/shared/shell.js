@@ -60,6 +60,7 @@ const ScenarioShell = (() => {
           ${Object.entries(G.views || {}).map(([k, v]) => `<a class="btn btn-quiet" href="#${k}">${v.label}</a>`).join('')}
         </div>
       </div>
+      ${G.lead || ''}
       <div id="books">${groupsHTML()}</div>
     </div>`;
     document.getElementById('q').addEventListener('input', e => { query = e.target.value; document.getElementById('books').innerHTML = groupsHTML(); });
