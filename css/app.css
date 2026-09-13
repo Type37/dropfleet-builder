@@ -7204,6 +7204,10 @@ h1, h2, h3, h4, h5, h6 {
    footer to the very bottom of the viewport so it's always visible without any
    page scroll. Panels are shortened by --footer-h (see above) so they don't
    slide behind it. */
+/* The shared WarLore footer (loaded from type37.github.io/warlore-footer) sits
+   below the credits footer on pages that scroll. The builder fills the screen,
+   so it has no room for it. */
+body[data-view="builder"] .wlf { display: none; }
 body[data-view="builder"] .game-info-footer {
   position: fixed;
   bottom: 0;
