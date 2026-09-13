@@ -56,7 +56,8 @@ window.ScoreSheet = (function () {
 .ss-total{display:flex;align-items:baseline;gap:16px;padding-top:12px;font-size:15px;color:#5d5850;}
 .ss-total b{font:700 30px/1 'Jost',system-ui,sans-serif;color:#a14a07;}
 .ss button:focus-visible,.ss-box:focus-visible{outline:2px solid #B86C0A;outline-offset:2px;}
-@media (max-width:640px){.ss-row{grid-template-columns:minmax(0,1fr);}.ss-parts{grid-template-columns:max-content;}}
+/* phones: a rule's name and its counters share a line, counters stacked on the right, so the sheet stays short */
+@media (max-width:640px){.ss-head,.ss-body{padding-left:12px;padding-right:12px;}.ss-row{grid-template-columns:minmax(0,1fr) max-content;gap:4px 10px;padding:4px 0;font-size:14px;}.ss-parts{grid-template-columns:max-content;gap:4px;}.ss-part{grid-template-columns:auto 84px 3.2em;gap:6px;}.ss-each{display:none;}.ss-step button{width:26px;height:28px;}.ss-h{padding-top:10px;}}
 @media print{.ss{display:none !important;}}`;
   const style = document.createElement('style');
   style.textContent = css;
@@ -67,7 +68,7 @@ window.ScoreSheet = (function () {
   const MINUS = icon('M5 12h14'), PLUS = icon('M12 5v14m-7-7h14'), CHEV = 'M6 9l6 6l6-6';
   const plain = t => String(t).replace(/<[^>]+>/g, '');
   const idOf = (row, j) => plain(row.text).toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 60) + '#' + j;
-  const vpText = (p) => `${p.vp} VP${p.kind === 'count' ? ' each' : ''}`;
+  const vpText = (p) => `${p.vp} VP${p.kind === 'count' ? '<span class="ss-each"> each</span>' : ''}`;
 
   function mount(el, cfg) {
     const rounds = cfg.rounds || 6;

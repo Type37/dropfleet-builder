@@ -25,8 +25,6 @@ const ScenarioShell = (() => {
     share: '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 13v8h14v-8"/></svg>',
     done: '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>',
     print: '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 9V3h10v6M7 17H4v-8h16v8h-3M7 14h10v7H7z"/></svg>',
-    // Tabler Icons file-type-pdf (MIT)
-    pdf: '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M5 12V5a2 2 0 0 1 2-2h7l5 5v4M5 18h1.5a1.5 1.5 0 0 0 0-3H5v6m12-3h3m1-3h-4v6m-6-6v6h1a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2z"/></svg>',
     mark: '<svg class="vp-dm" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 15,8 8,15 1,8" fill="#B8952F"/></svg>',
   };
   const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -76,9 +74,8 @@ const ScenarioShell = (() => {
     document.title = `${G.name(s)}: ${G.titleSuffix}`;
     app.innerHTML = `<div class="bar"><div class="bar-in">
         <a class="bar-back" href="#">← All scenarios</a>
-        <span></span>
+        ${(src => src ? `<a class="bar-src" href="${src.url}" target="_blank" rel="noopener">Source: ${src.title}</a>` : '<span></span>')(G.source && G.source(s))}
         <div class="acts">
-          ${G.source && G.source(s) ? `<a class="icon-btn" href="${G.source(s)}" target="_blank" rel="noopener" aria-label="Source PDF" title="Source PDF">${ICON.pdf}</a>` : ''}
           <button class="icon-btn" id="share" aria-label="Share">${ICON.share}</button>
           <button class="icon-btn" id="print" aria-label="Print">${ICON.print}</button>
         </div>
