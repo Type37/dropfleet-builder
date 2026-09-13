@@ -523,7 +523,9 @@ const SCENARIOS=[
    deployment:`Both Players Close, from opposite table edges as shown. The Ether Drake is deployed in the centre of the table.`,
    scoring:[`Standard Scoring.`,
             `The player that deals the final point of damage to the Ether Drake scores 12VP.`],
-   special:[`Each Space Station is armed with a Mass Driver Armament and a Laser Armament.`],
+   // Who fires them: no player owns these stations, so the controlling player does; the timing is the
+   // Fleet Space Stations PDF's ("activate at the end of the Activation Phase alongside other Dropsites")
+   special:[`Each Space Station is armed with a Mass Driver Armament and a Laser Armament. Space Stations activate at the end of the Activation Phase, and the player who Controls a Space Station attacks with its Armaments.`],
    // Shown with the Drake's card, under the page's own heading for them
    leviathanRules:[`The Ether Drake does not follow the normal activation order. It activates during the Cleanup step of the End Phase, and the player with 2nd initiative that round activates it.`,
             `When the Ether Drake activates, roll a D3. On a 1 it moves its Thrust forwards. On a 2 it turns 90° to the left, then moves its Thrust forwards. On a 3 it turns 90° to the right, then moves its Thrust forwards. If the Ether Drake would move off the table, rotate it 180° and continue its movement.`,

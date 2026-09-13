@@ -19,6 +19,15 @@ generator built on a d66 chart. The Dropzone rulebook has no such chart and no
 random setup (players choose the Scenario, 3.3), so both came out the same day.
 Dropzone keeps its Scenario Reference, still linked from the reference switch.
 
+### 2026-09-12: Dragonslayer: who fires the station Armaments
+
+The old page armed its stations but never said who fires them. Nobody pays for these stations, so the player
+who Controls one attacks with its Armaments (Jet), at the end of the Activation Phase: the timing the Fleet
+Space Stations PDF gives stations ("activate at the end of the Activation Phase alongside other Dropsites").
+That PDF limits a bought station's weapons to the player who paid for it, which doesn't apply here. The Drake's
+activation and movement bullets moved from Special Rules to its card, under the old page's own heading,
+Controlling the Drake.
+
 ### 2026-09-12: Dropsite Reference shows only the scenario's Dropsites
 
 Scenario pages take the Dropsites from the map's hover spots (`SCN_HOTSPOTS` ds keys) plus any named in the

@@ -4656,6 +4656,7 @@
       'Dropsite Reference lists only the Dropsites a scenario uses, in the Scenario Reference and the Scenario Generator, and the score sheet drops its repeated round line and row dividers.',
       'The score sheet’s rounds and players sit on its title line, and each player’s total reads as VP.',
       'Dragonslayer’s rules for how the Ether Drake activates, moves and attacks sit with its card, under Controlling the Drake.',
+      'Dragonslayer says who fires the Space Stations’ Armaments: the player who Controls the station, at the end of the Activation Phase.',
     ]},
     { date: '2026-09-12', title: 'Lore: hull length and displacement', items: [
       'The Armstrong Destroyer, Aldrin Colony Ship, Collins Support Carrier, Helium Voidflyer, Harpocrates Guerrilla Lighter, Hiruko Boarding Cutter, Seneca Detonator, Newton Kill-Sat, Galileo Orbital Telescope and Pungari Thresher Hive Ship show their Length and Displacement under their lore, and the Pungari its Beam and Height too.',

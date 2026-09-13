@@ -8826,6 +8826,7 @@ let activeGroupId = null;
       'Dropsite Reference lists only the Dropsites a scenario uses, in the Scenario Reference and the Scenario Generator, and the score sheet drops its repeated round line and row dividers.',
       'The score sheet’s rounds and players sit on its title line, and each player’s total reads as VP.',
       'Dragonslayer’s rules for how the Ether Drake activates, moves and attacks sit with its card, under Controlling the Drake.',
+      'Dragonslayer says who fires the Space Stations’ Armaments: the player who Controls the station, at the end of the Activation Phase.',
     ]},
     { date: '2026-09-12', title: 'Fleets open again', items: [
       'Opening a fleet had stopped showing the builder: the fleet list stayed on screen. Fixed.',
