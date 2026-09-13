@@ -39,6 +39,10 @@
 /* a weapon's Special chips wrap inside a narrow column instead of running past the card's edge */
 @media (max-width:760px){.pw-special{min-width:0;}.pw-special .pw-chip{white-space:normal;overflow-wrap:anywhere;}}
 @media print{.pub-civ-pick{display:none;}}
+/* Staggered's X follows the game size switch: its number in the steps, its size marked in the X line */
+.scenario.pub .xv{display:none;}
+.scenario.pub[data-size="skirmish"] .xv-skirmish,.scenario.pub[data-size="clash"] .xv-clash,.scenario.pub[data-size="battle"] .xv-battle,.scenario.pub[data-size="reconquest"] .xv-reconquest{display:inline;}
+.scenario.pub[data-size="skirmish"] .xs-skirmish,.scenario.pub[data-size="clash"] .xs-clash,.scenario.pub[data-size="battle"] .xs-battle,.scenario.pub[data-size="reconquest"] .xs-reconquest{font-weight:600;background:linear-gradient(transparent 45%,#f1dc92 45%,#f1dc92 92%,transparent 92%);}
 </style>
 </head>
 <body>

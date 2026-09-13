@@ -594,10 +594,12 @@ const pubTable=t=>`<div class="pub-tbl-wrap"><table class="pub-tbl"><thead><tr>$
 const vpTable=t=>`<table class="stbl"><thead><tr>${t.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${t.rows.map(r=>`<tr>${r.map((c,i)=>`<td>${i?pubVP(c):c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
 // Jet's call (2026-09-13): the deployments that change by round read as round-by-round steps, every condition of the
 // book's paragraph kept, tonnage letters written out (L Light, M Medium, H Heavy, C Colossal)
+// Staggered's X for the game size the size switch has chosen (Reconquest keeps X: it grows with the points)
+const XN='<b class="xv xv-skirmish">1</b><b class="xv xv-clash">2</b><b class="xv xv-battle">3</b><b class="xv xv-reconquest">X</b>';
 const SE1_STEPS={
   'Imminent':[['Round 1','May only activate and deploy Groups of Light and Medium Tonnage.'],['Round 2+','May also activate Groups of Heavy Tonnage.'],['Round 3+','May activate any Group.']],
   'Backline':[['Round 1','May only activate and deploy Groups of Heavy and Colossal Tonnage.'],['Round 2+','May activate any Group.'],['Vanguard-X','Groups with the Vanguard-X special rule may use it as normal.']],
-  'Staggered':[['Round 1','Activate and deploy X Groups of your choice.'],['Round 2','Must activate and deploy an additional X Groups of your choice.'],['Round 3','Must activate and deploy any remaining Groups.'],['Vanguard-X','Groups with the Vanguard-X special rule may use it as normal.'],['X','Skirmish 1, Clash 2, Battle 3, Reconquest 4 plus 1 for every 1000 points above 3001.']],
+  'Staggered':[['Round 1',`Activate and deploy ${XN} Groups of your choice.`],['Round 2',`Must activate and deploy an additional ${XN} Groups of your choice.`],['Round 3','Must activate and deploy any remaining Groups.'],['Vanguard-X','Groups with the Vanguard-X special rule may use it as normal.'],['X',`<span class="xs xs-skirmish">Skirmish 1</span>, <span class="xs xs-clash">Clash 2</span>, <span class="xs xs-battle">Battle 3</span>, <span class="xs xs-reconquest">Reconquest 4 plus 1 for every 1000 points above 3001</span>.`]],
 };
 const pubSE1=name=>{const d=SCN_SE1[name]; if(SE1_STEPS[name]) return `<ul class="rule-bullets">${SE1_STEPS[name].map(([k,v])=>`<li><b>${k}:</b> ${v}</li>`).join('')}</ul>`; return pubParas(d.body)+(d.table?(/VP$/.test(d.table.rows[0][1])?vpTable(d.table):pubTable(d.table)):'')+(d.after?pubParas(d.after):'');};
 
@@ -881,7 +883,8 @@ function renderScenario(s){
   // Game size: one setting for every scenario; the map's data-size layers follow it
   let gsize='battle';
   try{ gsize=localStorage.getItem(PUB_SIZE_KEY)||'battle'; }catch(e){}
-  const sizeSeg=s.sizes?`<div class="seg pub-size" role="group" aria-label="Game size">${[['Skirmish','501-1000'],['Clash','1001-2000'],['Battle','2001-3000']].map(([z,pts])=>`<button type="button" data-set-size="${z.toLowerCase()}" aria-pressed="${z.toLowerCase()===gsize}">${tablerIcon('pub-size-tick','<path d="M5 12l5 5L20 7"/>')}<span class="pub-size-name">${z}</span><span class="pub-size-pts">${pts} pts</span></button>`).join('')}</div>`:'';
+  const sizeMatters=s.sizes||/\bStaggered\b/.test([s.deployment,s.special].map(J).join(' '));
+  const sizeSeg=sizeMatters?`<div class="seg pub-size" role="group" aria-label="Game size">${[['Skirmish','501-1000'],['Clash','1001-2000'],['Battle','2001-3000'],['Reconquest','3001+']].map(([z,pts])=>`<button type="button" data-set-size="${z.toLowerCase()}" aria-pressed="${z.toLowerCase()===gsize}">${tablerIcon('pub-size-tick','<path d="M5 12l5 5L20 7"/>')}<span class="pub-size-name">${z}</span><span class="pub-size-pts">${pts} pts</span></button>`).join('')}</div>`:'';
   const mapSrc=`${SCN_ASSETS}scenarios/dropfleet/${s.id}.${SCENARIO_MAP_SVG.has(s.id)?'svg':'webp'}`, mapImg=`<img src="${mapSrc}" alt="${s.name} map">`;
   if(SCENARIO_MAP_SVG.has(s.id)) setTimeout(pubInlineMaps);
   const own=!!s.sections;

@@ -68,6 +68,13 @@ factions, a flagship (Magellan, 570 pts), a Feature Carrier (Actium), a
 modular hull (Cruiser) and the generic and faction stations; no sideways
 scroll at 320, 393 and 700 px.
 
+### 2026-09-13: Game size switch where size changes the rules
+
+Every scenario using Staggered Deployment (15 of them) gets the game size switch,
+which now includes Reconquest (3001+ pts). Staggered's steps show X for the chosen
+size (Skirmish 1, Clash 2, Battle 3; Reconquest keeps X) and its X line marks
+that size.
+
 ### 2026-09-13: Round-by-round deployment steps
 
 Imminent, Backline and Staggered Deployment (Scenario Expansion 1) show as

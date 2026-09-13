@@ -9030,6 +9030,9 @@ let activeGroupId = null;
       'Open any ship for its full ship card: points, stats, weapons, launch table, every loadout option with its guns, the hardpoint list, the Deployable Features a carrier can take, the Ship Rules and the full text of every rule it uses. Search finds ships by name, weapon or rule.',
       'Each faction and each ship has its own link (#units/ucm, #units/ucm/new-york) you can share.',
     ]},
+    { date: '2026-09-13', title: 'Game size switch on Staggered scenarios', items: [
+      'Scenarios that use Staggered Deployment get the game size switch, now with Reconquest. Staggered shows how many Groups X is for the size you pick.',
+    ]},
     { date: '2026-09-13', title: 'Imminent, Backline and Staggered as round-by-round steps', items: [
       'On the scenario pages, Imminent, Backline and Staggered Deployment read as Round 1, Round 2+ and Round 3+ steps instead of a paragraph.',
     ]},
