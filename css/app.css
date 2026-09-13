@@ -7976,6 +7976,7 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 .rules-wrap { display: flex; flex-direction: column; gap: var(--sp-lg); }
 .rules-intro { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-md); flex-wrap: wrap; }
 .rules-intro p { margin: 0; color: var(--ink-soft); max-width: 60ch; }
+.rules-intro-acts { display: flex; gap: var(--sp-sm, 8px); flex-wrap: wrap; }
 .rules-pills { display: flex; flex-wrap: wrap; gap: var(--sp-xs); position: sticky; top: 0; z-index: 4; background: var(--paper-warm); padding: var(--sp-sm) 0; border-bottom: 1px solid var(--line, rgba(120,110,95,.25)); }
 .rules-pill { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-xs); padding: 4px 10px; border: 1px solid var(--line, rgba(120,110,95,.3)); border-radius: 999px; background: var(--paper); color: var(--ink-soft); cursor: pointer; }
 .rules-pill:hover { border-color: var(--navy); color: var(--navy); }

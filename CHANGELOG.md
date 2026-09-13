@@ -5,6 +5,11 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Quick Reference Sheets link on the rules
+
+The top of Interactive Rules (desktop and phone) links to the faction Quick
+Reference Sheets at `ref/index.html`.
+
 ### 2026-09-13: Score sheet VP animation
 
 Scenario score sheets: when a player's VP goes up, their total pops and +VP
