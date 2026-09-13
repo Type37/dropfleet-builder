@@ -8815,9 +8815,6 @@ let activeGroupId = null;
     { date: '2026-09-12', title: 'Scenarios: Dragonslayer and the Ether Drake', items: [
       'The Scenario Reference has Dragonslayer, with its map and rules word for word, and the Ether Drake’s stats, weapons, rules and lore under it.',
     ]},
-    { date: '2026-09-12', title: 'Scenario Generator: Dropzone switch', items: [
-      'The Scenario Generator has the Dropfleet/Dropzone switch the Scenario Reference has. Dropzone opens its own new generator, rolling on the d66 chart.',
-    ]},
     { date: '2026-09-12', title: 'Fleets open again', items: [
       'Opening a fleet had stopped showing the builder: the fleet list stayed on screen. Fixed.',
     ]},

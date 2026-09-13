@@ -12,12 +12,12 @@ TTCombat overwrote `UCM_Combined_Fleet_Stats_260828.pdf` in place (same name,
 Mendoza" in the Flying Dutchman title and lore. Fixed in `faction-ucm.json`,
 `fleet-data.json` and `add-260828-content.py`; manifest rebaselined.
 
-### 2026-09-12: Scenario Generator gets the Dropzone switch
+### 2026-09-12: Dropzone switch on the generator, added and removed
 
-The Dropfleet generator's control panel carries the same Dropfleet/Dropzone
-switch as the Scenario Reference. Dropzone goes to the new Dropzone generator
-(`dropzone-3e-army-builder/scenarios/generator/`), which rolls on the d66 chart
-and renders the reference card with the chosen game size and Variant.
+A Dropfleet/Dropzone switch on the generator pointed at a Dropzone scenario
+generator built on a d66 chart. The Dropzone rulebook has no such chart and no
+random setup (players choose the Scenario, 3.3), so both came out the same day.
+Dropzone keeps its Scenario Reference, still linked from the reference switch.
 
 ### 2026-09-12: Dragonslayer scenario and the Ether Drake
 
