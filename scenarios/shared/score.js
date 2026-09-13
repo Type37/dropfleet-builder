@@ -63,6 +63,13 @@ window.ScoreSheet = (function () {
 .ss button:focus-visible,.ss-box:focus-visible{outline:2px solid #B86C0A;outline-offset:2px;}
 /* phones: a rule's name and its counters share a line, counters stacked on the right, so the sheet stays short */
 @media (max-width:640px){.ss-head,.ss-body{padding-left:12px;padding-right:12px;}.ss-row{grid-template-columns:minmax(0,1fr) max-content;gap:4px 10px;padding:4px 0;font-size:16px;}.ss-parts{grid-template-columns:max-content;gap:4px;}.ss-part{grid-template-columns:auto 84px 3.2em;gap:6px;}.ss-each{display:none;}.ss-step button{width:26px;height:28px;}.ss-h{padding-top:10px;}}
+/* VP going up: the player's total pops and a +VP rises from the control */
+.ss-seg .ss-n{display:inline-block;}
+.ss-pop{animation:ss-pop .45s cubic-bezier(.3,1.6,.5,1);}
+@keyframes ss-pop{0%{transform:scale(1);}40%{transform:scale(1.45);}100%{transform:scale(1);}}
+.ss-fly{position:fixed;z-index:50;pointer-events:none;font:700 18px/1 'Jost',system-ui,sans-serif;color:#8a5a12;transform:translate(-50%,0);animation:ss-fly .9s ease-out forwards;}
+@keyframes ss-fly{0%{opacity:0;transform:translate(-50%,4px) scale(.7);}20%{opacity:1;transform:translate(-50%,-8px) scale(1.15);}100%{opacity:0;transform:translate(-50%,-44px) scale(1);}}
+@media (prefers-reduced-motion:reduce){.ss-pop,.ss-fly{animation:none;}.ss-fly{display:none;}}
 @media print{.ss{display:none !important;}}`;
   const style = document.createElement('style');
   style.textContent = css;
@@ -137,12 +144,28 @@ window.ScoreSheet = (function () {
     el._ssCount = e => { setCount(e.detail); save(); draw(); };
     document.addEventListener('scenario-players', el._ssCount);
     function refocus(sel) { const t = sel && el.querySelector(sel); if (t) t.focus(); }
+    // after a change, a higher total gets a little celebration: the total pops, +N VP floats up from the control
+    function celebrate(before, sel) {
+      const gain = total(st.players[st.active]) - before;
+      if (gain <= 0) return;
+      const n = el.querySelector(`[data-player="${st.active}"] .ss-n`);
+      if (n) n.classList.add('ss-pop');
+      const from = sel && el.querySelector(sel);
+      if (!from) return;
+      const r = from.getBoundingClientRect(), fly = document.createElement('span');
+      fly.className = 'ss-fly'; fly.textContent = `+${gain} VP`;
+      fly.style.left = `${r.left + r.width / 2}px`; fly.style.top = `${r.top - 6}px`;
+      fly.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(fly);
+      fly.addEventListener('animationend', () => fly.remove());
+      setTimeout(() => fly.remove(), 1200);
+    }
     // mounting again on the same element (a new roll) replaces the old sheet's listeners
     if (el._ssOff) el._ssOff();
     const onClick = e => {
       const b = e.target.closest('button');
       if (!b || !el.contains(b)) return;
-      const p = st.players[st.active];
+      const p = st.players[st.active], before = total(p);
       let focus = null;
       if (b.classList.contains('ss-toggle')) { st.open = !st.open; focus = '.ss-toggle'; }
       else if (b.classList.contains('ss-clear')) { const open = st.open; st = fresh(); st.open = open; focus = '.ss-clear'; }
@@ -151,12 +174,14 @@ window.ScoreSheet = (function () {
       else if (b.dataset.step) { const id = b.dataset.id; p.c[id] = Math.max(id === 'other' ? -999 : 0, (+(p.c[id] || 0)) + (+b.dataset.step)); focus = `[data-id="${id}"][data-step="${b.dataset.step}"]`; }
       else return;
       save(); draw(); refocus(focus);
+      if (b.dataset.step) celebrate(before, focus);
     };
     const onChange = e => {
       const box = e.target.closest('.ss-box');
       if (!box) return;
+      const before = total(st.players[st.active]), sel = `.ss-box[data-id="${box.dataset.id}"]`;
       st.players[st.active].c[box.dataset.id] = box.checked ? 1 : 0;
-      save(); draw(); refocus(`.ss-box[data-id="${box.dataset.id}"]`);
+      save(); draw(); refocus(sel); celebrate(before, sel);
     };
     el.addEventListener('click', onClick);
     el.addEventListener('change', onChange);
