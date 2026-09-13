@@ -492,8 +492,8 @@ const SCENARIOS=[
    deployment:`Both Players Close. At the start of the game, randomly determine a Large Object to deploy the Fauna in coherency within 3" of.`,
    scoring:[`Assess. Each Fauna can be Assessed as if it was a Dropsite. When a Fauna is destroyed, do not remove it, instead, it becomes a Focal Point with a range of 6" that can no longer be Assessed. Kill Points.`],
    special:[`This scenario uses the Fauna Rules.`,
-            `When Neutral, Fauna move towards the nearest Large Object. When Panicked, Fauna move towards the furthest of either the closest Group or second closest Large Object.`,
-            `Variant: Use one Fauna per Large Object, placing each within 3" of its own Large Object.`]},
+            `When Neutral, Fauna move towards the nearest Large Object. When Panicked, Fauna move towards the furthest of either the closest Group or second closest Large Object.`],
+   variant:`Use one Fauna per Large Object, placing each within 3" of its own Large Object.`},
 
   {id:'fauna-rules', name:'Fauna Rules', src:'Civilian Ships & Scenarios',
    intro:`Used by the Fauna scenarios (Sacred Moon, Hatching Grounds, A Rocky Runaround).`,
@@ -745,6 +745,9 @@ function renderScenario(s){
   const J=pubJoin;
   const rulesText=[s.players,s.deployment,s.scoring,s.variant,s.special].map(J).join(' ');
   const allText=[s.intro,s.body,s.scenery,rulesText].map(J).join(' ');
+  // Features only a Variant brings show in the legend only while that Variant is on
+  const baseText=[s.intro,s.body,s.scenery,s.players,s.deployment,s.scoring,s.special,s.features].map(J).join(' ');
+  const vOnly=Object.keys(FS).filter(n=>!baseText.includes(n)&&J(s.variant).includes(n.replace(/s$/,'')));
   const sec=(label,html)=>html?`<div class="sec">${pubHead(label)}<div class="sec-body">${html}</div></div>`:'';
   const deploy=s.deployment?pubParas(s.deployment)+pubModes(J(s.deployment)):'';
   const score=s.scoring?pubBullets(s.scoring)+pubScoring([s.scoring,s.special,s.variant].map(J).join(' ')):'';
@@ -767,7 +770,7 @@ function renderScenario(s){
       <div class="map-frame">${SCENARIO_MAP_SVG.has(s.id)?`<div class="map-svg" data-src="${mapSrc}">${mapImg}</div>`:mapImg}${mapSpots(s.id)}</div>
       ${own&&s.key?`<img class="pub-key" src="${SCN_ASSETS}scenarios/dropfleet/key/${s.key}" alt="${s.keyAlt}">`:''}
       ${own?'':`${sec('Scenery',scenery)}
-      <div class="leg">${pubFeatures(allText+' '+(s.features||[]).join(' '))}${pubDropsites(s,allText)}</div>`}
+      <div class="leg">${pubFeatures(baseText)}${vOnly.length?`<div class="pub-v-only">${featTable(vOnly)}</div>`:''}${pubDropsites(s,allText)}</div>`}
     </div>`:'';
   const lev=s.leviathan&&SCN_LEVIATHANS[s.leviathan];
   // The builder's ship card: stat strip (icons where the stat has one; A, PD and T as the page labels them),
