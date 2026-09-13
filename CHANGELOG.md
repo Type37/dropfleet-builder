@@ -59,6 +59,8 @@ the shared `data/rules-wiki.json`, so no app-code change was needed.
   once the printer dropped their fill. Gold diamonds are gone from headings,
   bullets and the layout list, on both games' scenario pages. The Standard
   Scoring table keeps its own width instead of spreading across the card.
+- **Game Summary.** A home-page card opens Andrew Yep's three-page Game
+  Summary PDF (`assets/rules/game-summary-dfc.pdf`).
 - **Score sheet, after Mission Geist.** The round and VP bar is gone. Under
   the scenario title (above the card on the generator) a Score panel lists
   every scoring rule as the rule states it: a tick box when it scores once, a
