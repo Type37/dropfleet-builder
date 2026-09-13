@@ -201,6 +201,8 @@ const MAPS = {
       ['LC', 32, 32, 0, ['pow', 'out', 'out', 'pow'], ''],
     ],
     cb: [2],
+    // Turf War: every City becomes a Medium Space Station
+    variants: { 1: { swap: [[0, ['MS', 16, 16, 0, [], '']], [1, ['MS', 32, 16, 0, [], '']], [2, ['MS', 24, 24, 0, [], '']], [3, ['MS', 16, 32, 0, [], '']], [4, ['MS', 32, 32, 0, [], '']]] } },
   },
   'heavy-convoy': {
     zones: () => zone.edges(),
@@ -218,6 +220,8 @@ const MAPS = {
     ],
     // this page's blue-marked Clusters are "only used in Battles"
     battle: [1, 3],
+    // Defensive Station: 2 Medium Space Stations 18" from the defender's (red, north) edge; the page gives no position across the table
+    variants: { 1: { add: [['MS', 12, 18, 0, [], ''], ['MS', 36, 18, 0, [], 'N']] } },
   },
   'core-take-and-hold': {
     zones: () => zone.edges(),
@@ -279,6 +283,8 @@ const MAPS = {
       ['MC', 24, 36, 0, ['', 'pow', 'pow'], 'S'],
     ],
     cb: [0, 4],
+    // Orbital Installation: the centre City becomes a Large Space Station, the two Medium Cities Medium Space Stations
+    variants: { 1: { swap: [[0, ['MS', 24, 12, 0, [], '']], [2, ['LS', 24, 24, 0, [], '']], [4, ['MS', 24, 36, 0, [], 'S']]] } },
   },
   'core-power-grab': {
     zones: () => zone.cornerLs(12),
@@ -289,6 +295,8 @@ const MAPS = {
       ['LC', 18, 30, 0, ['pow', 'pow', 'pow', 'pow'], 'WS'],
       ['MC', 6, 42, 180, ['pow', 'pow', ''], ''],
     ],
+    // Bifurcate: a Planetary Ring down the centre of the table
+    variants: { 1: { scenery: () => `<line x1="${_i(24)}" y1="0" x2="${_i(24)}" y2="200" stroke="#C47A10" stroke-width="3" opacity=".8"/>` } },
   },
   'core-defence-relay': {
     zones: () => zone.edges(),
@@ -301,6 +309,8 @@ const MAPS = {
       ['MS', 24, 30, 0, [], ''],
     ],
     cb: [0, 5],
+    // Surface to Space: each Space Station becomes a Medium City with an Orbital Defence Gun and 2 Military Outposts
+    variants: { 1: { swap: [[0, ['MC', 24, 18, 180, ['odg', 'out', 'out'], 'N']], [5, ['MC', 24, 30, 0, ['odg', 'out', 'out'], '']]] } },
   },
 };
 
@@ -324,12 +334,15 @@ for (const [id, m] of Object.entries(MAPS)) {
   const GR = `<line x1="99" y1="0" x2="99" y2="200" stroke="#B8952F" stroke-width=".4" opacity=".22"/><line x1="101" y1="0" x2="101" y2="200" stroke="#B8952F" stroke-width=".4" opacity=".22"/><line x1="0" y1="99" x2="200" y2="99" stroke="#B8952F" stroke-width=".4" opacity=".22"/><line x1="0" y1="101" x2="200" y2="101" stroke="#B8952F" stroke-width=".4" opacity=".22"/>`;
   let dims = '', sites = '', toks = '';
   const spots = [];
-  for (const [si, [t, xi, yi, rot, feats, edges, shifts]] of m.sites.entries()) {
+  // Draws one Dropsite into dims/sites/toks. `wrap` puts its drawing in a Variant layer; `tag` marks its hover spots.
+  const drawSite = (site, si, wrap, tag) => {
+    const [t, xi, yi, rot, feats, edges, shifts] = site;
     const x = _i(xi), y = _i(yi);
     // A Dropsite only on the table in bigger games sits in a data-size layer the scenario page's game size
     // switch shows or hides: "clash" = Clash and Battle, "battle" = Battle only
-    const gsize = (m.battle || []).includes(si) ? 'battle' : (m.cb || []).includes(si) ? 'clash' : '';
-    const sized = s => gsize ? `<g data-size="${gsize}">${s}</g>` : s, stag = gsize ? { size: gsize } : {};
+    const gsize = si < 0 ? '' : (m.battle || []).includes(si) ? 'battle' : (m.cb || []).includes(si) ? 'clash' : '';
+    const sized = s => { const g = gsize ? `<g data-size="${gsize}">${s}</g>` : s; return wrap ? `<g${wrap}>${g}</g>` : g; };
+    const stag = { ...(gsize ? { size: gsize } : {}), ...tag };
     let d = '';
     for (const e of edges) d += edgeLine(e, xi, yi, shifts && shifts[e]);
     dims += sized(d);
@@ -337,29 +350,43 @@ for (const [id, m] of Object.entries(MAPS)) {
       : mkStn(x, y, t[0], t === 'SS' ? 7 : 9)));
     spots.push({ t: t.toLowerCase(), x: pct(x), y: pct(y), r: SITE_R[t], ...stag });
     // A site's Features, wrapped in a layer when a Variant swaps them (v: shown with it, hideV: hidden by it)
-    const layer = (list, attrs, tag) => {
+    const layer = (list, attrs, ftag) => {
       let out = '';
       list.forEach((k, i) => {
         if (!k) return;
         const onDot = ON_DOTS.has(id) && DOTS[t], size = onDot ? DOT_TOKEN : TOKEN;
         const [px, py] = onDot ? dotSpot(t, x, y, rot, i) : tokenSpot(t, x, y, rot, i, false);
         out += token(k, px, py, size);
-        spots.push({ t: FEAT_KEY[k], x: pct(px), y: pct(py), r: +((size / 2 + 0.8) / 2).toFixed(1), ...tag, ...stag });
+        spots.push({ t: FEAT_KEY[k], x: pct(px), y: pct(py), r: +((size / 2 + 0.8) / 2).toFixed(1), ...ftag, ...stag });
       });
       return attrs ? `<g${attrs}>${out}</g>` : out;
     };
-    const swaps = Object.entries(m.variants || {}).filter(([, v]) => v.site === si);
+    const swaps = si < 0 ? [] : Object.entries(m.variants || {}).filter(([, v]) => v.site === si);
     const hide = swaps.map(([n]) => n).join(' ');
     let tk = hide ? layer(feats, ` data-hide-v="${hide}"`, { hideV: hide }) : layer(feats, '', {});
     for (const [n, v] of swaps) tk += layer(v.feats, ` data-v="${n}" display="none"`, { v: n });
     toks += sized(tk);
+  };
+  for (const [si, site] of m.sites.entries()) {
+    // A Variant that replaces this Dropsite: the original hides with the Variant on, the replacement shows
+    const repl = Object.entries(m.variants || {}).flatMap(([n, v]) => (v.swap || []).filter(([i]) => i === si).map(([, s]) => [n, s]));
+    if (!repl.length) { drawSite(site, si, '', {}); continue; }
+    const hide = repl.map(([n]) => n).join(' ');
+    drawSite(site, si, ` data-hide-v="${hide}"`, { hideV: hide });
+    for (const [n, s] of repl) drawSite(s, si, ` data-v="${n}" display="none"`, { v: n });
+  }
+  // Dropsites and scenery a Variant adds
+  let vScenery = '';
+  for (const [n, v] of Object.entries(m.variants || {})) {
+    for (const s of v.add || []) drawSite(s, -1, ` data-v="${n}" display="none"`, { v: n });
+    if (v.scenery) vScenery += `<g data-v="${n}" display="none">${v.scenery()}</g>`;
   }
   for (const [lx, ly, d] of m.los || []) spots.push({ t: 'lo', x: pct(_i(lx)), y: pct(_i(ly)), r: pct(_i(d / 2)) });
   // A/B/C names sit below their Dropsite, clear of its Feature tokens
   const labels = (m.labels || []).map(([lx, ly, t]) => `<text x="${_i(lx) + (lx > 40 ? -12 : 12)}" y="${_i(ly) + 16}" text-anchor="middle" font-size="9" font-weight="700" fill="#2B4A6F" font-family="sans-serif">${t}</text>`).join('');
   sites += labels;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="1000" height="1000">` +
-    `<rect width="200" height="200" fill="#f4efe8"/>${GR}${m.zones()}${m.extra ? m.extra() : ''}` +
+    `<rect width="200" height="200" fill="#f4efe8"/>${GR}${m.zones()}${m.extra ? m.extra() : ''}${vScenery}` +
     `<rect x="0" y="0" width="200" height="200" fill="none" stroke="#B8952F" stroke-width="1.6"/>${dims}${sites}${toks}</svg>\n`;
   fs.writeFileSync(path.join(ROOT, 'assets', 'scenarios', 'dropfleet', id + '.svg'), svg);
   fs.writeFileSync(path.join(ROOT, 'data', 'scenario-hotspots', id + '.json'), JSON.stringify(spots, null, 1) + '\n');

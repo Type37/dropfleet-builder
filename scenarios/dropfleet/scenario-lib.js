@@ -812,7 +812,7 @@ function renderScenario(s){
       ${sec('Players',s.players&&!TWO_PLAYERS.test(pubJoin(s.players).trim())?pubParas(s.players):'')}
       ${sec('Deployment',deploy)}
       ${sec('Scoring',score)}
-      ${sec('Variants',s.variant?`<ul class="pub-vlist"><li><button type="button" class="pub-vbtn" data-set-v="1" aria-pressed="${on==='1'}">Variant</button><div>${pubParas(s.variant)}</div></li></ul>`:'')}
+      ${sec('Variants',s.variant?`<ul class="pub-vlist"><li><button type="button" class="pub-vbtn" data-set-v="1" aria-pressed="${on==='1'}">Variant</button><div>${pubParas(s.variant)}${s.variantWeapons?weaponList(s.variantWeapons):''}</div></li></ul>`:'')}
       ${sec('Special Rules',special)}
       ${hasMap?'':sec('Scenery',scenery)}
       ${sec('Terms',pubTerms(rulesText))}
