@@ -13,7 +13,8 @@
 window.ScoreSheet = (function () {
   const css = `
 .ss{background:#fff;border:1px solid #e1d6be;font-family:'Jost',system-ui,sans-serif;color:#0E0C08;}
-.ss-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;}
+.ss-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;padding:10px 16px;}
+.ss-head .ss-clear{margin-left:auto;}
 .ss-toggle{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:none;border:0;padding:0;cursor:pointer;text-align:left;color:inherit;}
 .ss-title{font:700 18px/1.2 'Roboto Slab',Georgia,serif;text-transform:uppercase;color:#5A4710;}
 .ss-sum{font:400 14px/1.3 'Jost',system-ui,sans-serif;color:#5d5850;}
@@ -23,7 +24,7 @@ window.ScoreSheet = (function () {
 .ss-clear:hover{background:#f7f1e6;}
 .ss-body{padding:0 16px 14px;}
 .ss.closed .ss-body{display:none;}
-.ss-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;padding:2px 0 8px;}
+.ss-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;}
 .ss-seg{display:flex;flex-wrap:wrap;align-items:center;gap:2px;}
 .ss-l{font-size:13px;color:#5d5850;margin-right:8px;}
 .ss-seg button{font:600 14px/1 'Jost',system-ui,sans-serif;min-width:34px;height:32px;padding:0 10px;border:0;background:#f1ece2;color:#3d3834;cursor:pointer;}
@@ -104,14 +105,14 @@ window.ScoreSheet = (function () {
       const scores = st.players.map(total);
       el.innerHTML = `<section class="ss${st.open ? '' : ' closed'}" aria-label="Score">
         <div class="ss-head">
-          <button type="button" class="ss-toggle" aria-expanded="${st.open}"><svg class="ss-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="${CHEV}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="ss-title">Score</span>${st.open ? '' : `<span class="ss-sum">Round ${st.round} · ${scores.join('–')}</span>`}</button>
+          <button type="button" class="ss-toggle" aria-expanded="${st.open}"><svg class="ss-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="${CHEV}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="ss-title">Score</span>${st.open ? '' : `<span class="ss-sum">Round ${st.round} · ${scores.map(s => s + 'VP').join('–')}</span>`}</button>
+          ${st.open ? `<div class="ss-bar">
+            <div class="ss-seg" role="group" aria-label="Round"><span class="ss-l">Round</span>${Array.from({ length: rounds }, (_, i) => i + 1).map(r => `<button type="button" data-round="${r}" aria-pressed="${r === st.round}"${cfg.markRound && cfg.markRound(r) ? ' class="mark"' : ''}>${r}</button>`).join('')}</div>
+            <div class="ss-seg" role="group" aria-label="Player">${st.players.map((_, i) => `<button type="button" data-player="${i}" aria-pressed="${i === st.active}">Player ${i + 1}<span class="ss-n">${scores[i]}VP</span></button>`).join('')}${st.players.length < 4 ? `<button type="button" data-add aria-label="Add a player">${PLUS}</button>` : ''}${st.players.length > 2 ? `<button type="button" data-remove aria-label="Remove the last player">${MINUS}</button>` : ''}</div>
+          </div>` : ''}
           <button type="button" class="ss-clear">Clear</button>
         </div>
         <div class="ss-body">
-          <div class="ss-bar">
-            <div class="ss-seg" role="group" aria-label="Round"><span class="ss-l">Round</span>${Array.from({ length: rounds }, (_, i) => i + 1).map(r => `<button type="button" data-round="${r}" aria-pressed="${r === st.round}"${cfg.markRound && cfg.markRound(r) ? ' class="mark"' : ''}>${r}</button>`).join('')}</div>
-            <div class="ss-seg" role="group" aria-label="Player">${st.players.map((_, i) => `<button type="button" data-player="${i}" aria-pressed="${i === st.active}">Player ${i + 1}<span class="ss-n">${scores[i]}</span></button>`).join('')}${st.players.length < 4 ? `<button type="button" data-add aria-label="Add a player">${PLUS}</button>` : ''}${st.players.length > 2 ? `<button type="button" data-remove aria-label="Remove the last player">${MINUS}</button>` : ''}</div>
-          </div>
           <ul class="ss-rows">${rows.map(rowHTML).join('')}
             <li class="ss-row"><span class="ss-t">Other VP</span><span class="ss-parts"><span class="ss-part"><span class="ss-step"><button type="button" data-step="-1" data-id="other" aria-label="One fewer">${MINUS}</button><output>${other}</output><button type="button" data-step="1" data-id="other" aria-label="One more">${PLUS}</button></span></span></span></li>
           </ul>

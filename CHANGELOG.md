@@ -25,7 +25,8 @@ Scenario pages take the Dropsites from the map's hover spots (`SCN_HOTSPOTS` ds 
 scenario's text; with none, the table is left out. The generator takes them from the rolled Layout, after
 the Variant swaps (Gridlocked MC to MS, Secure Comms Array LC to LS, Orbital Complex every City to a Station).
 The score sheet's header line (round and totals) shows only when the sheet is closed, and the row and bar
-dividers are gone. `score.js` is shared with Dropzone via tools/dzc/sync_scenario_shell.py.
+dividers are gone. `score.js` is shared with Dropzone via tools/dzc/sync_scenario_shell.py. The round and player
+controls now sit on the Score title line, and player totals read "0VP".
 
 ### 2026-09-12: Scenario pages: one screen type scale
 
