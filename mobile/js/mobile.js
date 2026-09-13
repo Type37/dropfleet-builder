@@ -4645,6 +4645,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Desktop app: print a whole faction', items: [
+      'The desktop Unit Reference prints a whole faction: every ship card, the hardpoint lists, Deployable Features, station armaments and every rule in full.',
+    ]},
     { date: '2026-09-13', title: 'Desktop app: Unit Reference', items: [
       'The desktop app has a new Unit Reference on its home screen: every ship each faction fields, grouped by weight class, with flagships, Misc ships and space stations, and each ship’s full ship card and rules.',
     ]},

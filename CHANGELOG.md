@@ -5,6 +5,21 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Unit Reference prints a whole faction (desktop)
+
+Print on the Unit Reference goes through the fleet sheet's own print preview
+and `#print-container` (`unitsOnScreen()` / `sheetPrintHTML()` pick the sheet;
+Layout, Abilities and Secondary objectives are hidden for it, Paper, Colour
+and Rules text stay). `unitsPrintHTML()` builds the same `print-fleet` header,
+`dp-group` cards packed two-up by `packPrintColumns`, `renderLaunchAssetReference`
+and glossary as the fleet sheet, with the fleet sheet's rule span and `-X`
+collapse hoisted out of `buildFullPrintHTML` so both share them
+(`printRuleSpan`, `collapsePrintGloss`). Loadout-option weapons join the weapon
+table with their loadout and price (`dpWeaponTable` reads an optional `note`).
+Hardpoint lists, Deployable Features and Space Station Armaments print once
+after the cards. It prints what is on screen, so search and the weight-class
+chip narrow it. Resistance: 75 cards, 22 A4 pages.
+
 ### 2026-09-13: Unit Reference (desktop)
 
 New `#units` screen, modelled on the Dropzone army builder's Unit Reference:

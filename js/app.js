@@ -6516,6 +6516,32 @@ let activeGroupId = null;
   // on screen (in the preview) as on paper — so the preview is WYSIWYG and a fleet
   // fits onto a few readable pages (Army-App / Hobgoblin style), instead of reusing
   // the big on-screen stat cells whose compact form only existed inside @media print.
+  // A rule spelled out on a printed sheet. The rulebook section number (2.3.1)
+  // closes the text, so the name reads clean; faction-only rules have none.
+  // Shared by the fleet sheet and the Unit Reference sheet.
+  function printRuleSpan([n, d]) {
+    const sec = (lookupRuleFull(n) || {}).section;
+    return `<span class="dp-rule"><b>${esc(n)}:</b> ${ruleHtml(d)}${sec ? ` <span class="dp-rule-sec">${esc(sec)}</span>` : ''}</span>`;
+  }
+  // Numeric/measurement value families (Vanguard-4", Reave-2, Critical-2 ...) collapse
+  // to a single generic "<base>-X" glossary entry; the value is on each card already.
+  // Named-effect families (Crippling-Fire) end in a word, so they stay listed.
+  function collapsePrintGloss(pairs) {
+    const seen = new Set(), out = [];
+    pairs.forEach(([name, def]) => {
+      let key = name, d = def;
+      const m = String(name).match(/^(.*?)[-\s]\d+\+?"?$/);
+      if (m) {
+        const generic = m[1].trim() + '-X';
+        const gdef = lookupRuleFull(generic);
+        if (gdef && gdef.description) { key = generic; d = gdef; }
+      }
+      if (seen.has(key)) return;
+      seen.add(key); out.push([key, d]);
+    });
+    return out;
+  }
+
   function dpStatLine(stats, mods, hullHtml) {
     // Same 2-col paired layout as the on-screen stat grid (renderStatGrid):
     //   Scan | KS,  Sig | ES,  Thrust | BS,  then Hull spanning both.
@@ -6568,7 +6594,7 @@ let activeGroupId = null;
     const body = weapons.map(w => {
       const dmg = `${esc(w.damage || '')}${w.type ? ' ' + esc(w.type) : ''}`;
       const special = (w.special && w.special !== '-') ? specialKeywordsHtml(w.special) : '';
-      const nm = `${w.qty > 1 ? w.qty + '× ' : ''}${esc(w.name || '')}`;
+      const nm = `${w.qty > 1 ? w.qty + '× ' : ''}${esc(w.name || '')}${w.note ? ` <i>(${esc(w.note)})</i>` : ''}`;
       const arc = ARC_ICONS[w.arc]
         ? `<span class="dp-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${ARC_ICONS[w.arc]}<span class="dp-arc-lab">${esc(w.arc || '')}</span></span>`
         : esc(w.arc || '');
@@ -6707,10 +6733,7 @@ let activeGroupId = null;
     // The rulebook section number (2.3.1) closes the rule text, so the name reads
     // clean and the reference is where you finish reading. Faction-only rules have
     // no rulebook section and show none.
-    const ruleSpan = ([n, d]) => {
-      const sec = (lookupRuleFull(n) || {}).section;
-      return `<span class="dp-rule"><b>${esc(n)}:</b> ${ruleHtml(d)}${sec ? ` <span class="dp-rule-sec">${esc(sec)}</span>` : ''}</span>`;
-    };
+    const ruleSpan = printRuleSpan;
     const chipsHtml = names => names.length
       ? `<div class="dp-systems"><b>Rules:</b> ${names.map(esc).join(', ')}</div>` : '';
 
@@ -7130,21 +7153,7 @@ let activeGroupId = null;
     // to a single generic "<base>-X" entry — the value already shows on each ship card,
     // so the glossary just needs the rule once. Named-effect families (Crippling-Fire,
     // Crippling-Navigation Offline) end in a word, so they stay listed individually.
-    const collapseGloss = pairs => {
-      const seen = new Set(), out = [];
-      pairs.forEach(([name, def]) => {
-        let key = name, d = def;
-        const m = String(name).match(/^(.*?)[-\s]\d+\+?"?$/);
-        if (m) {
-          const generic = m[1].trim() + '-X';
-          const gdef = lookupRuleFull(generic);
-          if (gdef && gdef.description) { key = generic; d = gdef; }
-        }
-        if (seen.has(key)) return;
-        seen.add(key); out.push([key, d]);
-      });
-      return out;
-    };
+    const collapseGloss = collapsePrintGloss;
     const glossEntries = collapseGloss([
       ...Object.keys(hoistedShipDefs).sort().map(n => [n, hoistedShipDefs[n]]),
       ...Object.keys(hoistedWeaponDefs).sort().map(n => [n, hoistedWeaponDefs[n]])
@@ -7186,8 +7195,10 @@ let activeGroupId = null;
   }
 
   function fleetPrintHTML(f) {
-    const html = settings.printSimple ? buildSimplePrintHTML(f) : buildFullPrintHTML(f);
-    // The sheet is paper: no tooltips, click handlers or focus stops survive into it.
+    return paperHTML(settings.printSimple ? buildSimplePrintHTML(f) : buildFullPrintHTML(f));
+  }
+  // The sheet is paper: no tooltips, click handlers or focus stops survive into it.
+  function paperHTML(html) {
     return html.replace(/\s(?:onclick|onkeydown|data-rule-desc|data-tooltip|title|tabindex|role)="[^"]*"/g, '').replace(/\bhas-tooltip\b/g, '');
   }
 
@@ -7218,6 +7229,14 @@ let activeGroupId = null;
   function fleetOnScreen() {
     const view = (location.hash.slice(1) || 'landing').split('/')[0];
     return currentFleet && (view === 'builder' || view === 'play') ? currentFleet : null;
+  }
+  // The Unit Reference prints its faction through the same container and preview.
+  function unitsOnScreen() {
+    const view = (location.hash.slice(1) || 'landing').split('/')[0];
+    return view === 'units' && !!shipDB[unitsState.faction];
+  }
+  function sheetPrintHTML() {
+    return unitsOnScreen() ? unitsPrintHTML() : fleetPrintHTML(currentFleet);
   }
   // Cards print two-up. A CSS grid pairs cards in rows, so a tall card leaves a
   // hole beside a short one, and a group too tall for what is left of a page is
@@ -7323,11 +7342,12 @@ let activeGroupId = null;
   function buildPrintContainer() {
     document.getElementById('print-container')?.remove();
     const fleet = fleetOnScreen();
-    if (!fleet) return null;
+    const units = !fleet && unitsOnScreen();
+    if (!fleet && !units) return null;
     applyPrintPageSize();
     const printDiv = document.createElement('div');
     printDiv.id = 'print-container';
-    printDiv.innerHTML = fleetPrintHTML(fleet);
+    printDiv.innerHTML = units ? unitsPrintHTML() : fleetPrintHTML(fleet);
     document.body.appendChild(printDiv);
     // Lay the sheet out off screen at the printed width and type size to measure
     // the groups for packing, then hand it back to the print stylesheet.
@@ -7342,7 +7362,7 @@ let activeGroupId = null;
   }
 
   function doPrintNow() {
-    if (!currentFleet) return;
+    if (!currentFleet && !unitsOnScreen()) return;
     // The preview overlay can stay open underneath; @media print hides it.
     buildPrintContainer();
     window.print();
@@ -7365,7 +7385,8 @@ let activeGroupId = null;
     openPrintPreview();
   }
   function openPrintPreview() {
-    if (!currentFleet) return;
+    const unitsSheet = unitsOnScreen();
+    if (!currentFleet && !unitsSheet) return;
     document.getElementById('print-preview-overlay')?.remove();
     const seg = (id, label, opts, current) => `<div class="pp-group" id="${id}" role="group" aria-label="${label}">
           <span class="pp-label">${label}</span>
@@ -7388,7 +7409,7 @@ let activeGroupId = null;
         <button class="btn btn-outline btn-sm pp-close-btn" id="pp-close" type="button">Close</button>
         <button class="btn btn-primary btn-sm" id="pp-print" type="button">Print</button>
       </div>
-      <div class="print-preview-scroll"><div class="print-preview-surface" id="pp-surface">${fleetPrintHTML(currentFleet)}</div></div>`;
+      <div class="print-preview-scroll"><div class="print-preview-surface" id="pp-surface">${sheetPrintHTML()}</div></div>`;
     document.body.appendChild(ov);
     const closePreview = () => { ov.remove(); document.removeEventListener('keydown', onKey); syncBackGuard(); };
     const onKey = (e) => { if (e.key === 'Escape') closePreview(); };
@@ -7473,7 +7494,7 @@ let activeGroupId = null;
     const refresh = () => {
       const s = document.getElementById('pp-surface');
       if (!s) return;
-      s.innerHTML = fleetPrintHTML(currentFleet);
+      s.innerHTML = sheetPrintHTML();
       paginate();
       // Re-run once art/fonts settle (image onerror removals change height).
       s.querySelectorAll('img').forEach(img => { img.addEventListener('load', schedulePaginate); img.addEventListener('error', schedulePaginate); });
@@ -7483,10 +7504,13 @@ let activeGroupId = null;
     // takes paper and objectives, nothing else.
     const updateControls = () => {
       const layout = printLayoutMode();
-      const text = layout === 'text';
+      const text = layout === 'text' && !unitsSheet;
       ov.querySelector('#pp-colour-opt').hidden = text;
       ov.querySelector('#pp-rules-opt').hidden = text;
-      ov.querySelector('#pp-abil-opt').hidden = text;
+      ov.querySelector('#pp-abil-opt').hidden = text || unitsSheet;
+      // A faction sheet has one layout and no fleet: no abilities or objectives.
+      ov.querySelector('#pp-layout').hidden = unitsSheet;
+      ov.querySelector('#pp-obj-opt').hidden = unitsSheet;
     };
     const onSeg = (id, apply) => {
       ov.querySelectorAll(`#${id} .pp-seg-btn`).forEach(btn => {
@@ -8992,6 +9016,10 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Unit Reference: print a whole faction', items: [
+      'Print on the Unit Reference opens the print preview with every ship card of that faction, two to a row by weight class: stats, weapons (loadout guns marked with their loadout and price), launch, loadout options, Ship Rules and flagship abilities.',
+      'After the cards come the faction’s hardpoint lists, its Deployable Features and the space station armaments, once each, then every rule on the sheet in full. A search or a weight-class filter narrows what prints.',
+    ]},
     { date: '2026-09-13', title: 'Unit Reference', items: [
       'A new Unit Reference on the home screen, next to Interactive Rules: every ship each faction fields, faction by faction, grouped Light, Medium, Heavy, Colossal (and Payload for the Bioficers), with the famous admirals’ flagships, the Misc ships and the space stations.',
       'Open any ship for its full ship card: points, stats, weapons, launch table, every loadout option with its guns, the hardpoint list, the Deployable Features a carrier can take, the Ship Rules and the full text of every rule it uses. Search finds ships by name, weapon or rule.',
@@ -10826,6 +10854,9 @@ let activeGroupId = null;
         <div class="units-toolbar">
           <input class="units-search" type="search" placeholder="Search" aria-label="Search ships, weapons and rules" value="${esc(unitsState.search)}" oninput="App.unitsSearch(this.value)">
           <div class="units-chips" id="units-chips"></div>
+          <button type="button" class="btn btn-outline btn-sm units-print" onclick="App.printUnits()">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6V2h8v4M4 12H2V7h12v5h-2"/><rect x="4" y="10" width="8" height="4"/></svg>
+            Print</button>
         </div>
         <div id="units-groups"></div>
       </div>`;
@@ -10909,6 +10940,181 @@ let activeGroupId = null;
 
   function unitsSearch(v) { unitsState.search = v || ''; renderUnitsGrid(); }
   function unitsCat(c) { unitsState.cat = c; renderUnitsGrid(); }
+
+  // THE WHOLE FACTION ON PAPER, as the Dropzone builder's Unit Reference prints.
+  // It is the fleet sheet with the fleet taken out: the same print-fleet header,
+  // dp- ship cards packed two-up by weight class, launch-asset reference, rules
+  // glossary and print preview. It prints what the screen shows, so a search or a
+  // weight-class chip narrows the sheet too. Every option a ship could take is on
+  // its card: loadout weapons join the weapon table marked with their loadout and
+  // price; hardpoint lists, Deployable Features and station armaments print once
+  // each after the cards, since several ships share them.
+  function unitsPrintHTML() {
+    const fk = unitsState.faction;
+    const fdb = shipDB[fk];
+    if (!fdb) return '';
+    const entries = unitsFiltered(fk).sort((a, b) =>
+      UNIT_CAT_ORDER.indexOf(a.category) - UNIT_CAT_ORDER.indexOf(b.category)
+      || unitPoints(a) - unitPoints(b) || (a.data.name || '').localeCompare(b.data.name || ''));
+    const gloss = new Map();
+    const addGloss = (n, d, p) => { n = String(n || '').trim(); if (n && d && !gloss.has(n)) gloss.set(n, { description: d, page: p || '' }); };
+    const addSpecials = s => String(s || '').split(',').map(t => t.trim()).filter(t => t && t !== '-')
+      .forEach(t => { const r = lookupRuleFull(t); if (r && r.description) addGloss(t, r.description, r.page); });
+    const cost = c => c > 0 ? `+${c} pts` : c < 0 ? `${c} pts` : 'free';
+    const launchNames = new Set();
+    // Launch capacity adds up: identical bays read as one Launch value, as on the fleet sheet.
+    const loadsLine = loads => {
+      const out = [], byKey = new Map();
+      (loads || []).forEach(l => {
+        if (!l || !l.name) return;
+        launchNames.add(l.name); addSpecials(l.special);
+        const n = parseInt(l.launch, 10);
+        const k = Number.isFinite(n) ? `${l.name}|${l.special ?? ''}` : null;
+        if (k && byKey.has(k)) { const g = byKey.get(k); g._n += n; g.launch = String(g._n); }
+        else { const g = { ...l, _n: Number.isFinite(n) ? n : null }; if (k) byKey.set(k, g); out.push(g); }
+      });
+      return out.map(l => `${esc(String(l.name))} (${esc(String(l.launch))}${l.special && l.special !== '-' ? ', ' + esc(l.special) : ''})`).join('; ');
+    };
+    const listsUsed = new Set();
+    let carriers = false, genericStations = false;
+
+    const card = e => {
+      const d = e.data;
+      const cat = e.category;
+      const catTag = ` <span class="dp-group-cat dp-group-cat-${esc(cat)}">${esc(cat === 'station' ? 'Space Station' : (CATEGORY_LABELS[cat] || cat))}</span>`;
+      if (e.kind === 'station') {
+        const art = stationArtPath(fk, d);
+        (d.specialRules || []).forEach(r => addGloss(r.name, r.description || (lookupRuleFull(r.name) || {}).description, r.page));
+        (d.stationRules || []).forEach(r => addGloss(r.name, r.effect));
+        (d.weapons || []).forEach(w => addSpecials(w.special));
+        const spec = stationArmamentSpec(d);
+        if (spec) genericStations = true;
+        const names = [...(d.specialRules || []), ...(d.stationRules || [])].map(r => r.name).filter(Boolean);
+        const launch = loadsLine(d.loads);
+        return `<div class="dp-group" data-cat="station"><div class="dp-ship">
+          <div class="dp-ship-head"><span class="dp-name">${esc(d.name)}${catTag}</span><span class="dp-pts">${d.cost || 0} pts</span></div>
+          <div class="dp-card-top">${art ? `<img class="dp-thumb" src="${esc(thumbUrl(art))}" alt="" onerror="this.remove()">` : ''}${dpStatLine(d.stats || {})}</div>
+          ${names.length ? `<div class="dp-systems"><b>Rules:</b> ${names.map(esc).join(', ')}</div>` : ''}
+          ${dpWeaponTable(d.weapons || [])}
+          ${launch ? `<div class="dp-loads"><b>Launch:</b> ${launch}</div>` : ''}
+          ${spec ? `<div class="dp-systems"><b>Armaments, choose ${spec.required}</b></div>` : ''}
+        </div></div>`;
+      }
+      const weapons = (d.weapons || []).map(w => ({ ...w }));
+      const optLines = (d.loadoutOptions || []).map(lo => {
+        const parts = (lo.options || []).map(o => {
+          (o.weapons || []).forEach(w => weapons.push({ ...w, note: `${lo.name}, ${cost(o.cost)}` }));
+          (o.gainRules || []).forEach(addSpecials);
+          const launch = loadsLine(o.loads);
+          const extra = [...(o.gainRules || []).map(esc), launch ? 'Launch ' + launch : ''].filter(Boolean);
+          return `${esc(o.name)} (${cost(o.cost)})${extra.length ? ': ' + extra.join(', ') : ''}`;
+        });
+        return `<div class="dp-systems"><b>${esc(lo.name)}:</b> ${parts.join('; ')}</div>`;
+      }).join('');
+      weapons.forEach(w => addSpecials(w.special));
+      (d.specialRuleDetails || []).forEach(r => { if (r.description) addGloss(r.name, r.description, r.page); else addSpecials(r.name); });
+      addSpecials(d.special);
+      const ruleNames = [], seenNames = new Set();
+      [...(d.special_rules || []), ...String(d.special || '').split(',')].map(s => String(s).trim())
+        .filter(s => s && s !== '-' && !/^(rare|unique)$/i.test(s))
+        .forEach(n => { const k = n.toLowerCase(); if (!seenNames.has(k)) { seenNames.add(k); ruleNames.push(n); } });
+      if (d.systemSelection) listsUsed.add(d.systemSelection.listName);
+      if (isFeatureCarrier(d)) carriers = true;
+      let name = esc(d.name), abil = '';
+      if (e.kind === 'famous') {
+        name = `${flagshipLabel(d, true, true)} <span class="dp-name-class">(${esc(d.admiralName)}, Level ${esc(d.level)})</span>`;
+        const picks = d.ability_picks || 0;
+        abil = `<div class="dp-rules">${(d.special_abilities || []).map(ab => printRuleSpan([`${ab.name}${ab.cost ? ' (' + ab.cost + ')' : ''}`, ab.effect || ''])).join('')}${picks ? `<span class="dp-rule">Also chooses <b>${picks}</b> from the faction Abilities Table (each Ability only once per list).</span>` : ''}</div>`;
+      }
+      const badge = `${d.isUnique ? ' <span class="dp-badge">Unique</span>' : d.isRare ? ' <span class="dp-badge">Rare</span>' : ''}${d.additional ? ' <span class="dp-badge">Misc</span>' : ''}`;
+      const group = d.g ? ` <span class="dp-name-class">Group ${esc(d.g)}</span>` : '';
+      const thumb = d.image ? `<img class="dp-thumb" src="${esc(thumbUrl(d.image))}" alt="" onerror="this.remove()">` : '';
+      const launch = loadsLine(d.loads);
+      return `<div class="dp-group" data-cat="${esc(cat)}"><div class="dp-ship">
+        <div class="dp-ship-head"><span class="dp-name">${name}${catTag}${badge}${group}</span><span class="dp-pts">${d.points || 0} pts</span></div>
+        <div class="dp-card-top">${thumb}${dpStatLine(d)}</div>
+        ${ruleNames.length ? `<div class="dp-systems"><b>Rules:</b> ${ruleNames.map(esc).join(', ')}</div>` : ''}
+        ${dpWeaponTable(weapons)}
+        ${launch ? `<div class="dp-loads"><b>Launch:</b> ${launch}</div>` : ''}
+        ${optLines}
+        ${d.rulesText ? `<div class="dp-systems">${esc(d.rulesText)}</div>` : ''}
+        ${abil}
+      </div></div>`;
+    };
+    const cards = entries.map(card).join('');
+
+    // An option list printed once: weapon options as one table, the rest as lines.
+    const optionSection = (title, options, once) => {
+      const wRows = [], lines = [];
+      options.forEach(o => {
+        const tag = `${o.category ? o.category + ', ' : ''}${cost(o.cost)}${o[once] ? ', max one' : ''}`;
+        if (o.weapons && o.weapons.length) {
+          o.weapons.forEach(w => { addSpecials(w.special); wRows.push({ ...w, name: w.name || o.name, note: tag }); });
+          if (o.effect) lines.push(`<b>${esc(o.name)}:</b> ${esc(o.effect)}`);
+          return;
+        }
+        const launch = loadsLine(o.loads);
+        lines.push(`<b>${esc(o.name)}</b> (${esc(tag)})${launch ? ': Launch ' + launch : o.effect ? ': ' + ruleHtml(o.effect) : ''}`);
+      });
+      return `<div class="print-section"><div class="print-section-title">${esc(title)}</div>${dpWeaponTable(wRows)}${lines.length ? `<div class="dp-rules">${lines.map(t => `<span class="dp-rule">${t}</span>`).join('')}</div>` : ''}</div>`;
+    };
+    let sections = '';
+    listsUsed.forEach(ln => {
+      const list = (fdb.systemsLists || {})[ln];
+      if (list && (list.options || []).length) sections += optionSection(ln, list.options, 'oncePerShip');
+    });
+    if (carriers && (fdb.deployableFeatures || []).length) {
+      const rows = fdb.deployableFeatures.map(ft => {
+        const bits = (ft.features || []).map(x => { addSpecials(x.special); return `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`; });
+        (ft.weapons || []).forEach(w => { addSpecials(w.special); bits.push(`${w.name}: ${w.scan ? `Scan ${w.scan}, ` : ''}Att ${w.attack}, Lock ${w.lock}, Dmg ${w.damage}${w.type || ''}${w.special && w.special !== '-' ? ', ' + w.special : ''}`); });
+        const launch = loadsLine(ft.loads);
+        const rules = (ft.rules || []).map(r => printRuleSpan([r.name, r.description || ''])).join('');
+        return `<span class="dp-rule"><b>${esc(ft.name)}</b> (${cost(ft.cost)})${bits.length ? ': ' + esc(bits.join('; ')) : ''}${launch ? `; Launch ${launch}` : ''}</span>${rules}`;
+      }).join('');
+      sections += `<div class="print-section"><div class="print-section-title">Deployable Features</div><div class="dp-rules">${rows}</div></div>`;
+    }
+    const SA = rawFleetData && rawFleetData.stationArmaments;
+    if (genericStations && SA && (SA.options || []).length) sections += optionSection('Space Station Armaments', SA.options, 'oncePerStation');
+
+    // Launch assets every card and list above can launch, stats once, at the top.
+    const assets = [], seenAssets = new Set();
+    launchNames.forEach(n => String(n).split(/\s*&\s*/).forEach(p => {
+      const k = p.trim().toLowerCase();
+      const a = (fdb.launchAssets || []).find(x => x.name.toLowerCase() === k);
+      if (!a || seenAssets.has(k)) return;
+      seenAssets.add(k); assets.push(a);
+      addSpecials(a.special);
+      if (a.ksReroll !== undefined) addSpecials('Close Protection');
+    }));
+    const launchRef = assets.length ? renderLaunchAssetReference(assets, true) : '';
+
+    const glossEntries = collapsePrintGloss([...gloss.keys()].map(n => [n, gloss.get(n)]))
+      .sort((a, b) => a[0].localeCompare(b[0]));
+    const glossHtml = (!settings.printNoRules && glossEntries.length)
+      ? `<div class="print-section dp-glossary"><div class="print-section-title">Rules</div><div class="dp-rules">${glossEntries.map(([n, def]) => printRuleSpan([n, def.description])).join('')}</div></div>`
+      : '';
+
+    const fName = (factionData[fk] || {}).name || FACTION_LABELS[fk];
+    const meta = ['Unit Reference', unitsState.cat !== 'all' ? unitCatLabel(unitsState.cat) : '',
+      unitsState.search.trim() ? `“${unitsState.search.trim()}”` : ''].filter(Boolean).join(', ');
+    return paperHTML(`<div class="print-fleet print-2col${settings.printInk ? ' pf-inksaver' : ''}" data-fleet-name="${escAttr(fName + ' Unit Reference')}">
+      <div class="print-header">
+        <div class="print-header-top">
+          ${FACTION_ICONS[fk] ? `<img src="${FACTION_ICONS[fk]}" alt="" class="print-faction-icon">` : ''}
+          <div class="print-header-text">
+            <div class="print-fleet-name">${esc(fName)}</div>
+            <div class="print-fleet-meta">${esc(meta)}</div>
+          </div>
+        </div>
+      </div>
+      ${launchRef}
+      ${cards ? `<div class="dp-groups dp-2col">${cards}</div>` : ''}
+      ${sections}
+      ${glossHtml}
+    </div>`);
+  }
+
+  function printUnits() { openPrintPreview(); }
 
   // ── Rule Tooltip ──
   function showRuleTooltip(event, el) {
@@ -11280,7 +11486,7 @@ let activeGroupId = null;
   return {
     navigate, ensureFactionLoaded,
     jumpRules, filterRules,
-    openUnit, unitsSearch, unitsCat,
+    openUnit, unitsSearch, unitsCat, printUnits,
     // Data hooks for the Combat Calculator (Calc, js/calc-ui.js).
     getCalcData: () => ({ shipDB, factionData, FACTION_LABELS, CATEGORY_ORDER, CATEGORY_LABELS, currentFaction: currentFleet ? currentFleet.faction : null }),
     openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
