@@ -35,7 +35,8 @@ has no current source, so Jet approved these (2026-09-12): ES 3+, KS 3+, BS 5+ (
 saves of the Bioficer Battleships, the current Heavy ships with Hull 17); PD dropped (no
 current stat; Dragonscale Armour already ignores Bombers); both Dragon's Breath
 weapons E; Flash-1 and Scald-1. The page carries Jet's own note that it was converted
-from 1st edition.
+from 1st edition. Its map is redrawn by `scripts/draw-rulebook-maps.js` in the generator's
+style (Line edges, four Medium Space Stations 12" from the centre, the Drake as an orange disc).
 
 ### 2026-09-12: Dragonslayer scenario and the Ether Drake
 

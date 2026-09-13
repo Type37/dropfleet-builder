@@ -161,6 +161,18 @@ const MAPS = {
     ],
     los: [[24, 24, 12]],
   },
+  // Dragonslayer (Ether_Drake.pdf page 2, converted): Line edges, four Space Stations 12" from the centre
+  // (Medium Space Stations under the conversion), the Ether Drake in the centre as the book's orange disc
+  'dragonslayer': {
+    zones: () => zone.edges(),
+    extra: () => `<circle cx="${_i(24)}" cy="${_i(24)}" r="${_i(2)}" fill="#D9793F" fill-opacity=".85" stroke="#8A4420" stroke-width="1" stroke-dasharray="3,1.6"/>`,
+    sites: [
+      ['MS', 24, 12, 0, [], 'N'],
+      ['MS', 12, 24, 0, [], 'W'],
+      ['MS', 36, 24, 0, [], 'E'],
+      ['MS', 24, 36, 0, [], 'S'],
+    ],
+  },
 };
 
 // Hover spot radius (percent of the map) for each dropsite drawing

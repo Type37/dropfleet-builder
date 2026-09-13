@@ -552,7 +552,7 @@ function scnParas(v){ return (Array.isArray(v)?v:[v]).map(p=>`<p>${p}</p>`).join
 // Maps pulled from the PDFs at native size by scripts/extract-scenario-maps.py.
 const SCENARIO_MAPS=new Set(['a-rocky-runaround','almost-nothing-at-all','down-with-the-cities','dragonslayer','entrapmoont','erupting-battlefront','erupting-quarters','grind-to-dust','hatching-grounds','lagrange-points','latitudinal-lanes','make-the-rendezvous','mandatory-festivities','mass-exodus','moonbreaker','moonguard','moonshot','moonskipper','moonswipe','moonwreck','on-the-clock','one-with-almost-nothing','orbital-support','power-grab','ready-salted-earth','retrieving-intelligence','sacred-moon','scrap-collection','shipyard-raid','shock-and-yaw','stop-the-terraformer','supply-run','take-and-hold','tug-of-war','very-important-moon','when-backfields-meet']);
 // The rulebook prints these six at 240px; scripts/draw-rulebook-maps.js redraws them as SVG.
-const SCENARIO_MAP_SVG=new Set(['take-and-hold','erupting-battlefront','power-grab','shock-and-yaw','orbital-support','entrapmoont']);
+const SCENARIO_MAP_SVG=new Set(['dragonslayer','take-and-hold','erupting-battlefront','power-grab','shock-and-yaw','orbital-support','entrapmoont']);
 function pubHead(label){return sh(label);}
 
 /* A published scenario names rules without explaining them. Every explanation
