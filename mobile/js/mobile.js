@@ -2882,7 +2882,7 @@
     const famousList = renderFamousShips(ship.famousShipsPrefix, famous);
     const namesakeLine = nsInner ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${nsInner}</div>` : '';
     const sp = ship.specs || {};
-    const specLines = [['Length', sp.length], ['Displacement', sp.displacement]].filter(r => r[1])
+    const specLines = [['Length', sp.length], ['Beam', sp.beam], ['Height', sp.height], ['Displacement', sp.displacement]].filter(r => r[1])
       .map(([k, v]) => `<div class="lore-namesake lore-spec"><span class="lore-namesake-label">${k}:</span> ${esc(v)}</div>`).join('');
     return `<div class="lore-card">
       <div class="lore-label">Lore</div>
@@ -4643,7 +4643,7 @@
       'The Scenario Generator has the Dropfleet/Dropzone switch the Scenario Reference has. Dropzone opens its own new generator, rolling on the d66 chart.',
     ]},
     { date: '2026-09-12', title: 'Lore: hull length and displacement', items: [
-      'The Armstrong Destroyer, Aldrin Colony Ship, Collins Support Carrier and Helium Voidflyer show their Length and Displacement under their lore.',
+      'The Armstrong Destroyer, Aldrin Colony Ship, Collins Support Carrier, Helium Voidflyer, Hiruko Boarding Cutter, Seneca Detonator, Newton Kill-Sat, Galileo Orbital Telescope and Pungari Thresher Hive Ship show their Length and Displacement under their lore, and the Pungari its Beam and Height too.',
     ]},
     { date: '2026-09-12', title: 'How to Play: four tables put back together', items: [
       'Four rulebook tables that had come through as loose lines are proper tables again: the Tonnage restrictions, the core Ability costs, the Game Round phases, and the Battalion deployment targets. Same words as the book, in their grid.',

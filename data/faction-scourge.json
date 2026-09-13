@@ -3704,6 +3704,7 @@
    "category": "light",
    "ship": {
     "name": "Hiruko Boarding Cutter",
+    "specs": {"length": "454m", "displacement": "1,800,000m³"},
     "cost": 23,
     "stats": {
      "thrust": "14\"",
@@ -3812,6 +3813,7 @@
    "category": "medium",
    "ship": {
     "name": "Pungari Thresher Hive Ship",
+    "specs": {"length": "741m", "beam": "387m", "height": "388m", "displacement": "21,166m³"},
     "cost": 170,
     "stats": {
      "thrust": "6\"",

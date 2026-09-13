@@ -4120,6 +4120,7 @@
    "category": "medium",
    "ship": {
     "name": "Pungari Thresher Hive Ship",
+    "specs": {"length": "741m", "beam": "387m", "height": "388m", "displacement": "21,166m³"},
     "cost": 170,
     "stats": {
      "thrust": "6\"",

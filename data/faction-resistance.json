@@ -3114,6 +3114,7 @@
    "category": "light",
    "ship": {
     "name": "Galileo Orbital Telescope",
+    "specs": {"length": "468m", "displacement": "3,775,000m³"},
     "cost": 55,
     "stats": {
      "thrust": "4\"",
@@ -3180,6 +3181,7 @@
    "category": "light",
    "ship": {
     "name": "Newton Kill-Sat",
+    "specs": {"length": "643m", "displacement": "4,245,000m³"},
     "cost": 46,
     "stats": {
      "thrust": "4\"",
@@ -3398,6 +3400,7 @@
    "category": "light",
    "ship": {
     "name": "Seneca Detonator",
+    "specs": {"length": "470m", "displacement": "3,441,000m³"},
     "cost": 40,
     "stats": {
      "thrust": "12\"",
@@ -3631,6 +3634,7 @@
    "category": "medium",
    "ship": {
     "name": "Pungari Thresher Hive Ship",
+    "specs": {"length": "741m", "beam": "387m", "height": "388m", "displacement": "21,166m³"},
     "cost": 170,
     "stats": {
      "thrust": "6\"",

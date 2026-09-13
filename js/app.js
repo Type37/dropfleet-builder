@@ -417,7 +417,7 @@ let activeGroupId = null;
   // Hull length and displacement from the ship's tarot card (a handful of ships).
   function specsDiv(specs) {
     if (!specs) return '';
-    const rows = [['Length', specs.length], ['Displacement', specs.displacement]].filter(r => r[1]);
+    const rows = [['Length', specs.length], ['Beam', specs.beam], ['Height', specs.height], ['Displacement', specs.displacement]].filter(r => r[1]);
     return rows.map(([k, v]) => `<div class="lore-namesake lore-spec"><span class="lore-namesake-label">${k}:</span> ${esc(v)}</div>`).join('');
   }
 
@@ -8816,7 +8816,7 @@ let activeGroupId = null;
       'Opening a fleet had stopped showing the builder: the fleet list stayed on screen. Fixed.',
     ]},
     { date: '2026-09-12', title: 'Lore: hull length and displacement', items: [
-      'The Armstrong Destroyer, Aldrin Colony Ship, Collins Support Carrier and Helium Voidflyer show their Length and Displacement under their lore.',
+      'The Armstrong Destroyer, Aldrin Colony Ship, Collins Support Carrier, Helium Voidflyer, Hiruko Boarding Cutter, Seneca Detonator, Newton Kill-Sat, Galileo Orbital Telescope and Pungari Thresher Hive Ship show their Length and Displacement under their lore, and the Pungari its Beam and Height too.',
     ]},
     { date: '2026-09-12', title: 'How to Play: four tables put back together', items: [
       'Four rulebook tables that had come through as loose lines are proper tables again: the Tonnage restrictions, the core Ability costs, the Game Round phases, and the Battalion deployment targets. Same words as the book, in their grid.',
