@@ -23,7 +23,7 @@ window.ScoreSheet = (function () {
 .ss-clear:hover{background:#f7f1e6;}
 .ss-body{padding:0 16px 14px;}
 .ss.closed .ss-body{display:none;}
-.ss-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;padding:2px 0 12px;border-bottom:1px solid #eee6d6;}
+.ss-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;padding:2px 0 8px;}
 .ss-seg{display:flex;flex-wrap:wrap;align-items:center;gap:2px;}
 .ss-l{font-size:13px;color:#5d5850;margin-right:8px;}
 .ss-seg button{font:600 14px/1 'Jost',system-ui,sans-serif;min-width:34px;height:32px;padding:0 10px;border:0;background:#f1ece2;color:#3d3834;cursor:pointer;}
@@ -32,7 +32,7 @@ window.ScoreSheet = (function () {
 .ss-seg button.mark{box-shadow:inset 0 -3px 0 #8a6a12;}
 .ss-seg .ss-n{font-weight:700;margin-left:8px;}
 .ss-rows{list-style:none;margin:0;padding:0;}
-.ss-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px 18px;padding:9px 0;border-bottom:1px solid #eee6d6;font-size:15px;line-height:1.45;}
+.ss-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px 18px;padding:7px 0;font-size:15px;line-height:1.45;}
 .ss-row .ss-t{flex:1;min-width:0;}
 .ss-row b{font-weight:700;}
 .ss-h{padding:14px 0 2px;font:700 16px/1.3 'Roboto Slab',Georgia,serif;}
@@ -104,7 +104,7 @@ window.ScoreSheet = (function () {
       const scores = st.players.map(total);
       el.innerHTML = `<section class="ss${st.open ? '' : ' closed'}" aria-label="Score">
         <div class="ss-head">
-          <button type="button" class="ss-toggle" aria-expanded="${st.open}"><svg class="ss-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="${CHEV}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="ss-title">Score</span><span class="ss-sum">Round ${st.round} · ${scores.join('–')}</span></button>
+          <button type="button" class="ss-toggle" aria-expanded="${st.open}"><svg class="ss-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="${CHEV}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="ss-title">Score</span>${st.open ? '' : `<span class="ss-sum">Round ${st.round} · ${scores.join('–')}</span>`}</button>
           <button type="button" class="ss-clear">Clear</button>
         </div>
         <div class="ss-body">

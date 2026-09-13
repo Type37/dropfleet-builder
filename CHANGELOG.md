@@ -19,6 +19,14 @@ generator built on a d66 chart. The Dropzone rulebook has no such chart and no
 random setup (players choose the Scenario, 3.3), so both came out the same day.
 Dropzone keeps its Scenario Reference, still linked from the reference switch.
 
+### 2026-09-12: Dropsite Reference shows only the scenario's Dropsites
+
+Scenario pages take the Dropsites from the map's hover spots (`SCN_HOTSPOTS` ds keys) plus any named in the
+scenario's text; with none, the table is left out. The generator takes them from the rolled Layout, after
+the Variant swaps (Gridlocked MC to MS, Secure Comms Array LC to LS, Orbital Complex every City to a Station).
+The score sheet's header line (round and totals) shows only when the sheet is closed, and the row and bar
+dividers are gone. `score.js` is shared with Dropzone via tools/dzc/sync_scenario_shell.py.
+
 ### 2026-09-12: Scenario pages: one screen type scale
 
 A font audit found 14 distinct sizes and the ship cards still at print sizes (weapon headers, chips,

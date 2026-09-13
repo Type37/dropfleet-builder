@@ -824,7 +824,10 @@ function gen(keep){
   legH+=`</ol>`;
 
   if(V.ft.length) legH+=`<div class="lhdr">Features Added</div>${featTable(V.ft)}`;
-  legH+=`<div class="lhdr">Dropsite Reference</div>${dsTable()}`;
+  // Only the Dropsites on this map, after the Variant swaps any Cities for Space Stations
+  const siteTypes=((LM[L.name]||{}).s||[]).map(e=>e[0]).filter(t=>t in DS_INDEX).map(t=>
+    V.name==='Orbital Complex'&&t[1]==='C'?t[0]+'S':V.name==='Gridlocked'&&t==='MC'?'MS':V.name==='Secure Comms Array'&&t==='LC'?'LS':t);
+  legH+=`<div class="lhdr">Dropsite Reference</div>${dsTable([...new Set(siteTypes.map(t=>DS_INDEX[t]))])}`;
 
   const comp_note = comp?' · Competitive':'';
 

@@ -652,14 +652,22 @@ function featTable(names){
   if(!list.length) return '';
   return `<table class="st st-feat"><thead><tr><th scope="col">Feature</th>${statHead('es')}${statHead('ks')}</tr></thead><tbody>${list.map(n=>{const f=FS[n]; return `<tr class="st-main"><th scope="row"><span class="st-name">${tipped('feat:'+n,f.ico)}${n}</span></th><td class="c sv-e">${f.es}</td><td class="c sv-k">${f.ks}</td></tr><tr class="st-more"><td colspan="3">${featDetail(f)}</td></tr>`;}).join('')}</tbody></table>`;
 }
-function dsTable(){
-  return `<table class="st st-ds"><thead><tr><th scope="col">Dropsite</th>${statHead('scan')}${statHead('sig')}${statHead('hull')}${statHead('es')}${statHead('ks')}</tr></thead><tbody>${DS.map((d,i)=>`<tr><th scope="row"><span class="st-name">${tipped('ds:'+i,d.ico())}${d.nm}</span></th><td class="c">${d.sc}</td><td class="c">${d.sg}</td><td class="c">${d.h}</td><td class="c sv-e">${d.es}</td><td class="c sv-k">${d.ks}</td></tr>`).join('')}</tbody></table>`;
+// only: the DS indices a scenario actually uses (all six when not given)
+function dsTable(only){
+  const list=DS.map((d,i)=>[d,i]).filter(([,i])=>!only||only.includes(i));
+  return `<table class="st st-ds"><thead><tr><th scope="col">Dropsite</th>${statHead('scan')}${statHead('sig')}${statHead('hull')}${statHead('es')}${statHead('ks')}</tr></thead><tbody>${list.map(([d,i])=>`<tr><th scope="row"><span class="st-name">${tipped('ds:'+i,d.ico())}${d.nm}</span></th><td class="c">${d.sc}</td><td class="c">${d.sg}</td><td class="c">${d.h}</td><td class="c sv-e">${d.es}</td><td class="c sv-k">${d.ks}</td></tr>`).join('')}</tbody></table>`;
 }
 function pubFeatures(text){
   const html=featTable(Object.keys(FS).filter(n=>text.includes(n)));
   return html?`<div class="lhdr">Features</div>${html}`:'';
 }
-const pubDropsites=()=>`<div class="lhdr">Dropsite Reference</div>${dsTable()}`;
+// Only the Dropsites this scenario uses: the ones drawn on its map, plus any its text names (placed or swapped in play)
+function pubDropsites(s,text){
+  const spots=typeof SCN_HOTSPOTS!=='undefined'&&SCN_HOTSPOTS[s.id]||[];
+  const used=new Set(spots.filter(([k])=>k.startsWith('ds:')).map(([k])=>+k.slice(3)));
+  DS.forEach((d,i)=>{ if(new RegExp('\\b'+d.nm.replace(/City$/,'Cit(?:y|ies)').replace(/Station$/,'Stations?')+'\\b').test(text)) used.add(i); });
+  return used.size?`<div class="lhdr">Dropsite Reference</div>${dsTable([...used])}`:'';
+}
 
 function pubShips(text){
   return Object.keys(SCN_SHIPS).filter(k=>text.includes(k)).map(k=>{
@@ -727,7 +735,7 @@ function renderScenario(s){
       <div class="map-frame">${SCENARIO_MAP_SVG.has(s.id)?`<div class="map-svg" data-src="${mapSrc}">${mapImg}</div>`:mapImg}${mapSpots(s.id)}</div>
       ${own&&s.key?`<img class="pub-key" src="${SCN_ASSETS}scenarios/dropfleet/key/${s.key}" alt="${s.keyAlt}">`:''}
       ${own?'':`${sec('Scenery',scenery)}
-      <div class="leg">${pubFeatures(allText)}${pubDropsites()}</div>`}
+      <div class="leg">${pubFeatures(allText)}${pubDropsites(s,allText)}</div>`}
     </div>`:'';
   const lev=s.leviathan&&SCN_LEVIATHANS[s.leviathan];
   // The builder's ship card: stat strip (icons where the stat has one; A, PD and T as the page labels them),
