@@ -554,6 +554,18 @@ const SCN_LEVIATHANS={'Ether Drake':{
         'There are only a handful of dragons left that are known of, the last of their kind in the galaxy, perhaps the universe.'],
 }};
 
+// Each book's PDF on TTCombat's own site (scripts/dfc-files-manifest.json, kept current by scan-dfc-files.py)
+const SCN_SOURCES={
+  'Rulebook':'https://cdn.shopify.com/s/files/1/0965/1274/files/A5_Dropfleet_Rulebook_2.3.1_Print_Friendly.pdf?v=1774605669',
+  'Scenario Expansion 1':'https://cdn.shopify.com/s/files/1/0965/1274/files/Scenario_Expansion_1_250818.pdf?v=1755254981',
+  'Civilian Ships & Scenarios':'https://cdn.shopify.com/s/files/1/0965/1274/files/Civilian_Ships_Scenarios_260901.pdf?v=1787931568',
+  'The Ether Drake':'https://cdn.shopify.com/s/files/1/0965/1274/files/Ether_Drake.pdf?439',
+  'Automated Dreadnought':'https://cdn.shopify.com/s/files/1/0965/1274/files/Automated_Dreadnought.pdf?444',
+  'Advent Scenarios':'https://cdn.shopify.com/s/files/1/0965/1274/files/Advent_Scenarios.pdf?525',
+  'Core Scenarios':'https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_Core_Scenarios_2704ae6b-ad65-48af-a5e2-109efd0e5109.pdf?v=1661442291',
+  'Tournament Pack 2017':'https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_TOURNAMENT_PACK_2017.pdf?13027330658637360583',
+};
+
 function scnParas(v){ return (Array.isArray(v)?v:[v]).map(p=>`<p>${p}</p>`).join(''); }
 // Maps pulled from the PDFs at native size by scripts/extract-scenario-maps.py.
 const SCENARIO_MAPS=new Set(['a-rocky-runaround','almost-nothing-at-all','down-with-the-cities','dragonslayer','entrapmoont','erupting-battlefront','erupting-quarters','grind-to-dust','hatching-grounds','lagrange-points','latitudinal-lanes','make-the-rendezvous','mandatory-festivities','mass-exodus','moonbreaker','moonguard','moonshot','moonskipper','moonswipe','moonwreck','on-the-clock','one-with-almost-nothing','orbital-support','power-grab','ready-salted-earth','retrieving-intelligence','sacred-moon','scrap-collection','shipyard-raid','shock-and-yaw','stop-the-terraformer','supply-run','take-and-hold','tug-of-war','very-important-moon','when-backfields-meet']);

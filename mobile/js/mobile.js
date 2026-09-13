@@ -4660,6 +4660,7 @@
       'The score sheet lines up its Control and Contest counters in columns beside each rule instead of pushing them to the far edge, and scenarios no longer repeat Control, Contest, Levelled and Ruined under Terms when Standard Scoring already defines them.',
       'Scenario pages leave out a Players section that only says 2, draw bigger list bullets, and table headings are no longer half italic.',
       'The Ether Drake’s lore reads like ship lore in the fleet builder: a Lore heading, its text, then the Recognised Ether Drakes as a list.',
+      'Each scenario has a PDF button beside Share and Print that opens its source book on TTCombat’s site.',
     ]},
     { date: '2026-09-12', title: 'Lore: hull length and displacement', items: [
       'The Armstrong Destroyer, Aldrin Colony Ship, Collins Support Carrier, Helium Voidflyer, Harpocrates Guerrilla Lighter, Hiruko Boarding Cutter, Seneca Detonator, Newton Kill-Sat, Galileo Orbital Telescope and Pungari Thresher Hive Ship show their Length and Displacement under their lore, and the Pungari its Beam and Height too.',

@@ -83,6 +83,7 @@ ScenarioShell.start({
   ],
   randomPool:s=>SCENARIO_MAPS.has(s.id),
   render:renderScenario,
+  source:s=>SCN_SOURCES[s.src],
   // Older-edition pages score by their own sentences only; the current rulebook's scoring tables don't apply to them
   scoreRows:s=>s.sections?(r=>r.length?[{heading:'Scenario'},...r]:[])(vpRows(scoringText(s))):pubScoreRows(s),
   // Standard, Normal and Focal Points scoring award VP in rounds 4 and 6; so do objectives that use Standard Scoring
