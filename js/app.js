@@ -1451,7 +1451,7 @@ let activeGroupId = null;
             <div class="rules-intro">
               <p>The Dropfleet Commander rulebook${rulesWiki.edition ? `, edition ${esc(rulesWiki.edition)}` : ''}, reproduced from TTCombat's free download.</p>
               <span class="rules-intro-acts">
-                <a class="btn btn-outline" href="ref/index.html" target="_blank" rel="noopener">Quick Reference Sheets</a>
+                <a class="btn btn-outline" href="assets/rules/game-summary-dfc.pdf" target="_blank" rel="noopener">Game Summary</a>
                 <a class="btn btn-outline" href="${RULEBOOK_URL}" target="_blank" rel="noopener">TTCombat downloads</a>
               </span>
             </div>
@@ -8936,8 +8936,8 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
-    { date: '2026-09-13', title: 'Quick Reference Sheets from the rules', items: [
-      'The top of Interactive Rules links to the faction Quick Reference Sheets.',
+    { date: '2026-09-13', title: 'Game Summary from the rules', items: [
+      'The top of Interactive Rules links to Andrew Yep’s Game Summary.',
     ]},
     { date: '2026-09-13', title: 'Scenario score sheets: VP you can see go up', items: [
       'Scenario score sheets: when a player’s VP goes up, their total pops and +VP rises from the button you pressed.',
