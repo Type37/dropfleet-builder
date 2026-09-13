@@ -4,13 +4,13 @@
   /* rem, so text follows the reader's browser font size */
   --fs-display:1.875rem; /* 30px  scenario title */
   --fs-section:1.25rem;  /* 20px  section headings (Players, Scoring…) */
-  --fs-heading:1rem;     /* 16px  subheadings: map-column headings, objective names, ship names */
+  --fs-heading:1.0625rem; /* 17px  subheadings (Jost 600): map-column headings, objective names, ship names */
   --fs-body:.9375rem;    /* 15px  reading text, table cells, weapon rows, stat values */
-  --fs-small:.8125rem;   /* 13px  secondary text beside a heading, table headers */
-  --fs-label:.75rem;     /* 12px  the floor: column labels, rule chips, crit notes */
+  --fs-small:.8125rem;   /* 13px  the floor: secondary text, table headers, column labels, chips */
+  --fs-label:var(--fs-small); /* one small size, not 12 and 13 */
 }
 /* A VP amount stays in the sentence's own face, just bold */
-vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
+vp{font-family:inherit;font-weight:600;font-size:inherit;color:inherit;}
 
 /* ── CARD INTERIOR (unchanged) ─────────────────────────────────────────── */
 
@@ -285,6 +285,16 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .scenario .spill{background:none;color:var(--ch);padding:0;font-family:'Roboto Slab',Georgia,serif;font-size:inherit;font-weight:700;letter-spacing:0;}
 .scenario .spill-sub{font-family:'Jost',system-ui,sans-serif;font-weight:400;color:#5d5850;margin-left:8px;}
 @media screen{ .scenario .spill{font-size:var(--fs-heading);} .scenario .spill-sub{font-size:var(--fs-small);} .scenario .spill-row{margin-top:3mm;} }
+/* ── Type system (Jet, 2026-09-13) ──────────────────────────────────────────
+   Roboto Slab 700 only for the scenario title and section headings. Everything under them is Jost:
+   subheadings 17px 600, body 15px 400, small 13px. Weights 400 and 600 only (Slab keeps 700).
+   Libre Baskerville italic stays for flavour text. Table headers: 13px 400 grey. */
+@media screen{
+  .lhdr, .scenario .spill, .pub-ship-h b { font-family: 'Jost', system-ui, sans-serif; font-weight: 600; font-size: var(--fs-heading); }
+  .stbl th, .st thead th, .st-sub thead th, .pub-tbl th { font-size: var(--fs-small); font-weight: 400; color: #5d5850; }
+  .stbl td, .st td.c, .st-sub td.c { font-weight: 600; }
+  .scenario b, .scenario strong { font-weight: 600; }
+}
 /* The rolled die beside a heading */
 .sh-die{width:1.1em;height:1.1em;vertical-align:-.18em;color:#5d5850;}
 /* A table keeps its own width; stretched to the column it spread three columns across the card */

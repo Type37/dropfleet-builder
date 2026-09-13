@@ -15,27 +15,27 @@ window.ScoreSheet = (function () {
 .ss{background:#fff;border:1px solid #e1d6be;font-family:'Jost',system-ui,sans-serif;color:#0E0C08;}
 .ss-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;padding:10px 16px;}
 .ss-head .ss-clear{margin-left:auto;}
-.ss-toggle{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:none;border:0;padding:0;cursor:pointer;text-align:left;color:inherit;}
-.ss-title{font:700 18px/1.2 'Roboto Slab',Georgia,serif;text-transform:uppercase;color:#5A4710;}
+.ss-toggle{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:none;border:0;padding:0;cursor:pointer;text-align:left;color:inherit;font:inherit;}
+.ss-title{font:700 20px/1.2 'Roboto Slab',Georgia,serif;text-transform:uppercase;color:#5A4710;}
 .ss-chev{width:18px;height:18px;color:#5d5850;transition:transform .15s;}
 .ss.closed .ss-chev{transform:rotate(-90deg);}
-.ss-clear{font:600 12px/1 'Jost',system-ui,sans-serif;text-transform:uppercase;color:#6b5210;background:none;border:1.5px solid #8a6a12;padding:5px 10px;cursor:pointer;}
+.ss-clear{font:600 13px/1 'Jost',system-ui,sans-serif;text-transform:uppercase;color:#6b5210;background:none;border:1.5px solid #8a6a12;padding:5px 10px;cursor:pointer;}
 .ss-clear:hover{background:#f7f1e6;}
 .ss-body{padding:0 16px 14px;}
 .ss.closed .ss-body{display:none;}
 .ss-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;}
 .ss-seg{display:flex;flex-wrap:wrap;align-items:center;gap:2px;}
 .ss-l{font-size:13px;color:#5d5850;margin-right:8px;}
-.ss-seg button{font:600 14px/1 'Jost',system-ui,sans-serif;min-width:34px;height:32px;padding:0 10px;border:0;background:#f1ece2;color:#3d3834;cursor:pointer;}
+.ss-seg button{font:600 15px/1 'Jost',system-ui,sans-serif;min-width:34px;height:32px;padding:0 10px;border:0;background:#f1ece2;color:#3d3834;cursor:pointer;}
 .ss-seg button:hover{background:#e6ddcc;}
 .ss-seg button[aria-pressed="true"]{background:#d3b27a;color:#0E0C08;}
 .ss-seg button.mark{box-shadow:inset 0 -3px 0 #8a6a12;}
-.ss-seg .ss-n{font-weight:700;margin-left:8px;}
+.ss-seg .ss-n{font-weight:600;margin-left:8px;}
 .ss-rows{list-style:none;margin:0;padding:0;}
 .ss-row{display:grid;grid-template-columns:minmax(0,26em) max-content;justify-content:start;align-items:center;gap:6px 32px;padding:6px 0;font-size:15px;line-height:1.45;}
 .ss-row .ss-t{flex:1;min-width:0;}
-.ss-row b{font-weight:700;}
-.ss-h{padding:14px 0 2px;font:700 16px/1.3 'Roboto Slab',Georgia,serif;}
+.ss-row b{font-weight:600;}
+.ss-h{padding:14px 0 2px;font:600 17px/1.3 'Jost',system-ui,sans-serif;}
 .ss-h span{font:400 13px 'Jost',system-ui,sans-serif;color:#5d5850;margin-left:8px;}
 .ss-check{display:flex;align-items:flex-start;gap:10px;flex:1;min-width:0;cursor:pointer;}
 .ss-box{appearance:none;-webkit-appearance:none;width:18px;height:18px;flex:0 0 18px;margin:3px 0 0;border:1.5px solid #b08a3e;background:#f7f1e6;cursor:pointer;}
@@ -50,11 +50,11 @@ window.ScoreSheet = (function () {
 .ss-step button{width:28px;height:28px;display:grid;place-items:center;border:0;background:#f7f1e6;color:#3d3834;cursor:pointer;padding:0;}
 .ss-step button:hover{background:#ece2cf;}
 .ss-step svg{width:14px;height:14px;}
-.ss-step output{min-width:2.4ch;text-align:center;font-weight:700;}
-.ss-vp{font-weight:700;color:#a14a07;white-space:nowrap;}
+.ss-step output{min-width:2.4ch;text-align:center;font-weight:600;}
+.ss-vp{font-weight:600;color:#a14a07;white-space:nowrap;}
 .ss button:focus-visible,.ss-box:focus-visible{outline:2px solid #B86C0A;outline-offset:2px;}
 /* phones: a rule's name and its counters share a line, counters stacked on the right, so the sheet stays short */
-@media (max-width:640px){.ss-head,.ss-body{padding-left:12px;padding-right:12px;}.ss-row{grid-template-columns:minmax(0,1fr) max-content;gap:4px 10px;padding:4px 0;font-size:14px;}.ss-parts{grid-template-columns:max-content;gap:4px;}.ss-part{grid-template-columns:auto 84px 3.2em;gap:6px;}.ss-each{display:none;}.ss-step button{width:26px;height:28px;}.ss-h{padding-top:10px;}}
+@media (max-width:640px){.ss-head,.ss-body{padding-left:12px;padding-right:12px;}.ss-row{grid-template-columns:minmax(0,1fr) max-content;gap:4px 10px;padding:4px 0;font-size:15px;}.ss-parts{grid-template-columns:max-content;gap:4px;}.ss-part{grid-template-columns:auto 84px 3.2em;gap:6px;}.ss-each{display:none;}.ss-step button{width:26px;height:28px;}.ss-h{padding-top:10px;}}
 @media print{.ss{display:none !important;}}`;
   const style = document.createElement('style');
   style.textContent = css;
