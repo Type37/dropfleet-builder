@@ -2502,6 +2502,7 @@ body.sheet-open .sheet-scrim {
   line-height: 1.6;
   color: var(--fg3);
 }
+.lore-spec + .lore-spec { margin-top: 0; }
 .lore-namesake-label {
   font-weight: var(--weight-bold);
   font-style: normal;

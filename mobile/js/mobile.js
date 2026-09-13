@@ -2881,11 +2881,15 @@
     // Order matches desktop: lore → famous ships (bold header, italic bullets) → Namesake.
     const famousList = renderFamousShips(ship.famousShipsPrefix, famous);
     const namesakeLine = nsInner ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${nsInner}</div>` : '';
+    const sp = ship.specs || {};
+    const specLines = [['Length', sp.length], ['Displacement', sp.displacement]].filter(r => r[1])
+      .map(([k, v]) => `<div class="lore-namesake lore-spec"><span class="lore-namesake-label">${k}:</span> ${esc(v)}</div>`).join('');
     return `<div class="lore-card">
       <div class="lore-label">Lore</div>
       <div class="lore-body">${paras}</div>
       ${famousList}
       ${namesakeLine}
+      ${specLines}
     </div>`;
   }
 
@@ -4635,6 +4639,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-12', title: 'Lore: hull length and displacement', items: [
+      'The Armstrong Destroyer, Aldrin Colony Ship and Collins Support Carrier show their Length and Displacement under their lore.',
+    ]},
     { date: '2026-09-12', title: 'How to Play: four tables put back together', items: [
       'Four rulebook tables that had come through as loose lines are proper tables again: the Tonnage restrictions, the core Ability costs, the Game Round phases, and the Battalion deployment targets. Same words as the book, in their grid.',
     ]},

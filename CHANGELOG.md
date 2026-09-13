@@ -5,6 +5,14 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-12: Lore gets hull Length and Displacement
+
+New optional `specs: {length, displacement}` on a ship in the faction JSON, shown
+under Namesake in the lore section on desktop (card + detail pane) and mobile.
+Filled for three Resistance ships from their spec cards: Armstrong Destroyer
+(651m, 13,058,000m³), Aldrin Colony Ship (651m, 11,745,000m³), Collins Support
+Carrier (470m, 3,441,000m³).
+
 ### 2026-09-12: How to Play, four flattened tables rebuilt
 
 The rulebook extractor recovers a table only where the PDF draws a ruled grid.

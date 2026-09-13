@@ -2872,7 +2872,8 @@
     "isUnique": false,
     "tonnage": "L",
     "lore": "The Collins is a class of ship designed to serve as part of humanity's exploration fleets over three hundred years ago. These fleets prized self-sufficiency and endurance above all else, two traits the Collins provided by repairing and refuelling the fleet's shuttles and escorts. Following the Scourge's arrival, the Collins swiftly became an important part of Independent Resistance fleets due to its supply of tough fuel haulers and engineering wings. A single Collins can keep entire squadrons of fighters in the air long after they would otherwise have had to return to their motherships, maintaining the fighter screen for both defensive and scouting purposes.",
-    "namesake": "[Michael Collins](https://en.wikipedia.org/wiki/Michael_Collins_(astronaut)) (1930-2021), the Apollo 11 command-module pilot who orbited the Moon alone while his crewmates landed. A United States Air Force test pilot before joining NASA, he first flew in space on Gemini 10 in 1966, becoming the first person to make two spacewalks on a single mission. After leaving NASA he served as the first director of the National Air and Space Museum in Washington."
+    "namesake": "[Michael Collins](https://en.wikipedia.org/wiki/Michael_Collins_(astronaut)) (1930-2021), the Apollo 11 command-module pilot who orbited the Moon alone while his crewmates landed. A United States Air Force test pilot before joining NASA, he first flew in space on Gemini 10 in 1966, becoming the first person to make two spacewalks on a single mission. After leaving NASA he served as the first director of the National Air and Space Museum in Washington.",
+    "specs": {"length": "470m", "displacement": "3,441,000m³"}
    }
   },
   {
@@ -2921,7 +2922,8 @@
      "[Odyssey](https://en.wikipedia.org/wiki/Apollo_13)"
     ],
     "famousShipsPrefix": "Recorded ships of the class:",
-    "namesake": "[Buzz Aldrin](https://en.wikipedia.org/wiki/Buzz_Aldrin) (born 1930), the Apollo 11 lunar-module pilot and the second human to walk on the Moon. Born Edwin Eugene Aldrin Jr., he flew 66 combat missions in F-86 Sabres during the Korean War and earned a doctorate in astronautics from MIT for his work on orbital rendezvous. He had already flown in space on Gemini 12 before the Apollo 11 mission."
+    "namesake": "[Buzz Aldrin](https://en.wikipedia.org/wiki/Buzz_Aldrin) (born 1930), the Apollo 11 lunar-module pilot and the second human to walk on the Moon. Born Edwin Eugene Aldrin Jr., he flew 66 combat missions in F-86 Sabres during the Korean War and earned a doctorate in astronautics from MIT for his work on orbital rendezvous. He had already flown in space on Gemini 12 before the Apollo 11 mission.",
+    "specs": {"length": "651m", "displacement": "11,745,000m³"}
    }
   },
   {
@@ -2987,7 +2989,8 @@
      "[Tranquility](https://en.wikipedia.org/wiki/Tranquility_Base)",
      "[Saturn](https://en.wikipedia.org/wiki/Saturn_V)"
     ],
-    "namesake": "[Neil Armstrong](https://en.wikipedia.org/wiki/Neil_Armstrong) (1930-2012), commander of Apollo 11 and the first human to set foot on the Moon, in 1969. A naval aviator and test pilot, he flew the X-15 rocket plane before joining NASA and commanded the Gemini 8 mission in 1966. His words on stepping onto the lunar surface, \"that's one small step for man, one giant leap for mankind\", became among the most famous ever spoken."
+    "namesake": "[Neil Armstrong](https://en.wikipedia.org/wiki/Neil_Armstrong) (1930-2012), commander of Apollo 11 and the first human to set foot on the Moon, in 1969. A naval aviator and test pilot, he flew the X-15 rocket plane before joining NASA and commanded the Gemini 8 mission in 1966. His words on stepping onto the lunar surface, \"that's one small step for man, one giant leap for mankind\", became among the most famous ever spoken.",
+    "specs": {"length": "651m", "displacement": "13,058,000m³"}
    }
   },
   {

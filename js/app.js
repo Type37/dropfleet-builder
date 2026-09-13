@@ -414,6 +414,13 @@ let activeGroupId = null;
     return inner ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${inner}</div>` : '';
   }
 
+  // Hull length and displacement from the ship's tarot card (a handful of ships).
+  function specsDiv(specs) {
+    if (!specs) return '';
+    const rows = [['Length', specs.length], ['Displacement', specs.displacement]].filter(r => r[1]);
+    return rows.map(([k, v]) => `<div class="lore-namesake lore-spec"><span class="lore-namesake-label">${k}:</span> ${esc(v)}</div>`).join('');
+  }
+
   // Speak a namesake aloud. We feed the respelling (not the raw name) to the
   // synth so it lands close to the intended pronunciation.
   function sayName(btn) {
@@ -738,6 +745,7 @@ let activeGroupId = null;
       famousShipsPrefix: s.famousShipsPrefix || '',
       famousShips: s.famousShips || [],
       namesake: s.namesake || '',
+      specs: s.specs || null,
       image: shipArtPath(s.name),
       variants: s.variants || [],
       systemSelection: s.systemSelection || null,
@@ -4791,7 +4799,7 @@ let activeGroupId = null;
       const openAttr = settings.autoExpandLore ? ' open' : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
-        <div class="ship-lore-text">${formatLore(loreText, dbShip.famousShipsPrefix, dbShip.famousShips)}${nsDiv}${cityMapHtml(dbShip.name)}</div>
+        <div class="ship-lore-text">${formatLore(loreText, dbShip.famousShipsPrefix, dbShip.famousShips)}${nsDiv}${specsDiv(dbShip.specs)}${cityMapHtml(dbShip.name)}</div>
       </details>`;
     } else if (nsDiv) {
       // Namesake flavour even when there's no main lore block
@@ -8801,6 +8809,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-12', title: 'Lore: hull length and displacement', items: [
+      'The Armstrong Destroyer, Aldrin Colony Ship and Collins Support Carrier show their Length and Displacement under their lore.',
+    ]},
     { date: '2026-09-12', title: 'How to Play: four tables put back together', items: [
       'Four rulebook tables that had come through as loose lines are proper tables again: the Tonnage restrictions, the core Ability costs, the Game Round phases, and the Battalion deployment targets. Same words as the book, in their grid.',
     ]},
@@ -10396,7 +10407,7 @@ let activeGroupId = null;
     if (dbShip.lore || detailNamesake) {
       loreHtml = `<div class="detail-lore">
         <div class="detail-section-label">Lore</div>
-        <div class="text-rules">${formatLore(dbShip.lore, dbShip.famousShipsPrefix, dbShip.famousShips)}${detailNamesake}${cityMapHtml(dbShip.name)}</div>
+        <div class="text-rules">${formatLore(dbShip.lore, dbShip.famousShipsPrefix, dbShip.famousShips)}${detailNamesake}${specsDiv(dbShip.specs)}${cityMapHtml(dbShip.name)}</div>
       </div>`;
     }
 
