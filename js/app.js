@@ -8806,6 +8806,13 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-12', title: 'Print: every Ability you can use', items: [
+      'The printed Abilities table lists everything your fleet can use: each admiral’s own Abilities and chosen picks, Command Abilities from ships like the Rotterdam and Venice, ship Abilities like Fully Fuelled and Battalion Support, and the Core Abilities.',
+      'While an admiral still has picks to make, the rest of its Abilities Table prints with tick boxes.',
+      'Core Abilities print even without an admiral, and their text now matches the rulebook word for word.',
+      'The print preview has an Abilities switch, and Abilities keep their full text when Rules text is off.',
+      'Five Famous Admiral bonuses missing from the ship cards were added from the official stats: Cull the Weak (Helena of Asgard), Doomed (Enslaver), Death Mistress (Baba Yaga), Godray Lightvice (Atom) and Twins (Twins of Aaru).',
+    ]},
     { date: '2026-09-12', title: 'Print: clear controls and a complete sheet', items: [
       'The print preview has plain controls: Layout (Cards, Big cards, Table, Text list), Columns, Paper, Colour, Rules text and Secondary objectives. Options that don’t apply to a layout aren’t shown.',
       'Paper is a real setting: A4 or Letter sets the printed page size and the page count.',

@@ -4635,6 +4635,12 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-12', title: 'Export PDF: every Ability you can use', items: [
+      'The Abilities table lists everything your fleet can use: each admiral’s own Abilities and chosen picks, Command Abilities from ships like the Rotterdam and Venice, ship Abilities like Fully Fuelled and Battalion Support, and the Core Abilities.',
+      'While an admiral still has picks to make, the rest of its Abilities Table prints with tick boxes.',
+      'Core Abilities print even without an admiral, and their text now matches the rulebook word for word.',
+      'Five Famous Admiral bonuses missing from the ship cards were added from the official stats: Cull the Weak (Helena of Asgard), Doomed (Enslaver), Death Mistress (Baba Yaga), Godray Lightvice (Atom) and Twins (Twins of Aaru).',
+    ]},
     { date: '2026-09-12', title: 'Export PDF: the full sheet', items: [
       'Space stations print their stats, hull boxes, weapons, chosen armaments and upgrades, and every rule in full.',
       'Admiral abilities print as a table with AP cost and effect, including each admiral’s own ability and the Core Abilities.',

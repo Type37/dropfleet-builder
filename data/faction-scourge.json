@@ -208,6 +208,10 @@
       "description": "This Ship may fire one Weapon while Silent Running.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Death Mistress",
+      "description": "Whenever an enemy group is destroyed, roll a dice. On a 4+ gain 1AP.\nThis ship cannot be take a Keel Refit."
      }
     ],
     "groupMin": 1,
@@ -386,6 +390,10 @@
       "description": "This Ship may fire one Weapon while Silent Running.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Doomed",
+      "description": "Whenever you capture an enemy Ship or an enemy Ship is destroyed due to the Fire Crippling Effect, gain 2AP."
      }
     ],
     "groupMin": 1,

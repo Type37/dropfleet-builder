@@ -2826,8 +2826,9 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
 }
 .dp-abilities { break-inside: auto; }
-.dp-abilities-short { width: auto; min-width: 50%; }
-.dp-abilities-short .dp-abil-name { width: auto; }
+.dp-abilities .dp-checkbox { font-family: var(--font-stat); font-size: 1.5em; line-height: 1; vertical-align: -0.15em; color: #1b3a5c; }
+.dp-abilities .dp-abil-on td { background: rgba(184, 147, 46, 0.08); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.dp-abilities .dp-abil-on .dp-checkbox { color: #8a6d1e; }
 .pf-inksaver .dp-abilities-table .dp-abil-grouprow td { background: #fff !important; color: #000 !important; border-top: 1px solid #999; }
 
 /* Loadout selectors */

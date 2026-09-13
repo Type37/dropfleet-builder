@@ -273,6 +273,10 @@
      {
       "name": "Vanguard-6\"",
       "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+     },
+     {
+      "name": "Godray Lightvice",
+      "description": "This weapon’s Bombardment profile may target Dropsites within scan range as if it did not have the Close Action special rule.\nIf either of this weapon’s profiles target a Dropsite containing a friendly Bioficer Deployable Feature, friendly Battalions assigned to that Feature ignore Collateral Damage due to this weapon."
      }
     ],
     "groupMin": 1,

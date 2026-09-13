@@ -816,6 +816,10 @@
        {
         "name": "Vanguard-6\"",
         "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+       },
+       {
+        "name": "Godray Lightvice",
+        "description": "This weapon’s Bombardment profile may target Dropsites within scan range as if it did not have the Close Action special rule.\nIf either of this weapon’s profiles target a Dropsite containing a friendly Bioficer Deployable Feature, friendly Battalions assigned to that Feature ignore Collateral Damage due to this weapon."
        }
       ],
       "groupMin": 1,
@@ -5848,6 +5852,10 @@
        {
         "name": "Vanguard-4\"",
         "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+       },
+       {
+        "name": "Cull the Weak",
+        "description": "Heavy Quad Battery (Flak) may only be used to attack Ships of L Tonnage."
        }
       ],
       "groupMin": 1,
@@ -17179,6 +17187,10 @@
         "description": "This Ship may fire one Weapon while Silent Running.",
         "page": "37",
         "publicationId": "45b0-3e3b-e83d-fd70"
+       },
+       {
+        "name": "Death Mistress",
+        "description": "Whenever an enemy group is destroyed, roll a dice. On a 4+ gain 1AP.\nThis ship cannot be take a Keel Refit."
        }
       ],
       "groupMin": 1,
@@ -17357,6 +17369,10 @@
         "description": "This Ship may fire one Weapon while Silent Running.",
         "page": "37",
         "publicationId": "45b0-3e3b-e83d-fd70"
+       },
+       {
+        "name": "Doomed",
+        "description": "Whenever you capture an enemy Ship or an enemy Ship is destroyed due to the Fire Crippling Effect, gain 2AP."
        }
       ],
       "groupMin": 1,
@@ -23010,6 +23026,10 @@
         "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
         "page": "37",
         "publicationId": "45b0-3e3b-e83d-fd70"
+       },
+       {
+        "name": "Twins",
+        "description": "This Admiral counts as being in both Amber Cruisers in this Group and is only removed once the Group is destroyed."
        }
       ],
       "groupMin": 1,

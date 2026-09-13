@@ -3314,3 +3314,7 @@ h5.rules-h, h6.rules-h { font-size: 13px; font-family: var(--font-body, inherit)
 .rules-tok--desc img { grid-row: span 2; align-self: start; }
 .rules-tok--desc .rules-tok-nm { font-weight: 700; color: var(--fg1); align-self: end; }
 .rules-tok-desc { font-size: 12px; line-height: 1.45; color: var(--fg3); }
+
+/* Abilities Table rows still to pick from on the printed sheet. */
+.pr-check { font-size: 1.3em; line-height: 1; vertical-align: -0.12em; }
+.pr-abil-on td { background: rgba(184, 147, 46, 0.08); -webkit-print-color-adjust: exact; print-color-adjust: exact; }

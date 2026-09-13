@@ -25,6 +25,44 @@ of what changed between stats PDFs.
 - **CI:** GitHub Actions moved off the deprecated Node 20 (checkout v7, Pages
   actions v6/v5/v5, github-script v9).
 
+### 2026-09-12: Print every Ability the fleet can use, both apps
+
+Researched against rulebook 2.3.1 (4.2.1.1 Abilities and Ability Points, 4.2.1.2
+Faction and Famous Admirals) and every faction file. The sheet's Abilities table
+(`fleetAbilityGroups`, same logic in both apps) now lists, per source:
+- **Each Faction/Famous Admiral:** its own Abilities (and One Upsmanship, the one
+  passive bonus the data keeps as an ability, with no AP cost), plus the
+  Abilities Table picks chosen for it.
+- **Abilities Table still to pick:** while an admiral has picks left, the rest of
+  the table prints with tick boxes, chosen picks ticked.
+- **Abilities granted by ship rules**, parsed verbatim from "Name (2AP): effect"
+  lines: UCMA Battlenet (Rotterdam) and UCMF Battlenet (Venice) Command
+  Abilities, and Fuel Transporter (Fully Fuelled) and Bulk Lighter (Battalion
+  Support), which every faction can field. Flagship and station rules are scanned
+  too.
+- **Core Abilities** always print, even with no admiral (they were skipped when
+  the fleet had none). Their text is now verbatim: AP Re-roll had lost "You may
+  re-roll multiple dice in a single roll this way but", and Time to Target had
+  been paraphrased.
+
+Desktop print preview gets an **Abilities** switch (on by default, not shown for
+Text list). Abilities always print their full effect text; Rules text no longer
+strips it. `**bold**` in ability text renders as bold instead of asterisks.
+Mobile also finds the abilities of a famous admiral added on desktop (stored by
+`shipKey` only).
+
+**Missing famous-admiral bonuses added (data).** Every Famous Admiral block in the
+canonical PDFs (UCM/PHR 260828, Scourge 260626, Bioficer 260529, Shaltari and
+Resistance 260731) was checked against the faction files. Most passive bonuses
+were already stored as flagship special rules (Winged Bulwark, Savagery, Jink,
+Fighter Command, True Disintegration ...). Five were missing and are now added
+verbatim as flagship special rules, so they show on the ship card on screen and
+in print: Helena of Asgard's **Cull the Weak**, Enslaver's **Doomed**, Baba
+Yaga's **Death Mistress** (including the PDF's "This ship cannot be take a Keel
+Refit."; her flagship has no Keel Refit to offer), Atom's **Godray Lightvice**,
+and the Twins of Aaru's **Twins**. fleet-data.json and the offline manifest
+regenerated; audit-special-rules and audit-named-rules pass.
+
 ### 2026-09-12: Print preview, Text size removed
 
 - **Text size (Large/Small) is gone.** Small only shrank card text by about 1pt,

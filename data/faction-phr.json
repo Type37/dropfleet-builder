@@ -256,6 +256,10 @@
      {
       "name": "Vanguard-4\"",
       "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
+     },
+     {
+      "name": "Cull the Weak",
+      "description": "Heavy Quad Battery (Flak) may only be used to attack Ships of L Tonnage."
      }
     ],
     "groupMin": 1,
