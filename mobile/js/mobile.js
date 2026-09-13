@@ -4645,6 +4645,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Scenario Generator: Print and Share buttons', items: [
+      'Print and Share Link to This Scenario have big icons with their words.',
+      'Print Features Reference, next to Print, leaves the Features and Dropsite tables off the printout. On by default.',
+    ]},
     { date: '2026-09-13', title: 'Scenario Generator: Share Link', items: [
       'The Scenario Generator has a Share Link button. The link opens the same scenario, with the same player count.',
     ]},

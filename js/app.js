@@ -4478,11 +4478,14 @@ let activeGroupId = null;
     return '';
   }
 
-  function renderSystemsPicker(ship, dbShip, groupId, factionKey) {
+  // `readOnly` draws the same option list for the Unit Reference: every option
+  // with its price and its full weapon or launch table, no counters.
+  function renderSystemsPicker(ship, dbShip, groupId, factionKey, readOnly) {
     const sel = dbShip && dbShip.systemSelection;
     if (!sel) return '';
     const list = systemsListFor(dbShip, factionKey);
     if (!list) return '';   // option table not loaded yet, Ship Rules text still explains it
+    if (readOnly) ship = { id: 'ref', systems: [] };
 
     const { counts, total, capUsage, catCounts } = summariseSystems(ship, list, sel);
     const required = sel.totalRequired;
@@ -4510,6 +4513,7 @@ let activeGroupId = null;
       <button class="sys-step-btn sys-step-add" aria-label="Add one ${esc(o.name)}${o.cost ? ', ' + o.cost + ' points' : ''}" ${canAdd ? '' : 'disabled'} onclick="App.addSystem('${groupId}','${ship.id}','${esq(o.name)}')">+${o.cost > 0 ? o.cost : ''}</button>
     </div>`;
     const sysToggle = (o, on, canAdd) => `<button class="sys-toggle${on ? ' on' : ''}" role="switch" aria-checked="${on}" aria-label="${esc(o.name)}${o.cost ? ', ' + o.cost + ' points' : ''}" ${(!on && !canAdd) ? 'disabled' : ''} onclick="App.toggleSystem('${groupId}','${ship.id}','${esq(o.name)}')"><span class="sys-toggle-knob"></span>${o.cost > 0 ? `<span class="sys-toggle-cost">+${o.cost}</span>` : ''}</button>`;
+    const sysCost = o => `<span class="sys-opt-cost">${o.cost > 0 ? '+' + o.cost : o.cost} pts</span>`;
 
     const body = cats.map(cat => {
       const isStructureCat = /structure/i.test(cat);
@@ -4518,7 +4522,9 @@ let activeGroupId = null;
       // cap label for this category. Per-tier model shows count/need and flags
       // tiers not yet satisfied; legacy cap model shows usage against the max.
       let capNote = '';
-      if (req && req[cat]) {
+      if (readOnly) {
+        // No selection to count against in the reference.
+      } else if (req && req[cat]) {
         const r = req[cat];
         const c = catCounts[cat] || 0;
         const lo = r.min || 0, hi = r.max != null ? r.max : Infinity;
@@ -5144,7 +5150,10 @@ let activeGroupId = null;
     grid.innerHTML = ships.map(s => renderShipSelectCard(s)).join('');
   }
 
-  function renderShipSelectCard({ key, data, category }) {
+  // `ref` = { faction, slug } draws the same card for the Unit Reference: no Add
+  // button, no fleet checks, and a click opens that ship in the reference.
+  function renderShipSelectCard({ key, data, category }, ref) {
+    const refFaction = ref ? ref.faction : currentFleet.faction;
     const catLabel = CATEGORY_LABELS[category] || category;
     const specialRules = data.special_rules || [];
     // Famous admiral entry: the card represents the admiral + their flagship.
@@ -5182,23 +5191,25 @@ let activeGroupId = null;
 
     // Famous admirals open no ship card (handled via the Admiral slot) and use
     // the admiral add-flow; the type line names their flagship.
-    const sizeInfoSel = GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash;
-    const famBlocked = isFamous && (hasFamousAdmiral() || (data.level && data.level > (sizeInfoSel.maxAdmiralLevel || 4)));
-    const famReason = !isFamous ? '' : (hasFamousAdmiral() ? 'One named admiral per fleet' : (data.level > (sizeInfoSel.maxAdmiralLevel || 4) ? `Requires ${sizeInfoSel.label}+` : ''));
+    const sizeInfoSel = ref ? GAME_SIZES.clash : (GAME_SIZES[currentFleet.gameSize] || GAME_SIZES.clash);
+    const famBlocked = !ref && isFamous && (hasFamousAdmiral() || (data.level && data.level > (sizeInfoSel.maxAdmiralLevel || 4)));
+    const famReason = (ref || !isFamous) ? '' : (hasFamousAdmiral() ? 'One named admiral per fleet' : (data.level > (sizeInfoSel.maxAdmiralLevel || 4) ? `Requires ${sizeInfoSel.label}+` : ''));
     // Famous admirals live under the famous_admirals group — open their ship card
     // with that category so the "click for info" works for them too.
-    const cardOnclick = ` onclick="App.openShipDetail('${currentFleet.faction}','${isFamous ? 'famous_admirals' : category}','${key}',true)"`;
+    const cardOnclick = ref
+      ? ` onclick="App.openUnit('${refFaction}','${esc(ref.slug)}')" onkeydown="if(event.key==='Enter'){App.openUnit('${refFaction}','${esc(ref.slug)}')}" tabindex="0"`
+      : ` onclick="App.openShipDetail('${currentFleet.faction}','${isFamous ? 'famous_admirals' : category}','${key}',true)"`;
     const typeLine = isFamous
       ? `${flagshipLabel(data, true, true)}, ${esc(tonLabel(data.tonnage) || catLabel)}`
       : `${esc(tonLabel(data.tonnage) || catLabel)}`;
-    const addBtn = isFamous
+    const addBtn = ref ? '' : isFamous
       ? `<button class="btn btn-primary btn-sm"${famBlocked ? ` disabled title="${esc(famReason)}"` : ''} onclick="event.stopPropagation(); App.addFamousAdmiralFromPicker('${key}')">+ Add Admiral</button>`
       : `<button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.addShipToGroup('${key}','${category}')">+ Add</button>`;
 
     // Collection chip — opt-in via Settings → Collection (default off). Just the
     // owned count from the Collection tab; no fleet-relative maths.
     let collBadge = '';
-    if (!isFamous && settings.showCollection) {
+    if (!ref && !isFamous && settings.showCollection) {
       const owned = ownedCount(currentFleet.faction, key);
       const cls = owned > 0 ? 'coll-badge-ok' : 'coll-badge-none';
       const txt = owned > 0 ? `${owned} in collection` : 'not in collection';
@@ -5217,7 +5228,7 @@ let activeGroupId = null;
       </div>
       ${renderStatGrid(data)}
       ${weaponSummary}
-      ${isFamous ? '' : shipLaunchIcons(data, currentFleet.faction)}
+      ${isFamous ? '' : shipLaunchIcons(data, refFaction)}
       ${isFamous ? '' : shipBombardmentTag(data)}
       ${specialRules.length > 0 ? `<div class="special-rules">${specialRules.map(r => {
         // Every special rule is a clickable chip: prefer the ship's own detail,
@@ -5232,9 +5243,9 @@ let activeGroupId = null;
       }).join('')}</div>` : ''}
       <div class="flex items-center justify-between" style="margin-top:auto">
         <span class="text-caption">${data.g ? `Group: ${data.g}` : ''}${collBadge}</span>
-        <div class="flex gap-xs">
+        ${addBtn ? `<div class="flex gap-xs">
           ${addBtn}
-        </div>
+        </div>` : ''}
       </div>
     </div>`;
   }
@@ -8936,6 +8947,10 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Scenario Generator: Print and Share buttons', items: [
+      'Print and Share Link to This Scenario have big icons with their words.',
+      'Print Features Reference, next to Print, leaves the Features and Dropsite tables off the printout. On by default.',
+    ]},
     { date: '2026-09-13', title: 'Scenario Generator: Share Link', items: [
       'The Scenario Generator has a Share Link button. The link opens the same scenario, with the same player count.',
     ]},

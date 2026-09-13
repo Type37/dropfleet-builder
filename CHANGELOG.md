@@ -5,6 +5,12 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Generator Print and Share buttons, Print Features Reference
+
+Print and Share Link to This Scenario are icon plus word buttons. A Print
+Features Reference checkbox (on by default, remembered per device) prints or
+leaves off the Features Added and Dropsite Reference tables.
+
 ### 2026-09-13: Scenario Generator Share Link
 
 A Share Link button beside Print and Save Image. The address carries the five
