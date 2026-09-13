@@ -5,6 +5,29 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Unit Reference (desktop)
+
+New `#units` screen, modelled on the Dropzone army builder's Unit Reference:
+faction tabs, a search box, weight-class chips and a heading per class (Light,
+Medium, Heavy, Colossal, Payload, then Space Stations, the picker's own
+buckets and order, cheapest first). Home-screen card beside Interactive Rules.
+Routes `#units`, `#units/<faction>`, `#units/<faction>/<ship>`; a ship's slug
+is its name, a flagship's is its admiral's name.
+
+Nothing is rendered twice. The grid is the ship picker's card
+(`renderShipSelectCard` with a `ref` argument: no Add button, no fleet
+checks) and a ship opens the picker's ship card (`openShipDetail` with `ref`),
+which adds the launch table, every loadout option's weapons, launch and gained
+rules, the hardpoint list (`renderSystemsPicker` read-only), the Deployable
+Features list (`renderFeatureCarrierBlock` read-only), the Ship Rules text and
+`renderShipRulesGlossary` over every option. Stations use the builder's stat
+grid, weapon rows, launch table and the armament picker read-only. Flagships
+are the famous admirals' own profiles from `admirals[].flagship`, never the
+line ship. Misc ships show with the picker's Misc tag. Verified all six
+factions, a flagship (Magellan, 570 pts), a Feature Carrier (Actium), a
+modular hull (Cruiser) and the generic and faction stations; no sideways
+scroll at 320, 393 and 700 px.
+
 ### 2026-09-13: Generator Print and Share buttons, Print Features Reference
 
 Print and Share Link to This Scenario are icon plus word buttons. A Print

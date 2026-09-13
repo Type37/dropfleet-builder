@@ -145,6 +145,12 @@
         <h2 class="tool-card-title">Interactive Rules</h2>
         <p class="tool-card-desc">Searchable, linked version of the rulebook with token reference.</p>
       </div>
+      <div class="tool-card tool-card--units card-deco" onclick="App.navigate('units')">
+        <div class="tool-card-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="8" height="7" rx="1"/><rect x="13" y="4" width="8" height="7" rx="1"/><rect x="3" y="13" width="8" height="7" rx="1"/><rect x="13" y="13" width="8" height="7" rx="1"/></svg>
+        </div>
+        <h2 class="tool-card-title">Unit Reference</h2>
+      </div>
       <div class="tool-card tool-card--calc card-deco" onclick="App.navigate('calc')">
         <div class="tool-card-shot" style="background-image:url(assets/screens/combat-calc.webp)"></div>
         <div class="tool-card-icon">
@@ -276,6 +282,11 @@
   <!-- ── Interactive Rules (rules reference) ── -->
   <section class="hidden rules-view" id="view-rules">
     <!-- Rendered by renderRules() in js/app.js -->
+  </section>
+
+  <!-- ── Unit Reference (every ship, faction by faction) ── -->
+  <section class="hidden units-view" id="view-units">
+    <!-- Rendered by renderUnits() in js/app.js -->
   </section>
 
   <!-- ── Play Mode ── -->

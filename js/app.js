@@ -910,6 +910,19 @@ let activeGroupId = null;
       const param = parts.slice(1).join('/');
       showView(view, param);
     });
+    // A Unit Reference ship card closed by Back (or by the Back guard unwinding
+    // after its close button) leaves #units/<faction>/<ship> in the address.
+    // Registered here, after the Back guard's own popstate listener, so the card
+    // is already closed when this runs.
+    // Only the address of the card that was open is tidied: following a link to
+    // another ship also fires popstate (before hashchange), and that new address
+    // must survive for hashchange to open it.
+    window.addEventListener('popstate', () => {
+      if (!unitsDetailHash || location.hash !== unitsDetailHash) return;
+      if (document.getElementById('modal-ship-detail')?.classList.contains('active')) return;
+      unitsDetailHash = '';
+      history.replaceState(history.state, '', '#units/' + location.hash.slice(1).split('/')[1]);
+    });
   }
 
   function navigate(view, param) {
@@ -1012,6 +1025,11 @@ let activeGroupId = null;
         show('view-rules');
         topContext.innerHTML = `<a href="#landing" class="topbar-back" onclick="App.navigate('landing'); return false;"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> Interactive Rules`;
         renderRules(param);
+        break;
+      case 'units':
+        show('view-units');
+        topContext.innerHTML = `<a href="#landing" class="topbar-back" onclick="App.navigate('landing'); return false;" aria-label="Back"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> Unit Reference`;
+        renderUnits(param);
         break;
       default:
         show('view-landing');
@@ -4327,11 +4345,26 @@ let activeGroupId = null;
     return Math.min(FEATURE_SLOT_KEYS.length, Math.max(1, (dbShip && dbShip.featureSlots) || 1));
   }
 
-  function renderFeatureCarrierBlock(ship, dbShip, groupId) {
+  // `readOnly` = { faction } lists every Deployable Feature this carrier can take,
+  // with its price and full rules, for the Unit Reference (nothing to choose).
+  function renderFeatureCarrierBlock(ship, dbShip, groupId, readOnly) {
     if (!isFeatureCarrier(dbShip)) return '';
-    const faction = shipDB[currentFleet.faction];
+    const faction = shipDB[readOnly ? readOnly.faction : currentFleet.faction];
     const feats = (faction && faction.deployableFeatures) || [];
     if (feats.length === 0) return '';
+    if (readOnly) {
+      const rows = feats.map(f => {
+        const art = featureArtPath(f.name);
+        return `<div class="feature-radio">
+          ${art ? `<img class="feature-radio-art" src="${art}" alt="" loading="lazy" onerror="this.remove()">` : ''}
+          <span class="feature-radio-main">
+            <span class="feature-radio-name">${esc(f.name)}${f.cost ? ` <span class="feature-radio-cost">+${f.cost} pts</span>` : ''}</span>
+            ${renderFeatureFullRules(f)}
+          </span>
+        </div>`;
+      }).join('');
+      return `<div class="feature-carrier-block"><div class="feature-carrier-label">Deployable Features</div><div class="feature-radio-list">${rows}</div></div>`;
+    }
     const slots = featureSlotCount(dbShip);
     // Radio list (not a dropdown) so every option's full rules are visible while
     // choosing, rather than hidden until selected.
@@ -4562,9 +4595,11 @@ let activeGroupId = null;
             <span class="weapon-col weapon-col-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${arcCell}</span>
             <span class="weapon-col weapon-col-att">${attackHtml(w.attack)}</span>
             <span class="weapon-col weapon-col-lock">${esc(String(w.lock))}${weaponCritOn(w) ? `<span class="weapon-col-crit" title="Scores a critical on ${esc(weaponCritOn(w))} (2 over Lock); this weapon has rules that use criticals">crit ${esc(weaponCritOn(w))}</span>` : ''}</span>
-            <span class="weapon-col weapon-col-dmg weapon-col-dmg--calc" role="button" tabindex="0" title="Damage odds, open in the Combat Calculator" onclick="event.stopPropagation();Calc.addBuilderWeapon(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Calc.addBuilderWeapon(this)}" data-cn="${esc(w.name || o.name || '')}" data-ca="${esc(String(w.attack))}" data-cl="${esc(String(w.lock))}" data-cd="${esc(String(w.damage))}" data-ct="${esc(w.type || '')}" data-cs="${esc(w.special || '')}" data-carc="${esc(w.arc || '')}">${esc(String(w.damage))}${typeTag}</span>
+            ${readOnly
+              ? `<span class="weapon-col weapon-col-dmg">${esc(String(w.damage))}${typeTag}</span>`
+              : `<span class="weapon-col weapon-col-dmg weapon-col-dmg--calc" role="button" tabindex="0" title="Damage odds, open in the Combat Calculator" onclick="event.stopPropagation();Calc.addBuilderWeapon(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Calc.addBuilderWeapon(this)}" data-cn="${esc(w.name || o.name || '')}" data-ca="${esc(String(w.attack))}" data-cl="${esc(String(w.lock))}" data-cd="${esc(String(w.damage))}" data-ct="${esc(w.type || '')}" data-cs="${esc(w.special || '')}" data-carc="${esc(w.arc || '')}">${esc(String(w.damage))}${typeTag}</span>`}
             <span class="weapon-col weapon-col-special">${w.special && w.special !== '-' ? renderWeaponSpecialChips(w.special) : ''}</span>
-            <span class="weapon-col station-arm-qty">${sysStepper(o, c, canAdd)}</span>
+            <span class="weapon-col station-arm-qty">${readOnly ? sysCost(o) : sysStepper(o, c, canAdd)}</span>
           </div>`;
         }).join('');
         return `<div class="sys-cat"><div class="sys-cat-head">${esc(cat)}${capNote}</div><div class="weapon-list station-arm-list">${head}${swRows}</div></div>`;
@@ -4586,9 +4621,9 @@ let activeGroupId = null;
         const omitName = isWeapon && o.weapons.length === 1;
         const summary = (isWeapon || isLaunch) ? '' : systemOptionSummary(o);
         const sheet = isWeapon
-          ? `<div class="weapon-list sys-opt-sheet${omitName ? ' weapon-list-noname' : ''}">${renderWeaponHeader(omitName)}${o.weapons.map(w => renderWeaponRow(w, omitName, true)).join('')}</div>`
+          ? `<div class="weapon-list sys-opt-sheet${omitName ? ' weapon-list-noname' : ''}">${renderWeaponHeader(omitName)}${o.weapons.map(w => renderWeaponRow(w, omitName, !readOnly)).join('')}</div>`
           : (isLaunch ? buildLaunchTable(factionKey, o.loads, true) : '');
-        const control = isStructureCat ? sysToggle(o, c > 0, canAdd) : sysStepper(o, c, canAdd);
+        const control = readOnly ? sysCost(o) : isStructureCat ? sysToggle(o, c > 0, canAdd) : sysStepper(o, c, canAdd);
         return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}${isStructureCat ? ' sys-opt-structure' : ''}">
           <div class="sys-opt-main">
             <span class="sys-opt-name">${esc(o.name)}${star}</span>
@@ -4601,10 +4636,10 @@ let activeGroupId = null;
       return `<div class="sys-cat"><div class="sys-cat-head">${esc(cat)}${capNote}</div>${rows}</div>`;
     }).join('');
 
-    return `<div class="systems-picker${headerClass}">
+    return `<div class="systems-picker${readOnly ? '' : headerClass}">
       <div class="systems-picker-head">
         <span class="systems-picker-title">${esc(sel.listName)}</span>
-        <span class="systems-picker-count">${reqLabel}</span>
+        ${readOnly ? '' : `<span class="systems-picker-count">${reqLabel}</span>`}
       </div>
       ${body}
     </div>`;
@@ -4627,7 +4662,10 @@ let activeGroupId = null;
   // Every special rule the ship actually uses (its own + all weapon specials,
   // base and selected loadout), spelled out in full once, deduped. So the rules
   // are readable on the detail page without tapping a single chip.
-  function renderShipRulesGlossary(dbShip, ship) {
+  // `all` = { faction } spells out the rules of every option the ship could take
+  // (all loadout choices, every hardpoint), not just the selected ones, plus any
+  // Special-column keyword. Used by the Unit Reference.
+  function renderShipRulesGlossary(dbShip, ship, all) {
     if (!dbShip) return '';
     const seen = new Map(); // name -> {description, page}
     const add = (name) => {
@@ -4642,15 +4680,19 @@ let activeGroupId = null;
       else add(r.name);
     });
     const weapons = [...(dbShip.weapons || [])];
+    if (all) String(dbShip.special || '').split(',').forEach(add);
     (dbShip.loadoutOptions || []).forEach((lo, i) => {
       const sel = (ship && ship.loadouts && ship.loadouts[i] !== undefined) ? ship.loadouts[i] : 0;
-      const opt = lo.options && lo.options[sel];
-      if (opt && opt.weapons) weapons.push(...opt.weapons);
-      if (opt && opt.gainRules) opt.gainRules.forEach(add);
+      (all ? (lo.options || []) : [lo.options && lo.options[sel]]).forEach(opt => {
+        if (opt && opt.weapons) weapons.push(...opt.weapons);
+        if (opt && opt.gainRules) opt.gainRules.forEach(add);
+      });
     });
     // Selected systems/hardpoints carry their own weapons (e.g. Vent Cannon Turret).
-    const glossarySysList = systemsListFor(dbShip, currentFleet && currentFleet.faction);
-    if (glossarySysList && ship && Array.isArray(ship.systems)) {
+    const glossarySysList = systemsListFor(dbShip, all ? all.faction : (currentFleet && currentFleet.faction));
+    if (glossarySysList && all) {
+      glossarySysList.options.forEach(o => { if (o.weapons) weapons.push(...o.weapons); });
+    } else if (glossarySysList && ship && Array.isArray(ship.systems)) {
       ship.systems.forEach(nm => { const o = findSystemOption(glossarySysList, nm); if (o && o.weapons) weapons.push(...o.weapons); });
     }
     weapons.forEach(w => { if (w && w.special) { w.special.split(',').forEach(add); } });
@@ -6360,12 +6402,15 @@ let activeGroupId = null;
     st.systems.splice(i, 1);
     recalcStationCost(st); saveFleets(); renderStationSlot(); renderStationArmamentsModal(); updatePoints();
   }
-  function renderStationArmamentPicker(station, spec) {
-    const { counts, armTotal } = summariseStation(station);
-    const complete = armTotal === spec.required;
+  // `readOnly` = { faction } lists the armaments for the Unit Reference: prices
+  // and full weapon/launch tables, no counters.
+  function renderStationArmamentPicker(station, spec, readOnly) {
+    const { counts, armTotal } = summariseStation(readOnly ? { systems: [] } : station);
+    const complete = readOnly || armTotal === spec.required;
+    const launchFaction = readOnly ? readOnly.faction : currentFleet.faction;
     const byCat = {};
     spec.options.forEach(o => { (byCat[o.category] = byCat[o.category] || []).push(o); });
-    const stepper = (o, c, canAdd) => `<div class="sys-opt-step">
+    const stepper = (o, c, canAdd) => readOnly ? '' : `<div class="sys-opt-step">
             <button class="sys-step-btn" aria-label="Remove one ${esc(o.name)}" ${c <= 0 ? 'disabled' : ''} onclick="App.removeStationSystem('${esc(o.name).replace(/'/g, "\\'")}')">&minus;</button>
             <span class="sys-opt-count">${c}</span>
             <button class="sys-step-btn" aria-label="Add one ${esc(o.name)}" ${canAdd ? '' : 'disabled'} onclick="App.addStationSystem('${esc(o.name).replace(/'/g, "\\'")}')">+</button>
@@ -6419,7 +6464,7 @@ let activeGroupId = null;
         const summary = (!hasWeapons && !isLaunch && o.effect) ? `<span class="sys-opt-detail">${esc(o.effect)}</span>` : '';
         const sheet = hasWeapons
           ? `<div class="weapon-list sys-opt-sheet">${renderWeaponHeader()}${o.weapons.map(w => renderWeaponRow(w)).join('')}</div>`
-          : (isLaunch ? buildLaunchTable(currentFleet.faction, o.loads, true) : '');
+          : (isLaunch ? buildLaunchTable(launchFaction, o.loads, true) : '');
         const star = o.oncePerStation ? '<span class="sys-opt-star" title="Max one">*</span>' : '';
         return `<div class="sys-opt${c > 0 ? ' sys-opt-active' : ''}">
           ${stationOptThumb(o.name)}<div class="sys-opt-main"><span class="sys-opt-name">${esc(o.name)}${star}</span>${summary}</div>
@@ -6433,7 +6478,7 @@ let activeGroupId = null;
     return `<div class="systems-picker${complete ? '' : ' systems-picker-incomplete'}">
       <div class="systems-picker-head">
         <span class="systems-picker-title">Armaments, choose ${spec.required}</span>
-        <span class="systems-picker-count">${armTotal} / ${spec.required}</span>
+        ${readOnly ? '' : `<span class="systems-picker-count">${armTotal} / ${spec.required}</span>`}
       </div>
       ${body}
     </div>`;
@@ -8947,6 +8992,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Unit Reference', items: [
+      'A new Unit Reference on the home screen, next to Interactive Rules: every ship each faction fields, faction by faction, grouped Light, Medium, Heavy, Colossal (and Payload for the Bioficers), with the famous admirals’ flagships, the Misc ships and the space stations.',
+      'Open any ship for its full ship card: points, stats, weapons, launch table, every loadout option with its guns, the hardpoint list, the Deployable Features a carrier can take, the Ship Rules and the full text of every rule it uses. Search finds ships by name, weapon or rule.',
+      'Each faction and each ship has its own link (#units/ucm, #units/ucm/new-york) you can share.',
+    ]},
     { date: '2026-09-13', title: 'Scenario Generator: Print and Share buttons', items: [
       'Print and Share Link to This Scenario have big icons with their words.',
       'Print Features Reference, next to Print, leaves the Features and Dropsite tables off the printout. On by default.',
@@ -10472,7 +10522,11 @@ let activeGroupId = null;
     wrap.querySelectorAll('.hero-art-dot').forEach((d, i) => d.classList.toggle('active', i === detailHeroIdx));
   }
 
-  function openShipDetail(faction, category, shipKey, addable) {
+  // `ref` = the Unit Reference is asking: the same ship card, plus everything a
+  // player could take on it (launch table, every loadout option's guns and
+  // launch, the hardpoint list, the Deployable Features, the Ship Rules text and
+  // the full rules of all of it). The picker's modal keeps its shorter card.
+  function openShipDetail(faction, category, shipKey, addable, ref) {
     const dbShip = findShipInDB(faction, category, shipKey);
     if (!dbShip) return;
 
@@ -10512,6 +10566,8 @@ let activeGroupId = null;
           if (optWpns.length > 0) {
             wpnDetail = '<div class="weapon-list" style="margin-top:var(--sp-xs)">' + renderWeaponHeader() + optWpns.map(renderWeaponRow).join('') + '</div>';
           }
+          if (ref && opt.loads && opt.loads.length) wpnDetail += buildLaunchTable(faction, opt.loads, true);
+          if (ref && opt.gainRules && opt.gainRules.length) wpnDetail += `<div class="special-rules">${renderWeaponSpecialChips(opt.gainRules.join(', '))}</div>`;
           const redundant = optWpns.length && optWpns.every(w => w.name === opt.name);
           return `<div class="detail-loadout-option">
             <div class="detail-loadout-name">${redundant ? costLabel.replace(/^ \(|\)$/g, '').trim() || 'Included' : esc(opt.name) + costLabel}</div>
@@ -10538,7 +10594,9 @@ let activeGroupId = null;
       else { const g = { ...l, _n: Number.isFinite(n) ? n : null }; if (key) _loadKeys.set(key, g); loads.push(g); }
     });
     let loadsHtml = '';
-    if (loads.length > 0) {
+    if (ref) {
+      loadsHtml = buildLaunchTable(faction, dbShip.loads || []);
+    } else if (loads.length > 0) {
       loadsHtml = loads.map(l =>
           `<div class="load-row"><span class="load-row-name">${esc(l.name)}</span>
           <div class="weapon-row-stats"><span class="weapon-stat-chip">Launch ${l.launch}</span>
@@ -10555,7 +10613,10 @@ let activeGroupId = null;
     // so it is folded into the Overcharge chip's own tooltip instead of being surfaced
     // as if the ship natively has the rule.
     let rulesHtml = '';
-    if (ruleRows.length > 0) {
+    if (ref) {
+      const gloss = renderShipRulesGlossary(dbShip, null, { faction });
+      rulesHtml = gloss ? `<div class="detail-section-label">Special Rules</div>${gloss}` : '';
+    } else if (ruleRows.length > 0) {
       rulesHtml = '<div class="detail-section-label">Special Rules</div><div class="detail-rules-list">' +
         ruleRows.map(r => {
           const page = r.page ? ` <span class="detail-rule-page">p.${esc(r.page)}</span>` : '';
@@ -10638,13 +10699,213 @@ let activeGroupId = null;
       ${weaponsHtml}
       ${loadoutsHtml}
       ${loadsHtml}
+      ${ref ? renderSystemsPicker(null, dbShip, '', faction, true) : ''}
+      ${ref ? renderFeatureCarrierBlock(null, dbShip, '', { faction }) : ''}
+      ${ref && dbShip.rulesText ? `<div class="ship-rules-block">
+        <div class="ship-rules-block-label">Ship Rules</div>
+        <div class="ship-rules-block-text">${esc(dbShip.rulesText)}</div>
+      </div>` : ''}
       ${rulesHtml}
+      ${ref ? renderShipModels(dbShip) : ''}
       ${loreHtml}
       ${variantsHtml}
     `;
 
     openModal('modal-ship-detail');
   }
+
+  // ── Unit Reference ─────────────────────────────────────────────────────────
+  // Every ship a faction can field, browsable without building a fleet: line
+  // ships by weight class (the picker's own buckets and order), famous admirals'
+  // flagships under their flagship's class (their own profile, never the line
+  // ship's), Misc ships with the picker's Misc tag, and the space stations. The
+  // grid is the ship picker's card and a ship opens the picker's ship card with
+  // `ref` set, so the reference cannot drift from what the builder shows.
+  // Routes: #units, #units/<faction>, #units/<faction>/<ship>.
+  let unitsState = { faction: 'ucm', search: '', cat: 'all' };
+  let unitsBuilt = '';
+  let unitsDetailHash = '';   // the #units/<faction>/<ship> address of the open ship card
+  const UNIT_CAT_ORDER = [...CATEGORY_ORDER, 'station'];
+  const unitCatLabel = c => c === 'station' ? 'Space Stations' : (CATEGORY_LABELS[c] || c);
+  const unitSlug = s => String(s || '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+  // One entry per thing on the screen, each with a URL slug that stays put: line
+  // ships claim theirs first, then flagships (by admiral name), then stations.
+  function unitEntries(fk) {
+    const fdb = shipDB[fk];
+    if (!fdb) return [];
+    const out = [];
+    const used = new Set();
+    const slugFor = (name, alt) => {
+      let s = unitSlug(name);
+      if (used.has(s)) s = unitSlug(name + ' ' + alt);
+      const base = s;
+      for (let n = 2; used.has(s); n++) s = `${base}-${n}`;
+      used.add(s);
+      return s;
+    };
+    CATEGORY_ORDER.forEach(cat => {
+      Object.entries((fdb.groups[cat] || {}).ships || {}).forEach(([key, data]) => {
+        if (data.type === 'launch_asset') return;
+        out.push({ kind: 'ship', key, data, category: cat, slug: slugFor(data.name, 'ship') });
+      });
+    });
+    Object.entries((fdb.groups.famous_admirals || {}).ships || {}).forEach(([key, data]) => {
+      out.push({ kind: 'famous', key, data, category: data.shipCategory || 'medium', slug: slugFor(data.admiralName || data.name, 'flagship') });
+    });
+    (fdb.spaceStations || []).forEach(ss => {
+      out.push({ kind: 'station', key: ss.id, data: ss, category: 'station', slug: slugFor(ss.name, 'station') });
+    });
+    return out;
+  }
+
+  function unitHaystack(e) {
+    const d = e.data;
+    const bits = [d.name, d.admiralName, d.flagshipName, d.namesake, d.special,
+      ...(d.special_rules || []), ...(d.specialRules || []).map(r => r.name),
+      ...(d.special_abilities || []).map(a => a.name), ...(d.stationRules || []).map(r => r.name)];
+    const wpn = w => { bits.push(w.name, w.special); };
+    (d.weapons || []).forEach(wpn);
+    (d.loads || []).forEach(l => bits.push(l.name, l.special));
+    (d.loadoutOptions || []).forEach(lo => {
+      bits.push(lo.name);
+      (lo.options || []).forEach(o => { bits.push(o.name, ...(o.gainRules || [])); (o.weapons || []).forEach(wpn); (o.loads || []).forEach(l => bits.push(l.name)); });
+    });
+    return bits.filter(Boolean).join(' ').toLowerCase();
+  }
+
+  function unitsFiltered(fk) {
+    const q = unitsState.search.trim().toLowerCase();
+    return unitEntries(fk).filter(e =>
+      (unitsState.cat === 'all' || e.category === unitsState.cat) && (!q || unitHaystack(e).includes(q)));
+  }
+
+  const unitPoints = e => e.kind === 'station' ? (e.data.cost || 0) : (e.data.points || 0);
+
+  // A station on the grid, in the picker card's own markup.
+  function renderStationRefCard(e, fk) {
+    const ss = e.data;
+    const art = stationArtPath(fk, ss);
+    const rules = (ss.specialRules || []).map(r => r.name).filter(Boolean);
+    const open = `App.openUnit('${fk}','${esc(e.slug)}')`;
+    return `<div class="ship-card" onclick="${open}" onkeydown="if(event.key==='Enter'){${open}}" tabindex="0">
+      <div class="ship-card-top">
+        ${art ? `<div class="ship-card-image"><img src="${esc(thumbUrl(art))}" alt="${esc(ss.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+        <div class="ship-card-info">
+          <div class="ship-card-name">${esc(ss.name)}</div>
+          <div class="ship-card-type">Space Station</div>
+        </div>
+        <div class="ship-card-cost">${ss.cost || 0}<span style="font-size:var(--text-sm);font-weight:var(--weight-regular)"> pts</span></div>
+      </div>
+      ${renderStatGrid(ss.stats || {})}
+      ${rules.length ? `<div class="special-rules">${rules.map(n => {
+        const r = (ss.specialRules || []).find(x => x.name === n);
+        const full = (r && r.description) ? r : lookupRuleFull(n);
+        return full && full.description
+          ? `<span class="rule-chip has-tooltip" data-rule-desc="${esc(full.description)}" onclick="event.stopPropagation(); App.showRuleTooltip(event, this)">${esc(n)}</span>`
+          : `<span class="rule-chip">${esc(n)}</span>`;
+      }).join('')}</div>` : ''}
+    </div>`;
+  }
+
+  async function renderUnits(param) {
+    const el = document.getElementById('view-units');
+    if (!el) return;
+    const parts = String(param || '').split('/');
+    const fk = FACTION_LABELS[parts[0]] ? parts[0] : unitsState.faction;
+    if (fk !== unitsState.faction) unitsState = { faction: fk, search: '', cat: 'all' };
+    await ensureFactionLoaded(fk);
+    if (unitsBuilt !== fk) {
+      const tabs = Object.keys(FACTION_LABELS).map(k => `<button type="button" class="units-tab${k === fk ? ' active' : ''}" style="--acc:${FACTION_COLORS[k]}" aria-pressed="${k === fk}" onclick="App.navigate('units','${k}')">
+          ${FACTION_ICONS[k] ? `<img src="${FACTION_ICONS[k]}" alt="">` : ''}${esc(FACTION_LABELS[k])}</button>`).join('');
+      el.innerHTML = `<div class="units-wrap" style="--acc:${FACTION_COLORS[fk]}">
+        <div class="units-tabs">${tabs}</div>
+        <div class="units-toolbar">
+          <input class="units-search" type="search" placeholder="Search" aria-label="Search ships, weapons and rules" value="${esc(unitsState.search)}" oninput="App.unitsSearch(this.value)">
+          <div class="units-chips" id="units-chips"></div>
+        </div>
+        <div id="units-groups"></div>
+      </div>`;
+      unitsBuilt = fk;
+    }
+    renderUnitsGrid();
+    const slug = parts[1] ? decodeURIComponent(parts[1]) : '';
+    if (slug) openUnitDetail(fk, slug);
+    else if (document.getElementById('modal-ship-detail')?.classList.contains('active')) closeModal('modal-ship-detail');
+  }
+
+  function renderUnitsGrid() {
+    const fk = unitsState.faction;
+    const all = unitEntries(fk);
+    const cats = UNIT_CAT_ORDER.filter(c => all.some(e => e.category === c));
+    const chips = document.getElementById('units-chips');
+    if (chips) chips.innerHTML = ['all', ...cats].map(c =>
+      `<button type="button" class="units-chip${unitsState.cat === c ? ' active' : ''}" aria-pressed="${unitsState.cat === c}" onclick="App.unitsCat('${c}')">${c === 'all' ? 'All' : esc(unitCatLabel(c))}</button>`).join('');
+    const list = unitsFiltered(fk);
+    const box = document.getElementById('units-groups');
+    if (!box) return;
+    const html = cats.map(cat => {
+      const inCat = list.filter(e => e.category === cat).sort((a, b) => unitPoints(a) - unitPoints(b) || (a.data.name || '').localeCompare(b.data.name || ''));
+      if (!inCat.length) return '';
+      return `<section class="units-group">
+        <h2 class="units-group-head">${esc(unitCatLabel(cat))}</h2>
+        <div class="units-grid">${inCat.map(e => e.kind === 'station'
+          ? renderStationRefCard(e, fk)
+          : renderShipSelectCard({ key: e.key, data: e.data, category: e.category }, { faction: fk, slug: e.slug })).join('')}</div>
+      </section>`;
+    }).join('');
+    box.innerHTML = html || `<p class="units-empty">No ships match “${esc(unitsState.search)}”.</p>`;
+  }
+
+  // A card was clicked: open its ship card and put it in the address without a
+  // new history entry, so Back closes the card rather than replaying it.
+  function openUnit(fk, slug) {
+    history.replaceState(history.state, '', `#units/${fk}/${slug}`);
+    openUnitDetail(fk, slug);
+  }
+
+  function openUnitDetail(fk, slug) {
+    const e = unitEntries(fk).find(x => x.slug === slug || x.key === slug);
+    if (!e) return;
+    unitsDetailHash = location.hash;
+    if (e.kind !== 'station') {
+      openShipDetail(fk, e.kind === 'famous' ? 'famous_admirals' : e.category, e.key, false, true);
+      return;
+    }
+    const ss = e.data;
+    const art = stationArtPath(fk, ss);
+    detailHeroArts = [];
+    const rules = (ss.specialRules || []).filter(r => r && r.name).map(r => {
+      const full = r.description ? r : (lookupRuleFull(r.name) || {});
+      return `<div class="detail-rule-entry"><span class="detail-rule-name">${esc(r.name)}${full.page ? ` <span class="detail-rule-page">p.${esc(full.page)}</span>` : ''}</span>${full.description ? `<span class="detail-rule-desc">${ruleHtml(full.description)}</span>` : ''}</div>`;
+    }).join('');
+    const stationRules = (ss.stationRules || []).map(r =>
+      `<div class="detail-rule-entry"><span class="detail-rule-name">${esc(r.name)}</span><span class="detail-rule-desc">${linkKeywords(r.effect || '')}</span></div>`).join('');
+    const wpns = ss.weapons || [];
+    const spec = stationArmamentSpec(ss);
+    const specials = new Set();
+    wpns.forEach(w => String(w.special || '').split(',').forEach(s => { s = s.trim(); if (s && s !== '-') specials.add(s); }));
+    const wRules = [...specials].map(n => lookupRuleFull(n)).map((full, i) => full && full.description
+      ? `<div class="detail-rule-entry"><span class="detail-rule-name">${esc([...specials][i])}${full.page ? ` <span class="detail-rule-page">p.${esc(full.page)}</span>` : ''}</span><span class="detail-rule-desc">${ruleHtml(full.description)}</span></div>` : '').join('');
+    document.getElementById('detail-ship-name').textContent = ss.name;
+    document.getElementById('detail-ship-body').innerHTML = `
+      <div class="detail-hero">
+        ${art ? `<div class="detail-hero-image"><img src="${esc(art)}" alt="${esc(ss.name)}" loading="lazy" onerror="this.style.display='none'"></div>` : ''}
+        <div class="detail-hero-info">
+          <div class="detail-hero-tonnage">Space Station</div>
+          <div class="detail-hero-cost">${ss.cost || 0} pts</div>
+          ${renderStatGrid(ss.stats || {})}
+        </div>
+      </div>
+      ${wpns.length ? `<div class="weapon-list">${renderWeaponHeader()}${wpns.map(renderWeaponRow).join('')}</div>` : ''}
+      ${renderLaunchTable(fk, ss, ss)}
+      ${spec ? renderStationArmamentPicker(ss, spec, { faction: fk }) : ''}
+      ${rules || stationRules || wRules ? `<div class="detail-section-label">Special Rules</div><div class="detail-rules-list">${rules}${stationRules}${wRules}</div>` : ''}`;
+    openModal('modal-ship-detail');
+  }
+
+  function unitsSearch(v) { unitsState.search = v || ''; renderUnitsGrid(); }
+  function unitsCat(c) { unitsState.cat = c; renderUnitsGrid(); }
 
   // ── Rule Tooltip ──
   function showRuleTooltip(event, el) {
@@ -11016,6 +11277,7 @@ let activeGroupId = null;
   return {
     navigate, ensureFactionLoaded,
     jumpRules, filterRules,
+    openUnit, unitsSearch, unitsCat,
     // Data hooks for the Combat Calculator (Calc, js/calc-ui.js).
     getCalcData: () => ({ shipDB, factionData, FACTION_LABELS, CATEGORY_ORDER, CATEGORY_LABELS, currentFaction: currentFleet ? currentFleet.faction : null }),
     openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,

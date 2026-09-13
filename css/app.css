@@ -8198,3 +8198,32 @@ h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-we
   .print-preview-surface .launch-ref-table:not(.dp-abilities-table) th:last-child, .print-preview-surface .launch-ref-table:not(.dp-abilities-table) td:last-child { grid-column: 1 / -1; }
   .print-preview-surface .launch-ref-table th, .print-preview-surface .launch-ref-table td { padding-left: 2px; padding-right: 2px; }
 }
+
+/* ── Unit Reference ─────────────────────────────────────────────────────────
+   Every ship a faction fields, on the ship picker's own cards. Laid out after
+   the Dropzone builder's Unit Reference: faction tabs, one toolbar, a heading
+   per weight class. No rules between sections: space and type separate them. */
+.units-view { max-width: 1440px; margin: 0 auto; padding: var(--sp-lg) var(--sp-lg) var(--sp-3xl); }
+.units-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: var(--sp-md); }
+.units-tab { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 14px 6px 8px; border: 1px solid var(--stroke); border-radius: var(--radius-md); background: var(--paper); color: var(--ink); font: 600 var(--text-sm)/1.2 var(--font-body); cursor: pointer; }
+.units-tab img { width: 26px; height: 26px; object-fit: contain; }
+.units-tab:hover { border-color: var(--acc); }
+.units-tab.active { border-color: var(--acc); box-shadow: inset 0 -3px 0 var(--acc); }
+.units-tab:focus-visible, .units-chip:focus-visible, .units-search:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+.units-toolbar { display: flex; flex-wrap: wrap; gap: var(--sp-sm); align-items: center; margin-bottom: var(--sp-xl); }
+.units-search { flex: 1 1 240px; min-width: 0; padding: 9px 12px; font: 16px/1.2 var(--font-body); border: 1px solid var(--stroke-strong); border-radius: var(--radius-md); background: var(--paper); color: var(--ink); }
+.units-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.units-chip { min-height: 40px; padding: 6px 12px; border: 1px solid var(--stroke); border-radius: var(--radius-md); background: var(--paper); color: var(--ink-soft); font: 500 var(--text-sm)/1.1 var(--font-body); cursor: pointer; }
+.units-chip:hover { border-color: var(--ink-muted); color: var(--ink); }
+.units-chip.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.units-print { margin-left: auto; }
+.units-group { margin-bottom: var(--sp-3xl); }
+.units-group-head { font: 700 var(--text-lg)/1.2 var(--font-display); color: var(--ink); text-transform: uppercase; letter-spacing: normal; margin: 0 0 var(--sp-md); }
+.units-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: var(--sp-md); }
+.units-grid .ship-card { min-width: 0; }
+.units-empty { padding: var(--sp-3xl) 0; text-align: center; color: var(--ink-muted); }
+@media (max-width: 640px) {
+  .units-view { padding: var(--sp-md) var(--sp-sm) var(--sp-2xl); }
+  .units-print { margin-left: 0; }
+  .units-grid .ship-card-image { width: 88px; height: 88px; }
+}
