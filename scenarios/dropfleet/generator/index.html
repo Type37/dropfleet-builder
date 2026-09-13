@@ -673,11 +673,9 @@ function variantOverlay(sites,variantRoll){
 function makeMap(depRoll,layoutName,players,variantRoll){
   const F='#f4efe8';
   const TB='<rect x="0" y="0" width="200" height="200" fill="none" stroke="#B8952F" stroke-width="1.6"/>';
-  // Double midpoint lines; always visible, barely perceptible, no dash
-  const GR=`<line x1="99" y1="0" x2="99" y2="200" stroke="#B8952F" stroke-width=".4" opacity=".22"/>
-<line x1="101" y1="0" x2="101" y2="200" stroke="#B8952F" stroke-width=".4" opacity=".22"/>
-<line x1="0" y1="99" x2="200" y2="99" stroke="#B8952F" stroke-width=".4" opacity=".22"/>
-<line x1="0" y1="101" x2="200" y2="101" stroke="#B8952F" stroke-width=".4" opacity=".22"/>`;
+  // One centre line each way; barely perceptible, no dash, under everything else
+  const GR=`<line x1="100" y1="0" x2="100" y2="200" stroke="#B8952F" stroke-width=".5" opacity=".25"/>
+<line x1="0" y1="100" x2="200" y2="100" stroke="#B8952F" stroke-width=".5" opacity=".25"/>`;
   const lay=LM[layoutName]||{s:[],d:[]};
   const items=lay.s||[];
   const dims=lay.d||[];

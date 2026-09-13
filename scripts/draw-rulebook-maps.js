@@ -62,7 +62,7 @@ const zoneLabel = (x1, y1, x2, y2, txt, color) => {
 
 // A Planetary Ring and a Large Object, as the generator draws them
 const ring = y => `<line x1="0" y1="${_i(y)}" x2="200" y2="${_i(y)}" stroke="#C47A10" stroke-width="3" opacity=".8"/>`;
-const largeObject = (x, y, d) => `<circle cx="${_i(x)}" cy="${_i(y)}" r="${_i(d / 2)}" fill="#c4beb6" stroke="#888" stroke-width="1.2" stroke-dasharray="4,2" opacity=".85"/><text x="${_i(x)}" y="${_i(y) + 3}" text-anchor="middle" font-size="7" fill="#555" font-family="sans-serif">${d}"</text>`;
+const largeObject = (x, y, d) => `<circle cx="${_i(x)}" cy="${_i(y)}" r="${_i(d / 2)}" fill="#c4beb6" stroke="#888" stroke-width="1.2" stroke-dasharray="4,2"/><text x="${_i(x)}" y="${_i(y) + 3}" text-anchor="middle" font-size="7" fill="#555" font-family="sans-serif">${d}"</text>`;
 
 // A measurement from a dropsite to a table edge, as the generator's edgeLine draws it
 function edgeLine(edge, xi, yi, shift) {
@@ -331,7 +331,8 @@ const FEAT_KEY = { out: 'out', odg: 'odg', com: 'com', pow: 'pow', han: 'han' };
 const pct = v => Math.round(v / 2 * 10) / 10;   // SVG units (0-200) to percent
 
 for (const [id, m] of Object.entries(MAPS)) {
-  const GR = `<line x1="99" y1="0" x2="99" y2="200" stroke="#B8952F" stroke-width=".4" opacity=".22"/><line x1="101" y1="0" x2="101" y2="200" stroke="#B8952F" stroke-width=".4" opacity=".22"/><line x1="0" y1="99" x2="200" y2="99" stroke="#B8952F" stroke-width=".4" opacity=".22"/><line x1="0" y1="101" x2="200" y2="101" stroke="#B8952F" stroke-width=".4" opacity=".22"/>`;
+  // One centre line each way (the table's halves), drawn first so zones and scenery sit over it
+  const GR = `<line x1="100" y1="0" x2="100" y2="200" stroke="#B8952F" stroke-width=".5" opacity=".25"/><line x1="0" y1="100" x2="200" y2="100" stroke="#B8952F" stroke-width=".5" opacity=".25"/>`;
   let dims = '', sites = '', toks = '';
   const spots = [];
   // Draws one Dropsite into dims/sites/toks. `wrap` puts its drawing in a Variant layer; `tag` marks its hover spots.
