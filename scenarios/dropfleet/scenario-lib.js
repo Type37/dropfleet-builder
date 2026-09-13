@@ -762,8 +762,9 @@ function renderScenario(s){
         ${weaponList(lev.weapons.rows.map(([name,lock,attack,damage,arc,special,type])=>({name,lock,attack,damage,arc,special,type})))}`}
         ${s.leviathanRules?`<div class="lhdr">Controlling the Drake</div>${pubBullets(s.leviathanRules)}`:''}
         ${lev.rules.map(([n,t])=>[].concat(t).map((p,i)=>`<p class="rule-text">${i?'':`<b>${n}:</b> `}${p}</p>`).join('')).join('')}
-        ${lev.famous?`<p class="pub-lev-famous"><b>${lev.famousLabel}</b> <i>${lev.famous}</i></p>`:''}
-        ${(lev.lore||[]).map(p=>`<p class="sc-flavor">${p}</p>`).join('')}
+        ${(lev.lore||[]).length||lev.famous?`<div class="lhdr">Lore</div>
+        ${(lev.lore||[]).map(p=>`<p class="pub-lev-lore">${p}</p>`).join('')}
+        ${lev.famous?`<p class="pub-lev-famous"><b>${lev.famousLabel.replace(/:$/,'')}</b></p><ul class="pub-lev-list">${lev.famous.split(/,\s*/).map(n=>`<li>${n}</li>`).join('')}</ul>`:''}`:''}
       </div>
     </div></div>`:'';
   if(own) return `<div class="scenario pub${hasMap?'':' no-map'}" data-scn="${s.id}" data-v="0">
