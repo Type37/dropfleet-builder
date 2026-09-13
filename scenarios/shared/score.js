@@ -16,27 +16,28 @@ window.ScoreSheet = (function () {
 .ss-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;padding:10px 16px;}
 .ss-head .ss-clear{margin-left:auto;}
 .ss-toggle{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:none;border:0;padding:0;cursor:pointer;text-align:left;color:inherit;font:inherit;}
-.ss-title{font:700 20px/1.2 'Roboto Slab',Georgia,serif;text-transform:uppercase;color:#5A4710;}
+.ss-title{font:700 28px/1.2 'Roboto Slab',Georgia,serif;color:#0E0C08;}
 .ss-chev{width:18px;height:18px;color:#5d5850;transition:transform .15s;}
 .ss.closed .ss-chev{transform:rotate(-90deg);}
-.ss-clear{font:600 13px/1 'Jost',system-ui,sans-serif;text-transform:uppercase;color:#6b5210;background:none;border:1.5px solid #8a6a12;padding:5px 10px;cursor:pointer;}
+.ss-clear{font:600 14px/1 'Jost',system-ui,sans-serif;color:#6b5210;background:none;border:1.5px solid #8a6a12;padding:5px 10px;cursor:pointer;}
 .ss-clear:hover{background:#f7f1e6;}
 .ss-body{padding:0 16px 14px;}
 .ss.closed .ss-body{display:none;}
 .ss-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px;}
 .ss-seg{display:flex;flex-wrap:wrap;align-items:center;gap:2px;}
-.ss-l{font-size:13px;color:#5d5850;margin-right:8px;}
-.ss-seg button{font:600 15px/1 'Jost',system-ui,sans-serif;min-width:34px;height:32px;padding:0 10px;border:0;background:#f1ece2;color:#3d3834;cursor:pointer;}
+.ss-l{font-size:14px;color:#5d5850;margin-right:8px;}
+.ss-seg button{font:600 16px/1 'Jost',system-ui,sans-serif;min-width:34px;height:32px;padding:0 10px;border:0;background:#f1ece2;color:#3d3834;cursor:pointer;}
 .ss-seg button:hover{background:#e6ddcc;}
 .ss-seg button[aria-pressed="true"]{background:#d3b27a;color:#0E0C08;}
 .ss-seg button.mark{box-shadow:inset 0 -3px 0 #8a6a12;}
 .ss-seg .ss-n{font-weight:600;margin-left:8px;}
 .ss-rows{list-style:none;margin:0;padding:0;}
-.ss-row{display:grid;grid-template-columns:minmax(0,26em) max-content;justify-content:start;align-items:center;gap:6px 32px;padding:6px 0;font-size:15px;line-height:1.45;}
+.ss-row{display:grid;grid-template-columns:minmax(0,26em) max-content;justify-content:start;align-items:center;gap:6px 32px;padding:6px 0;font-size:16px;line-height:1.45;}
 .ss-row .ss-t{flex:1;min-width:0;}
 .ss-row b{font-weight:600;}
-.ss-h{padding:14px 0 2px;font:600 17px/1.3 'Jost',system-ui,sans-serif;}
-.ss-h span{font:400 13px 'Jost',system-ui,sans-serif;color:#5d5850;margin-left:8px;}
+.ss-h{padding:16px 0 2px;font:600 20px/1.3 'Jost',system-ui,sans-serif;}
+.ss-h mark{color:inherit;background:linear-gradient(transparent 45%,#f1dc92 45%,#f1dc92 92%,transparent 92%);padding:0 4px;margin-left:-4px;}
+.ss-h span{font:400 14px 'Jost',system-ui,sans-serif;color:#5d5850;margin-left:8px;}
 .ss-check{display:flex;align-items:flex-start;gap:10px;flex:1;min-width:0;cursor:pointer;}
 .ss-box{appearance:none;-webkit-appearance:none;width:18px;height:18px;flex:0 0 18px;margin:3px 0 0;border:1.5px solid #b08a3e;background:#f7f1e6;cursor:pointer;}
 .ss-box:checked{background:#8a5a12 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12l5 5L20 7' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat;border-color:#8a5a12;}
@@ -54,7 +55,7 @@ window.ScoreSheet = (function () {
 .ss-vp{font-weight:600;color:#a14a07;white-space:nowrap;}
 .ss button:focus-visible,.ss-box:focus-visible{outline:2px solid #B86C0A;outline-offset:2px;}
 /* phones: a rule's name and its counters share a line, counters stacked on the right, so the sheet stays short */
-@media (max-width:640px){.ss-head,.ss-body{padding-left:12px;padding-right:12px;}.ss-row{grid-template-columns:minmax(0,1fr) max-content;gap:4px 10px;padding:4px 0;font-size:15px;}.ss-parts{grid-template-columns:max-content;gap:4px;}.ss-part{grid-template-columns:auto 84px 3.2em;gap:6px;}.ss-each{display:none;}.ss-step button{width:26px;height:28px;}.ss-h{padding-top:10px;}}
+@media (max-width:640px){.ss-head,.ss-body{padding-left:12px;padding-right:12px;}.ss-row{grid-template-columns:minmax(0,1fr) max-content;gap:4px 10px;padding:4px 0;font-size:16px;}.ss-parts{grid-template-columns:max-content;gap:4px;}.ss-part{grid-template-columns:auto 84px 3.2em;gap:6px;}.ss-each{display:none;}.ss-step button{width:26px;height:28px;}.ss-h{padding-top:10px;}}
 @media print{.ss{display:none !important;}}`;
   const style = document.createElement('style');
   style.textContent = css;
@@ -89,7 +90,7 @@ window.ScoreSheet = (function () {
         return `<span class="ss-part"><span class="ss-pl">${part.label || ''}</span><span class="ss-step"><button type="button" data-step="-1" data-id="${id}" aria-label="One fewer">${MINUS}</button><output>${n}</output><button type="button" data-step="1" data-id="${id}" aria-label="One more">${PLUS}</button></span><span class="ss-vp">${vpText(part)}</span></span>`;
       };
       const rowHTML = r => {
-        if (r.heading) return `<li class="ss-h">${r.heading}${r.sub ? `<span>${r.sub}</span>` : ''}</li>`;
+        if (r.heading) return `<li class="ss-h"><mark>${r.heading}</mark>${r.sub ? `<span>${r.sub}</span>` : ''}</li>`;
         const parts = r.parts || [];
         // a rule scored once, for one amount, is a tick box; anything else gets a counter per amount
         if (parts.length === 1 && parts[0].kind === 'check') {

@@ -47,7 +47,7 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 .ctrl-inner{padding:16px 18px 0;flex-shrink:0;}
 .ctrl-lockup{display:flex;flex-direction:column;align-items:center;gap:0;margin-bottom:0;}
 .ctrl-logo{height:56px;width:auto;display:block;margin:0 auto;filter:drop-shadow(0 2px 8px rgba(0,159,227,.3));}
-.ctrl-sub{font-family:'Jost',system-ui,sans-serif;font-weight:600;font-size:13px;text-transform:uppercase;color:#a9c0ce;margin-top:9px;}
+.ctrl-sub{font-family:'Jost',system-ui,sans-serif;font-weight:600;font-size:14px;text-transform:uppercase;color:#a9c0ce;margin-top:9px;}
 
 
 /* TRAY inside left panel */
@@ -65,19 +65,19 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 .gbtn:hover{background:var(--action-dk);}
 .gbtn:active{transform:scale(.97);}
 
-.abtn{font-family:'Jost',system-ui,sans-serif;font-size:14px;color:var(--cobalt-dk);background:transparent;border:1.5px solid var(--cobalt-dk);padding:7px 12px;cursor:pointer;transition:all .15s;}
+.abtn{font-family:'Jost',system-ui,sans-serif;font-size:16px;color:var(--cobalt-dk);background:transparent;border:1.5px solid var(--cobalt-dk);padding:7px 12px;cursor:pointer;transition:all .15s;}
 .abtn:hover:not([disabled]){background:var(--action);color:#fff;border-color:var(--action);}
 .abtn[disabled]{color:var(--nc);border-color:#b9c3c9;cursor:not-allowed;}
 
 /* Competitive toggle */
 .comp-wrap{display:flex;align-items:center;gap:6px;position:relative;}
-.comp-lbl{font-family:'Jost',system-ui,sans-serif;font-size:14px;color:var(--cobalt-dk);display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;}
+.comp-lbl{font-family:'Jost',system-ui,sans-serif;font-size:16px;color:var(--cobalt-dk);display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;}
 .comp-lbl input[type=checkbox]{width:17px;height:17px;margin:0;accent-color:var(--action);}
 
 
 
 
-.tip{position:absolute;top:calc(100% + 6px);left:0;width:240px;background:var(--cobalt-bg);border:1px solid var(--cobalt-dk);padding:10px 12px;font-family:'Jost',system-ui,sans-serif;font-size:12px;color:#d5dde2;line-height:1.5;display:none;z-index:300;text-align:left;pointer-events:none;}
+.tip{position:absolute;top:calc(100% + 6px);left:0;width:240px;background:var(--cobalt-bg);border:1px solid var(--cobalt-dk);padding:10px 12px;font-family:'Jost',system-ui,sans-serif;font-size:14px;color:#d5dde2;line-height:1.5;display:none;z-index:300;text-align:left;pointer-events:none;}
 .tip::after{content:'';position:absolute;top:-5px;left:16px;width:8px;height:8px;background:var(--cobalt-bg);border-left:1px solid var(--cobalt-dk);border-top:1px solid var(--cobalt-dk);transform:rotate(45deg);}
 .tip b{color:var(--cobalt);}
 .tip .tip-row{margin-bottom:3px;}
@@ -86,13 +86,13 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 /* PICKS inside tray */
 .picks{display:flex;flex-direction:column;gap:8px;}
 .pick-section{display:flex;flex-direction:column;gap:5px;}
-.pick-section-lbl{font-family:'Jost',system-ui,sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;color:#0a1e2e;}
+.pick-section-lbl{font-family:'Jost',system-ui,sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;color:#0a1e2e;}
 .pick-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
 .pick-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;}
 #row-players{grid-template-columns:repeat(3,minmax(0,1fr));}
 .pick-tile{position:relative;display:block;cursor:pointer;}
 .pick-tile input[type=radio]{position:absolute;opacity:0;width:0;height:0;}
-.tile-inner{font-family:'Jost',system-ui,sans-serif;font-size:14px;color:var(--cobalt-dk);background:transparent;padding:6px 8px;transition:background .12s,color .12s;display:flex;align-items:center;gap:8px;min-height:36px;line-height:1.2;}
+.tile-inner{font-family:'Jost',system-ui,sans-serif;font-size:16px;color:var(--cobalt-dk);background:transparent;padding:6px 8px;transition:background .12s,color .12s;display:flex;align-items:center;gap:8px;min-height:36px;line-height:1.2;}
 .pick-tile input:checked + .tile-inner{background:#e3eff6;color:#0a1e2e;font-weight:600;}
 .pick-tile:hover .tile-inner{background:rgba(0,114,168,.08);}
 .tile-die{width:18px;height:18px;flex:0 0 18px;color:#5d7a8c;}
@@ -112,13 +112,13 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 #tt-arrow{position:absolute;width:9px;height:9px;background:var(--cobalt-bg);border-right:1.5px solid var(--cobalt);border-bottom:1.5px solid var(--cobalt);transform:rotate(45deg);}
 #tt.below #tt-arrow{border-right:none;border-bottom:none;border-left:1.5px solid var(--cobalt);border-top:1.5px solid var(--cobalt);}
 #tt svg{display:block;width:130px;height:130px;}
-#tt .tip-text{font-family:'Jost',system-ui,sans-serif;font-size:12px;color:#d5dde2;line-height:1.4;padding:4px 6px;min-width:160px;max-width:200px;}
-#tt .tip-name{font-family:'Jost',system-ui,sans-serif;font-size:12px;font-weight:600;color:var(--cobalt);margin-bottom:3px;}
+#tt .tip-text{font-family:'Jost',system-ui,sans-serif;font-size:14px;color:#d5dde2;line-height:1.4;padding:4px 6px;min-width:160px;max-width:200px;}
+#tt .tip-name{font-family:'Jost',system-ui,sans-serif;font-size:14px;font-weight:600;color:var(--cobalt);margin-bottom:3px;}
 
 /* Footer inside left panel */
-.game-info-footer{flex-shrink:0;background:#f3f1ec;padding:10px 20px;font-size:12px;color:#6b6660;font-family:'Jost',system-ui,sans-serif;}
+.game-info-footer{flex-shrink:0;background:#f3f1ec;padding:10px 20px;font-size:14px;color:#5d5850;font-family:'Jost',system-ui,sans-serif;}
 .gif-inner{display:flex;flex-wrap:wrap;align-items:center;gap:10px;max-width:1200px;margin:0 auto;}
-.gif-title{font-family:'Jost',system-ui,sans-serif;font-weight:700;color:#3a3834;}
+.gif-title{font-family:'Jost',system-ui,sans-serif;font-weight:600;color:#3a3834;}
 .game-info-footer a{color:#1b3a5c;text-decoration:none;}
 .game-info-footer a:hover{text-decoration:underline;}
 .gif-builder{margin-left:auto;}
@@ -197,7 +197,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 }
 /* ── Scenario loader ─────────────────────────────── */
 .ctrl-scen-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:10px 0 0;}
-.scen-ref-link{font-family:'Jost',system-ui,sans-serif;font-size:14px;font-weight:600;color:var(--action);text-decoration:underline;text-underline-offset:3px;padding:4px 2px;}
+.scen-ref-link{font-family:'Jost',system-ui,sans-serif;font-size:16px;font-weight:600;color:var(--action);text-decoration:underline;text-underline-offset:3px;padding:4px 2px;}
 .scen-ref-link:hover{color:var(--action-dk);}
 .scen-ref-link:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
 
@@ -242,7 +242,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
           <div class="tip-row"><b>Deployment Type:</b> Re-roll results of 5 or 6.</div>
           <div class="tip-row"><b>Approach Type:</b> Re-roll results of 4, 5, or 6.</div>
           <div class="tip-row"><b>Layout:</b> Re-roll results of 4 or more.</div>
-          <div style="margin-top:5px;font-size:.65rem;color:var(--ink-muted);">(Rules 12.1.1–12.1.3, v2.3.1)</div>
+          <div style="margin-top:5px;font-size:.875rem;color:var(--ink-muted);">(Rules 12.1.1–12.1.3, v2.3.1)</div>
         </div>
       </div>
       <button class="abtn" id="pb" onclick="window.print()" disabled>Print / PDF</button>
@@ -791,17 +791,14 @@ function gen(keep){
   // APPROACH TYPE
   let appH='';
   if(A.r===A.b){
-    appH=pill(`All Players: ${A.r}`,modePill(A.r));
-    appH+=`<p class="rule-text">${DM[A.r]}</p>`;
+    appH=runIn(`All Players: ${A.r}`,DM[A.r]);
     // If both sides Directly Deploy, add multi-player clause
     if(A.r==="Directly Deploy"){
       appH+=`<p class="rule-text">If multiple players must Directly Deploy, all red players deploy these Groups, then all blue players deploy these Groups. Groups not deployed cannot be activated during the 1st round. From the 2nd round onwards, players that Directly Deploy may activate Groups not on the table.</p>`;
     }
   } else {
-    appH=pill(`Red (Attackers): ${A.r}`,modePill(A.r));
-    appH+=`<p class="rule-text">${DM[A.r]}</p>`;
-    appH+=pill(`Blue (Defenders): ${A.b}`,modePill(A.b));
-    if(A.b!==A.r) appH+=`<p class="rule-text">${DM[A.b]}</p>`;
+    appH=runIn(`Red (Attackers): ${A.r}`,DM[A.r]);
+    appH+=A.b!==A.r?runIn(`Blue (Defenders): ${A.b}`,DM[A.b]):`<p class="rule-text"><b class="run-in">Blue (Defenders): ${A.b}.</b></p>`;
   }
 
   // SCENERY

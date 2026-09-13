@@ -183,7 +183,10 @@ const dieIcon=(n,cls,label)=>tablerIcon(cls,`<path d="M3 5a2 2 0 0 1 2-2h14a2 2 
 const shuffleIcon=cls=>tablerIcon(cls,'<path d="m18 4l3 3l-3 3m0 10l3-3l-3-3"/><path d="M3 7h3a5 5 0 0 1 5 5a5 5 0 0 0 5 5h5m0-10h-5a4.98 4.98 0 0 0-3 1m-4 8a5 5 0 0 1-3 1H3"/>');
 // A section heading; a rolled result shows as that die face
 function sh(label,roll){return `<div class="sh"><h3 class="sl">${label}${roll?` ${dieIcon(roll,'sh-die',`Result ${roll}`)}`:''}</h3></div>`;}
-function pill(label,cls){return `<div class="spill-row"><span class="spill ${cls}">${label}</span></div>`;}
+// An H2: the highlighted name, then any note beside it ("Rounds 4 & 6") outside the highlight
+function pill(label,cls){const m=String(label).match(/^(.*?)(<span class="spill-sub">.*)$/);return `<div class="spill-row"><span class="spill ${cls}">${m?m[1]:label}</span>${m?m[2]:''}</div>`;}
+// An H3: a named rule in bold leading its own text
+function runIn(name,html){const h=String(html);return /^<p class="rule-text">/.test(h)?h.replace(/^<p class="rule-text">/,`<p class="rule-text"><b class="run-in">${name}.</b> `):`<div class="rule-text"><b class="run-in">${name}.</b> ${h}</div>`;}
 function stdScoring(){
   return `${pill("Standard Scoring<span class=\"spill-sub\">Rounds 4 &amp; 6</span>","sp-std")}<table class="stbl"><thead><tr><th>Dropsite Size</th><th>Control / Levelled</th><th>Contest / Ruined</th></tr></thead><tbody><tr><td>Small</td><td><vp>2VP</vp></td><td><vp>0VP</vp></td></tr><tr><td>Medium</td><td><vp>3VP</vp></td><td><vp>1VP</vp></td></tr><tr><td>Large</td><td><vp>4VP</vp></td><td><vp>2VP</vp></td></tr></tbody></table><div class="terms"><div class="term"><b>Control:</b> Only you have Battalions and/or deployed Features on the Dropsite.</div><div class="term"><b>Contest:</b> You and an opponent both have Battalions and/or deployed Features on it.</div><div class="term"><b>Levelled:</b> Players that destroy a Dropsite have Levelled it.</div><div class="term"><b>Ruined:</b> Dropsites that have less than half of their Hull Points remaining are Ruined.</div><div class="term"><b>Kill Points:</b> the total points in Admirals and Ships you have destroyed. In the event of a tie in VP, the victor is determined by who has the most Kill Points.</div></div>`;
 }
@@ -594,9 +597,9 @@ function pubFind(text,detectors){
 
 function pubModes(dep){
   const out=[], shown=new Set();
-  const mode=(m,label)=>{ if(shown.has(m)) return; shown.add(m); out.push(pill(label||m,PUB_MODE[m])+`<p class="rule-text">${DM[m]}</p>`); };
+  const mode=(m,label)=>{ if(shown.has(m)) return; shown.add(m); out.push(runIn(label||m,DM[m])); };
   const at=name=>{ const a=AT.find(x=>x.name===name); mode(a.r,`${name}: All Players ${a.r}`); };
-  const se1=name=>{ if(shown.has(name)) return; shown.add(name); out.push(pill(name,PUB_MODE[name])+pubSE1(name)); };
+  const se1=name=>{ if(shown.has(name)) return; shown.add(name); out.push(runIn(name,pubSE1(name))); };
   pubFind(dep,[
     {re:/\bClose Enough\b/,run:()=>at('Close Enough')},
     {re:/\bColumn\b/,run:()=>at('Column')},

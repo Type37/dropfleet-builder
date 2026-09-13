@@ -14,13 +14,13 @@ svg.i{width:18px;height:18px;flex:0 0 18px;}
 /* Header: back to the tools, the logo, the other scenario tools */
 .top{background:var(--navy);color:var(--navy-ink);}
 .top-in{max-width:1180px;margin:0 auto;padding:10px 20px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;}
-.top a{color:var(--navy-ink);text-decoration:none;font-size:.92rem;}
+.top a{color:var(--navy-ink);text-decoration:none;font-size:1rem;}
 .top a:hover{color:#fff;}
 .top-logo img{height:40px;width:auto;display:block;}
 .top-links{justify-self:end;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:flex-end;}
 .top-links a{display:inline-flex;align-items:center;gap:8px;}
 .game-switch{display:inline-flex;border:1.5px solid #3a5568;}
-.game-switch a{padding:4px 10px;font-size:.85rem;}
+.game-switch a{padding:4px 10px;font-size:.875rem;}
 .game-switch a[aria-current="page"]{background:var(--navy-ink);color:var(--navy);font-weight:600;}
 
 main{flex:1;width:100%;}
@@ -28,15 +28,16 @@ main{flex:1;width:100%;}
 /* Index */
 .idx{max-width:1180px;margin:0 auto;padding:28px 20px 48px;}
 .idx-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:14px 24px;margin-bottom:8px;}
-.idx-h{font-family:'Roboto Slab',Georgia,serif;font-weight:700;font-size:2rem;line-height:1.1;}
+/* Type: Title 36 Slab, H1 28 Slab, H2 20, body 16, labels 14 (scenario-card.css has the full list) */
+.idx-h{font-family:'Roboto Slab',Georgia,serif;font-weight:700;font-size:2.25rem;line-height:1.1;}
 .idx-tools{display:flex;gap:8px;flex-wrap:wrap;}
 .idx-tools input{font:inherit;font-size:1rem;color:var(--ink);background:#fff;border:1.5px solid #8a8378;padding:8px 12px;width:240px;max-width:100%;}
-.btn{font-family:'Jost',system-ui,sans-serif;font-size:.95rem;font-weight:600;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1.5px solid var(--action);background:var(--action);color:#fff;cursor:pointer;}
+.btn{font-family:'Jost',system-ui,sans-serif;font-size:1rem;font-weight:600;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1.5px solid var(--action);background:var(--action);color:#fff;cursor:pointer;}
 .btn:hover{background:var(--action-dk);border-color:var(--action-dk);}
 .btn-quiet{background:transparent;color:var(--action-dk);text-decoration:none;}
 .btn-quiet:hover{background:var(--hover);color:var(--action-dk);border-color:var(--action-dk);}
 .book{margin-top:30px;}
-.book-h{display:flex;align-items:center;gap:8px;font-family:'Roboto Slab',Georgia,serif;font-weight:700;font-size:1.25rem;margin-bottom:10px;}
+.book-h{display:flex;align-items:center;gap:8px;font-family:'Roboto Slab',Georgia,serif;font-weight:700;font-size:1.75rem;line-height:1.2;margin-bottom:10px;}
 /* Two scenarios to a row on a wide screen, one when it narrows. Each is a
    compact card -- thumbnail, name, then its facts labelled beneath -- so the
    row fills the width instead of stretching four short columns across the page. */
@@ -45,10 +46,10 @@ main{flex:1;width:100%;}
 .scn{display:grid;grid-template-columns:72px minmax(0,1fr);gap:1px 14px;align-items:start;padding:8px;color:inherit;text-decoration:none;}
 .scn:hover{background:var(--hover);}
 .scn-map{width:72px;height:72px;grid-row:span 6;display:block;background:#e6dfcf;border:1px solid #cdbf98;object-fit:cover;}
-.scn-name{font-family:'Roboto Slab',Georgia,serif;font-weight:600;font-size:1.05rem;line-height:1.25;margin-bottom:2px;}
+.scn-name{font-family:'Jost',system-ui,sans-serif;font-weight:600;font-size:1rem;line-height:1.3;margin-bottom:2px;}
 /* A small note beside a scenario name, such as its edition */
-.scn-tag{display:inline-block;vertical-align:2px;margin-left:4px;padding:0 6px;font-family:'Jost',system-ui,sans-serif;font-size:.8rem;font-weight:500;font-style:italic;line-height:1.5;color:#4a443c;background:#ebe3d3;border-radius:3px;white-space:nowrap;}
-.scn-f{font-size:.9rem;line-height:1.35;color:var(--ink);display:flex;flex-wrap:wrap;gap:0 6px;}
+.scn-tag{display:inline-block;vertical-align:2px;margin-left:4px;padding:0 6px;font-family:'Jost',system-ui,sans-serif;font-size:.875rem;font-weight:400;font-style:italic;line-height:1.5;color:#4a443c;background:#ebe3d3;border-radius:3px;white-space:nowrap;}
+.scn-f{font-size:.875rem;line-height:1.4;color:var(--ink);display:flex;flex-wrap:wrap;gap:0 6px;}
 .scn-f span{display:inline;}
 .scn-f .scn-fl{display:inline;color:var(--muted);}
 
@@ -64,19 +65,19 @@ main{flex:1;width:100%;}
 .icon-btn:hover{border-color:#8a8378;}
 .trk{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 14px;}
 .trk-g{display:flex;align-items:center;gap:4px;}
-.trk-l{font-size:.85rem;color:var(--muted);margin-right:4px;white-space:nowrap;}
+.trk-l{font-size:.875rem;color:var(--muted);margin-right:4px;white-space:nowrap;}
 .trk button{width:32px;height:32px;display:grid;place-items:center;background:#fff;border:1.5px solid #8a8378;color:var(--ink);font:600 1rem 'Jost',sans-serif;cursor:pointer;}
 .trk button:hover{border-color:var(--ink);}
-.trk output{min-width:2.2ch;text-align:center;font-family:'Jost',system-ui,sans-serif;font-weight:700;font-size:1.1rem;display:inline-flex;align-items:center;justify-content:center;gap:3px;}
+.trk output{min-width:2.2ch;text-align:center;font-family:'Jost',system-ui,sans-serif;font-weight:600;font-size:1rem;display:inline-flex;align-items:center;justify-content:center;gap:3px;}
 .trk output .vp-dm{width:9px;height:9px;}
-.trk .trk-plain{width:auto;padding:0 10px;font-size:.85rem;font-weight:500;}
+.trk .trk-plain{width:auto;padding:0 10px;font-size:.875rem;font-weight:600;}
 .sheet{max-width:1180px;margin:0 auto;padding:4mm 0 10mm;}
 .ss-host{padding:4mm 20px 0;}
 
 /* Footer */
-.foot{background:#f3f1ec;padding:10px 20px;font-size:.78rem;color:#5d5850;}
+.foot{background:#f3f1ec;padding:10px 20px;font-size:.875rem;color:#5d5850;}
 .foot-in{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;max-width:1180px;margin:0 auto;}
-.foot b{font-family:'Jost',system-ui,sans-serif;font-weight:700;color:#3a3834;}
+.foot b{font-family:'Jost',system-ui,sans-serif;font-weight:600;color:#3a3834;}
 .foot a{color:#1b3a5c;text-decoration:none;}
 .foot a:hover{text-decoration:underline;}
 .foot-by{margin-left:auto;}
@@ -90,7 +91,7 @@ main{flex:1;width:100%;}
   .scn-cols{display:none;}
   .scn{grid-template-columns:64px minmax(0,1fr);gap:4px 12px;align-items:start;}
   .scn-map{width:64px;height:64px;grid-row:span 5;}
-  .scn-f{display:flex;flex-wrap:wrap;gap:0 6px;font-size:.86rem;}
+  .scn-f{display:flex;flex-wrap:wrap;gap:0 6px;font-size:.875rem;}
   .scn-f span{display:inline;}
   .scn-f .scn-fl{display:inline;color:var(--muted);}
   .idx-tools{width:100%;}
