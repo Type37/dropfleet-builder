@@ -4665,6 +4665,7 @@
       'The scenario list puts commas between the deployments and scoring it names.',
       'A scenario page names its deployment and scoring rules in bold at the start of their paragraphs, the way the Dropzone pages do, instead of in dark labels.',
       'A generated scenario no longer carries credit or copyright lines under it; the footer already has them.',
+      'The generator is calmer: rolls show as die faces beside each heading instead of "(result: N)", option tiles lose their borders and number boxes, Random sits beside each section name, and the info circle, coloured labels and gold diamonds are gone. Labels no longer print pale.',
       'Tap a Micrometeor Cloud, Dense Debris Field, Planetary Ring or Large Object, on a map or in the scenery text, to read its rules. That text is now the rulebook’s own, word for word: Large Objects had been reworded, and bold the book does not print had been added.',
       'Orbital Support’s map shows the Medium Space Station with its Military Outposts. Turn its Variant on and they become Hangars on the map, stats included.',
     ]},

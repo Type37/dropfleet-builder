@@ -77,8 +77,6 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 
 
 
-.info-btn{background:none;border:1.5px solid var(--cobalt-dk);color:var(--cobalt-dk);border-radius:50%;width:20px;height:20px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Roboto Slab',Georgia,serif;font-weight:700;line-height:1;}
-.info-btn:hover{border-color:var(--cobalt);color:var(--cobalt);}
 .tip{position:absolute;top:calc(100% + 6px);left:0;width:240px;background:var(--cobalt-bg);border:1px solid var(--cobalt-dk);padding:10px 12px;font-family:'Jost',system-ui,sans-serif;font-size:12px;color:#d5dde2;line-height:1.5;display:none;z-index:300;text-align:left;pointer-events:none;}
 .tip::after{content:'';position:absolute;top:-5px;left:16px;width:8px;height:8px;background:var(--cobalt-bg);border-left:1px solid var(--cobalt-dk);border-top:1px solid var(--cobalt-dk);transform:rotate(45deg);}
 .tip b{color:var(--cobalt);}
@@ -89,20 +87,24 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 .picks{display:flex;flex-direction:column;gap:8px;}
 .pick-section{display:flex;flex-direction:column;gap:5px;}
 .pick-section-lbl{font-family:'Roboto Slab',Georgia,serif;font-size:13px;font-weight:700;text-transform:uppercase;color:#0a1e2e;}
-.pick-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;}
+.pick-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.pick-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;}
 #row-players{grid-template-columns:repeat(3,minmax(0,1fr));}
 .pick-tile{position:relative;display:block;cursor:pointer;}
 .pick-tile input[type=radio]{position:absolute;opacity:0;width:0;height:0;}
-.tile-inner{font-family:'Jost',system-ui,sans-serif;font-size:14px;color:var(--cobalt-dk);background:#fff;border:1.5px solid var(--cobalt-dk);padding:7px 9px;transition:background .12s,color .12s,border-color .12s;display:flex;align-items:center;gap:6px;min-height:36px;line-height:1.2;}
-.pick-tile input:checked + .tile-inner{background:#e3eff6;color:#0a1e2e;border-color:var(--action);box-shadow:inset 0 0 0 1.5px var(--action);font-weight:600;}
-.pick-tile:hover .tile-inner{border-color:var(--cobalt);background:rgba(0,159,227,.08);}
+.tile-inner{font-family:'Jost',system-ui,sans-serif;font-size:14px;color:var(--cobalt-dk);background:transparent;padding:6px 8px;transition:background .12s,color .12s;display:flex;align-items:center;gap:8px;min-height:36px;line-height:1.2;}
+.pick-tile input:checked + .tile-inner{background:#e3eff6;color:#0a1e2e;font-weight:600;}
+.pick-tile:hover .tile-inner{background:rgba(0,114,168,.08);}
+.tile-die{width:18px;height:18px;flex:0 0 18px;color:#5d7a8c;}
+.pick-tile input:checked + .tile-inner .tile-die{color:var(--action);}
+.pick-head .tile-inner{min-height:30px;padding:3px 8px;}
 .pick-tile input:focus-visible + .tile-inner,
 .comp-lbl input:focus-visible,
-.gbtn:focus-visible,.abtn:focus-visible,.info-btn:focus-visible,
+.gbtn:focus-visible,.abtn:focus-visible,
 .ctrl a:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
 /* Competitive mode dims nc-only tiles */
-body.competitive .pick-tile.nc .tile-inner{color:var(--nc);border-color:var(--nc);border-style:dashed;text-decoration:line-through;}
-body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);border-color:var(--nc);color:#fff;text-decoration:line-through;}
+body.competitive .pick-tile.nc .tile-inner{color:var(--nc);text-decoration:line-through;}
+body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);color:#fff;text-decoration:line-through;}
 /* One tooltip, fixed to the viewport. Parented to a tile it lost its right edge
    to .ctrl's overflow-x:hidden, which clipped three of the map previews. */
 #tt{display:none;position:fixed;z-index:400;background:var(--cobalt-bg);border:1.5px solid var(--cobalt);padding:6px;pointer-events:none;min-width:130px;}
@@ -147,7 +149,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
   .scenario{padding:2.5mm 5mm 1.5mm 5mm;gap:4mm;}
   .rules-col{gap:.8mm;}
   .sec{gap:.4mm;}
-  .sec-body{gap:.6mm;padding-left:8px;}
+  .sec-body{gap:.6mm;padding-left:0;}
   .sh{gap:1mm;}
   .sl{font-size:7.5pt;}
   .sc-num{font-size:6pt;}
@@ -156,10 +158,9 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
   .rule-text{font-size:7pt;line-height:1.3;}
   .rule-bullets{gap:.3mm;}
   .rule-bullets li{font-size:7pt;line-height:1.28;padding-left:3mm;}
-  .spill{font-size:6.5pt;padding:.4mm 2.5mm;}
+  .scenario .spill{font-size:7pt;padding:0;}
   .spill-row{margin-top:1mm;margin-bottom:.2mm;}
   .spill-row:has(.sp-std){margin-top:.3mm;margin-bottom:.3mm;}
-  .spill.sp-std{padding:1mm 2.5mm;font-size:6.5pt;}
   .stbl{font-size:6.5pt;}
   .stbl th{font-size:6pt;padding:.2mm 2mm;}
   .stbl td{padding:.15mm 2mm;font-size:6.5pt;}
@@ -171,7 +172,6 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
   .sc-wrap{gap:.4mm;}
   .sc-flavor{font-size:6pt;font-family:'Libre Baskerville',Georgia,serif;}
   .sc-note{font-size:6pt;}
-  .dm{width:10px;height:10px;}
 
   .map-col{flex:0 0 2.45in;gap:.6mm;}
   .map-frame{width:2.45in;height:2.45in;}
@@ -213,8 +213,6 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 .gbtn.rolling .gdie{animation:gdtumble .5s cubic-bezier(.34,1.3,.5,1);}
 @keyframes gdtumble{0%{transform:rotate(0)}40%{transform:rotate(200deg) scale(1.15)}100%{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.gbtn.rolling .gdie{animation:none;}}
-.pick-tile.is-random{grid-column:1/-1;}
-.tile-n{flex:0 0 20px;height:20px;display:inline-grid;place-items:center;font-size:12px;font-weight:600;border:1px solid currentColor;}
 </style>
 </head>
 <body>
@@ -238,7 +236,6 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
           <input type="checkbox" id="cm">
           Competitive
         </label>
-        <button class="info-btn" tabindex="0">i</button>
         <div class="tip">
           <div class="tip-row"><b>Competitive Mode</b> re-rolls certain results:</div>
           <div class="tip-row"><b>Deployment Type:</b> Re-roll results of 5 or 6.</div>
@@ -820,13 +817,12 @@ function gen(){
 
   // RIGHT COL LEGEND
   let legH=`<div class="lhdr">Layout: ${L.name}</div><ol class="lds-list">`;
-  L.sc.forEach(s=>{legH+=`<li class="lds"><span style="color:var(--gold);font-size:6pt">◆</span>&nbsp;${scenTips(s)}</li>`;});
+  L.sc.forEach(s=>{legH+=`<li class="lds">${scenTips(s)}</li>`;});
   legH+=`</ol>`;
 
   if(V.ft.length) legH+=`<div class="lhdr">Features Added</div>${featTable(V.ft)}`;
   legH+=`<div class="lhdr">Dropsite Reference</div>${dsTable()}`;
 
-  const tag=(r)=>`<span class="roll-tag">(result: ${r})</span>`;
   const comp_note = comp?' · Competitive':'';
 
   const html=`<div class="scenario">
@@ -841,22 +837,22 @@ function gen(){
     </div>
 
     <div class="sec">
-      ${sh(`Deployment Type: ${D.name} ${tag(dep.roll)}`)}
+      ${sh(`Deployment Type: ${D.name}`,dep.roll)}
       <div class="sec-body">${dtH}</div>
     </div>
 
     <div class="sec">
-      ${sh(`Approach Type: ${A.name} ${tag(app.roll)}`)}
+      ${sh(`Approach Type: ${A.name}`,app.roll)}
       <div class="sec-body">${appH}</div>
     </div>
 
     <div class="sec">
-      ${sh(`Layout: ${L.name} ${tag(lay.roll)}`)}
+      ${sh(`Layout: ${L.name}`,lay.roll)}
       <div class="sec-body">${scenH}</div>
     </div>
 
     <div class="sec">
-      ${sh(`Variant: ${V.name} ${tag(vari.roll)}`)}
+      ${sh(`Variant: ${V.name}`,vari.roll)}
       <div class="sec-body">
 ${varH}
       </div>
@@ -1021,13 +1017,13 @@ function buildPicks(){
   sections.forEach(sec=>{
     const row=document.createElement('div');
     row.className='pick-section';
-    row.innerHTML=`<span class="pick-section-lbl">${sec.label}</span><div class="pick-row" id="row-${sec.id}"></div>`;
+    row.innerHTML=`<div class="pick-head"><span class="pick-section-lbl">${sec.label}</span></div><div class="pick-row" id="row-${sec.id}"></div>`;
     root.appendChild(row);
-    const pickRow=row.querySelector('.pick-row');
+    const head=row.querySelector('.pick-head'), pickRow=row.querySelector('.pick-row');
     sec.items.forEach((item,idx)=>{
       const lbl=document.createElement('label');
-      lbl.className='pick-tile'+(item.nc?' nc':'')+(item.v===''?' is-random':'');
-      lbl.innerHTML=`<input type="radio" name="${sec.id}" id="${sec.id}-${idx}" value="${item.v}"${idx===0?' checked':''}><span class="tile-inner">${item.v&&sec.id!=='players'?`<span class="tile-n">${item.v}</span>`:''}${item.name}</span>`;
+      lbl.className='pick-tile'+(item.nc?' nc':'');
+      lbl.innerHTML=`<input type="radio" name="${sec.id}" id="${sec.id}-${idx}" value="${item.v}"${idx===0?' checked':''}><span class="tile-inner">${item.v===''?shuffleIcon('tile-die'):sec.id!=='players'?dieIcon(+item.v,'tile-die'):''}${item.name}</span>`;
       if(item.tip){
         lbl.dataset.tip=TIPS.length; TIPS.push(item.tip);
         lbl.addEventListener('pointerenter',()=>ttShow(lbl));
@@ -1035,7 +1031,7 @@ function buildPicks(){
         lbl.addEventListener('focusin',()=>ttShow(lbl));   // keyboard, and tap-to-select on touch
         lbl.addEventListener('focusout',ttHide);
       }
-      pickRow.appendChild(lbl);
+      (item.v===''?head:pickRow).appendChild(lbl);   // Random sits beside the section name
     });
   });
 }

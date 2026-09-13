@@ -42,6 +42,15 @@ the shared `data/rules-wiki.json`, so no app-code change was needed.
   "as shown in orange.").
 - **Generator card:** the TT Combat copyright line under a generated scenario
   is gone, as the WarLore credit before it; the page footer carries both.
+- **Generator, decluttered.** A roll shows as that die face beside its
+  heading (Tabler dice via Iconify) instead of "(result: N)". Option tiles
+  lose their borders and numbered boxes and carry die faces; Random is a small
+  shuffle control beside each section name, not a full-width tile. The circled
+  "i" is gone (hover Competitive for its re-roll rules). Named rules are bold
+  lead-ins, not colour-coded labels, which also fixes labels printing pale
+  once the printer dropped their fill. Gold diamonds are gone from headings,
+  bullets and the layout list, on both games' scenario pages. The Standard
+  Scoring table keeps its own width instead of spreading across the card.
 - **CI:** GitHub Actions moved off the deprecated Node 20 (checkout v7, Pages
   actions v6/v5/v5, github-script v9).
 

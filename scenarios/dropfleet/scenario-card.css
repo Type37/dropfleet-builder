@@ -20,7 +20,6 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 
 .sec{display:flex;flex-direction:column;gap:.7mm;flex-shrink:0;}
 .sh{display:flex;align-items:center;gap:1.5mm;}
-.dm{width:12px;height:12px;flex-shrink:0;}
 .sl{font-family:'Roboto Slab',Georgia,serif;font-size:8.5pt;font-weight:700;color:var(--ch);line-height:1.2;margin:0;text-transform:uppercase;}
 
 .spill-row{display:flex;align-items:center;gap:1.5mm;margin-top:1.5mm;margin-bottom:.4mm;}
@@ -36,12 +35,12 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 /* .si removed from pill() */
 .spill.sp-std{}
 .spill-sub{font-weight:400;margin-left:2mm;}
-.sec-body{padding-left:10px;display:flex;flex-direction:column;gap:1.2mm;}
+.sec-body{padding-left:0;display:flex;flex-direction:column;gap:1.2mm;}
 .rule-text{font-family:'Jost',system-ui,sans-serif;font-size:8pt;color:var(--ch);line-height:1.48;}
 .rule-text b{font-weight:700;color:inherit;}
 .rule-bullets{list-style:none;display:flex;flex-direction:column;gap:.7mm;}
 .rule-bullets li{font-family:'Jost',system-ui,sans-serif;font-size:8pt;color:var(--ch);line-height:1.42;padding-left:3.5mm;position:relative;}
-.rule-bullets li::before{content:'◆';position:absolute;left:0;font-size:6pt;color:var(--gold);top:2px;}
+.rule-bullets li::before{content:'\2022';position:absolute;left:0;color:var(--ch);}
 .rule-bullets li b{font-weight:700;color:inherit;}
 .sside{display:flex;gap:3mm;align-items:flex-start;}
 .stbl-w{flex-shrink:0;}.sdefs{flex:1;min-width:0;}
@@ -229,7 +228,6 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
   .sc-name { font-size: var(--fs-display); line-height: 1.12; }
   .pub-src { font-size: var(--fs-body); }
   .sh { gap: 8px; }
-  .dm { width: 14px; height: 14px; }
   .sl, .lhdr { font-family: 'Roboto Slab', Georgia, serif; font-weight: 700; color: var(--ch); line-height: 1.25; }
   .sl { font-size: var(--fs-section); }
   .lhdr { font-size: var(--fs-heading); margin-top: 3mm; }
@@ -250,12 +248,16 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
   .sv-e, .sv-k { font-size: 14px; }
 }
 
-/* Published scenarios read like the Dropzone pages: a named rule leads its paragraph in bold
-   instead of sitting in a filled label */
-.scenario.pub .spill-row{margin:1mm 0 0;}
-.scenario.pub .spill{background:none;color:var(--ch);padding:0;font-family:'Jost',system-ui,sans-serif;font-size:inherit;font-weight:700;letter-spacing:0;}
-.scenario.pub .spill-sub{font-weight:400;color:#5d5850;margin-left:6px;}
-@media screen{ .scenario.pub .spill{font-size:var(--fs-body);} }
+/* A named rule leads its paragraph in bold, as on the Dropzone pages. Not a filled label:
+   its colour meant nothing, and printing drops the fill and leaves pale text. */
+.scenario .spill-row{margin:1mm 0 0;}
+.scenario .spill{background:none;color:var(--ch);padding:0;font-family:'Jost',system-ui,sans-serif;font-size:inherit;font-weight:700;letter-spacing:0;}
+.scenario .spill-sub{font-weight:400;color:#5d5850;margin-left:6px;}
+@media screen{ .scenario .spill{font-size:var(--fs-body);} }
+/* The rolled die beside a heading */
+.sh-die{width:1.15em;height:1.15em;flex:0 0 auto;color:#5d5850;}
+/* A table keeps its own width; stretched to the column it spread three columns across the card */
+.stbl{align-self:flex-start;}
 
 /* Variants: a toggle beside each, and the map layers it shows or hides (as on the Dropzone pages) */
 .map-svg,.map-svg svg,.map-svg img{display:block;width:100%;height:100%;}

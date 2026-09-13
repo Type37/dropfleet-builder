@@ -25,7 +25,6 @@ const ScenarioShell = (() => {
     share: '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 13v8h14v-8"/></svg>',
     done: '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>',
     print: '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 9V3h10v6M7 17H4v-8h16v8h-3M7 14h10v7H7z"/></svg>',
-    diamond: '<svg viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 15,8 8,15 1,8" fill="none" stroke="#B8952F" stroke-width="1.5"/><polygon points="8,5 11,8 8,11 5,8" fill="#B8952F" opacity="0.28"/></svg>',
     mark: '<svg class="vp-dm" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 15,8 8,15 1,8" fill="#B8952F"/></svg>',
   };
   const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -42,7 +41,7 @@ const ScenarioShell = (() => {
     return G.groups.map(g => {
       const list = g.items.filter(s => !q || [G.name(s), ...cols.flatMap(c => c.values(s))].join(' ').toLowerCase().includes(q));
       if (!list.length) return '';
-      return `<section class="book"><h2 class="book-h">${ICON.diamond}${g.name}</h2>
+      return `<section class="book"><h2 class="book-h">${g.name}</h2>
         <div class="scn-cols" aria-hidden="true"><span>Scenario</span>${cols.map(c => `<span>${c.label}</span>`).join('')}</div>
         <ul class="scn-list">${list.map(s => {
           const t = G.thumb(s);
