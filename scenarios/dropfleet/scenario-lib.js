@@ -157,7 +157,7 @@ const OB=[
   {name:"Extract",cls:"sp-ext",std:false,b:["Place 1 Recon Operative token on Small Dropsites, 2 tokens on Medium Dropsites, and 3 tokens on Large Dropsites. If a Ship may launch Assets to deploy a Battalion token to that Dropsite, they may instead Extract Recon Operatives from that Dropsite equal to the number of Battalions that would be placed. The Extracting Ship gains those Recon Operatives. A Ship cannot Extract more Recon Operatives than the Dropsite has.","Players are awarded <vp>2VP</vp> at the end of the game for each Recon Operative token left aboard their Ships.","Players are awarded <vp>1VP</vp> at the end of the game for each enemy Ship they have destroyed with any number of Recon Operatives.","Once onboard a Ship, Recon Operatives cannot be removed. Recon Operatives on Payload Ships are transferred to a Porter Ship when the Payload Ship attaches to it."]},
   {name:"Protect",cls:"sp-prot",std:true,b:["At the start of the game, after determining Initiative, each player nominates a single different Dropsite in Initiative order. You are awarded additional Standard Scoring for controlling/contesting your nominated Dropsite if it is not Levelled or Ruined. At the end of the game, you are subtracted Standard Scoring if your Dropsite has been levelled."]},
   {name:"Breakthrough",cls:"sp-brk",std:false,b:["Red Players may permanently fly Ships off the board in any opponent's Deployment Zone. For every <b>200pts</b> in Ships Players fly off, they are awarded <vp>1VP</vp> at the end of the game.","Other Players are awarded <vp>2VP</vp> at the end of the game for every <b>500 points</b> of Ships and Admirals they have destroyed."]},
-  {name:"Raze",cls:"sp-raze",std:true,b:["At the end of the game, players are awarded <b>double Standard Scoring</b> for each Dropsite that has been Levelled or Ruined that is <b>24\" or more</b> away from their Deployment Zone, regardless of who Levelled or Ruined it. Players are also awarded <vp>2 VP</vp> for every <b>500 points</b> of Ships and Admirals they have destroyed."]},
+  {name:"Raze",cls:"sp-raze",std:false,b:["At the end of the game, players are awarded <b>double Standard Scoring</b> for each Dropsite that has been Levelled or Ruined that is <b>24\" or more</b> away from their Deployment Zone, regardless of who Levelled or Ruined it. Players are also awarded <vp>2 VP</vp> for every <b>500 points</b> of Ships and Admirals they have destroyed."]},
 ];
 // Rulebook 2.3.1, 11.3 Features (p27), verbatim
 const FS={
@@ -443,7 +443,7 @@ const SCENARIOS=[
    players:`1 Attacker in Red, 1 Defender in Blue.`,
    scenery:`6 Debris Fields placed as shown in the map.`,
    deployment:`Defender Directly Deploys. Attacker Deploys Close.`,
-   scoring:[`The defender scores 1 victory points equal to number of Scrap tokens on any friendly Harvester or Flenser ship they control and that is still alive at the end of the game.`,
+   scoring:[`The defender scores a number of victory points equal to number of Scrap tokens on any friendly Harvester or Flenser ship they control and that is still alive at the end of the game.`,
             `The attacker scores 3 Victory Points for every VX-22 Flenser destroyed and 6 Victory Points if they destroy the Type-87 Terminus Harvester.`],
    special:[`The Defender begins the game with a Terminus Harvester with 6 friendly battalions on it and 2 attached Flensers.`,
             `The Harvester activates like any other friendly Group and is treated as such for all rules purposes.`,
@@ -647,7 +647,7 @@ function pubScoring(text,sides={}){
     {re:/\bStandard Scoring\b/,run:stdOnce},
     {re:/\bNormal Scoring\b/,run:se1('Normal Scoring','sp-std')},
     {re:/\bDemolish/,run:se1('Demolish Scoring','sp-raze')},
-    {re:/\bFocal [Pp]oint/,run:se1('Focal Points Scoring','sp-surv')},
+    {re:/\bFocal Point/i,run:se1('Focal Points Scoring','sp-surv')},
     {re:/\bKill Points\b/,run:se1('Kill Points Scoring','sp-att')},
     {re:/\bAssess/,run:se1('Assess Scoring','sp-surv')},
     ...OB.map(o=>({re:new RegExp('\\b'+o.name+'\\b'),run:()=>{ out.push(pill(o.name+(sides[o.name]?` - ${sides[o.name]==='red'?'Red':'Blue'} Player`:''),o.cls+(sides[o.name]?' side-'+sides[o.name]:''))+pubParas(o.b)); if(o.std) stdOnce(); }})),
@@ -915,7 +915,7 @@ function vpRows(html){
 const asCounts=rows=>rows.map(r=>({...r,parts:r.parts.map(p=>({...p,kind:'count'}))}));
 // The generator: the rolled objective, then the Standard Scoring it uses
 function genScoreRows(O){
-  return [{heading:O.name},...vpRows(O.b.join(' ')),...(O.std?SCORE_TABLE('Standard Scoring','Rounds 4 & 6',['Control','Contest']):[])];
+  return [{heading:O.name,sub:O.name==='Protect'?'Rounds 4 & 6':''},...objectiveRows(O),...(O.std?SCORE_TABLE('Standard Scoring','Rounds 4 & 6',['Control','Contest']):[])];
 }
 // A published scenario: its objectives and its own scoring sentences, then the scoring methods it names
 // Which side an objective is given to ("Attackers-Raze, Defenders-Protect."): {Raze:'red', Protect:'blue'}
@@ -939,6 +939,8 @@ function objectiveRows(o){
 }
 
 function pubScoreRows(s){
+  // Scenarios whose scoring the text reading gets wrong have their sheet written out (scenario-sheets.js)
+  if(typeof SCN_SHEETS!=='undefined'&&SCN_SHEETS[s.id]) return SCN_SHEETS[s.id];
   const text=[s.scoring,s.special,s.variant].map(pubJoin).join(' ');
   const rows=[], has=re=>re.test(text);
   const add=(heading,sub,list)=>{ if(list.length) rows.push({heading,sub},...list); };
@@ -950,13 +952,13 @@ function pubScoreRows(s){
   if(has(/\bNormal Scoring\b/)) rows.push(...SCORE_TABLE('Normal Scoring','Rounds 4 & 6',['Control','Contest']));
   if(has(/\bDemolish/)) rows.push(...SCORE_TABLE('Demolish Scoring','',['Levelled','Ruined']));
   // Short labels; the full Focal Points rule is written out on the card
-  if(has(/\bFocal [Pp]oint/)){
+  if(has(/\bFocal Point/i)){
     // The range each scenario gives its Focal Points, e.g. 6" or 8"
     const ranges=[...new Set([...text.matchAll(/Focal Points?,? (?:with a range of|\(range) (\d+)["”]/g)].map(m=>m[1]+'"'))];
     const within=ranges.length?` within ${ranges.join(' or ')}`:'';
     add('Focal Points','Rounds 4 & 6',[{text:`Highest Ship value${within}`,parts:[{kind:'count',vp:3}]},{text:`At least half that value${within}`,parts:[{kind:'count',vp:1}]}]);
   }
-  if(has(/\bKill Points\b/)) add('Kill Points','',vpRows(SCN_SE1['Kill Points Scoring'].body.join(' ')));
+  if(has(/\bKill Points\b/)) add('Kill Points','End of game',[{text:'For every 500 points of Ships and Admirals destroyed',parts:[{kind:'count',vp:2}]}]);
   if(has(/\bAssess/)) add('Assess','',asCounts(vpRows(SCN_SE1['Assess Scoring'].body.join(' '))));
   if(std||has(/\bStandard Scoring\b/)) rows.push(...SCORE_TABLE('Standard Scoring','Rounds 4 & 6',['Control','Contest']));
   return rows;

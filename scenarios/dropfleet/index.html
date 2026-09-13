@@ -53,6 +53,7 @@
 <script src="scenario-terms.js"></script>
 <script src="scenario-lib.js"></script>
 <script src="scenario-legacy.js"></script>
+<script src="scenario-sheets.js"></script>
 <script src="scenario-hotspots.js"></script>
 <script src="../shared/tooltip.js"></script>
 <script src="../shared/score.js"></script>
@@ -81,7 +82,8 @@ ScenarioShell.start({
   // Index groups: a heading and the source books under it (each scenario keeps its own book for its Source link)
   groups:[['Rulebook',['Rulebook']],['Scenario Expansion 1',['Scenario Expansion 1']],['Civilian Ship Scenarios',['Civilian Ships & Scenarios']],
     ['Converted 1e Scenarios',['The Ether Drake (1st edition)','Automated Dreadnought (1st edition)','Advent Scenarios (1st edition)','Core Scenarios (1st edition)']]]
-    .map(([name,srcs])=>({name,items:srcs.flatMap(src=>SCENARIOS.filter(s=>s.src===src))})),
+    // Rulebook keeps the book's order; every other group reads A to Z
+    .map(([name,srcs])=>({name,items:(items=>name==='Rulebook'?items:items.slice().sort((x,y)=>x.name.localeCompare(y.name)))(srcs.flatMap(src=>SCENARIOS.filter(s=>s.src===src)))})),
   id:s=>s.id,
   name:s=>s.name,
   // The Scenario Generator card above the books already rolls a scenario
@@ -99,8 +101,8 @@ ScenarioShell.start({
   source:s=>SCN_SOURCES[s.src]?{url:SCN_SOURCES[s.src],title:s.src}:null,
   // Older-edition pages score by their own sentences only; the current rulebook's scoring tables don't apply to them
   scoreRows:s=>s.sections?(r=>r.length?[{heading:'Scenario'},...r]:[])(vpRows(scoringText(s))):pubScoreRows(s),
-  // Standard, Normal and Focal Points scoring award VP in rounds 4 and 6; so do objectives that use Standard Scoring
-  markRound:(s,r)=>!s.sections&&(r===4||r===6)&&(/\b(Standard|Normal) Scoring\b|\bFocal [Pp]oint/.test(scoringText(s))||OB.some(o=>o.std&&new RegExp('\\b'+o.name+'\\b').test(scoringText(s)))),
+  // Rounds 4 and 6 are marked when the sheet has anything scored on those rounds
+  markRound:(s,r)=>(r===4||r===6)&&(s.sections?vpRows(scoringText(s)):pubScoreRows(s)).some(x=>x.sub==='Rounds 4 & 6'),
 });
 </script>
 </body>
