@@ -713,7 +713,7 @@
     syncBackGuard();
   }
 
-  /* ── How to Play (rules reference) ───────────────────────
+  /* ── Interactive Rules (rules reference) ───────────────────────
      A reference, not a copy of the rulebook. Two sections carry content the app
      already owns and shows — the Card Breakdown legend (STAT_META / ARC_LABELS)
      and the Special Rules glossary (RULES_DB, the verbatim keyword text the rule
@@ -1801,7 +1801,7 @@
       case 'screen-station-detail': back.classList.remove('hidden'); title.textContent = 'Space Station'; showPts(); break;
       case 'screen-play': back.classList.remove('hidden'); title.textContent = (mPlayFleet ? esc(mPlayFleet.name) + ', Play' : 'Play Mode'); break;
       case 'screen-collection': back.classList.remove('hidden'); title.textContent = 'My Collection'; break;
-      case 'screen-rules': back.classList.remove('hidden'); title.textContent = 'Rules Reference'; break;
+      case 'screen-rules': back.classList.remove('hidden'); title.textContent = 'Interactive Rules'; break;
     }
   }
 
@@ -4644,14 +4644,17 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Rules Reference is now Interactive Rules', items: [
+      'The searchable, linked rulebook in Settings is now called Interactive Rules. A link to it opens straight onto the rules on a phone too.',
+    ]},
     { date: '2026-09-13', title: 'Desktop app: print preview ability names wrap', items: [
       'On a narrow window the desktop print preview’s Abilities table keeps its rows, so each name wraps beside its AP cost instead of being cut off.',
     ]},
     { date: '2026-09-13', title: 'Desktop app: nothing scrolls sideways on a narrow window', items: [
-      'The desktop builder, print preview, How to Play, the scenario list and the faction quick references all fit a narrow screen instead of scrolling sideways.',
+      'The desktop builder, print preview, Interactive Rules, the scenario list and the faction quick references all fit a narrow screen instead of scrolling sideways.',
     ]},
     { date: '2026-09-13', title: 'Nothing scrolls sideways', items: [
-      'The ship picker filters and the Collection faction tabs wrap onto more lines, and How to Play tables fit the screen, so no part of the phone app scrolls sideways.',
+      'The ship picker filters and the Collection faction tabs wrap onto more lines, and Interactive Rules tables fit the screen, so no part of the phone app scrolls sideways.',
     ]},
     { date: '2026-09-13', title: 'Credits stay in view on the fleet list', items: [
       'The credits line rides just above the Create Fleet bar as you scroll the fleet list, and settles above the WarLore footer when you reach it.',
@@ -4684,7 +4687,7 @@
     { date: '2026-09-12', title: 'Lore: hull length and displacement', items: [
       'The Armstrong Destroyer, Aldrin Colony Ship, Collins Support Carrier, Helium Voidflyer, Harpocrates Guerrilla Lighter, Hiruko Boarding Cutter, Seneca Detonator, Newton Kill-Sat, Galileo Orbital Telescope and Pungari Thresher Hive Ship show their Length and Displacement under their lore, and the Pungari its Beam and Height too.',
     ]},
-    { date: '2026-09-12', title: 'How to Play: four tables put back together', items: [
+    { date: '2026-09-12', title: 'Interactive Rules: four tables put back together', items: [
       'Four rulebook tables that had come through as loose lines are proper tables again: the Tonnage restrictions, the core Ability costs, the Game Round phases, and the Battalion deployment targets. Same words as the book, in their grid.',
     ]},
     { date: '2026-09-12', title: 'Export PDF: cleaner sheet', items: [
@@ -4706,7 +4709,7 @@
       'Printing from the fleet list no longer prints the last fleet you opened.',
       'A shared fleet link can no longer put markup or script onto the sheet, and its points are recalculated from the ship data.',
     ]},
-    { date: '2026-09-11', title: 'How to Play: the Dropsite icons', items: [
+    { date: '2026-09-11', title: 'Interactive Rules: the Dropsite icons', items: [
       'The Dropsites table shows each type’s icon, the S, M and L station discs and the city blocks, lifted from the rulebook page.',
     ]},
     { date: '2026-09-11', title: 'Scenarios: every published scenario, and a separate generator', items: [
@@ -4727,19 +4730,19 @@
       'Tap a Micrometeor Cloud, Dense Debris Field, Planetary Ring or Large Object, on a map or in the scenery text, to read its rules. That text is now the rulebook’s own, word for word: Large Objects had been reworded, and bold the book does not print had been added.',
       'Orbital Support’s map shows the Medium Space Station with its Military Outposts. Turn its Variant on and they become Hangars on the map, stats included.',
     ]},
-    { date: '2026-09-11', title: 'How to Play: the whole rulebook', items: [
-      'How to Play now carries the entire Dropfleet Commander rulebook, verbatim, the same as the desktop app. Every chapter, section and table is there to read.',
+    { date: '2026-09-11', title: 'Interactive Rules: the whole rulebook', items: [
+      'Interactive Rules now carries the entire Dropfleet Commander rulebook, verbatim, the same as the desktop app. Every chapter, section and table is there to read.',
       'The example ship card and the legend open chapter 1; the book’s diagrams (Base Contact, Coherency, weapon Arcs, Move, the Explosion chain) sit with the rule they show; the searchable Special Rules glossary lives under chapter 14.',
       'It cross-links: tap a section number, a rule name or a keyword to jump to where it is defined. Tap Scenarios to open the full Scenario Reference.',
       'The token counters appear inline with the rule that uses them (Atmosphere, Spikes, Crippling Effects, Launch assets, Dropsite features, Battalion, Activation and Pass), plus the full Tokens reference at the end.',
     ]},
-    { date: '2026-09-09', title: 'How to Play: the tokens, as they look on the table', items: [
-      'How to Play has a new Tokens section showing every counter off the official downloadable token sheet: Spikes, the six Crippling Effects, the Atmosphere marker, and the Dropsite Features and City.',
+    { date: '2026-09-09', title: 'Interactive Rules: the tokens, as they look on the table', items: [
+      'Interactive Rules has a new Tokens section showing every counter off the official downloadable token sheet: Spikes, the six Crippling Effects, the Atmosphere marker, and the Dropsite Features and City.',
       'Each Crippling Effect shows the 2D6 result that causes it, so you can read the whole table off the pictures.',
       'They are the real tokens, traced as vector from the official sheet, so they are the same shapes sitting in front of you.',
     ]},
-    { date: '2026-09-01', title: 'How to Play: a searchable special-rules reference', items: [
-      'Settings now has How to Play. It opens a Card Breakdown legend, what every stat, arc, damage type and tonnage letter on a ship card means, and a searchable list of every special rule. Tap any rule to read it.',
+    { date: '2026-09-01', title: 'Interactive Rules: a searchable special-rules reference', items: [
+      'Settings now has Interactive Rules. It opens a Card Breakdown legend, what every stat, arc, damage type and tonnage letter on a ship card means, and a searchable list of every special rule. Tap any rule to read it.',
       'Type in the search box to filter the rules instantly, or use the numbered section jumps at the top.',
       'For the full rules, each section links straight to the official Dropfleet Commander rulebook, a free download from TTCombat.',
     ]},
@@ -5064,7 +5067,7 @@
       { icon: 'copy', label: `Back up all fleets (${fleets.length})`, action: exportAllFleets, disabled: !fleets.length },
       { icon: 'edit', label: 'Restore or import a fleet…', action: importFleetPrompt },
       { icon: 'duplicate', label: 'My Collection', action: openCollection },
-      { icon: 'menu_book', label: 'Rules Reference', action: () => navigate('screen-rules') },
+      { icon: 'menu_book', label: 'Interactive Rules', action: () => navigate('screen-rules') },
       { icon: 'new_releases', label: "What's New", action: openChangelog },
       { icon: 'mail', label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
       { icon: 'bug_report', label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
@@ -6670,6 +6673,23 @@
 
     renderFleetList();
     navigate('screen-fleet-list', { replace: true });
+    // A #rules or #rules/<id> link (the desktop Interactive Rules route, which a
+    // phone is bounced here with) opens Interactive Rules over the fleet list, so
+    // Back still lands somewhere.
+    const rulesLink = location.hash.match(/^#rules(?:\/(.+))?$/);
+    if (rulesLink) {
+      navigate('screen-rules');
+      // The rulebook loads async, so wait (up to ~5s) for the section to exist.
+      if (rulesLink[1]) {
+        const id = decodeURIComponent(rulesLink[1]);
+        let tries = 0;
+        const tryJump = () => {
+          if (document.getElementById('rules-sec-' + id)) jumpMobileRules(id);
+          else if (++tries < 25) setTimeout(tryJump, 200);
+        };
+        tryJump();
+      }
+    }
     setTimeout(maybeShowOfflineTip, 1200);
 
     // Pull anything another device changed while this one was closed. Runs after

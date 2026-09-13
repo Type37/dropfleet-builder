@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cut the rulebook's instructional diagrams out of the PDF for the How to Play
+"""Cut the rulebook's instructional diagrams out of the PDF for the Interactive Rules
 wiki, one PNG per figure, each mapped to the section it illustrates.
 
     python scripts/extract-rules-figures.py

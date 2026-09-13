@@ -3234,14 +3234,14 @@ body.sheet-open .sheet-scrim {
 .coll-badge-ok { color: #1f5c37; background: rgba(31,92,55,0.10); }
 .coll-badge-none { color: var(--fg3); background: var(--paper-alt); }
 
-/* ── How to Play (rules reference, renderMobileRules in mobile.js) ── */
+/* ── Interactive Rules (rules reference, renderMobileRules in mobile.js) ── */
 #screen-rules { padding: var(--sp-l); }
 .rules-intro p { margin: 0 0 var(--sp-s); color: var(--fg2); }
 .rules-pills { display: flex; flex-wrap: wrap; gap: var(--sp-xs); position: sticky; top: var(--header-h); z-index: 15; background: var(--paper); padding: var(--sp-s) 0; margin: 0 calc(var(--sp-l) * -1); padding-left: var(--sp-l); padding-right: var(--sp-l); border-bottom: 1px solid var(--stroke1); }
 .rules-pill { display: inline-flex; align-items: center; gap: 5px; font-size: var(--text-caption2); padding: 4px 9px; border: 1px solid var(--stroke1); border-radius: 999px; background: var(--paper); color: var(--fg2); }
 .rules-pill-n { color: var(--fg3); font-weight: 700; font-variant-numeric: tabular-nums; }
 .rules-section { scroll-margin-top: calc(var(--header-h) + 44px); padding-top: var(--sp-m); }
-/* ── How to Play: the token plate ─────────────────────────────────────────
+/* ── Interactive Rules: the token plate ─────────────────────────────────────────
    Names wrap under the art instead of truncating; "Defence Systems Offline"
    is the longest and has to read in full on a phone. */
 .rules-tok-grp { margin-bottom: var(--sp-m, 16px); }
@@ -3270,7 +3270,7 @@ body.sheet-open .sheet-scrim {
 .rules-kw-chev { color: var(--fg3); font-size: 1.2em; }
 .rules-note { color: var(--fg3); font-size: var(--text-caption1); }
 
-/* ── How to Play: full rulebook wiki (mobile) ─────────────────────────────── */
+/* ── Interactive Rules: full rulebook wiki (mobile) ─────────────────────────────── */
 .rules-chapter { scroll-margin-top: calc(var(--header-h) + 48px); margin-bottom: var(--sp-xl, 22px); }
 .rules-chapter-title { display: flex; align-items: baseline; gap: var(--sp-s); font-family: var(--font-display); font-weight: 800; font-size: 24px; line-height: 1.15; text-transform: uppercase; letter-spacing: .01em; color: var(--fg1); margin: 0 0 var(--sp-m); padding-bottom: var(--sp-xs); border-bottom: 3px solid var(--navy); }
 .rules-chapter-n { font-size: .68em; color: var(--navy); font-weight: 800; font-variant-numeric: tabular-nums; }

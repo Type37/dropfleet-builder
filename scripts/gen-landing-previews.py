@@ -24,7 +24,7 @@ OUT = pathlib.Path(__file__).resolve().parent.parent / "assets" / "screens"
 # own pages. The slug is what index.html references in .tool-card-shot.
 SHOTS = {
     "fleet-builder": f"{BASE}/index.html#fleets",
-    "how-to-play":   f"{BASE}/index.html#rules",
+    "interactive-rules": f"{BASE}/index.html#rules",
     "combat-calc":   f"{BASE}/index.html#calc",
     "mission-maker": f"{BASE}/scenarios/dropfleet/generator/",
     "scenarios":     f"{BASE}/scenarios/dropfleet/",

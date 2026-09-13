@@ -5,6 +5,17 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Rules Reference renamed Interactive Rules
+
+The rulebook screen (home-screen card, desktop topbar, phone app bar and
+Settings entry) is now called Interactive Rules, and older notes that called it
+How to Play follow suit. New link-preview entry page at `/interactive-rules/`;
+the old `/rules/` entry page and the `#rules` route still work. A phone that
+opens `#rules` or `#rules/<id>` (bounced to `/mobile/`) now lands on the rules
+screen instead of the fleet list. Landing preview image renamed
+`assets/screens/interactive-rules.webp`, notes moved to
+`docs/interactive-rules-notes.md`, OG image title regenerated.
+
 ### 2026-09-13: Print preview Abilities names no longer clipped
 
 The narrow-screen launch-table reflow in the desktop print preview also caught
@@ -22,7 +33,7 @@ Play), the scenario list and views, the generator and the quick references at
 the builder's sticky tallies bar bled past the panel at phone padding; the
 ship picker grid and category tabs, the admiral card row, the ship-detail art
 (320px minimum), play-mode weapon tables (340px minimum) and launch tables now
-shrink or wrap; the How to Play chapter list wraps instead of a sideways strip;
+shrink or wrap; the Interactive Rules chapter list wraps instead of a sideways strip;
 the print preview trims its padding on a phone; the scenario list (360px column
 minimum in `scenarios/shared/shell.css`) and scenario ship grid cap their
 minimums; the six quick references reflow their letter-size sheet on screen
@@ -204,7 +215,7 @@ which closed `#app` right after the landing section. Every other view fell outsi
 `#app`, so `showView`'s `#app > section` hide loop never hid the fleet list and the
 builder rendered below it, off screen.
 
-### 2026-09-12: How to Play, four flattened tables rebuilt
+### 2026-09-12: Interactive Rules, four flattened tables rebuilt
 
 The rulebook extractor recovers a table only where the PDF draws a ruled grid.
 Four tables have none, so they came through as stranded column heads (captions)
@@ -441,7 +452,7 @@ from the rulebook, and "crit 7+" on a 5+ Lock is what rule 7.3.4 gives.
   hover stats. `scripts/draw-rulebook-maps.js` draws a Variant as a hidden
   layer; `build-scenario-hotspots.py` carries the layer onto each spot.
 
-### 2026-09-11: How to Play, centred read and Dropsite icons
+### 2026-09-11: Interactive Rules, centred read and Dropsite icons
 
 - **Centred reading column.** The rulebook text now sits as a centred 74ch
   column with the chapter nav pinned out in the left margin (a three-track grid,
@@ -455,9 +466,9 @@ from the rulebook, and "crit 7+" on a 5+ Lock is what rule 7.3.4 gives.
   touched; the icons sit on a fixed light tile so their black linework reads in
   either theme.
 
-### 2026-09-11: How to Play carries the whole rulebook
+### 2026-09-11: Interactive Rules carries the whole rulebook
 
-How to Play was a legend, a token board and a glossary that signposted the PDF
+Interactive Rules was a legend, a token board and a glossary that signposted the PDF
 for everything else. It now holds the entire A5 rulebook, verbatim, lifted out
 of the PDF by `scripts/extract-rules-wiki.py` into `data/rules-wiki.json` (a
 tree of chapter -> section -> subsection, paragraphs and tables, with the book's
@@ -487,7 +498,7 @@ bold kept).
 - The Dropsites stats table (chapter 11) came out of the extractor as stranded
   captions and paragraphs; `scripts/patch-rules-wiki.py` rebuilds it as a real
   table from those same verbatim values, and is re-runnable after any re-extract.
-- Mobile How to Play now carries the same full rulebook (linear stack, chapter
+- Mobile Interactive Rules now carries the same full rulebook (linear stack, chapter
   pills, inline tokens, cross-links, glossary), reading from the shared
   data/rules-wiki.json.
 
@@ -634,9 +645,9 @@ are Roboto Slab without capitals, the tables lose their rules, and the map takes
 readable but blurry on a large screen, and are the first candidates to redraw
 with the generator's own map engine.
 
-### 2026-09-09: How to Play shows the tokens
+### 2026-09-09: Interactive Rules shows the tokens
 
-How to Play named the Crippling Effects in prose and never showed the counter
+Interactive Rules named the Crippling Effects in prose and never showed the counter
 you put on the ship. It now has a Tokens section, `n: 12`, between Dropsites and
 Scenarios, in both the desktop and mobile references.
 
@@ -853,17 +864,17 @@ Medium Torpedo (Limited-1, Penetrator). Reworded the lore to match the card. A
 sweep of every faction for lore that names a weapon count found no others (Rome
 Battlecruiser checks out at two Heavy Torpedoes).
 
-### 2026-09-01: How to Play on mobile
+### 2026-09-01: Interactive Rules on mobile
 
-The desktop How to Play reference now has a mobile twin, reachable from Settings.
+The desktop Interactive Rules reference now has a mobile twin, reachable from Settings.
 Same scope and sourcing: a Card Breakdown legend from the app's own vocabulary,
 a searchable Special Rules list, and rulebook signposts for the rest. Each
 keyword row opens the app's existing rule sheet (verbatim text it already
 carries), so no rules prose is duplicated. Sticky section pills, live search.
 
-### 2026-09-01: How to Play, a searchable special-rules reference (desktop)
+### 2026-09-01: Interactive Rules, a searchable special-rules reference (desktop)
 
-A new "How to Play" tool on the home screen. Deliberately a reference, not a
+A new "Interactive Rules" tool on the home screen. Deliberately a reference, not a
 copy of the rulebook: it surfaces only content the app already owns and shows,
 and signposts the rest to the source.
 

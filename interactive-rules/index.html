@@ -4,12 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dropfleet Commander: Interactive Rules</title>
-<!-- A tiny entry page so the Interactive Rules route has its own link preview: the
-     app itself lives at a #rules hash, which crawlers cannot read. This page
-     carries the preview tags and sends a visitor straight into the app. -->
+<!-- A tiny entry page so Interactive Rules has its own link preview: the app
+     itself lives at a #rules hash, which crawlers cannot read. This page carries
+     the preview tags and sends a visitor straight into the app. The older
+     /rules/ entry page does the same, so links already shared keep working. -->
 <meta name="description" content="Searchable, linked version of the rulebook with token reference.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://type37.github.io/dropfleet-builder/rules/">
+<meta property="og:url" content="https://type37.github.io/dropfleet-builder/interactive-rules/">
 <meta property="og:title" content="Dropfleet Commander: Interactive Rules">
 <meta property="og:description" content="Searchable, linked version of the rulebook with token reference.">
 <meta property="og:image" content="https://type37.github.io/dropfleet-builder/assets/og/rules.png">
@@ -22,7 +23,7 @@
 <meta name="twitter:image" content="https://type37.github.io/dropfleet-builder/assets/og/rules.png">
 <link rel="canonical" href="https://type37.github.io/dropfleet-builder/#rules">
 <meta http-equiv="refresh" content="0; url=../#rules">
-<script>location.replace('../#rules');</script>
+<script>location.replace('../#rules' + (location.hash.indexOf('#rules/') === 0 ? location.hash.slice(6) : ''));</script>
 <style>
   body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #0a121e; color: #c4a86e; font-family: "Roboto Slab", Georgia, serif; }
   a { color: #ffcc00; }

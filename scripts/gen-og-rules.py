@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Build the How to Play link-preview image: the same gold-on-navy Art Deco
+"""Build the Interactive Rules link-preview image: the same gold-on-navy Art Deco
 frame as the main banner, but plain, no faction band. The DROPFLEET COMMANDER
-chrome wordmark, HOW TO PLAY in Broadway, a one-line subtitle, WarLore footer.
+chrome wordmark, INTERACTIVE RULES in Broadway, a one-line subtitle, WarLore footer.
 Run: python scripts/gen-og-rules.py  ->  assets/og/rules.png
 """
 import os, tempfile
@@ -77,10 +77,10 @@ lh = int(logo.height * lw / logo.width)
 logo = logo.resize((lw, lh), Image.LANCZOS)
 canvas.paste(logo, ((W - lw) // 2, 150), logo)
 
-# HOW TO PLAY (Broadway) with flanking Deco rules
+# INTERACTIVE RULES (Broadway) with flanking Deco rules
 title_y = 150 + lh + 30
 tf = broadway(66)
-title = 'HOW TO PLAY'
+title = 'INTERACTIVE RULES'
 tw_ = tw(draw, title, tf, 8)
 center_tracked(draw, title, tf, title_y, GOLD_BRIGHT, 8)
 ry = title_y + 46

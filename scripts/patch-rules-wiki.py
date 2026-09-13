@@ -262,7 +262,7 @@ def fix_battalions(ch):
     return True
 
 
-# Fiction that bled in from a facing page. How to Play carries rules only, so
+# Fiction that bled in from a facing page. Interactive Rules carries rules only, so
 # these narrative paragraphs are dropped (matched by their opening words).
 FLAVOR_STRIP = {
     "13.1": [

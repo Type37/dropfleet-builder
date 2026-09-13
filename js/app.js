@@ -1010,7 +1010,7 @@ let activeGroupId = null;
         break;
       case 'rules':
         show('view-rules');
-        topContext.innerHTML = `<a href="#landing" class="topbar-back" onclick="App.navigate('landing'); return false;"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> Rules Reference`;
+        topContext.innerHTML = `<a href="#landing" class="topbar-back" onclick="App.navigate('landing'); return false;"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> Interactive Rules`;
         renderRules(param);
         break;
       default:
@@ -1022,7 +1022,7 @@ let activeGroupId = null;
     document.getElementById(id).classList.remove('hidden');
   }
 
-  // ── How to Play (rulebook) ────────────────────────────────────────────────
+  // ── Interactive Rules (rulebook) ────────────────────────────────────────────────
   // The whole A5 rulebook, verbatim, lifted into data/rules-wiki.json by
   // scripts/extract-rules-wiki.py (a tree of chapter -> section -> subsection,
   // each carrying its number, heading, paragraphs and tables, with bold runs
@@ -1056,7 +1056,7 @@ let activeGroupId = null;
   ];
 
   // Which token groups belong inline with which section (by number). They still
-  // all appear together in the Tokens reference at the end of How to Play.
+  // all appear together in the Tokens reference at the end of Interactive Rules.
   const SECTION_TOKENS = {
     '3.1.2': ['atmosphere'],
     '3.3':   ['spikes'],
@@ -8933,14 +8933,17 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Rules Reference is now Interactive Rules', items: [
+      'The searchable, linked rulebook on the home screen is now called Interactive Rules. Links to the old page still open it.',
+    ]},
     { date: '2026-09-13', title: 'Print preview: ability names wrap', items: [
       'On a narrow screen the print preview’s Abilities table keeps its rows, so each name wraps beside its AP cost instead of being cut off.',
     ]},
     { date: '2026-09-13', title: 'Nothing scrolls sideways on a narrow window', items: [
-      'The builder, ship picker, admiral and station pickers, play mode, print preview, How to Play, the scenario list and the faction quick references all fit a narrow screen instead of scrolling sideways.',
+      'The builder, ship picker, admiral and station pickers, play mode, print preview, Interactive Rules, the scenario list and the faction quick references all fit a narrow screen instead of scrolling sideways.',
     ]},
     { date: '2026-09-13', title: 'Phone app: nothing scrolls sideways', items: [
-      'On the phone app the ship picker filters and Collection faction tabs wrap onto more lines, and How to Play tables fit the screen.',
+      'On the phone app the ship picker filters and Collection faction tabs wrap onto more lines, and Interactive Rules tables fit the screen.',
     ]},
     { date: '2026-09-13', title: 'Phone app: credits stay in view', items: [
       'On the phone app’s fleet list the credits line rides just above the Create Fleet bar, and settles above the WarLore footer when you reach it.',
@@ -8978,7 +8981,7 @@ let activeGroupId = null;
     { date: '2026-09-12', title: 'Lore: hull length and displacement', items: [
       'The Armstrong Destroyer, Aldrin Colony Ship, Collins Support Carrier, Helium Voidflyer, Harpocrates Guerrilla Lighter, Hiruko Boarding Cutter, Seneca Detonator, Newton Kill-Sat, Galileo Orbital Telescope and Pungari Thresher Hive Ship show their Length and Displacement under their lore, and the Pungari its Beam and Height too.',
     ]},
-    { date: '2026-09-12', title: 'How to Play: four tables put back together', items: [
+    { date: '2026-09-12', title: 'Interactive Rules: four tables put back together', items: [
       'Four rulebook tables that had come through as loose lines are proper tables again: the Tonnage restrictions, the core Ability costs, the Game Round phases, and the Battalion deployment targets. Same words as the book, in their grid.',
     ]},
     { date: '2026-09-12', title: 'Print: every Ability you can use', items: [
@@ -9003,7 +9006,7 @@ let activeGroupId = null;
       'A shared fleet link can no longer put markup or script onto the print sheet.',
       'Keywords like Fusillade-2 no longer split across lines, and faint labels are darker.',
     ]},
-    { date: '2026-09-11', title: 'How to Play: a centred read, and the Dropsite icons', items: [
+    { date: '2026-09-11', title: 'Interactive Rules: a centred read, and the Dropsite icons', items: [
       'The rulebook now reads as a centred column down the middle of the page, with the chapter list out in the left margin.',
       'The Dropsites table shows each type’s icon, the S, M and L station discs and the city blocks, lifted from the rulebook page.',
     ]},
@@ -9025,21 +9028,21 @@ let activeGroupId = null;
       'Hover or tap a Micrometeor Cloud, Dense Debris Field, Planetary Ring or Large Object, on a map or in the scenery text, to read its rules. That text is now the rulebook’s own, word for word: Large Objects had been reworded, and bold the book does not print had been added.',
       'Orbital Support’s map shows the Medium Space Station with its Military Outposts. Turn its Variant on and they become Hangars on the map, stats included.',
     ]},
-    { date: '2026-09-11', title: 'How to Play: the whole rulebook, on one page', items: [
-      'How to Play now carries the entire Dropfleet Commander rulebook, verbatim, not just a legend and a glossary. Every chapter, section and table is there to read in the app.',
+    { date: '2026-09-11', title: 'Interactive Rules: the whole rulebook, on one page', items: [
+      'Interactive Rules now carries the entire Dropfleet Commander rulebook, verbatim, not just a legend and a glossary. Every chapter, section and table is there to read in the app.',
       'A chapter list runs down the left, the way a style guide reads. Pick a chapter to jump to it; the list follows you as you scroll.',
       'Chapter 1 opens with the example ship card from page 5 and the legend that names every stat, arc, damage type and tonnage letter on it.',
       'The book’s diagrams are in too: Base Contact, Coherency, the weapon Arcs, Move and the Explosion chain, each sitting with the rule it illustrates.',
       'The Tokens section now explains the Launch assets too, Fighters, Bombers, Fire Ships, Torpedoes, Mines and Battalions, plus the Activation and Pass tokens, each with the real counter beside it.',
       'It cross-links like the book does. Every section number, rule name and keyword in the text is a link to where it is defined, and the Back button takes you straight back to where you were reading.',
     ]},
-    { date: '2026-09-09', title: 'How to Play: the tokens, as they look on the table', items: [
-      'How to Play has a new Tokens section showing every counter off the official downloadable token sheet: Spikes, the six Crippling Effects, the Atmosphere marker, and the Dropsite Features and City.',
+    { date: '2026-09-09', title: 'Interactive Rules: the tokens, as they look on the table', items: [
+      'Interactive Rules has a new Tokens section showing every counter off the official downloadable token sheet: Spikes, the six Crippling Effects, the Atmosphere marker, and the Dropsite Features and City.',
       'Each Crippling Effect shows the 2D6 result that causes it, so you can read the whole table off the pictures.',
       'They are the real tokens, traced as vector from the official sheet, so they are the same shapes sitting in front of you.',
     ]},
-    { date: '2026-09-01', title: 'How to Play: a searchable special-rules reference', items: [
-      'A new How to Play tool on the home screen. It opens a Card Breakdown legend, what every stat, arc, damage type and tonnage letter on a ship card means, and a searchable list of every special rule, each with its rulebook page.',
+    { date: '2026-09-01', title: 'Interactive Rules: a searchable special-rules reference', items: [
+      'A new Interactive Rules tool on the home screen. It opens a Card Breakdown legend, what every stat, arc, damage type and tonnage letter on a ship card means, and a searchable list of every special rule, each with its rulebook page.',
       'Type in the search box to filter the rules instantly, or use the numbered section jumps at the top.',
       'For the full rules, each section links straight to the official Dropfleet Commander rulebook, a free download from TTCombat.',
     ]},

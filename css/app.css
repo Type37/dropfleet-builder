@@ -7971,7 +7971,7 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 .play-weapons-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
 .play-weapons { min-width: 0; }
 
-/* ── How to Play (rules reference, renderRules in js/app.js) ── */
+/* ── Interactive Rules (rules reference, renderRules in js/app.js) ── */
 .rules-view { max-width: 1360px; margin: 0 auto; padding: var(--sp-xl) var(--sp-lg) var(--sp-2xl); }
 .rules-wrap { display: flex; flex-direction: column; gap: var(--sp-lg); }
 .rules-intro { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-md); flex-wrap: wrap; }
@@ -7986,7 +7986,7 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 .rules-rulebook-link { display: inline-flex; align-items: center; gap: 6px; color: var(--navy); text-decoration: none; font-size: var(--text-sm); }
 .rules-rulebook-link:hover { text-decoration: underline; }
 
-/* ── How to Play: the token plate ─────────────────────────────────────────
+/* ── Interactive Rules: the token plate ─────────────────────────────────────────
    Vector cut from TTCombat's downloadable sheet. Names sit under the art and
    wrap rather than truncate: "Defence Systems Offline" is the longest and it
    must read in full. */

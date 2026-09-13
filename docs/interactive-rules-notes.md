@@ -1,4 +1,4 @@
-# How to Play — notes & todos
+# Interactive Rules — notes & todos
 
 Working notes for the in-app rulebook (desktop `js/app.js` + `css/app.css`, mobile `mobile/js/mobile.js` + `mobile/css/mobile.css`, data `data/rules-wiki.json`). Verbatim rulebook text; only presentation and cross-links are ours.
 
@@ -20,10 +20,10 @@ Working notes for the in-app rulebook (desktop `js/app.js` + `css/app.css`, mobi
 ## Open / todo
 
 - [ ] **Crippling strip redundancy** — 7.3.6 shows tokens BOTH inline in the table AND as the `SECTION_TOKENS['7.3.6']` strip below it. Decide: drop the strip and keep in-table only? (awaiting Jet)
-- [ ] **Mobile visual check** — ch.11/12 changes are validated + mirror the verified desktop code, but the mobile rules screen only builds through the app's own menu (Settings → How to Play), which the screenshot harness can't drive. Eyeball on a real phone / the `review` config.
+- [ ] **Mobile visual check** — ch.11/12 changes are validated + mirror the verified desktop code, but the mobile rules screen only builds through the app's own menu (Settings → Interactive Rules), which the screenshot harness can't drive. Eyeball on a real phone / the `review` config.
 - [ ] **Term-link over-linking** — "Core hits" / "Backup Save(s)" now link on every occurrence. Confirm that reads OK and isn't too busy; bare "Core" is intentionally NOT linked.
 - [ ] **Token clip safety** — `clip-path: circle(47%)` assumes token art sits ~46% radius in a 64 box (true for the ones checked). If any counter's art fills the box it'd get clipped — spot-check play-mode / gallery uses.
-- [ ] **Changelog debt** — none of this session's How-to-Play changes are in the in-app changelog (`app.js` + `mobile.js`) or the README changelog yet. See [[feedback_changelog_everywhere]] convention.
+- [ ] **Changelog debt** — none of this session's Interactive Rules changes are in the in-app changelog (`app.js` + `mobile.js`) or the README changelog yet. See [[feedback_changelog_everywhere]] convention.
 - [ ] **`scenario-card.css`** was reformatted by a parallel session (fonts Barlow→Jost). Just noted; nothing to do unless it regressed the scenario weapon/stat styling.
 
 ## Handy anchors
