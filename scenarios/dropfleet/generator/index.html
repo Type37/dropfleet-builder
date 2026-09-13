@@ -601,9 +601,19 @@ function tokenSpot(t,x,y,rot,i,asStation){
   const h=TOKEN/2;
   return [Math.max(h,Math.min(200-h,x+dx)), Math.max(h,Math.min(200-h,y+dy))];
 }
-function token(key,px,py){
-  const h=TOKEN/2, name=FEAT_NAME[key];
-  const art=FI[key].replace(/^<svg class="ico-feat"/,`<svg x="${(px-h).toFixed(1)}" y="${(py-h).toFixed(1)}" width="${TOKEN}" height="${TOKEN}"`);
+// A City's Features sit on its own dots (Jet, 2026-09-13), in the order mkLC/mkMC/mkSC draw them, turned with
+// the City. A Space Station, or a City with more Features than dots, keeps them beside it.
+const DOT_TOKEN=6.6;
+const CITY_DOTS={LC:[[-3.5,-3.5],[3.5,-3.5],[-3.5,3.5],[3.5,3.5]],MC:[[0,-3],[-3.8,3.2],[3.8,3.2]],SC:[[-3,0],[3,0]]};
+function featSpot(t,x,y,rot,i,asStation){
+  const dots=!asStation&&CITY_DOTS[t];
+  if(!dots||i>=dots.length){ const [px,py]=tokenSpot(t,x,y,rot,i,asStation); return [px,py,TOKEN]; }
+  const [dx,dy]=dots[i], a=(rot||0)*Math.PI/180;
+  return [x+dx*Math.cos(a)-dy*Math.sin(a), y+dx*Math.sin(a)+dy*Math.cos(a), DOT_TOKEN];
+}
+function token(key,px,py,size){
+  const S=size||TOKEN, h=S/2, name=FEAT_NAME[key];
+  const art=FI[key].replace(/^<svg class="ico-feat"/,`<svg x="${(px-h).toFixed(1)}" y="${(py-h).toFixed(1)}" width="${S}" height="${S}"`);
   return `<g data-tip="feat:${name}"><circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${(h+.8).toFixed(1)}" fill="#f4efe8"/>${art}</g>`;
 }
 
@@ -626,7 +636,7 @@ function variantOverlay(sites,variantRoll){
     if(t==='R'||t==='LO') return;
     const x=_i(e[1]),y=_i(e[2]),rot=e[3]||0;
     let n=0, asStation=false, stn='', mine='';
-    const tk=key=>{ const [px,py]=tokenSpot(t,x,y,rot,n++,asStation); mine+=token(key,px,py); };
+    const tk=key=>{ const [px,py,size]=featSpot(t,x,y,rot,n++,asStation); mine+=token(key,px,py,size); };
     const toStation=letter=>{ stn=stationOver(x,y,letter); asStation=true; };
 
     switch(variantRoll){

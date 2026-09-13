@@ -316,7 +316,7 @@ const MAPS = {
 
 // The converted 1st edition maps put each Feature on the City dot it replaces, as the 1st edition map
 // coloured that Sector's dot (Jet, 2026-09-13); the book's own maps keep their tokens beside the Dropsite
-const ON_DOTS = new Set(['the-ancient-relic', 'resistance-spearhead', 'heavy-convoy', 'monitoring-the-situation', 'core-take-and-hold', 'core-mixed-engagement', 'core-erupting-battlefront', 'core-station-assault', 'core-grid-control', 'core-power-grab', 'core-defence-relay']);
+// Every City's Features sit on its dots, the book's maps included (Jet, 2026-09-13)
 const DOT_TOKEN = 6.6;
 // The generator's dot centres (mkLC, mkMC, mkSC), turned with the Dropsite
 const DOTS = { LC: [[-3.5, -3.5], [3.5, -3.5], [-3.5, 3.5], [3.5, 3.5]], MC: [[0, -3], [-3.8, 3.2], [3.8, 3.2]], SC: [[-3, 0], [3, 0]] };
@@ -354,7 +354,7 @@ for (const [id, m] of Object.entries(MAPS)) {
       let out = '';
       list.forEach((k, i) => {
         if (!k) return;
-        const onDot = ON_DOTS.has(id) && DOTS[t], size = onDot ? DOT_TOKEN : TOKEN;
+        const onDot = DOTS[t] && i < DOTS[t].length, size = onDot ? DOT_TOKEN : TOKEN;
         const [px, py] = onDot ? dotSpot(t, x, y, rot, i) : tokenSpot(t, x, y, rot, i, false);
         out += token(k, px, py, size);
         spots.push({ t: FEAT_KEY[k], x: pct(px), y: pct(py), r: +((size / 2 + 0.8) / 2).toFixed(1), ...ftag, ...stag });
