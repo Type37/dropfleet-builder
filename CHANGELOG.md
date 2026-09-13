@@ -51,8 +51,30 @@ the shared `data/rules-wiki.json`, so no app-code change was needed.
   once the printer dropped their fill. Gold diamonds are gone from headings,
   bullets and the layout list, on both games' scenario pages. The Standard
   Scoring table keeps its own width instead of spreading across the card.
+- **Variants on the generator map, checked against 12.1.4.** Gridlocked had
+  armed existing Medium Space Stations too; only the Medium Cities it replaces
+  gain the Outpost, Defence Gun and Hangar. Secure Comms Array falls back to
+  Small Cities when a layout has no Medium City. The Variant text is word for
+  word.
+- **Deployment follows the player count.** Only the 2 Players or 3-4 Players
+  line shows, and changing the count redraws the same scenario.
+- **Hierarchy test.** An objective or arrival mode heads its rules in 16px
+  Roboto Slab, between the 18px section heading and bold term labels; the
+  objective comes before the Standard Scoring it uses; beige boxes are gone;
+  Roboto Slab is for titles and headings only.
 - **CI:** GitHub Actions moved off the deprecated Node 20 (checkout v7, Pages
   actions v6/v5/v5, github-script v9).
+
+### 2026-09-12: Hull number once; mobile sheet cleaned up
+
+- **Hull boxes, both apps:** a group of several ships showed "#1 4 [boxes]" and
+  "#2 4 [boxes]". The hull number now prints once ("Hull 4") with one row of
+  boxes per ship.
+- **Mobile Export PDF** gets the desktop sheet rules: stat numbers 12pt bold,
+  every colour black, weight class and Unique as plain words, no divider lines
+  (header, table header and row rules, ability group rules, section titles),
+  light zebra weapon rows, and ability tick boxes drawn like the objectives
+  checklist instead of a box round a ballot-box character.
 
 ### 2026-09-12: Print sheet, said once and in black
 
