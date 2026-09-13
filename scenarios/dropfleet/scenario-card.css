@@ -321,6 +321,9 @@ vp{font-family:inherit;font-weight:600;font-size:inherit;color:inherit;}
 .scenario.pub[data-v="1"] svg [data-v="1"]{display:inline;}
 .scenario.pub[data-v="1"] [data-hide-v~="1"]{display:none;}
 .scenario.pub:not([data-v="1"]) .pub-v-only{display:none;}
+/* Beside a Variant button the weapon list is narrow: names wrap rather than run under the next column */
+.pub-vlist .pw-list .pw-name{white-space:normal;}
+.pub-vlist .pw-list{width:auto;}
 /* Game size: Dropsites only used in bigger games hide with the size switch */
 .scenario.pub[data-size="skirmish"] [data-size],.scenario.pub[data-size="clash"] [data-size="battle"]{display:none;}
 /* Selected: solid dark fill, white text, tick. Unselected: plain outline, no tick. */
