@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WarLore footers, personal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif&family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,300;6..72,400&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:"TG Open";src:url("../assets/fonts/terminal-grotesque-open.woff2") format("woff2");font-display:swap}
+:root{
+  --amber:#FFCC00; --black:#000; --teal:#16E0BD; --pink:#EF476F;
+  --cream:#F6F3EC; --ink:#141414; --grey:#5E5A53;
+  --inter:"Inter",system-ui,sans-serif; --grot:"Space Grotesk",var(--inter);
+  --news:"Newsreader",Georgia,serif; --inst:"Instrument Serif",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace; --heavy:"Archivo Black",var(--inter);
+}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:var(--inter)}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+footer a:focus-visible,footer button:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.src{font:500 15px/1.3 var(--inter);margin:64px 20px 12px}
+.src:first-child{margin-top:20px}
+.src a{text-decoration:underline}
+
+/* WarLore wordmark: gold on black, invert on hover */
+.wl{display:inline-block;background:var(--black);color:var(--amber);font-family:"TG Open",var(--mono);font-weight:400;line-height:.88;padding:.05em .12em;text-transform:none}
+.wl:hover,.wl:focus-visible{background:var(--amber);color:var(--black)}
+.arr::after{content:"\2197";margin-left:.2em}
+
+/* 1 JACKPHAT.EXE */
+.jp{padding:0 5vw 48px;background:#fff repeating-radial-gradient(circle at 20% 30%,transparent 0 22px,rgba(120,110,220,.12) 22px 23px)}
+.jp .card{background:var(--amber);border:3px solid var(--black);border-top-width:0;box-shadow:6px 6px 0 var(--black);padding:40px 22px 36px;position:relative}
+.jp .card::before{content:"";position:absolute;left:-3px;right:-3px;top:-16px;height:16px;border:3px solid var(--black);border-bottom:0;background:#fff}
+.jp .wl{font-size:clamp(3rem,9vw,7rem)}
+.jp .row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-top:30px}
+.jp nav a{display:block;font:700 clamp(1.05rem,1.8vw,1.35rem)/1.75 var(--grot);text-transform:uppercase}
+.jp nav a:hover{text-decoration:underline;text-decoration-thickness:2px}
+.jp .right{display:flex;flex-direction:column;align-items:flex-end;gap:12px;text-align:right;font:700 .78rem/1.35 var(--grot);text-transform:uppercase}
+.jp .top{background:var(--teal);border:2px solid var(--black);box-shadow:3px 3px 0 var(--black);padding:8px 12px;font:500 .78rem/1 var(--grot)}
+.jp .top:active{transform:translate(3px,3px);box-shadow:none}
+.jp .cols{display:flex;gap:48px;flex-wrap:wrap}
+
+/* 2 Harsh Shah */
+.hs{background:var(--cream);padding:40px 20px 36px}
+.hs .grid{display:grid;grid-template-columns:22% 1fr 1fr 1fr;gap:36px 24px}
+.hs .lab{font:500 .66rem/1 var(--inter);text-transform:uppercase;margin-bottom:22px}
+.hs .col a{display:block;font:400 .95rem/1.45 var(--inter)}
+.hs .col a:hover{text-decoration:underline}
+.hs .arr::after{color:#C9852B}
+.hs .nav{grid-column:2/-1;font:300 clamp(2.1rem,5.2vw,3.9rem)/1.05 var(--news);margin-top:70px}
+.hs .nav a{white-space:nowrap}.hs .nav a:hover{font-style:italic}
+.hs .nav .sl{margin:0 .18em}
+.hs .navlab{margin-top:74px}
+.hs .base{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:12px 0;align-items:center;margin-top:90px;font:400 .9rem/1 var(--inter)}
+.hs .base>*:first-child{width:22%;min-width:130px;text-align:left}
+.hs .wl{font-size:1.9rem;margin-left:24px}
+@media (max-width:760px){.hs .grid{grid-template-columns:1fr 1fr}.hs .grid>div:empty{display:none}.hs .navlab{margin-top:30px;grid-column:1/-1}.hs .nav{grid-column:1/-1;margin-top:0}.hs .wl{margin-left:0}}
+
+/* 3 Haley Park (layout); black ground from the locked palette */
+.hp{background:var(--black);color:#EFE8D6;padding:46px 5vw 0;text-align:center;font-family:var(--inst)}
+.hp .wl{font-size:clamp(3rem,8vw,5.5rem)}
+.hp .links{display:grid;grid-template-columns:repeat(6,1fr);gap:14px 12px;margin:46px 0 34px;font-size:1.3rem}
+.hp .links a:hover{font-style:italic;color:var(--amber)}
+.hp .base{display:flex;justify-content:space-around;flex-wrap:wrap;gap:12px 30px;align-items:center;font-size:1.3rem;padding-bottom:30px}
+.hp kbd{display:inline-block;font:.72rem/1 var(--mono);border:1px solid #8a8577;padding:3px 5px;margin-left:6px;vertical-align:middle}
+.hp .check{height:16px;background:conic-gradient(#1e1e1e 25%,transparent 0 50%,#1e1e1e 0 75%,transparent 0) 0 0/16px 16px}
+@media (max-width:760px){.hp .links{grid-template-columns:repeat(2,1fr)}}
+
+/* 4 Studiokay */
+.sk{background:var(--amber);padding:14px 20px 44px}
+.sk .head{text-align:right}
+.sk .wl{font-size:clamp(2.6rem,7vw,5rem)}
+.sk .grid{display:grid;grid-template-columns:1.25fr .6fr 1fr;gap:28px 20px;margin-top:90px;align-items:end}
+.sk .small{font:400 .72rem/1.5 var(--inter)}
+.sk .year{font:700 1.5rem/1 var(--inter);margin-top:20px}
+.sk h3{margin:0 0 14px;font:600 .95rem/1 var(--inter);text-transform:uppercase}
+.sk .cols{display:contents}
+.sk .col{align-self:start}
+.sk .col a{display:block;font:400 .85rem/1.9 var(--inter)}
+.sk .col a:hover{text-decoration:underline}
+@media (max-width:760px){.sk .grid{grid-template-columns:1fr 1fr;margin-top:40px}.sk .first{grid-column:1/-1;order:3}}
+
+/* 5 Kuba */
+.kb{background:#EFEFEF;padding:90px 8% 36px}
+.kb .grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.kb .wl{font-size:clamp(3.4rem,8vw,6.5rem);align-self:start}
+.kb .btns{display:flex;flex-wrap:wrap;gap:0}
+.kb .btns a{font:500 .7rem/1 var(--inter);text-transform:uppercase;padding:9px 12px;background:#fff}
+.kb .btns a:first-child{background:var(--black);color:var(--amber)}
+.kb .btns a:hover{background:var(--amber);color:var(--black)}
+.kb .rows{display:grid;grid-template-columns:120px 1fr;gap:56px 0;margin-top:74px}
+.kb .rows dt{font:500 .64rem/1.6 var(--mono);text-transform:uppercase}
+.kb .rows dd{margin:0}
+.kb .rows a{display:block;font:400 .9rem/1.45 var(--inter)}
+.kb .rows a:hover{text-decoration:underline}
+.kb .base{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 40px;margin-top:110px;font:400 .66rem/1.4 var(--mono);text-transform:uppercase;letter-spacing:normal}
+.kb .base nav{display:flex;gap:34px;margin-right:12%}
+@media (max-width:760px){.kb{padding-top:40px}.kb .grid{grid-template-columns:1fr}.kb .base nav{margin-right:0}}
+
+/* 6 Chris Fairchild */
+.cf{background:#F7F7F7;padding:56px 20px 18px}
+.cf .grid{display:grid;grid-template-columns:1.1fr 1.15fr .55fr .6fr;gap:0 40px}
+.cf .lab{font:400 .7rem/1 var(--inter);color:var(--grey);text-transform:uppercase;padding-bottom:10px;margin-bottom:10px}
+.cf .next a{font:400 1.5rem/1.1 var(--inter)}
+.cf .next a:hover{text-decoration:underline}
+.cf .img{margin-top:16px;background:#1c2a3a;aspect-ratio:1.6;display:flex;align-items:center;justify-content:center}
+.cf .img img{width:92%;object-fit:contain}
+.cf .col a{display:block;font:400 .95rem/2 var(--inter)}
+.cf .col a:hover{text-decoration:underline}
+.cf .base{display:grid;grid-template-columns:2.25fr .55fr .6fr;gap:0 40px;align-items:end;margin-top:90px;font:400 .95rem/1 var(--inter)}
+.cf .base>*:last-child{text-align:right}
+.cf .wl{font-size:1.8rem;justify-self:start}
+@media (max-width:860px){.cf .grid{grid-template-columns:1fr 1fr;gap:32px 24px}.cf .feat{grid-column:1/-1;order:-1}.cf .base{grid-template-columns:1fr auto auto;gap:0 20px}}
+
+/* 7 Xavier Coulombe-Murray */
+.xc{background:var(--black);color:#fff;padding:14px 14px 14px 16px}
+.xc .grid{display:grid;grid-template-columns:1fr auto 210px;gap:18px;align-items:center}
+.xc .status{display:flex;align-items:center;gap:8px;font:600 1.15rem/1.2 var(--inter);color:#9d9d9d}
+.xc .status i{width:14px;height:14px;border-radius:50%;background:var(--teal)}
+.xc .wl{font-size:2rem;margin:6px 0 4px}
+.xc .role{font:600 1.05rem/1.35 var(--inter);color:#9d9d9d}
+.xc .role a:hover,.xc .role [aria-current]{color:#fff}
+.xc .role .sep{margin:0 .35em}
+.xc .ver{font:400 .62rem/1 var(--inter);color:#9d9d9d;margin:8px 0 10px}
+.xc .tiles{display:flex;flex-wrap:wrap;gap:6px}
+.xc .tile{width:84px;height:84px;background:#1d1d1d;border-radius:4px;padding:7px;display:flex;flex-direction:column;justify-content:space-between;font:600 .62rem/1.3 var(--inter)}
+.xc .tile small{display:block;font-weight:400;color:#9d9d9d}
+.xc .tile:hover{background:#2c2c2c}
+.xc .tile svg{width:13px;height:13px}
+.xc .clock{width:190px;height:190px;border-radius:50%;background:#1a1a1a;position:relative}
+.xc .clock b{position:absolute;left:50%;top:50%;transform-origin:50% 100%;border-radius:4px}
+.xc .clock .h{width:8px;height:40px;margin:-40px 0 0 -4px;background:#fff}
+.xc .clock .m{width:5px;height:68px;margin:-68px 0 0 -2.5px;background:#1a1a1a;border:2px solid #fff}
+.xc .clock .s{width:2px;height:74px;margin:-74px 0 0 -1px;background:var(--teal)}
+.xc .clock .dot{width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#fff;transform:none}
+.xc .clock .tick{position:absolute;left:50%;top:6px;width:1px;height:12px;background:#555;transform-origin:50% 89px}
+.xc .photo{background:#111 center/cover;border-radius:6px;height:190px;display:flex;align-items:center;justify-content:center;overflow:clip}
+.xc .photo img{width:100%;height:100%;object-fit:contain;filter:grayscale(1) contrast(1.1)}
+@media (max-width:760px){.xc .grid{grid-template-columns:1fr}.xc .clock{display:none}.xc .photo{height:160px}}
+
+/* 8 Rafael Cespedes */
+.rc{background:#141414;color:#A8A8A8;font-family:var(--news)}
+.rc .rails{max-width:900px;margin:0 auto;border-left:1px solid #262626;border-right:1px solid #262626;padding:0 30px}
+.rc .grid{display:grid;grid-template-columns:.9fr 1.5fr 1fr 1fr;gap:20px;padding:40px 0 34px;align-items:start}
+.rc .wl{font-size:2rem}
+.rc .when{display:flex;align-items:center;gap:8px;font-size:.95rem}
+.rc .when i{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#bfe3ff,#1f6fd6)}
+.rc a{display:block;font-size:.95rem;line-height:1.3}
+.rc nav a:hover{color:#fff}
+@media (max-width:760px){.rc .grid{grid-template-columns:1fr 1fr}}
+
+/* 9 Kasturi */
+.ks{background:var(--amber) radial-gradient(circle,var(--black) 2.2px,transparent 2.6px) 0 0/12px 12px;padding:18px}
+.ks .card{background:var(--pink);border:2px solid var(--black);border-radius:14px;padding:30px 5% 34px;position:relative;text-align:center}
+.ks .star{position:absolute;width:44px;height:44px}
+.ks .s1{left:26px;top:26px}.ks .s2{right:26px;top:26px}.ks .s3{left:26px;bottom:26px}.ks .s4{right:26px;bottom:26px}
+.ks .wl{font-size:clamp(3rem,8vw,5.8rem)}
+.ks .oval{display:inline-flex;align-items:center;justify-content:center;border:2px solid var(--black);border-radius:50%;font:700 .78rem/1 var(--inter);text-transform:uppercase}
+.ks .big{background:var(--black);color:#fff;width:min(340px,80%);height:74px;margin:36px auto 30px;display:flex;font-size:.9rem}
+.ks .big:hover{background:var(--amber);color:var(--black)}
+.ks .row{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 18px}
+.ks .row .oval{min-width:150px;height:38px;padding:0 18px}
+.ks .row .oval:hover{background:var(--black);color:var(--pink)}
+.ks .row+.row{margin-top:14px}
+@media (max-width:560px){.ks .star{width:28px;height:28px}.ks .row .oval{min-width:0;width:100%}}
+
+/* 10 Isa de Burgh */
+.ib{background:#FDFCF7;padding:150px 10px 12px}
+.ib .lab{font:700 .95rem/1 var(--inter);text-transform:uppercase;letter-spacing:-.02em}
+.ib .mail{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.ib .mail a{font:400 clamp(2rem,5vw,3.1rem)/1.05 var(--inst);word-break:break-word}
+.ib .copy{margin-top:-14px;border:1.5px solid var(--ink);border-radius:50%;padding:6px 14px;transform:rotate(12deg);font:600 .6rem/1 var(--inter);text-transform:uppercase}
+.ib .copy:hover{background:var(--ink);color:#FDFCF7}
+.ib .icons{display:flex;flex-wrap:wrap;gap:14px 48px;margin-top:18px}
+.ib .icons a{display:flex;align-items:center;gap:12px;font:700 .95rem/1 var(--inter);text-transform:uppercase;letter-spacing:-.02em}
+.ib .icons svg{width:48px;height:48px}
+.ib .icons a:hover{text-decoration:underline}
+.ib .tools{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:40px;font:700 .95rem/1.3 var(--inter);text-transform:uppercase;letter-spacing:-.02em}
+.ib .tools a:hover{text-decoration:underline}
+.ib .base{display:flex;justify-content:space-between;align-items:center;margin-top:80px}
+.ib .wl{font-size:1.6rem}
+.ib .up{width:26px;height:26px;border:1.5px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.ib .up:hover{background:var(--ink);color:#fff}
+</style>
+</head>
+<body>
+<div id="gallery"></div>
+
+<script>
+/* One list of links. Add a line and every footer picks it up. */
+const CURRENT = 'dropfleet';
+const TOOLS = [
+  { id:'dropfleet', name:'Dropfleet Commander', url:'https://type37.github.io/dropfleet-builder/' },
+  { id:'dropzone',  name:'Dropzone Commander',  url:'https://type37.github.io/dropzone-3e-army-builder/' },
+  { id:'abs',       name:'A Billion Suns 2e',   url:'https://type37.github.io/a-billion-suns-shipyard/' },
+  { id:'pacific',   name:'Pacific Command',     url:'https://jetwong.neocities.org/wargaming/historicals/pacific-command-builder-2' },
+  { id:'dragon',    name:'Dragon Rampant 2e',   url:'https://type37.github.io/dragon-rampant-2e-warband-builder/' },
+  { id:'xenos',     name:'Xenos Rampant',       url:'https://type37.github.io/xenos-rampant-force-builder/' },
+  { id:'warcrow',   name:'Warcrow',             url:'#' },
+];
+const CHANNELS = [
+  { id:'youtube', name:'YouTube', handle:'@WarLore', url:'https://youtube.com/@WarLore' },
+  { id:'patreon', name:'Patreon', handle:'WarLore',  url:'#' },
+  { id:'kofi',    name:'Ko-fi',   handle:'jetwong',  url:'https://ko-fi.com/jetwong' },
+];
+const EMAIL = 'warlore1@outlook.com';
+const HOME = 'https://linktr.ee/warlore';
+const ART = '../assets/art/basilisk.webp';
+
+const ext = u => /^https?:/.test(u) ? ' target="_blank" rel="noopener"' : '';
+const cur = t => t.id === CURRENT ? ' aria-current="page"' : '';
+const short = t => t.name.replace(/ Commander$| 2e$/, '');
+const WL = () => `<a class="wl" href="${HOME}"${ext(HOME)}>WarLore</a>`;
+const tools = (fmt = t => t.name, cls = '') => TOOLS.map(t => `<a class="${cls}" href="${t.url}"${cur(t)}>${fmt(t)}</a>`).join('');
+const chans = (cls = '') => CHANNELS.map(c => `<a class="${cls}" href="${c.url}"${ext(c.url)}>${c.name}</a>`).join('');
+const mail = (label = 'Feedback', cls = '') => `<a class="${cls}" href="mailto:${EMAIL}">${label}</a>`;
+const year = new Date().getFullYear();
+const ICON = {
+  youtube:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="3" y="3" width="42" height="42" rx="11"/><path d="M19 16v16l13-8z"/></svg>',
+  patreon:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="3" width="42" height="42" rx="11"/><circle cx="27" cy="21" r="8"/><path d="M14 13v22"/></svg>',
+  kofi:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="3" y="3" width="42" height="42" rx="11"/><path d="M12 18h19v9a7 7 0 0 1-7 7h-5a7 7 0 0 1-7-7zM31 20h3a4 4 0 0 1 0 8h-3"/></svg>',
+  arrow:'<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11L11 3M5 3h6v6"/></svg>',
+  mail:'<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1.5" y="3" width="11" height="8" rx="1"/><path d="M1.5 4l5.5 4 5.5-4"/></svg>',
+  star:'<svg viewBox="0 0 44 44" fill="#000"><path d="M22 0l2 18 20 4-20 4-2 18-2-18-20-4 20-4z"/><path d="M22 22L8 8M22 22l14-14M22 22L8 36M22 22l14 14" stroke="#000" stroke-width="1.6"/></svg>',
+};
+const toTop = `onclick="window.scrollTo({top:0,behavior:'smooth'})"`;
+
+const FOOTERS = [
+  ['Jack Phat', 'jack-phat', () => `
+    <footer class="jp"><div class="card">
+      ${WL()}
+      <div class="row">
+        <div class="cols"><nav>${chans()}${mail()}</nav><nav>${tools(short)}</nav></div>
+        <div class="right"><button class="top" type="button" ${toTop}>Back to top</button><span>&copy;${year} WarLore / Unofficial</span></div>
+      </div>
+    </div></footer>`],
+
+  ['Harsh Shah', 'harsh-shah', () => `
+    <footer class="hs"><div class="grid">
+      <div></div>
+      <div class="col"><div class="lab">Contact</div>${mail(EMAIL)}</div>
+      <div class="col"><div class="lab">Support</div>${CHANNELS.filter(c => c.id !== 'youtube').map(c => `<a class="arr" href="${c.url}"${ext(c.url)}>${c.name}</a>`).join('')}</div>
+      <div class="col"><div class="lab">Follow</div>${CHANNELS.filter(c => c.id === 'youtube').map(c => `<a class="arr" href="${c.url}"${ext(c.url)}>${c.name}</a>`).join('')}</div>
+      <div class="lab navlab">Tools</div>
+      <nav class="nav">${TOOLS.map(t => `<a href="${t.url}"${cur(t)}>${short(t)}</a>`).join('<span class="sl">/</span>')}</nav>
+      <div class="base"><button class="arr" type="button" ${toTop}>Back To Top</button>${WL()}</div>
+    </div></footer>`],
+
+  ['Haley Park', 'haley-park', () => `
+    <footer class="hp">
+      ${WL()}
+      <nav class="links">${tools(short)}${chans()}${mail()}</nav>
+      <div class="base"><span>Unofficial<kbd>U</kbd></span><button type="button" ${toTop}>Back to top<kbd>T</kbd></button></div>
+      <div class="check" aria-hidden="true"></div>
+    </footer>`],
+
+  ['Studiokay', 'studiokay', () => `
+    <footer class="sk">
+      <div class="head">${WL()}</div>
+      <div class="grid">
+        <div class="first"><div class="small">Unofficial</div><div class="year">&copy;${year}</div></div>
+        <div class="col"><h3>Channels</h3>${chans()}${mail()}</div>
+        <div class="col"><h3>Tools</h3>${tools()}</div>
+      </div>
+    </footer>`],
+
+  ['Kuba', 'kuba', () => `
+    <footer class="kb">
+      <div class="grid">
+        ${WL()}
+        <div>
+          <div class="btns">${mail('Feedback')}<a href="mailto:${EMAIL}">${EMAIL}</a></div>
+          <dl class="rows">
+            <dt>Tools</dt><dd>${tools()}</dd>
+            <dt>Channels</dt><dd>${chans()}</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="base"><span>Unofficial. WarLore ${year}.</span><nav><button type="button" ${toTop}>Back to top</button></nav></div>
+    </footer>`],
+
+  ['Chris Fairchild', 'chris-fairchild', () => {
+    const t = TOOLS.find(x => x.id === CURRENT);
+    return `
+    <footer class="cf">
+      <div class="grid">
+        <div class="next"><div class="lab">Now</div><a href="${t.url}">${t.name}</a></div>
+        <div class="feat"><div class="img"><img src="${ART}" alt=""></div></div>
+        <div class="col"><div class="lab">Tools</div>${tools(short)}</div>
+        <div class="col"><div class="lab">Contact</div>${mail('Email')}${chans()}</div>
+      </div>
+      <div class="base">${WL()}<span>Unofficial</span><span>${year}</span></div>
+    </footer>`}],
+
+  ['Xavier Coulombe-Murray', 'xavier-coulombe-murray', () => `
+    <footer class="xc"><div class="grid">
+      <div>
+        <div class="status"><i></i>Unofficial</div>
+        ${WL()}
+        <div class="role">${TOOLS.map(t => `<a href="${t.url}"${cur(t)}>${short(t)}</a>`).join('<span class="sep">/</span>')}</div>
+        <div class="ver">${year}</div>
+        <div class="tiles">${CHANNELS.map(c => `<a class="tile" href="${c.url}"${ext(c.url)}><span>${c.name}<small>${c.handle}</small></span>${ICON.arrow}</a>`).join('')}<a class="tile" href="mailto:${EMAIL}"><span>Feedback<small>Email</small></span>${ICON.mail}</a></div>
+      </div>
+      <div class="clock" aria-hidden="true">${Array.from({length:12},(_, i) => `<span class="tick" style="transform:rotate(${i*30}deg)"></span>`).join('')}<b class="h"></b><b class="m"></b><b class="s"></b><b class="dot"></b></div>
+      <div class="photo"><img src="${ART}" alt=""></div>
+    </div></footer>`],
+
+  ['Rafael Cespedes', 'rafael-cespedes', () => `
+    <footer class="rc"><div class="rails"><div class="grid">
+      ${WL()}
+      <div class="when"><i></i><span class="now"></span></div>
+      <nav>${tools(short)}</nav>
+      <nav>${CHANNELS.map(c => `<a class="arr" href="${c.url}"${ext(c.url)}>${c.name}</a>`).join('')}<a class="arr" href="mailto:${EMAIL}">Email</a></nav>
+    </div></div></footer>`],
+
+  ['Kasturi', 'kasturi', () => `
+    <footer class="ks"><div class="card">
+      ${['s1','s2','s3','s4'].map(s => `<span class="star ${s}" aria-hidden="true">${ICON.star}</span>`).join('')}
+      ${WL()}
+      <a class="oval big" href="mailto:${EMAIL}">Feedback</a>
+      <div class="row">${chans('oval')}</div>
+      <div class="row">${tools(short, 'oval')}</div>
+    </div></footer>`],
+
+  ['Isa de Burgh', 'isa-de-burgh', () => `
+    <footer class="ib">
+      <div class="lab">Email</div>
+      <div class="mail"><a href="mailto:${EMAIL}">${EMAIL}</a><button class="copy" type="button" data-copy="${EMAIL}">Copy</button></div>
+      <div class="icons">${CHANNELS.map(c => `<a href="${c.url}"${ext(c.url)}>${ICON[c.id]}${c.name}</a>`).join('')}</div>
+      <nav class="tools">${tools()}</nav>
+      <div class="base">${WL()}<button class="up" type="button" aria-label="Back to top" ${toTop}>&#8593;</button></div>
+    </footer>`],
+];
+
+document.getElementById('gallery').innerHTML = FOOTERS.map(([name, slug, render], i) =>
+  `<p class="src">${i + 1}. <a href="https://www.footer.design/sites/${slug}" target="_blank" rel="noopener">${name}</a></p>${render()}`).join('');
+
+/* live clock (Xavier) and date line (Rafael) */
+const tick = () => {
+  const d = new Date(), s = d.getSeconds(), m = d.getMinutes() + s / 60, h = (d.getHours() % 12) + m / 60;
+  document.querySelectorAll('.xc .clock').forEach(c => {
+    c.querySelector('.h').style.transform = `rotate(${h * 30}deg)`;
+    c.querySelector('.m').style.transform = `rotate(${m * 6}deg)`;
+    c.querySelector('.s').style.transform = `rotate(${s * 6}deg)`;
+  });
+  document.querySelectorAll('.rc .now').forEach(n => n.textContent =
+    d.toLocaleDateString('en-US', { weekday:'short', month:'long', day:'2-digit', year:'numeric' }) + ' ' +
+    d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' }));
+};
+tick(); setInterval(tick, 1000);
+
+/* copy button (Isa) */
+document.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => {
+  navigator.clipboard?.writeText(b.dataset.copy).then(() => { b.textContent = 'Copied'; setTimeout(() => b.textContent = 'Copy', 1400); });
+});
+</script>
+</body>
+</html>
