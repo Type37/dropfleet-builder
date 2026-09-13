@@ -89,12 +89,13 @@ const DI={
 };
 
 const DT=[
-  {name:"Line",nc:false,desc:"<b>2 Players:</b> All Ships in base contact with opposite table edges as shown.<br><b>3-4 Players:</b> All Ships in base contact with a single table edge for each player."},
-  {name:"Table Corners",nc:false,desc:"<b>2 Players:</b> All Ships in base contact with a table edge up to <b>12\"</b> from opposite corners.<br><b>3-4 Players:</b> All Ships in base contact with a table edge up to 12\" from a single corner for each player."},
-  {name:"Midboard",nc:false,desc:"<b>2 Players:</b> <b>8\"</b> from the centre of opposite table edges.<br><b>3-4 Players:</b> 8\" from the centre of separate table edges."},
-  {name:"From Corners",nc:false,desc:"<b>2 Players:</b> <b>12\"</b> from opposite table corners.<br><b>3-4 Players:</b> 12\" from separate table corners."},
-  {name:"Attacker &amp; Defender",nc:true,desc:"1 Attacking Team in Red with all Ships in base contact with the table edge as shown.<br>1 Defending Team in Blue <b>12\"</b> from the opposite table edge."},
-  {name:"Encirclement",nc:true,desc:"1 Attacking Team in Red <b>6\"</b> from all board corners.<br>1 Defending Team in Blue <b>9\"</b> from the board centre.<br><b>Note:</b> Scenario rules and Objectives that measure distance from a Deployment Zone to a Dropsite reduce that distance by half; this matters for any rule like \"within 12\" of your Deployment Zone.\""},
+  // Word for word from rulebook 12.1.1; the generator shows only the line for the chosen player count
+  {name:"Line",nc:false,desc:"2 Players: All Ships in base contact with opposite table edges as shown.<br>3-4 Players: All Ships in base contact with a single table edge for each player."},
+  {name:"Table Corners",nc:false,desc:"2 Players: All Ships in base contact with a table edge up to 12” from opposite corners.<br>3-4 Players: All Ships in base contact with a table edge up to 12” from a single corner for each player."},
+  {name:"Midboard",nc:false,desc:"2 Players: 8” from the centre of opposite table edges.<br>3-4 Players: 8” from the centre of separate table edges."},
+  {name:"From Corners",nc:false,desc:"2 Players: 12” from opposite table corners.<br>3-4 Players: 12” from separate table corners."},
+  {name:"Attacker &amp; Defender",nc:true,desc:"1 Attacking Team in Red with all Ships in base contact with the table edge as shown.<br>1 Defending Team in Blue 12” from the opposite table edge."},
+  {name:"Encirclement",nc:true,desc:"1 Attacking Team in Red 6” from all board corners.<br>1 Defending Team in Blue 9” from the board centre.<br>Scenario rules and Objectives that require you to measure distance from these Deployment Zones to a Dropsite reduce that distance by half."},
 ];
 const AT=[
   {name:"Standoff",nc:false,r:"Directly Deploy",b:"Directly Deploy"},

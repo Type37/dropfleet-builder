@@ -8839,6 +8839,7 @@ let activeGroupId = null;
       'A scenario page names its deployment and scoring rules in bold at the start of their paragraphs, the way the Dropzone pages do, instead of in dark labels.',
       'A generated scenario no longer carries credit or copyright lines under it; the footer already has them.',
       'The Dropzone Scenarios card is off the landing page; the scenario pages link across to Dropzone from their header.',
+      'A generated scenario shows only the deployment line for your player count, and changing the count redraws the same scenario. The Deployment Type text is now the rulebook’s own: Encirclement’s note had been reworded, and bold the book does not print had been added.',
       'The generator is calmer: rolls show as die faces beside each heading instead of "(result: N)", option tiles lose their borders and number boxes, Random sits beside each section name, and the info circle, coloured labels and gold diamonds are gone. Labels no longer print pale.',
       'Hover or tap a Micrometeor Cloud, Dense Debris Field, Planetary Ring or Large Object, on a map or in the scenery text, to read its rules. That text is now the rulebook’s own, word for word: Large Objects had been reworded, and bold the book does not print had been added.',
       'Orbital Support’s map shows the Medium Space Station with its Military Outposts. Turn its Variant on and they become Hangars on the map, stats included.',

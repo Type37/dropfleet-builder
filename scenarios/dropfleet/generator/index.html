@@ -757,7 +757,9 @@ function spinAndGen(){
   gen(); showCard();
 }
 function showCard(){ if(matchMedia('(max-width:800px)').matches) document.getElementById('card').scrollIntoView({block:'start'}); }
-function gen(){
+// The last results, so changing the player count redraws this scenario instead of rolling a new one
+let LAST=null;
+function gen(keep){
   const comp=document.getElementById('cm').checked;
   // Manual pick helpers: if a dropdown has a value, use it; otherwise roll
   function pickIdx(id){ const sel=document.querySelector(`input[name=${id}]:checked`); return sel&&sel.value?parseInt(sel.value)-1:-1; }
@@ -767,11 +769,8 @@ function gen(){
     if(m>=0) return {item:table[m], roll:m+1};
     return roll(table, useComp?comp:false);
   }
-  const dep=rollOrPick(DT,'dep',true);
-  const app=rollOrPick(AT,'app',true);
-  const lay=rollOrPick(LY,'lay',true);
-  const vari=rollOrPick(VA,'var',false);
-  const obj=rollOrPick(OB,'obj',false);
+  const {dep,app,lay,vari,obj}=keep&&LAST?LAST:{dep:rollOrPick(DT,'dep',true),app:rollOrPick(AT,'app',true),lay:rollOrPick(LY,'lay',true),vari:rollOrPick(VA,'var',false),obj:rollOrPick(OB,'obj',false)};
+  LAST={dep,app,lay,vari,obj};
   const D=dep.item,A=app.item,L=lay.item,V=vari.item,O=obj.item;
 
   // SCORING
@@ -782,8 +781,9 @@ function gen(){
 
   // DEPLOYMENT TYPE
   const numPlayers=parseInt(getPickVal('players'))||2;
-  // Split description by <br> and filter by player count
-  const dtH=`<div class="sbox"><p>${D.desc}</p></div>`;
+  // Only the line for the chosen player count ("2 Players:" or "3-4 Players:"); lines for no count always show
+  const dtLines=D.desc.split('<br>').filter(l=>{ const m=l.match(/^(?:<b>)?(\d)(?:-(\d))? Players:/); return !m||(numPlayers>=+m[1]&&numPlayers<=+(m[2]||m[1])); });
+  const dtH=`<div class="sbox">${dtLines.map(l=>`<p>${l}</p>`).join('')}</div>`;
 
   // APPROACH TYPE
   let appH='';
@@ -1050,6 +1050,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   gen();
   const cm=document.getElementById('cm');
   cm.addEventListener('change',()=>document.body.classList.toggle('competitive',cm.checked));
+  document.querySelectorAll('input[name=players]').forEach(r=>r.addEventListener('change',()=>gen(true)));
   document.querySelector('.ctrl-tray').addEventListener('scroll',ttHide);
   window.addEventListener('resize',ttHide);
 });
