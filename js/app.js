@@ -8933,6 +8933,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Scenario score sheets: VP you can see go up', items: [
+      'Scenario score sheets: when a player’s VP goes up, their total pops and +VP rises from the button you pressed.',
+    ]},
     { date: '2026-09-13', title: 'Rules Reference is now Interactive Rules', items: [
       'The searchable, linked rulebook on the home screen is now called Interactive Rules. Links to the old page still open it.',
     ]},

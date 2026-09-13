@@ -4644,6 +4644,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Scenario score sheets: VP you can see go up', items: [
+      'Scenario score sheets: when a player’s VP goes up, their total pops and +VP rises from the button you pressed.',
+    ]},
     { date: '2026-09-13', title: 'Rules Reference is now Interactive Rules', items: [
       'The searchable, linked rulebook in Settings is now called Interactive Rules. A link to it opens straight onto the rules on a phone too.',
     ]},

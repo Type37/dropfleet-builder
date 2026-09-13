@@ -5,6 +5,12 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Score sheet VP animation
+
+Scenario score sheets: when a player's VP goes up, their total pops and +VP
+rises from the button you pressed. Off with reduced motion
+(`scenarios/shared/score.js`, ed2cfc9).
+
 ### 2026-09-13: Rules Reference renamed Interactive Rules
 
 The rulebook screen (home-screen card, desktop topbar, phone app bar and
