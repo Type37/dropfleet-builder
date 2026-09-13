@@ -83,7 +83,7 @@ ScenarioShell.start({
   groups:[['Rulebook',['Rulebook']],['Scenario Expansion 1',['Scenario Expansion 1']],['Civilian Ship Scenarios',['Civilian Ships & Scenarios']],
     ['Converted 1e Scenarios',['The Ether Drake (1st edition)','Automated Dreadnought (1st edition)','Advent Scenarios (1st edition)','Core Scenarios (1st edition)']]]
     // Rulebook keeps the book's order; every other group reads A to Z
-    .map(([name,srcs])=>({name,items:(items=>name==='Rulebook'?items:items.slice().sort((x,y)=>x.name.localeCompare(y.name)))(srcs.flatMap(src=>SCENARIOS.filter(s=>s.src===src)))})),
+    .map(([name,srcs])=>({name,items:(items=>name==='Rulebook'?items:items.slice().sort((x,y)=>x.name.localeCompare(y.name)))(srcs.flatMap(src=>SCENARIOS.filter(s=>s.src===src&&s.id!=='fauna-rules')))})),
   id:s=>s.id,
   name:s=>s.name,
   // The Scenario Generator card above the books already rolls a scenario

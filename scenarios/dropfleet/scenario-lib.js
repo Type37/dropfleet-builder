@@ -826,7 +826,9 @@ function renderScenario(s){
   const scenery=s.scenery?pubParas([].concat(s.scenery).map(scenTips))+pubScenery([s.scenery,s.special,s.scoring].map(J).join(' ')):'';
   const ships=pubShips(allText);
   const hasMap=SCENARIO_MAPS.has(s.id);
-  const fauna=s.id!=='fauna-rules'&&/\bFauna\b/.test(allText)?`<button class="abtn pub-fauna" onclick="pubOpen('fauna-rules')">Fauna Rules</button>`:'';
+  // A Fauna scenario carries the Fauna Rules written out in full, as its own section
+  const FR=s.id!=='fauna-rules'&&/\bFauna\b/.test(allText)&&SCENARIOS.find(x=>x.id==='fauna-rules');
+  const fauna=FR?sec('Fauna Rules',pubParas(FR.body)+(FR.table?pubTable(FR.table):'')):'';
   let on='0';
   try{ if(s.variant&&localStorage.getItem(pubVariantKey(s.id))==='1') on='1'; }catch(e){}
   // Game size: one setting for every scenario; the map's data-size layers follow it

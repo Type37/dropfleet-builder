@@ -113,6 +113,13 @@ const ScenarioShell = (() => {
     document.getElementById('print').addEventListener('click', () => window.print());
   }
 
+  /* ── Print: the print styles size a scenario for one page; when it is longer it continues on the next page,
+     with sections, tables, maps and ship cards kept whole and headings kept with what follows them ── */
+  const PRINT_CSS = document.createElement('style');
+  PRINT_CSS.textContent = `@media print{article.sheet .sec,article.sheet table,article.sheet .pub-ship,article.sheet .map-frame,article.sheet .spill-row{break-inside:avoid;}
+article.sheet .sl,article.sheet .spill-row{break-after:avoid;}}`;
+  document.head.appendChild(PRINT_CSS);
+
   function route() {
     const id = decodeURIComponent(location.hash.slice(1));
     const s = id && all().find(x => G.id(x) === id);
