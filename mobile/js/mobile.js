@@ -4639,6 +4639,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-12', title: 'Scenario Generator: Dropzone switch', items: [
+      'The Scenario Generator has the Dropfleet/Dropzone switch the Scenario Reference has. Dropzone opens its own new generator, rolling on the d66 chart.',
+    ]},
     { date: '2026-09-12', title: 'Lore: hull length and displacement', items: [
       'The Armstrong Destroyer, Aldrin Colony Ship, Collins Support Carrier and Helium Voidflyer show their Length and Displacement under their lore.',
     ]},

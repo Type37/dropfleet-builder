@@ -8809,6 +8809,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-12', title: 'Scenario Generator: Dropzone switch', items: [
+      'The Scenario Generator has the Dropfleet/Dropzone switch the Scenario Reference has. Dropzone opens its own new generator, rolling on the d66 chart.',
+    ]},
     { date: '2026-09-12', title: 'Fleets open again', items: [
       'Opening a fleet had stopped showing the builder: the fleet list stayed on screen. Fixed.',
     ]},

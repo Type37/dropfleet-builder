@@ -5,6 +5,13 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-12: Scenario Generator gets the Dropzone switch
+
+The Dropfleet generator's control panel carries the same Dropfleet/Dropzone
+switch as the Scenario Reference. Dropzone goes to the new Dropzone generator
+(`dropzone-3e-army-builder/scenarios/generator/`), which rolls on the d66 chart
+and renders the reference card with the chosen game size and Variant.
+
 ### 2026-09-12: Lore gets hull Length and Displacement
 
 New optional `specs: {length, displacement}` on a ship in the faction JSON, shown
