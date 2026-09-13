@@ -295,6 +295,15 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .scenario.pub:not([data-v="1"]) .hs[data-v="1"]{display:none;}
 .scenario.pub[data-v="1"] svg [data-v="1"]{display:inline;}
 .scenario.pub[data-v="1"] [data-hide-v~="1"]{display:none;}
+/* Game size: Dropsites only used in bigger games hide with the size switch */
+.scenario.pub[data-size="skirmish"] [data-size],.scenario.pub[data-size="clash"] [data-size="battle"]{display:none;}
+.seg.pub-size{display:inline-flex;flex-wrap:wrap;align-self:flex-start;border:1.5px solid var(--action,#0072a8);margin-bottom:2mm;}
+.seg.pub-size button{font-family:'Jost',system-ui,sans-serif;font-size:14px;font-weight:600;padding:6px 12px;background:transparent;color:var(--action-dk,#005b85);border:0;cursor:pointer;}
+.seg.pub-size button+button{border-left:1.5px solid var(--action,#0072a8);}
+.seg.pub-size button[aria-pressed="true"]{background:var(--action,#0072a8);color:#fff;}
+@media (hover:hover){.seg.pub-size button:not([aria-pressed="true"]):hover{background:var(--hover,#efe9dc);}}
+.seg.pub-size button:focus-visible{outline:2px solid #B86C0A;outline-offset:2px;}
+@media print{.seg.pub-size{border:0;}.seg.pub-size button:not([aria-pressed="true"]){display:none;}.seg.pub-size button[aria-pressed="true"]{background:none;color:inherit;padding:0;}}
 .pub-vlist{list-style:none;display:flex;flex-direction:column;gap:2mm;}
 .pub-vlist li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:start;}
 .pub-vbtn{font-family:'Jost',system-ui,sans-serif;font-size:14px;font-weight:600;padding:2px 10px;border:1.5px solid var(--action,#0072a8);background:transparent;color:var(--action-dk,#005b85);cursor:pointer;white-space:nowrap;}

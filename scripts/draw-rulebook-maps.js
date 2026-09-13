@@ -38,9 +38,9 @@ const { mkLC, mkMC, mkSC, mkStn, _i, tokenSpot, TOKEN } = ctx.mk;
 // The generator's cities use rgba fills; give them the same colour with a separate opacity
 const plain = svg => svg.replace(/fill="rgba\((\d+),(\d+),(\d+),([.\d]+)\)"/g, (m, r, g, b, a) => `fill="rgb(${r},${g},${b})" fill-opacity="${a}"`);
 // A Feature token: the real token art, placed with a transform rather than a nested <svg>
-function token(key, px, py) {
-  const art = ctx.FI[key], inner = art.slice(art.indexOf('>') + 1, art.lastIndexOf('</svg>')), h = TOKEN / 2;
-  return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${(h + .8).toFixed(1)}" fill="#f4efe8"/><g transform="translate(${(px - h).toFixed(2)},${(py - h).toFixed(2)}) scale(${TOKEN / 64})">${inner}</g>`;
+function token(key, px, py, size = TOKEN) {
+  const art = ctx.FI[key], inner = art.slice(art.indexOf('>') + 1, art.lastIndexOf('</svg>')), h = size / 2;
+  return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${(h + .8).toFixed(1)}" fill="#f4efe8"/><g transform="translate(${(px - h).toFixed(2)},${(py - h).toFixed(2)}) scale(${size / 64})">${inner}</g>`;
 }
 
 // ── Zone styles, as the generator's depZone draws them ──────────────────────
@@ -176,7 +176,7 @@ const MAPS = {
   // ── 1st edition scenarios converted to the current edition (scenario-legacy.js). Read off the
   // 1st edition maps: Clusters of 2/3/4 Sectors -> Small/Medium/Large Cities, Sector colours -> Features
   // (tan Military -> out, green Orbital Defence -> odg, orange Power Plant -> pow, pink Comms Station -> com;
-  // blue Commercial and yellow Industrial carry none). `cb` rings the Clash-and-Battle-only Dropsites.
+  // blue Commercial and yellow Industrial carry none). `cb` / `battle` put a Dropsite in the Clash-and-Battle / Battle-only game size layer.
   'the-ancient-relic': {
     zones: () => zone.edges(),
     // No measurements are printed; positions read off the map's grid
@@ -213,7 +213,8 @@ const MAPS = {
       ['MC', 33, 24, 0, ['out', 'out', 'out'], ''],
       ['MC', 42, 24, 0, ['odg'], ''],
     ],
-    cb: [1, 3],
+    // this page's blue-marked Clusters are "only used in Battles"
+    battle: [1, 3],
   },
   'core-take-and-hold': {
     zones: () => zone.edges(),
@@ -249,7 +250,7 @@ const MAPS = {
       ['MC', 12, 36, 0, ['out'], ''],
       ['MC', 36, 36, 0, ['out'], 'ES'],
     ],
-    labels: [[12, 12, 'B'], [36, 12, 'B'], [12, 36, 'A'], [36, 36, 'A']],
+    labels: [[12, 12, 'B'], [36, 12, 'B'], [12, 36, 'A'], [36, 36, 'A'], [24, 24, 'C']],
     cb: [2, 4],
     // Punching Up: the centre City gains 2 Orbital Defence Guns
     variants: { 1: { site: 3, feats: ['out', 'out', 'odg', 'odg'] } },
@@ -268,11 +269,11 @@ const MAPS = {
   'core-grid-control': {
     zones: () => zone.edges(),
     sites: [
-      ['MC', 24, 12, 0, ['out'], ''],
+      ['MC', 24, 12, 180, [], ''],
       ['SC', 4, 24, 0, ['out', 'odg'], ''],
       ['LC', 24, 24, 0, ['out', 'out', 'out', 'out'], ''],
       ['SC', 44, 24, 0, ['odg', 'out'], 'E'],
-      ['MC', 24, 36, 0, ['out'], 'S'],
+      ['MC', 24, 36, 0, [], 'S'],
     ],
     cb: [0, 4],
   },
@@ -300,6 +301,17 @@ const MAPS = {
   },
 };
 
+// The converted 1st edition maps put each Feature on the City dot it replaces, as the 1st edition map
+// coloured that Sector's dot (Jet, 2026-09-13); the book's own maps keep their tokens beside the Dropsite
+const ON_DOTS = new Set(['the-ancient-relic', 'resistance-spearhead', 'heavy-convoy', 'monitoring-the-situation', 'core-take-and-hold', 'core-mixed-engagement', 'core-erupting-battlefront', 'core-station-assault', 'core-grid-control', 'core-power-grab', 'core-defence-relay']);
+const DOT_TOKEN = 6.6;
+// The generator's dot centres (mkLC, mkMC, mkSC), turned with the Dropsite
+const DOTS = { LC: [[-3.5, -3.5], [3.5, -3.5], [-3.5, 3.5], [3.5, 3.5]], MC: [[0, -3], [-3.8, 3.2], [3.8, 3.2]], SC: [[-3, 0], [3, 0]] };
+function dotSpot(t, x, y, rot, i) {
+  const [dx, dy] = DOTS[t][i % DOTS[t].length], a = (rot || 0) * Math.PI / 180;
+  return [x + dx * Math.cos(a) - dy * Math.sin(a), y + dx * Math.sin(a) + dy * Math.cos(a)];
+}
+
 // Hover spot radius (percent of the map) for each dropsite drawing
 const SITE_R = { LC: 5, MC: 5, SC: 4.6, SS: 4, MS: 5, LS: 5 };
 const FEAT_KEY = { out: 'out', odg: 'odg', com: 'com', pow: 'pow', han: 'han' };
@@ -311,30 +323,37 @@ for (const [id, m] of Object.entries(MAPS)) {
   const spots = [];
   for (const [si, [t, xi, yi, rot, feats, edges, shifts]] of m.sites.entries()) {
     const x = _i(xi), y = _i(yi);
-    for (const e of edges) dims += edgeLine(e, xi, yi, shifts && shifts[e]);
-    sites += plain(t === 'LC' ? mkLC(x, y) : t === 'MC' ? mkMC(x, y, rot) : t === 'SC' ? mkSC(x, y, rot)
-      : mkStn(x, y, t[0], t === 'SS' ? 7 : 9));
-    spots.push({ t: t.toLowerCase(), x: pct(x), y: pct(y), r: SITE_R[t] });
+    // A Dropsite only on the table in bigger games sits in a data-size layer the scenario page's game size
+    // switch shows or hides: "clash" = Clash and Battle, "battle" = Battle only
+    const gsize = (m.battle || []).includes(si) ? 'battle' : (m.cb || []).includes(si) ? 'clash' : '';
+    const sized = s => gsize ? `<g data-size="${gsize}">${s}</g>` : s, stag = gsize ? { size: gsize } : {};
+    let d = '';
+    for (const e of edges) d += edgeLine(e, xi, yi, shifts && shifts[e]);
+    dims += sized(d);
+    sites += sized(plain(t === 'LC' ? mkLC(x, y) : t === 'MC' ? mkMC(x, y, rot) : t === 'SC' ? mkSC(x, y, rot)
+      : mkStn(x, y, t[0], t === 'SS' ? 7 : 9)));
+    spots.push({ t: t.toLowerCase(), x: pct(x), y: pct(y), r: SITE_R[t], ...stag });
     // A site's Features, wrapped in a layer when a Variant swaps them (v: shown with it, hideV: hidden by it)
     const layer = (list, attrs, tag) => {
       let out = '';
       list.forEach((k, i) => {
-        const [px, py] = tokenSpot(t, x, y, rot, i, false);
-        out += token(k, px, py);
-        spots.push({ t: FEAT_KEY[k], x: pct(px), y: pct(py), r: +((TOKEN / 2 + 0.8) / 2).toFixed(1), ...tag });
+        const onDot = ON_DOTS.has(id) && DOTS[t], size = onDot ? DOT_TOKEN : TOKEN;
+        const [px, py] = onDot ? dotSpot(t, x, y, rot, i) : tokenSpot(t, x, y, rot, i, false);
+        out += token(k, px, py, size);
+        spots.push({ t: FEAT_KEY[k], x: pct(px), y: pct(py), r: +((size / 2 + 0.8) / 2).toFixed(1), ...tag, ...stag });
       });
       return attrs ? `<g${attrs}>${out}</g>` : out;
     };
     const swaps = Object.entries(m.variants || {}).filter(([, v]) => v.site === si);
     const hide = swaps.map(([n]) => n).join(' ');
-    toks += hide ? layer(feats, ` data-hide-v="${hide}"`, { hideV: hide }) : layer(feats, '', {});
-    for (const [n, v] of swaps) toks += layer(v.feats, ` data-v="${n}" display="none"`, { v: n });
+    let tk = hide ? layer(feats, ` data-hide-v="${hide}"`, { hideV: hide }) : layer(feats, '', {});
+    for (const [n, v] of swaps) tk += layer(v.feats, ` data-v="${n}" display="none"`, { v: n });
+    toks += sized(tk);
   }
   for (const [lx, ly, d] of m.los || []) spots.push({ t: 'lo', x: pct(_i(lx)), y: pct(_i(ly)), r: pct(_i(d / 2)) });
-  // Clash-and-Battle-only Dropsites get a blue ring; A/B names sit beside their Dropsite
-  const rings = (m.cb || []).map(si => { const [, xi, yi] = m.sites[si]; return `<circle cx="${_i(xi)}" cy="${_i(yi)}" r="15" fill="none" stroke="#2B4A6F" stroke-width="1.4" stroke-dasharray="4,2"/>`; }).join('');
-  const labels = (m.labels || []).map(([lx, ly, t]) => `<text x="${_i(lx) + 13}" y="${_i(ly) - 9}" font-size="9" font-weight="700" fill="#2B4A6F" font-family="sans-serif">${t}</text>`).join('');
-  sites = rings + sites + labels;
+  // A/B/C names sit below their Dropsite, clear of its Feature tokens
+  const labels = (m.labels || []).map(([lx, ly, t]) => `<text x="${_i(lx) + (lx > 40 ? -12 : 12)}" y="${_i(ly) + 16}" text-anchor="middle" font-size="9" font-weight="700" fill="#2B4A6F" font-family="sans-serif">${t}</text>`).join('');
+  sites += labels;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="1000" height="1000">` +
     `<rect width="200" height="200" fill="#f4efe8"/>${GR}${m.zones()}${m.extra ? m.extra() : ''}` +
     `<rect x="0" y="0" width="200" height="200" fill="none" stroke="#B8952F" stroke-width="1.6"/>${dims}${sites}${toks}</svg>\n`;

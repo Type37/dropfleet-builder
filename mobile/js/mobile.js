@@ -4650,8 +4650,8 @@
       'Launch assets show their crit value, on screen and on the sheet, when the asset or its bay has a rule that uses criticals, such as Penetrator torpedoes.',
       'Printing from the phone app now shows crit values on weapons and launch assets.',
     ]},
-    { date: '2026-09-12', title: 'Scenarios: older-edition packs', items: [
-      'The Scenario Reference has twenty more scenarios with their maps, word for word: The Ancient Relic with the Automated Dreadnought, the three Princess Liner scenarios with the Princess Cruise Liner, the three Advent scenarios, the eight 1st edition Core Scenarios, and the 2017 Tournament Pack’s five with its setup and scoring rules.',
+    { date: '2026-09-13', title: 'Scenarios: 1st edition scenarios converted', items: [
+      'Eleven 1st edition scenarios are converted to the current rules, with redrawn maps: The Ancient Relic with the Automated Dreadnought, the three Advent scenarios, and seven of the Core Scenarios. Each is marked From 1st edition. A Skirmish, Clash or Battle switch shows the Dropsites that game size uses. Moonshot, the Princess Liner scenarios and the Tournament Pack are gone: TTCombat’s current versions are already on the page.',
     ]},
     { date: '2026-09-12', title: 'UCM: Francis Mendoza', items: [
       'TTCombat corrected the Flying Dutchman captain’s name in the UCM stats PDF, from Frances to Francis. The ship, its lore and the printed sheet now match.',

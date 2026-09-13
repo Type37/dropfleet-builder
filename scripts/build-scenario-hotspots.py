@@ -57,7 +57,7 @@ def main():
                 sys.exit('unknown type %s in %s' % (t, sid))
             spot = [tip, s['x'], s['y'], s['r']]
             # a spot on a Variant's map layer carries it: {"v": "1"} shown with it, {"hideV": "1"} hidden by it
-            layer = {k: s[k] for k in ('v', 'hideV') if k in s}
+            layer = {k: s[k] for k in ('v', 'hideV', 'size') if k in s}
             if layer:
                 spot.append(layer)
             spots.append(spot)

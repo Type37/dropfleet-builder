@@ -5,6 +5,31 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: 1st edition scenarios converted to the current edition
+
+Replaces the verbatim older-edition pages of 2026-09-12. Eleven scenarios in
+`scenarios/dropfleet/scenario-legacy.js` now use the normal scenario fields, so
+the page explains Deployment, Scoring and Scenery as for any other scenario:
+The Ancient Relic, Resistance Spearhead, Heavy Convoy, Monitoring the Situation,
+and the Core Scenarios' Take & Hold, Mixed Engagement, Erupting Battlefront,
+Station Assault, Grid Control, Power Grab and Defence Relay. The term mapping
+(Clusters to Cities with the identical Standard Scoring table, Sectors to
+Features, Critical Locations to 6" Focal Points as TTCombat's own Moonshot does,
+Column/Rapid Response to Staggered, Battleline to Close) is written out at the
+top of that file, read from `Desktop_Dropfleet_Rulebook_1.2.pdf`. Removed because
+TTCombat already converted them: Moonshot, the three Princess Liner scenarios
+(Civilian Ships & Scenarios). The Tournament Pack 2017 group is gone too.
+
+Maps are redrawn in `scripts/draw-rulebook-maps.js`. Features sit on the City dot
+they replace. Dropsites the 1st edition map marks for Clash and Battle (or Battle
+only) sit in `data-size` layers; converted scenarios with `sizes:true` get a
+Skirmish / Clash / Battle switch (`dfc-scenario-size`, shared by every scenario)
+that hides them, map and hover spots alike. `converted:true` puts "From 1st
+edition" in the index's Converted column. Each map was checked side by side against
+its 1st edition page by three independent reviews (`drafts/conversion-compare/`).
+The Automated Dreadnought card follows the Ether Drake's: ES 3+ KS 4+ BS 5+ from
+current Hull 15 Heavy ships, Particle to Core, Scald to Scald-1.
+
 ### 2026-09-13: Packed print columns, rulebook section numbers, sticky credits footer
 
 **Packing** (`packPrintColumns`, desktop Cards): groups are measured and cut into

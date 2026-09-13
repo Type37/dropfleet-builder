@@ -708,7 +708,7 @@ const SPOT_NAME=k=>{ const [kind,id]=[k.slice(0,k.indexOf(':')),k.slice(k.indexO
 function mapSpots(id){
   const spots=typeof SCN_HOTSPOTS!=='undefined'&&SCN_HOTSPOTS[id];
   // a fifth entry is the Variant layer a spot belongs to: {v} shown with it, {hideV} hidden by it
-  const layer=l=>l?(l.v?` data-v="${l.v}"`:'')+(l.hideV?` data-hide-v="${l.hideV}"`:''):'';
+  const layer=l=>l?(l.v?` data-v="${l.v}"`:'')+(l.hideV?` data-hide-v="${l.hideV}"`:'')+(l.size?` data-size="${l.size}"`:''):'';
   return spots?spots.map(([tip,x,y,r,l])=>`<span class="hs" tabindex="0" role="img" aria-label="${SPOT_NAME(tip)}" data-tip="${tip}"${layer(l)} style="left:${x-r}%;top:${y-r}%;width:${2*r}%;height:${2*r}%"></span>`).join(''):'';
 }
 // A redrawn map is inlined once fetched, so its Variant layers can follow the toggle
@@ -722,6 +722,14 @@ async function pubInlineMaps(){
     el.innerHTML=PUB_SVG[src].replace('<svg ',`<svg role="img" aria-label="${alt}" `);
   }
 }
+const PUB_SIZE_KEY='dfc-scenario-size';
+if(typeof document!=='undefined'&&document.addEventListener) document.addEventListener('click',e=>{
+  const b=e.target.closest&&e.target.closest('.scenario.pub [data-set-size]'), card=b&&b.closest('.scenario');
+  if(!card) return;
+  card.dataset.size=b.dataset.setSize;
+  try{ localStorage.setItem(PUB_SIZE_KEY,b.dataset.setSize); }catch(err){}
+  card.querySelectorAll('[data-set-size]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+});
 const pubVariantKey=id=>`dfc-scenario-variant:${id}`;
 if(typeof document!=='undefined'&&document.addEventListener) document.addEventListener('click',e=>{
   const b=e.target.closest&&e.target.closest('.scenario.pub [data-set-v]'), card=b&&b.closest('.scenario');
@@ -748,14 +756,18 @@ function renderScenario(s){
   const fauna=s.id!=='fauna-rules'&&/\bFauna\b/.test(allText)?`<button class="abtn pub-fauna" onclick="pubOpen('fauna-rules')">Fauna Rules</button>`:'';
   let on='0';
   try{ if(s.variant&&localStorage.getItem(pubVariantKey(s.id))==='1') on='1'; }catch(e){}
+  // Game size: one setting for every scenario; the map's data-size layers follow it
+  let gsize='battle';
+  try{ gsize=localStorage.getItem(PUB_SIZE_KEY)||'battle'; }catch(e){}
+  const sizeSeg=s.sizes?`<div class="seg pub-size" role="group" aria-label="Game size">${['Skirmish','Clash','Battle'].map(z=>`<button type="button" data-set-size="${z.toLowerCase()}" aria-pressed="${z.toLowerCase()===gsize}">${z}</button>`).join('')}</div>`:'';
   const mapSrc=`${SCN_ASSETS}scenarios/dropfleet/${s.id}.${SCENARIO_MAP_SVG.has(s.id)?'svg':'webp'}`, mapImg=`<img src="${mapSrc}" alt="${s.name} map">`;
   if(SCENARIO_MAP_SVG.has(s.id)) setTimeout(pubInlineMaps);
   const own=!!s.sections;
-  const right=hasMap?`<div class="map-col">
+  const right=hasMap?`<div class="map-col">${sizeSeg}
       <div class="map-frame">${SCENARIO_MAP_SVG.has(s.id)?`<div class="map-svg" data-src="${mapSrc}">${mapImg}</div>`:mapImg}${mapSpots(s.id)}</div>
       ${own&&s.key?`<img class="pub-key" src="${SCN_ASSETS}scenarios/dropfleet/key/${s.key}" alt="${s.keyAlt}">`:''}
       ${own?'':`${sec('Scenery',scenery)}
-      <div class="leg">${pubFeatures(allText)}${pubDropsites(s,allText)}</div>`}
+      <div class="leg">${pubFeatures(allText+' '+(s.features||[]).join(' '))}${pubDropsites(s,allText)}</div>`}
     </div>`:'';
   const lev=s.leviathan&&SCN_LEVIATHANS[s.leviathan];
   // The builder's ship card: stat strip (icons where the stat has one; A, PD and T as the page labels them),
@@ -789,7 +801,7 @@ function renderScenario(s){
     ${right}
   </div>
   ${leviathan}`;
-  return `<div class="scenario pub${hasMap?'':' no-map'}" data-scn="${s.id}" data-v="${on}">
+  return `<div class="scenario pub${hasMap?'':' no-map'}" data-scn="${s.id}" data-v="${on}" data-size="${gsize}">
     <div class="rules-col">
       <div class="sc-header"><h2 class="sc-name">${s.name}</h2>${s.note?`<p class="pub-note">${s.note}</p>`:''}</div>
       ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
