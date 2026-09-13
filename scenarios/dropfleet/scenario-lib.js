@@ -721,7 +721,7 @@ function renderScenario(s){
       <div class="leg">${pubFeatures(allText)}${pubDropsites()}</div>`}
     </div>`:'';
   const lev=s.leviathan&&SCN_LEVIATHANS[s.leviathan];
-  const leviathan=lev?`<div class="pub-ships">${pubHead(lev.title)}<div class="pub-lev">
+  const leviathan=lev?`<div class="pub-ships">${pubHead('Ships')}<div class="pub-lev">
       <img class="pub-lev-art" src="${SCN_ASSETS}art/thumb/${lev.art}" alt="${lev.title}">
       <div class="pub-ship-body">
         <div class="pub-ship-h"><b>${lev.title}</b><span>${lev.kind}</span></div>
