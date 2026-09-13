@@ -51,7 +51,7 @@ window.ScoreSheet = (function () {
 .ss-check:has(.ss-box:checked) .ss-t{text-decoration:line-through;color:#6b6660;}
 /* every counter is the same width, so Control and Contest line up down the sheet */
 .ss-parts{display:grid;grid-template-columns:repeat(2,max-content);align-items:center;gap:6px 28px;}
-.ss-part{display:grid;grid-template-columns:4.2em 92px 6em;align-items:center;gap:8px;white-space:nowrap;}
+.ss-part{display:grid;grid-template-columns:minmax(4.6em,max-content) 92px 6em;align-items:center;gap:8px;white-space:nowrap;}
 .ss-part .ss-pl{text-align:right;}
 .ss-part .ss-pl{color:#3d3834;}
 .ss-step{display:inline-flex;align-items:center;border:1px solid #d8ccb4;}
