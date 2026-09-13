@@ -58,10 +58,17 @@ function shipStatGrid(st){
 const WPN_DIE='<svg class="pw-die" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10.998 1.58a2 2 0 0 1 2.004 0l7.5 4.342a2 2 0 0 1 .998 1.731v8.694a2 2 0 0 1-.998 1.73l-7.5 4.343a2 2 0 0 1-2.004 0l-7.5-4.342a2 2 0 0 1-.998-1.731V7.653a2 2 0 0 1 .998-1.73zM5.25 8.092a.5.5 0 0 0-.751.433v6.669a2 2 0 0 0 .998 1.73l5.751 3.33a.5.5 0 0 0 .751-.432v-6.669a2 2 0 0 0-.998-1.73zm10.517-2.575c-.478-.276-1.254-.276-1.732 0s-.478.724 0 1s1.254.276 1.732 0s.478-.724 0-1m-5.8 0c-.478-.276-1.254-.276-1.732 0s-.478.724 0 1s1.254.276 1.732 0c.479-.276.479-.724 0-1m7.025 10.328c.597-.345 1.082-1.184 1.082-1.875c0-.69-.485-.97-1.082-.625S15.91 14.53 15.91 15.22s.485.97 1.082.625M6.365 12.2c.478.277.866.053.866-.5c0-.552-.388-1.223-.866-1.5s-.866-.052-.866.5c0 .553.388 1.224.866 1.5m4.33 5.498c0 .552-.389.776-.867.5s-.866-.948-.866-1.5s.388-.776.866-.5s.866.948.866 1.5M7.231 15.7c0 .553-.388.777-.866.5c-.478-.276-.866-.947-.866-1.5c0-.552.388-.776.866-.5c.478.277.866.948.866 1.5m3.463-2c0 .553-.388.777-.866.5c-.479-.275-.866-.947-.866-1.5c0-.551.387-.775.866-.5c.478.277.866.949.866 1.5"/></svg>';
 const wpnCritOn=w=>/\b(Penetrator|Critical|Crippling|Reave|Impel|Burnthrough)\b/i.test(w.special||'')?(parseInt(w.lock,10)+2)+'+':'';
 const wpnAtt=a=>/^\d+$/.test(String(a))?String(a)+WPN_DIE:(a||'');
-const wpnChips=s=>(!s||s==='-')?'':s.split(',').map(t=>t.trim()).filter(Boolean).map(t=>`<span class="pw-chip">${t}</span>`).join('');
+// A special rule's chip opens its rulebook text (14.1, 14.2) when the rule is known
+const ruleText=name=>{
+  if(typeof SCN_RULES==='undefined') return null;
+  if(SCN_RULES[name]) return {name,text:SCN_RULES[name]};
+  const m=String(name).match(/^(.*?)[- ]\(?(\d+)\)?$/);   // Scald-1 -> Scald-X, with X read as 1
+  return m&&SCN_RULES[m[1]+'-X']?{name,text:SCN_RULES[m[1]+'-X'].replace(/\bX\b/g,m[2])}:null;
+};
+const wpnChips=s=>(!s||s==='-')?'':s.split(',').map(t=>t.trim()).filter(Boolean).map(t=>ruleText(t)?`<span class="pw-chip tip-t" tabindex="0" data-tip="rule:${t}">${t}</span>`:`<span class="pw-chip">${t}</span>`).join('');
 function weaponList(weps){
   if(!weps||!weps.length) return '';
-  const head=`<div class="pw-row pw-head"><span class="pw-c pw-name">Weapon</span><span class="pw-c pw-arc">Arc</span><span class="pw-c pw-att">Att</span><span class="pw-c pw-lock">Lk</span><span class="pw-c pw-dmg">Dmg</span><span class="pw-c pw-special">Special</span></div>`;
+  const head=`<div class="pw-row pw-head"><span class="pw-c pw-name">Weapon</span><span class="pw-c pw-arc">Arc</span><span class="pw-c pw-att">Attack</span><span class="pw-c pw-lock">Lock</span><span class="pw-c pw-dmg">Damage</span><span class="pw-c pw-special">Special</span></div>`;
   const rows=weps.map(w=>{
     const co=wpnCritOn(w);
     const dt=w.type?`<span class="pw-dt pw-dt-${w.type}">${w.type}</span>`:'';
@@ -132,12 +139,9 @@ const SCENERY_PLACEMENT=typeof SCN_RULEBOOK==='undefined'?[]:[
   ...SCN_RULEBOOK['12.1.3'].body.filter(p=>/^Players alternate/.test(p)).map(denseDebris),
   ...SCN_RULEBOOK['10'].body.filter(p=>/^When placing/.test(p)),
 ];
-// Every scenery name in a piece of text opens that scenery's rules on hover or tap
+// Scenery names in running text stay plain (Jet, 2026-09-12): the scenery's rules are already written out beside them
 function scenTips(text){
-  return String(text).replace(/\b(Planetary Rings?|Micrometeor Clouds?|Dense (?:Debris )?Fields?|Debris Fields?|Large Objects?)\b/g,m=>{
-    const name=/Ring/.test(m)?'Planetary Ring':/Micrometeor/.test(m)?'Micrometeor Cloud':/Field/.test(m)?'Dense Debris Field':'Large Object';
-    return `<span class="tip-t" tabindex="0" data-tip="scen:${name}">${m}</span>`;
-  });
+  return String(text);
 }
 const VA=[
   {name:"Guarded Sectors",ef:"Each Dropsite gains a Military Outpost and each Large Dropsite also gains an Orbital Defence Gun.<br><br>If the Deployment type uses a Defender, the Defender may place an additional Military Outpost in any Dropsite.",ft:["Military Outpost","Orbital Defence Gun"]},
@@ -517,7 +521,7 @@ const SCENARIOS=[
    players:`2.`,
    scenery:`2-5 Micrometeor Clouds, 4-6 Dense Debris Fields.`,
    deployment:`Both Players Close, from opposite table edges as shown. The Ether Drake is deployed in the centre of the table.`,
-   scoring:[`Standard Scoring, using the four Medium Space Stations as the Dropsites.`,
+   scoring:[`Standard Scoring.`,
             `The player that deals the final point of damage to the Ether Drake scores 12VP.`],
    special:[`Each Space Station is armed with a Mass Driver Armament and a Laser Armament.`,
             `The Ether Drake does not follow the normal activation order. It activates during the Cleanup step of the End Phase, and the player with 2nd initiative that round activates it.`,
@@ -721,6 +725,7 @@ function renderScenario(s){
   const own=!!s.sections;
   const right=hasMap?`<div class="map-col">
       <div class="map-frame">${SCENARIO_MAP_SVG.has(s.id)?`<div class="map-svg" data-src="${mapSrc}">${mapImg}</div>`:mapImg}${mapSpots(s.id)}</div>
+      ${own&&s.key?`<img class="pub-key" src="${SCN_ASSETS}scenarios/dropfleet/key/${s.key}" alt="${s.keyAlt}">`:''}
       ${own?'':`${sec('Scenery',scenery)}
       <div class="leg">${pubFeatures(allText)}${pubDropsites()}</div>`}
     </div>`:'';
@@ -733,30 +738,30 @@ function renderScenario(s){
   const leviathan=lev?`<div class="pub-ships">${pubHead('Ships')}<div class="pub-ship-grid"><div class="pub-ship">
       <img class="pub-ship-art" src="${SCN_ASSETS}art/thumb/${lev.art}" alt="${lev.title}">
       <div class="pub-ship-body">
-        <div class="pub-ship-h"><b>${lev.title}</b><span>${lev.kind}</span></div>
+        <div class="pub-ship-h"><b>${lev.title}</b>${lev.kind?`<span>${lev.kind}</span>`:''}</div>
         ${lev.current
           // Stats beside the weapons; its special rules are written out below, so no chips repeat them
           ?`<div class="pub-lev-top">${shipStatGrid(lev.current)}${weaponList(lev.weapons.rows.map(([name,lock,attack,damage,arc,special,type])=>({name,lock,attack,damage,arc,special,type})))}</div>`
           :`<div class="pub-ship-stats">${['Thrust','Scan','Sig','Hull','A','PD','G','T'].map(levCell).join('')}</div>
         <div class="pub-lev-special">${wpnChips(levVal('Special'))}</div>
         ${weaponList(lev.weapons.rows.map(([name,lock,attack,damage,arc,special,type])=>({name,lock,attack,damage,arc,special,type})))}`}
-        ${lev.rules.map(([n,t])=>`<p class="rule-text"><b>${n}:</b> ${t}</p>`).join('')}
-        <p class="pub-lev-famous"><b>${lev.famousLabel}</b> <i>${lev.famous}</i></p>
-        ${lev.lore.map(p=>`<p class="sc-flavor">${p}</p>`).join('')}
+        ${lev.rules.map(([n,t])=>[].concat(t).map((p,i)=>`<p class="rule-text">${i?'':`<b>${n}:</b> `}${p}</p>`).join('')).join('')}
+        ${lev.famous?`<p class="pub-lev-famous"><b>${lev.famousLabel}</b> <i>${lev.famous}</i></p>`:''}
+        ${(lev.lore||[]).map(p=>`<p class="sc-flavor">${p}</p>`).join('')}
       </div>
     </div></div>`:'';
   if(own) return `<div class="scenario pub${hasMap?'':' no-map'}" data-scn="${s.id}" data-v="0">
     <div class="rules-col">
-      <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.srcLabel||s.src}</div>${s.note?`<p class="pub-note">${s.note}</p>`:''}</div>
+      <div class="sc-header"><h2 class="sc-name">${s.name}</h2>${s.note?`<p class="pub-note">${s.note}</p>`:''}</div>
       ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
-      ${s.sections.map(([h,b])=>sec(h,pubBullets(b||s.scoring))).join('')}
+      ${s.sections.map(([h,b,o={}])=>sec(h,(o.paras?pubParas(b):pubBullets(b||s.scoring))+(o.list?pubBullets(o.list):'')+(o.table?pubTable(o.table):'')+(o.after?pubParas(o.after):''))).join('')}
     </div>
     ${right}
   </div>
   ${leviathan}`;
   return `<div class="scenario pub${hasMap?'':' no-map'}" data-scn="${s.id}" data-v="${on}">
     <div class="rules-col">
-      <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.srcLabel||s.src}</div>${s.note?`<p class="pub-note">${s.note}</p>`:''}</div>
+      <div class="sc-header"><h2 class="sc-name">${s.name}</h2>${s.note?`<p class="pub-note">${s.note}</p>`:''}</div>
       ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
       ${s.body?pubParas(s.body):''}
       ${sec('Players',s.players?pubParas(s.players):'')}
@@ -825,6 +830,7 @@ function tipHTML(key){
   if(kind==='scen'){ const x=SR[id]; return x?`<div class="scn-tip-h"><b>${id}</b></div><div>${x.desc}</div><div>${x.rules.join(' ')}</div>`:''; }
   if(kind==='ship'){ const x=SCN_SHIPS[id]; if(!x) return ''; const st=x.stats;
     return `<div class="scn-tip-h"><b>${x.name}</b></div><div>${x.tonnage}, ${x.cost} pts</div><div class="scn-tip-st">${G.iThrust}${st.thrust} ${G.iScan}${st.scan} ${G.iSig}${st.sig} ${G.iHull}${st.hull} ${G.iES}<span class="sv-e">${st.es}</span>${G.iKS}<span class="sv-k">${st.ks}</span>${G.iBS}${st.bs} ${G.iG}${st.g}</div>${x.rules.map(r=>`<div><b>${r.name}</b></div>`).join('')}`; }
+  if(kind==='rule'){ const r=ruleText(id); return r?`<div class="scn-tip-h"><b>${r.name}</b></div><div>${r.text}</div>`:''; }
   if(kind==='wtype'){ return WTYPE[id]?`<b>${id}</b> ${WTYPE[id]}`:''; }
   if(kind==='ds'){ const d=DS[+id]; return d?`<div class="scn-tip-h">${d.ico()}<b>${d.nm}</b></div><div class="scn-tip-st">${G.iScan}${d.sc} ${G.iSig}${d.sg} ${G.iHull}${d.h} ${G.iES}<span class="sv-e">${d.es}</span>${G.iKS}<span class="sv-k">${d.ks}</span></div>`:''; }
   return '';

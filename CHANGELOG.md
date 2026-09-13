@@ -19,6 +19,17 @@ generator built on a d66 chart. The Dropzone rulebook has no such chart and no
 random setup (players choose the Scenario, 3.3), so both came out the same day.
 Dropzone keeps its Scenario Reference, still linked from the reference switch.
 
+### 2026-09-12: Scenario pages: rulebook scoring table, rule chips, tidier weapon tables
+
+Standard Scoring's table was checked against the rulebook page (12.1.5.1, page 33): headings now read
+Dropsite Size, Control / Levelled, Contest / Ruined (were Dropsite, Control, Contested / Ruined), values
+2VP, with Levelled and Ruined defined from 11.1; the score sheet counters read Control and Contest, since
+Levelled/Ruined only score "if specifically stated". `build-scenario-terms.py` now also exports every Ship
+and Weapon Special Rule (rulebook 14.1, 14.2) as `SCN_RULES`; a weapon chip opens its text, X read as the
+chip's number. Weapon lists use a subgrid so columns fit their content. The source line under a scenario's
+title and the scenery-name hover text are gone (Jet). Dragonslayer's scoring line is just "Standard Scoring.",
+since a Medium Space Station is already a Dropsite.
+
 ### 2026-09-12: Dragonslayer moved to the current edition
 
 On Jet's call, Dragonslayer is no longer shown verbatim: its old-edition terms are mapped

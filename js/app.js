@@ -8819,6 +8819,9 @@ let activeGroupId = null;
       'Dragonslayer’s map is redrawn in the same style as the other scenario maps.',
       'The Ether Drake’s weapons sit beside its stats, and its rule names are no longer repeated as chips above their text.',
       'Dragonslayer’s Space Station weapons use the same weapon rows as ship cards.',
+      'Standard Scoring matches the rulebook table: Dropsite Size, Control / Levelled, Contest / Ruined.',
+      'Scenario weapon tables are only as wide as their columns, spell out Attack, Lock and Damage, and each rule chip (Scald, Burnthrough, Close Action…) opens its rulebook text.',
+      'Scenario pages drop the source line under the title and the hover text on scenery names, and list bullets are bigger.',
     ]},
     { date: '2026-09-12', title: 'Fleets open again', items: [
       'Opening a fleet had stopped showing the builder: the fleet list stayed on screen. Fixed.',
