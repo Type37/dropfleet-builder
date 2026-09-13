@@ -33,7 +33,7 @@ let activeGroupId = null;
   let activeFilters = new Set();  // 'launch', 'drop', 'rare', 'unique'
   let shipSearchQuery = '';
   let pendingGroupCreation = false;  // true when "Add Group" opened the ship modal
-  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, print2col: true, printSimple: false, printInk: true, printBig: true, printRoster: false, printNoRules: false, printNoObjectives: false, printNoAbilities: false, printPaper: '', showCollection: false, theme: 'light' };
+  let settings = { showAdditionalShips: false, compactView: false, autoExpandLore: false, altStatBlock: false, printSimple: false, printInk: true, printBig: true, printRoster: false, printNoRules: false, printNoObjectives: false, printNoAbilities: false, printPaper: '', showCollection: false, theme: 'light' };
   let fleetSortMode = 'updated'; // 'updated', 'name', 'faction', 'points'
 
   // Filled check used for selected/active toggle states (replaces the old "✓"
@@ -6558,7 +6558,7 @@ let activeGroupId = null;
     const layout = printLayoutMode();
     const roster = layout === 'table';
     const big = layout === 'big';
-    const twoCol = layout === 'cards' && settings.print2col; // big/roster are one column
+    const twoCol = layout === 'cards'; // Cards print two-up; big/roster are one column
     let html = `<div class="print-fleet${twoCol ? ' print-2col' : ''}${settings.printInk ? ' pf-inksaver' : ''}${big ? ' pf-big' : ''}${roster ? ' pf-roster' : ''}" data-fleet-name="${escAttr(f.name)}">
       <div class="print-header">
         <div class="print-header-top">
@@ -7175,7 +7175,6 @@ let activeGroupId = null;
         <span class="print-preview-title">Print preview</span>
         <span class="pp-pagecount" id="pp-pagecount"></span>
         ${seg('pp-layout', 'Layout', [['cards', 'Cards'], ['big', 'Big cards'], ['table', 'Table'], ['text', 'Text list']], printLayoutMode())}
-        ${seg('pp-cols', 'Columns', [['1', '1'], ['2', '2']], settings.print2col ? '2' : '1')}
         ${seg('pp-paper', 'Paper', [['a4', 'A4'], ['letter', 'Letter']], printPaperKey())}
         <label class="print-preview-opt" id="pp-colour-opt"><input type="checkbox" id="pp-colour" ${settings.printInk ? '' : 'checked'}> Colour</label>
         <label class="print-preview-opt" id="pp-rules-opt"><input type="checkbox" id="pp-rules" ${settings.printNoRules ? '' : 'checked'}> Rules text</label>
@@ -7291,12 +7290,11 @@ let activeGroupId = null;
       s.querySelectorAll('img').forEach(img => { img.addEventListener('load', schedulePaginate); img.addEventListener('error', schedulePaginate); });
       schedulePaginate();
     };
-    // Only the options that change the chosen layout are offered: Columns only
-    // exists for Cards; the Text list takes paper and objectives, nothing else.
+    // Only the options that change the chosen layout are offered: the Text list
+    // takes paper and objectives, nothing else.
     const updateControls = () => {
       const layout = printLayoutMode();
       const text = layout === 'text';
-      ov.querySelector('#pp-cols').hidden = layout !== 'cards';
       ov.querySelector('#pp-colour-opt').hidden = text;
       ov.querySelector('#pp-rules-opt').hidden = text;
       ov.querySelector('#pp-abil-opt').hidden = text;
@@ -7315,7 +7313,6 @@ let activeGroupId = null;
       settings.printRoster = v === 'table';
       settings.printBig = v === 'big';
     });
-    onSeg('pp-cols', v => { settings.print2col = v === '2'; });
     onSeg('pp-paper', v => { settings.printPaper = v; });
     ov.querySelector('#pp-colour').onchange = (e) => { settings.printInk = !e.target.checked; saveSettings(); refresh(); };
     ov.querySelector('#pp-rules').onchange = (e) => { settings.printNoRules = !e.target.checked; saveSettings(); refresh(); };
@@ -8814,6 +8811,7 @@ let activeGroupId = null;
       'While an admiral still has picks to make, the rest of its Abilities Table prints with tick boxes.',
       'Core Abilities print even without an admiral, and their text now matches the rulebook word for word.',
       'The print preview has an Abilities switch, and Abilities keep their full text when Rules text is off.',
+      'Cards always print in two columns. The one-column option is gone: Big cards already covers a single wide card per ship.',
       'Five Famous Admiral bonuses missing from the ship cards were added from the official stats: Cull the Weak (Helena of Asgard), Doomed (Enslaver), Death Mistress (Baba Yaga), Godray Lightvice (Atom) and Twins (Twins of Aaru).',
     ]},
     { date: '2026-09-12', title: 'Print: clear controls and a complete sheet', items: [

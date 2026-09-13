@@ -43,6 +43,11 @@ the shared `data/rules-wiki.json`, so no app-code change was needed.
 - **CI:** GitHub Actions moved off the deprecated Node 20 (checkout v7, Pages
   actions v6/v5/v5, github-script v9).
 
+### 2026-09-12: Print preview, Columns removed
+
+- **Cards always print two-up.** One-column Cards was Big cards with a smaller
+  picture, so the Columns control (and `settings.print2col`) is gone. Desktop only.
+
 ### 2026-09-12: Print every Ability the fleet can use, both apps
 
 Researched against rulebook 2.3.1 (4.2.1.1 Abilities and Ability Points, 4.2.1.2
