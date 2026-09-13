@@ -47,7 +47,7 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 .ctrl-inner{padding:16px 18px 0;flex-shrink:0;}
 .ctrl-lockup{display:flex;flex-direction:column;align-items:center;gap:0;margin-bottom:0;}
 .ctrl-logo{height:56px;width:auto;display:block;margin:0 auto;filter:drop-shadow(0 2px 8px rgba(0,159,227,.3));}
-.ctrl-sub{font-family:'Roboto Slab',Georgia,serif;font-weight:600;font-size:13px;text-transform:uppercase;color:#a9c0ce;margin-top:9px;}
+.ctrl-sub{font-family:'Jost',system-ui,sans-serif;font-weight:600;font-size:13px;text-transform:uppercase;color:#a9c0ce;margin-top:9px;}
 
 
 /* TRAY inside left panel */
@@ -61,7 +61,7 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 
 
 
-.gbtn{font-family:'Roboto Slab',Georgia,serif;font-size:16px;font-weight:600;color:#fff;background:var(--action);border:2px solid var(--action);padding:11px 32px;cursor:pointer;transition:background .15s,transform .1s;display:inline-flex;align-items:center;gap:9px;}
+.gbtn{font-family:'Jost',system-ui,sans-serif;font-size:16px;font-weight:600;color:#fff;background:var(--action);border:2px solid var(--action);padding:11px 32px;cursor:pointer;transition:background .15s,transform .1s;display:inline-flex;align-items:center;gap:9px;}
 .gbtn:hover{background:var(--action-dk);}
 .gbtn:active{transform:scale(.97);}
 
@@ -86,7 +86,7 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 /* PICKS inside tray */
 .picks{display:flex;flex-direction:column;gap:8px;}
 .pick-section{display:flex;flex-direction:column;gap:5px;}
-.pick-section-lbl{font-family:'Roboto Slab',Georgia,serif;font-size:13px;font-weight:700;text-transform:uppercase;color:#0a1e2e;}
+.pick-section-lbl{font-family:'Jost',system-ui,sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;color:#0a1e2e;}
 .pick-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
 .pick-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;}
 #row-players{grid-template-columns:repeat(3,minmax(0,1fr));}
@@ -118,7 +118,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 /* Footer inside left panel */
 .game-info-footer{flex-shrink:0;background:#f3f1ec;padding:10px 20px;font-size:12px;color:#6b6660;font-family:'Jost',system-ui,sans-serif;}
 .gif-inner{display:flex;flex-wrap:wrap;align-items:center;gap:10px;max-width:1200px;margin:0 auto;}
-.gif-title{font-family:'Roboto Slab',Georgia,serif;font-weight:700;color:#3a3834;}
+.gif-title{font-family:'Jost',system-ui,sans-serif;font-weight:700;color:#3a3834;}
 .game-info-footer a{color:#1b3a5c;text-decoration:none;}
 .game-info-footer a:hover{text-decoration:underline;}
 .gif-builder{margin-left:auto;}
@@ -158,7 +158,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
   .rule-text{font-size:7pt;line-height:1.3;}
   .rule-bullets{gap:.3mm;}
   .rule-bullets li{font-size:7pt;line-height:1.28;padding-left:3mm;}
-  .scenario .spill{font-size:7pt;padding:0;}
+  .scenario .spill{font-size:8pt;padding:0;}
   .spill-row{margin-top:1mm;margin-bottom:.2mm;}
   .spill-row:has(.sp-std){margin-top:.3mm;margin-bottom:.3mm;}
   .stbl{font-size:6.5pt;}
@@ -616,6 +616,7 @@ function variantOverlay(sites,variantRoll){
   const isLarge=t=>t==='LC'||t==='LS';
   const isCity=t=>t==='SC'||t==='MC'||t==='LC';
 
+  const hasMC=sites.some(e=>e[0]==='MC');
   sites.forEach(e=>{
     const t=e[0];
     if(t==='R'||t==='LO') return;
@@ -628,8 +629,8 @@ function variantOverlay(sites,variantRoll){
       case 1: // GUARDED SECTORS: every Dropsite gets an Outpost; Large ones also an ODG
         tk('out'); if(isLarge(t)) tk('odg');
         break;
-      case 2: // SECURE COMMS ARRAY: Medium Cities gain Comms; Large Cities become Large Stations with ODG + Power Plant
-        if(t==='MC') tk('com');
+      case 2: // SECURE COMMS ARRAY: Medium Cities (Small Cities if there are none) gain Comms; Large Cities become Large Stations with ODG + Power Plant
+        if(t==='MC'||(t==='SC'&&!hasMC)) tk('com');
         if(t==='LC'){ toStation('L'); tk('odg'); tk('pow'); }
         break;
       case 3: // BATTLESCARRED: Medium Cities and Medium Stations gain two Power Plants
@@ -638,7 +639,7 @@ function variantOverlay(sites,variantRoll){
       case 4: // GRIDLOCKED: every Dropsite gains a Power Plant; Medium Cities become Medium Stations with Outpost, ODG, Hangar
         if(t==='MC') toStation('M');
         tk('pow');
-        if(t==='MC'||t==='MS'){ tk('out'); tk('odg'); tk('han'); }
+        if(t==='MC'){ tk('out'); tk('odg'); tk('han'); }   // "These Stations": the ones that were Medium Cities
         break;
       case 5: break; // Expansive Atmosphere: player-placed, no fixed overlay
       case 6: // ORBITAL COMPLEX: Cities become Space Stations; each Station gains an Outpost
@@ -774,10 +775,9 @@ function gen(keep){
   const D=dep.item,A=app.item,L=lay.item,V=vari.item,O=obj.item;
 
   // SCORING
-  let scoreH='';
-  if(O.std) scoreH+=stdScoring();
-  scoreH+=pill(O.name,O.cls);
+  let scoreH=pill(O.name,O.cls);
   if(O.b.length) scoreH+=`<ul class="rule-bullets">${O.b.map(b=>`<li>${b}</li>`).join('')}</ul>`;
+  if(O.std) scoreH+=stdScoring();
 
   // DEPLOYMENT TYPE
   const numPlayers=parseInt(getPickVal('players'))||2;

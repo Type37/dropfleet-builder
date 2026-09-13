@@ -140,12 +140,12 @@ function scenTips(text){
   });
 }
 const VA=[
-  {name:"Guarded Sectors",ef:"Each Dropsite gains a <b>Military Outpost</b> and each Large Dropsite also gains an <b>Orbital Defence Gun.</b><br><br>If the Deployment type uses a Defender, the Defender may place an additional Military Outpost in any Dropsite.",ft:["Military Outpost","Orbital Defence Gun"]},
-  {name:"Secure Comms Array",ef:"Each Medium City (or Small Cities if the scenario has no Medium Cities) gains a <b>Comms Station.</b><br><br>Replace each Large City with a Large Space Station containing an <b>Orbital Defence Gun</b> and a <b>Power Plant.</b>",ft:["Comms Station","Orbital Defence Gun","Power Plant"]},
-  {name:"Battlescarred",ef:"Each player places an additional piece of Micrometeor Cloud and Dense Debris Field. These additional pieces should be placed partially over a piece of the same type to create larger areas.<br><br>Each Medium City and Medium Space Station gain two <b>Power Plants.</b>",ft:["Power Plant"]},
-  {name:"Gridlocked",ef:"Each Dropsite gains a <b>Power Plant.</b><br><br>Replace each Medium City with a Medium Space Station. These Stations gain a <b>Military Outpost,</b> an <b>Orbital Defence Gun,</b> and a <b>Hangar.</b>",ft:["Power Plant","Military Outpost","Orbital Defence Gun","Hangar"]},
+  {name:"Guarded Sectors",ef:"Each Dropsite gains a Military Outpost and each Large Dropsite also gains an Orbital Defence Gun.<br><br>If the Deployment type uses a Defender, the Defender may place an additional Military Outpost in any Dropsite.",ft:["Military Outpost","Orbital Defence Gun"]},
+  {name:"Secure Comms Array",ef:"Each Medium City (or Small Cities if the scenario has no Medium Cities) gains a Comms Station.<br><br>Replace each Large City with a Large Space Station containing an Orbital Defence Gun and Power Plant.",ft:["Comms Station","Orbital Defence Gun","Power Plant"]},
+  {name:"Battlescarred",ef:"Each player places an additional piece of Micrometeor Cloud and Dense Debris Field. These additional pieces should be placed partially over a piece of the same type to create larger areas.<br><br>Each Medium City and Medium Space Station gain two Power Plants.",ft:["Power Plant"]},
+  {name:"Gridlocked",ef:"Each Dropsite gains a Power Plant.<br><br>Replace each Medium City with a Medium Space Station. These Stations gain a Military Outpost, Orbital Defence Gun, and a Hangar.",ft:["Power Plant","Military Outpost","Orbital Defence Gun","Hangar"]},
   {name:"Expansive Atmosphere",ef:"Groups on Course Change and Max Thrust orders suffer 1 hit at the end of their activation and may use their Energy or Kinetic save against it.<br><br>Ships may launch Ground Assets at Dropsites in any Orbital Layer.<br><br>Each Red player may place 2 Features of their choice on a Dropsite. Then each Blue player may place 2 Features of their choice on any other Dropsite.",ft:["Military Outpost","Orbital Defence Gun","Comms Station","Power Plant","Hangar"]},
-  {name:"Orbital Complex",ef:"Replace each City with a Space Station of equal size. Each Space Station gains a <b>Military Outpost.</b><br><br>Only Orbit is used. Orbital Decay tokens cause a Ship to take D3 damage at the end of its activation. Colossal Ships take 2D3 damage instead.",ft:["Military Outpost"]},
+  {name:"Orbital Complex",ef:"Replace each City with a Space Station of equal size. Each Space Station gains a Military Outpost.<br><br>Only Orbit is used. Orbital Decay tokens cause a Ship to take D3 damage at the end of its activation. Colossal Ships take 2D3 damage instead.",ft:["Military Outpost"]},
 ];
 const OB=[
   {name:"Attrition",cls:"sp-att",std:true,b:["Players are awarded <vp>2VP</vp> at the end of the game for every <b>500 points</b> of Ships and Admirals they have destroyed."]},
@@ -558,7 +558,7 @@ function pubScoring(text){
     {re:/\bFocal [Pp]oint/,run:se1('Focal Points Scoring','sp-surv')},
     {re:/\bKill Points\b/,run:se1('Kill Points Scoring','sp-att')},
     {re:/\bAssess/,run:se1('Assess Scoring','sp-surv')},
-    ...OB.map(o=>({re:new RegExp('\\b'+o.name+'\\b'),run:()=>{ if(o.std) stdOnce(); out.push(pill(o.name,o.cls)+pubBullets(o.b)); }})),
+    ...OB.map(o=>({re:new RegExp('\\b'+o.name+'\\b'),run:()=>{ out.push(pill(o.name,o.cls)+pubBullets(o.b)); if(o.std) stdOnce(); }})),
   ]).forEach(d=>d.run());
   return out.join('');
 }

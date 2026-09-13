@@ -2,7 +2,7 @@
 :root{--gold:#B8952F;--glt:#C9A94A;--gdk:#5A4710;--ch:#0E0C08;--wg:#3D3834;
   /* Screen type scale (one step ≈ major third). Print keeps its own point sizes. */
   --fs-display:30px;   /* h2 mission / scenario title */
-  --fs-section:21px;   /* h3 main section headings (SCORING, DEPLOYMENT…) */
+  --fs-section:18px;   /* h3 main section headings (SCORING, DEPLOYMENT…) */
   --fs-heading:17px;   /* legend headings in the map column */
   --fs-body:14px;      /* reading text, table cells, stat values */
   --fs-label:12px;     /* pills, roll tags, captions, table headers */
@@ -57,7 +57,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .sc-def b{font-weight:700;color:inherit;}
 .sc-flavor{font-style:italic;color:var(--wg);font-size:8pt;font-family:'Libre Baskerville',Georgia,serif;}
 .sc-note{font-family:'Jost',system-ui,sans-serif;font-size:8pt;color:var(--ch);line-height:1.45;margin-bottom:1.5mm;}
-.sbox{background:rgba(184,149,47,.07);border:none;padding:2mm 2.5mm;}
+.sbox{background:none;border:none;padding:0;}
 .sbox p{font-family:'Jost',system-ui,sans-serif;font-size:7.5pt;color:var(--ch);line-height:1.42;}
 .sbox p b{font-weight:700;color:inherit;}
 .map-col{flex:0 0 2.36in;display:flex;flex-direction:column;gap:1mm;}
@@ -111,7 +111,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .pw-head{background:#EFE7D4;font-family:'Jost',sans-serif;font-size:7pt;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#6C6456;padding:.6mm 2.4mm;}
 .pw-c{white-space:nowrap;color:var(--ch);}
 .pw-head .pw-c{color:#6C6456;}
-.pw-name{white-space:normal;overflow-wrap:anywhere;font-family:'Roboto Slab',Georgia,serif;font-weight:600;font-size:9pt;}
+.pw-name{white-space:normal;overflow-wrap:anywhere;font-family:'Jost',system-ui,sans-serif;font-weight:600;font-size:9pt;}
 .pw-arc{text-align:center;font-weight:600;color:var(--gdk);}
 .pw-att,.pw-lock,.pw-dmg{text-align:center;font-weight:700;}
 .pw-die{width:.8em;height:.8em;vertical-align:-.08em;margin-left:.6px;opacity:.55;}
@@ -158,7 +158,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .pss-l{font-family:'Jost',sans-serif;font-size:7pt;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#6C6456;line-height:1;}
 .pss-row{display:flex;align-items:center;gap:1.1mm;}
 .pss-row .ico-stat{flex-shrink:0;opacity:.85;}
-.pss-v{font-family:'Roboto Slab',Georgia,serif;font-weight:700;font-size:11pt;line-height:1;color:var(--ch);font-variant-numeric:tabular-nums lining-nums;}
+.pss-v{font-family:'Jost',system-ui,sans-serif;font-weight:700;font-size:11pt;line-height:1;color:var(--ch);font-variant-numeric:tabular-nums lining-nums;}
 .pss-es{box-shadow:inset 0 2.2px 0 #7A6200;} .pss-es .pss-v{color:#7A6200;}
 .pss-ks{box-shadow:inset 0 2.2px 0 var(--navy,#2B4A6F);} .pss-ks .pss-v{color:var(--navy,#2B4A6F);}
 .pss-bs{box-shadow:inset 0 2.2px 0 var(--gold);} .pss-bs .pss-v{color:var(--gdk);}
@@ -251,9 +251,11 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 /* A named rule leads its paragraph in bold, as on the Dropzone pages. Not a filled label:
    its colour meant nothing, and printing drops the fill and leaves pale text. */
 .scenario .spill-row{margin:1mm 0 0;}
-.scenario .spill{background:none;color:var(--ch);padding:0;font-family:'Jost',system-ui,sans-serif;font-size:inherit;font-weight:700;letter-spacing:0;}
-.scenario .spill-sub{font-weight:400;color:#5d5850;margin-left:6px;}
-@media screen{ .scenario .spill{font-size:var(--fs-body);} }
+/* The middle step: an objective or arrival mode heads its own rules in Roboto Slab, between the
+   section heading and the bold term labels in the text */
+.scenario .spill{background:none;color:var(--ch);padding:0;font-family:'Roboto Slab',Georgia,serif;font-size:inherit;font-weight:700;letter-spacing:0;}
+.scenario .spill-sub{font-family:'Jost',system-ui,sans-serif;font-weight:400;color:#5d5850;margin-left:8px;}
+@media screen{ .scenario .spill{font-size:16px;} .scenario .spill-sub{font-size:14px;} .scenario .spill-row{margin-top:3mm;} }
 /* The rolled die beside a heading */
 .sh-die{width:1.1em;height:1.1em;vertical-align:-.18em;color:#5d5850;}
 /* A table keeps its own width; stretched to the column it spread three columns across the card */

@@ -63,7 +63,7 @@ main{flex:1;width:100%;}
 .trk-l{font-size:.85rem;color:var(--muted);margin-right:4px;white-space:nowrap;}
 .trk button{width:32px;height:32px;display:grid;place-items:center;background:#fff;border:1.5px solid #8a8378;color:var(--ink);font:600 1rem 'Jost',sans-serif;cursor:pointer;}
 .trk button:hover{border-color:var(--ink);}
-.trk output{min-width:2.2ch;text-align:center;font-family:'Roboto Slab',Georgia,serif;font-weight:700;font-size:1.1rem;display:inline-flex;align-items:center;justify-content:center;gap:3px;}
+.trk output{min-width:2.2ch;text-align:center;font-family:'Jost',system-ui,sans-serif;font-weight:700;font-size:1.1rem;display:inline-flex;align-items:center;justify-content:center;gap:3px;}
 .trk output .vp-dm{width:9px;height:9px;}
 .trk .trk-plain{width:auto;padding:0 10px;font-size:.85rem;font-weight:500;}
 .sheet{max-width:1180px;margin:0 auto;padding:4mm 0 10mm;}
@@ -71,7 +71,7 @@ main{flex:1;width:100%;}
 /* Footer */
 .foot{background:#f3f1ec;padding:10px 20px;font-size:.78rem;color:#5d5850;}
 .foot-in{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;max-width:1180px;margin:0 auto;}
-.foot b{font-family:'Roboto Slab',Georgia,serif;font-weight:700;color:#3a3834;}
+.foot b{font-family:'Jost',system-ui,sans-serif;font-weight:700;color:#3a3834;}
 .foot a{color:#1b3a5c;text-decoration:none;}
 .foot a:hover{text-decoration:underline;}
 .foot-by{margin-left:auto;}
