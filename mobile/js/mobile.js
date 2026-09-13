@@ -4648,6 +4648,7 @@
       'The Ether Drake has current stats: ES 3+, KS 3+, BS 5+, Energy Dragon’s Breath with Flash-1 and Scald-1.',
       'Dragonslayer’s map is redrawn in the same style as the other scenario maps.',
       'The Ether Drake’s weapons sit beside its stats, and its rule names are no longer repeated as chips above their text.',
+      'Dragonslayer’s Space Station weapons use the same weapon rows as ship cards.',
     ]},
     { date: '2026-09-12', title: 'Lore: hull length and displacement', items: [
       'The Armstrong Destroyer, Aldrin Colony Ship, Collins Support Carrier, Helium Voidflyer, Harpocrates Guerrilla Lighter, Hiruko Boarding Cutter, Seneca Detonator, Newton Kill-Sat, Galileo Orbital Telescope and Pungari Thresher Hive Ship show their Length and Displacement under their lore, and the Pungari its Beam and Height too.',

@@ -523,9 +523,8 @@ const SCENARIOS=[
             `The Ether Drake does not follow the normal activation order. It activates during the Cleanup step of the End Phase, and the player with 2nd initiative that round activates it.`,
             `When the Ether Drake activates, roll a D3. On a 1 it moves its Thrust forwards. On a 2 it turns 90° to the left, then moves its Thrust forwards. On a 3 it turns 90° to the right, then moves its Thrust forwards. If the Ether Drake would move off the table, rotate it 180° and continue its movement.`,
             `After moving, the Ether Drake turns to face the last Ship that attacked it (including Ships that launched Launch Assets at it) and attacks with every weapon it is able to. Its activation then ends.`],
-   tables:[{head:['Armament','Arc','Att','Lock','Dmg','Type','Special'],
-            rows:[['Mass Driver Armament','F/S/R','3','3+','1','K','-'],
-                  ['Laser Armament','F/S/R','2','3+','1','E','Burnthrough-1, Flash-1']]}]},
+   weapons:[{name:'Mass Driver Armament',arc:'F/S/R',attack:'3',lock:'3+',damage:'1',type:'K',special:'-'},
+            {name:'Laser Armament',arc:'F/S/R',attack:'2',lock:'3+',damage:'1',type:'E',special:'Burnthrough-1, Flash-1'}]},
 ];
 
 // The Ether Drake (Ether_Drake.pdf page 1). Its rules are reworded into current terms: Crippling Effect (7.3.6),
@@ -710,7 +709,7 @@ function renderScenario(s){
   const deploy=s.deployment?pubParas(s.deployment)+pubModes(J(s.deployment)):'';
   const score=s.scoring?pubBullets(s.scoring)+pubScoring([s.scoring,s.special,s.variant].map(J).join(' ')):'';
   const tbls=(s.tables||(s.table?[s.table]:[])).map(pubTable).join('');
-  const special=(s.special?pubBullets(s.special):'')+tbls;
+  const special=(s.special?pubBullets(s.special):'')+tbls+(s.weapons?weaponList(s.weapons):'');
   const scenery=s.scenery?pubParas([].concat(s.scenery).map(scenTips))+pubScenery([s.scenery,s.special,s.scoring].map(J).join(' ')):'';
   const ships=pubShips(allText);
   const hasMap=SCENARIO_MAPS.has(s.id);
