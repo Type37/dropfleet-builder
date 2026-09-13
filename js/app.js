@@ -6492,6 +6492,12 @@ let activeGroupId = null;
     if (!m) return null;
     return (parseInt(m[1], 10) + 2) + '+';
   }
+  // A launch asset's crit-using rule can sit on the bay ("Torpedoes (Penetrator)")
+  // rather than on the asset, so both count.
+  function critOnFor(asset, loadSpecial) {
+    const special = [asset.special, loadSpecial].filter(s => s && s !== '-').join(', ');
+    return weaponCritOn({ special, lock: asset.lock });
+  }
   // A Special column's keywords, each kept whole on one line ("Fusillade-2" never
   // splits into "Fusillade-" / "2"); the list itself still wraps between keywords.
   function specialKeywordsHtml(special) {
@@ -6829,7 +6835,8 @@ let activeGroupId = null;
           const arcCell = ARC_ICONS[w.arc]
             ? `<span class="dp-arc" title="${esc(ARC_LABELS[w.arc] || w.arc || '')}">${ARC_ICONS[w.arc]}<span class="dp-arc-lab">${esc(w.arc || '')}</span></span>`
             : esc(w.arc || '');
-          return `<td class="rt-w">${nm}${sp}</td><td class="rt-arc">${arcCell}</td><td>${attackHtml(w.attack)}</td><td>${esc(w.lock || '')}</td><td>${dmg}</td>`;
+          const crit = weaponCritOn(w);
+          return `<td class="rt-w">${nm}${sp}</td><td class="rt-arc">${arcCell}</td><td>${attackHtml(w.attack)}</td><td>${esc(w.lock || '')}${crit ? `<span class="dp-w-crit">crit ${esc(crit)}</span>` : ''}</td><td>${dmg}</td>`;
         };
         if (wr.length === 0 && allLoads.length === 0) {
           out += `<tr class="rt-ship rt-first"><td class="rt-name">${nameCell}</td>${statCells}<td class="rt-w" colspan="5"><span class="rt-none">No weapons</span></td></tr>`;
@@ -8809,6 +8816,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Crit values on every printed sheet', items: [
+      'The crit value (2 over Lock, for weapons whose rules use criticals) now prints in the Table layout too. It was only on Cards and Big cards.',
+      'Launch assets show their crit value, on screen and on the sheet, when the asset or its bay has a rule that uses criticals, such as Penetrator torpedoes.',
+      'Printing from the phone app now shows crit values on weapons and launch assets.',
+    ]},
     { date: '2026-09-12', title: 'UCM: Francis Mendoza', items: [
       'TTCombat corrected the Flying Dutchman captain’s name in the UCM stats PDF, from Frances to Francis. The ship, its lore and the printed sheet now match.',
     ]},
@@ -10043,7 +10055,7 @@ let activeGroupId = null;
           ${rangeCell}
           <td>${esc(String(a.thrust ?? '-'))}</td>
           <td>${hasStats ? esc(String(a.attack)) : '-'}</td>
-          <td>${hasStats ? esc(String(a.lock)) : '-'}</td>
+          <td>${hasStats ? esc(String(a.lock)) : '-'}${hasStats && critOnFor(a, loadSpecial) ? `<span class="weapon-col-crit">crit ${esc(critOnFor(a, loadSpecial))}</span>` : ''}</td>
           <td>${dmg}</td>
           <td class="lt-special">${special}</td>
         </tr>`;
@@ -10114,7 +10126,7 @@ let activeGroupId = null;
         <td>${esc(launchRange(a.name))}</td>
         <td>${esc(a.thrust || '')}</td>
         <td>${a.attack || ''}</td>
-        <td>${a.lock || ''}</td>
+        <td>${a.lock || ''}${weaponCritOn(a) ? `<span class="dp-w-crit">crit ${esc(weaponCritOn(a))}</span>` : ''}</td>
         <td>${a.damage || ''}</td>
         <td class="lar-type" title="${esc(typeLabel)}">${typeCell}</td>
         <td class="lar-special">${special}</td>

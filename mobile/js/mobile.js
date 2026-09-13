@@ -4639,6 +4639,11 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Crit values on every printed sheet', items: [
+      'The crit value (2 over Lock, for weapons whose rules use criticals) now prints in the Table layout too. It was only on Cards and Big cards.',
+      'Launch assets show their crit value, on screen and on the sheet, when the asset or its bay has a rule that uses criticals, such as Penetrator torpedoes.',
+      'Printing from the phone app now shows crit values on weapons and launch assets.',
+    ]},
     { date: '2026-09-12', title: 'UCM: Francis Mendoza', items: [
       'TTCombat corrected the Flying Dutchman captain’s name in the UCM stats PDF, from Frances to Francis. The ship, its lore and the printed sheet now match.',
     ]},
@@ -6177,7 +6182,7 @@
           <td>${esc(range)}</td>
           <td>${esc(a.thrust || '-')}</td>
           <td>${has ? esc(a.attack) : '-'}</td>
-          <td>${has ? esc(a.lock) : '-'}</td>
+          <td>${has ? esc(a.lock) + critHtml(special, a.lock) : '-'}</td>
           <td>${has ? `${esc(a.damage)}${esc(t)}` : '-'}</td>
           <td>${esc(special)}</td>
         </tr>`;
@@ -6188,12 +6193,27 @@
       <table class="pr-weapons pr-launch"><colgroup><col class="pr-c-launch"><col class="pr-c-load"><col class="pr-c-n"><col class="pr-c-n"><col class="pr-c-n"><col class="pr-c-n"><col class="pr-c-n"><col class="pr-c-lspec"></colgroup><thead><tr><th>Launch</th><th>Load</th><th>Rng</th><th>Thr</th><th>At</th><th>Lk</th><th>Dm</th><th>Special</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   }
 
+  // A critical is any to-hit roll at least 2 higher than the Weapon's Lock (rulebook
+  // 7.3.4). It does nothing on its own, so the crit value only prints for Weapons
+  // whose rules use criticals. Mirrors weaponCritOn in the desktop app.
+  const CRIT_RELEVANT_RE = /^(Penetrator|Critical|Crippling|Reave|Impel|Burnthrough)\b/i;
+  function weaponCritOn(special, lock) {
+    const list = String(special || '').split(',').map(s => s.trim()).filter(s => s && s !== '-');
+    if (!list.some(s => CRIT_RELEVANT_RE.test(s))) return null;
+    const m = String(lock || '').match(/(\d+)/);
+    return m ? (parseInt(m[1], 10) + 2) + '+' : null;
+  }
+  const critHtml = (special, lock) => {
+    const c = weaponCritOn(special, lock);
+    return c ? `<span class="pr-crit">crit ${esc(c)}</span>` : '';
+  };
+
   // Weapon table for the printed sheet, fixed column widths like the launch table.
   function printWeaponTable(wlist, collectRule) {
     if (!wlist.length) return '';
     const rows = wlist.map(w => {
       if (w.special && w.special !== '-') w.special.split(',').forEach(s => collectRule(s.trim()));
-      return `<tr><td>${esc(w.name)}</td><td>${esc(w.lock || '')}</td><td>${esc(w.attack || '')}</td><td>${esc(w.damage || '')}${esc(w.type || '')}</td><td>${esc(w.arc || '')}</td><td>${esc(w.special && w.special !== '-' ? w.special : '')}</td></tr>`;
+      return `<tr><td>${esc(w.name)}</td><td>${esc(w.lock || '')}${critHtml(w.special, w.lock)}</td><td>${esc(w.attack || '')}</td><td>${esc(w.damage || '')}${esc(w.type || '')}</td><td>${esc(w.arc || '')}</td><td>${esc(w.special && w.special !== '-' ? w.special : '')}</td></tr>`;
     }).join('');
     return `<table class="pr-weapons"><colgroup><col class="pr-c-wname"><col class="pr-c-n"><col class="pr-c-n"><col class="pr-c-n"><col class="pr-c-arc"><col class="pr-c-wspec"></colgroup><thead><tr><th>Weapon</th><th>Lk</th><th>At</th><th>Dm</th><th>Arc</th><th>Special</th></tr></thead><tbody>${rows}</tbody></table>`;
   }

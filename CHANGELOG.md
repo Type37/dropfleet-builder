@@ -5,6 +5,15 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Crit values on every printed sheet
+
+`weaponCritOn` (Lock + 2, rulebook 7.3.4, only for Penetrator / Critical /
+Crippling / Reave / Impel / Burnthrough) was wired into the Cards and Big cards
+weapon table but not the Table (roster) layout, the launch asset reference,
+the builder's launch table, or any of the mobile print tables. All of those
+now show it. Launch assets count a crit rule on the asset or on its bay
+(`critOnFor`). Mobile has its own copy of the helper.
+
 ### 2026-09-12: UCM 260828 silent re-upload, Francis Mendoza
 
 TTCombat overwrote `UCM_Combined_Fleet_Stats_260828.pdf` in place (same name,

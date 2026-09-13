@@ -2388,6 +2388,7 @@ body.sheet-open .sheet-scrim {
   .pr-weapons tr { break-inside: avoid; }
   .pr-c-wname { width: 30%; }
   .pr-c-n { width: 7%; }
+  .pr-crit { display: block; font-size: 6.8pt; font-weight: 700; line-height: 1.1; color: #8a6d1e; white-space: nowrap; margin-top: 1px; }
   .pr-c-arc { width: 10%; }
   .pr-c-launch { width: 9%; }
   .pr-c-load { width: 24%; }
