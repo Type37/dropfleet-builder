@@ -30,6 +30,27 @@ tables, the map and headings kept whole. The References page prints with 3mm
 margins, as the Generator does. Print Features Reference still hides the
 reference tables.
 
+### 2026-09-13: Unit Reference on the phone app
+
+Two new screens in `mobile/`: `screen-units` (faction chips with icons,
+weight-class chips, search, a section per class) and `screen-unit-detail`,
+reached from Settings under Interactive Rules and from `#units`,
+`#units/<faction>`, `#units/<faction>/<ship>` links (a phone opening the desktop
+route is bounced to `/mobile/` with the hash). Slugs are built in the same
+order as desktop, so one link opens the same ship on both.
+
+Reuse rather than new renderers: rows are the ship picker's (`pickerRowHtml`,
+extracted from `renderShipPicker`, with a `ref` argument) and the station
+picker's (`stationRowHtml`); a ship is `flagshipShipCard` (now taking a faction,
+a title suffix and a body slot) plus the loadout options (`loadoutOptionSheet`),
+`renderSystemsPicker` read-only, the Deployable Features (`featureOptionHtml`,
+extracted from the group screen) and the Ship Rules; a flagship adds its
+admiral's Abilities (`abilityCardHtml`, extracted from the admiral screen); a
+station is `stationBodyHtml`, extracted from `renderStationDetail`, with
+`renderStationArmamentPicker` read-only. The ··· menu's Export PDF builds the
+faction into `#print-root` with the fleet sheet's `printWeaponTable`,
+`printLaunchTable` and glossary; `beforeprint` builds it on these screens.
+
 ### 2026-09-13: Unit Reference prints a whole faction (desktop)
 
 Print on the Unit Reference goes through the fleet sheet's own print preview

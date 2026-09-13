@@ -176,6 +176,26 @@
   </div>
 </main>
 
+<!-- Unit Reference: every ship a faction fields (the desktop #units screen) -->
+<main class="screen" id="screen-units">
+  <div class="search-bar">
+    <input class="search-input" id="units-search" type="search" placeholder="Search" aria-label="Search ships, weapons and rules" oninput="App.unitsSearchM(this.value)">
+  </div>
+  <div class="chip-row" id="units-chips">
+    <!-- Populated by JS -->
+  </div>
+  <div id="units-list" style="padding-bottom:72px">
+    <!-- Populated by JS -->
+  </div>
+</main>
+
+<!-- Unit Reference: one ship's card and every option it could take -->
+<main class="screen screen-padded" id="screen-unit-detail">
+  <div id="unit-detail-content">
+    <!-- Populated by JS -->
+  </div>
+</main>
+
 <!-- Play Mode -->
 <main class="screen" id="screen-play">
   <div id="play-content">

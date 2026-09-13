@@ -9021,6 +9021,9 @@ let activeGroupId = null;
       'Paper keeps its own rules: labels print black, the players box, Variant button and weapon rule chips print as plain text, and weapon lists and ship stats use banded rows instead of lines.',
       'A rolled scenario from the Scenario Generator prints at an 8pt body so a typical roll stays on one landscape page. A long one continues on a second page with its sections, tables and map kept whole.',
     ]},
+    { date: '2026-09-13', title: 'Phone app: Unit Reference', items: [
+      'The phone app has the Unit Reference too (Settings, under Interactive Rules), with every ship card and a whole-faction PDF. Unit Reference links open the same ship on a phone.',
+    ]},
     { date: '2026-09-13', title: 'Unit Reference: print a whole faction', items: [
       'Print on the Unit Reference opens the print preview with every ship card of that faction, two to a row by weight class: stats, weapons (loadout guns marked with their loadout and price), launch, loadout options, Ship Rules and flagship abilities.',
       'After the cards come the faction’s hardpoint lists, its Deployable Features and the space station armaments, once each, then every rule on the sheet in full. A search or a weight-class filter narrows what prints.',

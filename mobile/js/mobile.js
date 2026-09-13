@@ -1032,6 +1032,8 @@
     delete: 'M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z',
     cloud_sync: 'M160-160v-80h109q-51-44-80-106t-29-134q0-112 68-197.5T400-790v84q-70 25-115 86.5T240-480q0 54 21.5 99.5T320-302v-98h80v240H160Zm440 0q-50 0-85-35t-35-85q0-48 33-82.5t81-36.5q17-36 50.5-58.5T720-480q53 0 91.5 34.5T858-360q42 0 72 29t30 70q0 42-29 71.5T860-160H600Zm116-360q-7-41-27-76t-49-62v98h-80v-240h240v80H691q43 38 70.5 89T797-520h-81ZM600-240h260q8 0 14-6t6-14q0-8-6-14t-14-6h-70v-50q0-29-20.5-49.5T720-400q-29 0-49.5 20.5T650-330v10h-50q-17 0-28.5 11.5T560-280q0 17 11.5 28.5T600-240Zm120-80Z',
     check: 'M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z',
+    // Material Symbols "grid_view" (Apache 2.0), for the Unit Reference.
+    grid_view: 'M120-520v-320h320v320H120Zm0 400v-320h320v320H120Zm400-400v-320h320v320H520Zm0 400v-320h320v320H520ZM200-600h160v-160H200v160Zm400 0h160v-160H600v160Zm0 400h160v-160H600v160Zm-400 0h160v-160H200v160Z',
     menu_book: 'M480-320q54-45 114-67.5T720-410q28 0 54.5 4.5T828-392v-380q-25-12-52.5-18t-55.5-6q-56 0-108.5 21.5T480-708v388Zm0 100q-9 0-17.5-2t-16.5-7q-46-32-98.5-51.5T240-300q-42 0-82.5 11T80-259q-23 12-41.5-1T20-296v-436q0-13 6.5-25t18.5-18q46-24 96-35t102-11q58 0 113.5 15T480-756q51-30 106.5-45T700-816q52 0 102 11t96 35q12 6 18.5 18t6.5 25v436q0 24-18.5 37t-41.5 1q-38-20-78.5-31T720-300q-56 0-108.5 19.5T513-229q-8 5-16.5 7t-16.5 2Zm-40-408Z'
   };
   function sheetIcon(name) {
@@ -1660,7 +1662,9 @@
     'screen-station-detail': renderStationDetail,
     'screen-play': renderMobilePlay,
     'screen-collection': renderCollection,
-    'screen-rules': renderMobileRules
+    'screen-rules': renderMobileRules,
+    'screen-units': renderUnitsM,
+    'screen-unit-detail': renderUnitDetailM
   };
 
   function navigate(screenId, opts) {
@@ -1803,6 +1807,8 @@
       case 'screen-play': back.classList.remove('hidden'); title.textContent = (mPlayFleet ? esc(mPlayFleet.name) + ', Play' : 'Play Mode'); break;
       case 'screen-collection': back.classList.remove('hidden'); title.textContent = 'My Collection'; break;
       case 'screen-rules': back.classList.remove('hidden'); title.textContent = 'Interactive Rules'; break;
+      case 'screen-units':
+      case 'screen-unit-detail': back.classList.remove('hidden'); overflow.classList.remove('hidden'); title.textContent = 'Unit Reference'; break;
     }
   }
 
@@ -2345,12 +2351,7 @@
     // the picker too (not just the Admiral screen, where they sit below the fold).
     // Picking one adds the admiral + flagship. Modelled as pseudo-groups sorted by
     // the flagship's tonnage; they always show (never hidden by the Misc toggle).
-    const famousPseudo = (faction.admirals || []).filter(a => a.isFamous && a.flagship).map(a => ({
-      id: a.id, category: a.flagship.category || 'medium', _famous: true,
-      _art: admiralArtPath(a.name) || shipArtPath(a.flagship.name),
-      _flagship: a.flagship.name, _level: a.level,
-      ship: Object.assign({}, a.flagship, { name: a.name, cost: a.cost + a.flagship.cost, _famous: true })
-    }));
+    const famousPseudo = famousPseudoGroups(faction);
 
     // Apply all filters first so the live count is accurate.
     const search = (document.getElementById('picker-search')?.value || '').toLowerCase();
@@ -2407,18 +2408,25 @@
     list = list.slice().sort(cmp);
     if (pickerSort.dir === 'desc') list.reverse();
 
-    const sizeSel = GAME_SIZES[activeFleet.gameSize] || GAME_SIZES.clash;
-    const namedTaken = (activeFleet.admirals || []).some(a => a.type === 'Famous' || a.type === 'Faction' || a.admiralId);
-    document.getElementById('picker-list').innerHTML = list.map(g => {
+    document.getElementById('picker-list').innerHTML = list.map(g => pickerRowHtml(g, f.faction)).join('');
+    setupPickerLongPress();
+  }
+
+  // One ship picker row. `ref` = { slug } draws it for the Unit Reference: no
+  // fleet checks, no collection count, and a tap opens the ship card instead of
+  // adding the ship.
+  function pickerRowHtml(g, factionKey, ref) {
+    const sizeSel = ref ? GAME_SIZES.clash : (GAME_SIZES[activeFleet.gameSize] || GAME_SIZES.clash);
+    const namedTaken = !ref && (activeFleet.admirals || []).some(a => a.type === 'Famous' || a.type === 'Faction' || a.admiralId);
       const ship = g.ship || {};
       const cost = ship.cost || 0;
       const gMin = ship.groupMin || 1, gMax = ship.groupMax || gMin;
       const tonnage = tonLabel(ship.tonnage) || CATEGORY_LABELS[g.category] || g.category;
       const modCls = isFullyModular(ship) ? ' ship-img-modular' : '';
       if (g._famous) {
-        const blocked = namedTaken || (g._level && g._level > (sizeSel.maxAdmiralLevel || 4));
+        const blocked = !ref && (namedTaken || (g._level && g._level > (sizeSel.maxAdmiralLevel || 4)));
         const reason = namedTaken ? 'One named Admiral per fleet' : (g._level > (sizeSel.maxAdmiralLevel || 4) ? `Exceeds ${sizeSel.label} cap` : '');
-        return `<div class="list-row${blocked ? ' row-disabled' : ''}" onclick="${blocked ? '' : `App.addAdmiral('${g.id}')`}">
+        return `<div class="list-row${blocked ? ' row-disabled' : ''}" onclick="${ref ? `App.openUnitM('${esc(ref.slug)}')` : blocked ? '' : `App.addAdmiral('${g.id}')`}">
           ${g._art ? `<div class="ship-thumb ship-thumb-lg"><img src="${thumbUrl(g._art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
           <div class="list-row-content">
             <div class="flex justify-between items-center">
@@ -2436,7 +2444,7 @@
       if (isFullyModular(ship)) tags.push('<span class="ship-tag">Modular</span>');
       // (No Launch/Drop tag next to the name — it reads from the launch filter
       // chip and the ship's loads/launch table; an inline tag is just noise.)
-      return `<div class="list-row" data-gid="${g.id}" onclick="App.addShip('${g.id}','${g.category}')">
+      return `<div class="list-row" data-gid="${g.id}" onclick="${ref ? `App.openUnitM('${esc(ref.slug)}')` : `App.addShip('${g.id}','${g.category}')`}">
         ${art ? `<div class="ship-thumb ship-thumb-lg${modCls}"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb ship-thumb-lg"></div>'}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
@@ -2445,18 +2453,16 @@
           </div>
           <div class="list-row-sub">${tonnageBadge(g.category)}${esc(tonnage)}, Group ${gMin}${gMax > gMin ? '–' + gMax : ''}${gMin > 1 ? `, ${gMin}× ${cost}` : ''}</div>
           ${(() => { const rs = (ship.specialRules || []).map(r => r.name).filter(Boolean).join(', '); return rs ? `<div class="list-row-rules">${renderSpecialChips(rs)}</div>` : ''; })()}
-          ${shipLaunchIcons(ship, activeFleet.faction)}
+          ${shipLaunchIcons(ship, factionKey)}
           ${(() => {
             // Collection chip — opt-in, matching desktop. Just the owned count; no
             // fleet-relative maths (desktop dropped that as noise).
-            if (!showCollection) return '';
-            const owned = ownedCount(activeFleet.faction, g.id);
+            if (ref || !showCollection) return '';
+            const owned = ownedCount(factionKey, g.id);
             return `<div class="coll-badge ${owned > 0 ? 'coll-badge-ok' : 'coll-badge-none'}">${owned > 0 ? `${owned} in collection` : 'not in collection'}</div>`;
           })()}
         </div>
       </div>`;
-    }).join('');
-    setupPickerLongPress();
   }
 
   // Long-press a ship row to preview its ship card (without adding it). Reuses
@@ -2734,8 +2740,7 @@
             const on = oi === sel;
             // Show BOTH options' ship cards so the two guns can be compared under
             // their radios (matches desktop), not just the unselected preview.
-            const sheet = opt.weapons?.length ? optionWeaponSheet(opt.weapons)
-              : (opt.loads?.length ? buildLaunchTable(f.faction, opt.loads) : '');
+            const sheet = loadoutOptionSheet(opt, f.faction);
             // Don't repeat the option name when its ship card already shows it.
             const redundant = opt.weapons?.length && opt.weapons.every(w => w.name === opt.name);
             return `<div class="loadout-option loadout-radio-opt ${on ? 'selected' : ''}" onclick="App.selectLoadout(${loIdx}, ${oi})">
@@ -2768,37 +2773,7 @@
             <span class="loadout-option-cost loadout-req-flag">${featReq && !chosenFeature ? STATUS_ICON.warn : ''}</span>
           </div>
         </div>
-        ${features.map(ft => {
-          const sel = ft.name === chosenFeature;
-          const stat = (ft.features && ft.features[0]) ? ft.features[0] : null;
-          const detail = stat ? `ES ${stat.es || '-'}, KS ${stat.ks || '-'}${stat.special && stat.special !== '-' ? ', ' + stat.special : ''}` : '';
-          // Show every option's full rules inline so they can be compared before picking.
-          const rulesHtml = (ft.rules || []).map(r =>
-            `<div class="feature-rule">${r.description ? `<b>${esc(r.name)}:</b> ${ruleHtml(r.description)}` : `<b>${esc(r.name)}</b>`}</div>`
-          ).join('');
-          // Feature weapons (e.g. Skybane Halo's Skybane Oculus Array) fire by Scan, not Arc.
-          const weaponsHtml = (ft.weapons || []).map(w =>
-            `<div class="feature-rule">${esc(w.name)}: ${w.scan ? `Scan ${esc(w.scan)}, ` : ''}Att ${esc(w.attack)}, Lock ${esc(w.lock)}, Dmg ${esc(w.damage)} ${esc(w.type || '')}${w.special && w.special !== '-' ? ' ' + renderSpecialChips(w.special) : ''}</div>`
-          ).join('');
-          // A feature can also carry a launch bay (the Resistance ICBM Silo
-          // launches Bombardment Torpedoes, Launch 2, Limited-6).
-          const loadsHtml = (ft.loads || []).map(l =>
-            `<div class="feature-rule">Launch ${esc(String(l.launch))} ${esc(String(l.name))}${l.special && l.special !== '-' ? ' ' + renderSpecialChips(l.special) : ''}</div>`
-          ).join('');
-          const art = featureArtPath(ft.name);
-          return `<div class="loadout-option loadout-radio-opt ${sel ? 'selected' : ''}" onclick="App.selectFeature('${ft.name.replace(/'/g, "\\'")}',${slot})">
-            <div class="loadout-radio-row">
-              <span class="loadout-radio-dot"></span>
-              ${art ? `<img class="feature-opt-art" src="${art}" alt="" loading="lazy" onerror="this.remove()">` : ''}
-              <span class="loadout-option-name" style="flex:1">${esc(ft.name)}</span>
-              <span class="loadout-option-cost">${ft.cost ? '+' + ft.cost + 'pts' : 'Free'}</span>
-            </div>
-            ${detail ? `<div class="loadout-option-desc">${esc(detail)}</div>` : ''}
-            ${weaponsHtml}
-            ${loadsHtml}
-            ${rulesHtml}
-          </div>`;
-        }).join('')}
+        ${features.map(ft => featureOptionHtml(ft, slot, ft.name === chosenFeature)).join('')}
       </div>`;
       }).join('') : ''}
 
@@ -2925,7 +2900,9 @@
         ${omitName ? '' : '<div class="weapon-name">Weapon</div>'}<div class="weapon-val">Lk</div><div class="weapon-val">At</div><div class="weapon-val">Dm</div><div class="weapon-val">Arc</div>
       </div>${rows}</div>`;
   }
-  function renderSystemsPicker(factionKey, ship, inst, list, seln) {
+  // `readOnly` lists every option with its price and full table for the Unit
+  // Reference: no counters, no running total.
+  function renderSystemsPicker(factionKey, ship, inst, list, seln, readOnly) {
     const { counts, total, capUsage, catCounts } = summariseSystems(inst, list, seln);
     const required = seln.totalRequired;
     const req = seln.categoryReq;
@@ -2935,7 +2912,7 @@
       ? Object.entries(req).every(([cat, r]) => { const c = catCounts[cat] || 0; return c >= (r.min || 0) && c <= (r.max != null ? r.max : Infinity); })
       : (seln.totalIsExact ? total === required : total <= required);
     // Category requirement / cap chips
-    const capChips = req
+    const capChips = readOnly ? '' : req
       ? Object.entries(req).map(([cat, r]) => {
           const c = catCounts[cat] || 0;
           const lo = r.min || 0, hi = r.max != null ? r.max : Infinity;
@@ -2966,11 +2943,11 @@
                 <span class="loadout-option-cost">${o.cost ? '+' + o.cost : '0'} pts</span>
               </div>
             </div>
-            <div class="sys-option-controls">
+            ${readOnly ? '' : `<div class="sys-option-controls">
               <button class="counter-btn" onclick="App.removeSystem('${o.name.replace(/'/g, "\\'")}')" ${c <= 0 ? 'disabled' : ''}>&minus;</button>
               <span class="sys-option-count">${c}</span>
               <button class="counter-btn" onclick="App.addSystem('${o.name.replace(/'/g, "\\'")}')" ${canAdd ? '' : 'disabled'}>+</button>
-            </div>
+            </div>`}
           </div>
           ${sheet}
         </div>`;
@@ -2979,7 +2956,7 @@
     return `<div class="loadout-section">
       <div class="section-header" style="padding:0 0 var(--sp-xs)">
         ${esc(seln.listName)}, ${req ? 'choose ' + (sumMin === sumMax ? sumMax : sumMin + '-' + sumMax) : (seln.totalIsExact ? 'choose ' + required : 'up to ' + required)}
-        <span class="sys-total ${complete ? 'ok' : 'incomplete'}">${total}/${req ? (sumMin === sumMax ? sumMax : sumMin + '-' + sumMax) : required}</span>
+        ${readOnly ? '' : `<span class="sys-total ${complete ? 'ok' : 'incomplete'}">${total}/${req ? (sumMin === sumMax ? sumMax : sumMin + '-' + sumMax) : required}</span>`}
       </div>
       ${capChips ? `<div class="sys-cap-row">${capChips}</div>` : ''}
       ${optsHtml}
@@ -3546,11 +3523,14 @@
   }
   // Render a flagship's full ship card (stat grid + weapons + rules), reusing the
   // same components as the group ship detail so it matches desktop parity.
-  function flagshipShipCard(fs) {
+  // Also the Unit Reference's ship card for any ship: `factionKey` when there is
+  // no open fleet, `extraHead` appended to the title line, `extraBody` (loadouts,
+  // hardpoints, features, Ship Rules) placed before the lore.
+  function flagshipShipCard(fs, factionKey, extraHead, extraBody) {
     if (!fs) return '';
     // Flagship data carries namesake but not lore — pull the flagship ship's lore
     // (and recorded ships) from the matching regular ship by name so it shows.
-    const _fac = FACTIONS[activeFleet.faction];
+    const _fac = FACTIONS[factionKey || activeFleet.faction];
     const _loreSrc = (_fac && (_fac.groups || []).map(g => g.ship).find(s => s && s.name === fs.name)) || {};
     const loreShip = {
       lore: fs.lore || _loreSrc.lore || '',
@@ -3577,7 +3557,7 @@
       .split(',').map(s => s.trim()).filter(t => t && !ruleNames.has(t.toLowerCase())).join(', ');
     const artSrc = shipArtPath(fs.name);
     const sizeClass = fs.category ? (CATEGORY_LABELS[fs.category] || '') : '';
-    return `<div class="section-header">${flagshipLabel(fs, true, true)}${sizeClass ? ', ' + esc(sizeClass) : ''}${fs.cost ? `, ${fs.cost} pts` : ''}</div>
+    return `<div class="section-header">${flagshipLabel(fs, true, true)}${sizeClass ? ', ' + esc(sizeClass) : ''}${fs.cost ? `, ${fs.cost} pts` : ''}${extraHead || ''}</div>
       ${artSrc ? `<div class="ship-art-hero">${shopLinkImg(fs.name, `<img src="${artSrc}" alt="${esc(fs.name)}" loading="lazy">`, fs)}</div>` : ''}
       ${statGridMobile(statEntries, false)}
       ${weapons.length ? `<div class="weapon-table">
@@ -3594,9 +3574,10 @@
           </div>${w.special && w.special !== '-' ? `<div class="weapon-special">${renderSpecialChips(w.special)}</div>` : ''}`;
         }).join('')}
       </div>` : ''}
-      ${fs.loads && fs.loads.length ? buildLaunchTable(activeFleet.faction, fs.loads) : ''}
+      ${fs.loads && fs.loads.length ? buildLaunchTable(factionKey || activeFleet.faction, fs.loads) : ''}
       ${specialText ? `<div class="rule-card"><div class="rule-card-text">${esc(specialText)}</div></div>` : ''}
       ${rules.length ? rules.map(r => `<div class="rule-card"><div class="rule-card-name">${esc(r.name || r)}</div>${r.description ? `<div class="rule-card-text">${ruleHtml(r.description)}</div>` : ''}</div>`).join('') : ''}
+      ${extraBody || ''}
       ${renderLore(loreShip)}`;
   }
   function openAdmiralDetail(i) { activeAdmiralIdx = i; navigate('screen-admiral-detail'); }
@@ -3609,13 +3590,7 @@
     const art = admiralArtPath(a.name);
     const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
 
-    const abilityInfo = ab => `<div class="rule-card">
-      <div class="flex justify-between items-center">
-        <div class="rule-card-name">${esc(ab.name)}</div>
-        ${ab.cost ? `<span class="loadout-option-cost">${esc(ab.cost)}</span>` : ''}
-      </div>
-      ${ab.effect ? `<div class="rule-card-text">${linkKeywords(ab.effect)}</div>` : ''}
-    </div>`;
+    const abilityInfo = abilityCardHtml;
 
     let abilitiesHtml = '';
     if (info && info.innate.length) {
@@ -3763,10 +3738,13 @@
       el.innerHTML = `<div class="empty-state-sm">No space stations available for this faction.</div>`;
       return;
     }
-    el.innerHTML = stations.map(s => {
+    el.innerHTML = stations.map(s => stationRowHtml(s, f.faction, `App.addStation('${s.id}')`)).join('');
+  }
+  // One station row (the station picker's, reused by the Unit Reference).
+  function stationRowHtml(s, factionKey, onclick) {
       const st = s.stats || {};
-      const art = stationArtPath(f.faction, s);
-      return `<div class="list-row" onclick="App.addStation('${s.id}')">
+      const art = stationArtPath(factionKey, s);
+      return `<div class="list-row" onclick="${onclick}">
         ${art ? `<div class="ship-thumb"><img src="${thumbUrl(art)}" alt="" loading="lazy"></div>` : '<div class="ship-thumb"></div>'}
         <div class="list-row-content">
           <div class="flex justify-between items-center">
@@ -3776,7 +3754,6 @@
           <div class="list-row-sub">Hull ${st.hull || '?'}, ES ${st.es || '-'}, KS ${st.ks || '-'}</div>
         </div>
       </div>`;
-    }).join('');
   }
   function addStation(stationId) {
     const f = activeFleet;
@@ -3856,13 +3833,14 @@
     renderStationDetail(); updateAppBar('screen-station-detail');
   }
 
-  function renderStationArmamentPicker(station, spec) {
-    const { counts, armTotal } = summariseStation(station);
+  // `readOnly` = { faction } lists the armaments for the Unit Reference.
+  function renderStationArmamentPicker(station, spec, readOnly) {
+    const { counts, armTotal } = summariseStation(readOnly ? { systems: [] } : station);
     const complete = armTotal === spec.required;
     const byCat = {};
     spec.options.forEach(o => { (byCat[o.category] = byCat[o.category] || []).push(o); });
     const cats = Object.keys(byCat);
-    const stationStepper = (o, c, canAdd) => `<div class="sys-option-controls">
+    const stationStepper = (o, c, canAdd) => readOnly ? '' : `<div class="sys-option-controls">
               <button class="counter-btn" onclick="App.removeStationSystem('${o.name.replace(/'/g, "\\'")}')" ${c <= 0 ? 'disabled' : ''}>&minus;</button>
               <span class="sys-option-count">${c}</span>
               <button class="counter-btn" onclick="App.addStationSystem('${o.name.replace(/'/g, "\\'")}')" ${canAdd ? '' : 'disabled'}>+</button>
@@ -3913,7 +3891,7 @@
         // A mixed category (e.g. Upgrades) can still hold a weapon-bearing option
         // like Defence Grid — keep showing its ship card here.
         const sheet = (o.weapons && o.weapons.length) ? optionWeaponSheet(o.weapons)
-          : (o.loads && o.loads.length) ? buildLaunchTable(activeFleet.faction, o.loads)
+          : (o.loads && o.loads.length) ? buildLaunchTable(readOnly ? readOnly.faction : activeFleet.faction, o.loads)
           : (o.effect ? `<div class="loadout-option-desc">${linkKeywords(o.effect)}</div>` : '');
         return `<div class="sys-option ${c > 0 ? 'selected' : ''}">
           <div class="sys-option-row">
@@ -3934,7 +3912,7 @@
     return `<div class="loadout-section">
       <div class="section-header" style="padding:0 0 var(--sp-xs)">
         Armaments, choose ${spec.required}
-        <span class="sys-total ${complete ? 'ok' : 'incomplete'}">${armTotal}/${spec.required}</span>
+        ${readOnly ? '' : `<span class="sys-total ${complete ? 'ok' : 'incomplete'}">${armTotal}/${spec.required}</span>`}
       </div>
       ${optsHtml}
     </div>`;
@@ -3946,9 +3924,16 @@
     if (!el) return;
     if (!st) { el.innerHTML = ''; return; }
     recalcStation(f.faction, st);
-    const def = findStationDef(f.faction, st);
+    el.innerHTML = stationBodyHtml(f.faction, st, findStationDef(f.faction, st)) + `
+      <button class="btn btn-ghost btn-block" onclick="App.removeStationPrompt()" style="color:var(--danger);border-color:var(--danger);margin-top:var(--sp-m)">Remove Station</button>`;
+  }
+
+  // A station's ship card: stats, weapons (its own and its chosen upgrades'),
+  // launch, station rules and armaments. `readOnly` = { faction } for the Unit
+  // Reference, which also spells out the station's special rules.
+  function stationBodyHtml(fk, st, def, readOnly) {
     const stats = (def && def.stats) || {};
-    const art = stationArtPath(f.faction, st);
+    const art = stationArtPath(fk, st);
     const spec = stationArmamentSpec(st);
 
     const statDefs = [
@@ -3973,22 +3958,359 @@
       if (upgradeWpns.length) upgradeWeaponSheet = optionWeaponSheet(upgradeWpns);
     }
     // Launch assets as the full ship-style table (parity with desktop + ships).
-    const loadsHtml = def ? renderLaunchTable(f.faction, def) : '';
+    const loadsHtml = def ? renderLaunchTable(fk, def) : '';
     const rules = (def && def.stationRules) || [];
     const rulesHtml = rules.length ? `<div class="loadout-section"><div class="section-header" style="padding:0 0 var(--sp-xs)">Station Rules</div>${rules.map(r => `<div class="rule-card"><div class="rule-card-name">${esc(r.name)}</div><div class="rule-card-text">${linkKeywords(r.effect || '')}</div></div>`).join('')}</div>` : '';
-    const picker = spec ? renderStationArmamentPicker(st, spec) : '';
+    const picker = spec ? renderStationArmamentPicker(st, spec, readOnly) : '';
+    const special = readOnly ? ((def && def.specialRules) || []).filter(r => r && r.name).map(r => {
+      const d = r.description || lookupRule(r.name).description;
+      return `<div class="rule-card"><div class="rule-card-name">${esc(r.name)}</div>${d ? `<div class="rule-card-text">${ruleHtml(d)}</div>` : ''}</div>`;
+    }).join('') : '';
 
-    el.innerHTML = `
+    return `
       <div class="section-header">${esc(st.name)}, ${st.cost} pts</div>
       ${art ? `<div class="ship-art-hero">${shopLinkImg(st.name, `<img src="${art}" alt="${esc(st.name)}" loading="lazy">`, def)}</div>` : ''}
       ${statGrid}
       ${weaponSheet}
       ${upgradeWeaponSheet}
       ${loadsHtml}
+      ${special}
       ${rulesHtml}
-      ${picker}
-      <button class="btn btn-ghost btn-block" onclick="App.removeStationPrompt()" style="color:var(--danger);border-color:var(--danger);margin-top:var(--sp-m)">Remove Station</button>
+      ${picker}`;
+  }
+
+  /* ── Shared row / card pieces ──────────────────────────── */
+  // Famous admirals as picker pseudo-groups (their flagship sorted by its class).
+  function famousPseudoGroups(faction) {
+    return ((faction && faction.admirals) || []).filter(a => a.isFamous && a.flagship).map(a => ({
+      id: a.id, category: a.flagship.category || 'medium', _famous: true,
+      _art: admiralArtPath(a.name) || shipArtPath(a.flagship.name),
+      _flagship: a.flagship.name, _level: a.level,
+      ship: Object.assign({}, a.flagship, { name: a.name, cost: a.cost + a.flagship.cost, _famous: true })
+    }));
+  }
+  // One admiral Ability as a rule card (admiral screen and Unit Reference).
+  function abilityCardHtml(ab) {
+    return `<div class="rule-card">
+      <div class="flex justify-between items-center">
+        <div class="rule-card-name">${esc(ab.name)}</div>
+        ${ab.cost ? `<span class="loadout-option-cost">${esc(ab.cost)}</span>` : ''}
+      </div>
+      ${ab.effect ? `<div class="rule-card-text">${linkKeywords(ab.effect)}</div>` : ''}
+    </div>`;
+  }
+  // A loadout option's own weapon or launch table.
+  function loadoutOptionSheet(opt, factionKey) {
+    return opt.weapons?.length ? optionWeaponSheet(opt.weapons)
+      : (opt.loads?.length ? buildLaunchTable(factionKey, opt.loads) : '');
+  }
+  // One Deployable Feature with its stats, weapons, launch and full rules. A
+  // radio row in the group screen; `readOnly` drops the radio for the Unit Reference.
+  function featureOptionHtml(ft, slot, sel, readOnly) {
+    const stat = (ft.features && ft.features[0]) ? ft.features[0] : null;
+    const detail = stat ? `ES ${stat.es || '-'}, KS ${stat.ks || '-'}${stat.special && stat.special !== '-' ? ', ' + stat.special : ''}` : '';
+    // Show every option's full rules inline so they can be compared before picking.
+    const rulesHtml = (ft.rules || []).map(r =>
+      `<div class="feature-rule">${r.description ? `<b>${esc(r.name)}:</b> ${ruleHtml(r.description)}` : `<b>${esc(r.name)}</b>`}</div>`
+    ).join('');
+    // Feature weapons (e.g. Skybane Halo's Skybane Oculus Array) fire by Scan, not Arc.
+    const weaponsHtml = (ft.weapons || []).map(w =>
+      `<div class="feature-rule">${esc(w.name)}: ${w.scan ? `Scan ${esc(w.scan)}, ` : ''}Att ${esc(w.attack)}, Lock ${esc(w.lock)}, Dmg ${esc(w.damage)} ${esc(w.type || '')}${w.special && w.special !== '-' ? ' ' + renderSpecialChips(w.special) : ''}</div>`
+    ).join('');
+    // A feature can also carry a launch bay (the Resistance ICBM Silo
+    // launches Bombardment Torpedoes, Launch 2, Limited-6).
+    const loadsHtml = (ft.loads || []).map(l =>
+      `<div class="feature-rule">Launch ${esc(String(l.launch))} ${esc(String(l.name))}${l.special && l.special !== '-' ? ' ' + renderSpecialChips(l.special) : ''}</div>`
+    ).join('');
+    const art = featureArtPath(ft.name);
+    return `<div class="loadout-option${readOnly ? '' : ` loadout-radio-opt ${sel ? 'selected' : ''}`}"${readOnly ? '' : ` onclick="App.selectFeature('${ft.name.replace(/'/g, "\\'")}',${slot})"`}>
+      <div class="loadout-radio-row">
+        ${readOnly ? '' : '<span class="loadout-radio-dot"></span>'}
+        ${art ? `<img class="feature-opt-art" src="${art}" alt="" loading="lazy" onerror="this.remove()">` : ''}
+        <span class="loadout-option-name" style="flex:1">${esc(ft.name)}</span>
+        <span class="loadout-option-cost">${ft.cost ? '+' + ft.cost + 'pts' : 'Free'}</span>
+      </div>
+      ${detail ? `<div class="loadout-option-desc">${esc(detail)}</div>` : ''}
+      ${weaponsHtml}
+      ${loadsHtml}
+      ${rulesHtml}
+    </div>`;
+  }
+
+  /* ── Unit Reference ────────────────────────────────────── */
+  // The desktop #units screen on a phone: every ship a faction fields, without a
+  // fleet. Rows are the ship picker's rows, a ship opens flagshipShipCard (the
+  // read-only ship card the admiral screen already uses) with every option it
+  // could take, and the PDF is built from the fleet sheet's print tables. Slugs
+  // are made in the same order as desktop, so a #units/<faction>/<ship> link
+  // opens the same ship on either.
+  let unitsM = { faction: 'ucm', search: '', cat: 'all' };
+  let unitM = null;   // { faction, slug } of the open ship card
+  const UNIT_SCREENS = new Set(['screen-units', 'screen-unit-detail']);
+  const UNIT_CAT_ORDER_M = [...CATEGORY_ORDER, 'station'];
+  const unitSlugM = s => String(s || '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const unitCatLabelM = c => c === 'station' ? 'Space Stations' : (CATEGORY_LABELS[c] || c);
+
+  function unitEntriesM(fk) {
+    const f = FACTIONS[fk];
+    if (!f) return [];
+    const out = [], used = new Set();
+    const slugFor = (name, alt) => {
+      let s = unitSlugM(name);
+      if (used.has(s)) s = unitSlugM(name + ' ' + alt);
+      const base = s;
+      for (let n = 2; used.has(s); n++) s = `${base}-${n}`;
+      used.add(s);
+      return s;
+    };
+    CATEGORY_ORDER.forEach(cat => (f.groups || []).filter(g => (g.category || 'medium') === cat)
+      .forEach(g => out.push({ kind: 'ship', g, category: cat, slug: slugFor(g.ship.name, 'ship') })));
+    famousPseudoGroups(f).forEach(g => out.push({ kind: 'famous', g, category: g.category, slug: slugFor(g.ship.name, 'flagship') }));
+    (f.spaceStations || []).forEach(s => out.push({ kind: 'station', s, category: 'station', slug: slugFor(s.name, 'station') }));
+    return out;
+  }
+  const unitPtsM = e => e.kind === 'station' ? (e.s.cost || 0) : (e.g.ship.cost || 0);
+  function unitHayM(e) {
+    const d = e.kind === 'station' ? e.s : e.g.ship;
+    const bits = [d.name, e.g && e.g._flagship, d.namesake, (d.stats || {}).special,
+      ...(d.specialRules || []).map(r => r.name), ...(d.stationRules || []).map(r => r.name)];
+    const wpn = w => bits.push(w.name, w.special);
+    (d.weapons || []).forEach(wpn);
+    (d.loads || []).forEach(l => bits.push(l.name, l.special));
+    (d.loadoutOptions || []).forEach(lo => {
+      bits.push(lo.name);
+      (lo.options || []).forEach(o => { bits.push(o.name, ...(o.gainRules || [])); (o.weapons || []).forEach(wpn); });
+    });
+    return bits.filter(Boolean).join(' ').toLowerCase();
+  }
+  function unitsFilteredM(fk) {
+    const q = unitsM.search.trim().toLowerCase();
+    const name = e => (e.kind === 'station' ? e.s.name : e.g.ship.name) || '';
+    return unitEntriesM(fk)
+      .filter(e => (unitsM.cat === 'all' || e.category === unitsM.cat) && (!q || unitHayM(e).includes(q)))
+      .sort((a, b) => UNIT_CAT_ORDER_M.indexOf(a.category) - UNIT_CAT_ORDER_M.indexOf(b.category)
+        || unitPtsM(a) - unitPtsM(b) || name(a).localeCompare(name(b)));
+  }
+
+  async function renderUnitsM() {
+    const fk = unitsM.faction;
+    const chips = document.getElementById('units-chips');
+    const listEl = document.getElementById('units-list');
+    if (!chips || !listEl) return;
+    if (!FACTIONS[fk]) {
+      await ensureFaction(fk);
+      if (unitsM.faction !== fk) return;
+    }
+    const all = unitEntriesM(fk);
+    const cats = UNIT_CAT_ORDER_M.filter(c => all.some(e => e.category === c));
+    const order = Object.keys(FACTION_FILES).sort((a, b) => (FACTION_INFO[a]?.order || 99) - (FACTION_INFO[b]?.order || 99));
+    chips.innerHTML = `
+      <div class="filter-row">${order.map(k => `<button class="chip ${k === fk ? 'active' : ''}" aria-pressed="${k === fk}" onclick="App.unitsFactionM('${k}')">${FACTION_ICONS[k] ? `<img src="${FACTION_ICONS[k]}" alt="">` : ''}${esc(FACTION_INFO[k]?.name || k)}</button>`).join('')}</div>
+      <div class="filter-row">${['all', ...cats].map(c => `<button class="chip ${unitsM.cat === c ? 'active' : ''}" aria-pressed="${unitsM.cat === c}" onclick="App.unitsCatM('${c}')">${c === 'all' ? 'All' : esc(unitCatLabelM(c))}</button>`).join('')}</div>`;
+    const list = unitsFilteredM(fk);
+    const html = cats.map(cat => {
+      const inCat = list.filter(e => e.category === cat);
+      if (!inCat.length) return '';
+      return `<div class="section-header">${esc(unitCatLabelM(cat))}</div>` + inCat.map(e => e.kind === 'station'
+        ? stationRowHtml(e.s, fk, `App.openUnitM('${esc(e.slug)}')`)
+        : pickerRowHtml(e.g, fk, { slug: e.slug })).join('');
+    }).join('');
+    listEl.innerHTML = html || `<div class="empty-state-sm">No ships match “${esc(unitsM.search)}”.</div>`;
+    const input = document.getElementById('units-search');
+    if (input && input.value !== unitsM.search) input.value = unitsM.search;
+  }
+
+  function openUnitM(slug) {
+    unitM = { faction: unitsM.faction, slug };
+    navigate('screen-unit-detail');
+  }
+
+  function renderUnitDetailM() {
+    const el = document.getElementById('unit-detail-content');
+    if (!el || !unitM) return;
+    const fk = unitM.faction;
+    const e = unitEntriesM(fk).find(x => x.slug === unitM.slug);
+    if (!e) { el.innerHTML = ''; return; }
+    if (e.kind === 'station') {
+      el.innerHTML = stationBodyHtml(fk, e.s, e.s, { faction: fk });
+      return;
+    }
+    // A flagship is its admiral's own profile, never the line ship of its class.
+    const admiral = e.kind === 'famous' ? findFamousAdmiral(fk, e.g.id) : null;
+    const ship = Object.assign({}, admiral ? admiral.flagship : e.g.ship, { category: e.category });
+    const st = ship.stats || {};
+    const tags = [ship.isUnique ? 'Unique' : ship.isRare ? 'Rare' : '', ship.additional ? 'Misc' : ''].filter(Boolean)
+      .map(t => ` <span class="ship-tag">${t}</span>`).join('');
+    const head = `${!admiral && st.g ? `, Group ${esc(st.g)}` : ''}${tags}`;
+    const adm = admiral ? `<div class="detail-header">
+        ${admiralThumb(fk, admiral.level, admiralArtPath(admiral.name), true)}
+        <div style="flex:1;margin-left:var(--sp-m)">
+          <div class="detail-name">${esc(admiral.name)}</div>
+          <div class="detail-type">Level ${esc(admiral.level)}</div>
+        </div>
+        <div class="pts-badge-lg"><div class="pts-badge-value">${(admiral.cost || 0) + (admiral.flagship.cost || 0)}</div><div class="pts-badge-label">Points</div></div>
+      </div>
+      ${(admiral.abilities || []).length ? `<div class="section-header">Ability</div>${admiral.abilities.map(abilityCardHtml).join('')}` : ''}
+      ${admiral.abilityPicks ? `<div class="section-header">Abilities Table, choose ${esc(admiral.abilityPicks)}</div>` : ''}` : '';
+    const loadouts = (ship.loadoutOptions || []).length ? `<div class="loadout-section">
+        <div class="section-header" style="padding:0 0 var(--sp-s)">Loadout</div>
+        ${ship.loadoutOptions.map(lo => `<div class="loadout-group-label">${esc(lo.name || 'Option')}</div>
+          ${(lo.options || []).map(opt => {
+            const redundant = opt.weapons?.length && opt.weapons.every(w => w.name === opt.name);
+            return `<div class="loadout-option">
+              <div class="loadout-radio-row">
+                <span class="loadout-option-name">${redundant ? '' : esc(opt.name)}</span>
+                <span class="loadout-option-cost">${opt.cost ? '+' + opt.cost + 'pts' : 'Free'}</span>
+              </div>
+              ${loadoutOptionSheet(opt, fk)}
+              ${opt.gainRules?.length ? `<div class="weapon-special">${renderSpecialChips(opt.gainRules.join(', '))}</div>` : ''}
+            </div>`;
+          }).join('')}`).join('')}
+      </div>` : '';
+    const sysList = systemsListFor(ship, fk);
+    const systems = sysList && ship.systemSelection ? renderSystemsPicker(fk, ship, { systems: [] }, sysList, ship.systemSelection, true) : '';
+    const features = isFeatureCarrier(ship) && factionFeatures(fk).length
+      ? `<div class="loadout-section"><div class="section-header" style="padding:0 0 var(--sp-s)">Deployable Features</div>${factionFeatures(fk).map(ft => featureOptionHtml(ft, 0, false, true)).join('')}</div>`
+      : '';
+    const shipRules = ship.rulesText ? `<div class="rule-card"><div class="rule-card-name">Ship Rules</div><div class="rule-card-text">${esc(ship.rulesText)}</div></div>` : '';
+    el.innerHTML = adm + flagshipShipCard(ship, fk, head, `${loadouts}${systems}${features}${shipRules}${renderShipModels(ship)}`);
+  }
+
+  function unitsFactionM(k) { unitsM = { faction: k, search: '', cat: 'all' }; renderUnitsM(); }
+  function unitsCatM(c) { unitsM.cat = c; renderUnitsM(); }
+  function unitsSearchM(v) { unitsM.search = v || ''; renderUnitsM(); }
+
+  // The whole faction as a PDF, from the fleet sheet's print tables (the desktop
+  // Unit Reference prints the same content). What is on screen is what prints.
+  function buildUnitsPrintSheet() {
+    const fk = unitsM.faction;
+    const f = FACTIONS[fk];
+    const root = document.getElementById('print-root');
+    if (!f || !root) { clearPrintSheet(); return; }
+    const usedRules = new Map();
+    const collectRule = name => {
+      if (!name || usedRules.has(name)) return;
+      const r = lookupRule(name);
+      if (r.description) usedRules.set(name, r.description);
+    };
+    const addRuleText = (name, description) => { if (name && description && !usedRules.has(name)) usedRules.set(name, description); };
+    const ruleSecHtml = name => { const sec = lookupRule(name).section; return sec ? ` <span class="pr-rule-sec">${esc(sec)}</span>` : ''; };
+    const collectSpecial = s => String(s || '').split(',').map(t => t.trim()).filter(t => t && t !== '-').forEach(collectRule);
+    const laMap = getLaunchAssetMap(fk);
+    const cost = c => c > 0 ? `+${c} pts` : c < 0 ? `${c} pts` : 'free';
+    const loadText = l => `Launch ${l.name} (${l.launch}${l.special && l.special !== '-' ? ', ' + l.special : ''})`;
+    const statCells = st => [['Scan', 'scan'], ['Sig', 'sig'], ['Thrust', 'thrust'], ['Hull', 'hull'], ['ES', 'es'], ['KS', 'ks'], ['BS', 'bs'], ['Group', 'g']]
+      .filter(([, k]) => st[k] != null && st[k] !== '-' && st[k] !== '')
+      .map(([lab, k]) => `<span class="pr-stat"><b>${lab}</b> ${esc(st[k])}</span>`).join('');
+    const lists = new Set();
+    let carriers = false, generic = false;
+
+    const card = e => {
+      if (e.kind === 'station') {
+        const s = e.s;
+        const spec = stationArmamentSpec(s);
+        if (spec) generic = true;
+        (s.specialRules || []).forEach(r => addRuleText(r.name, r.description || lookupRule(r.name).description));
+        (s.stationRules || []).forEach(r => addRuleText(r.name, r.effect));
+        const names = [...(s.specialRules || []), ...(s.stationRules || [])].map(r => r.name).filter(Boolean);
+        return `<div class="pr-group">
+          <div class="pr-group-head"><span class="pr-group-name">${esc(s.name)} <span class="pr-ton">Space Station</span></span><span class="pr-group-pts">${esc(s.cost || 0)} pts</span></div>
+          <div class="pr-stats">${statCells(s.stats || {})}</div>
+          ${printWeaponTable((s.weapons || []).map(w => ({ ...w })), collectRule)}
+          ${printLaunchTable(laMap, s.loads || [], collectRule)}
+          ${names.length ? `<div class="pr-rules-line"><b>Special:</b> ${names.map(esc).join(', ')}</div>` : ''}
+          ${spec ? `<div class="pr-opts"><b>Armaments, choose ${esc(spec.required)}</b></div>` : ''}
+        </div>`;
+      }
+      const admiral = e.kind === 'famous' ? findFamousAdmiral(fk, e.g.id) : null;
+      const db = admiral ? admiral.flagship : e.g.ship;
+      const st = db.stats || {};
+      const wlist = (db.weapons || []).map(w => ({ ...w }));
+      const lines = (db.loadoutOptions || []).map(lo => {
+        const parts = (lo.options || []).map(o => {
+          (o.weapons || []).forEach(w => wlist.push({ ...w, name: `${w.name} (${lo.name}, ${cost(o.cost)})` }));
+          (o.gainRules || []).forEach(collectRule);
+          (o.loads || []).forEach(l => collectSpecial(l.special));
+          const extra = [...(o.gainRules || []), ...(o.loads || []).map(loadText)];
+          return esc(`${o.name} (${cost(o.cost)})${extra.length ? ': ' + extra.join(', ') : ''}`);
+        });
+        return `<div class="pr-opts"><b>${esc(lo.name)}:</b> ${parts.join('; ')}</div>`;
+      }).join('');
+      const names = [], seen = new Set();
+      const addName = n => { n = String(n || '').trim(); const k = n.toLowerCase(); if (!n || n === '-' || seen.has(k) || /^(rare|unique)$/.test(k)) return false; seen.add(k); names.push(n); return true; };
+      (db.specialRules || []).forEach(r => { if (r && r.name) { addRuleText(r.name, r.description); addName(r.name); } });
+      String(st.special || '').split(',').forEach(t => { if (addName(t)) collectRule(t.trim()); });
+      if (db.systemSelection) lists.add(db.systemSelection.listName);
+      if (isFeatureCarrier(db)) carriers = true;
+      const ton = tonLabel(db.tonnage || st.tonnage) || CATEGORY_LABELS[e.category] || '';
+      const tags = `${ton ? ` <span class="pr-ton">${esc(ton)}</span>` : ''}${db.isUnique ? ' <span class="pr-badge">Unique</span>' : db.isRare ? ' <span class="pr-badge">Rare</span>' : ''}${db.additional ? ' <span class="pr-badge">Misc</span>' : ''}`;
+      const label = admiral
+        ? `${flagshipLabel(db, true, true)} <span class="pr-group-class">(${esc(admiral.name)}, Level ${esc(admiral.level)})</span>`
+        : esc(db.name);
+      const pts = admiral ? (admiral.cost || 0) + (db.cost || 0) : (db.cost || 0);
+      const abil = admiral
+        ? (admiral.abilities || []).map(ab => `<div class="pr-gloss pr-inline-rule"><b>${esc(ab.name)}${ab.cost ? ' (' + esc(ab.cost) + ')' : ''}</b>: ${ruleHtml(ab.effect || '')}</div>`).join('')
+          + (admiral.abilityPicks ? `<div class="pr-opts"><b>Abilities Table, choose ${esc(admiral.abilityPicks)}</b></div>` : '')
+        : '';
+      return `<div class="pr-group${admiral ? ' pr-flagship' : ''}">
+        <div class="pr-group-head"><span class="pr-group-name">${label}${tags}</span><span class="pr-group-pts">${esc(pts)} pts</span></div>
+        <div class="pr-stats">${statCells(st)}</div>
+        ${printWeaponTable(wlist, collectRule)}
+        ${printLaunchTable(laMap, db.loads || [], collectRule)}
+        ${names.length ? `<div class="pr-rules-line"><b>Special:</b> ${names.map(esc).join(', ')}</div>` : ''}
+        ${lines}
+        ${db.rulesText ? `<div class="pr-opts">${esc(db.rulesText)}</div>` : ''}
+        ${abil}
+      </div>`;
+    };
+    const cards = unitsFilteredM(fk).map(card).join('');
+
+    // Option lists several ships share print once, after the cards.
+    const optionSection = (title, options, onceKey) => {
+      const wl = [], ls = [];
+      (options || []).forEach(o => {
+        const tag = `${o.category ? o.category + ', ' : ''}${cost(o.cost)}${o[onceKey] ? ', max one' : ''}`;
+        if (o.weapons && o.weapons.length) {
+          o.weapons.forEach(w => wl.push({ ...w, name: `${w.name || o.name} (${tag})` }));
+          return;
+        }
+        (o.loads || []).forEach(l => collectSpecial(l.special));
+        ls.push(`<div class="pr-gloss"><b>${esc(o.name)}</b> (${esc(tag)})${o.loads && o.loads.length ? ': ' + esc(o.loads.map(loadText).join(', ')) : o.effect ? ': ' + ruleHtml(o.effect) : ''}</div>`);
+      });
+      return `<div class="pr-section-title">${esc(title)}</div>${printWeaponTable(wl, collectRule)}${ls.length ? `<div class="pr-glossary">${ls.join('')}</div>` : ''}`;
+    };
+    let sections = '';
+    lists.forEach(ln => { const list = (f.systemsLists || {})[ln]; if (list) sections += optionSection(ln, list.options, 'oncePerShip'); });
+    if (carriers && factionFeatures(fk).length) {
+      sections += `<div class="pr-section-title">Deployable Features</div><div class="pr-glossary">${factionFeatures(fk).map(ft => {
+        const bits = (ft.features || []).map(x => { collectSpecial(x.special); return `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`; });
+        (ft.weapons || []).forEach(w => { collectSpecial(w.special); bits.push(`${w.name}: ${w.scan ? `Scan ${w.scan}, ` : ''}Att ${w.attack}, Lock ${w.lock}, Dmg ${w.damage}${w.type || ''}${w.special && w.special !== '-' ? ', ' + w.special : ''}`); });
+        (ft.loads || []).forEach(l => { collectSpecial(l.special); bits.push(loadText(l)); });
+        return `<div class="pr-gloss"><b>${esc(ft.name)}</b> (${esc(cost(ft.cost))})${bits.length ? ': ' + esc(bits.join('; ')) : ''}</div>`
+          + (ft.rules || []).map(r => `<div class="pr-gloss pr-inline-rule"><b>${esc(r.name)}</b>${r.description ? ': ' + ruleHtml(r.description) : ''}</div>`).join('');
+      }).join('')}</div>`;
+    }
+    if (generic && STATION_ARMAMENTS) sections += optionSection('Space Station Armaments', STATION_ARMAMENTS.options, 'oncePerStation');
+
+    const glossary = [...usedRules.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([n, d]) => `<div class="pr-gloss"><b>${esc(n)}</b>: ${ruleHtml(d)}${ruleSecHtml(n)}</div>`).join('');
+    const meta = ['Unit Reference', unitsM.cat !== 'all' ? unitCatLabelM(unitsM.cat) : '',
+      unitsM.search.trim() ? `“${unitsM.search.trim()}”` : ''].filter(Boolean).join(', ');
+    root.innerHTML = `
+      <div class="pr-header">
+        <div class="pr-title">${esc(f.name || FACTION_INFO[fk]?.name || fk)}</div>
+        <div class="pr-sub">${esc(meta)}</div>
+      </div>
+      <div class="pr-units">${cards}</div>
+      ${sections}
+      ${glossary ? `<div class="pr-section-title">Rules Glossary</div><div class="pr-glossary">${glossary}</div>` : ''}
+      <div class="pr-foot">type37.github.io/dropfleet-builder</div>
     `;
+    document.body.classList.add('has-print-sheet');
+  }
+  function exportUnitsPdf() {
+    buildUnitsPrintSheet();
+    window.print();
   }
 
   /* ── Play Mode ─────────────────────────────────────────── */
@@ -4634,6 +4956,7 @@
   function overflow() {
     const active = document.querySelector('.screen.active')?.id;
     if (active === 'screen-group-detail') groupOverflow();
+    else if (UNIT_SCREENS.has(active)) showActionSheet([{ icon: 'pdf', label: 'Export PDF', action: exportUnitsPdf }]);
     else fleetOverflow();
   }
 
@@ -4648,6 +4971,11 @@
     { date: '2026-09-13', title: 'Scenarios: printouts match the screen', items: [
       'Printed scenarios use the same type as the screen: Roboto Slab titles and headings, named rules on the gold highlighter (red and blue for each side) and 9pt body text, with labels in black and nothing that looks like a button.',
       'A rolled scenario from the Scenario Generator prints at an 8pt body so a typical roll stays on one page; a long one continues on a second page with its sections, tables and map whole.',
+    ]},
+    { date: '2026-09-13', title: 'Unit Reference', items: [
+      'Unit Reference, in Settings under Interactive Rules: every ship each faction fields, grouped Light, Medium, Heavy, Colossal (and Payload for the Bioficers), with the famous admirals’ flagships, the Misc ships and the space stations. Search finds ships by name, weapon or rule.',
+      'Tap a ship for its full ship card: points, stats, weapons, launch, every loadout option, the hardpoint list, the Deployable Features a carrier can take, the Ship Rules and every rule. The ··· menu exports the whole faction as a PDF.',
+      'A desktop Unit Reference link (#units/ucm/new-york) opens the same ship on a phone.',
     ]},
     { date: '2026-09-13', title: 'Desktop app: print a whole faction', items: [
       'The desktop Unit Reference prints a whole faction: every ship card, the hardpoint lists, Deployable Features, station armaments and every rule in full.',
@@ -5107,6 +5435,7 @@
       { icon: 'edit', label: 'Restore or import a fleet…', action: importFleetPrompt },
       { icon: 'duplicate', label: 'My Collection', action: openCollection },
       { icon: 'menu_book', label: 'Interactive Rules', action: () => navigate('screen-rules') },
+      { icon: 'grid_view', label: 'Unit Reference', action: () => navigate('screen-units') },
       { icon: 'new_releases', label: "What's New", action: openChangelog },
       { icon: 'mail', label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
       { icon: 'bug_report', label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
@@ -6545,6 +6874,7 @@
   window.addEventListener('beforeprint', () => {
     const screen = document.querySelector('.screen.active');
     if (activeFleet && screen && FLEET_SCOPED_SCREENS.has(screen.id)) buildPrintSheet();
+    else if (screen && UNIT_SCREENS.has(screen.id)) buildUnitsPrintSheet();
     else clearPrintSheet();   // not on a fleet: let the normal page print
   });
   // Clear it afterwards so a later browser-initiated print can never send the
@@ -6729,6 +7059,15 @@
         tryJump();
       }
     }
+    // A #units, #units/<faction> or #units/<faction>/<ship> link (the desktop
+    // Unit Reference route) opens the Unit Reference, and that ship if named.
+    const unitsLink = location.hash.match(/^#units(?:\/([a-z]+))?(?:\/(.+))?$/);
+    if (unitsLink) {
+      if (unitsLink[1] && FACTION_FILES[unitsLink[1]]) unitsM.faction = unitsLink[1];
+      await ensureFaction(unitsM.faction);
+      navigate('screen-units');
+      if (unitsLink[2]) openUnitM(decodeURIComponent(unitsLink[2]));
+    }
     setTimeout(maybeShowOfflineTip, 1200);
 
     // Pull anything another device changed while this one was closed. Runs after
@@ -6793,7 +7132,8 @@
     openSyncModal, closeSyncModal, renderSyncBody, syncGenerate, syncLookup, syncDoJoin, syncNow, syncCopyToken, syncStop, syncDeleteRemote,
     syncSignOut, syncAdoptToken,
     openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet, sayName,
-    renderMobileRules, jumpMobileRules, filterMobileRules
+    renderMobileRules, jumpMobileRules, filterMobileRules,
+    openUnitM, unitsFactionM, unitsCatM, unitsSearchM, exportUnitsPdf
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

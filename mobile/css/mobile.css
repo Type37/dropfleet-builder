@@ -704,12 +704,15 @@ button, a, input, select, textarea,
 
 /* Picker filter layout: stacked rows (Tonnage radio, then attribute toggles),
    each horizontally scrollable, with a live count + Clear. */
-#picker-chips {
+#picker-chips,
+#units-chips {
   flex-direction: column;
   align-items: stretch;
   gap: var(--sp-xs);
   overflow-x: visible;
 }
+/* Unit Reference faction chips carry the faction icon. */
+#units-chips .chip img { width: 18px; height: 18px; object-fit: contain; }
 .filter-row {
   display: flex;
   flex-wrap: wrap;
