@@ -54,6 +54,28 @@ the shared `data/rules-wiki.json`, so no app-code change was needed.
 - **CI:** GitHub Actions moved off the deprecated Node 20 (checkout v7, Pages
   actions v6/v5/v5, github-script v9).
 
+### 2026-09-12: Print sheet, said once and in black
+
+- **No doubling.** A group of identical ships is now one card carrying the group
+  name, weight class and points (it used to be a group header saying "Bruges
+  Cruiser MEDIUM 84 pts, 1 ship" over a card saying "Bruges Cruiser MEDIUM 84
+  pts"). Only a group mixing loadouts keeps a header, and its cards drop the class.
+  Table layout: the same, no group row for a single card.
+- **Space used.** In Cards the picture, stat grid and hull boxes sit side by side.
+- **Readable.** Stat numbers 12.5pt bold black, hull number 11pt; every text colour
+  on the sheet is black (the Special column, arcs, points, labels and titles were
+  grey). Weight class and Unique are plain coloured words, not outlined pills.
+- **No lines.** Section-title underlines, group-head rules, table row and header
+  rules, the header's double rule, the glossary rule and the dotted hull rule are
+  gone; light zebra rows keep tables readable. The left bars on cards, table rows
+  and the fleet description are gone.
+- **Nothing clickable.** The launch reference prints its specials as text instead of
+  tooltip chips, rule keywords print as a plain "Rules:" line, every tooltip and
+  click handler is stripped from the sheet, and the preview ignores the pointer.
+- **Preview:** the dashed "Page N" lines are gone; the page count remains and still
+  allows for blocks pushed to the next page. The Abilities table has no column
+  header row. Big-card art 160px wide (was 200), Cards thumbnail 48px (was 58).
+
 ### 2026-09-12: Print preview, Columns removed
 
 - **Cards always print two-up.** One-column Cards was Big cards with a smaller

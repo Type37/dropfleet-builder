@@ -1002,7 +1002,7 @@ let activeGroupId = null;
         break;
       case 'rules':
         show('view-rules');
-        topContext.innerHTML = `<a href="#landing" class="topbar-back" onclick="App.navigate('landing'); return false;"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> How to Play`;
+        topContext.innerHTML = `<a href="#landing" class="topbar-back" onclick="App.navigate('landing'); return false;"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L4 8l6 6"/></svg></a> Rules Reference`;
         renderRules(param);
         break;
       default:
@@ -6468,7 +6468,7 @@ let activeGroupId = null;
       cell('scan'), cell('es'),
       cell('sig'), cell('bs')
     ].filter(Boolean).join('');
-    const hullEl = hullHtml ? `<div class="dp-sc-wide dp-sc-hull">${hullHtml}</div>` : cell('hull', true);
+    const hullEl = hullHtml ? `<div class="dp-sc-wide dp-sc-hull">${hullHtml}</div>` : (hullHtml === false ? '' : cell('hull', true));
     return (base || hullEl) ? `<div class="dp-statgrid">${base}${hullEl}</div>` : '';
   }
   // weapons: array of {name, arc, attack, lock, damage, type, special, qty?}
@@ -6631,7 +6631,7 @@ let activeGroupId = null;
     const allLaunchAssetNames = new Set();
     const ruleSpan = ([n, d, p]) => `<span class="dp-rule"><b>${esc(n)}${p ? ` p.${esc(p)}` : ''}:</b> ${ruleHtml(d)}</span>`;
     const chipsHtml = names => names.length
-      ? `<div class="dp-hoist-chips">${names.map(n => `<span class="dp-hoist-chip">${esc(n)}</span>`).join('')}</div>` : '';
+      ? `<div class="dp-systems"><b>Rules:</b> ${names.map(esc).join(', ')}</div>` : '';
 
     // One ship card: dense and self-contained, reading the same in the preview as on
     // paper. System/loadout weapons merge into the weapon table. `ship` carries the
@@ -6773,7 +6773,10 @@ let activeGroupId = null;
       const rulesHtml = renderRules([...shipRuleEntries, ...gunRuleEntries]); // combined (normal mode)
       const hoistChips = chipsHtml((noRules ? shipRuleEntriesAll : hoistedHere).map(e => e[0]));
 
-      const tonnageLabel = tonLabel(db.tonnage) || CATEGORY_LABELS[ship.groupCategory] || '';
+      // The weight class shows once: on the card when the card is the whole group (or a
+      // flagship), otherwise on the group header above it.
+      const catKey = opts.cat || '';
+      const catTag = catKey ? ` <span class="dp-group-cat dp-group-cat-${catKey}">${esc(CATEGORY_LABELS[catKey] || catKey)}</span>` : '';
       // A small Unique pill (label only — no rule text needed on the sheet).
       const badge = db.isUnique ? ' <span class="dp-badge">Unique</span>' : '';
       const qtyPrefix = count > 1 ? `${count}× ` : '';
@@ -6785,16 +6788,16 @@ let activeGroupId = null;
       const thumbSrc = thumbUrl(artSrc);
       const thumbHtml = (thumbSrc && !big) ? `<img class="dp-thumb" src="${esc(thumbSrc)}" alt="" onerror="this.remove()">` : '';
 
-      // Hull tracking boxes replace the numeric Hull cell inside the stat grid.
+      // Hull tracking boxes sit beside the stat grid, filling the card's width.
       const hullHtml = dpHullTrack(db.hull, count, db.tonnage);
-      const statHtml = dpStatLine(eff.stats, eff.mods, hullHtml);
+      const statHtml = `<div class="dp-statrow">${dpStatLine(eff.stats, eff.mods, false)}${hullHtml ? `<div class="dp-statrow-hull">${hullHtml}</div>` : ''}</div>`;
       const weaponsHtml = dpWeaponTable(weaponRows);
       const abilHtml = `${loadsHtml}${sysHtml}${featHtml}${refitHtml}${rulesHtml}`;
       const nameHtml = opts.nameHtml || `${esc(qtyPrefix)}${esc(name)}`;
       const ptsHtml = opts.ptsHtml !== undefined ? opts.ptsHtml
         : (count > 1 ? `${totalPts} pts <span class="dp-each">(${shipPts} ea)</span>` : `${shipPts} pts`);
       const headHtml = `<div class="dp-ship-head">
-            <span class="dp-name-wrap">${thumbHtml}<span class="dp-name">${nameHtml}${tonnageLabel ? ` <span class="dp-ton">${esc(tonnageLabel)}</span>` : ''}${badge}</span></span>
+            <span class="dp-name">${nameHtml}${catTag}${badge}</span>
             <span class="dp-pts">${ptsHtml}</span>
           </div>`;
 
@@ -6806,9 +6809,9 @@ let activeGroupId = null;
         const rowCount = Math.max(1, wr.length + (allLoads.length ? 1 : 0));
         const ruleKw = shipRuleEntriesAll.length ? `<div class="rt-rules">${shipRuleEntriesAll.map(e => esc(e[0])).join(', ')}</div>` : '';
         const ptsStr = count > 1 ? `${totalPts} pts (${shipPts} ea)` : `${shipPts} pts`;
-        const nameCell = `<div class="rt-shipname">${esc(qtyPrefix)}${esc(name)}${tonnageLabel ? ` <span class="rt-ton">${esc(tonnageLabel)}</span>` : ''}${badge} <span class="rt-pts">${ptsStr}</span></div>${ruleKw}${sysHtml}${featHtml}${refitHtml}<div class="rt-hull">${hullHtml}</div>`;
+        const nameCell = `<div class="rt-shipname">${nameHtml}${catKey ? ` <span class="rt-gcat">${esc(CATEGORY_LABELS[catKey] || catKey)}</span>` : ''}${badge} <span class="rt-pts">${ptsStr}</span></div>${ruleKw}${sysHtml}${featHtml}${refitHtml}<div class="rt-hull">${hullHtml}</div>`;
         const sc = k => { const v = eff.stats[k]; return (v === undefined || v === null) ? '' : esc(String(v)); };
-        const statCells = `<td rowspan="${rowCount}">${sc('scan')}</td><td rowspan="${rowCount}">${sc('sig')}</td><td rowspan="${rowCount}">${sc('thrust')}</td><td rowspan="${rowCount}">${eff.stats.hull || ''}</td><td rowspan="${rowCount}">${sc('es')}</td><td rowspan="${rowCount}">${sc('ks')}</td><td rowspan="${rowCount}">${sc('bs')}</td>`;
+        const statCells = ['scan', 'sig', 'thrust', 'hull', 'es', 'ks', 'bs'].map(k => `<td class="rt-stat" rowspan="${rowCount}">${sc(k)}</td>`).join('');
         const wCell = w => {
           const dmg = `${esc(w.damage || '')}${w.type ? ` <span class="dmg-type dmg-type-${esc(w.type)}">${esc(w.type)}</span>` : ''}`;
           const sp = (w.special && w.special !== '-') ? ` <span class="rt-wsp">${specialKeywordsHtml(w.special)}</span>` : '';
@@ -6850,7 +6853,7 @@ let activeGroupId = null;
       } else {
         out += `<div class="dp-ship">
             ${headHtml}
-            ${statHtml}
+            <div class="dp-card-top">${thumbHtml}${statHtml}</div>
             ${hoistChips}
             ${weaponsHtml}
             ${abilHtml}
@@ -6861,20 +6864,6 @@ let activeGroupId = null;
 
     let groupsHtml = '';
     printGroups.forEach(g => {
-      const gPts = g.ships.reduce((t, s) => t + (Number(s.points) || 0), 0);
-      const gCat = g.ships.length > 0 ? (g.ships[0].groupCategory || 'medium') : '';
-      const gCatLabel = gCat ? (CATEGORY_LABELS[gCat] || gCat) : '';
-      const gShips = g.ships.length ? `, ${g.ships.length} ship${g.ships.length !== 1 ? 's' : ''}` : '';
-      if (roster) {
-        groupsHtml += `<tr class="rt-group${gCat ? ` dp-group-cat-${gCat}` : ''}"><td colspan="13">${esc(g.name)}${gCat ? ` <span class="rt-gcat">${gCatLabel}</span>` : ''} <span class="rt-gpts">${gPts} pts${gShips}</span></td></tr>`;
-      } else {
-        groupsHtml += `<div class="dp-group">
-        <div class="dp-group-head">
-          <span class="dp-group-name">${esc(g.name)}${gCat ? ` <span class="dp-group-cat dp-group-cat-${gCat}">${gCatLabel}</span>` : ''}</span>
-          <span class="dp-group-pts">${gPts} pts${gShips}</span>
-        </div>`;
-      }
-
       // Collapse identical ships (same loadout/systems/feature) into one card with N hull tracks.
       const shipBuckets = [];
       g.ships.forEach(ship => {
@@ -6883,11 +6872,32 @@ let activeGroupId = null;
         if (!bucket) { bucket = { key: bucketKey, ship, count: 0 }; shipBuckets.push(bucket); }
         bucket.count++;
       });
-      shipBuckets.forEach(({ ship, count }) => {
-        const db = findShipInDB(f.faction, ship.groupCategory, ship.shipKey);
-        if (db) groupsHtml += shipCardHtml(db, ship, count);
-      });
-
+      const cards = shipBuckets.map(bk => ({ ...bk, db: findShipInDB(f.faction, bk.ship.groupCategory, bk.ship.shipKey) })).filter(bk => bk.db);
+      if (!cards.length) return;
+      const gCat = g.ships[0].groupCategory || 'medium';
+      const label = (bk) => {
+        const qty = bk.count > 1 ? `${bk.count}× ` : '';
+        return (cards.length === 1 && g.name && g.name !== bk.db.name)
+          ? `${esc(g.name)} <span class="dp-name-class">(${qty}${esc(bk.db.name)})</span>`
+          : `${qty}${esc(bk.db.name)}`;
+      };
+      if (cards.length === 1) {
+        const card = shipCardHtml(cards[0].db, cards[0].ship, cards[0].count, { nameHtml: label(cards[0]), cat: gCat });
+        groupsHtml += roster ? card : `<div class="dp-group">${card}</div>`;
+        return;
+      }
+      const gPts = g.ships.reduce((t, s) => t + (Number(s.points) || 0), 0);
+      const gCatLabel = CATEGORY_LABELS[gCat] || gCat;
+      if (roster) {
+        groupsHtml += `<tr class="rt-group"><td colspan="13">${esc(g.name)} <span class="rt-gcat">${gCatLabel}</span> <span class="rt-gpts">${gPts} pts</span></td></tr>`;
+      } else {
+        groupsHtml += `<div class="dp-group">
+        <div class="dp-group-head">
+          <span class="dp-group-name">${esc(g.name)} <span class="dp-group-cat dp-group-cat-${gCat}">${gCatLabel}</span></span>
+          <span class="dp-group-pts">${gPts} pts</span>
+        </div>`;
+      }
+      cards.forEach(bk => { groupsHtml += shipCardHtml(bk.db, bk.ship, bk.count, { nameHtml: label(bk) }); });
       if (!roster) groupsHtml += '</div>';
     });
     if (roster) {
@@ -6916,6 +6926,7 @@ let activeGroupId = null;
               // the card resolves it the same way the screen does.
               flagshipHtml = shipCardHtml(fsp, { ...a, groupCategory: fsp.shipCategory || 'medium' }, fsCount, {
                 card: true,
+                cat: fsp.shipCategory || '',
                 nameHtml: `${fsCount > 1 ? fsCount + '× ' : ''}${flagshipLabel(fsp, true, true)}`,
                 ptsHtml: fsp.ship_cost ? `(${fsp.ship_cost} pts)` : ''
               });
@@ -6947,7 +6958,6 @@ let activeGroupId = null;
       admiralsHtml += `<div class="print-section dp-abilities">
         <div class="print-section-title">Abilities</div>
         <table class="launch-ref-table dp-abilities-table">
-          <thead><tr><th class="dp-abil-name">Ability</th><th class="dp-abil-cost">AP</th><th class="dp-abil-effect">Effect</th></tr></thead>
           <tbody>${abilBody}</tbody>
         </table>
       </div>`;
@@ -7028,7 +7038,7 @@ let activeGroupId = null;
         });
       });
       if (relevantAssets.length > 0) {
-        launchRefHtml = renderLaunchAssetReference(relevantAssets);
+        launchRefHtml = renderLaunchAssetReference(relevantAssets, true);
       }
     }
 
@@ -7094,7 +7104,9 @@ let activeGroupId = null;
   }
 
   function fleetPrintHTML(f) {
-    return settings.printSimple ? buildSimplePrintHTML(f) : buildFullPrintHTML(f);
+    const html = settings.printSimple ? buildSimplePrintHTML(f) : buildFullPrintHTML(f);
+    // The sheet is paper: no tooltips, click handlers or focus stops survive into it.
+    return html.replace(/\s(?:onclick|onkeydown|data-rule-desc|data-tooltip|title|tabindex|role)="[^"]*"/g, '').replace(/\bhas-tooltip\b/g, '');
   }
 
   // Print uses a #print-container the @media print CSS targets.
@@ -7190,20 +7202,17 @@ let activeGroupId = null;
     const onKey = (e) => { if (e.key === 'Escape') closePreview(); };
     document.addEventListener('keydown', onKey);
 
-    // Mark page boundaries on the continuous "paper" surface and report the page
-    // count. Print keeps certain blocks whole (CSS break-inside: avoid — a whole
+    // Report the page count of the continuous "paper" surface. Print keeps certain blocks whole (CSS break-inside: avoid — a whole
     // group when it fits on a page, else each ship card; admiral cards, the launch
     // reference, the glossary), so a naive "every page height" split would draw
     // breaks the printer won't make. Instead we find those atomic blocks and, when
     // one would straddle a boundary, insert a spacer that pushes it to the next page
-    // — how print resolves it. Spacers and break lines are preview-only; doPrintNow
-    // rebuilds clean HTML to print.
+    // — how print resolves it — and counts that pushed space too.
     let pageTimer = null;
     const paginate = () => {
       const s = document.getElementById('pp-surface');
       const label = document.getElementById('pp-pagecount');
       if (!s) return;
-      s.querySelectorAll('.pp-page-break, .pp-page-spacer').forEach(el => el.remove());
       const paper = PRINT_PAPER[printPaperKey()];
       s.style.width = paper.w + 'mm';
       const cs = getComputedStyle(s);
@@ -7217,6 +7226,7 @@ let activeGroupId = null;
       // blocks down. The roster table and 2-column grid don't, so they keep the plain
       // height estimate. Guarded so a measurement hiccup falls back, never blanks.
       const oneColumn = !s.querySelector('.roster-table, .dp-2col, .print-2col, .print-simple');
+      let pushed = 0;              // space print leaves when it moves a block to the next page
       if (oneColumn) {
         try {
           const sTop = s.getBoundingClientRect().top;
@@ -7243,7 +7253,6 @@ let activeGroupId = null;
           const blocks = measured.filter(b => b.h > 0).sort((a, b) => a.top - b.top);
           let offset = 0;            // total spacer height added above the current block
           let pageLimit = pageContentPx;
-          const spacers = [];
           blocks.forEach(b => {
             const top = b.top + offset;
             const bottom = top + b.h;
@@ -7252,32 +7261,19 @@ let activeGroupId = null;
             if (b.breakable || b.h >= pageContentPx) { while (pageLimit < bottom) pageLimit += pageContentPx; return; }
             if (bottom > pageLimit) {                 // would straddle → push to next page
               const gap = pageLimit - top;
-              if (gap > 1) spacers.push({ el: b.el, gap });
               offset += gap;
               pageLimit += pageContentPx;
             }
           });
-          spacers.forEach(({ el, gap }) => {
-            const sp = document.createElement('div');
-            sp.className = 'pp-page-spacer';
-            sp.style.height = gap + 'px';
-            el.parentNode.insertBefore(sp, el);
-          });
+          pushed = offset;
         } catch (e) {
-          s.querySelectorAll('.pp-page-spacer').forEach(el => el.remove());
+          pushed = 0;
         }
       }
 
-      const contentPx = s.scrollHeight - padTop - padBot;
+      const contentPx = s.scrollHeight - padTop - padBot + pushed;
       const pages = Math.max(1, Math.ceil((contentPx - 1) / pageContentPx));
       if (label) label.textContent = pages === 1 ? '1 page' : `${pages} pages`;
-      for (let k = 1; k < pages; k++) {
-        const brk = document.createElement('div');
-        brk.className = 'pp-page-break';
-        brk.style.top = (padTop + k * pageContentPx) + 'px';
-        brk.innerHTML = `<span class="pp-page-break-label">Page ${k + 1}</span>`;
-        s.appendChild(brk);
-      }
     };
     const schedulePaginate = () => { clearTimeout(pageTimer); pageTimer = setTimeout(paginate, 60); };
 
@@ -8811,6 +8807,9 @@ let activeGroupId = null;
       'While an admiral still has picks to make, the rest of its Abilities Table prints with tick boxes.',
       'Core Abilities print even without an admiral, and their text now matches the rulebook word for word.',
       'The print preview has an Abilities switch, and Abilities keep their full text when Rules text is off.',
+      'A group of identical ships prints as one card, with its name, weight class and points said once.',
+      'In Cards the picture, stats and hull boxes sit side by side, stat numbers are bigger, and all the text on the sheet is black.',
+      'No divider lines, left bars, dashed page lines or clickable chips on the print sheet.',
       'Cards always print in two columns. The one-column option is gone: Big cards already covers a single wide card per ship.',
       'Five Famous Admiral bonuses missing from the ship cards were added from the official stats: Cull the Weak (Helena of Asgard), Doomed (Enslaver), Death Mistress (Baba Yaga), Godray Lightvice (Atom) and Twins (Twins of Aaru).',
     ]},
@@ -10050,7 +10049,7 @@ let activeGroupId = null;
 
   // Renders the full launch asset reference panel — stat table for each
   // asset type the group's ships can launch.
-  function renderLaunchAssetReference(assets) {
+  function renderLaunchAssetReference(assets, plain) {
     if (!assets || assets.length === 0) return '';
 
     // One aligned table: offensive assets carry full stats; fighters (defensive)
@@ -10067,7 +10066,7 @@ let activeGroupId = null;
     const offRow = a => {
       const typeLabel = WEAPON_TYPE_LABELS[a.type] || a.type || '';
       const typeCell = a.type ? `<span class="dmg-type dmg-type-${esc(a.type)}">${esc(a.type)}</span>` : '';
-      const special = (a.special && a.special !== '-') ? renderWeaponSpecialChips(a.special) : '';
+      const special = (a.special && a.special !== '-') ? (plain ? specialKeywordsHtml(a.special) : renderWeaponSpecialChips(a.special)) : '';
       return `<tr>
         <td class="lar-name">${esc(a.name)}</td>
         <td>${esc(launchRange(a.name))}</td>
@@ -10084,7 +10083,7 @@ let activeGroupId = null;
       <td>${esc(launchRange(a.name))}</td>
       <td>${esc(a.thrust || '')}</td>
       <td></td><td></td><td></td><td></td>
-      <td class="lar-special">${closeProtectionChip(a.ksReroll)}</td>
+      <td class="lar-special">${plain ? `Close Protection (re-roll ${esc(String(a.ksReroll))})` : closeProtectionChip(a.ksReroll)}</td>
     </tr>`;
 
     return `<div class="launch-ref">
