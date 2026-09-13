@@ -700,6 +700,46 @@ function renderScenario(s){
   ${ships?`<div class="pub-ships">${pubHead('Ships')}<div class="pub-ship-grid">${ships}</div></div>`:''}`;
 }
 
+/* ── Score sheet rows (shared/score.js) ─────────────────────────────────────
+   Built from the scoring sentences themselves: every VP amount a sentence names becomes a
+   control, a counter when it is earned per thing ("for each", "for every", "whenever") and a
+   tick box when it is earned once. Scoring tables become a row per Dropsite size. */
+const SCORE_TABLE=(heading,sub,cols)=>[{heading,sub},...[['Small',2,0],['Medium',3,1],['Large',4,2]].map(([size,hi,lo])=>({text:`${size} Dropsite`,parts:[{kind:'count',vp:hi,label:cols[0]},...(lo?[{kind:'count',vp:lo,label:cols[1]}]:[])]}))];
+const VP_AMOUNT=/(\d+) ?(?:additional )?(?:VP|victory points?)\b/gi;
+function vpRows(html){
+  return String(html).split(/(?<=[.!])\s+(?=[A-Z])/).map(s=>{
+    const p=s.replace(/<[^>]+>/g,'');
+    const parts=[...p.matchAll(VP_AMOUNT)].map(m=>{
+      const before=p.slice(0,m.index), after=p.slice(m.index,m.index+70);
+      const each=/\bfor (each|every)\b|\bwhenever\b|\bequal to\b|\beach time\b/i.test(after)||/\b(whenever|each time|for every)\b/i.test(before);
+      return {kind:each?'count':'check', vp:(/\blos(e|es)\s*$/i.test(before)?-1:1)*+m[1]};
+    });
+    return parts.length?{text:s,parts}:null;
+  }).filter(Boolean);
+}
+const asCounts=rows=>rows.map(r=>({...r,parts:r.parts.map(p=>({...p,kind:'count'}))}));
+// The generator: the rolled objective, then the Standard Scoring it uses
+function genScoreRows(O){
+  return [{heading:O.name},...vpRows(O.b.join(' ')),...(O.std?SCORE_TABLE('Standard Scoring','Rounds 4 & 6',['Control','Contested / Ruined']):[])];
+}
+// A published scenario: its objectives and its own scoring sentences, then the scoring methods it names
+function pubScoreRows(s){
+  const text=[s.scoring,s.special,s.variant].map(pubJoin).join(' ');
+  const rows=[], has=re=>re.test(text);
+  const add=(heading,sub,list)=>{ if(list.length) rows.push({heading,sub},...list); };
+  let std=false;
+  OB.forEach(o=>{ if(new RegExp('\\b'+o.name+'\\b').test(text)){ add(o.name,'',vpRows(o.b.join(' '))); if(o.std) std=true; } });
+  const own=vpRows([s.scoring,s.special,s.variant].map(pubJoin).join(' '));
+  if(own.length) rows.push({heading:'Scenario'},...own);
+  if(has(/\bNormal Scoring\b/)) rows.push(...SCORE_TABLE('Normal Scoring','Rounds 4 & 6',['High Scoring','Low Scoring']));
+  if(has(/\bDemolish/)) rows.push(...SCORE_TABLE('Demolish Scoring','',['Levelled','Ruined']));
+  if(has(/\bFocal [Pp]oint/)) add('Focal Points','Rounds 4 & 6',asCounts(vpRows(SCN_SE1['Focal Points Scoring'].body.join(' '))));
+  if(has(/\bKill Points\b/)) add('Kill Points','',vpRows(SCN_SE1['Kill Points Scoring'].body.join(' ')));
+  if(has(/\bAssess/)) add('Assess','',asCounts(vpRows(SCN_SE1['Assess Scoring'].body.join(' '))));
+  if(std||has(/\bStandard Scoring\b/)) rows.push(...SCORE_TABLE('Standard Scoring','Rounds 4 & 6',['Control','Contested / Ruined']));
+  return rows;
+}
+
 /* ── What a data-tip key shows (shared/tooltip.js opens it) ──────────────────
    "stat:scan", "feat:Power Plant", "ds:3", "scen:Large Object", "ship:Tugboat", "wtype:K". */
 function tipHTML(key){

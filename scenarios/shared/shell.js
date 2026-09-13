@@ -28,7 +28,7 @@ const ScenarioShell = (() => {
     mark: '<svg class="vp-dm" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 15,8 8,15 1,8" fill="#B8952F"/></svg>',
   };
   const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  let G, app, query = '';
+  let G, app, query = '', current = null, score = null;
   const all = () => G.groups.flatMap(g => g.items);
 
   /* ── Index ── */
@@ -51,7 +51,6 @@ const ScenarioShell = (() => {
   }
   function renderIndex() {
     document.title = G.indexDocTitle;
-    document.body.classList.remove('has-trk');
     app.innerHTML = `<div class="idx" style="--cols:${G.columns.length}">
       <div class="idx-head">
         <h1 class="idx-h">${G.indexTitle}</h1>
@@ -70,65 +69,23 @@ const ScenarioShell = (() => {
     });
   }
 
-  /* ── Tracker: round and VP, kept per scenario on this device ── */
-  const key = s => `${G.storageKey}-scenario-track:${G.id(s)}`;
-  function load(s) {
-    try { const t = JSON.parse(localStorage.getItem(key(s))); if (t && Array.isArray(t.vp)) return t; } catch (e) {}
-    return { round: 1, vp: [0, 0] };
-  }
-  function save(s, t) { try { localStorage.setItem(key(s), JSON.stringify(t)); } catch (e) {} }
-  function sizeTrack() {
-    const el = document.getElementById('trk');
-    if (el) document.documentElement.style.setProperty('--trk-h', el.getBoundingClientRect().height + 'px');
-  }
-  function drawTrack(s, t) {
-    const el = document.getElementById('trk');
-    if (!el) return;
-    const mark = G.markRound && G.markRound(s, t.round) ? ICON.mark : '';
-    el.innerHTML = `<div class="trk-g"><span class="trk-l">Round</span><button data-a="r-" aria-label="Previous round">−</button><output aria-live="polite">${t.round}${mark}</output><button data-a="r+" aria-label="Next round">+</button></div>
-      ${t.vp.map((v, i) => `<div class="trk-g"><span class="trk-l">Player ${i + 1}</span><button data-a="v-" data-p="${i}" aria-label="Player ${i + 1} VP down">−</button><output aria-live="polite">${v}</output><button data-a="v+" data-p="${i}" aria-label="Player ${i + 1} VP up">+</button></div>`).join('')}
-      ${t.vp.length < 4 ? '<button class="trk-plain" data-a="p+">Add player</button>' : ''}
-      ${t.vp.length > 2 ? '<button class="trk-plain" data-a="p-">Remove player</button>' : ''}
-      <button class="trk-plain" data-a="clear">Clear</button>`;
-    sizeTrack();
-  }
-  function wireTrack(s) {
-    let t = load(s);
-    drawTrack(s, t);
-    document.getElementById('trk').addEventListener('click', e => {
-      const b = e.target.closest('button');
-      if (!b) return;
-      const a = b.dataset.a, p = b.dataset.p;
-      switch (a) {
-        case 'r-': t.round = Math.max(1, t.round - 1); break;
-        case 'r+': t.round++; break;
-        case 'v-': t.vp[+p]--; break;
-        case 'v+': t.vp[+p]++; break;
-        case 'p+': if (t.vp.length < 4) t.vp.push(0); break;
-        case 'p-': if (t.vp.length > 2) t.vp.pop(); break;
-        case 'clear': t = { round: 1, vp: t.vp.map(() => 0) }; break;
-      }
-      save(s, t);
-      drawTrack(s, t);
-      const again = document.querySelector(`#trk button[data-a="${a}"]${p !== undefined ? `[data-p="${p}"]` : ''}`);
-      if (again) again.focus();
-    });
-  }
-
   /* ── Scenario ── */
   function renderOne(s) {
     document.title = `${G.name(s)}: ${G.titleSuffix}`;
-    document.body.classList.add('has-trk');
     app.innerHTML = `<div class="bar"><div class="bar-in">
         <a class="bar-back" href="#">← All scenarios</a>
-        <div class="trk" id="trk"></div>
+        <span></span>
         <div class="acts">
           <button class="icon-btn" id="share" aria-label="Share">${ICON.share}</button>
           <button class="icon-btn" id="print" aria-label="Print">${ICON.print}</button>
         </div>
       </div></div>
+      ${G.scoreRows && window.ScoreSheet ? '<div class="sheet ss-host" id="score"></div>' : ''}
       <article class="sheet">${G.render(s)}</article>`;
-    wireTrack(s);
+    current = s;
+    if (G.scoreRows && window.ScoreSheet) {
+      score = ScoreSheet.mount(document.getElementById('score'), { key: `${G.storageKey}-score:${G.id(s)}`, rows: G.scoreRows(s), markRound: r => !!(G.markRound && G.markRound(s, r)) });
+    }
     document.getElementById('print').addEventListener('click', () => window.print());
     document.getElementById('share').addEventListener('click', async e => {
       const b = e.currentTarget, url = location.href;
@@ -146,7 +103,6 @@ const ScenarioShell = (() => {
   /* ── An extra page a game supplies, such as a printable chart ── */
   function renderView(v) {
     document.title = `${v.title}: ${G.titleSuffix}`;
-    document.body.classList.remove('has-trk');
     app.innerHTML = `<div class="bar"><div class="bar-in">
         <a class="bar-back" href="#">← All scenarios</a>
         <span></span>
@@ -165,11 +121,12 @@ const ScenarioShell = (() => {
   }
 
   return {
+    // a page calls this when something it shows changes what can score (a Variant, a game size)
+    rescore() { if (score && current) score.update(G.scoreRows(current)); },
     start(game) {
       G = game;
       app = document.getElementById('app');
       addEventListener('hashchange', route);
-      addEventListener('resize', sizeTrack);
       route();
     },
   };

@@ -51,6 +51,14 @@ the shared `data/rules-wiki.json`, so no app-code change was needed.
   once the printer dropped their fill. Gold diamonds are gone from headings,
   bullets and the layout list, on both games' scenario pages. The Standard
   Scoring table keeps its own width instead of spreading across the card.
+- **Score sheet, after Mission Geist.** The round and VP bar is gone. Under
+  the scenario title (above the card on the generator) a Score panel lists
+  every scoring rule as the rule states it: a tick box when it scores once, a
+  counter when it scores per thing, with its VP on the right; Standard, Normal
+  and Demolish Scoring are a row per Dropsite size. Rounds 1-6 (scoring rounds
+  underlined), players 2-4 with a running total each, Other VP for anything the
+  rules do not fix to a number, Clear. Dropzone objectives read their X/Y VP
+  and follow the game size and Variant. `scenarios/shared/score.js`.
 - **Variants on the generator map, checked against 12.1.4.** Gridlocked had
   armed existing Medium Space Stations too; only the Medium Cities it replaces
   gain the Outpost, Defence Gun and Hangar. Secure Comms Array falls back to

@@ -67,6 +67,7 @@ main{flex:1;width:100%;}
 .trk output .vp-dm{width:9px;height:9px;}
 .trk .trk-plain{width:auto;padding:0 10px;font-size:.85rem;font-weight:500;}
 .sheet{max-width:1180px;margin:0 auto;padding:4mm 0 10mm;}
+.ss-host{padding:4mm 20px 0;}
 
 /* Footer */
 .foot{background:#f3f1ec;padding:10px 20px;font-size:.78rem;color:#5d5850;}

@@ -48,6 +48,7 @@
 <script src="scenario-lib.js"></script>
 <script src="scenario-hotspots.js"></script>
 <script src="../shared/tooltip.js"></script>
+<script src="../shared/score.js"></script>
 <script src="../shared/shell.js"></script>
 <script>
 /* The Fauna button inside a scenario opens the Fauna rules */
@@ -81,6 +82,7 @@ ScenarioShell.start({
   ],
   randomPool:s=>SCENARIO_MAPS.has(s.id),
   render:renderScenario,
+  scoreRows:pubScoreRows,
   // Standard, Normal and Focal Points scoring award VP in rounds 4 and 6; so do objectives that use Standard Scoring
   markRound:(s,r)=>(r===4||r===6)&&(/\b(Standard|Normal) Scoring\b|\bFocal [Pp]oint/.test(scoringText(s))||OB.some(o=>o.std&&new RegExp('\\b'+o.name+'\\b').test(scoringText(s)))),
 });

@@ -135,6 +135,8 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 
 .wrap{flex:1;overflow-y:auto;padding:20px;background:var(--paper);}
 .card{background:#fff;position:relative;overflow:hidden;width:100%;max-width:10in;margin:0 auto;}
+.gen-score{max-width:10in;margin:0 auto 16px;}
+@media print{.gen-score{display:none;}}
 
 
 @media print{
@@ -258,6 +260,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 
 
 <div class="wrap">
+  <div class="gen-score" id="score"></div>
   <div class="card" id="card" style="display:none">
     <div id="content"></div>
 
@@ -281,6 +284,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 <script src="../scenario-terms.js"></script>
 <script src="../scenario-lib.js"></script>
 <script src="../../shared/tooltip.js"></script>
+<script src="../../shared/score.js"></script>
 <script>
 // ─── COMBINED MAP SYSTEM ─────────────────────────────────────────────────────
 // Single SVG: deployment zones (semi-transparent) + layout dropsites overlaid.
@@ -867,6 +871,8 @@ ${varH}
 </div>`;
 
   document.getElementById('content').innerHTML=html;
+  // A new roll starts a fresh score; a new player count keeps it
+  ScoreSheet.mount(document.getElementById('score'),{key:'dfc-generator-score',rows:genScoreRows(O),markRound:r=>O.std&&(r===4||r===6),reset:!keep});
   document.getElementById('card').style.display='block';
   const es=document.getElementById('empty-state'); if(es) es.style.display='none';
 
