@@ -5300,6 +5300,7 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   background: #fff; width: 210mm; max-width: 100%;
   padding: 12mm; box-shadow: 0 4px 24px rgba(0,0,0,0.4); border-radius: 2px;
+  font-size: 10pt; /* the printed body size, so the preview measures what prints */
 }
 /* Page-count readout + density select in the preview bar. */
 .pp-pagecount { font-size: var(--text-sm); color: #cdd6e0; font-variant-numeric: tabular-nums; min-width: 5.5em; }
@@ -5853,6 +5854,13 @@ h1, h2, h3, h4, h5, h6 {
    are self-contained and always expand the container to their full height. */
 .dp-groups.dp-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
 .dp-group { margin-bottom: 8px; break-inside: avoid; }
+/* Rulebook section number at the end of a rule's text. */
+.dp-rule-sec { color: #000; font-size: 0.9em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* Packed by packPrintColumns: one block per printed page, two stacked columns. */
+.dp-groups.dp-2col.dp-packed { display: block; }
+.dp-page { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+@media screen { .dp-page-break { margin-top: var(--pp-push, 0px); } }
+@media print { .dp-page-break { break-before: page; } }
 .dp-2col .dp-group { break-inside: avoid; }
 .dp-group-head {
   display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
@@ -7199,6 +7207,11 @@ h1, h2, h3, h4, h5, h6 {
   padding: var(--sp-md) var(--sp-lg);
   font-size: var(--text-xs);
   color: var(--ink-muted);
+  /* Rides the bottom of the screen while you scroll, then settles into place
+     above the big WarLore footer once you reach it. */
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-topbar);
 }
 /* On the builder the three sticky panels already fill 100vh - topbar. Pin the
    footer to the very bottom of the viewport so it's always visible without any

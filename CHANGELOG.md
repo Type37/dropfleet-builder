@@ -5,6 +5,27 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Packed print columns, rulebook section numbers, sticky credits footer
+
+**Packing** (`packPrintColumns`, desktop Cards): groups are measured and cut into
+explicit pages (`.dp-page`, `break-before: page`, a matching `--pp-push` top
+margin on screen). A page is one ordered run split into left and right at the
+most even cut that fits both columns; when the next group will not fit, the
+tallest later group of the same weight class that does takes the gap. A group
+taller than a page gets one to itself. The print container is laid out off
+screen at the printed width and 10pt to measure; the preview surface is 10pt
+too. Checked by printToPDF: a 3x PHR Fast Play fleet fills four A4 pages.
+
+**Section numbers**: `sharedRules` in `data/fleet-index.json` gains `section`,
+each confirmed against the numbered heading in the 2.3.1 rulebook PDF (60 of
+60 glossary rules). Close Protection is 8.3.3.1. Reinforced Armour is printed
+in the book as 14.1.221 (the next heading is 14.1.22, nothing is 14.1.21) and
+is kept as printed. Payload/Porter map to 14.1.11/14.1.12 for S and L only.
+Faction-only rules have no section. The print sheet's `p.N` after the name is
+replaced by the section at the end of the text, both apps.
+
+**Footer**: `.game-info-footer` is `position: sticky; bottom: 0` off the builder.
+
 ### 2026-09-13: Printed Abilities table groups named down the side
 
 Both apps. The group heading rows (`dp-abil-grouprow` / `pr-abil-group`) are

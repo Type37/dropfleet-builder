@@ -553,7 +553,7 @@
     const wrap = (e, val) => {
       let desc = e.description || '';
       if (val && /\bX\b/.test(desc)) desc = desc.replace(/\bX\b/g, val);
-      return { name, description: desc, page: e.page || '' };
+      return { name, description: desc, page: e.page || '', section: e.section || '' };
     };
     if (RULES_DB[name]) return wrap(RULES_DB[name]);
     const numM = name.match(/^(.*?)[-\s]?(\d+)$/);
@@ -4639,6 +4639,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Rulebook section numbers on the printed sheet', items: [
+      'Rules on the printed sheet end with their rulebook section number (Aegis-X 14.1.1, Penetrator 14.2.24). Rules that are only in a faction’s stats have no rulebook section and show none.',
+    ]},
     { date: '2026-09-13', title: 'Printed Abilities table: group names down the side', items: [
       'Each group in the printed Abilities table (your admiral’s, Core Abilities) is named down the left edge beside its own rows, with a rule between groups, instead of a grey heading row. The table no longer has an Abilities title above it.',
     ]},
@@ -6267,6 +6270,11 @@
       const r = lookupRule(name);
       if (r.description) usedRules.set(name, r.description);
     };
+    // Rulebook section (2.3.1) closing a rule's text; faction-only rules have none.
+    const ruleSecHtml = name => {
+      const sec = lookupRule(name).section;
+      return sec ? ` <span class="pr-rule-sec">${esc(sec)}</span>` : '';
+    };
     const addRuleText = (name, description) => {
       if (name && description && !usedRules.has(name)) usedRules.set(name, description);
     };
@@ -6442,7 +6450,7 @@
         ${printLaunchTable(laMap, loads, collectRule)}
         ${armLines.length ? `<div class="pr-opts"><b>Armaments:</b> ${armLines.join('; ')}</div>` : ''}
         ${upgLines.map(t => `<div class="pr-opts"><b>Upgrade:</b> ${t}</div>`).join('')}
-        ${stRules.map(([n, d]) => `<div class="pr-gloss pr-inline-rule"><b>${esc(n)}</b>${d ? ': ' + ruleHtml(d) : ''}</div>`).join('')}
+        ${stRules.map(([n, d]) => `<div class="pr-gloss pr-inline-rule"><b>${esc(n)}</b>${d ? ': ' + ruleHtml(d) + ruleSecHtml(n) : ''}</div>`).join('')}
       </div>`;
     }
 
@@ -6453,7 +6461,7 @@
     const secObjsHtml = allObjs.map(o => `<div class="pr-gloss pr-check-row"><span class="pr-check${chosen.has(o.name) ? ' on' : ''}" aria-hidden="true">${chosen.has(o.name) ? '✓' : ''}</span><span><b>${esc(o.name)}</b>${o.description ? ': ' + ruleHtml(o.description) : ''}</span></div>`).join('');
 
     const glossary = [...usedRules.entries()].sort((a, b) => a[0].localeCompare(b[0]))
-      .map(([n, d]) => `<div class="pr-gloss"><b>${esc(n)}</b>: ${ruleHtml(d)}</div>`).join('');
+      .map(([n, d]) => `<div class="pr-gloss"><b>${esc(n)}</b>: ${ruleHtml(d)}${ruleSecHtml(n)}</div>`).join('');
 
     root.innerHTML = `
       <div class="pr-header">
@@ -6609,7 +6617,7 @@
     // ship-lore.json (216K) were unused dead weight and are no longer fetched.
     await fetch('../data/fleet-index.json').then(r => r.json()).then(idx => {
       Object.entries(idx.sharedRules || {}).forEach(([k, v]) => {
-        RULES_DB[k] = (typeof v === 'string') ? { description: v, page: '' } : { description: v.description || '', page: v.page || '' };
+        RULES_DB[k] = (typeof v === 'string') ? { description: v, page: '' } : { description: v.description || '', page: v.page || '', section: v.section || '' };
       });
       SECONDARY_OBJECTIVES = idx.secondaryObjectives || [];
       STATION_ARMAMENTS = idx.stationArmaments || null;

@@ -698,7 +698,7 @@ let activeGroupId = null;
         if (typeof v === 'string') {
           sharedRulesDB[k] = { description: v, page: '' };
         } else {
-          sharedRulesDB[k] = { description: v.description || '', page: v.page || '' };
+          sharedRulesDB[k] = { description: v.description || '', page: v.page || '', section: v.section || '' };
         }
       });
     }
@@ -4131,7 +4131,7 @@ let activeGroupId = null;
   // "Reave-2" reads "...reduce ... by 2" instead of "...by X".
   function ruleWithValue(rule, val) {
     if (!rule || !val || !/\bX\b/.test(rule.description || '')) return rule;
-    return { description: rule.description.replace(/\bX\b/g, val), page: rule.page };
+    return { description: rule.description.replace(/\bX\b/g, val), page: rule.page, section: rule.section };
   }
   function lookupRuleFull(name) {
     // Returns {description, page} or null. Single source of truth: the shared
@@ -6645,7 +6645,13 @@ let activeGroupId = null;
     const hoistedShipDefs = {};
     const hoistedWeaponDefs = {};
     const allLaunchAssetNames = new Set();
-    const ruleSpan = ([n, d, p]) => `<span class="dp-rule"><b>${esc(n)}${p ? ` p.${esc(p)}` : ''}:</b> ${ruleHtml(d)}</span>`;
+    // The rulebook section number (2.3.1) closes the rule text, so the name reads
+    // clean and the reference is where you finish reading. Faction-only rules have
+    // no rulebook section and show none.
+    const ruleSpan = ([n, d]) => {
+      const sec = (lookupRuleFull(n) || {}).section;
+      return `<span class="dp-rule"><b>${esc(n)}:</b> ${ruleHtml(d)}${sec ? ` <span class="dp-rule-sec">${esc(sec)}</span>` : ''}</span>`;
+    };
     const chipsHtml = names => names.length
       ? `<div class="dp-systems"><b>Rules:</b> ${names.map(esc).join(', ')}</div>` : '';
 
@@ -6900,7 +6906,7 @@ let activeGroupId = null;
       };
       if (cards.length === 1) {
         const card = shipCardHtml(cards[0].db, cards[0].ship, cards[0].count, { nameHtml: label(cards[0]), cat: gCat });
-        groupsHtml += roster ? card : `<div class="dp-group">${card}</div>`;
+        groupsHtml += roster ? card : `<div class="dp-group" data-cat="${esc(gCat)}">${card}</div>`;
         return;
       }
       const gPts = g.ships.reduce((t, s) => t + (Number(s.points) || 0), 0);
@@ -6908,7 +6914,7 @@ let activeGroupId = null;
       if (roster) {
         groupsHtml += `<tr class="rt-group"><td colspan="13">${esc(g.name)} <span class="rt-gcat">${gCatLabel}</span> <span class="rt-gpts">${gPts} pts</span></td></tr>`;
       } else {
-        groupsHtml += `<div class="dp-group">
+        groupsHtml += `<div class="dp-group" data-cat="${esc(gCat)}">
         <div class="dp-group-head">
           <span class="dp-group-name">${esc(g.name)} <span class="dp-group-cat dp-group-cat-${gCat}">${gCatLabel}</span></span>
           <span class="dp-group-pts">${gPts} pts</span>
@@ -7154,6 +7160,107 @@ let activeGroupId = null;
     const view = (location.hash.slice(1) || 'landing').split('/')[0];
     return currentFleet && (view === 'builder' || view === 'play') ? currentFleet : null;
   }
+  // Cards print two-up. A CSS grid pairs cards in rows, so a tall card leaves a
+  // hole beside a short one, and a group too tall for what is left of a page is
+  // pushed whole to the next one, leaving the bottom of the page blank. Instead
+  // the groups are placed by measured height, page by page (see bestCut), and
+  // when the next one will not fit, a later group of the SAME weight class that
+  // does takes the gap, so heaviest-first still holds across classes. Pages
+  // become explicit blocks (break-before: page in print, a
+  // matching top margin on screen), so the preview shows the breaks print makes.
+  //
+  // Re-runnable: groups carry their original order and are put back into the
+  // plain grid before measuring, so a re-pack after images load starts clean.
+  function packPrintColumns(root, pxPerMm) {
+    const wrap = root.querySelector('.dp-groups.dp-2col');
+    if (!wrap || !(pxPerMm > 0)) return;
+    const paper = PRINT_PAPER[printPaperKey()];
+    const pageH = (paper.h - 2 * PRINT_MARGIN_MM) * pxPerMm;
+    const groups = [...wrap.querySelectorAll('.dp-group')];
+    if (!groups.length) return;
+    groups.forEach((g, i) => { if (g.dataset.order === undefined) g.dataset.order = String(i); });
+    groups.sort((a, b) => a.dataset.order - b.dataset.order);
+    wrap.classList.remove('dp-packed');
+    wrap.querySelectorAll('.dp-page').forEach(p => p.remove());
+    groups.forEach(g => wrap.appendChild(g));
+
+    const sheet = wrap.closest('.print-fleet') || root;
+    const top = wrap.getBoundingClientRect().top - sheet.getBoundingClientRect().top;
+    const items = groups.map(el => ({
+      el, cat: el.dataset.cat || '',
+      h: el.getBoundingClientRect().height + (parseFloat(getComputedStyle(el).marginBottom) || 0),
+    }));
+
+    // A page reads down the left column, then the right, so its groups are one
+    // ordered run cut in two. Groups join the page while some cut still fits both
+    // columns; the cut used is the one that leaves the columns most even.
+    const bestCut = (run, cap) => {
+      const total = run.reduce((t, it) => t + it.h, 0);
+      // From the far end, so a tie keeps more in the left column (a lone group
+      // sits on the left, not alone on the right).
+      let best = -1, bestTall = Infinity, left = total;
+      for (let k = run.length; k >= 0; k--) {
+        if (k < run.length) left -= run[k].h;
+        const tall = Math.max(left, total - left);
+        if (left <= cap && total - left <= cap && tall < bestTall) { best = k; bestTall = tall; }
+      }
+      return best;
+    };
+    const pages = [];
+    const queue = items.slice();
+    let cap = pageH - (top % pageH);
+    while (queue.length) {
+      const run = [];
+      for (;;) {
+        if (!queue.length) break;
+        let pick = bestCut([...run, queue[0]], cap) >= 0 ? 0 : -1;
+        if (pick < 0) {
+          // Fill the gap with a later group of the same weight class, the tallest that fits.
+          for (let i = 1; i < queue.length && queue[i].cat === queue[0].cat; i++) {
+            if (bestCut([...run, queue[i]], cap) >= 0 && (pick < 0 || queue[i].h > queue[pick].h)) pick = i;
+          }
+        }
+        if (pick < 0) break;
+        run.push(queue.splice(pick, 1)[0]);
+      }
+      if (!run.length) {
+        // Nothing fits: a short first page moves on; a group taller than a whole
+        // page takes one to itself and breaks inside.
+        if (cap < pageH) { pages.push({ cols: [[], []] }); cap = pageH; continue; }
+        run.push(queue.shift());
+        pages.push({ cols: [run, []] });
+      } else {
+        const k = bestCut(run, cap);
+        pages.push({ cols: [run.slice(0, k), run.slice(k)] });
+      }
+      cap = pageH;
+    }
+
+    wrap.classList.add('dp-packed');
+    let first = true;
+    pages.forEach(p => {
+      if (!p.cols[0].length && !p.cols[1].length) return;
+      const pg = document.createElement('div');
+      pg.className = 'dp-page' + (first && p === pages[0] ? '' : ' dp-page-break');
+      first = false;
+      p.cols.forEach(col => {
+        const d = document.createElement('div');
+        d.className = 'dp-page-col';
+        col.forEach(it => d.appendChild(it.el));
+        pg.appendChild(d);
+      });
+      wrap.appendChild(pg);
+    });
+    // On screen, push each new page down to where the paper's page starts.
+    wrap.querySelectorAll('.dp-page-break').forEach(pg => {
+      pg.style.marginTop = '0px';
+      const t = pg.getBoundingClientRect().top - sheet.getBoundingClientRect().top;
+      const boundary = Math.ceil((t - 0.5) / pageH) * pageH;
+      pg.style.setProperty('--pp-push', `${Math.max(0, boundary - t)}px`);
+      pg.style.marginTop = '';
+    });
+  }
+
   function buildPrintContainer() {
     document.getElementById('print-container')?.remove();
     const fleet = fleetOnScreen();
@@ -7163,6 +7270,15 @@ let activeGroupId = null;
     printDiv.id = 'print-container';
     printDiv.innerHTML = fleetPrintHTML(fleet);
     document.body.appendChild(printDiv);
+    // Lay the sheet out off screen at the printed width and type size to measure
+    // the groups for packing, then hand it back to the print stylesheet.
+    if (printDiv.querySelector('.dp-2col')) {
+      const paper = PRINT_PAPER[printPaperKey()];
+      const widthMm = paper.w - 2 * PRINT_MARGIN_MM;
+      printDiv.style.cssText = `display:block;position:absolute;left:-10000px;top:0;visibility:hidden;width:${widthMm}mm;font-size:10pt`;
+      packPrintColumns(printDiv, printDiv.getBoundingClientRect().width / widthMm);
+      printDiv.style.cssText = '';
+    }
     return printDiv;
   }
 
@@ -7238,6 +7354,7 @@ let activeGroupId = null;
       const pxPerMm = s.getBoundingClientRect().width / paper.w;
       const pageContentPx = (paper.h - 2 * PRINT_MARGIN_MM) * pxPerMm;
       if (!(pageContentPx > 0)) return;
+      try { packPrintColumns(s, pxPerMm); } catch (e) { /* the plain grid still prints */ }
 
       // 1-column layouts stack as a simple vertical run, so we can push straddling
       // blocks down. The roster table and 2-column grid don't, so they keep the plain
@@ -8816,6 +8933,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Fuller printed pages, rulebook section numbers', items: [
+      'Cards print two columns that fill each page: groups run down the left column then the right, the two kept even, and a later group of the same weight class fills a gap at the bottom of a page. No more space beside a tall card or a blank half page before a break. The preview shows the same page breaks.',
+      'Rules on the printed sheet end with their rulebook section number (Aegis-X 14.1.1, Penetrator 14.2.24) in place of a page number after the name. Rules that are only in a faction’s stats have no rulebook section and show none.',
+      'The credits footer stays at the bottom of the screen as you scroll, and settles above the WarLore footer when you reach it.',
+    ]},
     { date: '2026-09-13', title: 'Printed Abilities table: group names down the side', items: [
       'Each group in the printed Abilities table (your admiral’s, Core Abilities) is named down the left edge beside its own rows, with a rule between groups, instead of a grey heading row. The table no longer has an Abilities title above it.',
     ]},
