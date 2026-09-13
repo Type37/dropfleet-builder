@@ -8935,7 +8935,7 @@ let activeGroupId = null;
   const CHANGELOG = [
     { date: '2026-09-13', title: 'Fuller printed pages, rulebook section numbers', items: [
       'Cards print two columns that fill each page: groups run down the left column then the right, the two kept even, and a later group of the same weight class fills a gap at the bottom of a page. No more space beside a tall card or a blank half page before a break. The preview shows the same page breaks.',
-      'Rules on the printed sheet end with their rulebook section number (Aegis-X 14.1.1, Penetrator 14.2.24) in place of a page number after the name. Rules that are only in a faction’s stats have no rulebook section and show none.',
+      'Rules on the printed sheet end with their rulebook section number in small grey type (Aegis-X 14.1.1, Penetrator 14.2.24) in place of a page number after the name. Rules that are only in a faction’s stats have no rulebook section and show none.',
       'The credits footer stays at the bottom of the screen as you scroll, and settles above the WarLore footer when you reach it.',
     ]},
     { date: '2026-09-13', title: 'Printed Abilities table: group names down the side', items: [

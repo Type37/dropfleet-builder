@@ -5855,7 +5855,7 @@ h1, h2, h3, h4, h5, h6 {
 .dp-groups.dp-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
 .dp-group { margin-bottom: 8px; break-inside: avoid; }
 /* Rulebook section number at the end of a rule's text. */
-.dp-rule-sec { color: #000; font-size: 0.9em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.dp-rule-sec { color: #5c5c5c; font-size: 0.8em; font-variant-numeric: tabular-nums; white-space: nowrap; }
 /* Packed by packPrintColumns: one block per printed page, two stacked columns. */
 .dp-groups.dp-2col.dp-packed { display: block; }
 .dp-page { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }

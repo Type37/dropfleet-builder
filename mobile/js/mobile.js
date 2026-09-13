@@ -4640,7 +4640,7 @@
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
     { date: '2026-09-13', title: 'Rulebook section numbers on the printed sheet', items: [
-      'Rules on the printed sheet end with their rulebook section number (Aegis-X 14.1.1, Penetrator 14.2.24). Rules that are only in a faction’s stats have no rulebook section and show none.',
+      'Rules on the printed sheet end with their rulebook section number in small grey type (Aegis-X 14.1.1, Penetrator 14.2.24). Rules that are only in a faction’s stats have no rulebook section and show none.',
     ]},
     { date: '2026-09-13', title: 'Printed Abilities table: group names down the side', items: [
       'Each group in the printed Abilities table (your admiral’s, Core Abilities) is named down the left edge beside its own rows, with a rule between groups, instead of a grey heading row. The table no longer has an Abilities title above it.',
