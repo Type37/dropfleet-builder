@@ -818,7 +818,7 @@ function renderScenario(s){
   // written out in full just below, highlighted in its side's colour. Sentences with the scenario's own rules stay, as paragraphs.
   const METHOD_ONLY=new RegExp(`^(?:(?:${SIDE_LBL}\\s*[-–:]\\s*)?(?:${METHODS})\\s*[,.]?\\s*)+$`,'i');
   const scoreText=[s.scoring,s.special,s.variant].map(J).join(' ');
-  const sides={}; OB.forEach(o=>{ const m=scoreText.match(new RegExp(`\\b(${SIDE_LBL})\\s*[-–:]\\s*${o.name}\\b`,'i')); if(m) sides[o.name]=/^red/i.test(m[1])?'red':/^blue/i.test(m[1])?'blue':/^attack/i.test(m[1])?att:(att==='red'?'blue':'red'); });
+  const sides=objectiveSides(s);
   const ownScoring=[].concat(s.scoring||[]).map(p=>String(p).split(/(?<=\.)\s+(?=[A-Z])/).filter(x=>!METHOD_ONLY.test(x.trim())).join(' ')).filter(p=>p.trim());
   const score=s.scoring?(ownScoring.length?SW(pubParas(ownScoring)):'')+pubScoring(scoreText,sides):'';
   const tbls=(s.tables||(s.table?[s.table]:[])).map(pubTable).join('');
@@ -918,12 +918,33 @@ function genScoreRows(O){
   return [{heading:O.name},...vpRows(O.b.join(' ')),...(O.std?SCORE_TABLE('Standard Scoring','Rounds 4 & 6',['Control','Contest']):[])];
 }
 // A published scenario: its objectives and its own scoring sentences, then the scoring methods it names
+// Which side an objective is given to ("Attackers-Raze, Defenders-Protect."): {Raze:'red', Protect:'blue'}
+function objectiveSides(s){
+  const att=attackerSide(s), text=[s.scoring,s.special,s.variant].map(pubJoin).join(' '), sides={};
+  OB.forEach(o=>{ const m=text.match(new RegExp(`\\b(Attackers?|Defenders?|Red(?: players?)?|Blue(?: players?)?)\\s*[-–:]\\s*${o.name}\\b`,'i')); if(m) sides[o.name]=/^red/i.test(m[1])?'red':/^blue/i.test(m[1])?'blue':/^attack/i.test(m[1])?att:(att==='red'?'blue':'red'); });
+  return sides;
+}
+// Rulebook 12.1.5 objectives whose VP is a multiple of Standard Scoring get rows per Dropsite size:
+// Raze: double Standard Scoring for each Levelled (Control column) or Ruined (Contest column) Dropsite 24" or more away, at the end.
+// Protect: additional Standard Scoring for your nominated Dropsite while it is not Levelled or Ruined; subtracted at the end if Levelled.
+const SIZES_VP=[['Small',2,0],['Medium',3,1],['Large',4,2]];
+function objectiveRows(o){
+  if(o.name==='Raze') return [
+    ...SIZES_VP.map(([size,hi,lo])=>({text:`${size} Dropsite 24" or more away`,parts:[{kind:'count',vp:hi*2,label:'Levelled'},...(lo?[{kind:'count',vp:lo*2,label:'Ruined'}]:[])]})),
+    ...vpRows(o.b.join(' ')).filter(r=>/500 points/.test(r.text)).map(r=>({...r,text:'For every 500 points of Ships and Admirals destroyed'}))];
+  if(o.name==='Protect') return [
+    ...SIZES_VP.map(([size,hi,lo])=>({text:`Your nominated ${size} Dropsite`,parts:[{kind:'count',vp:hi,label:'Control'},...(lo?[{kind:'count',vp:lo,label:'Contest'}]:[])]})),
+    ...SIZES_VP.map(([size,hi])=>({text:`Your nominated ${size} Dropsite Levelled, end of game`,parts:[{kind:'check',vp:-hi}]}))];
+  return vpRows(o.b.join(' '));
+}
+
 function pubScoreRows(s){
   const text=[s.scoring,s.special,s.variant].map(pubJoin).join(' ');
   const rows=[], has=re=>re.test(text);
   const add=(heading,sub,list)=>{ if(list.length) rows.push({heading,sub},...list); };
   let std=false;
-  OB.forEach(o=>{ if(new RegExp('\\b'+o.name+'\\b').test(text)){ add(o.name,'',vpRows(o.b.join(' '))); if(o.std) std=true; } });
+  const sides=objectiveSides(s);
+  OB.forEach(o=>{ if(new RegExp('\\b'+o.name+'\\b').test(text)){ add(o.name+(sides[o.name]?` - ${sides[o.name]==='red'?'Red':'Blue'} Player`:''),o.name==='Protect'?'Rounds 4 & 6':'',objectiveRows(o)); if(o.std) std=true; } });
   const own=vpRows([s.scoring,s.special,s.variant].map(pubJoin).join(' '));
   if(own.length) rows.push({heading:'Scenario'},...own);
   if(has(/\bNormal Scoring\b/)) rows.push(...SCORE_TABLE('Normal Scoring','Rounds 4 & 6',['Control','Contest']));
