@@ -523,8 +523,9 @@ const SCENARIOS=[
    deployment:`Both Players Close, from opposite table edges as shown. The Ether Drake is deployed in the centre of the table.`,
    scoring:[`Standard Scoring.`,
             `The player that deals the final point of damage to the Ether Drake scores 12VP.`],
-   special:[`Each Space Station is armed with a Mass Driver Armament and a Laser Armament.`,
-            `The Ether Drake does not follow the normal activation order. It activates during the Cleanup step of the End Phase, and the player with 2nd initiative that round activates it.`,
+   special:[`Each Space Station is armed with a Mass Driver Armament and a Laser Armament.`],
+   // Shown with the Drake's card, under the page's own heading for them
+   leviathanRules:[`The Ether Drake does not follow the normal activation order. It activates during the Cleanup step of the End Phase, and the player with 2nd initiative that round activates it.`,
             `When the Ether Drake activates, roll a D3. On a 1 it moves its Thrust forwards. On a 2 it turns 90° to the left, then moves its Thrust forwards. On a 3 it turns 90° to the right, then moves its Thrust forwards. If the Ether Drake would move off the table, rotate it 180° and continue its movement.`,
             `After moving, the Ether Drake turns to face the last Ship that attacked it (including Ships that launched Launch Assets at it) and attacks with every weapon it is able to. Its activation then ends.`],
    weapons:[{name:'Mass Driver Armament',arc:'F/S/R',attack:'3',lock:'3+',damage:'1',type:'K',special:'-'},
@@ -753,6 +754,7 @@ function renderScenario(s){
           :`<div class="pub-ship-stats">${['Thrust','Scan','Sig','Hull','A','PD','G','T'].map(levCell).join('')}</div>
         <div class="pub-lev-special">${wpnChips(levVal('Special'))}</div>
         ${weaponList(lev.weapons.rows.map(([name,lock,attack,damage,arc,special,type])=>({name,lock,attack,damage,arc,special,type})))}`}
+        ${s.leviathanRules?`<div class="lhdr">Controlling the Drake</div>${pubBullets(s.leviathanRules)}`:''}
         ${lev.rules.map(([n,t])=>[].concat(t).map((p,i)=>`<p class="rule-text">${i?'':`<b>${n}:</b> `}${p}</p>`).join('')).join('')}
         ${lev.famous?`<p class="pub-lev-famous"><b>${lev.famousLabel}</b> <i>${lev.famous}</i></p>`:''}
         ${(lev.lore||[]).map(p=>`<p class="sc-flavor">${p}</p>`).join('')}
