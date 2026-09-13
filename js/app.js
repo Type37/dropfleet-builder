@@ -8997,6 +8997,9 @@ let activeGroupId = null;
       'Open any ship for its full ship card: points, stats, weapons, launch table, every loadout option with its guns, the hardpoint list, the Deployable Features a carrier can take, the Ship Rules and the full text of every rule it uses. Search finds ships by name, weapon or rule.',
       'Each faction and each ship has its own link (#units/ucm, #units/ucm/new-york) you can share.',
     ]},
+    { date: '2026-09-13', title: 'Civilian Ship scenarios: pick any Civilian Ship', items: [
+      'Scenarios with a Civilian Ship show the Princess Liner, with its stats, rules, known ships and lore. Pick any of the 20 Civilian Ships from the book instead; the page remembers your pick.',
+    ]},
     { date: '2026-09-13', title: 'Scenario Generator: Print and Share buttons', items: [
       'Print and Share Link to This Scenario have big icons with their words.',
       'Print Features Reference, next to Print, leaves the Features and Dropsite tables off the printout. On by default.',

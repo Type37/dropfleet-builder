@@ -28,6 +28,16 @@ factions, a flagship (Magellan, 570 pts), a Feature Carrier (Actium), a
 modular hull (Cruiser) and the generic and faction stations; no sideways
 scroll at 320, 393 and 700 px.
 
+### 2026-09-13: Civilian Ship picker
+
+Scenarios that name a Civilian Ship show the Princess Liner (Civilian Ships &
+Scenarios, page 2: the scenarios were designed with it in mind, and any Civilian
+Ship can stand in). A select swaps in any of the 20, remembered per device. The five
+Scenario Only ships (L-Type Barge, Nirvana, Precedent One, Affluence Liner,
+Princess Liner) come from the PDF with their pictures; the other 15 from the fleet
+data. `scripts/build-civilian-ships.py` writes `scenarios/dropfleet/scenario-civilian.js`.
+On phones, weapon Special chips wrap instead of running off the card.
+
 ### 2026-09-13: Generator Print and Share buttons, Print Features Reference
 
 Print and Share Link to This Scenario are icon plus word buttons. A Print

@@ -736,6 +736,46 @@ function pubShips(text){
   }).join('');
 }
 
+// Civilian Ships & Scenarios, page 2: "The Civilian Ships in these scenarios can be represented by any of the stat sheets
+// presented in this document. While they were designed with the Princess Liner in mind, players may want to use a different
+// Civilian Ship". A scenario naming a Civilian Ship shows the Princess Liner, and players can switch to any of the 20.
+const CIV_KEY='dfc-civilian-ship', CIV_DEFAULT='Princess Liner';
+function civPick(){ let n=CIV_DEFAULT; try{ n=localStorage.getItem(CIV_KEY)||n; }catch(e){} return SCN_CIVILIAN.ships.some(x=>x.name===n)?n:CIV_DEFAULT; }
+function civCard(name){
+  const x=SCN_CIVILIAN.ships.find(v=>v.name===name);
+  const para=t=>String(t).split(/\n+/).filter(Boolean).map(l=>`<p class="rule-text">${l}</p>`).join('');
+  // a rule's text: the ship's own, else page 2's Civilian Ship rules, else the rulebook's; a name with no text anywhere stays a name
+  const rules=x.rules.map(r=>{
+    const t=r.text||(SCN_CIVILIAN.rules[r.name]||[]).join('\n')||(ruleText(r.name)||{}).text||'';
+    return t?`<div class="rule-text"><b>${r.name}:</b> ${para(t).replace(/^<p class="rule-text">|<\/p>$/g,'')}</div>`:`<p class="rule-text"><b>${r.name}</b></p>`;
+  }).join('');
+  const loads=x.loads.length?`<table class="st st-load"><thead><tr><th scope="col">Launch</th><th scope="col" class="c">Capacity</th><th scope="col">Special</th></tr></thead><tbody>${x.loads.map(l=>`<tr><th scope="row">${l.name}</th><td class="c">${l.launch}</td><td>${wpnChips(l.special)}</td></tr>`).join('')}</tbody></table>`:'';
+  return `<img class="pub-ship-art" src="${SCN_ASSETS}art/thumb/${x.art}" alt="${x.name}">
+    <div class="pub-ship-body">
+      <div class="pub-ship-h"><b>${x.name}</b><span>${x.tonnage}, ${x.cost==null?'Scenario Only':x.cost+' pts'}</span></div>
+      ${shipStatGrid(x.stats)}
+      ${weaponList(x.weapons)}${loads}
+      ${rules}
+      ${x.famous.length?`<p class="pub-lev-famous"><b>${x.famousPrefix.replace(/:$/,'')}</b></p><ul class="pub-lev-list">${x.famous.map(n=>`<li>${n}</li>`).join('')}</ul>`:''}
+      ${x.lore.map(l=>`<p class="pub-lev-lore">${l}</p>`).join('')}
+    </div>`;
+}
+function pubCivilian(text){
+  if(typeof SCN_CIVILIAN==='undefined'||!/\bCivilian Ships?\b/.test(text)) return '';
+  const pick=civPick();
+  return `<div class="pub-civ">
+    <label class="pub-civ-pick"><span class="pub-civ-l">Civilian Ship</span><select data-civ-pick>${SCN_CIVILIAN.ships.map(x=>`<option${x.name===pick?' selected':''}>${x.name}</option>`).join('')}</select></label>
+    <div class="pub-ship" data-civ-card>${civCard(pick)}</div>
+  </div>`;
+}
+if(typeof document!=='undefined'&&document.addEventListener) document.addEventListener('change',e=>{
+  const sel=e.target.closest&&e.target.closest('[data-civ-pick]');
+  if(!sel) return;
+  try{ localStorage.setItem(CIV_KEY,sel.value); }catch(e){}
+  document.querySelectorAll('[data-civ-card]').forEach(c=>{ c.innerHTML=civCard(sel.value); });
+  document.querySelectorAll('[data-civ-pick]').forEach(o=>{ o.value=sel.value; });
+});
+
 // Invisible spots over the book's map symbols (scenario-hotspots.js), each opening its stats
 const SPOT_NAME=k=>{ const [kind,id]=[k.slice(0,k.indexOf(':')),k.slice(k.indexOf(':')+1)]; return kind==='ds'?DS[+id].nm:kind==='ship'?SCN_SHIPS[id].name:id; };
 function mapSpots(id){
@@ -824,7 +864,7 @@ function renderScenario(s){
   const tbls=(s.tables||(s.table?[s.table]:[])).map(pubTable).join('');
   const special=(s.special?SW(pubBullets(s.special)):'')+tbls+(s.weapons?weaponList(s.weapons):'');
   const scenery=s.scenery?pubParas([].concat(s.scenery).map(scenTips))+pubScenery([s.scenery,s.special,s.scoring].map(J).join(' ')):'';
-  const ships=pubShips(allText);
+  const ships=pubCivilian(allText)+pubShips(allText);
   const hasMap=SCENARIO_MAPS.has(s.id);
   // A Fauna scenario carries the Fauna Rules written out in full, as its own section
   const FR=s.id!=='fauna-rules'&&/\bFauna\b/.test(allText)&&SCENARIOS.find(x=>x.id==='fauna-rules');

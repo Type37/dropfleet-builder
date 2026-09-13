@@ -27,6 +27,16 @@
 .gen-card-ico svg{width:40px;height:40px;}
 .gen-card-name{font-family:'Jost',system-ui,sans-serif;font-size:1.25rem;font-weight:600;}
 @media print{.gen-card{display:none;}}
+/* The Civilian Ship picker: a ship card under a select of every Civilian Ship */
+.pub-civ{grid-column:1/-1;display:grid;gap:3mm;}
+.pub-civ-pick{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-family:'Jost',system-ui,sans-serif;font-size:1rem;font-weight:600;}
+.pub-civ-pick select{font:500 1rem 'Jost',system-ui,sans-serif;padding:6px 10px;border:1.5px solid #8a6a12;background:#fff;color:var(--ink);max-width:100%;}
+.pub-civ-pick select:focus-visible{outline:2px solid #B86C0A;outline-offset:2px;}
+.st-load{margin-top:3mm;}
+@media (max-width:600px){.pub-civ .pub-ship{grid-template-columns:minmax(0,1fr);}.pub-civ .pub-ship-art{width:140px;}}
+/* a weapon's Special chips wrap inside a narrow column instead of running past the card's edge */
+@media (max-width:760px){.pw-special{min-width:0;}.pw-special .pw-chip{white-space:normal;overflow-wrap:anywhere;}}
+@media print{.pub-civ-pick{display:none;}}
 </style>
 </head>
 <body>
@@ -56,6 +66,7 @@
 <script src="scenario-lib.js"></script>
 <script src="scenario-legacy.js"></script>
 <script src="scenario-sheets.js"></script>
+<script src="scenario-civilian.js"></script>
 <script src="scenario-hotspots.js"></script>
 <script src="../shared/tooltip.js"></script>
 <script src="../shared/score.js"></script>
