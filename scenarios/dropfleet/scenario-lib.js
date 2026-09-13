@@ -721,11 +721,18 @@ function renderScenario(s){
       <div class="leg">${pubFeatures(allText)}${pubDropsites()}</div>`}
     </div>`:'';
   const lev=s.leviathan&&SCN_LEVIATHANS[s.leviathan];
-  const leviathan=lev?`<div class="pub-ships">${pubHead('Ships')}<div class="pub-lev">
-      <img class="pub-lev-art" src="${SCN_ASSETS}art/thumb/${lev.art}" alt="${lev.title}">
+  // The builder's ship card: stat strip (icons where the stat has one; A, PD and T as the page labels them),
+  // Special as chips, weapon rows
+  const levVal=h=>lev.stats.rows[0][lev.stats.head.indexOf(h)];
+  const levCell=h=>{ const k={Scan:'scan',Sig:'sig',Thrust:'thrust',Hull:'hull',G:'g'}[h];
+    return `<div class="pss-cell"><span class="pss-l">${h}</span><span class="pss-row">${k?statIcon(k):''}<span class="pss-v">${levVal(h)}</span></span></div>`; };
+  const leviathan=lev?`<div class="pub-ships">${pubHead('Ships')}<div class="pub-ship-grid"><div class="pub-ship">
+      <img class="pub-ship-art" src="${SCN_ASSETS}art/thumb/${lev.art}" alt="${lev.title}">
       <div class="pub-ship-body">
         <div class="pub-ship-h"><b>${lev.title}</b><span>${lev.kind}</span></div>
-        ${pubTable(lev.stats)}${pubTable(lev.weapons)}
+        <div class="pub-ship-stats">${['Thrust','Scan','Sig','Hull','A','PD','G','T'].map(levCell).join('')}</div>
+        <div class="pub-lev-special">${wpnChips(levVal('Special'))}</div>
+        ${weaponList(lev.weapons.rows.map(([name,lock,attack,damage,arc,special])=>({name,lock,attack,damage,arc,special})))}
         ${lev.rules.map(([n,t])=>`<p class="rule-text"><b>${n}:</b> ${t}</p>`).join('')}
         <p class="pub-lev-famous"><b>${lev.famousLabel}</b> <i>${lev.famous}</i></p>
         ${lev.lore.map(p=>`<p class="sc-flavor">${p}</p>`).join('')}
