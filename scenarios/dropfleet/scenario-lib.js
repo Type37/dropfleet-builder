@@ -583,7 +583,9 @@ const pubVP=h=>String(h).replace(/(?<!<vp>)\b(\d+)\s?VP\b/g,'<vp>$1VP</vp>');
 const pubParas=v=>(Array.isArray(v)?v:[v]).map(p=>`<p class="rule-text">${pubVP(p)}</p>`).join('');
 const pubBullets=v=>`<ul class="rule-bullets">${(Array.isArray(v)?v:[v]).map(p=>`<li>${pubVP(p)}</li>`).join('')}</ul>`;
 const pubTable=t=>`<div class="pub-tbl-wrap"><table class="pub-tbl"><thead><tr>${t.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${t.rows.map(r=>`<tr>${r.map(c=>`<td>${pubVP(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
-const pubSE1=name=>{const d=SCN_SE1[name]; return pubParas(d.body)+(d.table?pubTable(d.table):'')+(d.after?pubParas(d.after):'');};
+// A VP table (Normal Scoring) is drawn like the Standard Scoring table
+const vpTable=t=>`<table class="stbl"><thead><tr>${t.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${t.rows.map(r=>`<tr>${r.map((c,i)=>`<td>${i?pubVP(c):c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+const pubSE1=name=>{const d=SCN_SE1[name]; return pubParas(d.body)+(d.table?(/VP$/.test(d.table.rows[0][1])?vpTable(d.table):pubTable(d.table)):'')+(d.after?pubParas(d.after):'');};
 
 /* Explanations follow the order the terms appear in the scenario's own text. */
 function pubFind(text,detectors){
@@ -855,7 +857,7 @@ function pubScoreRows(s){
   OB.forEach(o=>{ if(new RegExp('\\b'+o.name+'\\b').test(text)){ add(o.name,'',vpRows(o.b.join(' '))); if(o.std) std=true; } });
   const own=vpRows([s.scoring,s.special,s.variant].map(pubJoin).join(' '));
   if(own.length) rows.push({heading:'Scenario'},...own);
-  if(has(/\bNormal Scoring\b/)) rows.push(...SCORE_TABLE('Normal Scoring','Rounds 4 & 6',['High Scoring','Low Scoring']));
+  if(has(/\bNormal Scoring\b/)) rows.push(...SCORE_TABLE('Normal Scoring','Rounds 4 & 6',['Control','Contest']));
   if(has(/\bDemolish/)) rows.push(...SCORE_TABLE('Demolish Scoring','',['Levelled','Ruined']));
   // Short labels; the full Focal Points rule is written out on the card
   if(has(/\bFocal [Pp]oint/)){

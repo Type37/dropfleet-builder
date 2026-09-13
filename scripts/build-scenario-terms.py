@@ -40,13 +40,15 @@ SE1 = {
     'Staggered': {'body': [
         'Players using Staggered Deployment can only activate and deploy X Groups of their choice in the 1st round. Then they must activate and deploy an additional X Groups of their choice in the 2nd round. They must activate and deploy any remaining Groups in the 3rd round. Groups with the Vanguard-X special rule may use it as normal.',
         'For Skirmish games, X is 1. For Clash games, X is 2. For Battle games, X is 3. For Reconquest games, X is 4 plus 1 for every 1000 points above 3001.']},
+    # Normal and Demolish Scoring: the book's High/Low Scoring columns read as the rulebook's Standard Scoring
+    # columns (Control / Levelled, Contest / Ruined), same numbers, on Jet's call (2026-09-13)
     'Normal Scoring': {
-        'body': ['Players are awarded the corresponding High Scoring when they Control a Scenario Objective and the corresponding Low Scoring when they Contest a Scenario Objective.'],
-        'table': {'head': ['Dropsite Size', 'High Scoring', 'Low Scoring'],
+        'body': ['Players are awarded the corresponding Control VP when they Control a Scenario Objective and the corresponding Contest VP when they Contest a Scenario Objective.'],
+        'table': {'head': ['Dropsite Size', 'Control / Levelled', 'Contest / Ruined'],
                   'rows': [['Small', '2VP', '0VP'], ['Medium', '3VP', '1VP'], ['Large', '4VP', '2VP']]},
         'after': ['Normal Scoring awards VP during the Victory Points step of the End Phase on rounds 4 and 6.']},
     'Demolish Scoring': {'body': [
-        'Using the Normal Scoring table, players are immediately awarded the corresponding High Scoring when they have Levelled a Dropsite. Using the Normal Scoring table, players are immediately awarded the corresponding Low Scoring when they have Ruined a Dropsite.']},
+        'Using the Normal Scoring table, players are immediately awarded the corresponding Levelled VP when they have Levelled a Dropsite. Using the Normal Scoring table, players are immediately awarded the corresponding Ruined VP when they have Ruined a Dropsite.']},
     'Focal Points Scoring': {
         'body': ['Players total up the specified value of their Ships in range of the Focal Point. The players with the highest combined value within that distance gains 3VP. Any other player with at least half of that value within range of that Focal point gains 1VP. When calculating value, Ships use their High Value unless otherwise specified and Ships assigned an Admiral always use their High Value. Ships only count as being in a single Focal Point, if a Ship would be in range of two or more focal points, choose one for it to count towards.'],
         'table': {'head': ['Dropsite Size', 'High Value', 'Low Value'],
