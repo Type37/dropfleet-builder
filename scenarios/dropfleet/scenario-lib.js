@@ -503,11 +503,49 @@ const SCENARIOS=[
      ['Defending',`If the Fauna has been attacked this round and is within 6" of a Large Object.`,`The Fauna faces, then moves up to half its Thrust towards the closest Ship that attacked it. The Fauna then attacks that Ship's Group. The Fauna activates again after the next 3 activations.`],
      ['Panicked',`If the Fauna has been attacked this round and is not within 6" of a Large Object or a Ship that attacked it.`,`The Fauna faces, then moves up to half its Thrust towards the nearest Group, or nearest Large Object, whichever is closer. It then attacks the closest Group. The Fauna activates again after the next D6 activations`],
      ['Neutral',`If the Fauna has not been attacked this round.`,`The Fauna faces, then moves up to half its Thrust towards the nearest Group. The Fauna activates again after 2D3 activations. Each time it is attacked, it activates 1 activation sooner.`]]}},
+
+  // Ether_Drake.pdf, page 2. An older-edition page: it keeps its own headings (and its own typos),
+  // so none of the current rulebook's explanations are attached to it.
+  {id:'dragonslayer', name:'Dragonslayer', src:'The Ether Drake', leviathan:'Ether Drake',
+   intro:`An Ether Drake has made one of the Cradle World systems its home! Drive the Ether Drake and your opponent away and claim this system.`,
+   players:`2.`,
+   scoring:[`Space Stations score as Medium Clusters.`,
+            `All Space Stations are armed with Mass Driver Armament and Laser Armament.`,
+            `The player that deals the final point of damage to the Ether Drake scores 12VP.`],
+   sections:[
+     ['Players',[`2.`]],
+     ['Fleet List',[`Standard.`]],
+     ['Suggested Approach',[`Rapid Response (opposing edges shown in blue).`]],
+     ['Duration',[`6 turns.`]],
+     ['Orbital Debris',[`Debris Fields (2-5 Fine, 4-6 Dense).`]],
+     ['Victory Conditions',null],
+     ['Controlling the Drake',[`The Ether Drake is deployed in the centre of the board.`,
+       `The Ether Drake activates at the end of the roundup phase and is controlled by the player that activated second this round.`,
+       `When activated the Ether Drake moves (see below) followed by attacking with any and all weapons it is able to.`,
+       `To move the Ether Drake, roll 1D3. On a 1 the Ether Drake moves its Thrust forwards. On a 2 it turns 90° to the left, then moves its Thrust forwards. On a 3 it turns 90° to the right, the moves its Thrust forwards. If the Ether Drake would move off of the table, rotate it 180° and containue its movement.`,
+       `After moving, the Ether Drake now turns directly towards the last ship that attacked it (including those that launched launch assets) and shoots any weapons it is able to.`,
+       `One both these actions are completed the Ether Drake’s activation ends.`]]]},
 ];
+
+// Ether_Drake.pdf, page 1, in that page's own columns (A and PD, not the current saves)
+const SCN_LEVIATHANS={'Ether Drake':{
+  title:'The Ether Drake', kind:'Leviathan', art:'ether_drake.webp',
+  stats:{head:['Name','Scan','Sig','Thrust','Hull','A','PD','G','T','Special'],
+         rows:[['Ether Drake','8"','8"','8"','17','2+','5','1','H','Fauna, Regenerate (2), Dragonscale Armour']]},
+  weapons:{head:['Type','Lock','Attack','Damage','Arc','Special'],
+           rows:[['Dragon’s Breath (Beam)','2+','6','2','F','Flash, Scald'],
+                 ['Dragon’s Breath (Wide)','2+','4','2','F/S','Close Action']]},
+  rules:[['Fauna','This ship does not roll for Crippling Damage when reduced to below 50% of its starting Hull value (but still becomes crippled). Additionally this ship is removed from play once it has no Hull points remaining and does not roll for Catastrophic Damage.'],
+         ['Dragonscale Armour','Attacks against this ship cannot score Critical Hits. This ship’s armour cannot be modified. This ship suffers no damage from Bombers.']],
+  famousLabel:'Recognised Ether Drakes:', famous:'Francis, King Dahaka, Aubrey’s Bane, Tao-Tieh, Bubbles’ Buddy',
+  lore:['The creature observed in the Shangri-La system is unlike anything the UCMF have previously encountered. Highly aggressive and with destructive capabilities to match.',
+        'By all accounts, the Ether Drakes predate all galactic civilization. There once were multitudes, but their race has been wasting away for eons.',
+        'There are only a handful of dragons left that are known of, the last of their kind in the galaxy, perhaps the universe.'],
+}};
 
 function scnParas(v){ return (Array.isArray(v)?v:[v]).map(p=>`<p>${p}</p>`).join(''); }
 // Maps pulled from the PDFs at native size by scripts/extract-scenario-maps.py.
-const SCENARIO_MAPS=new Set(['a-rocky-runaround','almost-nothing-at-all','down-with-the-cities','entrapmoont','erupting-battlefront','erupting-quarters','grind-to-dust','hatching-grounds','lagrange-points','latitudinal-lanes','make-the-rendezvous','mandatory-festivities','mass-exodus','moonbreaker','moonguard','moonshot','moonskipper','moonswipe','moonwreck','on-the-clock','one-with-almost-nothing','orbital-support','power-grab','ready-salted-earth','retrieving-intelligence','sacred-moon','scrap-collection','shipyard-raid','shock-and-yaw','stop-the-terraformer','supply-run','take-and-hold','tug-of-war','very-important-moon','when-backfields-meet']);
+const SCENARIO_MAPS=new Set(['a-rocky-runaround','almost-nothing-at-all','down-with-the-cities','dragonslayer','entrapmoont','erupting-battlefront','erupting-quarters','grind-to-dust','hatching-grounds','lagrange-points','latitudinal-lanes','make-the-rendezvous','mandatory-festivities','mass-exodus','moonbreaker','moonguard','moonshot','moonskipper','moonswipe','moonwreck','on-the-clock','one-with-almost-nothing','orbital-support','power-grab','ready-salted-earth','retrieving-intelligence','sacred-moon','scrap-collection','shipyard-raid','shock-and-yaw','stop-the-terraformer','supply-run','take-and-hold','tug-of-war','very-important-moon','when-backfields-meet']);
 // The rulebook prints these six at 240px; scripts/draw-rulebook-maps.js redraws them as SVG.
 const SCENARIO_MAP_SVG=new Set(['take-and-hold','erupting-battlefront','power-grab','shock-and-yaw','orbital-support','entrapmoont']);
 function pubHead(label){return sh(label);}
@@ -676,11 +714,32 @@ function renderScenario(s){
   try{ if(s.variant&&localStorage.getItem(pubVariantKey(s.id))==='1') on='1'; }catch(e){}
   const mapSrc=`${SCN_ASSETS}scenarios/dropfleet/${s.id}.${SCENARIO_MAP_SVG.has(s.id)?'svg':'webp'}`, mapImg=`<img src="${mapSrc}" alt="${s.name} map">`;
   if(SCENARIO_MAP_SVG.has(s.id)) setTimeout(pubInlineMaps);
+  const own=!!s.sections;
   const right=hasMap?`<div class="map-col">
       <div class="map-frame">${SCENARIO_MAP_SVG.has(s.id)?`<div class="map-svg" data-src="${mapSrc}">${mapImg}</div>`:mapImg}${mapSpots(s.id)}</div>
-      ${sec('Scenery',scenery)}
-      <div class="leg">${pubFeatures(allText)}${pubDropsites()}</div>
+      ${own?'':`${sec('Scenery',scenery)}
+      <div class="leg">${pubFeatures(allText)}${pubDropsites()}</div>`}
     </div>`:'';
+  const lev=s.leviathan&&SCN_LEVIATHANS[s.leviathan];
+  const leviathan=lev?`<div class="pub-ships">${pubHead(lev.title)}<div class="pub-lev">
+      <img class="pub-lev-art" src="${SCN_ASSETS}art/thumb/${lev.art}" alt="${lev.title}">
+      <div class="pub-ship-body">
+        <div class="pub-ship-h"><b>${lev.title}</b><span>${lev.kind}</span></div>
+        ${pubTable(lev.stats)}${pubTable(lev.weapons)}
+        ${lev.rules.map(([n,t])=>`<p class="rule-text"><b>${n}:</b> ${t}</p>`).join('')}
+        <p class="pub-lev-famous"><b>${lev.famousLabel}</b> <i>${lev.famous}</i></p>
+        ${lev.lore.map(p=>`<p class="sc-flavor">${p}</p>`).join('')}
+      </div>
+    </div></div>`:'';
+  if(own) return `<div class="scenario pub${hasMap?'':' no-map'}" data-scn="${s.id}" data-v="0">
+    <div class="rules-col">
+      <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.src}</div></div>
+      ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
+      ${s.sections.map(([h,b])=>sec(h,pubBullets(b||s.scoring))).join('')}
+    </div>
+    ${right}
+  </div>
+  ${leviathan}`;
   return `<div class="scenario pub${hasMap?'':' no-map'}" data-scn="${s.id}" data-v="${on}">
     <div class="rules-col">
       <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.src}</div></div>

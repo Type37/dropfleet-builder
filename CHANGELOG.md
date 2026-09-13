@@ -12,6 +12,18 @@ switch as the Scenario Reference. Dropzone goes to the new Dropzone generator
 (`dropzone-3e-army-builder/scenarios/generator/`), which rolls on the d66 chart
 and renders the reference card with the chosen game size and Variant.
 
+### 2026-09-12: Dragonslayer scenario and the Ether Drake
+
+From `Rules-Mechanics-PDFs/Ether_Drake.pdf`. A new "The Ether Drake" group on the
+Scenario Reference index. The PDF is an older-edition page (Armour and PD, Rapid
+Response, Medium Clusters), so the scenario carries its own headings in `sections`
+and `renderScenario` skips the current rulebook's deployment, scoring, scenery and
+Dropsite explanations for it. The Drake's card (`SCN_LEVIATHANS`) keeps the page's
+columns. Text is verbatim, typos included ("containue", "One both"). Regenerate (2)
+is named on the page but not defined there, so it has no text. Map and art pulled
+from the PDF's embedded images (`assets/scenarios/dropfleet/dragonslayer.webp`,
+`assets/art/ether_drake.webp`).
+
 ### 2026-09-12: Lore gets hull Length and Displacement
 
 New optional `specs: {length, displacement}` on a ship in the faction JSON, shown

@@ -71,7 +71,7 @@ ScenarioShell.start({
   titleSuffix:'Dropfleet Commander Scenarios',
   indexDocTitle:'Dropfleet Commander: Scenarios',
   indexTitle:'Scenarios',
-  groups:['Rulebook','Scenario Expansion 1','Civilian Ships & Scenarios'].map(name=>({name,items:SCENARIOS.filter(s=>s.src===name)})),
+  groups:['Rulebook','Scenario Expansion 1','Civilian Ships & Scenarios','The Ether Drake'].map(name=>({name,items:SCENARIOS.filter(s=>s.src===name)})),
   id:s=>s.id,
   name:s=>s.name,
   thumb:s=>SCENARIO_MAPS.has(s.id)?`${SCN_ASSETS}scenarios/dropfleet/thumb/${s.id}.webp`:'',
