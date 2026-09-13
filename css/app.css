@@ -8191,8 +8191,9 @@ h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-we
   .print-preview-scroll { padding: var(--sp-sm); }
   .print-preview-surface { padding: 4mm; }
   .print-preview-surface .launch-ref-table th { white-space: normal; }
-  .print-preview-surface .launch-ref-table, .print-preview-surface .launch-ref-table thead, .print-preview-surface .launch-ref-table tbody { display: block; }
-  .print-preview-surface .launch-ref-table tr { display: grid; grid-template-columns: repeat(7, minmax(0, auto)); }
-  .print-preview-surface .launch-ref-table th:last-child, .print-preview-surface .launch-ref-table td:last-child { grid-column: 1 / -1; }
+  /* Launch assets only: the Abilities table shares the class but keeps its rows (group label spans them). */
+  .print-preview-surface .launch-ref-table:not(.dp-abilities-table), .print-preview-surface .launch-ref-table:not(.dp-abilities-table) thead, .print-preview-surface .launch-ref-table:not(.dp-abilities-table) tbody { display: block; }
+  .print-preview-surface .launch-ref-table:not(.dp-abilities-table) tr { display: grid; grid-template-columns: repeat(7, minmax(0, auto)); }
+  .print-preview-surface .launch-ref-table:not(.dp-abilities-table) th:last-child, .print-preview-surface .launch-ref-table:not(.dp-abilities-table) td:last-child { grid-column: 1 / -1; }
   .print-preview-surface .launch-ref-table th, .print-preview-surface .launch-ref-table td { padding-left: 2px; padding-right: 2px; }
 }

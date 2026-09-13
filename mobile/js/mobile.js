@@ -4644,6 +4644,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Desktop app: print preview ability names wrap', items: [
+      'On a narrow window the desktop print preview’s Abilities table keeps its rows, so each name wraps beside its AP cost instead of being cut off.',
+    ]},
     { date: '2026-09-13', title: 'Desktop app: nothing scrolls sideways on a narrow window', items: [
       'The desktop builder, print preview, How to Play, the scenario list and the faction quick references all fit a narrow screen instead of scrolling sideways.',
     ]},

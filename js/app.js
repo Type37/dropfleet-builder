@@ -8933,6 +8933,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Print preview: ability names wrap', items: [
+      'On a narrow screen the print preview’s Abilities table keeps its rows, so each name wraps beside its AP cost instead of being cut off.',
+    ]},
     { date: '2026-09-13', title: 'Nothing scrolls sideways on a narrow window', items: [
       'The builder, ship picker, admiral and station pickers, play mode, print preview, How to Play, the scenario list and the faction quick references all fit a narrow screen instead of scrolling sideways.',
     ]},

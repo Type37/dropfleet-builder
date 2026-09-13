@@ -5,6 +5,14 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Print preview Abilities names no longer clipped
+
+The narrow-screen launch-table reflow in the desktop print preview also caught
+the Abilities table (it shares `.launch-ref-table`), turning its rows into a
+grid under a spanning group label, so names like "Brace for Impact" were cut
+off against their AP cost. The reflow now skips `.dp-abilities-table`; names
+wrap and rows grow. Checked 320 to 1280px on screen; print media unchanged.
+
 ### 2026-09-13: No horizontal scrolling on the desktop app, scenarios and references
 
 Audited the desktop app (landing, fleets, Collection, all six builders, every
