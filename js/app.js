@@ -5746,9 +5746,9 @@ let activeGroupId = null;
         const isDisabled = disabled || tooHighLevel;
         html += `
         <div class="admiral-card${isDisabled ? ' disabled' : ''}" style="${isDisabled ? 'opacity:0.5;' : ''}">
-          <div class="flex gap-md items-start">
+          <div class="flex gap-md items-start flex-wrap">
             ${admiral.image ? `<div class="ship-card-image"><img src="${esc(thumbUrl(admiral.image))}" alt="${esc(admiral.admiralName)}" loading="lazy" onerror="this.style.display='none'"></div>` : admiralThumb(admiral.level, null)}
-            <div style="flex:1;min-width:0">
+            <div style="flex:1 1 11rem;min-width:0">
               <div class="admiral-name">${esc(admiral.admiralName)}</div>
               <div class="admiral-level">Level ${admiral.level || '?'} Famous${tooHighLevel ? `, requires ${sizeInfo.label}+` : ''}</div>
               <div class="flex gap-sm flex-wrap" style="margin-top:var(--sp-xs)">
@@ -8933,6 +8933,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Nothing scrolls sideways on a narrow window', items: [
+      'The builder, ship picker, admiral and station pickers, play mode, print preview, How to Play, the scenario list and the faction quick references all fit a narrow screen instead of scrolling sideways.',
+    ]},
     { date: '2026-09-13', title: 'Phone app: nothing scrolls sideways', items: [
       'On the phone app the ship picker filters and Collection faction tabs wrap onto more lines, and How to Play tables fit the screen.',
     ]},

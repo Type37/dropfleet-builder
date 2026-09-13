@@ -7969,7 +7969,7 @@ html[data-theme="dark"] .play-launch-val { color: #64b5f6; background: rgba(100,
 
 /* ── Play: weapons table horizontal scroll ── */
 .play-weapons-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
-.play-weapons { min-width: 340px; }
+.play-weapons { min-width: 0; }
 
 /* ── How to Play (rules reference, renderRules in js/app.js) ── */
 .rules-view { max-width: 1360px; margin: 0 auto; padding: var(--sp-xl) var(--sp-lg) var(--sp-2xl); }
@@ -8146,4 +8146,53 @@ h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-we
 @media (max-width: 700px) {
   .rules-legend-grid { grid-template-columns: 1fr; }
   .rules-glossary { grid-template-columns: 1fr; }
+}
+
+/* ── No sideways scrolling at any width ─────────────────────────
+   Everything reflows to the viewport instead of scrolling sideways. Desktop
+   layouts are unchanged: each rule only bites once content would overflow. */
+.fleet-info-name, .overview-group-name, .print-fleet-name { overflow-wrap: anywhere; }
+.ship-category-tabs { flex-wrap: wrap; }
+.detail-hero-image { min-width: min(320px, 100%); }
+@media (max-width: 860px) {
+  /* The chapter list wraps onto rows, so it scrolls away with the page. */
+  .rules-nav { position: static; flex-wrap: wrap; overflow-x: visible; }
+}
+@media (max-width: 768px) {
+  /* The sticky tallies bar bleeds to the panel edge by the panel's own padding. */
+  .overview-topbar { margin-left: calc(var(--sp-lg) * -1); margin-right: calc(var(--sp-lg) * -1); padding-left: var(--sp-lg); padding-right: var(--sp-lg); }
+  .ship-grid { grid-template-columns: minmax(0, 1fr); }
+  .ship-category-tabs { flex-wrap: wrap; overflow-x: visible; }
+}
+@media (min-width: 640px) and (max-width: 768px), (max-width: 480px) {
+  .overview-topbar { margin-left: calc(var(--sp-md) * -1); margin-right: calc(var(--sp-md) * -1); padding-left: var(--sp-md); padding-right: var(--sp-md); }
+}
+@media (max-width: 700px) {
+  .rules-chapter-title { font-size: 26px; overflow-wrap: break-word; }
+  .rules-table th, .rules-table td { padding: 5px 4px; hyphens: auto; -webkit-hyphens: auto; overflow-wrap: anywhere; }
+  .rules-table th { letter-spacing: normal; }
+  /* Seven or more columns: every row is the same wrapping grid, so header and
+     body cells stay aligned while the row folds onto two lines. */
+  .rules-table:has(tr > :nth-child(7)), .rules-table:has(tr > :nth-child(7)) thead, .rules-table:has(tr > :nth-child(7)) tbody { display: block; }
+  .rules-table:has(tr > :nth-child(7)) tr { display: grid; grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr)); }
+}
+.dp-name { overflow-wrap: anywhere; }
+@media (max-width: 480px) {
+  /* Eight columns don't fit a phone: each row becomes a grid and Special takes its own line. */
+  .launch-table, .launch-table thead, .launch-table tbody { display: block; }
+  .launch-table tr { display: grid; grid-template-columns: repeat(7, minmax(0, auto)); }
+  .launch-table thead th:last-child, .launch-table td:last-child { grid-column: 1 / -1; }
+  /* Rows under a spanning Launch cell start one column in, so they stay aligned. */
+  .launch-table tbody tr:not(:has(> .lt-launch)) > td:first-child { grid-column-start: 2; }
+  .launch-table thead th, .launch-table td { padding-left: 3px; padding-right: 3px; }
+  .launch-table .weapon-special-chip, .launch-table .weapon-col-crit { white-space: normal; }
+}
+@media screen and (max-width: 600px) {
+  .print-preview-scroll { padding: var(--sp-sm); }
+  .print-preview-surface { padding: 4mm; }
+  .print-preview-surface .launch-ref-table th { white-space: normal; }
+  .print-preview-surface .launch-ref-table, .print-preview-surface .launch-ref-table thead, .print-preview-surface .launch-ref-table tbody { display: block; }
+  .print-preview-surface .launch-ref-table tr { display: grid; grid-template-columns: repeat(7, minmax(0, auto)); }
+  .print-preview-surface .launch-ref-table th:last-child, .print-preview-surface .launch-ref-table td:last-child { grid-column: 1 / -1; }
+  .print-preview-surface .launch-ref-table th, .print-preview-surface .launch-ref-table td { padding-left: 2px; padding-right: 2px; }
 }

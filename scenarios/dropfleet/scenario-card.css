@@ -149,7 +149,7 @@ vp{font-family:inherit;font-weight:600;font-size:inherit;color:inherit;}
 .pub-ships .sr{display:none;}
 .pub-fauna{text-transform:none;letter-spacing:.02em;}
 .pub-ships{max-width:1180px;margin:0 auto;padding:0 14mm 8mm;display:flex;flex-direction:column;gap:2mm;}
-.pub-ship-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:6mm;}
+.pub-ship-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:6mm;}
 .pub-ship{display:grid;grid-template-columns:110px minmax(0,1fr);gap:4mm;align-items:start;}
 .pub-ship-art{width:110px;height:auto;display:block;}
 .pub-ship-body{display:flex;flex-direction:column;gap:1.2mm;min-width:0;}

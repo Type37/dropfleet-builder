@@ -5,6 +5,21 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: No horizontal scrolling on the desktop app, scenarios and references
+
+Audited the desktop app (landing, fleets, Collection, all six builders, every
+modal, print preview in all four layouts, play mode, Combat Calculator, How to
+Play), the scenario list and views, the generator and the quick references at
+320 to 1280px. Fixes, all reflow: long unbroken fleet and group names wrap;
+the builder's sticky tallies bar bled past the panel at phone padding; the
+ship picker grid and category tabs, the admiral card row, the ship-detail art
+(320px minimum), play-mode weapon tables (340px minimum) and launch tables now
+shrink or wrap; the How to Play chapter list wraps instead of a sideways strip;
+the print preview trims its padding on a phone; the scenario list (360px column
+minimum in `scenarios/shared/shell.css`) and scenario ship grid cap their
+minimums; the six quick references reflow their letter-size sheet on screen
+(print unchanged).
+
 ### 2026-09-13: No horizontal scrolling on the phone app
 
 Audited every mobile screen, sheet and modal (six Fast Play fleets with long

@@ -4644,6 +4644,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Desktop app: nothing scrolls sideways on a narrow window', items: [
+      'The desktop builder, print preview, How to Play, the scenario list and the faction quick references all fit a narrow screen instead of scrolling sideways.',
+    ]},
     { date: '2026-09-13', title: 'Nothing scrolls sideways', items: [
       'The ship picker filters and the Collection faction tabs wrap onto more lines, and How to Play tables fit the screen, so no part of the phone app scrolls sideways.',
     ]},

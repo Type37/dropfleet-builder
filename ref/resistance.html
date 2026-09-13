@@ -495,6 +495,33 @@
   table.launch tbody tr:nth-child(even) td { background: var(--rowalt); }
   table.launch tbody tr:last-child td { border-bottom: none; }
 
+  /* Narrower than the letter page: the sheet reflows to the screen. Print is untouched. */
+  @media screen and (max-width: 8.75in) {
+    .sheet { width: auto; height: auto; margin: 0; grid-template-columns: minmax(0, 1fr); }
+    .grid, .col, .sec-objs { overflow: visible; }
+    table.launch tbody td { white-space: normal; }
+  }
+  @media screen and (max-width: 640px) {
+    .grid { grid-template-columns: minmax(0, 1fr); row-gap: 6pt; }
+    .brand { grid-template-columns: minmax(0, 1fr); }
+    .sec-objs .objs-grid { grid-template-columns: minmax(0, 1fr); }
+    .foot { grid-template-columns: minmax(0, 1fr); }
+    .foot .right { text-align: left; }
+    .feat-head { flex-wrap: wrap; }
+    .feat-name { white-space: normal; }
+    .sec { flex-wrap: wrap; }
+    .sec .sub { white-space: normal; }
+    .sec-objs { grid-template-columns: minmax(0, 1fr); }
+    /* One column: the two-column heading alignment margins no longer apply. */
+    #sec-faction, #sec-ucm-abilities, #sec-phr-abilities { margin-top: 4pt !important; }
+    /* Each launch row folds: equal cells, the name wider, Special on its own line. */
+    table.launch, table.launch thead, table.launch tbody { display: block; }
+    table.launch tr { display: flex; flex-wrap: wrap; }
+    table.launch th, table.launch td { flex: 1 1 0; min-width: 0; }
+    table.launch th:first-child, table.launch td:first-child { flex-grow: 2; }
+    table.launch th:last-child, table.launch td:last-child { flex-basis: 100%; }
+    table.launch thead th { letter-spacing: normal; }
+  }
   @media print {
     html, body { background: white; }
     .sheet { margin: 0; box-shadow: none; }
