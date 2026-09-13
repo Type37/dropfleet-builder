@@ -4643,7 +4643,8 @@
       'TTCombat corrected the Flying Dutchman captain’s name in the UCM stats PDF, from Frances to Francis. The ship, its lore and the printed sheet now match.',
     ]},
     { date: '2026-09-12', title: 'Scenarios: Dragonslayer and the Ether Drake', items: [
-      'The Scenario Reference has Dragonslayer, with its map and rules word for word, and the Ether Drake’s stats, weapons, rules and lore under it.',
+      'The Scenario Reference has Dragonslayer, with its map, and the Ether Drake’s stats, weapons, rules and lore under it.',
+      'Dragonslayer was an older-edition scenario, so it now uses current rules: both players Close from opposite edges, Micrometeor Clouds and Dense Debris Fields, Standard Scoring with Medium Space Stations, and the Drake activating in the End Phase.',
     ]},
     { date: '2026-09-12', title: 'Lore: hull length and displacement', items: [
       'The Armstrong Destroyer, Aldrin Colony Ship, Collins Support Carrier, Helium Voidflyer, Harpocrates Guerrilla Lighter, Hiruko Boarding Cutter, Seneca Detonator, Newton Kill-Sat, Galileo Orbital Telescope and Pungari Thresher Hive Ship show their Length and Displacement under their lore, and the Pungari its Beam and Height too.',

@@ -8813,7 +8813,8 @@ let activeGroupId = null;
       'TTCombat corrected the Flying Dutchman captain’s name in the UCM stats PDF, from Frances to Francis. The ship, its lore and the printed sheet now match.',
     ]},
     { date: '2026-09-12', title: 'Scenarios: Dragonslayer and the Ether Drake', items: [
-      'The Scenario Reference has Dragonslayer, with its map and rules word for word, and the Ether Drake’s stats, weapons, rules and lore under it.',
+      'The Scenario Reference has Dragonslayer, with its map, and the Ether Drake’s stats, weapons, rules and lore under it.',
+      'Dragonslayer was an older-edition scenario, so it now uses current rules: both players Close from opposite edges, Micrometeor Clouds and Dense Debris Fields, Standard Scoring with Medium Space Stations, and the Drake activating in the End Phase.',
     ]},
     { date: '2026-09-12', title: 'Fleets open again', items: [
       'Opening a fleet had stopped showing the builder: the fleet list stayed on screen. Fixed.',

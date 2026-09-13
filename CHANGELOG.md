@@ -19,6 +19,21 @@ generator built on a d66 chart. The Dropzone rulebook has no such chart and no
 random setup (players choose the Scenario, 3.3), so both came out the same day.
 Dropzone keeps its Scenario Reference, still linked from the reference switch.
 
+### 2026-09-12: Dragonslayer moved to the current edition
+
+On Jet's call, Dragonslayer is no longer shown verbatim: its old-edition terms are mapped
+to the current rulebook's. Rapid Response from opposing edges became both players Close
+from opposite edges (12.1.1 Line, 12.1.2). 6 turns became the standard 6 rounds (12.1).
+2-5 Fine / 4-6 Dense debris became 2-5 Micrometeor Clouds and 4-6 Dense Fields, the counts
+Shock And Yaw prints (12.2); nothing states Fine became Micrometeor Cloud, so that is a
+judgement. Medium Clusters became Medium Space Stations under Standard Scoring (12.1.5).
+The end of the roundup phase became the End Phase's Cleanup step (9.3), and "activated second"
+became 2nd initiative (6.3). The Mass Driver and Laser Armaments come from
+Fleet_Space_Stations_250828.pdf page 2. The Drake's rules use current terms (Crippling
+Effect 7.3.6, explodes 7.3.7, criticals 7.3.3, Regenerate-2 from 13.1). Its stat line
+(Armour 2+, PD 5) and its Flash and Scald values have no current source and still show
+as printed until Jet settles them. The scenario is labelled as a WarLore update.
+
 ### 2026-09-12: Dragonslayer scenario and the Ether Drake
 
 From `Rules-Mechanics-PDFs/Ether_Drake.pdf`. A new "The Ether Drake" group on the

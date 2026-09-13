@@ -46,6 +46,7 @@
 
 <script src="scenario-terms.js"></script>
 <script src="scenario-lib.js"></script>
+<script src="scenario-legacy.js"></script>
 <script src="scenario-hotspots.js"></script>
 <script src="../shared/tooltip.js"></script>
 <script src="../shared/score.js"></script>
@@ -71,7 +72,7 @@ ScenarioShell.start({
   titleSuffix:'Dropfleet Commander Scenarios',
   indexDocTitle:'Dropfleet Commander: Scenarios',
   indexTitle:'Scenarios',
-  groups:['Rulebook','Scenario Expansion 1','Civilian Ships & Scenarios','The Ether Drake'].map(name=>({name,items:SCENARIOS.filter(s=>s.src===name)})),
+  groups:['Rulebook','Scenario Expansion 1','Civilian Ships & Scenarios','The Ether Drake','Automated Dreadnought','Princess Cruise Liner','Advent Scenarios','Core Scenarios','Tournament Pack 2017'].map(name=>({name,items:SCENARIOS.filter(s=>s.src===name)})),
   id:s=>s.id,
   name:s=>s.name,
   thumb:s=>SCENARIO_MAPS.has(s.id)?`${SCN_ASSETS}scenarios/dropfleet/thumb/${s.id}.webp`:'',
@@ -82,9 +83,10 @@ ScenarioShell.start({
   ],
   randomPool:s=>SCENARIO_MAPS.has(s.id),
   render:renderScenario,
-  scoreRows:pubScoreRows,
+  // Older-edition pages score by their own sentences only; the current rulebook's scoring tables don't apply to them
+  scoreRows:s=>s.sections?(r=>r.length?[{heading:'Scenario'},...r]:[])(vpRows(scoringText(s))):pubScoreRows(s),
   // Standard, Normal and Focal Points scoring award VP in rounds 4 and 6; so do objectives that use Standard Scoring
-  markRound:(s,r)=>(r===4||r===6)&&(/\b(Standard|Normal) Scoring\b|\bFocal [Pp]oint/.test(scoringText(s))||OB.some(o=>o.std&&new RegExp('\\b'+o.name+'\\b').test(scoringText(s)))),
+  markRound:(s,r)=>!s.sections&&(r===4||r===6)&&(/\b(Standard|Normal) Scoring\b|\bFocal [Pp]oint/.test(scoringText(s))||OB.some(o=>o.std&&new RegExp('\\b'+o.name+'\\b').test(scoringText(s)))),
 });
 </script>
 </body>

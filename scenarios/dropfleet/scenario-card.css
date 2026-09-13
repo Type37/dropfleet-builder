@@ -166,6 +166,7 @@ vp{font-family:inherit;font-weight:700;font-size:inherit;color:inherit;}
 .pub-lev-special{display:flex;flex-wrap:wrap;gap:1mm;}
 .pub-lev-famous{font-family:'Jost',system-ui,sans-serif;font-size:10pt;color:var(--ch);margin-top:2mm;}
 .pub-lev-famous i{font-style:italic;}
+.pub-key{display:block;width:100%;max-width:300px;height:auto;margin-top:3mm;}
 @media (max-width:760px){.pub-lev{grid-template-columns:minmax(0,1fr);}.pub-lev-art{max-width:220px;}}
 @media (max-width:760px){.pub-ships{padding:0 3mm 6mm;}.pub-ship{grid-template-columns:80px minmax(0,1fr);}.pub-ship-art{width:80px;}}
 

@@ -504,39 +504,42 @@ const SCENARIOS=[
      ['Panicked',`If the Fauna has been attacked this round and is not within 6" of a Large Object or a Ship that attacked it.`,`The Fauna faces, then moves up to half its Thrust towards the nearest Group, or nearest Large Object, whichever is closer. It then attacks the closest Group. The Fauna activates again after the next D6 activations`],
      ['Neutral',`If the Fauna has not been attacked this round.`,`The Fauna faces, then moves up to half its Thrust towards the nearest Group. The Fauna activates again after 2D3 activations. Each time it is attacked, it activates 1 activation sooner.`]]}},
 
-  // Ether_Drake.pdf, page 2. An older-edition page: it keeps its own headings (and its own typos),
-  // so none of the current rulebook's explanations are attached to it.
-  {id:'dragonslayer', name:'Dragonslayer', src:'The Ether Drake', leviathan:'Ether Drake',
+  // Dragonslayer (Ether_Drake.pdf page 2), an older-edition page put into the current edition's terms
+  // by WarLore on Jet's call (2026-09-12). Each change maps an old term to the rulebook's own:
+  // Rapid Response from opposing edges -> both Close from opposite edges (12.1.1 Line, 12.1.2);
+  // 6 turns -> the standard 6 rounds (12.1); 2-5 Fine / 4-6 Dense debris -> 2-5 Micrometeor Clouds,
+  // 4-6 Dense Fields (the counts Shock And Yaw prints, 12.2); Medium Clusters -> Medium Space Stations
+  // under Standard Scoring (12.1.5); roundup phase -> End Phase (9); "activated second" -> 2nd initiative (6.3).
+  // Station weapons: Space Station Armaments, Fleet_Space_Stations_250828.pdf page 2.
+  {id:'dragonslayer', name:'Dragonslayer', src:'The Ether Drake', srcLabel:'The Ether Drake, updated for the current edition by WarLore', leviathan:'Ether Drake',
    intro:`An Ether Drake has made one of the Cradle World systems its home! Drive the Ether Drake and your opponent away and claim this system.`,
    players:`2.`,
-   scoring:[`Space Stations score as Medium Clusters.`,
-            `All Space Stations are armed with Mass Driver Armament and Laser Armament.`,
+   scenery:`2-5 Micrometeor Clouds, 4-6 Dense Debris Fields.`,
+   deployment:`Both Players Close, from opposite table edges as shown. The Ether Drake is deployed in the centre of the table.`,
+   scoring:[`Standard Scoring. Each Space Station is a Medium Space Station.`,
             `The player that deals the final point of damage to the Ether Drake scores 12VP.`],
-   sections:[
-     ['Players',[`2.`]],
-     ['Fleet List',[`Standard.`]],
-     ['Suggested Approach',[`Rapid Response (opposing edges shown in blue).`]],
-     ['Duration',[`6 turns.`]],
-     ['Orbital Debris',[`Debris Fields (2-5 Fine, 4-6 Dense).`]],
-     ['Victory Conditions',null],
-     ['Controlling the Drake',[`The Ether Drake is deployed in the centre of the board.`,
-       `The Ether Drake activates at the end of the roundup phase and is controlled by the player that activated second this round.`,
-       `When activated the Ether Drake moves (see below) followed by attacking with any and all weapons it is able to.`,
-       `To move the Ether Drake, roll 1D3. On a 1 the Ether Drake moves its Thrust forwards. On a 2 it turns 90° to the left, then moves its Thrust forwards. On a 3 it turns 90° to the right, the moves its Thrust forwards. If the Ether Drake would move off of the table, rotate it 180° and containue its movement.`,
-       `After moving, the Ether Drake now turns directly towards the last ship that attacked it (including those that launched launch assets) and shoots any weapons it is able to.`,
-       `One both these actions are completed the Ether Drake’s activation ends.`]]]},
+   special:[`Each Space Station is armed with a Mass Driver Armament and a Laser Armament.`,
+            `The Ether Drake does not follow the normal activation order. It activates during the Cleanup step of the End Phase, and the player with 2nd initiative that round activates it.`,
+            `When the Ether Drake activates, roll a D3. On a 1 it moves its Thrust forwards. On a 2 it turns 90° to the left, then moves its Thrust forwards. On a 3 it turns 90° to the right, then moves its Thrust forwards. If the Ether Drake would move off the table, rotate it 180° and continue its movement.`,
+            `After moving, the Ether Drake turns to face the last Ship that attacked it (including Ships that launched Launch Assets at it) and attacks with every weapon it is able to. Its activation then ends.`],
+   tables:[{head:['Armament','Arc','Att','Lock','Dmg','Type','Special'],
+            rows:[['Mass Driver Armament','F/S/R','3','3+','1','K','-'],
+                  ['Laser Armament','F/S/R','2','3+','1','E','Burnthrough-1, Flash-1']]}]},
 ];
 
-// Ether_Drake.pdf, page 1, in that page's own columns (A and PD, not the current saves)
+// The Ether Drake (Ether_Drake.pdf page 1). Its rules are reworded into current terms: Crippling Effect (7.3.6),
+// explodes (7.3.7), criticals (7.3.3), Regenerate-X (13.1). The stat line is still the page's own (A and PD)
+// until its current saves are settled.
 const SCN_LEVIATHANS={'Ether Drake':{
   title:'The Ether Drake', kind:'Leviathan', art:'ether_drake.webp',
   stats:{head:['Name','Scan','Sig','Thrust','Hull','A','PD','G','T','Special'],
-         rows:[['Ether Drake','8"','8"','8"','17','2+','5','1','H','Fauna, Regenerate (2), Dragonscale Armour']]},
+         rows:[['Ether Drake','8"','8"','8"','17','2+','5','1','H','Fauna, Regenerate-2, Dragonscale Armour']]},
   weapons:{head:['Type','Lock','Attack','Damage','Arc','Special'],
            rows:[['Dragon’s Breath (Beam)','2+','6','2','F','Flash, Scald'],
                  ['Dragon’s Breath (Wide)','2+','4','2','F/S','Close Action']]},
-  rules:[['Fauna','This ship does not roll for Crippling Damage when reduced to below 50% of its starting Hull value (but still becomes crippled). Additionally this ship is removed from play once it has no Hull points remaining and does not roll for Catastrophic Damage.'],
-         ['Dragonscale Armour','Attacks against this ship cannot score Critical Hits. This ship’s armour cannot be modified. This ship suffers no damage from Bombers.']],
+  rules:[['Fauna','This Ship does not suffer a Crippling Effect when damage reduces it below half of its starting Hull value. It is removed from play once it has no Hull points remaining, and does not explode.'],
+         ['Regenerate-2','This Ship recovers 2 lost Hull Points at the end of its activation.'],
+         ['Dragonscale Armour','Attacks against this Ship cannot score criticals. This Ship’s saves cannot be modified. This Ship suffers no damage from Bombers.']],
   famousLabel:'Recognised Ether Drakes:', famous:'Francis, King Dahaka, Aubrey’s Bane, Tao-Tieh, Bubbles’ Buddy',
   lore:['The creature observed in the Shangri-La system is unlike anything the UCMF have previously encountered. Highly aggressive and with destructive capabilities to match.',
         'By all accounts, the Ether Drakes predate all galactic civilization. There once were multitudes, but their race has been wasting away for eons.',
@@ -740,7 +743,7 @@ function renderScenario(s){
     </div></div>`:'';
   if(own) return `<div class="scenario pub${hasMap?'':' no-map'}" data-scn="${s.id}" data-v="0">
     <div class="rules-col">
-      <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.src}</div></div>
+      <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.srcLabel||s.src}</div></div>
       ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
       ${s.sections.map(([h,b])=>sec(h,pubBullets(b||s.scoring))).join('')}
     </div>
@@ -749,7 +752,7 @@ function renderScenario(s){
   ${leviathan}`;
   return `<div class="scenario pub${hasMap?'':' no-map'}" data-scn="${s.id}" data-v="${on}">
     <div class="rules-col">
-      <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.src}</div></div>
+      <div class="sc-header"><h2 class="sc-name">${s.name}</h2><div class="pub-src">${s.srcLabel||s.src}</div></div>
       ${s.intro?`<p class="sc-flavor pub-intro">${s.intro}</p>`:''}
       ${s.body?pubParas(s.body):''}
       ${sec('Players',s.players?pubParas(s.players):'')}
@@ -763,7 +766,8 @@ function renderScenario(s){
     </div>
     ${right}
   </div>
-  ${ships?`<div class="pub-ships">${pubHead('Ships')}<div class="pub-ship-grid">${ships}</div></div>`:''}`;
+  ${ships?`<div class="pub-ships">${pubHead('Ships')}<div class="pub-ship-grid">${ships}</div></div>`:''}
+  ${leviathan}`;
 }
 
 /* ── Score sheet rows (shared/score.js) ─────────────────────────────────────
