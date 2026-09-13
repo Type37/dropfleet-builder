@@ -173,6 +173,131 @@ const MAPS = {
       ['MS', 24, 36, 0, [], 'S'],
     ],
   },
+  // ── 1st edition scenarios converted to the current edition (scenario-legacy.js). Read off the
+  // 1st edition maps: Clusters of 2/3/4 Sectors -> Small/Medium/Large Cities, Sector colours -> Features
+  // (tan Military -> out, green Orbital Defence -> odg, orange Power Plant -> pow, pink Comms Station -> com;
+  // blue Commercial and yellow Industrial carry none). `cb` rings the Clash-and-Battle-only Dropsites.
+  'the-ancient-relic': {
+    zones: () => zone.edges(),
+    // No measurements are printed; positions read off the map's grid
+    extra: () => `<circle cx="${_i(46)}" cy="${_i(24)}" r="${_i(2)}" fill="#D9793F" fill-opacity=".85" stroke="#8A4420" stroke-width="1" stroke-dasharray="3,1.6"/>`,
+    sites: [
+      ['MS', 6, 16, 0, [], ''],
+      ['MS', 32, 16, 0, [], ''],
+      ['MS', 16, 32, 0, [], ''],
+      ['MS', 42, 32, 0, [], ''],
+    ],
+  },
+  'resistance-spearhead': {
+    zones: () => zone.edges(),
+    sites: [
+      ['LC', 16, 16, 0, ['out', 'out'], 'NW'],
+      ['LC', 32, 16, 0, ['out', 'out'], ''],
+      ['MC', 24, 24, 0, [], ''],
+      ['LC', 16, 32, 0, ['out', 'out'], ''],
+      ['LC', 32, 32, 0, ['out', 'out'], ''],
+    ],
+    cb: [2],
+  },
+  'heavy-convoy': {
+    zones: () => zone.edges(),
+    sites: [],
+  },
+  'monitoring-the-situation': {
+    zones: () => `<rect x="0" y="0" width="200" height="${STRIP}" ${RED}/><rect x="0" y="${200 - STRIP}" width="200" height="${STRIP}" ${BLUE}/>`,
+    extra: () => ring(30),
+    sites: [
+      ['MC', 6, 24, 0, ['odg'], ''],
+      ['MC', 15, 24, 0, ['out', 'out', 'out'], ''],
+      ['MC', 24, 24, 0, ['odg'], ''],
+      ['MC', 33, 24, 0, ['out', 'out', 'out'], ''],
+      ['MC', 42, 24, 0, ['odg'], ''],
+    ],
+    cb: [1, 3],
+  },
+  'core-take-and-hold': {
+    zones: () => zone.edges(),
+    sites: [
+      ['LC', 4, 24, 0, ['out'], ''],
+      ['MC', 36, 18, 0, ['out'], 'N'],
+      ['LC', 24, 24, 0, ['out', 'out'], ''],
+      ['MC', 12, 30, 0, ['out'], 'WS'],
+      ['LC', 44, 24, 0, ['out'], 'E'],
+    ],
+    cb: [1, 3],
+  },
+  'core-mixed-engagement': {
+    zones: () => zone.edges(),
+    sites: [
+      ['MS', 24, 12, 0, [], ''],
+      ['LC', 4, 24, 0, ['out'], ''],
+      ['MS', 24, 24, 0, [], ''],
+      ['LC', 44, 24, 0, ['out'], 'E'],
+      ['MS', 24, 36, 0, [], 'S'],
+    ],
+    cb: [2],
+  },
+  'core-erupting-battlefront': {
+    zones: () => zone.edges(),
+    extra: () => ring(24),
+    sites: [
+      ['MC', 12, 12, 0, ['out'], ''],
+      ['MC', 36, 12, 0, ['out'], ''],
+      ['MS', 24, 18, 0, [], 'N'],
+      ['LC', 24, 24, 0, ['out', 'out'], ''],
+      ['MS', 24, 30, 0, [], ''],
+      ['MC', 12, 36, 0, ['out'], ''],
+      ['MC', 36, 36, 0, ['out'], 'ES'],
+    ],
+    labels: [[12, 12, 'B'], [36, 12, 'B'], [12, 36, 'A'], [36, 36, 'A']],
+    cb: [2, 4],
+    // Punching Up: the centre City gains 2 Orbital Defence Guns
+    variants: { 1: { site: 3, feats: ['out', 'out', 'odg', 'odg'] } },
+  },
+  'core-station-assault': {
+    zones: () => zone.cornerLs(12),
+    sites: [
+      ['MS', 24, 12, 0, [], ''],
+      ['MS', 44, 18, 0, [], 'NE'],
+      ['MS', 24, 24, 0, [], ''],
+      ['MS', 4, 30, 0, [], ''],
+      ['MS', 24, 36, 0, [], 'S'],
+    ],
+    labels: [[24, 12, 'B'], [44, 18, 'A'], [24, 24, 'A'], [4, 30, 'A'], [24, 36, 'B']],
+  },
+  'core-grid-control': {
+    zones: () => zone.edges(),
+    sites: [
+      ['MC', 24, 12, 0, ['out'], ''],
+      ['SC', 4, 24, 0, ['out', 'odg'], ''],
+      ['LC', 24, 24, 0, ['out', 'out', 'out', 'out'], ''],
+      ['SC', 44, 24, 0, ['odg', 'out'], 'E'],
+      ['MC', 24, 36, 0, ['out'], 'S'],
+    ],
+    cb: [0, 4],
+  },
+  'core-power-grab': {
+    zones: () => zone.cornerLs(12),
+    sites: [
+      ['MC', 42, 6, 0, [], 'NE'],
+      ['LC', 30, 18, 0, ['pow'], ''],
+      ['MC', 24, 24, 0, ['out', 'out', 'out'], ''],
+      ['LC', 18, 30, 0, ['pow'], 'WS'],
+      ['MC', 6, 42, 0, [], ''],
+    ],
+  },
+  'core-defence-relay': {
+    zones: () => zone.edges(),
+    sites: [
+      ['MS', 24, 18, 0, [], 'N'],
+      ['SC', 4, 24, 0, ['com'], ''],
+      ['LC', 18, 24, 0, ['out', 'out'], ''],
+      ['LC', 30, 24, 0, ['out', 'out'], 'E'],
+      ['SC', 44, 24, 0, ['com'], ''],
+      ['MS', 24, 30, 0, [], ''],
+    ],
+    cb: [0, 5],
+  },
 };
 
 // Hover spot radius (percent of the map) for each dropsite drawing
@@ -206,6 +331,10 @@ for (const [id, m] of Object.entries(MAPS)) {
     for (const [n, v] of swaps) toks += layer(v.feats, ` data-v="${n}" display="none"`, { v: n });
   }
   for (const [lx, ly, d] of m.los || []) spots.push({ t: 'lo', x: pct(_i(lx)), y: pct(_i(ly)), r: pct(_i(d / 2)) });
+  // Clash-and-Battle-only Dropsites get a blue ring; A/B names sit beside their Dropsite
+  const rings = (m.cb || []).map(si => { const [, xi, yi] = m.sites[si]; return `<circle cx="${_i(xi)}" cy="${_i(yi)}" r="15" fill="none" stroke="#2B4A6F" stroke-width="1.4" stroke-dasharray="4,2"/>`; }).join('');
+  const labels = (m.labels || []).map(([lx, ly, t]) => `<text x="${_i(lx) + 13}" y="${_i(ly) - 9}" font-size="9" font-weight="700" fill="#2B4A6F" font-family="sans-serif">${t}</text>`).join('');
+  sites = rings + sites + labels;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="1000" height="1000">` +
     `<rect width="200" height="200" fill="#f4efe8"/>${GR}${m.zones()}${m.extra ? m.extra() : ''}` +
     `<rect x="0" y="0" width="200" height="200" fill="none" stroke="#B8952F" stroke-width="1.6"/>${dims}${sites}${toks}</svg>\n`;

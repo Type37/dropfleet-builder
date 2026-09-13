@@ -27,32 +27,52 @@ footer a:focus-visible,footer button:focus-visible{outline:2px solid currentColo
 .ext::after{content:"\2197";margin-left:.25em;font-size:.85em}
 [aria-current="page"]{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.15em}
 
-/* A. ++hellohello */
-.hh{background:var(--black);color:var(--red);padding:22px 16px 10px}
-.hh .head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
-.hh .tools{columns:1;column-gap:40px;font:700 clamp(1.125rem,3.2vw,2.5rem)/1.05 var(--inter);letter-spacing:-.04em}
-.hh .tools.many{columns:2}
-.hh .tools a{display:flex;align-items:center;min-height:44px;break-inside:avoid;padding:.04em 0}
-.hh .tools a:hover{color:#fff}
-.hh .head .wl{font-size:clamp(3.5rem,9vw,8rem);flex:none}
-.hh .groups{display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-top:clamp(32px,6vw,80px)}
-.hh .chan ul{columns:2;column-gap:24px}
-.hh .stack{display:grid;gap:22px;align-content:start}
-.hh h3{margin:0 0 8px;font:600 1.3rem/1.1 var(--inter);letter-spacing:-.02em}
-.hh ul{list-style:none;margin:0;padding:0}
-.hh li{break-inside:avoid}
-.hh .groups a{display:block;padding:12px 0;font:500 1rem/1.25 var(--inter);color:#F3F0EA}
-.hh .groups a:hover{color:var(--red)}
-.hh .bar{display:flex;justify-content:space-between;align-items:center;margin:22px 0 8px;padding:18px 16px;background:var(--red);color:var(--black);font:600 clamp(1.3rem,2.4vw,1.8rem)/1 var(--inter);letter-spacing:-.02em}
-.hh .bar:hover{background:var(--amber)}
-.hh .bar svg{width:22px;height:22px;flex:none}
-.hh .base{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0 24px;font:600 .875rem/1.25 var(--inter)}
-.hh .base nav{display:flex;flex-wrap:wrap;gap:0 20px}
-.hh .base a,.hh .base button,.hh .base span{display:inline-flex;align-items:center;min-height:44px}
-.hh .base a:hover,.hh .base button:hover{color:#fff}
-@media (max-width:900px){.hh .groups{grid-template-columns:1fr 1fr}.hh .chan ul{columns:1}}
-@media (max-width:600px){.hh .head{flex-direction:column;gap:18px}.hh .head .wl{order:-1}.hh .tools.many{column-gap:16px}}
-@media (max-width:360px){.hh .tools.many{columns:1}}
+/* A. ++hellohello
+   amber = made by WarLore (wordmark, tools, wikis)
+   teal  = WarLore channels elsewhere (headline, YouTube bar) */
+.hh{--own:#FFCC00;--out:#16E0BD;--dim:#F3F0EA;position:relative;isolation:isolate;overflow:clip;background:#000;color:var(--out);padding:clamp(24px,3vw,48px) clamp(20px,3.2vw,56px) clamp(14px,1.6vw,24px)}
+/* rotating dark photos: greyscale Windows Color Waves, under a flat 55% black veil so every text colour keeps AA contrast */
+.hh .bgs{position:absolute;inset:0;z-index:-2;pointer-events:none}
+.hh .bgs i{position:absolute;inset:0;background:50% 60%/cover no-repeat;opacity:0}
+.hh .bgs i.on{opacity:1}
+.hh::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:rgba(0,0,0,.55)}
+/* the thin line from the original */
+.hh .rule{height:clamp(3px,.32vw,5px);background:var(--out);margin-bottom:clamp(18px,2.4vw,36px)}
+.hh a{text-underline-offset:.14em}
+.hh .head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:clamp(16px,3vw,48px)}
+.hh .chans{display:flex;flex-wrap:wrap;gap:0 .32em;font:700 clamp(2.5rem,4.6vw,4.5rem)/1 var(--inter);letter-spacing:-.055em;max-width:14ch}
+.hh .chans a{color:var(--out);display:inline-flex;align-items:center;white-space:nowrap}
+.hh .chans .ic{width:.62em;height:.62em;margin-right:.18em;flex:none;stroke-width:2.2}
+@media (min-width:900px){.hh .chans{display:grid;grid-template-columns:repeat(2,max-content);column-gap:.55em;max-width:none}.hh .chans.one{grid-template-columns:max-content}}
+.hh .chans a:hover{color:var(--dim)}
+.hh .chans .ext::after{font-size:.32em;vertical-align:.9em;margin-left:.1em;letter-spacing:0}
+.hh .head .wl{font-size:clamp(3.5rem,7.6vw,7.5rem);flex:none;max-width:100%}
+@media (min-width:900px){.hh .head .wl{font-size:clamp(6rem,10.5vw,12rem)}}
+.hh .band{position:relative;height:clamp(48px,11vw,180px)}
+@media (hover:hover) and (min-width:900px){.hh .band{height:clamp(200px,15vw,260px)}}
+.hh .reveal{position:absolute;left:0;bottom:8px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;width:360px;max-width:calc(100% - 8px);text-align:left;opacity:0;transition:opacity .12s ease;pointer-events:none}
+.hh .reveal.on{opacity:1}
+.hh .reveal .mk{flex:none;height:40px;display:flex;align-items:flex-end;justify-content:flex-start}
+.hh .reveal .mk img{display:block;width:auto;filter:brightness(0) invert(1);opacity:.72}
+.hh .reveal .osp{display:inline-block;background:#004C80;color:#fff;font:800 1.05rem/1 var(--inter);text-transform:uppercase;letter-spacing:-.01em;padding:.45em .6em .4em;white-space:nowrap;font-style:normal}
+.hh .reveal .feat{margin:0;width:360px;max-width:100%;min-height:var(--featH,4.2em);display:flex;flex-direction:column;justify-content:flex-start;text-align:left;font:500 clamp(1rem,1.2vw,1.25rem)/1.4 var(--inter);color:var(--dim)}
+.hh .reveal .feat b{display:block;font-weight:600}
+@media (hover:none){.hh .reveal{display:none}}
+@media (prefers-reduced-motion:reduce){.hh .reveal{transition:none}}
+.hh .tiny{height:1em;width:auto;margin-right:.3em;vertical-align:-.15em;filter:grayscale(1)}
+.hh .tools{display:flex;flex-wrap:wrap;gap:4px clamp(14px,1.6vw,26px);margin-top:0;font:700 clamp(1.25rem,1.7vw,1.75rem)/1.25 var(--inter);letter-spacing:-.02em}
+.hh .tools a{display:inline-flex;align-items:center;min-height:32px;color:var(--own)}
+.hh .tools a:hover{color:var(--dim)}
+.hh .bar{display:flex;justify-content:space-between;align-items:center;margin:clamp(18px,2vw,32px) 0 clamp(24px,3vw,44px);padding:clamp(18px,1.8vw,26px) clamp(18px,1.8vw,26px);background:var(--out);color:#000;font:600 clamp(1.375rem,2vw,2rem)/1 var(--inter);letter-spacing:-.02em}
+.hh .bar:hover{background:var(--own)}
+.hh .bar svg{width:clamp(20px,2vw,30px);height:auto;flex:none}
+.hh .base{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0 24px;font:500 clamp(1rem,1.1vw,1.125rem)/1.35 var(--inter)}
+.hh .base nav{display:flex;flex-wrap:wrap;gap:0 clamp(18px,2vw,32px)}
+.hh .base a,.hh .base button,.hh .base span{display:inline-flex;align-items:center;min-height:40px}
+.hh .base .own{color:var(--own)}
+.hh .base .dim{color:var(--dim)}
+.hh .base a:hover,.hh .base button:hover{color:var(--out)}
+@media (max-width:640px){.hh .head{flex-direction:column;align-items:stretch}.hh .head .wl{align-self:flex-start}.hh .head .wl{order:-1}.hh .chans{max-width:none}.hh .base{flex-direction:column;align-items:flex-start}}
 
 /* B. Kuba */
 .kb{background:#EFEFEF;padding:90px 8% 36px}
@@ -110,27 +130,27 @@ const ART = '../assets/art/basilisk.webp';
 const BIG = { name:'Watch on YouTube', url:'https://www.youtube.com/warlore' };
 
 const TOOLS = [
-  { id:'dropfleet', name:'Dropfleet',       url:'https://type37.github.io/dropfleet-builder/' },
-  { id:'dropzone',  name:'Dropzone',        url:'https://type37.github.io/dropzone-3e-army-builder/' },
-  { id:'abs',       name:'A Billion Suns',  url:'https://type37.github.io/a-billion-suns-shipyard/' },
-  { id:'pacific',   name:'Pacific Command', url:'https://jetwong.neocities.org/wargaming/historicals/pacific-command-builder-2' },
-  { id:'dragon',    name:'Dragon Rampant',  url:'https://type37.github.io/dragon-rampant-2e-warband-builder/' },
-  { id:'xenos',     name:'Xenos Rampant',   url:'https://type37.github.io/xenos-rampant-force-builder/' },
-  { id:'warcrow',   name:'Warcrow',         url:'https://jetwong.neocities.org/wargaming#warcrow' },
+  { id:'dropfleet', name:'Dropfleet',       url:'https://type37.github.io/dropfleet-builder/', full:'Dropfleet Commander', kind:'Fleet builder, scenario generator, scenario reference, combat calc, quick reference sheets, rules wiki, starter lists & builds', mark:'logo:_logos/dropfleet.webp' },
+  { id:'dropzone',  name:'Dropzone',        url:'https://type37.github.io/dropzone-3e-army-builder/', full:'Dropzone Commander 3E', kind:'Army builder, scenario references, rules wiki', mark:'logo:_logos/dropzone.webp' },
+  { id:'abs',       name:'A Billion Suns',  url:'https://type37.github.io/a-billion-suns-shipyard/', full:'A Billion Suns 2e', kind:'Fleet builder, solo campaign tracker, ship compendium, starter lists, rules overview, custom faction builder', mark:'osprey:A Billion Suns' },
+  { id:'pacific',   name:'Pacific Command', url:'https://jetwong.neocities.org/wargaming/historicals/pacific-command-builder-2', full:'Pacific Command', kind:'Task force builder, campaign builder, historical lists', mark:'osprey:Pacific Command' },
+  { id:'dragon',    name:'Dragon Rampant',  url:'https://type37.github.io/dragon-rampant-2e-warband-builder/', full:'Dragon Rampant 2e', kind:'Warband builder, starter warbands', mark:'logo:_logos/dragon-rampant.webp' },
+  { id:'xenos',     name:'Xenos Rampant',   url:'https://type37.github.io/xenos-rampant-force-builder/', full:'Xenos Rampant', kind:'Detachment builder, pre-made detachments', mark:'osprey:Xenos Rampant' },
+  { id:'steelrift', name:'Steel Rift', url:'https://type37.github.io/Steel-Rift-Hangar-WL/', full:'Steel Rift Army Forger', kind:'Army builder, print mode', mark:'logo:_logos/steel-rift.svg' },
+  { id:'warcrow',   name:'Warcrow',         url:'https://jetwong.neocities.org/wargaming#warcrow', full:'Warcrow', kind:'Quick reference sheet, print-friendly rules reference, links, references, fonts, guides for new players', mark:'logo:_logos/warcrow.webp' },
 ];
-const ALL_TOOLS = { name:'All tools', url:'https://jetwong.neocities.org/wargaming' };
+const ALL_TOOLS = { id:'all', name:'All tools', full:'WarLore wargaming tools', kind:'Every tool and resource', url:'https://jetwong.neocities.org/wargaming' };
 const WIKIS = [
-  { name:'Human Sphere', note:'Infinity', url:'https://human-sphere.com' },
-  { name:"Wanderer's Inn", note:'Warcrow', url:'https://wanderers-inn.com/Main_Page' },
+  { id:'hs', name:'Human Sphere', full:'Human Sphere', tiny:'_logos/infinity-n.webp', url:'https://human-sphere.com' },
+  { id:'wi', name:"Wanderer's Inn", full:"Wanderer's Inn", tiny:'_logos/warcrow-w.webp', url:'https://wanderers-inn.com/Main_Page' },
 ];
 const CHANNELS = [
-  { id:'youtube',   name:'YouTube',   handle:'warlore',   url:'https://www.youtube.com/warlore' },
-  { id:'patreon',   name:'Patreon',   handle:'warlore',   url:'https://www.patreon.com/warlore' },
-  { id:'discord',   name:'Discord',   handle:'Join',      url:'https://discord.com/invite/kmE8bK84gu' },
-  { id:'bluesky',   name:'Bluesky',   handle:'warlore',   url:'https://bsky.app/profile/warlore.bsky.social' },
-  { id:'instagram', name:'Instagram', handle:'jetwong1',  url:'https://www.instagram.com/jetwong1/' },
-  { id:'github',    name:'GitHub',    handle:'Type37',    url:'https://github.com/Type37' },
-  { id:'kofi',      name:'Ko-fi',     handle:'jetwong',   url:'https://ko-fi.com/jetwong' },
+  { id:'youtube',   name:'YouTube',   handle:'warlore',   url:'https://www.youtube.com/warlore', icon:`<svg xmlns="http://www.w3.org/2000/svg" class="ic" aria-hidden="true" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M2 8a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/><path d="m10 9l5 3l-5 3z"/></g></svg>` },
+  { id:'patreon',   name:'Patreon',   handle:'warlore',   url:'https://www.patreon.com/warlore', icon:`<svg xmlns="http://www.w3.org/2000/svg" class="ic" aria-hidden="true" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 8.408c-.003-2.299-1.746-4.182-3.79-4.862c-2.54-.844-5.888-.722-8.312.453c-2.939 1.425-3.862 4.545-3.896 7.656c-.028 2.559.22 9.297 3.92 9.345c2.75.036 3.159-3.603 4.43-5.356c.906-1.247 2.071-1.599 3.506-1.963c2.465-.627 4.146-2.626 4.142-5.273"/></svg>` },
+  { id:'bluesky',   name:'Bluesky',   handle:'warlore',   url:'https://bsky.app/profile/warlore.bsky.social', icon:`<svg xmlns="http://www.w3.org/2000/svg" class="ic" aria-hidden="true" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.335 5.144C4.681 3.945 2 3.017 2 5.97c0 .59.35 4.953.556 5.661C3.269 14.094 5.686 14.381 8 14c-4.045.665-4.889 3.208-2.667 5.41C6.363 20.428 7.246 21 8 21c2 0 3.134-2.769 3.5-3.5q.5-1 .5-1.5q0 .5.5 1.5c.366.731 1.5 3.5 3.5 3.5c.754 0 1.637-.571 2.667-1.59C20.889 17.207 20.045 14.664 16 14c2.314.38 4.73.094 5.444-2.369c.206-.708.556-5.072.556-5.661c0-2.953-2.68-2.025-4.335-.826C15.372 6.806 12.905 10.192 12 12c-.905-1.808-3.372-5.194-5.665-6.856"/></svg>` },
+  { id:'instagram', name:'Instagram', handle:'jetwong1',  url:'https://www.instagram.com/jetwong1/', icon:`<svg xmlns="http://www.w3.org/2000/svg" class="ic" aria-hidden="true" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M4 8a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0-6 0m7.5-4.5v.01"/></g></svg>` },
+  { id:'github',    name:'GitHub',    handle:'Type37',    url:'https://github.com/Type37', icon:`<svg xmlns="http://www.w3.org/2000/svg" class="ic" aria-hidden="true" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2c2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2a4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6c-.6.6-.6 1.2-.5 2V21"/></svg>` },
+  { id:'kofi',      name:'Ko-fi',     handle:'jetwong',   url:'https://ko-fi.com/jetwong', icon:`<svg xmlns="http://www.w3.org/2000/svg" class="ic" aria-hidden="true" viewBox="0 0 24 24"><path fill="currentColor" d="M11.351 2.715c-2.7 0-4.986.025-6.83.26C2.078 3.285 0 5.154 0 8.61c0 3.506.182 6.13 1.585 8.493c1.584 2.701 4.233 4.182 7.662 4.182h.83c4.209 0 6.494-2.234 7.637-4a9.5 9.5 0 0 0 1.091-2.338C21.792 14.688 24 12.22 24 9.208v-.415c0-3.247-2.13-5.507-5.792-5.87c-1.558-.156-2.65-.208-6.857-.208m0 1.947c4.208 0 5.09.052 6.571.182c2.624.311 4.13 1.584 4.13 4v.39c0 2.156-1.792 3.844-3.87 3.844h-.935l-.156.649c-.208 1.013-.597 1.818-1.039 2.546c-.909 1.428-2.545 3.064-5.922 3.064h-.805c-2.571 0-4.831-.883-6.078-3.195c-1.09-2-1.298-4.155-1.298-7.506c0-2.181.857-3.402 3.012-3.714c1.533-.233 3.559-.26 6.39-.26m6.547 2.287c-.416 0-.65.234-.65.546v2.935c0 .311.234.545.65.545c1.324 0 2.051-.754 2.051-2s-.727-2.026-2.052-2.026m-10.39.182c-1.818 0-3.013 1.48-3.013 3.142c0 1.533.858 2.857 1.949 3.897c.727.701 1.87 1.429 2.649 1.896a1.47 1.47 0 0 0 1.507 0c.78-.467 1.922-1.195 2.623-1.896c1.117-1.039 1.974-2.364 1.974-3.897c0-1.662-1.247-3.142-3.039-3.142c-1.065 0-1.792.545-2.338 1.298c-.493-.753-1.246-1.298-2.312-1.298"/></svg>` },
 ];
 const WORK = [
   { name:'Hire me for UX', url:'https://www.notion.so/Welcome-to-Notion-267648d58edc8069a0dae8eb06295caf?source=copy_link' },
@@ -143,7 +163,7 @@ const newTab = u => /^https?:/.test(u) && !OWN.has(u);
 const ext = u => newTab(u) ? ' target="_blank" rel="noopener"' : '';
 const A = (l, cls = '') => {
   const nt = newTab(l.url), c = [cls, nt ? 'ext' : ''].filter(Boolean).join(' ');
-  return `<a href="${l.url}"${nt ? ' target="_blank" rel="noopener"' : ''}${isCurrent(l) ? ' aria-current="page"' : ''}${c ? ` class="${c}"` : ''}>${l.name}${nt ? '<span class="sr"> (opens in a new tab)</span>' : ''}</a>`;
+  return `<a href="${l.url}"${nt ? ' target="_blank" rel="noopener"' : ''}${isCurrent(l) ? ' aria-current="page"' : ''}${c ? ` class="${c}"` : ''}${l.mark || l.kind ? ` data-key="${l.id}"` : ''}>${l.tiny ? `<img class="tiny" src="${l.tiny}" alt="">` : ''}${l.name}${l.kind ? `<span class="sr">, ${l.kind}</span>` : ''}${nt ? '<span class="sr"> (opens in a new tab)</span>' : ''}</a>`;
 };
 const WL = () => `<a class="wl" href="${HOME}" target="_blank" rel="noopener">WarLore</a>`;
 const year = new Date().getFullYear();
@@ -151,22 +171,24 @@ const toTop = `onclick="window.scrollTo({top:0,behavior:matchMedia('(prefers-red
 const ARROW = '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11L11 3M5 3h6v6"/></svg>';
 
 const FOOTERS = [
-  ['++hellohello', 'https://www.footer.design/sites/hellohello', () => `
+  ['++hellohello', 'https://www.footer.design/sites/hellohello', () => {
+    const head = CHANNELS.filter(c => c.url !== BIG.url);
+    return `
     <footer class="hh">
-      <div class="head"><nav class="tools${TOOLS.length > 6 ? ' many' : ''}" aria-label="WarLore tools">${TOOLS.map(t => A(t)).join('')}</nav>${WL()}</div>
-      <div class="groups">
-        <nav class="chan" aria-label="Channels"><h3>Channels</h3><ul>${CHANNELS.map(c => `<li>${A(c)}</li>`).join('')}</ul></nav>
-        <div class="stack">
-          <nav aria-label="Wikis"><h3>Wikis</h3><ul>${WIKIS.map(w => `<li>${A(w)}</li>`).join('')}</ul></nav>
-          <nav aria-label="Work"><h3>Work</h3><ul>${WORK.map(w => `<li>${A(w)}</li>`).join('')}<li><a href="mailto:${EMAIL}">Feedback</a></li></ul></nav>
-        </div>
+      <div class="bgs" aria-hidden="true"><i></i><i></i></div>
+      <div class="rule" aria-hidden="true"></div>
+      <div class="head">
+        <nav class="chans${new URLSearchParams(location.search).get('chans') === '1' ? ' one' : ''}" aria-label="WarLore channels">${head.map(c => A(c).replace(/(<a[^>]*>)/, `$1${c.icon || ''}`)).join('')}</nav>
+        ${WL()}
       </div>
+      <div class="band"></div><div class="reveal" aria-hidden="true"></div>
+      <nav class="tools" aria-label="WarLore tools">${TOOLS.map(t => A(t)).join('')}${A(ALL_TOOLS)}</nav>
       <a class="bar" href="${BIG.url}" target="_blank" rel="noopener">${BIG.name}<span class="sr"> (opens in a new tab)</span>${ARROW}</a>
       <div class="base">
-        <nav aria-label="Footer">${A(ALL_TOOLS)}<a href="mailto:${EMAIL}">${EMAIL}</a><button type="button" ${toTop}>Back to top</button></nav>
-        <span>Unofficial &copy;${year}</span>
+        <nav aria-label="Wikis">${WIKIS.map(w => A(w, 'own')).join('')}</nav>
+        <nav aria-label="Work">${WORK.map(w => A(w, 'dim')).join('')}<a class="dim" href="mailto:${EMAIL}">${EMAIL}</a><button class="dim" type="button" ${toTop}>Back to top</button></nav>
       </div>
-    </footer>`],
+    </footer>`}],
 
   ['Kuba (option 5 on the page)', 'https://www.footer.design/sites/kuba', () => `
     <footer class="kb">
@@ -198,8 +220,9 @@ const FOOTERS = [
     </div></footer>`],
 ];
 
+if (new URLSearchParams(location.search).get('only') === 'hh') FOOTERS.splice(1);
 document.getElementById('gallery').innerHTML = FOOTERS.map(([name, url, render]) =>
-  `<p class="src"><a href="${url}" target="_blank" rel="noopener">${name}</a></p>${render()}`).join('');
+  (new URLSearchParams(location.search).get('only') ? '' : `<p class="src"><a href="${url}" target="_blank" rel="noopener">${name}</a></p>`) + render()).join('');
 
 const tick = () => {
   const d = new Date(), s = d.getSeconds(), m = d.getMinutes() + s / 60, h = d.getHours() % 12 + m / 60;
@@ -210,6 +233,75 @@ const tick = () => {
   });
 };
 tick(); setInterval(tick, 1000);
+
+/* Hover or focus a tool or wiki: its logo (greyed) or Osprey-blue title appears in the empty band, with what the link is. */
+const ALL_LINKS = [...TOOLS, ALL_TOOLS];
+document.querySelectorAll('.hh').forEach(ft => {
+  const box = ft.querySelector('.reveal'); if (!box) return;
+  let hideT;
+  const show = key => {
+    const l = ALL_LINKS.find(x => x.id === key); if (!l) return;
+    clearTimeout(hideT);
+    const [type, val] = (l.mark || ':').split(/:(.*)/s);
+    const mark = type === 'logo' ? `<img src="${val}" alt="">` : type === 'osprey' ? `<i class="osp">${val}</i>` : '';
+    /* skip the name when the mark already spells it (Osprey title, or the game's own logo) */
+    const spelled = type === 'osprey' || ['dropfleet', 'dropzone', 'warcrow', 'dragon', 'steelrift'].includes(l.id);
+    box.innerHTML = `<div class="mk">${mark}</div><p class="feat">${spelled ? '' : `<b>${l.full || l.name}</b>`}${l.kind || ''}</p>`;
+    box.classList.add('on');
+    const img = box.querySelector('.mk img');
+    const fit = () => {
+      const H0 = 34, ratio = img.naturalWidth / img.naturalHeight || 4;
+      img.style.height = Math.round(Math.min(40, Math.max(H0 * 0.6, H0 * Math.sqrt(4 / ratio)))) + 'px';
+      place(key);
+    };
+    if (img) { img.complete ? fit() : (img.onload = fit); }
+    place(key);
+  };
+  const place = key => {
+    const link = ft.querySelector(`[data-key="${key}"]`); if (!link) return;
+    const host = box.offsetParent || ft, hr = host.getBoundingClientRect(), lr = link.getBoundingClientRect();
+    /* left edge of the box lines up with the left edge of the word you're pointing at */
+    const w = box.offsetWidth;
+    const left = Math.max(0, Math.min(lr.left - hr.left, hr.width - w));
+    box.style.left = left + 'px';
+    box.style.top = 'auto';
+    box.style.bottom = (hr.bottom - lr.top + 4) + 'px';
+  };
+  const hide = () => { hideT = setTimeout(() => box.classList.remove('on'), 120); };
+  /* only on wide screens with a real mouse: phones fire mouseenter on tap, and narrow layouts have no room above the tools */
+  const canHover = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 900px)');
+  ft.querySelectorAll('[data-key]').forEach(a => {
+    a.addEventListener('mouseenter', () => { if (canHover.matches) show(a.dataset.key); });
+    a.addEventListener('focus', () => { if (canHover.matches) show(a.dataset.key); });
+    a.addEventListener('mouseleave', hide);
+    a.addEventListener('blur', hide);
+  });
+  const measure = () => {
+    let tallest = 0;
+    box.style.setProperty('--featH', '0px');
+    ALL_LINKS.forEach(l => {
+      if (!l.kind) return;
+      box.innerHTML = `<div class="mk"></div><p class="feat">${l.kind}</p>`;
+      tallest = Math.max(tallest, box.querySelector('.feat').offsetHeight);
+    });
+    box.innerHTML = '';
+    box.classList.remove('on');
+    box.style.setProperty('--featH', tallest + 'px');
+  };
+  document.fonts.ready.then(measure);
+  addEventListener('resize', measure);
+  const pin = new URLSearchParams(location.search).get('show');
+  if (pin) show(pin);
+});
+
+/* Footer photo: a random dark wave, picked once per page load. */
+const BGS = ['01-purple-dm-4k','02-green-blue-dm-4k','03-blue-purple-dm-4k','04-pink-orange-dm-4k','05-orange-dm-4k','06-yellow-dm-4k','wip-dark','wip-dark-full'].map(n => `_bg/${n}.webp`);
+document.querySelectorAll('.hh .bgs').forEach(box => {
+  const a = box.querySelector('i');
+  a.style.backgroundImage = `url(${BGS[Math.floor(Math.random() * BGS.length)]})`;
+  a.classList.add('on');
+});
+
 </script>
 </body>
 </html>

@@ -22,10 +22,12 @@ SHIPS = ['Terminus Harvester', 'Flenser', 'Provenance Ark', 'Tugboat', 'Hyperyac
 
 
 def scenario_text():
-    src = io.open(LIB, encoding='utf-8').read()
     out = {}
-    for m in re.finditer(r"\{id:'([^']+)'(.*?)(?=\n\s*\{id:'|\n\];)", src, re.S):
-        out[m.group(1)] = m.group(2)
+    # scenario-legacy.js adds the converted 1st edition scenarios, each as add({id:...})
+    for lib in (LIB, os.path.join(os.path.dirname(LIB), 'scenario-legacy.js')):
+        src = io.open(lib, encoding='utf-8').read()
+        for m in re.finditer(r"\{id:'([^']+)'(.*?)(?=\n\s*(?:add\()?\{id:'|\n\];|\n\s*SCENARIOS\.push)", src, re.S):
+            out[m.group(1)] = m.group(2)
     return out
 
 

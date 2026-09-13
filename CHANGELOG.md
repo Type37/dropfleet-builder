@@ -22,6 +22,22 @@ the builder's launch table, or any of the mobile print tables. All of those
 now show it. Launch assets count a crit rule on the asset or on its bay
 (`critOnFor`). Mobile has its own copy of the helper.
 
+### 2026-09-12: Older-edition scenarios on the Scenario Reference
+
+Twenty more scenarios, each with its map, from TTCombat's "Scenarios (Unsupported)"
+downloads: The Ancient Relic (`Automated_Dreadnought.pdf`), the three Princess
+Liner scenarios (`Princess_Liner_Scenarios.pdf`, newly downloaded), the three
+Advent scenarios, the eight 1st-edition Core Scenarios, and the Tournament Pack
+2017's five plus its setup and scoring rules. The Tournament Pack prints its
+scenarios as pictures, so that text is transcribed by eye; its maps and its
+Moonshot Kill Points table (500+/750+/1000+) differ from the Core Scenarios PDF
+(600+/760+/1000+), so both are kept. Data lives in
+`scenarios/dropfleet/scenario-legacy.js`, following Dragonslayer's `sections`
+model (verbatim, typos kept, no current-rulebook explanations, no rounds 4 and 6
+scoring). The Automated Dreadnought and Princess Cruise Liner get ship cards with
+their page's art; the Princess Liner maps show that PDF's map key. Maps and art:
+`scripts/extract-legacy-scenario-maps.py`.
+
 ### 2026-09-12: UCM 260828 silent re-upload, Francis Mendoza
 
 TTCombat overwrote `UCM_Combined_Fleet_Stats_260828.pdf` in place (same name,
@@ -35,55 +51,6 @@ A Dropfleet/Dropzone switch on the generator pointed at a Dropzone scenario
 generator built on a d66 chart. The Dropzone rulebook has no such chart and no
 random setup (players choose the Scenario, 3.3), so both came out the same day.
 Dropzone keeps its Scenario Reference, still linked from the reference switch.
-
-### 2026-09-13: Dragonslayer checked against the 1st edition rulebook; three more ship specs
-
-Jet supplied the 1st edition rulebook (Desktop Dropfleet Rulebook v1.1, now in Rules-Mechanics-PDFs, untracked).
-Page 36 defines Rapid Response: one Battlegroup of your choice on turn 1, each remaining one on a 4+ on turn 2
-and a 2+ on turn 3, all by turn 4. Dragonslayer's deployment changed from Close (a guess) to Staggered, the
-current type that feeds a fleet in over rounds. The same page's Cluster table (Medium: Hold 3VP, Contest 1VP,
-scored at the end of the Roundup Phase on turns 4 and 6) matches the Medium Space Station under Standard
-Scoring, so that conversion stands. Specs added: New York Battleship (Length 1293m, Beam 421m, Height 383m,
-Displacement 25,253,000m³), Shenlong Heavy Cruiser, Ganymede Assault Troopship. The New
-York famous-admiral flagship is left alone.
-
-### 2026-09-12: Dragonslayer: who fires the station Armaments
-
-The old page armed its stations but never said who fires them. Nobody pays for these stations, so the player
-who Controls one attacks with its Armaments (Jet), at the end of the Activation Phase: the timing the Fleet
-Space Stations PDF gives stations ("activate at the end of the Activation Phase alongside other Dropsites").
-That PDF limits a bought station's weapons to the player who paid for it, which doesn't apply here. The Drake's
-activation and movement bullets moved from Special Rules to its card, under the old page's own heading,
-Controlling the Drake.
-
-### 2026-09-12: Dropsite Reference shows only the scenario's Dropsites
-
-Scenario pages take the Dropsites from the map's hover spots (`SCN_HOTSPOTS` ds keys) plus any named in the
-scenario's text; with none, the table is left out. The generator takes them from the rolled Layout, after
-the Variant swaps (Gridlocked MC to MS, Secure Comms Array LC to LS, Orbital Complex every City to a Station).
-The score sheet's header line (round and totals) shows only when the sheet is closed, and the row and bar
-dividers are gone. `score.js` is shared with Dropzone via tools/dzc/sync_scenario_shell.py. The round and player
-controls now sit on the Score title line, and player totals read "0VP".
-
-### 2026-09-12: Scenario pages: one screen type scale
-
-A font audit found 14 distinct sizes and the ship cards still at print sizes (weapon headers, chips,
-stat labels and crit notes at 9-11px beside 14px rules). `scenario-card.css` tokens are now rem:
-display 30, section 20, heading 16, body 15, small 13, label 12 (the floor), applied in the screen block
-to ship cards, weapon rows, stat strips, the note and famous-ship line; tracked capitals on column labels
-are gone. Print sizes are untouched. `scenarios/shared/score.js` is left as is because it is synced into
-the Dropzone repo.
-
-### 2026-09-12: Scenario pages: rulebook scoring table, rule chips, tidier weapon tables
-
-Standard Scoring's table was checked against the rulebook page (12.1.5.1, page 33): headings now read
-Dropsite Size, Control / Levelled, Contest / Ruined (were Dropsite, Control, Contested / Ruined), values
-2VP, with Levelled and Ruined defined from 11.1; the score sheet counters read Control and Contest, since
-Levelled/Ruined only score "if specifically stated". `build-scenario-terms.py` now also exports every Ship
-and Weapon Special Rule (rulebook 14.1, 14.2) as `SCN_RULES`; a weapon chip opens its text, X read as the
-chip's number. Weapon lists use a subgrid so columns fit their content. The source line under a scenario's
-title and the scenery-name hover text are gone (Jet). Dragonslayer's scoring line is just "Standard Scoring.",
-since a Medium Space Station is already a Dropsite.
 
 ### 2026-09-12: Dragonslayer moved to the current edition
 
@@ -101,8 +68,7 @@ has no current source, so Jet approved these (2026-09-12): ES 3+, KS 3+, BS 5+ (
 saves of the Bioficer Battleships, the current Heavy ships with Hull 17); PD dropped (no
 current stat; Dragonscale Armour already ignores Bombers); both Dragon's Breath
 weapons E; Flash-1 and Scald-1. The page carries Jet's own note that it was converted
-from 1st edition. Its map is redrawn by `scripts/draw-rulebook-maps.js` in the generator's
-style (Line edges, four Medium Space Stations 12" from the centre, the Drake as an orange disc).
+from 1st edition.
 
 ### 2026-09-12: Dragonslayer scenario and the Ether Drake
 

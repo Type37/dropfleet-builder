@@ -565,7 +565,6 @@ const SCN_SOURCES={
   'Automated Dreadnought':'https://cdn.shopify.com/s/files/1/0965/1274/files/Automated_Dreadnought.pdf?444',
   'Advent Scenarios':'https://cdn.shopify.com/s/files/1/0965/1274/files/Advent_Scenarios.pdf?525',
   'Core Scenarios':'https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_Core_Scenarios_2704ae6b-ad65-48af-a5e2-109efd0e5109.pdf?v=1661442291',
-  'Tournament Pack 2017':'https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_TOURNAMENT_PACK_2017.pdf?13027330658637360583',
 };
 
 function scnParas(v){ return (Array.isArray(v)?v:[v]).map(p=>`<p>${p}</p>`).join(''); }
@@ -774,7 +773,7 @@ function renderScenario(s){
           :`<div class="pub-ship-stats">${['Thrust','Scan','Sig','Hull','A','PD','G','T'].map(levCell).join('')}</div>
         <div class="pub-lev-special">${wpnChips(levVal('Special'))}</div>
         ${weaponList(lev.weapons.rows.map(([name,lock,attack,damage,arc,special,type])=>({name,lock,attack,damage,arc,special,type})))}`}
-        ${s.leviathanRules?`<div class="lhdr">Controlling the Drake</div>${pubBullets(s.leviathanRules)}`:''}
+        ${s.leviathanRules?`<div class="lhdr">${s.leviathanRulesLabel||'Controlling the Drake'}</div>${pubBullets(s.leviathanRules)}`:''}
         ${lev.rules.map(([n,t])=>[].concat(t).map((p,i)=>`<p class="rule-text">${i?'':`<b>${n}:</b> `}${p}</p>`).join('')).join('')}
         ${(lev.lore||[]).length||lev.famous?`<div class="lhdr">Lore</div>
         ${(lev.lore||[]).map(p=>`<p class="pub-lev-lore">${p}</p>`).join('')}
