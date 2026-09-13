@@ -72,7 +72,10 @@ ScenarioShell.start({
   titleSuffix:'Dropfleet Commander Scenarios',
   indexDocTitle:'Dropfleet Commander: Scenarios',
   indexTitle:'Scenarios',
-  groups:['Rulebook','Scenario Expansion 1','Civilian Ships & Scenarios','The Ether Drake (1st edition)','Automated Dreadnought (1st edition)','Advent Scenarios (1st edition)','Core Scenarios (1st edition)'].map(src=>({name:src.replace('(1st edition)','(Converted from 1e)'),items:SCENARIOS.filter(s=>s.src===src)})),
+  // Index groups: a heading and the source books under it (each scenario keeps its own book for its Source link)
+  groups:[['Rulebook',['Rulebook']],['Scenario Expansion 1',['Scenario Expansion 1']],['Civilian Ship Scenarios',['Civilian Ships & Scenarios']],
+    ['Converted 1e Scenarios',['The Ether Drake (1st edition)','Automated Dreadnought (1st edition)','Advent Scenarios (1st edition)','Core Scenarios (1st edition)']]]
+    .map(([name,srcs])=>({name,items:srcs.flatMap(src=>SCENARIOS.filter(s=>s.src===src))})),
   id:s=>s.id,
   name:s=>s.name,
   // The Scenario Generator in the header already rolls a scenario

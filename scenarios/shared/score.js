@@ -31,6 +31,13 @@ window.ScoreSheet = (function () {
 .ss-seg button[aria-pressed="true"]{background:#d3b27a;color:#0E0C08;}
 .ss-seg button.mark{box-shadow:inset 0 -3px 0 #8a6a12;}
 .ss-seg .ss-n{font-weight:600;margin-left:8px;}
+/* Red and Blue players, in the map's deployment colours: tinted when not chosen, filled when chosen */
+.ss-seg .ss-p-red{background:#f6e4de;color:#8f2e14;}
+.ss-seg .ss-p-blue{background:#e1edf4;color:#15587b;}
+.ss-seg .ss-p-red:hover{background:#efd2c8;}
+.ss-seg .ss-p-blue:hover{background:#cfe1ec;}
+.ss-seg .ss-p-red[aria-pressed="true"]{background:#B23A1C;color:#fff;}
+.ss-seg .ss-p-blue[aria-pressed="true"]{background:#1A6A94;color:#fff;}
 .ss-rows{list-style:none;margin:0;padding:0;}
 .ss-row{display:grid;grid-template-columns:minmax(0,26em) max-content;justify-content:start;align-items:center;gap:6px 32px;padding:6px 0;font-size:16px;line-height:1.45;}
 .ss-row .ss-t{flex:1;min-width:0;}
@@ -66,6 +73,8 @@ window.ScoreSheet = (function () {
   const MINUS = icon('M5 12h14'), PLUS = icon('M12 5v14m-7-7h14'), CHEV = 'M6 9l6 6l6-6';
   const plain = t => String(t).replace(/<[^>]+>/g, '');
   const idOf = (row, j) => plain(row.text).toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 60) + '#' + j;
+  // Players take the map's sides: Red, Blue, then Red 2 and Blue 2 when there are more than two
+  const playerName = (i, n) => (i % 2 ? 'Blue' : 'Red') + (n > 2 ? ` ${Math.floor(i / 2) + 1}` : '');
   const vpText = (p) => `${p.vp} VP${p.kind === 'count' ? '<span class="ss-each"> each</span>' : ''}`;
 
   function mount(el, cfg) {
@@ -109,7 +118,7 @@ window.ScoreSheet = (function () {
           <button type="button" class="ss-toggle" aria-expanded="${st.open}"><svg class="ss-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="${CHEV}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="ss-title">Score</span></button>
           <div class="ss-bar">
             <div class="ss-seg" role="group" aria-label="Round"><span class="ss-l">Round</span>${Array.from({ length: rounds }, (_, i) => i + 1).map(r => `<button type="button" data-round="${r}" aria-pressed="${r === st.round}"${cfg.markRound && cfg.markRound(r) ? ' class="mark"' : ''}>${r}</button>`).join('')}</div>
-            <div class="ss-seg" role="group" aria-label="Player">${st.players.map((_, i) => `<button type="button" data-player="${i}" aria-pressed="${i === st.active}">Player ${i + 1}<span class="ss-n">${scores[i]}VP</span></button>`).join('')}${st.players.length < 4 ? `<button type="button" data-add aria-label="Add a player">${PLUS}</button>` : ''}${st.players.length > 2 ? `<button type="button" data-remove aria-label="Remove the last player">${MINUS}</button>` : ''}</div>
+            <div class="ss-seg" role="group" aria-label="Player">${st.players.map((_, i) => `<button type="button" class="ss-p ss-p-${i % 2 ? 'blue' : 'red'}" data-player="${i}" aria-pressed="${i === st.active}">${playerName(i, st.players.length)}<span class="ss-n">${scores[i]}VP</span></button>`).join('')}${st.players.length < 4 ? `<button type="button" data-add aria-label="Add a player">${PLUS}</button>` : ''}${st.players.length > 2 ? `<button type="button" data-remove aria-label="Remove the last player">${MINUS}</button>` : ''}</div>
           </div>
           <button type="button" class="ss-clear">Clear</button>
         </div>
