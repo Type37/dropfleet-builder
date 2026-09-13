@@ -157,53 +157,18 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
   .wrap{height:auto;overflow:visible;padding:0;}
   .card{display:block !important;width:100%;}
 
-  /* ── PRINT TIGHTENING ────────────────────────────── */
-  .scenario{padding:1.5mm 3mm 1mm 3mm;gap:4mm;}
-  .rules-col{gap:.8mm;}
-  .sec{gap:.4mm;}
-  .sec-body{gap:.6mm;padding-left:0;}
-  .sh{gap:1mm;}
-  .sl{font-size:7.5pt;}
-  .sc-num{font-size:6pt;}
-  .sc-name{font-size:9pt;font-weight:700;}
-
-  .rule-text{font-size:7pt;line-height:1.3;}
-  .rule-bullets{gap:.3mm;}
-  .rule-bullets li{font-size:7pt;line-height:1.28;padding-left:3mm;}
-  .scenario .spill{font-size:8pt;padding:0;}
-  .spill-row{margin-top:1mm;margin-bottom:.2mm;}
-  .spill-row:has(.sp-std){margin-top:.3mm;margin-bottom:.3mm;}
-  .stbl{font-size:6.5pt;}
-  .stbl th{font-size:6pt;padding:.2mm 2mm;}
-  .stbl td{padding:.15mm 2mm;font-size:6.5pt;}
-  .term{font-size:6.5pt;line-height:1.3;}
-  .terms{gap:.2mm;}
-  .sbox{padding:1.5mm 2mm;}
-  .sbox p{font-size:7pt;line-height:1.28;}
-  .sc-def{font-size:7pt;line-height:1.35;}
-  .sc-wrap{gap:.4mm;}
-  .sc-flavor{font-size:6pt;font-family:'Libre Baskerville',Georgia,serif;}
-  .sc-note{font-size:6pt;}
-
-  .map-col{flex:0 0 2.45in;gap:.6mm;}
-  .map-frame{width:2.45in;height:2.45in;}
-  .lhdr{font-size:6.5pt;margin-top:.3mm;color:var(--gdk);}
-  .lds{font-size:7pt;gap:1mm;}
-  .fh{font-size:7pt;}
-  .fb{font-size:6.5pt;line-height:1.28;}
-  .leg{padding:.8mm 0;gap:.3mm;}
-  .pg-footer{padding:1mm 5mm;}
-  .pg-fl{font-size:6pt;}
-  .pg-fr{font-size:6pt;}
-  .sc-def{font-size:7pt;line-height:1.35;}
-  .sc-note{font-size:6.5pt;line-height:1.35;}
-  .sc-flavor{font-size:6pt;font-family:'Libre Baskerville',Georgia,serif;}
-  .lf{font-size:7pt;}
-  .ico-stat{width:9px;height:9px;}
-  .ico-feat{width:12px;height:12px;}
-  .ico-ds{width:14px;height:14px;}
-  .sv-e{font-size:7pt;}
-  .sv-k{font-size:6pt;}
+  /* Layout only: the type roles come from scenario-card.css's print type system. A rolled scenario is one
+     landscape sheet, so its scale starts at an 8pt body (same ratios) to keep a typical roll on one page */
+  :root{--pfs-display:18pt;--pfs-section:14pt;--pfs-heading:10pt;--pfs-body:8pt;--pfs-small:7pt;}
+  .scenario{padding:1.5mm 3mm 1mm 3mm;gap:5mm;}
+  .sbox{padding:0;}
+  .sc-wrap{gap:.8mm;}
+  .map-col{flex:0 0 3.1in;gap:1mm;}
+  .map-frame{width:100%;height:auto;aspect-ratio:1/1;}
+  .leg{padding:.8mm 0;gap:.4mm;}
+  /* A rolled scenario that runs long continues on the next page with its sections, tables and map whole */
+  .sec,table,.map-frame,.spill-row{break-inside:avoid;}
+  .sl,.spill-row,.lhdr{break-after:avoid;}
 }
 /* ── Scenario loader ─────────────────────────────── */
 .ctrl-scen-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:10px 0 0;}

@@ -4645,6 +4645,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Scenarios: printouts match the screen', items: [
+      'Printed scenarios use the same type as the screen: Roboto Slab titles and headings, named rules on the gold highlighter (red and blue for each side) and 9pt body text, with labels in black and nothing that looks like a button.',
+      'A rolled scenario from the Scenario Generator prints at an 8pt body so a typical roll stays on one page; a long one continues on a second page with its sections, tables and map whole.',
+    ]},
     { date: '2026-09-13', title: 'Desktop app: print a whole faction', items: [
       'The desktop Unit Reference prints a whole faction: every ship card, the hardpoint lists, Deployable Features, station armaments and every rule in full.',
     ]},

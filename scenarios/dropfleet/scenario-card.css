@@ -359,3 +359,75 @@ vp{font-family:inherit;font-weight:600;font-size:inherit;color:inherit;}
 .pub-vbtn[aria-pressed="true"]{background:var(--action,#0072a8);color:#fff;}
 @media (hover:hover){ .pub-vbtn:not([aria-pressed="true"]):hover{background:var(--hover,#efe9dc);} }
 .pub-vbtn:focus-visible{outline:2px solid #B86C0A;outline-offset:2px;}
+
+/* ── PRINT TYPE SYSTEM ──────────────────────────────────────────────────────
+   The screen's roles on paper: same faces, weights, caps, highlighter and side colours,
+   with body at 9pt and every other size at its screen ratio (Title 36/16, H1 28/16, H2 20/16,
+   labels 14/16). Where the print sheet rules differ from the screen they win: labels are black
+   not grey, chips, buttons and the players box print as plain text, and the weapon list and
+   ship stats lose their hairlines and accent bars for banded fills. Last in the file so it wins. */
+@media print{
+  :root{--pfs-display:20.25pt;--pfs-section:15.75pt;--pfs-heading:11.25pt;--pfs-body:9pt;--pfs-small:7.875pt;}
+  .scenario,.pub-ships{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .rules-col{gap:2mm;}
+  .sec{gap:1mm;}
+  .sec-body{gap:1.2mm;}
+  .sh{gap:6px;}
+  .sc-name,.scenario.pub .sc-name{font-family:'Roboto Slab',Georgia,serif;font-size:var(--pfs-display);font-weight:800;line-height:1.12;text-transform:uppercase;letter-spacing:normal;color:var(--ch);}
+  .sl,.pub-ships .sl{font-family:'Roboto Slab',Georgia,serif;font-size:var(--pfs-section);font-weight:600;line-height:1.2;text-transform:none;letter-spacing:normal;color:var(--ch);}
+  .lhdr,.scenario .spill,.scenario.pub .spill,.pub-ship-h b{font-family:'Jost',system-ui,sans-serif;font-size:var(--pfs-heading);font-weight:600;line-height:1.3;text-transform:none;letter-spacing:normal;color:var(--ch);
+    background:linear-gradient(transparent 45%,#f1dc92 45%,#f1dc92 92%,transparent 92%);padding:0 3px;margin-left:-3px;-webkit-box-decoration-break:clone;box-decoration-break:clone;}
+  .scenario .spill.side-red{color:var(--ch);background:linear-gradient(transparent 45%,#f4c4b3 45%,#f4c4b3 92%,transparent 92%);}
+  .scenario .spill.side-blue{color:var(--ch);background:linear-gradient(transparent 45%,#c2dcec 45%,#c2dcec 92%,transparent 92%);}
+  .lhdr{display:table;align-self:flex-start;margin-top:1.5mm;break-after:avoid;}
+  .leg > .lhdr:first-child{margin-top:0;}
+  .scenario .spill-row,.spill-row:has(.sp-std){margin:2mm 0 0;gap:6px;align-items:baseline;}
+  .pw-list,.pub-ship-stats,.pub-tbl-wrap,.leg .st{break-inside:avoid;}
+  .scenario .spill-sub,.pub-ship-h span,.roll-tag{font-family:'Jost',system-ui,sans-serif;font-size:var(--pfs-small);font-weight:400;color:var(--ch);}
+  .run-in{font-weight:600;}
+  .rule-text,.rule-bullets li,.sbox p,.sc-def,.sc-note,.term,.lds,.lf,.fh,.fb,.pub-body p,.st,.st-rule,.st-sub,.pub-note,.pub-lev-famous,.pw-row,.pss-v,.pub-src,.pub-tbl,.stbl,.stbl td,.st td.c,.st-sub td.c,.sv-e,.sv-k,.pub-players-n{font-size:var(--pfs-body);}
+  .rule-text,.rule-bullets li,.sbox p,.sc-def,.sc-note,.term,.lds,.fb,.pub-body p,.st-rule,.pub-note{line-height:1.32;}
+  .rule-text b,.rule-bullets li b{font-size:inherit;}
+  .sc-flavor,.pub-intro,.pub-lev-lore,.pub-lev-list li{font-size:var(--pfs-body);line-height:1.32;color:var(--ch);}
+  .pub-tbl td,.pub-tbl th{line-height:1.3;}
+  .sc-flavor,.st-rule,.st-note{line-height:1.22;}
+  .map-col .sec-body{gap:.5mm;}
+  .map-col .sc-def,.map-col .rule-text{line-height:1.28;}
+  .scenario.pub .map-col{gap:1mm;}
+  .sv-k{color:var(--ch);}
+  .stbl th,.st thead th,.st-sub thead th,.pub-tbl th,.st-note,.st-spec-l,.pw-head,.pw-head .pw-c,.pss-l,.pw-chip,.pw-crit,.pw-dt{font-size:var(--pfs-small);font-weight:400;letter-spacing:normal;text-transform:none;color:var(--ch);}
+  .pw-chip,.pw-dt,.pw-crit{font-weight:600;}
+  .pw-dt-K{color:#0057A3;}.pw-dt-E{color:#8A5000;}.pw-dt-C{color:#B23A2E;}
+  .stbl td,.st td.c,.st-sub td.c,.pw-att,.pw-lock,.pw-dmg,.pss-v,.pw-name,.pw-arc,.fh b{font-weight:600;}
+  .pw-name{font-size:inherit;}
+  .scenario b,.scenario strong,.pub-ships b,.pub-ships strong,vp{font-weight:600;}
+  .fb,.sh-die{color:var(--ch);}
+  .stbl th,.stbl td{padding:.3mm 3mm .3mm 0;}
+  .st th,.st td{padding:.25mm 1mm;}
+  .st thead th{padding-bottom:.2mm;}
+  .st-feat tr.st-more > td{padding:.2mm 1mm .4mm;}
+  .leg .st{margin:.3mm 0 0;}
+  .pub-tbl th,.pub-tbl td{padding:.4mm 4mm .4mm 0;}
+  .ico-stat{width:10.5px;height:10.5px;}
+  .ico-feat,.st .ico-feat{width:16.5px;height:16.5px;}
+  .ico-ds,.st .ico-ds{width:13.5px;height:13.5px;}
+  /* Nothing on paper looks pressable */
+  .pub-players-n{border:0;padding:0;font-weight:600;}
+  .seg.pub-size .pub-size-name{font-size:var(--pfs-body);}
+  .seg.pub-size .pub-size-pts{font-size:var(--pfs-small);}
+  .pub-opts{margin-bottom:0;gap:4mm;}
+  .leg{padding:0;}
+  .pub-vbtn{border:0;padding:0;background:none;color:var(--ch);font-size:var(--pfs-body);}
+  .pub-vlist li{gap:2mm;}
+  .pw-chip{background:none;border:0;padding:0;color:var(--ch);}
+  .pw-chip:not(:last-child)::after{content:',';}
+  .pw-special{gap:0 1.2mm;}
+  /* Weapon list and ship stats: banded fills instead of hairlines */
+  .pw-list{border:0;border-radius:0;}
+  .pw-row{border-bottom:0;background:none;padding:.5mm 1.5mm;}
+  .pw-row.pw-head,.pw-row:nth-child(odd){background:rgba(184,149,47,.09);}
+  .pub-ship-stats{background:none;border:0;border-radius:0;gap:1mm;}
+  .pss-cell{background:rgba(184,149,47,.09);box-shadow:none;padding:1mm .6mm;}
+  .pub-ship-art{width:80px;}
+  .pub-ship{grid-template-columns:80px minmax(0,1fr);}
+}

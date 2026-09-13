@@ -108,7 +108,7 @@ main{flex:1;width:100%;}
 @media print{
   @page{size:letter;margin:6mm;}
   .top,.bar,.foot{display:none !important;}
-  body{background:#fff;}
+  html,body{background:#fff;}
   body.has-trk{padding-bottom:0;}
   .sheet{max-width:none;padding:0;}
 }

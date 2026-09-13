@@ -9016,6 +9016,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Scenarios: printouts match the screen', items: [
+      'Printed scenarios use the same type as the screen: the scenario name in Roboto Slab capitals, section headings in Roboto Slab, named rules on the gold highlighter (red and blue for each side), bold run-in terms, and body text at 9pt with every other size in the screen’s proportions.',
+      'Paper keeps its own rules: labels print black, the players box, Variant button and weapon rule chips print as plain text, and weapon lists and ship stats use banded rows instead of lines.',
+      'A rolled scenario from the Scenario Generator prints at an 8pt body so a typical roll stays on one landscape page. A long one continues on a second page with its sections, tables and map kept whole.',
+    ]},
     { date: '2026-09-13', title: 'Unit Reference: print a whole faction', items: [
       'Print on the Unit Reference opens the print preview with every ship card of that faction, two to a row by weight class: stats, weapons (loadout guns marked with their loadout and price), launch, loadout options, Ship Rules and flagship abilities.',
       'After the cards come the faction’s hardpoint lists, its Deployable Features and the space station armaments, once each, then every rule on the sheet in full. A search or a weight-class filter narrows what prints.',

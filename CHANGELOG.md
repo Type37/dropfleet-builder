@@ -5,6 +5,31 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Scenario printouts match the screen
+
+Printed scenario pages (the Scenario References and a rolled scenario from the
+Generator) now use the screen's type system, scaled to paper. A print block at
+the end of `scenarios/dropfleet/scenario-card.css` sets `--pfs-*` tokens: body
+9pt, and Title 20.25pt, H1 15.75pt, H2 11.25pt, labels 7.875pt, the same
+36/28/20/16/14 ratios as the screen. Same faces, weights and caps: Title Roboto
+Slab 800 capitals, H1 Roboto Slab 600, H2 Jost 600 on the gold highlighter
+(red and blue highlighters for each side), H3 Jost 600 run in, body Jost 400.
+Highlighters and banded fills print with `print-color-adjust: exact`.
+
+The print sheet rules win where they differ from the screen: table labels, the
+Standard Scoring "Rounds 4 & 6" note and KS saves print black, not grey; the
+players box, Variant button and weapon rule chips print as plain text; the
+weapon list and ship stat grid drop their hairlines and coloured accent bars
+for banded fills. `shell.css` prints the page ground white, which removes a
+beige block that printed under short second pages.
+
+The Generator's own print block is now layout only. It sets an 8pt body on the
+same ratios so a typical roll stays on one letter landscape page; a long roll
+(Extract with Secure Comms Array) continues on a second page, with sections,
+tables, the map and headings kept whole. The References page prints with 3mm
+margins, as the Generator does. Print Features Reference still hides the
+reference tables.
+
 ### 2026-09-13: Unit Reference prints a whole faction (desktop)
 
 Print on the Unit Reference goes through the fleet sheet's own print preview

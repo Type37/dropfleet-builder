@@ -27,6 +27,8 @@
 .gen-card-ico svg{width:40px;height:40px;}
 .gen-card-name{font-family:'Jost',system-ui,sans-serif;font-size:1.25rem;font-weight:600;}
 @media print{.gen-card{display:none;}}
+/* A scenario at the print type scale needs the room: 3mm margins, as the generator's sheet uses */
+@media print{@page{size:letter;margin:3mm;}}
 /* The Civilian Ship picker: a ship card under a select of every Civilian Ship */
 .pub-civ{grid-column:1/-1;display:grid;gap:3mm;}
 .pub-civ-pick{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-family:'Jost',system-ui,sans-serif;font-size:1rem;font-weight:600;}
