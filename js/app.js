@@ -9034,6 +9034,7 @@ let activeGroupId = null;
       'The game sizes sit two by two under the Players selector, each size with its points on one line.',
       'A Variant’s weapons in a narrow window wrap by word, with their special rules on their own line, so nothing is cut off.',
       'The scenario pages end with the WarLore footer, as the Dropzone scenario page does.',
+      'The small credits footer stays at the bottom of the screen until you reach the WarLore footer.',
     ]},
     { date: '2026-09-13', title: 'Game size switch on Staggered scenarios', items: [
       'Scenarios that use Staggered Deployment get the game size switch, now with Reconquest. Staggered shows how many Groups X is for the size you pick.',

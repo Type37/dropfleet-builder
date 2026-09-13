@@ -73,7 +73,8 @@ scroll at 320, 393 and 700 px.
 Game sizes two by two with their points on one line, on a row under the Players
 selector. A Variant's weapon list in a narrow column wraps names by word and puts
 Special chips on their own line (they were clipped). The WarLore footer now closes
-the Dropfleet scenario pages, as it does on Dropzone's.
+the Dropfleet scenario pages, as it does on Dropzone's, and the credits footer stays
+at the bottom of the screen until it arrives.
 
 ### 2026-09-13: Game size switch where size changes the rules
 

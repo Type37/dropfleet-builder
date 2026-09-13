@@ -39,6 +39,8 @@
 /* a weapon's Special chips wrap inside a narrow column instead of running past the card's edge */
 @media (max-width:760px){.pw-special{min-width:0;}.pw-special .pw-chip{white-space:normal;overflow-wrap:anywhere;}}
 @media print{.pub-civ-pick{display:none;}}
+/* The credits footer rides the bottom of the screen until the WarLore footer arrives, as on Dropzone */
+.foot{position:sticky;bottom:0;z-index:20;}
 /* The four game sizes two by two, each size's points on one line (as the Dropzone page lays them out) */
 .pub-opts .seg.pub-size[aria-label="Game size"]{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
 .pub-opts .seg.pub-size[aria-label="Game size"] .pub-size-pts{white-space:nowrap;}
