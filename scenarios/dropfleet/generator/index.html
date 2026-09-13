@@ -134,8 +134,9 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 .ctrl-back:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
 
 .wrap{flex:1;overflow-y:auto;padding:20px;background:var(--paper);}
-.card{background:#fff;position:relative;overflow:hidden;width:100%;max-width:10in;margin:0 auto;}
-.gen-score{max-width:10in;margin:0 auto 16px;}
+/* Same width as the Scenario Reference sheet (shell.css .sheet), so a rolled scenario and a published one look alike */
+.card{background:#fff;position:relative;overflow:hidden;width:100%;max-width:1180px;margin:0 auto;}
+.gen-score{max-width:1180px;margin:0 auto 16px;}
 @media print{.gen-score{display:none;}}
 
 

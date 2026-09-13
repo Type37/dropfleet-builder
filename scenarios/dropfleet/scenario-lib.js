@@ -755,7 +755,11 @@ function renderScenario(s){
   const vOnly=Object.keys(FS).filter(n=>!baseText.includes(n)&&J(s.variant).includes(n.replace(/s$/,'')));
   const sec=(label,html)=>html?`<div class="sec">${pubHead(label)}<div class="sec-body">${html}</div></div>`:'';
   const deploy=s.deployment?pubParas(s.deployment)+pubModes(J(s.deployment)):'';
-  const score=s.scoring?pubBullets(s.scoring)+pubScoring([s.scoring,s.special,s.variant].map(J).join(' ')):'';
+  // A sentence that only names a scoring method ("Standard Scoring.", "Kill Points.") is dropped: that method is
+  // written out in full just below. Sentences with the scenario's own rules stay, as paragraphs.
+  const METHOD_ONLY=/^(?:Standard Scoring|Normal Scoring|Demolish Scoring|Kill Points|Assess|Focal Points|Attrition|Survey|Protect|Raze|Extract|Breakthrough)\.?$/;
+  const ownScoring=[].concat(s.scoring||[]).map(p=>String(p).split(/(?<=\.)\s+(?=[A-Z])/).filter(x=>!METHOD_ONLY.test(x.trim())).join(' ')).filter(p=>p.trim());
+  const score=s.scoring?(ownScoring.length?pubParas(ownScoring):'')+pubScoring([s.scoring,s.special,s.variant].map(J).join(' ')):'';
   const tbls=(s.tables||(s.table?[s.table]:[])).map(pubTable).join('');
   const special=(s.special?pubBullets(s.special):'')+tbls+(s.weapons?weaponList(s.weapons):'');
   const scenery=s.scenery?pubParas([].concat(s.scenery).map(scenTips))+pubScenery([s.scenery,s.special,s.scoring].map(J).join(' ')):'';
