@@ -43,6 +43,13 @@ factions, a flagship (Magellan, 570 pts), a Feature Carrier (Actium), a
 modular hull (Cruiser) and the generic and faction stations; no sideways
 scroll at 320, 393 and 700 px.
 
+### 2026-09-13: Round-by-round deployment steps
+
+Imminent, Backline and Staggered Deployment (Scenario Expansion 1) show as
+Round 1 / Round 2+ / Round 3+ steps on the scenario pages, on Jet's call: every
+condition of the book's paragraph kept, tonnage letters written out (L Light,
+M Medium, H Heavy, C Colossal), and Staggered's X by game size.
+
 ### 2026-09-13: Civilian Ship picker
 
 Scenarios that name a Civilian Ship show the Princess Liner (Civilian Ships &

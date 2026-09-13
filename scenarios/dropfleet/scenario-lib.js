@@ -592,7 +592,14 @@ const pubBullets=v=>`<ul class="rule-bullets">${(Array.isArray(v)?v:[v]).map(p=>
 const pubTable=t=>`<div class="pub-tbl-wrap"><table class="pub-tbl"><thead><tr>${t.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${t.rows.map(r=>`<tr>${r.map(c=>`<td>${pubVP(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 // A VP table (Normal Scoring) is drawn like the Standard Scoring table
 const vpTable=t=>`<table class="stbl"><thead><tr>${t.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${t.rows.map(r=>`<tr>${r.map((c,i)=>`<td>${i?pubVP(c):c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
-const pubSE1=name=>{const d=SCN_SE1[name]; return pubParas(d.body)+(d.table?(/VP$/.test(d.table.rows[0][1])?vpTable(d.table):pubTable(d.table)):'')+(d.after?pubParas(d.after):'');};
+// Jet's call (2026-09-13): the deployments that change by round read as round-by-round steps, every condition of the
+// book's paragraph kept, tonnage letters written out (L Light, M Medium, H Heavy, C Colossal)
+const SE1_STEPS={
+  'Imminent':[['Round 1','May only activate and deploy Groups of Light and Medium Tonnage.'],['Round 2+','May also activate Groups of Heavy Tonnage.'],['Round 3+','May activate any Group.']],
+  'Backline':[['Round 1','May only activate and deploy Groups of Heavy and Colossal Tonnage.'],['Round 2+','May activate any Group.'],['Vanguard-X','Groups with the Vanguard-X special rule may use it as normal.']],
+  'Staggered':[['Round 1','Activate and deploy X Groups of your choice.'],['Round 2','Must activate and deploy an additional X Groups of your choice.'],['Round 3','Must activate and deploy any remaining Groups.'],['Vanguard-X','Groups with the Vanguard-X special rule may use it as normal.'],['X','Skirmish 1, Clash 2, Battle 3, Reconquest 4 plus 1 for every 1000 points above 3001.']],
+};
+const pubSE1=name=>{const d=SCN_SE1[name]; if(SE1_STEPS[name]) return `<ul class="rule-bullets">${SE1_STEPS[name].map(([k,v])=>`<li><b>${k}:</b> ${v}</li>`).join('')}</ul>`; return pubParas(d.body)+(d.table?(/VP$/.test(d.table.rows[0][1])?vpTable(d.table):pubTable(d.table)):'')+(d.after?pubParas(d.after):'');};
 
 /* Explanations follow the order the terms appear in the scenario's own text. */
 function pubFind(text,detectors){

@@ -9025,6 +9025,9 @@ let activeGroupId = null;
       'Open any ship for its full ship card: points, stats, weapons, launch table, every loadout option with its guns, the hardpoint list, the Deployable Features a carrier can take, the Ship Rules and the full text of every rule it uses. Search finds ships by name, weapon or rule.',
       'Each faction and each ship has its own link (#units/ucm, #units/ucm/new-york) you can share.',
     ]},
+    { date: '2026-09-13', title: 'Imminent, Backline and Staggered as round-by-round steps', items: [
+      'On the scenario pages, Imminent, Backline and Staggered Deployment read as Round 1, Round 2+ and Round 3+ steps instead of a paragraph.',
+    ]},
     { date: '2026-09-13', title: 'Civilian Ship scenarios: pick any Civilian Ship', items: [
       'Scenarios with a Civilian Ship show the Princess Liner, with its stats, rules, known ships and lore. Pick any of the 20 Civilian Ships from the book instead; the page remembers your pick.',
     ]},

@@ -4651,6 +4651,9 @@
     { date: '2026-09-13', title: 'Desktop app: Unit Reference', items: [
       'The desktop app has a new Unit Reference on its home screen: every ship each faction fields, grouped by weight class, with flagships, Misc ships and space stations, and each ship’s full ship card and rules.',
     ]},
+    { date: '2026-09-13', title: 'Imminent, Backline and Staggered as round-by-round steps', items: [
+      'On the scenario pages, Imminent, Backline and Staggered Deployment read as Round 1, Round 2+ and Round 3+ steps instead of a paragraph.',
+    ]},
     { date: '2026-09-13', title: 'Civilian Ship scenarios: pick any Civilian Ship', items: [
       'Scenarios with a Civilian Ship show the Princess Liner, with its stats, rules, known ships and lore. Pick any of the 20 Civilian Ships from the book instead; the page remembers your pick.',
     ]},
