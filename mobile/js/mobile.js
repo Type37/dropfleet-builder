@@ -1482,7 +1482,23 @@
     return pts;
   }
   function countableGroups(fleet) {
-    return (fleet.battleGroups || []).filter(g => g.ships[0]?.groupCategory !== 'payload');
+    return (fleet.battleGroups || []).filter(g => g.ships[0]?.groupCategory !== 'payload')
+      .concat(flagshipGroups(fleet));
+  }
+
+  // A famous admiral's flagship deploys as its own battle group, but it is stored
+  // on the admiral rather than in fleet.battleGroups, so every tally that walked
+  // battleGroups alone was one group light: a Heavy flagship read as 2 Heavy
+  // groups instead of 3, and the fleet looked one group under the cap. These
+  // stand in for it wherever groups are counted (play mode builds its own
+  // synthetic group for the same reason). Only `cat` and the count are read.
+  function flagshipGroups(fleet) {
+    if (!fleet) return [];
+    return (fleet.admirals || []).map(a => {
+      const fs = admiralFlagship(a, fleet);
+      if (!fs) return null;
+      return { id: 'flagship:' + (a.admiralId || a.shipKey), isFlagship: true, cat: fs.category || 'medium', ships: [] };
+    }).filter(Boolean);
   }
 
   /* ── Validation (subset of desktop rules) ──────────────── */
@@ -1887,6 +1903,8 @@
       const colCap = size.colossalMax ?? 0;
       const classCount = {};
       (f.battleGroups || []).forEach(g => { const c = groupCatOf(g); classCount[c] = (classCount[c] || 0) + 1; });
+      // The flagship is a group of its own weight class (see flagshipGroups).
+      flagshipGroups(f).forEach(fg => { classCount[fg.cat] = (classCount[fg.cat] || 0) + 1; });
       const chips = ['light', 'medium', 'heavy', 'colossal']
         .filter(c => (classCount[c] || 0) > 0 || (c === 'colossal' && colCap > 0))
         .map(c => {
@@ -3345,7 +3363,7 @@
             <span class="list-row-title">Level ${l.level} Admiral</span>
             <span class="list-row-pts">${l.cost} pts</span>
           </div>
-          <div class="list-row-sub">Take any number, adds Level for AP; highest-Level Admiral adds +1 to Initiative</div>
+          <div class="list-row-sub">Take any number, adds Level for AP on top of the 1 AP you generate anyway (6.1); highest-Level Admiral adds +1 to Initiative</div>
         </div>
       </div>`).join('');
 
@@ -5048,6 +5066,10 @@
       'The crit value (2 over Lock, for weapons whose rules use criticals) now prints in the Table layout too. It was only on Cards and Big cards.',
       'Launch assets show their crit value, on screen and on the sheet, when the asset or its bay has a rule that uses criticals, such as Penetrator torpedoes.',
       'Printing from the phone app now shows crit values on weapons and launch assets.',
+    ]},
+    { date: '2026-09-14', title: 'Famous admirals: their flagship counts', items: [
+      'A famous admiral’s flagship counts toward the group tally and its weight class, the way it does on the table. A Heavy flagship read as two Heavy groups instead of three, and the fleet looked one group under the cap.',
+      'The admiral picker says the Ability Point you generate anyway is on top of your Admiral’s Level (rulebook 6.1).',
     ]},
     { date: '2026-09-13', title: 'Scenarios: 1st edition scenarios converted', items: [
       'Eleven 1st edition scenarios are converted to the current rules, with redrawn maps: The Ancient Relic with the Automated Dreadnought, the three Advent scenarios, and seven of the Core Scenarios. Each is marked From 1st edition. A Skirmish, Clash or Battle switch shows the Dropsites that game size uses. Moonshot, the Princess Liner scenarios and the Tournament Pack are gone: TTCombat’s current versions are already on the page.',

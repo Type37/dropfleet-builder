@@ -1538,6 +1538,25 @@ let activeGroupId = null;
       }
     });
 
+    // A famous admiral's flagship is looked up by `shipKey` all through this file,
+    // but the mobile app records the same admiral under `admiralId` and leaves
+    // shipKey unset. Both hold the same id — famous_admirals.ships is keyed by it
+    // — so a fleet that had been through mobile came back here with no flagship:
+    // missing from the overview, and missing from the printed sheet. Resolve the
+    // id against the famous table (a Generic or Faction admiral's id is not in it,
+    // so they are left alone) and fill in what this app reads.
+    fleets.forEach(f => {
+      (f.admirals || []).forEach(a => {
+        if (!a || a.shipKey) return;
+        const key = a.admiralId;
+        if (!key) return;
+        if (!shipDB[f.faction]?.groups?.famous_admirals?.ships?.[key]) return;
+        a.shipKey = key;
+        a.type = 'Famous';
+        migrated = true;
+      });
+    });
+
     // Merge legacy duplicate payload groups (Bioficer Cells) into one group each.
     // Older fleets spawned a separate 1-ship group per copy, which spammed the
     // printout with identical cells; consolidate same-ship payloads into one.
@@ -2626,11 +2645,15 @@ let activeGroupId = null;
     const glEl = document.getElementById('groups-limit');
     if (glEl) glEl.textContent = '';
 
-    // AP/turn = the sum of your admirals' Levels, each already raised by the
-    // Command Ship-X of the hull that admiral is assigned to.
-    const totalAP = (f.admirals || []).reduce((t, a) => t + admiralEffectiveLevel(f, a), 0);
+    // AP/turn, per rulebook 6.1 Ability Point Generation: "Players generate one
+    // Ability Point plus an amount equal to their Admiral's Level." The base point
+    // is per player, not per admiral, so it is added once — and each admiral's
+    // Level is already raised by the Command Ship-X of the hull they are aboard.
+    const admiralAP = (f.admirals || []).reduce((t, a) => t + admiralEffectiveLevel(f, a), 0);
+    const totalAP = 1 + admiralAP;
     const apEl = document.getElementById('fleet-ap-per-turn');
-    if (apEl) apEl.textContent = totalAP > 0 ? `${totalAP} AP/turn` : '';
+    const hasFleet = (f.admirals || []).length > 0 || (f.battleGroups || []).length > 0;
+    if (apEl) apEl.textContent = hasFleet ? `${totalAP} AP/turn` : '';
 
     // Update mobile sidebar peek summary
     const peekPts = document.getElementById('sidebar-peek-points');
@@ -2660,7 +2683,25 @@ let activeGroupId = null;
     return ton === 'P';
   }
   function countableGroups(fleet) {
-    return (fleet.battleGroups || []).filter(g => !isPayloadGroup(fleet, g));
+    return (fleet.battleGroups || []).filter(g => !isPayloadGroup(fleet, g))
+      .concat(flagshipGroups(fleet));
+  }
+
+  // A famous admiral's flagship deploys as its own battle group, but it is stored
+  // on the admiral rather than in fleet.battleGroups, so every tally that walked
+  // battleGroups alone was one group light: a Heavy flagship read as 2 Heavy
+  // groups instead of 3, and the fleet looked one group under the cap. These
+  // stand in for it wherever groups are counted. Only `cat` and the count are
+  // read; they are never rendered as real groups.
+  function flagshipGroups(fleet) {
+    if (!fleet) return [];
+    return (fleet.admirals || []).map(a => {
+      const key = a && (a.shipKey || a.admiralId);
+      if (!key) return null;
+      const fs = shipDB[fleet.faction]?.groups?.famous_admirals?.ships?.[key];
+      if (!fs) return null;
+      return { id: 'flagship:' + key, isFlagship: true, cat: fs.shipCategory || 'medium', ships: [] };
+    }).filter(Boolean);
   }
 
   // Effective points cap for a fleet. `pointsLimit` (shared with the mobile app)
@@ -3460,6 +3501,9 @@ let activeGroupId = null;
     // class holds 2+ groups (a lone group has nothing to reorder against).
     const ovClassCounts = {};
     sortedGroups.forEach(sg => { const c = (sg.ships[0]?.groupCategory) || 'medium'; ovClassCounts[c] = (ovClassCounts[c] || 0) + 1; });
+    // The flagship is a group of its own weight class, so the class chips count it
+    // alongside the rest (see flagshipGroups).
+    flagshipGroups(f).forEach(fg => { ovClassCounts[fg.cat] = (ovClassCounts[fg.cat] || 0) + 1; });
     let lastCat = null;
     const groupCards = sortedGroups.map(g => {
       const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
@@ -9073,6 +9117,11 @@ let activeGroupId = null;
     ]},
     { date: '2026-09-13', title: 'Rules Reference is now Interactive Rules', items: [
       'The searchable, linked rulebook on the home screen is now called Interactive Rules. Links to the old page still open it.',
+    ]},
+    { date: '2026-09-14', title: 'Famous admirals: their flagship counts', items: [
+      'A famous admiral’s flagship counts toward the group tally and its weight class, the way it does on the table. A Heavy flagship read as two Heavy groups instead of three, and the fleet looked one group under the cap.',
+      'A fleet built or edited on the phone app keeps its flagship here: it is back in the group list and on the printed and exported sheet, instead of vanishing with the admiral left behind.',
+      'AP per turn counts the Ability Point you generate anyway, so it reads Admiral’s Level + 1 (rulebook 6.1).',
     ]},
     { date: '2026-09-13', title: 'Print preview: ability names wrap', items: [
       'On a narrow screen the print preview’s Abilities table keeps its rows, so each name wraps beside its AP cost instead of being cut off.',

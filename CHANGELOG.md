@@ -5,6 +5,25 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-14: A famous admiral's flagship is a group
+
+Three bugs, all from the same place: the flagship is stored on the admiral, not
+in `fleet.battleGroups`, so anything that walked battleGroups alone missed it.
+
+`countableGroups` and the per-class tally chips now add a stand-in group per
+famous flagship (`flagshipGroups`, both apps), so Helena of Asgard's Pompeius
+reads as the third Heavy group and counts against the game-size cap.
+
+The desktop app looked a famous admiral up by `shipKey`; the phone app writes the
+same id as `admiralId` and leaves shipKey unset. A fleet that had been through the
+phone app therefore lost its flagship here: gone from the group list and gone from
+the printed and exported sheet, with the admiral still listed. `loadFleets` now
+resolves either id against the famous table and fills in `shipKey`.
+
+AP per turn was the sum of admiral Levels. Rulebook 6.1: "Players generate one
+Ability Point plus an amount equal to their Admiral's Level." The base point is
+per player, so it is added once.
+
 ### 2026-09-14: BSData cross-check removed from the weekly scan
 
 The scan is three tripwires now, not four. `compare-bsdata.py` is deleted and its
