@@ -4968,6 +4968,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Unit Reference card preview', items: [
+      'The Unit Reference card on the home screen fades in a picture of the reference on hover, like the other cards.',
+    ]},
     { date: '2026-09-13', title: 'Scenario Generator: Location', items: [
       'A rolled scenario can say where the battle is fought: one of 48 places from the Commander Universe lore, each with a short account of what happened there. Pick any place from the list, or turn Location off; it prints and travels in the Share Link.',
     ]},

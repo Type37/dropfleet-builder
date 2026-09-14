@@ -9016,6 +9016,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Unit Reference card preview', items: [
+      'The Unit Reference card on the home screen fades in a picture of the reference on hover, like the other cards.',
+    ]},
     { date: '2026-09-13', title: 'Scenario Generator: Location', items: [
       'A rolled scenario can say where the battle is fought: one of 48 places from the Commander Universe lore, from Earth Orbit and the Tartarus to Styx, the Tlalocan Moons and the twelve big Colonies, each with a short account of what happened there.',
       'Pick any place from the list on the scenario, or turn Location off beside Competitive. The place prints with the scenario and travels in its Share Link.',

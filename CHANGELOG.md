@@ -5,6 +5,11 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Unit Reference card preview
+
+The home screen's Unit Reference card has a hover screenshot
+(`assets/screens/unit-reference.webp`, from `scripts/gen-landing-previews.py`).
+
 ### 2026-09-13: Scenario Generator Location
 
 A rolled scenario now names where it is fought. `scenarios/dropfleet/scenario-locations.js`

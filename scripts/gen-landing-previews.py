@@ -29,6 +29,7 @@ SHOTS = {
     "mission-maker": f"{BASE}/scenarios/dropfleet/generator/",
     "scenarios":     f"{BASE}/scenarios/dropfleet/",
     "faction-ref":   f"{BASE}/ref/index.html",
+    "unit-reference": f"{BASE}/index.html#units",
 }
 
 
