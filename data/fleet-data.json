@@ -90,236 +90,296 @@
  "sharedRules": {
   "Aegis-X": {
    "description": "All Ships with this rule in a Group combine their X values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
-   "page": "36"
+   "page": "36",
+   "section": "14.1.1"
   },
   "Cloak-X": {
    "description": "This Group may have a maximum of X Spikes.",
-   "page": "36"
+   "page": "36",
+   "section": "14.1.2"
   },
   "Command Ship-X": {
    "description": "Increase the Level of any Admiral assigned to this Ship by X.",
-   "page": "36"
+   "page": "36",
+   "section": "14.1.3"
   },
   "Descent": {
    "description": "Ships with the Descent special rule are designed to work in Atmosphere and are referred to as Descent Ships, which may be part of Descent Groups. The atmospheric operational depth of these Ships is far lower than normal ships.\nWhen attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
-   "page": "36"
+   "page": "36",
+   "section": "14.1.4"
   },
   "Detector": {
    "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
-   "page": "36"
+   "page": "36",
+   "section": "14.1.5"
   },
   "Escort": {
    "description": "After Weapons have been assigned to a friendly Ship of H or C tonnage within 6” of this Ship on the same Orbital Layer, you may declare the use of Escort for the friendly Ship. Only one Group may Escort at a time and it must be in Coherency.\nAfter your opponent rolls to hit the original target, allocate an amount of hits from that roll to this Group. An Escort Group cannot be allocated more damage by those hits than each remaining Ship in it has in starting Hull. You may use this even if the Escort Group is out of range, arc, and line of sight of the attacking Group. Continue the attack sequence using the Escort Group.\nWeapons with the Focused rule cannot be affected by the Escort rule.",
-   "page": "36"
+   "page": "36",
+   "section": "14.1.6"
   },
   "Gateship-X": {
    "description": "Shaltari Motherships must launch their Dropships via a Ship/Dropsite with this rule (sometimes referred to as Gateships). Each Gateship can have up to X Dropships deployed from it each round. Note: though the launch is measured from the Gateship, it is the Mothership that is launching.\nWhen this Ship goes on the Weapons Free, Max Thrust, or Damage Control orders, it reduces its Gateship-X value to 0 until the start of its next activation.",
-   "page": "36"
+   "page": "36",
+   "section": "14.1.7"
   },
   "Hero": {
-   "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet."
+   "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet.",
+   "section": "14.1.23"
   },
   "Impetuous": {
-   "description": "At the start of each round, friendly Groups with this rule improve the Lock of their Weapon Systems by 1 until you activate a friendly Group without this rule."
+   "description": "At the start of each round, friendly Groups with this rule improve the Lock of their Weapon Systems by 1 until you activate a friendly Group without this rule.",
+   "section": "14.1.20"
   },
   "Marines-X": {
    "description": "Remove X enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
-   "page": "36"
+   "page": "36",
+   "section": "14.1.8"
   },
   "Monitor": {
    "description": "Ships with this rule may not use Course Change or Max Thrust orders.",
-   "page": "36"
+   "page": "36",
+   "section": "14.1.9"
   },
   "Mothership": {
-   "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships/Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
+   "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships/Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching.",
+   "section": "14.1.10"
   },
   "Payload S/L-X": {
    "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up X of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
-   "page": "36"
+   "page": "36",
+   "section": "14.1.11"
   },
   "Porter S/L-X": {
    "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
-   "page": "37"
+   "page": "37",
+   "section": "14.1.12"
   },
   "Rapid Drop": {
    "description": "This Ship may launch its Assets at any point during its movement",
-   "page": "37"
+   "page": "37",
+   "section": "14.1.13"
   },
   "Rare": {
    "description": "You may only take one Group of this Ship in a Skirmish-sized game, two in a Clash, three in a Battle, and four in a Reconquest.",
-   "page": "37"
+   "page": "37",
+   "section": "14.1.14"
   },
   "Regenerate-X": {
    "description": "This Ship recovers X lost Hull Points at the end of its activation.",
-   "page": "37"
+   "page": "37",
+   "section": "14.1.15"
   },
   "Reinforced Armour": {
-   "description": "Weapons rolling to hit this Ship or its Group can only score criticals against it on a result of a 3 higher than its Lock value."
+   "description": "Weapons rolling to hit this Ship or its Group can only score criticals against it on a result of a 3 higher than its Lock value.",
+   "section": "14.1.221"
   },
   "Shield-X": {
    "description": "This Group has a Shield Save of X+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-   "page": "37"
+   "page": "37",
+   "section": "14.1.16"
   },
   "Stealth": {
    "description": "This Ship may fire one Weapon while Silent Running.",
-   "page": "37"
+   "page": "37",
+   "section": "14.1.17"
   },
   "Unique": {
    "description": "You may only take one Group of this Ship.",
-   "page": "37"
+   "page": "37",
+   "section": "14.1.18"
   },
   "Vanguard-X": {
-   "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to X” away from your Deployment Zone."
+   "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to X” away from your Deployment Zone.",
+   "section": "14.1.22"
   },
   "Vectored": {
    "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
-   "page": "37"
+   "page": "37",
+   "section": "14.1.19"
   },
   "Air to Air": {
    "description": "This weapon ignores the penalties for attacking Ships in Atmosphere while the attacking Ship is also in Atmosphere.",
-   "page": "37"
+   "page": "37",
+   "section": "14.2.1"
   },
   "Alt-X": {
    "description": "Only one Weapon or Load with the same Alt value on the same Ship may be used by that Ship each round.\nAll Alt Weapons with the same value count as the same Weapon when determining how many Weapons a Ship has.",
-   "page": "37"
+   "page": "37",
+   "section": "14.2.2"
   },
   "Alt Launch": {
    "description": "In a round this Weapon is fired this Ship may not launch Assets.",
-   "page": "37"
+   "page": "37",
+   "section": "14.2.3"
   },
   "Anti Wing": {
-   "description": "This weapon may target enemy Wings as if they were Ships (with a Sig of 0”) but reduces its Lock value by 1 for that attack. If it does, for each hit, remove 1 Fighter or 1 Bomber from that Wing or any other enemy Wing within 3” of the target."
+   "description": "This weapon may target enemy Wings as if they were Ships (with a Sig of 0”) but reduces its Lock value by 1 for that attack. If it does, for each hit, remove 1 Fighter or 1 Bomber from that Wing or any other enemy Wing within 3” of the target.",
+   "section": "14.2.31"
   },
   "Arrest-X": {
    "description": "A Ship damaged by this Weapon reduces its Thrust by X” during its next activation. A Ship can only be affected by this rule once each round.",
-   "page": "37"
+   "page": "37",
+   "section": "14.2.4"
   },
   "Bloom-X": {
    "description": "Whenever you fire this Weapon (including separate attacks generated by the Volley-X special rule), the attacking Group gains X Spikes.",
-   "page": "37"
+   "page": "37",
+   "section": "14.2.5"
   },
   "Bombardment": {
    "description": "This Weapon ignores the penalties for attacking Cities and Ships in Atmosphere.\nImprove the Lock of this Weapon by 2 when attacking Cities.\nWhen attacking a Ship in Orbit with this weapon, it always hits on a 6+ and can never cause a critical.\nThis weapon cannot be used to attack Ships in Orbit while the attacking Ship is in Atmosphere.",
-   "page": "37"
+   "page": "37",
+   "section": "14.2.6"
   },
   "Burnthrough-X": {
    "description": "Each of this Weapon’s critical hits reduces the target’s Energy/Kinetic Save by X for hits caused by this Weapon for this attack. Saves made for other Weapons are unaffected. Roll attacks separately for each Burnthrough Weapon.",
-   "page": "38"
+   "page": "38",
+   "section": "14.2.7"
   },
   "Calibre-X": {
    "description": "Improve the Lock value of this Weapon by 1 when attacking Groups of any of the listed X Tonnage values.",
-   "page": "38"
+   "page": "38",
+   "section": "14.2.8"
   },
   "Close Action": {
    "description": "This Weapon may only be fired at targets within Scan range and on the same Orbital Layer as the attacking Ship.",
-   "page": "38"
+   "page": "38",
+   "section": "14.2.9"
   },
   "Close Protection": {
    "description": "<b>After rolling Kinetic or Energy saves</b> against Close Action and Bomber (of any type) attacks, you may declare the use of any number of Fighters. Each Fighter used confers its re-rolls to a defending friendly Group within its Thrust range. The <b>defending player assigns all re-rolls</b> from each Fighter against specific weapons, dividing up Fighters as they choose. Shield and Backup saves cannot be re-rolled this way.\n<b>Once a Fighter has been used in this way, remove it.</b>",
-   "page": "22"
+   "page": "22",
+   "section": "8.3.3.1"
   },
   "Corruptor-X": {
    "description": "When this Weapon successfully inflicts damage, place X Battalions on the target.",
-   "page": "38"
+   "page": "38",
+   "section": "14.2.10"
   },
   "Crippling-X": {
    "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains the stated X Crippling Effect regardless of Tonnage. If no effect is listed, roll 2D6 and apply the corresponding Crippling Effect from the table.",
-   "page": "38"
+   "page": "38",
+   "section": "14.2.11"
   },
   "Crippling-Fire": {
    "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Fire: Gain a Fire Token. At the start of the End Phase, before the Repair step, this Ship suffers a point of damage for each Fire Token it has. Repairable.",
-   "page": "19"
+   "page": "19",
+   "section": "14.2.11"
   },
   "Crippling-2xFire": {
    "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Gain two Fire Tokens (Fire is the one Crippling Effect a Ship may hold more than one of). At the start of the End Phase, before the Repair step, this Ship suffers a point of damage for each Fire Token it has. Repairable.",
-   "page": "19"
+   "page": "19",
+   "section": "14.2.11"
   },
   "Crippling-Navigation Offline": {
    "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Navigation Offline: Gain a Navigation Offline token, reducing this Ship’s total movement to 2” (regardless of Thrust) and preventing it from turning or changing Orbital Layer. Repairable.",
-   "page": "19"
+   "page": "19",
+   "section": "14.2.11"
   },
   "Crippling-Weapons Offline": {
    "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Weapons Offline: Gain a Weapons Offline token, preventing this Ship from using Weapons or launching Assets. Repairable.",
-   "page": "19"
+   "page": "19",
+   "section": "14.2.11"
   },
   "Critical-X": {
    "description": "Each of this Weapon’s criticals increases the damage of that hit by X.",
-   "page": "38"
+   "page": "38",
+   "section": "14.2.12"
   },
   "Escape Velocity": {
    "description": "This weapon ignores the penalty for attacking Ships in Orbit and treats all Ships in Atmosphere as non-Descent Ships, so only reduces its Lock by 1 when attacking Ships in Atmosphere.\nClose Action weapons with this special rule may be used against targets in Orbit while the attacking Ship is in Atmosphere.",
-   "page": "38"
+   "page": "38",
+   "section": "14.2.13"
   },
   "Flash-X": {
    "description": "When this Weapon inflicts damage, the damaged Group (or Ship if it ignores the usual coherency rules) gains X Spikes.",
-   "page": "38"
+   "page": "38",
+   "section": "14.2.14"
   },
   "Focused": {
    "description": "Instead of the normal potential targets for Weapons, this Weapon’s potential targets are either:\n• A single enemy Ship.\n• A Dropsite containing no friendly Battalions.\nDamage caused by this Weapon is allocated to only the target.",
-   "page": "38"
+   "page": "38",
+   "section": "14.2.15"
   },
   "Fusillade-X": {
    "description": "This Weapon increases its Attack value by X while its Ship is on Weapons Free.",
-   "page": "38"
+   "page": "38",
+   "section": "14.2.16"
   },
   "High Power": {
    "description": "Unless the attacking Ship is on the Weapons Free Order, attacking with this Weapon counts as attacking with two Weapons (though it only fires once).\nShips with only a single High Power Weapon can only attack with it while on the Weapons Free Order.",
-   "page": "38"
+   "page": "38",
+   "section": "14.2.17"
   },
   "Impel-X": {
    "description": "If an attacking Group scores at least X critical hits with this Weapon System against a Group, choose one of the following for each affected Group:\nA) Turn all Ships in that Group 45 degrees in the same direction. If the Group scored at least twice X, turn all Ships in that Group 90 degrees in the same direction instead.\nB) Move all Ships in that Group up to twice X inches directly forward (measuring from the affected Ships). Ships moved this way cannot be moved into Large Objects or off of the table.\nA Group can only be affected by each effect once per Weapon System per attack sequence.",
-   "page": "38"
+   "page": "38",
+   "section": "14.2.18"
   },
   "Limited-X": {
    "description": "This Weapon can only be fired X times per game.\nYou may launch a total of X of this Asset per game.",
-   "page": "38"
+   "page": "38",
+   "section": "14.2.19"
   },
   "Linked-X": {
    "description": "Weapons with the same Linked-X value on the same Ship count as 1 Weapon for Orders purposes. When you attack with a Linked-X Weapon, you attack with all other Weapons on that Ship with the same Linked-X value.",
-   "page": "39"
+   "page": "39",
+   "section": "14.2.20"
   },
   "Low Power": {
    "description": "If a Ship’s Orders allow it to fire Close Action Weapons, it may attack with one Low Power Weapon in addition to any other Weapons allowed by its Order.",
-   "page": "39"
+   "page": "39",
+   "section": "14.2.21"
   },
   "Mauler": {
    "description": "The Lock value of this Weapon is equal to the save the target would use to defend against it.",
-   "page": "39"
+   "page": "39",
+   "section": "14.2.22"
   },
   "Overcharge": {
    "description": "Before assigning Weapons to targets, you may double the Damage value of this Weapon. If you do, this becomes a High Power Weapon for this activation and each attack roll of 6 causes that attacking Ship to lose this Weapon’s unmodified Damage value in hull points. Only one Weapon per Ship may benefit from this rule per activation.",
-   "page": "39"
+   "page": "39",
+   "section": "14.2.23"
   },
   "Penetrator": {
    "description": "Each of this Weapon’s critical hits cause a Core hit instead of its normal Damage Type.",
-   "page": "39"
+   "page": "39",
+   "section": "14.2.24"
   },
   "Re-Entry": {
    "description": "This weapon ignores the penalties for attacking Ships in Atmosphere while the attacking Ship is in Orbit.\nClose Action weapons with this special rule may be used against targets in Atmosphere while the attacking Ship is in Orbit.",
-   "page": "39"
+   "page": "39",
+   "section": "14.2.25"
   },
   "Reave-X": {
-   "description": "Each of this Weapon’s criticals reduces the Energy/Kinetic save used against that hit by X."
+   "description": "Each of this Weapon’s criticals reduces the Energy/Kinetic save used against that hit by X.",
+   "section": "14.2.30"
   },
   "Scald-X": {
    "description": "If this weapon attacks a target within Scan range, reduce the target’s Energy / Kinetic save against this weapon's hits by X (other attacks and Weapons are unaffected).",
-   "page": "39"
+   "page": "39",
+   "section": "14.2.26"
   },
   "Status": {
    "description": "When you hit with this Weapon, pick one of the following tokens; Defence Systems Offline, Scanners Offline, or Navigation Offline. \nAt the end of the Inflict Damage step, choose one of the defending Ships to gain the selected token, regardless of the amount of damage caused by the attack or amount of hits saved. This token is automatically removed at the start of the End Phase, before making repairs.",
-   "page": "39"
+   "page": "39",
+   "section": "14.2.27"
   },
   "Sustained Fire": {
    "description": "If this Weapon attacks a target Group it hit in the previous round, double its Attack value for this attack.",
-   "page": "39"
+   "page": "39",
+   "section": "14.2.28"
   },
   "Volley-X": {
    "description": "This Weapon counts as 1 Weapon for Orders purposes. When you assign this Weapon to a target, you assign it to targets up to X times (either the same or different). Once assigned, treat each allocation as a separate weapon for the subsequent steps in the attack sequence.\nBroadside Weapons using Volley must alternate arcs when determining and assigning targets (so cannot target the same Group on the same side twice in a row).",
-   "page": "39"
+   "page": "39",
+   "section": "14.2.29"
   },
   "Crippling": {
    "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship suffers a Crippling Effect regardless of Tonnage: roll 2D6 and apply the result from the Crippling Effect table.",
-   "page": ""
+   "page": "",
+   "section": "14.2.11"
   }
  },
  "mercenaries": [
@@ -3730,6 +3790,12 @@
      "category": "medium",
      "ship": {
       "name": "Pungari Thresher Hive Ship",
+      "specs": {
+       "length": "741m",
+       "beam": "387m",
+       "height": "388m",
+       "displacement": "21,166m³"
+      },
       "cost": 170,
       "stats": {
        "thrust": "6\"",
@@ -7464,6 +7530,12 @@
      "category": "medium",
      "ship": {
       "name": "Ganymede Assault Troopship",
+      "specs": {
+       "length": "990m",
+       "beam": "262m (variable)",
+       "height": "321m (variable)",
+       "displacement": "9,587,000m³"
+      },
       "cost": 165,
       "stats": {
        "thrust": "7\"",
@@ -9243,6 +9315,10 @@
      "category": "light",
      "ship": {
       "name": "Harpocrates Guerrilla Lighter",
+      "specs": {
+       "length": "429m",
+       "displacement": "1,854,000m³"
+      },
       "cost": 20,
       "stats": {
        "thrust": "10\"",
@@ -9367,6 +9443,12 @@
      "category": "medium",
      "ship": {
       "name": "Pungari Thresher Hive Ship",
+      "specs": {
+       "length": "741m",
+       "beam": "387m",
+       "height": "388m",
+       "displacement": "21,166m³"
+      },
       "cost": 170,
       "stats": {
        "thrust": "6\"",
@@ -14101,7 +14183,11 @@
       "isUnique": false,
       "tonnage": "L",
       "lore": "The Collins is a class of ship designed to serve as part of humanity's exploration fleets over three hundred years ago. These fleets prized self-sufficiency and endurance above all else, two traits the Collins provided by repairing and refuelling the fleet's shuttles and escorts. Following the Scourge's arrival, the Collins swiftly became an important part of Independent Resistance fleets due to its supply of tough fuel haulers and engineering wings. A single Collins can keep entire squadrons of fighters in the air long after they would otherwise have had to return to their motherships, maintaining the fighter screen for both defensive and scouting purposes.",
-      "namesake": "[Michael Collins](https://en.wikipedia.org/wiki/Michael_Collins_(astronaut)) (1930-2021), the Apollo 11 command-module pilot who orbited the Moon alone while his crewmates landed. A United States Air Force test pilot before joining NASA, he first flew in space on Gemini 10 in 1966, becoming the first person to make two spacewalks on a single mission. After leaving NASA he served as the first director of the National Air and Space Museum in Washington."
+      "namesake": "[Michael Collins](https://en.wikipedia.org/wiki/Michael_Collins_(astronaut)) (1930-2021), the Apollo 11 command-module pilot who orbited the Moon alone while his crewmates landed. A United States Air Force test pilot before joining NASA, he first flew in space on Gemini 10 in 1966, becoming the first person to make two spacewalks on a single mission. After leaving NASA he served as the first director of the National Air and Space Museum in Washington.",
+      "specs": {
+       "length": "470m",
+       "displacement": "3,441,000m³"
+      }
      }
     },
     {
@@ -14150,7 +14236,11 @@
        "[Odyssey](https://en.wikipedia.org/wiki/Apollo_13)"
       ],
       "famousShipsPrefix": "Recorded ships of the class:",
-      "namesake": "[Buzz Aldrin](https://en.wikipedia.org/wiki/Buzz_Aldrin) (born 1930), the Apollo 11 lunar-module pilot and the second human to walk on the Moon. Born Edwin Eugene Aldrin Jr., he flew 66 combat missions in F-86 Sabres during the Korean War and earned a doctorate in astronautics from MIT for his work on orbital rendezvous. He had already flown in space on Gemini 12 before the Apollo 11 mission."
+      "namesake": "[Buzz Aldrin](https://en.wikipedia.org/wiki/Buzz_Aldrin) (born 1930), the Apollo 11 lunar-module pilot and the second human to walk on the Moon. Born Edwin Eugene Aldrin Jr., he flew 66 combat missions in F-86 Sabres during the Korean War and earned a doctorate in astronautics from MIT for his work on orbital rendezvous. He had already flown in space on Gemini 12 before the Apollo 11 mission.",
+      "specs": {
+       "length": "651m",
+       "displacement": "11,745,000m³"
+      }
      }
     },
     {
@@ -14216,7 +14306,11 @@
        "[Tranquility](https://en.wikipedia.org/wiki/Tranquility_Base)",
        "[Saturn](https://en.wikipedia.org/wiki/Saturn_V)"
       ],
-      "namesake": "[Neil Armstrong](https://en.wikipedia.org/wiki/Neil_Armstrong) (1930-2012), commander of Apollo 11 and the first human to set foot on the Moon, in 1969. A naval aviator and test pilot, he flew the X-15 rocket plane before joining NASA and commanded the Gemini 8 mission in 1966. His words on stepping onto the lunar surface, \"that's one small step for man, one giant leap for mankind\", became among the most famous ever spoken."
+      "namesake": "[Neil Armstrong](https://en.wikipedia.org/wiki/Neil_Armstrong) (1930-2012), commander of Apollo 11 and the first human to set foot on the Moon, in 1969. A naval aviator and test pilot, he flew the X-15 rocket plane before joining NASA and commanded the Gemini 8 mission in 1966. His words on stepping onto the lunar surface, \"that's one small step for man, one giant leap for mankind\", became among the most famous ever spoken.",
+      "specs": {
+       "length": "651m",
+       "displacement": "13,058,000m³"
+      }
      }
     },
     {
@@ -14340,6 +14434,10 @@
      "category": "light",
      "ship": {
       "name": "Galileo Orbital Telescope",
+      "specs": {
+       "length": "468m",
+       "displacement": "3,775,000m³"
+      },
       "cost": 55,
       "stats": {
        "thrust": "4\"",
@@ -14406,6 +14504,10 @@
      "category": "light",
      "ship": {
       "name": "Newton Kill-Sat",
+      "specs": {
+       "length": "643m",
+       "displacement": "4,245,000m³"
+      },
       "cost": 46,
       "stats": {
        "thrust": "4\"",
@@ -14624,6 +14726,10 @@
      "category": "light",
      "ship": {
       "name": "Seneca Detonator",
+      "specs": {
+       "length": "470m",
+       "displacement": "3,441,000m³"
+      },
       "cost": 40,
       "stats": {
        "thrust": "12\"",
@@ -14857,6 +14963,12 @@
      "category": "medium",
      "ship": {
       "name": "Pungari Thresher Hive Ship",
+      "specs": {
+       "length": "741m",
+       "beam": "387m",
+       "height": "388m",
+       "displacement": "21,166m³"
+      },
       "cost": 170,
       "stats": {
        "thrust": "6\"",
@@ -18953,6 +19065,12 @@
      "category": "medium",
      "ship": {
       "name": "Shenlong Heavy Cruiser",
+      "specs": {
+       "length": "1,007m",
+       "beam": "401m (variable)",
+       "height": "354m (variable)",
+       "displacement": "8,843,000m³"
+      },
       "cost": 135,
       "stats": {
        "thrust": "8\"",
@@ -20683,6 +20801,10 @@
      "category": "light",
      "ship": {
       "name": "Hiruko Boarding Cutter",
+      "specs": {
+       "length": "454m",
+       "displacement": "1,800,000m³"
+      },
       "cost": 23,
       "stats": {
        "thrust": "14\"",
@@ -20791,6 +20913,12 @@
      "category": "medium",
      "ship": {
       "name": "Pungari Thresher Hive Ship",
+      "specs": {
+       "length": "741m",
+       "beam": "387m",
+       "height": "388m",
+       "displacement": "21,166m³"
+      },
       "cost": 170,
       "stats": {
        "thrust": "6\"",
@@ -26581,6 +26709,10 @@
        "Ether Rider"
       ],
       "namesake": "The second-lightest element, an inert gas born in the hearts of stars and lighter than air.",
+      "specs": {
+       "length": "504m",
+       "displacement": "1,628,000m³"
+      },
       "storeUrl": "https://ttcombat.com/products/helium-voidflyers"
      }
     },
@@ -26767,6 +26899,12 @@
      "category": "medium",
      "ship": {
       "name": "Pungari Thresher Hive Ship",
+      "specs": {
+       "length": "741m",
+       "beam": "387m",
+       "height": "388m",
+       "displacement": "21,166m³"
+      },
       "cost": 170,
       "stats": {
        "thrust": "6\"",
@@ -29843,6 +29981,12 @@
      "category": "heavy",
      "ship": {
       "name": "New York Battleship",
+      "specs": {
+       "length": "1293m",
+       "beam": "421m",
+       "height": "383m",
+       "displacement": "25,253,000m³"
+      },
       "cost": 245,
       "stats": {
        "thrust": "6\"",
@@ -32978,6 +33122,12 @@
      "category": "medium",
      "ship": {
       "name": "Pungari Thresher Hive Ship",
+      "specs": {
+       "length": "741m",
+       "beam": "387m",
+       "height": "388m",
+       "displacement": "21,166m³"
+      },
       "cost": 170,
       "stats": {
        "thrust": "6\"",
