@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """Weekly audit of our ship data against TTCombat's stat cards.
 
-The other two tripwires in .github/workflows/dfc-files-scan.yml watch UPSTREAM:
-scan-dfc-files.py notices TTCombat publishing something, compare-bsdata.py notices
-the community catalogue disagreeing with us. Neither watches US. On 2026-07-27,
-commit 66bbad0 deleted a weapon from four Bioficer ships. Nothing upstream moved,
-so both tripwires stayed quiet and the Binary sailed with half its Scythe Nodules
-for 25 days until a player noticed at the table.
+The other tripwire in .github/workflows/dfc-files-scan.yml that watches UPSTREAM
+is scan-dfc-files.py, which notices TTCombat publishing something. It does not
+watch US. On 2026-07-27, commit 66bbad0 deleted a weapon from four Bioficer ships.
+Nothing upstream moved, so it stayed quiet and the Binary sailed with half its
+Scythe Nodules for 25 days until a player noticed at the table.
 
-This is the third tripwire, and the only one pointed inward: fetch the current
+This is the tripwire pointed inward: fetch the current
 cards, parse them, and diff every cost, stat and weapon COUNT against
 data/faction-*.json. Weapon count matters as much as weapon name — the whole
 66bbad0 regression was a name that was still present, just once instead of twice.

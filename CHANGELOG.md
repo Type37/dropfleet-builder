@@ -5,6 +5,16 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-14: BSData cross-check removed from the weekly scan
+
+The scan is three tripwires now, not four. `compare-bsdata.py` is deleted and its
+step is gone from `.github/workflows/dfc-files-scan.yml`. It compared our ships
+against the BSData community catalogues, which transcribe the same PDFs by hand,
+so every finding was really a question about someone else's transcription. The
+useful ones it caught, `audit-cards.py` catches too, and that one reads the actual
+card. Its last finding, Frances Mendoza on 2026-09-14, was a duplicate of the card
+audit's. README keeps the BSData credit: the original stat import came from there.
+
 ### 2026-09-13: No WarLore footer on phones
 
 Jet's call: the shared WarLore footer is gone from the phone app (`mobile/index.html`
