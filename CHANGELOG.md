@@ -5,6 +5,14 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-14: Feature Carrier filter
+
+Add Group gets a Feature Carrier chip in both apps (Lou Branch's request). It
+matches any rule whose name starts "Feature Carrier", so the M-Type Barge's
+"Feature Carrier (Outpost)" and the EX-7 Packet Runner count too, not only the
+ships that choose a feature. Like the other chips it only shows when the faction
+has a match.
+
 ### 2026-09-14: A famous admiral's flagship is a group
 
 Three bugs, all from the same place: the flagship is stored on the admiral, not

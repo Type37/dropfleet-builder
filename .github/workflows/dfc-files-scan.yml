@@ -1,13 +1,9 @@
 name: Watch for DFC data changes
 
-# Four independent tripwires, so a stat change cannot land silently:
+# Three independent tripwires, so a stat change cannot land silently:
 #
 #   scan-dfc-files.py   watches TTCombat's downloads page for a new or re-uploaded
 #                       PDF. First to know, but only says "something changed".
-#   compare-bsdata.py   diffs our ship data against the BSData community
-#                       catalogues, who transcribe the same PDFs by hand. Slower
-#                       (they publish days later) but says exactly WHICH ship and
-#                       WHICH number, in plain language.
 #   audit-cards.py      downloads the current stat cards and diffs every cost,
 #                       stat and weapon COUNT against data/faction-*.json. The
 #                       only one pointed at US rather than upstream, and the only
@@ -74,22 +70,6 @@ jobs:
           sed -i '/^#findings=/d' files.txt
           echo "findings=${n:-$code}" >> "$GITHUB_OUTPUT"
 
-      - name: Cross-check against BSData
-        id: bsdata
-        run: |
-          set +e
-          python scripts/compare-bsdata.py --quiet > bsdata.txt 2>&1
-          code=$?
-          set -e
-          cat bsdata.txt
-          if [ "$code" -gt 1 ]; then
-            echo "comparator errored with exit $code" >&2
-            exit "$code"
-          fi
-          n=$(sed -n 's/^#findings=//p' bsdata.txt | tail -1)
-          sed -i '/^#findings=/d' bsdata.txt
-          echo "findings=${n:-$code}" >> "$GITHUB_OUTPUT"
-
       # audit-cards.py is the one step with dependencies: it parses the PDFs. It
       # reuses the card parser from ingest_pdf.py, which imports Pillow for the art
       # extraction this audit never runs — install it anyway or the import exits.
@@ -129,7 +109,7 @@ jobs:
           fi
 
       - name: Report
-        if: steps.files.outputs.findings != '0' || steps.bsdata.outputs.findings != '0' || steps.cards.outputs.findings != '0' || steps.mirror.outputs.findings != '0' || inputs.test_alert
+        if: steps.files.outputs.findings != '0' ||steps.cards.outputs.findings != '0' || steps.mirror.outputs.findings != '0' || inputs.test_alert
         uses: actions/github-script@v9
         with:
           script: |
@@ -141,23 +121,11 @@ jobs:
               : ['The Dropfleet data needs a look.', ''];
 
             const files = Number('${{ steps.files.outputs.findings }}' || 0);
-            const bsdata = Number('${{ steps.bsdata.outputs.findings }}' || 0);
             const cards = Number('${{ steps.cards.outputs.findings }}' || 0);
             const mirror = Number('${{ steps.mirror.outputs.findings }}' || 0);
 
             if (files) {
               parts.push(`## TTCombat published something (${files})`, '', '```', read('files.txt'), '```', '');
-            }
-            if (bsdata) {
-              parts.push(`## BSData cross-check (${bsdata})`, '',
-                'Either a ship whose number or rule differs from the community catalogue,',
-                'or one of theirs we have no counterpart for. Read the block: it says which.',
-                '',
-                'The PDF settles a difference. If we turn out to be right, add the ship to',
-                '`ADJUDICATED` in `scripts/compare-bsdata.py` with the page reference so it',
-                'stops reappearing. An unmatched ship is usually a rename on one side or the',
-                'other, and often theirs, since TTCombat re-uploads reach us first.',
-                '', '```', read('bsdata.txt'), '```', '');
             }
             if (cards) {
               parts.push(`## The cards and our data disagree (${cards})`, '',

@@ -2351,6 +2351,7 @@
       { key: 'launch',  label: 'Launch',  test: s => (s.loads && s.loads.length) || (s.loadoutOptions || []).some(lo => (lo.options || []).some(o => o.loads && o.loads.length)) },
       // "Drop" = can deliver Battalions to the ground (Bulk Lander / Dropship / Drop Pod).
       { key: 'drop',    label: 'Drop',    test: s => shipHasDrop(s) },
+      { key: 'feature', label: 'Feature Carrier', test: s => (s.specialRules || []).some(r => /^Feature Carrier/.test(r.name || '')) },
       { key: 'modular', label: 'Modular', test: s => isFullyModular(s) },
       { key: 'rare',    label: 'Rare',    test: s => s.isRare },
       { key: 'unique',  label: 'Unique',  test: s => s.isUnique },
@@ -4986,6 +4987,13 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-14', title: 'Feature Carrier filter', items: [
+      'Add Group has a Feature Carrier filter, for every ship that carries a Deployable Feature. Thanks to Lou Branch for asking.',
+    ]},
+    { date: '2026-09-14', title: 'Famous admirals: group count and AP', items: [
+      'A famous admiral’s flagship counts as a group, so Helena of Asgard’s Pompeius is your third Heavy group and counts against the game size.',
+      'AP per turn is one plus your Admiral’s Level (rulebook 6.1). It had left out the one.',
+    ]},
     { date: '2026-09-13', title: 'No WarLore footer on phones', items: [
       'The fleet list no longer ends with the big WarLore footer. The small credits footer stays.',
     ]},

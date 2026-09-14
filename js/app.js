@@ -5050,6 +5050,9 @@ let activeGroupId = null;
     { key: 'launch',  label: 'Has Launch',   test: s => (s.loads && s.loads.length > 0) || (s.loadoutOptions || []).some(lo => lo.options.some(o => o.loads && o.loads.length > 0)) },
     { key: 'drop',    label: 'Has Drop',     test: shipHasDrop },
     { key: 'bombardment', label: 'Bombardment', test: shipHasBombardment },
+    // Every ship whose rules name Feature Carrier, including the M-Type Barge's
+    // "Feature Carrier (Outpost)" and the EX-7's fixed one, not only the choosers.
+    { key: 'feature carrier', label: 'Feature Carrier', test: s => (s.specialRuleDetails || []).some(r => /^Feature Carrier/.test(r.name || '')) },
     { key: 'rare',    label: 'Rare',         test: s => s.isRare },
     { key: 'unique',  label: 'Unique',       test: s => s.isUnique },
     { key: 'famous',  label: 'Famous',       test: s => s.type === 'Famous' },
@@ -9060,6 +9063,14 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-14', title: 'Feature Carrier filter', items: [
+      'Add Group has a Feature Carrier filter, for every ship that carries a Deployable Feature. Thanks to Lou Branch for asking.',
+    ]},
+    { date: '2026-09-14', title: 'Famous admirals: flagship, group count and AP', items: [
+      'A famous admiral’s flagship counts as a group, so Helena of Asgard’s Pompeius is your third Heavy group and counts against the game size.',
+      'A fleet last saved on the phone app no longer loses its famous flagship here, on screen or on the printed sheet.',
+      'AP per turn is one plus your Admiral’s Level (rulebook 6.1). It had left out the one.',
+    ]},
     { date: '2026-09-13', title: 'No WarLore footer on phones', items: [
       'The big WarLore footer no longer appears on the phone app, or on this app at phone widths. The small credits footer stays.',
     ]},
