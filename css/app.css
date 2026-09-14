@@ -8065,8 +8065,13 @@ h5.rules-h, h6.rules-h { font-size: 15px; font-family: var(--font-body); font-we
 .rules-nb b { color: var(--navy); font-weight: 700; }
 /* A token counter drawn inline in the reference tables (Features, Crippling).
    clip-path crops the transparent margin the token art carries, so no light ring. */
-.rules-tbl-tok { vertical-align: -6px; margin-right: 7px; clip-path: circle(47%); }
-.rules-tok img { clip-path: circle(47%); }
+/* Two token shapes. The printed set is round except the Launch tokens and the
+   two turn markers, which are rounded squares. A circle crop takes the corners
+   clean off those, so shape is matched to the art rather than assumed. */
+.rules-tbl-tok { vertical-align: -6px; margin-right: 7px; }
+.rules-tbl-tok, .rules-tok img { clip-path: circle(47%); }
+.rules-tbl-tok[src*="/launch-"], .rules-tbl-tok[src*="/token-"],
+.rules-tok img[src*="/launch-"], .rules-tok img[src*="/token-"] { clip-path: inset(0 round 12%); }
 .rules-td-tok { white-space: normal; }
 /* A scene-setting paragraph, set in the flavour face (warm, not grey). */
 .rules-flavor { font-family: 'Libre Baskerville', Georgia, serif; font-style: italic; color: var(--ink-soft); }
