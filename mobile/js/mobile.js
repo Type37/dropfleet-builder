@@ -4975,7 +4975,7 @@
       'The Unit Reference card on the home screen fades in a picture of the reference on hover, like the other cards.',
     ]},
     { date: '2026-09-13', title: 'Scenario Generator: Location', items: [
-      'A rolled scenario can say where the battle is fought: one of 48 places from the Commander Universe lore, each with a short account of what happened there. Pick any place from the list, or turn Location off; it prints and travels in the Share Link.',
+      'A rolled scenario can say where the battle is fought: one of 37 orbital places from the Commander Universe lore, each with a short account of what happened there. Pick any place from the list, or turn Location off; it prints and travels in the Share Link.',
     ]},
     { date: '2026-09-13', title: 'Scenarios: printouts match the screen', items: [
       'Printed scenarios use the same type as the screen: Roboto Slab titles and headings, named rules on the gold highlighter (red and blue for each side) and 9pt body text, with labels in black and nothing that looks like a button.',

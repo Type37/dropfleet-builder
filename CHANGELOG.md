@@ -19,13 +19,14 @@ The home screen's Unit Reference card has a hover screenshot
 ### 2026-09-13: Scenario Generator Location
 
 A rolled scenario now names where it is fought. `scenarios/dropfleet/scenario-locations.js`
-holds 48 places from TTCombat's Commander Universe lore books (Commander Universe
-Lore Primer, Reconquest Primers 1 and 2, Zone Primer): the Solar system (Earth
-Orbit, the Tartarus, the Japan breeding hive, Tranquillity, Mars, Foundry Prime,
-Europa, Ganymede, Callisto), every Cradle World theatre (Eden, Elysium,
-Shangri-La, Olympus, Aaru, Asgard, Tlalocan) with its named battlefronts, the
-twelve big Colonies plus Kalium, Vega IV and Caeruleum Prime. Each has a short
-summary written from the books, not copied, with its page cited in `src`.
+holds 37 places from TTCombat's Commander Universe lore books (Commander Universe
+Lore Primer, Reconquest Primers 1 and 2, Zone Primer). Dropfleet is fought in
+space, so every place is orbital: planetary orbits, moons, stations, outer markers
+and void battles, never a city or other ground site. They cover the Solar system
+(Earth Orbit, the Hole over North America, the Moon, Mars, Foundry Prime, Europa,
+Ganymede, Callisto, Saturn's moons), every Cradle World system, the Colonies,
+Vega IV and Caeruleum Prime. Each has a short summary written from the books, not
+copied, with its page cited in `src`. Dates give the year only.
 
 The Generator rolls a place with every scenario and shows it last on the card,
 under a select of every place grouped by system. It is the first thing cut from a
