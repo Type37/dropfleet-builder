@@ -79,7 +79,7 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 .gen-loc-pick{font:500 16px 'Jost',system-ui,sans-serif;padding:6px 10px;border:1.5px solid var(--cobalt-dk);background:#fff;color:#0a1e2e;max-width:100%;align-self:flex-start;}
 .gen-loc-pick:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
 .gen-loc-print{display:none;}
-@media print{.gen-loc-pick{display:none !important;}.gen-loc-print{display:inline;}}
+@media print{.gen-loc-pick{display:none !important;}.gen-loc-print{display:inline;}body.loc-cut .gen-loc{display:none !important;}}
 
 /* Competitive toggle */
 .comp-wrap{display:flex;align-items:center;gap:6px;position:relative;}
@@ -840,7 +840,6 @@ function gen(keep){
     <div class="sc-header">
       <h2 class="sc-name">${missionTitle(D,A,L,O,V)}</h2>
     </div>
-    ${locSec}
 
     <div class="sec">
       ${sh('Scoring')}
@@ -868,6 +867,7 @@ function gen(keep){
 ${varH}
       </div>
     </div>
+    ${locSec}
   </div>
 
   <div class="map-col">
@@ -1088,6 +1088,17 @@ document.addEventListener('DOMContentLoaded',()=>{
   const locon=document.getElementById('locon');
   try{ locon.checked=localStorage.getItem('dfc-gen-location')!=='0'; }catch(e){}
   gen(fromLink());
+  // Location is the first thing cut from a printout: if it would add a page, it doesn't print.
+  // Measured once the print layout applies (letter landscape, 3mm margins).
+  const PAGE_H=8.5*96-6/25.4*96;
+  const fitLocation=()=>{
+    const card=document.getElementById('card'); if(!card.querySelector('.gen-loc')) return;
+    document.body.classList.remove('loc-cut'); const withLoc=card.scrollHeight;
+    document.body.classList.add('loc-cut'); const without=card.scrollHeight;
+    if(Math.ceil(withLoc/PAGE_H)<=Math.ceil(without/PAGE_H)) document.body.classList.remove('loc-cut');
+  };
+  matchMedia('print').addEventListener('change',e=>{ if(e.matches) fitLocation(); });
+  window.addEventListener('afterprint',()=>document.body.classList.remove('loc-cut'));
   locon.addEventListener('change',()=>{ try{ localStorage.setItem('dfc-gen-location',locon.checked?'1':'0'); }catch(e){} gen(true); });
   document.addEventListener('change',e=>{
     const s=e.target.closest&&e.target.closest('[data-gen-loc]'); if(!s||!LAST) return;
