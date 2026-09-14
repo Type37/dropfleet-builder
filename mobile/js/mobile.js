@@ -4968,6 +4968,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Scenario Generator: Location', items: [
+      'A rolled scenario can say where the battle is fought: one of 48 places from the Commander Universe lore, each with a short account of what happened there. Pick any place from the list, or turn Location off; it prints and travels in the Share Link.',
+    ]},
     { date: '2026-09-13', title: 'Scenarios: printouts match the screen', items: [
       'Printed scenarios use the same type as the screen: Roboto Slab titles and headings, named rules on the gold highlighter (red and blue for each side) and 9pt body text, with labels in black and nothing that looks like a button.',
       'A rolled scenario from the Scenario Generator prints at an 8pt body so a typical roll stays on one page; a long one continues on a second page with its sections, tables and map whole.',

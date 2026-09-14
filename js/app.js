@@ -9016,6 +9016,10 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'Scenario Generator: Location', items: [
+      'A rolled scenario can say where the battle is fought: one of 48 places from the Commander Universe lore, from Earth Orbit and the Tartarus to Styx, the Tlalocan Moons and the twelve big Colonies, each with a short account of what happened there.',
+      'Pick any place from the list on the scenario, or turn Location off beside Competitive. The place prints with the scenario and travels in its Share Link.',
+    ]},
     { date: '2026-09-13', title: 'Scenarios: printouts match the screen', items: [
       'Printed scenarios use the same type as the screen: the scenario name in Roboto Slab capitals, section headings in Roboto Slab, named rules on the gold highlighter (red and blue for each side), bold run-in terms, and body text at 9pt with every other size in the screen’s proportions.',
       'Paper keeps its own rules: labels print black, the players box, Variant button and weapon rule chips print as plain text, and weapon lists and ship stats use banded rows instead of lines.',

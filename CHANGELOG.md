@@ -5,6 +5,23 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: Scenario Generator Location
+
+A rolled scenario now names where it is fought. `scenarios/dropfleet/scenario-locations.js`
+holds 48 places from TTCombat's Commander Universe lore books (Commander Universe
+Lore Primer, Reconquest Primers 1 and 2, Zone Primer): the Solar system (Earth
+Orbit, the Tartarus, the Japan breeding hive, Tranquillity, Mars, Foundry Prime,
+Europa, Ganymede, Callisto), every Cradle World theatre (Eden, Elysium,
+Shangri-La, Olympus, Aaru, Asgard, Tlalocan) with its named battlefronts, the
+twelve big Colonies plus Kalium, Vega IV and Caeruleum Prime. Each has a short
+summary written from the books, not copied, with its page cited in `src`.
+
+The Generator rolls a place with every scenario and shows it first on the card,
+under a select of every place grouped by system. The Location checkbox beside
+Competitive turns it off (remembered per device). The place prints in the
+section heading, and the Share Link carries it (`x<id>` after the player count),
+so a shared scenario opens at the same place.
+
 ### 2026-09-13: Scenario printouts match the screen
 
 Printed scenario pages (the Scenario References and a rolled scenario from the

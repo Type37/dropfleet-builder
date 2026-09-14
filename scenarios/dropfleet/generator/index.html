@@ -75,6 +75,11 @@ body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display
 #pb,#shb,#sb{flex:1 1 100%;justify-content:center;}
 .print-ref-lbl{flex:1 1 100%;justify-content:center;}
 @media print{body.no-print-ref .leg-ref{display:none !important;}}
+/* Location: a select of every place on screen, the chosen name in the heading on paper */
+.gen-loc-pick{font:500 16px 'Jost',system-ui,sans-serif;padding:6px 10px;border:1.5px solid var(--cobalt-dk);background:#fff;color:#0a1e2e;max-width:100%;align-self:flex-start;}
+.gen-loc-pick:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+.gen-loc-print{display:none;}
+@media print{.gen-loc-pick{display:none !important;}.gen-loc-print{display:inline;}}
 
 /* Competitive toggle */
 .comp-wrap{display:flex;align-items:center;gap:6px;position:relative;}
@@ -220,6 +225,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
           <div style="margin-top:5px;font-size:.875rem;color:var(--ink-muted);">(Rules 12.1.1–12.1.3, v2.3.1)</div>
         </div>
       </div>
+      <label class="comp-lbl"><input type="checkbox" id="locon" checked>Location</label>
       <button class="abtn abtn-ico" id="pb" onclick="window.print()" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 17h2a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2"/><path d="M17 9V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v4"/><path d="M7 15a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/></svg><span>Print</span></button>
       <label class="comp-lbl print-ref-lbl"><input type="checkbox" id="pref" checked>Print Features Reference</label>
       <button class="abtn abtn-ico" id="shb" onclick="shareLink()" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a3 3 0 1 0 6 0a3 3 0 1 0-6 0"/><path d="M15 6a3 3 0 1 0 6 0a3 3 0 1 0-6 0"/><path d="M15 18a3 3 0 1 0 6 0a3 3 0 1 0-6 0"/><path d="M8.7 10.7l6.6-3.4"/><path d="M8.7 13.3l6.6 3.4"/></svg><span>Share Link to This Scenario</span></button>
@@ -258,6 +264,7 @@ body.competitive .pick-tile.nc input:checked + .tile-inner{background:var(--nc);
 </footer>
 
 <script src="../scenario-terms.js"></script>
+<script src="../scenario-locations.js"></script>
 <script src="../scenario-lib.js"></script>
 <script src="../../shared/tooltip.js"></script>
 <script src="../../shared/score.js"></script>
@@ -759,8 +766,22 @@ function gen(keep){
     return roll(table, useComp?comp:false);
   }
   const {dep,app,lay,vari,obj}=keep&&LAST?LAST:{dep:rollOrPick(DT,'dep',true),app:rollOrPick(AT,'app',true),lay:rollOrPick(LY,'lay',true),vari:rollOrPick(VA,'var',false),obj:rollOrPick(OB,'obj',false)};
-  LAST={dep,app,lay,vari,obj};
+  // The Location rolls with the scenario and stays put when only the player count or the pick changes
+  const loc0=keep&&LAST?LAST.loc:null;
+  LAST={dep,app,lay,vari,obj,loc:loc0==null?Math.floor(Math.random()*SCN_LOCATIONS.length):loc0};
   const D=dep.item,A=app.item,L=lay.item,V=vari.item,O=obj.item;
+  const showLoc=document.getElementById('locon').checked, LOC=SCN_LOCATIONS[LAST.loc];
+  let locOpts='';
+  [...new Set(SCN_LOCATIONS.map(x=>x.group))].forEach(g=>{
+    locOpts+=`<optgroup label="${g}">${SCN_LOCATIONS.map((x,i)=>x.group===g?`<option value="${i}"${i===LAST.loc?' selected':''}>${x.name}</option>`:'').join('')}</optgroup>`;
+  });
+  const locSec=showLoc?`<div class="sec gen-loc">
+      <div class="sh"><h3 class="sl">Location<span class="gen-loc-print">: ${LOC.name}</span></h3></div>
+      <div class="sec-body">
+        <select class="gen-loc-pick" data-gen-loc aria-label="Location">${locOpts}</select>
+        <p class="rule-text">${LOC.text}</p>
+      </div>
+    </div>`:'';
 
   // SCORING
   let scoreH=pill(O.name,O.cls);
@@ -819,6 +840,7 @@ function gen(keep){
     <div class="sc-header">
       <h2 class="sc-name">${missionTitle(D,A,L,O,V)}</h2>
     </div>
+    ${locSec}
 
     <div class="sec">
       ${sh('Scoring')}
@@ -865,16 +887,19 @@ ${varH}
   document.getElementById('pb').removeAttribute('disabled');
   document.getElementById('sb').removeAttribute('disabled');
   document.getElementById('shb').removeAttribute('disabled');
-  // The address carries this scenario's five results and player count, so the link opens the same scenario
-  history.replaceState(null,'',`#d${dep.roll}a${app.roll}l${lay.roll}v${vari.roll}o${obj.roll}p${numPlayers}`);
+  // The address carries this scenario's five results, player count and Location, so the link opens the same scenario
+  history.replaceState(null,'',`#d${dep.roll}a${app.roll}l${lay.roll}v${vari.roll}o${obj.roll}p${numPlayers}${showLoc?`x${LOC.id}`:''}`);
 }
 
 // A shared link (#d1a2l3v4o5p2) opens that scenario instead of rolling a new one
 function fromLink(){
-  const m=location.hash.match(/^#d([1-6])a([1-6])l([1-6])v([1-6])o([1-6])p([2-4])$/);
+  const m=location.hash.match(/^#d([1-6])a([1-6])l([1-6])v([1-6])o([1-6])p([2-4])(?:x([a-z0-9-]+))?$/);
   if(!m) return false;
   const at=(t,r)=>({item:t[r-1],roll:r});
-  LAST={dep:at(DT,+m[1]),app:at(AT,+m[2]),lay:at(LY,+m[3]),vari:at(VA,+m[4]),obj:at(OB,+m[5])};
+  // A link with a Location shows it; one without keeps this device's Location setting and rolls a place
+  const li=m[7]?SCN_LOCATIONS.findIndex(x=>x.id===m[7]):-1;
+  if(m[7]) document.getElementById('locon').checked=true;
+  LAST={dep:at(DT,+m[1]),app:at(AT,+m[2]),lay:at(LY,+m[3]),vari:at(VA,+m[4]),obj:at(OB,+m[5]),loc:li>=0?li:null};
   const r=document.querySelector(`input[name=players][value="${m[6]}"]`); if(r) r.checked=true;
   return true;
 }
@@ -1059,7 +1084,16 @@ function getPickVal(name){
 // Text is transcribed verbatim from the official PDFs.
 document.addEventListener('DOMContentLoaded',()=>{
   buildPicks();
+  // Location: on unless this device turned it off
+  const locon=document.getElementById('locon');
+  try{ locon.checked=localStorage.getItem('dfc-gen-location')!=='0'; }catch(e){}
   gen(fromLink());
+  locon.addEventListener('change',()=>{ try{ localStorage.setItem('dfc-gen-location',locon.checked?'1':'0'); }catch(e){} gen(true); });
+  document.addEventListener('change',e=>{
+    const s=e.target.closest&&e.target.closest('[data-gen-loc]'); if(!s||!LAST) return;
+    LAST.loc=+s.value; gen(true);
+    const n=document.querySelector('[data-gen-loc]'); if(n) n.focus();
+  });
   // Print Features Reference: on unless this device turned it off
   const pref=document.getElementById('pref');
   try{ pref.checked=localStorage.getItem('dfc-gen-print-ref')!=='0'; }catch(e){}
