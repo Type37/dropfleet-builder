@@ -7221,6 +7221,8 @@ h1, h2, h3, h4, h5, h6 {
    below the credits footer on pages that scroll. The builder fills the screen,
    so it has no room for it. */
 body[data-view="builder"] .wlf { display: none; }
+/* Not on phone widths either (Jet, 2026-09-13). */
+@media (max-width: 768px) { body .wlf { display: none; } }
 body[data-view="builder"] .game-info-footer {
   position: fixed;
   bottom: 0;

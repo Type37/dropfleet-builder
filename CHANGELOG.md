@@ -5,6 +5,12 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-13: No WarLore footer on phones
+
+Jet's call: the shared WarLore footer is gone from the phone app (`mobile/index.html`
+no longer loads `footer.js`; `.m-bottom-clear` keeps the credits clear of the Create
+Fleet bar) and hidden on the desktop app at 768px and below.
+
 ### 2026-09-13: Unit Reference card preview
 
 The home screen's Unit Reference card has a hover screenshot
@@ -21,8 +27,9 @@ Shangri-La, Olympus, Aaru, Asgard, Tlalocan) with its named battlefronts, the
 twelve big Colonies plus Kalium, Vega IV and Caeruleum Prime. Each has a short
 summary written from the books, not copied, with its page cited in `src`.
 
-The Generator rolls a place with every scenario and shows it first on the card,
-under a select of every place grouped by system. The Location checkbox beside
+The Generator rolls a place with every scenario and shows it last on the card,
+under a select of every place grouped by system. It is the first thing cut from a
+printout: if the Location would add a page, it doesn't print. The Location checkbox beside
 Competitive turns it off (remembered per device). The place prints in the
 section heading, and the Share Link carries it (`x<id>` after the player count),
 so a shared scenario opens at the same place.

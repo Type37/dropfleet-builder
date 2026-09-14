@@ -9016,6 +9016,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'No WarLore footer on phones', items: [
+      'The big WarLore footer no longer appears on the phone app, or on this app at phone widths. The small credits footer stays.',
+    ]},
     { date: '2026-09-13', title: 'Unit Reference card preview', items: [
       'The Unit Reference card on the home screen fades in a picture of the reference on hover, like the other cards.',
     ]},

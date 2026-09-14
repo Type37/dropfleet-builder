@@ -4968,6 +4968,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-13', title: 'No WarLore footer on phones', items: [
+      'The fleet list no longer ends with the big WarLore footer. The small credits footer stays.',
+    ]},
     { date: '2026-09-13', title: 'Unit Reference card preview', items: [
       'The Unit Reference card on the home screen fades in a picture of the reference on hover, like the other cards.',
     ]},
