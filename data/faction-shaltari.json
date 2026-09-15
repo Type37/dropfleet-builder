@@ -1861,7 +1861,17 @@
      "Closed Fist",
      "Immolator"
     ],
-    "namesake": "A brown-to-yellow iron mineral and major ore of iron, named after the poet Goethe."
+    "namesake": "A brown-to-yellow iron mineral and major ore of iron, named after the poet Goethe.",
+    "models": [
+     {
+      "label": "Plastic",
+      "url": "https://ttcombat.com/products/shaltari-battlecruisers-copy"
+     },
+     {
+      "label": "Resin (direct)",
+      "url": "https://ttcombat.com/products/shaltari-battlecruisers"
+     }
+    ]
    }
   },
   {
@@ -1919,7 +1929,17 @@
      "Temple Blade",
      "Bloodletter"
     ],
-    "namesake": "A metallic grey-to-red iron ore that takes a mirror polish; its name comes from the Greek for 'blood'."
+    "namesake": "A metallic grey-to-red iron ore that takes a mirror polish; its name comes from the Greek for 'blood'.",
+    "models": [
+     {
+      "label": "Plastic",
+      "url": "https://ttcombat.com/products/shaltari-battlecruisers-copy"
+     },
+     {
+      "label": "Resin (direct)",
+      "url": "https://ttcombat.com/products/shaltari-battlecruisers"
+     }
+    ]
    }
   },
   {
@@ -2003,10 +2023,14 @@
      "Supreme"
     ],
     "namesake": "The blue variety of corundum, second only to diamond in hardness among gems.",
-    "altSculpts": [
+    "models": [
      {
-      "name": "Palladium",
-      "url": "https://ttcombat.com/products/shaltari-adamant-exclusive"
+      "label": "Plastic",
+      "url": "https://ttcombat.com/products/shaltari-battlecruisers-copy"
+     },
+     {
+      "label": "Resin (direct)",
+      "url": "https://ttcombat.com/products/shaltari-battlecruisers"
      }
     ]
    }
@@ -2083,10 +2107,14 @@
      "Ages Scarlet"
     ],
     "namesake": "The blood-red variety of corundum, among the most valued of all coloured gemstones.",
-    "altSculpts": [
+    "models": [
      {
-      "name": "Adamant",
-      "url": "https://ttcombat.com/products/shaltari-adamant-exclusive"
+      "label": "Plastic",
+      "url": "https://ttcombat.com/products/shaltari-battlecruisers-copy"
+     },
+     {
+      "label": "Resin (direct)",
+      "url": "https://ttcombat.com/products/shaltari-battlecruisers"
      }
     ]
    }
@@ -3933,7 +3961,10 @@
      "Ether Rider"
     ],
     "namesake": "The second-lightest element, an inert gas born in the hearts of stars and lighter than air.",
-    "specs": {"length": "504m", "displacement": "1,628,000m³"},
+    "specs": {
+     "length": "504m",
+     "displacement": "1,628,000m³"
+    },
     "storeUrl": "https://ttcombat.com/products/helium-voidflyers"
    }
   },
@@ -4120,7 +4151,12 @@
    "category": "medium",
    "ship": {
     "name": "Pungari Thresher Hive Ship",
-    "specs": {"length": "741m", "beam": "387m", "height": "388m", "displacement": "21,166m³"},
+    "specs": {
+     "length": "741m",
+     "beam": "387m",
+     "height": "388m",
+     "displacement": "21,166m³"
+    },
     "cost": 170,
     "stats": {
      "thrust": "6\"",

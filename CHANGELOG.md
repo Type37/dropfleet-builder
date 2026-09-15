@@ -5,6 +5,14 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-14: Shaltari battlecruiser models
+
+The Sapphire, Ruby, Goethite and Hematite get a `models` list like the UCM
+battlecruisers: Plastic (`shaltari-battlecruisers-copy`) and Resin (direct)
+(`shaltari-battlecruisers`). Both kits build "one of either Ruby or Sapphire" and
+"one of either Goethite or Hematite". The Adamant/Palladium alt-sculpt link on
+the Sapphire and Ruby is gone: `shaltari-adamant-exclusive` returns 404.
+
 ### 2026-09-14: Feature Carrier filter
 
 Add Group gets a Feature Carrier chip in both apps (Lou Branch's request). It

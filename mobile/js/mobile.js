@@ -4987,6 +4987,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-14', title: 'Shaltari battlecruiser models', items: [
+      'The Sapphire, Ruby, Goethite and Hematite link to both TTCombat kits, the plastic Battlecruisers and the resin Battlecruisers (direct only).',
+    ]},
     { date: '2026-09-14', title: 'Feature Carrier filter', items: [
       'Add Group has a Feature Carrier filter, for every ship that carries a Deployable Feature. Thanks to Lou Branch for asking.',
     ]},
