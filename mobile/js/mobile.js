@@ -294,7 +294,7 @@
   }
   // Ships with an alternate resin sculpt at ../assets/art/<slug>_resin.webp — the
   // same ship, a different physical model, offered as alternate hero art.
-  const SHIP_ALT = new Set(['rhadamanthus','beelzebub','beijing','bronze','daemon','delhi','devil','diamond','dragon','gold','hanoi','heracles','kairos','lucifer','minos','new_york','platinum','sarpedon','silver','tokyo']);
+  const SHIP_ALT = new Set(['rhadamanthus','beelzebub','beijing','bronze','daemon','delhi','devil','diamond','dragon','goethite','gold','hanoi','hematite','heracles','kairos','lucifer','minos','new_york','platinum','sarpedon','silver','tokyo']);
   function shipAltArt(name) {
     if (!name) return [];
     let slug = null;
@@ -4989,6 +4989,7 @@
   const CHANGELOG = [
     { date: '2026-09-14', title: 'Shaltari battlecruiser models', items: [
       'The Sapphire, Ruby, Goethite and Hematite link to both TTCombat kits, the plastic Battlecruisers and the resin Battlecruisers (direct only).',
+      'The Goethite and Hematite show their resin sculpt too, a different model from the plastic one.',
     ]},
     { date: '2026-09-14', title: 'Feature Carrier filter', items: [
       'Add Group has a Feature Carrier filter, for every ship that carries a Deployable Feature. Thanks to Lou Branch for asking.',

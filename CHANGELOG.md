@@ -13,6 +13,11 @@ battlecruisers: Plastic (`shaltari-battlecruisers-copy`) and Resin (direct)
 "one of either Goethite or Hematite". The Adamant/Palladium alt-sculpt link on
 the Sapphire and Ruby is gone: `shaltari-adamant-exclusive` returns 404.
 
+Goethite and Hematite get resin sculpt art (`goethite_resin.webp`,
+`hematite_resin.webp`), cut out of TTCombat's photos on the resin kit's product
+page. The resin Sapphire and Ruby are the same sculpt as the plastic ones, so
+they get none.
+
 ### 2026-09-14: Feature Carrier filter
 
 Add Group gets a Feature Carrier chip in both apps (Lou Branch's request). It
