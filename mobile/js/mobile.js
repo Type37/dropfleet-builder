@@ -4987,6 +4987,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-19', title: 'Copied list shows group points', items: [
+      'A multi-ship line in the copied text list now shows what the whole group costs, so two Kyivs read 120 pts, not 60. Thanks to devil dodge for spotting it.',
+    ]},
     { date: '2026-09-14', title: 'Shaltari battlecruiser models', items: [
       'The Sapphire, Ruby, Goethite and Hematite link to both TTCombat kits, the plastic Battlecruisers and the resin Battlecruisers (direct only).',
       'The Goethite and Hematite show their resin sculpt too, a different model from the plastic one.',
@@ -6047,7 +6050,7 @@
         profs.forEach(({ s, count }) => {
           const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
           const nm = db ? db.name : s.shipKey;
-          out += count > 1 ? `• ${count}x ${nm} [${s.points} pts]\n` : `${nm} [${s.points} pts]\n`;
+          out += count > 1 ? `• ${count}x ${nm} [${(s.points || 0) * count} pts]\n` : `${nm} [${s.points} pts]\n`;
           const notes = [];
           (db && db.loadoutOptions || []).forEach((lo, i) => { const o = lo.options[(s.loadouts && s.loadouts[i]) || 0]; if (o && o.cost) notes.push(o.name); });
           if (s.systems && s.systems.length) { const c = {}; s.systems.forEach(n => c[n] = (c[n] || 0) + 1); notes.push(...Object.entries(c).map(([n, k]) => k > 1 ? `${k}x ${n}` : n)); }

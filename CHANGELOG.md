@@ -5,6 +5,16 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-19: Copied list shows group points, not per-model points
+
+`generateFleetText` (desktop) and `fleetToText` (mobile) printed each profile
+line as `2x Kyiv [60 pts]`, the cost of one ship, while every other total in the
+list is a group or section total. Readers of a pasted list took the bracket as
+the line's cost and under-counted. Multi-ship lines now print `count * points`,
+so two Kyivs read `120 pts`. Single-ship lines are unchanged.
+
+Reported by devil dodge on Discord.
+
 ### 2026-09-14: Shaltari battlecruiser models
 
 The Sapphire, Ruby, Goethite and Hematite get a `models` list like the UCM
