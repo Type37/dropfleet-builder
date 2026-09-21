@@ -1754,6 +1754,21 @@ body.sheet-open .sheet-scrim {
   padding: var(--sp-s) var(--sp-m) calc(var(--sp-m) + env(safe-area-inset-bottom, 0px));
   transform: translateY(100%);
   transition: transform var(--duration-gentle) var(--ease-decelerate);
+  /* Never taller than the screen: the items scroll inside the sheet, so the
+     top entry (Sync, in Settings) stays reachable. Without this the sheet's
+     top sat above the viewport and every drag was a dismiss drag. */
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - var(--sp-l) - env(safe-area-inset-top, 0px));
+  max-height: calc(100dvh - var(--sp-l) - env(safe-area-inset-top, 0px));
+}
+.action-sheet > .rule-sheet-handle,
+.action-sheet > .action-sheet-cancel { flex: none; }
+#action-sheet-items {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .action-sheet.active { transform: translateY(0); }
 .action-sheet-item {

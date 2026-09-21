@@ -5,6 +5,20 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-21: Phone menu scrolls
+
+The mobile action sheet (the gear's Settings menu, and every overflow menu) had
+no max-height and no scrolling list. Taller than the screen, it sat with its top
+above the viewport, and because the item list never scrolled its `scrollTop`
+was always 0, so the swipe-to-dismiss handler took every drag: pulling down to
+reach Sync Fleets Online dragged the sheet, which snapped back or closed.
+
+The sheet is now capped at the screen height and its item list scrolls inside
+it. The swipe handler reads the scroll position of whatever actually scrolls
+between the finger and the sheet (the rule sheet scrolls itself, not its body,
+so it had the same fault), and a drag that starts upward is left to the browser
+as a scroll. The list opens at the top every time.
+
 ### 2026-09-19: Copied list shows group points, not per-model points
 
 `generateFleetText` (desktop) and `fleetToText` (mobile) printed each profile

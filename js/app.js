@@ -9063,6 +9063,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-21', title: 'Phone menu scrolls', items: [
+      'On a short phone screen the Settings menu ran off the top, and dragging it to reach Sync Fleets Online closed it or snapped it back. The menu fits the screen now and scrolls, so every item can be reached.',
+    ]},
     { date: '2026-09-19', title: 'Copied list shows group points', items: [
       'A multi-ship line in the copied text list now shows what the whole group costs, so two Kyivs read 120 pts, not 60. Thanks to devil dodge for spotting it.',
     ]},

@@ -1049,6 +1049,7 @@
       ? `<div class="action-sheet-note" ${it.id ? `id="${it.id}"` : ''}>${it.label}</div>`
       : `<button class="action-sheet-item ${it.danger ? 'danger' : ''}${anyIcon ? ' has-icon' : ''}" data-idx="${i}" ${it.disabled ? 'disabled' : ''}>${anyIcon ? (sheetIcon(it.icon) || '<span class="as-icon"></span>') : ''}<span class="as-label">${it.label}</span></button>`
     ).join('');
+    el.scrollTop = 0;
     el.querySelectorAll('.action-sheet-item').forEach((btn) => {
       const i = +btn.dataset.idx;
       btn.onclick = () => {
@@ -1074,19 +1075,31 @@
   // the top — so a downward swipe always dismisses without fighting body scroll.
   // The sheet follows the finger; releasing past a distance/velocity threshold
   // closes it, otherwise it snaps back.
-  function makeSheetSwipeable(sheetEl, closeFn, scrollEl) {
+  // "Scrolled" is read off every element between the finger and the sheet, not
+  // one named element: whichever of them actually scrolls (the item list, or the
+  // sheet itself for the rule sheet) is the one that has to be at its top.
+  function makeSheetSwipeable(sheetEl, closeFn) {
     if (!sheetEl) return;
     let startY = 0, lastY = 0, startT = 0, dragging = false;
+    const scrolledBetween = (el) => {
+      for (; el && el !== sheetEl.parentNode; el = el.parentNode) {
+        if (el.scrollTop > 0) return true;
+      }
+      return false;
+    };
     const onStart = (e) => {
       const t = e.touches[0];
-      const fromGrab = !scrollEl || !scrollEl.contains(e.target) || scrollEl.scrollTop <= 0;
-      if (!fromGrab) { dragging = false; return; }
+      const onHandle = e.target.closest && e.target.closest('.rule-sheet-handle');
+      if (!onHandle && scrolledBetween(e.target)) { dragging = false; return; }
       startY = lastY = t.clientY; startT = Date.now(); dragging = true;
       sheetEl.style.transition = 'none';
     };
     const onMove = (e) => {
       if (!dragging) return;
       const dy = e.touches[0].clientY - startY;
+      // A finger moving up is scrolling the list: hand the whole gesture to the
+      // browser, so coming back down scrolls back rather than dragging the sheet.
+      if (dy < -8) { dragging = false; sheetEl.style.transition = ''; sheetEl.style.transform = ''; return; }
       if (dy <= 0) { sheetEl.style.transform = 'translateY(0)'; lastY = e.touches[0].clientY; return; }
       // Actively pulling the sheet down — suppress body scroll/overscroll.
       if (e.cancelable) e.preventDefault();
@@ -1109,10 +1122,8 @@
   }
 
   function setupSheetGestures() {
-    makeSheetSwipeable(document.getElementById('rule-sheet'), closeRuleSheet,
-      document.getElementById('rule-sheet-body'));
-    makeSheetSwipeable(document.getElementById('action-sheet'), closeActionSheet,
-      document.getElementById('action-sheet-items'));
+    makeSheetSwipeable(document.getElementById('rule-sheet'), closeRuleSheet);
+    makeSheetSwipeable(document.getElementById('action-sheet'), closeActionSheet);
   }
 
   /* ── Helpers ───────────────────────────────────────────── */
@@ -4987,6 +4998,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-21', title: 'Phone menu scrolls', items: [
+      'On a short phone screen the Settings menu ran off the top, and dragging it to reach Sync Fleets Online closed it or snapped it back. The menu fits the screen now and scrolls, so every item can be reached.',
+    ]},
     { date: '2026-09-19', title: 'Copied list shows group points', items: [
       'A multi-ship line in the copied text list now shows what the whole group costs, so two Kyivs read 120 pts, not 60. Thanks to devil dodge for spotting it.',
     ]},
