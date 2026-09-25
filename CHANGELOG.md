@@ -17,6 +17,13 @@ asks Discord for `identify` only (name and avatar) and revokes the access token
 straight after reading it. Setup and the never-change-SYNC_SECRET warning are in
 `docs/AUTH-SETUP.md`.
 
+A device that was on a Sync Token when it signs in with Discord keeps that
+token linked (`dfc_sync_linked`) and syncs both documents every time, so
+token-only devices and Discord devices converge on one list instead of
+splitting. A linked copy deleted elsewhere drops the link rather than being
+recreated; "Delete online copy" removes both. Covered by
+`scripts/test-fleet-sync-discord.mjs` (27 multi-device checks, 73 total).
+
 ### 2026-09-25: Seti the Kinslayer, Aeon, Frances Mendoza
 
 TTCombat published Shaltari and Bioficer Combined Fleet Stats 260925 and re-uploaded

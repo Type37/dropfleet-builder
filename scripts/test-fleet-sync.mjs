@@ -357,5 +357,7 @@ console.log('\na fleet missing battleGroups is still a fleet');
   check('it is kept', fleets(s.store.get('dfc_fleets')).length === 1);
 }
 
+await import('./test-fleet-sync-discord.mjs').then(m => m.run({ vm, SRC, fleets, check }));
+
 console.log('\n' + pass + ' passed, ' + fail + ' failed');
 process.exit(fail ? 1 : 0);

@@ -63,6 +63,10 @@
   const TOKEN_KEY   = 'dfc_sync_token';
   const DELETED_KEY = 'dfc_sync_deleted';  // { fleetId: deletedAt }
   const LASTSYNC_KEY = 'dfc_sync_last';
+  // A Sync Token this device used before it signed in with Discord. It keeps
+  // being synced alongside the Discord copy, so devices still on the token and
+  // devices on Discord share one list instead of drifting apart.
+  const LINKED_KEY  = 'dfc_sync_linked';
 
   /* ── Keeping the Dropzone builder's armies out ────────────────
    *
@@ -146,6 +150,10 @@
     catch (e) { return false; }
   }
   function token()   { try { return localStorage.getItem(TOKEN_KEY) || null; } catch (e) { return null; } }
+  function linkedToken() {
+    if (!token()) return null;
+    try { return localStorage.getItem(LINKED_KEY) || null; } catch (e) { return null; }
+  }
   function enabled() { return mode() !== null; }
   function lastSync() {
     const v = parseInt(localStorage.getItem(LASTSYNC_KEY) || '0', 10);
@@ -383,17 +391,33 @@
 
   /* Adopt a token: pull, merge into local, then push the merged result back so
    * every device converges on the same list. */
-  async function join(raw) {
+  async function join(raw, linked) {
     const tok = normaliseToken(raw);
     if (!looksLikeToken(tok)) throw new Error('That does not look like a Sync Token.');
     const remote = (await remoteGet(tokenTarget(tok))) || EMPTY;
     const before = readLocal().length;
-    const merged = mergeWith(remote);
+    let merged = mergeWith(remote);
+    // Discord sign-in from a device that had a token: pull that token's copy in
+    // too, so fleets saved from other token devices since the last sync are not
+    // left behind, and keep it linked from now on.
+    const link = linked && linked !== tok ? linked : null;
+    let linkedRemote = null;
+    if (link) {
+      linkedRemote = await remoteGet(tokenTarget(link));
+      if (linkedRemote) {
+        writeLocal(merged.fleets);
+        writeDeleted(merged.deleted);
+        merged = mergeWith(linkedRemote);
+      }
+    }
     writeLocal(merged.fleets);
     writeDeleted(merged.deleted);
     localStorage.setItem(TOKEN_KEY, tok);
     localStorage.removeItem(DISCORD_KEY);   // a phrase joined by hand is not a Discord login
+    if (link && linkedRemote) localStorage.setItem(LINKED_KEY, link);
+    else localStorage.removeItem(LINKED_KEY);
     await remotePut(tokenTarget(tok), merged);
+    if (link && linkedRemote) await remotePut(tokenTarget(link), merged);
     localStorage.setItem(LASTSYNC_KEY, String(Date.now()));
     return {
       token: tok,
@@ -421,10 +445,29 @@
         if (!t) return null;
         const remote = (await remoteGet(t)) || EMPTY;
         const beforeIds = readLocal().map(f => f && f.id).join(',');
-        const merged = mergeWith(remote);
+        let merged = mergeWith(remote);
+        // The linked token's copy is read and written with the main one, so a
+        // device still on the token sees what this one saved and vice versa. If
+        // that copy has been deleted, the link goes: recreating it would undo
+        // somebody's "Delete online copy".
+        const link = t.bearer ? null : linkedToken();
+        let lt = null;
+        if (link) {
+          lt = tokenTarget(link);
+          const lr = await remoteGet(lt);
+          if (lr) {
+            writeLocal(merged.fleets);
+            writeDeleted(merged.deleted);
+            merged = mergeWith(lr);
+          } else {
+            localStorage.removeItem(LINKED_KEY);
+            lt = null;
+          }
+        }
         writeLocal(merged.fleets);
         writeDeleted(merged.deleted);
         await remotePut(t, merged);
+        if (lt) await remotePut(lt, merged);
         localStorage.setItem(LASTSYNC_KEY, String(Date.now()));
         const changed = merged.fleets.map(f => f && f.id).join(',') !== beforeIds;
         if (changed && typeof api.onChange === 'function') api.onChange(merged.fleets);
@@ -463,6 +506,7 @@
   function stop() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(DISCORD_KEY);
+    localStorage.removeItem(LINKED_KEY);
     localStorage.removeItem(LASTSYNC_KEY);
     clearTimeout(timer);
   }
@@ -476,6 +520,9 @@
     const t = await target();
     if (!t) return false;
     await remoteDelete(t);
+    // Both copies: leaving the linked one would hand every fleet straight back.
+    const link = t.bearer ? null : linkedToken();
+    if (link) await remoteDelete(tokenTarget(link));
     // Signing out is the user's own decision, so an account keeps its session
     // and simply has nothing stored online any more. A token has no meaning
     // once its document is gone, so that one is dropped from this device.
@@ -569,7 +616,11 @@
     const key = p.get('dsync');
     if (!key || !looksLikeToken(key)) return Promise.reject(new Error('Discord sign-in failed. Try again.'));
     const who = { name: p.get('dn') || 'Discord', avatar: p.get('da') || '' };
-    return join(key).then(r => {
+    // A device that was on a Sync Token keeps it linked, see LINKED_KEY. A token
+    // that is itself a Discord key (another account) is not carried over.
+    const prev = token();
+    const keep = prev && prev.indexOf('discord-') !== 0 ? prev : linkedToken();
+    return join(key, keep).then(r => {
       localStorage.setItem(DISCORD_KEY, JSON.stringify(who));
       return Object.assign({ name: who.name }, r);
     });
@@ -610,7 +661,7 @@
   } catch (e) { /* non-browser host (the test sandbox); nothing to attach to */ }
 
   const api = {
-    supported, enabled, token, lastSync,
+    supported, enabled, token, linkedToken, lastSync,
     randomToken, normaliseToken, looksLikeToken,
     mode, preview, join, start, sync, notifyChanged, maybeAutoSync, stop, deleteRemote, recordDeleted,
     adoptToken,
