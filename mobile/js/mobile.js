@@ -5585,12 +5585,28 @@
    * account. With no client ID configured in the build this renders nothing, so
    * the token flow is exactly what it was. */
   function syncAccountHTML() {
-    if (!(window.FleetAuth && FleetAuth.configured())) return '';
-    const u = FleetAuth.user();
+    const google = !!(window.FleetAuth && FleetAuth.configured());
+    const discord = FleetSync.discordConfigured();
+    if (!google && !discord) return '';
+    const d = FleetSync.discordUser();
+    if (d) {
+      return `<div class="m-sync-account">
+        <div class="m-sync-account-row">
+          ${d.avatar ? `<img class="m-sync-avatar" src="${esc(d.avatar)}" alt="" referrerpolicy="no-referrer">` : ''}
+          <div class="m-sync-account-who">
+            <div class="m-sync-account-name">${esc(d.name)}</div>
+            <div class="m-sync-account-mail">Discord</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-block" onclick="App.syncDiscordSignOut()">Sign out</button>
+      </div>`;
+    }
+    const u = google ? FleetAuth.user() : null;
     if (!u) {
       return `<div class="m-sync-account">
         <p class="m-sync-p">Sign in and your fleets follow you to every device you use, with no phrase to type.</p>
-        <div id="m-sync-google" class="m-sync-google"></div>
+        ${discord ? `<button class="m-sync-discord" onclick="App.syncDiscordSignIn()">${DISCORD_ICON} Sign in with Discord</button>` : ''}
+        ${google ? `<div id="m-sync-google" class="m-sync-google"></div>` : ''}
       </div>
       <div class="m-sync-or"><span>or</span></div>`;
     }
@@ -5609,6 +5625,17 @@
       ${adopt}
       <button class="btn btn-ghost btn-block" onclick="App.syncSignOut()">Sign out</button>
     </div>`;
+  }
+
+  const DISCORD_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>';
+  function syncDiscordSignIn() {
+    syncSetBusy(true, 'Opening Discord…');
+    FleetSync.discordSignIn();
+  }
+  function syncDiscordSignOut() {
+    FleetSync.discordSignOut();
+    syncFlash = 'Signed out';
+    renderSyncBody();
   }
 
   /* Signing out leaves every fleet on the device, and the account's cloud copy
@@ -5672,9 +5699,9 @@
   function syncOnHTML() {
     const last = FleetSync.lastSync();
     const when = last ? new Date(last).toLocaleString() : 'not yet';
-    // In account mode there is no phrase to show, and no "stop syncing here":
-    // Sign out is that button, and it lives in the account block above.
-    const account = FleetSync.mode() === 'account';
+    // In account mode (Google or Discord) there is no phrase to show, and no
+    // "stop syncing here": Sign out is that button, in the account block above.
+    const account = FleetSync.mode() === 'account' || !!FleetSync.discordUser();
     const tokenPart = account ? '' : `
       <div class="m-sync-sub">Your Sync Token</div>
       <code class="m-sync-token" id="m-sync-token">${esc(FleetSync.token())}</code>
@@ -7139,10 +7166,29 @@
     }
     setTimeout(maybeShowOfflineTip, 1200);
 
+    // Back from Discord's sign-in page: join the account's sync document, then
+    // show the result in the sync sheet (mobile has no toast).
+    const discordDone = window.FleetSync && FleetSync.discordFinish();
+    if (discordDone) {
+      discordDone.then(r => {
+        loadFleets();
+        renderFleetList();
+        syncFlash = 'Signed in as ' + r.name + '. ' + r.total + ' fleet' + (r.total === 1 ? '' : 's') + ' syncing';
+        installSyncHook();
+        openSyncModal();
+      }).catch(e => {
+        syncFlash = e.message || 'Discord sign-in failed';
+        openSyncModal();
+      });
+    } else {
+      installSyncHook();
+    }
+
     // Pull anything another device changed while this one was closed. Runs after
     // the first render so a slow network never delays the app, and stays silent on
     // failure: the next edit or reload retries.
-    if (window.FleetSync && FleetSync.enabled()) {
+    function installSyncHook() {
+      if (!(window.FleetSync && FleetSync.enabled())) return;
       FleetSync.onChange = () => {
         loadFleets();
         renderFleetList();
@@ -7199,7 +7245,7 @@
     openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayChangeVP, mPlayChangeOppVP, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayOrderDown, mPlayOrderMove, mPlayOrderUp, mPlayOrderCancel, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayToggleCripPanel, mPlayCorruptorChange,
     mPlayToggleReorder, mPlayMoveGroup, mPlayToggleCollapse, mPlayCollapseAll,
     openSyncModal, closeSyncModal, renderSyncBody, syncGenerate, syncLookup, syncDoJoin, syncNow, syncCopyToken, syncStop, syncDeleteRemote,
-    syncSignOut, syncAdoptToken,
+    syncSignOut, syncAdoptToken, syncDiscordSignIn, syncDiscordSignOut,
     openRule, openRangeTip, openLaunchRule, openStat, closeRuleSheet, closeActionSheet, sayName,
     renderMobileRules, jumpMobileRules, filterMobileRules,
     openUnitM, unitsFactionM, unitsCatM, unitsSearchM, exportUnitsPdf

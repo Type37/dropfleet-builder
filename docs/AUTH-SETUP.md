@@ -97,3 +97,28 @@ way it consumes Google. It needs a small server endpoint holding the Discord
 client secret, which exchanges the OAuth code and mints a Firebase custom token.
 A free Cloudflare Worker is the cheapest home for that. Roughly sixty lines,
 plus a Discord application and a Firebase service-account key.
+
+## Discord sign-in
+
+Discord cannot sign in to Firebase directly (no OpenID id_token), so a tiny
+Cloudflare Worker in `worker/discord-sync/` does the Discord side. It swaps
+Discord's code for the user's id and sends the browser back with a sync key:
+`HMAC-SHA256(SYNC_SECRET, "discord:" + id)` written as letters. That key names
+the user's `/sync/{key}` document, the same kind of document a six-word Sync
+Token names, so `firestore.rules` and the sync engine need no changes.
+
+Setup (one time):
+
+1. `npx wrangler login`, then `npx wrangler deploy` in `worker/discord-sync/`.
+   Note the `https://dfc-discord-sync.<account>.workers.dev` URL.
+2. Discord Developer Portal > New Application > OAuth2: copy the Client ID,
+   reset and copy the Client Secret, add the redirect
+   `https://dfc-discord-sync.<account>.workers.dev/callback`.
+3. Put all three values into `worker/discord-sync/.secrets` (gitignored), then
+   `wrangler secret put` each of DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET,
+   SYNC_SECRET.
+4. Set `DISCORD_WORKER` in `js/fleet-sync.js` to the Worker URL.
+
+**Never change SYNC_SECRET.** Every Discord user's document name is derived
+from it; a new secret points everyone at an empty document. It is backed up in
+`worker/discord-sync/.secrets` on the machine that deployed it.

@@ -1878,6 +1878,25 @@ body.sheet-open .sheet-scrim {
   margin-top: var(--sp-s);
   min-height: 44px;
 }
+/* Discord's own blurple is 4.4:1 against white text, a hair under AA, so the
+   button uses Discord's darker hover shade (6:1). */
+.m-sync-discord {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-s);
+  width: 100%;
+  min-height: 48px;
+  margin-top: var(--sp-s);
+  border: 0;
+  border-radius: 8px;
+  background: #4752c4;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+}
+.m-sync-discord:active { background: #3c45a5; }
+.m-sync-discord svg { flex: none; }
 .m-sync-or {
   display: flex;
   align-items: center;
@@ -1886,7 +1905,6 @@ body.sheet-open .sheet-scrim {
   color: var(--fg4);
   font-size: var(--text-caption2);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 .m-sync-or::before, .m-sync-or::after {
   content: '';

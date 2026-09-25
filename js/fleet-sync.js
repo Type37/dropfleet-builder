@@ -392,6 +392,7 @@
     writeLocal(merged.fleets);
     writeDeleted(merged.deleted);
     localStorage.setItem(TOKEN_KEY, tok);
+    localStorage.removeItem(DISCORD_KEY);   // a phrase joined by hand is not a Discord login
     await remotePut(tokenTarget(tok), merged);
     localStorage.setItem(LASTSYNC_KEY, String(Date.now()));
     return {
@@ -461,6 +462,7 @@
    * the user can rejoin later or keep using it elsewhere. Local fleets are kept. */
   function stop() {
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(DISCORD_KEY);
     localStorage.removeItem(LASTSYNC_KEY);
     clearTimeout(timer);
   }
@@ -503,6 +505,76 @@
     return { total: merged.fleets.length, fromToken: (remote.fleets || []).length, fromDevice: before };
   }
 
+  /* ── Discord sign-in ─────────────────────────────────────────
+   * Discord's login needs a server holding the app's client secret, so a small
+   * Cloudflare Worker (worker/discord-sync) does the Discord side and sends the
+   * browser back here with a sync key in the URL fragment. That key is a token
+   * like any other: it names this user's /sync document, so join() and every
+   * sync after it run unchanged. What is new is only who the key belongs to,
+   * kept in DISCORD_KEY so the panel can say "Signed in as ..." instead of
+   * showing a phrase. The key is derived from the Discord id, so signing in on
+   * any device lands on the same document.
+   *
+   * While DISCORD_WORKER is empty no button renders and nothing changes. */
+  const DISCORD_WORKER = '';
+  const DISCORD_KEY = 'dfc_sync_discord';     // { name, avatar }
+  const DISCORD_STATE = 'dfc_discord_state';  // nonce for the login in flight (localStorage: Discord's app may hand back to a new tab)
+
+  function discordConfigured() { return !!DISCORD_WORKER; }
+  function discordUser() {
+    if (!token()) return null;
+    try { return JSON.parse(localStorage.getItem(DISCORD_KEY) || 'null'); } catch (e) { return null; }
+  }
+  function discordSignIn() {
+    const buf = new Uint8Array(18);
+    crypto.getRandomValues(buf);
+    const nonce = Array.from(buf, b => b.toString(16).padStart(2, '0')).join('');
+    try { localStorage.setItem(DISCORD_STATE, nonce); } catch (e) {}
+    const ret = location.href.split('#')[0];
+    location.href = DISCORD_WORKER + '/login?state=' + nonce + '&return=' + encodeURIComponent(ret);
+  }
+  function discordSignOut() {
+    localStorage.removeItem(DISCORD_KEY);
+    stop();
+  }
+  /* Called once at app start. Returns null when this load is not a return from
+   * Discord, otherwise a promise of join()'s result (or a rejection saying why).
+   * The fragment was wiped at load so a reload or a shared link never carries
+   * the key. The nonce check means only a login this tab started is
+   * accepted, so nobody can sign you into their account with a crafted link. */
+  // Captured at load, before app.js or mobile.js run: both route on the URL
+  // hash, and would otherwise read the sync key as a page to open.
+  let discordReturn = null;
+  try {
+    if ((location.hash || '').indexOf('dsync') !== -1) {
+      discordReturn = new URLSearchParams(location.hash.slice(1));
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  } catch (e) { /* non-browser host */ }
+
+  function discordFinish() {
+    const p = discordReturn;
+    if (!p) return null;
+    discordReturn = null;
+    let expected = null;
+    try { expected = localStorage.getItem(DISCORD_STATE); localStorage.removeItem(DISCORD_STATE); } catch (e) {}
+    if (!expected || p.get('ds') !== expected) {
+      return Promise.reject(new Error('Discord sign-in expired. Try again.'));
+    }
+    if (p.get('dsync_error')) {
+      const why = p.get('dsync_error');
+      return Promise.reject(new Error(why === 'access_denied' || why === 'cancelled'
+        ? 'Discord sign-in was cancelled.' : 'Discord sign-in failed. Try again.'));
+    }
+    const key = p.get('dsync');
+    if (!key || !looksLikeToken(key)) return Promise.reject(new Error('Discord sign-in failed. Try again.'));
+    const who = { name: p.get('dn') || 'Discord', avatar: p.get('da') || '' };
+    return join(key).then(r => {
+      localStorage.setItem(DISCORD_KEY, JSON.stringify(who));
+      return Object.assign({ name: who.name }, r);
+    });
+  }
+
   /* ── Staying in step ─────────────────────────────────────────
    * A device syncs on app start and after its own edits, but that leaves the
    * obvious gap: a phone sitting open while you edit on the desktop has no
@@ -542,6 +614,7 @@
     randomToken, normaliseToken, looksLikeToken,
     mode, preview, join, start, sync, notifyChanged, maybeAutoSync, stop, deleteRemote, recordDeleted,
     adoptToken,
+    discordConfigured, discordUser, discordSignIn, discordSignOut, discordFinish,
     stampChanged,
     wordCount: WORDS.length,
     WORDS_PER_TOKEN: WORDS_PER_TOKEN,

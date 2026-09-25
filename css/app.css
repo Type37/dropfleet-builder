@@ -1259,7 +1259,6 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-muted);
   font-size: var(--text-sm);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
 }
 .sync-or::before, .sync-or::after {
   content: '';
@@ -1284,6 +1283,29 @@ h1, h2, h3, h4, h5, h6 {
 .sync-account-who { flex: 1; min-width: 0; }
 .sync-account-name { font-weight: 700; }
 .sync-account-mail { font-size: var(--text-sm); color: var(--ink-muted); }
+/* Discord's own blurple is 4.4:1 against white text, a hair under AA, so the
+   button uses Discord's darker hover shade (6:1) at rest and goes darker still. */
+.sync-discord-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-sm);
+  width: 100%;
+  max-width: 320px;
+  min-height: 44px;
+  margin: var(--sp-sm) auto 0;
+  padding: 0 var(--sp-md);
+  border: 0;
+  border-radius: 6px;
+  background: #4752c4;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.sync-discord-btn:hover { background: #3c45a5; }
+.sync-discord-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.sync-discord-btn svg { flex: none; }
 
 .sync-existing { margin-top: var(--sp-lg); }
 .sync-join-row {
