@@ -313,7 +313,9 @@ let activeGroupId = null;
     if (fb) fb.href = FEEDBACK_HREF;   // upgrade the plain mailto to the guided one
     window.dispatchEvent(new Event('hashchange'));
     const settingsBtn = document.getElementById('topbar-settings-btn');
-    if (settingsBtn) setTimeout(() => maybeShowOfflineTip(settingsBtn), 1200);
+    // One tip per load: the Discord one wins for a returning visitor who has not
+    // seen it, and the offline tip waits for a later visit.
+    if (settingsBtn) setTimeout(() => { if (!maybeShowDiscordTip(settingsBtn)) maybeShowOfflineTip(settingsBtn); }, 1200);
 
     // Back from Discord's sign-in page: join the account's sync document now,
     // then fall into the normal hook below so later edits keep syncing.
@@ -9083,6 +9085,7 @@ let activeGroupId = null;
     { date: '2026-09-25', title: 'Sign in with Discord', items: [
       'Sync Fleets Online now has a Sign in with Discord button. Your fleets save to your Discord account and appear on any device you sign in on, with no Sync Token to type. Sync Tokens still work as before.',
       'Signing in with Discord on a device that already used a Sync Token keeps that token in step too, so devices still on the token and devices on Discord share one list.',
+      'Returning visitors see a one-time tip about it under the menu button. Tapping the tip opens Sync Fleets Online.',
     ]},
     { date: '2026-09-25', title: 'New heroes: Seti the Kinslayer and Aeon', items: [
       'Shaltari: Seti the Kinslayer joins in the Spear of Anubis, 170 pts. A Shield-4+ heavy cruiser with an Ancient Thermal Lance Cannon, Dropships and Torpedoes, and Seti Alpha Strike.',
@@ -9661,7 +9664,11 @@ let activeGroupId = null;
     const out = document.getElementById('sync-signout');
     if (out) out.onclick = syncSignOut;
     const dIn = document.getElementById('sync-discord');
-    if (dIn) dIn.onclick = () => { syncBusy(true, 'Opening Discord…'); FleetSync.discordSignIn(); };
+    if (dIn) dIn.onclick = () => {
+      try { localStorage.setItem('dfc_tip_discord_seen', '1'); } catch {}
+      syncBusy(true, 'Opening Discord…');
+      FleetSync.discordSignIn();
+    };
     const dOut = document.getElementById('sync-discord-out');
     if (dOut) dOut.onclick = syncDiscordSignOut;
     const adopt = document.getElementById('sync-adopt');
@@ -11370,6 +11377,21 @@ let activeGroupId = null;
   // stale check if the window is later widened. Same 3-visits gate and
   // one-time flag as the rename tip, so the two never compete for attention on
   // the very first session.
+  // Once per device, for someone coming back (not a first visit), and never for
+  // anyone already signed in with Discord. Tapping it opens the sync panel.
+  const TIP_DISCORD_SEEN_KEY = 'dfc_tip_discord_seen';
+  const TIP_DISCORD_TEXT = 'Did you know? You can now sync your fleets by signing in with Discord.';
+  function maybeShowDiscordTip(anchorEl) {
+    if (!anchorEl || !document.body.contains(anchorEl)) return false;
+    if (!window.FleetSync || !FleetSync.discordConfigured() || FleetSync.discordUser()) return false;
+    if (localStorage.getItem(TIP_DISCORD_SEEN_KEY) === '1') return false;
+    const visits = parseInt(localStorage.getItem(VISIT_COUNT_KEY), 10) || 0;
+    if (visits < 2) return false;
+    showOnboardingTip(anchorEl, TIP_DISCORD_TEXT, '', openSyncModal);
+    try { localStorage.setItem(TIP_DISCORD_SEEN_KEY, '1'); } catch {}
+    return true;
+  }
+
   function maybeShowOfflineTip(anchorEl) {
     if (!anchorEl || window.innerWidth >= 640) return;
     if (localStorage.getItem(TIP_OFFLINE_SEEN_KEY) === '1') return;
@@ -11384,7 +11406,7 @@ let activeGroupId = null;
   // tracks the anchor even when the bubble has to shift to stay on-screen.
   // `viewportClass` re-hides it if a resize crosses the 640px breakpoint after
   // it's already been created (e.g. 'desktop-only' or 'mobile-only').
-  function showOnboardingTip(anchorEl, message, viewportClass) {
+  function showOnboardingTip(anchorEl, message, viewportClass, onTap) {
     const existing = document.getElementById('onboard-tip');
     if (existing) existing.remove();
 
@@ -11427,6 +11449,15 @@ let activeGroupId = null;
     }
     function onDocClick(e) { if (!tip.contains(e.target)) cleanup(); }
     tip.querySelector('.onboard-tip-close').addEventListener('click', cleanup);
+    if (onTap) {
+      const body = tip.querySelector('.onboard-tip-body');
+      body.classList.add('onboard-tip-action');
+      body.setAttribute('role', 'button');
+      body.tabIndex = 0;
+      const go = () => { cleanup(); onTap(); };
+      body.addEventListener('click', go);
+      body.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+    }
     setTimeout(() => document.addEventListener('click', onDocClick, true), 10);
     window.addEventListener('resize', cleanup, { once: true });
   }

@@ -615,6 +615,22 @@
     } catch { return 0; }
   }
 
+  // Once per device, for someone coming back (not a first visit), and never for
+  // anyone already signed in with Discord. Tapping it opens the sync sheet.
+  const TIP_DISCORD_SEEN_KEY = 'dfc_tip_discord_seen';
+  const TIP_DISCORD_TEXT = 'Did you know? You can now sync your fleets by signing in with Discord.';
+  function maybeShowDiscordTip() {
+    const anchorEl = document.getElementById('app-bar-menu');
+    if (!anchorEl || anchorEl.classList.contains('hidden')) return false;
+    if (!window.FleetSync || !FleetSync.discordConfigured() || FleetSync.discordUser()) return false;
+    if (localStorage.getItem(TIP_DISCORD_SEEN_KEY) === '1') return false;
+    const visits = parseInt(localStorage.getItem('dfc_visit_count'), 10) || 0;
+    if (visits < 2) return false;
+    showMobileTip(anchorEl, TIP_DISCORD_TEXT, openSyncModal);
+    try { localStorage.setItem(TIP_DISCORD_SEEN_KEY, '1'); } catch {}
+    return true;
+  }
+
   function maybeShowOfflineTip() {
     const anchorEl = document.getElementById('app-bar-menu');
     if (!anchorEl || anchorEl.classList.contains('hidden')) return;
@@ -627,7 +643,7 @@
 
   // One-time callout bubble anchored below `anchorEl`, with an arrow pointing
   // up at it. Dismisses on any outside tap.
-  function showMobileTip(anchorEl, message) {
+  function showMobileTip(anchorEl, message, onTap) {
     const existing = document.getElementById('mobile-tip');
     if (existing) existing.remove();
 
@@ -655,6 +671,11 @@
     }
     function onDocClick(e) { if (!tip.contains(e.target)) cleanup(); }
     tip.querySelector('.mobile-tip-close').addEventListener('click', cleanup);
+    if (onTap) {
+      const body = tip.querySelector('.mobile-tip-body');
+      body.setAttribute('role', 'button');
+      body.addEventListener('click', () => { cleanup(); onTap(); });
+    }
     setTimeout(() => document.addEventListener('click', onDocClick, true), 10);
     window.addEventListener('resize', cleanup, { once: true });
   }
@@ -5004,6 +5025,7 @@
     { date: '2026-09-25', title: 'Sign in with Discord', items: [
       'Sync Fleets Online now has a Sign in with Discord button. Your fleets save to your Discord account and appear on any device you sign in on, with no Sync Token to type. Sync Tokens still work as before.',
       'Signing in with Discord on a device that already used a Sync Token keeps that token in step too, so devices still on the token and devices on Discord share one list.',
+      'Returning visitors see a one-time tip about it under the menu button. Tapping the tip opens Sync Fleets Online.',
     ]},
     { date: '2026-09-25', title: 'New heroes: Seti the Kinslayer and Aeon', items: [
       'Shaltari: Seti the Kinslayer joins in the Spear of Anubis, 170 pts. A Shield-4+ heavy cruiser with an Ancient Thermal Lance Cannon, Dropships and Torpedoes, and Seti Alpha Strike.',
@@ -5640,6 +5662,7 @@
     return FleetSync.token();
   }
   function syncDiscordSignIn() {
+    try { localStorage.setItem('dfc_tip_discord_seen', '1'); } catch {}
     syncSetBusy(true, 'Opening Discord…');
     FleetSync.discordSignIn();
   }
@@ -7176,7 +7199,9 @@
       navigate('screen-units');
       if (unitsLink[2]) openUnitM(decodeURIComponent(unitsLink[2]));
     }
-    setTimeout(maybeShowOfflineTip, 1200);
+    // One tip per load: the Discord one wins for a returning visitor who has not
+    // seen it, and the offline tip waits for a later visit.
+    setTimeout(() => { if (!maybeShowDiscordTip()) maybeShowOfflineTip(); }, 1200);
 
     // Back from Discord's sign-in page: join the account's sync document, then
     // show the result in the sync sheet (mobile has no toast).

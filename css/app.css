@@ -3024,6 +3024,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink-soft);
   max-width: 260px;
 }
+.onboard-tip-action { cursor: pointer; }
 .onboard-tip-close {
   position: absolute;
   top: 6px;

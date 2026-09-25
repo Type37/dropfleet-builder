@@ -1612,6 +1612,7 @@ button, a, input, select, textarea,
   line-height: var(--lh-body1);
   color: var(--fg2);
 }
+.mobile-tip-body[role="button"] { cursor: pointer; }
 .mobile-tip-close {
   position: absolute;
   top: 4px;
