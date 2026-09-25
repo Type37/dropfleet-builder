@@ -5,6 +5,18 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-25: Sign in with Discord
+
+Fleet Sync gained a Discord sign-in. Discord issues no OpenID id_token, so
+Firebase Auth cannot take it directly; a Cloudflare Worker
+(`worker/discord-sync`, live at dfc-discord-sync.discord-sync.workers.dev) does
+the OAuth code exchange and returns HMAC(SYNC_SECRET, discord id) as a
+letters-only sync key. That key names a `/sync` document exactly like a six-word
+Sync Token does, so the merge engine and Firestore rules are unchanged. The app
+asks Discord for `identify` only (name and avatar) and revokes the access token
+straight after reading it. Setup and the never-change-SYNC_SECRET warning are in
+`docs/AUTH-SETUP.md`.
+
 ### 2026-09-25: Seti the Kinslayer, Aeon, Frances Mendoza
 
 TTCombat published Shaltari and Bioficer Combined Fleet Stats 260925 and re-uploaded

@@ -516,7 +516,7 @@
    * any device lands on the same document.
    *
    * While DISCORD_WORKER is empty no button renders and nothing changes. */
-  const DISCORD_WORKER = '';
+  const DISCORD_WORKER = 'https://dfc-discord-sync.discord-sync.workers.dev';
   const DISCORD_KEY = 'dfc_sync_discord';     // { name, avatar }
   const DISCORD_STATE = 'dfc_discord_state';  // nonce for the login in flight (localStorage: Discord's app may hand back to a new tab)
 

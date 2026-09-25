@@ -9080,6 +9080,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-25', title: 'Sign in with Discord', items: [
+      'Sync Fleets Online now has a Sign in with Discord button. Your fleets save to your Discord account and appear on any device you sign in on, with no Sync Token to type. Sync Tokens still work as before.',
+    ]},
     { date: '2026-09-25', title: 'New heroes: Seti the Kinslayer and Aeon', items: [
       'Shaltari: Seti the Kinslayer joins in the Spear of Anubis, 170 pts. A Shield-4+ heavy cruiser with an Ancient Thermal Lance Cannon, Dropships and Torpedoes, and Seti Alpha Strike.',
       'Bioficer: Aeon - The Ring Ship, 175 pts. A heavy cruiser with Genitor Bomblets, Launch 5 Fighters & Bombers, and Summoning.',

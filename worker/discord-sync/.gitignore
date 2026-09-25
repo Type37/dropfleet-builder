@@ -2,3 +2,6 @@
 .dev.vars
 .wrangler/
 node_modules/
+discord-keys.txt
+.cid
+.csec
