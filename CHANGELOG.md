@@ -5,6 +5,27 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-25: Seti the Kinslayer, Aeon, Frances Mendoza
+
+TTCombat published Shaltari and Bioficer Combined Fleet Stats 260925 and re-uploaded
+UCM 260828 in place again. A page-by-page diff against the editions they replace
+found three changes:
+
+- Shaltari p37: new Hero, **Seti the Kinslayer - Spear of Anubis** (170 pts, M).
+  Ancient Thermal Lance Cannon, Dropships 2 (Limited-2), Torpedoes 2 (Limited-4),
+  Seti Alpha Strike.
+- Bioficer p46: new Hero, **Aeon - The Ring Ship** (175 pts, M). Genitor Bomblets,
+  Fighters & Bombers 5, Summoning. The five Feature Carriers now say
+  "Gravitational Arc" instead of "Gravitational Lens", which is what the app
+  already used.
+- UCM p44: the captain is "Frances Mendoza" again (the 2026-09-12 re-upload had
+  changed it to "Francis"). That rename had also unhooked the ship's art, hiding it
+  from the picker when "Additional ships" was off; the revert restores it.
+
+Separately, mobile's art list was missing twelve Bioficer slugs desktop had (Sluice,
+Source, Syntax, Synthesis, Sierra, Shade, Anode and the cells), so those ships were
+hidden on phones. Added. Ingest script: `scripts/add-260925-content.py`.
+
 ### 2026-09-21: Phone menu scrolls
 
 The mobile action sheet (the gear's Settings menu, and every overflow menu) had

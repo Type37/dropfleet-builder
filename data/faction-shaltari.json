@@ -4146,6 +4146,79 @@
    }
   },
   {
+   "id": "5b67-336e-cd0b-8dea",
+   "name": "Seti the Kinslayer - Spear of Anubis Heavy Cruiser",
+   "category": "medium",
+   "ship": {
+    "name": "Seti the Kinslayer - Spear of Anubis Heavy Cruiser",
+    "cost": 170,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "12\"",
+     "sig": "6\"",
+     "hull": 11,
+     "es": "5+",
+     "ks": "4+",
+     "bs": "6+",
+     "g": "1",
+     "special": "Hero, Shield-4+, Unique"
+    },
+    "weapons": [
+     {
+      "name": "Ancient Thermal Lance Cannon",
+      "arc": "FN",
+      "attack": "3",
+      "lock": "2+",
+      "damage": "1",
+      "type": "E",
+      "special": "Bloom-1, Burnthrough-1, Critical-2"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Dropships",
+      "launch": "2",
+      "special": "Limited-2"
+     },
+     {
+      "name": "Torpedo",
+      "launch": "2",
+      "special": "Limited-4"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Hero",
+      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet."
+     },
+     {
+      "name": "Shield-4+",
+      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
+      "page": "37",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Unique",
+      "description": "You may only take one Group of this Ship."
+     },
+     {
+      "name": "Seti Alpha Strike",
+      "description": "Dropships deploying Battalions from this Ship do not use the Mothership and Gateship-X special rules and can be deployed to any orbital layer. When you deploy any of this Ship’s Dropships to a Dropsite, Immediately remove that many enemy Battalions from that Dropsite."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": true,
+    "tonnage": "M",
+    "famousShipsPrefix": "Only ship of the class:",
+    "famousShips": [
+     "Spear of Anubis"
+    ],
+    "lore": "Seti the Kinslayer is an infamously treacherous Shaltari who loves nothing better than fighting and ending his own kind. With no better targets, annihilating the lesser races will do. He was originally known as a ground commander but has since been known to helm a unique, personal vessel of heavy cruiser tonnage: the Spear of Anubis. Unusually, and excessively, this ship packs two vast torpedo tubes, presumably to achieve kills in a most satisfying manner. Those are augmented by a spinal mounted thermal lance cannon. Inside, a small teleportation chamber allows Seti and his warriors to make planetfall whenever the impersonality of void combat bores him. He is understood to relish the smells of smoke, death, and blood.\n\nSeti will attach himself to any tribe’s campaign so long as it promises good sport for him, but given his reputation, any starchief that accepts his sword should be permanently nervous. If anything, this reputation has soured further in recent years after the Brazilian incident and his gleefully vicious actions over Aaru in 2678."
+   }
+  },
+  {
    "id": "1fd6-31e0-548c-cc1e",
    "name": "Pungari Thresher Hive Ship",
    "category": "medium",

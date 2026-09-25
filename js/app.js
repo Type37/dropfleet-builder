@@ -488,7 +488,7 @@ let activeGroupId = null;
     'painite','platinum','plutonium','ruby','sapphire','scoria','selenium',
     'shedu','silicon','silver','spinel','strontium','thorium','topaz',
     'turquoise','umbra','uranium',
-    'nefertem',
+    'nefertem','seti',
     // Resistance
     'aldrin','armstrong','barbarossa','collins','coloniser','drake','explorer',
     'farragut','galileo','guy','iowa','lexington','musashi','nelson','nimitz',
@@ -504,7 +504,7 @@ let activeGroupId = null;
     'sagitarii','sanctum','scion','stature','supercell','tally','tine',
     'torrent','vertex','zenith','zodiac',
     // Bioficer: new May-2026 ships + previously art-less hulls/cells
-    'anode','invasion','lander','prism','shade','sierra','sluice','source',
+    'aeon','anode','invasion','lander','prism','shade','sierra','sluice','source',
     'summoner','syntax','synthesis','torpedo'
   ]);
   const SHIP_ART_SPECIAL = {
@@ -9063,6 +9063,12 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-09-25', title: 'New heroes: Seti the Kinslayer and Aeon', items: [
+      'Shaltari: Seti the Kinslayer joins in the Spear of Anubis, 170 pts. A Shield-4+ heavy cruiser with an Ancient Thermal Lance Cannon, Dropships and Torpedoes, and Seti Alpha Strike.',
+      'Bioficer: Aeon - The Ring Ship, 175 pts. A heavy cruiser with Genitor Bomblets, Launch 5 Fighters & Bombers, and Summoning.',
+      'UCM: TTCombat changed the Flying Dutchman captain back to Frances Mendoza. The ship shows its art again.',
+      'Phone: Sluice, Source, Syntax, Synthesis, Sierra, Shade and other Bioficer ships now show their art and appear in the ship list.',
+    ]},
     { date: '2026-09-21', title: 'Phone menu scrolls', items: [
       'On a short phone screen the Settings menu ran off the top, and dragging it to reach Sync Fleets Online closed it or snapped it back. The menu fits the screen now and scrolls, so every item can be reached.',
     ]},
