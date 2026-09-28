@@ -19,6 +19,11 @@ the Flying Dutchman keeps its art under either spelling. The files manifest
 records the stale size under `stale_bytes`, so the weekly scan stops flapping
 between the two edges; `scan-dfc-files.py` ignores a Content-Length listed there.
 
+New `scripts/cdn_fetch.py` downloads a URL four times and keeps the copy with the
+latest PDF `/CreationDate`, so one unlucky download can no longer walk the data
+backwards. `audit-cards.py` uses it for the weekly card check, and it runs by
+hand as `python scripts/cdn_fetch.py URL DEST` when integrating an edition.
+
 ### 2026-09-25: Sign in with Discord
 
 Fleet Sync gained a Discord sign-in. Discord issues no OpenID id_token, so

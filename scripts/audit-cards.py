@@ -55,6 +55,7 @@ try:
 except ImportError:
     sys.exit("PyMuPDF required: pip install pymupdf")
 from ingest_pdf import parse_page, canon, _vnorm  # noqa: E402
+from cdn_fetch import fetch_newest  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
@@ -84,9 +85,11 @@ def load(path):
 
 
 def fetch(url, dest):
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (DFC-card-audit)"})
-    with urllib.request.urlopen(req, timeout=180) as r, open(dest, "wb") as f:
-        f.write(r.read())
+    # Newest of several downloads: CDN edges can still hold a pre-overwrite copy.
+    copies = fetch_newest(url, dest)
+    for n, c in copies[1:]:
+        print("  (%s: CDN also served an older %d-byte copy built %s; using the newest)"
+              % (os.path.basename(dest), n, c or "unknown"))
 
 
 def sha256(path):
