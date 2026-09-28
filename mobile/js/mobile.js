@@ -277,7 +277,9 @@
     'Triumvir':'triumvir','Tribune':'tribune','Disciple':'disciple',
     'M.A.B. 67':'mab_67_fuel_transport',
     'MK Mass Transporter':'mk_mass_transporter',
-    'M-Type':'m-type','El Paso':'el_paso'
+    'M-Type':'m-type','El Paso':'el_paso',
+    // TTCombat's CDN serves two cuts of UCM 260828: "Frances" and "Francis" Mendoza.
+    'Francis Mendoza':'frances'
   };
   const ADMIRAL_ART = {
     'claudia rhee':'claudia_rhee','gaius chau':'gaius_chau','javelin':'director_javelin',
@@ -5022,6 +5024,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-09-28', title: 'UCM: Francis Mendoza', items: [
+      'The Flying Dutchman captain is Francis Mendoza again. TTCombat\'s download server hands out two copies of the UCM stats PDF, and the newer one (built 1 September) says Francis. The 25 September change back to Frances came from the older copy.',
+      'The ship keeps its art under either spelling.',
+    ]},
     { date: '2026-09-25', title: 'Sign in with Discord', items: [
       'Sync Fleets Online now has a Sign in with Discord button. Your fleets save to your Discord account and appear on any device you sign in on, with no Sync Token to type. Sync Tokens still work as before.',
       'Signing in with Discord on a device that already used a Sync Token keeps that token in step too, so devices still on the token and devices on Discord share one list.',

@@ -83,7 +83,8 @@ def diff(old, new):
         elif cur.get("version") != prev.get("version"):
             changes["REVISED"].append((fam, prev, cur))
         elif (prev.get("bytes") is not None and cur.get("bytes") is not None
-              and prev["bytes"] != cur["bytes"]):
+              and prev["bytes"] != cur["bytes"]
+              and cur["bytes"] not in prev.get("stale_bytes", [])):
             changes["RESIZED"].append((fam, prev, cur))
     for fam, prev in old.items():
         if fam not in new:
@@ -127,6 +128,14 @@ def main():
             print(f"\n{n} change(s). Review, download updated PDFs into Rules-Mechanics-PDFs/, and integrate.")
 
     if update:
+        # stale_bytes: sizes a lagging CDN edge still serves for an overwritten file
+        # (UCM 260828 on 2026-09-28). Hand-maintained; carried over while the URL holds.
+        for fam, cur in new.items():
+            prev = old.get(fam, {})
+            if prev.get("stale_bytes") and prev.get("url") == cur["url"]:
+                cur["stale_bytes"] = prev["stale_bytes"]
+                if cur.get("bytes") in prev["stale_bytes"]:
+                    cur["bytes"] = prev["bytes"]
         json.dump({"source": PAGE, "files": new}, open(MANIFEST, "w", encoding="utf-8", newline=""),
                   indent=1, ensure_ascii=False)
         if not as_json:

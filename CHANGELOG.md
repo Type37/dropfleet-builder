@@ -5,6 +5,20 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-09-28: Francis Mendoza, for good this time
+
+TTCombat's Shopify CDN serves two different files under the one UCM 260828 URL
+(`?v=1787908175`), depending on which edge answers. Repeated HEADs return
+20083785 or 20083776 bytes. The 20083785 copy was built 2026-08-28 and says
+"Frances" on p44; the 20083776 copy was built 2026-09-01 and says "Francis".
+Page 44 (name and lore) is the only text difference. The 2026-09-25 switch back
+to "Frances" was read from the stale edge, so this restores "Francis".
+
+`SHIP_ART_SPECIAL` in both apps now maps "Francis Mendoza" to `frances.webp`, so
+the Flying Dutchman keeps its art under either spelling. The files manifest
+records the stale size under `stale_bytes`, so the weekly scan stops flapping
+between the two edges; `scan-dfc-files.py` ignores a Content-Length listed there.
+
 ### 2026-09-25: Sign in with Discord
 
 Fleet Sync gained a Discord sign-in. Discord issues no OpenID id_token, so
