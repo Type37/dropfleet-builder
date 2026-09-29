@@ -30,8 +30,12 @@ const DISCORD = 'https://discord.com';
 function allowedReturn(url) {
   try {
     const u = new URL(url);
+    // Both of Jet's builders sync through this Worker. Each keeps its own
+    // Firestore document for a Discord account (the Dropzone app prefixes
+    // "dzc-"), so the lists never mix.
     if (u.protocol === 'https:' && u.host === 'type37.github.io' &&
-        u.pathname.startsWith('/dropfleet-builder/')) return true;
+        (u.pathname.startsWith('/dropfleet-builder/') ||
+         u.pathname.startsWith('/dropzone-3e-army-builder/'))) return true;
     if (u.protocol === 'http:' && (u.hostname === 'localhost' || u.hostname === '127.0.0.1')) return true;
     return false;
   } catch (e) { return false; }
