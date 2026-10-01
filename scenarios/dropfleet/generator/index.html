@@ -32,6 +32,8 @@
   --panel-w:340px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+/* Fast taps must count, not double-tap zoom the page. Pinch zoom stays. */
+html,*{touch-action:manipulation;}
 
 html,body{height:100%;overflow:hidden;}
 body{font-family:'Jost',system-ui,sans-serif;background:var(--cobalt-bg);display:flex;flex-direction:column;}

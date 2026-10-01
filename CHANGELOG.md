@@ -5,6 +5,19 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-10-01: Fast taps no longer zoom the page
+
+Two quick taps on a small stepper zoomed the page on Android. Only buttons
+carried `touch-action: manipulation`, so a second tap that missed Play mode's
+20px VP + by a few pixels landed on the row behind, and Samsung Internet,
+Firefox and Chrome with "Force enable zoom" read that as a double tap. Every
+element now carries it, in the mobile app, the desktop build (phones open the
+Combat Calculator there) and the scenario pages. Pinch zoom still works, and
+drag handles keep `touch-action: none`.
+
+The MY VP and OPP VP buttons grow from 20px to 28px of hit area. Negative
+margins hold the old footprint, so the Play header still fits two rows at 360px.
+
 ### 2026-09-28: Francis Mendoza, for good this time
 
 TTCombat's Shopify CDN serves two different files under the one UCM 260828 URL

@@ -146,10 +146,14 @@ input, textarea, select { font: inherit; }
    16px. Force every control to >=16px so focusing never triggers an auto-zoom.
    (This rule wins over the smaller per-field sizes that follow.) */
 input, textarea, select { font-size: 16px; }
-/* Kill the 300ms tap delay and double-tap zoom on interactive targets. */
-button, a, input, select, textarea,
-.btn, .counter-btn, .ovg-step, .list-row, .pill, .chip,
-[onclick], [role="button"] { touch-action: manipulation; }
+/* Kill the 300ms tap delay and double-tap zoom everywhere, not only on the
+   buttons themselves. With it on buttons alone, two fast taps on a small
+   stepper (Play's 20px VP +/-) zoomed the page whenever the second tap landed
+   a few pixels off, on the row behind. Samsung Internet, Firefox and Chrome
+   with "Force enable zoom" all double-tap zoom a device-width page. Pinch
+   zoom stays. The universal selector has zero specificity, so every class
+   that sets `none` or `pan-y` for a drag still wins. */
+html, * { touch-action: manipulation; }
 
 
 /* ── 3. App Bar (Dark header) ──────────────────────────── */
@@ -3129,8 +3133,11 @@ body.sheet-open .sheet-scrim {
   font-size: 9px; font-weight: var(--weight-bold); text-transform: uppercase;
   letter-spacing: .06em; color: rgba(255,255,255,.7); white-space: nowrap; margin-right: 2px;
 }
+/* 28px square, pulled into the pill by negative margins so the pill keeps
+   its 20px footprint and the header its rows. At 20px a thumb missed it
+   about as often as it hit. */
 .play-score-btn {
-  width: 20px; height: 20px; border: none; background: transparent; cursor: pointer;
+  width: 28px; height: 28px; margin: -4px; border: none; background: transparent; cursor: pointer;
   font-size: 15px; font-weight: 300; color: rgba(255,255,255,.9); font-family: inherit;
   display: flex; align-items: center; justify-content: center; line-height: 1; padding: 0;
   border-radius: 3px; transition: background var(--duration-fast);

@@ -227,6 +227,10 @@ html[data-theme="dark"] .admiral-ability-cost { color: var(--navy-light); }
 
 /* ── 2. Reset & Base ─────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* Phones open the Combat Calculator here directly, and tablets get this build.
+   Fast taps on its steppers must count, not double-tap zoom the page.
+   Pinch zoom stays; zero specificity, so drag handles keep `none`. */
+html, * { touch-action: manipulation; }
 
 html {
   scroll-behavior: smooth;

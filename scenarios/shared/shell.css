@@ -6,6 +6,8 @@
   --ink:#0E0C08;--muted:#5d5850;--action:#0072a8;--action-dk:#005b85;--focus:#B86C0A;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+/* Fast taps on the tracker steppers must count, not double-tap zoom the page. Pinch zoom stays. */
+html,*{touch-action:manipulation;}
 html{background:var(--page);}
 body{font-family:'Jost',system-ui,sans-serif;color:var(--ink);background:var(--page);min-height:100vh;display:flex;flex-direction:column;}
 a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
