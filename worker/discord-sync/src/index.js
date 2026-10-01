@@ -27,15 +27,31 @@ const DISCORD = 'https://discord.com';
 
 // Where the Worker may send people back to. Anything else is refused, so the
 // Worker cannot be used to bounce someone's sync key to a stranger's page.
+//
+// Jet's builders sync through this Worker. Each keeps its own Firestore
+// document for a Discord account (Dropzone prefixes "dzc-", A Billion Suns
+// "abs2-"), so the lists never mix. Every entry is a type37.github.io page.
+// A builder only works once it is listed here AND this Worker has been
+// redeployed (`npx wrangler deploy` in this folder); until then its sign-in
+// gets a bare "Bad request".
+const BUILDERS = [
+  '/dropfleet-builder/',
+  '/dropzone-3e-army-builder/',
+  '/a-billion-suns-shipyard/',
+  '/oathmark-2e-kingdom-builder/',
+  '/xenos-rampant-force-builder/',
+  '/dragon-rampant-2e-warband-builder/',
+  '/pacific-command-builder/',
+  '/steel-rift-hangar/',
+  '/Steel-Rift-Hangar-WL/',
+  '/battlefleet-gothic/',
+  '/dropzone-commander-arsenal/'
+];
 function allowedReturn(url) {
   try {
     const u = new URL(url);
-    // Both of Jet's builders sync through this Worker. Each keeps its own
-    // Firestore document for a Discord account (the Dropzone app prefixes
-    // "dzc-"), so the lists never mix.
     if (u.protocol === 'https:' && u.host === 'type37.github.io' &&
-        (u.pathname.startsWith('/dropfleet-builder/') ||
-         u.pathname.startsWith('/dropzone-3e-army-builder/'))) return true;
+        BUILDERS.some(p => u.pathname.startsWith(p))) return true;
     if (u.protocol === 'http:' && (u.hostname === 'localhost' || u.hostname === '127.0.0.1')) return true;
     return false;
   } catch (e) { return false; }
