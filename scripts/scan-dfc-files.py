@@ -25,7 +25,7 @@ Usage:
   python scripts/scan-dfc-files.py --update   # scan, print report, and rewrite the manifest
   python scripts/scan-dfc-files.py --json      # machine-readable diff on stdout
 """
-import sys, os, re, json, urllib.request
+import sys, os, re, json, time, urllib.request, urllib.error
 
 PAGE = "https://ttcombat.com/pages/dropfleet-commander-downloads"
 MANIFEST = os.path.join(os.path.dirname(__file__), "dfc-files-manifest.json")
@@ -33,10 +33,19 @@ CDN_RE = re.compile(r'https://cdn\.shopify\.com/s/files/[^\s"\'<>]+?\.(?:pdf|xls
 DATE_RE = re.compile(r'_(\d{6})(?=\.[A-Za-z]+(?:\?|$))')  # trailing _YYMMDD before extension
 
 
-def fetch(url):
+def fetch(url, tries=4):
+    """GET with backoff. TTCombat's storefront answers 429 to bursts (it did on
+    2026-10-05), and a one-off refusal is not news about the downloads page."""
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (DFC-file-scan)"})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return r.read().decode("utf-8", "replace")
+    for attempt in range(tries):
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return r.read().decode("utf-8", "replace")
+        except urllib.error.HTTPError as e:
+            if e.code != 429 and e.code < 500 or attempt == tries - 1:
+                raise
+            wait = e.headers.get("Retry-After", "")
+            time.sleep(min(int(wait), 300) if wait.isdigit() else 30 * 2 ** attempt)
 
 
 def head_bytes(url):
@@ -103,7 +112,13 @@ def main():
     if os.path.exists(MANIFEST):
         old = json.load(open(MANIFEST, encoding="utf-8")).get("files", {})
 
-    html = fetch(PAGE)
+    # A crash must not exit 1: the workflow reads 1 as "files changed" and mails
+    # an alert. Issue #10 was exactly that, a 429 reported as a new publication.
+    try:
+        html = fetch(PAGE)
+    except Exception as e:
+        print(f"Could not read {PAGE}: {e}", file=sys.stderr)
+        return 2
     new = parse(html, with_bytes=with_bytes)
     changes = diff(old, new)
     n = sum(len(v) for v in changes.values())
