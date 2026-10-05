@@ -24,7 +24,7 @@ name: Watch for DFC data changes
 
 on:
   schedule:
-    - cron: '0 7 * * 1'   # 07:00 UTC every Monday
+    - cron: '39 8 * * 1'   # 08:39 UTC every Monday
   workflow_dispatch:
     inputs:
       test_alert:

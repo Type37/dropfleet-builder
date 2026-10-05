@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Weekly scan of TTCombat's Dropfleet Commander downloads page.
 
-Runs from .github/workflows/dfc-files-scan.yml, 07:00 UTC every Monday.
+Runs from .github/workflows/dfc-files-scan.yml, 08:39 UTC every Monday.
 
 Fetches https://ttcombat.com/pages/dropfleet-commander-downloads, extracts every
 linked PDF/XLSX on the TTCombat Shopify CDN, and diffs it against the committed

@@ -24,10 +24,10 @@ import urllib.request
 UA = {"User-Agent": "Mozilla/5.0 (DFC-cdn-fetch)"}
 CREATED_RE = re.compile(rb"/CreationDate\s*\(D:(\d{14})")
 
-# Minutes to wait before each retry of a 429 or 5xx. The weekly watch fires at
-# 07:00, when scheduled jobs from every repo on GitHub's shared runners hit the
-# web at once, and TTCombat answered that crowd with a 429 on 2026-10-05.
-# Waiting out the rush costs runner time only on a week it is refused.
+# Minutes to wait before each retry of a 429 or 5xx. GitHub's shared runners
+# are crowded with scheduled jobs from every repo hitting the web at once, and
+# TTCombat answered that crowd with a 429 on 2026-10-05. Waiting out the rush
+# costs runner time only on a week it is refused.
 RETRY_MINUTES = (2, 5, 10, 20)
 
 
