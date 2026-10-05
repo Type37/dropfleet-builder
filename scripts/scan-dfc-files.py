@@ -33,19 +33,26 @@ CDN_RE = re.compile(r'https://cdn\.shopify\.com/s/files/[^\s"\'<>]+?\.(?:pdf|xls
 DATE_RE = re.compile(r'_(\d{6})(?=\.[A-Za-z]+(?:\?|$))')  # trailing _YYMMDD before extension
 
 
-def fetch(url, tries=4):
-    """GET with backoff. TTCombat's storefront answers 429 to bursts (it did on
-    2026-10-05), and a one-off refusal is not news about the downloads page."""
+# Minutes to wait before each retry. The cron fires at 07:00, when scheduled jobs
+# from every repo on GitHub's shared runners hit the web at once, and TTCombat's
+# storefront answered that crowd with a 429 on 2026-10-05. Waiting out the rush
+# costs runner time only on a week it is refused.
+RETRY_MINUTES = (2, 5, 10, 20)
+
+
+def fetch(url):
+    """GET, retrying a 429 or 5xx after RETRY_MINUTES. A refusal is not news
+    about the downloads page."""
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (DFC-file-scan)"})
-    for attempt in range(tries):
+    for wait in RETRY_MINUTES + (None,):
         try:
             with urllib.request.urlopen(req, timeout=60) as r:
                 return r.read().decode("utf-8", "replace")
         except urllib.error.HTTPError as e:
-            if e.code != 429 and e.code < 500 or attempt == tries - 1:
+            if e.code != 429 and e.code < 500 or wait is None:
                 raise
-            wait = e.headers.get("Retry-After", "")
-            time.sleep(min(int(wait), 300) if wait.isdigit() else 30 * 2 ** attempt)
+            print(f"{url} answered {e.code}; retrying in {wait} min", file=sys.stderr)
+            time.sleep(wait * 60)
 
 
 def head_bytes(url):
