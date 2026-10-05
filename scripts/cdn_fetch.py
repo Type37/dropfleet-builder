@@ -17,16 +17,34 @@ Usage:
 import os
 import re
 import sys
+import time
+import urllib.error
 import urllib.request
 
 UA = {"User-Agent": "Mozilla/5.0 (DFC-cdn-fetch)"}
 CREATED_RE = re.compile(rb"/CreationDate\s*\(D:(\d{14})")
 
+# Minutes to wait before each retry of a 429 or 5xx. The weekly watch fires at
+# 07:00, when scheduled jobs from every repo on GitHub's shared runners hit the
+# web at once, and TTCombat answered that crowd with a 429 on 2026-10-05.
+# Waiting out the rush costs runner time only on a week it is refused.
+RETRY_MINUTES = (2, 5, 10, 20)
 
-def _get(url):
-    req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=180) as r:
-        return r.read()
+
+def get(url, headers=UA, timeout=180):
+    req = urllib.request.Request(url, headers=headers)
+    for wait in RETRY_MINUTES + (None,):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.read()
+        except urllib.error.HTTPError as e:
+            if e.code != 429 and e.code < 500 or wait is None:
+                raise
+            print("%s answered %d; retrying in %d min" % (url, e.code, wait), file=sys.stderr)
+            time.sleep(wait * 60)
+
+
+_get = get
 
 
 def created(data):
