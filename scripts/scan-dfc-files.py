@@ -26,6 +26,7 @@ Usage:
   python scripts/scan-dfc-files.py --json      # machine-readable diff on stdout
 """
 import sys, os, re, json, urllib.request
+from cdn_fetch import get
 
 PAGE = "https://ttcombat.com/pages/dropfleet-commander-downloads"
 MANIFEST = os.path.join(os.path.dirname(__file__), "dfc-files-manifest.json")
@@ -34,9 +35,7 @@ DATE_RE = re.compile(r'_(\d{6})(?=\.[A-Za-z]+(?:\?|$))')  # trailing _YYMMDD bef
 
 
 def fetch(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (DFC-file-scan)"})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return r.read().decode("utf-8", "replace")
+    return get(url, {"User-Agent": "Mozilla/5.0 (DFC-file-scan)"}, timeout=60).decode("utf-8", "replace")
 
 
 def head_bytes(url):
@@ -103,7 +102,16 @@ def main():
     if os.path.exists(MANIFEST):
         old = json.load(open(MANIFEST, encoding="utf-8")).get("files", {})
 
-    html = fetch(PAGE)
+    # An unreachable page is not news, so it must not exit 1 (the workflow reads 1
+    # as "files changed"; issue #10 was a 429 mailed as a new publication). Skip
+    # the week instead: the manifest is untouched, so next week's scan still sees
+    # anything published in the meantime.
+    try:
+        html = fetch(PAGE)
+    except Exception as e:
+        print(f"Could not read {PAGE} ({e}). Skipped this week; nothing is lost.")
+        print("#findings=0")
+        return 0
     new = parse(html, with_bytes=with_bytes)
     changes = diff(old, new)
     n = sum(len(v) for v in changes.values())

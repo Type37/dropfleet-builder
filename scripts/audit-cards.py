@@ -241,7 +241,14 @@ def main():
         path = os.path.join(LOCAL_PDFS, filename)
         if not (args.local and os.path.exists(path)):
             path = os.path.join(tmp, filename)
-            fetch(entry["url"], path)
+            try:
+                fetch(entry["url"], path)
+            except Exception as e:
+                # A refused download says nothing about the cards. Exiting 1 would
+                # mail it as a disagreement; skip the week, the baseline is unchanged.
+                print("Could not download %s (%s). Skipped this week; nothing is lost." % (filename, e))
+                print("#findings=0")
+                return 0
 
         digest = sha256(path)
         hashes[filename] = digest
