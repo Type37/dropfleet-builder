@@ -134,6 +134,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: Read docs/AUTO-INGEST.md and reply with its first heading. Change no files.
           claude_args: --max-turns 3 --allowedTools "Read"
+          show_full_output: true
 
       # Claude reads the new PDFs and does the integration a person used to do from
       # the issue. It does not commit; the gate below decides whether its work ships.
