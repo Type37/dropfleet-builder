@@ -185,7 +185,14 @@ jobs:
           import json, os
           r = json.load(open('auto-update-report.json')) if os.path.exists('auto-update-report.json') else {}
           files = r.get('files') or []
-          title = 'TTCombat update: ' + ', '.join(f.rsplit('.', 1)[0] for f in files) if files else 'Data brought back in line with the cards'
+          import subprocess
+          staged = subprocess.run(['git', 'diff', '--name-only', 'HEAD'], capture_output=True, text=True).stdout.split()
+          if files:
+              title = 'TTCombat update: ' + ', '.join(f.rsplit('.', 1)[0] for f in files)
+          elif staged == ['scripts/card-audit-baseline.json']:
+              title = "Card audit: record the current PDFs' fingerprints"
+          else:
+              title = 'Data brought back in line with the cards'
           body = [title, ''] + ['- ' + c for c in r.get('changelog', [])]
           if r.get('claude'):
               body += ['', 'Claude handled: ' + ', '.join(c.get('ship') or c.get('pdf') for c in r['claude']) + '.']
