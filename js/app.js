@@ -9557,6 +9557,12 @@ let activeGroupId = null;
       'Name your battlegroups (names persist, share and print).',
     ] },
   ];
+  // "Updated October 2026 with Civilian_Ships_Scenarios_261001": the newest TTCombat
+  // file the data was built from, written by scripts/auto-update.py.
+  function editionLabel() {
+    const e = rawFleetData && rawFleetData.edition;
+    return e ? `Updated ${e.month} with ${e.file}` : "What's New";
+  }
   function openChangelog() {
     const body = document.getElementById('changelog-body');
     body.innerHTML = `
@@ -9610,7 +9616,7 @@ let activeGroupId = null;
           <button class="btn btn-outline btn-sm" onclick="App.exportAllFleets()" title="Download all your fleets as a JSON backup"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 7l4 4 4-4M2 13h12"/></svg> Export fleets</button>
           <a class="btn btn-outline btn-sm" href="${FEEDBACK_HREF}"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12v8H2zM2 4l6 5 6-5"/></svg> Feedback</a>
           <a class="btn btn-outline btn-sm" href="${BUG_HREF}" target="_blank" rel="noopener" title="Opens GitHub, where you can paste a screenshot straight into the report"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3a3 3 0 0 1 3 3v3a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM2 7h3M11 7h3M2.5 11h2.8M10.7 11h2.8M5.5 4.2 4 2.8M10.5 4.2 12 2.8"/></svg> Report a bug</a>
-          <button class="btn btn-outline btn-sm" onclick="App.closeModal('modal-settings'); App.openChangelog()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1v14M1 8h14"/></svg> What's New</button>
+          <button class="btn btn-outline btn-sm" style="white-space:normal;overflow-wrap:anywhere;text-align:left;height:auto" onclick="App.closeModal('modal-settings'); App.openChangelog()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1v14M1 8h14"/></svg> ${esc(editionLabel())}</button>
         </div>
       </div>
     `;

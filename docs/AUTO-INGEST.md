@@ -1,64 +1,45 @@
-# Automatic ingest
+# Automatic update: Claude's part
 
-Instructions for the Claude run in `.github/workflows/dfc-files-scan.yml`. The
-weekly watcher found a change and handed it to you. Integrate it so the app is
-right, then stop. The workflow runs the checks, commits and deploys if they pass.
-Jet is emailed only if you write `NEEDS_JET.md` or the checks fail, so finish the
-job whenever the PDF settles the question.
+The weekly run in `.github/workflows/dfc-files-scan.yml` has already done the routine
+work with `scripts/auto-update.py`: downloaded the changed TTCombat sheets, compared
+them card by card with `scripts/card-snapshots.json`, written new and changed ships,
+cut their art, rebuilt the Civilian picker, and written the What's New entry. You are
+called only for what it could not do. Keep to that; do not redo its work.
 
-`files.txt` and `cards.txt` in the repo root are this week's scan and card audit.
+Your work is listed in two places in the repo root:
+
+- `auto-update-report.json` → `claude`: each item names the sheet (`pdf`, `url`),
+  the `page`, the `ship`, and `why` the script stopped (a keyword not in our rules,
+  a layout it does not read, a document the app uses that changed).
+- `pre.txt`, if it is not empty: where our data disagrees with TTCombat's current
+  cards (the card audit) or the generated mirror was hand-edited.
+
+## How
+
+1. Download the sheet: `python scripts/cdn_fetch.py "<url>" /tmp/<file>`. Read only
+   the page named. `python scripts/card_reader.py /tmp/<file> --page N` shows what
+   the script read from it.
+2. Fix that one card in every faction file it belongs in (Mercenary ships are in all
+   six). Copy stats, weapons, rules and lore from the card word for word. Reuse a
+   rule's existing entry when one exists; a new keyword's text comes from the
+   rulebook (`data/rules-wiki.json`, chapter 14) when it is there.
+3. Insert as text, never by rewriting a whole faction file with `json.dump`: several
+   have hand-compacted lines and PHR and Scourge are CRLF. `write_groups` in
+   `scripts/auto_ingest.py` does this safely.
+4. A new rule that changes what is legal to take (group limits, a new list choice)
+   must be enforced in both `js/app.js` and `mobile/js/mobile.js`, not only shown.
+5. Add one plain-words line per card you handled to the newest entry of `CHANGELOG`
+   in both apps (the script already created the entry for this run).
+6. Run `python scripts/gen-fleet-data.py`. The workflow runs every other check.
+
+For `pre.txt` drift: open the card. If our data is wrong, fix it. If the card reader
+misread a correct entry, run `python scripts/audit-cards.py --update`.
 
 ## Do not
 
-- commit, push, or open issues or PRs. The workflow does that.
-- edit `data/fleet-data.json` by hand. It is generated (`scripts/gen-fleet-data.py`).
-- rewrite whole faction files with `json.dump`. Several have hand-compacted lines
-  and PHR and Scourge are CRLF. Insert new groups as text and keep each file's own
-  line endings (see `scripts/add-civilian-261001.py`, `insert_text`).
-- guess. Every stat, weapon row, rule and lore paragraph is copied from the PDF.
-
-## Steps
-
-1. Download each new or changed PDF from the URL in `files.txt` with
-   `python scripts/cdn_fetch.py URL Rules-Mechanics-PDFs/<file>`. TTCombat's CDN
-   serves stale copies under the same URL; `cdn_fetch.py` keeps the newest build.
-   Also fetch the previous edition from `scripts/dfc-files-manifest.json`'s `url`.
-2. Diff the two editions' text page by page (PyMuPDF `get_text()`). Ignore page
-   renumbering. List every real change: new cards, changed stats, costs, weapons,
-   rules, renames, removals.
-3. Write `scripts/add-<sheet>-<date>.py`, an idempotent ingest script in the style of
-   `scripts/add-civilian-261001.py` and `scripts/add-260828-content.py`:
-   - new ships go into the right `data/faction-*.json`; Mercenary ships go into
-     all six with `additional: true`, next to the other civilian hulls;
-   - rules already in a faction file (Rare, Vectored, Descent ...) are reused
-     from there, not retyped; ship-specific rules are stored verbatim;
-   - Boardable and Civilian Transport are dropped from civilian Special columns;
-   - `groupMin`/`groupMax` from the G column, `isRare`/`isUnique` from Special.
-   Run it, then `python scripts/gen-fleet-data.py`, and set each faction's
-   `shipCount` in `data/fleet-index.json` to its number of groups.
-4. Art: cut the ship picture from its page with its soft mask into
-   `assets/art/<slug>.webp` (see `cut_art` in `add-civilian-261001.py`), add the
-   name to `SHIP_ART_SPECIAL` in both `js/app.js` and `mobile/js/mobile.js`,
-   then `python scripts/gen-thumbnails.py`.
-5. Repoint every script that names the old edition to the new file
-   (`grep -rn <old filename> scripts scenarios`). For the Civilian sheet that
-   includes `build-civilian-ships.py` (its `ORDER`, page numbers and image xrefs),
-   then run it. Write the new PDF's text to `scripts/_pdftext/<name>.txt`.
-6. If a change affects what is legal to take (group sizes, Rare/Unique, a new
-   limit, a new list-building choice), wire it into both apps, not just the data.
-7. `python scripts/scan-dfc-files.py --update`, `python scripts/gen-offline-manifest.py`,
-   bump `CACHE` in `sw.js` by one.
-8. Add a dated entry at the top of `CHANGELOG` in both `js/app.js` and
-   `mobile/js/mobile.js` (plain words a player understands, no file names), and a
-   dated section at the top of `CHANGELOG.md` saying what moved and why.
-
-## When to write NEEDS_JET.md
-
-Only for a decision the PDF cannot settle. Examples: a rule change that needs new
-builder behaviour you cannot implement confidently; two PDFs contradicting each
-other; a card that cannot be read. Write what changed, what you did, and the one
-question. Leave the rest of your work in place.
-
-If the card audit reports a disagreement on an existing ship, open the card and
-fix whichever side is wrong. If the parser misread it and the data is right, run
-`python scripts/audit-cards.py --update`.
+- commit, push, open issues or pull requests. The workflow does that.
+- add files to the repo beyond the data, art and app changes the card needs.
+- guess. If the card cannot settle something (two sheets contradict each other, a
+  card is unreadable, a rule needs builder behaviour you cannot implement with
+  confidence), write `NEEDS_JET.md`: what changed, what you did, and the one question.
+  That is the only thing that emails Jet, so use it only when it is truly needed.

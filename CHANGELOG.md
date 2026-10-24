@@ -5,6 +5,34 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-10-24: TTCombat updates go in by themselves
+
+The weekly watcher now does the whole job instead of opening an issue:
+
+1. `scripts/auto-update.py` asks the downloads page what changed and downloads only
+   those sheets, to a temporary folder. No PDFs are kept in the repo.
+2. `scripts/card_reader.py` reads every ship card (table, rules, "…of the class"
+   line, lore, picture) and `scripts/auto_ingest.py` compares it by ship name with
+   `scripts/card-snapshots.json`, the previous edition's cards as text (214 KB for
+   all 346 cards). Unchanged cards are skipped; changed ones update only the fields
+   that moved; new ones are built whole, with art, when every keyword on them is
+   already known (our data or the rulebook's chapter 14).
+3. Cards it cannot settle (a new keyword, an ability box it does not model, a rule
+   that reads like list building) go to Claude Sonnet one page at a time
+   (`docs/AUTO-INGEST.md`). The gate then re-runs the downloads scan, the card audit,
+   the mirror check and the tests; only passing work is committed, and Pages deploys
+   it. An email goes out only when that fails or Claude writes `NEEDS_JET.md`.
+
+Replayed against the last five releases that were integrated by hand (Civilian
+261001, UCM and PHR 260828, Shaltari and Bioficer 260925), it produced the same
+ships with no Claude needed; the only differences are TTCombat's own spellings
+(Frances/Francis, an em dash) and rule page references the hand versions left out.
+
+`build-civilian-ships.py` now reads the ship order, pages and pictures from the PDF,
+so a new Civilian sheet needs no edits. Both apps' menus show "Updated <month> with
+<file>", which opens What's New. The 47 one-off ingest and fix scripts this replaces
+are removed; git history keeps them.
+
 ### 2026-10-24: Civilian Ships 261001, the PSC Interdictor
 
 The weekly scan (#14) found `Civilian_Ships_Scenarios_261001.pdf` replacing 260901.

@@ -1,48 +1,45 @@
 #!/usr/bin/env python3
 """Every Civilian Ship from Civilian Ships & Scenarios, for the Civilian Ship picker on the scenario pages.
 
-    PYTHONUTF8=1 python scripts/build-civilian-ships.py
+    PYTHONUTF8=1 python scripts/build-civilian-ships.py [path/to/Civilian_Ships_Scenarios_YYMMDD.pdf]
 
 The PDF (page 2): "The Civilian Ships in these scenarios can be represented by any of the stat sheets presented in
 this document. While they were designed with the Princess Liner in mind, players may want to use a different
 Civilian Ship". So the scenario pages show the Princess Liner and let a player switch to any of the 21.
 
-16 of them are buildable Miscellaneous Ships already in data/fleet-data.json: their stats, weapons, launch
-loads, special rules and lore come from there. The 5 Scenario Only ships (no points) are read from the PDF
-here, verbatim, and their pictures taken from it. Writes scenarios/dropfleet/scenario-civilian.js.
+The ship list and its order come from the PDF itself, so a new edition needs no edits here. Ships with points
+are buildable Miscellaneous Ships already in data/fleet-data.json: their stats, weapons, launch loads, special
+rules and lore come from there. The Scenario Only ships (no points) are listed below, verbatim; their page and
+picture are found by name. A Scenario Only ship not listed below stops the build, so it gets added by a person
+(or by Claude in the weekly run), never guessed. Writes scenarios/dropfleet/scenario-civilian.js.
 """
 import io, json, os, re, sys
 import fitz
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PDF = os.path.join(ROOT, 'Rules-Mechanics-PDFs', 'Civilian_Ships_Scenarios_261001.pdf')
+PDF_DIR = os.path.join(ROOT, 'Rules-Mechanics-PDFs')
 OUT = os.path.join(ROOT, 'scenarios', 'dropfleet', 'scenario-civilian.js')
 ART = os.path.join(ROOT, 'assets', 'art')
 
-# PDF order (pages 3-23). Buildable ships: (name, art thumb). Scenario Only: (name, None) with a PDF block below.
-ORDER = [
-    ('Hyperyacht Somniferum', 'hyperyacht_somniferum.webp'), ('L-Type Barge', None), ('LKS Dredger', 'lks_dredger.webp'),
-    ('MK Mass Transporter', 'mk_mass_transporter.webp'), ('M.A.B. 67 Fuel Transport', 'mab_67_fuel_transport.webp'),
-    ('Nirvana', None), ('Precedent One', None), ('PSC Interdictor', 'psc_interdictor.webp'), ('SLM-9 Resupply Hauler', 'slm_9_resupply_hauler.webp'),
-    ('T-Type Tugboat', 't_type_tugboat.webp'), ('EX-7 Packet Runner', 'ex7_packet_runner.webp'), ('Affluence Liner', None),
-    ('DH-Type Penal Transport', 'dh_type_penal_transport.webp'), ('Jah’tar Startrader', 'jahetar_startrader.webp'),
-    ('M-Type Barge', 'm_type_barge.webp'), ('Princess Liner', None), ('OBV-64 Oblivion Barge', 'obv_64_oblivion_barge.webp'),
-    ('Argonaut', 'argonaut.webp'), ('Type-87 Terminus Harvester', 'type_87_terminus_harvester.webp'),
-    ('VX-22 Flenser', 'vx_22_flenser.webp'), ('PRK-91 Provenance Ark', 'prk_91_provenance_ark.webp'),
-]
+# Buildable ships whose picture is not simply named after the ship.
+ART_OVERRIDES = {
+    'M.A.B. 67 Fuel Transport': 'mab_67_fuel_transport.webp',
+    'EX-7 Packet Runner': 'ex7_packet_runner.webp',
+    'Jah’tar Startrader': 'jahetar_startrader.webp',
+}
 
-# The Scenario Only ships, as printed (page, picture xref, tonnage, stats, special, weapons)
+# The Scenario Only ships, as printed (tonnage, stats, special, weapons)
 SCENARIO_ONLY = {
-    'L-Type Barge': (4, 20, 'L', ['10”', '4”', '3”', 4, '3+', '6+', '5+', '1'], 'Descent, Boardable, Civilian Transport',
+    'L-Type Barge': ('L', ['10”', '4”', '3”', 4, '3+', '6+', '5+', '1'], 'Descent, Boardable, Civilian Transport',
                      [['Asteroid Clearance Laser', 'F/S/R', '2', '4+', '1', 'E', 'Close Action']]),
-    'Nirvana': (8, 51, 'L', ['9”', '4”', '3”', 6, '4+', '6+', '-', '1'], 'Blooming, Boardable, Civilian Transport',
+    'Nirvana': ('L', ['9”', '4”', '3”', 6, '4+', '6+', '-', '1'], 'Blooming, Boardable, Civilian Transport',
                 [['Asteroid Clearance Laser', 'F/S/R', '2', '4+', '1', 'E', 'Close Action']]),
-    'Precedent One': (9, 58, 'L', ['9”', '4”', '3”', 6, '4+', '6+', '-', '1'], 'Blooming, Boardable, Civilian Transport, Elite Fighter Escort',
+    'Precedent One': ('L', ['9”', '4”', '3”', 6, '4+', '6+', '-', '1'], 'Blooming, Boardable, Civilian Transport, Elite Fighter Escort',
                       [['Deterrence Missiles', 'F/S', '4', '3+', '1', 'K', 'Close Action']]),
-    'Affluence Liner': (14, 92, 'M', ['14”', '6”', '3”', 12, '4+', '5+', '-', '1'], 'Descent, Cloak-1, Boardable, Civilian Transport, Elite Fighter Escort, Unique',
+    'Affluence Liner': ('M', ['14”', '6”', '3”', 12, '4+', '5+', '-', '1'], 'Descent, Cloak-1, Boardable, Civilian Transport, Elite Fighter Escort, Unique',
                         [['Deterrence Missiles', 'F/S', '4', '3+', '1', 'K', 'Close Action']]),
-    'Princess Liner': (18, 119, 'M', ['10”', '4”', '3”', 12, '4+', '5+', '-', '1'], 'Descent, Cloak-1, Boardable, Civilian Transport',
+    'Princess Liner': ('M', ['10”', '4”', '3”', 12, '4+', '5+', '-', '1'], 'Descent, Cloak-1, Boardable, Civilian Transport',
                        [['Asteroid Clearance Laser', 'F/S/R', '2', '4+', '1', 'E', 'Close Action']]),
 }
 
@@ -81,7 +78,8 @@ def pdf_page(doc, pno):
 
 
 def scenario_only(doc, name):
-    pno, xref, tonnage, st, special, weapons = SCENARIO_ONLY[name]
+    tonnage, st, special, weapons = SCENARIO_ONLY[name]
+    pno = next(i + 1 for i, pg in enumerate(doc) if title(pg) == name)
     blocks = pdf_page(doc, pno)
     famous_i = next(i for i, b in enumerate(blocks) if re.match(r'(Known ships of the class|Only Ship of the Class):', b))
     prefix, ships = blocks[famous_i].split(':', 1)
@@ -89,7 +87,7 @@ def scenario_only(doc, name):
     assert lore and blocks[0].startswith(name), (name, blocks[:2])
     # the picture, with its transparency
     page = doc[pno - 1]
-    smask = next(i[1] for i in page.get_images(full=True) if i[0] == xref)
+    xref, smask = ship_picture(page)
     pix = fitz.Pixmap(doc, xref)
     if pix.n > 3 or pix.alpha:
         pix = fitz.Pixmap(fitz.csRGB, pix)
@@ -133,10 +131,56 @@ def buildable(data, name, art):
     }
 
 
+def title(page):
+    """A ship page's title: its first line, when the page carries a stat table."""
+    text = page.get_text()
+    if 'Thrust' not in text or 'Scan' not in text:
+        return None
+    return text.strip().splitlines()[0].strip()
+
+
+def ship_picture(page):
+    """(xref, smask) of the largest picture that is not the page background."""
+    area = page.rect.width * page.rect.height
+    best = None
+    for img in page.get_images(full=True):
+        rects = page.get_image_rects(img[0])
+        if not rects or rects[0].width * rects[0].height > 0.7 * area:
+            continue
+        size = rects[0].width * rects[0].height
+        if best is None or size > best[0]:
+            best = (size, img[0], img[1])
+    return best[1], best[2]
+
+
+def ship_order(doc, data):
+    """[(name, art or None)] in the PDF's order. None means Scenario Only."""
+    known = {s.get('name') for f in data['factions'].values() for g in f.get('groups', []) for s in [g.get('ship') or {}]}
+    order = []
+    for page in doc:
+        name = title(page)
+        if not name or name in [n for n, _ in order]:
+            continue
+        if name in known:
+            order.append((name, ART_OVERRIDES.get(name, slug(name) + '.webp')))
+        elif name in SCENARIO_ONLY:
+            order.append((name, None))
+        else:
+            sys.exit('%s (page %d) is neither in fleet-data.json nor in SCENARIO_ONLY' % (name, page.number + 1))
+    return order
+
+
+def newest_pdf():
+    found = sorted(f for f in os.listdir(PDF_DIR) if re.match(r'Civilian_Ships_Scenarios_\d{6}\.pdf$', f))
+    if not found:
+        sys.exit('No Civilian_Ships_Scenarios_YYMMDD.pdf in ' + PDF_DIR)
+    return os.path.join(PDF_DIR, found[-1])
+
+
 def main():
-    doc = fitz.open(PDF)
+    doc = fitz.open(sys.argv[1] if len(sys.argv) > 1 else newest_pdf())
     data = json.load(io.open(os.path.join(ROOT, 'data', 'fleet-data.json'), encoding='utf-8'))
-    ships = [scenario_only(doc, n) if art is None else buildable(data, n, art) for n, art in ORDER]
+    ships = [scenario_only(doc, n) if art is None else buildable(data, n, art) for n, art in ship_order(doc, data)]
     js = ('// Generated by scripts/build-civilian-ships.py. Verbatim; do not edit by hand.\n'
           'const SCN_CIVILIAN={ships:%s,rules:%s};\n' % (json.dumps(ships, ensure_ascii=False), json.dumps(CIVILIAN_RULES, ensure_ascii=False)))
     io.open(OUT, 'w', encoding='utf-8', newline='\n').write(js)

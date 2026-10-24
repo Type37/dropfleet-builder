@@ -27,6 +27,7 @@
   let RULES_DB = {};           // shared rules glossary
   let rulesWiki = null;        // verbatim rulebook tree from ../data/rules-wiki.json (lazy)
   let SECONDARY_OBJECTIVES = []; // [{name, description}], pick 2 per game
+  let EDITION = null; // {month, file}: the newest TTCombat file the data was built from
   let STATION_ARMAMENTS = null;  // universal Fleet Space Station armaments/upgrades
   let fleets = [];
   let activeFleet = null;
@@ -5543,7 +5544,7 @@
       { icon: 'duplicate', label: 'My Collection', action: openCollection },
       { icon: 'menu_book', label: 'Interactive Rules', action: () => navigate('screen-rules') },
       { icon: 'grid_view', label: 'Unit Reference', action: () => navigate('screen-units') },
-      { icon: 'new_releases', label: "What's New", action: openChangelog },
+      { icon: 'new_releases', label: EDITION ? `Updated ${EDITION.month} with ${EDITION.file}` : "What's New", action: openChangelog },
       { icon: 'mail', label: 'Send feedback', action: () => { window.location.href = FEEDBACK_HREF; } },
       { icon: 'bug_report', label: 'Report a bug (with screenshot)', action: () => { window.open(BUG_HREF, '_blank', 'noopener'); } },
       { icon: 'desktop', label: 'Switch to desktop view', action: viewDesktop }
@@ -7156,6 +7157,7 @@
       });
       SECONDARY_OBJECTIVES = idx.secondaryObjectives || [];
       STATION_ARMAMENTS = idx.stationArmaments || null;
+      EDITION = idx.edition || null;
     }).catch(() => {});
 
     await fetch('../data/pronunciations.json').then(r => r.json()).then(raw => {

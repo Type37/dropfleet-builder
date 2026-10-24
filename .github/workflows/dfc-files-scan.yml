@@ -1,27 +1,22 @@
 name: Watch for DFC data changes
 
-# Three independent tripwires, so a stat change cannot land silently:
+# The weekly Dropfleet update. The same process as the Dropzone builder's:
 #
-#   scan-dfc-files.py   watches TTCombat's downloads page for a new or re-uploaded
-#                       PDF. First to know, but only says "something changed".
-#   audit-cards.py      downloads the current stat cards and diffs every cost,
-#                       stat and weapon COUNT against data/faction-*.json. The
-#                       only one pointed at US rather than upstream, and the only
-#                       one that would have caught 66bbad0, where we deleted a
-#                       weapon from four Bioficer ships and nothing upstream moved.
-#                       Having the bytes, it also hashes them, so an in-place
-#                       re-cut under an unchanged URL cannot hide (the 260731
-#                       Resistance stats were re-cut exactly that way).
-#   gen-fleet-data.py   proves data/fleet-data.json is still a faithful merge of
-#                       the faction files. It drifted 19 ships behind once, and a
-#                       session then trusted it over the PDF.
-#
-# None of them edit data. When one fires, Claude integrates the change following
-# docs/AUTO-INGEST.md. The same three tripwires then re-run as the gate, plus the
-# test suites; only if all pass is the work committed to master, which deploys.
-# Jet is emailed (an assigned issue) only when Claude says a decision is needed
-# (NEEDS_JET.md), the gate fails, or no Claude token is set. A quiet week and a
-# successful automatic ingest send nothing.
+#   1. scripts/auto-update.py   asks TTCombat's downloads page what changed, downloads
+#                               only those sheets (to a temporary folder, never kept),
+#                               compares them card by card with scripts/card-snapshots.json
+#                               and writes new and changed ships, art, the What's New
+#                               entry and the "Updated <month> with <file>" line.
+#   2. Claude (Sonnet)          only for the cards or documents the script listed as
+#                               unfamiliar (a new keyword, an odd layout), one at a time,
+#                               and for any drift the card audit finds.
+#   3. The gate                 the downloads scan, the card audit (our data against
+#                               TTCombat's current cards), the mirror check and the test
+#                               suites. Only work that passes all of them is committed;
+#                               the commit deploys.
+#   4. Email                    only when the gate fails, Claude says a person must
+#                               decide (NEEDS_JET.md), or a ship or file vanished.
+#                               A quiet week and a successful update send nothing.
 
 on:
   schedule:
@@ -51,83 +46,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HAS_CLAUDE: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
+      PYTHONUTF8: '1'
     steps:
       - uses: actions/checkout@v7
 
-      # Both scripts are stdlib-only and exit 1 on findings, 0 when clean, so
-      # neither needs installs and neither should fail the job on a finding.
-      #
-      # The alert gates on the "#findings=N" trailer each report ends with, not
-      # on the exit code. An exit code cannot say how many findings there were,
-      # and a mail that announces findings it does not list is worse than no
-      # mail: #7 and #9 were both that. If the trailer is somehow absent, fall
-      # back to the exit code rather than going quiet about a real change.
-      - name: TTCombat downloads page
-        id: files
-        run: |
-          set +e
-          python scripts/scan-dfc-files.py > files.txt 2>&1
-          code=$?
-          set -e
-          cat files.txt
-          if [ "$code" -gt 1 ]; then
-            echo "scanner errored with exit $code" >&2
-            exit "$code"
-          fi
-          n=$(sed -n 's/^#findings=//p' files.txt | tail -1)
-          sed -i '/^#findings=/d' files.txt
-          echo "findings=${n:-$code}" >> "$GITHUB_OUTPUT"
-
-      # audit-cards.py is the one step with dependencies: it parses the PDFs. It
-      # reuses the card parser from ingest_pdf.py, which imports Pillow for the art
-      # extraction this audit never runs — install it anyway or the import exits.
-      - name: Install the PDF parser
+      - name: Install the PDF reader
         run: pip install --quiet pymupdf pillow
 
-      # Downloads ~60 MB of stat cards each run. That is the price of checking our
-      # numbers against the source rather than against another copy of ourselves,
-      # which is precisely the shortcut that lost four Bioficer weapons for 25 days.
-      - name: Cards vs our data
-        id: cards
-        run: |
-          set +e
-          python scripts/audit-cards.py > cards.txt 2>&1
-          code=$?
-          set -e
-          cat cards.txt
-          if [ "$code" -gt 1 ]; then
-            echo "card audit errored with exit $code" >&2
-            exit "$code"
-          fi
-          n=$(sed -n 's/^#findings=//p' cards.txt | tail -1)
-          sed -i '/^#findings=/d' cards.txt
-          echo "findings=${n:-$code}" >> "$GITHUB_OUTPUT"
-
-      # Cheap, no network: regenerate the mirror and see whether anything moved.
-      # A diff here means someone hand-edited a generated file.
-      - name: Mirror is still generated, not hand-patched
-        id: mirror
-        run: |
-          python scripts/gen-fleet-data.py > /dev/null
-          if git diff --quiet -- data/fleet-data.json; then
-            echo "findings=0" >> "$GITHUB_OUTPUT"
-          else
-            git --no-pager diff --stat -- data/fleet-data.json | tee mirror.txt
-            echo "findings=1" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Anything to do?
-        id: need
-        run: |
-          if [ "${{ steps.files.outputs.findings }}" != "0" ] || [ "${{ steps.cards.outputs.findings }}" != "0" ] || [ "${{ steps.mirror.outputs.findings }}" != "0" ]; then
-            echo "work=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "work=false" >> "$GITHUB_OUTPUT"
-          fi
-          git checkout -- data/fleet-data.json   # undo the mirror check's regeneration
-
-      # A test, so it never fails the run (a failed run emails Jet). The result is
-      # on the run's summary page instead.
+      # A test, so it never fails the run (a failed run emails Jet).
       - name: Token check
         id: tokencheck
         if: inputs.test_claude
@@ -137,7 +63,7 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: Read docs/AUTO-INGEST.md and reply with its first heading. Change no files.
-          claude_args: --max-turns 3 --allowedTools "Read"
+          claude_args: --max-turns 3 --model claude-sonnet-5-5 --allowedTools "Read"
           show_full_output: true
 
       - name: Token check result
@@ -149,40 +75,71 @@ jobs:
             echo "### Claude token was rejected" >> "$GITHUB_STEP_SUMMARY"
           fi
 
-      # Claude reads the new PDFs and does the integration a person used to do from
-      # the issue. It does not commit; the gate below decides whether its work ships.
-      - name: Integrate with Claude
+      # 0 done or nothing new, 10 some cards need Claude, 20 a person must decide,
+      # anything else: the script broke (that is a gate failure, so it emails).
+      - name: Update from TTCombat
+        id: update
+        if: ${{ !inputs.test_alert && !inputs.test_claude }}
+        run: |
+          set +e
+          python scripts/auto-update.py > update.txt 2>&1
+          code=$?
+          set -e
+          cat update.txt
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+
+      # Our data against TTCombat's current cards, and the generated mirror against
+      # the faction files. Drift here is for Claude first, then for the gate.
+      - name: Cards and mirror
+        id: pre
+        if: steps.update.outcome == 'success'
+        run: |
+          : > pre.txt
+          python scripts/audit-cards.py > cards.txt 2>&1 || true
+          grep -q '^#findings=0' cards.txt || { echo "The card audit disagrees with our data:" >> pre.txt; sed '/^#findings/d' cards.txt | tail -25 >> pre.txt; }
+          cp data/fleet-data.json /tmp/mirror.json
+          python scripts/gen-fleet-data.py > /dev/null
+          cmp -s data/fleet-data.json /tmp/mirror.json || echo "data/fleet-data.json had been edited by hand; it was regenerated." >> pre.txt
+          if [ -s pre.txt ]; then echo "drift=true" >> "$GITHUB_OUTPUT"; cat pre.txt; else echo "drift=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Claude, for what the script could not do
         id: claude
-        if: steps.need.outputs.work == 'true' && env.HAS_CLAUDE == 'true' && !inputs.test_alert
+        if: env.HAS_CLAUDE == 'true' && (steps.update.outputs.code == '10' || steps.pre.outputs.drift == 'true')
         continue-on-error: true
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
-            Read docs/AUTO-INGEST.md and do what it says. files.txt and cards.txt in the
-            repo root are this week's findings. Before you finish, write ingest-summary.txt:
-            a one-line title (under 70 characters), a blank line, then what changed in plain words.
-          claude_args: --max-turns 300 --allowedTools "Bash,Read,Write,Edit,Glob,Grep"
+            Read docs/AUTO-INGEST.md and do what it says. The script's report is
+            auto-update-report.json (its "claude" list is your work); pre.txt, if not
+            empty, lists drift between our data and TTCombat's cards.
+          claude_args: --max-turns 80 --model claude-sonnet-5-5 --allowedTools "Bash,Read,Write,Edit,Glob,Grep"
 
-      # The same tripwires that found the change must now come back clean, and
-      # nothing may break. Each failure is written to gate.txt for the email.
-      - name: Check Claude's work
+      - name: Check the work
         id: gate
-        if: steps.claude.outcome == 'success' || steps.claude.outcome == 'failure'
+        if: steps.update.outcome == 'success' && (steps.update.outputs.code != '0' || steps.pre.outputs.drift == 'true' || hashFiles('auto-update-report.json') != '')
         run: |
           : > gate.txt
           fail() { echo "- $1" >> gate.txt; }
-          [ "${{ steps.claude.outcome }}" = "success" ] || fail "The Claude step itself failed; see the run log."
+          code="${{ steps.update.outputs.code }}"
+          case "$code" in
+            0|10) ;;
+            20) fail "The update needs a decision:"; python -c "import json; [print('  ' + p) for p in json.load(open('auto-update-report.json'))['person']]" >> gate.txt ;;
+            *) fail "scripts/auto-update.py stopped with exit $code:"; tail -20 update.txt >> gate.txt ;;
+          esac
+          if [ "$code" = "10" ] || [ "${{ steps.pre.outputs.drift }}" = "true" ]; then
+            [ "$HAS_CLAUDE" = "true" ] || fail "Some cards need Claude, but the repo has no CLAUDE_CODE_OAUTH_TOKEN secret."
+            [ "${{ steps.claude.outcome }}" = "success" ] || [ "$HAS_CLAUDE" != "true" ] || fail "The Claude step failed; see the run log."
+          fi
           [ -f NEEDS_JET.md ] && fail "Claude asked for a decision (below)."
-          [ -f ingest-summary.txt ] || fail "No ingest-summary.txt, so Claude did not finish."
           python scripts/scan-dfc-files.py > scan2.txt 2>&1 || true
           grep -q '^#findings=0' scan2.txt || { fail "The downloads scan still reports changes:"; sed '/^#findings/d' scan2.txt >> gate.txt; }
           python scripts/audit-cards.py > cards2.txt 2>&1 || true
           grep -q '^#findings=0' cards2.txt || { fail "The card audit still disagrees with the data:"; sed '/^#findings/d' cards2.txt | tail -25 >> gate.txt; }
           cp data/fleet-data.json /tmp/mirror.json
           python scripts/gen-fleet-data.py > /dev/null
-          cmp -s data/fleet-data.json /tmp/mirror.json || fail "data/fleet-data.json was not regenerated from the faction files."
+          cmp -s data/fleet-data.json /tmp/mirror.json || fail "data/fleet-data.json does not match the faction files."
           for f in js/app.js mobile/js/mobile.js; do node --check "$f" 2>> gate.txt || fail "$f does not parse."; done
           for t in test-calc-data test-calc-engine test-calc-rules test-fleet-sync; do
             node "scripts/$t.mjs" > t.txt 2>&1 || { fail "scripts/$t.mjs failed:"; tail -15 t.txt >> gate.txt; }
@@ -194,8 +151,19 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          { cat ingest-summary.txt; printf '\n\nAutomatic: found by the weekly scan, integrated by Claude following\ndocs/AUTO-INGEST.md, and committed because the downloads scan, card audit,\nmirror check and test suites all passed afterwards.\n'; } > msg.txt
-          rm -f ingest-summary.txt files.txt cards.txt mirror.txt scan2.txt cards2.txt gate.txt t.txt msg.txt.bak
+          python - <<'PY'
+          import json, os
+          r = json.load(open('auto-update-report.json')) if os.path.exists('auto-update-report.json') else {}
+          files = r.get('files') or []
+          title = 'TTCombat update: ' + ', '.join(f.rsplit('.', 1)[0] for f in files) if files else 'Data brought back in line with the cards'
+          body = [title, ''] + ['- ' + c for c in r.get('changelog', [])]
+          if r.get('claude'):
+              body += ['', 'Claude handled: ' + ', '.join(c.get('ship') or c.get('pdf') for c in r['claude']) + '.']
+          body += ['', 'Automatic. Committed because the downloads scan, card audit, mirror check',
+                   'and test suites all passed afterwards.']
+          open('msg.txt', 'w').write('\n'.join(body) + '\n')
+          PY
+          rm -f auto-update-report.json update.txt pre.txt cards.txt scan2.txt cards2.txt gate.txt t.txt
           git add -A data assets js mobile scenarios scripts sw.js CHANGELOG.md
           git diff --cached --quiet && { echo "Nothing changed."; exit 0; }
           git commit -F msg.txt
@@ -213,94 +181,36 @@ jobs:
               await github.rest.issues.update({ owner: context.repo.owner, repo: context.repo.repo,
                 issue_number: i.number, state: 'closed', state_reason: 'completed' });
 
-      - name: Report
-        if: (steps.need.outputs.work == 'true' && steps.gate.outputs.ok != 'true') || inputs.test_alert
+      - name: Email Jet
+        if: steps.gate.outputs.ok == 'false' || inputs.test_alert
         uses: actions/github-script@v9
         with:
           script: |
             const fs = require('fs');
+            const has = f => fs.existsSync(f) && fs.statSync(f).size > 0;
             const read = f => fs.readFileSync(f, 'utf8').trim();
             const isTest = ${{ inputs.test_alert || false }};
             const parts = isTest
               ? ['**Test alert.** Nothing is wrong; this only proves the email path works. Close it.', '']
-              : ['The Dropfleet data needs a look.', ''];
-
+              : ['The weekly Dropfleet update could not finish on its own. Nothing was committed; the site still has last week\'s data.', ''];
             if (!isTest) {
-              const has = f => fs.existsSync(f) && fs.statSync(f).size > 0;
-              if (process.env.HAS_CLAUDE !== 'true') {
-                parts.push('Nothing was integrated automatically: the repo has no `CLAUDE_CODE_OAUTH_TOKEN` secret.', '');
-              } else {
-                parts.push('## Claude tried, and stopped here', '');
-                if (has('NEEDS_JET.md')) parts.push(read('NEEDS_JET.md'), '');
-                if (has('gate.txt')) parts.push('Checks that did not pass:', '', '```', read('gate.txt'), '```', '');
-                parts.push('Nothing was committed. The findings that started it are below.', '');
-              }
+              if (has('NEEDS_JET.md')) parts.push('## What Claude needs you to decide', '', read('NEEDS_JET.md'), '');
+              if (has('gate.txt')) parts.push('## What did not pass', '', '```', read('gate.txt'), '```', '');
+              if (has('update.txt')) parts.push('## What the script did', '', '```', read('update.txt').slice(-4000), '```', '');
             }
-
-            const files = Number('${{ steps.files.outputs.findings }}' || 0);
-            const cards = Number('${{ steps.cards.outputs.findings }}' || 0);
-            const mirror = Number('${{ steps.mirror.outputs.findings }}' || 0);
-
-            if (files) {
-              parts.push(`## TTCombat published something (${files})`, '', '```', read('files.txt'), '```', '');
-            }
-            if (cards) {
-              parts.push(`## The cards and our data disagree (${cards})`, '',
-                'This one is about us, not TTCombat. Either a ship drifted from its card,',
-                'or a card was re-cut in place under an unchanged URL.',
-                '',
-                'Open the PDF and read the block. If the data is wrong, fix it. If the parser',
-                'is wrong, confirm it against the card and move the line into `accepted` in',
-                '`scripts/card-audit-baseline.json` — that bucket is a claim someone read it.',
-                '', '```', read('cards.txt'), '```', '');
-            }
-            if (mirror) {
-              parts.push('## `data/fleet-data.json` was hand-edited', '',
-                'It is generated. Regenerating it changed it, which means an edit went into',
-                'the mirror instead of into the `faction-*.json` file the app actually loads —',
-                'so the edit is not live, and the mirror now disagrees with the app.',
-                '',
-                'Put the change in the faction file, then run `python scripts/gen-fleet-data.py`.',
-                '', '```', read('mirror.txt'), '```', '');
-            }
-            parts.push(
-              '---',
-              'Integrating an edition: download the PDFs into `Rules-Mechanics-PDFs/`, diff them',
-              'page by page against the previous edition, update `data/faction-*.json`, and check',
-              'whether any new rule changes what is LEGAL to take. If it does, wire it into both',
-              '`js/app.js` and `mobile/js/mobile.js`, not just the card text. Then rebaseline with',
-              '`python scripts/scan-dfc-files.py --update`.',
-              '',
-              'A `REVISED` entry means the same date stamp was re-uploaded. Usually cosmetic, but',
-              'not always: on 2026-08-02 a re-upload renamed a ship, so diff the text before',
-              'assuming nothing changed.',
-              '',
-              `_[Run log](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})_`,
-            );
+            parts.push(`_[Run log](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})_`);
             const body = parts.join('\n');
-
-            // One open issue at a time. If the last one is still open the change
-            // has not been dealt with, so comment rather than pile up.
+            // One open issue at a time; a still-open one gets a comment instead.
             const { data: open } = await github.rest.issues.listForRepo({
-              owner: context.repo.owner, repo: context.repo.repo,
-              state: 'open', labels: 'dfc-data',
-            });
+              owner: context.repo.owner, repo: context.repo.repo, state: 'open', labels: 'dfc-data' });
             if (open.length) {
               await github.rest.issues.createComment({
-                owner: context.repo.owner, repo: context.repo.repo,
-                issue_number: open[0].number, body,
-              });
+                owner: context.repo.owner, repo: context.repo.repo, issue_number: open[0].number, body });
             } else {
-              // Assign the repo owner: GitHub emails on assignment under the
-              // default "Participating and @mentions" setting, whereas an issue
-              // merely opened by the Actions bot would not reach the inbox.
+              // Assigning the owner is what makes GitHub email it.
               const { data: issue } = await github.rest.issues.create({
                 owner: context.repo.owner, repo: context.repo.repo,
-                title: (isTest ? 'Test alert' : 'Dropfleet data changed')
-                  + ` (${new Date().toISOString().slice(0, 10)})`,
-                labels: ['dfc-data'],
-                assignees: [context.repo.owner],
-                body,
-              });
+                title: (isTest ? 'Test alert' : 'Dropfleet update needs you') + ` (${new Date().toISOString().slice(0, 10)})`,
+                labels: ['dfc-data'], assignees: [context.repo.owner], body });
               core.notice(`Opened #${issue.number}: ${issue.html_url}`);
             }

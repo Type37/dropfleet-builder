@@ -62,7 +62,7 @@ LOCK_RE = re.compile(r'^(\d\+|\*|-)$')
 NUM_RE = re.compile(r'^(\d+|-)$')
 TYPE_RE = re.compile(r'^[KEC]$')
 PTS_RE = re.compile(r'^(\d+)\s*pts(?:\s*\((\d+)\s*\+\s*(\d+)\s*pts\))?', re.I)
-TON_RE = re.compile(r'^([LMHCS])\s*/\s*(\d+)mm$')
+TON_RE = re.compile(r'^([LMHCS])\s*/\s*(\d+)\s*mm$')  # "30mm" and, on some cards, "30 mm"
 # The sub-line under a flagship's title. TTCombat writes it four ways across the
 # six PDFs — with and without "Famous", joined by "&" or by "+", and once as
 # "Levlel" (PHR Pompeius, 260626). Miss it and the card still parses, but as a

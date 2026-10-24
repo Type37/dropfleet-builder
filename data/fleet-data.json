@@ -600,6 +600,10 @@
    }
   ]
  },
+ "edition": {
+  "month": "October 2026",
+  "file": "Civilian_Ships_Scenarios_261001"
+ },
  "factions": {
   "bioficer": {
    "id": "3407-27f0-fe29-a5b4",
