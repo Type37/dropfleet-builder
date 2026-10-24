@@ -386,37 +386,37 @@
   "bioficer": {
    "name": "Bioficers",
    "shortName": "Bioficers",
-   "shipCount": 72,
+   "shipCount": 74,
    "admiralCount": 6
   },
   "phr": {
    "name": "Post-Human Republic",
    "shortName": "PHR",
-   "shipCount": 77,
+   "shipCount": 78,
    "admiralCount": 6
   },
   "resistance": {
    "name": "Resistance",
    "shortName": "Resistance",
-   "shipCount": 66,
+   "shipCount": 67,
    "admiralCount": 6
   },
   "scourge": {
    "name": "Scourge",
    "shortName": "Scourge",
-   "shipCount": 68,
+   "shipCount": 69,
    "admiralCount": 6
   },
   "shaltari": {
    "name": "Shaltari",
    "shortName": "Shaltari",
-   "shipCount": 69,
+   "shipCount": 71,
    "admiralCount": 6
   },
   "ucm": {
    "name": "United Colonies of Mankind",
    "shortName": "UCM",
-   "shipCount": 79,
+   "shipCount": 80,
    "admiralCount": 6
   }
  },

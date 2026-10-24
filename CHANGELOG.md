@@ -5,6 +5,26 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-10-24: Civilian Ships 261001, the PSC Interdictor
+
+The weekly scan (#14) found `Civilian_Ships_Scenarios_261001.pdf` replacing 260901.
+Diffing the text page by page gives one new card and one cosmetic change; every
+other page only moved down one.
+
+  p10  PSC Interdictor, 48 pts, L, groups 2-4, Rare. Mercenary, so it is stored in
+       all six faction files with `additional: true`, after the MK Mass Transporters.
+  p6   MK Mass Transporter's BS column prints "-" instead of "N/A".
+
+Boardable is dropped from the Interdictor's Special column like every other
+civilian hull. Crippling-Navigation Offline applies only on Weapons Free, so it
+stays in the UF-2800i rule text rather than the weapon's Special column. Nothing
+about it changes what is legal to take beyond Rare, which `isRare` already enforces.
+
+The new sheet carries higher-resolution pictures of the five Scenario Only ships;
+`build-civilian-ships.py` now reads 261001 (page and image numbers updated) and the
+Civilian Ship picker has 21 ships. fleet-index ship counts recomputed (Bioficer and
+Shaltari were one low). Ingest: `scripts/add-civilian-261001.py`.
+
 ### 2026-09-28: Francis Mendoza, for good this time
 
 TTCombat's Shopify CDN serves two different files under the one UCM 260828 URL

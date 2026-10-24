@@ -32,7 +32,7 @@ GEN = os.path.join(ROOT, 'scenarios', 'dropfleet', 'scenario-lib.js')
 SOURCES = [
     ('A5_Dropfleet_Rulebook_2.3.1_Print_Friendly.pdf', 'Rulebook'),
     ('Scenario_Expansion_1_250818.pdf', 'Scenario Expansion 1'),
-    ('Civilian_Ships_Scenarios_260901.pdf', 'Civilian Ships & Scenarios'),
+    ('Civilian_Ships_Scenarios_261001.pdf', 'Civilian Ships & Scenarios'),
 ]
 
 

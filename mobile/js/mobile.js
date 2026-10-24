@@ -277,6 +277,7 @@
     'Triumvir':'triumvir','Tribune':'tribune','Disciple':'disciple',
     'M.A.B. 67':'mab_67_fuel_transport',
     'MK Mass Transporter':'mk_mass_transporter',
+    'PSC Interdictor':'psc_interdictor',
     'M-Type':'m-type','El Paso':'el_paso',
     // TTCombat's CDN serves two cuts of UCM 260828: "Frances" and "Francis" Mendoza.
     'Francis Mendoza':'frances'
@@ -5024,6 +5025,11 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-10-24', title: 'New mercenary: PSC Interdictor', items: [
+      'The PSC Interdictor, from TTCombat’s 1 October Civilian Ships sheet, can join any fleet: 48 pts, groups of 2 to 4, Rare. Rapid Drop, Vectored, Boarding Pods, and Interdiction Mass Drivers with Arrest-4 and Scald-1 that also cripple Navigation on Weapons Free.',
+      'Civilian Ship scenarios can use the Interdictor as their Civilian Ship.',
+      'The Scenario Only liners and barges show sharper pictures, taken from the new sheet.',
+    ]},
     { date: '2026-09-28', title: 'UCM: Francis Mendoza', items: [
       'The Flying Dutchman captain is Francis Mendoza again. TTCombat\'s download server hands out two copies of the UCM stats PDF, and the newer one (built 1 September) says Francis. The 25 September change back to Frances came from the older copy.',
       'The ship keeps its art under either spelling.',

@@ -5,9 +5,9 @@
 
 The PDF (page 2): "The Civilian Ships in these scenarios can be represented by any of the stat sheets presented in
 this document. While they were designed with the Princess Liner in mind, players may want to use a different
-Civilian Ship". So the scenario pages show the Princess Liner and let a player switch to any of the 20.
+Civilian Ship". So the scenario pages show the Princess Liner and let a player switch to any of the 21.
 
-15 of them are buildable Miscellaneous Ships already in data/fleet-data.json: their stats, weapons, launch
+16 of them are buildable Miscellaneous Ships already in data/fleet-data.json: their stats, weapons, launch
 loads, special rules and lore come from there. The 5 Scenario Only ships (no points) are read from the PDF
 here, verbatim, and their pictures taken from it. Writes scenarios/dropfleet/scenario-civilian.js.
 """
@@ -16,15 +16,15 @@ import fitz
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PDF = os.path.join(ROOT, 'Rules-Mechanics-PDFs', 'Civilian_Ships_Scenarios_260901.pdf')
+PDF = os.path.join(ROOT, 'Rules-Mechanics-PDFs', 'Civilian_Ships_Scenarios_261001.pdf')
 OUT = os.path.join(ROOT, 'scenarios', 'dropfleet', 'scenario-civilian.js')
 ART = os.path.join(ROOT, 'assets', 'art')
 
-# PDF order (pages 3-22). Buildable ships: (name, art thumb). Scenario Only: (name, None) with a PDF block below.
+# PDF order (pages 3-23). Buildable ships: (name, art thumb). Scenario Only: (name, None) with a PDF block below.
 ORDER = [
     ('Hyperyacht Somniferum', 'hyperyacht_somniferum.webp'), ('L-Type Barge', None), ('LKS Dredger', 'lks_dredger.webp'),
     ('MK Mass Transporter', 'mk_mass_transporter.webp'), ('M.A.B. 67 Fuel Transport', 'mab_67_fuel_transport.webp'),
-    ('Nirvana', None), ('Precedent One', None), ('SLM-9 Resupply Hauler', 'slm_9_resupply_hauler.webp'),
+    ('Nirvana', None), ('Precedent One', None), ('PSC Interdictor', 'psc_interdictor.webp'), ('SLM-9 Resupply Hauler', 'slm_9_resupply_hauler.webp'),
     ('T-Type Tugboat', 't_type_tugboat.webp'), ('EX-7 Packet Runner', 'ex7_packet_runner.webp'), ('Affluence Liner', None),
     ('DH-Type Penal Transport', 'dh_type_penal_transport.webp'), ('Jah’tar Startrader', 'jahetar_startrader.webp'),
     ('M-Type Barge', 'm_type_barge.webp'), ('Princess Liner', None), ('OBV-64 Oblivion Barge', 'obv_64_oblivion_barge.webp'),
@@ -34,15 +34,15 @@ ORDER = [
 
 # The Scenario Only ships, as printed (page, picture xref, tonnage, stats, special, weapons)
 SCENARIO_ONLY = {
-    'L-Type Barge': (4, 16, 'L', ['10”', '4”', '3”', 4, '3+', '6+', '5+', '1'], 'Descent, Boardable, Civilian Transport',
+    'L-Type Barge': (4, 20, 'L', ['10”', '4”', '3”', 4, '3+', '6+', '5+', '1'], 'Descent, Boardable, Civilian Transport',
                      [['Asteroid Clearance Laser', 'F/S/R', '2', '4+', '1', 'E', 'Close Action']]),
-    'Nirvana': (8, 44, 'L', ['9”', '4”', '3”', 6, '4+', '6+', '-', '1'], 'Blooming, Boardable, Civilian Transport',
+    'Nirvana': (8, 51, 'L', ['9”', '4”', '3”', 6, '4+', '6+', '-', '1'], 'Blooming, Boardable, Civilian Transport',
                 [['Asteroid Clearance Laser', 'F/S/R', '2', '4+', '1', 'E', 'Close Action']]),
-    'Precedent One': (9, 50, 'L', ['9”', '4”', '3”', 6, '4+', '6+', '-', '1'], 'Blooming, Boardable, Civilian Transport, Elite Fighter Escort',
+    'Precedent One': (9, 58, 'L', ['9”', '4”', '3”', 6, '4+', '6+', '-', '1'], 'Blooming, Boardable, Civilian Transport, Elite Fighter Escort',
                       [['Deterrence Missiles', 'F/S', '4', '3+', '1', 'K', 'Close Action']]),
-    'Affluence Liner': (13, 73, 'M', ['14”', '6”', '3”', 12, '4+', '5+', '-', '1'], 'Descent, Cloak-1, Boardable, Civilian Transport, Elite Fighter Escort, Unique',
+    'Affluence Liner': (14, 92, 'M', ['14”', '6”', '3”', 12, '4+', '5+', '-', '1'], 'Descent, Cloak-1, Boardable, Civilian Transport, Elite Fighter Escort, Unique',
                         [['Deterrence Missiles', 'F/S', '4', '3+', '1', 'K', 'Close Action']]),
-    'Princess Liner': (17, 98, 'M', ['10”', '4”', '3”', 12, '4+', '5+', '-', '1'], 'Descent, Cloak-1, Boardable, Civilian Transport',
+    'Princess Liner': (18, 119, 'M', ['10”', '4”', '3”', 12, '4+', '5+', '-', '1'], 'Descent, Cloak-1, Boardable, Civilian Transport',
                        [['Asteroid Clearance Laser', 'F/S/R', '2', '4+', '1', 'E', 'Close Action']]),
 }
 

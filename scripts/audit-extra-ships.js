@@ -19,7 +19,7 @@ const FACTION_PDF = {
   resistance: 'Resistance_Combined_Fleet_Stats_260731.txt',
   bioficer:   'Bioficer_Combined_Fleet_Stats_260925.txt',
 };
-const SHARED = ['Misc_Combined_Ship_Stats_250822.txt', 'Civilian_Ships_Scenarios_260901.txt',
+const SHARED = ['Misc_Combined_Ship_Stats_250822.txt', 'Civilian_Ships_Scenarios_261001.txt',
                 'Fleet_Space_Stations_250828.txt'];
 
 const norm = s => (s || '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]/g, '');

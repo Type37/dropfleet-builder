@@ -4953,7 +4953,7 @@
      "hull": 5,
      "es": "5+",
      "ks": "6+",
-     "bs": "N/A",
+     "bs": "-",
      "g": "1-2",
      "special": "Descent, Rare"
     },
@@ -4996,6 +4996,86 @@
     "tonnage": "L",
     "additional": true,
     "lore": "It’s a tough, thankless job hauling cargo from ground to space, but the Maganum Kinematics Mass Transporter takes it all in its stride. This reliable workhorse can be frequently seen flitting between orbit and atmosphere collecting and dispensing valuable cargo. During the reconquest, the durable, yet lightly armoured spaceframe of this vessel was used as a second line support vessel assisting troopships in setting up forward operating bases. Full of prefabricated barricades, fire-support bunkers, and even command centres, this small hauler vastly improves the efficiency of troops deployed to combat zones. Keeping the war machine well equipped, well stocked, and with a relatively comfortable, if cramped base to strike out at Scourge targets from.\n\nEven though their primary contracts are with the UCM, Maganum Kinematics have sold many of these to other non government organisations. Various shipping magnates operate at least one of these reliable ships at each of their destinations. More surprisingly, even other factions have been making use of these vessels. The PHR stationed at Earth have requisitioned a pair of these ships, as well as Kalium counting no fewer than four of these vessels amongst its fleet, though only two have been seen operating in the vicinity of Earth."
+   }
+  },
+  {
+   "id": "7295-20a3-2d0e-3a42",
+   "name": "PSC Interdictors",
+   "category": "light",
+   "ship": {
+    "name": "PSC Interdictor",
+    "cost": 48,
+    "stats": {
+     "thrust": "9\"",
+     "scan": "6\"",
+     "sig": "4\"",
+     "hull": 4,
+     "es": "4+",
+     "ks": "4+",
+     "bs": "-",
+     "g": "2-4",
+     "special": "Rapid Drop, Rare, Vectored"
+    },
+    "weapons": [
+     {
+      "name": "UF-2800i Interdiction Mass Drivers",
+      "arc": "F/S",
+      "attack": "2",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Arrest-4, Scald-1"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Boarding Pods",
+      "launch": "1",
+      "special": "-"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Rapid Drop",
+      "description": "This Ship may launch its Assets at any point during its movement",
+      "page": "37",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Rare",
+      "description": "You may only take one Group of this Ship in a Skirmish-sized game, two in a Clash, three in a Battle, and four in a Reconquest.",
+      "page": "37",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Vectored",
+      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
+      "page": "37",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "UF-2800i Interdiction Mass Drivers",
+      "description": "While this Group is on the Max Thrust Order, it may attack with one Weapon System. While this Group is on the Weapons Free Order, its UF-2800i Interdiction Mass Drivers have Crippling-Navigation Offline."
+     },
+     {
+      "name": "Mercenary",
+      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable rule."
+     }
+    ],
+    "groupMin": 2,
+    "groupMax": 4,
+    "isRare": true,
+    "isUnique": false,
+    "tonnage": "L",
+    "additional": true,
+    "famousShipsPrefix": "Infamous Ships of the Class:",
+    "famousShips": [
+     "Whippet",
+     "Borzoi",
+     "Shin Kicker",
+     "Stay Put"
+    ],
+    "lore": "The Colonial Fleet Penal Corps GH-Type Interdictor is a mainstay of inter-system policing and target acquisition. This fast attack craft is built to chase down fleeing criminal elements and as quickly and safely as possible, disable engines and deliver preliminary boarding parties before more specialised forces arrive to take the target into custody. Colloquially known as Gazehounds, these pack hunters are brutally efficient at intercepting fleeing ships, impacts from their custom mass drivers cause small EM pulses that stall engines and knock out reactors. While smaller than other turrets produced by the Olympus Fleet Yards, these UF-2800 variants have inbuilt capacitors, allowing the ship itself to put full power to the engines while also having weapons ready to fire. Alternatively, when all power is put into weapon systems, these capacitors add to the power coursing through the weapon, delivering a far more potent shot and clipping the wings of any criminal foolish enough to be in its sights."
    }
   }
  ],

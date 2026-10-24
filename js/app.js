@@ -554,6 +554,7 @@ let activeGroupId = null;
     'MK Mass Transporter':'mk_mass_transporter',
     'OBV-64':'obv_64_oblivion_barge',
     'PRK-91':'prk_91_provenance_ark',
+    'PSC Interdictor':'psc_interdictor',
     'Palatine Command Barge':'palatine',
     'Pungari Thresher':'pungari_thresher',
     'SLM-9':'slm_9_resupply_hauler',
@@ -9084,6 +9085,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-10-24', title: 'New mercenary: PSC Interdictor', items: [
+      'The PSC Interdictor, from TTCombat’s 1 October Civilian Ships sheet, can join any fleet: 48 pts, groups of 2 to 4, Rare. Rapid Drop, Vectored, Boarding Pods, and Interdiction Mass Drivers with Arrest-4 and Scald-1 that also cripple Navigation on Weapons Free.',
+      'Civilian Ship scenarios can use the Interdictor as their Civilian Ship.',
+      'The Scenario Only liners and barges show sharper pictures, taken from the new sheet.',
+    ]},
     { date: '2026-09-28', title: 'UCM: Francis Mendoza', items: [
       'The Flying Dutchman captain is Francis Mendoza again. TTCombat\'s download server hands out two copies of the UCM stats PDF, and the newer one (built 1 September) says Francis. The 25 September change back to Frances came from the older copy.',
       'The ship keeps its art under either spelling.',
