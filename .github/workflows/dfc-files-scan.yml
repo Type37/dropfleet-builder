@@ -126,8 +126,12 @@ jobs:
           fi
           git checkout -- data/fleet-data.json   # undo the mirror check's regeneration
 
+      # A test, so it never fails the run (a failed run emails Jet). The result is
+      # on the run's summary page instead.
       - name: Token check
+        id: tokencheck
         if: inputs.test_claude
+        continue-on-error: true
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -135,6 +139,15 @@ jobs:
           prompt: Read docs/AUTO-INGEST.md and reply with its first heading. Change no files.
           claude_args: --max-turns 3 --allowedTools "Read"
           show_full_output: true
+
+      - name: Token check result
+        if: inputs.test_claude
+        run: |
+          if [ "${{ steps.tokencheck.outcome }}" = "success" ]; then
+            echo "### Claude token works" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### Claude token was rejected" >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       # Claude reads the new PDFs and does the integration a person used to do from
       # the issue. It does not commit; the gate below decides whether its work ships.
