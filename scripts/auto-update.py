@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The weekly Dropfleet update, end to end, with no person and (usually) no Claude.
+"""The monthly Dropfleet update, end to end, with no person and (usually) no Claude.
 
     python scripts/auto-update.py
 

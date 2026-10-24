@@ -1,6 +1,6 @@
 name: Watch for DFC data changes
 
-# The weekly Dropfleet update. The same process as the Dropzone builder's:
+# The monthly Dropfleet update (2nd weekday of the month). The same process as the Dropzone builder's:
 #
 #   1. scripts/auto-update.py   asks TTCombat's downloads page what changed, downloads
 #                               only those sheets (to a temporary folder, never kept),
@@ -16,11 +16,14 @@ name: Watch for DFC data changes
 #                               the commit deploys.
 #   4. Email                    only when the gate fails, Claude says a person must
 #                               decide (NEEDS_JET.md), or a ship or file vanished.
-#                               A quiet week and a successful update send nothing.
+#                               A quiet month and a successful update send nothing.
 
 on:
+  # The 2nd weekday (Mon-Fri) of each month always falls on the 2nd, 3rd or 4th.
+  # Cron cannot say "2nd weekday", so it fires on all three and the `when` job
+  # lets only the right one through. Run it by hand any time from the Actions tab.
   schedule:
-    - cron: '39 8 * * 1'   # 08:39 UTC every Monday
+    - cron: '39 8 2-4 * *'
   workflow_dispatch:
     inputs:
       test_alert:
@@ -36,13 +39,40 @@ permissions:
   contents: write
   issues: write
   id-token: write
+  actions: write
 
 concurrency:
   group: dfc-data-watch
   cancel-in-progress: false
 
 jobs:
+  when:
+    runs-on: ubuntu-latest
+    outputs:
+      go: ${{ steps.day.outputs.go }}
+    steps:
+      - name: Is today the 2nd weekday of the month?
+        id: day
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then echo "go=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          today=$(date -u +%-d); month=$(date -u +%Y-%m); n=0
+          for d in $(seq 1 "$today"); do
+            [ "$(date -u -d "$month-$d" +%u)" -le 5 ] && n=$((n + 1))
+          done
+          if [ "$(date -u +%u)" -le 5 ] && [ "$n" -eq 2 ]; then echo "go=true"; else echo "go=false"; fi >> "$GITHUB_OUTPUT"
+          echo "weekday number $n of the month"
+
+      # GitHub switches off schedules in a public repo after 60 days without
+      # activity, and a month with nothing new commits nothing. Enabling the
+      # workflow through the API on every firing keeps the schedule alive.
+      - name: Keep the schedule switched on
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/dfc-files-scan.yml/enable" || true
+
   watch:
+    needs: when
+    if: needs.when.outputs.go == 'true'
     runs-on: ubuntu-latest
     env:
       HAS_CLAUDE: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
@@ -192,7 +222,7 @@ jobs:
             const isTest = ${{ inputs.test_alert || false }};
             const parts = isTest
               ? ['**Test alert.** Nothing is wrong; this only proves the email path works. Close it.', '']
-              : ['The weekly Dropfleet update could not finish on its own. Nothing was committed; the site still has last week\'s data.', ''];
+              : ['The monthly Dropfleet update could not finish on its own. Nothing was committed; the site still has the last good data.', ''];
             if (!isTest) {
               if (has('NEEDS_JET.md')) parts.push('## What Claude needs you to decide', '', read('NEEDS_JET.md'), '');
               if (has('gate.txt')) parts.push('## What did not pass', '', '```', read('gate.txt'), '```', '');

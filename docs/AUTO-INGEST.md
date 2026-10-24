@@ -1,6 +1,6 @@
 # Automatic update: Claude's part
 
-The weekly run in `.github/workflows/dfc-files-scan.yml` has already done the routine
+The monthly run (2nd weekday of the month) in `.github/workflows/dfc-files-scan.yml` has already done the routine
 work with `scripts/auto-update.py`: downloaded the changed TTCombat sheets, compared
 them card by card with `scripts/card-snapshots.json`, written new and changed ships,
 cut their art, rebuilt the Civilian picker, and written the What's New entry. You are
