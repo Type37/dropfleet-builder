@@ -16,11 +16,12 @@ name: Watch for DFC data changes
 #                       the faction files. It drifted 19 ships behind once, and a
 #                       session then trusted it over the PDF.
 #
-# None of them edit data. Integrating an edition means reading the PDF and deciding
-# whether a new rule changes what is legal to take, which is a judgement call.
-# The issue this opens is the prompt to do that work, with the diff already laid
-# out. The files manifest is deliberately NOT rebaselined here, so an
-# unintegrated change keeps showing up until it is actually dealt with.
+# None of them edit data. When one fires, Claude integrates the change following
+# docs/AUTO-INGEST.md. The same three tripwires then re-run as the gate, plus the
+# test suites; only if all pass is the work committed to master, which deploys.
+# Jet is emailed (an assigned issue) only when Claude says a decision is needed
+# (NEEDS_JET.md), the gate fails, or no Claude token is set. A quiet week and a
+# successful automatic ingest send nothing.
 
 on:
   schedule:
@@ -33,8 +34,9 @@ on:
         default: false
 
 permissions:
-  contents: read
+  contents: write
   issues: write
+  id-token: write
 
 concurrency:
   group: dfc-data-watch
@@ -43,6 +45,8 @@ concurrency:
 jobs:
   watch:
     runs-on: ubuntu-latest
+    env:
+      HAS_CLAUDE: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v7
 
@@ -108,8 +112,82 @@ jobs:
             echo "findings=1" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Anything to do?
+        id: need
+        run: |
+          if [ "${{ steps.files.outputs.findings }}" != "0" ] || [ "${{ steps.cards.outputs.findings }}" != "0" ] || [ "${{ steps.mirror.outputs.findings }}" != "0" ]; then
+            echo "work=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "work=false" >> "$GITHUB_OUTPUT"
+          fi
+          git checkout -- data/fleet-data.json   # undo the mirror check's regeneration
+
+      # Claude reads the new PDFs and does the integration a person used to do from
+      # the issue. It does not commit; the gate below decides whether its work ships.
+      - name: Integrate with Claude
+        id: claude
+        if: steps.need.outputs.work == 'true' && env.HAS_CLAUDE == 'true' && !inputs.test_alert
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Read docs/AUTO-INGEST.md and do what it says. files.txt and cards.txt in the
+            repo root are this week's findings. Before you finish, write ingest-summary.txt:
+            a one-line title (under 70 characters), a blank line, then what changed in plain words.
+          claude_args: --max-turns 300 --allowedTools "Bash,Read,Write,Edit,Glob,Grep"
+
+      # The same tripwires that found the change must now come back clean, and
+      # nothing may break. Each failure is written to gate.txt for the email.
+      - name: Check Claude's work
+        id: gate
+        if: steps.claude.outcome == 'success' || steps.claude.outcome == 'failure'
+        run: |
+          : > gate.txt
+          fail() { echo "- $1" >> gate.txt; }
+          [ "${{ steps.claude.outcome }}" = "success" ] || fail "The Claude step itself failed; see the run log."
+          [ -f NEEDS_JET.md ] && fail "Claude asked for a decision (below)."
+          [ -f ingest-summary.txt ] || fail "No ingest-summary.txt, so Claude did not finish."
+          python scripts/scan-dfc-files.py > scan2.txt 2>&1 || true
+          grep -q '^#findings=0' scan2.txt || { fail "The downloads scan still reports changes:"; sed '/^#findings/d' scan2.txt >> gate.txt; }
+          python scripts/audit-cards.py > cards2.txt 2>&1 || true
+          grep -q '^#findings=0' cards2.txt || { fail "The card audit still disagrees with the data:"; sed '/^#findings/d' cards2.txt | tail -25 >> gate.txt; }
+          cp data/fleet-data.json /tmp/mirror.json
+          python scripts/gen-fleet-data.py > /dev/null
+          cmp -s data/fleet-data.json /tmp/mirror.json || fail "data/fleet-data.json was not regenerated from the faction files."
+          for f in js/app.js mobile/js/mobile.js; do node --check "$f" 2>> gate.txt || fail "$f does not parse."; done
+          for t in test-calc-data test-calc-engine test-calc-rules test-fleet-sync; do
+            node "scripts/$t.mjs" > t.txt 2>&1 || { fail "scripts/$t.mjs failed:"; tail -15 t.txt >> gate.txt; }
+          done
+          if [ -s gate.txt ]; then echo "ok=false" >> "$GITHUB_OUTPUT"; cat gate.txt; else echo "ok=true" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Commit and deploy
+        if: steps.gate.outputs.ok == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          { cat ingest-summary.txt; printf '\n\nAutomatic: found by the weekly scan, integrated by Claude following\ndocs/AUTO-INGEST.md, and committed because the downloads scan, card audit,\nmirror check and test suites all passed afterwards.\n'; } > msg.txt
+          rm -f ingest-summary.txt files.txt cards.txt mirror.txt scan2.txt cards2.txt gate.txt t.txt msg.txt.bak
+          git add -A data assets js mobile scenarios scripts sw.js CHANGELOG.md
+          git diff --cached --quiet && { echo "Nothing changed."; exit 0; }
+          git commit -F msg.txt
+          git push
+
+      # An open alert from an earlier week is answered by this commit; close it.
+      - name: Close the old alert
+        if: steps.gate.outputs.ok == 'true'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { data: open } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo, state: 'open', labels: 'dfc-data' });
+            for (const i of open)
+              await github.rest.issues.update({ owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: i.number, state: 'closed', state_reason: 'completed' });
+
       - name: Report
-        if: steps.files.outputs.findings != '0' ||steps.cards.outputs.findings != '0' || steps.mirror.outputs.findings != '0' || inputs.test_alert
+        if: (steps.need.outputs.work == 'true' && steps.gate.outputs.ok != 'true') || inputs.test_alert
         uses: actions/github-script@v9
         with:
           script: |
@@ -119,6 +197,18 @@ jobs:
             const parts = isTest
               ? ['**Test alert.** Nothing is wrong; this only proves the email path works. Close it.', '']
               : ['The Dropfleet data needs a look.', ''];
+
+            if (!isTest) {
+              const has = f => fs.existsSync(f) && fs.statSync(f).size > 0;
+              if (process.env.HAS_CLAUDE !== 'true') {
+                parts.push('Nothing was integrated automatically: the repo has no `CLAUDE_CODE_OAUTH_TOKEN` secret.', '');
+              } else {
+                parts.push('## Claude tried, and stopped here', '');
+                if (has('NEEDS_JET.md')) parts.push(read('NEEDS_JET.md'), '');
+                if (has('gate.txt')) parts.push('Checks that did not pass:', '', '```', read('gate.txt'), '```', '');
+                parts.push('Nothing was committed. The findings that started it are below.', '');
+              }
+            }
 
             const files = Number('${{ steps.files.outputs.findings }}' || 0);
             const cards = Number('${{ steps.cards.outputs.findings }}' || 0);

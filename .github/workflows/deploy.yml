@@ -3,6 +3,11 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [master]
+  # A push made with GITHUB_TOKEN starts no workflow, so the watcher's automatic
+  # ingest would land on master and go nowhere. workflow_run brings it back in.
+  workflow_run:
+    workflows: ["Watch for DFC data changes"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -21,6 +26,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # After a watcher run only if it succeeded. A quiet week redeploys the same
+    # site, which costs a minute and nothing else.
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
