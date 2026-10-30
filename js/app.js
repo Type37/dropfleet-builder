@@ -5265,6 +5265,7 @@ let activeGroupId = null;
   // button, no fleet checks, and a click opens that ship in the reference.
   function renderShipSelectCard({ key, data, category }, ref) {
     const refFaction = ref ? ref.faction : currentFleet.faction;
+    const dbFaction = ref && ref.db ? ref.db : refFaction;
     const catLabel = CATEGORY_LABELS[category] || category;
     const specialRules = data.special_rules || [];
     // Famous admiral entry: the card represents the admiral + their flagship.
@@ -5275,7 +5276,7 @@ let activeGroupId = null;
     else if (data.isRare) selectBadges += '<span class="ship-badge ship-badge-rare">Rare</span>';
     // Mark the optional mercenary / cross-faction / civilian ships so they're
     // distinguishable when revealed alongside the core list via the Misc filter.
-    if (!isFamous && data.additional) selectBadges += '<span class="ship-badge ship-badge-misc" title="Mercenary / cross-faction / civilian ship">Misc</span>';
+    if (!isFamous && data.additional && !(ref && ref.faction === 'civilian')) selectBadges += '<span class="ship-badge ship-badge-misc" title="Mercenary / cross-faction / civilian ship">Misc</span>';
     // (No Launch/Drop badge next to the name — launch capability already reads
     // from the launch-capacity indicator, the weapon summary and the loads.)
 
@@ -5339,7 +5340,7 @@ let activeGroupId = null;
       </div>
       ${renderStatGrid(data)}
       ${weaponSummary}
-      ${isFamous ? '' : shipLaunchIcons(data, refFaction)}
+      ${isFamous ? '' : shipLaunchIcons(data, dbFaction)}
       ${isFamous ? '' : shipBombardmentTag(data)}
       ${specialRules.length > 0 ? `<div class="special-rules">${specialRules.map(r => {
         // Every special rule is a clickable chip: prefer the ship's own detail,
@@ -7302,7 +7303,7 @@ let activeGroupId = null;
   // The Unit Reference prints its faction through the same container and preview.
   function unitsOnScreen() {
     const view = (location.hash.slice(1) || 'landing').split('/')[0];
-    return view === 'units' && !!shipDB[unitsState.faction];
+    return view === 'units' && !!shipDB[unitsDb(unitsState.faction)];
   }
   function sheetPrintHTML() {
     return unitsOnScreen() ? unitsPrintHTML() : fleetPrintHTML(currentFleet);
@@ -9085,6 +9086,10 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-10-30', title: 'Unit Reference: Civilian Ships tab', items: [
+      'Civilian and mercenary ships that any fleet can take now have their own Civilian Ships tab after Resistance, instead of repeating in every faction.',
+      'The Palatine Command Barge and the Kalium ships stay with their factions.'
+    ] },
     { date: '2026-10-24', title: 'New mercenary: PSC Interdictor', items: [
       'The PSC Interdictor, from TTCombat’s 1 October Civilian Ships sheet, can join any fleet: 48 pts, groups of 2 to 4, Rare. Rapid Drop, Vectored, Boarding Pods, and Interdiction Mass Drivers with Arrest-4 and Scald-1 that also cripple Navigation on Weapons Free.',
       'Civilian Ship scenarios can use the Interdictor as their Civilian Ship.',
@@ -10950,11 +10955,23 @@ let activeGroupId = null;
   const unitCatLabel = c => c === 'station' ? 'Space Stations' : (CATEGORY_LABELS[c] || c);
   const unitSlug = s => String(s || '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
+  // Civilian Ships tab: the cross-faction Misc ships, shown once after Resistance
+  // instead of inside every faction. Every faction file carries its own copy;
+  // UCM's has them all. Palatine and the Kalium KNCs are Resistance ships that
+  // happen to be flagged Misc, so they stay with their factions.
+  const UNITS_TABS = [...Object.keys(FACTION_LABELS), 'civilian'];
+  const UNITS_LABELS = { ...FACTION_LABELS, civilian: 'Civilian Ships' };
+  const UNITS_COLORS = { ...FACTION_COLORS, civilian: '#8a8f98' };
+  const FACTION_OWNED_MISC = new Set(['39f3-e983-5400-5b03', '675e-18e1-0e9c-c3f1', '5554-9f7d-880e-8f1f']);
+  function unitsDb(fk) { return fk === 'civilian' ? 'ucm' : fk; }
+  const isCivilianShip = (key, data) => !!data.additional && !FACTION_OWNED_MISC.has(key);
+
   // One entry per thing on the screen, each with a URL slug that stays put: line
   // ships claim theirs first, then flagships (by admiral name), then stations.
   function unitEntries(fk) {
-    const fdb = shipDB[fk];
+    const fdb = shipDB[unitsDb(fk)];
     if (!fdb) return [];
+    const civ = fk === 'civilian';
     const out = [];
     const used = new Set();
     const slugFor = (name, alt) => {
@@ -10968,9 +10985,11 @@ let activeGroupId = null;
     CATEGORY_ORDER.forEach(cat => {
       Object.entries((fdb.groups[cat] || {}).ships || {}).forEach(([key, data]) => {
         if (data.type === 'launch_asset') return;
+        if (isCivilianShip(key, data) !== civ) return;
         out.push({ kind: 'ship', key, data, category: cat, slug: slugFor(data.name, 'ship') });
       });
     });
+    if (civ) return out;
     Object.entries((fdb.groups.famous_admirals || {}).ships || {}).forEach(([key, data]) => {
       out.push({ kind: 'famous', key, data, category: data.shipCategory || 'medium', slug: slugFor(data.admiralName || data.name, 'flagship') });
     });
@@ -11033,13 +11052,13 @@ let activeGroupId = null;
     const el = document.getElementById('view-units');
     if (!el) return;
     const parts = String(param || '').split('/');
-    const fk = FACTION_LABELS[parts[0]] ? parts[0] : unitsState.faction;
+    const fk = UNITS_LABELS[parts[0]] ? parts[0] : unitsState.faction;
     if (fk !== unitsState.faction) unitsState = { faction: fk, search: '', cat: 'all' };
-    await ensureFactionLoaded(fk);
+    await ensureFactionLoaded(unitsDb(fk));
     if (unitsBuilt !== fk) {
-      const tabs = Object.keys(FACTION_LABELS).map(k => `<button type="button" class="units-tab${k === fk ? ' active' : ''}" style="--acc:${FACTION_COLORS[k]}" aria-pressed="${k === fk}" onclick="App.navigate('units','${k}')">
-          ${FACTION_ICONS[k] ? `<img src="${FACTION_ICONS[k]}" alt="">` : ''}${esc(FACTION_LABELS[k])}</button>`).join('');
-      el.innerHTML = `<div class="units-wrap" style="--acc:${FACTION_COLORS[fk]}">
+      const tabs = UNITS_TABS.map(k => `<button type="button" class="units-tab${k === fk ? ' active' : ''}" style="--acc:${UNITS_COLORS[k]}" aria-pressed="${k === fk}" onclick="App.navigate('units','${k}')">
+          ${FACTION_ICONS[k] ? `<img src="${FACTION_ICONS[k]}" alt="">` : ''}${esc(UNITS_LABELS[k])}</button>`).join('');
+      el.innerHTML = `<div class="units-wrap" style="--acc:${UNITS_COLORS[fk]}">
         <div class="units-tabs">${tabs}</div>
         <div class="units-toolbar">
           <input class="units-search" type="search" placeholder="Search" aria-label="Search ships, weapons and rules" value="${esc(unitsState.search)}" oninput="App.unitsSearch(this.value)">
@@ -11075,7 +11094,7 @@ let activeGroupId = null;
         <h2 class="units-group-head">${esc(unitCatLabel(cat))}</h2>
         <div class="units-grid">${inCat.map(e => e.kind === 'station'
           ? renderStationRefCard(e, fk)
-          : renderShipSelectCard({ key: e.key, data: e.data, category: e.category }, { faction: fk, slug: e.slug })).join('')}</div>
+          : renderShipSelectCard({ key: e.key, data: e.data, category: e.category }, { faction: fk, db: unitsDb(fk), slug: e.slug })).join('')}</div>
       </section>`;
     }).join('');
     box.innerHTML = html || `<p class="units-empty">No ships match “${esc(unitsState.search)}”.</p>`;
@@ -11093,7 +11112,7 @@ let activeGroupId = null;
     if (!e) return;
     unitsDetailHash = location.hash;
     if (e.kind !== 'station') {
-      openShipDetail(fk, e.kind === 'famous' ? 'famous_admirals' : e.category, e.key, false, true);
+      openShipDetail(unitsDb(fk), e.kind === 'famous' ? 'famous_admirals' : e.category, e.key, false, true);
       return;
     }
     const ss = e.data;
@@ -11141,7 +11160,7 @@ let activeGroupId = null;
   // each after the cards, since several ships share them.
   function unitsPrintHTML() {
     const fk = unitsState.faction;
-    const fdb = shipDB[fk];
+    const fdb = shipDB[unitsDb(fk)];
     if (!fdb) return '';
     const entries = unitsFiltered(fk).sort((a, b) =>
       UNIT_CAT_ORDER.indexOf(a.category) - UNIT_CAT_ORDER.indexOf(b.category)
@@ -11284,7 +11303,7 @@ let activeGroupId = null;
       ? `<div class="print-section dp-glossary"><div class="print-section-title">Rules</div><div class="dp-rules">${glossEntries.map(([n, def]) => printRuleSpan([n, def.description])).join('')}</div></div>`
       : '';
 
-    const fName = (factionData[fk] || {}).name || FACTION_LABELS[fk];
+    const fName = fk === 'civilian' ? UNITS_LABELS.civilian : ((factionData[fk] || {}).name || FACTION_LABELS[fk]);
     const meta = ['Unit Reference', unitsState.cat !== 'all' ? unitCatLabel(unitsState.cat) : '',
       unitsState.search.trim() ? `“${unitsState.search.trim()}”` : ''].filter(Boolean).join(', ');
     return paperHTML(`<div class="print-fleet print-2col${settings.printInk ? ' pf-inksaver' : ''}" data-fleet-name="${escAttr(fName + ' Unit Reference')}">

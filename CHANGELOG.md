@@ -5,6 +5,15 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-10-30: Unit Reference gets a Civilian Ships tab
+
+The cross-faction Misc ships (18 of them, the civilian, mercenary and astrofauna
+hulls any fleet can take) now sit in their own Civilian Ships tab after
+Resistance, at `#units/civilian`, instead of repeating in all six faction tabs.
+The Palatine Command Barge and the Kalium KNC-5 and KNC-12 are Resistance ships
+flagged Misc, so they stay in their faction tabs. Only the Unit Reference
+changed; the builder's ship picker still lists Misc ships per faction.
+
 ### 2026-10-24: TTCombat updates go in by themselves
 
 The weekly watcher now does the whole job instead of opening an issue:
