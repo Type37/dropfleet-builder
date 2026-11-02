@@ -369,7 +369,7 @@
      "scan": "12\"",
      "sig": "14\"",
      "hull": 25,
-     "es": "2+",
+     "es": "3+",
      "ks": "3+",
      "bs": "5+",
      "g": "1",
@@ -386,22 +386,58 @@
       "special": "Bombardment, Overcharge"
      },
      {
-      "name": "Energy Glaive Battery",
+      "name": "Energy Glaives (Pulse)",
       "arc": "B",
-      "attack": "6",
-      "lock": "3+",
+      "attack": "4",
+      "lock": "4+",
       "damage": "2",
       "type": "E",
-      "special": "Overcharge, Volley-2"
+      "special": "Alt-1, Reave-1, Volley-2"
      },
      {
-      "name": "Energy Glaive Battery",
-      "arc": "B",
-      "attack": "6",
+      "name": "Energy Glaives (Beam)",
+      "arc": "S",
+      "attack": "2",
       "lock": "3+",
+      "damage": "4",
+      "type": "E",
+      "special": "Alt-1, Reave-2, Fusillade-1"
+     },
+     {
+      "name": "Energy Glaives (Pulse)",
+      "arc": "B",
+      "attack": "4",
+      "lock": "4+",
       "damage": "2",
       "type": "E",
-      "special": "Overcharge, Volley-2"
+      "special": "Alt-2, Reave-1, Volley-2"
+     },
+     {
+      "name": "Energy Glaives (Beam)",
+      "arc": "S",
+      "attack": "2",
+      "lock": "3+",
+      "damage": "4",
+      "type": "E",
+      "special": "Alt-2, Reave-2, Fusillade-1"
+     },
+     {
+      "name": "Energy Glaives (Pulse)",
+      "arc": "B",
+      "attack": "4",
+      "lock": "4+",
+      "damage": "2",
+      "type": "E",
+      "special": "Alt-3, Reave-1, Volley-2"
+     },
+     {
+      "name": "Energy Glaives (Beam)",
+      "arc": "S",
+      "attack": "2",
+      "lock": "3+",
+      "damage": "4",
+      "type": "E",
+      "special": "Alt-3, Reave-2, Fusillade-1"
      },
      {
       "name": "Hornet Drone Hive",
@@ -454,7 +490,7 @@
      "scan": "12\"",
      "sig": "14\"",
      "hull": 25,
-     "es": "2+",
+     "es": "3+",
      "ks": "3+",
      "bs": "5+",
      "g": "1",
@@ -471,31 +507,58 @@
       "special": "Critical-1, Focused"
      },
      {
-      "name": "Energy Glaive Battery",
+      "name": "Energy Glaives (Pulse)",
       "arc": "B",
-      "attack": "6",
-      "lock": "3+",
+      "attack": "4",
+      "lock": "4+",
       "damage": "2",
       "type": "E",
-      "special": "Overcharge, Volley-2"
+      "special": "Alt-1, Reave-1, Volley-2"
      },
      {
-      "name": "Energy Glaive Battery",
-      "arc": "B",
-      "attack": "6",
+      "name": "Energy Glaives (Beam)",
+      "arc": "S",
+      "attack": "2",
       "lock": "3+",
-      "damage": "2",
+      "damage": "4",
       "type": "E",
-      "special": "Overcharge, Volley-2"
+      "special": "Alt-1, Reave-2, Fusillade-1"
      },
      {
-      "name": "Energy Glaive Battery",
+      "name": "Energy Glaives (Pulse)",
       "arc": "B",
-      "attack": "6",
-      "lock": "3+",
+      "attack": "4",
+      "lock": "4+",
       "damage": "2",
       "type": "E",
-      "special": "Overcharge, Volley-2"
+      "special": "Alt-2, Reave-1, Volley-2"
+     },
+     {
+      "name": "Energy Glaives (Beam)",
+      "arc": "S",
+      "attack": "2",
+      "lock": "3+",
+      "damage": "4",
+      "type": "E",
+      "special": "Alt-2, Reave-2, Fusillade-1"
+     },
+     {
+      "name": "Energy Glaives (Pulse)",
+      "arc": "B",
+      "attack": "4",
+      "lock": "4+",
+      "damage": "2",
+      "type": "E",
+      "special": "Alt-3, Reave-1, Volley-2"
+     },
+     {
+      "name": "Energy Glaives (Beam)",
+      "arc": "S",
+      "attack": "2",
+      "lock": "3+",
+      "damage": "4",
+      "type": "E",
+      "special": "Alt-3, Reave-2, Fusillade-1"
      }
     ],
     "loads": [],
@@ -541,13 +604,31 @@
     },
     "weapons": [
      {
-      "name": "Heavy Calibre Triple Broadside",
+      "name": "Heavy Calibre Broadside",
       "arc": "B",
-      "attack": "3",
-      "lock": "3+",
+      "attack": "2",
+      "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H/C, Penetrator, Volley-2"
+      "special": "Calibre-H, Penetrator, Volley-2"
+     },
+     {
+      "name": "Heavy Calibre Broadside",
+      "arc": "B",
+      "attack": "2",
+      "lock": "4+",
+      "damage": "3",
+      "type": "K",
+      "special": "Calibre-H, Penetrator, Volley-2"
+     },
+     {
+      "name": "Heavy Calibre Broadside",
+      "arc": "B",
+      "attack": "2",
+      "lock": "4+",
+      "damage": "3",
+      "type": "K",
+      "special": "Calibre-H, Penetrator, Volley-2"
      },
      {
       "name": "Neutron Missiles",
@@ -565,7 +646,7 @@
       "lock": "2+",
       "damage": "2",
       "type": "E",
-      "special": "Critical-1, Crippling, Penetrator"
+      "special": "Critical-1, Crippling, High Power, Penetrator"
      }
     ],
     "loads": [
@@ -597,7 +678,7 @@
    "category": "heavy",
    "ship": {
     "name": "Caesar Super Battleship",
-    "cost": 270,
+    "cost": 295,
     "stats": {
      "thrust": "6\"",
      "scan": "10\"",
@@ -626,7 +707,7 @@
       "lock": "2+",
       "damage": "2",
       "type": "E",
-      "special": "Critical-1, Crippling, Penetrator"
+      "special": "Critical-1, Crippling, High Power, Penetrator"
      },
      {
       "name": "Laser Multi-Lance",
@@ -661,7 +742,7 @@
    "category": "heavy",
    "ship": {
     "name": "Augustus Super Battleship",
-    "cost": 245,
+    "cost": 260,
     "stats": {
      "thrust": "6\"",
      "scan": "10\"",
@@ -675,22 +756,22 @@
     },
     "weapons": [
      {
-      "name": "Energy Glaives",
+      "name": "Energy Glaives (Pulse)",
       "arc": "B",
-      "attack": "3",
-      "lock": "3+",
+      "attack": "4",
+      "lock": "4+",
       "damage": "2",
       "type": "E",
-      "special": "Overcharge, Volley-2"
+      "special": "Alt-1, Reave-1, Volley-2"
      },
      {
-      "name": "Energy Glaives",
-      "arc": "B",
-      "attack": "3",
+      "name": "Energy Glaives (Beam)",
+      "arc": "S",
+      "attack": "2",
       "lock": "3+",
-      "damage": "2",
+      "damage": "4",
       "type": "E",
-      "special": "Overcharge, Volley-2"
+      "special": "Alt-1, Reave-2, Fusillade-1"
      },
      {
       "name": "Neutron Missiles",
@@ -871,7 +952,7 @@
    "category": "heavy",
    "ship": {
     "name": "Amphion Battleship",
-    "cost": 230,
+    "cost": 250,
     "stats": {
      "thrust": "6\"",
      "scan": "10\"",
@@ -885,22 +966,22 @@
     },
     "weapons": [
      {
-      "name": "Energy Glaives",
+      "name": "Energy Glaives (Pulse)",
       "arc": "B",
-      "attack": "3",
-      "lock": "3+",
+      "attack": "4",
+      "lock": "4+",
       "damage": "2",
       "type": "E",
-      "special": "Overcharge, Volley-2"
+      "special": "Alt-1, Reave-1, Volley-2"
      },
      {
-      "name": "Energy Glaives",
-      "arc": "B",
-      "attack": "3",
+      "name": "Energy Glaives (Beam)",
+      "arc": "S",
+      "attack": "2",
       "lock": "3+",
-      "damage": "2",
+      "damage": "4",
       "type": "E",
-      "special": "Overcharge, Volley-2"
+      "special": "Alt-1, Reave-2, Fusillade-1"
      },
      {
       "name": "Meganova Laser",
@@ -935,7 +1016,7 @@
    "category": "heavy",
    "ship": {
     "name": "Rhadamanthus Battleship",
-    "cost": 220,
+    "cost": 205,
     "stats": {
      "thrust": "10\"",
      "scan": "10\"",
@@ -949,10 +1030,10 @@
     },
     "weapons": [
      {
-      "name": "Heavy Calibre Broadside",
+      "name": "Heavy Calibre Broadside Array",
       "arc": "B",
-      "attack": "1",
-      "lock": "3+",
+      "attack": "3",
+      "lock": "4+",
       "damage": "3",
       "type": "K",
       "special": "Calibre-H, Penetrator, Volley-2"
@@ -1000,7 +1081,7 @@
    "category": "heavy",
    "ship": {
     "name": "Kairos Battleship",
-    "cost": 210,
+    "cost": 200,
     "stats": {
      "thrust": "10\"",
      "scan": "10\"",
@@ -1127,13 +1208,31 @@
     },
     "weapons": [
      {
-      "name": "Heavy Calibre Triple Broadside",
+      "name": "Heavy Calibre Broadside",
       "arc": "B",
-      "attack": "3",
-      "lock": "3+",
+      "attack": "2",
+      "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H/C, Penetrator, Volley-2"
+      "special": "Calibre-H, Penetrator, Volley-2"
+     },
+     {
+      "name": "Heavy Calibre Broadside",
+      "arc": "B",
+      "attack": "2",
+      "lock": "4+",
+      "damage": "3",
+      "type": "K",
+      "special": "Calibre-H, Penetrator, Volley-2"
+     },
+     {
+      "name": "Heavy Calibre Broadside",
+      "arc": "B",
+      "attack": "2",
+      "lock": "4+",
+      "damage": "3",
+      "type": "K",
+      "special": "Calibre-H, Penetrator, Volley-2"
      },
      {
       "name": "Neutron Missiles",
@@ -1189,13 +1288,31 @@
     },
     "weapons": [
      {
-      "name": "Heavy Calibre Triple Broadside",
+      "name": "Heavy Calibre Broadside",
       "arc": "B",
-      "attack": "3",
-      "lock": "3+",
+      "attack": "2",
+      "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H/C, Penetrator, Volley-2"
+      "special": "Calibre-H, Penetrator, Volley-2"
+     },
+     {
+      "name": "Heavy Calibre Broadside",
+      "arc": "B",
+      "attack": "2",
+      "lock": "4+",
+      "damage": "3",
+      "type": "K",
+      "special": "Calibre-H, Penetrator, Volley-2"
+     },
+     {
+      "name": "Heavy Calibre Broadside",
+      "arc": "B",
+      "attack": "2",
+      "lock": "4+",
+      "damage": "3",
+      "type": "K",
+      "special": "Calibre-H, Penetrator, Volley-2"
      },
      {
       "name": "Dark Matter Cannon",
@@ -1204,7 +1321,7 @@
       "lock": "2+",
       "damage": "2",
       "type": "E",
-      "special": "Critical-1, Crippling, Penetrator"
+      "special": "Critical-1, Crippling, High Power, Penetrator"
      }
     ],
     "loads": [],
@@ -1232,7 +1349,7 @@
    "category": "heavy",
    "ship": {
     "name": "Antony Pocket Battleship",
-    "cost": 200,
+    "cost": 195,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -1252,7 +1369,7 @@
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Re-Entry, Volley-2"
+      "special": "Calibre-L, Reave-1, Volley-2"
      }
     ],
     "loads": [
@@ -1265,7 +1382,7 @@
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+      "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the PHR Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature"
      }
     ],
     "groupMin": 1,
@@ -1316,13 +1433,22 @@
       "special": "Close Action"
      },
      {
-      "name": "Glaive Lance",
-      "arc": "FN",
+      "name": "Glaive Lance (Pulse)",
+      "arc": "F",
       "attack": "3",
-      "lock": "2+",
+      "lock": "4+",
       "damage": "2",
       "type": "E",
-      "special": "Overcharge"
+      "special": "Alt-1, Reave-2"
+     },
+     {
+      "name": "Glaive Lance (Beam)",
+      "arc": "FN",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "4",
+      "type": "E",
+      "special": "Alt-1, Focused, High Power, Penetrator"
      }
     ],
     "loads": [],
@@ -1342,7 +1468,7 @@
    "category": "heavy",
    "ship": {
     "name": "Brutus Pocket Battleship",
-    "cost": 210,
+    "cost": 205,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -1371,16 +1497,25 @@
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Re-Entry, Volley-2"
+      "special": "Calibre-L, Reave-1, Volley-2"
      },
      {
-      "name": "Glaive Lance",
-      "arc": "FN",
+      "name": "Glaive Lance (Pulse)",
+      "arc": "F",
       "attack": "3",
-      "lock": "2+",
+      "lock": "4+",
       "damage": "2",
       "type": "E",
-      "special": "Overcharge"
+      "special": "Alt-1, Reave-2"
+     },
+     {
+      "name": "Glaive Lance (Beam)",
+      "arc": "FN",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "4",
+      "type": "E",
+      "special": "Alt-1, Focused, High Power, Penetrator"
      }
     ],
     "loads": [],
@@ -1423,11 +1558,17 @@
       "special": "Anti Wing, Close Action, Volley-2"
      }
     ],
-    "loads": [],
+    "loads": [
+     {
+      "name": "Mines",
+      "launch": "3",
+      "special": "-"
+     }
+    ],
     "specialRules": [
      {
       "name": "Holo Interference Field",
-      "description": "At the end of this ship’s activation, you may place a Holo Interference Field within 3” of this ship. These Holo Interference Fields are removed during the Cleanup step of the End Phase and are circular with a 4” diameter (a D6 or custom template are perfect tokens to represent these). Enemy Ships ignore the target’s Spikes and Signature when attacking through a Holo Interference Field. Enemy Fighters & Bombers underneath the Holo Interference Field when it is placed, or that move/are placed into the Holo Interference Field are removed on a 4+."
+      "description": "At the end of this ship’s activation, you may place a Holo Interference Field within 4” of this ship. These Holo Interference Fields are removed during the Cleanup step of the End Phase and are circular with a 4” diameter (a D6 or custom template are perfect tokens to represent these). Enemy Ships ignore the target’s Spikes and Signature when attacking through a Holo Interference Field. Enemy Fighters & Bombers underneath the Holo Interference Field when it is placed, or that move/ are placed into the Holo Interference Field are removed on a 4+."
      },
      {
       "name": "Vanguard-4\"",
@@ -1508,22 +1649,13 @@
     },
     "weapons": [
      {
-      "name": "Light Calibre Broadside",
+      "name": "Light Calibre Double Broadside",
       "arc": "B",
-      "attack": "6",
+      "attack": "12",
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Volley-2, Re-Entry"
-     },
-     {
-      "name": "Light Calibre Broadside",
-      "arc": "B",
-      "attack": "6",
-      "lock": "5+",
-      "damage": "1",
-      "type": "K",
-      "special": "Calibre-L, Volley-2, Re-Entry"
+      "special": "Calibre-L, Reave-1, Volley-2"
      }
     ],
     "loads": [
@@ -1582,40 +1714,22 @@
     },
     "weapons": [
      {
-      "name": "Light Calibre Broadside",
+      "name": "Light Calibre Double Broadside",
       "arc": "B",
-      "attack": "6",
+      "attack": "12",
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Volley-2, Re-Entry"
+      "special": "Calibre-L, Reave-1, Volley-2"
      },
      {
-      "name": "Light Calibre Broadside",
+      "name": "Medium Calibre Double Broadside",
       "arc": "B",
       "attack": "6",
-      "lock": "5+",
-      "damage": "1",
-      "type": "K",
-      "special": "Calibre-L, Volley-2, Re-Entry"
-     },
-     {
-      "name": "Medium Calibre Broadside",
-      "arc": "B",
-      "attack": "3",
       "lock": "4+",
       "damage": "2",
       "type": "K",
-      "special": "Volley-2, Fusillade-1"
-     },
-     {
-      "name": "Medium Calibre Broadside",
-      "arc": "B",
-      "attack": "3",
-      "lock": "4+",
-      "damage": "2",
-      "type": "K",
-      "special": "Volley-2, Fusillade-1"
+      "special": "Fusillade-1, Volley-2"
      }
     ],
     "loads": [],
@@ -1654,7 +1768,7 @@
    "category": "medium",
    "ship": {
     "name": "Leonnatus Supercruiser",
-    "cost": 190,
+    "cost": 178,
     "stats": {
      "thrust": "7\"",
      "scan": "8\"",
@@ -1670,8 +1784,8 @@
      {
       "name": "Heavy Calibre Double Broadside",
       "arc": "B",
-      "attack": "2",
-      "lock": "3+",
+      "attack": "4",
+      "lock": "4+",
       "damage": "3",
       "type": "K",
       "special": "Calibre-H, Penetrator, Volley-2"
@@ -1683,7 +1797,7 @@
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Re-Entry, Volley-2"
+      "special": "Calibre-L, Reave-1, Volley-2"
      }
     ],
     "loads": [],
@@ -1758,7 +1872,7 @@
    "category": "medium",
    "ship": {
     "name": "Seleucus Supercruiser",
-    "cost": 200,
+    "cost": 176,
     "stats": {
      "thrust": "7\"",
      "scan": "8\"",
@@ -1778,7 +1892,7 @@
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Re-Entry, Volley-2"
+      "special": "Calibre-L, Reave-1, Volley-2"
      },
      {
       "name": "Light Calibre Double Broadside",
@@ -1787,14 +1901,14 @@
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Re-Entry, Volley-2"
+      "special": "Calibre-L, Reave-1, Volley-2"
      }
     ],
     "loads": [],
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+      "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the PHR Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
@@ -1813,7 +1927,7 @@
    "category": "medium",
    "ship": {
     "name": "Ptolemy Supercruiser",
-    "cost": 174,
+    "cost": 168,
     "stats": {
      "thrust": "7\"",
      "scan": "8\"",
@@ -1827,15 +1941,6 @@
     },
     "weapons": [
      {
-      "name": "Light Calibre Double Broadside",
-      "arc": "B",
-      "attack": "12",
-      "lock": "5+",
-      "damage": "1",
-      "type": "K",
-      "special": "Calibre-L, Re-Entry, Volley-2"
-     },
-     {
       "name": "Hornet Drone Locus",
       "arc": "F/S/R",
       "attack": "8",
@@ -1843,13 +1948,22 @@
       "damage": "2",
       "type": "K",
       "special": "Close Action"
+     },
+     {
+      "name": "Light Calibre Double Broadside",
+      "arc": "B",
+      "attack": "12",
+      "lock": "5+",
+      "damage": "1",
+      "type": "K",
+      "special": "Calibre-L, Reave-1, Volley-2"
      }
     ],
     "loads": [],
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+      "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the PHR Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
@@ -1940,7 +2054,7 @@
    "category": "medium",
    "ship": {
     "name": "Orpheus Assault Troopship",
-    "cost": 170,
+    "cost": 166,
     "stats": {
      "thrust": "7\"",
      "scan": "8\"",
@@ -1960,7 +2074,7 @@
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Volley-2, Re-Entry"
+      "special": "Calibre-L, Reave-1, Volley-2"
      },
      {
       "name": "Light Calibre Broadside",
@@ -1969,7 +2083,7 @@
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Volley-2, Re-Entry"
+      "special": "Calibre-L, Reave-1, Volley-2"
      },
      {
       "name": "Supernova Laser",
@@ -2048,7 +2162,7 @@
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Volley-2, Re-Entry"
+      "special": "Calibre-L, Reave-1, Volley-2"
      }
     ],
     "loads": [
@@ -2081,7 +2195,7 @@
    "category": "medium",
    "ship": {
     "name": "Hector Heavy Cruiser",
-    "cost": 134,
+    "cost": 130,
     "stats": {
      "thrust": "7\"",
      "scan": "8\"",
@@ -2223,8 +2337,8 @@
      {
       "name": "Heavy Calibre Broadside",
       "arc": "B",
-      "attack": "1",
-      "lock": "3+",
+      "attack": "2",
+      "lock": "4+",
       "damage": "3",
       "type": "K",
       "special": "Calibre-H, Penetrator, Volley-2"
@@ -2232,8 +2346,8 @@
      {
       "name": "Heavy Calibre Broadside",
       "arc": "B",
-      "attack": "1",
-      "lock": "3+",
+      "attack": "2",
+      "lock": "4+",
       "damage": "3",
       "type": "K",
       "special": "Calibre-H, Penetrator, Volley-2"
@@ -2269,7 +2383,7 @@
    "category": "medium",
    "ship": {
     "name": "Teucer Cruiser",
-    "cost": 130,
+    "cost": 122,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -2289,13 +2403,13 @@
       "lock": "4+",
       "damage": "2",
       "type": "K",
-      "special": "Volley-2, Fusillade-1"
+      "special": "Fusillade-1, Volley-2"
      },
      {
       "name": "Heavy Calibre Broadside",
       "arc": "B",
-      "attack": "1",
-      "lock": "3+",
+      "attack": "2",
+      "lock": "4+",
       "damage": "3",
       "type": "K",
       "special": "Calibre-H, Penetrator, Volley-2"
@@ -2421,7 +2535,7 @@
    "category": "medium",
    "ship": {
     "name": "Orion Cruiser",
-    "cost": 105,
+    "cost": 110,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -2506,13 +2620,13 @@
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Volley-2, Re-Entry"
+      "special": "Calibre-L, Reave-1, Volley-2"
      },
      {
       "name": "Heavy Calibre Broadside",
       "arc": "B",
-      "attack": "1",
-      "lock": "3+",
+      "attack": "2",
+      "lock": "4+",
       "damage": "3",
       "type": "K",
       "special": "Calibre-H, Penetrator, Volley-2"
@@ -2551,7 +2665,7 @@
    "category": "medium",
    "ship": {
     "name": "Ajax Cruiser",
-    "cost": 114,
+    "cost": 110,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -2571,7 +2685,7 @@
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Volley-2, Re-Entry"
+      "special": "Calibre-L, Reave-1, Volley-2"
      },
      {
       "name": "Light Calibre Broadside",
@@ -2580,7 +2694,7 @@
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Volley-2, Re-Entry"
+      "special": "Calibre-L, Reave-1, Volley-2"
      },
      {
       "name": "Supernova Laser",
@@ -2616,7 +2730,7 @@
    "category": "medium",
    "ship": {
     "name": "Otera Light Cruiser",
-    "cost": 80,
+    "cost": 88,
     "stats": {
      "thrust": "10\"",
      "scan": "8\"",
@@ -2645,7 +2759,7 @@
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Volley-2, Re-Entry"
+      "special": "Calibre-L, Reave-1, Volley-2"
      }
     ],
     "loads": [],
@@ -2744,7 +2858,7 @@
      },
      {
       "name": "Energy Glaive Pair",
-      "arc": "FN",
+      "arc": "F",
       "attack": "2",
       "lock": "3+",
       "damage": "2",
@@ -2850,7 +2964,7 @@
      {
       "name": "Twin Heavy Calibres",
       "arc": "F",
-      "attack": "1",
+      "attack": "2",
       "lock": "4+",
       "damage": "3",
       "type": "K",
@@ -2911,7 +3025,7 @@
      {
       "name": "Twin Heavy Calibres",
       "arc": "F",
-      "attack": "1",
+      "attack": "2",
       "lock": "4+",
       "damage": "3",
       "type": "K",
@@ -2919,7 +3033,7 @@
      },
      {
       "name": "Energy Glaive Pair",
-      "arc": "FN",
+      "arc": "F",
       "attack": "2",
       "lock": "3+",
       "damage": "2",
@@ -2943,7 +3057,7 @@
    "category": "light",
    "ship": {
     "name": "Ariadne Destroyer",
-    "cost": 60,
+    "cost": 57,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -2959,7 +3073,7 @@
      {
       "name": "Twin Heavy Calibres",
       "arc": "F",
-      "attack": "1",
+      "attack": "2",
       "lock": "4+",
       "damage": "3",
       "type": "K",
@@ -2995,7 +3109,7 @@
    "category": "light",
    "ship": {
     "name": "Electra Destroyer",
-    "cost": 50,
+    "cost": 53,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -3011,7 +3125,7 @@
      {
       "name": "Twin Heavy Calibres",
       "arc": "F",
-      "attack": "1",
+      "attack": "2",
       "lock": "4+",
       "damage": "3",
       "type": "K",
@@ -3020,7 +3134,7 @@
      {
       "name": "Twin Heavy Calibres",
       "arc": "F",
-      "attack": "1",
+      "attack": "2",
       "lock": "4+",
       "damage": "3",
       "type": "K",
@@ -3157,7 +3271,7 @@
       "lock": "4+",
       "damage": "1",
       "type": "K",
-      "special": "Close Action"
+      "special": "Close Action, Scald-1"
      }
     ],
     "loads": [],
@@ -3191,7 +3305,7 @@
    "category": "light",
    "ship": {
     "name": "Philonoe Torpedo Monitor",
-    "cost": 65,
+    "cost": 70,
     "stats": {
      "thrust": "5\"",
      "scan": "10\"",
@@ -3248,7 +3362,7 @@
    "category": "light",
    "ship": {
     "name": "Pollux Escort Frigate",
-    "cost": 65,
+    "cost": 61,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -3315,7 +3429,7 @@
    "category": "light",
    "ship": {
     "name": "Castor Monitor",
-    "cost": 55,
+    "cost": 52,
     "stats": {
      "thrust": "5\"",
      "scan": "10\"",
@@ -3373,7 +3487,7 @@
      "scan": "8\"",
      "sig": "3\"",
      "hull": 5,
-     "es": "3+",
+     "es": "4+",
      "ks": "4+",
      "bs": "-",
      "g": "1-2",
@@ -3454,7 +3568,12 @@
      {
       "name": "Fighters & Bombers",
       "launch": "1",
-      "special": "-"
+      "special": "Alt-1"
+     },
+     {
+      "name": "Mines",
+      "launch": "1",
+      "special": "Alt-1"
      }
     ],
     "specialRules": [
@@ -3520,7 +3639,7 @@
      },
      {
       "name": "Advanced ECM Suite",
-      "description": "When a friendly Group (including this Ship’s Group) within 4\" of this Ship is attacked, you may have this Ship use its Advanced ECM Suite. If you do, after all weapons have been assigned, reduce the Lock of weapons belonging to one of the attacking Ships by 1 for the rest of the round. The attacking group must be on the same orbital layer as this ship. A Ship can be affected multiple times each round by this rule but each Ship with this rule can only use it once per round."
+      "description": "When a friendly Group (including this Ship’s Group) within 4” of this Ship is attacked, you may have this Ship use its Advanced ECM Suite. If you do, after all weapons have been assigned, reduce the Lock of weapons belonging to one of the attacking Ships by 1 for the rest of the round. The attacking group must be on the same orbital layer as this ship. A Ship can only be affected by this rule once each round and each Ship with this rule can only use it once per round."
      }
     ],
     "groupMin": 1,
@@ -3607,21 +3726,12 @@
     "weapons": [
      {
       "name": "Medium Calibre Bank",
-      "arc": "SL",
+      "arc": "B",
       "attack": "2",
       "lock": "4+",
       "damage": "2",
       "type": "K",
-      "special": "-"
-     },
-     {
-      "name": "Medium Calibre Bank",
-      "arc": "SR",
-      "attack": "2",
-      "lock": "4+",
-      "damage": "2",
-      "type": "K",
-      "special": "-"
+      "special": "Volley-2"
      }
     ],
     "loads": [],
@@ -3703,14 +3813,14 @@
    "category": "light",
    "ship": {
     "name": "Echo Corvette",
-    "cost": 28,
+    "cost": 25,
     "stats": {
      "thrust": "12\"",
      "scan": "8\"",
      "sig": "2\"",
      "hull": 2,
-     "es": "4+",
-     "ks": "6+",
+     "es": "5+",
+     "ks": "5+",
      "bs": "-",
      "g": "1-4",
      "special": "Descent, Stealth"
@@ -3732,7 +3842,7 @@
       "lock": "4+",
       "damage": "1",
       "type": "K",
-      "special": "Air to Air, Close Action"
+      "special": "Air to Air, Calibre-L, Close Action, Reave-1"
      }
     ],
     "loads": [],
@@ -4927,13 +5037,22 @@
     },
     "weapons": [
      {
-      "name": "Glaive Lance",
-      "arc": "FN",
+      "name": "Glaive Lance (Pulse)",
+      "arc": "F",
       "attack": "3",
-      "lock": "2+",
+      "lock": "4+",
       "damage": "2",
       "type": "E",
-      "special": "Overcharge"
+      "special": "Alt-1, Reave-2"
+     },
+     {
+      "name": "Glaive Lance (Beam)",
+      "arc": "FN",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "4",
+      "type": "E",
+      "special": "Alt-1, Focused, High Power, Penetrator"
      },
      {
       "name": "Black Nano Drones",

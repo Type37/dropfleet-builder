@@ -601,7 +601,7 @@
    "category": "heavy",
    "ship": {
     "name": "Faust Super Battleship",
-    "cost": 265,
+    "cost": 255,
     "stats": {
      "thrust": "6\"",
      "scan": "8\"",
@@ -619,9 +619,9 @@
       "arc": "F",
       "attack": "3",
       "lock": "3+",
-      "damage": "2",
+      "damage": "1",
       "type": "E",
-      "special": "Close Action, Penetrator"
+      "special": "Close Action, Critical-1, Penetrator, Volley-2"
      },
      {
       "name": "Oculus Beam Array",
@@ -704,7 +704,7 @@
    "category": "heavy",
    "ship": {
     "name": "Samael Super Battleship",
-    "cost": 285,
+    "cost": 275,
     "stats": {
      "thrust": "6\"",
      "scan": "8\"",
@@ -820,7 +820,7 @@
    "category": "heavy",
    "ship": {
     "name": "Bael Super Battleship",
-    "cost": 305,
+    "cost": 295,
     "stats": {
      "thrust": "6\"",
      "scan": "8\"",
@@ -950,27 +950,18 @@
       "arc": "F",
       "attack": "3",
       "lock": "3+",
-      "damage": "3",
+      "damage": "1",
       "type": "E",
-      "special": "Close Action, Penetrator"
+      "special": "Close Action, Critical-1, Penetrator, Volley-3"
      },
      {
-      "name": "Furnace Fangs",
+      "name": "Furnace Fang Quad",
       "arc": "FN",
       "attack": "6",
       "lock": "2+",
       "damage": "1",
       "type": "E",
-      "special": "Burnthrough-1, Crippling-Fire, Focused"
-     },
-     {
-      "name": "Furnace Fangs",
-      "arc": "FN",
-      "attack": "6",
-      "lock": "2+",
-      "damage": "1",
-      "type": "E",
-      "special": "Burnthrough-1, Crippling-Fire, Focused"
+      "special": "Burnthrough-1, Crippling-Fire, Focused, Volley-2"
      },
      {
       "name": "Oculus Beam Array",
@@ -1060,7 +1051,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Close Action, Penetrator"
+      "special": "Close Action, Critical-1, Penetrator"
      },
      {
       "name": "Oculus Beam Array",
@@ -1580,7 +1571,7 @@
    "category": "heavy",
    "ship": {
     "name": "Umbra Battlecruiser",
-    "cost": 235,
+    "cost": 225,
     "stats": {
      "thrust": "10\"",
      "scan": "9\"",
@@ -1610,6 +1601,15 @@
       "damage": "1",
       "type": "K",
       "special": "Close Action, Fusillade-2, Scald-2"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
      }
     ],
     "loads": [
@@ -1626,7 +1626,7 @@
      },
      {
       "name": "Oculus Booster",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of this Ship’s activation, you may place an Oculus token on an enemy Group in line of sight in this Ship’s Front Arc. Unused Oculus tokens placed by this Ship persist between rounds and are only removed when this Ship would place another Oculus token or when a Ship with an Oculus token goes on the Silent Running order.\n\nWhen you assign “Oculus” weapons to a Group that has an Oculus Token and is within Scan range of the attacking Group, you may remove the token. If you do, one of the Group’s “Oculus” Weapon Systems’ Type becomes Core against that Group for that attack."
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of this Ship’s activation, you may place an Oculus token on an enemy Group in line of sight in this Ship’s Front Arc. Unused Oculus tokens placed by this Ship persist between rounds and are only removed when this Ship would place another Oculus token or when a Ship with an Oculus token goes on the Silent Running order.\nWhen you assign “Oculus” weapons to a Group that has an Oculus token and is within Scan range of the attacking Group, you may remove the Oculus token. If you do, choose one of the attacking Group’s “Oculus” Weapon Systems. That Weapon System’s Type becomes Core on each attacking Ship within Scan range of the defending Group. Weapons on Ships outside of Scan range of the defending Group are unaffected."
      }
     ],
     "groupMin": 1,
@@ -1690,6 +1690,15 @@
       "damage": "1",
       "type": "K",
       "special": "Close Action, Fusillade-2, Scald-2"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
      }
     ],
     "loads": [
@@ -1757,6 +1766,15 @@
       "damage": "1",
       "type": "K",
       "special": "Close Action, Fusillade-2, Scald-2"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
      }
     ],
     "loads": [
@@ -1850,6 +1868,15 @@
       "damage": "2",
       "type": "E",
       "special": "Scald-1, Volley-2"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
      }
     ],
     "loads": [],
@@ -1969,13 +1996,91 @@
    }
   },
   {
+   "id": "791d-8913-f59e-55c4",
+   "name": "The Spectre of Eden - Death Arrow Heavy Cruiser",
+   "category": "medium",
+   "ship": {
+    "name": "The Spectre of Eden - Death Arrow Heavy Cruiser",
+    "cost": 124,
+    "stats": {
+     "thrust": "16\"",
+     "scan": "8\"",
+     "sig": "8\"",
+     "hull": 12,
+     "es": "4+",
+     "ks": "3+",
+     "bs": "6+",
+     "g": "1",
+     "special": "Hero, Unique"
+    },
+    "weapons": [
+     {
+      "name": "Oculus Beams",
+      "arc": "F",
+      "attack": "1",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Scald-1"
+     },
+     {
+      "name": "Plasma Tempest",
+      "arc": "F/S",
+      "attack": "8",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Fusillade-2, Scald-2"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
+     }
+    ],
+    "loads": [],
+    "specialRules": [
+     {
+      "name": "Hero",
+      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet.",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Unique",
+      "description": "You may only take one Group of this Ship.",
+      "page": "37",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": true,
+    "tonnage": "M",
+    "famousShipsPrefix": "Only ship of the class:",
+    "famousShips": [
+     "Death Arrow"
+    ],
+    "lore": "The Death Arrow is the fastest vessel of cruiser tonnage in known space. Outpacing even fast frigates, she was clearly built for nothing but speed and the savage application of plasma weaponry. Her armament matches the common Wyvern class, but she features the rarer form of superstructure and an entirely new, overcharged drive module and tail section, upping her to heavy cruiser classification, although over half her mass is estimated to be drive-related.\n\nUnusually, whatever malevolent Scourge commands this apparently unique vessel has ‘earned’ a nickname: The Spectre of Eden. Time and again, this ship has appeared, alone, and has quickly closed with and annihilated weaker adversaries, usually merchantmen, before smoothly outpacing any pursuit. Despite the UCM’s near-total conquest of the Eden system, this ship remains a looming menace to all who sail there. The Death Arrow and her captain have thus cost the UCM more resources in extra security cordons and lost tonnage than any other vessel."
+   }
+  },
+  {
    "id": "646f-4712-7d5e-0fc9",
    "name": "Shenlong Heavy Cruiser",
    "category": "medium",
    "ship": {
     "name": "Shenlong Heavy Cruiser",
-    "specs": {"length": "1,007m", "beam": "401m (variable)", "height": "354m (variable)", "displacement": "8,843,000m³"},
-    "cost": 135,
+    "specs": {
+     "length": "1,007m",
+     "beam": "401m (variable)",
+     "height": "354m (variable)",
+     "displacement": "8,843,000m³"
+    },
+    "cost": 132,
     "stats": {
      "thrust": "8\"",
      "scan": "6\"",
@@ -2053,7 +2158,7 @@
    "category": "medium",
    "ship": {
     "name": "Raiju Heavy Cruiser",
-    "cost": 125,
+    "cost": 120,
     "stats": {
      "thrust": "8\"",
      "scan": "6\"",
@@ -2281,7 +2386,7 @@
    "category": "medium",
    "ship": {
     "name": "Wyvern Cruiser",
-    "cost": 85,
+    "cost": 88,
     "stats": {
      "thrust": "10\"",
      "scan": "6\"",
@@ -2669,7 +2774,7 @@
    "category": "light",
    "ship": {
     "name": "The Hated - Little Chaos Heavy Destroyer",
-    "cost": 90,
+    "cost": 83,
     "stats": {
      "thrust": "10\"",
      "scan": "6\"",
@@ -2752,7 +2857,7 @@
    "category": "light",
    "ship": {
     "name": "Revenant Destroyer",
-    "cost": 66,
+    "cost": 61,
     "stats": {
      "thrust": "10\"",
      "scan": "6\"",
@@ -2788,7 +2893,12 @@
      {
       "name": "Fighters & Bombers",
       "launch": "1",
-      "special": "-"
+      "special": "Alt-1"
+     },
+     {
+      "name": "Mines",
+      "launch": "2",
+      "special": "Alt-1"
      }
     ],
     "specialRules": [
@@ -2868,9 +2978,9 @@
       "special": "Scald-1"
      },
      {
-      "name": "Oculus Beams",
-      "arc": "F/S",
-      "attack": "1",
+      "name": "Oculus Beam Cluster",
+      "arc": "F",
+      "attack": "2",
       "lock": "3+",
       "damage": "2",
       "type": "E",
@@ -2879,7 +2989,7 @@
      {
       "name": "Seekers",
       "arc": "F/S/R",
-      "attack": "4",
+      "attack": "6",
       "lock": "3+",
       "damage": "1",
       "type": "E",
@@ -2968,7 +3078,7 @@
      {
       "name": "Furnace Blaster",
       "arc": "FN",
-      "attack": "4",
+      "attack": "5",
       "lock": "3+",
       "damage": "1",
       "type": "E",
@@ -3131,7 +3241,7 @@
       "arc": "F",
       "attack": "2",
       "lock": "3+",
-      "damage": "2",
+      "damage": "3",
       "type": "K",
       "special": "Close Action, Crippling-Fire, Scald-2"
      }
@@ -3168,7 +3278,7 @@
    "category": "light",
    "ship": {
     "name": "Apsasu Barge",
-    "cost": 60,
+    "cost": 68,
     "stats": {
      "thrust": "6\"",
      "scan": "8\"",
@@ -3591,7 +3701,7 @@
    "category": "light",
    "ship": {
     "name": "Harpy Frigate",
-    "cost": 40,
+    "cost": 37,
     "stats": {
      "thrust": "12\"",
      "scan": "6\"",
@@ -3654,14 +3764,14 @@
      "es": "6+",
      "ks": "6+",
      "bs": "-",
-     "g": "1-3",
+     "g": "1-4",
      "special": "Impetuous, Rare, Vanguard-7”"
     },
     "weapons": [
      {
       "name": "Engine Needle",
       "arc": "FN",
-      "attack": "2",
+      "attack": "3",
       "lock": "3+",
       "damage": "1",
       "type": "E",
@@ -3705,7 +3815,10 @@
    "category": "light",
    "ship": {
     "name": "Hiruko Boarding Cutter",
-    "specs": {"length": "454m", "displacement": "1,800,000m³"},
+    "specs": {
+     "length": "454m",
+     "displacement": "1,800,000m³"
+    },
     "cost": 23,
     "stats": {
      "thrust": "14\"",
@@ -3715,7 +3828,7 @@
      "es": "6+",
      "ks": "6+",
      "bs": "-",
-     "g": "1-3",
+     "g": "1-4",
      "special": "Impetuous, Vanguard-7”"
     },
     "weapons": [
@@ -3723,7 +3836,7 @@
       "name": "Plasma Torch",
       "arc": "F",
       "attack": "3",
-      "lock": "4+",
+      "lock": "3+",
       "damage": "1",
       "type": "E",
       "special": "Close Action, Scald-2, Sustained Fire"
@@ -3783,7 +3896,7 @@
       "name": "Plasma Squall",
       "arc": "F/S/R",
       "attack": "3",
-      "lock": "4+",
+      "lock": "3+",
       "damage": "1",
       "type": "K",
       "special": "Air to Air, Close Action, Scald-2"
@@ -4659,7 +4772,7 @@
    "category": "medium",
    "ship": {
     "name": "Nereid Supercruiser",
-    "cost": 190,
+    "cost": 180,
     "stats": {
      "thrust": "8\"",
      "scan": "6\"",
@@ -4680,6 +4793,15 @@
       "damage": "2",
       "type": "E",
       "special": "Scald-1"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
      }
     ],
     "loads": [
@@ -4743,6 +4865,15 @@
       "damage": "2",
       "type": "E",
       "special": "Calibre-H/C, Close Action, Mauler, Penetrator"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
      }
     ],
     "loads": [],
@@ -4761,7 +4892,7 @@
    "category": "medium",
    "ship": {
     "name": "Nixie Supercruiser",
-    "cost": 145,
+    "cost": 140,
     "stats": {
      "thrust": "8\"",
      "scan": "6\"",
@@ -4782,6 +4913,15 @@
       "damage": "2",
       "type": "E",
       "special": "Scald-1"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
      }
     ],
     "loads": [],
@@ -4796,7 +4936,7 @@
      },
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the Scourge Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+      "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the Scourge Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
@@ -4842,6 +4982,15 @@
       "damage": "1",
       "type": "E",
       "special": "Burnthrough-1, Crippling-2xFire, Focused"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
      }
     ],
     "loads": [],
@@ -4872,7 +5021,7 @@
    "category": "heavy",
    "ship": {
     "name": "Kikimora Pocket Battleship",
-    "cost": 230,
+    "cost": 215,
     "stats": {
      "thrust": "8\"",
      "scan": "6\"",
@@ -4902,6 +5051,15 @@
       "damage": "1",
       "type": "E",
       "special": "Burnthrough-1, Crippling-2xFire, Focused"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
      }
     ],
     "loads": [
@@ -4922,7 +5080,7 @@
      },
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the Scourge Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+      "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the Scourge Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature"
      }
     ],
     "groupMin": 1,
@@ -5045,6 +5203,15 @@
       "damage": "2",
       "type": "E",
       "special": "Calibre-H/C, Close Action, Mauler, Penetrator"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
      }
     ],
     "loads": [
@@ -5074,7 +5241,7 @@
    "category": "heavy",
    "ship": {
     "name": "Fossegrim Pocket Battleship",
-    "cost": 195,
+    "cost": 190,
     "stats": {
      "thrust": "8\"",
      "scan": "6\"",
@@ -5104,6 +5271,15 @@
       "damage": "1",
       "type": "K",
       "special": "Close Action, Fusillade-2, Scald-2"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
      }
     ],
     "loads": [
@@ -5124,7 +5300,7 @@
      },
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the Scourge Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+      "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the Scourge Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
