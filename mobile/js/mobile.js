@@ -4083,7 +4083,7 @@
   // radio row in the group screen; `readOnly` drops the radio for the Unit Reference.
   function featureOptionHtml(ft, slot, sel, readOnly) {
     const stat = (ft.features && ft.features[0]) ? ft.features[0] : null;
-    const detail = stat ? `ES ${stat.es || '-'}, KS ${stat.ks || '-'}${stat.special && stat.special !== '-' ? ', ' + stat.special : ''}` : '';
+    const detail = stat ? `ES ${stat.es || '-'}, KS ${stat.ks || '-'}${stat.hull ? ', Hull ' + stat.hull : ''}${stat.special && stat.special !== '-' ? ', ' + stat.special : ''}` : '';
     // Show every option's full rules inline so they can be compared before picking.
     const rulesHtml = (ft.rules || []).map(r =>
       `<div class="feature-rule">${r.description ? `<b>${esc(r.name)}:</b> ${ruleHtml(r.description)}` : `<b>${esc(r.name)}</b>`}</div>`
@@ -4358,7 +4358,7 @@
     lists.forEach(ln => { const list = (f.systemsLists || {})[ln]; if (list) sections += optionSection(ln, list.options, 'oncePerShip'); });
     if (carriers && factionFeatures(fk).length) {
       sections += `<div class="pr-section-title">Deployable Features</div><div class="pr-glossary">${factionFeatures(fk).map(ft => {
-        const bits = (ft.features || []).map(x => { collectSpecial(x.special); return `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`; });
+        const bits = (ft.features || []).map(x => { collectSpecial(x.special); return `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.hull ? ` Hull ${x.hull}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`; });
         (ft.weapons || []).forEach(w => { collectSpecial(w.special); bits.push(`${w.name}: ${w.scan ? `Scan ${w.scan}, ` : ''}Att ${w.attack}, Lock ${w.lock}, Dmg ${w.damage}${w.type || ''}${w.special && w.special !== '-' ? ', ' + w.special : ''}`); });
         (ft.loads || []).forEach(l => { collectSpecial(l.special); bits.push(loadText(l)); });
         return `<div class="pr-gloss"><b>${esc(ft.name)}</b> (${esc(cost(ft.cost))})${bits.length ? ': ' + esc(bits.join('; ')) : ''}</div>`

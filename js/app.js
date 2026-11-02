@@ -4413,7 +4413,7 @@ let activeGroupId = null;
   function renderFeatureStats(feat) {
     if (!feat) return '';
     const statLine = (feat.features || []).map(f =>
-      `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.special && f.special !== '-' ? `, ${esc(f.special)}` : ''}</span>`
+      `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.hull ? ` Hull ${f.hull}` : ''}${f.special && f.special !== '-' ? `, ${esc(f.special)}` : ''}</span>`
     ).join('');
     const weapons = renderFeatureWeapons(feat) + renderFeatureLoads(feat);
     const ruleChips = (feat.rules || []).map(r =>
@@ -4491,7 +4491,7 @@ let activeGroupId = null;
   // text (so options can be compared before picking).
   function renderFeatureFullRules(feat) {
     const statLine = (feat.features || []).map(f =>
-      `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.special && f.special !== '-' ? `, ${esc(f.special)}` : ''}</span>`
+      `<span class="station-stat">${esc(f.name)}${f.es ? ` ES ${f.es}` : ''}${f.ks ? ` KS ${f.ks}` : ''}${f.hull ? ` Hull ${f.hull}` : ''}${f.special && f.special !== '-' ? `, ${esc(f.special)}` : ''}</span>`
     ).join('');
     const weapons = renderFeatureWeapons(feat) + renderFeatureLoads(feat);
     const rules = (feat.rules || []).map(r =>
@@ -6920,7 +6920,7 @@ let activeGroupId = null;
       if (chosenFeats.length) {
         const featLines = chosenFeats.map(name => {
           const feat = ((shipDB[f.faction] || {}).deployableFeatures || []).find(df => df.name === name);
-          const fStat = feat ? (feat.features || []).map(x => `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`).join('; ') : '';
+          const fStat = feat ? (feat.features || []).map(x => `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.hull ? ` Hull ${x.hull}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`).join('; ') : '';
           return `${esc(name)}${fStat ? ', ' + esc(fStat) : ''}`;
         });
         const label = chosenFeats.length > 1 ? 'Deployable Features:' : 'Deployable Feature:';
@@ -11297,7 +11297,7 @@ let activeGroupId = null;
     });
     if (carriers && (fdb.deployableFeatures || []).length) {
       const rows = fdb.deployableFeatures.map(ft => {
-        const bits = (ft.features || []).map(x => { addSpecials(x.special); return `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`; });
+        const bits = (ft.features || []).map(x => { addSpecials(x.special); return `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.hull ? ` Hull ${x.hull}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`; });
         (ft.weapons || []).forEach(w => { addSpecials(w.special); bits.push(`${w.name}: ${w.scan ? `Scan ${w.scan}, ` : ''}Att ${w.attack}, Lock ${w.lock}, Dmg ${w.damage}${w.type || ''}${w.special && w.special !== '-' ? ', ' + w.special : ''}`); });
         const launch = loadsLine(ft.loads);
         const rules = (ft.rules || []).map(r => printRuleSpan([r.name, r.description || ''])).join('');
