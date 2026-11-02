@@ -1,8 +1,8 @@
 {
  "game": "Dropfleet Commander",
  "book": "A5 Dropfleet Rulebook (Print Friendly)",
- "edition": "2.3.1",
- "source": "A5_Dropfleet_Rulebook_2.3.1_Print_Friendly.pdf",
+ "edition": "2.4",
+ "source": "A5_Dropfleet_Rulebook_2.4_Print_Friendly.pdf",
  "generator": "scripts/extract-rules-wiki.py",
  "verbatim": true,
  "chapters": [
@@ -435,11 +435,11 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Modifiers cannot make a dice roll impossible or certain.",
+           "t": "Modifiers are cumulative and cannot make a dice roll impossible or certain. ",
            "b": true
           },
           {
-           "t": " Stop at the minimum/maximum value e.g. a 6+ or 2+ on a D6."
+           "t": "Total up all modifiers to a dice roll before rolling any dice. Dice rolls cannot be modified to be better than a 2+ or worse than a 6+.”"
           }
          ]
         }
@@ -758,78 +758,137 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Ships in Atmosphere may move a maximum of 2”",
-           "b": true
-          },
-          {
-           "t": "."
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
            "t": "Ships with the Descent special rule are designed to work in Atmosphere and are referred to as Descent Ships, which may be part of Descent Groups. The atmospheric operational depth of these Ships is far lower than normal ships."
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "When attacking a City or a Descent Ship in Atmosphere",
-           "b": true
-          },
-          {
-           "t": ", that attack always hits on a 6+ and can never cause a critical."
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "When attacking a "
-          },
-          {
-           "t": "non-Descent Ship",
-           "b": true
-          },
-          {
-           "t": " in Atmosphere, reduce the lock of Weapons attacking it by 1."
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "When attacking "
-          },
-          {
-           "t": "into Orbit from Atmosphere",
-           "b": true
-          },
-          {
-           "t": ", any attack always hits on a 6+."
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "A non-Descent Ship that ends its activation in Atmosphere takes D3 damage.",
-           "b": true
-          },
-          {
-           "t": " Colossal Ships take 2D3 damage instead."
           }
          ]
         }
        ],
-       "children": []
+       "children": [
+        {
+         "id": "3.1.2.1",
+         "number": "3.1.2.1",
+         "heading": "Atmospheric Penalties",
+         "page": 9,
+         "body": [
+          {
+           "kind": "p",
+           "runs": [
+            {
+             "t": "Ships have the following Atmospheric Penalties due to Atmosphere.",
+             "b": true
+            }
+           ]
+          },
+          {
+           "kind": "h",
+           "runs": [
+            {
+             "t": "Drag"
+            }
+           ]
+          },
+          {
+           "kind": "p",
+           "runs": [
+            {
+             "t": "Ships in Atmosphere may move a maximum of 2”",
+             "b": true
+            },
+            {
+             "t": "."
+            }
+           ]
+          },
+          {
+           "kind": "h",
+           "runs": [
+            {
+             "t": "Suboptimal Weapon"
+            }
+           ]
+          },
+          {
+           "kind": "p",
+           "runs": [
+            {
+             "t": "When attacking a City or a Descent Ship in Atmosphere",
+             "b": true
+            },
+            {
+             "t": ", that attack always hits on a 6+ and can never cause a critical."
+            }
+           ]
+          },
+          {
+           "kind": "h",
+           "runs": [
+            {
+             "t": "Innacurate"
+            }
+           ]
+          },
+          {
+           "kind": "p",
+           "runs": [
+            {
+             "t": "When attacking a "
+            },
+            {
+             "t": "non-Descent Ship",
+             "b": true
+            },
+            {
+             "t": " in Atmosphere, reduce the lock of Weapons attacking it by 1."
+            }
+           ]
+          },
+          {
+           "kind": "h",
+           "runs": [
+            {
+             "t": "Blind Shot"
+            }
+           ]
+          },
+          {
+           "kind": "p",
+           "runs": [
+            {
+             "t": "When attacking "
+            },
+            {
+             "t": "into Orbit from Atmosphere",
+             "b": true
+            },
+            {
+             "t": ", any attack always hits on a 6+."
+            }
+           ]
+          },
+          {
+           "kind": "h",
+           "runs": [
+            {
+             "t": "Buckling"
+            }
+           ]
+          },
+          {
+           "kind": "p",
+           "runs": [
+            {
+             "t": "A non-Descent Ship that ends its activation in Atmosphere takes D3 damage.",
+             "b": true
+            },
+            {
+             "t": " Colossal Ships take 2D3 damage instead."
+            }
+           ]
+          }
+         ],
+         "children": []
+        }
+       ]
       }
      ]
     },
@@ -1076,7 +1135,39 @@
            "kind": "li",
            "runs": [
             {
-             "t": "They ignore the effects of Navigation Offline tokens, and the Orbital Decay Crippling Effect. • It ignores the effects of Defence Systems Offline (individual Ships are still affected when targeted/affected individually). • They gain an unmodifiable 6+ Backup Save against hits caused by attacks • They may measure Weapons range and Arcs from the Group’s Lead Ship. • They may Launch Assets from the Lead Ship instead of the launching Carrier."
+             "t": "Any Crippling Effect rolls for Ships in this Group of a 10+ become a Structural Damage result instead. Crippling effects due to special rules are unaffected."
+            }
+           ]
+          },
+          {
+           "kind": "li",
+           "runs": [
+            {
+             "t": "It ignores the effects of Defence Systems Offline (individual Ships are still affected when targeted/affected individually)."
+            }
+           ]
+          },
+          {
+           "kind": "li",
+           "runs": [
+            {
+             "t": "They gain an unmodifiable 6+ Backup Save against hits caused by attacks."
+            }
+           ]
+          },
+          {
+           "kind": "li",
+           "runs": [
+            {
+             "t": "They may measure Weapons range from the Group’s Lead Ship (targets must still be in the attacking Ship’s own arcs)."
+            }
+           ]
+          },
+          {
+           "kind": "li",
+           "runs": [
+            {
+             "t": "They may Launch Assets from the Lead Ship instead of the launching Carrier."
             }
            ]
           }
@@ -1157,7 +1248,7 @@
      "id": "3.4",
      "number": "3.4",
      "heading": "Arcs",
-     "page": 11,
+     "page": 12,
      "body": [
       {
        "kind": "p",
@@ -1195,7 +1286,7 @@
        "id": "3.4.1",
        "number": "3.4.1",
        "heading": "Front/Side/Rear (F/S/R)",
-       "page": 11,
+       "page": 12,
        "body": [
         {
          "kind": "p",
@@ -1220,7 +1311,7 @@
        "id": "3.4.2",
        "number": "3.4.2",
        "heading": "Front/Rear Narrow (FN/RN)",
-       "page": 11,
+       "page": 12,
        "body": [
         {
          "kind": "p",
@@ -1237,13 +1328,13 @@
        "id": "3.4.3",
        "number": "3.4.3",
        "heading": "Broadside (B)",
-       "page": 11,
+       "page": 12,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "Side-mounted Broadside Weapons are noted on Weapon profiles as a B. Their arcs combine the entire S arc along with the segments of F and R arcs not covered by the FN and RN arcs. Each side of a Broadside Weapon is a separate arc."
+           "t": "Side-mounted Broadside Weapons are noted on Weapon profiles as a B. Their arcs combine the entire S arc along with the segments of F and R arcs not covered by the FN and RN arcs. Broadside Arcs are separate arcs and sometimes restricted to either Left (BL) or Right (BR) sides.”"
           }
          ]
         }
@@ -1258,14 +1349,14 @@
    "id": "4",
    "number": "4",
    "heading": "Preparation",
-   "page": 12,
+   "page": 13,
    "body": [],
    "children": [
     {
      "id": "4.1",
      "number": "4.1",
      "heading": "Game Size",
-     "page": 12,
+     "page": 13,
      "body": [
       {
        "kind": "p",
@@ -1330,7 +1421,7 @@
      "id": "4.2",
      "number": "4.2",
      "heading": "Build Your Fleet",
-     "page": 12,
+     "page": 13,
      "body": [
       {
        "kind": "p",
@@ -1369,7 +1460,7 @@
          ],
          [
           {
-           "t": "No more points of Heavy Ships than Medium Ships."
+           "t": "No more points of Heavy and Colossal Ships than Medium Ships."
           }
          ]
         ],
@@ -1382,7 +1473,7 @@
          ],
          [
           {
-           "t": "Skirmish: 0 Groups. Clash: 1 Group total. Battle: 2 Groups total. Reconquest: 3 Groups total."
+           "t": "Skirmish: 0 Groups.\nClash: 1 Group total.\nBattle: 2 Groups total.\nReconquest: 3 Groups total.\nNo more points of Heavy and Colossal Ships than Medium Ships."
           }
          ]
         ]
@@ -1418,7 +1509,7 @@
        "id": "4.2.1",
        "number": "4.2.1",
        "heading": "Admirals",
-       "page": 12,
+       "page": 13,
        "body": [
         {
          "kind": "p",
@@ -1528,7 +1619,7 @@
          "id": "4.2.1.1",
          "number": "4.2.1.1",
          "heading": "Abilities and Ability Points",
-         "page": 13,
+         "page": 14,
          "body": [
           {
            "kind": "p",
@@ -1556,24 +1647,24 @@
             [
              [
               {
-               "t": "*AP",
+               "t": "1AP",
                "b": true
               }
              ],
              [
               {
-               "t": "AP Re-roll:",
+               "t": "AP Dice Bonus: ",
                "b": true
               },
               {
-               "t": " Once per Group, Asset, or Dropsite activation, after you roll any dice, you can re-roll any number of those dice. You may re-roll multiple dice in a single roll this way but must re-roll at least one dice, spending 1AP for each dice re-rolled."
+               "t": "Once per Group, Asset, or Dropsite activation, or during the Repair step of the End Phase, after you roll any dice, you can add 1 to the result of one of those dice. This Ability cannot be used on D3s or dice results of a 1, and dice modified by this ability cannot score criticals."
               }
              ]
             ],
             [
              [
               {
-               "t": "2AP",
+               "t": "1AP",
                "b": true
               }
              ],
@@ -1583,7 +1674,7 @@
                "b": true
               },
               {
-               "t": " When a player would roll for Crippling Effects, instead of rolling, make the result of a Crippling Effect roll (for you or your opponent) a 4."
+               "t": " After you roll for Crippling Effects, re-roll the Crippling Effect roll."
               }
              ]
             ],
@@ -1627,7 +1718,7 @@
            "kind": "p",
            "runs": [
             {
-             "t": "Each Ability has a set trigger and its use can only be declared when this trigger is met (e.g. At the start of a Group’s activation). AP is expended when the Ability is declared. Once play has moved on from that trigger, the Ability cannot be used until the next time its trigger would apply."
+             "t": "Each ability has a set trigger and its use can only be declared when this trigger is met (e.g. At the start of a Group’s activation), before any other abilities are resolved. AP is expended when the ability is declared. Multiple abilities can be used on the same trigger, but each ability can only be used once per trigger. If multiple players use an ability on the same trigger, resolve these abilities in reverse initiative order with each player choosing the order their abilities resolve in."
             }
            ]
           }
@@ -1638,7 +1729,7 @@
          "id": "4.2.1.2",
          "number": "4.2.1.2",
          "heading": "Faction and Famous Admirals",
-         "page": 13,
+         "page": 14,
          "body": [
           {
            "kind": "p",
@@ -1678,7 +1769,7 @@
      "id": "4.3",
      "number": "4.3",
      "heading": "Choose a Scenario",
-     "page": 13,
+     "page": 14,
      "body": [
       {
        "kind": "p",
@@ -1705,7 +1796,7 @@
    "id": "5",
    "number": "5",
    "heading": "Game Rounds",
-   "page": 14,
+   "page": 15,
    "body": [
     {
      "kind": "p",
@@ -1727,22 +1818,22 @@
       [
        [
         {
-         "t": "Ability Point Generation. Pass Token Generation. Determine Initiative."
+         "t": "Ability Point Generation.\nPass Token Generation.\nDetermine Initiative."
         }
        ],
        [
         {
-         "t": "Players alternate activating Groups. Players alternate activating Dropsites."
+         "t": "Players alternate activating Groups.\nPlayers alternate activating Dropsites."
         }
        ],
        [
         {
-         "t": "Battalion Combat. Boarding Actions. Asset Combat."
+         "t": "Battalion Combat.\nBoarding Actions.\nAsset Combat."
         }
        ],
        [
         {
-         "t": "Repair. Victory Points. Cleanup."
+         "t": "Repair.\nVictory Points.\nCleanup."
         }
        ]
       ]
@@ -1755,7 +1846,7 @@
    "id": "6",
    "number": "6",
    "heading": "Planning Phase",
-   "page": 14,
+   "page": 15,
    "body": [
     {
      "kind": "p",
@@ -1787,7 +1878,7 @@
      "id": "6.1",
      "number": "6.1",
      "heading": "Ability Point Generation",
-     "page": 14,
+     "page": 15,
      "body": [
       {
        "kind": "p",
@@ -1812,7 +1903,7 @@
      "id": "6.2",
      "number": "6.2",
      "heading": "Pass Token Generation",
-     "page": 14,
+     "page": 15,
      "body": [
       {
        "kind": "p",
@@ -1837,7 +1928,7 @@
      "id": "6.3",
      "number": "6.3",
      "heading": "Determine Initiative",
-     "page": 14,
+     "page": 15,
      "body": [
       {
        "kind": "p",
@@ -1880,7 +1971,7 @@
    "id": "7",
    "number": "7",
    "heading": "Activation Phase",
-   "page": 15,
+   "page": 16,
    "body": [
     {
      "kind": "p",
@@ -1936,14 +2027,14 @@
      "id": "7.1",
      "number": "7.1",
      "heading": "Group’s Orders",
-     "page": 15,
+     "page": 16,
      "body": [],
      "children": [
       {
        "id": "7.1.1",
        "number": "7.1.1",
        "heading": "General Quarters",
-       "page": 15,
+       "page": 16,
        "body": [
         {
          "kind": "p",
@@ -1967,7 +2058,7 @@
        "id": "7.1.2",
        "number": "7.1.2",
        "heading": "Silent Running",
-       "page": 15,
+       "page": 16,
        "body": [
         {
          "kind": "p",
@@ -1991,7 +2082,7 @@
        "id": "7.1.3",
        "number": "7.1.3",
        "heading": "Weapons Free",
-       "page": 15,
+       "page": 16,
        "body": [
         {
          "kind": "p",
@@ -2031,7 +2122,7 @@
        "id": "7.1.4",
        "number": "7.1.4",
        "heading": "Course Change",
-       "page": 15,
+       "page": 16,
        "body": [
         {
          "kind": "p",
@@ -2055,7 +2146,7 @@
        "id": "7.1.5",
        "number": "7.1.5",
        "heading": "Max Thrust",
-       "page": 15,
+       "page": 16,
        "body": [
         {
          "kind": "p",
@@ -2079,20 +2170,20 @@
        "id": "7.1.6",
        "number": "7.1.6",
        "heading": "Damage Control",
-       "page": 15,
+       "page": 16,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "Each Ship recovers 1 lost Hull Point. Ships of H and C tonnage recover D3 lost Hull Points instead. The Group may turn up to 45 degrees then move up to half its Thrust. Each Ship may only attack with a "
+           "t": "Each Ship recovers 1 lost Hull Point. Ships of H and C tonnage recover D3 lost Hull Points instead. The Group may turn up to 45 degrees, then must move up to half its Thrust. Each Ship may only attack with a "
           },
           {
            "t": "single Close Action",
            "b": true
           },
           {
-           "t": " Weapon. The Group may not Launch Assets. During the Repair step of the End Phase, roll 2 dice for each Crippling Effect the Group attempts to repair. While rolling to save against Core hits due to Boarding Actions, this ship improves its BS value by 1 or gains a BS of 6+ if it has no BS value listed."
+           "t": " Weapon. The Group may not Launch Assets. At the end of this Group’s activation, it rolls to repair as if it was the Repair step of the End Phase, then attempts to repel boarders. Roll either a Backup save or a roll of a 6+ for each enemy Battalion aboard each Ship in the Group and remove an enemy Battalion from that Ship for each successful dice"
           }
          ]
         }
@@ -2105,7 +2196,7 @@
      "id": "7.2",
      "number": "7.2",
      "heading": "Move",
-     "page": 16,
+     "page": 17,
      "body": [
       {
        "kind": "p",
@@ -2135,7 +2226,7 @@
        "kind": "p",
        "runs": [
         {
-         "t": "Ships may move through other Ships, tokens, and most scenery, but may not end their move with their base overlapping any other base."
+         "t": "Ships may move through other Ships, tokens, and most scenery, but cannot end their move with their base overlapping any other base. Where possible, a Ship must move to within the specified movement distances stated by its order. If a Ship cannot be placed anywhere between these distances due to bases overlapping, it is placed the minimum available distance from its starting position so that bases are not overlapping along its line of movement."
         }
        ]
       },
@@ -2143,7 +2234,15 @@
        "kind": "p",
        "runs": [
         {
-         "t": "Some Frigates do not have the movement needed to remain in Coherency after moving. 3 move straight forward, with 2 of those moving back due to bases overlapping. The 4th turns and moves to a position that allows the entire Group to maintain Coherency."
+         "t": "A Ship that must move due to an order but chooses to move 0” (such as the Course Change order) during its movement counts as having moved."
+        }
+       ]
+      },
+      {
+       "kind": "p",
+       "runs": [
+        {
+         "t": "Moving directly forward, the allowed movement for these UCM frigates would put them out of coherency. One frigate turns while the other three move different distances during their movement. The PHR cruisers can move past them when they activate."
         }
        ]
       }
@@ -2154,7 +2253,7 @@
      "id": "7.3",
      "number": "7.3",
      "heading": "Attack",
-     "page": 16,
+     "page": 17,
      "body": [
       {
        "kind": "p",
@@ -2234,7 +2333,7 @@
        "id": "7.3.1",
        "number": "7.3.1",
        "heading": "Determine Potential Targets",
-       "page": 16,
+       "page": 17,
        "body": [
         {
          "kind": "p",
@@ -2331,7 +2430,7 @@
        "id": "7.3.2",
        "number": "7.3.2",
        "heading": "Assign Weapons to Targets",
-       "page": 17,
+       "page": 18,
        "body": [
         {
          "kind": "p",
@@ -2353,7 +2452,8 @@
          "kind": "p",
          "runs": [
           {
-           "t": "You must assign a target to every Weapon a Group is attacking with before rolling any dice."
+           "t": "You must assign a target to every Weapon a Group is attacking with before rolling any dice.",
+           "b": true
           }
          ]
         }
@@ -2364,7 +2464,7 @@
        "id": "7.3.3",
        "number": "7.3.3",
        "heading": "Roll to Hit",
-       "page": 17,
+       "page": 18,
        "body": [
         {
          "kind": "p",
@@ -2401,7 +2501,8 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Roll to hit with all your attacks before your opponent rolls to save."
+           "t": "Roll to hit with all assigned weapons before your opponent rolls to save.",
+           "b": true
           }
          ]
         },
@@ -2420,7 +2521,7 @@
        "id": "7.3.4",
        "number": "7.3.4",
        "heading": "Roll to Save",
-       "page": 17,
+       "page": 18,
        "body": [
         {
          "kind": "p",
@@ -2457,9 +2558,14 @@
          "kind": "p",
          "runs": [
           {
-           "t": "UF-6400 Mass Drivers ",
+           "t": "UF-6400 Mass Drivers",
            "b": true
-          },
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
           {
            "t": "4 Attack Dice"
           }
@@ -2469,9 +2575,14 @@
          "kind": "p",
          "runs": [
           {
-           "t": "UF-4200 Mass Drivers ",
+           "t": "UF-4200 Mass Drivers",
            "b": true
-          },
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
           {
            "t": "4 Attack Dice"
           }
@@ -2517,14 +2628,6 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Take any remaining hits and multiply them by the Weapon’s Damage (D) value—the target will take this much damage."
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
            "t": "It may be useful to roll saves against identical Weapons simultaneously. If a Weapon’s hits are modified in any way, roll these attacks separately in an order chosen by the attacking player."
           }
          ]
@@ -2536,13 +2639,13 @@
        "id": "7.3.5",
        "number": "7.3.5",
        "heading": "Inflict Damage",
-       "page": 18,
+       "page": 19,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "Damage reduces a Ship’s total Hull. If a Ship is reduced to 0 Hull, it is destroyed and removed from play."
+           "t": "After the defending player rolls to save, allocate the remaining hits to Ships in the defending Group. Starting with the hits with the greatest damage, allocate these hits to the Ship with the least remaining Hull Points until there is enough damage from those hits to destroy it. Any damage from hits beyond a Ship’s remaining Hull Points are lost. Then continue allocating hits this way to the next Ship with the least remaining Hull Points and so on. If all remaining Ships are undamaged or equally damaged, allocate from the closest Ship to the attacking Group’s Lead Ship to the furthest."
           }
          ]
         },
@@ -2550,14 +2653,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Damage against Groups is allocated to the Ship with the least remaining Hull points until it is destroyed, then to the next Ship with the least remaining Hull points, and so on. If all remaining Ships are undamaged or equally damaged, allocate to the closest Ship to the "
-          },
-          {
-           "t": "attacking",
-           "b": true
-          },
-          {
-           "t": " Group’s Lead Ship, and so on."
+           "t": "Damage reduces a Ship’s total Hull. If a Ship is reduced to 0 Hull, it is destroyed and removed from play."
           }
          ]
         },
@@ -2577,6 +2673,14 @@
            "b": true
           }
          ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Allocate all hits before rolling for Crippling Effects."
+          }
+         ]
         }
        ],
        "children": []
@@ -2585,7 +2689,7 @@
        "id": "7.3.6",
        "number": "7.3.6",
        "heading": "Roll for Crippling Effects",
-       "page": 18,
+       "page": 19,
        "body": [
         {
          "kind": "p",
@@ -2669,7 +2773,7 @@
              "b": true
             },
             {
-             "t": " Gain a Fire Token. At the start of the End Phase, before the Repair step, this ship suffers a point of damage for each Fire Token it has. Repairable."
+             "t": " Gain a Fire Token. At the start of the End Phase, before the Repair step, this ship suffers a point of damage for each Fire Token it has. Repairable. This effect is repaired on a roll of a 3+ instead of a 4+."
             }
            ]
           ],
@@ -2754,7 +2858,7 @@
              "b": true
             },
             {
-             "t": " The Ship gains an Orbital Decay token and falls into Atmosphere. Orbital Decay tokens prevent this Ship from moving from Atmosphere into Orbit. Repairable. This effect is repaired on a roll of a 6+ instead of a 4+."
+             "t": " The Ship gains an Orbital Decay token and falls into Atmosphere. Orbital Decay tokens prevent this Ship from moving from Atmosphere into Orbit. Repairable. This effect is repaired on a roll of a 5+ instead of a 4+."
             }
            ]
           ]
@@ -2767,7 +2871,7 @@
        "id": "7.3.7",
        "number": "7.3.7",
        "heading": "Roll for Explosion",
-       "page": 19,
+       "page": 20,
        "body": [
         {
          "kind": "p",
@@ -2895,7 +2999,7 @@
              "b": true
             },
             {
-             "t": "All Groups and Space Stations in explosion range suffer 2 Kinetic hits. Assets are removed on a 5+."
+             "t": "All Groups and Space Stations in explosion range suffer 3 Kinetic hits. Assets are removed on a 5+."
             }
            ]
           ],
@@ -2912,7 +3016,7 @@
              "b": true
             },
             {
-             "t": "All Groups and Space Stations in explosion range suffer 2 Energy hits. Assets are removed on a 4+."
+             "t": "All Groups and Space Stations in explosion range suffer 3 Energy hits. Assets are removed on a 4+."
             }
            ]
           ],
@@ -2929,7 +3033,7 @@
              "b": true
             },
             {
-             "t": "All Groups and Space Stations in explosion range suffer 2 Core hits. Assets are removed on a 3+."
+             "t": "All Groups and Space Stations in explosion range suffer 3 Core hits. Assets are removed on a 3+."
             }
            ]
           ],
@@ -2946,7 +3050,7 @@
              "b": true
             },
             {
-             "t": "All Groups and Space Stations in explosion range suffer 2 damage and gain a Spike. Assets are removed on a 2+."
+             "t": "All Groups and Space Stations in explosion range suffer 4 damage and gain a Spike. Assets are removed on a 2+."
             }
            ]
           ]
@@ -2961,7 +3065,7 @@
      "id": "7.4",
      "number": "7.4",
      "heading": "Launch Assets",
-     "page": 20,
+     "page": 21,
      "body": [
       {
        "kind": "p",
@@ -2995,6 +3099,14 @@
          "t": "Each Carrier in a Group contributes its own Assets but does not have to combine them with the rest of its Group when they launch Assets and can place them separately."
         }
        ]
+      },
+      {
+       "kind": "p",
+       "runs": [
+        {
+         "t": "When a carrier’s load is shared between two different types of Launch Asset (e.g. Fighters & Bombers) you can choose any combination of those Assets to place when launching Assets, up to their Launch value."
+        }
+       ]
       }
      ],
      "children": [
@@ -3002,7 +3114,7 @@
        "id": "7.4.1",
        "number": "7.4.1",
        "heading": "Deploying Battalions",
-       "page": 20,
+       "page": 21,
        "body": [
         {
          "kind": "p",
@@ -3027,7 +3139,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "When you deploy Battalions to Dropsites, you may instead deploy them to a specific Feature on that Dropsite"
+           "t": "When you deploy Battalions to Dropsites, you may instead deploy them to a specific Feature on that Dropsite, dividing the total Battalions deployed as you choose between Dropsite and Feature."
           }
          ]
         },
@@ -3120,55 +3232,74 @@
        "id": "7.4.2",
        "number": "7.4.2",
        "heading": "Deploying Features",
-       "page": 20,
+       "page": 21,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "Some Ships can deploy scenic Features with special rules onto Dropsites. These are launched in the same way as other Assets, at a range of 6”, and on any orbital layer. Place the Feature miniature/token on the Dropsite. Once deployed, it becomes a Feature and cannot move."
+           "t": "Some Ships carry Deployable Features. These Ships are counted as carriers and may deploy their carried features onto Dropsites. These are launched in the same way as other Assets, at a range of 6”, and on any orbital layer. Place the Feature miniature/token on the Dropsite. Once deployed, it becomes a Feature and cannot move."
           }
          ]
         }
        ],
        "children": []
-      }
-     ]
-    },
-    {
-     "id": "7.5",
-     "number": "7.5",
-     "heading": "Activating Dropsites",
-     "page": 20,
-     "body": [
+      },
       {
-       "kind": "p",
-       "runs": [
-        {
-         "t": "At the end of the Activation Phase, after all Groups have activated, players can alternate activating all the "
-        },
-        {
-         "t": "Dropsites they Control",
-         "b": true
-        },
-        {
-         "t": " (but not those they Contest) in Initiative order to attack with their Weapons and/or launch Assets. Each Dropsite may attack with all its Weapons and/or launch all available Assets."
-        }
-       ]
-      }
-     ],
-     "children": [
-      {
-       "id": "7.5.1",
-       "number": "7.5.1",
-       "heading": "Attacking with and Launching from dropped Features",
-       "page": 20,
+       "id": "7.4.3",
+       "number": "7.4.3",
+       "heading": "Immediate Combat",
+       "page": 21,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "At the end of the Activation Phase, after all Groups and any Dropsites have activated, players can alternate activating all the Features they have dropped in via Ship in Initiative order to attack and/or launch Assets. Each Feature may attack with all its Weapons and/or launch all available Assets. Controlling and Contesting is ignored for Features you have dropped."
+           "t": "After launching Assets, if any of those Assets were placed directly into base contact with specific targets, you may attack with those Assets immediately instead of during the Asset Phase. If the following conditions are met, the launched asset immediately attacks, using the rules for attacking with that asset (see 8.3 Asset Combat):"
+          }
+         ]
+        },
+        {
+         "kind": "li",
+         "runs": [
+          {
+           "t": "Fighters launched into base contact with enemy Fighters or Bombers"
+          }
+         ]
+        },
+        {
+         "kind": "li",
+         "runs": [
+          {
+           "t": "Bombers launched into base contact with Space Stations or enemy Ships"
+          }
+         ]
+        },
+        {
+         "kind": "li",
+         "runs": [
+          {
+           "t": "Torpedoes launched into base contact with Space Stations or enemy Ships”"
+          }
+         ]
+        }
+       ],
+       "children": [],
+       "xrefs": [
+        "8.3"
+       ]
+      },
+      {
+       "id": "7.4.5",
+       "number": "7.4.5",
+       "heading": "Recall Launch",
+       "page": 21,
+       "body": [
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "If launching a Fighter or Bomber would bring you above your Launch Capacity, you may remove friendly Fighters/Bombers from the table until you would be at your Launch Capacity."
           }
          ]
         }
@@ -3183,7 +3314,7 @@
    "id": "8",
    "number": "8",
    "heading": "Asset Phase",
-   "page": 21,
+   "page": 22,
    "body": [
     {
      "kind": "p",
@@ -3215,13 +3346,13 @@
      "id": "8.1",
      "number": "8.1",
      "heading": "Battalion Combat",
-     "page": 21,
+     "page": 22,
      "body": [
       {
        "kind": "p",
        "runs": [
         {
-         "t": "For each Dropsite or Ship with Battalions belonging to 2 or more players, Battalions are removed equally between the players until either only one player has Battalions left or all Battalions have been removed. If players are allied, treat their Battalions as belonging to one player and decide with your ally/s whose Battalions to remove."
+         "t": "Each Dropsite with Battalions belonging to 2 or more players and has not had Battalion Combat resolve this round is eligible for Battalion Combat. In initiative order, each player selects an eligible Dropsite to resolve combat on before moving on to the next. Repeat this until there are no more eligible Dropsites."
         }
        ]
       },
@@ -3229,21 +3360,15 @@
        "kind": "p",
        "runs": [
         {
-         "t": "Battalions on "
-        },
+         "t": "After a player selects a Dropsite to resolve, players follow this sequence to assign combat to Battalions:"
+        }
+       ]
+      },
+      {
+       "kind": "h",
+       "runs": [
         {
-         "t": "Dropsites",
-         "b": true
-        },
-        {
-         "t": " may be used to remove enemy Battalions on "
-        },
-        {
-         "t": "either the Dropsite or a single Feature on that Dropsite. Battalions on Features can only be used to remove enemy Battalions on that Feature",
-         "b": true
-        },
-        {
-         "t": " and cannot be used to remove Battalions on that Feature’s Dropsite."
+         "t": "1. Dropsite to Feature Combat"
         }
        ]
       },
@@ -3251,7 +3376,15 @@
        "kind": "p",
        "runs": [
         {
-         "t": "In initiative order, players assign combat to all friendly Battalions on a Dropsite/Feature in the following sequence:"
+         "t": "In initiative order, each player with Battalions assigned to the Dropsite may select a single one of its Features with opposing Battalions on it. In the same order, players remove equal amounts of Battalions from their Battalions assigned to the Dropsite and their chosen Feature until either no player, or only one player has Battalions remaining in that combat."
+        }
+       ]
+      },
+      {
+       "kind": "h",
+       "runs": [
+        {
+         "t": "2. Dropsite Centric Combat"
         }
        ]
       },
@@ -3259,7 +3392,15 @@
        "kind": "p",
        "runs": [
         {
-         "t": "1. All friendly Battalions on the Dropsite to a single one of its Features. 2. The Dropsite itself. 3. Each Feature on the Dropsite to that Feature."
+         "t": "Each player with Battalions assigned to the Dropsite removes equal amounts of Battalions from it until either no player, or only one player has Battalions remaining in that combat."
+        }
+       ]
+      },
+      {
+       "kind": "h",
+       "runs": [
+        {
+         "t": "3. Feature Centric Combat"
         }
        ]
       },
@@ -3267,28 +3408,131 @@
        "kind": "p",
        "runs": [
         {
-         "t": "Once this has been resolved, players with 4 or more Battalions on a Feature which contains no enemy Battalions may remove all those Battalions to destroy that Feature."
+         "t": "For each Feature on the Dropsite, each player with Battalions on it removes equal amounts of Battalions until either no player, or only one player has Battalions remaining in that combat."
+        }
+       ]
+      },
+      {
+       "kind": "h",
+       "runs": [
+        {
+         "t": "4. Feature Demolition"
+        }
+       ]
+      },
+      {
+       "kind": "p",
+       "runs": [
+        {
+         "t": "Players with an amount of friendly Battalions on a Feature equal to or greater than that Feature’s remaining Hull that also contains no enemy Battalions may remove all of those Battalions to destroy that Feature."
+        }
+       ]
+      },
+      {
+       "kind": "h",
+       "runs": [
+        {
+         "t": "5. Battalion Consolidation"
+        }
+       ]
+      },
+      {
+       "kind": "p",
+       "runs": [
+        {
+         "t": "Players may now consolidate Battalions they have anywhere on the Dropsite. If they do, they choose any amount of those Battalions and assign them to the Dropsite (any amount can be 0), then assign any remaining Battalions to a single Feature on the Dropsite."
+        }
+       ]
+      },
+      {
+       "kind": "p",
+       "runs": [
+        {
+         "t": "When Battalions are removed in each step of Battalion Combat, they are removed simultaneously."
+        }
+       ]
+      },
+      {
+       "kind": "p",
+       "runs": [
+        {
+         "t": "When a player has multiple types of Battalions in a combat, that player decides which of their Battalions are removed first. If players are allied, treat their Battalions as belonging to one player and decide with your ally/s whose Battalions to remove."
         }
        ]
       }
      ],
-     "children": []
+     "children": [
+      {
+       "id": "8.1.1",
+       "number": "8.1.1",
+       "heading": "Activating Dropsites",
+       "page": 23,
+       "body": [
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "After players have completed Battalion Combat for a Dropsite, a player that controls that Dropsite, "
+          },
+          {
+           "t": "ignoring enemy deployed Features",
+           "b": true
+          },
+          {
+           "t": ", activates it. For each Scenario Feature only they have Battalions on, they may attack with all its Weapons and/or launch all available Assets. Scenario Features containing enemy Battalions or Features deployed by other players cannot be used to attack or launch this way."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Then, in initiative order, "
+          },
+          {
+           "t": "each player",
+           "b": true
+          },
+          {
+           "t": " may activate all deployable Features they have on the Dropsite. Each Feature may attack with all its weapons and/or launch Assets."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Deployed Features",
+           "b": true
+          },
+          {
+           "t": " with "
+          },
+          {
+           "t": "only",
+           "b": true
+          },
+          {
+           "t": " enemy Battalions assigned to them cannot be activated and lose all of their special rules (though still confer their saves to the Dropsite) until they have an equal amount of, or more friendly Battalions assigned to them."
+          }
+         ]
+        }
+       ],
+       "children": []
+      }
+     ]
     },
     {
      "id": "8.2",
      "number": "8.2",
      "heading": "Boarding Actions",
-     "page": 21,
+     "page": 23,
      "body": [
       {
        "kind": "p",
        "runs": [
         {
-         "t": "Any Battalions left aboard enemy Ships inflict an amount of Core hits equal to their number. Each passed backup save also removes one Battalion. If the Ship is destroyed by the boarders, remove it from play without rolling for Explosion—that Ship is captured. "
-        },
-        {
-         "t": "Captured Ships are worth twice their usual Kill Points.",
-         "b": true
+         "t": "Each Ship with Battalions belonging to an opponent and has not had Boarding Actions resolve this round is eligible for Boarding Actions. In initiative order, each player selects an eligible Ship with enemy Battalions on to resolve Boarding Actions before moving on to the next. Repeat this until there are no more eligible Ships."
         }
        ]
       },
@@ -3296,21 +3540,23 @@
        "kind": "p",
        "runs": [
         {
-         "t": "If a carrier with Assets that deploy Battalions does not launch "
-        },
+         "t": "Each player with Battalions on the Ship removes equal amounts of Battalions until either no player, or only one player has Battalions remaining."
+        }
+       ]
+      },
+      {
+       "kind": "p",
+       "runs": [
         {
-         "t": "any",
-         "b": true
-        },
+         "t": "Then, each friendly Battalion left aboard an enemy Ship inflicts a Core hit. Total these up before rolling backup saves. Each passed backup save also removes one Battalion. If the Ship is destroyed by the boarders, remove it from play without rolling for Explosion—that Ship is captured. At the end of the game, when determining points of Ships destroyed, captured Ships count towards this and are worth double their points."
+        }
+       ]
+      },
+      {
+       "kind": "p",
+       "runs": [
         {
-         "t": " of those assets this round, choose one of those Assets types. For each of the chosen Assets, this carrier removes an enemy Battalion on it "
-        },
-        {
-         "t": "before any Core hits are inflicted",
-         "b": true
-        },
-        {
-         "t": "."
+         "t": "If a carrier with Assets that deploy Battalions does not launch any of those assets this round, choose one of those Assets types. For each of the chosen Assets, this carrier removes an enemy Battalion on it before any Core hits are inflicted."
         }
        ]
       }
@@ -3321,7 +3567,7 @@
      "id": "8.3",
      "number": "8.3",
      "heading": "Asset Combat",
-     "page": 22,
+     "page": 24,
      "body": [
       {
        "kind": "p",
@@ -3369,7 +3615,7 @@
        "id": "8.3.1",
        "number": "8.3.1",
        "heading": "Moving Assets",
-       "page": 22,
+       "page": 24,
        "body": [
         {
          "kind": "p",
@@ -3386,7 +3632,7 @@
        "id": "8.3.2",
        "number": "8.3.2",
        "heading": "Wings",
-       "page": 22,
+       "page": 24,
        "body": [
         {
          "kind": "p",
@@ -3400,7 +3646,23 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Wings may divide into any number of smaller Wings when they move. A single Fighter/Bomber Asset is still a Wing. When you divide a Wing, do so at the start of its movement. Place the new Wing anywhere in Thrust range of the original Wing, counting as its movement. Each Fighter/Bomber may only form or divide into Wings once each round—they cannot do both. If any assets in a newly formed Wing have moved, all assets in that Wing are treated as having moved."
+           "t": "Wings may divide into any number of smaller wings as part of their activation during that particular Asset’s Form Wings step. A single Fighter/Bomber Asset is still a Wing. When you divide a Wing, place all new Wings in base contact with the original."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "When you Form Wings, you can combine identical Assets in base contact into a single larger Wing. If you do, choose one of those Wings for the rest to be combined with. If any assets in a newly formed Wing have moved."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Each Fighter/Bomber can only form or divide into Wings once each round and cannot do both."
           }
          ]
         },
@@ -3419,20 +3681,13 @@
        "id": "8.3.3",
        "number": "8.3.3",
        "heading": "Activating Fighters",
-       "page": 22,
+       "page": 24,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "First, move your Fighters in a straight line "
-          },
-          {
-           "t": "in any direction",
-           "b": true
-          },
-          {
-           "t": " up to their Thrust, then form any Wings if allowed."
+           "t": "When a player activates Fighters, follow these steps in order:"
           }
          ]
         },
@@ -3440,7 +3695,79 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Each Wing may then attack one enemy Wing they are in base contact with."
+           "t": "A. Form Wings"
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "B. Fighter Movement"
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "C. Fighter Attacks"
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Assets perform each step simultaneously; move all Fighters before forming Wings and form all Wings before attacking."
+          }
+         ]
+        },
+        {
+         "kind": "h",
+         "runs": [
+          {
+           "t": "8.3.3.a Form Wings"
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "During this step, you may form your Fighters into Wings and divide into Wings."
+          }
+         ]
+        },
+        {
+         "kind": "h",
+         "runs": [
+          {
+           "t": "8.3.3.b Fighter Movement"
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "For each of your Fighter Wings, move them in a straight line up to their Thrust value in any direction."
+          }
+         ]
+        },
+        {
+         "kind": "h",
+         "runs": [
+          {
+           "t": "8.3.3.c Fighter Attacks"
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Fighters in base contact with an enemy Fighter or Bomber Wing may attack one of those Wings. Declare the use of all Fighters you wish to attack with before proceeding."
           }
          ]
         },
@@ -3464,7 +3791,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Once all their attacks have been resolved, the Fighter’s activation is over. Any remaining Fighters can activate again in the next round."
+           "t": "Once all their attacks have been resolved, the Fighter’s activation is over. Any remaining Fighters can activate again in the next round"
           }
          ]
         }
@@ -3474,7 +3801,7 @@
          "id": "8.3.3.1",
          "number": "8.3.3.1",
          "heading": "Fighters—Close Protection",
-         "page": 22,
+         "page": 25,
          "body": [
           {
            "kind": "p",
@@ -3503,6 +3830,14 @@
              "b": true
             }
            ]
+          },
+          {
+           "kind": "p",
+           "runs": [
+            {
+             "t": "Fighters cannot be used this way if there is scenery between them and any Ships in the defending Group."
+            }
+           ]
           }
          ],
          "children": []
@@ -3513,20 +3848,13 @@
        "id": "8.3.4",
        "number": "8.3.4",
        "heading": "Activating Bombers",
-       "page": 23,
+       "page": 25,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "First, move your Bombers in a straight line "
-          },
-          {
-           "t": "in any direction",
-           "b": true
-          },
-          {
-           "t": " up to their Thrust, then form any Wings if allowed. Different types of Bombers (Such as Heavy Bombers or Fire Ships) may only form Wings with other Bombers of that type."
+           "t": "When a player activates Bombers, follow these steps in order"
           }
          ]
         },
@@ -3534,14 +3862,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "They may then attack any Group or Space Station they are in base contact with that does not have any friendly Battalions present. "
-          },
-          {
-           "t": "Only Bombers with the Bombardment special rule may attack Cities or Descent Groups in Atmosphere. ",
-           "b": true
-          },
-          {
-           "t": "When you attack with a Wing, all Bombers in that Wing contribute to the attack."
+           "t": "A. Form Wings"
           }
          ]
         },
@@ -3549,7 +3870,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Bombers attack as if they were a Weapon with the stats in their profile. Every friendly Bomber in every friendly Wing attacking the same target combines into one roll. Damage is assigned to a Group in the usual way, including against Ships not in base contact with the Bombers."
+           "t": "B. Bomber Movement"
           }
          ]
         },
@@ -3557,8 +3878,118 @@
          "kind": "p",
          "runs": [
           {
-           "t": "When Bombers attack, remove the attacking Bombers from play after completing the attack.",
+           "t": "C. Bomber Attacks"
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "D. Remove Unused Attackers"
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Assets perform each step simultaneously; move all Bombers before forming Wings and form all Wings before attacking."
+          }
+         ]
+        },
+        {
+         "kind": "h",
+         "runs": [
+          {
+           "t": "8.3.4.a Form Wings"
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "During this step, you may form your Bombers into Wings and divide into Wings."
+          }
+         ]
+        },
+        {
+         "kind": "h",
+         "runs": [
+          {
+           "t": "8.3.4.b Bomber Movement"
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "For each of your Bomber Wings, move them in a straight line up to their Thrust value in any direction."
+          }
+         ]
+        },
+        {
+         "kind": "h",
+         "runs": [
+          {
+           "t": "8.3.4.c Bomber Attacks"
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Bombers in base contact with a Ship or Space Station may be used to attack that Ship or Space Station. Bombers cannot attack a Space Station with friendly Battalions or friendly Ships. Only Bombers with the Bombardment special rule may attack Descent Groups in Atmosphere or Cities, treating its template as a base. When you attack with a Wing, All Bombers in that Wing contribute to the attack. Declare the use of all Bombers you wish to attack with before proceeding."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Declare all Bomber attacks before rolling any dice."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Bombers attack as if they were a weapon with the stats in their profile, following the attack sequence from 7.3.3 Roll to Hit onwards."
+          },
+          {
+           "t": " Each type of Bomber attacking the same target combines into a single roll for that type of Bomber",
            "b": true
+          },
+          {
+           "t": ", counting as a separate Weapon System."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Damage from a Wing is only allocated to the Ship it attacked. Any excess damage from the attack is lost."
+          }
+         ]
+        },
+        {
+         "kind": "h",
+         "runs": [
+          {
+           "t": "8.3.4.d Remove Unused Bombers"
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "After completing an attack with Bombers, remove the attacking Bombers from play."
           }
          ]
         }
@@ -3568,7 +3999,7 @@
          "id": "8.3.4.1",
          "number": "8.3.4.1",
          "heading": "Fire Ships",
-         "page": 23,
+         "page": 25,
          "body": [
           {
            "kind": "p",
@@ -3585,26 +4016,29 @@
          "id": "8.3.4.2",
          "number": "8.3.4.2",
          "heading": "Saturation Fire",
-         "page": 23,
+         "page": 25,
          "body": [
           {
            "kind": "p",
            "runs": [
             {
-             "t": "For every Bomber above 6 in an attack, the target must roll one fewer Energy / Kinetic / Shield Save against the Bombers attack, chosen by the defending player before any saves are made."
+             "t": "Each type of Bomber attacking a Light Ship, or Crippled Capital Ship gains Saturation Fire against the target. After rolling to hit, for every Bomber above 6 in an attack, one hit of the attacker’s choice for that type of Bomber becomes Core damage rather than Kinetic or Energy damage"
             }
            ]
           }
          ],
          "children": []
         }
+       ],
+       "xrefs": [
+        "7.3.3"
        ]
       },
       {
        "id": "8.3.5",
        "number": "8.3.5",
        "heading": "Activating Torpedoes",
-       "page": 23,
+       "page": 26,
        "body": [
         {
          "kind": "p",
@@ -3632,7 +4066,7 @@
            "b": true
           },
           {
-           "t": "."
+           "t": ". Declare the use of all Torpedoes you wish to attack with before proceeding."
           }
          ]
         },
@@ -3646,13 +4080,39 @@
          ]
         }
        ],
-       "children": []
+       "children": [
+        {
+         "id": "8.3.5.1",
+         "number": "8.3.5.1",
+         "heading": "Shooting Down Torpedoes",
+         "page": 26,
+         "body": [
+          {
+           "kind": "p",
+           "runs": [
+            {
+             "t": "Weapons in Orbit and Escape Velocity weapons in Atmosphere may be assigned to Torpedoes. Torpedoes have a Signature of 0” and never have saves of any kind. Instead of inflicting damage, each hit against a torpedo reduces the Torpedo’s Attack value by 1. If a Torpedo has its Attack value reduced to 0 this way, the Torpedo is removed."
+            }
+           ]
+          },
+          {
+           "kind": "p",
+           "runs": [
+            {
+             "t": "When you attack a Torpedo this way, that attack always hits on a 6+."
+            }
+           ]
+          }
+         ],
+         "children": []
+        }
+       ]
       },
       {
        "id": "8.3.6",
        "number": "8.3.6",
        "heading": "Mines",
-       "page": 23,
+       "page": 26,
        "body": [
         {
          "kind": "p",
@@ -3670,16 +4130,50 @@
          "kind": "p",
          "runs": [
           {
-           "t": "When a Mine attacks, remove it from the table and make an attack with its profile. This attack is made when the Ship completes its movement, even if it ends it out of range. "
+           "t": "Mines attack as if they were a weapon with the stats in their profile. Every Mine attacking the same target combines into one roll. Remove a Mine after completing an attack with it. Roll for this attack when the Ship completes its movement, choosing a point within the Mine’s Thrust as the enemy Ship’s position and Orbital Layer for this attack, even if it ends its movement out of range and on a different Orbital Layer. Use this point for any explosion effects due to this attack. "
           },
           {
            "t": "Mines can only damage the attacked Ship.",
            "b": true
           }
          ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Mines may be used against torpedoes that move through the Mines’ Thrust. Mines used this way ignore the penalties for attacking Torpedoes."
+          }
+         ]
         }
        ],
-       "children": []
+       "children": [
+        {
+         "id": "8.3.6.1",
+         "number": "8.3.6.1",
+         "heading": "Clearing Mines",
+         "page": 26,
+         "body": [
+          {
+           "kind": "p",
+           "runs": [
+            {
+             "t": "Weapons in Orbit and Weapons with the Escape Velocity special rule may be assigned to Mines. Mines have a Signature of 0” and never have saves of any kind. Instead of inflicting damage, each hit against a Mine reduces the Mine’s Attack value by 1. If a Mine has its Attack value reduced to 0 this way, the Mine is removed."
+            }
+           ]
+          },
+          {
+           "kind": "p",
+           "runs": [
+            {
+             "t": "When you attack a Mine this way, that attack always hits on a 6+."
+            }
+           ]
+          }
+         ],
+         "children": []
+        }
+       ]
       }
      ]
     }
@@ -3689,20 +4183,20 @@
    "id": "9",
    "number": "9",
    "heading": "End Phase",
-   "page": 24,
+   "page": 27,
    "body": [],
    "children": [
     {
      "id": "9.1",
      "number": "9.1",
      "heading": "Repair",
-     "page": 24,
+     "page": 27,
      "body": [
       {
        "kind": "p",
        "runs": [
         {
-         "t": "During this step, you can attempt to repair repairable Crippling Effects. For each Ship with a repairable Crippling Effect, roll 1D6 for each repairable effect that Ship has. For each roll of a 4+, remove one repairable effect of your choice from that Ship."
+         "t": "During this step, you may attempt a repair roll for each repairable Crippling Effect on friendly Ships. To make a repair roll, roll 1D6. If the result is a 4+, that Crippling Effect is removed, otherwise, the Crippling Effect remains"
         }
        ]
       }
@@ -3713,7 +4207,7 @@
      "id": "9.2",
      "number": "9.2",
      "heading": "Victory Points",
-     "page": 24,
+     "page": 27,
      "body": [
       {
        "kind": "p",
@@ -3730,7 +4224,7 @@
      "id": "9.3",
      "number": "9.3",
      "heading": "Cleanup",
-     "page": 24,
+     "page": 27,
      "body": [
       {
        "kind": "p",
@@ -3749,7 +4243,7 @@
    "id": "10",
    "number": "10",
    "heading": "Scenery",
-   "page": 25,
+   "page": 28,
    "body": [
     {
      "kind": "p",
@@ -3795,7 +4289,7 @@
      "kind": "p",
      "runs": [
       {
-       "t": "When placing Micrometeor Clouds and Debris Fields, they must be placed at least 4” away from board edges, deployment zones, and other scenery pieces unless otherwise specified."
+       "t": "When placing scenery, it must be placed at least 4” away from board edges, deployment zones, other scenery pieces, and Dropsites unless otherwise specified."
       }
      ]
     },
@@ -3813,7 +4307,7 @@
      "id": "10.1",
      "number": "10.1",
      "heading": "Planetary Ring",
-     "page": 25,
+     "page": 28,
      "body": [
       {
        "kind": "p",
@@ -3827,7 +4321,7 @@
        "kind": "p",
        "runs": [
         {
-         "t": "Ignore the target’s Spikes when attacking through this."
+         "t": "Groups and Dropsites on one side of a Planetary Ring Ignore two Spikes on targets on the other side of the Planetary Ring if those targets are further than 3” away from the Planetary Ring. If the target is on the other side of the Planetary Ring and further than 6” away from it, ignore all of its Spikes instead.”"
         }
        ]
       },
@@ -3835,7 +4329,7 @@
        "kind": "p",
        "runs": [
         {
-         "t": "After you move or place Assets into or through this, roll a dice. For each result of a 2+, remove one of those Assets (placing any Battalions after rolling). Assets deploying Battalions to a Dropsite with its centre underneath a Planetary Ring ignore the Planetary Ring."
+         "t": "Each Asset moved through this is removed on a 3+. Battalions deploying to Dropsites directly under a Planetary Ring are ignored."
         }
        ]
       }
@@ -3846,7 +4340,7 @@
      "id": "10.2",
      "number": "10.2",
      "heading": "Micrometeor Cloud",
-     "page": 25,
+     "page": 28,
      "body": [
       {
        "kind": "p",
@@ -3887,7 +4381,7 @@
      "id": "10.3",
      "number": "10.3",
      "heading": "Debris Field",
-     "page": 25,
+     "page": 29,
      "body": [
       {
        "kind": "p",
@@ -3928,7 +4422,7 @@
      "id": "10.4",
      "number": "10.4",
      "heading": "Large Objects",
-     "page": 25,
+     "page": 29,
      "body": [
       {
        "kind": "p",
@@ -3958,13 +4452,20 @@
    "id": "11",
    "number": "11",
    "heading": "Dropsites",
-   "page": 26,
+   "page": 30,
    "body": [
     {
      "kind": "p",
      "runs": [
       {
-       "t": "Dropsites are strategic locations that often must be Controlled or destroyed. They are either Space Stations, which exist in Orbit, or Cities, which exist in Atmosphere."
+       "t": "Dropsites are strategic locations that often must be Controlled or destroyed. "
+      },
+      {
+       "t": "They are either Space Stations, which exist in Orbit, or Cities, which exist in Atmosphere",
+       "b": true
+      },
+      {
+       "t": "."
       }
      ]
     },
@@ -3972,7 +4473,7 @@
      "kind": "p",
      "runs": [
       {
-       "t": "Dropsites cannot be moved or turned. Space Station bases cannot be moved onto, as if they were Ships. Cities may be moved over by Ships."
+       "t": "Dropsites cannot be moved or turned. Space Station bases cannot be moved onto, as if they were Ships. Cities have a base the size of their template. Bases of Cities are ignored when moving and are moved over as if they were not there."
       }
      ]
     },
@@ -4195,7 +4696,7 @@
      "id": "11.1",
      "number": "11.1",
      "heading": "Control & Contest",
-     "page": 26,
+     "page": 30,
      "body": [
       {
        "kind": "p",
@@ -4264,28 +4765,13 @@
      "id": "11.2",
      "number": "11.2",
      "heading": "Damaging Dropsites",
-     "page": 26,
+     "page": 30,
      "body": [
       {
        "kind": "p",
        "runs": [
         {
          "t": "Dropsites use the best Save available out of those on their Features (so a Dropsite with a Military Outpost has an Energy Save of 3+). Once a feature has been removed, any saves that feature would grant cannot be used."
-        }
-       ]
-      },
-      {
-       "kind": "p",
-       "runs": [
-        {
-         "t": "For every 4 damage a Dropsite takes from an "
-        },
-        {
-         "t": "attacking Group or Asset/s attacks",
-         "b": true
-        },
-        {
-         "t": ", the attacking player may instead remove one Feature and any Battalions assigned to it from that Dropsite instead of dealing that damage."
         }
        ]
       },
@@ -4307,7 +4793,7 @@
        "id": "11.2.1",
        "number": "11.2.1",
        "heading": "Collateral Damage",
-       "page": 26,
+       "page": 30,
        "body": [
         {
          "kind": "p",
@@ -4326,7 +4812,7 @@
      "id": "11.3",
      "number": "11.3",
      "heading": "Features",
-     "page": 27,
+     "page": 31,
      "body": [
       {
        "kind": "p",
@@ -4339,9 +4825,10 @@
       {
        "kind": "table",
        "header": [
-        "Feature",
+        "Type",
         "ES",
         "KS",
+        "Hull",
         "Special"
        ],
        "rows": [
@@ -4358,103 +4845,12 @@
          ],
          [
           {
-           "t": "5+"
-          }
-         ],
-         [
-          {
-           "t": "-"
-          }
-         ]
-        ],
-        [
-         [
-          {
-           "t": "Orbital Defence Gun"
-          }
-         ],
-         [
-          {
-           "t": "5+"
-          }
-         ],
-         [
-          {
            "t": "3+"
           }
          ],
          [
           {
-           "t": "-"
-          }
-         ]
-        ],
-        [
-         [
-          {
-           "t": "Comms Station"
-          }
-         ],
-         [
-          {
-           "t": "5+"
-          }
-         ],
-         [
-          {
-           "t": "4+"
-          }
-         ],
-         [
-          {
-           "t": "Comms Uplink:",
-           "b": true
-          },
-          {
-           "t": " If you control this Dropsite, increase the amount of Ability Points you generate by 1. You can only be affected by Comms Uplink once each round."
-          }
-         ]
-        ],
-        [
-         [
-          {
-           "t": "Power Plant"
-          }
-         ],
-         [
-          {
-           "t": "4+"
-          }
-         ],
-         [
-          {
-           "t": "5+"
-          }
-         ],
-         [
-          {
-           "t": "Volatile:",
-           "b": true
-          },
-          {
-           "t": " When this Feature is destroyed, all Groups within 3” gain a Spike and this Feature’s Dropsite takes an additional 2D3 damage."
-          }
-         ]
-        ],
-        [
-         [
-          {
-           "t": "Hangar"
-          }
-         ],
-         [
-          {
-           "t": "4+"
-          }
-         ],
-         [
-          {
-           "t": "4+"
+           "t": "6"
           }
          ],
          [
@@ -4468,7 +4864,6 @@
       {
        "kind": "table",
        "header": [
-        "Feature",
         "Weapon",
         "Scan",
         "Att",
@@ -4479,11 +4874,6 @@
        ],
        "rows": [
         [
-         [
-          {
-           "t": "Military Outpost"
-          }
-         ],
          [
           {
            "t": "Missile Halo"
@@ -4519,13 +4909,61 @@
            "t": "Close Action, Escape Velocity"
           }
          ]
-        ],
+        ]
+       ]
+      },
+      {
+       "kind": "table",
+       "header": [
+        "Type",
+        "ES",
+        "KS",
+        "Hull",
+        "Special"
+       ],
+       "rows": [
         [
          [
           {
            "t": "Orbital Defence Gun"
           }
          ],
+         [
+          {
+           "t": "5+"
+          }
+         ],
+         [
+          {
+           "t": "5+"
+          }
+         ],
+         [
+          {
+           "t": "5"
+          }
+         ],
+         [
+          {
+           "t": "-"
+          }
+         ]
+        ]
+       ]
+      },
+      {
+       "kind": "table",
+       "header": [
+        "Weapon",
+        "Scan",
+        "Att",
+        "Lock",
+        "Dmg",
+        "Type",
+        "Special"
+       ],
+       "rows": [
+        [
          [
           {
            "t": "Orbital Gun"
@@ -4567,9 +5005,96 @@
       {
        "kind": "table",
        "header": [
-        "Feature",
-        "Asset",
-        "Launch",
+        "Type",
+        "ES",
+        "KS",
+        "Hull",
+        "Special"
+       ],
+       "rows": [
+        [
+         [
+          {
+           "t": "Comms Station"
+          }
+         ],
+         [
+          {
+           "t": "4+"
+          }
+         ],
+         [
+          {
+           "t": "4+"
+          }
+         ],
+         [
+          {
+           "t": "5"
+          }
+         ],
+         [
+          {
+           "t": "Comms Uplink:",
+           "b": true
+          },
+          {
+           "t": " If you control this Dropsite, increase the amount of Ability Points you generate by 1. You can only be affected by Comms Uplink once each round."
+          }
+         ]
+        ]
+       ]
+      },
+      {
+       "kind": "table",
+       "header": [
+        "Type",
+        "ES",
+        "KS",
+        "Hull",
+        "Special"
+       ],
+       "rows": [
+        [
+         [
+          {
+           "t": "Power Plant"
+          }
+         ],
+         [
+          {
+           "t": "5+"
+          }
+         ],
+         [
+          {
+           "t": "5+"
+          }
+         ],
+         [
+          {
+           "t": "5"
+          }
+         ],
+         [
+          {
+           "t": "Volatile:",
+           "b": true
+          },
+          {
+           "t": " When this Feature is destroyed, all Groups within 3” gain a Spike and this Feature’s Dropsite takes an additional 2D3 damage."
+          }
+         ]
+        ]
+       ]
+      },
+      {
+       "kind": "table",
+       "header": [
+        "Type",
+        "ES",
+        "KS",
+        "Hull",
         "Special"
        ],
        "rows": [
@@ -4579,6 +5104,34 @@
            "t": "Hangar"
           }
          ],
+         [
+          {
+           "t": "4+"
+          }
+         ],
+         [
+          {
+           "t": "4+"
+          }
+         ],
+         [],
+         [
+          {
+           "t": "-"
+          }
+         ]
+        ]
+       ]
+      },
+      {
+       "kind": "table",
+       "header": [
+        "Type",
+        "Launch",
+        "Special"
+       ],
+       "rows": [
+        [
          [
           {
            "t": "Fighters & Bombers*"
@@ -4606,7 +5159,40 @@
        ]
       }
      ],
-     "children": []
+     "children": [
+      {
+       "id": "11.3.1",
+       "number": "11.3.1",
+       "heading": "Damaging Features",
+       "page": 32,
+       "body": [
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "When you assign weapons to a Space Station or Bombardment weapons to a City, you may choose to assign any amount of those weapons to Features on that Dropsite instead of the Dropsite. Abilities and Special rules treat this weapon as targeting the Dropsite. If you do, use the saves of those Features instead of the Dropsite. Damage inflicted to features is tracked independently of the Dropsite. When a Feature is reduced to 0 hull points, that Feature is destroyed and is removed from the dropsite, along with all battalions assigned to that feature. Any remaining damage is ignored. "
+          },
+          {
+           "t": "Deployable Features that have an associated points cost",
+           "b": true
+          },
+          {
+           "t": " count as Ships when determining Kill Points at the end of the game."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "When an Attack targets both a Dropsite and a Feature on that Dropsite, battalions are removed from damage to or destruction of Features first. Then remove battalions for damage dealt to the Dropsite itself as normal."
+          }
+         ]
+        }
+       ],
+       "children": []
+      }
+     ]
     }
    ]
   },
@@ -4614,20 +5200,28 @@
    "id": "12",
    "number": "12",
    "heading": "Scenarios",
-   "page": 28,
+   "page": 33,
    "body": [],
    "children": [
     {
      "id": "12.1",
      "number": "12.1",
      "heading": "Generating Scenarios",
-     "page": 28,
+     "page": 33,
      "body": [
       {
        "kind": "p",
        "runs": [
         {
          "t": "Scenarios are generated using several tables with random results, providing players with a way to make a different scenario from core blocks each game."
+        }
+       ]
+      },
+      {
+       "kind": "p",
+       "runs": [
+        {
+         "t": "Tables will use a D6 to determine the results. To generate a scenario, roll once for each table in order. Follow the results of each roll to determine each aspect of the Scenario."
         }
        ]
       },
@@ -4647,6 +5241,14 @@
          "b": true
         }
        ]
+      },
+      {
+       "kind": "p",
+       "runs": [
+        {
+         "t": "You can also choose from these options to generate scenarios based on personal preference. To emphasise the ground combat part of the game, build a scenario around Atmospheric deployment. If you prefer a pure space battle, design your scenarios around Orbital Complexes and avoid Atmosphere altogether."
+        }
+       ]
       }
      ],
      "children": [
@@ -4654,7 +5256,7 @@
        "id": "12.1.1",
        "number": "12.1.1",
        "heading": "Deployment Type",
-       "page": 28,
+       "page": 33,
        "body": [
         {
          "kind": "p",
@@ -4670,7 +5272,7 @@
          "id": "12.1.1/1-line",
          "number": null,
          "heading": "1 - Line",
-         "page": 28,
+         "page": 33,
          "body": [
           {
            "kind": "p",
@@ -4687,14 +5289,6 @@
              "t": "3-4 Players: All Ships in base contact with a single table edge for each player."
             }
            ]
-          },
-          {
-           "kind": "p",
-           "runs": [
-            {
-             "t": "You can also choose from these options to generate scenarios based on personal preference. To emphasise the ground combat part of the game, build a scenario around Atmospheric deployment. If you prefer a pure space battle, design your scenarios around Orbital Complexes and avoid Atmosphere altogether."
-            }
-           ]
           }
          ],
          "children": []
@@ -4703,7 +5297,7 @@
          "id": "12.1.1/2-table-corners",
          "number": null,
          "heading": "2 - Table Corners",
-         "page": 28,
+         "page": 33,
          "body": [
           {
            "kind": "p",
@@ -4728,7 +5322,7 @@
          "id": "12.1.1/3-midboard",
          "number": null,
          "heading": "3 - Midboard",
-         "page": 29,
+         "page": 34,
          "body": [
           {
            "kind": "p",
@@ -4753,7 +5347,7 @@
          "id": "12.1.1/4-from-corners",
          "number": null,
          "heading": "4 - From Corners",
-         "page": 29,
+         "page": 34,
          "body": [
           {
            "kind": "p",
@@ -4778,7 +5372,7 @@
          "id": "12.1.1/5-attacker-defender",
          "number": null,
          "heading": "5 - Attacker Defender",
-         "page": 29,
+         "page": 34,
          "body": [
           {
            "kind": "p",
@@ -4803,7 +5397,7 @@
          "id": "12.1.1/6-encirclement",
          "number": null,
          "heading": "6 - Encirclement",
-         "page": 29,
+         "page": 34,
          "body": [
           {
            "kind": "p",
@@ -4838,7 +5432,7 @@
        "id": "12.1.2",
        "number": "12.1.2",
        "heading": "Approach Type",
-       "page": 30,
+       "page": 35,
        "body": [
         {
          "kind": "p",
@@ -4852,6 +5446,14 @@
           },
           {
            "t": " in your deployment zone (so no Ship is outside of the deployment zone or Coherency) when they activate. Once a Group has been deployed it continues its activation as normal."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "If a Group is unable to fit completely within your deployment zone when it deploys, that Group instead remains off of the table until the next time it would be able to deploy, following its Approach Type. Any Groups that have not been deployed by the end of the game count as destroyed"
           }
          ]
         },
@@ -5018,7 +5620,7 @@
          "id": "12.1.2.1",
          "number": "12.1.2.1",
          "heading": "Directly Deployed",
-         "page": 30,
+         "page": 35,
          "body": [
           {
            "kind": "p",
@@ -5035,7 +5637,7 @@
          "id": "12.1.2.2",
          "number": "12.1.2.2",
          "heading": "Close",
-         "page": 30,
+         "page": 35,
          "body": [
           {
            "kind": "p",
@@ -5052,7 +5654,7 @@
          "id": "12.1.2.3",
          "number": "12.1.2.3",
          "heading": "Distant",
-         "page": 30,
+         "page": 35,
          "body": [
           {
            "kind": "p",
@@ -5071,7 +5673,7 @@
        "id": "12.1.3",
        "number": "12.1.3",
        "heading": "Layouts",
-       "page": 30,
+       "page": 35,
        "body": [
         {
          "kind": "p",
@@ -5095,7 +5697,7 @@
          "id": "12.1.3/1-diagonal",
          "number": null,
          "heading": "1 - Diagonal",
-         "page": 31,
+         "page": 37,
          "body": [
           {
            "kind": "p",
@@ -5129,7 +5731,7 @@
          "id": "12.1.3/2-edge-case",
          "number": null,
          "heading": "2 - Edge Case",
-         "page": 31,
+         "page": 37,
          "body": [
           {
            "kind": "p",
@@ -5163,7 +5765,7 @@
          "id": "12.1.3/3-eruption",
          "number": null,
          "heading": "3 - Eruption",
-         "page": 31,
+         "page": 37,
          "body": [
           {
            "kind": "p",
@@ -5197,7 +5799,7 @@
          "id": "12.1.3/4-gatecrash",
          "number": null,
          "heading": "4 - Gatecrash",
-         "page": 31,
+         "page": 37,
          "body": [
           {
            "kind": "p",
@@ -5239,7 +5841,7 @@
          "id": "12.1.3/5-moonlight",
          "number": null,
          "heading": "5 - Moonlight",
-         "page": 32,
+         "page": 38,
          "body": [
           {
            "kind": "p",
@@ -5281,7 +5883,7 @@
          "id": "12.1.3/6-moonstruck",
          "number": null,
          "heading": "6 - Moonstruck",
-         "page": 32,
+         "page": 38,
          "body": [
           {
            "kind": "p",
@@ -5317,7 +5919,7 @@
        "id": "12.1.4",
        "number": "12.1.4",
        "heading": "Variants",
-       "page": 33,
+       "page": 39,
        "body": [
         {
          "kind": "p",
@@ -5349,7 +5951,7 @@
            ],
            [
             {
-             "t": "Each Dropsite gains a Military Outpost and each Large Dropsite also gains an Orbital Defence Gun. If the Deployment type uses a Defender, the Defender may place an additional Military Outpost in any Dropsite."
+             "t": "Each Dropsite gains a Military Outpost and each Large Dropsite also gains an Orbital Defence Gun.\nIf the Deployment type uses a Defender, the Defender may place an additional Military Outpost in any Dropsite."
             }
            ]
           ],
@@ -5367,7 +5969,7 @@
            ],
            [
             {
-             "t": "Each Medium City (or Small Cities if the scenario has no Medium Cities) gains a Comms Station. Replace each Large City with a Large Space Station containing an Orbital Defence Gun and Power Plant."
+             "t": "Each Medium City (or Small Cities if the scenario has no Medium Cities) gains a Comms Station.\nReplace each Large City with a Large Space Station containing an Orbital Defence Gun and Power Plant."
             }
            ]
           ],
@@ -5385,25 +5987,7 @@
            ],
            [
             {
-             "t": "Each player places an additional piece of Micrometeor Cloud and Dense Field. These additional pieces should be placed partially over a piece of the same type to create larger areas."
-            }
-           ]
-          ],
-          [
-           [],
-           [],
-           [
-            {
-             "t": "Each Medium City and Medium Space Station gain two Power Plants."
-            }
-           ]
-          ],
-          [
-           [],
-           [],
-           [
-            {
-             "t": "Each Dropsite gains a Power Plant."
+             "t": "Each player places an additional piece of Micrometeor Cloud and Dense Field. These additional pieces should be placed partially over a piece of the same type to create larger areas.\nEach Medium City and Medium Space Station gain two Power Plants."
             }
            ]
           ],
@@ -5421,16 +6005,7 @@
            ],
            [
             {
-             "t": "Replace each Medium City with a Medium Space Station. These Stations gain a Military Outpost, Orbital Defence Gun, and a Hangar."
-            }
-           ]
-          ],
-          [
-           [],
-           [],
-           [
-            {
-             "t": "Groups on Course Change and Max Thrust orders suffer 1 hit at the end of their activation and may use their Energy or Kinetic save against it"
+             "t": "Each Dropsite gains a Power Plant.\nReplace each Medium City with a Medium Space Station. These Stations gain a Military Outpost, Orbital Defence Gun, and a Hangar."
             }
            ]
           ],
@@ -5448,25 +6023,7 @@
            ],
            [
             {
-             "t": "Ships may launch Ground Assets at Dropsites in any Orbital Layer."
-            }
-           ]
-          ],
-          [
-           [],
-           [],
-           [
-            {
-             "t": "Each Red player may place 2 Features of their choice on a Dropsite. Then each Blue player may place 2 Features of their choice on any other Dropsite."
-            }
-           ]
-          ],
-          [
-           [],
-           [],
-           [
-            {
-             "t": "Replace each City with a Space Station of equal size. Each Space Station gains a Military Outpost."
+             "t": "Groups on Course Change and Max Thrust orders suffer 1 hit at the end of their activation and may use their Energy or Kinetic save against it\nShips may launch Ground Assets at Dropsites in any Orbital Layer.\nEach Red player may place 2 Features of their choice on a Dropsite. Then each Blue player may place 2 Features of their choice on any other Dropsite."
             }
            ]
           ],
@@ -5484,7 +6041,7 @@
            ],
            [
             {
-             "t": "Only Orbit is used. Orbital Decay tokens cause a Ship to take D3 damage at the end of its activation. Colossal Ships take 2D3 damage instead."
+             "t": "Replace each City with a Space Station of equal size. Each Space Station gains a Military Outpost.\nOnly Orbit is used. Orbital Decay tokens cause a Ship to take D3 damage at the end of its activation. Colossal Ships take 2D3 damage instead."
             }
            ]
           ]
@@ -5497,14 +6054,14 @@
        "id": "12.1.5",
        "number": "12.1.5",
        "heading": "Objectives",
-       "page": 34,
+       "page": 40,
        "body": [],
        "children": [
         {
          "id": "12.1.5.1",
          "number": "12.1.5.1",
          "heading": "Standard Scoring",
-         "page": 34,
+         "page": 40,
          "body": [
           {
            "kind": "p",
@@ -5595,15 +6152,6 @@
            ],
            "rows": [
             [
-             [],
-             [],
-             [
-              {
-               "t": "Standard Scoring."
-              }
-             ]
-            ],
-            [
              [
               {
                "t": "1",
@@ -5617,16 +6165,7 @@
              ],
              [
               {
-               "t": "Players are awarded 2VP at the end of the game for every 500 points of Ships and Admirals they have destroyed."
-              }
-             ]
-            ],
-            [
-             [],
-             [],
-             [
-              {
-               "t": "Standard Scoring"
+               "t": "Standard Scoring.\nPlayers are awarded 2VP at the end of the game for every 500 points of Ships and Admirals they have destroyed."
               }
              ]
             ],
@@ -5644,16 +6183,7 @@
              ],
              [
               {
-               "t": "Players are awarded 1VP whenever they Survey Dropsites. Any Capital Ship within 6” of the Dropsite and able to fire Weapons may substitute all attacking and launching that round to Survey it. Each Dropsite may be Surveyed once per player per game"
-              }
-             ]
-            ],
-            [
-             [],
-             [],
-             [
-              {
-               "t": "Place 1 Recon Operatives token on Small Dropsites, 2 tokens on Medium Dropsites, and 3 tokens on Large Dropsites. If a Ship may launch Assets to deploy a Battalion token to that Dropsite, they may instead Extract Recon Operatives from that Dropsite equal to the number of Battalions that would be placed. The Extracting Ship gains those Recon Operatives. A Ship cannot Extract more Recon Operatives than the Dropsite has."
+               "t": "Standard Scoring\nPlayers are awarded 1VP whenever they Survey Dropsites. Any Capital Ship within 6” of the Dropsite and able to fire Weapons may substitute all attacking and launching that round to Survey it. Each Dropsite may be Surveyed once per player per game"
               }
              ]
             ],
@@ -5671,43 +6201,7 @@
              ],
              [
               {
-               "t": "Players are awarded 2VP at the end of the game for each Recon Operative token left aboard their Ships."
-              }
-             ]
-            ],
-            [
-             [],
-             [],
-             [
-              {
-               "t": "Players are awarded 1VP at the end of the game for each enemy Ship they have destroyed with any number of Recon Operatives."
-              }
-             ]
-            ],
-            [
-             [],
-             [],
-             [
-              {
-               "t": "Once onboard a Ship, Recon Operatives cannot be removed. Recon Operatives on Payload Ships are transferred to a Porter Ship when the Payload Ship attaches to it."
-              }
-             ]
-            ],
-            [
-             [],
-             [],
-             [
-              {
-               "t": "Standard Scoring."
-              }
-             ]
-            ],
-            [
-             [],
-             [],
-             [
-              {
-               "t": "At the start of the game, after determining Initiative, each player nominates a single different Dropsite in Initiative order."
+               "t": "Place 1 Recon Operatives token on Small Dropsites, 2 tokens on Medium Dropsites, and 3 tokens on Large Dropsites. If a Ship may launch Assets to deploy a Battalion token to that Dropsite, they may instead Extract Recon Operatives from that Dropsite equal to the number of Battalions that would be placed. The Extracting Ship gains those Recon Operatives. A Ship cannot Extract more Recon Operatives than the Dropsite has.\nPlayers are awarded 2VP at the end of the game for each Recon Operative token left aboard their Ships.\nPlayers are awarded 1VP at the end of the game for each enemy Ship they have destroyed with any number of Recon Operatives.\nOnce onboard a Ship, Recon Operatives cannot be removed. Recon Operatives on Payload Ships are transferred to a Porter Ship when the Payload Ship attaches to it."
               }
              ]
             ],
@@ -5725,16 +6219,7 @@
              ],
              [
               {
-               "t": "Each player is awarded additional Standard Scoring for controlling/contesting their nominated Dropsite if that Dropsite is not Levelled/Ruined."
-              }
-             ]
-            ],
-            [
-             [],
-             [],
-             [
-              {
-               "t": "At the end of the game, players are subtracted Standard Scoring if their Dropsite has been levelled."
+               "t": "Standard Scoring.\nAt the start of the game, after determining Initiative, each player nominates a single different Dropsite in Initiative order.\nEach player is awarded additional Standard Scoring for controlling/contesting their nominated Dropsite if that Dropsite is not Levelled/Ruined.\nAt the end of the game, players are subtracted Standard Scoring if their Dropsite has been levelled."
               }
              ]
             ],
@@ -5752,7 +6237,7 @@
              ],
              [
               {
-               "t": "Red Players may permanently fly Ships off the board in any opponent’s Deployment Zone. For every 200pts in Ships Players fly off, they are awarded 1VP at the end of the game. Other Players are awarded 2VP at the end of the game for every 500 points of Ships and Admirals they have destroyed."
+               "t": "Red Players may permanently fly Ships off the board in any opponent’s Deployment Zone. For every 200pts in Ships Players fly off, they are awarded 1VP at the end of the game.\nOther Players are awarded 2VP at the end of the game for every 500 points of Ships and Admirals they have destroyed."
               }
              ]
             ],
@@ -5770,7 +6255,7 @@
              ],
              [
               {
-               "t": "At the end of the game, players are awarded double Standard Scoring for each Dropsite that has been Levelled/Ruined that is 24” or more away from their Deployment Zone (regardless of who Levelled/Ruined those Dropsites). Players are awarded 2VP at the end of the game for every 500 points of Ships and Admirals they have destroyed."
+               "t": "At the end of the game, players are awarded double Standard Scoring for each Dropsite that has been Levelled/Ruined that is 24” or more away from their Deployment Zone (regardless of who Levelled/Ruined those Dropsites).\nPlayers are awarded 2VP at the end of the game for every 500 points of Ships and Admirals they have destroyed."
               }
              ]
             ]
@@ -5787,14 +6272,14 @@
      "id": "12.2",
      "number": "12.2",
      "heading": "Standard Scenarios",
-     "page": 35,
+     "page": 41,
      "body": [],
      "children": [
       {
        "id": "12.2/take-and-hold",
        "number": null,
        "heading": "Take and Hold",
-       "page": 35,
+       "page": 41,
        "body": [
         {
          "kind": "p",
@@ -5843,7 +6328,16 @@
            "t": " Survey."
           }
          ]
-        },
+        }
+       ],
+       "children": []
+      },
+      {
+       "id": "12.2/erupting-battlefront",
+       "number": null,
+       "heading": "Erupting Battlefront",
+       "page": 41,
+       "body": [
         {
          "kind": "p",
          "runs": [
@@ -5855,16 +6349,7 @@
            "t": " 2 players."
           }
          ]
-        }
-       ],
-       "children": []
-      },
-      {
-       "id": "12.2/erupting-battlefront",
-       "number": null,
-       "heading": "Erupting Battlefront",
-       "page": 35,
-       "body": [
+        },
         {
          "kind": "p",
          "runs": [
@@ -5900,7 +6385,16 @@
            "t": " Raze."
           }
          ]
-        },
+        }
+       ],
+       "children": []
+      },
+      {
+       "id": "12.2/power-grab",
+       "number": null,
+       "heading": "Power Grab",
+       "page": 42,
+       "body": [
         {
          "kind": "p",
          "runs": [
@@ -5912,16 +6406,7 @@
            "t": " 2 players."
           }
          ]
-        }
-       ],
-       "children": []
-      },
-      {
-       "id": "12.2/power-grab",
-       "number": null,
-       "heading": "Power Grab",
-       "page": 36,
-       "body": [
+        },
         {
          "kind": "p",
          "runs": [
@@ -5957,7 +6442,16 @@
            "t": " Attrition."
           }
          ]
-        },
+        }
+       ],
+       "children": []
+      },
+      {
+       "id": "12.2/shock-and-yaw",
+       "number": null,
+       "heading": "Shock And Yaw",
+       "page": 42,
+       "body": [
         {
          "kind": "p",
          "runs": [
@@ -5969,16 +6463,7 @@
            "t": " 2 players."
           }
          ]
-        }
-       ],
-       "children": []
-      },
-      {
-       "id": "12.2/shock-and-yaw",
-       "number": null,
-       "heading": "Shock And Yaw",
-       "page": 36,
-       "body": [
+        },
         {
          "kind": "p",
          "runs": [
@@ -6026,7 +6511,16 @@
            "t": " Instead of its normal effect, destroying a Power Plant Feature does not deal additional damage to the Medium Space Station but causes all Groups within 6” to gain two Spikes and all Ships within 6” to gain a Scanners Offline token."
           }
          ]
-        },
+        }
+       ],
+       "children": []
+      },
+      {
+       "id": "12.2/orbital-support",
+       "number": null,
+       "heading": "Orbital Support",
+       "page": 43,
+       "body": [
         {
          "kind": "p",
          "runs": [
@@ -6038,16 +6532,7 @@
            "t": " 2 players."
           }
          ]
-        }
-       ],
-       "children": []
-      },
-      {
-       "id": "12.2/orbital-support",
-       "number": null,
-       "heading": "Orbital Support",
-       "page": 37,
-       "body": [
+        },
         {
          "kind": "p",
          "runs": [
@@ -6095,7 +6580,16 @@
            "t": " The Medium Space Station replaces its two Military Outposts with two Hangars."
           }
          ]
-        },
+        }
+       ],
+       "children": []
+      },
+      {
+       "id": "12.2/entrapmoont",
+       "number": null,
+       "heading": "Entrapmoont",
+       "page": 43,
+       "body": [
         {
          "kind": "p",
          "runs": [
@@ -6107,16 +6601,7 @@
            "t": " 2-4 players, 1 attacking team in red, 1 defending team in blue."
           }
          ]
-        }
-       ],
-       "children": []
-      },
-      {
-       "id": "12.2/entrapmoont",
-       "number": null,
-       "heading": "Entrapmoont",
-       "page": 37,
-       "body": [
+        },
         {
          "kind": "p",
          "runs": [
@@ -6174,7 +6659,7 @@
      "id": "12.3",
      "number": "12.3",
      "heading": "Secondary Objectives",
-     "page": 38,
+     "page": 44,
      "body": [
       {
        "kind": "p",
@@ -6214,7 +6699,7 @@
        "id": "12.3.1",
        "number": "12.3.1",
        "heading": "Key Site",
-       "page": 38,
+       "page": 44,
        "body": [
         {
          "kind": "p",
@@ -6231,7 +6716,7 @@
        "id": "12.3.2",
        "number": "12.3.2",
        "heading": "Priority Target",
-       "page": 38,
+       "page": 44,
        "body": [
         {
          "kind": "p",
@@ -6248,13 +6733,13 @@
        "id": "12.3.3",
        "number": "12.3.3",
        "heading": "Long Shot",
-       "page": 38,
+       "page": 44,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "Nominate one Feature in a Dropsite within 12” of an opponent’s Deployment Zone before the game. If you have destroyed it, at the end of the game, gain 2VP. Each Feature can only be nominated once but a Dropsite can have more than one nominated Feature."
+           "t": "Nominate one Feature in a Dropsite within 12” of an opponent’s Deployment Zone before the game. If you have destroyed it, or a deployed enemy Deployable Feature within 12” of their Deployment Zone at the end of the game, gain 2VP. Each Feature can only be nominated once but a Dropsite can have more than one nominated Feature."
           }
          ]
         }
@@ -6265,7 +6750,7 @@
        "id": "12.3.4",
        "number": "12.3.4",
        "heading": "Annihilate",
-       "page": 38,
+       "page": 44,
        "body": [
         {
          "kind": "p",
@@ -6282,7 +6767,7 @@
        "id": "12.3.5",
        "number": "12.3.5",
        "heading": "Take Prizes",
-       "page": 38,
+       "page": 44,
        "body": [
         {
          "kind": "p",
@@ -6299,7 +6784,7 @@
        "id": "12.3.6",
        "number": "12.3.6",
        "heading": "Gather Intel",
-       "page": 38,
+       "page": 44,
        "body": [
         {
          "kind": "p",
@@ -6316,13 +6801,13 @@
        "id": "12.3.7",
        "number": "12.3.7",
        "heading": "Decapitate",
-       "page": 38,
+       "page": 44,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "You are awarded 2VP if you kill your opponent’s highest-Level Admiral (or one of if there are multiple with the same Level)."
+           "t": "You are awarded 2VP if an opponent’s highest-level Admiral has been killed for any reason (or one of if there are multiple with the same Level)."
           }
          ]
         }
@@ -6333,7 +6818,7 @@
        "id": "12.3.8",
        "number": "12.3.8",
        "heading": "Objectives Beyond",
-       "page": 38,
+       "page": 44,
        "body": [
         {
          "kind": "p",
@@ -6352,7 +6837,7 @@
      "id": "12.4",
      "number": "12.4",
      "heading": "Kill Points & Ties",
-     "page": 38,
+     "page": 44,
      "body": [
       {
        "kind": "p",
@@ -6371,14 +6856,14 @@
    "id": "13",
    "number": "13",
    "heading": "Competitive Play",
-   "page": 39,
+   "page": 45,
    "body": [],
    "children": [
     {
      "id": "13.1",
      "number": "13.1",
      "heading": "Two Lists",
-     "page": 39,
+     "page": 45,
      "body": [
       {
        "kind": "p",
@@ -6411,7 +6896,7 @@
      "id": "13.2",
      "number": "13.2",
      "heading": "Scenario Selection",
-     "page": 39,
+     "page": 45,
      "body": [
       {
        "kind": "p",
@@ -6494,27 +6979,27 @@
    "id": "14",
    "number": "14",
    "heading": "Special Rules",
-   "page": 40,
+   "page": 46,
    "body": [],
    "children": [
     {
      "id": "14.1",
      "number": "14.1",
      "heading": "Ship Special Rules",
-     "page": 40,
+     "page": 46,
      "body": [],
      "children": [
       {
        "id": "14.1.1",
        "number": "14.1.1",
        "heading": "Aegis-X",
-       "page": 40,
+       "page": 46,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "All Ships with this rule in a Group combine their X values into a single value, Y."
+           "t": "All Ships with this rule in a Group in coherency combine their X values into a single value Y."
           }
          ]
         },
@@ -6530,7 +7015,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "When rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits)."
+           "t": "When rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to their Energy or Kinetic saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits) between any Energy or Kinetic saves."
           }
          ]
         },
@@ -6549,6 +7034,30 @@
            "t": "A friendly Group can only benefit from Aegis from one Group each time it is attacked."
           }
          ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Aegis has no effect on Backup saves or saves that replace Energy and Kinetic saves (such as Shield saves).”"
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "In addition, Ships benefiting from Aegis increase the number of bombers required to trigger Saturation Fire by Y."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "e.g. A Ship benefiting from Aegis-2 would suffer one Core hit per bomber above 8, rather than 6.”"
+          }
+         ]
         }
        ],
        "children": []
@@ -6557,7 +7066,7 @@
        "id": "14.1.2",
        "number": "14.1.2",
        "heading": "Cloak-X",
-       "page": 40,
+       "page": 46,
        "body": [
         {
          "kind": "p",
@@ -6574,7 +7083,7 @@
        "id": "14.1.3",
        "number": "14.1.3",
        "heading": "Command Ship-X",
-       "page": 40,
+       "page": 46,
        "body": [
         {
          "kind": "p",
@@ -6591,7 +7100,7 @@
        "id": "14.1.4",
        "number": "14.1.4",
        "heading": "Descent",
-       "page": 40,
+       "page": 46,
        "body": [
         {
          "kind": "p",
@@ -6608,7 +7117,7 @@
        "id": "14.1.5",
        "number": "14.1.5",
        "heading": "Detector",
-       "page": 40,
+       "page": 46,
        "body": [
         {
          "kind": "p",
@@ -6633,37 +7142,13 @@
        "id": "14.1.6",
        "number": "14.1.6",
        "heading": "Escort",
-       "page": 40,
+       "page": 46,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "After Weapons have been assigned to a friendly Ship of H or C tonnage within 6” of this Ship on the same Orbital Layer, you may declare the use of Escort for the friendly Ship. Only one Group may Escort at a time and it must be in Coherency."
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "After your opponent rolls to hit the original target, allocate an amount of hits from that roll to this Group. An Escort Group cannot be allocated more damage by those hits than each remaining Ship in it has in starting Hull. You may use this even if the Escort Group is out of range, arc, and line of sight of the attacking Group. Continue the attack sequence using the Escort Group."
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "Weapons with the Focused rule cannot be affected by the Escort rule."
-          }
-         ]
-        },
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "E.g. an Escort Group has 2 Ships with a starting Hull of 5, with one down to 3 Hull remaining. When you use Escort, you may assign up to 10 damage worth of hits to the Escort Group (so could be 10 damage 1 hits, or 5 damage 2 hits) regardless of their current remaining Hull."
+           "t": "At the start of the game, before deployment, assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers"
           }
          ]
         }
@@ -6674,7 +7159,7 @@
        "id": "14.1.7",
        "number": "14.1.7",
        "heading": "Gateship-X",
-       "page": 41,
+       "page": 47,
        "body": [
         {
          "kind": "p",
@@ -6688,7 +7173,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "When this Ship goes on the Weapons Free, Max Thrust, or Damage Control orders, it reduces its Gateship-X value to 0 until the start of its next activation."
+           "t": "When this Ship goes on the Max Thrust or Damage Control orders, it reduces its Gateship-X value to 0 until the start of its next activation."
           }
          ]
         }
@@ -6699,7 +7184,7 @@
        "id": "14.1.8",
        "number": "14.1.8",
        "heading": "Marines-X",
-       "page": 41,
+       "page": 47,
        "body": [
         {
          "kind": "p",
@@ -6716,7 +7201,7 @@
        "id": "14.1.9",
        "number": "14.1.9",
        "heading": "Monitor",
-       "page": 41,
+       "page": 47,
        "body": [
         {
          "kind": "p",
@@ -6733,13 +7218,13 @@
        "id": "14.1.10",
        "number": "14.1.10",
        "heading": "Mothership",
-       "page": 41,
+       "page": 47,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "Shaltari Motherships can only deploy their Dropships via friendly Ships/Dropsites with the Gateship-X special rule (sometimes referred to as Gateships)."
+           "t": "Shaltari Motherships can only deploy their Dropships via friendly Ships or controlled Dropsites with the Gateship-X special rule (sometimes referred to as Gateships)."
           }
          ]
         },
@@ -6758,7 +7243,7 @@
        "id": "14.1.11",
        "number": "14.1.11",
        "heading": "Payload S/L-X",
-       "page": 41,
+       "page": 47,
        "body": [
         {
          "kind": "p",
@@ -6814,7 +7299,7 @@
        "id": "14.1.12",
        "number": "14.1.12",
        "heading": "Porter S/L-X",
-       "page": 41,
+       "page": 47,
        "body": [
         {
          "kind": "p",
@@ -6847,7 +7332,7 @@
        "id": "14.1.13",
        "number": "14.1.13",
        "heading": "Rapid Drop",
-       "page": 42,
+       "page": 47,
        "body": [
         {
          "kind": "p",
@@ -6864,7 +7349,7 @@
        "id": "14.1.14",
        "number": "14.1.14",
        "heading": "Rare",
-       "page": 42,
+       "page": 47,
        "body": [
         {
          "kind": "p",
@@ -6881,7 +7366,7 @@
        "id": "14.1.15",
        "number": "14.1.15",
        "heading": "Regenerate-X",
-       "page": 42,
+       "page": 48,
        "body": [
         {
          "kind": "p",
@@ -6898,13 +7383,13 @@
        "id": "14.1.16",
        "number": "14.1.16",
        "heading": "Shield-X",
-       "page": 42,
+       "page": 48,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "This Group has a Shield Save of X+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal."
+           "t": "This Group/Dropsite has an unmodifiable Shield save of X+."
           }
          ]
         },
@@ -6912,7 +7397,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "A Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use)."
+           "t": "At the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation."
           }
          ]
         },
@@ -6920,7 +7405,31 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Hits caused by Boarding Actions cannot be saved by Shield Saves."
+           "t": "While a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "A Group on Silent Running loses any shields tokens it has and cannot have shields tokens."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Groups that Directly Deploy may start the game with a shields token."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Core Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves."
           }
          ]
         }
@@ -6931,7 +7440,7 @@
        "id": "14.1.17",
        "number": "14.1.17",
        "heading": "Stealth",
-       "page": 42,
+       "page": 48,
        "body": [
         {
          "kind": "p",
@@ -6948,7 +7457,7 @@
        "id": "14.1.18",
        "number": "14.1.18",
        "heading": "Unique",
-       "page": 42,
+       "page": 48,
        "body": [
         {
          "kind": "p",
@@ -6965,13 +7474,13 @@
        "id": "14.1.19",
        "number": "14.1.19",
        "heading": "Vectored",
-       "page": 42,
+       "page": 48,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
+           "t": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken."
           }
          ]
         }
@@ -6982,7 +7491,7 @@
        "id": "14.1.20",
        "number": "14.1.20",
        "heading": "Impetuous",
-       "page": 42,
+       "page": 48,
        "body": [
         {
          "kind": "p",
@@ -6999,7 +7508,7 @@
        "id": "14.1.221",
        "number": "14.1.221",
        "heading": "Reinforced Armour",
-       "page": 42,
+       "page": 48,
        "body": [
         {
          "kind": "p",
@@ -7016,7 +7525,7 @@
        "id": "14.1.22",
        "number": "14.1.22",
        "heading": "Vanguard-X”",
-       "page": 42,
+       "page": 48,
        "body": [
         {
          "kind": "p",
@@ -7033,13 +7542,96 @@
        "id": "14.1.23",
        "number": "14.1.23",
        "heading": "Hero",
-       "page": 42,
+       "page": 48,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
            "t": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet."
+          }
+         ]
+        }
+       ],
+       "children": []
+      },
+      {
+       "id": "14.1.24",
+       "number": "14.1.24",
+       "heading": "Boardable",
+       "page": 48,
+       "body": [
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "This Ship can have Battalions Assigned to it as if it were a Space Station."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "At the start of the round, this Ship is controlled by a Player if only they have any Battalions on it, lasting until the end of the round."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Players that control a Boardable Ship may activate it as if it were a Ship in their Fleet, after all other Groups have activated."
+          }
+         ]
+        }
+       ],
+       "children": []
+      },
+      {
+       "id": "14.1.25",
+       "number": "14.1.25",
+       "heading": "Civilian Transport",
+       "page": 48,
+       "body": [
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "This Ship can only choose the General Quarters order."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "This Ship cannot be attacked unless it is controlled by a player. Players cannot attack a friendly Civilian Transport."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "This Ship cannot be the target of Abilities."
+          }
+         ]
+        }
+       ],
+       "children": []
+      },
+      {
+       "id": "14.1.26",
+       "number": "14.1.26",
+       "heading": "Mercenary (X)",
+       "page": 48,
+       "body": [
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "This Ship may be used in X faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
           }
          ]
         }
@@ -7052,20 +7644,20 @@
      "id": "14.2",
      "number": "14.2",
      "heading": "Weapon Special Rules",
-     "page": 43,
+     "page": 49,
      "body": [],
      "children": [
       {
        "id": "14.2.1",
        "number": "14.2.1",
        "heading": "Air to Air",
-       "page": 43,
+       "page": 49,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "This weapon ignores the penalties for attacking Ships in Atmosphere while the attacking Ship is also in Atmosphere."
+           "t": "This weapon ignores the penalties for attacking Ships in Atmosphere while the attacker is also in Atmosphere."
           }
          ]
         }
@@ -7076,7 +7668,7 @@
        "id": "14.2.2",
        "number": "14.2.2",
        "heading": "Alt-X",
-       "page": 43,
+       "page": 49,
        "body": [
         {
          "kind": "p",
@@ -7101,7 +7693,7 @@
        "id": "14.2.3",
        "number": "14.2.3",
        "heading": "Alt Launch",
-       "page": 43,
+       "page": 49,
        "body": [
         {
          "kind": "p",
@@ -7118,13 +7710,13 @@
        "id": "14.2.4",
        "number": "14.2.4",
        "heading": "Arrest-X",
-       "page": 43,
+       "page": 49,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "A Ship damaged by this Weapon reduces its Thrust by X” during its next activation. A Ship can only be affected by this rule once each round."
+           "t": "A Ship damaged by this Weapon reduces its Thrust by X” during its next activation. A Ship affected by this rule multiple times before it activates uses the highest X value it is affected by to determine its Thrust reduction."
           }
          ]
         }
@@ -7135,13 +7727,13 @@
        "id": "14.2.5",
        "number": "14.2.5",
        "heading": "Bloom-X",
-       "page": 43,
+       "page": 49,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "Whenever you fire this Weapon (including separate attacks generated by the Volley-X special rule), the attacking Group gains X Spikes."
+           "t": "When you attack with this Weapon System (including separate attacks generated by the Volley-X special rule), the attacking Group gains X Spikes."
           }
          ]
         }
@@ -7152,7 +7744,7 @@
        "id": "14.2.6",
        "number": "14.2.6",
        "heading": "Bombardment",
-       "page": 43,
+       "page": 49,
        "body": [
         {
          "kind": "p",
@@ -7201,7 +7793,7 @@
        "id": "14.2.7",
        "number": "14.2.7",
        "heading": "Burnthrough-X",
-       "page": 43,
+       "page": 49,
        "body": [
         {
          "kind": "p",
@@ -7218,7 +7810,7 @@
        "id": "14.2.8",
        "number": "14.2.8",
        "heading": "Calibre-X",
-       "page": 43,
+       "page": 49,
        "body": [
         {
          "kind": "p",
@@ -7235,13 +7827,13 @@
        "id": "14.2.9",
        "number": "14.2.9",
        "heading": "Close Action",
-       "page": 43,
+       "page": 49,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "This Weapon may only be fired at targets within Scan range and on the same Orbital Layer as the attacking Ship."
+           "t": "This weapon does not benefit from Formation Benefits and can only be assigned to targets within Scan range and on the same Orbital Layer as the attacker."
           }
          ]
         }
@@ -7252,7 +7844,7 @@
        "id": "14.2.10",
        "number": "14.2.10",
        "heading": "Corruptor-X",
-       "page": 43,
+       "page": 49,
        "body": [
         {
          "kind": "p",
@@ -7269,7 +7861,7 @@
        "id": "14.2.11",
        "number": "14.2.11",
        "heading": "Crippling-X",
-       "page": 43,
+       "page": 49,
        "body": [
         {
          "kind": "p",
@@ -7312,7 +7904,7 @@
        "id": "14.2.12",
        "number": "14.2.12",
        "heading": "Critical-X",
-       "page": 43,
+       "page": 50,
        "body": [
         {
          "kind": "p",
@@ -7337,7 +7929,7 @@
        "id": "14.2.13",
        "number": "14.2.13",
        "heading": "Escape Velocity",
-       "page": 44,
+       "page": 50,
        "body": [
         {
          "kind": "p",
@@ -7362,7 +7954,7 @@
        "id": "14.2.14",
        "number": "14.2.14",
        "heading": "Flash-X",
-       "page": 44,
+       "page": 50,
        "body": [
         {
          "kind": "p",
@@ -7379,7 +7971,7 @@
        "id": "14.2.15",
        "number": "14.2.15",
        "heading": "Focused",
-       "page": 44,
+       "page": 50,
        "body": [
         {
          "kind": "p",
@@ -7393,7 +7985,15 @@
          "kind": "li",
          "runs": [
           {
-           "t": "A single enemy Ship. • A Dropsite containing no friendly Battalions."
+           "t": "A single enemy Ship."
+          }
+         ]
+        },
+        {
+         "kind": "li",
+         "runs": [
+          {
+           "t": "A Dropsite containing no friendly Battalions."
           }
          ]
         },
@@ -7412,7 +8012,7 @@
        "id": "14.2.16",
        "number": "14.2.16",
        "heading": "Fusillade-X",
-       "page": 44,
+       "page": 50,
        "body": [
         {
          "kind": "p",
@@ -7429,7 +8029,7 @@
        "id": "14.2.17",
        "number": "14.2.17",
        "heading": "High Power",
-       "page": 44,
+       "page": 50,
        "body": [
         {
          "kind": "p",
@@ -7454,7 +8054,7 @@
        "id": "14.2.18",
        "number": "14.2.18",
        "heading": "Impel-X",
-       "page": 44,
+       "page": 50,
        "body": [
         {
          "kind": "p",
@@ -7495,7 +8095,7 @@
        "id": "14.2.19",
        "number": "14.2.19",
        "heading": "Limited-X",
-       "page": 44,
+       "page": 50,
        "body": [
         {
          "kind": "p",
@@ -7528,7 +8128,7 @@
        "id": "14.2.20",
        "number": "14.2.20",
        "heading": "Linked-X",
-       "page": 44,
+       "page": 50,
        "body": [
         {
          "kind": "p",
@@ -7545,7 +8145,7 @@
        "id": "14.2.21",
        "number": "14.2.21",
        "heading": "Low Power",
-       "page": 44,
+       "page": 50,
        "body": [
         {
          "kind": "p",
@@ -7562,13 +8162,13 @@
        "id": "14.2.22",
        "number": "14.2.22",
        "heading": "Mauler",
-       "page": 45,
+       "page": 51,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "The Lock value of this Weapon is equal to the save the target would use to defend against it."
+           "t": "The Lock value of this weapon is equal to the target’s save value against this weapon’s Type."
           }
          ]
         },
@@ -7587,7 +8187,7 @@
        "id": "14.2.23",
        "number": "14.2.23",
        "heading": "Overcharge",
-       "page": 45,
+       "page": 51,
        "body": [
         {
          "kind": "p",
@@ -7604,7 +8204,7 @@
        "id": "14.2.24",
        "number": "14.2.24",
        "heading": "Penetrator",
-       "page": 45,
+       "page": 51,
        "body": [
         {
          "kind": "p",
@@ -7621,7 +8221,7 @@
        "id": "14.2.25",
        "number": "14.2.25",
        "heading": "Re-Entry",
-       "page": 45,
+       "page": 51,
        "body": [
         {
          "kind": "p",
@@ -7646,13 +8246,13 @@
        "id": "14.2.26",
        "number": "14.2.26",
        "heading": "Scald-X",
-       "page": 45,
+       "page": 51,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "If this weapon attacks a target within Scan range, reduce the target’s Energy / Kinetic save against this Weapon’s hits by X (other attacks and Weapons are unaffected)."
+           "t": "If this weapon attacks a target within Scan range of the attacking Ship, reduce the target’s Energy / Kinetic save against this weapon’s hits by X (other attacks and weapons are unaffected)."
           }
          ]
         }
@@ -7663,7 +8263,7 @@
        "id": "14.2.27",
        "number": "14.2.27",
        "heading": "Status",
-       "page": 45,
+       "page": 51,
        "body": [
         {
          "kind": "p",
@@ -7677,7 +8277,23 @@
          "kind": "p",
          "runs": [
           {
-           "t": "At the end of the Inflict Damage step, choose one of the defending Ships to gain the selected token, regardless of the amount of damage caused by the attack or amount of hits saved. This token is automatically removed at the start of the End Phase, before making repairs."
+           "t": "At the end of the Inflict Damage step, for each unsaved hit from this weapon, choose one of the defending Ships to gain the selected token, regardless of the amount of damage caused by those hits."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "This token is automatically removed at the end of the affected ship’s next activation or the start of the next End Phase, before making repairs (whichever is first)."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "Tokens gained from this rule are counted separately from normal Crippling Effects. A Ship may only have one of each type of these tokens gained due to this rule."
           }
          ]
         }
@@ -7688,7 +8304,7 @@
        "id": "14.2.28",
        "number": "14.2.28",
        "heading": "Sustained Fire",
-       "page": 45,
+       "page": 51,
        "body": [
         {
          "kind": "p",
@@ -7705,13 +8321,13 @@
        "id": "14.2.29",
        "number": "14.2.29",
        "heading": "Volley-X",
-       "page": 45,
+       "page": 51,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
-           "t": "This Weapon counts as 1 Weapon for Orders purposes. When you assign this Weapon to a target, you assign it to targets up to X times (either the same or different). Once assigned, treat each allocation as a separate weapon for the subsequent steps in the attack sequence."
+           "t": "This Weapon counts as 1 Weapon System for Orders purposes. When you assign this Weapon to a target, you assign it to targets up to X times (either the same or different). Once assigned, treat each allocation as a separate weapon for the subsequent steps in the attack sequence."
           }
          ]
         },
@@ -7730,7 +8346,7 @@
        "id": "14.2.30",
        "number": "14.2.30",
        "heading": "Reave-X",
-       "page": 45,
+       "page": 51,
        "body": [
         {
          "kind": "p",
@@ -7755,13 +8371,38 @@
        "id": "14.2.31",
        "number": "14.2.31",
        "heading": "Anti Wing",
-       "page": 45,
+       "page": 52,
        "body": [
         {
          "kind": "p",
          "runs": [
           {
            "t": "This weapon may target enemy Wings as if they were Ships (with a Sig of 0”) but reduces its Lock value by 1 for that attack. If it does, for each hit, remove 1 Fighter or 1 Bomber from that Wing or any other enemy Wing within 3” of the target."
+          }
+         ]
+        },
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "When this weapon is assigned to a Torpedo, it reduces its Lock value by 1 instead of always hitting on a 6+.”"
+          }
+         ]
+        }
+       ],
+       "children": []
+      },
+      {
+       "id": "14.2.32",
+       "number": "14.2.32",
+       "heading": "Point Blank",
+       "page": 52,
+       "body": [
+        {
+         "kind": "p",
+         "runs": [
+          {
+           "t": "A weapon with this rule can only be assigned targets in base contact and on the same Orbital Layer. This Weapon counts as a Close Action weapon for Orders purposes. This Weapon cannot target Cities."
           }
          ]
         }

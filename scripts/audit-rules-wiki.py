@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Audit data/rules-wiki.json against the source PDF.
 
-    python scripts/audit-rules-wiki.py
+    python scripts/audit-rules-wiki.py --pdf <path to the rulebook PDF>
 
 Checks, in order of importance:
   1. VERBATIM  - every paragraph, list item and table cell in the wiki must
@@ -31,7 +31,7 @@ except ImportError:
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WIKI = os.path.join(ROOT, "data", "rules-wiki.json")
 PDF = os.path.join(ROOT, "Rules-Mechanics-PDFs",
-                   "A5_Dropfleet_Rulebook_2.3.1_Print_Friendly.pdf")
+                   "A5_Dropfleet_Rulebook_2.4_Print_Friendly.pdf")
 
 
 def norm(s):
@@ -52,8 +52,13 @@ def cell_text(cell):
 
 
 def main():
-    doc = json.load(open(WIKI, encoding="utf-8"))
-    pdf = fitz.open(PDF)
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--pdf", default=PDF)
+    ap.add_argument("--wiki", default=WIKI)
+    args = ap.parse_args()
+    doc = json.load(open(args.wiki, encoding="utf-8"))
+    pdf = fitz.open(args.pdf)
     hay = norm("".join(pdf[i].get_text() for i in range(pdf.page_count)))
 
     verbatim_fail, table_fail = [], []

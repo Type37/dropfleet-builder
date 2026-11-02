@@ -9,11 +9,21 @@ invented or reworded, only re-shaped from stranded paragraphs into a table.
 
 Chapter 11 Dropsites
 --------------------
-The Dropsite stats table on page 26 has no ruled grid, so find_tables() missed
-it: its column heads (Icon, Dropsite, Scan, Sig, Hull, ES, KS) came through as
-loose captions and its six rows as ordinary paragraphs. This gathers them back
-into one table. The Icon column is dropped: it held only the dropsite icon,
-which is a picture, not text.
+In 2.3.1 the Dropsite stats table (page 26) had no ruled grid, so find_tables()
+missed it: its column heads (Icon, Dropsite, Scan, Sig, Hull, ES, KS) came
+through as loose captions and its six rows as ordinary paragraphs, and this
+gathers them back into one table. 2.4 (page 30) rules it and the extractor
+finds it whole. Either way the Icon column is dropped: it holds only the
+dropsite icon, which is a picture, not text.
+
+Edition 2.4
+-----------
+Run against the 2.4 book (A5_Dropfleet_Rulebook_2.4_Print_Friendly.pdf) the
+extractor now recovers the 4.2, 4.2.1.1, 5 and 7.4.1 tables itself (their
+column heads sit in a dark band one point above find_tables' grid; see
+extend_table_head), so those four repairs find a table already there and do
+nothing. They stay for a re-run against 2.3.1. 11.3 Features is rebuilt for
+the 2.4 layout, which adds a Hull column to every Feature.
 """
 import json
 import os
@@ -33,6 +43,15 @@ def plain(item):
 
 def fix_dropsites(ch):
     body = ch["body"]
+    for it in body:
+        # 2.4 rules the table, so it is found whole -- with its Icon column,
+        # which holds only the dropsite pictures and comes through empty. The
+        # app draws those icons itself off a table headed "Dropsite".
+        if (it["kind"] == "table" and (it.get("header") or [""])[0] == "Icon"
+                and all(not "".join(r["t"] for r in row[0]).strip() for row in it["rows"])):
+            it["header"] = it["header"][1:]
+            it["rows"] = [row[1:] for row in it["rows"]]
+            return True
     if any(it["kind"] == "table" for it in body):
         return False  # already repaired
 
@@ -103,45 +122,79 @@ def find(node, number):
 
 
 def fix_features(ch):
-    """Chapter 11.3 Features: the per-Feature cards (a stat line, a weapon or
-    launch line, and a rule) flattened into one broken table with the weapon
-    stats mis-split. Rebuild as clean tables, values read from page 27."""
+    """Chapter 11.3 Features (page 31 in 2.4): five Feature cards, each a
+    Type/ES/KS/Hull/Special stat row, the two armed ones with a Weapon row
+    beneath, and the Hangar with a Launch row. The rows of different cards
+    share no column grid, so find_tables reads the whole page as one ten-column
+    table with every card's head repeated and the weapon stats glued together
+    ("1 E Burnthrough-1, Escape Velocity"). Rebuilt one table per printed row
+    group, exactly as the book sets them out: no column is invented, and each
+    value is checked against the extracted text before it is written.
+
+    Printer omission, kept: the Hangar card prints no Hull value (its Hull
+    cell is empty in the book; every other Feature has one)."""
     sec = find(ch, "11.3")
     if not sec:
         return False
-    if any(it["kind"] == "table" and it.get("header", [""])[0] == "Feature"
+    if any(it["kind"] == "table" and (it.get("header") or [""])[:2] == ["Type", "ES"]
            for it in sec["body"]):
         return False  # already repaired
 
+    def ptext(it):
+        if it["kind"] == "table":
+            cells = list(it.get("header") or [])
+            cells += ["".join(r["t"] for r in c) for row in it["rows"] for c in row]
+            return " ".join(cells)
+        return plain(it)
+    src = re.sub(r"\s+", " ", " ".join(ptext(it) for it in sec["body"]))
+
     intro = next((it for it in sec["body"]
-                  if it["kind"] == "p" and "".join(r["t"] for r in it["runs"]).startswith("Features are")), None)
+                  if it["kind"] == "p" and plain(it).startswith("Features are")), None)
     foot = next((it for it in sec["body"]
-                 if it["kind"] == "p" and "".join(r["t"] for r in it["runs"]).lstrip().startswith("*")), None)
+                 if it["kind"] == "p" and plain(it).lstrip().startswith("*")), None)
+    _require(intro and foot, "11.3 Features intro/footnote")
 
-    stats = {"kind": "table", "header": ["Feature", "ES", "KS", "Special"], "rows": [
-        row(cell("Military Outpost"), cell("3+"), cell("5+"), cell("-")),
-        row(cell("Orbital Defence Gun"), cell("5+"), cell("3+"), cell("-")),
-        row(cell("Comms Station"), cell("5+"), cell("4+"),
-            cell(("Comms Uplink:", " If you control this Dropsite, increase the amount of Ability Points you generate by 1. You can only be affected by Comms Uplink once each round."))),
-        row(cell("Power Plant"), cell("4+"), cell("5+"),
-            cell(("Volatile:", " When this Feature is destroyed, all Groups within 3" + Q + " gain a Spike and this Feature" + APOS + "s Dropsite takes an additional 2D3 damage."))),
-        row(cell("Hangar"), cell("4+"), cell("4+"), cell("-")),
-    ]}
-    weapons = {"kind": "table",
-               "header": ["Feature", "Weapon", "Scan", "Att", "Lock", "Dmg", "Type", "Special"], "rows": [
-                   row(cell("Military Outpost"), cell("Missile Halo"), cell("6" + Q), cell("1"), cell("2+"), cell("2"), cell("K"), cell("Close Action, Escape Velocity")),
-                   row(cell("Orbital Defence Gun"), cell("Orbital Gun"), cell("6" + Q), cell("3"), cell("3+"), cell("1"), cell("E"), cell("Burnthrough-1, Escape Velocity")),
-               ]}
-    launch = {"kind": "table", "header": ["Feature", "Asset", "Launch", "Special"], "rows": [
-        row(cell("Hangar"), cell("Fighters & Bombers*"), cell("2"), cell("-")),
-    ]}
+    STAT = ["Type", "ES", "KS", "Hull", "Special"]
+    WEAP = ["Weapon", "Scan", "Att", "Lock", "Dmg", "Type", "Special"]
+    uplink = ("Comms Uplink:", " If you control this Dropsite, increase the amount of "
+              "Ability Points you generate by 1. You can only be affected by Comms "
+              "Uplink once each round.")
+    volatile = ("Volatile:", " When this Feature is destroyed, all Groups within 3" + Q
+                + " gain a Spike and this Feature" + APOS + "s Dropsite takes an "
+                "additional 2D3 damage.")
+    cards = [
+        (["Military Outpost", "3+", "3+", "6", "-"],
+         ["Missile Halo", "6" + Q, "1", "2+", "2", "K", "Close Action, Escape Velocity"]),
+        (["Orbital Defence Gun", "5+", "5+", "5", "-"],
+         ["Orbital Gun", "6" + Q, "3", "3+", "1", "E", "Burnthrough-1, Escape Velocity"]),
+        (["Comms Station", "4+", "4+", "5", uplink], None),
+        (["Power Plant", "5+", "5+", "5", volatile], None),
+        (["Hangar", "4+", "4+", "", "-"], None),
+    ]
+    # Every short value must be in the extracted section; the two rule texts
+    # are checked word by word, since the extractor scrambled their lines.
+    for stat, weap in cards:
+        for v in stat[:4] + (weap or []):
+            if isinstance(v, str) and len(v) > 2:
+                for w in v.replace(",", " ").split():
+                    _require(w in src, "11.3 Features: %r" % v)
+    for label, rest in (uplink, volatile):
+        for w in (label + rest).split():
+            _require(w in src, "11.3 Features: %r" % w)
 
-    body = []
-    if intro:
-        body.append(intro)
-    body += [stats, weapons, launch]
-    if foot:
-        body.append(foot)
+    def mk(v):
+        return cell(v) if isinstance(v, tuple) else cell(v) if v else []
+
+    body = [intro]
+    for stat, weap in cards:
+        body.append({"kind": "table", "header": STAT, "rows": [[mk(v) for v in stat]]})
+        if weap:
+            body.append({"kind": "table", "header": WEAP, "rows": [[mk(v) for v in weap]]})
+    body.append({"kind": "table", "header": ["Type", "Launch", "Special"],
+                 "rows": [[cell("Fighters & Bombers*"), cell("2"), cell("-")]]})
+    body.append(foot)
+    body += [it for it in sec["body"] if it["kind"] not in ("table", "caption")
+             and it is not intro and it is not foot]
     sec["body"] = body
     return True
 
@@ -319,7 +372,12 @@ def fix_hyphens(nodes):
 
 
 def main():
-    with open(OUT, encoding="utf-8") as fh:
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--path", default=OUT, help="rules-wiki JSON to patch in place")
+    args = ap.parse_args()
+    out = args.path
+    with open(out, encoding="utf-8") as fh:
         doc = json.load(fh)
 
     changed = 0
@@ -358,9 +416,9 @@ def main():
     if not changed:
         print("nothing to patch (already applied, or source shape changed)")
         return
-    with open(OUT, "w", encoding="utf-8") as fh:
+    with open(out, "w", encoding="utf-8") as fh:
         json.dump(doc, fh, ensure_ascii=False, indent=1)
-    print("wrote", os.path.relpath(OUT, ROOT))
+    print("wrote", os.path.relpath(out, ROOT))
 
 
 if __name__ == "__main__":

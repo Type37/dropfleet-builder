@@ -95,17 +95,17 @@
   },
   "Cloak-X": {
    "description": "This Group may have a maximum of X Spikes.",
-   "page": "36",
+   "page": "46",
    "section": "14.1.2"
   },
   "Command Ship-X": {
    "description": "Increase the Level of any Admiral assigned to this Ship by X.",
-   "page": "36",
+   "page": "46",
    "section": "14.1.3"
   },
   "Descent": {
    "description": "Ships with the Descent special rule are designed to work in Atmosphere and are referred to as Descent Ships, which may be part of Descent Groups. The atmospheric operational depth of these Ships is far lower than normal ships.\nWhen attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
-   "page": "36",
+   "page": "46",
    "section": "14.1.4"
   },
   "Detector": {
@@ -125,20 +125,22 @@
   },
   "Hero": {
    "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet.",
-   "section": "14.1.23"
+   "section": "14.1.23",
+   "page": "48"
   },
   "Impetuous": {
    "description": "At the start of each round, friendly Groups with this rule improve the Lock of their Weapon Systems by 1 until you activate a friendly Group without this rule.",
-   "section": "14.1.20"
+   "section": "14.1.20",
+   "page": "48"
   },
   "Marines-X": {
    "description": "Remove X enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
-   "page": "36",
+   "page": "47",
    "section": "14.1.8"
   },
   "Monitor": {
    "description": "Ships with this rule may not use Course Change or Max Thrust orders.",
-   "page": "36",
+   "page": "47",
    "section": "14.1.9"
   },
   "Mothership": {
@@ -148,32 +150,33 @@
   },
   "Payload S/L-X": {
    "description": "When building your fleet, you may choose as many Payload Ships as you like— tonnage limits do not apply to these Ships, and they have no Group size. All Payload S/L Ships must be assigned to a Porter S/L Ship with the same letter. Payload Ships may not activate or be targeted until detached.\nPayload Ships take up X of a Porter Ship’s capacity.\nDuring the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.\nPayload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.\nIf a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.",
-   "page": "36",
+   "page": "47",
    "section": "14.1.11"
   },
   "Porter S/L-X": {
    "description": "This Ship may be assigned Payload Ships with the same letter up to a total capacity of X.\nDuring a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.\nAny tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.",
-   "page": "37",
+   "page": "47",
    "section": "14.1.12"
   },
   "Rapid Drop": {
    "description": "This Ship may launch its Assets at any point during its movement",
-   "page": "37",
+   "page": "47",
    "section": "14.1.13"
   },
   "Rare": {
    "description": "You may only take one Group of this Ship in a Skirmish-sized game, two in a Clash, three in a Battle, and four in a Reconquest.",
-   "page": "37",
+   "page": "47",
    "section": "14.1.14"
   },
   "Regenerate-X": {
    "description": "This Ship recovers X lost Hull Points at the end of its activation.",
-   "page": "37",
+   "page": "48",
    "section": "14.1.15"
   },
   "Reinforced Armour": {
    "description": "Weapons rolling to hit this Ship or its Group can only score criticals against it on a result of a 3 higher than its Lock value.",
-   "section": "14.1.221"
+   "section": "14.1.221",
+   "page": "48"
   },
   "Shield-X": {
    "description": "This Group/Dropsite has an unmodifiable Shield save of X+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
@@ -182,17 +185,18 @@
   },
   "Stealth": {
    "description": "This Ship may fire one Weapon while Silent Running.",
-   "page": "37",
+   "page": "48",
    "section": "14.1.17"
   },
   "Unique": {
    "description": "You may only take one Group of this Ship.",
-   "page": "37",
+   "page": "48",
    "section": "14.1.18"
   },
   "Vanguard-X": {
    "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to X” away from your Deployment Zone.",
-   "section": "14.1.22"
+   "section": "14.1.22",
+   "page": "48"
   },
   "Vectored": {
    "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
@@ -206,12 +210,12 @@
   },
   "Alt-X": {
    "description": "Only one Weapon or Load with the same Alt value on the same Ship may be used by that Ship each round.\nAll Alt Weapons with the same value count as the same Weapon when determining how many Weapons a Ship has.",
-   "page": "37",
+   "page": "49",
    "section": "14.2.2"
   },
   "Alt Launch": {
    "description": "In a round this Weapon is fired this Ship may not launch Assets.",
-   "page": "37",
+   "page": "49",
    "section": "14.2.3"
   },
   "Anti Wing": {
@@ -231,17 +235,17 @@
   },
   "Bombardment": {
    "description": "This Weapon ignores the penalties for attacking Cities and Ships in Atmosphere.\nImprove the Lock of this Weapon by 2 when attacking Cities.\nWhen attacking a Ship in Orbit with this weapon, it always hits on a 6+ and can never cause a critical.\nThis weapon cannot be used to attack Ships in Orbit while the attacking Ship is in Atmosphere.",
-   "page": "37",
+   "page": "49",
    "section": "14.2.6"
   },
   "Burnthrough-X": {
    "description": "Each of this Weapon’s critical hits reduces the target’s Energy/Kinetic Save by X for hits caused by this Weapon for this attack. Saves made for other Weapons are unaffected. Roll attacks separately for each Burnthrough Weapon.",
-   "page": "38",
+   "page": "49",
    "section": "14.2.7"
   },
   "Calibre-X": {
    "description": "Improve the Lock value of this Weapon by 1 when attacking Groups of any of the listed X Tonnage values.",
-   "page": "38",
+   "page": "49",
    "section": "14.2.8"
   },
   "Close Action": {
@@ -251,12 +255,12 @@
   },
   "Close Protection": {
    "description": "<b>After rolling Kinetic or Energy saves</b> against Close Action and Bomber (of any type) attacks, you may declare the use of any number of Fighters. Each Fighter used confers its re-rolls to a defending friendly Group within its Thrust range. The <b>defending player assigns all re-rolls</b> from each Fighter against specific weapons, dividing up Fighters as they choose. Shield and Backup saves cannot be re-rolled this way.\n<b>Once a Fighter has been used in this way, remove it.</b>",
-   "page": "22",
+   "page": "25",
    "section": "8.3.3.1"
   },
   "Corruptor-X": {
    "description": "When this Weapon successfully inflicts damage, place X Battalions on the target.",
-   "page": "38",
+   "page": "49",
    "section": "14.2.10"
   },
   "Crippling-X": {
@@ -266,22 +270,22 @@
   },
   "Crippling-Fire": {
    "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Fire: Gain a Fire Token. At the start of the End Phase, before the Repair step, this Ship suffers a point of damage for each Fire Token it has. Repairable.",
-   "page": "19",
+   "page": "49",
    "section": "14.2.11"
   },
   "Crippling-2xFire": {
    "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Gain two Fire Tokens (Fire is the one Crippling Effect a Ship may hold more than one of). At the start of the End Phase, before the Repair step, this Ship suffers a point of damage for each Fire Token it has. Repairable.",
-   "page": "19",
+   "page": "49",
    "section": "14.2.11"
   },
   "Crippling-Navigation Offline": {
    "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Navigation Offline: Gain a Navigation Offline token, reducing this Ship’s total movement to 2” (regardless of Thrust) and preventing it from turning or changing Orbital Layer. Repairable.",
-   "page": "19",
+   "page": "49",
    "section": "14.2.11"
   },
   "Crippling-Weapons Offline": {
    "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Weapons Offline: Gain a Weapons Offline token, preventing this Ship from using Weapons or launching Assets. Repairable.",
-   "page": "19",
+   "page": "49",
    "section": "14.2.11"
   },
   "Critical-X": {
@@ -291,32 +295,32 @@
   },
   "Escape Velocity": {
    "description": "This weapon ignores the penalty for attacking Ships in Orbit and treats all Ships in Atmosphere as non-Descent Ships, so only reduces its Lock by 1 when attacking Ships in Atmosphere.\nClose Action weapons with this special rule may be used against targets in Orbit while the attacking Ship is in Atmosphere.",
-   "page": "38",
+   "page": "50",
    "section": "14.2.13"
   },
   "Flash-X": {
    "description": "When this Weapon inflicts damage, the damaged Group (or Ship if it ignores the usual coherency rules) gains X Spikes.",
-   "page": "38",
+   "page": "50",
    "section": "14.2.14"
   },
   "Focused": {
    "description": "Instead of the normal potential targets for Weapons, this Weapon’s potential targets are either:\n• A single enemy Ship.\n• A Dropsite containing no friendly Battalions.\nDamage caused by this Weapon is allocated to only the target.",
-   "page": "38",
+   "page": "50",
    "section": "14.2.15"
   },
   "Fusillade-X": {
    "description": "This Weapon increases its Attack value by X while its Ship is on Weapons Free.",
-   "page": "38",
+   "page": "50",
    "section": "14.2.16"
   },
   "High Power": {
    "description": "Unless the attacking Ship is on the Weapons Free Order, attacking with this Weapon counts as attacking with two Weapons (though it only fires once).\nShips with only a single High Power Weapon can only attack with it while on the Weapons Free Order.",
-   "page": "38",
+   "page": "50",
    "section": "14.2.17"
   },
   "Impel-X": {
    "description": "If an attacking Group scores at least X critical hits with this Weapon System against a Group, choose one of the following for each affected Group:\nA) Turn all Ships in that Group 45 degrees in the same direction. If the Group scored at least twice X, turn all Ships in that Group 90 degrees in the same direction instead.\nB) Move all Ships in that Group up to twice X inches directly forward (measuring from the affected Ships). Ships moved this way cannot be moved into Large Objects or off of the table.\nA Group can only be affected by each effect once per Weapon System per attack sequence.",
-   "page": "38",
+   "page": "50",
    "section": "14.2.18"
   },
   "Limited-X": {
@@ -326,12 +330,12 @@
   },
   "Linked-X": {
    "description": "Weapons with the same Linked-X value on the same Ship count as 1 Weapon for Orders purposes. When you attack with a Linked-X Weapon, you attack with all other Weapons on that Ship with the same Linked-X value.",
-   "page": "39",
+   "page": "50",
    "section": "14.2.20"
   },
   "Low Power": {
    "description": "If a Ship’s Orders allow it to fire Close Action Weapons, it may attack with one Low Power Weapon in addition to any other Weapons allowed by its Order.",
-   "page": "39",
+   "page": "50",
    "section": "14.2.21"
   },
   "Mauler": {
@@ -341,17 +345,17 @@
   },
   "Overcharge": {
    "description": "Before assigning Weapons to targets, you may double the Damage value of this Weapon. If you do, this becomes a High Power Weapon for this activation and each attack roll of 6 causes that attacking Ship to lose this Weapon’s unmodified Damage value in hull points. Only one Weapon per Ship may benefit from this rule per activation.",
-   "page": "39",
+   "page": "51",
    "section": "14.2.23"
   },
   "Penetrator": {
    "description": "Each of this Weapon’s critical hits cause a Core hit instead of its normal Damage Type.",
-   "page": "39",
+   "page": "51",
    "section": "14.2.24"
   },
   "Re-Entry": {
    "description": "This weapon ignores the penalties for attacking Ships in Atmosphere while the attacking Ship is in Orbit.\nClose Action weapons with this special rule may be used against targets in Atmosphere while the attacking Ship is in Orbit.",
-   "page": "39",
+   "page": "51",
    "section": "14.2.25"
   },
   "Reave-X": {
@@ -371,7 +375,7 @@
   },
   "Sustained Fire": {
    "description": "If this Weapon attacks a target Group it hit in the previous round, double its Attack value for this attack.",
-   "page": "39",
+   "page": "51",
    "section": "14.2.28"
   },
   "Volley-X": {
@@ -381,7 +385,7 @@
   },
   "Crippling": {
    "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship suffers a Crippling Effect regardless of Tonnage: roll 2D6 and apply the result from the Crippling Effect table.",
-   "page": "",
+   "page": "49",
    "section": "14.2.11"
   },
   "Boardable": {

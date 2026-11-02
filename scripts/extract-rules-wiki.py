@@ -78,10 +78,13 @@ except ImportError:
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC_DEFAULT = os.path.join(
-    ROOT, "Rules-Mechanics-PDFs", "A5_Dropfleet_Rulebook_2.3.1_Print_Friendly.pdf")
+    ROOT, "Rules-Mechanics-PDFs", "A5_Dropfleet_Rulebook_2.4_Print_Friendly.pdf")
 OUT_DEFAULT = os.path.join(ROOT, "data", "rules-wiki.json")
 
-BOOK_EDITION = "2.3.1"
+BOOK_EDITION = "2.4"
+# The edition is read off the file name when it carries one ("..._2.4_Print...")
+# so a run against an older or newer book cannot stamp itself with this one.
+EDITION_IN_NAME = re.compile(r"_(\d+(?:\.\d+)+)_")
 
 # Typography, measured off this PDF rather than assumed.
 HEAD_FACE = "Arkhip"            # every heading in the book, all sizes
@@ -91,9 +94,17 @@ CHAPTER_MIN = 19.0              # "1. Ship Characteristics" is 20pt
 # table column head, 8.6pt is the folio, and 11.3/14.5pt are the letters and
 # distances printed ON the diagrams ("A", "B", '3"') — none of them are headings.
 UNNUMBERED_HEAD_SIZES = (13.0, 14.0)
+CARD_TITLE_LEAD = 12.0          # pt a card title may sit below its card's first line
+CELL_PARA_GAP = 0.5             # pt of white between two paragraphs in one table cell
+SUBHEAD_SIZE = 10.0             # 2.4 run-in subheads ("Drag", "8.3.3.a Form Wings")
 SIZE_TOL = 0.3
 
 BACK_TO_TOP = "BACK TO TOP"     # navigation furniture in the left margin
+# Fiction is set in white RobotoSlab-Medium over artwork (the Bioficer quote on
+# page 39, the boarding-action story on page 45). Rules never use that face, and
+# reading it as prose filed the same quote under 6 - Moonstruck three times,
+# each copy a different torn fragment, and a short story under 13.1 Two Lists.
+LORE_FACE = "RobotoSlab-Medium"
 
 NUMBERED_HEAD = re.compile(r"^(\d+(?:\.\d+)+)\s+(\S.*)$")
 CHAPTER_HEAD = re.compile(r"^(\d+)\.\s+(\S.*)$")
@@ -120,10 +131,22 @@ TABLE_STOP = {"d", "result", "type", "special", "the", "of", "and", "a", "to",
 # extractor corrupted it — and so a NEW typo shows up as an unlisted surprise.
 # Nothing here is repaired. Quoting a source defect is the whole job.
 TYPO_WATCH = {
-    "Entrapmoont": "scenario name, p37 — 'Entrapment' everywhere else",
-    "14.1.221": "rule number, p42 — sits between 14.1.20 and 14.1.22",
-    "Batallion": "p20 Bulk Lander table — 'Battalion' everywhere else",
-    "Vanguard-X”": "p42 heading carries a stray inch mark after the X",
+    "Entrapmoont": "scenario name, p43 — 'Entrapment' everywhere else",
+    "14.1.221": "rule number, p48 — sits between 14.1.20 and 14.1.22",
+    "Batallion": "p21 Battalions intro and Bulk Lander table — 'Battalion' everywhere else",
+    "Vanguard-X”": "p48 heading carries a stray inch mark after the X",
+    "Innacurate": "p9 Atmospheric Penalty subhead — 'Inaccurate'",
+    "instillations": "p29 10.4 Large Objects — 'installations'",
+    # Closing quote marks with no opening one, new in 2.4 -- each at the end of
+    # a rule that was reworded, as if pasted in from a quoted errata note.
+    "worse than a 6+.”": "p7 2.1.1 stray closing quote",
+    "(BR) sides.”": "p12 3.4.3 stray closing quote",
+    "Spikes instead.”": "p28 10.1 stray closing quote",
+    "enemy Ships”": "p21 7.4.3 last bullet, stray closing quote",
+    "Shield saves).”": "p46 14.1.1 stray closing quote",
+    "rather than 6.”": "p46 14.1.1 example, stray closing quote",
+    "capacity of X.”": "p47 14.1.12 stray closing quote",
+    "hitting on a 6+.”": "p52 14.2.31 stray closing quote",
 }
 
 
@@ -191,6 +214,8 @@ def page_blocks(page):
                 if not txt.strip():
                     continue
                 if txt.strip() == BACK_TO_TOP:
+                    continue
+                if LORE_FACE in sp["font"]:
                     continue
                 key = (txt, round(sp["bbox"][0], 1), round(sp["bbox"][1], 1))
                 if key in seen:
@@ -404,8 +429,25 @@ def pieces_in_reading_order(page, blocks):
     for t, bt in bands:
         members = [b for b in full if b["y0"] < bt and t < b["y1"]]
         segs.append((t, "full", members))
+    # Two headings side by side on one baseline, one in each column, close
+    # whatever sits above them in BOTH columns. Page 33 sets 12.1's last
+    # paragraph ("You can also choose from these options...") at the top of the
+    # right column and the "1 - Line" | "2 - Table Corners" cards across the
+    # bottom of the page; read a column at a time, the left card's title came
+    # first and took that paragraph from 12.1. Cutting the page at a shared
+    # baseline makes everything above it read before either title.
+    # Only CARD titles (unnumbered, 13-14pt) cut the page. Two numbered
+    # sections can share a baseline by coincidence while the left column still
+    # flows into the right -- page 49 has 14.2.2 Alt-X beside 14.2.8 Calibre-X,
+    # with 14.2.3-14.2.6 to read before the right column at all.
+    def card_title(b):
+        h = heading_of(b["spans"]) if b["kind"] == "head" else None
+        return bool(h) and h[0] is None
+    heads = [b for b in cols if card_title(b)]
+    pair_cuts = [l["y0"] for l in heads if l["x0"] < mid
+                 for r in heads if r["x0"] >= mid and abs(r["y0"] - l["y0"]) < 3]
     cut = sorted(set([0.0] + [t for t, _ in bands] + [bt for _, bt in bands]
-                     + [page.rect.height]))
+                     + [y - 0.5 for y in pair_cuts] + [page.rect.height]))
     for i in range(len(cut) - 1):
         lo, hi = cut[i], cut[i + 1]
         members = [b for b in cols if lo <= b["y0"] < hi]
@@ -431,7 +473,12 @@ def pieces_in_reading_order(page, blocks):
             titles_only = (left and all(b["kind"] == "head" for b in left)
                            and right and any(b["kind"] == "para" for b in right))
             if titles_only:
-                order += sorted(members, key=lambda b: (round(b["y0"] / 6), b["x0"]))
+                # A card's title opens the card even where its first line of
+                # text sits a few points higher: on page 41 "Players: 2
+                # players." is set 6pt above "Erupting Battlefront", and read
+                # by height alone it went to Take and Hold, the card above.
+                order += sorted(members, key=lambda b: (
+                    b["y0"] - (CARD_TITLE_LEAD if b["kind"] == "head" else 0), b["x0"]))
             else:
                 order += left + right
     return order
@@ -461,8 +508,10 @@ def table_regions(page, blocks):
         if len(starts) < 2:
             continue
         x0, y0, x1, y1 = t.bbox
+        y0 = extend_table_head(blocks, x0, y0, x1)
         y1 = extend_table_region(blocks, x0, y0, x1, y1)
-        reg = {"x0": x0, "x1": x1, "y0": y0, "y1": y1, "cols": starts}
+        reg = {"x0": x0, "x1": x1, "y0": y0, "y1": y1, "cols": starts,
+               "rules": row_rules(page, x0, y0, x1, y1)}
         # find_tables draws its grid off the ruled boxes the layout puts around
         # a centred section title, so a "table" can swallow a heading whole --
         # page 13's Ability table took 4.3 Choose a Scenario with it, and page
@@ -476,6 +525,40 @@ def table_regions(page, blocks):
             continue
         out.append(reg)
     return out
+
+
+def is_real_heading(b):
+    """A block carrying a section or chapter title (Arkhip at 10pt or more),
+    as opposed to a 9pt column head."""
+    return any(HEAD_FACE in sp["font"] and sp["size"] >= 10
+               for ln in b["lines"] for sp in ln["spans"])
+
+
+def is_column_head(b):
+    return all(HEAD_FACE in sp["font"] and sp["size"] < 10
+               for ln in b["lines"] for sp in ln["spans"])
+
+
+def extend_table_head(blocks, x0, y0, x1):
+    """Pull the column-head row back into a table find_tables started below it.
+
+    The 2.4 book prints each table's heads in a solid dark band, and
+    find_tables draws its grid from the ruled body underneath: on page 13 the
+    Tonnage table's region opens at 358pt while "Tonnage" and "Restriction"
+    sit at 356pt. One point out, and the heads fell outside the table, came
+    through as two loose captions, and the table shipped with no header at
+    all. A row of 9pt column heads straddling or just above the top edge,
+    inside the table's width, belongs to it.
+    """
+    top = y0
+    for b in blocks:
+        if not is_column_head(b):
+            continue
+        if b["x0"] < x0 - 2 or b["x1"] > x1 + 2:
+            continue
+        if b["y1"] > y0 - 1 and b["y0"] < y0 + 1 and b["y0"] >= y0 - 14:
+            top = min(top, b["y0"])
+    return top
 
 
 def extend_table_region(blocks, x0, y0, x1, y1):
@@ -500,6 +583,14 @@ def extend_table_region(blocks, x0, y0, x1, y1):
                 continue
             if b["x0"] < x0 + 5 or b["x1"] > x1 + 2:
                 continue
+            # A section title below a table is the next section, never a
+            # stray row. Its banner is indented like a row, so without this
+            # page 30's Dropsite table grew through "11.1 Control & Contest"
+            # and every paragraph under it, and page 15's round table took
+            # "6. Planning Phase" -- after which the heading check below threw
+            # the whole table away.
+            if is_real_heading(b):
+                continue
             y1 = b["y1"]
             grew = True
     return y1
@@ -510,11 +601,57 @@ def block_in_region(b, reg):
             and b["x0"] >= reg["x0"] - 2 and b["x1"] <= reg["x1"] + 2)
 
 
+def row_rules(page, x0, y0, x1, y1):
+    """The y of every horizontal rule drawn across a table, top to bottom.
+
+    The ruled lines between rows are the book's own statement of where one row
+    ends and the next begins, and they are the only reliable one. Clustering
+    by vertical overlap fails wherever a cell holds two paragraphs and the
+    cell beside it is centred: in the 12.1.4 Variants table the "4" of
+    Gridlocked sits level with that row's SECOND paragraph, so the first ("Each
+    Dropsite gains a Power Plant.") came out as a row of its own with no
+    number -- and read as the tail of row 3, Battlescarred. 2.3.1 had the same
+    fault in both D6 tables on its scenario pages.
+    """
+    ys = []
+    try:
+        drawings = page.get_drawings()
+    except Exception:
+        return []
+    for dr in drawings:
+        for it in dr["items"]:
+            if it[0] == "l":
+                a, b = it[1], it[2]
+                if abs(a.y - b.y) > 0.5:
+                    continue
+                y, lx0, lx1 = a.y, min(a.x, b.x), max(a.x, b.x)
+            elif it[0] == "re":
+                r = it[1]
+                if r.height > 2:
+                    continue
+                y, lx0, lx1 = (r.y0 + r.y1) / 2, r.x0, r.x1
+            else:
+                continue
+            if lx1 - lx0 < 30 or lx1 < x0 or lx0 > x1:
+                continue
+            if y0 - 1 <= y <= y1 + 1:
+                ys.append(y)
+    out = []
+    for y in sorted(ys):
+        if not out or y - out[-1] > 2:
+            out.append(y)
+    return out
+
+
 def build_table(blocks, reg, head_face):
-    """Rows by vertical overlap, cells by x against the column boundaries."""
+    """Rows between the table's ruled lines (or, with none to go by, by
+    vertical overlap); cells by x against the column boundaries."""
     members = [b for b in blocks if block_in_region(b, reg)]
     if not members:
         return None
+    inner = [y for y in reg.get("rules", []) if reg["y0"] + 2 < y < reg["y1"] - 2]
+    if inner:
+        return build_ruled_table(members, reg, inner, head_face)
     rows, used = [], set()
     for b in sorted(members, key=lambda b: b["y0"]):
         if id(b) in used:
@@ -559,6 +696,70 @@ def build_table(blocks, reg, head_face):
     first = [b for _, g in rows[:1] for b in g]
     if first and all(head_face in sp["font"]
                      for b in first for ln in b["lines"] for sp in ln["spans"]):
+        header = ["".join(r["t"] for r in cell) for cell in out_rows[0]]
+        out_rows = out_rows[1:]
+    return {"kind": "table", "header": header, "rows": out_rows}
+
+
+def build_ruled_table(members, reg, inner, head_face):
+    edges = [reg["y0"] - 1] + inner + [reg["y1"] + 1]
+    bands = [[] for _ in range(len(edges) - 1)]
+    for b in members:
+        for ln in b["lines"]:
+            yc = (ln["y0"] + ln["y1"]) / 2
+            for i in range(len(bands)):
+                if edges[i] <= yc < edges[i + 1]:
+                    bands[i].append(ln)
+                    break
+    bands = [sorted(b, key=lambda ln: (round(ln["y0"], 1), ln["x0"])) for b in bands if b]
+
+    def col_of(x):
+        idx = 0
+        for i, cx in enumerate(reg["cols"]):
+            if x >= cx - 3:
+                idx = i
+        return idx
+
+    # A cell can hold more than one paragraph (12.1.5.1: "Standard Scoring" /
+    # "Players are awarded 1VP..."). Joined with a plain space they read as
+    # one sentence the book never wrote ("Standard Scoring Players are
+    # awarded"), so a paragraph break inside a cell is kept as a newline.
+    def cell_runs(lines):
+        paras, prev = [], None
+        for ln in lines:
+            if prev is None or ln["y0"] - prev["y1"] > CELL_PARA_GAP:
+                paras.append([])
+            paras[-1].extend(ln["spans"])
+            prev = ln
+        out = []
+        for spans in paras:
+            runs = runs_from_spans(spans)
+            if not runs:
+                continue
+            if out:
+                out[-1]["t"] += "\n"
+                if bool(out[-1].get("b")) == bool(runs[0].get("b")):
+                    out[-1]["t"] += runs.pop(0)["t"]
+            out.extend(runs)
+        return out
+
+    out_rows = []
+    for lines in bands:
+        cells = defaultdict(list)
+        for ln in lines:
+            by_col = defaultdict(list)
+            for sp in ln["spans"]:
+                by_col[col_of(sp["x0"])].append(sp)
+            for c, sps in by_col.items():
+                cells[c].append({"spans": sps,
+                                 "y0": min(sp["y0"] for sp in sps),
+                                 "y1": max(sp["y1"] for sp in sps)})
+        out_rows.append([cell_runs(sorted(cells.get(i, []), key=lambda l: l["y0"]))
+                         for i in range(len(reg["cols"]))])
+    if not out_rows:
+        return None
+    header = None
+    if all(head_face in sp["font"] for ln in bands[0] for sp in ln["spans"]):
         header = ["".join(r["t"] for r in cell) for cell in out_rows[0]]
         out_rows = out_rows[1:]
     return {"kind": "table", "header": header, "rows": out_rows}
@@ -625,6 +826,60 @@ def runs_from_spans(spans):
     return [r for r in out if r["t"]]
 
 
+def plain_runs(item):
+    return "".join(r["t"] for r in item["runs"])
+
+
+def add_para(body, para):
+    """Append a paragraph to a section body, healing the two ways a column
+    break cuts one paragraph in two.
+
+    A paragraph that runs off the foot of the left column and carries on at
+    the head of the right one arrives as two: "...Use this point for any" and
+    "explosion effects due to this attack." (8.3.6). The second opens in lower
+    case, which a paragraph of this book never does, so it is the first one's
+    tail and is joined back on across the line break it really was.
+
+    A bulleted list set tight comes through as ONE item with the later bullets
+    inline ("...unaffected. • It ignores the effects of..."), because the lines
+    sit too close to read as separate paragraphs. Each bullet is its own item.
+    """
+    items = split_bullets(para) if para["kind"] == "li" else [para]
+    for it in items:
+        prev = body[-1] if body else None
+        first = plain_runs(it)
+        if (prev is not None and prev["kind"] == it["kind"] == "p"
+                and first[:1].islower()
+                and not plain_runs(prev).rstrip().endswith((".", ":", "!", "?"))):
+            runs = [dict(r) for r in it["runs"]]
+            prev["runs"][-1]["t"] = prev["runs"][-1]["t"].rstrip() + " "
+            if prev["runs"][-1].get("b") == runs[0].get("b"):
+                prev["runs"][-1]["t"] += runs.pop(0)["t"]
+            prev["runs"].extend(runs)
+            continue
+        body.append(it)
+
+
+def split_bullets(para):
+    out, cur = [], []
+    for r in para["runs"]:
+        parts = r["t"].split("•")
+        for i, part in enumerate(parts):
+            if i:
+                out.append(cur)
+                cur = []
+                part = part.lstrip()
+            if i < len(parts) - 1:
+                part = part.rstrip()
+            if part:
+                run = {"t": part}
+                if r.get("b"):
+                    run["b"] = True
+                cur.append(run)
+    out.append(cur)
+    return [{"kind": "li", "runs": rs} for rs in out if rs]
+
+
 def spans_to_para(spans):
     runs = runs_from_spans(spans)
     if not runs:
@@ -669,6 +924,7 @@ def extract(doc, report):
     stack = []           # [(depth, node)]
     started = False
     dropped = Counter()
+    heads_y = defaultdict(list)  # page index -> top of every heading on it
 
     for pno in range(doc.page_count):
         page = doc[pno]
@@ -701,8 +957,15 @@ def extract(doc, report):
                         return {w.rstrip("s") for w in re.findall(r"[a-z]+", s.lower())} - TABLE_STOP
                     head_words = words(" ".join(tbl["header"] or []))
                     owner, best = stack[-1][1], 0
+                    # A table printed at the very top of a page, above every
+                    # heading on it, can belong to a section opened on the
+                    # page before: 2.4 moved the Approach Type table (12.1.2,
+                    # opened on page 35) to the top of page 36, under 12.1.3
+                    # Layouts, which is still the section being read.
+                    above_all = all(y >= reg["y0"] for y in heads_y.get(pno, []))
+                    pages = {pno + 1, pno} if above_all else {pno + 1}
                     for _, cand in walk(root):
-                        if cand["page"] != pno + 1:
+                        if cand["page"] not in pages:
                             continue
                         score = len(head_words & words(cand["heading"]))
                         if score > best:
@@ -733,6 +996,7 @@ def extract(doc, report):
                     depth = (stack[-1][0] + 1) if stack else 2
                 node = {"number": number, "heading": title, "page": pno + 1,
                         "body": [], "children": []}
+                heads_y[pno].append(piece["y0"])
                 while stack and stack[-1][0] >= depth:
                     stack.pop()
                 if stack:
@@ -753,13 +1017,21 @@ def extract(doc, report):
                     continue
                 para = spans_to_para(spans)
                 if para:
-                    para["kind"] = "caption"
+                    size = max(sp["size"] for sp in spans)
+                    # 2.4 sets run-in subheads INSIDE a section in 10pt
+                    # heading face with no number of their own: the five
+                    # Atmospheric Penalties ("Drag", "Buckling"), the five
+                    # steps of 8.1 Battalion Combat, and the lettered steps
+                    # "8.3.3.a Form Wings" (letters, so not a section number).
+                    # They are words of the rule, not diagram labels, so they
+                    # are kept as "h" -- a subhead -- not dropped as captions.
+                    para["kind"] = "h" if abs(size - SUBHEAD_SIZE) <= SIZE_TOL else "caption"
             else:
                 para = spans_to_para(spans)
             if not para:
                 continue
             if stack:
-                stack[-1][1]["body"].append(para)
+                add_para(stack[-1][1]["body"], para)
             else:
                 dropped["paragraph before chapter 1"] += 1
 
@@ -911,7 +1183,7 @@ def main():
     doc_json = {
         "game": "Dropfleet Commander",
         "book": "A5 Dropfleet Rulebook (Print Friendly)",
-        "edition": BOOK_EDITION,
+        "edition": (EDITION_IN_NAME.search(os.path.basename(args.pdf)) or [None, BOOK_EDITION])[1],
         "source": os.path.basename(args.pdf),
         "generator": "scripts/extract-rules-wiki.py",
         "verbatim": True,
