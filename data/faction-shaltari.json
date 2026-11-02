@@ -507,7 +507,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "14\"",
-     "sig": "12\"",
+     "sig": "8\"",
      "hull": 22,
      "es": "4+",
      "ks": "3+",
@@ -607,7 +607,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "8\"",
+     "sig": "6\"",
      "hull": 18,
      "es": "4+",
      "ks": "3+",
@@ -628,7 +628,7 @@
      {
       "name": "Electrosurge Projectors",
       "arc": "B",
-      "attack": "3",
+      "attack": "4",
       "lock": "4+",
       "damage": "1",
       "type": "E",
@@ -652,7 +652,7 @@
      },
      {
       "name": "Fighters & Bombers",
-      "launch": "4",
+      "launch": "6",
       "special": "-"
      }
     ],
@@ -689,7 +689,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "8\"",
+     "sig": "6\"",
      "hull": 18,
      "es": "4+",
      "ks": "3+",
@@ -701,20 +701,20 @@
      {
       "name": "Mega Thermal Lance Cannon",
       "arc": "FN",
-      "attack": "5",
+      "attack": "6",
       "lock": "2+",
       "damage": "2",
       "type": "E",
-      "special": "Burnthrough-1, Bloom-2"
+      "special": "Burnthrough-2, Bloom-2, Focused"
      },
      {
       "name": "Microwave Array Bank",
       "arc": "S",
-      "attack": "4",
+      "attack": "5",
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Close Action, Volley-2, Scald-1"
+      "special": "Close Action, Scald-1, Volley-2"
      }
     ],
     "loads": [
@@ -752,11 +752,11 @@
    "category": "heavy",
    "ship": {
     "name": "Lanthanum Super Battleship",
-    "cost": 265,
+    "cost": 285,
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "8\"",
+     "sig": "6\"",
      "hull": 18,
      "es": "4+",
      "ks": "3+",
@@ -772,21 +772,21 @@
       "lock": "3+",
       "damage": "2",
       "type": "C",
-      "special": "Critical-1"
+      "special": "Critical-2, Focused"
      },
      {
       "name": "Mega Thermal Lance Cannon",
       "arc": "FN",
-      "attack": "5",
+      "attack": "6",
       "lock": "2+",
       "damage": "2",
       "type": "E",
-      "special": "Burnthrough-1, Bloom-2"
+      "special": "Burnthrough-2, Bloom-2, Focused"
      },
      {
       "name": "Electrosurge Projectors",
       "arc": "B",
-      "attack": "3",
+      "attack": "4",
       "lock": "4+",
       "damage": "1",
       "type": "E",
@@ -827,7 +827,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "8\"",
+     "sig": "4\"",
      "hull": 18,
      "es": "4+",
      "ks": "3+",
@@ -846,18 +846,27 @@
       "special": "Reave-1, Volley-2"
      },
      {
-      "name": "Gravitic Beamer",
+      "name": "Gravitic Beamer (Leading)",
       "arc": "F/S",
-      "attack": "5",
+      "attack": "6",
       "lock": "4+",
       "damage": "1",
-      "type": "E",
-      "special": "Re-Entry, Impel-1"
+      "type": "C",
+      "special": "Alt-1, Calibre-L/M, Impel-2, Re-Entry"
+     },
+     {
+      "name": "Gravitic Beamer (Trailing)",
+      "arc": "F/S",
+      "attack": "4",
+      "lock": "4+",
+      "damage": "2",
+      "type": "C",
+      "special": "Alt-1, Arrest-3, Calibre-H/C"
      },
      {
       "name": "Electrosurge Projectors",
       "arc": "B",
-      "attack": "3",
+      "attack": "4",
       "lock": "4+",
       "damage": "1",
       "type": "E",
@@ -1529,11 +1538,11 @@
    "category": "heavy",
    "ship": {
     "name": "Boracite Pocket Battleship",
-    "cost": 200,
+    "cost": 190,
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "4\"",
      "hull": 14,
      "es": "5+",
      "ks": "4+",
@@ -1571,7 +1580,7 @@
      },
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features."
+      "description": "When building your fleet, this Ship must be assigned two deployable features from the Shaltari Deployable Features list (duplicates are allowed) paying points for each. This Ship starts the game carrying those Deployable Features."
      }
     ],
     "groupMin": 1,
@@ -1601,7 +1610,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "4\"",
      "hull": 14,
      "es": "5+",
      "ks": "4+",
@@ -1636,7 +1645,7 @@
      },
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features."
+      "description": "When building your fleet, this Ship must be assigned two deployable features from the Shaltari Deployable Features list (duplicates are allowed) paying points for each. This Ship starts the game carrying those Deployable Features."
      }
     ],
     "groupMin": 1,
@@ -1666,7 +1675,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "4\"",
      "hull": 14,
      "es": "5+",
      "ks": "4+",
@@ -1676,13 +1685,22 @@
     },
     "weapons": [
      {
+      "name": "Disintegrator Battery Pair",
+      "arc": "F/S",
+      "attack": "5",
+      "lock": "3+",
+      "damage": "1",
+      "type": "E",
+      "special": "Volley-2, Reave-1"
+     },
+     {
       "name": "Ion Aura",
       "arc": "F/S/R",
       "attack": "6",
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Close Action, Scald-1"
+      "special": "Close Action, Scald-2"
      },
      {
       "name": "Ion Storm",
@@ -1692,15 +1710,6 @@
       "damage": "1",
       "type": "E",
       "special": "Bombardment, Scald-1"
-     },
-     {
-      "name": "Disintegrator Battery Pair",
-      "arc": "F/S",
-      "attack": "5",
-      "lock": "3+",
-      "damage": "1",
-      "type": "E",
-      "special": "Reave-1, Volley-2"
      }
     ],
     "loads": [],
@@ -1713,7 +1722,7 @@
      },
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features."
+      "description": "When building your fleet, this Ship must be assigned two deployable features from the Shaltari Deployable Features list (duplicates are allowed) paying points for each. This Ship starts the game carrying those Deployable Features."
      }
     ],
     "groupMin": 1,
@@ -1739,11 +1748,11 @@
    "category": "heavy",
    "ship": {
     "name": "Spinel Pocket Battleship",
-    "cost": 225,
+    "cost": 215,
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "4\"",
      "hull": 14,
      "es": "5+",
      "ks": "4+",
@@ -1753,6 +1762,15 @@
     },
     "weapons": [
      {
+      "name": "Particle Lance Pair",
+      "arc": "FN",
+      "attack": "2",
+      "lock": "3+",
+      "damage": "2",
+      "type": "C",
+      "special": "Critical-2, Focused"
+     },
+     {
       "name": "Twin Hyperwave Cannon",
       "arc": "F",
       "attack": "4",
@@ -1760,15 +1778,6 @@
       "damage": "2",
       "type": "E",
       "special": "Crippling-2xFire"
-     },
-     {
-      "name": "Particle Lance Pair",
-      "arc": "FN",
-      "attack": "2",
-      "lock": "3+",
-      "damage": "2",
-      "type": "C",
-      "special": "Critical-1"
      }
     ],
     "loads": [],
@@ -1781,7 +1790,7 @@
      },
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features."
+      "description": "When building your fleet, this Ship must be assigned two deployable features from the Shaltari Deployable Features list (duplicates are allowed) paying points for each. This Ship starts the game carrying those Deployable Features."
      }
     ],
     "groupMin": 1,
@@ -1806,11 +1815,11 @@
    "category": "heavy",
    "ship": {
     "name": "Goethite Battlecruiser",
-    "cost": 210,
+    "cost": 195,
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 13,
      "es": "5+",
      "ks": "4+",
@@ -1880,11 +1889,11 @@
    "category": "heavy",
    "ship": {
     "name": "Hematite Battlecruiser",
-    "cost": 175,
+    "cost": 165,
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 13,
      "es": "5+",
      "ks": "4+",
@@ -1952,7 +1961,7 @@
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 13,
      "es": "5+",
      "ks": "4+",
@@ -1968,7 +1977,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Close Action, Scald-1"
+      "special": "Close Action, Scald-2"
      },
      {
       "name": "Ion Storm",
@@ -1982,11 +1991,11 @@
      {
       "name": "Gravity Coil Pair",
       "arc": "FN",
-      "attack": "3",
+      "attack": "4",
       "lock": "2+",
       "damage": "1",
       "type": "E",
-      "special": "Impel-2"
+      "special": "Impel-2, Reave-1"
      }
     ],
     "loads": [],
@@ -2045,7 +2054,7 @@
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 13,
      "es": "5+",
      "ks": "4+",
@@ -2061,7 +2070,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Reave-1, Volley-2"
+      "special": "Volley-2, Reave-1"
      },
      {
       "name": "Particle Lance Pair",
@@ -2070,7 +2079,7 @@
       "lock": "3+",
       "damage": "2",
       "type": "C",
-      "special": "Critical-1"
+      "special": "Critical-2, Focused"
      }
     ],
     "loads": [],
@@ -2125,11 +2134,11 @@
    "category": "medium",
    "ship": {
     "name": "Natrolite Supercruiser",
-    "cost": 184,
+    "cost": 172,
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 12,
      "es": "5+",
      "ks": "4+",
@@ -2158,7 +2167,7 @@
      },
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features."
+      "description": "When building your fleet, this Ship must be assigned two deployable features from the Shaltari Deployable Features list (duplicates are allowed) paying points for each. This Ship starts the game carrying those Deployable Features."
      }
     ],
     "groupMin": 1,
@@ -2184,11 +2193,11 @@
    "category": "medium",
    "ship": {
     "name": "Mesolite Supercruiser",
-    "cost": 180,
+    "cost": 166,
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 12,
      "es": "5+",
      "ks": "4+",
@@ -2217,7 +2226,7 @@
      },
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features."
+      "description": "When building your fleet, this Ship must be assigned two deployable features from the Shaltari Deployable Features list (duplicates are allowed) paying points for each. This Ship starts the game carrying those Deployable Features."
      }
     ],
     "groupMin": 1,
@@ -2243,11 +2252,11 @@
    "category": "medium",
    "ship": {
     "name": "Scoria Heavy Cruiser",
-    "cost": 175,
+    "cost": 160,
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 11,
      "es": "5+",
      "ks": "4+",
@@ -2257,22 +2266,13 @@
     },
     "weapons": [
      {
-      "name": "Particle Lance",
+      "name": "Particle Lance Pair",
       "arc": "FN",
-      "attack": "1",
+      "attack": "2",
       "lock": "3+",
       "damage": "2",
       "type": "C",
-      "special": "Critical-1"
-     },
-     {
-      "name": "Particle Lance",
-      "arc": "FN",
-      "attack": "1",
-      "lock": "3+",
-      "damage": "2",
-      "type": "C",
-      "special": "Critical-1"
+      "special": "Critical-2, Focused"
      },
      {
       "name": "Disintegrator Battery",
@@ -2317,7 +2317,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 11,
      "es": "5+",
      "ks": "4+",
@@ -2385,11 +2385,11 @@
    "category": "medium",
    "ship": {
     "name": "Obsidian Heavy Cruiser",
-    "cost": 135,
+    "cost": 130,
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 11,
      "es": "5+",
      "ks": "4+",
@@ -2399,13 +2399,13 @@
     },
     "weapons": [
      {
-      "name": "Particle Lance",
+      "name": "Particle Lance Pair",
       "arc": "FN",
-      "attack": "1",
+      "attack": "2",
       "lock": "3+",
       "damage": "2",
       "type": "C",
-      "special": "Critical-1"
+      "special": "Critical-2, Focused"
      },
      {
       "name": "Particle Lance",
@@ -2414,16 +2414,7 @@
       "lock": "3+",
       "damage": "2",
       "type": "C",
-      "special": "Critical-1"
-     },
-     {
-      "name": "Particle Lance",
-      "arc": "FN",
-      "attack": "1",
-      "lock": "3+",
-      "damage": "2",
-      "type": "C",
-      "special": "Critical-1"
+      "special": "Critical-2, Focused"
      }
     ],
     "loads": [],
@@ -2461,7 +2452,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 11,
      "es": "5+",
      "ks": "4+",
@@ -2477,7 +2468,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Close Action, Scald-1"
+      "special": "Close Action, Scald-2"
      },
      {
       "name": "Ion Storm",
@@ -2594,11 +2585,11 @@
    "category": "medium",
    "ship": {
     "name": "Emerald Mothership",
-    "cost": 115,
+    "cost": 106,
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 9,
      "es": "5+",
      "ks": "4+",
@@ -2777,7 +2768,7 @@
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 9,
      "es": "5+",
      "ks": "4+",
@@ -2793,7 +2784,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Close Action, Scald-1"
+      "special": "Close Action, Scald-2"
      },
      {
       "name": "Ion Storm",
@@ -2836,11 +2827,11 @@
    "category": "medium",
    "ship": {
     "name": "Granite Cruiser",
-    "cost": 115,
+    "cost": 110,
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 9,
      "es": "5+",
      "ks": "4+",
@@ -2850,22 +2841,13 @@
     },
     "weapons": [
      {
-      "name": "Particle Lance",
+      "name": "Particle Lance Pair",
       "arc": "FN",
-      "attack": "1",
+      "attack": "2",
       "lock": "3+",
       "damage": "2",
       "type": "C",
-      "special": "Critical-1"
-     },
-     {
-      "name": "Particle Lance",
-      "arc": "FN",
-      "attack": "1",
-      "lock": "3+",
-      "damage": "2",
-      "type": "C",
-      "special": "Critical-1"
+      "special": "Critical-2, Focused"
      }
     ],
     "loads": [],
@@ -2899,11 +2881,11 @@
    "category": "medium",
    "ship": {
     "name": "Amber Cruiser",
-    "cost": 100,
+    "cost": 96,
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 9,
      "es": "5+",
      "ks": "4+",
@@ -3039,7 +3021,7 @@
     "stats": {
      "thrust": "12\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 7,
      "es": "5+",
      "ks": "4+",
@@ -3051,11 +3033,11 @@
      {
       "name": "Gravity Coil Pair",
       "arc": "FN",
-      "attack": "3",
+      "attack": "4",
       "lock": "2+",
       "damage": "1",
       "type": "E",
-      "special": "Impel-2"
+      "special": "Impel-2, Reave-1"
      },
      {
       "name": "Harpoon Cascade",
@@ -3108,11 +3090,11 @@
    "category": "light",
    "ship": {
     "name": "Cobalt Homeship",
-    "cost": 56,
+    "cost": 52,
     "stats": {
      "thrust": "12\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 5,
      "es": "5+",
      "ks": "4+",
@@ -3124,11 +3106,11 @@
      {
       "name": "Disruption Beamers",
       "arc": "F",
-      "attack": "2",
+      "attack": "3",
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Fusillade-1"
+      "special": "-"
      }
     ],
     "loads": [
@@ -3233,11 +3215,11 @@
    "category": "light",
    "ship": {
     "name": "Iridium Destroyer",
-    "cost": 60,
+    "cost": 63,
     "stats": {
      "thrust": "12\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 5,
      "es": "5+",
      "ks": "4+",
@@ -3249,11 +3231,11 @@
      {
       "name": "Disruption Beamers",
       "arc": "F",
-      "attack": "2",
+      "attack": "3",
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Fusillade-1"
+      "special": "-"
      },
      {
       "name": "Kinetic Lance",
@@ -3292,7 +3274,7 @@
     "stats": {
      "thrust": "12\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 5,
      "es": "5+",
      "ks": "4+",
@@ -3304,11 +3286,11 @@
      {
       "name": "Disruption Beamers",
       "arc": "F",
-      "attack": "2",
+      "attack": "3",
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Fusillade-1"
+      "special": "-"
      },
      {
       "name": "Thermal Lance Cannon",
@@ -3317,7 +3299,7 @@
       "lock": "2+",
       "damage": "1",
       "type": "E",
-      "special": "Burnthrough-1, Fusillade-1"
+      "special": "Burnthrough-1, Fusillade-2"
      }
     ],
     "loads": [],
@@ -3351,11 +3333,11 @@
    "category": "light",
    "ship": {
     "name": "Gallium Bio-Hazard Cutter",
-    "cost": 60,
+    "cost": 55,
     "stats": {
      "thrust": "20\"",
      "scan": "8\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 3,
      "es": "6+",
      "ks": "4+",
@@ -3479,11 +3461,11 @@
    "category": "light",
    "ship": {
     "name": "Strontium Monitor",
-    "cost": 58,
+    "cost": 54,
     "stats": {
-     "thrust": "6\"",
+     "thrust": "8\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "2\"",
      "hull": 4,
      "es": "4+",
      "ks": "4+",
@@ -3531,11 +3513,11 @@
    "category": "light",
    "ship": {
     "name": "Selenium Heavy Voidgate",
-    "cost": 55,
+    "cost": 51,
     "stats": {
-     "thrust": "6\"",
+     "thrust": "8\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "2\"",
      "hull": 4,
      "es": "4+",
      "ks": "4+",
@@ -3606,9 +3588,9 @@
     "name": "Silicon Monitor",
     "cost": 55,
     "stats": {
-     "thrust": "6\"",
+     "thrust": "8\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "2\"",
      "hull": 4,
      "es": "4+",
      "ks": "4+",
@@ -3620,14 +3602,20 @@
      {
       "name": "Quad Ion Cannon",
       "arc": "F",
-      "attack": "2",
+      "attack": "4",
       "lock": "3+",
-      "damage": "2",
+      "damage": "1",
       "type": "E",
       "special": "Crippling-Navigation Offline"
      }
     ],
-    "loads": [],
+    "loads": [
+     {
+      "name": "Boarding Pods",
+      "launch": "1",
+      "special": "-"
+     }
+    ],
     "specialRules": [
      {
       "name": "Monitor",
@@ -3663,11 +3651,11 @@
    "category": "light",
    "ship": {
     "name": "Amethyst Frigate",
-    "cost": 43,
+    "cost": 39,
     "stats": {
      "thrust": "12\"",
      "scan": "10\"",
-     "sig": "4\"",
+     "sig": "3\"",
      "hull": 4,
      "es": "5+",
      "ks": "4+",
@@ -3721,11 +3709,11 @@
    "category": "light",
    "ship": {
     "name": "Opal Shielding Frigate",
-    "cost": 45,
+    "cost": 49,
     "stats": {
      "thrust": "12\"",
      "scan": "10\"",
-     "sig": "4\"",
+     "sig": "3\"",
      "hull": 4,
      "es": "5+",
      "ks": "4+",
@@ -3754,7 +3742,7 @@
      },
      {
       "name": "Shield Booster",
-      "description": "While this Ship’s Group is in coherency, when another friendly Group within 6” of this Ship uses its Shield Save, you may improve that Group’s Shield-X special rule by 1 for that Save, to a maximum of 3+ (so Shield-6+ would become Shield-5+). If you do, this Ship’s Group gains a Spike. Each Shield Save can only be affected by this rule once and Ships with this special rule are unaffected.\nThis rule can only be used while this Ship’s Group has fewer than 4 Spikes."
+      "description": "While this Group has a shield token, other friendly Groups in coherency within 6” of a Ship with this rule improve their Shield-X+ rule by 1 to a maximum of 3+. Ships with this rule are unaffected."
      },
      {
       "name": "Vanguard-4\"",
@@ -3783,11 +3771,11 @@
    "category": "light",
    "ship": {
     "name": "Jade Frigate",
-    "cost": 50,
+    "cost": 45,
     "stats": {
      "thrust": "12\"",
      "scan": "10\"",
-     "sig": "4\"",
+     "sig": "3\"",
      "hull": 4,
      "es": "5+",
      "ks": "4+",
@@ -3841,11 +3829,11 @@
    "category": "light",
    "ship": {
     "name": "Topaz Frigate",
-    "cost": 43,
+    "cost": 38,
     "stats": {
      "thrust": "12\"",
      "scan": "10\"",
-     "sig": "4\"",
+     "sig": "3\"",
      "hull": 4,
      "es": "5+",
      "ks": "4+",
@@ -3908,16 +3896,16 @@
      "es": "6+",
      "ks": "6+",
      "bs": "-",
-     "g": "1-3",
+     "g": "1-4",
      "special": "Descent, Shield-5+, Vectored, Void Skip"
     },
     "weapons": [
      {
       "name": "Pulse Blaster",
       "arc": "F/S",
-      "attack": "1",
+      "attack": "3",
       "lock": "3+",
-      "damage": "2",
+      "damage": "1",
       "type": "E",
       "special": "Close Action, Penetrator"
      }
@@ -3944,7 +3932,7 @@
      },
      {
       "name": "Void Skip",
-      "description": "If this ship goes on General Quarters when within 6” of a Ship with the Gateship special rule, rather than making a normal move, you may place it within 6” of any other Gateship in that Gateship’s chain (within 18” of each other as normal), facing any direction. If it does, it gains a Spike. It may be put in either Orbit or Atmosphere, regardless of the Voidgate it is placed by. When doing this, the whole group must move together."
+      "description": "If this Group goes on General Quarters within 6” of a friendly Ship or controlled Dropsite with the Gateship-X special rule, instead of moving normally, you may place the Group in coherency within 6” of a friendly Ship with the Gateship-X special rule in the same Gateship chain facing any direction on any Orbital Layer. If it does, this Group gains a Spike."
      }
     ],
     "groupMin": 1,
@@ -4155,7 +4143,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 11,
      "es": "5+",
      "ks": "4+",

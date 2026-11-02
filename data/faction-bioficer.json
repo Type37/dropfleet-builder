@@ -1137,7 +1137,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Reave-1"
+      "special": "Penetrator"
      }
     ],
     "loads": [],
@@ -1179,7 +1179,7 @@
    "category": "heavy",
    "ship": {
     "name": "Sanctum Battlecruiser",
-    "cost": 185,
+    "cost": 180,
     "stats": {
      "thrust": "8\"",
      "scan": "10\"",
@@ -1273,7 +1273,7 @@
    "category": "medium",
    "ship": {
     "name": "Carronade Heavy Cruiser",
-    "cost": 120,
+    "cost": 112,
     "stats": {
      "thrust": "7\"",
      "scan": "11\"",
@@ -1289,20 +1289,20 @@
      {
       "name": "Barb Launcher",
       "arc": "FN",
-      "attack": "1",
+      "attack": "2",
       "lock": "2+",
-      "damage": "4",
+      "damage": "2",
       "type": "K",
-      "special": "Reave-2"
+      "special": "Critical-1, Focused, Reave-2"
      },
      {
       "name": "Barb Launcher",
       "arc": "FN",
-      "attack": "1",
+      "attack": "2",
       "lock": "2+",
-      "damage": "4",
+      "damage": "2",
       "type": "K",
-      "special": "Reave-2"
+      "special": "Critical-1, Focused, Reave-2"
      }
     ],
     "loads": [],
@@ -1343,7 +1343,7 @@
     "weapons": [
      {
       "name": "Heavy Lightvice",
-      "arc": "F",
+      "arc": "F/S",
       "attack": "5",
       "lock": "2+",
       "damage": "2",
@@ -1357,7 +1357,7 @@
       "lock": "4+",
       "damage": "2",
       "type": "E",
-      "special": "Overcharge, Scald-1"
+      "special": "Overcharge, Scald-2"
      }
     ],
     "loads": [],
@@ -1383,7 +1383,7 @@
    "category": "medium",
    "ship": {
     "name": "Cacophony Heavy Cruiser",
-    "cost": 132,
+    "cost": 126,
     "stats": {
      "thrust": "7\"",
      "scan": "8\"",
@@ -1403,7 +1403,7 @@
       "lock": "4+",
       "damage": "1",
       "type": "E",
-      "special": "Anti Wing, Fusillade-3, Reave-1"
+      "special": "Anti Wing, Fusillade-3, Burnthrough-1"
      },
      {
       "name": "Scythes",
@@ -1412,7 +1412,7 @@
       "lock": "4+",
       "damage": "1",
       "type": "E",
-      "special": "Anti Wing, Fusillade-3, Reave-1"
+      "special": "Anti Wing, Fusillade-3, Burnthrough-1"
      }
     ],
     "loads": [],
@@ -1462,7 +1462,7 @@
      },
      {
       "name": "Heavy Lightvice",
-      "arc": "F",
+      "arc": "F/S",
       "attack": "5",
       "lock": "2+",
       "damage": "2",
@@ -1509,11 +1509,11 @@
      {
       "name": "Barb Launcher",
       "arc": "FN",
-      "attack": "1",
+      "attack": "2",
       "lock": "2+",
-      "damage": "4",
+      "damage": "2",
       "type": "K",
-      "special": "Reave-2"
+      "special": "Critical-1, Focused, Reave-2"
      }
     ],
     "loads": [],
@@ -1635,18 +1635,18 @@
      {
       "name": "Barb Launcher",
       "arc": "FN",
-      "attack": "1",
+      "attack": "2",
       "lock": "2+",
-      "damage": "4",
+      "damage": "2",
       "type": "K",
-      "special": "Reave-2"
+      "special": "Critical-1, Focused, Reave-2"
      },
      {
       "name": "Barb Stinger",
       "arc": "FN",
-      "attack": "1",
+      "attack": "2",
       "lock": "2+",
-      "damage": "2",
+      "damage": "1",
       "type": "K",
       "special": "Reave-2"
      }
@@ -1694,7 +1694,7 @@
       "lock": "4+",
       "damage": "2",
       "type": "E",
-      "special": "Overcharge, Scald-1"
+      "special": "Overcharge, Scald-2"
      },
      {
       "name": "Decon Blaster",
@@ -1703,7 +1703,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "-"
+      "special": "Penetrator"
      }
     ],
     "loads": [],
@@ -1729,7 +1729,7 @@
    "category": "medium",
    "ship": {
     "name": "Choral Cruiser",
-    "cost": 80,
+    "cost": 78,
     "stats": {
      "thrust": "8\"",
      "scan": "11\"",
@@ -1745,11 +1745,11 @@
      {
       "name": "Barb Launcher",
       "arc": "FN",
-      "attack": "1",
+      "attack": "2",
       "lock": "2+",
-      "damage": "4",
+      "damage": "2",
       "type": "K",
-      "special": "Reave-2"
+      "special": "Critical-1, Focused, Reave-2"
      }
     ],
     "loads": [],
@@ -1796,7 +1796,7 @@
     "weapons": [
      {
       "name": "Heavy Lightvice",
-      "arc": "F",
+      "arc": "F/S",
       "attack": "5",
       "lock": "2+",
       "damage": "2",
@@ -1831,7 +1831,7 @@
    "category": "medium",
    "ship": {
     "name": "Construct Cruiser",
-    "cost": 96,
+    "cost": 92,
     "stats": {
      "thrust": "8\"",
      "scan": "10\"",
@@ -1851,16 +1851,16 @@
       "lock": "4+",
       "damage": "1",
       "type": "E",
-      "special": "Anti Wing, Fusillade-3, Reave-1"
+      "special": "Anti Wing, Fusillade-3, Burnthrough-1"
      },
      {
       "name": "Barb Stinger",
       "arc": "FN",
-      "attack": "1",
+      "attack": "2",
       "lock": "2+",
-      "damage": "2",
+      "damage": "1",
       "type": "K",
-      "special": "Reave-2"
+      "special": "Focused, Reave-1"
      }
     ],
     "loads": [],
@@ -1894,7 +1894,7 @@
    "category": "medium",
    "ship": {
     "name": "Callous Cruiser",
-    "cost": 80,
+    "cost": 78,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -1923,7 +1923,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "-"
+      "special": "Penetrator"
      }
     ],
     "loads": [],
@@ -1949,7 +1949,7 @@
    "category": "medium",
    "ship": {
     "name": "Charger Light Cruiser",
-    "cost": 75,
+    "cost": 72,
     "stats": {
      "thrust": "10\"",
      "scan": "11\"",
@@ -1965,11 +1965,11 @@
      {
       "name": "Barb Launcher",
       "arc": "FN",
-      "attack": "1",
+      "attack": "2",
       "lock": "2+",
-      "damage": "4",
+      "damage": "2",
       "type": "K",
-      "special": "Reave-2"
+      "special": "Critical-1, Focused, Reave-2"
      }
     ],
     "loads": [],
@@ -1995,7 +1995,7 @@
    "category": "medium",
    "ship": {
     "name": "Cipher Light Cruiser",
-    "cost": 70,
+    "cost": 68,
     "stats": {
      "thrust": "10\"",
      "scan": "8\"",
@@ -2015,7 +2015,7 @@
       "lock": "4+",
       "damage": "2",
       "type": "E",
-      "special": "Overcharge, Scald-1"
+      "special": "Overcharge, Scald-2"
      }
     ],
     "loads": [],
@@ -2056,7 +2056,7 @@
     "weapons": [
      {
       "name": "Heavy Lightvice",
-      "arc": "F",
+      "arc": "F/S",
       "attack": "5",
       "lock": "2+",
       "damage": "2",
@@ -2259,7 +2259,7 @@
    "category": "light",
    "ship": {
     "name": "Diode Destroyer",
-    "cost": 75,
+    "cost": 73,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -2298,7 +2298,7 @@
    "category": "light",
    "ship": {
     "name": "Domain Destroyer",
-    "cost": 65,
+    "cost": 63,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -2318,7 +2318,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "-"
+      "special": "Penetrator"
      }
     ],
     "loads": [],
@@ -2337,7 +2337,7 @@
    "category": "light",
    "ship": {
     "name": "Tally Cutter",
-    "cost": 85,
+    "cost": 77,
     "stats": {
      "thrust": "14\"",
      "scan": "8\"",
@@ -2387,7 +2387,7 @@
    "category": "light",
    "ship": {
     "name": "Tine Cutter",
-    "cost": 52,
+    "cost": 50,
     "stats": {
      "thrust": "14\"",
      "scan": "8\"",
@@ -2403,7 +2403,7 @@
      {
       "name": "Gravitic Stave",
       "arc": "FN",
-      "attack": "3",
+      "attack": "4",
       "lock": "4+",
       "damage": "1",
       "type": "C",
@@ -2446,7 +2446,7 @@
       "lock": "4+",
       "damage": "1",
       "type": "E",
-      "special": "Anti Wing, Fusillade-3, Reave-1"
+      "special": "Anti Wing, Fusillade-3, Burnthrough-1"
      }
     ],
     "loads": [],
@@ -2517,7 +2517,7 @@
    "category": "light",
    "ship": {
     "name": "Monarch Monitor",
-    "cost": 85,
+    "cost": 92,
     "stats": {
      "thrust": "6\"",
      "scan": "12\"",
@@ -2569,7 +2569,7 @@
    "category": "light",
    "ship": {
     "name": "Mantle Monitor",
-    "cost": 65,
+    "cost": 68,
     "stats": {
      "thrust": "6\"",
      "scan": "12\"",
@@ -2669,7 +2669,7 @@
    "category": "light",
    "ship": {
     "name": "Fulcrum Frigate",
-    "cost": 37,
+    "cost": 34,
     "stats": {
      "thrust": "14\"",
      "scan": "10\"",
@@ -2685,11 +2685,11 @@
      {
       "name": "Barb Spiker",
       "arc": "FN",
-      "attack": "1",
+      "attack": "2",
       "lock": "2+",
-      "damage": "2",
+      "damage": "1",
       "type": "K",
-      "special": "Reave-2"
+      "special": "Focused, Reave-2"
      }
     ],
     "loads": [],
@@ -2754,7 +2754,7 @@
    "category": "light",
    "ship": {
     "name": "Forestall Frigate",
-    "cost": 38,
+    "cost": 35,
     "stats": {
      "thrust": "14\"",
      "scan": "8\"",
@@ -2774,7 +2774,7 @@
       "lock": "4+",
       "damage": "1",
       "type": "E",
-      "special": "Anti Wing, Fusillade-2, Reave-1"
+      "special": "Anti Wing, Fusillade-2, Burnthrough-1"
      }
     ],
     "loads": [],
@@ -2809,7 +2809,7 @@
      {
       "name": "Lightvice",
       "arc": "F/S",
-      "attack": "4",
+      "attack": "3",
       "lock": "2+",
       "damage": "1",
       "type": "K",
@@ -2884,7 +2884,7 @@
    "category": "light",
    "ship": {
     "name": "Vertex Corvette",
-    "cost": 30,
+    "cost": 33,
     "stats": {
      "thrust": "12\"",
      "scan": "8\"",
@@ -2904,7 +2904,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Air to Air"
+      "special": "Air to Air, Penetrator"
      }
     ],
     "loads": [],
@@ -4213,7 +4213,7 @@
    "category": "heavy",
    "ship": {
     "name": "Syntax Pocket Battleship",
-    "cost": 175,
+    "cost": 165,
     "stats": {
      "thrust": "8\"",
      "scan": "10\"",
@@ -4233,7 +4233,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Reave-1"
+      "special": "Penetrator"
      },
      {
       "name": "Decon Blaster",
@@ -4242,7 +4242,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "-"
+      "special": "Penetrator"
      },
      {
       "name": "Decon Blaster",
@@ -4251,14 +4251,14 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "-"
+      "special": "Penetrator"
      }
     ],
     "loads": [],
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
+      "description": "When building your fleet, this Ship must be assigned a Gravitational Arc or Ghost Orb Tower, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
@@ -4274,7 +4274,7 @@
    "category": "heavy",
    "ship": {
     "name": "Synthesis Pocket Battleship",
-    "cost": 230,
+    "cost": 205,
     "stats": {
      "thrust": "8\"",
      "scan": "10\"",
@@ -4312,7 +4312,7 @@
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
+      "description": "When building your fleet, this Ship must be assigned a Gravitational Arc or Ghost Orb Tower, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.”"
      }
     ],
     "groupMin": 1,
@@ -4328,7 +4328,7 @@
    "category": "heavy",
    "ship": {
     "name": "Sierra Pocket Battleship",
-    "cost": 185,
+    "cost": 170,
     "stats": {
      "thrust": "8\"",
      "scan": "10\"",
@@ -4357,7 +4357,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "-"
+      "special": "Penetrator"
      },
      {
       "name": "Decon Blaster",
@@ -4366,14 +4366,14 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "-"
+      "special": "Penetrator"
      }
     ],
     "loads": [],
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
+      "description": "When building your fleet, this Ship must be assigned a Gravitational Arc or Ghost Orb Tower, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
@@ -4389,7 +4389,7 @@
    "category": "heavy",
    "ship": {
     "name": "Shade Pocket Battleship",
-    "cost": 225,
+    "cost": 210,
     "stats": {
      "thrust": "8\"",
      "scan": "10\"",
@@ -4432,7 +4432,7 @@
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
+      "description": "When building your fleet, this Ship must be assigned a Gravitational Arc or Ghost Orb Tower, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
      },
      {
       "name": "High Velocity Boarding Pods",

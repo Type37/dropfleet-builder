@@ -434,44 +434,26 @@
         },
         "weapons": [
           {
-            "name": "UF-9000 Mass Driver Turret",
+            "name": "UF-9000 Mass Driver Turrets",
             "arc": "F/S",
             "attack": "2",
             "lock": "2+",
             "damage": "2",
             "type": "K",
-            "special": "Critical-1, Penetrator"
+            "special": "Critical-1, Penetrator, Volley-2"
           },
           {
-            "name": "UF-9000 Mass Driver Turret",
+            "name": "UF-4200 Mass Driver Turret Battery",
             "arc": "F/S",
-            "attack": "2",
-            "lock": "2+",
-            "damage": "2",
-            "type": "K",
-            "special": "Critical-1, Penetrator"
-          },
-          {
-            "name": "UF-4200 Mass Driver Turret Core Battery",
-            "arc": "F/S",
-            "attack": "6",
+            "attack": "10",
             "lock": "4+",
             "damage": "1",
             "type": "K",
-            "special": "Fusillade-3, Volley-2"
-          },
-          {
-            "name": "UF-4200 Mass Driver Turrets",
-            "arc": "F/S",
-            "attack": "4",
-            "lock": "4+",
-            "damage": "1",
-            "type": "K",
-            "special": "Fusillade-2, Volley-2"
+            "special": "Fusillade-5, Volley-2"
           },
           {
             "name": "Leviathan Missile Bays",
-            "arc": "F/S/R",
+            "arc": "F/S",
             "attack": "8",
             "lock": "3+",
             "damage": "1",
@@ -482,7 +464,7 @@
         "loads": [
           {
             "name": "Fighters & Bombers",
-            "launch": "6",
+            "launch": "8",
             "special": "Alt-1"
           },
           {
@@ -1754,7 +1736,7 @@
       "category": "heavy",
       "ship": {
         "name": "Milwaukee Pocket Battleship",
-        "cost": 225,
+        "cost": 215,
         "stats": {
           "thrust": "7\"",
           "scan": "8\"",
@@ -1822,7 +1804,7 @@
         "isRare": false,
         "isUnique": false,
         "tonnage": "H",
-        "lore": "",
+        "lore": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
         "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
         "namesake": "By the twenty-first century, [Milwaukee](https://www.visitmilwaukee.org/) had settled into being a fairly small city in Wisconsin, industrial heritage, good breweries, lake views. In 2025 it also became the home of Adepticon, the world's largest tabletop gaming convention. Sitting on the western shore of Lake Michigan at the confluence of three rivers, Milwaukee grew on waves of German immigration that built its renowned brewing industry. It is the largest city in Wisconsin."
       }
@@ -1833,7 +1815,7 @@
       "category": "heavy",
       "ship": {
         "name": "Rotterdam Pocket Battleship",
-        "cost": 195,
+        "cost": 185,
         "stats": {
           "thrust": "7\"",
           "scan": "8\"",
@@ -1853,7 +1835,7 @@
             "lock": "2+",
             "damage": "1",
             "type": "E",
-            "special": "Scald-2"
+            "special": "Critical-1, Scald-2"
           },
           {
             "name": "Taipan Laser Turrets",
@@ -1862,7 +1844,7 @@
             "lock": "2+",
             "damage": "1",
             "type": "E",
-            "special": "Scald-2"
+            "special": "Critical-1, Scald-2"
           },
           {
             "name": "Swordfish Missile Bays",
@@ -1898,7 +1880,7 @@
         "isRare": false,
         "isUnique": false,
         "tonnage": "H",
-        "lore": "",
+        "lore": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.\n\nAn Admiral assigned to this ship gains the following Command Abilities:\n\nDouble Time Bulk Line: When you activate another friendly Group in Orbit, until 2AP the end of its activation, that Group may launch its Bulk Landers as if the target Dropsite has no enemy Battalions.\n\nFeet First into Hell: When you activate another friendly Group in atmosphere, 2AP until the end of its activation, that Group can launch its Dropships or Drop Pods with a range of 6”. Drop Pods launched due to this rule ignore the Alt-X rule.",
         "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature. UCMA Battlenet An Admiral assigned to this ship gains the following Command Abilities: Double Time Bulk Line: When you activate another friendly Group in Orbit, until the end of its activation, that Group may launch its Bulk Landers as if the target Dropsite has no enemy Battalions. Feet First into Hell: When you activate another friendly Group in atmosphere, until the end of its activation, that Group can launch its Dropships or Drop Pods with a range of 6”. Drop Pods launched due to this rule ignore the Alt-Launch rule.",
         "namesake": "[Rotterdam](https://www.rotterdam.info/en/), Netherlands handles more cargo tonnage than any other port in Europe, a position built on its location at the mouth of the Rhine-Meuse-Scheldt delta; much of the city was destroyed by German bombing in May 1940 and rebuilt in a modernist style. The city is home to the Erasmus Bridge, a cable-stayed crossing of the Nieuwe Maas nicknamed the Swan. Its postwar reconstruction left it with one of the most experimental skylines in the Netherlands, including the cube houses designed by Piet Blom in the 1980s."
       }
@@ -1909,7 +1891,7 @@
       "category": "heavy",
       "ship": {
         "name": "New Dubai Pocket Battleship",
-        "cost": 215,
+        "cost": 205,
         "stats": {
           "thrust": "7\"",
           "scan": "8\"",
@@ -1974,7 +1956,7 @@
         "isRare": false,
         "isUnique": false,
         "tonnage": "H",
-        "lore": "",
+        "lore": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
         "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
         "namesake": "[Dubai](https://www.visitdubai.com/en/), United Arab Emirates was a small pearl-diving settlement at the mouth of a creek on the Persian Gulf until oil revenues in the 1960s funded the construction of a modern port; the city has since built the tallest building on Earth and islands visible from orbit. It is the most populous city of the United Arab Emirates and the seat of the Emirate of Dubai, one of the seven emirates that formed the federation in 1971. The tallest building it built, the Burj Khalifa, rises more than 800 metres and opened in 2010."
       }
@@ -1985,7 +1967,7 @@
       "category": "heavy",
       "ship": {
         "name": "Hong Kong Pocket Battleship",
-        "cost": 185,
+        "cost": 175,
         "stats": {
           "thrust": "7\"",
           "scan": "8\"",
@@ -2001,7 +1983,7 @@
           {
             "name": "Viper Super Heavy Laser",
             "arc": "FN",
-            "attack": "8",
+            "attack": "9",
             "lock": "3+",
             "damage": "1",
             "type": "E",
@@ -2047,7 +2029,7 @@
         "isRare": false,
         "isUnique": false,
         "tonnage": "H",
-        "lore": "",
+        "lore": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
         "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
         "namesake": "[Hong Kong](https://www.discoverhongkong.com/eng/index.html) was a British Crown Colony from 1842 until 1997, when sovereignty transferred to China; the territory's deep natural harbour and low-tax trade policy made it one of the world's highest-density commercial centres. Today it is a special administrative region governed under the principle of one country, two systems, retaining its own legal and economic structures. More than 70 percent of its land remains undeveloped countryside and country parks, despite its reputation for dense high-rise living."
       }
@@ -2058,7 +2040,7 @@
       "category": "heavy",
       "ship": {
         "name": "Siam Battlecruiser",
-        "cost": 180,
+        "cost": 175,
         "stats": {
           "thrust": "8\"",
           "scan": "8\"",
@@ -2284,7 +2266,7 @@
           {
             "name": "Viper Super Heavy Laser",
             "arc": "FN",
-            "attack": "8",
+            "attack": "9",
             "lock": "3+",
             "damage": "1",
             "type": "E",
@@ -2367,9 +2349,9 @@
             "arc": "F/S",
             "attack": "4",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1, Volley-2"
+            "special": "Volley-2"
           },
           {
             "name": "UF-4200 Mass Driver Turrets",
@@ -2437,7 +2419,7 @@
       "category": "medium",
       "ship": {
         "name": "Busan Supercruiser",
-        "cost": 166,
+        "cost": 156,
         "stats": {
           "thrust": "7\"",
           "scan": "8\"",
@@ -2499,7 +2481,7 @@
         "isRare": false,
         "isUnique": false,
         "tonnage": "M",
-        "lore": "",
+        "lore": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
         "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
         "namesake": "[Busan](https://www.visitbusan.net/index.do?menuCd=DOM_000000301001000000&lang_cd=en) is South Korea's second city and the country's primary seaport, situated on the southeastern tip of the peninsula where the Korea Strait narrows between Korea and Japan. Its container port is among the busiest in the world by cargo volume. The city hosts the Busan International Film Festival, one of the most prominent film events in Asia, and served as the provisional capital of South Korea during the Korean War."
       }
@@ -2510,7 +2492,7 @@
       "category": "medium",
       "ship": {
         "name": "Yokohama Supercruiser",
-        "cost": 160,
+        "cost": 148,
         "stats": {
           "thrust": "7\"",
           "scan": "8\"",
@@ -2528,9 +2510,9 @@
             "arc": "F/S",
             "attack": "4",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1"
+            "special": "-"
           },
           {
             "name": "UF-4200 Mass Driver Turrets",
@@ -2548,7 +2530,7 @@
             "lock": "2+",
             "damage": "1",
             "type": "E",
-            "special": "Scald-2"
+            "special": "Critical-1, Scald-2"
           },
           {
             "name": "Swordfish Missile Bays",
@@ -2572,7 +2554,7 @@
         "isRare": false,
         "isUnique": false,
         "tonnage": "M",
-        "lore": "",
+        "lore": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
         "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
         "namesake": "[Yokohama](https://www.yokohamajapan.com/), Japan was a small fishing village until US Commodore Matthew Perry forced the country to open the port to foreign trade in 1854; it grew into Japan's largest port and the gateway for Western goods and ideas into the Meiji-era country. It lies just south of Tokyo and forms part of the Greater Tokyo metropolitan area. Its Chinatown is the largest in Japan, a legacy of the Chinese merchants who settled there after the port opened to foreign trade."
       }
@@ -2583,7 +2565,7 @@
       "category": "medium",
       "ship": {
         "name": "Las Vegas Command Carrier",
-        "cost": 145,
+        "cost": 155,
         "stats": {
           "thrust": "7\"",
           "scan": "10\"",
@@ -2601,9 +2583,9 @@
             "arc": "F/S",
             "attack": "4",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1"
+            "special": "-"
           }
         ],
         "loads": [
@@ -2648,7 +2630,7 @@
       "category": "medium",
       "ship": {
         "name": "Edmonton Heavy Carrier",
-        "cost": 135,
+        "cost": 130,
         "stats": {
           "thrust": "7\"",
           "scan": "6\"",
@@ -2664,7 +2646,7 @@
           {
             "name": "Cobra Heavy Laser",
             "arc": "FN",
-            "attack": "4",
+            "attack": "5",
             "lock": "3+",
             "damage": "1",
             "type": "E",
@@ -2675,9 +2657,9 @@
             "arc": "F/S",
             "attack": "4",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1"
+            "special": "-"
           }
         ],
         "loads": [
@@ -2720,18 +2702,18 @@
             "arc": "F/S",
             "attack": "4",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1"
+            "special": "-"
           },
           {
             "name": "UF-6400 Mass Driver Turrets",
             "arc": "F/S",
             "attack": "4",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1"
+            "special": "-"
           },
           {
             "name": "UF-4200 Mass Driver Turrets",
@@ -2776,7 +2758,7 @@
           {
             "name": "Cobra Heavy Laser Pair",
             "arc": "FN",
-            "attack": "6",
+            "attack": "8",
             "lock": "3+",
             "damage": "1",
             "type": "E",
@@ -2809,7 +2791,7 @@
       "category": "medium",
       "ship": {
         "name": "San Francisco Troopship",
-        "cost": 100,
+        "cost": 95,
         "stats": {
           "thrust": "8\"",
           "scan": "6\"",
@@ -3048,7 +3030,7 @@
         "isRare": false,
         "isUnique": true,
         "tonnage": "M",
-        "lore": "The Geneva is a class of cruiser designed and constructed by the United Colonies of Mankind. In previous years, the communications array mounted on the Venice was too large and unwieldy to be built into anything smaller than a battlecruiser. However, advances in technology have allowed the UCM to create a smaller version of the array, resulting in the creation of the Geneva - a dedicated command vessel of cruiser tonnage. From the bridge of a Geneva, UCM commanders are afforded a crystal-clear view of the battlefield, giving them the ability to coordinate battlegroups with ease. However, this comes at the cost of the Geneva's own armament, as a cruiser hull lacks the engine power to field both the comms array and heavy weapons.",
+        "lore": "A UCM or Generic (from 4.2.1) Admiral assigned to this Ship may take 1 additional Ability from the UCM Abilities table.",
         "namesake": "[Geneva](https://www.geneve.com/en) sits at the southwestern tip of Lake Geneva on the Swiss Plateau; it became the centre of Protestant reform under John Calvin in the sixteenth century and later the seat of the League of Nations. It is the headquarters of numerous international organisations, including the European seat of the United Nations and the International Committee of the Red Cross. The Jet d'Eau, a fountain that throws water 140 metres into the air over the lake, is the city's most recognisable landmark."
       }
     },
@@ -3126,7 +3108,7 @@
             "lock": "2+",
             "damage": "1",
             "type": "E",
-            "special": "Scald-2"
+            "special": "Critical-1, Scald-2"
           },
           {
             "name": "Piranha Missile Turrets",
@@ -3228,7 +3210,7 @@
       "category": "medium",
       "ship": {
         "name": "Bruges Cruiser",
-        "cost": 84,
+        "cost": 80,
         "stats": {
           "thrust": "8\"",
           "scan": "6\"",
@@ -3244,7 +3226,7 @@
           {
             "name": "Cobra Heavy Laser",
             "arc": "FN",
-            "attack": "4",
+            "attack": "5",
             "lock": "3+",
             "damage": "1",
             "type": "E",
@@ -3257,7 +3239,7 @@
             "lock": "2+",
             "damage": "1",
             "type": "E",
-            "special": "Scald-2"
+            "special": "Critical-1, Scald-2"
           }
         ],
         "loads": [],
@@ -3332,7 +3314,7 @@
       "category": "medium",
       "ship": {
         "name": "Berlin Cruiser",
-        "cost": 80,
+        "cost": 78,
         "stats": {
           "thrust": "8\"",
           "scan": "6\"",
@@ -3348,7 +3330,7 @@
           {
             "name": "Cobra Heavy Laser",
             "arc": "FN",
-            "attack": "4",
+            "attack": "5",
             "lock": "3+",
             "damage": "1",
             "type": "E",
@@ -3415,9 +3397,9 @@
             "arc": "F/S",
             "attack": "4",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1"
+            "special": "-"
           },
           {
             "name": "UF-4200 Mass Driver Turrets",
@@ -3523,7 +3505,7 @@
           {
             "name": "Cobra Heavy Laser",
             "arc": "FN",
-            "attack": "4",
+            "attack": "5",
             "lock": "3+",
             "damage": "1",
             "type": "E",
@@ -3586,9 +3568,9 @@
             "arc": "F/S",
             "attack": "4",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1"
+            "special": "-"
           }
         ],
         "loads": [],
@@ -3696,7 +3678,7 @@
             "lock": "3+",
             "damage": "2",
             "type": "K",
-            "special": "Fusillade-1, Re-Entry"
+            "special": "Fusillade-1, Penetrator, Re-Entry"
           }
         ],
         "loads": [],
@@ -3749,7 +3731,12 @@
           {
             "name": "Fighters & Bombers",
             "launch": "1",
-            "special": "-"
+            "special": "Alt-1"
+          },
+          {
+            "name": "Mines",
+            "launch": "1",
+            "special": "Alt-1"
           }
         ],
         "specialRules": [
@@ -3906,7 +3893,7 @@
             "attack": "1",
             "lock": "4+",
             "damage": "0",
-            "type": "E",
+            "type": "C",
             "special": "Status"
           }
         ],
@@ -3968,7 +3955,7 @@
             "lock": "3+",
             "damage": "2",
             "type": "K",
-            "special": "-"
+            "special": "Focused, Penetrator"
           }
         ],
         "loads": [],
@@ -4002,7 +3989,7 @@
       "category": "light",
       "ship": {
         "name": "Vienna Escort Frigate",
-        "cost": 66,
+        "cost": 60,
         "stats": {
           "thrust": "6\"",
           "scan": "6\"",
@@ -4061,10 +4048,10 @@
       "category": "light",
       "ship": {
         "name": "Istanbul Monitor",
-        "cost": 50,
+        "cost": 57,
         "stats": {
           "thrust": "6\"",
-          "scan": "6\"",
+          "scan": "10\"",
           "sig": "4\"",
           "hull": 4,
           "es": "3+",
@@ -4081,7 +4068,7 @@
             "lock": "3+",
             "damage": "2",
             "type": "K",
-            "special": "Alt-1"
+            "special": "Alt-1, Focused, Penetrator"
           },
           {
             "name": "UF-B-9000s (Bombardment)",
@@ -4090,7 +4077,7 @@
             "lock": "4+",
             "damage": "2",
             "type": "K",
-            "special": "Alt-1, Bombardment"
+            "special": "Alt-1, Bombardment, Penetrator"
           }
         ],
         "loads": [],
@@ -4133,7 +4120,7 @@
           "es": "3+",
           "ks": "4+",
           "bs": "-",
-          "g": "1-2",
+          "g": "1-4",
           "special": "-"
         },
         "weapons": [
@@ -4181,7 +4168,7 @@
           "es": "3+",
           "ks": "4+",
           "bs": "-",
-          "g": "1-2",
+          "g": "1-4",
           "special": "-"
         },
         "weapons": [
@@ -4201,7 +4188,7 @@
             "lock": "2+",
             "damage": "1",
             "type": "E",
-            "special": "Scald-2"
+            "special": "Critical-1, Scald-2"
           }
         ],
         "loads": [],
@@ -4221,14 +4208,14 @@
       "category": "light",
       "ship": {
         "name": "New Orleans Strike Carrier",
-        "cost": 45,
+        "cost": 42,
         "stats": {
           "thrust": "10\"",
           "scan": "6\"",
           "sig": "3\"",
           "hull": 4,
           "es": "4+",
-          "ks": "3+",
+          "ks": "4+",
           "bs": "-",
           "g": "1-2",
           "special": "Descent"
@@ -4364,7 +4351,7 @@
             "special": "-"
           },
           {
-            "name": "Aegis V Array",
+            "name": "Aegis-V Array",
             "arc": "F/S/R",
             "attack": "4",
             "lock": "3+",
@@ -4404,7 +4391,7 @@
       "category": "light",
       "ship": {
         "name": "Taipei Missile Frigate",
-        "cost": 40,
+        "cost": 37,
         "stats": {
           "thrust": "10\"",
           "scan": "6\"",
@@ -4590,14 +4577,14 @@
       "category": "light",
       "ship": {
         "name": "Santiago Corvette",
-        "cost": 20,
+        "cost": 23,
         "stats": {
           "thrust": "14\"",
           "scan": "6\"",
           "sig": "2\"",
           "hull": 2,
           "es": "5+",
-          "ks": "6+",
+          "ks": "5+",
           "bs": "-",
           "g": "2-4",
           "special": "Descent, Rare"
@@ -5740,31 +5727,13 @@
         },
         "weapons": [
           {
-            "name": "Artillery Cannon",
+            "name": "Artillery Cannons",
             "arc": "F",
-            "attack": "1",
+            "attack": "3",
             "lock": "4+",
             "damage": "2",
             "type": "K",
-            "special": "Calibre-H/C, Fusillade-1, Low Power"
-          },
-          {
-            "name": "Artillery Cannon",
-            "arc": "F",
-            "attack": "1",
-            "lock": "4+",
-            "damage": "2",
-            "type": "K",
-            "special": "Calibre-H/C, Fusillade-1, Low Power"
-          },
-          {
-            "name": "Artillery Cannon",
-            "arc": "F",
-            "attack": "1",
-            "lock": "4+",
-            "damage": "2",
-            "type": "K",
-            "special": "Calibre-H/C, Fusillade-1, Low Power"
+            "special": "Calibre-H/C, Critical-1, Fusillade-3"
           }
         ],
         "loads": [],
