@@ -114,7 +114,7 @@
         "specialRules": [
           {
             "name": "Aegis-6",
-            "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+            "description": "All Ships with this rule in a Group in coherency combine their 6 values into a single value Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to their Energy or Kinetic saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits) between any Energy or Kinetic saves.\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.\nAegis has no effect on Backup saves or saves that replace Energy and Kinetic saves (such as Shield saves).\nIn addition, Ships benefiting from Aegis increase the number of bombers required to trigger Saturation Fire by Y.\ne.g. A Ship benefiting from Aegis-2 would suffer one Core hit per bomber above 8, rather than 6.",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
@@ -463,7 +463,7 @@
         "specialRules": [
           {
             "name": "Aegis-6",
-            "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+            "description": "All Ships with this rule in a Group in coherency combine their 6 values into a single value Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to their Energy or Kinetic saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits) between any Energy or Kinetic saves.\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.\nAegis has no effect on Backup saves or saves that replace Energy and Kinetic saves (such as Shield saves).\nIn addition, Ships benefiting from Aegis increase the number of bombers required to trigger Saturation Fire by Y.\ne.g. A Ship benefiting from Aegis-2 would suffer one Core hit per bomber above 8, rather than 6.",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
@@ -555,7 +555,7 @@
         "specialRules": [
           {
             "name": "Aegis-6",
-            "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+            "description": "All Ships with this rule in a Group in coherency combine their 6 values into a single value Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to their Energy or Kinetic saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits) between any Energy or Kinetic saves.\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.\nAegis has no effect on Backup saves or saves that replace Energy and Kinetic saves (such as Shield saves).\nIn addition, Ships benefiting from Aegis increase the number of bombers required to trigger Saturation Fire by Y.\ne.g. A Ship benefiting from Aegis-2 would suffer one Core hit per bomber above 8, rather than 6.",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
@@ -1916,7 +1916,7 @@
           },
           {
             "name": "Aegis-6",
-            "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+            "description": "All Ships with this rule in a Group in coherency combine their 6 values into a single value Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to their Energy or Kinetic saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits) between any Energy or Kinetic saves.\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.\nAegis has no effect on Backup saves or saves that replace Energy and Kinetic saves (such as Shield saves).\nIn addition, Ships benefiting from Aegis increase the number of bombers required to trigger Saturation Fire by Y.\ne.g. A Ship benefiting from Aegis-2 would suffer one Core hit per bomber above 8, rather than 6.",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           }
@@ -2186,7 +2186,7 @@
         "specialRules": [
           {
             "name": "Aegis-6",
-            "description": "All Ships with this rule in a Group combine their 6 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+            "description": "All Ships with this rule in a Group in coherency combine their 6 values into a single value Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to their Energy or Kinetic saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits) between any Energy or Kinetic saves.\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.\nAegis has no effect on Backup saves or saves that replace Energy and Kinetic saves (such as Shield saves).\nIn addition, Ships benefiting from Aegis increase the number of bombers required to trigger Saturation Fire by Y.\ne.g. A Ship benefiting from Aegis-2 would suffer one Core hit per bomber above 8, rather than 6.",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
@@ -2574,7 +2574,7 @@
           },
           {
             "name": "Detector",
-            "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+            "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).\ne.g. A Ship with 1 Weapon and Detector on General Quarters would be able to either attack with its single Weapon or use its Detector rule.",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
@@ -2984,7 +2984,7 @@
           },
           {
             "name": "Detector",
-            "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+            "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).\ne.g. A Ship with 1 Weapon and Detector on General Quarters would be able to either attack with its single Weapon or use its Detector rule.",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
@@ -3717,7 +3717,7 @@
         "specialRules": [
           {
             "name": "Escort",
-            "description": "After Weapons have been assigned to a friendly Ship of H or C tonnage within 6” of this Ship on the same Orbital Layer, you may declare the use of Escort for the friendly Ship. Only one Group may Escort at a time and it must be in Coherency.\nAfter your opponent rolls to hit the original target, allocate an amount of hits from that roll to this Group. An Escort Group cannot be allocated more damage by those hits than each remaining Ship in it has in starting Hull. You may use this even if the Escort Group is out of range, arc, and line of sight of the attacking Group. Continue the attack sequence using the Escort Group.\nWeapons with the Focused rule cannot be affected by the Escort rule.",
+            "description": "At the start of the game, before deployment, assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           }
@@ -3830,7 +3830,7 @@
         "specialRules": [
           {
             "name": "Vectored",
-            "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
+            "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
             "page": "37",
             "publicationId": "45b0-3e3b-e83d-fd70"
           }
@@ -3876,7 +3876,7 @@
         "specialRules": [
           {
             "name": "Vectored",
-            "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
+            "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
             "page": "37",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
@@ -3937,7 +3937,7 @@
         "specialRules": [
           {
             "name": "Vectored",
-            "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
+            "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
             "page": "37",
             "publicationId": "45b0-3e3b-e83d-fd70"
           }
@@ -3992,13 +3992,13 @@
         "specialRules": [
           {
             "name": "Aegis-3",
-            "description": "All Ships with this rule in a Group combine their 3 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+            "description": "All Ships with this rule in a Group in coherency combine their 3 values into a single value Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to their Energy or Kinetic saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits) between any Energy or Kinetic saves.\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.\nAegis has no effect on Backup saves or saves that replace Energy and Kinetic saves (such as Shield saves).\nIn addition, Ships benefiting from Aegis increase the number of bombers required to trigger Saturation Fire by Y.\ne.g. A Ship benefiting from Aegis-2 would suffer one Core hit per bomber above 8, rather than 6.",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
           {
             "name": "Escort",
-            "description": "After Weapons have been assigned to a friendly Ship of H or C tonnage within 6” of this Ship on the same Orbital Layer, you may declare the use of Escort for the friendly Ship. Only one Group may Escort at a time and it must be in Coherency.\nAfter your opponent rolls to hit the original target, allocate an amount of hits from that roll to this Group. An Escort Group cannot be allocated more damage by those hits than each remaining Ship in it has in starting Hull. You may use this even if the Escort Group is out of range, arc, and line of sight of the attacking Group. Continue the attack sequence using the Escort Group.\nWeapons with the Focused rule cannot be affected by the Escort rule.",
+            "description": "At the start of the game, before deployment, assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           }
@@ -4271,7 +4271,7 @@
         "specialRules": [
           {
             "name": "Detector",
-            "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+            "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).\ne.g. A Ship with 1 Weapon and Detector on General Quarters would be able to either attack with its single Weapon or use its Detector rule.",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
@@ -4340,7 +4340,7 @@
         "specialRules": [
           {
             "name": "Aegis-2",
-            "description": "All Ships with this rule in a Group combine their 2 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+            "description": "All Ships with this rule in a Group in coherency combine their 2 values into a single value Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to their Energy or Kinetic saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits) between any Energy or Kinetic saves.\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.\nAegis has no effect on Backup saves or saves that replace Energy and Kinetic saves (such as Shield saves).\nIn addition, Ships benefiting from Aegis increase the number of bombers required to trigger Saturation Fire by Y.\ne.g. A Ship benefiting from Aegis-2 would suffer one Core hit per bomber above 8, rather than 6.",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           }
@@ -4791,7 +4791,7 @@
           },
           {
             "name": "Detector",
-            "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+            "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).\ne.g. A Ship with 1 Weapon and Detector on General Quarters would be able to either attack with its single Weapon or use its Detector rule.",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
@@ -5054,7 +5054,7 @@
         "specialRules": [
           {
             "name": "Vectored",
-            "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
+            "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken."
           },
           {
             "name": "Resupply and Rearm",
@@ -5138,7 +5138,7 @@
           },
           {
             "name": "Vectored",
-            "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
+            "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
             "page": "37",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
@@ -5274,7 +5274,7 @@
         "specialRules": [
           {
             "name": "Aegis-4",
-            "description": "All Ships with this rule in a Group combine their 4 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
+            "description": "All Ships with this rule in a Group in coherency combine their 4 values into a single value Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to their Energy or Kinetic saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits) between any Energy or Kinetic saves.\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.\nAegis has no effect on Backup saves or saves that replace Energy and Kinetic saves (such as Shield saves).\nIn addition, Ships benefiting from Aegis increase the number of bombers required to trigger Saturation Fire by Y.\ne.g. A Ship benefiting from Aegis-2 would suffer one Core hit per bomber above 8, rather than 6.",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
@@ -5560,7 +5560,7 @@
           },
           {
             "name": "Vectored",
-            "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
+            "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken."
           },
           {
             "name": "Industrial Design",
@@ -5790,7 +5790,7 @@
           },
           {
             "name": "Vectored",
-            "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
+            "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
             "page": "37",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
@@ -5995,7 +5995,7 @@
         "specialRules": [
           {
             "name": "Vectored",
-            "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
+            "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken."
           },
           {
             "name": "Fuel Transporter",
@@ -6140,7 +6140,7 @@
           },
           {
             "name": "Vectored",
-            "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
+            "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
             "page": "37",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },

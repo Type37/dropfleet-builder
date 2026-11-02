@@ -1792,8 +1792,8 @@
     "specialRules": [
      {
       "name": "Detector",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
-      "page": "36",
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).\ne.g. A Ship with 1 Weapon and Detector on General Quarters would be able to either attack with its single Weapon or use its Detector rule.",
+      "page": "46",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3010,8 +3010,8 @@
      },
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
-      "page": "37",
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3069,8 +3069,8 @@
     "specialRules": [
      {
       "name": "Aegis-3",
-      "description": "All Ships with this rule in a Group combine their 3 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
-      "page": "36",
+      "description": "All Ships with this rule in a Group in coherency combine their 3 values into a single value Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to their Energy or Kinetic saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits) between any Energy or Kinetic saves.\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.\nAegis has no effect on Backup saves or saves that replace Energy and Kinetic saves (such as Shield saves).\nIn addition, Ships benefiting from Aegis increase the number of bombers required to trigger Saturation Fire by Y.\ne.g. A Ship benefiting from Aegis-2 would suffer one Core hit per bomber above 8, rather than 6.",
+      "page": "46",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3081,8 +3081,8 @@
      },
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
-      "page": "37",
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3145,8 +3145,8 @@
     "specialRules": [
      {
       "name": "Aegis-1",
-      "description": "All Ships with this rule in a Group combine their 1 values into a single value, Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to those saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits).\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.",
-      "page": "36",
+      "description": "All Ships with this rule in a Group in coherency combine their 1 values into a single value Y.\nFriendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.\nWhen rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to their Energy or Kinetic saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits) between any Energy or Kinetic saves.\nAn Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.\nA friendly Group can only benefit from Aegis from one Group each time it is attacked.\nAegis has no effect on Backup saves or saves that replace Energy and Kinetic saves (such as Shield saves).\nIn addition, Ships benefiting from Aegis increase the number of bombers required to trigger Saturation Fire by Y.\ne.g. A Ship benefiting from Aegis-2 would suffer one Core hit per bomber above 8, rather than 6.",
+      "page": "46",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3157,8 +3157,8 @@
      },
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
-      "page": "37",
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3254,8 +3254,8 @@
      },
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
-      "page": "37",
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -3311,8 +3311,8 @@
      },
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
-      "page": "37",
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -3597,7 +3597,8 @@
     "specialRules": [
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
+      "page": "48"
      },
      {
       "name": "Resupply and Rearm",
@@ -3681,8 +3682,8 @@
      },
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
-      "page": "37",
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -4050,7 +4051,8 @@
      },
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
+      "page": "48"
      },
      {
       "name": "Industrial Design",
@@ -4743,7 +4745,8 @@
     "specialRules": [
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
+      "page": "48"
      },
      {
       "name": "Fuel Transporter",
@@ -4888,8 +4891,8 @@
      },
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
-      "page": "37",
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {

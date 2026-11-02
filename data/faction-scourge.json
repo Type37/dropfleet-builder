@@ -3452,7 +3452,7 @@
     "specialRules": [
      {
       "name": "Detector",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).",
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).\ne.g. A Ship with 1 Weapon and Detector on General Quarters would be able to either attack with its single Weapon or use its Detector rule.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
