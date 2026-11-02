@@ -1577,6 +1577,10 @@
       }
       const def = facAdmirals.find(x => x.id === a.admiralId);
       const picks = def ? (def.abilityPicks || 0) : 0;
+      // A saved pick whose ability left the faction's table (2.4 replaced several)
+      // no longer counts and is dropped, so the slot opens again.
+      const tableNames = new Set(((FACTIONS[fleet.faction] || {}).abilitiesTable || []).map(t => t.name));
+      if (tableNames.size && Array.isArray(a.selectedAbilities)) a.selectedAbilities = a.selectedAbilities.filter(n => tableNames.has(n));
       const chosen = (a.selectedAbilities || []).length;
       if (picks > 0 && chosen < picks) {
         w.push({ t: 'warn', m: `${a.name}: choose ${picks} Abilit${picks > 1 ? 'ies' : 'y'} (${chosen}/${picks})` });

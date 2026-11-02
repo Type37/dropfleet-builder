@@ -2957,6 +2957,10 @@ let activeGroupId = null;
       }
       // Admiral hasn't picked all its Abilities Table choices yet (soft nudge).
       const picks = admiralRequiredPicks(fleet, adm);
+      // A saved pick whose ability left the faction's table (2.4 replaced several)
+      // no longer counts and is dropped, so the slot opens again.
+      const tableNames = new Set(((shipDB[fleet.faction] || {}).abilitiesTable || []).map(t => t.name));
+      if (tableNames.size && Array.isArray(adm.selectedAbilities)) adm.selectedAbilities = adm.selectedAbilities.filter(n => tableNames.has(n));
       const chosen = (adm.selectedAbilities || []).length;
       if (picks > 0 && chosen < picks) {
         warnings.push({ type: 'warn', msg: `${adm.name}: choose ${picks} Abilit${picks > 1 ? 'ies' : 'y'} (${chosen}/${picks})` });
