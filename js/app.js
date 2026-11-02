@@ -8377,7 +8377,7 @@ let activeGroupId = null;
     'Weapons Free':      'The Group cannot turn and must move between half and full Thrust. Each Ship may attack with any number of its Weapon Systems. Each Ship may then launch Assets, then the Group gains two Spikes at the end of its activation.',
     'Course Change':     'The Group may turn up to 45 degrees, must move up to half its Thrust, then make an additional turn up to 45 degrees. Each Ship may only attack with a single Weapon. The Group may forgo one of its allowed turns (either the first or second) to launch Assets at the end of its activation. The Group gains a Spike at the end of its activation.',
     'Max Thrust':        'The Group may not turn and must move between full and twice its Thrust. The Group cannot attack with any Weapons. The Group gains two Spikes at the end of its activation and cannot launch Assets.',
-    'Damage Control':    'Each Ship recovers 1 lost Hull Point. Ships of H and C tonnage recover D3 lost Hull Points instead. The Group may turn up to 45 degrees then move up to half its Thrust. Each Ship may only attack with a single Close Action Weapon. The Group may not Launch Assets. During the Repair step of the End Phase, roll 2 dice for each Crippling Effect the Group attempts to repair. While rolling to save against Core hits due to Boarding Actions, this ship improves its BS value by 1 or gains a BS of 6+ if it has no BS value listed.',
+    'Damage Control':    'Each Ship recovers 1 lost Hull Point. Ships of H and C tonnage recover D3 lost Hull Points instead. The Group may turn up to 45 degrees, then must move up to half its Thrust. Each Ship may only attack with a single Close Action Weapon. The Group may not Launch Assets. At the end of this Group\'s activation, it rolls to repair as if it was the Repair step of the End Phase, then attempts to repel boarders. Roll either a Backup save or a roll of a 6+ for each enemy Battalion aboard each Ship in the Group and remove an enemy Battalion from that Ship for each successful dice',
   };
   const PLAY_STORAGE_PREFIX = 'dfc_play_';
   // Rulebook 7.3.6: only Medium/Heavy/Colossal are Capital Ships — Light (frigates) never crip.
@@ -8410,7 +8410,7 @@ let activeGroupId = null;
   const CRIP_EFFECTS = [
     { key: 'fire',        label: 'On Fire',             stackable: true,
       icon: tokenImg('status-fire'),
-      color: 'err', title: '1 damage per token at start of End Phase. Repairable on 4+.' },
+      color: 'err', title: '1 damage per token at start of End Phase. Repairable on 3+.' },
     { key: 'defSysOff',   label: 'Def. Sys. Offline',   stackable: false,
       icon: tokenImg('status-defence-systems-offline'),
       color: 'warn', title: 'All saves -1. Can be targeted as Focused ignoring Formation. Repairable 4+.' },
@@ -8425,7 +8425,7 @@ let activeGroupId = null;
       color: 'warn', title: 'Movement capped at 2". Cannot turn or change Orbital Layer. Repairable on 4+.' },
     { key: 'orbDecay',    label: 'Orbital Decay',        stackable: false,
       icon: tokenImg('status-orbital-decay'),
-      color: 'err', title: 'Falls into Atmosphere. Cannot return to Orbit. Repairable on 6+.' },
+      color: 'err', title: 'Falls into Atmosphere. Cannot return to Orbit. Repairable on 5+.' },
   ];
 
   function loadPlayState(fleetId) {
@@ -8737,7 +8737,7 @@ let activeGroupId = null;
       case 'Course Change':    return { note: 'Course Change: fire 1 weapon only', tone: 'half', canFire: () => true };
       case 'Silent Running':   return { note: 'Silent Running: no weapons fire', tone: 'stop', canFire: () => false };
       case 'Max Thrust':       return { note: 'Max Thrust: no weapons fire', tone: 'stop', canFire: () => false };
-      case 'Damage Control':   return { note: 'Damage Control: repair, then fire 1 Close Action weapon only', tone: 'half', canFire: w => (w.type || w.t) === 'C' };
+      case 'Damage Control':   return { note: 'Damage Control: repair, then fire 1 Close Action weapon only', tone: 'half', canFire: w => /Close Action|Point Blank/i.test(w.special || w.s || '') };
       default: return null;
     }
   }
