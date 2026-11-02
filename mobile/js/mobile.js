@@ -1614,7 +1614,7 @@
     });
 
     // Tonnage restrictions
-    let light = 0, medium = 0, heavy = 0;
+    let light = 0, medium = 0, heavy = 0, colossalPts = 0;
     fleet.battleGroups.forEach(g => {
       const s0 = g.ships[0];
       const cat = s0?.groupCategory;
@@ -1622,7 +1622,7 @@
       const db0 = s0 ? findShip(fleet.faction, s0.groupCategory, s0.shipKey) : null;
       if (db0 && db0.noTonnageCount) return;
       const p = groupPoints(fleet, g);
-      if (cat === 'light') light += p; else if (cat === 'medium') medium += p; else if (cat === 'heavy') heavy += p;
+      if (cat === 'light') light += p; else if (cat === 'medium') medium += p; else if (cat === 'heavy') heavy += p; else if (cat === 'colossal') colossalPts += p;
     });
     // A famous admiral's flagship is a Ship on the table and rulebook 4.2 makes no
     // exemption for it, so the flagship's own cost counts toward its weight class.
@@ -1632,9 +1632,10 @@
       if (!fs || fs.noTonnageCount) return;
       const p = fs.cost || 0;
       const cat = fs.category || '';
-      if (cat === 'light') light += p; else if (cat === 'medium') medium += p; else if (cat === 'heavy') heavy += p;
+      if (cat === 'light') light += p; else if (cat === 'medium') medium += p; else if (cat === 'heavy') heavy += p; else if (cat === 'colossal') colossalPts += p;
     });
-    if (heavy > medium) w.push({ t: 'error', m: `Heavy points (${heavy}) can’t exceed Medium points (${medium}) (rulebook 4.2)` });
+    // 2.4 counts Colossal with Heavy against the Medium cap.
+    if (heavy + colossalPts > medium) w.push({ t: 'error', m: `${colossalPts ? 'Heavy and Colossal' : 'Heavy'} points (${heavy + colossalPts}) can’t exceed Medium points (${medium}) (rulebook 4.2)` });
     if (light > medium + heavy) w.push({ t: 'error', m: `Light points (${light}) can’t exceed Medium + Heavy points (${medium + heavy}) (rulebook 4.2)` });
 
     // Payload capacity — Payload Ships "take up X of a Porter Ship's capacity" and
