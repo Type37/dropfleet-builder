@@ -31,7 +31,7 @@
     {
      "name": "Re-route Systems",
      "cost": "1AP",
-     "effect": "At the start of a friendly Group’s activation, remove one Crippling Effect token (of any type) from that Group."
+     "effect": "At the start of a friendly Group’s activation, choose a Ship in that Group. That Ship attempts to repair a repairable Crippling Effect."
     },
     {
      "name": "Ranked Fire",
@@ -52,8 +52,8 @@
    "abilities": [
     {
      "name": "Backup Systems Engaged",
-     "cost": "2AP",
-     "effect": "When a friendly ship would roll for Crippling Damage, roll a dice. On a 4+ that Ship does not roll on the Crippling Damage table but is still Crippled."
+     "cost": "1AP",
+     "effect": "When a friendly Ship would roll for Crippling Damage, that Ship does not roll for Crippling Damage, but is still Crippled."
     }
    ],
    "flagship": {
@@ -143,7 +143,7 @@
    "abilities": [
     {
      "name": "High-G Manouevre",
-     "cost": "2AP",
+     "cost": "1AP",
      "effect": "When a friendly Group is given a Max Thrust order, it may turn as if it was on General Quarters."
     }
    ],
@@ -163,13 +163,31 @@
     },
     "weapons": [
      {
-      "name": "Heavy Calibre Triple Broadside",
+      "name": "Heavy Calibre Broadside",
       "arc": "B",
-      "attack": "3",
-      "lock": "3+",
+      "attack": "2",
+      "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H/C, Penetrator, Volley-2"
+      "special": "Calibre-H, Penetrator, Volley-2"
+     },
+     {
+      "name": "Heavy Calibre Broadside",
+      "arc": "B",
+      "attack": "2",
+      "lock": "4+",
+      "damage": "3",
+      "type": "K",
+      "special": "Calibre-H, Penetrator, Volley-2"
+     },
+     {
+      "name": "Heavy Calibre Broadside",
+      "arc": "B",
+      "attack": "2",
+      "lock": "4+",
+      "damage": "3",
+      "type": "K",
+      "special": "Calibre-H, Penetrator, Volley-2"
      },
      {
       "name": "Dark Matter Cannon",
@@ -178,7 +196,7 @@
       "lock": "2+",
       "damage": "2",
       "type": "E",
-      "special": "Critical-1, Crippling, Penetrator"
+      "special": "Critical-1, Crippling, High Power, Penetrator"
      },
      {
       "name": "Hornet Drones",
@@ -200,7 +218,7 @@
     "category": "heavy",
     "namesake": "The greatest hero of Greek mythology, son of Zeus and the mortal Alcmene. Killed his own family in a divine madness sent by Hera, then spent the rest of his life earning absolution through the Twelve Labors, slaying the Nemean Lion, capturing Cerberus, diverting rivers. Worshipped across the ancient world as the patron of strength and the destroyer of monsters."
    },
-   "abilityPicks": 2,
+   "abilityPicks": 3,
    "bio": "Claudia Rhee is a rarity amongst the PHR. Once a Siren, her tactical aptitude and control over countless Familiars gained her a place as a Medusa, one of the most elite members of the already elite Siren Corps. She earned her place in the captains chair when her ship was ambushed by Shaltari pirates. Their initial volley had struck right through the ship's CIC, killing many of the command crew and leaving vital systems unmanned. Acting immediately, Claudia networked her Familiars with the ships' systems, restored order and brought weapons to bear. Her quick thinking saved the lives of many that day and while the ship itself was unsalvageable, Claudia was approached with an offer that would one day see her commanding not only her own ship, but an entire fleet.\n\nAs the daughter of Octavia Rhee, there has been high expectations of her since the day she was born. Fortunately for her she has exceeded every single one of them. She was able to control multiple Familiars by the time her peers were only just able to operate a single Familiar. She aced every single combat proficiency test thrown at her and her field operation record is impeccable.\n\nThough despite all of this she still lives in her mother's shadow, made even darker by her recent sacrifice in the Shangri-La system. While Claudia is determined to make those responsible pay, the alliances made before the Battle of Earth make this a difficult prospect as of late. It is only a matter of time, however, before that all breaks down, countless simulations calculated by her Familiars have shown her that over and over again."
   },
   {
@@ -266,7 +284,7 @@
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "",
+    "tonnage": "H",
     "category": "heavy",
     "namesake": "[Gnaeus Pompeius Magnus](https://en.wikipedia.org/wiki/Pompey) (Pompey the Great) was the Roman general who conquered the eastern Mediterranean, cleared the sea of pirates in forty days, and formed the First Triumvirate with Caesar and Crassus before civil war made them enemies. He earned the cognomen Magnus, meaning the Great, early in his career under the dictator Sulla. In Rome he dedicated the city's first permanent stone theatre, an immense complex that bore his name."
    },
@@ -284,7 +302,7 @@
     {
      "name": "Heavy Sniper",
      "cost": "2AP",
-     "effect": "When you assign targets to a weapon with the Calibre-H special rule, the attacking Ship doubles its Scan value against H Tonnage Ships for that weapon’s attack (other attacks and weapons are unaffected)."
+     "effect": "When you assign targets to a weapon with the Calibre-H,C, or H/C special rule, the attacking Ship doubles its Scan value against H and C Tonnage Ships for that attack."
     }
    ],
    "flagship": {
@@ -305,8 +323,8 @@
      {
       "name": "Heavy Calibre Broadside",
       "arc": "B",
-      "attack": "1",
-      "lock": "3+",
+      "attack": "2",
+      "lock": "4+",
       "damage": "3",
       "type": "K",
       "special": "Calibre-H, Penetrator, Volley-2"
@@ -314,8 +332,8 @@
      {
       "name": "Heavy Calibre Broadside",
       "arc": "B",
-      "attack": "1",
-      "lock": "3+",
+      "attack": "2",
+      "lock": "4+",
       "damage": "3",
       "type": "K",
       "special": "Calibre-H, Penetrator, Volley-2"
@@ -473,7 +491,8 @@
      "Purity of Power",
      "Deliverance",
      "Heaven’s Judgement",
-     "Queen of Ends"
+     "Queen of Ends",
+     "Apocalypse"
     ],
     "namesake": "[Remus](https://en.wikipedia.org/wiki/Romulus_and_Remus) was, with his twin brother Romulus, one of the legendary founders of Rome. Suckled by a she-wolf as an infant, he was killed by Romulus in a dispute over the new city."
    }
@@ -579,7 +598,8 @@
      "Starheart",
      "Hammer of Purpose",
      "[Deus Ex Machina](https://en.wikipedia.org/wiki/Deus_ex_machina)",
-     "Forgefire"
+     "Forgefire",
+     "Atom’s Mistress"
     ],
     "namesake": "[Romulus](https://en.wikipedia.org/wiki/Romulus_and_Remus) was, with his twin brother Remus, the legendary founder of Rome. Raised by a she-wolf, he killed Remus in a quarrel and became the city's first king."
    }
@@ -884,7 +904,8 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Godhammer",
-     "Sphere’s Benevolence"
+     "Sphere’s Benevolence",
+     "The Vizier"
     ],
     "namesake": "[Trajan](https://en.wikipedia.org/wiki/Trajan) was the Roman emperor (98-117 AD) who expanded the empire to its greatest territorial extent, conquering Dacia and Mesopotamia. He was one of the \"Five Good Emperors\" and the Senate posthumously granted him the title Optimus, \"the best.\" Born Marcus Ulpius Traianus on 18 September 53 at Italica in present-day Spain, he was the first Roman emperor born outside Italy. He married Pompeia Plotina, and the couple remained childless."
    }
@@ -1137,10 +1158,10 @@
    "category": "heavy",
    "ship": {
     "name": "Sarpedon Battleship",
-    "cost": 235,
+    "cost": 230,
     "stats": {
      "thrust": "6\"",
-     "scan": "10\"",
+     "scan": "16\"",
      "sig": "10\"",
      "hull": 22,
      "es": "3+",
@@ -1382,7 +1403,7 @@
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the PHR Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature"
+      "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the PHR Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
@@ -1391,7 +1412,7 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "",
-    "rulesText": "The Antony folds carrier capacity (Fighters & Bombers) and a Deployable Feature into the pocket-battleship hull, a flexible flagship for Vizier-level admirals leading mixed task forces. At the start of the game, before players deploy, choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
+    "rulesText": "When building your fleet, this Ship must be assigned a Deployable Feature from the PHR Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
     "namesake": "[Mark Antony](https://en.wikipedia.org/wiki/Mark_Antony) (83–30 BC) was Caesar's finest general and the man who turned Rome against the assassins with a single speech over Caesar's body. He formed the Second Triumvirate, allied with Cleopatra, and reached for the whole empire. Octavian's fleet broke him at Actium in 31 BC. He died by suicide in Alexandria, wrongly convinced Cleopatra had gone first. He had earlier served as one of Caesar's leading generals, commanding the cavalry at the decisive victory at Alesia during the Gallic Wars. While Caesar campaigned abroad, Antony was left in charge of Italy as his deputy."
    }
   },
@@ -1816,7 +1837,7 @@
    "category": "medium",
    "ship": {
     "name": "Antigonus Supercruiser",
-    "cost": 176,
+    "cost": 170,
     "stats": {
      "thrust": "7\"",
      "scan": "8\"",
@@ -1826,7 +1847,7 @@
      "ks": "4+",
      "bs": "6+",
      "g": "1",
-     "special": "Command Ship-1, Holo Interference Field, Feature Carrier"
+     "special": "Command Ship-1, Holo Deterrence Field, Feature Carrier"
     },
     "weapons": [
      {
@@ -1848,12 +1869,12 @@
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
-      "name": "Holo Interference Field",
-      "description": "At the end of this ship’s activation, you may place a Holo Interference Field within 3” of this ship. These Holo Interference Fields are removed during the Cleanup step of the End Phase and are circular with a 4” diameter (a D6 or custom template are perfect tokens to represent these). Enemy Ships ignore the target’s Spikes and Signature when attacking through a Holo Interference Field. Enemy Fighters & Bombers underneath the Holo Interference Field when it is placed, or that move/are placed into the Holo Interference Field are removed on a 4+."
+      "name": "Holo Deterrence Field",
+      "description": "At the end of this Ship’s activation, choose two different Arcs from F/SL/SR/R. Until the start of this Ship’s next activation, enemy Launch Assets that start their move within 6” in the chosen Arcs reduce their Thrust by 2” for that move and cannot be placed in base contact with this Ship."
      },
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+      "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the PHR Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
@@ -1862,7 +1883,7 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "",
-    "rulesText": "Feature Carrier At the start of the game, before players deploy, choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
+    "rulesText": "When building your fleet, this Ship must be assigned a Deployable Feature from the PHR Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
     "namesake": "[Antigonus](https://en.wikipedia.org/wiki/Antigonus_I_Monophthalmus) I Monophthalmus was a Macedonian general under Alexander the Great and one of the Diadochi who contested his empire. He ruled much of Asia Minor before being killed at the Battle of Ipsus in 301 BC."
    }
   },
@@ -1917,7 +1938,7 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "",
-    "rulesText": "At the start of the game, before players deploy choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
+    "rulesText": "When building your fleet, this Ship must be assigned a Deployable Feature from the PHR Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
     "namesake": "[Seleucus](https://en.wikipedia.org/wiki/Seleucus_I_Nicator) I Nicator was a general of Alexander the Great and one of the Diadochi. He founded the Seleucid Empire, which ruled much of the Near East after Alexander's death."
    }
   },
@@ -1972,7 +1993,7 @@
     "isUnique": false,
     "tonnage": "M",
     "lore": "",
-    "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the PHR Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
+    "rulesText": "When building your fleet, this Ship must be assigned a Deployable Feature from the PHR Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
     "namesake": "[Ptolemy](https://en.wikipedia.org/wiki/Ptolemy_I_Soter) I Soter was a Macedonian general and companion of Alexander the Great who became one of the Diadochi. He took control of Egypt and founded the Ptolemaic dynasty that ruled it for three centuries."
    }
   },
@@ -2440,7 +2461,7 @@
    "category": "medium",
    "ship": {
     "name": "Ikarus Vanguard Carrier",
-    "cost": 125,
+    "cost": 120,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -2504,7 +2525,7 @@
        },
        {
         "name": "Mines",
-        "cost": 10,
+        "cost": 4,
         "weapons": [],
         "loads": [
          {
@@ -2525,7 +2546,7 @@
      "Tower of Knowledge",
      "Dark Prince"
     ],
-    "rulesText": "This ship may replace its Fighters & Bombers with Mines for +10 pts.",
+    "rulesText": "This ship may replace its Fighters & Bombers with Mines for +4 pts.",
     "namesake": "[Icarus](https://en.wikipedia.org/wiki/Icarus) was a figure of Greek myth, son of the craftsman Daedalus, who escaped Crete on wings of feathers and wax. Ignoring his father's warning, he flew too near the sun, the wax melted, and he fell into the sea and drowned."
    }
   },
@@ -2778,7 +2799,7 @@
    "category": "medium",
    "ship": {
     "name": "Theseus Light Cruiser",
-    "cost": 88,
+    "cost": 84,
     "stats": {
      "thrust": "10\"",
      "scan": "8\"",
@@ -2798,7 +2819,7 @@
       "lock": "5+",
       "damage": "1",
       "type": "K",
-      "special": "Calibre-L, Volley-2, Re-Entry"
+      "special": "Calibre-L, Reave-1, Volley-2"
      },
      {
       "name": "Medium Calibre Broadside",
@@ -2998,7 +3019,8 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Ghost Warrior",
-     "[Longship](https://en.wikipedia.org/wiki/Longship)"
+     "[Longship](https://en.wikipedia.org/wiki/Longship)",
+     "Carl Sagan"
     ],
     "namesake": "[Jason](https://en.wikipedia.org/wiki/Jason) was a hero of Greek myth who led the Argonauts aboard the ship Argo on a quest to recover the Golden Fleece. He succeeded with the help of the sorceress Medea of Colchis."
    }
@@ -3206,7 +3228,7 @@
     "cost": 35,
     "stats": {
      "thrust": "14\"",
-     "scan": "6\"",
+     "scan": "8\"",
      "sig": "3\"",
      "hull": 5,
      "es": "4+",
@@ -3226,7 +3248,7 @@
      },
      {
       "name": "Targeting Link",
-      "description": "Friendly Ships within their Scan range of this Ship may use it as a spotter when they attack. If they do, before assigning weapons to targets, choose any amount of the attacking Ship’s weapons. When assigning targets to those weapons, measure Weapons Range from this Ship, using this Ship’s Scan. Attacks made this way must still be in Arc and line of sight of the attacking Ship. This rule has no effect on Close Action Weapons and weapons already benefiting from this rule."
+      "description": "Friendly Ships within their Scan range of this Ship may use it as a spotter when they attack. If they do, before assigning weapons to targets, choose any amount of the attacking Ship’s weapons. When assigning those weapons to Ships/Groups, measure Weapons Range from this Ship, using this Ship’s Scan. Attacks made this way must still be in Arc and line of sight of the attacking Ship. This rule has no effect on Close Action and Point Blank Weapons and weapons already benefiting from this rule."
      }
     ],
     "groupMin": 1,
@@ -3418,7 +3440,8 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Conferred Divinity",
-     "Halo Nine"
+     "Halo Nine",
+     "Aegis"
     ],
     "namesake": "[Pollux](https://en.wikipedia.org/wiki/Castor_and_Pollux) was the immortal twin son of Zeus and Leda in Greek myth, brother of the mortal Castor. Together known as the Dioscuri, the twins were renowned as protectors of sailors, and Pollux was famed as an undefeated boxer."
    }
@@ -3470,7 +3493,8 @@
     "famousShipsPrefix": "Known ships of the class:",
     "famousShips": [
      "Cogent Reason",
-     "Bedrock"
+     "Bedrock",
+     "Moonshield"
     ],
     "namesake": "[Castor](https://en.wikipedia.org/wiki/Castor_and_Pollux) was the mortal twin son of Tyndareus and Leda in Greek myth, brother of the immortal Pollux. Together known as the Dioscuri, the twins were patrons of sailors and horsemanship, and Castor was celebrated as a tamer of horses."
    }
@@ -5593,6 +5617,10 @@
     {
      "name": "Station Turret Rack",
      "effect": "When you attack with this weapon, roll once and apply the roll to all enemy Groups within range."
+    },
+    {
+     "name": "Hardpoints",
+     "effect": "This Space Station has a Life Support Feature and two Weapons Control Features."
     }
    ]
   },
@@ -5635,6 +5663,10 @@
     {
      "name": "Station Turret Rack",
      "effect": "When you attack with this weapon, roll once and apply the roll to all enemy Groups within range."
+    },
+    {
+     "name": "Hardpoints",
+     "effect": "This Space Station has a Life Support Feature and two Weapons Control Features."
     }
    ]
   },
@@ -5677,6 +5709,10 @@
     {
      "name": "Station Turret Ring",
      "effect": "When you attack with this weapon, roll once and apply the roll to all enemy Groups within range."
+    },
+    {
+     "name": "Hardpoints",
+     "effect": "This Space Station has a Life Support Feature and two Weapons Control Features, and may take one additional option from the Space Station Features list."
     }
    ]
   },
@@ -5719,6 +5755,10 @@
     {
      "name": "Station Turret Ring",
      "effect": "When you attack with this weapon, roll once and apply the roll to all enemy Groups within range."
+    },
+    {
+     "name": "Hardpoints",
+     "effect": "This Space Station has a Life Support Feature and two Weapons Control Features, and may take one additional from the Space Station Features list."
     }
    ]
   }
@@ -5727,12 +5767,13 @@
   {
    "id": "7758-0507-51fd-7d00",
    "name": "Heavy Calibre Orbital Gun",
-   "cost": 0,
+   "cost": 5,
    "features": [
     {
      "name": "Heavy Calibre Orbital Gun",
      "es": "5+",
-     "ks": "3+",
+     "ks": "5+",
+     "hull": 4,
      "special": "-"
     }
    ],
@@ -5759,17 +5800,38 @@
      "page": "38",
      "publicationId": "45b0-3e3b-e83d-fd70"
     }
+   ],
+   "weapons": [
+    {
+     "name": "Heavy Calibre Orbital Gun (Mounted)",
+     "scan": "-",
+     "attack": "2",
+     "lock": "3+",
+     "damage": "2",
+     "type": "K",
+     "special": "Calibre-H/C"
+    },
+    {
+     "name": "Heavy Calibre Orbital Gun (Deployed)",
+     "scan": "8\"",
+     "attack": "2",
+     "lock": "3+",
+     "damage": "2",
+     "type": "K",
+     "special": "Calibre-H/C, Critical-2, Escape Velocity"
+    }
    ]
   },
   {
    "id": "4f98-9baa-dae8-329f",
    "name": "Shield Platform",
-   "cost": 0,
+   "cost": 10,
    "features": [
     {
      "name": "Shield Platform",
-     "es": "4+",
-     "ks": "4+",
+     "es": "3+",
+     "ks": "3+",
+     "hull": 4,
      "special": "-"
     }
    ],
@@ -5783,12 +5845,13 @@
   {
    "id": "b2e4-e44e-7f3f-4020",
    "name": "Scanner Tower",
-   "cost": 0,
+   "cost": 15,
    "features": [
     {
      "name": "Scanner Tower",
-     "es": "3+",
+     "es": "5+",
      "ks": "5+",
+     "hull": 4,
      "special": "-"
     }
    ],
@@ -5803,23 +5866,23 @@
  "abilitiesTable": [
   {
    "name": "Countermeasures Hack",
-   "cost": "1AP",
-   "effect": "At the start of a friendly Group’s activation, target an enemy Group that a friendly Admiral can draw line of sight to. Until the end of the activation, that Group cannot use its Backup Save, cannot gain the benefits of Aegis, and cannot gain the benefits of Fighters’ Close Protection. If this Ability targets a H or C tonnage Group, this Ability costs 2AP."
+   "cost": "2AP",
+   "effect": "At the start of a friendly Group’s activation, choose an enemy Ship in line of sight of a friendly Admiral. Until the end of the activation, that Ship counts as having a Defences Offline token. If this Ability targets a H or C tonnage Group, this Ability costs 3AP."
   },
   {
    "name": "Weapons Hack",
    "cost": "2AP",
-   "effect": "Once per round, at the start of an enemy Group’s activation, choose one of that Group’s Weapon Systems. Until the end of that Group’s activation, each of that Weapon System’s attack dice results of a 1 causes the attacking Ship to lose the weapon’s unmodified Damage value in hull points."
+   "effect": "When an opponent assigns weapons to friendly Ships, choose one of the attacking Group’s Weapon Systems. Until the end of the attacking Ships’ activation, that Weapon System automatically misses on rolls of a 2 or less and your opponent cannot use abilities on those weapons. This can cause that opponent’s unresolved abilities on that Weapon System to be negated."
   },
   {
    "name": "Ship of the Line",
    "cost": "1AP",
-   "effect": "When you assign targets to a Group's weapons, that Group's Broadside Arc weapons that have the Fusillade-X special rule gain the benefit of their Fusillade rule regardless of the Group's Order for its attacks this activation. If the attacking Group is on the Weapons Free order, it instead doubles the Fusillade value of those weapons for that attack."
+   "effect": "When you assign targets to a Group's weapons, that Group's Broadside Arc weapons that have the Fusillade-X special rule gain the benefit of their Fusillade rule regardless of the Group's Order for its attacks this activation. If the attacking Group is on the Weapons Free order, improve the lock of Broadside Arc weapons with Fusillade-X by 1 for this attack sequence."
   },
   {
    "name": "Drive Hack",
    "cost": "2AP",
-   "effect": "Once per round, at the end of the Planning Phase, target an enemy Group that a friendly Admiral can draw line of sight to. At the start of that Group’s activation, it must make a single Backup save. If it fails (or has no) Backup save, that Group cannot go on the Course Change and Max Thrust orders."
+   "effect": "Once per round, at the start of an enemy Group’s activation, if that Group is in a friendly Admiral’s line of sight, the enemy Group makes a single Backup save. At the start of that Group’s activation, it must make a single Backup save. If it fails (or has no) Backup save, that Group reduces its Thrust value by half this activation."
   },
   {
    "name": "Repair Drone Squadron",
@@ -5827,9 +5890,9 @@
    "effect": "At the end of the Repair step of the End Phase, target a friendly Ship. That Ship recovers D3 lost Hull Points."
   },
   {
-   "name": "Elite Ground Forces",
+   "name": "Hull Tanking",
    "cost": "2AP",
-   "effect": "At the start of the Battalion Combat step of the Asset Phase, choose a Feature containing friendly Battalions. Until the end of the Battalion Combat step, those Battalions remove 2 enemy Battalions instead of 1 and may also be used to remove enemy Battalions from anywhere on that Dropsite in the 3rd step of the combat sequence."
+   "effect": "After an opponent assigns weapons to friendly targets, choose one of those friendly Groups. That Group gains Reinforced Armour until the end of the Activation. If the friendly Group is H or C tonnage, this Ability costs 3AP."
   }
  ]
 }
