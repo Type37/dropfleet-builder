@@ -36,7 +36,7 @@
     {
      "name": "Espionage",
      "cost": "3AP",
-     "effect": "When an opponent uses an Ability, negate that use of that Ability (AP is still spent as usual and subsequent uses are unaffected)."
+     "effect": "When an opponent declares the use of an Ability, negate that use of that Ability (AP is still spent as usual and subsequent uses are unaffected)."
     }
    ],
    "flagship": null,
@@ -53,7 +53,7 @@
     {
      "name": "Radioactivity",
      "cost": "2AP",
-     "effect": "Before any player rolls for Explosion (friendly or enemy), make the final result of that roll a 5"
+     "effect": "Before any player rolls for Explosion (friendly or enemy), make the final result of that roll a 5."
     }
    ],
    "flagship": {
@@ -62,7 +62,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "14\"",
-     "sig": "12\"",
+     "sig": "8\"",
      "hull": 22,
      "es": "4+",
      "ks": "3+",
@@ -78,7 +78,7 @@
       "lock": "*",
       "damage": "1",
       "type": "E",
-      "special": "Burnthrough-2, Close Action, Mauler, Calibre-M/H/C"
+      "special": "Burnthrough-2, Calibre-M/H/C, Close Action, Mauler"
      },
      {
       "name": "Microwave Array Turret",
@@ -127,12 +127,12 @@
     "specialRules": [
      {
       "name": "Mothership",
-      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships/Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
+      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships or controlled Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
      },
      {
       "name": "Shield-3+",
-      "description": "This Group has a Shield Save of 3+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 3+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -171,7 +171,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "8\"",
+     "sig": "4\"",
      "hull": 18,
      "es": "4+",
      "ks": "3+",
@@ -196,7 +196,16 @@
       "lock": "3+",
       "damage": "2",
       "type": "C",
-      "special": "Critical-1"
+      "special": "Critical-2, Focused"
+     },
+     {
+      "name": "Harpoon Deluge",
+      "arc": "F/S/R",
+      "attack": "8",
+      "lock": "4+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action"
      }
     ],
     "loads": [
@@ -209,17 +218,17 @@
     "specialRules": [
      {
       "name": "Mothership",
-      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships/Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
+      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships or controlled Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
      },
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
       "name": "True Disintegration",
-      "description": "When damage from this Flagship’s Disintegrator Battery is part of an attack that causes a Ship to be destroyed, instead of rolling for explosion, all Ships in explosion range suffer 1 damage."
+      "description": "Whenever an attack from this Ship would cause an enemy Ship of M or greater Tonnage to be destroyed, that Ship automatically scores a Reactor Overload Explosion Effect but reduces the Core hits caused to 2. Friendly Ships ignore Explosions caused by this rule."
      }
     ],
     "groupMin": 1,
@@ -230,7 +239,7 @@
     "category": "heavy",
     "namesake": "The hardest natural material known, a crystal of pure carbon forged under immense heat and pressure."
    },
-   "abilityPicks": 1,
+   "abilityPicks": 4,
    "bio": "Mergen the Learned claims to have been alive long enough to have borne witness to the Shaltari's exodus from Aaru. Whether or not this is true can be left up for debate, but what is known is that this alabaster elder is an incredible tactician. Proving pivotal in the recapture of Aaru, Mergen was able to recall the exact sites of dormant Shaltari teleportation nodes. With this ancient knowledge Mergen's flagship, The Heart of the Mountain, was able to deploy vanguard battalions to critical locations ahead of the main Shaltari host.\n\nIn the void battles above the planet, Mergens fleet was responsible for sending a fifth of what Scourge remained above Aaru to their demise. The only other Starchief to achieve a similar number of confirmed kills was Quetzalcoatl, unsurprising given their martial prowess.\n\nWith the void above Aaru all but captured, Mergen is able to turn his attention to restoring the buried teleportation network on Aaru. Once his work on Aaru is done, the reclamation of other Shaltari strongholds awaits his attention."
   },
   {
@@ -244,7 +253,7 @@
     {
      "name": "Master of Gravity",
      "cost": "2AP",
-     "effect": "At the start of an enemy Group’s activation, pick another enemy Group that has not activated this round. Turn all Ships in that Group up to 90 degrees in the same direction."
+     "effect": "At the start of this Admiral’s activation, pick an enemy Group that has not activated this round. Turn all Ships in that Group up to 90 degrees in the same direction. Ships of H or C tonnage may make a Backup save to reduce this effect to 45 degrees instead. Backup saves rolled this way cannot be affected by Abilities."
     },
     {
      "name": "Gravity Assist",
@@ -258,7 +267,7 @@
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 13,
      "es": "5+",
      "ks": "4+",
@@ -274,7 +283,7 @@
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Close Action, Scald-1"
+      "special": "Close Action, Scald-2"
      },
      {
       "name": "Ion Storm",
@@ -288,19 +297,19 @@
      {
       "name": "Gravity Coil Pair",
       "arc": "FN",
-      "attack": "3",
+      "attack": "4",
       "lock": "2+",
       "damage": "1",
       "type": "E",
-      "special": "Impel-2"
+      "special": "Impel-2, Reave-1"
      }
     ],
     "loads": [],
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -334,16 +343,16 @@
     {
      "name": "Cunning Positioning",
      "cost": "2AP",
-     "effect": "When you move a Group of M Tonnage, that Group gains Vectored for that movement."
+     "effect": "When you activate a Group, for that Group’s movement this activation, it may choose a direction in its Front Arc to move, retaining its original facing. If that Group is M tonnage, it also gains Vectored until the end of its activation"
     }
    ],
    "flagship": {
     "name": "Amber Cruiser",
-    "cost": 200,
+    "cost": 192,
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 9,
      "es": "5+",
      "ks": "4+",
@@ -375,8 +384,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -407,7 +416,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "14\"",
-     "sig": "12\"",
+     "sig": "8\"",
      "hull": 22,
      "es": "4+",
      "ks": "3+",
@@ -423,7 +432,7 @@
       "lock": "*",
       "damage": "1",
       "type": "E",
-      "special": "Burnthrough-2, Close Action, Mauler, Calibre-M/H/C"
+      "special": "Burnthrough-2, Calibre-M/H/C, Close Action, Mauler"
      },
      {
       "name": "Microwave Array Turret",
@@ -472,12 +481,12 @@
     "specialRules": [
      {
       "name": "Mothership",
-      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships/Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
+      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships or controlled Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
      },
      {
       "name": "Shield-3+",
-      "description": "This Group has a Shield Save of 3+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 3+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -572,12 +581,12 @@
     "specialRules": [
      {
       "name": "Mothership",
-      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships/Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
+      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships or controlled Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
      },
      {
       "name": "Shield-3+",
-      "description": "This Group has a Shield Save of 3+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 3+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -592,7 +601,8 @@
      "Aztec King",
      "Mongol Heart",
      "Cheyenne Supreme",
-     "Blade of Infinity"
+     "Blade of Infinity",
+     "Deathstone"
     ],
     "namesake": "A heavy, radioactive metal forged in reactors, warm to the touch from its own decay."
    }
@@ -659,8 +669,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -727,8 +737,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -741,7 +751,8 @@
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Starbringer",
-     "She Immolates"
+     "She Immolates",
+     "Nova Sublime"
     ],
     "namesake": "The most abundant of the rare-earth metals, iron-grey and reactive, used to polish glass and spark lighter flints."
    }
@@ -797,8 +808,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -877,8 +888,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -907,7 +918,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "8\"",
+     "sig": "4\"",
      "hull": 18,
      "es": "4+",
      "ks": "3+",
@@ -939,15 +950,15 @@
      },
      {
       "name": "Fighters & Bombers",
-      "launch": "4",
+      "launch": "6",
       "special": "-"
      }
     ],
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -1001,7 +1012,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "8\"",
+     "sig": "4\"",
      "hull": 18,
      "es": "4+",
      "ks": "3+",
@@ -1013,28 +1024,28 @@
      {
       "name": "Mega Thermal Lance Cannon",
       "arc": "FN",
-      "attack": "5",
+      "attack": "6",
       "lock": "2+",
       "damage": "2",
       "type": "E",
-      "special": "Burnthrough-1, Bloom-2"
+      "special": "Burnthrough-2, Bloom-2, Focused"
      },
      {
       "name": "Microwave Array Bank",
       "arc": "S",
-      "attack": "4",
+      "attack": "5",
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Close Action, Volley-2, Scald-1"
+      "special": "Close Action, Scald-1, Volley-2"
      }
     ],
     "loads": [],
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -1078,11 +1089,11 @@
    "category": "heavy",
    "ship": {
     "name": "Bronze Battleship",
-    "cost": 230,
+    "cost": 215,
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "8\"",
+     "sig": "4\"",
      "hull": 18,
      "es": "4+",
      "ks": "3+",
@@ -1095,36 +1106,45 @@
       "name": "Ion Cannonade",
       "arc": "F",
       "attack": "10",
-      "lock": "4+",
+      "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Crippling-Navigation Offline"
+      "special": "Crippling-Navigation Offline, Reave-1"
      },
      {
       "name": "Microwave Array Bank",
       "arc": "S",
-      "attack": "4",
+      "attack": "5",
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Close Action, Volley-2, Scald-1"
+      "special": "Close Action, Scald-1, Volley-2"
      },
      {
-      "name": "Gravitic Beamer",
+      "name": "Gravitic Beamer (Leading)",
       "arc": "F/S",
-      "attack": "5",
+      "attack": "6",
       "lock": "4+",
       "damage": "1",
-      "type": "E",
-      "special": "Re-Entry, Impel-1"
+      "type": "C",
+      "special": "Alt-1, Calibre-L/M, Impel-2, Re-Entry"
+     },
+     {
+      "name": "Gravitic Beamer (Trailing)",
+      "arc": "F/S",
+      "attack": "4",
+      "lock": "4+",
+      "damage": "2",
+      "type": "C",
+      "special": "Alt-1, Arrest-3, Calibre-H/C"
      }
     ],
     "loads": [],
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -1134,6 +1154,13 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "Although many Shaltari ships can be considered unusual, the Bronze class battleship is especially so. At the prow, it mounts the fearsome Ion Cannonade - two vast rows of ion weapons with an excessive rate of fire. Like all ion weapons, these can cause havoc to a ship's power systems before battering it to shreds with a hail of energy pulses. On the ship's back, it mounts a Gravitic Beamer. While damaging enough on a basic level, this weapon's real threat comes from its effectiveness against ships in atmosphere and its tendency to literally shove ships forward, often into unfortunate places. Lastly, the ship mounts twin broadside crescents of microwave emitters for close-in killing power.\n\nUnlike other, more focused battleships, this class requires a Starchief with flexible cunning to achieve its maximum lethality while frustrating enemy operations.",
+    "famousShipsPrefix": "Encountered ships of the class:",
+    "famousShips": [
+     "Great Vex",
+     "Brazen Khopesh",
+     "Elemental",
+     "Eternal Master"
+    ],
     "namesake": "The alloy of copper and tin whose mastery gave its name to an entire age of human history.",
     "loadoutOptions": [
      {
@@ -1168,11 +1195,11 @@
    "category": "heavy",
    "ship": {
     "name": "Silver Battleship",
-    "cost": 250,
+    "cost": 240,
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "8\"",
+     "sig": "4\"",
      "hull": 18,
      "es": "4+",
      "ks": "3+",
@@ -1193,28 +1220,37 @@
      {
       "name": "Microwave Array Bank",
       "arc": "S",
-      "attack": "4",
+      "attack": "5",
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Close Action, Volley-2, Scald-1"
+      "special": "Close Action, Scald-1, Volley-2"
      },
      {
-      "name": "Gravitic Beamer",
+      "name": "Gravitic Beamer (Leading)",
       "arc": "F/S",
-      "attack": "5",
+      "attack": "6",
       "lock": "4+",
       "damage": "1",
-      "type": "E",
-      "special": "Re-Entry, Impel-1"
+      "type": "C",
+      "special": "Alt-1, Calibre-L/M, Impel-2, Re-Entry"
+     },
+     {
+      "name": "Gravitic Beamer (Trailing)",
+      "arc": "F/S",
+      "attack": "4",
+      "lock": "4+",
+      "damage": "2",
+      "type": "C",
+      "special": "Alt-1, Arrest-3, Calibre-H/C"
      }
     ],
     "loads": [],
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -1224,6 +1260,13 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "Closely related to the Bronze, the Silver class battleship also features a broadside microwave array and a prow-mounted Gravitic Beamer, but replaces the Ion Cannonade with the spectacular Obliterator Cannon. This massive weapon's capacitance prongs take up nearly half the ship's length. These generate a cracking flow of unstable, rare particles then channel them through a small emitter nozzle at the unfortunate target. For a Shaltari weapon, It is uncharacteristically random in its destructive power due to exactly how this torrent of particles interacts with its target. In the worst cases, they burrow through a ship like lightning through jelly, annihilating ordinary matter in their quest not to exist. Such a strike can cripple even another battleship, so only the most foolhardy captain would bank on a hit dissipating harmlessly around their ship's hull. Although most Starchiefs may be considered shrewd operators, those that command the Silver class may have an insatiable, gambler's mindset.",
+    "famousShipsPrefix": "Encountered ships of the class:",
+    "famousShips": [
+     "Tarnisher",
+     "Forsworn Fortune",
+     "Glassheart",
+     "Mortality"
+    ],
     "namesake": "The brilliant white precious metal, the finest conductor of electricity and a coin of the realm for ages.",
     "loadoutOptions": [
      {
@@ -1258,11 +1301,11 @@
    "category": "heavy",
    "ship": {
     "name": "Gold Supercarrier",
-    "cost": 285,
+    "cost": 270,
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "8\"",
+     "sig": "4\"",
      "hull": 18,
      "es": "4+",
      "ks": "3+",
@@ -1275,19 +1318,19 @@
       "name": "Ion Cannonade",
       "arc": "F",
       "attack": "10",
-      "lock": "4+",
+      "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Crippling-Navigation Offline"
+      "special": "Crippling-Navigation Offline, Reave-1"
      },
      {
       "name": "Microwave Array Bank",
       "arc": "S",
-      "attack": "4",
+      "attack": "5",
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Close Action, Volley-2, Scald-1"
+      "special": "Close Action, Scald-1, Volley-2"
      }
     ],
     "loads": [
@@ -1298,15 +1341,15 @@
      },
      {
       "name": "Fighters & Bombers",
-      "launch": "4",
+      "launch": "6",
       "special": "-"
      }
     ],
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -1316,6 +1359,13 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "Like the Bronze and Silver class battleships, the Gold class supercarrier is a relatively new and scarce sighting. Since none of these classes were recorded before 2672, it is assumed they are newly laid down, but with the Shaltari, things are seldom as they seem.\n\nUnlike the familiar Platinum class, the Gold is a far more aggressive vessel, since it mounts the powerful, close-action microwave arrays of its sister classes. Also armed with the Ion Cannonade, the Gold is a terror to almost any vessel, and that's before its swarms of formidable Shaltari bombers strike. Certainly, the Gold is one the Shaltari's premier assets and a worthy chariot for the mightiest of attack-oriented Starchiefs.",
+    "famousShipsPrefix": "Encountered ships of the class:",
+    "famousShips": [
+     "Golden Chariot",
+     "Orb of the Sun",
+     "Ark Resplendent",
+     "Ra’s Gaze"
+    ],
     "namesake": "The dense, untarnishing yellow metal that has served as treasure and currency across every civilisation.",
     "storeUrl": "https://ttcombat.com/products/shaltari-gold-battleship",
     "loadoutOptions": [
@@ -1351,11 +1401,11 @@
    "category": "heavy",
    "ship": {
     "name": "Platinum Supercarrier",
-    "cost": 280,
+    "cost": 265,
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "8\"",
+     "sig": "4\"",
      "hull": 18,
      "es": "4+",
      "ks": "3+",
@@ -1391,19 +1441,19 @@
      },
      {
       "name": "Fighters & Bombers",
-      "launch": "5",
+      "launch": "7",
       "special": "-"
      }
     ],
     "specialRules": [
      {
       "name": "Mothership",
-      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships/Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
+      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships or controlled Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
      },
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -1413,6 +1463,13 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "The Platinum Class shares the same basic hull design as the Diamond class, but its internal space and vast upper levels are dominated by an enormous flight deck, making this vessel a supercarrier by UCM reckoning. The Platinum class can unleash swarms of fighters and bombers in an unstoppable tide of destruction, in volumes and quality that few other ships can match. In addition (and like its cousin the Diamond) it also serves the secondary function of mothership, carrying a small number of ground troops to supplement surface landings.\n\nShips of this class are among the most ancient vessels ever encountered by mankind. Indeed, the very first non-human ship to make contact with humanity on the now famous exploration frigate Endurance was the Platinum class Supercarrier Aten. During the then cordial relations between Shaltari and Human, the Starchief at the helm of the mighty ship proudly proclaimed that it was over 7000 Earth years of age, and that was well over 300 years ago. Their continued survival over the millennia is due in part to their scale, but mostly to the extended combat range granted by its strike craft, ensuring that finally ending one of these behemoths is a challenging task in the extreme.",
+    "famousShipsPrefix": "Encountered ships of the class:",
+    "famousShips": [
+     "Aten",
+     "Crimson Monolith",
+     "Eternal Nightfall",
+     "Ancient Solace"
+    ],
     "namesake": "A dense, precious, silver-white metal, prized for jewellery and as a catalyst, and rarer than gold.",
     "loadoutOptions": [
      {
@@ -1451,7 +1508,7 @@
     "stats": {
      "thrust": "8\"",
      "scan": "12\"",
-     "sig": "8\"",
+     "sig": "4\"",
      "hull": 18,
      "es": "4+",
      "ks": "3+",
@@ -1476,7 +1533,16 @@
       "lock": "3+",
       "damage": "2",
       "type": "C",
-      "special": "Critical-1"
+      "special": "Critical-2, Focused"
+     },
+     {
+      "name": "Harpoon Deluge",
+      "arc": "F/S/R",
+      "attack": "8",
+      "lock": "4+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action"
      }
     ],
     "loads": [
@@ -1489,12 +1555,12 @@
     "specialRules": [
      {
       "name": "Mothership",
-      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships/Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
+      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships or controlled Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
      },
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -1504,6 +1570,13 @@
     "isUnique": false,
     "tonnage": "H",
     "lore": "The Diamond Class battleship is a truly frightening spectacle. Stretching 1546 meters in length, this mighty vessel is one of the largest known battleships and an imposing figurehead for any fleet. Despite their rarity, more UCMF officers ranking Admiral or above have met their deaths at the hands of one of these leviathans than any other type of ship in the Reconquest. This has caused many to speculate that the aliens use them to specifically hunt flagships, or simply that their captains treat the slaying of an opposite number as the highest achievement, such as it can be when fighting humans.\n\nIn addition to a pair of disintegrator banks, the Diamond class' primary armament is a triad of super particle lances. These vast weapons extend through half the ship's entire length and are fixed in the forward arc, such is their unknowable mass. These monstrosities have the ability to scythe through any armour like butter, their beams frequently passing right through a capital ship. While their damage dealing ability is potent, their real strength lies in reliability, the certainty that the enemy will feel the Diamond's wrath, no matter how well protected it is.",
+    "famousShipsPrefix": "Encountered ships of the class:",
+    "famousShips": [
+     "Void’s Needle",
+     "Claw of Anubis",
+     "Bloodlust",
+     "Lord of Slaughter"
+    ],
     "namesake": "The hardest natural material known, a crystal of pure carbon forged under immense heat and pressure.",
     "loadoutOptions": [
      {
@@ -1574,8 +1647,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -1588,6 +1661,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
+    "featureSlots": 2,
     "lore": "A sister class of the Euclase, the Boracite is configured for pure ship-ship combat through increased firepower. Here, the Euclase’s launch bays are replaced with a linked pair of disintegrator batteries. Coupled with the twinned Thermal Lance Cannons, this ship is at its most deadly when its captain, who must possess time-honed skill, can manoeuvre into an optimal firing position prior to unleashing all weapons, pushing the ship’s enhanced power matrix to the limit. This killing power is supplemented by a standard feature, thus far, of all Shaltari pocket battleships – launch clamps for self-deploying surface assets. On the Boracite, these are often employed as launch and forget assets while en-route to the next kill, although if targets are plentiful, the Boracite may remain on station of unleash salvos of annihilating energy at its foes.",
     "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
     "famousShipsPrefix": "Encountered ships of the class:",
@@ -1639,8 +1713,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -1653,6 +1727,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
+    "featureSlots": 2,
     "lore": "The new Euclase class pocket battleship is among the alien’s most powerful capital ships below full battleship tonnage. Offensively, it mounts twinned Thermal Lance Cannons. These forward-facing weapons are devastating enough, but once the Euclase is in an optimal firing position, the full might of the ship’s cores can be focused though them, increasing firepower at the expense of manoeuvres. Given the drain on the power matrix, the Euclase’s other offensive capabilities are low drain launch options. A substantial fight deck accommodates swarms of fighters and bombers, while the vessel’s enhanced superstructure permits the carrying of self-deploying surface assets. Against the Euclase, enemies of the Shaltari are safe nowhere.",
     "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
     "famousShips": [
@@ -1716,8 +1791,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -1730,6 +1805,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
+    "featureSlots": 2,
     "lore": "Another of the Shaltari’s latest pocket battleships, the Painite is configured largely for planetary assault. Its ability to launch self-deploying surface assets forms the foundation for this, but the addition of twinned Ion Storm batteries enhances this mission profile. With these, the Painite can bombard surface positions to support its landings or direct the weapons’ coruscating energies against enemy vessels above the dropsite. Packing the full firepower of a battlecruiser in addition to its surface deployment mount, the Painite also mounts a linked pair of disintegrator batteries for devastating firepower during flexible manoeuvres. In combination, these capabilities make the Painite a flexible, deadly foe, able to dominate the battlespace in orbit and on the surface in a way few vessels can match.",
     "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
     "famousShips": [
@@ -1784,8 +1860,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -1798,13 +1874,15 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
+    "featureSlots": 2,
     "lore": "The Spinel, one of the more ‘common’ variants, packs the previously unknown combination of a twin Hyperwave Cannon and a pair of Particle Lances. Both systems provide the Starchief with superlative, front-facing killing power.",
     "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Lance of Ra",
      "Eons to Dust",
-     "Reducer"
+     "Reducer",
+     "Star Hunter"
     ],
     "namesake": "A hard gem found in every colour, long mistaken for ruby - some 'rubies' among the crown jewels are spinels."
    }
@@ -1848,8 +1926,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -1916,8 +1994,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -2002,8 +2080,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -2086,8 +2164,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -2161,8 +2239,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -2175,6 +2253,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "M",
+    "featureSlots": 2,
     "lore": "Another recent addition to the 27th century battlespace is the Natrolite supercruiser. Much like its cousin, the Mesolite, this warship packs a battlecruiser-grade linked pair of disintegrator batteries for devastating firepower during flexible manoeuvres. While it offers little else in weaponry, it makes up for this with a docking mount for two stacked self-deploying surface instillations. These have already proven deeply problematic to deal with and represent an increased willingness from the aliens to commit to medium, and even long-term, surface commitments in contested territory. Some suggest this may be in response to  increased Bioficer incursions, possibly an attempt to sway the war to their exacting, unknowable ends before the new foe arrives in force.",
     "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
     "famousShips": [
@@ -2220,8 +2299,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -2234,6 +2313,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "M",
+    "featureSlots": 2,
     "lore": "While Shaltari battlecruisers are regrettably familiar, some of their latest, lightest derivatives are not. Classified as supercruisers, these ships appear to be brand new. The alien’s choice to increase battlecruiser production and variety suggests a development, but whether that’s the strain or war or simply innovation is unknown. The first Shaltari supercruiser sighting, early in 2679, was the Mesolite. This svelte ship-killer is armed with a twin Hyperwave Cannon, matching the primary armament of the heavier Goethite class. It foregoes other capabilities though in favour of a mount for two stacked self-deploying surface instillations. These vary from the Stellargate, which brings starship-grade teleport technology to the surface, to the Electrowave Caster, a devilish weapons instillation capable of inflicting crippling damage on orbiting starships. The most awe-inspiring and outlandish is the Worldstrider – by far the largest known walker-type construct, thus far. This city block-spanning monstrosity smashes whole instillations beneath its six, tungsten-sheaved legs.",
     "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
     "famousShipsPrefix": "Encountered ships of the class:",
@@ -2294,8 +2374,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -2358,8 +2438,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -2421,8 +2501,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -2493,8 +2573,8 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -2520,11 +2600,11 @@
    "category": "medium",
    "ship": {
     "name": "Citrine Mothership",
-    "cost": 130,
+    "cost": 122,
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 9,
      "es": "5+",
      "ks": "4+",
@@ -2562,12 +2642,12 @@
     "specialRules": [
      {
       "name": "Mothership",
-      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships/Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
+      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships or controlled Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
      },
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -2618,12 +2698,12 @@
     "specialRules": [
      {
       "name": "Mothership",
-      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships/Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
+      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships or controlled Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
      },
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -2645,7 +2725,8 @@
     "famousShips": [
      "Infinite Dreams",
      "Warhold",
-     "Kingdom of Osiris"
+     "Kingdom of Osiris",
+     "Erie"
     ],
     "namesake": "The brilliant green gem of the beryl family, valued since antiquity above almost all other stones.",
     "altSculpts": [
@@ -2666,7 +2747,7 @@
     "stats": {
      "thrust": "10\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 9,
      "es": "5+",
      "ks": "4+",
@@ -2689,8 +2770,8 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -2718,12 +2799,12 @@
         ]
        },
        {
-        "name": "Mines",
-        "cost": 10,
+        "name": "Mines & Impel Mines",
+        "cost": 4,
         "weapons": [],
         "loads": [
          {
-          "name": "Mines",
+          "name": "Mines & Impel Mines",
           "launch": "2",
           "special": "-"
          }
@@ -2748,7 +2829,7 @@
      "Verdant",
      "Fatebringer"
     ],
-    "rulesText": "This ship may replace its Fighters & Bombers with Mines for +10 pts.",
+    "rulesText": "This ship may replace its Fighters & Bombers with Mines & Impel Mines for +4 pts.",
     "namesake": "A dark, fine-grained volcanic rock - the most common stone of the planet's crust and ocean floors.",
     "altSculpts": [
      {
@@ -2800,8 +2881,8 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -2854,8 +2935,8 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -2917,8 +2998,8 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -2944,11 +3025,11 @@
    "category": "medium",
    "ship": {
     "name": "Azurite Light Cruiser",
-    "cost": 76,
+    "cost": 70,
     "stats": {
      "thrust": "12\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 7,
      "es": "5+",
      "ks": "4+",
@@ -2980,8 +3061,8 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3053,8 +3134,8 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3123,13 +3204,13 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
       "name": "Mothership",
-      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships/Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
+      "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships or controlled Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
      }
     ],
     "groupMin": 1,
@@ -3153,11 +3234,11 @@
    "category": "light",
    "ship": {
     "name": "Mercury Destroyer",
-    "cost": 60,
+    "cost": 58,
     "stats": {
      "thrust": "12\"",
      "scan": "12\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 5,
      "es": "5+",
      "ks": "4+",
@@ -3169,11 +3250,11 @@
      {
       "name": "Disruption Beamers",
       "arc": "F",
-      "attack": "2",
+      "attack": "3",
       "lock": "3+",
       "damage": "1",
       "type": "E",
-      "special": "Fusillade-1"
+      "special": "-"
      },
      {
       "name": "Pulse Ioniser Bank",
@@ -3182,15 +3263,15 @@
       "lock": "*",
       "damage": "1",
       "type": "E",
-      "special": "Burnthrough-2, Close Action, Mauler, Calibre-H/C"
+      "special": "Burnthrough-2, Calibre-H/C, Close Action, Mauler"
      }
     ],
     "loads": [],
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -3251,8 +3332,8 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -3306,8 +3387,8 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -3360,8 +3441,8 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3401,20 +3482,20 @@
     "stats": {
      "thrust": "20\"",
      "scan": "8\"",
-     "sig": "6\"",
+     "sig": "3\"",
      "hull": 3,
-     "es": "6+",
-     "ks": "4+",
+     "es": "5+",
+     "ks": "5+",
      "bs": "-",
      "g": "1-3",
-     "special": "Shield-5+, Vectored, Vanguard-4\""
+     "special": "Descent, Shield-5+, Vanguard-4\", Vectored"
     },
     "weapons": [
      {
       "name": "Light Disruptor",
       "arc": "FN",
-      "attack": "3",
-      "lock": "3+",
+      "attack": "4",
+      "lock": "4+",
       "damage": "1",
       "type": "E",
       "special": "Calibre-L"
@@ -3423,20 +3504,26 @@
     "loads": [],
     "specialRules": [
      {
-      "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "name": "Descent",
+      "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+      "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Shield-5+",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Vanguard-4\"",
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      },
      {
       "name": "Vectored",
       "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
-     },
-     {
-      "name": "Vanguard-4\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 4” away from your Deployment Zone."
      }
     ],
     "groupMin": 1,
@@ -3444,12 +3531,13 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "L",
-    "lore": "The Caesium goes even further than those of lesser races by mounting a specialised version of the disruptor designed specifically for targeting small ships. This makes it a focused blade in the hands of any Starchief, a tool poised to eliminate very specific targets early in an engagement. Hilariously fast by human standards, even the Scourge cannot outrun them. Though physically fragile even by Shaltari standards, its energy shields may hope to repel any hapless return fire that manages to connect. The Caesium’s capabilities also make it an infamous privateer; lone and rogue Shaltari captains have been known to command packs of these lethal hunters to harass and exploit vulnerable targets for their mysterious ends, or just for the sport of it.",
+    "lore": "Although smaller than some of the more typical Cutters employed by the UCMF, the Caesium is no less the archetypical design: fast, mobile, and excellent at hunting outlying enemy ships. The Caesium goes even further than those of lesser races by mounting a specialised version of the disruptor designed specifically for targeting small ships. This makes it a focused blade in the hands of any Starchief, a tool poised to eliminate very specific targets early in an engagement. Hilariously fast by human standards, even the Scourge cannot outrun them. Though physically fragile even by Shaltari standards, its energy shields may hope to repel any hapless return fire that manages to connect.\n\nThe Caesium’s capabilities also make it an infamous privateer; lone and rogue Shaltari captains have been known to command packs of these lethal hunters to harass and exploit vulnerable targets for their mysterious ends, or just for the sport of it.",
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Raa’s Wings",
      "Raa’s Claw",
-     "Featherblade"
+     "Featherblade",
+     "Crimson Point"
     ],
     "namesake": "A soft, golden alkali metal so reactive it ignites in air; its atomic vibrations define the modern second.",
     "storeUrl": "https://ttcombat.com/products/shaltari-caesium-cutters-1"
@@ -3494,8 +3582,8 @@
      },
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -3555,14 +3643,14 @@
      },
      {
       "name": "Gateship-3",
-      "description": "Shaltari Motherships must launch their Dropships via a Ship/Dropsite with this rule (sometimes referred to as Gateships). Each Gateship can have up to 3 Dropships deployed from it each round. Note: though the launch is measured from the Gateship, it is the Mothership that is launching.\nWhen this Ship goes on the Weapons Free, Max Thrust, or Damage Control orders, it reduces its Gateship-3 value to 0 until the start of its next activation.",
-      "page": "36",
+      "description": "Shaltari Motherships must launch their Dropships via a Ship/Dropsite with this rule (sometimes referred to as Gateships). Each Gateship can have up to 3 Dropships deployed from it each round. Note: though the launch is measured from the Gateship, it is the Mothership that is launching.\nWhen this Ship goes on the Max Thrust or Damage Control orders, it reduces its Gateship-3 value to 0 until the start of its next activation.",
+      "page": "47",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -3575,7 +3663,8 @@
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Warchariot",
-     "Deadly Conjurer"
+     "Deadly Conjurer",
+     "Amulet"
     ],
     "namesake": "A nonmetal that conducts electricity when struck by light - the principle behind the first photocells."
    }
@@ -3625,8 +3714,8 @@
      },
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -3678,8 +3767,8 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3736,8 +3825,8 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3798,8 +3887,8 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3856,8 +3945,8 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3920,8 +4009,8 @@
      },
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -3995,8 +4084,8 @@
      },
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -4026,13 +4115,13 @@
     "stats": {
      "thrust": "12\"",
      "scan": "2\"",
-     "sig": "2\"",
+     "sig": "1\"",
      "hull": 3,
      "es": "5+",
      "ks": "5+",
      "bs": "-",
      "g": "1-3",
-     "special": "Descent, Gateship-2, Shield-5+, Open Network"
+     "special": "Descent, Gateship-2, Shield-4+, Open Network"
     },
     "weapons": [],
     "loads": [],
@@ -4045,19 +4134,19 @@
      },
      {
       "name": "Gateship-2",
-      "description": "Shaltari Motherships must launch their Dropships via a Ship/Dropsite with this rule (sometimes referred to as Gateships). Each Gateship can have up to 2 Dropships deployed from it each round. Note: though the launch is measured from the Gateship, it is the Mothership that is launching.\nWhen this Ship goes on the Weapons Free, Max Thrust, or Damage Control orders, it reduces its Gateship-2 value to 0 until the start of its next activation.",
-      "page": "36",
+      "description": "Shaltari Motherships must launch their Dropships via a Ship/Dropsite with this rule (sometimes referred to as Gateships). Each Gateship can have up to 2 Dropships deployed from it each round. Note: though the launch is measured from the Gateship, it is the Mothership that is launching.\nWhen this Ship goes on the Max Thrust or Damage Control orders, it reduces its Gateship-2 value to 0 until the start of its next activation.",
+      "page": "47",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
-      "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "name": "Shield-4+",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
       "name": "Open Network",
-      "description": "In a round this Group is deployed, it activates following the normal activation, group, and deployment rules. In subsequent rounds all of your Open Network Ships count as being part of a single Group. Ships in this single Group choose their orders individually when it activates. From the second round onwards, all friendly Open Network Groups count as a single Group when generating Pass Tokens.\nOpen Network Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage and affect the targeted Open Network Ship. \nCrippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Open Network Ship."
+      "description": "In a round this Group is deployed, it activates following the normal activation, group, and deployment rules. In subsequent rounds all of your Open Network Ships count as being part of a single Group. Ships in this single Group choose their orders and whether to raise their shields individually when the Group activates. From the second round onwards, all friendly Open Network Groups count as a single Group when generating Pass Tokens.\nOpen Network Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage and affect the targeted Open Network Ship. \nCrippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Open Network Ship."
      }
     ],
     "groupMin": 1,
@@ -4065,7 +4154,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "L",
-    "lore": "The bizzare nature of these ‘ships’ has resulted in the unique classification of ‘voidgate’, devoid as they are of unique character. Indeed, the Shaltari seem to share this opinion, rarely naming them and or giving them more than a skeleton crew. These vessels loosely fulfil the same tactical role as strike carriers for other races, although they do not actually carry troops. Instead, they merely act as a conduit for Shaltari teleportation, transferring Gates (such as the Eden and the Gaia - Shaltari analogues to dropships) from an orbiting mothership to the atmosphere. Since a voidgate must be present in the immediate vicinity of the dropsite, it must physically move to where the teleported construct(s) are to re-materialise. This removes the risk to the forces before deployment as they are never physically present aboard the voidgate, but are instead aboard a much larger and tougher mothership. Voidgates can also re-route forces between each other once on the ground, affording the Shaltari immense tactical flexibility to counterbalance their low Voidgates also create a substantial field of energetic disturbance in the air. This energy can be unleashed against nearby enemy atmospheric assets, such as strike carriers, dropships or bulk landers and can also take the place of defence batteries in a tactical sense, since the Shaltari have no bulk landers of their own.",
+    "lore": "The bizzare nature of these ‘ships’ has resulted in the unique classification of ‘voidgate’, devoid as they are of unique character. Indeed, the Shaltari seem to share this opinion, rarely naming them and or giving them more than a skeleton crew.\n\nThese vessels loosely fulfil the same tactical role as strike carriers for other races, although they do not actually carry troops. Instead, they merely act as a conduit for Shaltari teleportation, transferring Gates (such as the Eden and the Gaia - Shaltari analogues to dropships) from an orbiting mothership to the atmosphere. Since a voidgate must be present in the immediate vicinity of the dropsite, it must physically move to where the teleported construct(s) are to re-materialise. This removes the risk to the forces before deployment as they are never physically present aboard the voidgate, but are instead aboard a much larger and tougher mothership. Voidgates can also re-route forces between each other once on the ground, affording the Shaltari immense tactical flexibility to counterbalance their low numbers.\n\nVoidgates also create a substantial field of energetic disturbance in the air. This energy can be unleashed against nearby enemy atmospheric assets, such as strike carriers, dropships or bulk landers and can also take the place of defence batteries in a tactical sense, since the Shaltari have no bulk landers of their own.",
     "storeUrl": "https://ttcombat.com/products/shaltari-voidgates"
    }
   },
@@ -4079,7 +4168,7 @@
     "stats": {
      "thrust": "12”",
      "scan": "12”",
-     "sig": "6”",
+     "sig": "3”",
      "hull": 7,
      "es": "5+",
      "ks": "4+",
@@ -4110,7 +4199,7 @@
      },
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves."
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves."
      },
      {
       "name": "Stealth",
@@ -4119,6 +4208,10 @@
      {
       "name": "Unique",
       "description": "You may only take one Group of this Ship."
+     },
+     {
+      "name": "Silent Shielding",
+      "description": "This Group can have shields tokens while on Silent Running and does not lose shields tokens when going on Silent Running."
      }
     ],
     "groupMin": 1,
@@ -4181,8 +4274,8 @@
      },
      {
       "name": "Shield-4+",
-      "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
@@ -4271,8 +4364,8 @@
      },
      {
       "name": "Shield-5+",
-      "description": "This Group has a Shield Save of 5+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-      "page": "37",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
     ],
@@ -5489,9 +5582,9 @@
     {
      "name": "Torpedo",
      "thrust": "6\"",
-     "attack": "3",
+     "attack": "9",
      "lock": "4+",
-     "damage": "3",
+     "damage": "1",
      "type": "C",
      "special": "Flash-2"
     },
@@ -5593,24 +5686,30 @@
    "name": "Gatestation",
    "cost": 75,
    "stats": {
-    "scan": "4\"",
+    "scan": "8\"",
     "sig": "6\"",
     "hull": 10,
     "es": "4+",
     "ks": "4+",
     "bs": "-",
     "g": "1",
-    "special": "Mothership, Shield-4+, Gate Node"
+    "special": "Mothership, Gateship-0, Shield-4+, Gate Node"
    },
    "specialRules": [
     {
      "name": "Mothership",
-     "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships/Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
+     "description": "Shaltari Motherships can only deploy their Dropships via friendly Ships or controlled Dropsites with the Gateship-X special rule (sometimes referred to as Gateships). These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching."
+    },
+    {
+     "name": "Gateship-0",
+     "description": "Shaltari Motherships must launch their Dropships via a Ship/Dropsite with this rule (sometimes referred to as Gateships). Each Gateship can have up to 0 Dropships deployed from it each round. Note: though the launch is measured from the Gateship, it is the Mothership that is launching.\nWhen this Ship goes on the Max Thrust or Damage Control orders, it reduces its Gateship-0 value to 0 until the start of its next activation.",
+     "page": "47",
+     "publicationId": "45b0-3e3b-e83d-fd70"
     },
     {
      "name": "Shield-4+",
-     "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-     "page": "37",
+     "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+     "page": "48",
      "publicationId": "45b0-3e3b-e83d-fd70"
     },
     {
@@ -5632,7 +5731,7 @@
    "loads": [
     {
      "name": "Dropships",
-     "launch": "2",
+     "launch": "3",
      "special": "-"
     }
    ],
@@ -5648,7 +5747,7 @@
    "name": "Grav Hook",
    "cost": 75,
    "stats": {
-    "scan": "4\"",
+    "scan": "8\"",
     "sig": "6\"",
     "hull": 10,
     "es": "4+",
@@ -5660,8 +5759,8 @@
    "specialRules": [
     {
      "name": "Shield-4+",
-     "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-     "page": "37",
+     "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+     "page": "48",
      "publicationId": "45b0-3e3b-e83d-fd70"
     }
    ],
@@ -5686,7 +5785,7 @@
   {
    "id": "0854-c0bb-b001-626d",
    "name": "Anchor",
-   "cost": 120,
+   "cost": 100,
    "stats": {
     "scan": "12\"",
     "sig": "6\"",
@@ -5695,19 +5794,19 @@
     "ks": "4+",
     "bs": "-",
     "g": "1",
-    "special": "Shield-4+, Gateship-0, Voidspace Anchor"
+    "special": "Shield-4+, Gateship-3, Voidspace Anchor"
    },
    "specialRules": [
     {
      "name": "Shield-4+",
-     "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-     "page": "37",
+     "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+     "page": "48",
      "publicationId": "45b0-3e3b-e83d-fd70"
     },
     {
-     "name": "Gateship-0",
-     "description": "Shaltari Motherships must launch their Dropships via a Ship/Dropsite with this rule (sometimes referred to as Gateships). Each Gateship can have up to 0 Dropships deployed from it each round. Note: though the launch is measured from the Gateship, it is the Mothership that is launching.\nWhen this Ship goes on the Weapons Free, Max Thrust, or Damage Control orders, it reduces its Gateship-0 value to 0 until the start of its next activation.",
-     "page": "36",
+     "name": "Gateship-3",
+     "description": "Shaltari Motherships must launch their Dropships via a Ship/Dropsite with this rule (sometimes referred to as Gateships). Each Gateship can have up to 3 Dropships deployed from it each round. Note: though the launch is measured from the Gateship, it is the Mothership that is launching.\nWhen this Ship goes on the Max Thrust or Damage Control orders, it reduces its Gateship-3 value to 0 until the start of its next activation.",
+     "page": "47",
      "publicationId": "45b0-3e3b-e83d-fd70"
     },
     {
@@ -5726,7 +5825,7 @@
   {
    "id": "8cf6-6559-ba2d-64a2",
    "name": "Shuriken",
-   "cost": 150,
+   "cost": 140,
    "stats": {
     "scan": "12\"",
     "sig": "6\"",
@@ -5740,20 +5839,20 @@
    "specialRules": [
     {
      "name": "Shield-4+",
-     "description": "This Group has a Shield Save of 4+. After Weapons have been assigned to this Group or Assets attack this Group, you may declare the use of Shield Saves for this Group. If you do, this Group replaces its Energy and Kinetic Saves with their Shield Saves for that attack sequence. Shield Saves can be used against Energy, Kinetic, and Core damage and ignore any modifiers to Energy and Kinetic Saves. Backup Saves may then be used after Shield Saves as normal.\nA Group gains a single Spike each time it uses its Shield saves (regardless of the number of saves made per use).\nHits caused by Boarding Actions cannot be saved by Shield Saves.",
-     "page": "37",
+     "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+     "page": "48",
      "publicationId": "45b0-3e3b-e83d-fd70"
     }
    ],
    "weapons": [
     {
-     "name": "Disintegrator Bank",
+     "name": "Station Disintegrator Bank",
      "arc": "*",
      "attack": "8",
      "lock": "3+",
      "damage": "1",
      "type": "E",
-     "special": "Volley-5"
+     "special": "Penetrator, Volley-5"
     }
    ],
    "stationRules": [
@@ -5769,57 +5868,78 @@
   {
    "id": "1200-12cb-1f6d-0421",
    "name": "Electrosurge Torus",
-   "cost": 0,
+   "cost": 10,
    "features": [
     {
      "name": "Electrosurge Torus",
      "es": "4+",
      "ks": "4+",
-     "special": "-"
+     "special": "-",
+     "hull": 3
     }
    ],
    "rules": [
     {
-     "name": "Electrosurge Torus",
-     "description": "This feature only requires 3 or more Battalions to be removed during Battalion Combat and 3 damage to remove due to attacks."
+     "name": "Electrowave Caster",
+     "description": "Effects caused by this weapon’s Status rule are removed at the start of next rounds End Phase instead of this rounds End Phase."
+    }
+   ],
+   "weapons": [
+    {
+     "name": "Electrowave Caster",
+     "scan": "8\"",
+     "attack": "3",
+     "lock": "2+",
+     "damage": "1",
+     "type": "E",
+     "special": "Close Action, Escape Velocity, Status"
     }
    ]
   },
   {
    "id": "2fd9-6c83-a2ab-7cd5",
    "name": "Worldstrider",
-   "cost": 0,
+   "cost": 5,
    "features": [
     {
      "name": "Worldstrider",
      "es": "4+",
      "ks": "4+",
-     "special": "-"
+     "special": "-",
+     "hull": 3
     }
    ],
    "rules": [
     {
      "name": "Worldstrider",
-     "description": "When you activate this Feature, you may pick another Feature on its Dropsite and roll a dice. On a result of a 3+, remove that Feature and any Battalions deployed on it from this Dropsite. If any Battalions are removed due to this rule, roll a dice. On a result of a 5+, this feature remains in play, otherwise, it is removed.\nThis feature only requires 3 or more Battalions to be removed during Battalion Combat and 3 damage to remove due to attacks."
+     "description": "When you activate this Feature, you may pick another Feature on its Dropsite and roll a dice. On a result of a 3+, remove that Feature and any Battalions deployed on it from this Dropsite. If any Battalions are removed due to this rule, roll a dice. On a result of a 5+, this feature remains in play, otherwise, it is removed."
     }
    ]
   },
   {
    "id": "fb5d-af80-233a-f528",
    "name": "Stellargate",
-   "cost": 0,
+   "cost": 15,
    "features": [
     {
      "name": "Stellargate",
      "es": "4+",
      "ks": "4+",
+     "special": "-",
+     "hull": 3
+    }
+   ],
+   "loads": [
+    {
+     "name": "Fighters & Bombers",
+     "launch": "2",
      "special": "-"
     }
    ],
    "rules": [
     {
      "name": "Stellargate",
-     "description": "After Battalion combat on this Feature’s Dropsite, if it contains any number of friendly Stellargates, deploy one Battalion to that Dropsite. A Dropsite can only have a single Battalion deployed to it this way each round.\nWhile you have one or more Stellargates on a Dropsite, that Dropsite counts as a Controlled Dropsite with Gateship-X for the purposes of the Mothership special rule, where X is the total number of friendly Stellargates on that Dropsite. Additionally, the Dropsite forms a part of a Gateship chain with friendly Gateships and Motherships within 18”.\nThis feature only requires 3 or more Battalions to be removed during Battalion Combat and 3 damage to remove due to attacks."
+     "description": "After Battalion combat on this Feature’s Dropsite, if it contains any number of friendly Stellargates, deploy one Battalion to that Dropsite. A Dropsite can only have a single Battalion deployed to it this way each round.\nWhile you have one or more Stellargates on a Dropsite, that Dropsite counts as a Controlled Dropsite with Gateship-X for the purposes of the Mothership special rule, where X is the total number of friendly Stellargates on that Dropsite. Additionally, the Dropsite forms a part of a Gateship chain with friendly Gateships and Motherships within 18”."
     }
    ]
   }
@@ -5827,28 +5947,28 @@
  "abilitiesTable": [
   {
    "name": "Impel Mines",
-   "cost": "1AP",
-   "effect": "When a friendly Carrier with H or C Tonnage launches assets, it may launch a single Impel Mine in addition to its normal Assets this round."
+   "cost": "*AP",
+   "effect": "Once per game, at the start of the Activation Phase, choose up to three different friendly Ships within 18” of a friendly Ship with the Mothership special rule. Those Ships gain 1 Impel Mine Launch Asset until the end of the game. This Ability costs 1AP for each chosen Ship."
   },
   {
    "name": "Advanced Picket Ships",
-   "cost": "1AP",
-   "effect": "When you use a Group’s Shield-X special rule, roll a dice. On a 4+ do not gain a Spike from that use of the Shield-X special rule (other uses are unaffected)."
+   "cost": "2AP",
+   "effect": "When you raise a group’s shields, until the start of its next activation, it does not triple its signature value. If that group is H or C tonnage, this ability costs 3AP."
   },
   {
-   "name": "Misdirection",
+   "name": "Launch Gate",
    "cost": "1AP",
-   "effect": "At the start of the Asset Phase, pick a Dropsite. You may redistribute the allocation of all friendly Assets in that Dropsite and its Features."
+   "effect": "When a friendly Carrier launches Fighters or Bombers, those Launch Assets may be launched through a Gateship chain, counting as a Dropship for the purposes of the Gateship-X special rule."
   },
   {
    "name": "Navigational Mastery",
-   "cost": "1AP",
-   "effect": "At the start of a friendly Group’s activation, that Group increases its Thrust by D3” until the end of its activation."
+   "cost": "1-2AP",
+   "effect": "At the start of a friendly Group’s activation, until the end of its activation, that Group gains Vectored and increases its Thrust by twice the AP paid to use this ability."
   },
   {
    "name": "Power to the Weapons",
-   "cost": "2AP",
-   "effect": "At the start of a friendly Group’s activation that Group may fire any number of its Weapons on General Quarters but may not use Shield Saves until the end of the round."
+   "cost": "1AP",
+   "effect": "At the start of a friendly Group’s activation, if that Group has the Shield-X+ special rule, that Group may attack with any number of its weapons on General Quarters, but cannot raise its Shields or gain a shields token. If this ability is used on a Group with 4 or more Weapon Systems, this Ability costs 2AP."
   },
   {
    "name": "Lives of Experience",
