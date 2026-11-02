@@ -1612,6 +1612,12 @@
       counts[key].c++;
     });
     const rareMax = RARE_MAX[fleet.gameSize] || 2;
+    const heroGroups = fleet.battleGroups.filter(g => {
+      const s = g.ships[0];
+      const db = s && findShip(fleet.faction, s.groupCategory, s.shipKey);
+      return db && (db.specialRules || []).some(r => r.name === 'Hero');
+    }).length;
+    if (heroGroups > 2) w.push({ t: 'error', m: `Only two Hero Groups per fleet (you have ${heroGroups})` });
     Object.values(counts).forEach(i => {
       if (i.uniq && i.c > 1) w.push({ t: 'error', m: `${i.n} is Unique, max 1 group` });
       if (i.rare && i.c > rareMax) w.push({ t: 'error', m: `${i.n} is Rare, max ${rareMax} at ${size.label}` });
@@ -3535,7 +3541,8 @@
       // A ship whose rules forbid an Admiral (e.g. Argonaut "Mind of its Own") is
       // never a valid host, even though it is Capital tonnage.
       const db = findShip(activeFleet.faction, g.ships[0].groupCategory, g.ships[0].shipKey);
-      return !(db && db.noAdmiral);
+      // Hero: "You cannot assign an Admiral to this Ship".
+      return !(db && (db.noAdmiral || (db.specialRules || []).some(r => r.name === 'Hero')));
     }).map(g => {
       const s = g.ships[0];
       const db = findShip(activeFleet.faction, s.groupCategory, s.shipKey);

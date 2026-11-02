@@ -755,7 +755,9 @@ let activeGroupId = null;
       groupMin: s.groupMin, groupMax: s.groupMax,
       isRare: s.isRare, isUnique: s.isUnique,
       additional: !!s.additional,
-      noAdmiral: !!s.noAdmiral,   // e.g. Argonaut "Mind of its Own": no Admiral may be assigned
+      // Hero: "You cannot assign an Admiral to this Ship" and only two Hero Groups per fleet.
+      isHero: (s.specialRules || []).some(r => r.name === 'Hero'),
+      noAdmiral: !!s.noAdmiral || (s.specialRules || []).some(r => r.name === 'Hero'),   // e.g. Argonaut "Mind of its Own": no Admiral may be assigned
       noTonnageCount: !!s.noTonnageCount, // e.g. Argonaut: excluded from the 4.2 tonnage-points budget
       // How many Deployable Features a Feature Carrier chooses. 1 for every ship
       // until the Resistance 260731 Battle Carriers (Actium, Salamis), which
@@ -2805,6 +2807,13 @@ let activeGroupId = null;
       }
       shipGroupCounts[key].count++;
     });
+
+    const heroGroups = fleet.battleGroups.filter(g => {
+      const s = g.ships[0];
+      const db = s && findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
+      return db && db.isHero;
+    }).length;
+    if (heroGroups > 2) warnings.push({ type: 'error', msg: `Only two Hero Groups per fleet (you have ${heroGroups})` });
 
     Object.values(shipGroupCounts).forEach(info => {
       if (info.isUnique && info.count > 1) {
