@@ -12,9 +12,9 @@
       "special": "-",
       "abilities": [
         {
-          "name": "Dedicated Survey Teams",
-          "cost": "2AP",
-          "effect": "When you activate a Group of a single Ship, that Ship may Survey a Dropsite and attack with a single weapon this round (but still cannot launch Assets)."
+          "name": "Interceptors",
+          "cost": "1AP",
+          "effect": "When a Wing of enemy Bombers are placed or moved into based contact with a friendly Ship, before they attack, choose a Wing of friendly Fighters within their Thrust of the friendly Ship. Move any number of Fighters from that Wing into base contact with the Friendly Ship, then remove the moved Fighters and that many enemy Bombers. Fighters moved this way cannot ignore intervening Scenery for any reason."
         }
       ],
       "flagship": null,
@@ -29,14 +29,14 @@
       "special": "-",
       "abilities": [
         {
-          "name": "Push Engines to Max",
-          "cost": "2AP",
-          "effect": "At the start of a friendly Group’s activation, each Ship in it suffers 1 Damage and improves its Thrust by 2” until the end of its activation."
-        },
-        {
           "name": "Overcharge Lasers",
           "cost": "2AP",
           "effect": "When you assign a Group’s weapons to a target, pick one of the attacking Group’s Weapon Systems with “Laser” in its name. That Weapon System gains Fusillade-2 for that attack sequence."
+        },
+        {
+          "name": "Push Engines to Max",
+          "cost": "2AP",
+          "effect": "At the start of a friendly Group’s activation, each Ship in it suffers 1 Damage and improves its Thrust by 2” until the end of its activation."
         }
       ],
       "flagship": null,
@@ -52,7 +52,7 @@
       "abilities": [
         {
           "name": "Master Tactician",
-          "cost": "4AP",
+          "cost": "3AP",
           "effect": "At the end of this Group’s activation, discard a Pass Token and target another friendly Group of L or M Tonnage. If you do, that Group may turn up to 45 degrees, then move up to a quarter of its Thrust, and then each Ship in it may attack with a single weapon."
         }
       ],
@@ -72,44 +72,26 @@
         },
         "weapons": [
           {
-            "name": "UF-9000 Mass Driver Turret",
+            "name": "UF-9000 Mass Driver Turrets",
             "arc": "F/S",
             "attack": "2",
             "lock": "2+",
             "damage": "2",
             "type": "K",
-            "special": "Critical-1, Penetrator"
+            "special": "Critical-1, Penetrator, Volley-2"
           },
           {
-            "name": "UF-9000 Mass Driver Turret",
+            "name": "UF-4200 Mass Driver Turret Battery",
             "arc": "F/S",
-            "attack": "2",
-            "lock": "2+",
-            "damage": "2",
-            "type": "K",
-            "special": "Critical-1, Penetrator"
-          },
-          {
-            "name": "UF-4200 Mass Driver Turret Core Battery",
-            "arc": "F/S",
-            "attack": "6",
+            "attack": "10",
             "lock": "4+",
             "damage": "1",
             "type": "K",
-            "special": "Fusillade-3, Volley-2"
-          },
-          {
-            "name": "UF-4200 Mass Driver Turrets",
-            "arc": "F/S",
-            "attack": "4",
-            "lock": "4+",
-            "damage": "1",
-            "type": "K",
-            "special": "Fusillade-2, Volley-2"
+            "special": "Fusillade-5, Volley-2"
           },
           {
             "name": "Leviathan Missile Bays",
-            "arc": "F/S/R",
+            "arc": "F/S",
             "attack": "8",
             "lock": "3+",
             "damage": "1",
@@ -120,7 +102,7 @@
         "loads": [
           {
             "name": "Fighters & Bombers",
-            "launch": "6",
+            "launch": "8",
             "special": "Alt-1"
           },
           {
@@ -159,7 +141,7 @@
         "category": "colossal",
         "namesake": "[Washington DC](https://washington.org/) was designed from scratch as a purpose-built capital in 1790, sited on the Potomac River between Maryland and Virginia at the insistence of George Washington; the city was burned by British forces in 1814 and rebuilt within a year. The city is named after George Washington, the first president of the United States, while the District of Columbia honours Christopher Columbus. Its layout was planned by the French-born engineer Pierre Charles L'Enfant, whose design of broad diagonal avenues overlaid on a grid still shapes the modern city."
       },
-      "abilityPicks": 2,
+      "abilityPicks": 3,
       "flagshipName": "Shield of Aurum",
       "bio": "Head of the most powerful institution mankind has ever known, Supreme Admiral Jacob 'Granite' Halsey is famous for his steely, brisk, borderline-offensive, flare. His rank grants him a permanent seat on the High Council, but his record there is of extensive truancy, not that anyone dares raise that. A career-sailor, his career began as a teenage rating aboard the ageing grand battleship UCMS Virginia, which he would, thirty-two years later, captain. His remaining on the bridge to the last as the venerable ship was wrecked by Shaltari privateers earned him a promotion to commodore, along with facial scarring and a lifetime's hatred for the 'filthy rotten stinking echidnas'. After another two decade's service as the UCMF's most battlehardened, pre-Reconquest commander, he attained mastery of the entire UCMF.\n\nPreferring to lead from the front, Halsey was present in the opening hours of the Battle for Earth, where, for the ninth time in his career, he had his CIC destroyed around him. Forced to command from the Shield of Aurum's auxiliary CIC, he remained a pivotal force in that titanic engagement, personally scoring nineteen capital ship kills in the first forty-eight hours.\n\nHalsey is a fixture on whichever frontline is hottest, and although he's burst some more blood vessels on his pockmarked face, he's at the razor's edge of command."
     },
@@ -179,7 +161,7 @@
       ],
       "flagship": {
         "name": "New York Battleship",
-        "cost": 245,
+        "cost": 235,
         "stats": {
           "thrust": "6\"",
           "scan": "10\"",
@@ -189,7 +171,7 @@
           "ks": "3+",
           "bs": "5+",
           "g": "1",
-          "special": "Spearhead"
+          "special": "Tip of the Spear"
         },
         "weapons": [
           {
@@ -219,14 +201,19 @@
           },
           {
             "name": "Fighters & Bombers",
-            "launch": "4",
-            "special": "-"
+            "launch": "5",
+            "special": "Alt-1"
+          },
+          {
+            "name": "Heavy Bombers",
+            "launch": "3",
+            "special": "Alt-1"
           }
         ],
         "specialRules": [
           {
-            "name": "Spearhead",
-            "description": "While this Flagship is within 12” of your opponent’s deployment zone, you may re-roll its failed Backup saves."
+            "name": "Tip of the Spear",
+            "description": "At the start of the game, choose one of your deployment zones or a single board edge. While this Ship is further than 12” away from the chosen deployment zone or board edge, you may re-roll its failed Backup Saves."
           }
         ],
         "groupMin": 1,
@@ -261,7 +248,7 @@
         "category": "heavy",
         "namesake": "[New York](https://www.nyctourism.com/) was founded as New Amsterdam by the Dutch West India Company in 1626 on the southern tip of Manhattan Island, captured by the English in 1664, and grew into the most populous city in the Western world. It was renamed New York in honour of the Duke of York, the future King James II of England. The city briefly served as the first capital of the United States, and George Washington was inaugurated as president there in 1789."
       },
-      "abilityPicks": 1,
+      "abilityPicks": 2,
       "flagshipName": "Carpe Noctum",
       "bio": "Famous for her ice-cold head and killer instinct, June Havelock, 39, is the youngest admiral in the UCMF. Credited with spearheading the assault on D-Day - Earth from her battleship Carpe Noctum, she scored the most crucial kill of the day: the Scourge super-dreadnought Darkheart. One of the leading admirals of Battlefleet Sol, she regularly deputises supreme command above Earth. Thus far, Grand Admiral Halsey's respect and patronage has not been misplaced.\n\nHavelock climbed far, quickly. At the outbreak of the Reconquest, she was a lowly Lieutenant Commander aboard the cruiser UCMS Regalia, and was deemed competent if unspectacular. While the fires of war have never yet taken her head, the crucible of combat has forged her. Forced to take command of the crippled Regalia on D+3 - Eden, Havelock successfully rammed the Scourge battleship Sorn's Nemesis, destroying her and emerging as the only officer commanding to survive a ramming action that year.\n\nToday, she is one of the most decorated officers in the fleet and one of a handful to have been present at over four D-Days. Although she commands from a carrier-type battleship, she is noteworthy for her gunnery skills, since she values skilled crew in that area in particular."
     },
@@ -377,7 +364,7 @@
           {
             "name": "Cobra Heavy Laser Pair",
             "arc": "FN",
-            "attack": "6",
+            "attack": "8",
             "lock": "3+",
             "damage": "1",
             "type": "E",
@@ -514,7 +501,7 @@
       "category": "colossal",
       "ship": {
         "name": "London Dreadnought",
-        "cost": 435,
+        "cost": 490,
         "stats": {
           "thrust": "6\"",
           "scan": "12\"",
@@ -524,66 +511,39 @@
           "ks": "3+",
           "bs": "5+",
           "g": "1",
-          "special": "Aegis-6, Command Ship-2, Reinforced Armour"
+          "special": "Aegis-6, Command Ship-1, Reinforced Armour"
         },
         "weapons": [
           {
-            "name": "UF-9000 Mass Driver Turret",
+            "name": "UF-9000 Mass Driver Turrets",
             "arc": "F/S",
             "attack": "2",
             "lock": "2+",
             "damage": "2",
             "type": "K",
-            "special": "Critical-1, Penetrator"
-          },
-          {
-            "name": "UF-9000 Mass Driver Turret",
-            "arc": "F/S",
-            "attack": "2",
-            "lock": "2+",
-            "damage": "2",
-            "type": "K",
-            "special": "Critical-1, Penetrator"
+            "special": "Critical-1, Penetrator, Volley-2"
           },
           {
             "name": "UF-6400 Mass Driver Turret Battery",
             "arc": "F/S",
             "attack": "8",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1"
+            "special": "Critical-1, Volley-2"
           },
           {
-            "name": "UF-6400 Mass Driver Turret Battery",
+            "name": "UF-4200 Mass Driver Turret Battery",
             "arc": "F/S",
-            "attack": "8",
-            "lock": "3+",
-            "damage": "1",
-            "type": "K",
-            "special": "Critical-1"
-          },
-          {
-            "name": "UF-4200 Mass Driver Turret Core Battery",
-            "arc": "F/S",
-            "attack": "6",
+            "attack": "10",
             "lock": "4+",
             "damage": "1",
             "type": "K",
-            "special": "Fusillade-3, Volley-2"
-          },
-          {
-            "name": "UF-4200 Mass Driver Turrets",
-            "arc": "F/S",
-            "attack": "4",
-            "lock": "4+",
-            "damage": "1",
-            "type": "K",
-            "special": "Fusillade-2, Volley-2"
+            "special": "Fusillade-5, Volley-2"
           },
           {
             "name": "Leviathan Missile Bays",
-            "arc": "F/S/R",
+            "arc": "F/S",
             "attack": "8",
             "lock": "3+",
             "damage": "1",
@@ -600,8 +560,8 @@
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
           {
-            "name": "Command Ship-2",
-            "description": "Increase the Level of any Admiral assigned to this Ship by 2.",
+            "name": "Command Ship-1",
+            "description": "Increase the Level of any Admiral assigned to this Ship by 1.",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
@@ -615,7 +575,7 @@
         "isRare": false,
         "isUnique": false,
         "tonnage": "C",
-        "lore": "Triple the displacement of a Battleship, the London is one of the most powerful warships ever produced by mankind, armed with fifty mass drivers in various gauges. One may annihilate an entire fleet, It takes an entire orbital yard sector three years to lay down the hull of one of these ships. The sheer resources to outfit crew and maintain the ship reserves its use for the direst circumstances, commanded by the UCMF’s most decorated Admirals. Each is a legend in its own right.",
+        "lore": "Triple the displacement of a Battleship, the London is one of the most powerful warships ever produced by mankind, armed with fifty mass drivers in various gauges. One may annihilate an entire fleet, unassisted.\n\nIt takes an entire orbital yard sector three years to lay down the hull of one of these ships. The sheer resources to outfit crew and maintain the ship reserves its use for the direst circumstances, commanded by the UCMF’s most decorated Admirals. Each is a legend in its own right.",
         "famousShips": [
           "[London](https://en.wikipedia.org/wiki/HMS_London_%2869%29)",
           "Robert A Bernard",
@@ -633,7 +593,7 @@
       "category": "heavy",
       "ship": {
         "name": "Thebes Super Battleship",
-        "cost": 310,
+        "cost": 305,
         "stats": {
           "thrust": "6\"",
           "scan": "10\"",
@@ -649,32 +609,32 @@
           {
             "name": "UF-12000 Twin Mass Driver",
             "arc": "FN",
-            "attack": "2",
+            "attack": "3",
             "lock": "2+",
-            "damage": "4",
+            "damage": "2",
             "type": "C",
-            "special": "Crippling"
+            "special": "Crippling, Critical-1, Focused"
           },
           {
             "name": "UF-6400 Mass Driver Turrets",
             "arc": "F/S",
             "attack": "4",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1"
+            "special": "-"
           }
         ],
         "loads": [
           {
-            "name": "Drop Pods",
-            "launch": "2",
-            "special": "Alt-1"
-          },
-          {
             "name": "Bulk Landers",
             "launch": "8",
             "special": "-"
+          },
+          {
+            "name": "Drop Pods",
+            "launch": "2",
+            "special": "Alt-1"
           },
           {
             "name": "Boarding Pods",
@@ -729,12 +689,12 @@
               },
               {
                 "name": "Cobra Heavy Laser Pair",
-                "cost": 5,
+                "cost": 10,
                 "weapons": [
                   {
                     "name": "Cobra Heavy Laser Pair",
                     "arc": "FN",
-                    "attack": "6",
+                    "attack": "8",
                     "lock": "3+",
                     "damage": "1",
                     "type": "E",
@@ -747,6 +707,7 @@
           }
         ],
         "lore": "The Thebes is the latest super battleship class to enter service with the UCMF . The Naval Design Bureau began with the Carthage’s superstructure and weapons payload but reconfigured its cavernous launch bay forecastle for surface deployments in addition to mounting a pair of UF-6400 turrets. From here the Thebes can launch bulk landers, drop pods, and boarding torpedoes. Already, the class has earned a reputation as a golden deployment for landing troops since they’re unlikely to perish aboard ship before making planetfall.",
+        "rulesText": "This Ship may take a Laser Refit for +10 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
         "famousShipsPrefix": "Famous ships of the class:",
         "famousShips": [
           "Thebes",
@@ -763,7 +724,7 @@
       "category": "heavy",
       "ship": {
         "name": "Carthage Super Battleship",
-        "cost": 320,
+        "cost": 315,
         "stats": {
           "thrust": "6\"",
           "scan": "10\"",
@@ -779,22 +740,22 @@
           {
             "name": "UF-12000 Twin Mass Driver",
             "arc": "FN",
-            "attack": "2",
+            "attack": "3",
             "lock": "2+",
-            "damage": "4",
+            "damage": "2",
             "type": "C",
-            "special": "Crippling"
+            "special": "Crippling, Critical-2, Focused"
           }
         ],
         "loads": [
           {
-            "name": "Heavy Bombers",
-            "launch": "3",
+            "name": "Fighters & Bombers",
+            "launch": "5",
             "special": "Alt-1"
           },
           {
-            "name": "Fighters & Bombers",
-            "launch": "4",
+            "name": "Heavy Bombers",
+            "launch": "3",
             "special": "Alt-1"
           },
           {
@@ -843,12 +804,12 @@
               },
               {
                 "name": "Cobra Heavy Laser Pair",
-                "cost": 5,
+                "cost": 10,
                 "weapons": [
                   {
                     "name": "Cobra Heavy Laser Pair",
                     "arc": "FN",
-                    "attack": "6",
+                    "attack": "8",
                     "lock": "3+",
                     "damage": "1",
                     "type": "E",
@@ -860,12 +821,14 @@
             ]
           }
         ],
-        "lore": "The Carthage focuses almost entirely on kinetic damage though, built around a pair of colossal UF-12000 mass drivers in a fixed frontal mounting. It maintains its sister’s fleet carrier capacity for enhanced strategic might. Should energy weapons be required, its UF-4200 turrets may be upgraded to a pair of Cobra heavy lasers, an option it shares with other UCM battleships.",
+        "lore": "Much like its sister class, the Babylon, the Carthage is configured for the annihilation of enemy ships. The Carthage focuses almost entirely on kinetic damage though, built around a pair of colossal UF-12000 mass drivers in a fixed frontal mounting. It maintains its sister’s fleet carrier capacity for enhanced strategic might. Should energy weapons be required, its UF-4200 turrets may be upgraded to a pair of Cobra heavy lasers, an option it shares with other UCM battleships.",
+        "rulesText": "This Ship may take a Laser Refit for +10 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
         "famousShipsPrefix": "Famous ships of the class:",
         "famousShips": [
           "[Hannibal](https://en.wikipedia.org/wiki/Hannibal)",
           "[War Elephant](https://en.wikipedia.org/wiki/War_elephant)",
-          "[Phoenician](https://en.wikipedia.org/wiki/Phoenicia)"
+          "[Phoenician](https://en.wikipedia.org/wiki/Phoenicia)",
+          "Scipio Africanus"
         ],
         "namesake": "[Carthage](https://en.wikipedia.org/wiki/Carthage) was a Phoenician trading colony founded near modern Tunis, Tunisia around 814 BC, became Rome's most dangerous rival for control of the western Mediterranean, and was destroyed by Scipio Aemilianus in 146 BC after a three-year siege. Its most famous general, Hannibal, marched an army with war elephants across the Alps to invade Italy during the Second Punic War. After the city's destruction the Romans rebuilt it, and Roman Carthage grew into one of the largest cities of the empire before the ruins were designated a UNESCO World Heritage Site in 1979."
       }
@@ -892,7 +855,7 @@
           {
             "name": "Python Super Heavy Laser",
             "arc": "FN",
-            "attack": "5",
+            "attack": "6",
             "lock": "3+",
             "damage": "2",
             "type": "E",
@@ -910,13 +873,13 @@
         ],
         "loads": [
           {
-            "name": "Heavy Bombers",
-            "launch": "3",
+            "name": "Fighters & Bombers",
+            "launch": "5",
             "special": "Alt-1"
           },
           {
-            "name": "Fighters & Bombers",
-            "launch": "4",
+            "name": "Heavy Bombers",
+            "launch": "3",
             "special": "Alt-1"
           },
           {
@@ -965,12 +928,12 @@
               },
               {
                 "name": "Cobra Heavy Laser Pair",
-                "cost": 5,
+                "cost": 10,
                 "weapons": [
                   {
                     "name": "Cobra Heavy Laser Pair",
                     "arc": "FN",
-                    "attack": "6",
+                    "attack": "8",
                     "lock": "3+",
                     "damage": "1",
                     "type": "E",
@@ -983,6 +946,7 @@
           }
         ],
         "lore": "The Byzantium super battleship was designed to spearhead anti-surface operations. The class has substantial bombardment capabilities coupled with enough firepower to annihilate any foe it might encounter, including torpedoes and a Python super-heavy laser. Once at its firing station, it can use its substantial fleet carrier capabilities to send waves of fighters and bombers further afield to secure the battlespace.",
+        "rulesText": "This Ship may take a Laser Refit for +10 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
         "famousShipsPrefix": "Famous ships of the class:",
         "famousShips": [
           "Byzantium",
@@ -1015,7 +979,7 @@
           {
             "name": "Python Super Heavy Laser",
             "arc": "FN",
-            "attack": "5",
+            "attack": "6",
             "lock": "3+",
             "damage": "2",
             "type": "E",
@@ -1026,20 +990,20 @@
             "arc": "F/S",
             "attack": "6",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1"
+            "special": "-"
           }
         ],
         "loads": [
           {
-            "name": "Heavy Bombers",
-            "launch": "3",
+            "name": "Fighters & Bombers",
+            "launch": "5",
             "special": "Alt-1"
           },
           {
-            "name": "Fighters & Bombers",
-            "launch": "4",
+            "name": "Heavy Bombers",
+            "launch": "3",
             "special": "Alt-1"
           },
           {
@@ -1088,12 +1052,12 @@
               },
               {
                 "name": "Cobra Heavy Laser Pair",
-                "cost": 5,
+                "cost": 10,
                 "weapons": [
                   {
                     "name": "Cobra Heavy Laser Pair",
                     "arc": "FN",
-                    "attack": "6",
+                    "attack": "8",
                     "lock": "3+",
                     "damage": "1",
                     "type": "E",
@@ -1106,6 +1070,7 @@
           }
         ],
         "lore": "The Babylon shares the substantial armaments and fleet carrier capacity as its sister class, the Byzantium super battleship, but the Babylon elevates its anti-shipping capabilities by replacing the bombardment turrets with UF-6400 mass driver turrets . This was only possible due to the UCM’s latest battleship superstructure and its enhanced power generators. Together, its extensive weapons suite is enough to obliterate any foe.",
+        "rulesText": "This Ship may take a Laser Refit for +10 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
         "famousShipsPrefix": "Famous ships of the class:",
         "famousShips": [
           "Babylon",
@@ -1140,21 +1105,21 @@
             "arc": "F/S",
             "attack": "4",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1"
+            "special": "-"
           }
         ],
         "loads": [
           {
-            "name": "Drop Pods",
-            "launch": "2",
-            "special": "Alt-1"
-          },
-          {
             "name": "Bulk Landers",
             "launch": "8",
             "special": "-"
+          },
+          {
+            "name": "Drop Pods",
+            "launch": "2",
+            "special": "Alt-1"
           },
           {
             "name": "Boarding Pods",
@@ -1231,12 +1196,12 @@
               },
               {
                 "name": "Cobra Heavy Laser Pair",
-                "cost": 5,
+                "cost": 10,
                 "weapons": [
                   {
                     "name": "Cobra Heavy Laser Pair",
                     "arc": "FN",
-                    "attack": "6",
+                    "attack": "8",
                     "lock": "3+",
                     "damage": "1",
                     "type": "E",
@@ -1249,7 +1214,7 @@
           }
         ],
         "lore": "The Delhi is a class of battleship designed and constructed by the United Colonies of Mankind. Part of a new generation of battleships, the Delhi - alongside its sister class, the Hanoi - was designed with the most modern technologies the UCM has to offer, as well as the latest design principles. This mostly comes in the form of compact systems, which have greatly increased the size of internal spaces and allows the Delhi to carry out its primary mission: rapid troop deployment.\n\nWhile the Hanoi was designed to be a consummate ship-killer, the Delhi was instead developed as an answer for the grievances of UCMA commanders. Though troopships like the San Francisco have served the Colonies admirably throughout the Reconquest, their vulnerability makes them more likely to be destroyed en route to drop zones, costing thousands of human lives in the process. The Delhi resolves this issue by being a battleship-sized delivery system, complete with thick armour and the ability to engage most threats unsupported.",
-        "rulesText": "This Ship may take a Drive Refit for +45 points, increasing its Thrust by 3”. Laser Refit This Ship may take a Laser Refit for +5 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
+        "rulesText": "This Ship may take a Drive Refit for +45 points, increasing its Thrust by 3”. Laser Refit This Ship may take a Laser Refit for +10 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
         "namesake": "[Delhi](https://delhitourism.gov.in/), India has served as the capital of successive empires on the Indo-Gangetic Plain for over a millennium; the city's layered history produced at least seven distinct urban centres, with New Delhi built by the British as an eighth from 1911. New Delhi, the planned capital district, was largely designed by the British architects Edwin Lutyens and Herbert Baker and was inaugurated in 1931. The wider National Capital Territory is among the most populous urban areas in the world."
       }
     },
@@ -1275,11 +1240,11 @@
           {
             "name": "UF-12000 Twin Mass Driver",
             "arc": "FN",
-            "attack": "2",
+            "attack": "3",
             "lock": "2+",
-            "damage": "4",
+            "damage": "2",
             "type": "C",
-            "special": "Crippling"
+            "special": "Crippling, Critical-2, Focused"
           }
         ],
         "loads": [],
@@ -1345,12 +1310,12 @@
               },
               {
                 "name": "Cobra Heavy Laser Pair",
-                "cost": 5,
+                "cost": 10,
                 "weapons": [
                   {
                     "name": "Cobra Heavy Laser Pair",
                     "arc": "FN",
-                    "attack": "6",
+                    "attack": "8",
                     "lock": "3+",
                     "damage": "1",
                     "type": "E",
@@ -1363,7 +1328,7 @@
           }
         ],
         "lore": "The Hanoi is a class of battleship designed and constructed by the United Colonies of Mankind. Along with its sister class, the Delhi, the Hanoi was designed to be a part of a new wave of battleships to help replace some of the UCM's more venerable designs, with the first of her class launched in 2673. Though old stalwarts like the Beijing are still being constructed, such classes are nearing 90 years' worth of service and are starting to show their age. The Hanoi meanwhile was constructed with the latest technological advancements that the UCMF has made, all in service of increased modernity, capabilities, and lethality.\n\nWhile the Delhi uses its battleship-sized bulk to ferry troops to landing points, the Hanoi was instead designed as a peerless ship-hunter. Central to this game plan are its two, overwhelmingly large UF-12000 mass drivers, attached in fixed mounts to the front of the ship. Such weapons pack enough ship-killing potential to match even the most devastating armaments of the other factions, giving the UCM a true shock-and-awe weapon to deploy in orbital combat. These weapons do come at the cost of requiring significant amount of next-gen capacitors and a fully-overhauled power core system to function - changes that could never have been made to one of the legacy battleships.",
-        "rulesText": "This Ship may take a Drive Refit for +45 points, increasing its Thrust by 3”. Laser Refit This Ship may take a Laser Refit for +5 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
+        "rulesText": "This Ship may take a Drive Refit for +45 points, increasing its Thrust by 3”. Laser Refit This Ship may take a Laser Refit for +10 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
         "namesake": "[Hanoi](https://vietnam.travel/places-to-go/northern-vietnam/ha-noi) has been the capital of Vietnam for most of the past thousand years, first founded as the Ly dynasty capital in 1010 on a bend of the Red River; the city's name means 'inside the river bend'. The city served as the capital of French Indochina from 1902 to 1954. Among its landmarks is the Temple of Literature, founded in 1070, which housed Vietnam's first national university.",
         "storeUrl": "https://ttcombat.com/products/ucm-hanoi-battleship-copy"
       }
@@ -1390,7 +1355,7 @@
           {
             "name": "Python Super Heavy Laser",
             "arc": "FN",
-            "attack": "5",
+            "attack": "6",
             "lock": "3+",
             "damage": "2",
             "type": "E",
@@ -1469,12 +1434,12 @@
               },
               {
                 "name": "Cobra Heavy Laser Pair",
-                "cost": 5,
+                "cost": 10,
                 "weapons": [
                   {
                     "name": "Cobra Heavy Laser Pair",
                     "arc": "FN",
-                    "attack": "6",
+                    "attack": "8",
                     "lock": "3+",
                     "damage": "1",
                     "type": "E",
@@ -1487,7 +1452,7 @@
           }
         ],
         "lore": "The Tokyo is a battleship constructed by the United Colonies of Mankind. A specialist vessel, the Tokyo was designed with one goal in mind: surface bombardment. It dispenses with the main mass driver battery of the Beijing-class in favor of three UF-B-8000 turrets, making one of the largest orbital bombardment platforms in the Reconquest (beaten only by the PHR's Remus-class dreadnought, and it's larger cousin, the Byzantium-class super battleship ).\n\nWhile a battleship may seem like an odd choice of ship to commit to bombardment, the Tokyo is significantly more survivable when exposed to enemy firepower than its lighter cousin, the Madrid. Regardless of enemy anti-ship batteries on the surface or enemy warships in orbit, the Tokyo can withstand a sizeable amount of punishment, all while laying waste to ground targets below.",
-        "rulesText": "This Ship may take a Drive Refit for +45 points, increasing its Thrust by 3”. Laser Refit This Ship may take a Laser Refit for +5 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
+        "rulesText": "This Ship may take a Drive Refit for +45 points, increasing its Thrust by 3”. Laser Refit This Ship may take a Laser Refit for +10 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
         "namesake": "[Tokyo](https://www.gotokyo.org/en/index.html), Japan was a small fishing village called Edo until 1603, when the Tokugawa shogunate established its seat of government there; it became the imperial capital in 1869 and is today the most populous metropolitan area on Earth. The name means 'Eastern Capital', reflecting its position relative to the former imperial seat at Kyoto. Tokyo has hosted the Summer Olympic Games twice, in 1964 and again in 2021."
       }
     },
@@ -1498,7 +1463,7 @@
       "ship": {
         "name": "New York Battleship",
         "specs": {"length": "1293m", "beam": "421m", "height": "383m", "displacement": "25,253,000m³"},
-        "cost": 245,
+        "cost": 235,
         "stats": {
           "thrust": "6\"",
           "scan": "10\"",
@@ -1519,8 +1484,13 @@
           },
           {
             "name": "Fighters & Bombers",
-            "launch": "4",
-            "special": "-"
+            "launch": "5",
+            "special": "Alt-1"
+          },
+          {
+            "name": "Heavy Bombers",
+            "launch": "3",
+            "special": "Alt-1"
           }
         ],
         "specialRules": [],
@@ -1585,12 +1555,12 @@
               },
               {
                 "name": "Cobra Heavy Laser Pair",
-                "cost": 5,
+                "cost": 10,
                 "weapons": [
                   {
                     "name": "Cobra Heavy Laser Pair",
                     "arc": "FN",
-                    "attack": "6",
+                    "attack": "8",
                     "lock": "3+",
                     "damage": "1",
                     "type": "E",
@@ -1603,7 +1573,7 @@
           }
         ],
         "lore": "The New York is a class of battleship constructed and employed by the United Colonies of Mankind. Due to its flexibility, the New York is one of the most in-demand classes of battleships in the UCMF - the class swaps out the UF-6400 mass drivers and Cobra laser mounted on Beijing-class battleships for twelve separate voidcraft hangars, as well as torpedo tubes. This allows any New York battleship to bring more threats to bear than the Beijing at a lower power requirement, making it altogether a more well-rounded threat.\n\nThough the New York is in high demand, it is fairly uncommon as far as battleships go - there are only 19 total New Yorks on the roster, due not only to the complexity of constructing one but also due to the shortage of trained pilots. Though this would have been a difficult shortfall to make up in the best of scenarios, the losses sustained by the Fleet Air Arm over Olympus have further exacerbated the issue. As a result, the percentage of new battleships built as New Yorks has dramatically decreased.",
-        "rulesText": "This Ship may take a Drive Refit for +45 points, increasing its Thrust by 3”. Laser Refit This Ship may take a Laser Refit for +5 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
+        "rulesText": "This Ship may take a Drive Refit for +45 points, increasing its Thrust by 3”. Laser Refit This Ship may take a Laser Refit for +10 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
         "namesake": "[New York](https://www.nyctourism.com/) was founded as New Amsterdam by the Dutch West India Company in 1626 on the southern tip of Manhattan Island, captured by the English in 1664, and grew into the most populous city in the Western world. It was renamed New York in honour of the Duke of York, the future King James II of England. The city briefly served as the first capital of the United States, and George Washington was inaugurated as president there in 1789."
       }
     },
@@ -1613,7 +1583,7 @@
       "category": "heavy",
       "ship": {
         "name": "Beijing Battleship",
-        "cost": 220,
+        "cost": 215,
         "stats": {
           "thrust": "6\"",
           "scan": "10\"",
@@ -1629,7 +1599,7 @@
           {
             "name": "Python Super Heavy Laser",
             "arc": "FN",
-            "attack": "5",
+            "attack": "6",
             "lock": "3+",
             "damage": "2",
             "type": "E",
@@ -1640,9 +1610,9 @@
             "arc": "F/S",
             "attack": "6",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1"
+            "special": "-"
           }
         ],
         "loads": [],
@@ -1708,12 +1678,12 @@
               },
               {
                 "name": "Cobra Heavy Laser Pair",
-                "cost": 5,
+                "cost": 10,
                 "weapons": [
                   {
                     "name": "Cobra Heavy Laser Pair",
                     "arc": "FN",
-                    "attack": "6",
+                    "attack": "8",
                     "lock": "3+",
                     "damage": "1",
                     "type": "E",
@@ -1726,7 +1696,7 @@
           }
         ],
         "lore": "The Beijing is a class of battleship constructed by the United Colonies of Mankind, and the oldest class still in service. The UCMS Beijing was completed in 2586 after a seven-year construction period, making her 85 years old by the time of her destruction during the first battle of Olympus; however, in that time period she proved to be a remarkably reliable and versatile ship, prompting the UCMF to commission more.\n\nBeijing-class battleships pack significant armament, making them highly effective at annihilating swathes of enemy ships. Many of these vessels are surrounded by legend, and tales of their exploits are known by the majority of colonial citizenry. As a result of their reputations - and in part due to their highly destructive capabilities - Beijings are highly preferred by UCMF admirals as command ships.",
-        "rulesText": "This Ship may take a Drive Refit for +45 points, increasing its Thrust by 3”. Laser Refit This Ship may take a Laser Refit for +5 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
+        "rulesText": "This Ship may take a Drive Refit for +45 points, increasing its Thrust by 3”. Laser Refit This Ship may take a Laser Refit for +10 points, replacing both of its UF-4200 Mass Driver Turrets with a single Cobra Heavy Laser Pair.",
         "namesake": "[Beijing](https://english.visitbeijing.com.cn/), China has been the seat of imperial power for most of the past seven centuries and is home to the Forbidden City, a palace complex covering 72 hectares and containing nearly a thousand individual buildings. The name translates as 'Northern Capital', distinguishing it from Nanjing, the Southern Capital, which held the seat of power during the intervening periods. The Forbidden City served as the imperial palace of the Ming and Qing dynasties and is now the Palace Museum, one of the most visited museums in the world. Sections of the Great Wall of China lie within the surrounding municipality."
       }
     },
@@ -1796,7 +1766,7 @@
         "specialRules": [
           {
             "name": "Feature Carrier",
-            "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+            "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
           }
         ],
         "groupMin": 1,
@@ -1804,8 +1774,8 @@
         "isRare": false,
         "isUnique": false,
         "tonnage": "H",
-        "lore": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
-        "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
+        "lore": "",
+        "rulesText": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
         "namesake": "By the twenty-first century, [Milwaukee](https://www.visitmilwaukee.org/) had settled into being a fairly small city in Wisconsin, industrial heritage, good breweries, lake views. In 2025 it also became the home of Adepticon, the world's largest tabletop gaming convention. Sitting on the western shore of Lake Michigan at the confluence of three rivers, Milwaukee grew on waves of German immigration that built its renowned brewing industry. It is the largest city in Wisconsin."
       }
     },
@@ -1866,11 +1836,11 @@
           },
           {
             "name": "Feature Carrier",
-            "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+            "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
           },
           {
             "name": "UCMA Battlenet",
-            "description": "An admiral assigned to this ship gains the following Command Abilities:\nDouble Time Bulk Line (2AP): When you activate another friendly Group in Orbit, until the end of its activation, that Group may launch its Bulk Landers as if the target Dropsite has no enemy Battalions.\nFeet First into Hell (2AP): When you activate another friendly Group in atmosphere, until the end of its activation, that Group can launch its Dropships or Drop Pods with a range of 6”. Drop Pods launched due to this rule ignore the Alt-Launch rule.",
+            "description": "An Admiral assigned to this ship gains the following Command Abilities:\nDouble Time Bulk Line (2AP): When you activate another friendly Group in Orbit, until the end of its activation, that Group may launch its Bulk Landers as if the target Dropsite has no enemy Battalions.\nFeet First into Hell (2AP): When you activate another friendly Group in atmosphere, until the end of its activation, that Group can launch its Dropships or Drop Pods with a range of 6”. Drop Pods launched due to this rule ignore the Alt-X rule.",
             "page": "45",
             "publicationId": "45b0-3e3b-e83d-fd70"
           }
@@ -1880,8 +1850,8 @@
         "isRare": false,
         "isUnique": false,
         "tonnage": "H",
-        "lore": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.\n\nAn Admiral assigned to this ship gains the following Command Abilities:\n\nDouble Time Bulk Line: When you activate another friendly Group in Orbit, until 2AP the end of its activation, that Group may launch its Bulk Landers as if the target Dropsite has no enemy Battalions.\n\nFeet First into Hell: When you activate another friendly Group in atmosphere, 2AP until the end of its activation, that Group can launch its Dropships or Drop Pods with a range of 6”. Drop Pods launched due to this rule ignore the Alt-X rule.",
-        "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature. UCMA Battlenet An Admiral assigned to this ship gains the following Command Abilities: Double Time Bulk Line: When you activate another friendly Group in Orbit, until the end of its activation, that Group may launch its Bulk Landers as if the target Dropsite has no enemy Battalions. Feet First into Hell: When you activate another friendly Group in atmosphere, until the end of its activation, that Group can launch its Dropships or Drop Pods with a range of 6”. Drop Pods launched due to this rule ignore the Alt-Launch rule.",
+        "lore": "",
+        "rulesText": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature. UCMA Battlenet An Admiral assigned to this ship gains the following Command Abilities: Double Time Bulk Line: When you activate another friendly Group in Orbit, until the end of its activation, that Group may launch its Bulk Landers as if the target Dropsite has no enemy Battalions. Feet First into Hell: When you activate another friendly Group in atmosphere, until the end of its activation, that Group can launch its Dropships or Drop Pods with a range of 6”. Drop Pods launched due to this rule ignore the Alt-X rule.",
         "namesake": "[Rotterdam](https://www.rotterdam.info/en/), Netherlands handles more cargo tonnage than any other port in Europe, a position built on its location at the mouth of the Rhine-Meuse-Scheldt delta; much of the city was destroyed by German bombing in May 1940 and rebuilt in a modernist style. The city is home to the Erasmus Bridge, a cable-stayed crossing of the Nieuwe Maas nicknamed the Swan. Its postwar reconstruction left it with one of the most experimental skylines in the Netherlands, including the cube houses designed by Piet Blom in the 1980s."
       }
     },
@@ -1942,7 +1912,7 @@
         "specialRules": [
           {
             "name": "Feature Carrier",
-            "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+            "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
           },
           {
             "name": "Aegis-6",
@@ -1956,8 +1926,8 @@
         "isRare": false,
         "isUnique": false,
         "tonnage": "H",
-        "lore": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
-        "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
+        "lore": "",
+        "rulesText": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
         "namesake": "[Dubai](https://www.visitdubai.com/en/), United Arab Emirates was a small pearl-diving settlement at the mouth of a creek on the Persian Gulf until oil revenues in the 1960s funded the construction of a modern port; the city has since built the tallest building on Earth and islands visible from orbit. It is the most populous city of the United Arab Emirates and the seat of the Emirate of Dubai, one of the seven emirates that formed the federation in 1971. The tallest building it built, the Burj Khalifa, rises more than 800 metres and opened in 2010."
       }
     },
@@ -2021,7 +1991,7 @@
         "specialRules": [
           {
             "name": "Feature Carrier",
-            "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+            "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
           }
         ],
         "groupMin": 1,
@@ -2029,8 +1999,8 @@
         "isRare": false,
         "isUnique": false,
         "tonnage": "H",
-        "lore": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
-        "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
+        "lore": "",
+        "rulesText": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
         "namesake": "[Hong Kong](https://www.discoverhongkong.com/eng/index.html) was a British Crown Colony from 1842 until 1997, when sovereignty transferred to China; the territory's deep natural harbour and low-tax trade policy made it one of the world's highest-density commercial centres. Today it is a special administrative region governed under the principle of one country, two systems, retaining its own legal and economic structures. More than 70 percent of its land remains undeveloped countryside and country parks, despite its reputation for dense high-rise living."
       }
     },
@@ -2473,7 +2443,7 @@
         "specialRules": [
           {
             "name": "Feature Carrier",
-            "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+            "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
           }
         ],
         "groupMin": 1,
@@ -2481,8 +2451,8 @@
         "isRare": false,
         "isUnique": false,
         "tonnage": "M",
-        "lore": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
-        "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
+        "lore": "",
+        "rulesText": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
         "namesake": "[Busan](https://www.visitbusan.net/index.do?menuCd=DOM_000000301001000000&lang_cd=en) is South Korea's second city and the country's primary seaport, situated on the southeastern tip of the peninsula where the Korea Strait narrows between Korea and Japan. Its container port is among the busiest in the world by cargo volume. The city hosts the Busan International Film Festival, one of the most prominent film events in Asia, and served as the provisional capital of South Korea during the Korean War."
       }
     },
@@ -2546,7 +2516,7 @@
         "specialRules": [
           {
             "name": "Feature Carrier",
-            "description": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature."
+            "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
           }
         ],
         "groupMin": 1,
@@ -2554,8 +2524,8 @@
         "isRare": false,
         "isUnique": false,
         "tonnage": "M",
-        "lore": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
-        "rulesText": "At the start of the game, before players deploy, choose one Deployable Feature from the UCM Deployable Features List. This Ship starts the game carrying that Deployable Feature.",
+        "lore": "",
+        "rulesText": "When building your fleet, this Ship must be assigned a Deployable Feature from the UCM Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature.",
         "namesake": "[Yokohama](https://www.yokohamajapan.com/), Japan was a small fishing village until US Commodore Matthew Perry forced the country to open the port to foreign trade in 1854; it grew into Japan's largest port and the gateway for Western goods and ideas into the Meiji-era country. It lies just south of Tokyo and forms part of the Greater Tokyo metropolitan area. Its Chinatown is the largest in Japan, a legacy of the Chinese merchants who settled there after the port opened to foreign trade."
       }
     },
@@ -2900,7 +2870,7 @@
       "category": "medium",
       "ship": {
         "name": "Seattle Fleet Carrier",
-        "cost": 116,
+        "cost": 108,
         "stats": {
           "thrust": "8\"",
           "scan": "6\"",
@@ -2918,9 +2888,9 @@
             "arc": "F/S",
             "attack": "4",
             "lock": "3+",
-            "damage": "1",
+            "damage": "2",
             "type": "K",
-            "special": "Critical-1"
+            "special": "-"
           }
         ],
         "loads": [],
@@ -2950,7 +2920,7 @@
               },
               {
                 "name": "Mines",
-                "cost": 10,
+                "cost": 4,
                 "weapons": [],
                 "loads": [
                   {
@@ -2971,7 +2941,7 @@
           "[Enterprise](https://en.wikipedia.org/wiki/USS_Enterprise_%28CV-6%29)",
           "Waning Tide"
         ],
-        "rulesText": "This ship may replace its Fighters & Bombers with Mines for +10 pts.",
+        "rulesText": "This ship may replace its Fighters & Bombers with Mines for +4 pts.",
         "namesake": "[Seattle](https://visitseattle.org/) was incorporated in 1869 on a steep hillside above Puget Sound; the city was almost entirely rebuilt after a fire destroyed its wooden downtown in 1889, this time in brick and stone. The city takes its name from Chief Si'ahl of the Duwamish and Suquamish peoples. It is the largest city in the Pacific Northwest and the headquarters of several major corporations, including Amazon, Boeing's commercial roots, and Starbucks."
       }
     },
@@ -2991,7 +2961,7 @@
           "ks": "3+",
           "bs": "-",
           "g": "1",
-          "special": "Command Ship-1, Detector, Unique"
+          "special": "Command Ship-1, Detector, Unique, UCM Battlenet"
         },
         "weapons": [
           {
@@ -3023,6 +2993,10 @@
             "description": "You may only take one Group of this Ship.",
             "page": "37",
             "publicationId": "45b0-3e3b-e83d-fd70"
+          },
+          {
+            "name": "UCM Battlenet",
+            "description": "A UCM or Generic (from 4.2.1) Admiral assigned to this Ship may take 1 additional Ability from the UCM Abilities table."
           }
         ],
         "groupMin": 1,
@@ -3030,7 +3004,8 @@
         "isRare": false,
         "isUnique": true,
         "tonnage": "M",
-        "lore": "A UCM or Generic (from 4.2.1) Admiral assigned to this Ship may take 1 additional Ability from the UCM Abilities table.",
+        "lore": "The Geneva is a class of cruiser designed and constructed by the United Colonies of Mankind. In previous years, the communications array mounted on the Venice was too large and unwieldy to be built into anything smaller than a battlecruiser. However, advances in technology have allowed the UCM to create a smaller version of the array, resulting in the creation of the Geneva - a dedicated command vessel of cruiser tonnage. From the bridge of a Geneva, UCM commanders are afforded a crystal-clear view of the battlefield, giving them the ability to coordinate battlegroups with ease. However, this comes at the cost of the Geneva's own armament, as a cruiser hull lacks the engine power to field both the comms array and heavy weapons.",
+        "rulesText": "A UCM or Generic (from 4.2.1) Admiral assigned to this Ship may take 1 additional Ability from the UCM Abilities table.",
         "namesake": "[Geneva](https://www.geneve.com/en) sits at the southwestern tip of Lake Geneva on the Swiss Plateau; it became the centre of Protestant reform under John Calvin in the sixteenth century and later the seat of the League of Nations. It is the headquarters of numerous international organisations, including the European seat of the United Nations and the International Committee of the Red Cross. The Jet d'Eau, a fountain that throws water 140 metres into the air over the lake, is the city's most recognisable landmark."
       }
     },
@@ -3527,7 +3502,7 @@
             "lore": "The Saratoga is an experimental development of the New Cairo class Light Cruiser, with a focus on efficiency and incorporating the very latest systems. An entirely new prow and amidships superstructure were conceived from the ground up, making it unique amongst the UCM's roster of ships. Early field reports of the class in action have been exemplary: it matches the combat performance of the New Cairo while requiring less energy and half the crew complement. The Saratogas were built exclusively at the FSI (Ferrum Shipping Industries) yards over the planet Ferrum, which were entirely destroyed during the Scourge onslaught in late 2671. The yards had turned out only a meagre twelve vessels for early void trials before their loss, making this one of the rarest ships in the UCMF."
           }
         ],
-        "lore": "The New Cairo class light cruiser is a recent development of the Osaka class that only entered service in 2669, making it one of the newest types in the UCMF. The New Cairo is armed with a single Cobra heavy laser, a powerful weapon capable of cutting to the core of an enemy capital ship and more than capable of slicing a frigate in half in a single burn. However, its utility is limited to a narrow arc in front of the ship, making the New Cairo an even more focused tool than the Osaka in an Admiral’s arsenal. Primarily, it excels at hunter-killer missions against priority targets where it can use its superior combat speed to attain a firing position. Much like other light cruisers, the New Cairo is less effective in general engagements or in the heart of the battle, where its lack of flexible firepower is New Cairos tend to attract captains with a focused zeal on the mission at the expense of all surrounding distractions, verging on the single-minded. A ridged adherence to orders coupled with aggression is also essential as these attack dogs must strike decisively and quickly if they are to prevail in the maelstrom of combat.",
+        "lore": "The New Cairo class light cruiser is a recent development of the Osaka class that only entered service in 2669, making it one of the newest types in the UCMF. The New Cairo is armed with a single Cobra heavy laser, a powerful weapon capable of cutting to the core of an enemy capital ship and more than capable of slicing a frigate in half in a single burn. However, its utility is limited to a narrow arc in front of the ship, making the New Cairo an even more focused tool than the Osaka in an Admiral’s arsenal. Primarily, it excels at hunter-killer missions against priority targets where it can use its superior combat speed to attain a firing position. Much like other light cruisers, the New Cairo is less effective in general engagements or in the heart of the battle, where its lack of flexible firepower is telling.\n\nNew Cairos tend to attract captains with a focused zeal on the mission at the expense of all surrounding distractions, verging on the single-minded. A ridged adherence to orders coupled with aggression is also essential as these attack dogs must strike decisively and quickly if they are to prevail in the maelstrom of combat.",
         "famousShipsPrefix": "Famous ships of the class:",
         "famousShips": [
           "Sunstar",
@@ -3587,7 +3562,7 @@
             "image": "assets/art/athens.webp"
           }
         ],
-        "lore": "The Osaka class is the standard light cruiser of the UCMF, designed for aggressive strike operations and flanking raids. In combat involving advanced manoeuvres, the class can deliver a mass driver firepower equivalent of the heavier Rio class while offering superior speed and cost effectiveness. However, the Osaka cannot match it in more stable situations where the Rio’s full firepower can be unleashed. As such, Admirals are instructed to exploit this class’ strength while acknowledging its weaknesses, including its limited close action capabilities compared to full cruisers and its lighter Captains graduating from a frigate-level command often prefer light cruisers such as the Osaka as many of the same combat principles apply and the access to high combat speed remains. Indeed, Osakas are normally deployed in squadrons where they can support each other in battle, since by necessity they often operate away from the main fleet.",
+        "lore": "The Osaka class is the standard light cruiser of the UCMF, designed for aggressive strike operations and flanking raids. In combat involving advanced manoeuvres, the class can deliver a mass driver firepower equivalent of the heavier Rio class while offering superior speed and cost effectiveness. However, the Osaka cannot match it in more stable situations where the Rio’s full firepower can be unleashed. As such, Admirals are instructed to exploit this class’ strength while acknowledging its weaknesses, including its limited close action capabilities compared to full cruisers and its lighter hull.\n\nCaptains graduating from a frigate-level command often prefer light cruisers such as the Osaka as many of the same combat principles apply and the access to high combat speed remains. Indeed, Osakas are normally deployed in squadrons where they can support each other in battle, since by necessity they often operate away from the main fleet.",
         "famousShipsPrefix": "Famous ships of the class:",
         "famousShips": [
           "[Paladin](https://en.wikipedia.org/wiki/Paladin)",
@@ -3977,7 +3952,8 @@
         "famousShips": [
           "Arrow",
           "[Lancelot](https://en.wikipedia.org/wiki/Lancelot)",
-          "Harpoon"
+          "Harpoon",
+          "North Star"
         ],
         "namesake": "[Reykjavik](https://visitreykjavik.is/), Iceland takes its name from the Old Norse for 'Smoky Bay', after the geothermal steam the first Norse settlers observed rising from hot springs on the shore. It is the capital and largest city of Iceland and, at roughly 64 degrees north, the world's northernmost capital of a sovereign state. Much of the city is heated using geothermal energy drawn from the surrounding volcanic landscape.",
         "storeUrl": "https://ttcombat.com/products/ucm-reykjavik-cutters-copy"
@@ -4146,7 +4122,7 @@
         "loads": [],
         "specialRules": [],
         "groupMin": 1,
-        "groupMax": 2,
+        "groupMax": 4,
         "isRare": false,
         "isUnique": false,
         "tonnage": "L",
@@ -4194,7 +4170,7 @@
         "loads": [],
         "specialRules": [],
         "groupMin": 1,
-        "groupMax": 2,
+        "groupMax": 4,
         "isRare": false,
         "isUnique": false,
         "tonnage": "L",
@@ -4494,7 +4470,7 @@
       "category": "light",
       "ship": {
         "name": "Lysander Stealth Lighter",
-        "cost": 25,
+        "cost": 36,
         "stats": {
           "thrust": "12\"",
           "scan": "6\"",
@@ -4504,7 +4480,7 @@
           "ks": "6+",
           "bs": "-",
           "g": "2-4",
-          "special": "Descent, Cloak-1, Rare, Vanguard-6\", Stealth Drop"
+          "special": "Descent, Cloak-1, Rare, Vanguard-7\", Surgical Strike"
         },
         "weapons": [
           {
@@ -4544,12 +4520,12 @@
             "publicationId": "45b0-3e3b-e83d-fd70"
           },
           {
-            "name": "Stealth Drop",
-            "description": "When this Group launches its Dropships, 2 Dropships are needed to place 1 Battalion. If this Group contains a single ship, each Dropship only places a Battalion on a roll of a 4+."
+            "name": "Surgical Strike",
+            "description": "When you deploy Battalions from this Group to a Feature that does not contain any enemy Battalions, you may have each Battalion deployed to that Feature inflict it 1 damage."
           },
           {
-            "name": "Vanguard-6\"",
-            "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
+            "name": "Vanguard-7\"",
+            "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 7” away from your Deployment Zone."
           }
         ],
         "groupMin": 2,
@@ -4565,7 +4541,7 @@
           "Eternal Darkness",
           "Azure Night",
           "[Leprechaun](https://en.wikipedia.org/wiki/Leprechaun)",
-          "Silent"
+          "Silent Blade"
         ],
         "namesake": "[Lysander of Sparta](https://en.wikipedia.org/wiki/Lysander), ancient Greece, was the navarch who destroyed the Athenian fleet at Aegospotami in 405 BC, ending the Peloponnesian War and becoming the first Greek general to receive divine honours in his own lifetime. He secured Persian funding for the Spartan fleet through an alliance with Cyrus the Younger, which proved decisive in the war. After the fall of Athens he installed pro-Spartan oligarchic governments across many Greek cities.",
         "storeUrl": "https://ttcombat.com/products/lysander-stealth-lighters"
@@ -6211,9 +6187,9 @@
         {
           "name": "Light Torpedo",
           "thrust": "6\"",
-          "attack": "4",
+          "attack": "2",
           "lock": "2+",
-          "damage": "1",
+          "damage": "2",
           "type": "K",
           "special": "Penetrator"
         },
@@ -6252,9 +6228,9 @@
         {
           "name": "Heavy Torpedo",
           "thrust": "4\"",
-          "attack": "4",
+          "attack": "8",
           "lock": "2+",
-          "damage": "4",
+          "damage": "2",
           "type": "K",
           "special": "Penetrator"
         },
@@ -6322,7 +6298,7 @@
     {
       "id": "68e9-14ab-4493-0656",
       "name": "Defence Hangar",
-      "cost": 50,
+      "cost": 58,
       "stats": {
         "scan": "6\"",
         "sig": "4\"",
@@ -6339,6 +6315,12 @@
           "name": "Fighters & Bombers",
           "launch": "2",
           "special": "-"
+        }
+      ],
+      "stationRules": [
+        {
+          "name": "Hardpoints",
+          "effect": "This Space Station has a Life Support Feature and two Launch Control Features."
         }
       ]
     },
@@ -6363,6 +6345,12 @@
           "launch": "2",
           "special": "Limited-4"
         }
+      ],
+      "stationRules": [
+        {
+          "name": "Hardpoints",
+          "effect": "This Space Station has a Life Support Feature and two Launch Control Features."
+        }
       ]
     }
   ],
@@ -6370,12 +6358,13 @@
     {
       "id": "8222-a290-f39e-07d3",
       "name": "Aegis Platform",
-      "cost": 0,
+      "cost": 5,
       "features": [
         {
           "name": "Aegis Platform",
-          "es": "6+",
-          "ks": "4+",
+          "es": "3+",
+          "ks": "3+",
+          "hull": 4,
           "special": "Aegis-4"
         }
       ],
@@ -6389,52 +6378,61 @@
     {
       "id": "e5ac-ee7e-cec2-6eb9",
       "name": "Comms Platform",
-      "cost": 0,
+      "cost": 10,
       "features": [
         {
           "name": "Comms Platform",
           "es": "5+",
           "ks": "5+",
+          "hull": 4,
           "special": "-"
         }
       ],
       "rules": [
         {
           "name": "Comms Platform",
-          "description": "Friendly Ships with the Command Ship-X ability within 8” of one or more Dropsites with a friendly Comms Platform improve the X value of that rule by 1 when generating AP.\nFriendly Ships within 8” of this Feature’s Dropsite ignore the effects of any Scanners Offline token."
+          "description": "While any Dropsites have a friendly Comms Platform deployed to them, friendly Ships on the table with the Command Ship-X special rule improve the X value of that rule by 1 when generating AP.\nFriendly Ships within 8” of this Feature’s Dropsite ignore the effects of any Scanners Offline token."
         }
       ]
     },
     {
       "id": "682b-72f9-37cc-f98b",
       "name": "Torpedo Platform",
-      "cost": 0,
+      "cost": 20,
       "features": [
         {
           "name": "Torpedo Platform",
           "es": "5+",
           "ks": "5+",
+          "hull": 4,
           "special": "-"
+        }
+      ],
+      "loads": [
+        {
+          "name": "Medium Torpedo",
+          "launch": "1",
+          "special": "Limited-4"
         }
       ],
       "rules": [
         {
           "name": "Torpedo Platform",
-          "description": "When an attacking Group or Asset/s attack would cause this feature to be removed, if it has any remaining Torpedoes, the attacking opponent may remove one additional Feature and any Battalions assigned to it from this Dropsite."
+          "description": "When an attacking Group or Asset’s attack would cause this feature to be removed, if it has any remaining Torpedoes, the attacking opponent may remove one additional Feature and any Battalions assigned to it from this Dropsite."
         }
       ]
     }
   ],
   "abilitiesTable": [
     {
-      "name": "Colonial Legions",
-      "cost": "2AP",
-      "effect": "After the Battalion Combat step of the Asset Phase, target a Dropsite or Feature. If any enemy Battalions completely removed any friendly Battalions from that Dropsite or Feature, place 1 Battalion on that Dropsite or Feature."
+      "name": "Aerobraking",
+      "cost": "1AP",
+      "effect": "At the start of a friendly Group in Orbit’s activation, that Group may move up to the maximum distance allowed by its Order this activation. At the end of its activation, it is moved into Atmosphere. Ships of L, M, and H Tonnage do not take damage due to Atmosphere this activation. Ships of C Tonnage only take 1D3 damage due to Atmosphere this activation instead."
     },
     {
       "name": "Intensify Point-Defence",
       "cost": "1AP",
-      "effect": "At the end of the Planning Phase, pick one friendly Group. All Ships in that Group improve their Aegis-X value by 2 or gain Aegis-1 if they do not have the Aegis-X special rule."
+      "effect": "At the start of the asset phase, pick one friendly Group. Until the end of the round, Ships in that Group cannot be affected by Saturation Fire and may re-roll Energy and Kinetic saves of a 1 when rolling to save against Torpedoes and Mines."
     },
     {
       "name": "Infiltrate and Sabotage",
@@ -6444,12 +6442,12 @@
     {
       "name": "Mass Driver Volley",
       "cost": "2AP",
-      "effect": "When you assign a Group’s weapons to a target, each of the attacking Group’s Weapon Systems with “Mass Driver” in their name improve their Lock by 1 for that attack sequence."
+      "effect": "When you assign a “Mass Driver” Weapon System to targets, that Weapon System improves its Lock by 1 for that attack sequence. If that Weapon System already has a Lock value of 2+, it causes criticals on a result of a 3+ for that attack sequence instead."
     },
     {
       "name": "Atmospheric Bombing Run",
       "cost": "1AP",
-      "effect": "At the start of the Asset Phase, target one friendly Wing of Bombers. That Wing gains the Bombardment special rule until the end of the round."
+      "effect": "At the start of the Asset Phase, target one friendly Wing of Bombers. That Wing reduces its Thrust by 2” and gains the Bombardment special rule until the end of the round."
     },
     {
       "name": "Next-Gen Armour Plating",
