@@ -6616,8 +6616,8 @@
   // Core Abilities (rulebook 4.2.1.1), available to every player. Same verbatim
   // text as the desktop CORE_ABILITIES table.
   const CORE_ABILITIES = [
-    { name: 'AP Re-roll', cost: '*AP', effect: 'Once per Group, Asset, or Dropsite activation, after you roll any dice, you can re-roll any number of those dice. You may re-roll multiple dice in a single roll this way but must re-roll at least one dice, spending 1AP for each dice re-rolled.' },
-    { name: 'Brace for Impact', cost: '2AP', effect: 'When a player would roll for Crippling Effects, instead of rolling, make the result of a Crippling Effect roll (for you or your opponent) a 4.' },
+    { name: 'AP Dice Bonus', cost: '1AP', effect: 'Once per Group, Asset, or Dropsite activation, or during the Repair step of the End Phase, after you roll any dice, you can add 1 to the result of one of those dice. This Ability cannot be used on D3s or dice results of a 1, and dice modified by this ability cannot score criticals.' },
+    { name: 'Brace for Impact', cost: '1AP', effect: 'After you roll for Crippling Effects, re-roll the Crippling Effect roll.' },
     { name: 'Contain Reactor', cost: '2AP', effect: 'When a player would roll for Explosion, instead of rolling, make the result of an Explosion roll (for you or your opponent) a 2.' },
     { name: 'Time to Target', cost: '2AP', effect: 'After moving a Wing of your Fighters or Bombers, you may move that Wing (or the Wing it combined into) a second time with a Thrust of 6” in any direction. The Wing cannot divide into smaller Wings or form/be formed into larger Wings due to this additional movement.' }
   ];
