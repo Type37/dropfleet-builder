@@ -43,7 +43,8 @@
     return {
       aegis: o.aegis || 0, fighters: o.fighters || 0, opal: !!o.opal, WF: !!o.WF,
       attacker_atmo: !!o.attacker_atmo, target_atmo: !!o.target_atmo, defences_offline: !!o.defences_offline,
-      close: !!o.close, grouped: !!o.grouped, impetuous: !!o.impetuous, shielded: !!o.shielded
+      close: !!o.close, grouped: !!o.grouped, impetuous: !!o.impetuous, shielded: !!o.shielded,
+      crippled: !!o.crippled
     };
   }
   function WeaponSituation(o) {
@@ -71,8 +72,11 @@
     if (pt.BS === 7 && sit.grouped) bs = 6;
     else if (pt.BS === 7 || pt.BS === 6) bs = pt.BS;
     else bs = pt.BS + off;
-    if (sit.shielded && pt.SS < 7) { es = ss; ks = ss; }
-    return new E.Target(es, ks, bs, 7, sit.aegis || 0, sit.fighters || 0, !!pt.reinforced);
+    // 2.4 14.1.1: Aegis has no effect on saves that replace Energy and Kinetic
+    // (Shield saves); 8.3.3.1: Close Protection cannot re-roll Shield saves.
+    const shieldsUp = sit.shielded && pt.SS < 7;
+    if (shieldsUp) { es = ss; ks = ss; }
+    return new E.Target(es, ks, bs, 7, shieldsUp ? 0 : (sit.aegis || 0), shieldsUp ? 0 : (sit.fighters || 0), !!pt.reinforced);
   }
 
   // returns an array of engine Weapon (length = number, except bomber returns 1)
@@ -84,17 +88,21 @@
     if (pw.bomber) attack *= number;
     const damage = pw.damage * (1 + (wsit.overcharging ? 1 : 0) * (pw.overcharge ? 1 : 0));
     const caw = pw.caw || pw.bomber;
-    const skipped_save = pw.bomber ? Math.max(number - 6, 0) : 0;
+    // 2.4 8.3.4.2: Saturation Fire only against a Light Ship or a crippled Capital
+    // Ship, and 14.1.1 raises its threshold by the target's Aegis.
+    const saturates = pw.bomber && !target.city && !target.station && (target.weight === 'L' || sit.crippled);
+    const skipped_save = saturates ? Math.max(number - 6 - (sit.aegis || 0), 0) : 0;
     let lock;
     if (target.city && !pw.bombardment) lock = 6;
     else if (pw.bombardment && !sit.target_atmo && !target.station && !target.city) lock = 6;
     else if (sit.attacker_atmo && !sit.target_atmo && !pw.escape) lock = 6;
-    else if (target.descent && sit.target_atmo && !(pw.bombardment || pw.a2a || pw.escape || pw.entry)) lock = 6;
+    // 2.4 14.2.1: Air to Air ignores the penalties only "while the attacker is also in Atmosphere".
+    else if (target.descent && sit.target_atmo && !(pw.bombardment || (pw.a2a && sit.attacker_atmo) || pw.escape || pw.entry)) lock = 6;
     else {
       lock = pw.lock;
       if (pw.mauler) { if (pw.damage_type === 'K') lock = target.KS; else if (pw.damage_type === 'E') lock = target.ES; }
       if (pw.bombardment && target.city) lock -= 2;
-      if (sit.target_atmo && !(pw.bombardment || pw.a2a || pw.entry)) lock += 1;
+      if (sit.target_atmo && !(pw.bombardment || (pw.a2a && sit.attacker_atmo) || pw.entry)) lock += 1;
       if ((pw.calibre || []).indexOf(target.weight) !== -1 && !(target.city || target.station)) lock -= 1;
       lock += (wsit.calypso || 0);
       if (sit.impetuous) lock -= 1;

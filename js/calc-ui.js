@@ -113,7 +113,7 @@
       targetPreset: 'Custom', type: 'Ship',
       pt: { weight: pt.weight, ES: pt.ES, KS: pt.KS, BS: pt.BS, SS: pt.SS, descent: false, reinforced: false },
       sit: { aegisOn: false, aegis: 0, fightersOn: false, fighters: 0, fullFighters: false,
-        opal: false, WF: true, attacker_atmo: false, target_atmo: false, defences_offline: false, close: true, grouped: false, impetuous: false, shielded: false }
+        opal: false, WF: true, attacker_atmo: false, target_atmo: false, defences_offline: false, close: true, grouped: false, impetuous: false, shielded: false, crippled: false }
     };
   }
   function freshState() { const t = freshTargetState(); t.weapons = []; t.faction = null; return t; }
@@ -126,7 +126,7 @@
     const fighters = v.fullFighters ? Infinity : (v.fightersOn ? (v.fighters | 0) : 0);
     return D.AttackSituation({ aegis: v.aegisOn ? (v.aegis | 0) : 0, fighters: fighters, opal: v.opal, WF: v.WF,
       attacker_atmo: v.attacker_atmo, target_atmo: v.target_atmo, defences_offline: v.defences_offline,
-      close: v.close, grouped: v.grouped, impetuous: v.impetuous, shielded: v.shielded });
+      close: v.close, grouped: v.grouped, impetuous: v.impetuous, shielded: v.shielded, crippled: v.crippled });
   }
 
   const std = freshState(), bld = freshState();
@@ -218,7 +218,8 @@
           ${chk('defences_offline', 'Defences offline', '+1 to all saves')}
           ${chk('opal', 'Opal (shield -1)')}
           ${chk('grouped', 'Grouped (6+ backup)')}
-          ${chk('shielded', 'Use shields', 'Defender rolls shield save instead of armour')}
+          ${chk('shielded', 'Shields raised', 'Shield save replaces Energy and Kinetic')}
+          ${chk('crippled', 'Target crippled', 'Saturation Fire applies')}
         </div></div>
         <div class="calc-modgroup"><div class="calc-modgroup-head">Lock & orders</div><div class="calc-checks">
           ${chk('impetuous', 'Impetuous (Lock -1)')}
