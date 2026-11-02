@@ -68,7 +68,7 @@
      "ks": "4+",
      "bs": "4+",
      "g": "1",
-     "special": "Command Ship-2"
+     "special": "Command Ship-2, Vanguard-3\""
     },
     "weapons": [
      {
@@ -137,6 +137,10 @@
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
+      "name": "Vanguard-3\"",
+      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 3” away from your Deployment Zone."
+     },
+     {
       "name": "Assault Carrier",
       "description": "This ship must take two 10k Mass Drivers, two Heavy Vent Cannons, a Drive Refit (that's been heavily jury-rigged and does not take up a hardpoint or points), and the following Launch Assets: Fighters & Bombers (4), Bulk Landers & Fire Ships (4)."
      }
@@ -148,7 +152,7 @@
     "tonnage": "",
     "category": "colossal"
    },
-   "abilityPicks": 1
+   "abilityPicks": 2
   },
   {
    "id": "996f-f331-e84f-11f1",
@@ -227,7 +231,7 @@
     "specialRules": [
      {
       "name": "Extensive Reactor Modifications",
-      "description": "If Hull points lost due to its Vent Cannon Batteries' Overcharge rule would cause this Ship to be destroyed, it rolls 3D3 for its explosion and that explosion also affects Ships in other Orbital Layers."
+      "description": "If Hull points lost due to its Vent Cannon Batteries’ Overcharge rule would cause this Ship to be destroyed, it rolls 3D3 for its explosion and that explosion also affects Ships in other Orbital Layers."
      }
     ],
     "groupMin": 1,
@@ -236,7 +240,7 @@
     "category": "heavy",
     "namesake": "[Mount Olympus](https://en.wikipedia.org/wiki/Mount_Olympus) is the highest mountain in Greece and, in Greek myth, the home of the twelve Olympian gods. Its cloud-wreathed peak was held to be the seat of Zeus and the council of the gods."
    },
-   "abilityPicks": 1,
+   "abilityPicks": 2,
    "flagshipName": "Grosses Messer",
    "bio": "Originally conscripted from one of the poorest locales on Kalium, Nguen has seen a meteoric rise through the ranks of the Kalium navy. He has proven himself time and time again for the Kabal, his first command would see him trade blows with the Shaltari in anti-piracy actions protecting valuable in-system shipping routes.\n\nSince his start as a Vent Cannon technician, Nguen has gained an intimate understanding of the technology and physics behind the devastating weapons. Preferring commands on ships equipped with the unstable weapons, he's reduced scores of ships to molten metal, very few of which were his own.\n\nThe defining point of his career was the destruction of a trio of scourge battlecruisers with his previous command, a Gladiator class Grand Cruiser. Suffering serious damage after the destruction of one and the crippling of another, a final volley of vent fire overloaded the ships reactor. Ordering the ship to fly at full thrust towards the third and the call to abandon ship, Nguen would soon watch the reactor consume both his ship and the enemy battlecruiser from the relative safety of his escape vessel.\n\nUpon his return to Kalium, Nguen and his surviving crew would be assigned to the nearly complete Grosses Messer, overseeing its final reactor adjustments and being tasked with a live fire shakedown cruise."
   },
@@ -256,7 +260,7 @@
    ],
    "flagship": {
     "name": "Tribune Battlecruiser",
-    "cost": 205,
+    "cost": 200,
     "stats": {
      "thrust": "7\"",
      "scan": "6\"",
@@ -304,12 +308,12 @@
       "special": "Limited-2"
      },
      {
-      "name": "Fighters & Bombers",
+      "name": "Bulk Landers & Fire Ships",
       "launch": "2",
       "special": "-"
      },
      {
-      "name": "Bulk Landers & Fire Ships",
+      "name": "Fighters & Bombers",
       "launch": "2",
       "special": "-"
      }
@@ -343,12 +347,12 @@
     {
      "name": "Artillery Strike",
      "cost": "2AP*",
-     "effect": "When you assign targets to a Weapon System with “Artillery” in its name, that Weapon System’s damage type becomes Core for those attacks. If that Weapon System is on a H or C tonnage Ship this Ability costs 3AP."
+     "effect": "Before attacking with a Group, choose one of that Group’s Weapon Systems with “Artillery” in its name. That Weapon System gains the benefit of its Fusillade rule and you may choose one of the following:\n• That Weapon System’s damage type becomes Core for that attack.\n• That Weapon System and all of that Group’s “Artillery” Weapon Systems gain Linked-SSN for that attack if they have no Linked value.\nIf that Weapon System is on a H or C tonnage Ship or a Group of 3 or more Ships, this ability costs 3AP."
     }
    ],
    "flagship": {
     "name": "Heavy Cruiser",
-    "cost": 113,
+    "cost": 102,
     "stats": {
      "thrust": "5\"",
      "scan": "10\"",
@@ -396,6 +400,15 @@
       "damage": "1",
       "type": "K",
       "special": "Fusillade-2, Low Power, Volley-2"
+     },
+     {
+      "name": "NC-1 Missile Rack",
+      "arc": "F/S/R",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action"
      }
     ],
     "loads": [],
@@ -621,7 +634,7 @@
    "category": "heavy",
    "ship": {
     "name": "Yamamoto Grand Battleship",
-    "cost": 300,
+    "cost": 290,
     "stats": {
      "thrust": "5\"",
      "scan": "8\"",
@@ -641,7 +654,7 @@
       "lock": "3+",
       "damage": "4",
       "type": "E",
-      "special": "Bloom-2, Overcharge, Reave-1"
+      "special": "Bloom-2, Overcharge, Reave-2"
      },
      {
       "name": "9K Mass Driver Turrets",
@@ -682,7 +695,7 @@
      "Sol Requiem",
      "Sadness (Independents)",
      "Spear of Onyx",
-     "Decapitator"
+     "Decapitator (Kalium)"
     ],
     "namesake": "[Isoroku Yamamoto](https://en.wikipedia.org/wiki/Isoroku_Yamamoto) (1884-1943), the Japanese admiral who conceived and directed the attack on Pearl Harbor. He studied at Harvard University and served two postings in the United States, leaving him wary of provoking a war he believed Japan could not ultimately win. An early champion of naval aviation, he steered the Imperial Japanese Navy away from battleships toward aircraft carriers. He was killed in 1943 when American fighters intercepted his aircraft over the Solomon Islands.",
     "loadoutOptions": [
@@ -717,7 +730,7 @@
    "category": "heavy",
    "ship": {
     "name": "Nimitz Grand Battleship",
-    "cost": 305,
+    "cost": 290,
     "stats": {
      "thrust": "5\"",
      "scan": "8\"",
@@ -737,7 +750,7 @@
       "lock": "3+",
       "damage": "4",
       "type": "E",
-      "special": "Bloom-2, Overcharge, Reave-1"
+      "special": "Bloom-2, Overcharge, Reave-2"
      },
      {
       "name": "NC-16 Missile Battery Turret Pair",
@@ -813,7 +826,7 @@
    "category": "heavy",
    "ship": {
     "name": "Drake Grand Battleship",
-    "cost": 245,
+    "cost": 255,
     "stats": {
      "thrust": "5\"",
      "scan": "8\"",
@@ -829,7 +842,7 @@
      {
       "name": "Spinal Mass Annihilator",
       "arc": "FN",
-      "attack": "2",
+      "attack": "3",
       "lock": "2+",
       "damage": "3",
       "type": "C",
@@ -919,7 +932,7 @@
    "category": "heavy",
    "ship": {
     "name": "Farragut Grand Battleship",
-    "cost": 215,
+    "cost": 210,
     "stats": {
      "thrust": "5\"",
      "scan": "8\"",
@@ -987,7 +1000,7 @@
      "[Endeavour](https://en.wikipedia.org/wiki/HMS_Endeavour)",
      "Tribe Bane (Independents)",
      "Hammer of Reason",
-     "Subjugator"
+     "Subjugator (Kalium)"
     ],
     "namesake": "[David Farragut](https://en.wikipedia.org/wiki/David_Farragut) (1801-1870), the first admiral of the US Navy, remembered for 'Damn the torpedoes, full speed ahead.'. He entered the navy as a midshipman at the age of nine and captured New Orleans for the Union in 1862. Congress created the ranks of rear admiral and later full admiral expressly to honour his service.",
     "loadoutOptions": [
@@ -1249,7 +1262,7 @@
    "category": "heavy",
    "ship": {
     "name": "Nelson Grand Battleship",
-    "cost": 255,
+    "cost": 265,
     "stats": {
      "thrust": "5\"",
      "scan": "8\"",
@@ -1325,7 +1338,8 @@
     "famousShips": [
      "[Victory II](https://en.wikipedia.org/wiki/HMS_Victory)",
      "[Trafalgar](https://en.wikipedia.org/wiki/Battle_of_Trafalgar) (Independents)",
-     "Might of Kalium"
+     "Might of Kalium",
+     "Steel Fist (Kalium)"
     ],
     "namesake": "[Admiral Horatio Nelson](https://en.wikipedia.org/wiki/Horatio_Nelson,_1st_Viscount_Nelson) (1758-1805), who shattered the Franco-Spanish fleet at Trafalgar and died in the hour of victory. He lost the sight in his right eye at Corsica and his right arm at Tenerife. His destruction of the French fleet at the Battle of the Nile in 1798 stranded Napoleon's army in Egypt.",
     "loadoutOptions": [
@@ -1702,7 +1716,7 @@
       "lock": "2+",
       "damage": "1",
       "type": "E",
-      "special": "Flash-2 Focused, Fusillade-2, Reave-1, Volley-2"
+      "special": "Flash-2, Focused, Fusillade-2, Reave-1, Volley-2"
      },
      {
       "name": "Heavy Vent Cannons",
@@ -2226,7 +2240,7 @@
    "category": "medium",
    "ship": {
     "name": "Gladiator Grand Cruiser",
-    "cost": 148,
+    "cost": 144,
     "stats": {
      "thrust": "5\"",
      "scan": "6\"",
@@ -2309,7 +2323,7 @@
    "category": "medium",
    "ship": {
     "name": "Secutor Grand Cruiser",
-    "cost": 142,
+    "cost": 138,
     "stats": {
      "thrust": "5\"",
      "scan": "6\"",
@@ -2387,7 +2401,7 @@
    "category": "medium",
    "ship": {
     "name": "Retiarius Grand Cruiser",
-    "cost": 134,
+    "cost": 130,
     "stats": {
      "thrust": "5\"",
      "scan": "6\"",
@@ -2412,9 +2426,9 @@
      {
       "name": "NL-9 Laser Turret",
       "arc": "F/S",
-      "attack": "2",
-      "lock": "3+",
-      "damage": "2",
+      "attack": "4",
+      "lock": "2+",
+      "damage": "1",
       "type": "E",
       "special": "Flash-1, Focused, Fusillade-1, Reave-1"
      }
@@ -2649,6 +2663,94 @@
       "Structures": 2
      }
     }
+   }
+  },
+  {
+   "id": "dda3-d291-994e-ded8",
+   "name": "General Cassius Brown - Kabal’s Deliverance Heavy Cruiser",
+   "category": "medium",
+   "ship": {
+    "name": "General Cassius Brown - Kabal’s Deliverance Heavy Cruiser",
+    "cost": 146,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "8\"",
+     "sig": "6\"",
+     "hull": 14,
+     "es": "3+",
+     "ks": "4+",
+     "bs": "6+",
+     "g": "1",
+     "special": "Hero, Reinforced Armour, Unique"
+    },
+    "weapons": [
+     {
+      "name": "XN-31 Long Nine Mass Driver Turret",
+      "arc": "F/S",
+      "attack": "2",
+      "lock": "2+",
+      "damage": "1",
+      "type": "K",
+      "special": "Critical-1, Reave-1"
+     },
+     {
+      "name": "XN-31 Long Nine Mass Driver Turret",
+      "arc": "F/S",
+      "attack": "2",
+      "lock": "2+",
+      "damage": "1",
+      "type": "K",
+      "special": "Critical-1, Reave-1"
+     },
+     {
+      "name": "NC-1 Missile Rack",
+      "arc": "F/S/R",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Firefist Assault Boats",
+      "launch": "4",
+      "special": "-"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Hero",
+      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet.",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Reinforced Armour",
+      "description": "Weapons rolling to hit this Ship or its Group can only score criticals against it on a result of a 3 higher than its Lock value."
+     },
+     {
+      "name": "Unique",
+      "description": "You may only take one Group of this Ship.",
+      "page": "37",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Firefist Assault Boats",
+      "description": "A fleet that includes Cassius Brown adds the following row to the table found in 7.4.1 Deploying Battalions\nFirefist Assault Boats. Target: Cities. Ships and Space stations in the same Orbital Layer. Range: 3”."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": true,
+    "noAdmiral": true,
+    "tonnage": "M",
+    "famousShipsPrefix": "Only ship of the class:",
+    "famousShips": [
+     "Kabal’s Deliverance"
+    ],
+    "lore": "Although Kalium’s military has no branches, ranks tend to reflect an individual’s area of operations. Therefore, it is unusual for a decorated general to command a warship, but Kabal’s Deliverance is no ordinary vessel. Colonial observers reckon her to be a highly visible statement of Kalium’s prowess, although most suspect her to be impractically costly. Everything about this ship is elite, from its two ‘Long Nine’ extended mass driver turrets to its upgraded drive cluster to its superlative, and uncharacteristic, build quality. Brown himself earned the respect of even the PHR during the Battle for Earth, ultimately leading the month-long defence of New St Petersburg until he lost both legs to plasma fire. Kalium’s prosthetics are cumbersome, so he now conducts operations from his command chair with cold, hardened efficiency.\n\nThe Deliverance’s payload is no less elite. Aboard is a full and unique cohort of the Kalium XIth Legion—the Honoured Ten Thousand. These veteran warriors have each demonstrated unwavering loyalty to the Motherworld by receiving brutal combat injuries and returning to frontline service with distinction. Each is given superior gear and is worth three regular conscripts at least. They use the Deliverance’s newly developed, armoured Firefist assault boats to conduct surface operations or launch devastating boarding actions."
    }
   },
   {
@@ -3165,7 +3267,7 @@
      "es": "4+",
      "ks": "6+",
      "bs": "-",
-     "g": "1-2",
+     "g": "1",
      "special": "Detector, Monitor, Rare, Space Telescope"
     },
     "weapons": [],
@@ -3195,15 +3297,15 @@
      },
      {
       "name": "Telescope Token",
-      "description": "When you assign weapons to a Group that has a Telescope token, you may remove the token. If you do, one of the Group's Weapon Systems lowers the result required to score a critical against that Group by 1 for that attack (so a weapon that would crit on a 5+ crits on a 4+ instead).\nTelescope tokens placed by this Ship persist between rounds and are only removed when this Ship would place another Telescope token or when a Ship with a Telescope token goes on the Silent Running order."
+      "description": "When you assign any number of weapons to a Group that has a Telescope token, you may remove a Telescope token. If you do, choose one of the attacking Group’s Weapon Systems. That Weapon System lowers the result required to score a critical against the assigned Group by 1 for that attack (so a weapon that would crit on a 5+ crits on a 4+ instead).\nTelescope tokens placed by this Ship persist between rounds and are only removed when this Ship would place another Telescope token or when a Ship with a Telescope token goes on the Silent Running order."
      }
     ],
     "groupMin": 1,
-    "groupMax": 2,
+    "groupMax": 1,
     "isRare": true,
     "isUnique": false,
     "tonnage": "L",
-    "lore": "Galileo orbital telescopes are among the oldest human ships still flying. In the earliest days of foldspace exploration, jumps to un-noded locations had to be conducted in drive-wearing ‘hops’ or random inaccuracy would result. Surveying potential jump locations for potential and celestial threats necessitated a ship built around a gigantic, high-power scanner. Speed was unimportant, so the superstructure of the more common Newton class monitor was chosen as an efficient, low-cost base. Never a military vessel, the Galileo is unarmed besides basic point defence. Surviving Galileos were vital to stranded Resistance fleets forced to use archaic jump-hops to seek the meagre resources not already discovered and either captured by the Scourge or (as with the Colonies) had their node codes changed. Being able to detect enemy activity from a vast distance is also of great use to those small remnant fleets hiding in the cracks of the galaxy - lest they be ambushed. At battlespace level, such observational power can be turned on in-system targets to achieve extraordinary definition unachievable with smaller hardware. This can augment Resistance vessels’ older scanning technology and aid a skilled captain in targeting vulnerable spots on enemy",
+    "lore": "Galileo orbital telescopes are among the oldest human ships still flying. In the earliest days of foldspace exploration, jumps to un-noded locations had to be conducted in drive-wearing ‘hops’ or random inaccuracy would result. Surveying potential jump locations for potential and celestial threats necessitated a ship built around a gigantic, high-power scanner. Speed was unimportant, so the superstructure of the more common Newton class monitor was chosen as an efficient, low-cost base. Never a military vessel, the Galileo is unarmed besides basic point defence. Surviving Galileos were vital to stranded Resistance fleets forced to use archaic jump-hops to seek the meagre resources not already discovered and either captured by the Scourge or (as with the Colonies) had their node codes changed. Being able to detect enemy activity from a vast distance is also of great use to those small remnant fleets hiding in the cracks of the galaxy - lest they be ambushed. At battlespace level, such observational power can be turned on in-system targets to achieve extraordinary definition unachievable with smaller hardware. This can augment Resistance vessels’ older scanning technology and aid a skilled captain in targeting vulnerable spots on enemy ships.",
     "famousShipsPrefix": "Recorded ships of the class:",
     "famousShips": [
      "Amber Eye",
@@ -3303,7 +3405,17 @@
      "g": "2-4",
      "special": "Reinforced Armour"
     },
-    "weapons": [],
+    "weapons": [
+     {
+      "name": "NC-1 Missiles",
+      "arc": "F/S/R",
+      "attack": "1",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action"
+     }
+    ],
     "loads": [],
     "specialRules": [
      {
@@ -5204,7 +5316,7 @@
     {
      "name": "Bombardment Torpedo",
      "thrust": "6\"",
-     "attack": "3",
+     "attack": "4",
      "lock": "5+",
      "damage": "2",
      "type": "K",
@@ -5265,7 +5377,7 @@
   {
    "id": "eedb-96cd-d7a3-6b75",
    "name": "Grand Station",
-   "cost": 85,
+   "cost": 70,
    "stats": {
     "scan": "6\"",
     "sig": "6\"",
@@ -5301,13 +5413,17 @@
     {
      "name": "Heavy Vent Cannon Turret",
      "effect": "When you assign targets to this weapon, you may have this Space Station gain 2 Spikes, if you do, it counts as going on Weapons Free Orders for the purposes of its Special rules."
+    },
+    {
+     "name": "Hardpoints",
+     "effect": "This Space Station has a Life Support Feature. It must take two additional Features from the Space Station Features list, and may take one additional option from the Space Station Features list."
     }
    ]
   },
   {
    "id": "1343-3008-33a4-59aa",
    "name": "Astrobotanical Outpost",
-   "cost": 85,
+   "cost": 80,
    "stats": {
     "scan": "6\"",
     "sig": "6\"",
@@ -5343,6 +5459,10 @@
     {
      "name": "Signature Bloom",
      "effect": "Friendly Ships within 6\" of this Space Station are Hidden within its Bloom. Enemy Ships targeting a Hidden Ship's Group ignore a Spike for each Hidden Ship in that Group. This rule has no effect while this Space Station is controlled by an enemy player."
+    },
+    {
+     "name": "Hardpoints",
+     "effect": "This Space Station has a Life Support Feature. It must take two additional Features from the Space Station Features list, and may take one additional option from the Space Station Features list."
     }
    ]
   }
@@ -5351,12 +5471,13 @@
   {
    "id": "7b83-a4b9-bb2b-724c",
    "name": "ICBM Silo",
-   "cost": 0,
+   "cost": 10,
    "features": [
     {
      "name": "ICBM Silo",
      "es": "5+",
      "ks": "5+",
+     "hull": 4,
      "special": "-"
     }
    ],
@@ -5377,12 +5498,13 @@
   {
    "id": "f3aa-5aaf-fe13-3b52",
    "name": "Ark Lander",
-   "cost": 0,
+   "cost": 5,
    "features": [
     {
      "name": "Ark Lander",
      "es": "4+",
      "ks": "4+",
+     "hull": 4,
      "special": "-"
     }
    ],
@@ -5396,12 +5518,13 @@
   {
    "id": "d065-3e0a-c5ac-76b7",
    "name": "Scanner Dome",
-   "cost": 0,
+   "cost": 10,
    "features": [
     {
      "name": "Scanner Dome",
      "es": "5+",
      "ks": "5+",
+     "hull": 4,
      "special": "-"
     }
    ],
@@ -5425,7 +5548,7 @@
     {
      "name": "XN-31 Mass Driver Turret",
      "category": "Turret Hardpoint",
-     "cost": 6,
+     "cost": 5,
      "oncePerShip": false,
      "weapons": [
       {
@@ -5444,7 +5567,7 @@
     {
      "name": "N-11 Artillery Cannon Turret",
      "category": "Turret Hardpoint",
-     "cost": 5,
+     "cost": 4,
      "oncePerShip": false,
      "weapons": [
       {
@@ -5482,7 +5605,7 @@
     {
      "name": "Vent Cannon Turret",
      "category": "Turret Hardpoint",
-     "cost": 10,
+     "cost": 8,
      "oncePerShip": false,
      "weapons": [
       {
@@ -5501,7 +5624,7 @@
     {
      "name": "N-31 Hybrid Gun Bank",
      "category": "Broadside Hardpoint (Weapons)",
-     "cost": 10,
+     "cost": 9,
      "oncePerShip": false,
      "weapons": [
       {
@@ -5511,7 +5634,7 @@
        "lock": "4+",
        "damage": "1",
        "type": "K",
-       "special": "Volley-2"
+       "special": "Critical-1, Fusillade-1, Volley-2"
       }
      ],
      "loads": [],
@@ -5520,7 +5643,7 @@
     {
      "name": "N-8 Artillery Cannon Bank",
      "category": "Broadside Hardpoint (Weapons)",
-     "cost": 8,
+     "cost": 7,
      "oncePerShip": false,
      "weapons": [
       {
@@ -5573,7 +5696,7 @@
     {
      "name": "Mines",
      "category": "Broadside Hardpoint (Launch)",
-     "cost": 35,
+     "cost": 26,
      "oncePerShip": false,
      "weapons": [],
      "loads": [
@@ -5628,7 +5751,7 @@
     {
      "name": "Drive Refit",
      "category": "Structures",
-     "cost": 15,
+     "cost": 12,
      "oncePerShip": true,
      "weapons": [],
      "loads": [],
@@ -5648,7 +5771,7 @@
     {
      "name": "N-31 Hybrid Gun Turret",
      "category": "Weapons",
-     "cost": 5,
+     "cost": 3,
      "oncePerShip": false,
      "weapons": [
       {
@@ -5658,7 +5781,7 @@
        "lock": "3+",
        "damage": "1",
        "type": "K",
-       "special": "Fusillade-1"
+       "special": "Penetrator"
       }
      ],
      "loads": [],
@@ -5693,7 +5816,7 @@
        "name": "Light Vent Cannon Turret",
        "arc": "F/S",
        "attack": "2",
-       "lock": "4+",
+       "lock": "3+",
        "damage": "1",
        "type": "E",
        "special": "Overcharge, Reave-1"
@@ -5709,7 +5832,7 @@
      "oncePerShip": true,
      "weapons": [],
      "loads": [],
-     "effect": "Gain Detector (counts as +1 weapon for Detector)"
+     "effect": "Gain Detector"
     }
    ]
   },
@@ -5724,7 +5847,7 @@
     {
      "name": "10K Mass Driver Turret",
      "category": "Turret Hardpoint",
-     "cost": 25,
+     "cost": 35,
      "oncePerShip": false,
      "weapons": [
       {
@@ -5743,7 +5866,7 @@
     {
      "name": "Heavy Dual Vent Cannon Turret",
      "category": "Turret Hardpoint",
-     "cost": 40,
+     "cost": 35,
      "oncePerShip": false,
      "weapons": [
       {
@@ -5882,23 +6005,23 @@
   },
   {
    "name": "Redundant Ship Systems",
-   "cost": "1AP",
-   "effect": "When you would Roll for Crippling Effects for a friendly Ship (for any reason), roll 1D6 instead of 2D6 for that Ship’s Crippling Effect. Count a result of a 1 as a result of a 2."
+   "cost": "*AP",
+   "effect": "When you would roll for Crippling Effects for a friendly Ship (for any reason), after rolling, you may pay up to 3AP. Add or subtract 1 (to a minimum of 2) from the result of the roll for each AP paid this way."
   },
   {
-   "name": "Final Mission",
+   "name": "Big Guns a' Blazing",
    "cost": "1AP",
-   "effect": "When you attack with Fire Ships, one of those attacking Wings gains Corruptor-2 for that attack."
+   "effect": "When you assign a Group's Weapon System with Damage 2 or higher to targets, double the Attack value of that Weapon System and that Weapon System has an unmodifiable Lock value of 4+ and only causes criticals on a 6+ for this attack and cannot have its dice rolls modified in any way. If this Ability affects a Weapon System with an Arc of B, it costs an additional 1AP. If this Ability affects a Weapon System on a Ship of H or C Tonnage, this Ability costs an additional 1AP (additional costs are cumulative)."
   },
   {
    "name": "Never Tell Me The Odds",
    "cost": "1AP",
-   "effect": "When you move a Group through Scenery or move/place a Wing of Assets through Scenery, that Group/Wing ignores the effects of that Scenery piece until the end of the movement."
+   "effect": "When you move a Group through Scenery you may re-roll any Kinetic or Energy saves for that movement. When you move/place a Wing through Scenery, you may re-roll the dice when rolling to remove those Assets."
   },
   {
-   "name": "Sabotage",
-   "cost": "2AP",
-   "effect": "At the end of the Activation Phase, before activating Dropsites, pick one Dropsite controlled by an enemy player within 6” of a friendly Group. That Dropsite takes D3+1 Core Hits. After rolling, you may spend an additional 1AP to re-roll the D3 and treat this ability as an attack for the purposes of removing a feature."
+   "name": "Missile Storm",
+   "cost": "1AP",
+   "effect": "At the start of a friendly Group's activation, choose a Weapon System with \"Missile\" in its name. That Weapon System gains Fusillade-2 and Anti-Wing until the end of the Activation."
   }
  ]
 }
