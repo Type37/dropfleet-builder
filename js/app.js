@@ -2838,7 +2838,7 @@ let activeGroupId = null;
     });
 
     // 7. Tonnage restrictions (Section 4.2)
-    let lightPts = 0, mediumPts = 0, heavyPts = 0;
+    let lightPts = 0, mediumPts = 0, heavyPts = 0, colossalPts = 0;
     fleet.battleGroups.forEach(g => {
       const s0 = g.ships[0];
       const cat = s0?.groupCategory;
@@ -2850,6 +2850,7 @@ let activeGroupId = null;
       if (cat === 'light') lightPts += groupPts;
       else if (cat === 'medium') mediumPts += groupPts;
       else if (cat === 'heavy') heavyPts += groupPts;
+      else if (cat === 'colossal') colossalPts += groupPts;
     });
     // Famous-admiral flagships are ships on the table too (rulebook 4.2 makes no
     // exemption for them), so their ship cost counts toward their Tonnage total
@@ -2863,11 +2864,14 @@ let activeGroupId = null;
       if (cat === 'light') lightPts += shipPts;
       else if (cat === 'medium') mediumPts += shipPts;
       else if (cat === 'heavy') heavyPts += shipPts;
+      else if (cat === 'colossal') colossalPts += shipPts;
     });
-    // Both are hard restrictions per Section 4.2: Heavy points may not exceed
-    // Medium points; Light points may not exceed Medium + Heavy points.
-    if (heavyPts > mediumPts) {
-      warnings.push({ type: 'error', msg: `Heavy points (${heavyPts}) can't exceed Medium points (${mediumPts}) (rulebook 4.2)` });
+    // Both are hard restrictions per Section 4.2: Heavy and Colossal points
+    // together may not exceed Medium points (2.4 added Colossal); Light points
+    // may not exceed Medium + Heavy points.
+    if (heavyPts + colossalPts > mediumPts) {
+      const what = colossalPts ? 'Heavy and Colossal' : 'Heavy';
+      warnings.push({ type: 'error', msg: `${what} points (${heavyPts + colossalPts}) can't exceed Medium points (${mediumPts}) (rulebook 4.2)` });
     }
     if (lightPts > mediumPts + heavyPts) {
       warnings.push({ type: 'error', msg: `Light points (${lightPts}) can't exceed Medium + Heavy points (${mediumPts + heavyPts}) (rulebook 4.2)` });
