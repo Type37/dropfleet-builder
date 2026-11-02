@@ -2877,8 +2877,18 @@ let activeGroupId = null;
       warnings.push({ type: 'error', msg: `Light points (${lightPts}) can't exceed Medium + Heavy points (${mediumPts + heavyPts}) (rulebook 4.2)` });
     }
 
-    // 7b. Deployable Features are always OPTIONAL now — a carrier can pick/swap one
-    // right before the game, so an empty slot is never flagged.
+    // 7b. A carrier whose rule says it "must be assigned" a Deployable Feature
+    // when building the fleet (2.4) needs every slot filled. The older game-day
+    // wording ("At the start of the game ... choose") is never flagged.
+    fleet.battleGroups.forEach(g => {
+      g.ships.forEach(s => {
+        const db = findShipInDB(fleet.faction, s.groupCategory, s.shipKey);
+        if (!db || !featureRequired(db)) return;
+        const n = featureSlotCount(db);
+        const missing = FEATURE_SLOT_KEYS.slice(0, n).filter(k => !s[k]).length;
+        if (missing) warnings.push({ type: 'warn', msg: `${db.name}: choose ${n > 1 ? `${n} Deployable Features` : 'a Deployable Feature'} (Feature Carrier)` });
+      });
+    });
 
     // 7c. Systems/Hardpoint selections must satisfy their list rules
     fleet.battleGroups.forEach(g => {
@@ -4357,14 +4367,21 @@ let activeGroupId = null;
     // faction features. The Genitor Tower is NOT handled here either: it is a
     // Payload S-1 unit in the Payload tab (consumes Porter S capacity), not a
     // per-Porter upgrade.
+    // 2.4 rewords it "When building your fleet, this Ship must be assigned ...
+    // Deployable Feature", which is still a choice.
+    return carrierTexts(dbShip).some(t => /(choose|must be assigned)[\s\S]*Deployable Feature/i.test(t));
+  }
+  function carrierTexts(dbShip) {
     const texts = (dbShip.specialRuleDetails || []).map(r => r.description || '');
     if (dbShip.rulesText) texts.push(dbShip.rulesText);
-    return texts.some(t => /choose[\s\S]*Deployable Feature/i.test(t));
+    return texts;
   }
 
-  // A genuine "choose one Deployable Feature" ship MUST take one; a Porter MAY.
+  // 2.4: "When building your fleet, this Ship must be assigned ... paying points
+  // for this Feature." The older "At the start of the game ... choose" wording
+  // left it to game day, so those carriers stay optional.
   function featureRequired(dbShip) {
-    return isFeatureCarrier(dbShip);
+    return isFeatureCarrier(dbShip) && carrierTexts(dbShip).some(t => /must be assigned/i.test(t));
   }
 
   // A ship is "fully modular" when it has a Systems selection and NO fixed
@@ -4450,17 +4467,19 @@ let activeGroupId = null;
         </span>
       </label>`;
     };
-    // Deployable Features are always optional (you can pick/swap one right before
-    // the game), so the picker never marks them required and always offers
-    // "No feature". Ships that choose two (the Resistance Battle Carriers) get one
-    // independent list per slot, and duplicates across slots are allowed.
+    // A carrier whose rule says "must be assigned" (2.4) is required, worded as
+    // the mobile build already words it; the older game-day wording stays
+    // optional. Ships that take two get one independent list per slot, and
+    // duplicates across slots are allowed.
+    const required = featureRequired(dbShip);
     const blocks = [];
     for (let slot = 0; slot < slots; slot++) {
       const chosen = ship[FEATURE_SLOT_KEYS[slot]] || '';
+      const state = required ? (chosen ? '' : ', required') : ', optional';
       const label = slots > 1
-        ? `Deployable Feature ${slot + 1} of ${slots}, optional`
-        : 'Deployable Feature, optional';
-      const noneRow = row(slot, '', 'No feature', 0, null, chosen === '');
+        ? `Deployable Feature ${slot + 1} of ${slots}${state}`
+        : `Deployable Feature${state}`;
+      const noneRow = row(slot, '', required ? 'None (choose one)' : 'No feature', 0, null, chosen === '');
       const featRows = feats.map(f => row(slot, f.name, f.name, f.cost, f, f.name === chosen)).join('');
       blocks.push(`<div class="feature-carrier-label">${label}</div>
         <div class="feature-radio-list">${noneRow}${featRows}</div>`);

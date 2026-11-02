@@ -1394,10 +1394,17 @@
     // non-chosen feature and must not show a picker of unrelated faction features.
     const texts = (ship.specialRules || []).map(r => r.description || '');
     if (ship.rulesText) texts.push(ship.rulesText);
-    return texts.some(t => /choose[\s\S]*Deployable Feature/i.test(t));
+    // 2.4 rewords it "When building your fleet, this Ship must be assigned ...
+    // Deployable Feature", which is still a choice.
+    return texts.some(t => /(choose|must be assigned)[\s\S]*Deployable Feature/i.test(t));
   }
+  // 2.4: "must be assigned ... paying points" makes the feature part of the list;
+  // the older "At the start of the game ... choose" wording stays optional.
   function featureRequired(ship) {
-    return isFeatureCarrier(ship);
+    if (!isFeatureCarrier(ship)) return false;
+    const texts = (ship.specialRules || []).map(r => r.description || '');
+    if (ship.rulesText) texts.push(ship.rulesText);
+    return texts.some(t => /must be assigned/i.test(t));
   }
   function factionFeatures(factionKey) {
     return (FACTIONS[factionKey]?.deployableFeatures) || [];
@@ -1659,8 +1666,17 @@
       }
     });
 
-    // Deployable Features are always OPTIONAL now — never flagged for an empty slot
-    // (a carrier can pick/swap one right before the game).
+    // 2.4: a carrier whose rule says it "must be assigned" a Deployable Feature
+    // when building the fleet needs every slot filled. The older game-day
+    // wording ("At the start of the game ... choose") is never flagged.
+    fleet.battleGroups.forEach(g => g.ships.forEach(s => {
+      const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
+      if (!db || !featureRequired(db)) return;
+      const n = featureSlotCount(db);
+      if (FEATURE_SLOT_KEYS.slice(0, n).some(k => !s[k])) {
+        w.push({ t: 'warn', m: `${db.name}: choose ${n > 1 ? n + ' Deployable Features' : 'a Deployable Feature'} (Feature Carrier)` });
+      }
+    }));
     fleet.battleGroups.forEach((g, gi) => {
       const s = g.ships[0];
       if (!s) return;
@@ -2727,7 +2743,7 @@
       .split(',').map(s => s.trim()).filter(t => t && !ruleNames.has(t.toLowerCase())).join(', ');
     const artSrc = shipArtPath(ship.name);
     const carrier = isFeatureCarrier(ship);
-    const featReq = false; // Deployable Features are always optional now
+    const featReq = carrier && featureRequired(ship);
     const features = carrier ? factionFeatures(f.faction) : [];
     const featSlots = featureSlotCount(ship);
     const sysList = systemsListFor(ship, f.faction);
@@ -2817,9 +2833,10 @@
 
       ${carrier && features.length ? Array.from({ length: featSlots }, (_, slot) => {
         const chosenFeature = inst[FEATURE_SLOT_KEYS[slot]] || '';
+        const state = featReq ? (chosenFeature ? '' : ', required') : ', optional';
         const heading = featSlots > 1
-          ? `Deployable Feature ${slot + 1} of ${featSlots}, optional`
-          : (featReq ? 'Deployable Feature' + (chosenFeature ? '' : ', required') : 'Deployable Feature, optional');
+          ? `Deployable Feature ${slot + 1} of ${featSlots}${state}`
+          : `Deployable Feature${state}`;
         return `<div class="loadout-section">
         <div class="section-header" style="padding:0 0 var(--sp-s)">
           ${heading}
