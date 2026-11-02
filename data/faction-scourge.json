@@ -14,7 +14,7 @@
     {
      "name": "Reaving Gaze",
      "cost": "1AP",
-     "effect": "When you assign a Group’s weapons to a target, pick one of the attacking Group’s Weapon Systems with “Oculus” in its name. That Weapon System replaces its Scald-X rule with Reave-X (of the same value) for that attack. If the attacking Group has 2 or more Ships, this Ability costs 2AP."
+     "effect": "When you assign a Group’s weapons to a target, pick one of the attacking Group’s Weapon Systems with “Oculus” in its name. That Weapon System replaces its Scald-X value with Reave-X+1 for that attack. If the attacking Group has 2 or more Ships, this Ability costs 2AP."
     }
    ],
    "flagship": null,
@@ -53,7 +53,7 @@
     {
      "name": "Limitless Pestilence",
      "cost": "1AP",
-     "effect": "When a friendly Fighter or Bomber Wing is completely removed due to an opponent’s Fighters, you may immediately launch a single Fighter or Bomber from this Admiral’s ship."
+     "effect": "When a friendly Fighter or Bomber Wing is completely removed due to an opponent’s Fighters, you may immediately launch a Wing of two Fighters or two Bombers from this Admiral’s Ship."
     }
    ],
    "flagship": {
@@ -66,9 +66,9 @@
      "hull": 24,
      "es": "3+",
      "ks": "2+",
-     "bs": "5+",
+     "bs": "4+",
      "g": "1",
-     "special": "Cloak-1, Stealth, Winged Bulwark"
+     "special": "Cloak-1, Stealth"
     },
     "weapons": [
      {
@@ -111,7 +111,7 @@
     "loads": [
      {
       "name": "Fighters & Bombers",
-      "launch": "6",
+      "launch": "8",
       "special": "-"
      }
     ],
@@ -160,7 +160,7 @@
    ],
    "flagship": {
     "name": "Daemon Battleship",
-    "cost": 215,
+    "cost": 210,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -211,14 +211,14 @@
      },
      {
       "name": "Death Mistress",
-      "description": "Whenever an enemy group is destroyed, roll a dice. On a 4+ gain 1AP.\nThis ship cannot be take a Keel Refit."
+      "description": "Whenever an enemy Group is destroyed, roll a dice. On a 5+, gain 1AP.\nThis ship cannot be take a Keel Refit."
      }
     ],
     "groupMin": 1,
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "",
+    "tonnage": "H",
     "category": "heavy",
     "namesake": "From the Greek 'daimon', a spirit standing between gods and mortals; in later lore, a demon outright."
    },
@@ -251,13 +251,13 @@
      "ks": "4+",
      "bs": "6+",
      "g": "1",
-     "special": "Vanguard-7\", Savagery"
+     "special": "Vanguard-7”"
     },
     "weapons": [
      {
       "name": "Oculus Beam Array",
       "arc": "F",
-      "attack": "3",
+      "attack": "2",
       "lock": "3+",
       "damage": "2",
       "type": "E",
@@ -304,7 +304,7 @@
      },
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -336,7 +336,7 @@
    ],
    "flagship": {
     "name": "Raiju Heavy Cruiser",
-    "cost": 125,
+    "cost": 120,
     "stats": {
      "thrust": "8\"",
      "scan": "6\"",
@@ -361,8 +361,8 @@
      {
       "name": "Furnace Cannons",
       "arc": "FN",
-      "attack": "4",
-      "lock": "2+",
+      "attack": "6",
+      "lock": "3+",
       "damage": "1",
       "type": "E",
       "special": "Burnthrough-1, Crippling-Fire, Focused"
@@ -393,14 +393,14 @@
      },
      {
       "name": "Doomed",
-      "description": "Whenever you capture an enemy Ship or an enemy Ship is destroyed due to the Fire Crippling Effect, gain 2AP."
+      "description": "When you generate AP, for each enemy Ship in the previous round that you captured or that was destroyed due to the Fire Crippling Effect, increase the AP you generate this round by 2."
      }
     ],
     "groupMin": 1,
     "groupMax": 1,
     "isRare": false,
     "isUnique": false,
-    "tonnage": "",
+    "tonnage": "M",
     "category": "medium",
     "namesake": "A beast of lightning in Japanese myth, a creature of fire and storm that leaps with the thunderbolt."
    },
@@ -431,11 +431,29 @@
      {
       "name": "Furnace Triad",
       "arc": "FN",
-      "attack": "3",
+      "attack": "4",
       "lock": "2+",
-      "damage": "4",
+      "damage": "3",
       "type": "C",
       "special": "Bloom-1, Crippling-Fire, Focused"
+     },
+     {
+      "name": "Oculus Beam Array",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Scald-1, Volley-2"
+     },
+     {
+      "name": "Oculus Beam Array",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Scald-1, Volley-2"
      },
      {
       "name": "Plasma Cyclone",
@@ -445,24 +463,6 @@
       "damage": "1",
       "type": "K",
       "special": "Close Action, Scald-2"
-     },
-     {
-      "name": "Oculus Beam Array",
-      "arc": "F/S",
-      "attack": "3",
-      "lock": "3+",
-      "damage": "2",
-      "type": "E",
-      "special": "Scald-1, Volley-2"
-     },
-     {
-      "name": "Oculus Beam Array",
-      "arc": "F/S",
-      "attack": "3",
-      "lock": "3+",
-      "damage": "2",
-      "type": "E",
-      "special": "Scald-1, Volley-2"
      }
     ],
     "loads": [
@@ -497,7 +497,8 @@
      "Mort",
      "Scythe of the Enemy",
      "Admiral Kimiko’s Doom",
-     "Voidflare"
+     "Voidflare",
+     "Scourge Incarnate"
     ],
     "namesake": "H.P. Lovecraft's cosmic monster-god, slumbering in the sunken city of R'lyeh and driving mad any who glimpse it."
    }
@@ -590,7 +591,8 @@
      "Eden’s Bane",
      "Sable Fiend",
      "Dread Warrior",
-     "Lord of the Damned"
+     "Lord of the Damned",
+     "Scarlet Vision"
     ],
     "namesake": "Nosferatu, the archaic name for a vampire, made famous by the 1922 silent film of the same name."
    }
@@ -890,7 +892,7 @@
     "rulesText": "This Ship must take either a Cloaking Keel, gaining Stealth and Cloak-2, or an Engine Upgrade for +10 points, increasing Thrust by 3”.",
     "famousShipsPrefix": "Infamous ships of the class:",
     "famousShips": [
-     "|Reaper’s Scythe",
+     "Reaper’s Scythe",
      "Eden Prowler",
      "Facets of Death",
      "Stygia"
@@ -992,7 +994,9 @@
     "famousShipsPrefix": "Infamous ships of the class:",
     "famousShips": [
      "Void Giant",
-     "Elysium’s Hammer"
+     "Elysium’s Hammer",
+     "The Loss of Victory",
+     "Sadness"
     ],
     "namesake": "The Nephilim, the giant offspring of the 'sons of God' and mortal women in the Book of Genesis.",
     "loadoutOptions": [
@@ -1107,7 +1111,10 @@
     "lore": "The Raven, Killian’s Shadow, Tokyo’s Undoing The Raum was the first Scourge battleship sighted with new capabilities, utilising their latest superstructure design. Entirely different from the ancient leviathans the UCMF were accustomed to facing, these ships are apparently brand new, a major concern. The Raum mounts the newly encountered heavy plasma beam in addition to oculus arrays and substantial launch capacity, making it especially deadly at close quarters. Coupled with its stealthy capabilities, this new threat is already dreaded.",
     "famousShipsPrefix": "Infamous ships of the class:",
     "famousShips": [
-     "Deathcrow"
+     "Deathcrow",
+     "The Raven",
+     "Killian’s Shadow",
+     "Tokyo’s Undoing"
     ],
     "namesake": "Raum, a Great Earl of Hell in demonology who appears as a crow and steals treasures from kings."
    }
@@ -1164,7 +1171,7 @@
    "category": "heavy",
    "ship": {
     "name": "Devil Battleship",
-    "cost": 265,
+    "cost": 255,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -1261,7 +1268,7 @@
    "category": "heavy",
    "ship": {
     "name": "Beelzebub Battleship",
-    "cost": 255,
+    "cost": 250,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -1368,7 +1375,7 @@
    "category": "heavy",
    "ship": {
     "name": "Dragon Battleship",
-    "cost": 245,
+    "cost": 235,
     "stats": {
      "thrust": "8\"",
      "scan": "8\"",
@@ -1581,7 +1588,7 @@
      "ks": "4+",
      "bs": "6+",
      "g": "1",
-     "special": "Vanguard-6”, Oculus Booster"
+     "special": "Vanguard-6”"
     },
     "weapons": [
      {
@@ -1661,7 +1668,7 @@
      "ks": "4+",
      "bs": "6+",
      "g": "1",
-     "special": "Vanguard-6\""
+     "special": "Vanguard-6”"
     },
     "weapons": [
      {
@@ -1913,7 +1920,11 @@
     ],
     "famousShipsPrefix": "Infamous ships of the class:",
     "famousShips": [
-     "Earthbane"
+     "Earthbane",
+     "Karin’s Demise (Basilisk class)",
+     "Maleficent",
+     "Blackheart",
+     "Beckoning Void (Akuma class)"
     ],
     "namesake": "In Japanese belief, an akuma is a malevolent fire-spirit or demon that brings misfortune and ruin.",
     "altSculpts": [
@@ -1922,77 +1933,6 @@
       "url": "https://ttcombat.com/products/scourge-basilisk-exclusive"
      }
     ]
-   }
-  },
-  {
-   "id": "db79-8171-8e92-6fc8",
-   "name": "Kulshedra Heavy Carrier",
-   "category": "medium",
-   "ship": {
-    "name": "Kulshedra Heavy Carrier",
-    "cost": 164,
-    "stats": {
-     "thrust": "8\"",
-     "scan": "6\"",
-     "sig": "8\"",
-     "hull": 12,
-     "es": "4+",
-     "ks": "3+",
-     "bs": "-",
-     "g": "1",
-     "special": "-"
-    },
-    "weapons": [
-     {
-      "name": "Oculus Beams",
-      "arc": "F",
-      "attack": "1",
-      "lock": "3+",
-      "damage": "2",
-      "type": "E",
-      "special": "Scald-1"
-     },
-     {
-      "name": "Plasma Tempest",
-      "arc": "F/S",
-      "attack": "8",
-      "lock": "3+",
-      "damage": "1",
-      "type": "K",
-      "special": "Close Action, Fusillade-2, Scald-2"
-     },
-     {
-      "name": "Plasma Gale",
-      "arc": "F/S",
-      "attack": "3",
-      "lock": "3+",
-      "damage": "1",
-      "type": "K",
-      "special": "Close Action, Scald-2"
-     }
-    ],
-    "loads": [
-     {
-      "name": "Fighters & Bombers",
-      "launch": "2",
-      "special": "-"
-     }
-    ],
-    "specialRules": [],
-    "groupMin": 1,
-    "groupMax": 1,
-    "isRare": false,
-    "isUnique": false,
-    "tonnage": "M",
-    "lore": "The Kulshedra was first seen by the UCM during the Scourge’s assault on Ferrum. Reports state middling combat performance at range, but the Scourge’s reckless tactics never left it at range for long. Designated the moniker Vilestars, Kulshedra’s would dive straight into cruiser formations and take out lead ships before disgorging waves of fighters and bombers. While not an effective tactic for the longevity of the Kulshedra, its effect on UCM morale and formations was undeniable. More valuable Scourge ships were left alone while panicked UCM crews focused on the Kulshedra. Analysis of wrecks suggest that these ships are as old as the ones that assaulted the Cradle Worlds so long ago. Their seeming absence may speak of Scourge battle tactics. Rather than fight an unknown enemy, the Kulshedra is a weapon of distraction for enemies the Scourge know. It was undeniably useful above Ferrum, where a battlegroup of three Kulshedra’s caused a massive break in UCM formations, causing the loss of several Battlegroups, as they were too busy dealing with the Kulshedras to fight back against the Scourge ships taking advantage of the distraction.",
-    "famousShipsPrefix": "Infamous ships of the class:",
-    "famousShips": [
-     "Foe Eater",
-     "Cthonia’s Serpent",
-     "Bollar",
-     "Neptune’s Bane"
-    ],
-    "namesake": "A fire-spitting she-dragon of Albanian myth, a vast serpent that hoards drought until a hero slays it."
    }
   },
   {
@@ -2066,6 +2006,105 @@
      "Death Arrow"
     ],
     "lore": "The Death Arrow is the fastest vessel of cruiser tonnage in known space. Outpacing even fast frigates, she was clearly built for nothing but speed and the savage application of plasma weaponry. Her armament matches the common Wyvern class, but she features the rarer form of superstructure and an entirely new, overcharged drive module and tail section, upping her to heavy cruiser classification, although over half her mass is estimated to be drive-related.\n\nUnusually, whatever malevolent Scourge commands this apparently unique vessel has ‘earned’ a nickname: The Spectre of Eden. Time and again, this ship has appeared, alone, and has quickly closed with and annihilated weaker adversaries, usually merchantmen, before smoothly outpacing any pursuit. Despite the UCM’s near-total conquest of the Eden system, this ship remains a looming menace to all who sail there. The Death Arrow and her captain have thus cost the UCM more resources in extra security cordons and lost tonnage than any other vessel."
+   }
+  },
+  {
+   "id": "db79-8171-8e92-6fc8",
+   "name": "Kulshedra Heavy Carrier",
+   "category": "medium",
+   "ship": {
+    "name": "Kulshedra Heavy Carrier",
+    "cost": 156,
+    "stats": {
+     "thrust": "8\"",
+     "scan": "6\"",
+     "sig": "8\"",
+     "hull": 12,
+     "es": "4+",
+     "ks": "3+",
+     "bs": "-",
+     "g": "1",
+     "special": "-"
+    },
+    "weapons": [
+     {
+      "name": "Oculus Beams",
+      "arc": "F",
+      "attack": "1",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Scald-1"
+     },
+     {
+      "name": "Plasma Tempest",
+      "arc": "F/S",
+      "attack": "8",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Fusillade-2, Scald-2"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
+     }
+    ],
+    "loads": [],
+    "specialRules": [],
+    "groupMin": 1,
+    "groupMax": 1,
+    "isRare": false,
+    "isUnique": false,
+    "tonnage": "M",
+    "loadoutOptions": [
+     {
+      "name": "Minelayer",
+      "minSelections": 1,
+      "maxSelections": 1,
+      "options": [
+       {
+        "name": "Fighters & Bombers",
+        "cost": 0,
+        "weapons": [],
+        "loads": [
+         {
+          "name": "Fighters & Bombers",
+          "launch": "2",
+          "special": "-"
+         }
+        ]
+       },
+       {
+        "name": "Mines",
+        "cost": 4,
+        "weapons": [],
+        "loads": [
+         {
+          "name": "Mines",
+          "launch": "3",
+          "special": "-"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "lore": "The Kulshedra was first seen by the UCM during the Scourge’s assault on Ferrum. Reports state middling combat performance at range, but the Scourge’s reckless tactics never left it at range for long. Designated the moniker Vilestars, Kulshedra’s would dive straight into cruiser formations and take out lead ships before disgorging waves of fighters and bombers. While not an effective tactic for the longevity of the Kulshedra, its effect on UCM morale and formations was undeniable. More valuable Scourge ships were left alone while panicked UCM crews focused on the Kulshedra. Analysis of wrecks suggest that these ships are as old as the ones that assaulted the Cradle Worlds so long ago. Their seeming absence may speak of Scourge battle tactics. Rather than fight an unknown enemy, the Kulshedra is a weapon of distraction for enemies the Scourge know. It was undeniably useful above Ferrum, where a battlegroup of three Kulshedra’s caused a massive break in UCM formations, causing the loss of several Battlegroups, as they were too busy dealing with the Kulshedras to fight back against the Scourge ships taking advantage of the distraction.",
+    "famousShipsPrefix": "Infamous ships of the class:",
+    "famousShips": [
+     "Foe Eater",
+     "Cthonia’s Serpent",
+     "Bollar",
+     "Neptune’s Bane"
+    ],
+    "rulesText": "This ship may replace its Fighters & Bombers with Mines for +4 pts.",
+    "namesake": "A fire-spitting she-dragon of Albanian myth, a vast serpent that hoards drought until a hero slays it."
    }
   },
   {
@@ -2236,7 +2275,7 @@
    "category": "medium",
    "ship": {
     "name": "Hydra Fleet Carrier",
-    "cost": 135,
+    "cost": 130,
     "stats": {
      "thrust": "10\"",
      "scan": "6\"",
@@ -2295,7 +2334,7 @@
        },
        {
         "name": "Mines",
-        "cost": 10,
+        "cost": 4,
         "weapons": [],
         "loads": [
          {
@@ -2312,9 +2351,11 @@
     "famousShipsPrefix": "Infamous ships of the class:",
     "famousShips": [
      "Sable Chalice",
-     "Angelslayer"
+     "Angelslayer",
+     "The Hive",
+     "Bombardier"
     ],
-    "rulesText": "This ship may replace its Fighters & Bombers with Mines for +10 pts.",
+    "rulesText": "This ship may replace its Fighters & Bombers with Mines for +4 pts.",
     "namesake": "The Lernaean Hydra, the Greek serpent that sprouted two heads for each one severed, slain by Heracles."
    }
   },
@@ -2603,7 +2644,7 @@
      "ks": "4+",
      "bs": "-",
      "g": "2-3",
-     "special": "Vanguard-6”"
+     "special": "-"
     },
     "weapons": [
      {
@@ -2626,12 +2667,7 @@
      }
     ],
     "loads": [],
-    "specialRules": [
-     {
-      "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
-     }
-    ],
+    "specialRules": [],
     "groupMin": 2,
     "groupMax": 3,
     "isRare": false,
@@ -2653,7 +2689,7 @@
    "category": "medium",
    "ship": {
     "name": "Strix Light Cruiser",
-    "cost": 84,
+    "cost": 88,
     "stats": {
      "thrust": "12\"",
      "scan": "6\"",
@@ -2663,7 +2699,7 @@
      "ks": "4+",
      "bs": "-",
      "g": "2-3",
-     "special": "Vanguard-6”"
+     "special": "-"
     },
     "weapons": [
      {
@@ -2686,12 +2722,7 @@
      }
     ],
     "loads": [],
-    "specialRules": [
-     {
-      "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
-     }
-    ],
+    "specialRules": [],
     "groupMin": 2,
     "groupMax": 3,
     "isRare": false,
@@ -2714,7 +2745,7 @@
    "category": "medium",
    "ship": {
     "name": "Gremlin Light Cruiser",
-    "cost": 72,
+    "cost": 80,
     "stats": {
      "thrust": "12\"",
      "scan": "6\"",
@@ -2724,7 +2755,7 @@
      "ks": "4+",
      "bs": "-",
      "g": "2-3",
-     "special": "Vanguard-6”"
+     "special": "-"
     },
     "weapons": [
      {
@@ -2747,12 +2778,7 @@
      }
     ],
     "loads": [],
-    "specialRules": [
-     {
-      "name": "Vanguard-6\"",
-      "description": "Groups with this rule may begin the game Directly Deployed, ignoring the normal Scenario Deployment and Approach Types (though still counting towards Groups Directly Deployed). If it does, it may be deployed up to 6” away from your Deployment Zone."
-     }
-    ],
+    "specialRules": [],
     "groupMin": 2,
     "groupMax": 3,
     "isRare": false,
@@ -2763,7 +2789,8 @@
     "famousShips": [
      "Piskie",
      "Little Sod",
-     "Firefang"
+     "Firefang",
+     "Emberlight"
     ],
     "namesake": "A mischievous gremlin, the imp blamed by airmen for unexplained mechanical faults and sabotage."
    }
@@ -2847,6 +2874,10 @@
     "isUnique": true,
     "tonnage": "L",
     "lore": "Thankfully, this vessel’s main weapon is unique to it. The Anharmonic Resonator is marked by two distinctive emanation banks along the ship’s midsection and is one of the most despised weapons any captain might face, hence the moniker given to whatever captain this ship has: The Hated. This individual throws its ship into combat with little regard for personal safely, unfortunate, since the weapon’s effects are limited to close victims. The Resonator throws pulsing waves of penetrating subatomic particles and exotic radiations into the target, causing a range of unpredictable internal effects, crew deaths, widespread vomiting, and systems failures. Given the necessity of being near the target, Little Chaos is equipped with one of the best stealth suites yet observed on any Scourge vessel. It is speculated that this ship was exceedingly difficult for the enemy to build or is challenging to maintain since they have produced no other known examples despite its horrible effectiveness. There are even suggestions that its entire crew might die of radiation poisoning after an engagement, although the captain’s consistent behaviour suggests that it, at least, fights from a heavily shielded bridge.",
+    "famousShipsPrefix": "Only ship of the class:",
+    "famousShips": [
+     "Little Chaos"
+    ],
     "namesake": "[Chaos](https://en.wikipedia.org/wiki/Chaos_(cosmogony)) was the primordial void in Greek cosmogony, the formless gap that existed before all else. In Hesiod's Theogony it is the first being to come into existence, from which Erebus and Nyx were born.",
     "storeUrl": "https://ttcombat.com/products/the-hated-little-chaos"
    }
@@ -3160,7 +3191,7 @@
      "ks": "6+",
      "bs": "-",
      "g": "1-3",
-     "special": "Vectored, Rare, Energy Siphon"
+     "special": "Vectored, Rare"
     },
     "weapons": [
      {
@@ -3177,7 +3208,7 @@
     "specialRules": [
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3203,7 +3234,8 @@
     "famousShips": [
      "Vampiric",
      "Darkshield",
-     "Swift Death"
+     "Swift Death",
+     "Little Nightmare"
     ],
     "namesake": "A [parasite](https://en.wikipedia.org/wiki/Parasitism) is an organism that lives on or inside a host of another species, deriving nourishment at the host's expense and causing it harm. Blood-feeding leeches are a classic example."
    }
@@ -3250,7 +3282,7 @@
     "specialRules": [
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3440,7 +3472,8 @@
     "famousShipsPrefix": "Infamous ships of the class:",
     "famousShips": [
      "Silent Guardian",
-     "Xi’s Sentinel"
+     "Xi’s Sentinel",
+     "Dark Watcher"
     ],
     "namesake": "A Mesopotamian protective spirit, a winged bull-man set as a guardian upon the thresholds of palaces.",
     "storeUrl": "https://ttcombat.com/products/scourge-monitors-1"
@@ -3802,7 +3835,7 @@
      }
     ],
     "groupMin": 1,
-    "groupMax": 3,
+    "groupMax": 4,
     "isRare": true,
     "isUnique": false,
     "tonnage": "L",
@@ -3860,14 +3893,14 @@
      }
     ],
     "groupMin": 1,
-    "groupMax": 3,
+    "groupMax": 4,
     "isRare": false,
     "isUnique": false,
     "tonnage": "L",
     "lore": "Though tiny by warship standards, the Hiruko Boarding Cutter is one of the most feared vessels in the Scourge arsenal. UCM armies know all too well the horrors of close contact with the hated enemy, but naval staff rarely see the fangs, saliva, hate and evisceration in person. The Hiruko brings all manner of bio-nightmares into personal, bloody contact in a way only the Scourge can. Almost uniquely, the Hiruko is designed specifically for ramming and more than that - to actually make physical contact with a target. Given the lethality of point-blank defence fire, this is always a one-way trip, so the Hiruko is equipped with a potent Plasma Torch and latching tentacles to quickly inject its savage payload into the bowels of the target. Beyond the rents torn by clashing tons of starship, it eventually spells doom for a ship of any size as its crew find their clean uniforms and shiny corridors painted crimson by the deadly boarding party - often made up of the most vicious close quarters Scourge hosts.",
     "famousShipsPrefix": "Infamous ships of the class:",
     "famousShips": [
-     "None - all destroyed"
+     "None - all destroyed, so no records required for future identification."
     ],
     "namesake": "Hiruko, the 'leech child' of Shinto myth, a malformed deity set adrift on the sea by its divine parents.",
     "storeUrl": "https://ttcombat.com/products/hiruko-boarding-cutters-1"
@@ -4190,7 +4223,7 @@
     "specialRules": [
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken."
      },
      {
       "name": "Resupply and Rearm",
@@ -4274,7 +4307,7 @@
      },
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -4643,7 +4676,7 @@
      },
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken."
      },
      {
       "name": "Industrial Design",
@@ -5107,7 +5140,7 @@
      "ks": "4+",
      "bs": "5+",
      "g": "1",
-     "special": "Command Ship-1, Oculus Booster"
+     "special": "Command Ship-1"
     },
     "weapons": [
      {
@@ -5127,6 +5160,15 @@
       "damage": "1",
       "type": "E",
       "special": "Burnthrough-1, Crippling-2xFire, Focused"
+     },
+     {
+      "name": "Plasma Gale",
+      "arc": "F/S",
+      "attack": "3",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action, Scald-2"
      }
     ],
     "loads": [
@@ -5144,11 +5186,13 @@
     "specialRules": [
      {
       "name": "Command Ship-1",
-      "description": "Increase the Level of any Admiral assigned to this Ship by 1."
+      "description": "Increase the Level of any Admiral assigned to this Ship by 1.",
+      "page": "36",
+      "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
       "name": "Oculus Booster",
-      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of this Ship’s activation, you may place an Oculus token on an enemy Group in line of sight in this Ship’s Front Arc. Unused Oculus tokens placed by this Ship persist between rounds and are only removed when this Ship would place another Oculus token or when a Ship with an Oculus token goes on the Silent Running order.\n\nWhen you assign “Oculus” weapons to a Group that has an Oculus Token and is within Scan range of the attacking Group, you may remove the token. If you do, one of the Group’s “Oculus” Weapon Systems’ Type becomes Core against that Group for that attack."
+      "description": "If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of this Ship’s activation, you may place an Oculus token on an enemy Group in line of sight in this Ship’s Front Arc. Unused Oculus tokens placed by this Ship persist between rounds and are only removed when this Ship would place another Oculus token or when a Ship with an Oculus token goes on the Silent Running order.\nWhen you assign “Oculus” weapons to a Group that has an Oculus token and is within Scan range of the attacking Group, you may remove the Oculus token. If you do, choose one of the attacking Group’s “Oculus” Weapon Systems. That Weapon System’s Type becomes Core on each attacking Ship within Scan range of the defending Group. Weapons on Ships outside of Scan range of the defending Group are unaffected."
      }
     ],
     "groupMin": 1,
@@ -5493,7 +5537,7 @@
     "specialRules": [
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken."
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken."
      },
      {
       "name": "Fuel Transporter",
@@ -5638,7 +5682,7 @@
      },
      {
       "name": "Vectored",
-      "description": "This Ship may make an additional turn at any point during its movement, regardless of the Order its Group has taken.",
+      "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -5771,8 +5815,8 @@
    "name": "Ephyra",
    "cost": 65,
    "stats": {
-    "scan": "6\"",
-    "sig": "4\"",
+    "scan": "10\"",
+    "sig": "0\"",
     "hull": 8,
     "es": "3+",
     "ks": "4+",
@@ -5790,6 +5834,12 @@
      "damage": "2",
      "type": "E",
      "special": "Close Action, Scald-1"
+    }
+   ],
+   "stationRules": [
+    {
+     "name": "Hardpoints",
+     "effect": "This Space Station has a Life Support Feature and two Weapons Control Features."
     }
    ],
    "namesake": "An ephyra is the free-swimming larval stage of a scyphozoan jellyfish, which later matures into the bell-shaped adult medusa. The term is borrowed from [Ephyra](https://en.wikipedia.org/wiki/Ephyra_(mythology)), an Oceanid water-nymph of Greek myth, a daughter of the Titans Oceanus and Tethys."
@@ -5820,6 +5870,12 @@
      "special": "Bloom-1, Burnthrough-1, Flash-1"
     }
    ],
+   "stationRules": [
+    {
+     "name": "Hardpoints",
+     "effect": "This Space Station has a Life Support Feature and two Weapons Control Features."
+    }
+   ],
    "namesake": "A [nematocyst](https://en.wikipedia.org/wiki/Cnidocyte) is the venomous stinging organelle housed within the cnidocyte cells of jellyfish, sea anemones, and other cnidarians. It fires a coiled, barbed thread to inject toxin into prey, in one of the fastest mechanical processes in nature."
   }
  ],
@@ -5827,12 +5883,13 @@
   {
    "id": "0d16-998e-317e-6349",
    "name": "Skybane Halo",
-   "cost": 0,
+   "cost": 5,
    "features": [
     {
      "name": "Skybane Halo",
      "es": "4+",
-     "ks": "5+",
+     "ks": "4+",
+     "hull": 4,
      "special": "Aegis-2"
     }
    ],
@@ -5857,38 +5914,40 @@
   {
    "id": "12d0-88ec-4d14-4f80",
    "name": "Shrouding Platform",
-   "cost": 0,
+   "cost": 5,
    "features": [
     {
      "name": "Shrouding Platform",
-     "es": "5+",
-     "ks": "5+",
+     "es": "4+",
+     "ks": "4+",
+     "hull": 4,
      "special": "-"
     }
    ],
    "rules": [
     {
      "name": "Shrouding Platform",
-     "description": "This Dropsite has a Signature of 0” and cannot gain Spikes.\nFriendly Groups within 6” of this Dropsite count as having one fewer Spike when an opponent is determining potential targets and assigning Weapons to targets."
+     "description": "This Dropsite has a Signature of 0” and cannot gain Spikes. While you have friendly Battalions assigned to this Feature, enemy Ships attacking this Dropsite reduce their Lock by 1.\nFriendly Groups within 6” of this Dropsite count as having one fewer Spike when an opponent is determining potential targets and assigning Weapons to targets.\nWhile you control this Dropsite, you have access to the Silent Killer Ability but can only use it on friendly Groups within 6” of this Dropsite."
     }
    ]
   },
   {
    "id": "da3d-bc95-8e2a-b482",
    "name": "Infestation Bastion",
-   "cost": 0,
+   "cost": 5,
    "features": [
     {
      "name": "Infestation Bastion",
-     "es": "5+",
-     "ks": "5+",
+     "es": "4+",
+     "ks": "4+",
+     "hull": 4,
      "special": "-"
     }
    ],
    "rules": [
     {
      "name": "Infestation Bastion",
-     "description": "When friendly Bulk Landers are launched to this Dropsite, they ignore enemy Battalions on this Dropsite. After enemy Battalions are deployed to this Dropsite, roll a dice for each of those Battalions. For each result of a 5+, remove one of those Battalions. Only one Infestation Bastion can be used this way for each Battalion and any Battalions already on the Dropsite are ignored."
+     "description": "When friendly Bulk Landers are launched to this Dropsite, they ignore enemy Battalions on this Dropsite.\nAfter enemy Battalions are deployed to this Dropsite, roll a dice for each of those Battalions. For each result of a 5+, remove one of those Battalions. Only one Infestation Bastion can be used this way for each Battalion and any Battalions already on the Dropsite are ignored."
     }
    ]
   }
@@ -5897,7 +5956,7 @@
   {
    "name": "For the Species",
    "cost": "1AP",
-   "effect": "At the end of a friendly Groups’ activation, pick a Crippled Ship in that Group and target an enemy Ship within 3” of it on the same Orbital Layer. Roll a dice for each of the friendly Ship’s remaining Hull Points. The target Ship is inflicted 1 Damage for each result of a 3+. The friendly Ship is destroyed and does not roll for explosion."
+   "effect": "At the end of a friendly Group’s activation, pick a Crippled Ship in that Group. That Ship explodes with a Reactor Overload effect. If the exploding Ship is H tonnage, it explodes with a Reactor Overload effect twice. If that Ship is C tonnage, it explodes twice with a Foldspace Catastrophe instead. Remove the exploding Ship after resolving its explosions."
   },
   {
    "name": "Augmentations",
@@ -5905,14 +5964,14 @@
    "effect": "At the start of a friendly Carrier’s activation, if that Carrier has 2 or more Bulk Landers, it replaces all its Bulk Landers with a single deployable Orbital Defence Gun Feature (see 7.4.2 Deploying Features and 11.3 Features) until the end of the round. This Ability can only be used once each round."
   },
   {
-   "name": "Abandon all Hope",
+   "name": "Point Blank Death",
    "cost": "2AP",
-   "effect": "At the end of the Planning Phase, target an opponent. That opponent discards D3 Ability Points."
+   "effect": "After rolling to hit an enemy Group in base contact with an attacking friendly Group, re-roll the hit roll for all weapons assigned to that enemy Group."
   },
   {
-   "name": "Assimilated Bioforms",
+   "name": "Out of Sight, Out of Mind",
    "cost": "1AP",
-   "effect": "At the start of the Battalion Combat step of the Asset Phase, pick a City with friendly Battalions on it. Deploy D3 Assimilated Battalions to that City. At the end of the Battalion Combat step, remove any remaining Assimilated Battalions from the Dropsite."
+   "effect": "At the start of an enemy Group’s activation, choose a friendly Group with 0 Spikes or the Stealth special rule. That Group cannot be targeted this Activation if the Weapon targeting it could target another friendly Group on the same Orbital Layer of the same or larger tonnage, and that other Group is closer to the attacking Group."
   },
   {
    "name": "High Speed Launch",
@@ -5920,9 +5979,9 @@
    "effect": "At the end of the Planning Phase, pick a friendly Group. That Group gains Rapid Drop and may launch Assets at the end of its activation while on the Max Thrust order until the end of the round."
   },
   {
-   "name": "Expert Defence Crews",
+   "name": "Silent Killer",
    "cost": "1AP",
-   "effect": "At the start of the Asset Phase, pick a friendly Group. That Group gains Marines-2D3 until the end of the round."
+   "effect": "When a friendly Group is given the Silent Running Order, that Group cannot gain Spikes due to your opponent’s weapons, special rules, and Abilities until the end of the round."
   }
  ]
 }
