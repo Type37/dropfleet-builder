@@ -38,9 +38,12 @@ for (const [name, code] of Object.entries(D.weapon_coded)) {
 }
 
 // 4. matchup averages (reference exact values)
+// Jafdy's averages were computed with his original preset stats. Two of those
+// presets now carry 2.4 card stats, so these checks use his original codes.
+const JAFDY_CODES = { 'PHR Heavy Calibre Broadside': 'aaddarC', 'UCM Cobra Heavy Laser': 'adbdbd' };
 function matchup(weaponName, targetName) {
   const [atk, pt] = D.importTarget(D.target_coded[targetName]);
-  const [wsit, pw] = D.importWeapon(D.weapon_coded[weaponName]);
+  const [wsit, pw] = D.importWeapon(JAFDY_CODES[weaponName] || D.weapon_coded[weaponName]);
   const T = D.createTarget(pt, atk);
   const W = D.createWeapon(pw, pt, atk, wsit);
   const A = new C.Attack(W, T).run();
