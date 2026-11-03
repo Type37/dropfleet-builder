@@ -535,7 +535,7 @@
   <header class="brand">
     <div class="title">Resistance Quick Reference</div>
     <div class="faction">The Resistance</div>
-    <div class="meta">Dropfleet Commander · v2.3.1</div>
+    <div class="meta">Dropfleet Commander · v2.4</div>
   </header>
 
   <main class="grid">
@@ -596,10 +596,10 @@
             <span class="adm-name">Typhoon Vasquez · <i>Red Baron</i> Heavy Cruiser</span>
             <span class="adm-tier">L2 Heavy Cruiser · +1 Ability</span>
           </div>
-          <div class="adm-cost">158 <span class="split">pts (45+113)</span></div>
+          <div class="adm-cost">147 <span class="split">pts (45+102)</span></div>
         </div>
         <div class="flagship"><b>Bullet Baron.</b> Must take 2× N-8 Artillery Banks, 2× N-11 Artillery Turrets, Ablative Armour, and a Scanner Array (jury-rigged, no hardpoint/points cost).</div>
-        <div class="rule"><span class="ap">2AP</span><div><b>Artillery Strike.</b> When assigning targets to a Weapon System with "Artillery" in its name, its damage type becomes <b>Core</b> for those attacks. Costs <b>3AP</b> if the Weapon System is on a H or C tonnage Ship.</div></div>
+        <div class="rule"><span class="ap">2AP*</span><div><b>Artillery Strike.</b> Before attacking with a Group, choose one of that Group’s Weapon Systems with “Artillery” in its name. That Weapon System gains the benefit of its Fusillade rule and you may choose one of the following:<br>• That Weapon System’s damage type becomes Core for that attack.<br>• That Weapon System and all of that Group’s “Artillery” Weapon Systems gain Linked-SSN for that attack if they have no Linked value.<br>If that Weapon System is on a H or C tonnage Ship or a Group of 3 or more Ships, this ability costs 3AP.</div></div>
       </div>
 
       <div class="adm">
@@ -608,7 +608,7 @@
             <span class="adm-name">Hagen · <i>Fortune's Fancy</i> Battlecruiser</span>
             <span class="adm-tier">L2 Battlecruiser · +1 Ability</span>
           </div>
-          <div class="adm-cost">255 <span class="split">pts (45+210)</span></div>
+          <div class="adm-cost">245 <span class="split">pts (45+200)</span></div>
         </div>
         <div class="flagship"><b>Fortune's Fancy.</b> Carries standard launch plus internal Torpedo (Limited-2). Vanguard-3".</div>
         <div class="rule"><span class="ap">3AP</span><div><b>Reinforce Systems.</b> When a friendly Ship of H or C tonnage would roll its Backup save due to an attack, <b>improve its Backup save by 1</b> for that attack.</div></div>
@@ -618,7 +618,7 @@
         <div class="adm-head">
           <div>
             <span class="adm-name">Magellan · <i>Coloniser</i> Interstellar Dreadnought</span>
-            <span class="adm-tier">L3 Dreadnought · +1 Ability</span>
+            <span class="adm-tier">L3 Dreadnought · +2 Abilities</span>
           </div>
           <div class="adm-cost">570 <span class="split">pts (45+525)</span></div>
         </div>
@@ -630,7 +630,7 @@
         <div class="adm-head">
           <div>
             <span class="adm-name">Nguen · <i>Grosses Messer</i> Grand Battleship</span>
-            <span class="adm-tier">L4 Grand Battleship · +1 Ability from the list</span>
+            <span class="adm-tier">L4 Grand Battleship · +2 Abilities from the list</span>
           </div>
           <div class="adm-cost">415 <span class="split">pts (85+330)</span></div>
         </div>
@@ -680,10 +680,44 @@
 
       <div class="rule"><span class="cbox"></span><span class="ap">2AP</span><div><b>Expert Repair Crews.</b> At the start of the Repair step of the End Phase, <b>remove all Crippling effects</b> from a friendly Group.</div></div>
       <div class="rule"><span class="cbox"></span><span class="ap">2AP</span><div><b>Duct Tape and Bubblegum.</b> When a friendly M, H, or C tonnage Ship would be destroyed by an opponent's attack (including Crippling/Explosion), it remains in play until the start of the End Phase. At the start of the End Phase, roll for explosion and remove it. It still counts as destroyed.</div></div>
-      <div class="rule"><span class="cbox"></span><span class="ap">1AP</span><div><b>Redundant Ship Systems.</b> When you would Roll for Crippling Effects for a friendly Ship (for any reason), roll <b>1D6 instead of 2D6</b>. Count a result of 1 as a result of 2.</div></div>
-      <div class="rule"><span class="cbox"></span><span class="ap">1AP</span><div><b>Final Mission.</b> When you attack with Fire Ships, one of those attacking Wings gains <b>Corruptor-2</b> for that attack.</div></div>
-      <div class="rule"><span class="cbox"></span><span class="ap">1AP</span><div><b>Never Tell Me The Odds.</b> When you move a Group through Scenery or move/place a Wing of Assets through Scenery, that Group/Wing <b>ignores the effects of that Scenery piece</b> until the end of the movement.</div></div>
-      <div class="rule"><span class="cbox"></span><span class="ap">2AP</span><div><b>Sabotage.</b> At the end of the Activation Phase, before activating Dropsites, pick a Dropsite controlled by an enemy within 6" of a friendly Group. That Dropsite takes <b>D3+1 Core Hits</b>. You may spend <b>1AP extra</b> to re-roll the D3; treat as an attack for removing a feature.</div></div>
+      <div class="rule"><span class="cbox"></span><span class="ap starap">*AP</span><div><b>Redundant Ship Systems.</b> When you would roll for Crippling Effects for a friendly Ship (for any reason), after rolling, you may pay up to 3AP. Add or subtract 1 (to a minimum of 2) from the result of the roll for each AP paid this way.</div></div>
+      <div class="rule"><span class="cbox"></span><span class="ap">1AP</span><div><b>Never Tell Me The Odds.</b> When you move a Group through Scenery you may re-roll any Kinetic or Energy saves for that movement. When you move/place a Wing through Scenery, you may re-roll the dice when rolling to remove those Assets.</div></div>
+      <div class="rule"><span class="cbox"></span><span class="ap">1AP</span><div><b>Big Guns a' Blazing.</b> When you assign a Group's Weapon System with Damage 2 or higher to targets, double the Attack value of that Weapon System and that Weapon System has an unmodifiable Lock value of 4+ and only causes criticals on a 6+ for this attack and cannot have its dice rolls modified in any way. If this Ability affects a Weapon System with an Arc of B, it costs an additional 1AP. If this Ability affects a Weapon System on a Ship of H or C Tonnage, this Ability costs an additional 1AP (additional costs are cumulative).</div></div>
+      <div class="rule"><span class="cbox"></span><span class="ap">1AP</span><div><b>Missile Storm.</b> At the start of a friendly Group's activation, choose a Weapon System with "Missile" in its name. That Weapon System gains Fusillade-2 and Anti-Wing until the end of the Activation.</div></div>
+
+      <!-- Deployable Features -->
+      <div class="sec" style="margin-top:4pt;">Deployable Features</div>
+
+      <div class="deploy-note"><b>Deploy:</b> Ships with <b>Feature Carrier</b> are assigned Features when you build your fleet, <b>paying their points</b>: Jutland, Midway, Trafalgar must be assigned <b>one</b> Deployable Feature; Actium, Salamis must be assigned <b>two</b> (duplicates allowed). They start the game carrying them. Launched as an Asset, range 6", any Orbital Layer.</div>
+
+      <div class="feat">
+        <div class="feat-head">
+          <span class="feat-name">ICBM Silo</span>
+          <span class="feat-stats">10 pts · ES 5+ · KS 5+ · Hull 4 · <span style="color:var(--ap);">Launch 2 Bombardment Torpedo (Limited-6)</span></span>
+        </div>
+        Bombardment Torpedoes launched from this Feature can only attack Cities and cannot attack the Dropsite the launching Feature is deployed to.
+        <p style="margin-top:1.5pt;">Bombardment Torpedoes launched from this Feature become damage Type C when used against Cities at least 6” away from enemy Ships.</p>
+        <p style="margin-top:1.5pt;">When an attacking Group or Asset/s attack would cause this feature to be removed, if it has any remaining Torpedoes, the attacking opponent may remove an additional Feature and any Battalions assigned to it from this Dropsite.</p>
+      </div>
+
+      <div class="feat">
+        <div class="feat-head">
+          <span class="feat-name">Ark Lander</span>
+          <span class="feat-stats">5 pts · ES 4+ · KS 4+ · Hull 4</span>
+        </div>
+        When this feature is deployed to a Dropsite, 4 friendly Battalions are automatically deployed to that Dropsite.
+        <p style="margin-top:1.5pt;">While Activating Dropsites (during 7.5 Activating Dropsites), if you have more Battalions on this feature than any opponent, you count as controlling the Dropsite this Feature is deployed to. If multiple players count as controlling the same Dropsite this way, this effect is ignored.</p>
+      </div>
+
+      <div class="feat">
+        <div class="feat-head">
+          <span class="feat-name">Scanner Dome</span>
+          <span class="feat-stats">10 pts · ES 5+ · KS 5+ · Hull 4</span>
+        </div>
+        When you assign any weapons to an enemy Ship/Group within 6” of this Dropsite, improve the Lock of those weapons by 1.
+        <p style="margin-top:1.5pt;">When you attack an enemy Descent Ship in Atmosphere within 6” of this Dropsite, instead of the usual penalties for attacking a City or a Descent Ship in Atmosphere (see paragraph 4 of 3.1.2 Atmosphere) that attack always hits on a 5+ and can never cause a critical (instead of a 6+).</p>
+        <p style="margin-top:1.5pt;">e.g. a weapon with Lock 3+ attacking a target in orbit within 6” of this Dropsite would improve its Lock to 2+. If that weapon was attacking a Descent Ship in Atmosphere within 6” of this Dropsite, it would always hit on a 5+ and will not cause criticals. A weapon with Bombardment attacking the same Descent Ship would hit on its Lock value improved by 1.</p>
+      </div>
 
       <!-- Low Power -->
       <div class="sec" style="margin-top:4pt;">Low Power</div>
@@ -702,13 +736,13 @@
       <div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Key Site.</span><span class="vp">2 / 3 VP</span> &nbsp;Nominate a Dropsite at least 24" from your DZ. Control at game end: <b>2VP</b>. If that Dropsite is within 6" of or inside opponent's DZ, score <b>3VP instead</b>.</div></div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Priority Target.</span><span class="vp">2 / 3 VP</span> &nbsp;Nominate a M or L Dropsite at least 24" from your DZ. Level at game end: <b>2VP</b>. If that Dropsite is within 6" of or inside opponent's DZ, score <b>3VP instead</b>.</div></div>
-        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Long Shot.</span><span class="vp">2 VP</span> &nbsp;Nominate a Feature in a Dropsite within 12" of opponent's DZ. Destroyed at game end: <b>2VP</b>. Each Feature can only be nominated once.</div></div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Long Shot.</span><span class="vp">2 VP</span> &nbsp;Nominate a Feature in a Dropsite within 12" of opponent's DZ before the game. Destroyed at game end, or a deployed enemy Deployable Feature within 12" of their DZ destroyed: <b>2VP</b>. Each Feature can only be nominated once.</div></div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Annihilate.</span><span class="vp">max 3 VP</span> &nbsp;1VP per 500 pts of Ships and Admirals destroyed.</div></div>
       </div>
       <div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Take Prizes.</span><span class="vp">max 3 VP</span> &nbsp;1VP per 100 pts of Ships captured.</div></div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Gather Intel.</span><span class="vp">max 2 VP</span> &nbsp;1VP per Survey over 24" from DZ. Capital Ship within 6" may sub attack/launch for Survey. One per Dropsite.</div></div>
-        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Decapitate.</span><span class="vp">2 VP</span> &nbsp;Kill opponent's highest-Level Admiral (or one of if tied).</div></div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Decapitate.</span><span class="vp">2 VP</span> &nbsp;Opponent's highest-Level Admiral has been killed for any reason (or one of if tied).</div></div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Objectives Beyond.</span><span class="vp">1 / 2 VP</span> &nbsp;Nominate one M+ Ship. It must permanently fly off in opponent's DZ. If not Crippled when it leaves: <b>1VP</b>. If it was Heavy or Colossal tonnage, score <b>2VP instead</b>.</div></div>
       </div>
     </div>

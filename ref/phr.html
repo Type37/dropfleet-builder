@@ -492,7 +492,7 @@
   <header class="brand">
     <div class="title">PHR Quick Reference</div>
     <div class="faction">Post-Human Republic</div>
-    <div class="meta">Dropfleet Commander · v2.3.1</div>
+    <div class="meta">Dropfleet Commander · v2.4</div>
   </header>
 
   <main class="grid">
@@ -540,7 +540,7 @@
           </div>
           <div class="adm-cost">65 <span class="split">pts</span></div>
         </div>
-        <div class="rule"><span class="ap">1AP</span><div><b>Re-route Systems.</b> At the start of a friendly Group's activation, remove one Crippling Effect token (of any type) from that Group.</div></div>
+        <div class="rule"><span class="ap">1AP</span><div><b>Re-route Systems.</b> At the start of a friendly Group’s activation, choose a Ship in that Group. That Ship attempts to repair a repairable Crippling Effect.</div></div>
         <div class="rule"><span class="ap">3AP</span><div><b>Ranked Fire.</b> When assigning targets to Broadside Arc weapons, select one with the Volley-X special rule. That weapon does not need to alternate arcs due to Volley-X for that attack (can attack the same target in the same arc using each Volley attack).</div></div>
       </div>
 
@@ -566,18 +566,18 @@
           </div>
           <div class="adm-cost">207 <span class="split">pts (65+142)</span></div>
         </div>
-        <div class="rule"><span class="ap">2AP</span><div><b>Heavy Sniper.</b> When assigning targets to a weapon with the Calibre-H special rule, the attacking Ship doubles its Scan value against H Tonnage Ships for that weapon's attack (other attacks and weapons unaffected).</div></div>
+        <div class="rule"><span class="ap">2AP</span><div><b>Heavy Sniper.</b> When you assign targets to a weapon with the Calibre-H,C, or H/C special rule, the attacking Ship doubles its Scan value against H and C Tonnage Ships for that attack.</div></div>
       </div>
 
       <div class="adm">
         <div class="adm-head">
           <div>
             <span class="adm-name">Claudia Rhee · <i>Heracles</i>-Class Battleship</span>
-            <span class="adm-tier">L4 Battleship · +2 Abilities</span>
+            <span class="adm-tier">L4 Battleship · +3 Abilities</span>
           </div>
           <div class="adm-cost">310 <span class="split">pts (75+235)</span></div>
         </div>
-        <div class="rule"><span class="ap">2AP</span><div><b>High-G Manoeuvre.</b> When a friendly Group is given a Max Thrust order, it may turn as if it was on General Quarters.</div></div>
+        <div class="rule"><span class="ap">1AP</span><div><b>High-G Manouevre.</b> When a friendly Group is given a Max Thrust order, it may turn as if it was on General Quarters.</div></div>
       </div>
 
       <div class="adm">
@@ -588,7 +588,7 @@
           </div>
           <div class="adm-cost">555 <span class="split">pts (105+450)</span></div>
         </div>
-        <div class="rule"><span class="ap">2AP</span><div><b>Backup Systems Engaged.</b> When a friendly ship would roll for Crippling Damage, roll a dice. On a 4+ that Ship does not roll on the Crippling Damage table but is still Crippled.</div></div>
+        <div class="rule"><span class="ap">1AP</span><div><b>Backup Systems Engaged.</b> When a friendly Ship would roll for Crippling Damage, that Ship does not roll for Crippling Damage, but is still Crippled.</div></div>
       </div>
 
       <!-- Launch Assets -->
@@ -630,22 +630,22 @@
       <!-- PHR Abilities -->
       <div class="sec" id="sec-phr-abilities" style="margin-top:4pt;">PHR Abilities</div>
 
-      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">1AP</span><div><b>Countermeasures Hack.</b> At the start of a friendly Group's activation, target an enemy Group a friendly Admiral can draw line of sight to. Until end of activation, that Group cannot use Backup Save, cannot benefit from Aegis, and cannot benefit from Fighters' Close Protection. Costs <b>2AP</b> vs H or C tonnage.</div></div>
-      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">2AP</span><div><b>Weapons Hack.</b> Once per round, at the start of an enemy Group's activation, choose one of that Group's Weapon Systems. Until end of that Group's activation, each of that weapon's attack dice results of <b>1</b> causes the attacking Ship to lose the weapon's unmodified Damage value in hull points.</div></div>
-      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">1AP</span><div><b>Ship Of The Line.</b> When you assign targets to a Group's weapons, that Group's Broadside Arc weapons with <b>Fusillade-X</b> gain the benefit of Fusillade regardless of the Group's Order this activation. If on Weapons Free, instead <b>double</b> the Fusillade value of those weapons for that attack.</div></div>
-      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">2AP</span><div><b>Drive Hack.</b> Once per round, at end of the Planning Phase, target an enemy Group a friendly Admiral can draw line of sight to. At the start of that Group's activation, it must make a single Backup save. If it fails (or has no Backup save), that Group <b>cannot go on Course Change or Max Thrust</b>.</div></div>
+      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">2AP</span><div><b>Countermeasures Hack.</b> At the start of a friendly Group’s activation, choose an enemy Ship in line of sight of a friendly Admiral. Until the end of the activation, that Ship counts as having a Defences Offline token. If this Ability targets a H or C tonnage Group, this Ability costs 3AP.</div></div>
+      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">2AP</span><div><b>Weapons Hack.</b> When an opponent assigns weapons to friendly Ships, choose one of the attacking Group’s Weapon Systems. Until the end of the attacking Ships’ activation, that Weapon System automatically misses on rolls of a 2 or less and your opponent cannot use abilities on those weapons. This can cause that opponent’s unresolved abilities on that Weapon System to be negated.</div></div>
+      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">1AP</span><div><b>Ship of the Line.</b> When you assign targets to a Group's weapons, that Group's Broadside Arc weapons that have the Fusillade-X special rule gain the benefit of their Fusillade rule regardless of the Group's Order for its attacks this activation. If the attacking Group is on the Weapons Free order, improve the lock of Broadside Arc weapons with Fusillade-X by 1 for this attack sequence.</div></div>
+      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">2AP</span><div><b>Drive Hack.</b> Once per round, at the start of an enemy Group’s activation, if that Group is in a friendly Admiral’s line of sight, the enemy Group makes a single Backup save. At the start of that Group’s activation, it must make a single Backup save. If it fails (or has no) Backup save, that Group reduces its Thrust value by half this activation.</div></div>
       <div class="rule rule-3col"><span class="cbox"></span><span class="ap">1AP</span><div><b>Repair Drone Squadron.</b> At end of the Repair step of the End Phase, target a friendly Ship. That Ship recovers <b>D3</b> lost Hull Points.</div></div>
-      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">2AP</span><div><b>Elite Ground Forces.</b> At start of the Battalion Combat step of the Asset Phase, choose a Feature containing friendly Battalions. Until end of that step, those Battalions remove <b>2</b> enemy Battalions instead of 1 and may also remove enemy Battalions from <b>anywhere on that Dropsite</b> in the 3rd step of the combat sequence.</div></div>
+      <div class="rule rule-3col"><span class="cbox"></span><span class="ap">2AP</span><div><b>Hull Tanking.</b> After an opponent assigns weapons to friendly targets, choose one of those friendly Groups. That Group gains Reinforced Armour until the end of the Activation. If the friendly Group is H or C tonnage, this Ability costs 3AP.</div></div>
 
       <!-- Deployable Features -->
       <div class="sec" style="margin-top:4pt;">Deployable Features</div>
 
-      <div class="deploy-note"><b>Deploy:</b> Ships with <b>Feature Carrier</b> (Ptolemy, Seleucus, Antigonus, Antony) pick one Feature pre-game. Launched as an Asset, range 6", any Orbital Layer.</div>
+      <div class="deploy-note"><b>Deploy:</b> Ships with <b>Feature Carrier</b> are assigned Features when you build your fleet, <b>paying their points</b>: Antigonus, Antony, Ptolemy, Seleucus must be assigned <b>one</b> Deployable Feature. They start the game carrying them. Launched as an Asset, range 6", any Orbital Layer.</div>
 
       <div class="feat">
         <div class="feat-head">
           <span class="feat-name">Heavy Calibre Orbital Gun</span>
-          <span class="feat-stats">ES 5+ · KS 3+</span>
+          <span class="feat-stats">5 pts · ES 5+ · KS 5+ · Hull 4</span>
         </div>
         While a Ship <b>carries</b> this Feature, it gains the <b>Heavy Calibre Orbital Gun (Mounted)</b> Weapon System in addition to its normal weapons. The Feature itself cannot fire the Mounted profile while carried. Once <b>deployed</b>, the Dropsite fires the Deployed profile.
         <table class="launch" style="margin-top:2pt;">
@@ -671,7 +671,7 @@
       <div class="feat">
         <div class="feat-head">
           <span class="feat-name">Shield Platform</span>
-          <span class="feat-stats">ES 4+ · KS 4+</span>
+          <span class="feat-stats">10 pts · ES 3+ · KS 3+ · Hull 4</span>
         </div>
         Friendly Groups in coherency within 6" of this Dropsite gain <b>Reinforced Armour.</b> This Dropsite counts as having Reinforced Armour against enemy attacks; reduce the Lock of enemy weapons targeting this Dropsite by 1.
       </div>
@@ -679,7 +679,7 @@
       <div class="feat">
         <div class="feat-head">
           <span class="feat-name">Scanner Tower</span>
-          <span class="feat-stats">ES 3+ · KS 5+</span>
+          <span class="feat-stats">15 pts · ES 5+ · KS 5+ · Hull 4</span>
         </div>
         When you activate this Feature, place <b>2 Spikes</b> on any enemy Group in line of sight, then place <b>2 more Spikes</b> on any enemy Group in line of sight.
       </div>
@@ -695,13 +695,13 @@
       <div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Key Site.</span><span class="vp">2 / 3 VP</span> &nbsp;Nominate a Dropsite at least 24" from your DZ. Control at game end: <b>2VP</b>. If that Dropsite is within 6" of or inside opponent's DZ, score <b>3VP instead</b>.</div></div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Priority Target.</span><span class="vp">2 / 3 VP</span> &nbsp;Nominate a M or L Dropsite at least 24" from your DZ. Level at game end: <b>2VP</b>. If that Dropsite is within 6" of or inside opponent's DZ, score <b>3VP instead</b>.</div></div>
-        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Long Shot.</span><span class="vp">2 VP</span> &nbsp;Nominate a Feature in a Dropsite within 12" of opponent's DZ. Destroyed at game end: <b>2VP</b>. Each Feature can only be nominated once.</div></div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Long Shot.</span><span class="vp">2 VP</span> &nbsp;Nominate a Feature in a Dropsite within 12" of opponent's DZ before the game. Destroyed at game end, or a deployed enemy Deployable Feature within 12" of their DZ destroyed: <b>2VP</b>. Each Feature can only be nominated once.</div></div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Annihilate.</span><span class="vp">max 3 VP</span> &nbsp;1VP per 500 pts of Ships and Admirals destroyed.</div></div>
       </div>
       <div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Take Prizes.</span><span class="vp">max 3 VP</span> &nbsp;1VP per 100 pts of Ships captured.</div></div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Gather Intel.</span><span class="vp">max 2 VP</span> &nbsp;1VP per Survey over 24" from DZ. Capital Ship within 6" may sub attack/launch for Survey. One per Dropsite.</div></div>
-        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Decapitate.</span><span class="vp">2 VP</span> &nbsp;Kill opponent's highest-Level Admiral (or one of if tied).</div></div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Decapitate.</span><span class="vp">2 VP</span> &nbsp;Opponent's highest-Level Admiral has been killed for any reason (or one of if tied).</div></div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Objectives Beyond.</span><span class="vp">1 / 2 VP</span> &nbsp;Nominate one M+ Ship. It must permanently fly off in opponent's DZ. If not Crippled when it leaves: <b>1VP</b>. If it was Heavy or Colossal tonnage, score <b>2VP instead</b>.</div></div>
       </div>
     </div>

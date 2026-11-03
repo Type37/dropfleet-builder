@@ -552,7 +552,7 @@
   <header class="brand">
     <div class="title">Bioficer Quick Reference</div>
     <div class="faction">The Bioficers</div>
-    <div class="meta">Dropfleet Commander · v2.3.1</div>
+    <div class="meta">Dropfleet Commander · v2.4</div>
   </header>
 
   <main class="grid">
@@ -589,7 +589,7 @@
           </div>
           <div class="adm-cost">25 <span class="split">pts</span></div>
         </div>
-        <div class="rule"><span class="ap">2AP</span><div><b>Backpedal.</b> At the start of a friendly Group's activation, pick any friendly Group. You may move each Ship in that Group up to <b>3" directly backwards</b>.</div></div>
+        <div class="rule"><span class="ap">2AP</span><div><b>Backpedal.</b> At the start of a friendly Group’s activation, pick any friendly Group. You may move each Ship in that Group up to 3” directly backwards, then turn any Ship that moved up to 22 degrees (the size of the FN or RN arc).</div></div>
       </div>
 
       <div class="adm">
@@ -600,7 +600,7 @@
           </div>
           <div class="adm-cost">65 <span class="split">pts</span></div>
         </div>
-        <div class="rule"><span class="ap">2AP</span><div><b>Gravitic Manoeuvring.</b> When a friendly Group is given a <b>Max Thrust</b> Order, it may turn as if it was on General Quarters.</div></div>
+        <div class="rule"><span class="ap">2AP</span><div><b>Gravitic Manoeuvring.</b> When a friendly Group is given a Weapons Free or Max Thrust Order, it may turn as if it was on General Quarters.</div></div>
         <div class="rule"><span class="ap">1AP</span><div><b>Kinetic Deconstruction.</b> When a friendly Group makes an attack with any number of weapons with "Decon" in its name, those weapons change their Type to <b>Kinetic</b> until the end of its activation.</div></div>
       </div>
 
@@ -634,9 +634,9 @@
         <div class="adm-head">
           <div>
             <span class="adm-name">Agency · <i>Bastion</i>-Class Battleship</span>
-            <span class="adm-tier">L3 Battleship · +1 Ability</span>
+            <span class="adm-tier">L3 Battleship · +3 Abilities</span>
           </div>
-          <div class="adm-cost">310 <span class="split">pts (65+245)</span></div>
+          <div class="adm-cost">290 <span class="split">pts (65+225)</span></div>
         </div>
         <div class="rule"><span class="ap">2AP</span><div><b>Sinthetic Grav Waves.</b> When you inflict damage to an enemy Ship with a weapon with the <b>Arrest-X</b> special rule, each Ship in the damaged Group is affected by the Arrest rule and <b>increases its X value by 2</b> for that attack.</div></div>
       </div>
@@ -649,7 +649,7 @@
           </div>
           <div class="adm-cost">605 <span class="split">pts (85+520)</span></div>
         </div>
-        <div class="rule"><span class="ap">2AP</span><div><b>Overwatch.</b> When you activate this Ship on General Quarters, you may forgo attacking. It goes on Overwatch until end of round or until it declares its use. At the end of any enemy Group's activation that moved through this Ship's Front arc while in weapons range, this Ship immediately makes an Attack as if on General Quarters against that Group, <b>even if out of arc and range</b>.</div></div>
+        <div class="rule"><span class="ap">2AP</span><div><b>Overwatch .</b> When you activate this Ship on General Quarters, you may forgo attacking. It goes on Overwatch until end of round or until it declares its use. At the end of any enemy Group's activation that moved through this Ship's Front arc while in weapons range, this Ship immediately makes an Attack as if on General Quarters against that Group, <b>even if out of arc and range</b>.</div></div>
       </div>
 
       <!-- Launch Assets (left-col slot) -->
@@ -696,12 +696,12 @@
       <!-- Bioficer Abilities -->
       <div class="sec" id="sec-ucm-abilities" style="margin-top:4pt;">Bioficer Abilities</div>
 
-      <div class="rule"><span class="cbox"></span><span class="ap">1AP</span><div><b>Good Fight, We Should Do It More Often.</b> If a friendly Group's attack would cause an enemy Group to be <b>completely removed</b> from the table, the friendly Group may immediately <b>turn up to 45°</b>.</div></div>
-      <div class="rule"><span class="cbox"></span><span class="ap">3AP</span><div><b>Maddening Communique.</b> At the start of the Activation Phase, pick an opponent. That opponent's Abilities cost <b>1 additional AP</b> to use until end of round.</div></div>
-      <div class="rule"><span class="cbox"></span><span class="ap">2AP</span><div><b>Forcing an Unfair Fight.</b> At the start of the Activation Phase, pick a Dropsite you contest. <b>Add a friendly Battalion</b> to each Feature on that Dropsite. In the Cleanup step, <b>remove a friendly Battalion</b> from each Feature on that Dropsite.</div></div>
-      <div class="rule"><span class="cbox"></span><span class="ap">2AP</span><div><b>Precision Strike.</b> When you assign a Group's weapons to targets, pick one of the attacking Group's Weapon Systems. <b>Improve its Lock by 1</b> for this attack sequence.</div></div>
-      <div class="rule"><span class="cbox"></span><span class="ap">1AP</span><div><b>Prismatic Surprise.</b> At the end of the Planning Phase, you may <b>swap the attached Payloads</b> of two Porter Ships with the same Porter value.</div></div>
-      <div class="rule"><span class="cbox"></span><span class="ap">3AP</span><div><b>Unsportsmanlike Behaviour.</b> During this round's Cleanup step, all players <b>retain any unspent AP</b> into the next round. Next round, only players who used this Ability this round can generate AP from Admirals in the Planning Phase.</div></div>
+      <div class="rule"><span class="cbox"></span><span class="ap">1AP</span><div><b>Good Fight, We Should Do It More Often.</b> At the end of the Activation Phase, choose one friendly Group and one enemy Group of the same or greater Tonnage within Scan range of the friendly Group. Starting with the friendly Group, Both Groups attack with a single Weapon System as if on the General Quarters Order, following the sequence in 7.3 Attack until 7.3.5 Inflict Damage. Damage from these attacks is then inflicted simultaneously.</div></div>
+      <div class="rule"><span class="cbox"></span><span class="ap">2AP</span><div><b>Precision Strike.</b> At the start of a friendly Group’s activation, choose one weapon on a Ship in that Group. That weapon gains Crippling until the end of the Group’s activation. Weapons with the Close Action special rule are unaffected.</div></div>
+      <div class="rule"><span class="cbox"></span><span class="ap">1AP</span><div><b>Prismatic Surprise.</b> Once per round, when you assign targets to a weapon with “Prism” in its name, other friendly Ships with the same name as the attacking Ship and that are within 12” of the target may contribute to the attack. For each Ship that contributes, the attacking “Prism” weapon increases its Attack by 1. If this causes the Attack of the attacking weapon to double or more, that weapon gains Penetrator for that attack.</div></div>
+      <div class="rule"><span class="cbox"></span><span class="ap starap">*AP</span><div><b>Unsportsmanlike Behaviour.</b> At the start of the Activation Phase, you may pay up to 3AP. If you do, roll twice that many dice and declare the unmodified results to your opponent. Until the end of the Activation Phase, after your opponent rolls to hit, to wound, for Crippling Effects, and for Explosion Effects, you may replace one of the dice in that roll with one of your declared dice, as if using an Ability. Any unused dice are lost at the end of the Activation Phase.</div></div>
+      <div class="rule"><span class="cbox"></span><span class="ap">1AP</span><div><b>Esoteric Ammunition.</b> When you assign a Group’s weapons to a target, each of the attacking Group’s Weapon Systems with “Barb” in their name gain Bloom-1, Flash-1, and Critical-1 for that attack.</div></div>
+      <div class="rule"><span class="cbox"></span><span class="ap">1AP</span><div><b>Limited Sensor Profile.</b> When an enemy Group assigns weapons to a friendly Group, if that enemy Group’s Lead Ship is in the Front or Rear Arc of the closest Ship to it in the friendly Group, reduce the Lock of the weapons targeting the friendly Group by 1.</div></div>
 
       <!-- Deployable Features -->
       <div class="sec" style="margin-top:4pt;">Deployable Features</div>
@@ -711,7 +711,7 @@
       <div class="feat">
         <div class="feat-head">
           <span class="feat-name">Genitor Tower</span>
-          <span class="feat-stats">15 pts · ES 4+ · KS 4+</span>
+          <span class="feat-stats">15 pts · ES 4+ · KS 4+ · Hull 4</span>
         </div>
         When one or more <b>enemy Battalions</b> on this Dropsite and its Features are removed for any reason, place <b>2 friendly Battalions</b> on this Dropsite, regardless of the number of Battalions removed or number of Genitor Towers present. If these Battalions are gained through Battalion Combat, they are placed <b>after</b> Battalion Combat.
         <p style="margin-top:1.5pt;">When this Feature is <b>destroyed</b>, it contributes its points to the <b>Kill Points</b> of the opposing player that destroyed it.</p>
@@ -720,7 +720,7 @@
       <div class="feat">
         <div class="feat-head">
           <span class="feat-name">Gravitational Arc</span>
-          <span class="feat-stats">ES 4+ · KS 4+</span>
+          <span class="feat-stats">12 pts · ES 4+ · KS 4+ · Hull 5</span>
         </div>
         When an enemy Group ends its move within 6" of this Feature's dropsite and in atmosphere, that Group's player rolls a dice. On a 1-3, the Group is moved into Orbit and cannot move into Atmosphere again this round. It suffers the effects of moving through any scenery it is placed in. This takes place before that Group attacks or launches assets. If all Ships in the Group have Orbital Decay tokens, they are not affected. This feature requires 5 or more Battalions to be removed during Battalion Combat and 5 damage to remove due to attacks.
       </div>
@@ -728,9 +728,9 @@
       <div class="feat">
         <div class="feat-head">
           <span class="feat-name">Ghost Orb Tower</span>
-          <span class="feat-stats">ES 4+ · KS 4+</span>
+          <span class="feat-stats">16 pts · ES 4+ · KS 4+ · Hull 5</span>
         </div>
-        Armed with the <b>Ghost Orb</b>. When you activate this Feature, remove 1 enemy Battalion from each Feature on this Dropsite, then remove 1 enemy Battalion from anywhere on this Dropsite. This feature requires 5 or more Battalions to be removed due to Battalion Combat and 5 damage to remove due to Group/Asset attacks.
+        Armed with the <b>Ghost Orb</b>. When you activate this Feature, remove 1 enemy Battalion from each Feature on this Dropsite, then remove 1 enemy Battalion from anywhere on this Dropsite. When a Ship carrying this Feature attacks, you may have one of its weapons gain <b>Status</b> for that attack.
         <table class="launch" style="margin-top:2pt;">
           <thead>
             <tr>
@@ -772,13 +772,13 @@
       <div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Key Site.</span><span class="vp">2 / 3 VP</span> &nbsp;Nominate a Dropsite at least 24" from your DZ. Control at game end: <b>2VP</b>. If that Dropsite is within 6" of or inside opponent's DZ, score <b>3VP instead</b>.</div></div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Priority Target.</span><span class="vp">2 / 3 VP</span> &nbsp;Nominate a M or L Dropsite at least 24" from your DZ. Level at game end: <b>2VP</b>. If that Dropsite is within 6" of or inside opponent's DZ, score <b>3VP instead</b>.</div></div>
-        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Long Shot.</span><span class="vp">2 VP</span> &nbsp;Nominate a Feature in a Dropsite within 12" of opponent's DZ. Destroyed at game end: <b>2VP</b>. Each Feature can only be nominated once.</div></div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Long Shot.</span><span class="vp">2 VP</span> &nbsp;Nominate a Feature in a Dropsite within 12" of opponent's DZ before the game. Destroyed at game end, or a deployed enemy Deployable Feature within 12" of their DZ destroyed: <b>2VP</b>. Each Feature can only be nominated once.</div></div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Annihilate.</span><span class="vp">max 3 VP</span> &nbsp;1VP per 500 pts of Ships and Admirals destroyed.</div></div>
       </div>
       <div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Take Prizes.</span><span class="vp">max 3 VP</span> &nbsp;1VP per 100 pts of Ships captured.</div></div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Gather Intel.</span><span class="vp">max 2 VP</span> &nbsp;1VP per Survey over 24" from DZ. Capital Ship within 6" may sub attack/launch for Survey. One per Dropsite.</div></div>
-        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Decapitate.</span><span class="vp">2 VP</span> &nbsp;Kill opponent's highest-Level Admiral (or one of if tied).</div></div>
+        <div class="obj"><span class="cbox-lg"></span><div><span class="name">Decapitate.</span><span class="vp">2 VP</span> &nbsp;Opponent's highest-Level Admiral has been killed for any reason (or one of if tied).</div></div>
         <div class="obj"><span class="cbox-lg"></span><div><span class="name">Objectives Beyond.</span><span class="vp">1 / 2 VP</span> &nbsp;Nominate one M+ Ship. It must permanently fly off in opponent's DZ. If not Crippled when it leaves: <b>1VP</b>. If it was Heavy or Colossal tonnage, score <b>2VP instead</b>.</div></div>
       </div>
     </div>
