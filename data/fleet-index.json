@@ -224,7 +224,7 @@
    "page": "52"
   },
   "Arrest-X": {
-   "description": "A Ship damaged by this Weapon reduces its Thrust by X during its next activation. A Ship affected by this rule multiple times before it activates uses the highest X value it is affected by to determine its Thrust reduction.",
+   "description": "A Ship damaged by this Weapon reduces its Thrust by X” during its next activation. A Ship affected by this rule multiple times before it activates uses the highest X value it is affected by to determine its Thrust reduction.",
    "page": "49",
    "section": "14.2.4"
   },
@@ -269,22 +269,22 @@
    "section": "14.2.11"
   },
   "Crippling-Fire": {
-   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Fire: Gain a Fire Token. At the start of the End Phase, before the Repair step, this Ship suffers a point of damage for each Fire Token it has. Repairable.",
+   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Fire: Gain a Fire Token. At the start of the End Phase, before the Repair step, this Ship suffers a point of damage for each Fire Token it has. Repairable.\nExcept for Fire, a Ship can only have one of each type of Crippling Effect token at a time (Spikes are not a Crippling Effect), even when placed from different sources or at different times. Any duplicate effects are ignored and discarded.",
    "page": "49",
    "section": "14.2.11"
   },
   "Crippling-2xFire": {
-   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Gain two Fire Tokens (Fire is the one Crippling Effect a Ship may hold more than one of). At the start of the End Phase, before the Repair step, this Ship suffers a point of damage for each Fire Token it has. Repairable.",
+   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Gain two Fire Tokens (Fire is the one Crippling Effect a Ship may hold more than one of). At the start of the End Phase, before the Repair step, this Ship suffers a point of damage for each Fire Token it has. Repairable.\nExcept for Fire, a Ship can only have one of each type of Crippling Effect token at a time (Spikes are not a Crippling Effect), even when placed from different sources or at different times. Any duplicate effects are ignored and discarded.",
    "page": "49",
    "section": "14.2.11"
   },
   "Crippling-Navigation Offline": {
-   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Navigation Offline: Gain a Navigation Offline token, reducing this Ship’s total movement to 2” (regardless of Thrust) and preventing it from turning or changing Orbital Layer. Repairable.",
+   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Navigation Offline: Gain a Navigation Offline token, reducing this Ship’s total movement to 2” (regardless of Thrust) and preventing it from turning or changing Orbital Layer. Repairable.\nExcept for Fire, a Ship can only have one of each type of Crippling Effect token at a time (Spikes are not a Crippling Effect), even when placed from different sources or at different times. Any duplicate effects are ignored and discarded.",
    "page": "49",
    "section": "14.2.11"
   },
   "Crippling-Weapons Offline": {
-   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Weapons Offline: Gain a Weapons Offline token, preventing this Ship from using Weapons or launching Assets. Repairable.",
+   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Weapons Offline: Gain a Weapons Offline token, preventing this Ship from using Weapons or launching Assets. Repairable.\nExcept for Fire, a Ship can only have one of each type of Crippling Effect token at a time (Spikes are not a Crippling Effect), even when placed from different sources or at different times. Any duplicate effects are ignored and discarded.",
    "page": "49",
    "section": "14.2.11"
   },
@@ -384,7 +384,7 @@
    "section": "14.2.29"
   },
   "Crippling": {
-   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship suffers a Crippling Effect regardless of Tonnage: roll 2D6 and apply the result from the Crippling Effect table.",
+   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship suffers a Crippling Effect regardless of Tonnage: roll 2D6 and apply the result from the Crippling Effect table.\nExcept for Fire, a Ship can only have one of each type of Crippling Effect token at a time (Spikes are not a Crippling Effect), even when placed from different sources or at different times. Any duplicate effects are ignored and discarded.",
    "page": "49",
    "section": "14.2.11"
   },
@@ -466,7 +466,7 @@
   {
    "id": "merc-aurorum",
    "name": "Hyperyacht Aurorum",
-   "cost": 80,
+   "cost": 76,
    "category": "light",
    "factions": [
     "ucm",

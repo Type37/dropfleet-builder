@@ -4400,7 +4400,7 @@
    "category": "light",
    "ship": {
     "name": "Hyperyacht Aurorum",
-    "cost": 80,
+    "cost": 76,
     "stats": {
      "thrust": "9\"",
      "scan": "6\"",
@@ -4410,7 +4410,7 @@
      "ks": "5+",
      "bs": "6+",
      "g": "1",
-     "special": "Marines-2, Stealth, Unique"
+     "special": "Marines-2, Hero, Stealth, Unique"
     },
     "weapons": [
      {
@@ -4435,6 +4435,11 @@
       "name": "Marines-2",
       "description": "Remove 2 enemy Battalions from this Ship at the beginning of the Battalion Combat step.",
       "page": "36",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Hero",
+      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet.",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
