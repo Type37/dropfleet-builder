@@ -419,19 +419,19 @@
   "phr": {
    "name": "Post-Human Republic",
    "shortName": "PHR",
-   "shipCount": 78,
+   "shipCount": 79,
    "admiralCount": 6
   },
   "resistance": {
    "name": "Resistance",
    "shortName": "Resistance",
-   "shipCount": 67,
+   "shipCount": 69,
    "admiralCount": 6
   },
   "scourge": {
    "name": "Scourge",
    "shortName": "Scourge",
-   "shipCount": 69,
+   "shipCount": 70,
    "admiralCount": 6
   },
   "shaltari": {
@@ -443,7 +443,7 @@
   "ucm": {
    "name": "United Colonies of Mankind",
    "shortName": "UCM",
-   "shipCount": 80,
+   "shipCount": 81,
    "admiralCount": 6
   }
  },
@@ -666,7 +666,7 @@
   ]
  },
  "edition": {
-  "month": "October 2026",
-  "file": "Civilian_Ships_Scenarios_261001"
+  "month": "November 2026",
+  "file": "Dropfleet 2.4"
  }
 }

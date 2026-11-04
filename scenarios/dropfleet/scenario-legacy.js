@@ -1,7 +1,7 @@
 /* 1st edition Dropfleet scenarios converted to the current edition by WarLore on Jet's call (2026-09-13),
    from TTCombat's "Scenarios (Unsupported)" downloads: Automated_Dreadnought.pdf, Advent_Scenarios.pdf and
    Dropfleet_Core_Scenarios.pdf. The 1st edition rules are Desktop_Dropfleet_Rulebook_1.2.pdf; the current
-   ones the 2.3.1 rulebook (section numbers below), Scenario Expansion 1 and Fleet_Space_Stations_250828.pdf.
+   ones the 2.3.1 rulebook (section numbers below), Scenario Expansion 1 and Fleet_Space_Stations_261104.pdf.
 
    Every change maps a 1st edition term to the current rule that does the same job:
    - Cluster of 2/3/4 Sectors -> Small/Medium/Large City. Hold 2/3/4 VP, Contest 0/1/2 VP on turns 4 and 6

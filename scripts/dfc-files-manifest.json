@@ -1,12 +1,12 @@
 {
  "source": "https://ttcombat.com/pages/dropfleet-commander-downloads",
  "files": {
-  "A5_Dropfleet_Rulebook_2.3.1_Print_Friendly": {
-   "filename": "A5_Dropfleet_Rulebook_2.3.1_Print_Friendly.pdf",
+  "A5_Dropfleet_Rulebook_2.4_Print_Friendly": {
+   "filename": "A5_Dropfleet_Rulebook_2.4_Print_Friendly.pdf",
    "date": null,
-   "version": "v=1774605669",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/A5_Dropfleet_Rulebook_2.3.1_Print_Friendly.pdf?v=1774605669",
-   "bytes": 6677060
+   "version": "v=1793786159",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/A5_Dropfleet_Rulebook_2.4_Print_Friendly.pdf?v=1793786159",
+   "bytes": 6683860
   },
   "Advent_Scenarios": {
    "filename": "Advent_Scenarios.pdf",
@@ -23,18 +23,18 @@
    "bytes": 1797437
   },
   "Bioficer_Combined_Fleet_Stats": {
-   "filename": "Bioficer_Combined_Fleet_Stats_260925.pdf",
-   "date": "260925",
-   "version": "v=1790330003",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Bioficer_Combined_Fleet_Stats_260925.pdf?v=1790330003",
-   "bytes": 19876602
+   "filename": "Bioficer_Combined_Fleet_Stats_261104.pdf",
+   "date": "261104",
+   "version": "v=1793786159",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Bioficer_Combined_Fleet_Stats_261104.pdf?v=1793786159",
+   "bytes": 4979285
   },
   "Civilian_Ships_Scenarios": {
-   "filename": "Civilian_Ships_Scenarios_261001.pdf",
-   "date": "261001",
-   "version": "v=1790842793",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Civilian_Ships_Scenarios_261001.pdf?v=1790842793",
-   "bytes": 6407388
+   "filename": "Civilian_Ships_Scenarios_261104.pdf",
+   "date": "261104",
+   "version": "v=1793786159",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Civilian_Ships_Scenarios_261104.pdf?v=1793786159",
+   "bytes": 4487316
   },
   "Clusters_and_Debris_Sheets": {
    "filename": "Clusters_and_Debris_Sheets.pdf",
@@ -57,19 +57,19 @@
    "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Dreadhold_FAQ.pdf?v=1766404183",
    "bytes": 1269032
   },
-  "Dropfleet_Commander_FAQ_v1.3": {
-   "filename": "Dropfleet_Commander_FAQ_v1.3.pdf",
+  "Dropfleet_Commander_FAQ_v1.4": {
+   "filename": "Dropfleet_Commander_FAQ_v1.4.pdf",
    "date": null,
-   "version": "v=1755254834",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_Commander_FAQ_v1.3.pdf?v=1755254834",
-   "bytes": 2323299
+   "version": "v=1793786158",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_Commander_FAQ_v1.4.pdf?v=1793786158",
+   "bytes": 2419066
   },
-  "Dropfleet_Commander_Ship_Updates_v1.3": {
-   "filename": "Dropfleet_Commander_Ship_Updates_v1.3.pdf",
+  "Dropfleet_Commander_Ship_Updates_v1.4": {
+   "filename": "Dropfleet_Commander_Ship_Updates_v1.4.pdf",
    "date": null,
-   "version": "v=1755507973",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_Commander_Ship_Updates_v1.3.pdf?v=1755507973",
-   "bytes": 2364264
+   "version": "v=1793786158",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_Commander_Ship_Updates_v1.4.pdf?v=1793786158",
+   "bytes": 2757477
   },
   "Dropfleet_Core_Scenarios": {
    "filename": "Dropfleet_Core_Scenarios_2704ae6b-ad65-48af-a5e2-109efd0e5109.pdf",
@@ -114,11 +114,11 @@
    "bytes": 1829887
   },
   "Fleet_Space_Stations": {
-   "filename": "Fleet_Space_Stations_250828.pdf",
-   "date": "250828",
-   "version": "v=1787908199",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Fleet_Space_Stations_250828.pdf?v=1787908199",
-   "bytes": 8953639
+   "filename": "Fleet_Space_Stations_261104.pdf",
+   "date": "261104",
+   "version": "v=1793786535",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Fleet_Space_Stations_261104.pdf?v=1793786535",
+   "bytes": 8909873
   },
   "LSO_Moon": {
    "filename": "LSO_Moon.pdf",
@@ -128,11 +128,11 @@
    "bytes": 3365096
   },
   "Misc_Combined_Ship_Stats": {
-   "filename": "Misc_Combined_Ship_Stats_250822.pdf",
-   "date": "250822",
-   "version": "v=1755851905",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Misc_Combined_Ship_Stats_250822.pdf?v=1755851905",
-   "bytes": 13682198
+   "filename": "Misc_Combined_Ship_Stats_261104.pdf",
+   "date": "261104",
+   "version": "v=1793786159",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Misc_Combined_Ship_Stats_261104.pdf?v=1793786159",
+   "bytes": 5249285
   },
   "Occupied_New_York_Features": {
    "filename": "Occupied_New_York_Features_241016.pdf",
@@ -142,18 +142,18 @@
    "bytes": 3654223
   },
   "PHR_Combined_Fleet_Stats": {
-   "filename": "PHR_Combined_Fleet_Stats_260828.pdf",
-   "date": "260828",
-   "version": "v=1787907744",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/PHR_Combined_Fleet_Stats_260828.pdf?v=1787907744",
-   "bytes": 16512114
+   "filename": "PHR_Combined_Fleet_Stats_261104.pdf",
+   "date": "261104",
+   "version": "v=1793786159",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/PHR_Combined_Fleet_Stats_261104.pdf?v=1793786159",
+   "bytes": 4430970
   },
   "Resistance_Combined_Fleet_Stats": {
-   "filename": "Resistance_Combined_Fleet_Stats_260731.pdf",
-   "date": "260731",
-   "version": "v=1787325876",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Resistance_Combined_Fleet_Stats_260731.pdf?v=1787325876",
-   "bytes": 4567743
+   "filename": "Resistance_Combined_Fleet_Stats_261104.pdf",
+   "date": "261104",
+   "version": "v=1793786158",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Resistance_Combined_Fleet_Stats_261104.pdf?v=1793786158",
+   "bytes": 4663427
   },
   "Scenario_Expansion_1": {
    "filename": "Scenario_Expansion_1_250818.pdf",
@@ -163,18 +163,18 @@
    "bytes": 13160330
   },
   "Scourge_Combined_Fleet_Stats": {
-   "filename": "Scourge_Combined_Fleet_Stats_260626.pdf",
-   "date": "260626",
-   "version": "v=1782476369",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Scourge_Combined_Fleet_Stats_260626.pdf?v=1782476369",
-   "bytes": 5083753
+   "filename": "Scourge_Combined_Fleet_Stats_261104.pdf",
+   "date": "261104",
+   "version": "v=1793786159",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Scourge_Combined_Fleet_Stats_261104.pdf?v=1793786159",
+   "bytes": 5158426
   },
   "Shaltari_Combined_Fleet_Stats": {
-   "filename": "Shaltari_Combined_Fleet_Stats_260925.pdf",
-   "date": "260925",
-   "version": "v=1790330054",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Shaltari_Combined_Fleet_Stats_260925.pdf?v=1790330054",
-   "bytes": 5606057
+   "filename": "Shaltari_Combined_Fleet_Stats_261104.pdf",
+   "date": "261104",
+   "version": "v=1793786159",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Shaltari_Combined_Fleet_Stats_261104.pdf?v=1793786159",
+   "bytes": 5609682
   },
   "Space_Stations": {
    "filename": "Space_Stations_d2c7c282-ac78-4e79-9c29-abab52d4c6ae.pdf",
@@ -191,14 +191,11 @@
    "bytes": 233470
   },
   "UCM_Combined_Fleet_Stats": {
-   "filename": "UCM_Combined_Fleet_Stats_260828.pdf",
-   "date": "260828",
-   "version": "v=1787908175",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/UCM_Combined_Fleet_Stats_260828.pdf?v=1787908175",
-   "bytes": 20083776,
-   "stale_bytes": [
-    20083785
-   ]
+   "filename": "UCM_Combined_Fleet_Stats_261104.pdf",
+   "date": "261104",
+   "version": "v=1793786159",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/UCM_Combined_Fleet_Stats_261104.pdf?v=1793786159",
+   "bytes": 5372619
   }
  }
 }

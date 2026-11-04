@@ -1684,7 +1684,7 @@
       "lock": "2+",
       "damage": "1",
       "type": "K",
-      "special": "Reave-2"
+      "special": "Focused, Reave-2"
      }
     ],
     "loads": [],
@@ -4219,7 +4219,7 @@
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "At the start of the game, before players deploy, choose from the Gravitational Arc or Ghost Orb Tower Deployable Feature. This Ship starts the game carrying the chosen Deployable Feature."
+      "description": "When building your fleet, this Ship must be assigned a Gravitational Arc or Ghost Orb Tower, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
      }
     ],
     "groupMin": 1,
@@ -4662,7 +4662,7 @@
       "lock": "3+",
       "damage": "2",
       "type": "E",
-      "special": "Scald-2, Sustained Fire"
+      "special": "Point Blank, Scald-2, Sustained Fire"
      },
      {
       "name": "Force Wave",
@@ -4686,11 +4686,11 @@
      },
      {
       "name": "Thermal Lash",
-      "description": "This weapon can only be used against targets in base contact.\nWhen you inflict damage with this weapon, you may remove a Spike from this Group, if you do, the defending Group gains a Spike."
+      "description": "When you inflict damage with this weapon, you may remove a Spike from this Group, if you do, the defending Group gains a Spike."
      },
      {
       "name": "Mind of its Own",
-      "description": "This Ship can be used in any fleet, regardless of faction but does not count towards point spent on M Tonnage Ships when building your fleet. This Ship cannot have an Admiral assigned to it for any reason.\nInstead of picking an Order for this Group when it activates, it may in any order; turn in any direction, move up to its Thrust, attack with any number of its weapons gaining a Spike for each additional Weapon System assigned after the first. Each option can only be chosen once per activation.\nAt the end of this Group's activation, if it did not gain any Spikes, remove a Spike from it."
+      "description": "This Ship can be used in any fleet, regardless of faction but does not count towards point spent on M Tonnage Ships when building your fleet. This Ship cannot have an Admiral assigned to it for any reason.\nInstead of picking an Order for this Group when it activates, it may in any order; turn in any direction, move up to its Thrust, attack with any number of its weapons gaining a Spike for each additional Weapon System assigned after the first. Each option can only be chosen once per activation.\nAt the end of this Group’s activation, if it did not gain any Spikes, remove a Spike from it."
      }
     ],
     "groupMin": 1,

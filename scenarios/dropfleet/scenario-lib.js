@@ -521,7 +521,7 @@ const SCENARIOS=[
   // 6 turns -> the standard 6 rounds (12.1); 2-5 Fine / 4-6 Dense debris -> 2-5 Micrometeor Clouds,
   // 4-6 Dense Fields (the counts Shock And Yaw prints, 12.2); Medium Clusters -> Medium Space Stations
   // under Standard Scoring (12.1.5); roundup phase -> End Phase (9); "activated second" -> 2nd initiative (6.3).
-  // Station weapons: Space Station Armaments, Fleet_Space_Stations_250828.pdf page 2.
+  // Station weapons: Space Station Armaments, Fleet_Space_Stations_261104.pdf page 2.
   {id:'dragonslayer', name:'Dragonslayer', src:'The Ether Drake (1st edition)', leviathan:'Ether Drake',
    note:`NB: I converted this from 1st edition's rules. Let me know what you think via <a href="mailto:warlore1@outlook.com">email</a> if you want.`,
    intro:`An Ether Drake has made one of the Cradle World systems its home! Drive the Ether Drake and your opponent away and claim this system.`,
@@ -567,7 +567,7 @@ const SCN_LEVIATHANS={'Ether Drake':{
 const SCN_SOURCES={
   'Rulebook':'https://cdn.shopify.com/s/files/1/0965/1274/files/A5_Dropfleet_Rulebook_2.3.1_Print_Friendly.pdf?v=1774605669',
   'Scenario Expansion 1':'https://cdn.shopify.com/s/files/1/0965/1274/files/Scenario_Expansion_1_250818.pdf?v=1755254981',
-  'Civilian Ships & Scenarios':'https://cdn.shopify.com/s/files/1/0965/1274/files/Civilian_Ships_Scenarios_261001.pdf?v=1790842793',
+  'Civilian Ships & Scenarios':'https://cdn.shopify.com/s/files/1/0965/1274/files/Civilian_Ships_Scenarios_261104.pdf?v=1793786159',
   'The Ether Drake (1st edition)':'https://cdn.shopify.com/s/files/1/0965/1274/files/Ether_Drake.pdf?439',
   'Automated Dreadnought (1st edition)':'https://cdn.shopify.com/s/files/1/0965/1274/files/Automated_Dreadnought.pdf?444',
   'Advent Scenarios (1st edition)':'https://cdn.shopify.com/s/files/1/0965/1274/files/Advent_Scenarios.pdf?525',

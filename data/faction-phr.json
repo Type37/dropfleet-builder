@@ -440,24 +440,6 @@
       "special": "Alt-2, Reave-2, Fusillade-1"
      },
      {
-      "name": "Energy Glaives (Pulse)",
-      "arc": "B",
-      "attack": "4",
-      "lock": "4+",
-      "damage": "2",
-      "type": "E",
-      "special": "Alt-3, Reave-1, Volley-2"
-     },
-     {
-      "name": "Energy Glaives (Beam)",
-      "arc": "S",
-      "attack": "2",
-      "lock": "3+",
-      "damage": "4",
-      "type": "E",
-      "special": "Alt-3, Reave-2, Fusillade-1"
-     },
-     {
       "name": "Hornet Drone Hive",
       "arc": "F/S/R",
       "attack": "6",
@@ -610,7 +592,7 @@
    "category": "heavy",
    "ship": {
     "name": "Octavius Super Battleship",
-    "cost": 300,
+    "cost": 315,
     "stats": {
      "thrust": "6\"",
      "scan": "10\"",
@@ -1403,7 +1385,7 @@
     "specialRules": [
      {
       "name": "Feature Carrier",
-      "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the PHR Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature."
+      "description": "When building your fleet, this Ship must be assigned a Deployable Feature from the PHR Deployable Features list, paying points for this Feature. This Ship starts the game carrying that Deployable Feature"
      }
     ],
     "groupMin": 1,
@@ -1505,8 +1487,8 @@
      {
       "name": "Heavy Calibre Double Broadside",
       "arc": "B",
-      "attack": "2",
-      "lock": "3+",
+      "attack": "4",
+      "lock": "4+",
       "damage": "3",
       "type": "K",
       "special": "Calibre-H, Penetrator, Volley-2"
@@ -5197,6 +5179,97 @@
    }
   },
   {
+   "id": "a803-a9e6-d60e-de11",
+   "name": "Kronos Barges",
+   "category": "light",
+   "ship": {
+    "name": "Kronos Barge",
+    "cost": 57,
+    "stats": {
+     "thrust": "10\"",
+     "scan": "6\"",
+     "sig": "3\"",
+     "hull": 6,
+     "es": "5+",
+     "ks": "5+",
+     "bs": "-",
+     "g": "1-2",
+     "special": "Impetuous, Rapid Drop, Rare, Mercenary (UCM, PHR, Resistance)"
+    },
+    "weapons": [
+     {
+      "name": "NC-1 Missiles",
+      "arc": "F/S/R",
+      "attack": "1",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action"
+     },
+     {
+      "name": "Thermal Wake",
+      "arc": "R",
+      "attack": "5",
+      "lock": "4+",
+      "damage": "1",
+      "type": "E",
+      "special": "Flash-1, Scald-1"
+     }
+    ],
+    "loads": [
+     {
+      "name": "Boarding Pods",
+      "launch": "2",
+      "special": "-"
+     }
+    ],
+    "specialRules": [
+     {
+      "name": "Impetuous",
+      "description": "At the start of each round, friendly Groups with this rule improve the Lock of their Weapon Systems by 1 until you activate a friendly Group without this rule."
+     },
+     {
+      "name": "Rapid Drop",
+      "description": "This Ship may launch its Assets at any point during its movement",
+      "page": "37",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Rare",
+      "description": "You may only take one Group of this Ship in a Skirmish-sized game, two in a Clash, three in a Battle, and four in a Reconquest.",
+      "page": "37",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "High Velocity Boarding Pods",
+      "description": "This Ship’s Boarding Pods may be used against targets up to 6” away."
+     },
+     {
+      "name": "Thermal Wake",
+      "description": "This weapon can only be used on Ships and Space Stations up to 6” away on the same Orbital layer."
+     },
+     {
+      "name": "Mercenary (UCM, PHR, Resistance)",
+      "description": "This Ship may be used in UCM, PHR and Resistance Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
+     }
+    ],
+    "groupMin": 1,
+    "groupMax": 2,
+    "isRare": true,
+    "isUnique": false,
+    "tonnage": "L",
+    "additional": true,
+    "famousShipsPrefix": "Encountered Ships of the Class:",
+    "famousShips": [
+     "Guttural Yell",
+     "Bellyache",
+     "Meathook",
+     "Kidney Shot"
+    ],
+    "lore": "As part of the Eightfold Syndicate’s flesh trade, the Kronos Barge excels in close action boarding assaults. Contained within its hull is a legion of psychotic criminals, trained in both void warfare and frenetic combat deep in the bowels of unfortunate ships. Tasked with acquiring precious new resources for the Syndicate to peddle and press gang into servitude, there is no bargaining with them once they have their targets. The hardened fighters cram themselves into boarding pods already overloaded with fuel, jettisoned into the cold of space towards their unfortunate targets.\n\nAny captured souls are returned to the boarding pods, jettisoned once again from the insides of the victim ship for the Kronos Barge to come and collect at a later date. Any exceptional enemy combatants are brought in alive whenever possible. When recovered these fighters are sent into the bowels of the ship and are only ever seen again once they have pledged absolute loyalty to the syndicate.\n\nThanks to the barge’s oversized engines, it is capable of exceptional speeds, matching that of more advanced or maintained adversaries. These engines run both hot and dirty, however. A canny captain can use this to their advantage by executing “fly-by’s” against enemy ships, searing hulls and imparting enough thermal energy that the enemy ship becomes much more visible to the rest of the barge’s fleet."
+   }
+  },
+  {
    "id": "4307-3349-8190-c0e7",
    "name": "Argonaut",
    "category": "medium",
@@ -5222,7 +5295,7 @@
       "lock": "3+",
       "damage": "2",
       "type": "E",
-      "special": "Scald-2, Sustained Fire"
+      "special": "Point Blank, Scald-2, Sustained Fire"
      },
      {
       "name": "Force Wave",
@@ -5246,11 +5319,11 @@
      },
      {
       "name": "Thermal Lash",
-      "description": "This weapon can only be used against targets in base contact.\nWhen you inflict damage with this weapon, you may remove a Spike from this Group, if you do, the defending Group gains a Spike."
+      "description": "When you inflict damage with this weapon, you may remove a Spike from this Group, if you do, the defending Group gains a Spike."
      },
      {
       "name": "Mind of its Own",
-      "description": "This Ship can be used in any fleet, regardless of faction but does not count towards point spent on M Tonnage Ships when building your fleet. This Ship cannot have an Admiral assigned to it for any reason.\nInstead of picking an Order for this Group when it activates, it may in any order; turn in any direction, move up to its Thrust, attack with any number of its weapons gaining a Spike for each additional Weapon System assigned after the first. Each option can only be chosen once per activation.\nAt the end of this Group's activation, if it did not gain any Spikes, remove a Spike from it."
+      "description": "This Ship can be used in any fleet, regardless of faction but does not count towards point spent on M Tonnage Ships when building your fleet. This Ship cannot have an Admiral assigned to it for any reason.\nInstead of picking an Order for this Group when it activates, it may in any order; turn in any direction, move up to its Thrust, attack with any number of its weapons gaining a Spike for each additional Weapon System assigned after the first. Each option can only be chosen once per activation.\nAt the end of this Group’s activation, if it did not gain any Spikes, remove a Spike from it."
      }
     ],
     "groupMin": 1,

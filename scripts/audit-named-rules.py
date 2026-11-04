@@ -26,12 +26,12 @@ except ImportError:
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PDFS = {
-    'ucm': 'UCM_Combined_Fleet_Stats_260828.pdf',
-    'phr': 'PHR_Combined_Fleet_Stats_260828.pdf',
-    'scourge': 'Scourge_Combined_Fleet_Stats_260626.pdf',
-    'shaltari': 'Shaltari_Combined_Fleet_Stats_260925.pdf',
-    'resistance': 'Resistance_Combined_Fleet_Stats_260731.pdf',
-    'bioficer': 'Bioficer_Combined_Fleet_Stats_260925.pdf',
+    'ucm': 'UCM_Combined_Fleet_Stats_261104.pdf',
+    'phr': 'PHR_Combined_Fleet_Stats_261104.pdf',
+    'scourge': 'Scourge_Combined_Fleet_Stats_261104.pdf',
+    'shaltari': 'Shaltari_Combined_Fleet_Stats_261104.pdf',
+    'resistance': 'Resistance_Combined_Fleet_Stats_261104.pdf',
+    'bioficer': 'Bioficer_Combined_Fleet_Stats_261104.pdf',
 }
 # A real stat-table row looks like "<arc> <att> <lock> ...": e.g. "F 3 4+ 2 E ...".
 STATROW = re.compile(r'^(F|S|R|B|FN|RN|F/S|F/S/R|S/R|\*)\s+\d', re.I)

@@ -1,11 +1,11 @@
 {
 "Bioficer_Combined_Fleet_Stats": {
-"file": "Bioficer_Combined_Fleet_Stats_260925.pdf",
+"file": "Bioficer_Combined_Fleet_Stats_261104.pdf",
 "cards": {
 "catastrophe": {
 "name": "Catastrophe",
 "page": 44,
-"sig": "156d8bc31abe",
+"sig": "322045c8177b",
 "cost": 110,
 "stats": {
 "thrust": "7\"",
@@ -21,7 +21,7 @@
 "weapons": [
 {
 "name": "Heavy Lightvice",
-"arc": "F",
+"arc": "F/S",
 "attack": "5",
 "lock": "2+",
 "damage": "2",
@@ -35,7 +35,7 @@
 "lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge, Scald-1"
+"special": "Overcharge, Scald-2"
 }
 ],
 "loads": [],
@@ -75,57 +75,10 @@
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
 },
-"bastionbattleship": {
-"name": "Bastion Battleship",
-"page": 6,
-"sig": "8a6160c37306",
-"cost": 310,
-"stats": {
-"thrust": "8\"",
-"scan": "12\"",
-"sig": "6\"",
-"hull": "17",
-"es": "3+",
-"ks": "3+",
-"bs": "4+",
-"g": "1",
-"special": "Porter L-1 Cost Effect *"
-},
-"weapons": [
-{
-"name": "Gravitic Hyperspear",
-"arc": "FN",
-"attack": "6",
-"lock": "3+",
-"damage": "2",
-"type": "C",
-"special": "Arrest-4, Bloom-2"
-},
-{
-"name": "Thermator",
-"arc": "F",
-"attack": "3",
-"lock": "4+",
-"damage": "2",
-"type": "E",
-"special": "Overcharge, Scald-1"
-}
-],
-"loads": [
-{
-"name": "Torpedo",
-"launch": "2",
-"special": "Limited-4"
-}
-],
-"rules": {},
-"lore": "a9d09539d314",
-"famous": "981c7ce4dc3d"
-},
 "invasioncell": {
 "name": "Invasion Cell",
 "page": 8,
-"sig": "2e4892b13af4",
+"sig": "ec8902d54da8",
 "cost": 15,
 "stats": {
 "thrust": "2\"",
@@ -134,7 +87,7 @@
 "hull": "2",
 "es": "4+",
 "ks": "4+",
-"bs": "6+",
+"bs": "5+",
 "g": "-",
 "special": "Payload S-1, Vectored"
 },
@@ -163,7 +116,7 @@
 "landercell": {
 "name": "Lander Cell",
 "page": 9,
-"sig": "50b648d0b1ff",
+"sig": "7ef3e083ba10",
 "cost": 15,
 "stats": {
 "thrust": "2\"",
@@ -172,7 +125,7 @@
 "hull": "2",
 "es": "4+",
 "ks": "4+",
-"bs": "6+",
+"bs": "5+",
 "g": "-",
 "special": "Payload S-1, Vectored"
 },
@@ -191,7 +144,7 @@
 "torpedocell": {
 "name": "Torpedo Cell",
 "page": 10,
-"sig": "4fef458480de",
+"sig": "2a8939374a64",
 "cost": 20,
 "stats": {
 "thrust": "2\"",
@@ -200,7 +153,7 @@
 "hull": "2",
 "es": "4+",
 "ks": "4+",
-"bs": "6+",
+"bs": "5+",
 "g": "-",
 "special": "Payload S-1"
 },
@@ -219,8 +172,8 @@
 "prismcell": {
 "name": "Prism Cell",
 "page": 11,
-"sig": "1611ab47cadc",
-"cost": 10,
+"sig": "5b468c2497f6",
+"cost": 15,
 "stats": {
 "thrust": "2\"",
 "scan": "8\"",
@@ -228,24 +181,34 @@
 "hull": "2",
 "es": "4+",
 "ks": "4+",
-"bs": "6+",
+"bs": "5+",
 "g": "-",
 "special": "Aegis-1, Payload S-1, Vectored"
 },
 "weapons": [
 {
-"name": "Prism",
+"name": "Prism (Deployed)",
 "arc": "F/S/R",
-"attack": "4",
+"attack": "7",
 "lock": "3+",
 "damage": "1",
 "type": "E",
 "special": "-"
+},
+{
+"name": "Prism (Attached)",
+"arc": "F/S/R",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "E",
+"special": "Close Action, Fusillade-2"
 }
 ],
 "loads": [],
 "rules": {
-"Limited Aegis Bandwidth": "6fc3405dc62d"
+"Limited Aegis Bandwidth": "6fc3405dc62d",
+"Prism (Attached)": "fa63585f15ab"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -253,7 +216,7 @@
 "supercell": {
 "name": "Supercell",
 "page": 12,
-"sig": "7b19e214ff77",
+"sig": "759e50e0bc7c",
 "cost": 55,
 "stats": {
 "thrust": "2\"",
@@ -268,18 +231,28 @@
 },
 "weapons": [
 {
-"name": "Concussion Prism",
+"name": "Concussion Prism (Deployed)",
 "arc": "F/S/R",
-"attack": "6",
+"attack": "9",
 "lock": "3+",
 "damage": "1",
 "type": "E",
 "special": "-"
+},
+{
+"name": "Concussion Prism (Attached)",
+"arc": "F/S",
+"attack": "5",
+"lock": "3+",
+"damage": "1",
+"type": "E",
+"special": "Close Action, Fusillade-2"
 }
 ],
 "loads": [],
 "rules": {
-"Limited Aegis Bandwidth": "6fc3405dc62d"
+"Limited Aegis Bandwidth": "6fc3405dc62d",
+"Concussion Prism (Attached)": "acc538cd0b9e"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -287,8 +260,8 @@
 "summonercell": {
 "name": "Summoner Cell",
 "page": 13,
-"sig": "301513e240a4",
-"cost": 70,
+"sig": "440cabfbbf74",
+"cost": 77,
 "stats": {
 "thrust": "2\"",
 "scan": "8\"",
@@ -309,7 +282,7 @@
 }
 ],
 "rules": {
-"Summoning Cell": "a22c07375adf"
+"Summoning Cell": "1d067aee057d"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -317,8 +290,8 @@
 "vertex": {
 "name": "Vertex",
 "page": 14,
-"sig": "d83f7dd58f4b",
-"cost": 30,
+"sig": "1be14b9a229c",
+"cost": 33,
 "stats": {
 "thrust": "12\"",
 "scan": "8\"",
@@ -338,7 +311,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Air to Air"
+"special": "Air to Air, Penetrator"
 }
 ],
 "loads": [],
@@ -387,7 +360,7 @@
 "fugue": {
 "name": "Fugue",
 "page": 16,
-"sig": "bbe6856a9a00",
+"sig": "c9606665be94",
 "cost": 35,
 "stats": {
 "thrust": "14\"",
@@ -404,7 +377,7 @@
 {
 "name": "Lightvice",
 "arc": "F/S",
-"attack": "4",
+"attack": "3",
 "lock": "2+",
 "damage": "1",
 "type": "K",
@@ -419,8 +392,8 @@
 "forestall": {
 "name": "Forestall",
 "page": 17,
-"sig": "3b9de42a0bd2",
-"cost": 38,
+"sig": "5c8c151cfbda",
+"cost": 35,
 "stats": {
 "thrust": "14\"",
 "scan": "8\"",
@@ -440,7 +413,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-2, Reave-1"
+"special": "Anti Wing, Fusillade-2, Burnthrough-1"
 }
 ],
 "loads": [],
@@ -483,8 +456,8 @@
 "fulcrum": {
 "name": "Fulcrum",
 "page": 19,
-"sig": "1b2af71ac8df",
-"cost": 37,
+"sig": "5fb006154bfc",
+"cost": 34,
 "stats": {
 "thrust": "14\"",
 "scan": "10\"",
@@ -500,11 +473,11 @@
 {
 "name": "Barb Spiker",
 "arc": "FN",
-"attack": "1",
+"attack": "2",
 "lock": "2+",
-"damage": "2",
+"damage": "1",
 "type": "K",
-"special": "Reave-2"
+"special": "Focused, Reave-2"
 }
 ],
 "loads": [],
@@ -515,8 +488,8 @@
 "fresco": {
 "name": "Fresco",
 "page": 20,
-"sig": "1839a8d7935a",
-"cost": 36,
+"sig": "8dda47235101",
+"cost": 34,
 "stats": {
 "thrust": "14\"",
 "scan": "8\"",
@@ -526,7 +499,7 @@
 "ks": "5+",
 "bs": "-",
 "g": "2-6",
-"special": "-"
+"special": "Descent"
 },
 "weapons": [
 {
@@ -536,7 +509,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Calibre-L, Close Action"
+"special": "Air to Air, Calibre-L, Close Action"
 }
 ],
 "loads": [],
@@ -547,8 +520,8 @@
 "mantle": {
 "name": "Mantle",
 "page": 21,
-"sig": "2578de784460",
-"cost": 65,
+"sig": "df0c3ad72e28",
+"cost": 68,
 "stats": {
 "thrust": "6\"",
 "scan": "12\"",
@@ -588,8 +561,8 @@
 "monarch": {
 "name": "Monarch",
 "page": 22,
-"sig": "10cb3b245218",
-"cost": 85,
+"sig": "b59c79cdca8c",
+"cost": 92,
 "stats": {
 "thrust": "6\"",
 "scan": "12\"",
@@ -626,10 +599,10 @@
 "matrix": {
 "name": "Matrix",
 "page": 23,
-"sig": "74f780f9b337",
+"sig": "4e527eb93a32",
 "cost": 65,
 "stats": {
-"thrust": "6\"",
+"thrust": "8\"",
 "scan": "12\"",
 "sig": "3\"",
 "hull": "4",
@@ -637,7 +610,7 @@
 "ks": "4+",
 "bs": "5+",
 "g": "1-2",
-"special": "Monitor"
+"special": "Rapid Drop"
 },
 "weapons": [
 {
@@ -657,14 +630,16 @@
 "special": "-"
 }
 ],
-"rules": {},
+"rules": {
+"High Velocity Boarding Pods": "b2b86d91bf0c"
+},
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
 },
 "torrent": {
 "name": "Torrent",
 "page": 24,
-"sig": "e44c5bcb85a6",
+"sig": "378e61474708",
 "cost": 60,
 "stats": {
 "thrust": "14\"",
@@ -685,7 +660,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-3, Reave-1"
+"special": "Anti Wing, Fusillade-3, Burnthrough-1"
 }
 ],
 "loads": [],
@@ -696,8 +671,8 @@
 "tine": {
 "name": "Tine",
 "page": 25,
-"sig": "e63d0564fed0",
-"cost": 52,
+"sig": "65597e7d8b64",
+"cost": 50,
 "stats": {
 "thrust": "14\"",
 "scan": "8\"",
@@ -713,7 +688,7 @@
 {
 "name": "Gravitic Stave",
 "arc": "FN",
-"attack": "3",
+"attack": "4",
 "lock": "4+",
 "damage": "1",
 "type": "C",
@@ -728,8 +703,8 @@
 "tally": {
 "name": "Tally",
 "page": 26,
-"sig": "5e63e53a485c",
-"cost": 85,
+"sig": "7127a542db60",
+"cost": 77,
 "stats": {
 "thrust": "14\"",
 "scan": "8\"",
@@ -762,8 +737,8 @@
 "domain": {
 "name": "Domain",
 "page": 27,
-"sig": "da3be2d12dde",
-"cost": 65,
+"sig": "11be55a7c0c6",
+"cost": 63,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -783,7 +758,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "-"
+"special": "Penetrator"
 }
 ],
 "loads": [],
@@ -794,8 +769,8 @@
 "diode": {
 "name": "Diode",
 "page": 28,
-"sig": "c6696f4c21ea",
-"cost": 75,
+"sig": "f2fe2b979119",
+"cost": 73,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -858,8 +833,8 @@
 "anodethemelter": {
 "name": "Anode - The Melter",
 "page": 30,
-"sig": "454576fffa12",
-"cost": 93,
+"sig": "43499e135e73",
+"cost": 89,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -879,7 +854,7 @@
 "lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Alt-1, Overcharge, Scald-2"
+"special": "Alt-1, Overcharge Reave-1"
 },
 {
 "name": "Thermator Cage (Short Range)",
@@ -899,7 +874,7 @@
 "cache": {
 "name": "Cache",
 "page": 31,
-"sig": "268f5dc59866",
+"sig": "d39139ea46ab",
 "cost": 65,
 "stats": {
 "thrust": "10\"",
@@ -915,7 +890,7 @@
 "weapons": [
 {
 "name": "Heavy Lightvice",
-"arc": "F",
+"arc": "F/S",
 "attack": "5",
 "lock": "2+",
 "damage": "2",
@@ -931,8 +906,8 @@
 "cipher": {
 "name": "Cipher",
 "page": 32,
-"sig": "94b651806c49",
-"cost": 70,
+"sig": "355374cb7710",
+"cost": 68,
 "stats": {
 "thrust": "10\"",
 "scan": "8\"",
@@ -952,7 +927,7 @@
 "lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge, Scald-1"
+"special": "Overcharge, Scald-2"
 }
 ],
 "loads": [],
@@ -963,8 +938,8 @@
 "charger": {
 "name": "Charger",
 "page": 33,
-"sig": "b1253d7a996c",
-"cost": 75,
+"sig": "0bb2b9276959",
+"cost": 72,
 "stats": {
 "thrust": "10\"",
 "scan": "11\"",
@@ -980,11 +955,11 @@
 {
 "name": "Barb Launcher",
 "arc": "FN",
-"attack": "1",
+"attack": "2",
 "lock": "2+",
-"damage": "4",
+"damage": "2",
 "type": "K",
-"special": "Reave-2"
+"special": "Critical-1, Focused, Reave-2"
 }
 ],
 "loads": [],
@@ -995,8 +970,8 @@
 "callous": {
 "name": "Callous",
 "page": 34,
-"sig": "deae1c7fc7f2",
-"cost": 80,
+"sig": "02d6620fe080",
+"cost": 78,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -1025,7 +1000,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "-"
+"special": "Penetrator"
 }
 ],
 "loads": [],
@@ -1036,8 +1011,8 @@
 "construct": {
 "name": "Construct",
 "page": 35,
-"sig": "0f76a6e65b34",
-"cost": 96,
+"sig": "b0b74322a4b3",
+"cost": 92,
 "stats": {
 "thrust": "8\"",
 "scan": "10\"",
@@ -1057,16 +1032,16 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-3, Reave-1"
+"special": "Anti Wing, Fusillade-3, Burnthrough-1"
 },
 {
 "name": "Barb Stinger",
 "arc": "FN",
-"attack": "1",
+"attack": "2",
 "lock": "2+",
-"damage": "2",
+"damage": "1",
 "type": "K",
-"special": "Reave-1"
+"special": "Focused, Reave-1"
 }
 ],
 "loads": [],
@@ -1077,7 +1052,7 @@
 "conqueror": {
 "name": "Conqueror",
 "page": 36,
-"sig": "d6601452bf8d",
+"sig": "6f51c7756ddf",
 "cost": 75,
 "stats": {
 "thrust": "8\"",
@@ -1093,7 +1068,7 @@
 "weapons": [
 {
 "name": "Heavy Lightvice",
-"arc": "F",
+"arc": "F/S",
 "attack": "5",
 "lock": "2+",
 "damage": "2",
@@ -1111,8 +1086,8 @@
 "choral": {
 "name": "Choral",
 "page": 37,
-"sig": "a5dce4ba7b79",
-"cost": 80,
+"sig": "51b7623617cc",
+"cost": 78,
 "stats": {
 "thrust": "8\"",
 "scan": "11\"",
@@ -1128,11 +1103,11 @@
 {
 "name": "Barb Launcher",
 "arc": "FN",
-"attack": "1",
+"attack": "2",
 "lock": "2+",
-"damage": "4",
+"damage": "2",
 "type": "K",
-"special": "Reave-2"
+"special": "Critical-1, Focused, Reave-2"
 }
 ],
 "loads": [],
@@ -1143,7 +1118,7 @@
 "comet": {
 "name": "Comet",
 "page": 38,
-"sig": "459e76caa390",
+"sig": "6ff657163a8e",
 "cost": 82,
 "stats": {
 "thrust": "8\"",
@@ -1164,7 +1139,7 @@
 "lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge, Scald-1"
+"special": "Overcharge, Scald-2"
 },
 {
 "name": "Decon Blaster",
@@ -1173,7 +1148,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "-"
+"special": "Penetrator"
 }
 ],
 "loads": [],
@@ -1184,7 +1159,7 @@
 "cosmic": {
 "name": "Cosmic",
 "page": 39,
-"sig": "73e053185c7d",
+"sig": "8504b7305f4b",
 "cost": 88,
 "stats": {
 "thrust": "8\"",
@@ -1201,20 +1176,20 @@
 {
 "name": "Barb Launcher",
 "arc": "FN",
-"attack": "1",
+"attack": "2",
 "lock": "2+",
-"damage": "4",
+"damage": "2",
 "type": "K",
-"special": "Reave-2"
+"special": "Critical-1, Focused, Reave-2"
 },
 {
 "name": "Barb Stinger",
 "arc": "FN",
-"attack": "1",
+"attack": "2",
 "lock": "2+",
-"damage": "2",
+"damage": "1",
 "type": "K",
-"special": "Reave-2"
+"special": "Focused, Reave-2"
 }
 ],
 "loads": [],
@@ -1225,7 +1200,7 @@
 "cavern": {
 "name": "Cavern",
 "page": 40,
-"sig": "d5ccc793c1a5",
+"sig": "7f0e00f4ea2b",
 "cost": 125,
 "stats": {
 "thrust": "8\"",
@@ -1246,7 +1221,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-3, Reave-1"
+"special": "Anti Wing, Fusillade-3, Burnthrough-1"
 }
 ],
 "loads": [
@@ -1262,7 +1237,7 @@
 }
 ],
 "rules": {
-"Minelayer": "0b752fdf28b1"
+"Minelayer": "b875ac2c6fb4"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -1270,7 +1245,7 @@
 "combine": {
 "name": "Combine",
 "page": 41,
-"sig": "b430662a31d6",
+"sig": "522c8ea7b013",
 "cost": 75,
 "stats": {
 "thrust": "8\"",
@@ -1287,11 +1262,11 @@
 {
 "name": "Barb Launcher",
 "arc": "FN",
-"attack": "1",
+"attack": "2",
 "lock": "2+",
-"damage": "4",
+"damage": "2",
 "type": "K",
-"special": "Reave-2"
+"special": "Critical-1, Focused, Reave-2"
 }
 ],
 "loads": [],
@@ -1302,7 +1277,7 @@
 "cataphract": {
 "name": "Cataphract",
 "page": 42,
-"sig": "c756cec10dc1",
+"sig": "059238b93984",
 "cost": 108,
 "stats": {
 "thrust": "7\"",
@@ -1327,7 +1302,7 @@
 },
 {
 "name": "Heavy Lightvice",
-"arc": "F",
+"arc": "F/S",
 "attack": "5",
 "lock": "2+",
 "damage": "2",
@@ -1343,8 +1318,8 @@
 "cacophony": {
 "name": "Cacophony",
 "page": 43,
-"sig": "5cc7615ea056",
-"cost": 132,
+"sig": "17fb246dbf98",
+"cost": 126,
 "stats": {
 "thrust": "7\"",
 "scan": "8\"",
@@ -1364,7 +1339,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-3, Reave-1"
+"special": "Anti Wing, Fusillade-3, Burnthrough-1"
 },
 {
 "name": "Scythes",
@@ -1373,7 +1348,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-3, Reave-1"
+"special": "Anti Wing, Fusillade-3, Burnthrough-1"
 }
 ],
 "loads": [],
@@ -1384,8 +1359,8 @@
 "carronade": {
 "name": "Carronade",
 "page": 45,
-"sig": "6a530b6582dd",
-"cost": 120,
+"sig": "401e67b3d6bc",
+"cost": 112,
 "stats": {
 "thrust": "7\"",
 "scan": "11\"",
@@ -1401,20 +1376,20 @@
 {
 "name": "Barb Launcher",
 "arc": "FN",
-"attack": "1",
+"attack": "2",
 "lock": "2+",
-"damage": "4",
+"damage": "2",
 "type": "K",
-"special": "Reave-2"
+"special": "Critical-1, Focused, Reave-2"
 },
 {
 "name": "Barb Launcher",
 "arc": "FN",
-"attack": "1",
+"attack": "2",
 "lock": "2+",
-"damage": "4",
+"damage": "2",
 "type": "K",
-"special": "Reave-2"
+"special": "Critical-1, Focused, Reave-2"
 }
 ],
 "loads": [],
@@ -1465,7 +1440,7 @@
 "sluice": {
 "name": "Sluice",
 "page": 47,
-"sig": "2e9afec25cd1",
+"sig": "ed53d9dc9aff",
 "cost": 152,
 "stats": {
 "thrust": "7\"",
@@ -1497,7 +1472,7 @@
 }
 ],
 "rules": {
-"Feature Carrier": "2c7d71493dac"
+"Feature Carrier": "fedbea0a5b2f"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -1505,8 +1480,8 @@
 "sanctum": {
 "name": "Sanctum",
 "page": 49,
-"sig": "2733c7293b03",
-"cost": 185,
+"sig": "4fea46476250",
+"cost": 180,
 "stats": {
 "thrust": "8\"",
 "scan": "10\"",
@@ -1543,7 +1518,7 @@
 "stature": {
 "name": "Stature",
 "page": 50,
-"sig": "7e6b1f2a6322",
+"sig": "4661ac01806c",
 "cost": 140,
 "stats": {
 "thrust": "8\"",
@@ -1564,7 +1539,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Reave-1"
+"special": "Penetrator"
 }
 ],
 "loads": [],
@@ -1621,8 +1596,8 @@
 "syntax": {
 "name": "Syntax",
 "page": 52,
-"sig": "955fdda4afbf",
-"cost": 175,
+"sig": "0ed74d3d5543",
+"cost": 165,
 "stats": {
 "thrust": "8\"",
 "scan": "10\"",
@@ -1642,7 +1617,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Reave-1"
+"special": "Penetrator"
 },
 {
 "name": "Decon Blaster",
@@ -1651,7 +1626,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "-"
+"special": "Penetrator"
 },
 {
 "name": "Decon Blaster",
@@ -1660,12 +1635,12 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "-"
+"special": "Penetrator"
 }
 ],
 "loads": [],
 "rules": {
-"Feature Carrier": "2c7d71493dac"
+"Feature Carrier": "fedbea0a5b2f"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -1673,8 +1648,8 @@
 "synthesis": {
 "name": "Synthesis",
 "page": 53,
-"sig": "74395ee4e265",
-"cost": 230,
+"sig": "656dd918bb59",
+"cost": 205,
 "stats": {
 "thrust": "8\"",
 "scan": "10\"",
@@ -1710,7 +1685,7 @@
 }
 ],
 "rules": {
-"Feature Carrier": "2c7d71493dac"
+"Feature Carrier": "bc8860715505"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -1718,8 +1693,8 @@
 "sierra": {
 "name": "Sierra",
 "page": 54,
-"sig": "82d2d12cf4e4",
-"cost": 185,
+"sig": "73960946b254",
+"cost": 170,
 "stats": {
 "thrust": "8\"",
 "scan": "10\"",
@@ -1748,7 +1723,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "-"
+"special": "Penetrator"
 },
 {
 "name": "Decon Blaster",
@@ -1757,12 +1732,12 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "-"
+"special": "Penetrator"
 }
 ],
 "loads": [],
 "rules": {
-"Feature Carrier": "2c7d71493dac"
+"Feature Carrier": "fedbea0a5b2f"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -1770,8 +1745,8 @@
 "shade": {
 "name": "Shade",
 "page": 55,
-"sig": "a1b47bdb300f",
-"cost": 225,
+"sig": "8bf74ec14b41",
+"cost": 210,
 "stats": {
 "thrust": "8\"",
 "scan": "10\"",
@@ -1812,7 +1787,7 @@
 }
 ],
 "rules": {
-"Feature Carrier": "2c7d71493dac",
+"Feature Carrier": "fedbea0a5b2f",
 "High Velocity Boarding Pods": "b2b86d91bf0c",
 "Bombardment Spine": "43ea395b5b44"
 },
@@ -1822,7 +1797,7 @@
 "binary": {
 "name": "Binary",
 "page": 56,
-"sig": "7dcd09103a11",
+"sig": "a72355dbf3a0",
 "cost": 225,
 "stats": {
 "thrust": "8\"",
@@ -1852,7 +1827,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-1, Reave-1"
+"special": "Anti Wing, Fusillade-1, Burnthrough-1"
 },
 {
 "name": "Scythe Nodule",
@@ -1861,7 +1836,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-1, Reave-1"
+"special": "Anti Wing, Fusillade-1, Burnthrough-1"
 }
 ],
 "loads": [
@@ -1880,7 +1855,7 @@
 "brutal": {
 "name": "Brutal",
 "page": 57,
-"sig": "1c1fd573df4c",
+"sig": "4c4c13b6b35f",
 "cost": 215,
 "stats": {
 "thrust": "8\"",
@@ -1901,7 +1876,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Calibre-L, Close Action, Fusillade-5"
+"special": "Calibre-L/M, Close Action, Fusillade-5"
 },
 {
 "name": "Scythe Nodule",
@@ -1910,7 +1885,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-1, Reave-1"
+"special": "Anti Wing, Fusillade-1, Burnthrough-1"
 },
 {
 "name": "Scythe Nodule",
@@ -1919,7 +1894,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-1, Reave-1"
+"special": "Anti Wing, Fusillade-1, Burnthrough-1"
 }
 ],
 "loads": [
@@ -1938,7 +1913,7 @@
 "bastion": {
 "name": "Bastion",
 "page": 58,
-"sig": "1ea800a75aba",
+"sig": "d1f720d92f9d",
 "cost": 225,
 "stats": {
 "thrust": "8\"",
@@ -1959,7 +1934,7 @@
 "lock": "3+",
 "damage": "2",
 "type": "C",
-"special": "Arrest-2, Bloom-2"
+"special": "Arrest-2, Bloom-2, Focused"
 },
 {
 "name": "Thermator",
@@ -1968,7 +1943,7 @@
 "lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge, Scald-1"
+"special": "Overcharge, Scald-2"
 }
 ],
 "loads": [
@@ -1987,18 +1962,18 @@
 "blackbird": {
 "name": "Blackbird",
 "page": 59,
-"sig": "5f565c68a335",
+"sig": "c7351f42a57f",
 "cost": 265,
 "stats": {
 "thrust": "6\"",
-"scan": "12\"",
+"scan": "14\"",
 "sig": "6\"",
 "hull": "19",
 "es": "3+",
 "ks": "3+",
 "bs": "5+",
 "g": "1",
-"special": "Marines-1, Porter L-1"
+"special": "Command Ship-1, Marines-1, Porter L-1"
 },
 "weapons": [
 {
@@ -2017,7 +1992,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-3, Reave-1"
+"special": "Anti Wing, Fusillade-3, Burnthrough-1"
 },
 {
 "name": "Thermator",
@@ -2026,7 +2001,7 @@
 "lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge, Scald-1"
+"special": "Overcharge, Scald-2"
 }
 ],
 "loads": [
@@ -2045,18 +2020,18 @@
 "bishop": {
 "name": "Bishop",
 "page": 60,
-"sig": "f725ba634ee9",
+"sig": "fe2f773a9772",
 "cost": 265,
 "stats": {
 "thrust": "6\"",
-"scan": "12\"",
+"scan": "14\"",
 "sig": "6\"",
 "hull": "19",
 "es": "3+",
 "ks": "3+",
 "bs": "5+",
 "g": "1",
-"special": "Marines-1, Porter L-1"
+"special": "Command Ship-1, Marines-1, Porter L-1"
 },
 "weapons": [
 {
@@ -2066,7 +2041,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Calibre-L, Close Action, Fusillade-5"
+"special": "Calibre-L/M, Close Action, Fusillade-5"
 },
 {
 "name": "Scythes",
@@ -2075,7 +2050,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-3, Reave-1"
+"special": "Anti Wing, Fusillade-3, Burnthrough-1"
 },
 {
 "name": "Thermator",
@@ -2084,7 +2059,7 @@
 "lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge, Scald-1"
+"special": "Overcharge, Scald-2"
 }
 ],
 "loads": [
@@ -2103,18 +2078,18 @@
 "binder": {
 "name": "Binder",
 "page": 61,
-"sig": "6340cc08f049",
+"sig": "a971df0253ea",
 "cost": 270,
 "stats": {
 "thrust": "6\"",
-"scan": "12\"",
+"scan": "14\"",
 "sig": "6\"",
 "hull": "19",
 "es": "3+",
 "ks": "3+",
 "bs": "5+",
 "g": "1",
-"special": "Marines-1, Porter L-1"
+"special": "Command Ship-1, Marines-1, Porter L-1"
 },
 "weapons": [
 {
@@ -2124,7 +2099,7 @@
 "lock": "3+",
 "damage": "2",
 "type": "C",
-"special": "Arrest-2, Bloom-2"
+"special": "Arrest-2, Bloom-2, Focused"
 },
 {
 "name": "Scythes",
@@ -2133,7 +2108,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-3, Reave-1"
+"special": "Anti Wing, Fusillade-3, Burnthrough-1"
 },
 {
 "name": "Thermator",
@@ -2142,7 +2117,7 @@
 "lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge, Scald-1"
+"special": "Overcharge, Scald-2"
 }
 ],
 "loads": [
@@ -2161,7 +2136,7 @@
 "zodiac": {
 "name": "Zodiac",
 "page": 63,
-"sig": "e840ff978468",
+"sig": "495ca967b58f",
 "cost": 435,
 "stats": {
 "thrust": "6\"",
@@ -2172,7 +2147,7 @@
 "ks": "3+",
 "bs": "5+",
 "g": "1",
-"special": "Marines-1, Reinforced Armour"
+"special": "Command Ship-1, Marines-1, Reinforced Armour"
 },
 "weapons": [
 {
@@ -2182,7 +2157,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Reave-2, Volley-2"
+"special": "Penetrator, Volley-2"
 }
 ],
 "loads": [
@@ -2193,7 +2168,7 @@
 },
 {
 "name": "Boarding Pods",
-"launch": "1",
+"launch": "2",
 "special": "-"
 }
 ],
@@ -2207,7 +2182,7 @@
 "zenith": {
 "name": "Zenith",
 "page": 64,
-"sig": "6038d68cff11",
+"sig": "9d93192740d6",
 "cost": 445,
 "stats": {
 "thrust": "6\"",
@@ -2218,12 +2193,12 @@
 "ks": "3+",
 "bs": "5+",
 "g": "1",
-"special": "Marines-1, Reinforced Armour"
+"special": "Command Ship-1, Marines-1, Reinforced Armour"
 },
 "weapons": [
 {
 "name": "Giga Lightvice",
-"arc": "F",
+"arc": "F/S",
 "attack": "8",
 "lock": "2+",
 "damage": "3",
@@ -2239,7 +2214,7 @@
 },
 {
 "name": "Boarding Pods",
-"launch": "1",
+"launch": "2",
 "special": "-"
 }
 ],
@@ -2254,12 +2229,12 @@
 }
 },
 "PHR_Combined_Fleet_Stats": {
-"file": "PHR_Combined_Fleet_Stats_260828.pdf",
+"file": "PHR_Combined_Fleet_Stats_261104.pdf",
 "cards": {
 "achilles": {
 "name": "Achilles",
 "page": 35,
-"sig": "25d39beba647",
+"sig": "13a0ce02d05c",
 "cost": 142,
 "stats": {
 "thrust": "7\"",
@@ -2276,8 +2251,8 @@
 {
 "name": "Heavy Calibre Broadside",
 "arc": "B",
-"attack": "1",
-"lock": "3+",
+"attack": "2",
+"lock": "4+",
 "damage": "3",
 "type": "K",
 "special": "Calibre-H, Penetrator, Volley-2"
@@ -2285,8 +2260,8 @@
 {
 "name": "Heavy Calibre Broadside",
 "arc": "B",
-"attack": "1",
-"lock": "3+",
+"attack": "2",
+"lock": "4+",
 "damage": "3",
 "type": "K",
 "special": "Calibre-H, Penetrator, Volley-2"
@@ -2338,7 +2313,7 @@
 "heracles": {
 "name": "Heracles",
 "page": 53,
-"sig": "7ca58d5e6715",
+"sig": "c1fe709169d6",
 "cost": 235,
 "stats": {
 "thrust": "6\"",
@@ -2353,13 +2328,31 @@
 },
 "weapons": [
 {
-"name": "Heavy Calibre Triple Broadside",
+"name": "Heavy Calibre Broadside",
 "arc": "B",
-"attack": "3",
-"lock": "3+",
+"attack": "2",
+"lock": "4+",
 "damage": "3",
 "type": "K",
-"special": "Calibre-H/C, Penetrator, Volley-2"
+"special": "Calibre-H, Penetrator, Volley-2"
+},
+{
+"name": "Heavy Calibre Broadside",
+"arc": "B",
+"attack": "2",
+"lock": "4+",
+"damage": "3",
+"type": "K",
+"special": "Calibre-H, Penetrator, Volley-2"
+},
+{
+"name": "Heavy Calibre Broadside",
+"arc": "B",
+"attack": "2",
+"lock": "4+",
+"damage": "3",
+"type": "K",
+"special": "Calibre-H, Penetrator, Volley-2"
 },
 {
 "name": "Dark Matter Cannon",
@@ -2368,7 +2361,7 @@
 "lock": "2+",
 "damage": "2",
 "type": "E",
-"special": "Critical-1, Crippling, Penetrator"
+"special": "Critical-1, Crippling, High Power, Penetrator"
 }
 ],
 "loads": [],
@@ -2379,14 +2372,14 @@
 "romulus": {
 "name": "Romulus",
 "page": 64,
-"sig": "b457f1c722b0",
+"sig": "d0cc0de0ccc5",
 "cost": 450,
 "stats": {
 "thrust": "6\"",
 "scan": "12\"",
 "sig": "14\"",
 "hull": "25",
-"es": "2+",
+"es": "3+",
 "ks": "3+",
 "bs": "5+",
 "g": "1",
@@ -2403,31 +2396,58 @@
 "special": "Critical-1, Focused"
 },
 {
-"name": "Energy Glaive Battery",
+"name": "Energy Glaives (Pulse)",
 "arc": "B",
-"attack": "6",
-"lock": "3+",
+"attack": "4",
+"lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge, Volley-2"
+"special": "Alt-1, Reave-1, Volley-2"
 },
 {
-"name": "Energy Glaive Battery",
-"arc": "B",
-"attack": "6",
+"name": "Energy Glaives (Beam)",
+"arc": "S",
+"attack": "2",
 "lock": "3+",
-"damage": "2",
+"damage": "4",
 "type": "E",
-"special": "Overcharge, Volley-2"
+"special": "Alt-1, Reave-2, Fusillade-1"
 },
 {
-"name": "Energy Glaive Battery",
+"name": "Energy Glaives (Pulse)",
 "arc": "B",
-"attack": "6",
-"lock": "3+",
+"attack": "4",
+"lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge, Volley-2"
+"special": "Alt-2, Reave-1, Volley-2"
+},
+{
+"name": "Energy Glaives (Beam)",
+"arc": "S",
+"attack": "2",
+"lock": "3+",
+"damage": "4",
+"type": "E",
+"special": "Alt-2, Reave-2, Fusillade-1"
+},
+{
+"name": "Energy Glaives (Pulse)",
+"arc": "B",
+"attack": "4",
+"lock": "4+",
+"damage": "2",
+"type": "E",
+"special": "Alt-3, Reave-1, Volley-2"
+},
+{
+"name": "Energy Glaives (Beam)",
+"arc": "S",
+"attack": "2",
+"lock": "3+",
+"damage": "4",
+"type": "E",
+"special": "Alt-3, Reave-2, Fusillade-1"
 }
 ],
 "loads": [],
@@ -2438,15 +2458,15 @@
 "echo": {
 "name": "Echo",
 "page": 8,
-"sig": "c87c8a8f3859",
-"cost": 28,
+"sig": "5c3a973d8ffd",
+"cost": 25,
 "stats": {
 "thrust": "12\"",
 "scan": "8\"",
 "sig": "2\"",
 "hull": "2",
-"es": "4+",
-"ks": "6+",
+"es": "5+",
+"ks": "5+",
 "bs": "-",
 "g": "1-4",
 "special": "Descent, Stealth"
@@ -2468,7 +2488,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "K",
-"special": "Air to Air, Close Action"
+"special": "Air to Air, Calibre-L, Close Action, Reave-1"
 }
 ],
 "loads": [],
@@ -2511,7 +2531,7 @@
 "europa": {
 "name": "Europa",
 "page": 10,
-"sig": "9de8ea2f1d26",
+"sig": "897d9719850f",
 "cost": 38,
 "stats": {
 "thrust": "10\"",
@@ -2527,21 +2547,12 @@
 "weapons": [
 {
 "name": "Medium Calibre Bank",
-"arc": "SL",
+"arc": "B",
 "attack": "2",
 "lock": "4+",
 "damage": "2",
 "type": "K",
-"special": "-"
-},
-{
-"name": "Medium Calibre Bank",
-"arc": "SR",
-"attack": "2",
-"lock": "4+",
-"damage": "2",
-"type": "K",
-"special": "-"
+"special": "Volley-2"
 }
 ],
 "loads": [],
@@ -2584,7 +2595,7 @@
 "calypso": {
 "name": "Calypso",
 "page": 12,
-"sig": "20ccbce891a1",
+"sig": "974d61d4b781",
 "cost": 40,
 "stats": {
 "thrust": "10\"",
@@ -2610,7 +2621,7 @@
 ],
 "loads": [],
 "rules": {
-"Advanced ECM Suite": "95c485106de4"
+"Advanced ECM Suite": "0af92c8093a5"
 },
 "lore": "f8d952b0bb0b",
 "famous": "f316f4fbb6a0"
@@ -2618,7 +2629,7 @@
 "andromeda": {
 "name": "Andromeda",
 "page": 13,
-"sig": "c143a2af3173",
+"sig": "cda7f95ee739",
 "cost": 60,
 "stats": {
 "thrust": "10\"",
@@ -2646,7 +2657,12 @@
 {
 "name": "Fighters & Bombers",
 "launch": "1",
-"special": "-"
+"special": "Alt-1"
+},
+{
+"name": "Mines",
+"launch": "1",
+"special": "Alt-1"
 }
 ],
 "rules": {},
@@ -2656,14 +2672,14 @@
 "medea": {
 "name": "Medea",
 "page": 14,
-"sig": "52555bc560e9",
+"sig": "be2a0671955e",
 "cost": 50,
 "stats": {
 "thrust": "10\"",
 "scan": "8\"",
 "sig": "3\"",
 "hull": "5",
-"es": "3+",
+"es": "4+",
 "ks": "4+",
 "bs": "-",
 "g": "1-2",
@@ -2694,8 +2710,8 @@
 "castor": {
 "name": "Castor",
 "page": 15,
-"sig": "105c4a9f66fd",
-"cost": 55,
+"sig": "d62d3f7e0eb5",
+"cost": 52,
 "stats": {
 "thrust": "5\"",
 "scan": "10\"",
@@ -2726,8 +2742,8 @@
 "pollux": {
 "name": "Pollux",
 "page": 16,
-"sig": "975bfe98a9fd",
-"cost": 65,
+"sig": "0a1f5c490da6",
+"cost": 61,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -2756,7 +2772,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Anti-Wing, Close Action, Fusillade-1"
+"special": "Anti Wing, Close Action, Fusillade-1"
 }
 ],
 "loads": [],
@@ -2767,8 +2783,8 @@
 "philonoe": {
 "name": "Philonoe",
 "page": 17,
-"sig": "34f8eee562e4",
-"cost": 65,
+"sig": "1371644f4a55",
+"cost": 70,
 "stats": {
 "thrust": "5\"",
 "scan": "10\"",
@@ -2807,7 +2823,7 @@
 "pegasus": {
 "name": "Pegasus",
 "page": 18,
-"sig": "d6440551621c",
+"sig": "cdf21bc23129",
 "cost": 58,
 "stats": {
 "thrust": "14\"",
@@ -2828,7 +2844,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "K",
-"special": "Close Action"
+"special": "Close Action, Scald-1"
 }
 ],
 "loads": [],
@@ -2839,11 +2855,11 @@
 "ourania": {
 "name": "Ourania",
 "page": 19,
-"sig": "082ee39b4e56",
+"sig": "74d36cb23227",
 "cost": 35,
 "stats": {
 "thrust": "14\"",
-"scan": "6\"",
+"scan": "8\"",
 "sig": "3\"",
 "hull": "5",
 "es": "4+",
@@ -2855,7 +2871,7 @@
 "weapons": [],
 "loads": [],
 "rules": {
-"Targeting Link": "4584f1b487e4"
+"Targeting Link": "5ea3044a8cfa"
 },
 "lore": "14fb2268a444",
 "famous": "14835d32d8bf"
@@ -2895,8 +2911,8 @@
 "electra": {
 "name": "Electra",
 "page": 21,
-"sig": "5a9e7c84ac4a",
-"cost": 50,
+"sig": "6c141c9a7385",
+"cost": 53,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -2912,7 +2928,7 @@
 {
 "name": "Twin Heavy Calibres",
 "arc": "F",
-"attack": "1",
+"attack": "2",
 "lock": "4+",
 "damage": "3",
 "type": "K",
@@ -2921,7 +2937,7 @@
 {
 "name": "Twin Heavy Calibres",
 "arc": "F",
-"attack": "1",
+"attack": "2",
 "lock": "4+",
 "damage": "3",
 "type": "K",
@@ -2936,8 +2952,8 @@
 "ariadne": {
 "name": "Ariadne",
 "page": 22,
-"sig": "4e494abee488",
-"cost": 60,
+"sig": "34aecddcbec0",
+"cost": 57,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -2953,7 +2969,7 @@
 {
 "name": "Twin Heavy Calibres",
 "arc": "F",
-"attack": "1",
+"attack": "2",
 "lock": "4+",
 "damage": "3",
 "type": "K",
@@ -2974,7 +2990,7 @@
 "cadmus": {
 "name": "Cadmus",
 "page": 23,
-"sig": "e146212dad42",
+"sig": "bb1528dbf426",
 "cost": 60,
 "stats": {
 "thrust": "8\"",
@@ -2991,7 +3007,7 @@
 {
 "name": "Twin Heavy Calibres",
 "arc": "F",
-"attack": "1",
+"attack": "2",
 "lock": "4+",
 "damage": "3",
 "type": "K",
@@ -2999,7 +3015,7 @@
 },
 {
 "name": "Energy Glaive Pair",
-"arc": "FN",
+"arc": "F",
 "attack": "2",
 "lock": "3+",
 "damage": "2",
@@ -3015,7 +3031,7 @@
 "jason": {
 "name": "Jason",
 "page": 24,
-"sig": "fd00499d1369",
+"sig": "698a76b5e2c2",
 "cost": 55,
 "stats": {
 "thrust": "12\"",
@@ -3032,7 +3048,7 @@
 {
 "name": "Twin Heavy Calibres",
 "arc": "F",
-"attack": "1",
+"attack": "2",
 "lock": "4+",
 "damage": "3",
 "type": "K",
@@ -3094,7 +3110,7 @@
 "meleager": {
 "name": "Meleager",
 "page": 26,
-"sig": "0fc33bb2eef7",
+"sig": "e9cb71e23b5e",
 "cost": 55,
 "stats": {
 "thrust": "12\"",
@@ -3119,7 +3135,7 @@
 },
 {
 "name": "Energy Glaive Pair",
-"arc": "FN",
+"arc": "F",
 "attack": "2",
 "lock": "3+",
 "damage": "2",
@@ -3176,8 +3192,8 @@
 "theseus": {
 "name": "Theseus",
 "page": 28,
-"sig": "b8907a7d9311",
-"cost": 88,
+"sig": "8fda96c988ae",
+"cost": 84,
 "stats": {
 "thrust": "10\"",
 "scan": "8\"",
@@ -3197,7 +3213,7 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-entry, Volley-2"
+"special": "Calibre-L, Reave-1 Volley-2"
 },
 {
 "name": "Medium Calibre Broadside",
@@ -3217,8 +3233,8 @@
 "otera": {
 "name": "Otera",
 "page": 29,
-"sig": "66dc1fc2e299",
-"cost": 80,
+"sig": "540ef9730b58",
+"cost": 88,
 "stats": {
 "thrust": "10\"",
 "scan": "8\"",
@@ -3247,7 +3263,7 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 }
 ],
 "loads": [],
@@ -3258,8 +3274,8 @@
 "ajax": {
 "name": "Ajax",
 "page": 30,
-"sig": "58616ba0cbbe",
-"cost": 114,
+"sig": "5080f41b8a7f",
+"cost": 110,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -3279,7 +3295,7 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 },
 {
 "name": "Light Calibre Broadside",
@@ -3288,7 +3304,7 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 },
 {
 "name": "Supernova Laser",
@@ -3308,7 +3324,7 @@
 "perseus": {
 "name": "Perseus",
 "page": 31,
-"sig": "396cbd0ccacd",
+"sig": "11c952d00eb0",
 "cost": 108,
 "stats": {
 "thrust": "8\"",
@@ -3329,13 +3345,13 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 },
 {
 "name": "Heavy Calibre Broadside",
 "arc": "B",
-"attack": "1",
-"lock": "3+",
+"attack": "2",
+"lock": "4+",
 "damage": "3",
 "type": "K",
 "special": "Calibre-H, Penetrator, Volley-2"
@@ -3358,8 +3374,8 @@
 "orion": {
 "name": "Orion",
 "page": 32,
-"sig": "492eda194c42",
-"cost": 105,
+"sig": "3e4b77164ba3",
+"cost": 110,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -3408,8 +3424,8 @@
 "ikarus": {
 "name": "Ikarus",
 "page": 33,
-"sig": "7d3904a37de1",
-"cost": 125,
+"sig": "880bbbf7450a",
+"cost": 120,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -3454,7 +3470,7 @@
 }
 ],
 "rules": {
-"Minelayer": "0b752fdf28b1"
+"Minelayer": "b875ac2c6fb4"
 },
 "lore": "9d42d2753048",
 "famous": "e72298151b0d"
@@ -3462,8 +3478,8 @@
 "teucer": {
 "name": "Teucer",
 "page": 34,
-"sig": "b57e252a7586",
-"cost": 130,
+"sig": "6fc0c1f29db0",
+"cost": 122,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -3488,8 +3504,8 @@
 {
 "name": "Heavy Calibre Broadside",
 "arc": "B",
-"attack": "1",
-"lock": "3+",
+"attack": "2",
+"lock": "4+",
 "damage": "3",
 "type": "K",
 "special": "Calibre-H, Penetrator, Volley-2"
@@ -3550,8 +3566,8 @@
 "hector": {
 "name": "Hector",
 "page": 37,
-"sig": "d39f02272929",
-"cost": 134,
+"sig": "2a78b1087c08",
+"cost": 130,
 "stats": {
 "thrust": "7\"",
 "scan": "8\"",
@@ -3600,7 +3616,7 @@
 "sysyphus": {
 "name": "Sysyphus",
 "page": 38,
-"sig": "5c08af3efc11",
+"sig": "9442cb580c61",
 "cost": 122,
 "stats": {
 "thrust": "7\"",
@@ -3630,7 +3646,7 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 }
 ],
 "loads": [
@@ -3647,8 +3663,8 @@
 "orpheus": {
 "name": "Orpheus",
 "page": 39,
-"sig": "85c699b5e3ae",
-"cost": 170,
+"sig": "28d7fd276f37",
+"cost": 166,
 "stats": {
 "thrust": "7\"",
 "scan": "8\"",
@@ -3668,7 +3684,7 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 },
 {
 "name": "Light Calibre Broadside",
@@ -3677,7 +3693,7 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 },
 {
 "name": "Supernova Laser",
@@ -3759,7 +3775,7 @@
 "camillafelixnanomatrix": {
 "name": "Camilla Felix - Nanomatrix",
 "page": 41,
-"sig": "438cd02aa9ab",
+"sig": "7cc0b061796c",
 "cost": 146,
 "stats": {
 "thrust": "9\"",
@@ -3774,13 +3790,22 @@
 },
 "weapons": [
 {
-"name": "Glaive Lance",
-"arc": "FN",
+"name": "Glaive Lance (Pulse)",
+"arc": "F",
 "attack": "3",
-"lock": "2+",
+"lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge"
+"special": "Alt-1, Reave-2"
+},
+{
+"name": "Glaive Lance (Beam)",
+"arc": "FN",
+"attack": "3",
+"lock": "3+",
+"damage": "4",
+"type": "E",
+"special": "Alt-1, Focused, High Power, Penetrator"
 },
 {
 "name": "Black Nano Drones",
@@ -3802,8 +3827,8 @@
 "ptolemy": {
 "name": "Ptolemy",
 "page": 42,
-"sig": "e0acf8c10d77",
-"cost": 174,
+"sig": "779b4eefb3c4",
+"cost": 168,
 "stats": {
 "thrust": "7\"",
 "scan": "8\"",
@@ -3832,12 +3857,12 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-Entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 }
 ],
 "loads": [],
 "rules": {
-"Feature Carrier": "eef30a2dfe21"
+"Feature Carrier": "edc050458cdd"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -3845,8 +3870,8 @@
 "seleucus": {
 "name": "Seleucus",
 "page": 43,
-"sig": "c7fce5f473f2",
-"cost": 200,
+"sig": "9da478480c22",
+"cost": 176,
 "stats": {
 "thrust": "7\"",
 "scan": "8\"",
@@ -3866,7 +3891,7 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-Entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 },
 {
 "name": "Light Calibre Double Broadside",
@@ -3875,12 +3900,12 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-Entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 }
 ],
 "loads": [],
 "rules": {
-"Feature Carrier": "7ed07c02336f"
+"Feature Carrier": "edc050458cdd"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -3888,8 +3913,8 @@
 "antigonus": {
 "name": "Antigonus",
 "page": 44,
-"sig": "15531a8f5630",
-"cost": 176,
+"sig": "7d8fe846a556",
+"cost": 170,
 "stats": {
 "thrust": "7\"",
 "scan": "8\"",
@@ -3914,8 +3939,8 @@
 ],
 "loads": [],
 "rules": {
-"Holo Interference Field": "af32b65f4607",
-"Feature Carrier": "eef30a2dfe21"
+"Holo Deterrence Field": "c0e3c3f81f80",
+"Feature Carrier": "edc050458cdd"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -3923,8 +3948,8 @@
 "leonnatus": {
 "name": "Leonnatus",
 "page": 45,
-"sig": "f50828e6d25e",
-"cost": 190,
+"sig": "a9ff736cca2f",
+"cost": 178,
 "stats": {
 "thrust": "7\"",
 "scan": "8\"",
@@ -3940,8 +3965,8 @@
 {
 "name": "Heavy Calibre Double Broadside",
 "arc": "B",
-"attack": "2",
-"lock": "3+",
+"attack": "4",
+"lock": "4+",
 "damage": "3",
 "type": "K",
 "special": "Calibre-H, Penetrator, Volley-2"
@@ -3953,7 +3978,7 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-Entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 }
 ],
 "loads": [],
@@ -3964,7 +3989,7 @@
 "agamemnon": {
 "name": "Agamemnon",
 "page": 46,
-"sig": "c0d577e86e02",
+"sig": "b90f17d52205",
 "cost": 160,
 "stats": {
 "thrust": "8\"",
@@ -3979,36 +4004,18 @@
 },
 "weapons": [
 {
-"name": "Light Calibre Broadside",
+"name": "Light Calibre Double Broadside",
 "arc": "B",
-"attack": "6",
+"attack": "12",
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-Entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 },
 {
-"name": "Light Calibre Broadside",
+"name": "Medium Calibre Double Broadside",
 "arc": "B",
 "attack": "6",
-"lock": "5+",
-"damage": "1",
-"type": "K",
-"special": "Calibre-L, Re-Entry, Volley-2"
-},
-{
-"name": "Medium Calibre Broadside",
-"arc": "B",
-"attack": "3",
-"lock": "4+",
-"damage": "2",
-"type": "K",
-"special": "Fusillade-1, Volley-2"
-},
-{
-"name": "Medium Calibre Broadside",
-"arc": "B",
-"attack": "3",
 "lock": "4+",
 "damage": "2",
 "type": "K",
@@ -4023,7 +4030,7 @@
 "priam": {
 "name": "Priam",
 "page": 47,
-"sig": "1463a2fd257e",
+"sig": "01de0d69ebeb",
 "cost": 195,
 "stats": {
 "thrust": "8\"",
@@ -4038,22 +4045,13 @@
 },
 "weapons": [
 {
-"name": "Light Calibre Broadside",
+"name": "Light Calibre Double Broadside",
 "arc": "B",
-"attack": "6",
+"attack": "12",
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-Entry, Volley-2"
-},
-{
-"name": "Light Calibre Broadside",
-"arc": "B",
-"attack": "6",
-"lock": "5+",
-"damage": "1",
-"type": "K",
-"special": "Calibre-L, Re-Entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 }
 ],
 "loads": [
@@ -4070,7 +4068,7 @@
 "agrippa": {
 "name": "Agrippa",
 "page": 49,
-"sig": "dba06cc287ba",
+"sig": "9a462c7da851",
 "cost": 160,
 "stats": {
 "thrust": "10\"",
@@ -4094,9 +4092,15 @@
 "special": "Anti Wing, Close Action, Volley-2"
 }
 ],
-"loads": [],
+"loads": [
+{
+"name": "Mines",
+"launch": "3",
+"special": "-"
+}
+],
 "rules": {
-"Holo Interference Field": "af32b65f4607"
+"Holo Interference Field": "cbcf0487aaaf"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -4104,8 +4108,8 @@
 "brutus": {
 "name": "Brutus",
 "page": 50,
-"sig": "8ae7ffdf487f",
-"cost": 210,
+"sig": "2920e0aa24f8",
+"cost": 205,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -4121,8 +4125,8 @@
 {
 "name": "Heavy Calibre Double Broadside",
 "arc": "B",
-"attack": "2",
-"lock": "3+",
+"attack": "4",
+"lock": "4+",
 "damage": "3",
 "type": "K",
 "special": "Calibre-H, Penetrator, Volley-2"
@@ -4134,16 +4138,25 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-Entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 },
 {
-"name": "Glaive Lance",
-"arc": "FN",
+"name": "Glaive Lance (Pulse)",
+"arc": "F",
 "attack": "3",
-"lock": "2+",
+"lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge"
+"special": "Alt-1, Reave-2"
+},
+{
+"name": "Glaive Lance (Beam)",
+"arc": "FN",
+"attack": "3",
+"lock": "3+",
+"damage": "4",
+"type": "E",
+"special": "Alt-1, Focused, High Power, Penetrator"
 }
 ],
 "loads": [],
@@ -4154,7 +4167,7 @@
 "cato": {
 "name": "Cato",
 "page": 51,
-"sig": "de01b7c305db",
+"sig": "23bf848aa859",
 "cost": 185,
 "stats": {
 "thrust": "8\"",
@@ -4187,13 +4200,22 @@
 "special": "Close Action"
 },
 {
-"name": "Glaive Lance",
-"arc": "FN",
+"name": "Glaive Lance (Pulse)",
+"arc": "F",
 "attack": "3",
-"lock": "2+",
+"lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge"
+"special": "Alt-1, Reave-2"
+},
+{
+"name": "Glaive Lance (Beam)",
+"arc": "FN",
+"attack": "3",
+"lock": "3+",
+"damage": "4",
+"type": "E",
+"special": "Alt-1, Focused, High Power, Penetrator"
 }
 ],
 "loads": [],
@@ -4204,8 +4226,8 @@
 "antony": {
 "name": "Antony",
 "page": 52,
-"sig": "434e95cc6a24",
-"cost": 200,
+"sig": "606fe8270fb6",
+"cost": 195,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -4225,7 +4247,7 @@
 "lock": "5+",
 "damage": "1",
 "type": "K",
-"special": "Calibre-L, Re-Entry, Volley-2"
+"special": "Calibre-L, Reave-1, Volley-2"
 }
 ],
 "loads": [
@@ -4236,7 +4258,7 @@
 }
 ],
 "rules": {
-"Feature Carrier": "eef30a2dfe21"
+"Feature Carrier": "6d1a3ef1d6dd"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -4244,7 +4266,7 @@
 "minos": {
 "name": "Minos",
 "page": 54,
-"sig": "67389369d427",
+"sig": "7b0238524b88",
 "cost": 255,
 "stats": {
 "thrust": "6\"",
@@ -4259,13 +4281,31 @@
 },
 "weapons": [
 {
-"name": "Heavy Calibre Triple Broadside",
+"name": "Heavy Calibre Broadside",
 "arc": "B",
-"attack": "3",
-"lock": "3+",
+"attack": "2",
+"lock": "4+",
 "damage": "3",
 "type": "K",
-"special": "Calibre-H/C, Penetrator, Volley-2"
+"special": "Calibre-H, Penetrator, Volley-2"
+},
+{
+"name": "Heavy Calibre Broadside",
+"arc": "B",
+"attack": "2",
+"lock": "4+",
+"damage": "3",
+"type": "K",
+"special": "Calibre-H, Penetrator, Volley-2"
+},
+{
+"name": "Heavy Calibre Broadside",
+"arc": "B",
+"attack": "2",
+"lock": "4+",
+"damage": "3",
+"type": "K",
+"special": "Calibre-H, Penetrator, Volley-2"
 },
 {
 "name": "Neutron Missiles",
@@ -4291,11 +4331,11 @@
 "sarpedon": {
 "name": "Sarpedon",
 "page": 55,
-"sig": "6c94c2e87fa9",
-"cost": 235,
+"sig": "715498716eab",
+"cost": 230,
 "stats": {
 "thrust": "6\"",
-"scan": "10\"",
+"scan": "16\"",
 "sig": "10\"",
 "hull": "22",
 "es": "3+",
@@ -4332,8 +4372,8 @@
 "kairos": {
 "name": "Kairos",
 "page": 56,
-"sig": "d04784183fb2",
-"cost": 210,
+"sig": "ee7025312217",
+"cost": 200,
 "stats": {
 "thrust": "10\"",
 "scan": "10\"",
@@ -4373,8 +4413,8 @@
 "rhadamanthus": {
 "name": "Rhadamanthus",
 "page": 57,
-"sig": "80c70b8eb361",
-"cost": 220,
+"sig": "7518ce963eb1",
+"cost": 205,
 "stats": {
 "thrust": "10\"",
 "scan": "10\"",
@@ -4388,10 +4428,10 @@
 },
 "weapons": [
 {
-"name": "Heavy Calibre Broadside",
+"name": "Heavy Calibre Broadside Array",
 "arc": "B",
-"attack": "1",
-"lock": "3+",
+"attack": "3",
+"lock": "4+",
 "damage": "3",
 "type": "K",
 "special": "Calibre-H, Penetrator, Volley-2"
@@ -4423,8 +4463,8 @@
 "amphion": {
 "name": "Amphion",
 "page": 58,
-"sig": "120c8d1b2f94",
-"cost": 230,
+"sig": "d93bcc9e30bc",
+"cost": 250,
 "stats": {
 "thrust": "6\"",
 "scan": "10\"",
@@ -4438,22 +4478,22 @@
 },
 "weapons": [
 {
-"name": "Energy Glaives",
+"name": "Energy Glaives (Pulse)",
 "arc": "B",
-"attack": "3",
-"lock": "3+",
+"attack": "4",
+"lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge, Volley-2"
+"special": "Alt-1, Reave-1, Volley-2"
 },
 {
-"name": "Energy Glaives",
-"arc": "B",
-"attack": "3",
+"name": "Energy Glaives (Beam)",
+"arc": "S",
+"attack": "2",
 "lock": "3+",
-"damage": "2",
+"damage": "4",
 "type": "E",
-"special": "Overcharge, Volley-2"
+"special": "Alt-1, Reave-2, Fusillade-1"
 },
 {
 "name": "Meganova Laser",
@@ -4563,8 +4603,8 @@
 "augustus": {
 "name": "Augustus",
 "page": 61,
-"sig": "c5e2e3320db3",
-"cost": 245,
+"sig": "091e098fa8ee",
+"cost": 260,
 "stats": {
 "thrust": "6\"",
 "scan": "10\"",
@@ -4578,22 +4618,22 @@
 },
 "weapons": [
 {
-"name": "Energy Glaives",
+"name": "Energy Glaives (Pulse)",
 "arc": "B",
-"attack": "3",
-"lock": "3+",
+"attack": "4",
+"lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge, Volley-2"
+"special": "Alt-1, Reave-1, Volley-2"
 },
 {
-"name": "Energy Glaives",
-"arc": "B",
-"attack": "3",
+"name": "Energy Glaives (Beam)",
+"arc": "S",
+"attack": "2",
 "lock": "3+",
-"damage": "2",
+"damage": "4",
 "type": "E",
-"special": "Overcharge, Volley-2"
+"special": "Alt-1, Reave-2, Fusillade-1"
 },
 {
 "name": "Neutron Missiles",
@@ -4628,8 +4668,8 @@
 "caesar": {
 "name": "Caesar",
 "page": 62,
-"sig": "0cf09d4a14e9",
-"cost": 270,
+"sig": "3a36972bb46d",
+"cost": 295,
 "stats": {
 "thrust": "6\"",
 "scan": "10\"",
@@ -4658,7 +4698,7 @@
 "lock": "2+",
 "damage": "2",
 "type": "E",
-"special": "Critical-1, Crippling, Penetrator"
+"special": "Critical-1, Crippling, High Power, Penetrator"
 },
 {
 "name": "Laser Multi-Lance",
@@ -4678,8 +4718,8 @@
 "octavius": {
 "name": "Octavius",
 "page": 63,
-"sig": "4a5ba6212990",
-"cost": 300,
+"sig": "8982f3d7eb6f",
+"cost": 315,
 "stats": {
 "thrust": "6\"",
 "scan": "10\"",
@@ -4693,13 +4733,31 @@
 },
 "weapons": [
 {
-"name": "Heavy Calibre Triple Broadside",
+"name": "Heavy Calibre Broadside",
 "arc": "B",
-"attack": "3",
-"lock": "3+",
+"attack": "2",
+"lock": "4+",
 "damage": "3",
 "type": "K",
-"special": "Calibre-H/C, Penetrator, Volley-2"
+"special": "Calibre-H, Penetrator, Volley-2"
+},
+{
+"name": "Heavy Calibre Broadside",
+"arc": "B",
+"attack": "2",
+"lock": "4+",
+"damage": "3",
+"type": "K",
+"special": "Calibre-H, Penetrator, Volley-2"
+},
+{
+"name": "Heavy Calibre Broadside",
+"arc": "B",
+"attack": "2",
+"lock": "4+",
+"damage": "3",
+"type": "K",
+"special": "Calibre-H, Penetrator, Volley-2"
 },
 {
 "name": "Neutron Missiles",
@@ -4717,7 +4775,7 @@
 "lock": "2+",
 "damage": "2",
 "type": "E",
-"special": "Critical-1, Crippling, Penetrator"
+"special": "Critical-1, Crippling, High Power, Penetrator"
 }
 ],
 "loads": [
@@ -4734,14 +4792,14 @@
 "remus": {
 "name": "Remus",
 "page": 65,
-"sig": "59fe2d2a4760",
+"sig": "0cbcce23ab75",
 "cost": 455,
 "stats": {
 "thrust": "6\"",
 "scan": "12\"",
 "sig": "14\"",
 "hull": "25",
-"es": "2+",
+"es": "3+",
 "ks": "3+",
 "bs": "5+",
 "g": "1",
@@ -4758,22 +4816,40 @@
 "special": "Bombardment, Overcharge"
 },
 {
-"name": "Energy Glaive Battery",
+"name": "Energy Glaives (Pulse)",
 "arc": "B",
-"attack": "6",
-"lock": "3+",
+"attack": "4",
+"lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge, Volley-2"
+"special": "Alt-1, Reave-1, Volley-2"
 },
 {
-"name": "Energy Glaive Battery",
-"arc": "B",
-"attack": "6",
+"name": "Energy Glaives (Beam)",
+"arc": "S",
+"attack": "2",
 "lock": "3+",
+"damage": "4",
+"type": "E",
+"special": "Alt-1, Reave-2, Fusillade-1"
+},
+{
+"name": "Energy Glaives (Pulse)",
+"arc": "B",
+"attack": "4",
+"lock": "4+",
 "damage": "2",
 "type": "E",
-"special": "Overcharge, Volley-2"
+"special": "Alt-2, Reave-1, Volley-2"
+},
+{
+"name": "Energy Glaives (Beam)",
+"arc": "S",
+"attack": "2",
+"lock": "3+",
+"damage": "4",
+"type": "E",
+"special": "Alt-2, Reave-2, Fusillade-1"
 },
 {
 "name": "Hornet Drone Hive",
@@ -4799,13 +4875,13 @@
 }
 },
 "Resistance_Combined_Fleet_Stats": {
-"file": "Resistance_Combined_Fleet_Stats_260731.pdf",
+"file": "Resistance_Combined_Fleet_Stats_261104.pdf",
 "cards": {
 "heavycruiser": {
 "name": "Heavy Cruiser",
 "page": 24,
-"sig": "a1fbc312e16e",
-"cost": 75,
+"sig": "872200cdcf7f",
+"cost": 68,
 "stats": {
 "thrust": "5\"",
 "scan": "6\"",
@@ -4817,7 +4893,17 @@
 "g": "1",
 "special": "- Hardpoints"
 },
-"weapons": [],
+"weapons": [
+{
+"name": "NC-1 Missile Rack",
+"arc": "F/S/R",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action"
+}
+],
 "loads": [],
 "rules": {
 "Hardpoints": "e82715869796"
@@ -4827,9 +4913,9 @@
 },
 "tribune": {
 "name": "Tribune",
-"page": 35,
-"sig": "fe0122ba6789",
-"cost": 205,
+"page": 36,
+"sig": "82d4853ae0f6",
+"cost": 200,
 "stats": {
 "thrust": "7\"",
 "scan": "6\"",
@@ -4889,7 +4975,7 @@
 "olympus": {
 "name": "Olympus",
 "page": 6,
-"sig": "eb402d0fd176",
+"sig": "83daff16808d",
 "cost": 415,
 "stats": {
 "thrust": "5\"",
@@ -4948,16 +5034,16 @@
 }
 ],
 "rules": {
-"Extensive Reactor Modifications": "fb5e7df63366"
+"Extensive Reactor Modifications": "1521c3109bf7"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
 },
 "coloniser": {
 "name": "Coloniser",
-"page": 55,
-"sig": "0f98146b78a1",
-"cost": 265,
+"page": 56,
+"sig": "19b059a3af97",
+"cost": 255,
 "stats": {
 "thrust": "5\"",
 "scan": "10\"",
@@ -4990,7 +5076,7 @@
 "munifex": {
 "name": "Munifex",
 "page": 8,
-"sig": "f00f9ecce2b8",
+"sig": "9b54b84f8ef3",
 "cost": 19,
 "stats": {
 "thrust": "12\"",
@@ -4998,7 +5084,7 @@
 "sig": "2\"",
 "hull": "2",
 "es": "5+",
-"ks": "6+",
+"ks": "5+",
 "bs": "-",
 "g": "2-4",
 "special": "Descent"
@@ -5022,15 +5108,15 @@
 "seneca": {
 "name": "Seneca",
 "page": 9,
-"sig": "b9e39d054322",
+"sig": "108b0a1818ea",
 "cost": 40,
 "stats": {
 "thrust": "12\"",
 "scan": "4\"",
 "sig": "2\"",
 "hull": "2",
-"es": "4+",
-"ks": "6+",
+"es": "5+",
+"ks": "5+",
 "bs": "-",
 "g": "1-3",
 "special": "Descent"
@@ -5044,7 +5130,7 @@
 }
 ],
 "rules": {
-"Explosive": "0f62c07071e8"
+"Explosive": "d7da5c064062"
 },
 "lore": "2641f59b7709",
 "famous": "d90a7c9aa970"
@@ -5052,7 +5138,7 @@
 "newton": {
 "name": "Newton",
 "page": 10,
-"sig": "91024c9c0d5a",
+"sig": "7a2fe72c52e2",
 "cost": 46,
 "stats": {
 "thrust": "4\"",
@@ -5082,7 +5168,7 @@
 "lock": "4+",
 "damage": "3",
 "type": "E",
-"special": "Alt-1, Bombardment, Penetrator"
+"special": "Alt-1, Bombardment, Critical-1, Penetrator"
 }
 ],
 "loads": [],
@@ -5093,7 +5179,7 @@
 "galileo": {
 "name": "Galileo",
 "page": 11,
-"sig": "4eea3d960cd4",
+"sig": "e279f9749554",
 "cost": 55,
 "stats": {
 "thrust": "4\"",
@@ -5103,14 +5189,14 @@
 "es": "4+",
 "ks": "6+",
 "bs": "-",
-"g": "1-2",
+"g": "1",
 "special": "Detector, Monitor, Rare Space Telescope"
 },
 "weapons": [],
 "loads": [],
 "rules": {
 "Space Telescope": "0797024002a8",
-"Telescope Token": "5047d8e03c6d"
+"Telescope Token": "f7b9a8cbc249"
 },
 "lore": "f9e984db56bf",
 "famous": "f347d9164a44"
@@ -5150,8 +5236,8 @@
 "baleares": {
 "name": "Baleares",
 "page": 13,
-"sig": "d881b26a8081",
-"cost": 55,
+"sig": "4fa50c3ee5c2",
+"cost": 52,
 "stats": {
 "thrust": "16\"",
 "scan": "4\"",
@@ -5174,6 +5260,11 @@
 "name": "Bombers",
 "launch": "1",
 "special": "Alt-1"
+},
+{
+"name": "Mines",
+"launch": "1",
+"special": "Alt-1"
 }
 ],
 "rules": {},
@@ -5183,8 +5274,8 @@
 "armstrong": {
 "name": "Armstrong",
 "page": 14,
-"sig": "cc69496df3e1",
-"cost": 65,
+"sig": "d8631af9fab1",
+"cost": 70,
 "stats": {
 "thrust": "9\"",
 "scan": "6\"",
@@ -5226,15 +5317,15 @@
 "aldrin": {
 "name": "Aldrin",
 "page": 15,
-"sig": "2e1926fd619f",
+"sig": "542b1f473ea0",
 "cost": 75,
 "stats": {
 "thrust": "9\"",
 "scan": "6\"",
 "sig": "4\"",
 "hull": "6",
-"es": "4+",
-"ks": "6+",
+"es": "5+",
+"ks": "5+",
 "bs": "6+",
 "g": "1-2",
 "special": "Descent"
@@ -5284,10 +5375,10 @@
 "guyfawkesparliament": {
 "name": "Guy Fawkes - Parliament",
 "page": 17,
-"sig": "d77c6f7dcd6f",
+"sig": "a19037a70e07",
 "cost": 85,
 "stats": {
-"thrust": "9\"",
+"thrust": "11\"",
 "scan": "6\"",
 "sig": "4\"",
 "hull": "6",
@@ -5301,16 +5392,16 @@
 {
 "name": "Explosive Detonation",
 "arc": "F/S/R",
-"attack": "8",
+"attack": "3",
 "lock": "3+",
 "damage": "1",
 "type": "C",
-"special": "Critical-1"
+"special": "Close Action, Critical-1"
 }
 ],
 "loads": [],
 "rules": {
-"Explosive Detonation": "6d819648b2b9",
+"Explosive Detonation": "9f8387697fe5",
 "Set Timers And Run": "de2a635dc25a",
 "Skeleton Crew": "6863c6f18d5d"
 },
@@ -5320,8 +5411,8 @@
 "strikecarrier": {
 "name": "Strike Carrier",
 "page": 19,
-"sig": "38d4bd6649cd",
-"cost": 35,
+"sig": "fcfa0e803243",
+"cost": 32,
 "stats": {
 "thrust": "11\"",
 "scan": "4\"",
@@ -5333,7 +5424,17 @@
 "g": "1-3",
 "special": "Descent"
 },
-"weapons": [],
+"weapons": [
+{
+"name": "NC-1 Missiles",
+"arc": "F/S/R",
+"attack": "1",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action"
+}
+],
 "loads": [
 {
 "name": "Dropships",
@@ -5350,7 +5451,7 @@
 "frigate": {
 "name": "Frigate",
 "page": 20,
-"sig": "ff36b733644f",
+"sig": "33e739143f68",
 "cost": 22,
 "stats": {
 "thrust": "11\"",
@@ -5363,7 +5464,17 @@
 "g": "2-6",
 "special": "- Hardpoints"
 },
-"weapons": [],
+"weapons": [
+{
+"name": "NC-1 Missiles",
+"arc": "F/S/R",
+"attack": "1",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action"
+}
+],
 "loads": [],
 "rules": {
 "Hardpoints": "e5ccf9f0e20a"
@@ -5374,8 +5485,8 @@
 "heavyfrigate": {
 "name": "Heavy Frigate",
 "page": 21,
-"sig": "367bfec77733",
-"cost": 32,
+"sig": "984b90cc0f6a",
+"cost": 34,
 "stats": {
 "thrust": "9\"",
 "scan": "4\"",
@@ -5387,7 +5498,17 @@
 "g": "2-4",
 "special": "Reinforced Armour Hardpoints"
 },
-"weapons": [],
+"weapons": [
+{
+"name": "NC-1 Missiles",
+"arc": "F/S/R",
+"attack": "1",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action"
+}
+],
 "loads": [],
 "rules": {
 "Hardpoints": "577ca7b4f27c"
@@ -5398,7 +5519,7 @@
 "lightcruiser": {
 "name": "Light Cruiser",
 "page": 22,
-"sig": "14f9eca1cd90",
+"sig": "dcbb2d55e9b7",
 "cost": 45,
 "stats": {
 "thrust": "9\"",
@@ -5411,7 +5532,17 @@
 "g": "2-3",
 "special": "- Hardpoints"
 },
-"weapons": [],
+"weapons": [
+{
+"name": "NC-1 Missiles",
+"arc": "F/S/R",
+"attack": "1",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action"
+}
+],
 "loads": [],
 "rules": {
 "Hardpoints": "fc068e6a948c"
@@ -5422,7 +5553,7 @@
 "cruiser": {
 "name": "Cruiser",
 "page": 23,
-"sig": "28e60f326b77",
+"sig": "090fa1315247",
 "cost": 60,
 "stats": {
 "thrust": "7\"",
@@ -5435,7 +5566,17 @@
 "g": "1-2",
 "special": "- Hardpoints"
 },
-"weapons": [],
+"weapons": [
+{
+"name": "NC-1 Missile Pod",
+"arc": "F/S/R",
+"attack": "2",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action"
+}
+],
 "loads": [],
 "rules": {
 "Hardpoints": "a3c4917e5ddd"
@@ -5443,9 +5584,65 @@
 "lore": "4e0a0c5a8fec",
 "famous": "905ef3592f1b"
 },
+"generalcassiusbrownkabalsdeliverance": {
+"name": "General Cassius Brown - Kabal’s Deliverance",
+"page": 25,
+"sig": "5148b23b0f23",
+"cost": 146,
+"stats": {
+"thrust": "8\"",
+"scan": "8\"",
+"sig": "6\"",
+"hull": "14",
+"es": "3+",
+"ks": "4+",
+"bs": "6+",
+"g": "1",
+"special": "Hero, Reinforced Armour, Unique"
+},
+"weapons": [
+{
+"name": "XN-31 Long Nine Mass Driver Turret",
+"arc": "F/S",
+"attack": "2",
+"lock": "2+",
+"damage": "1",
+"type": "K",
+"special": "Critical-1, Reave-1"
+},
+{
+"name": "XN-31 Long Nine Mass Driver Turret",
+"arc": "F/S",
+"attack": "2",
+"lock": "2+",
+"damage": "1",
+"type": "K",
+"special": "Critical-1, Reave-1"
+},
+{
+"name": "NC-1 Missile Rack",
+"arc": "F/S/R",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action"
+}
+],
+"loads": [
+{
+"name": "Firefist Assault Boats",
+"launch": "4",
+"special": "-"
+}
+],
+"rules": {},
+"lore": "3b8a2943451c",
+"famous": "fc025a40eded"
+},
 "centurion": {
 "name": "Centurion",
-"page": 25,
+"page": 26,
 "sig": "6d1a0b0c53b5",
 "cost": 125,
 "stats": {
@@ -5489,9 +5686,9 @@
 },
 "gladiator": {
 "name": "Gladiator",
-"page": 26,
-"sig": "48f3956918fd",
-"cost": 148,
+"page": 27,
+"sig": "61dea31b6339",
+"cost": 144,
 "stats": {
 "thrust": "5\"",
 "scan": "6\"",
@@ -5532,9 +5729,9 @@
 },
 "secutor": {
 "name": "Secutor",
-"page": 27,
-"sig": "64f6dfd33593",
-"cost": 142,
+"page": 28,
+"sig": "70fda8fb349c",
+"cost": 138,
 "stats": {
 "thrust": "5\"",
 "scan": "6\"",
@@ -5581,9 +5778,9 @@
 },
 "retiarius": {
 "name": "Retiarius",
-"page": 28,
-"sig": "5a063a936fa0",
-"cost": 134,
+"page": 29,
+"sig": "08be52b41fbe",
+"cost": 130,
 "stats": {
 "thrust": "5\"",
 "scan": "6\"",
@@ -5608,9 +5805,9 @@
 {
 "name": "NL-9 Laser Turret",
 "arc": "F/S",
-"attack": "2",
-"lock": "3+",
-"damage": "2",
+"attack": "4",
+"lock": "2+",
+"damage": "1",
 "type": "E",
 "special": "Flash-1, Focused, Fusillade-1, Reave-1"
 }
@@ -5625,9 +5822,9 @@
 },
 "trafalgar": {
 "name": "Trafalgar",
-"page": 29,
-"sig": "238521f109b2",
-"cost": 122,
+"page": 30,
+"sig": "be654e5e8048",
+"cost": 116,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -5652,16 +5849,16 @@
 ],
 "loads": [],
 "rules": {
-"Feature Carrier": "4959cdd7fb3c"
+"Feature Carrier": "c90b45faf627"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
 },
 "jutland": {
 "name": "Jutland",
-"page": 30,
-"sig": "6cae3778f214",
-"cost": 144,
+"page": 31,
+"sig": "5f28d913f5c1",
+"cost": 138,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -5686,16 +5883,16 @@
 ],
 "loads": [],
 "rules": {
-"Feature Carrier": "4959cdd7fb3c"
+"Feature Carrier": "40c17f5b1438"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
 },
 "midway": {
 "name": "Midway",
-"page": 31,
-"sig": "5c4de51515e2",
-"cost": 160,
+"page": 32,
+"sig": "314bcff7bbba",
+"cost": 154,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -5726,14 +5923,14 @@
 }
 ],
 "rules": {
-"Feature Carrier": "4959cdd7fb3c"
+"Feature Carrier": "c90b45faf627"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
 },
 "senator": {
 "name": "Senator",
-"page": 32,
+"page": 33,
 "sig": "4ccbdfcc5d81",
 "cost": 155,
 "stats": {
@@ -5786,9 +5983,9 @@
 },
 "triumvir": {
 "name": "Triumvir",
-"page": 33,
-"sig": "9d9e4b2c7484",
-"cost": 175,
+"page": 34,
+"sig": "ae5f11c20250",
+"cost": 180,
 "stats": {
 "thrust": "7\"",
 "scan": "6\"",
@@ -5809,17 +6006,17 @@
 }
 ],
 "rules": {
-"Repair Bay": "92c4ac83ad85",
-"Box Of Scraps": "45552d470d4d"
+"Repair Bay": "536462813ec9",
+"Box Of Scraps": "a62ebbeddb87"
 },
 "lore": "f29085e01ec5",
 "famous": "641c6a8f5daa"
 },
 "phalanx": {
 "name": "Phalanx",
-"page": 34,
-"sig": "320efeeddde1",
-"cost": 185,
+"page": 35,
+"sig": "cf7c2dbc5363",
+"cost": 190,
 "stats": {
 "thrust": "7\"",
 "scan": "6\"",
@@ -5867,8 +6064,8 @@
 },
 "xerxes": {
 "name": "Xerxes",
-"page": 36,
-"sig": "5cd631e4cf04",
+"page": 37,
+"sig": "e733fccd2313",
 "cost": 175,
 "stats": {
 "thrust": "7\"",
@@ -5886,10 +6083,10 @@
 "name": "NL-9 Laser Turret Pair",
 "arc": "F/S",
 "attack": "4",
-"lock": "3+",
-"damage": "2",
+"lock": "2+",
+"damage": "1",
 "type": "E",
-"special": "Flash-2 Focused, Fusillade-2, Reave-1"
+"special": "Flash-2 Focused, Fusillade-2, Reave-1, Volley-2"
 },
 {
 "name": "Heavy Vent Cannons",
@@ -5910,7 +6107,7 @@
 },
 "darius": {
 "name": "Darius",
-"page": 37,
+"page": 38,
 "sig": "febf155feec5",
 "cost": 180,
 "stats": {
@@ -5975,8 +6172,8 @@
 },
 "cyrus": {
 "name": "Cyrus",
-"page": 38,
-"sig": "6e6f8bda84ed",
+"page": 39,
+"sig": "c6a21514139e",
 "cost": 185,
 "stats": {
 "thrust": "7\"",
@@ -6008,17 +6205,17 @@
 }
 ],
 "rules": {
-"Repair Bay": "92c4ac83ad85",
-"Box Of Scraps": "45552d470d4d"
+"Repair Bay": "536462813ec9",
+"Box Of Scraps": "a62ebbeddb87"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
 },
 "actium": {
 "name": "Actium",
-"page": 39,
-"sig": "bb6a715a4f86",
-"cost": 180,
+"page": 40,
+"sig": "d230b4850b9b",
+"cost": 175,
 "stats": {
 "thrust": "6\"",
 "scan": "6\"",
@@ -6061,16 +6258,16 @@
 ],
 "loads": [],
 "rules": {
-"Feature Carrier": "5b2bb638466a"
+"Feature Carrier": "b757221e947e"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
 },
 "salamis": {
 "name": "Salamis",
-"page": 40,
-"sig": "fc17cbeaa5d6",
-"cost": 200,
+"page": 41,
+"sig": "97e690eb14df",
+"cost": 195,
 "stats": {
 "thrust": "6\"",
 "scan": "6\"",
@@ -6110,21 +6307,21 @@
 }
 ],
 "rules": {
-"Feature Carrier": "5b2bb638466a"
+"Feature Carrier": "b757221e947e"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
 },
 "musashi": {
 "name": "Musashi",
-"page": 41,
-"sig": "c2d924fbc8b6",
-"cost": 175,
+"page": 42,
+"sig": "2d3ab1d49595",
+"cost": 160,
 "stats": {
-"thrust": "7\"",
-"scan": "6\"",
+"thrust": "5\"",
+"scan": "4\"",
 "sig": "8\"",
-"hull": "15",
+"hull": "18",
 "es": "3+",
 "ks": "5+",
 "bs": "5+",
@@ -6167,14 +6364,14 @@
 },
 "lexington": {
 "name": "Lexington",
-"page": 42,
-"sig": "e62617e61607",
-"cost": 190,
+"page": 43,
+"sig": "fcef67693088",
+"cost": 155,
 "stats": {
-"thrust": "7\"",
-"scan": "6\"",
+"thrust": "5\"",
+"scan": "4\"",
 "sig": "8\"",
-"hull": "15",
+"hull": "18",
 "es": "3+",
 "ks": "5+",
 "bs": "5+",
@@ -6210,14 +6407,14 @@
 },
 "iowa": {
 "name": "Iowa",
-"page": 43,
-"sig": "fba13651f545",
-"cost": 175,
+"page": 44,
+"sig": "114a67705183",
+"cost": 155,
 "stats": {
-"thrust": "7\"",
-"scan": "6\"",
+"thrust": "5\"",
+"scan": "4\"",
 "sig": "8\"",
-"hull": "15",
+"hull": "18",
 "es": "3+",
 "ks": "5+",
 "bs": "5+",
@@ -6251,14 +6448,14 @@
 },
 "vanguard": {
 "name": "Vanguard",
-"page": 44,
-"sig": "5987d966c279",
-"cost": 230,
+"page": 45,
+"sig": "d2cefdb538cf",
+"cost": 220,
 "stats": {
-"thrust": "7\"",
-"scan": "6\"",
+"thrust": "5\"",
+"scan": "4\"",
 "sig": "8\"",
-"hull": "15",
+"hull": "18",
 "es": "3+",
 "ks": "5+",
 "bs": "5+",
@@ -6301,9 +6498,9 @@
 },
 "nelson": {
 "name": "Nelson",
-"page": 45,
-"sig": "de4ef3a31358",
-"cost": 255,
+"page": 46,
+"sig": "18abdac20a43",
+"cost": 265,
 "stats": {
 "thrust": "5\"",
 "scan": "8\"",
@@ -6368,7 +6565,7 @@
 },
 "yisunsin": {
 "name": "Yi Sun-sin",
-"page": 46,
+"page": 47,
 "sig": "4b67c3dee147",
 "cost": 340,
 "stats": {
@@ -6435,7 +6632,7 @@
 },
 "barbarossa": {
 "name": "Barbarossa",
-"page": 47,
+"page": 48,
 "sig": "a2a060507ee4",
 "cost": 240,
 "stats": {
@@ -6497,9 +6694,9 @@
 },
 "farragut": {
 "name": "Farragut",
-"page": 48,
-"sig": "9f78b8b1820c",
-"cost": 215,
+"page": 49,
+"sig": "72d33027bb47",
+"cost": 210,
 "stats": {
 "thrust": "5\"",
 "scan": "8\"",
@@ -6555,9 +6752,9 @@
 },
 "drake": {
 "name": "Drake",
-"page": 49,
-"sig": "6aae5c303166",
-"cost": 245,
+"page": 50,
+"sig": "294eecca8825",
+"cost": 255,
 "stats": {
 "thrust": "5\"",
 "scan": "8\"",
@@ -6573,7 +6770,7 @@
 {
 "name": "Spinal Mass Annihilator",
 "arc": "FN",
-"attack": "2",
+"attack": "3",
 "lock": "2+",
 "damage": "3",
 "type": "C",
@@ -6617,9 +6814,9 @@
 },
 "nimitz": {
 "name": "Nimitz",
-"page": 50,
-"sig": "41197a40b1e0",
-"cost": 305,
+"page": 51,
+"sig": "dc28de749574",
+"cost": 290,
 "stats": {
 "thrust": "5\"",
 "scan": "8\"",
@@ -6639,7 +6836,7 @@
 "lock": "3+",
 "damage": "4",
 "type": "E",
-"special": "Bloom-2, Overcharge, Reave-1"
+"special": "Bloom-2, Overcharge, Reave-2"
 },
 {
 "name": "NC-16 Missile Battery Turret Pair",
@@ -6675,9 +6872,9 @@
 },
 "yamamoto": {
 "name": "Yamamoto",
-"page": 51,
-"sig": "d47abec9092d",
-"cost": 300,
+"page": 52,
+"sig": "432baa03e6f0",
+"cost": 290,
 "stats": {
 "thrust": "5\"",
 "scan": "8\"",
@@ -6697,7 +6894,7 @@
 "lock": "3+",
 "damage": "4",
 "type": "E",
-"special": "Bloom-2, Overcharge, Reave-1"
+"special": "Bloom-2, Overcharge, Reave-2"
 },
 {
 "name": "9K Mass Driver Turrets",
@@ -6733,9 +6930,9 @@
 },
 "pathfinder": {
 "name": "Pathfinder",
-"page": 53,
-"sig": "a6926fc1d34f",
-"cost": 190,
+"page": 54,
+"sig": "b39ad23f328c",
+"cost": 180,
 "stats": {
 "thrust": "5\"",
 "scan": "8\"",
@@ -6767,9 +6964,9 @@
 },
 "explorer": {
 "name": "Explorer",
-"page": 54,
-"sig": "1727a88fe6cd",
-"cost": 210,
+"page": 55,
+"sig": "412aaed9cfa9",
+"cost": 200,
 "stats": {
 "thrust": "5\"",
 "scan": "8\"",
@@ -6802,13 +6999,13 @@
 }
 },
 "Scourge_Combined_Fleet_Stats": {
-"file": "Scourge_Combined_Fleet_Stats_260626.pdf",
+"file": "Scourge_Combined_Fleet_Stats_261104.pdf",
 "cards": {
 "raiju": {
 "name": "Raiju",
 "page": 33,
-"sig": "8ac3aae57526",
-"cost": 125,
+"sig": "f24b8a7ee0f1",
+"cost": 120,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -6856,8 +7053,8 @@
 },
 "shadow": {
 "name": "Shadow",
-"page": 41,
-"sig": "201023759f98",
+"page": 42,
+"sig": "02bbaef78405",
 "cost": 230,
 "stats": {
 "thrust": "10\"",
@@ -6897,6 +7094,15 @@
 "damage": "1",
 "type": "K",
 "special": "Close Action, Fusillade-2, Scald-2"
+},
+{
+"name": "Plasma Gale",
+"arc": "F/S",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Scald-2"
 }
 ],
 "loads": [
@@ -6912,7 +7118,7 @@
 },
 "daemon": {
 "name": "Daemon",
-"page": 48,
+"page": 49,
 "sig": "4e875ef26707",
 "cost": 215,
 "stats": {
@@ -6964,7 +7170,7 @@
 },
 "nosferatu": {
 "name": "Nosferatu",
-"page": 58,
+"page": 59,
 "sig": "06e6953af1b9",
 "cost": 490,
 "stats": {
@@ -7030,7 +7236,7 @@
 "nickar": {
 "name": "Nickar",
 "page": 8,
-"sig": "a4b287321a7d",
+"sig": "c71fecf662c4",
 "cost": 20,
 "stats": {
 "thrust": "16\"",
@@ -7048,7 +7254,7 @@
 "name": "Plasma Squall",
 "arc": "F/S/R",
 "attack": "3",
-"lock": "4+",
+"lock": "3+",
 "damage": "1",
 "type": "K",
 "special": "Air to Air, Close Action, Scald-2"
@@ -7062,7 +7268,7 @@
 "hiruko": {
 "name": "Hiruko",
 "page": 9,
-"sig": "2d6233c67d9e",
+"sig": "ad420b739960",
 "cost": 23,
 "stats": {
 "thrust": "14\"",
@@ -7072,7 +7278,7 @@
 "es": "6+",
 "ks": "6+",
 "bs": "-",
-"g": "1-3",
+"g": "1-4",
 "special": "Impetuous, Vanguard-7”"
 },
 "weapons": [
@@ -7080,7 +7286,7 @@
 "name": "Plasma Torch",
 "arc": "F",
 "attack": "3",
-"lock": "4+",
+"lock": "3+",
 "damage": "1",
 "type": "E",
 "special": "Close Action, Scald-2, Sustained Fire"
@@ -7100,7 +7306,7 @@
 "ebisu": {
 "name": "Ebisu",
 "page": 10,
-"sig": "7790ff0b5f4b",
+"sig": "88533ea77567",
 "cost": 23,
 "stats": {
 "thrust": "14\"",
@@ -7110,14 +7316,14 @@
 "es": "6+",
 "ks": "6+",
 "bs": "-",
-"g": "1-3",
+"g": "1-4",
 "special": "Impetuous, Rare, Vanguard-7”"
 },
 "weapons": [
 {
 "name": "Engine Needle",
 "arc": "FN",
-"attack": "2",
+"attack": "3",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -7138,8 +7344,8 @@
 "harpy": {
 "name": "Harpy",
 "page": 11,
-"sig": "007a8f4ca685",
-"cost": 40,
+"sig": "9f390e19f320",
+"cost": 37,
 "stats": {
 "thrust": "12\"",
 "scan": "6\"",
@@ -7410,8 +7616,8 @@
 "apsasu": {
 "name": "Apsasu",
 "page": 18,
-"sig": "21dda8e62109",
-"cost": 60,
+"sig": "308e23683f23",
+"cost": 68,
 "stats": {
 "thrust": "6\"",
 "scan": "8\"",
@@ -7457,7 +7663,7 @@
 "wraith": {
 "name": "Wraith",
 "page": 19,
-"sig": "65ee71fc4b4a",
+"sig": "749e394644d4",
 "cost": 48,
 "stats": {
 "thrust": "16\"",
@@ -7485,7 +7691,7 @@
 "arc": "F",
 "attack": "2",
 "lock": "3+",
-"damage": "2",
+"damage": "3",
 "type": "K",
 "special": "Close Action, Crippling-Fire, Scald-2"
 }
@@ -7532,7 +7738,7 @@
 "incubus": {
 "name": "Incubus",
 "page": 21,
-"sig": "13e4b80d8de3",
+"sig": "a13fee88fe15",
 "cost": 50,
 "stats": {
 "thrust": "10\"",
@@ -7558,7 +7764,7 @@
 {
 "name": "Furnace Blaster",
 "arc": "FN",
-"attack": "4",
+"attack": "5",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -7584,7 +7790,7 @@
 "succubus": {
 "name": "Succubus",
 "page": 22,
-"sig": "f99d2d65622d",
+"sig": "61a5d8d2cb1a",
 "cost": 65,
 "stats": {
 "thrust": "10\"",
@@ -7608,9 +7814,9 @@
 "special": "Scald-1"
 },
 {
-"name": "Oculus Beams",
-"arc": "F/S",
-"attack": "1",
+"name": "Oculus Beam Cluster",
+"arc": "F",
+"attack": "2",
 "lock": "3+",
 "damage": "2",
 "type": "E",
@@ -7619,7 +7825,7 @@
 {
 "name": "Seekers",
 "arc": "F/S/R",
-"attack": "4",
+"attack": "6",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -7636,8 +7842,8 @@
 "revenant": {
 "name": "Revenant",
 "page": 23,
-"sig": "d17ba4d38ead",
-"cost": 66,
+"sig": "2a019a27c7d0",
+"cost": 61,
 "stats": {
 "thrust": "10\"",
 "scan": "6\"",
@@ -7673,7 +7879,12 @@
 {
 "name": "Fighters & Bombers",
 "launch": "1",
-"special": "-"
+"special": "Alt-1"
+},
+{
+"name": "Mines",
+"launch": "2",
+"special": "Alt-1"
 }
 ],
 "rules": {
@@ -7685,8 +7896,8 @@
 "thehatedlittlechaos": {
 "name": "The Hated - Little Chaos",
 "page": 24,
-"sig": "232ab36f1ef0",
-"cost": 90,
+"sig": "64f026250ab2",
+"cost": 83,
 "stats": {
 "thrust": "10\"",
 "scan": "6\"",
@@ -7735,8 +7946,8 @@
 "gremlin": {
 "name": "Gremlin",
 "page": 25,
-"sig": "2ee2e95e0f97",
-"cost": 72,
+"sig": "d9270025f6ad",
+"cost": 80,
 "stats": {
 "thrust": "12\"",
 "scan": "6\"",
@@ -7746,7 +7957,7 @@
 "ks": "4+",
 "bs": "-",
 "g": "2-3",
-"special": "Vanguard-6”"
+"special": "-"
 },
 "weapons": [
 {
@@ -7776,8 +7987,8 @@
 "strix": {
 "name": "Strix",
 "page": 26,
-"sig": "266bb5a0e0bc",
-"cost": 84,
+"sig": "e1f89ef18eb4",
+"cost": 88,
 "stats": {
 "thrust": "12\"",
 "scan": "6\"",
@@ -7787,7 +7998,7 @@
 "ks": "4+",
 "bs": "-",
 "g": "2-3",
-"special": "Vanguard-6”"
+"special": "-"
 },
 "weapons": [
 {
@@ -7817,7 +8028,7 @@
 "yokai": {
 "name": "Yokai",
 "page": 27,
-"sig": "822de5e13a00",
+"sig": "9badf2df4568",
 "cost": 80,
 "stats": {
 "thrust": "12\"",
@@ -7828,7 +8039,7 @@
 "ks": "4+",
 "bs": "-",
 "g": "2-3",
-"special": "Vanguard-6”"
+"special": "-"
 },
 "weapons": [
 {
@@ -7958,8 +8169,8 @@
 "wyvern": {
 "name": "Wyvern",
 "page": 30,
-"sig": "b4741cdbb76f",
-"cost": 85,
+"sig": "5f7d615ca0ad",
+"cost": 88,
 "stats": {
 "thrust": "10\"",
 "scan": "6\"",
@@ -8055,8 +8266,8 @@
 "hydra": {
 "name": "Hydra",
 "page": 32,
-"sig": "10e0328a9f04",
-"cost": 135,
+"sig": "9016ead3c159",
+"cost": 130,
 "stats": {
 "thrust": "10\"",
 "scan": "6\"",
@@ -8101,7 +8312,7 @@
 }
 ],
 "rules": {
-"Minelayer": "0b752fdf28b1"
+"Minelayer": "b875ac2c6fb4"
 },
 "lore": "f627ab1eef91",
 "famous": "145ee236a94a"
@@ -8109,8 +8320,8 @@
 "shenlong": {
 "name": "Shenlong",
 "page": 34,
-"sig": "1b33eb049c2a",
-"cost": 135,
+"sig": "f0885814a2a1",
+"cost": 132,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -8159,8 +8370,8 @@
 "kulshedra": {
 "name": "Kulshedra",
 "page": 35,
-"sig": "1e97371b4079",
-"cost": 164,
+"sig": "09bafeb07cf0",
+"cost": 156,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -8206,17 +8417,74 @@
 "name": "Fighters & Bombers",
 "launch": "2",
 "special": "-"
+},
+{
+"name": "Optional Launch Mines",
+"launch": "3",
+"special": "-"
 }
 ],
-"rules": {},
+"rules": {
+"Minelayer": "b875ac2c6fb4"
+},
 "lore": "935849c2628c",
 "famous": "f1d6dbb8fd00"
 },
+"thespectreofedendeatharrow": {
+"name": "The Spectre of Eden - Death Arrow",
+"page": 36,
+"sig": "1f7ef3e41f51",
+"cost": 124,
+"stats": {
+"thrust": "16\"",
+"scan": "8\"",
+"sig": "8\"",
+"hull": "12",
+"es": "4+",
+"ks": "3+",
+"bs": "6+",
+"g": "1",
+"special": "Hero, Unique"
+},
+"weapons": [
+{
+"name": "Oculus Beams",
+"arc": "F",
+"attack": "1",
+"lock": "3+",
+"damage": "2",
+"type": "E",
+"special": "Scald-1"
+},
+{
+"name": "Plasma Tempest",
+"arc": "F/S",
+"attack": "8",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Fusillade-2, Scald-2"
+},
+{
+"name": "Plasma Gale",
+"arc": "F/S",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Scald-2"
+}
+],
+"loads": [],
+"rules": {},
+"lore": "00be7590b3fa",
+"famous": "a995ea399316"
+},
 "nereid": {
 "name": "Nereid",
-"page": 36,
-"sig": "3480aac69b22",
-"cost": 190,
+"page": 37,
+"sig": "9c641c10adde",
+"cost": 180,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -8237,6 +8505,15 @@
 "damage": "2",
 "type": "E",
 "special": "Scald-1"
+},
+{
+"name": "Plasma Gale",
+"arc": "F/S",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Scald-2"
 }
 ],
 "loads": [
@@ -8252,8 +8529,8 @@
 },
 "rusalka": {
 "name": "Rusalka",
-"page": 37,
-"sig": "f384f0505213",
+"page": 38,
+"sig": "c8b9ec293855",
 "cost": 130,
 "stats": {
 "thrust": "8\"",
@@ -8284,6 +8561,15 @@
 "damage": "2",
 "type": "E",
 "special": "Calibre-H/C, Close Action, Mauler, Penetrator"
+},
+{
+"name": "Plasma Gale",
+"arc": "F/S",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Scald-2"
 }
 ],
 "loads": [],
@@ -8293,9 +8579,9 @@
 },
 "nixie": {
 "name": "Nixie",
-"page": 38,
-"sig": "168be153f4d1",
-"cost": 145,
+"page": 39,
+"sig": "bb3aa8b19d7a",
+"cost": 140,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -8316,19 +8602,28 @@
 "damage": "2",
 "type": "E",
 "special": "Scald-1"
+},
+{
+"name": "Plasma Gale",
+"arc": "F/S",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Scald-2"
 }
 ],
 "loads": [],
 "rules": {
-"Feature Carrier": "a1afa33e28f8"
+"Feature Carrier": "c0333ffe9e97"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
 },
 "akuma": {
 "name": "Akuma",
-"page": 39,
-"sig": "1eb77fb53f72",
+"page": 40,
+"sig": "466bd1f098d6",
 "cost": 170,
 "stats": {
 "thrust": "10\"",
@@ -8359,6 +8654,15 @@
 "damage": "2",
 "type": "E",
 "special": "Scald-1, Volley-2"
+},
+{
+"name": "Plasma Gale",
+"arc": "F/S",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Scald-2"
 }
 ],
 "loads": [],
@@ -8368,8 +8672,8 @@
 },
 "banshee": {
 "name": "Banshee",
-"page": 40,
-"sig": "0c172adbb07d",
+"page": 41,
+"sig": "b6c893842fb1",
 "cost": 170,
 "stats": {
 "thrust": "10\"",
@@ -8400,6 +8704,15 @@
 "damage": "1",
 "type": "K",
 "special": "Close Action, Fusillade-2, Scald-2"
+},
+{
+"name": "Plasma Gale",
+"arc": "F/S",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Scald-2"
 }
 ],
 "loads": [
@@ -8415,9 +8728,9 @@
 },
 "umbra": {
 "name": "Umbra",
-"page": 42,
-"sig": "1ce0f2f15460",
-"cost": 235,
+"page": 43,
+"sig": "e57b8363858d",
+"cost": 225,
 "stats": {
 "thrust": "10\"",
 "scan": "9\"",
@@ -8447,6 +8760,15 @@
 "damage": "1",
 "type": "K",
 "special": "Close Action, Fusillade-2, Scald-2"
+},
+{
+"name": "Plasma Gale",
+"arc": "F/S",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Scald-2"
 }
 ],
 "loads": [
@@ -8457,15 +8779,15 @@
 }
 ],
 "rules": {
-"Oculus Booster": "5779d09fdfbd"
+"Oculus Booster": "53e49d41d10d"
 },
 "lore": "582e92d1298e",
 "famous": "5c96cc804167"
 },
 "gloam": {
 "name": "Gloam",
-"page": 43,
-"sig": "767ddf04da85",
+"page": 44,
+"sig": "dea147a88626",
 "cost": 160,
 "stats": {
 "thrust": "10\"",
@@ -8496,6 +8818,15 @@
 "damage": "1",
 "type": "E",
 "special": "Burnthrough-1, Crippling-2xFire, Focused"
+},
+{
+"name": "Plasma Gale",
+"arc": "F/S",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Scald-2"
 }
 ],
 "loads": [],
@@ -8505,9 +8836,9 @@
 },
 "kikimora": {
 "name": "Kikimora",
-"page": 44,
-"sig": "1e6dd8b0a713",
-"cost": 230,
+"page": 45,
+"sig": "5f35338bd8c3",
+"cost": 215,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -8537,6 +8868,15 @@
 "damage": "1",
 "type": "E",
 "special": "Burnthrough-1, Crippling-2xFire, Focused"
+},
+{
+"name": "Plasma Gale",
+"arc": "F/S",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Scald-2"
 }
 ],
 "loads": [
@@ -8547,15 +8887,15 @@
 }
 ],
 "rules": {
-"Feature Carrier": "a1afa33e28f8"
+"Feature Carrier": "6a14beee71bf"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
 },
 "bannik": {
 "name": "Bannik",
-"page": 45,
-"sig": "92b68dd5bf88",
+"page": 46,
+"sig": "80dac8e00a12",
 "cost": 250,
 "stats": {
 "thrust": "8\"",
@@ -8586,6 +8926,15 @@
 "damage": "1",
 "type": "E",
 "special": "Burnthrough-1, Crippling-2xFire, Focused"
+},
+{
+"name": "Plasma Gale",
+"arc": "F/S",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Scald-2"
 }
 ],
 "loads": [
@@ -8601,15 +8950,15 @@
 }
 ],
 "rules": {
-"Oculus Booster": "5779d09fdfbd"
+"Oculus Booster": "53e49d41d10d"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
 },
 "melusine": {
 "name": "Melusine",
-"page": 46,
-"sig": "44d2b9624d72",
+"page": 47,
+"sig": "838fe11eeced",
 "cost": 255,
 "stats": {
 "thrust": "8\"",
@@ -8649,6 +8998,15 @@
 "damage": "2",
 "type": "E",
 "special": "Calibre-H/C, Close Action, Mauler, Penetrator"
+},
+{
+"name": "Plasma Gale",
+"arc": "F/S",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Scald-2"
 }
 ],
 "loads": [
@@ -8669,9 +9027,9 @@
 },
 "fossegrim": {
 "name": "Fossegrim",
-"page": 47,
-"sig": "34baf86c2955",
-"cost": 195,
+"page": 48,
+"sig": "22122caab6a7",
+"cost": 190,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -8701,6 +9059,15 @@
 "damage": "1",
 "type": "K",
 "special": "Close Action, Fusillade-2, Scald-2"
+},
+{
+"name": "Plasma Gale",
+"arc": "F/S",
+"attack": "3",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action, Scald-2"
 }
 ],
 "loads": [
@@ -8711,16 +9078,16 @@
 }
 ],
 "rules": {
-"Feature Carrier": "a1afa33e28f8"
+"Feature Carrier": "c0333ffe9e97"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
 },
 "dragon": {
 "name": "Dragon",
-"page": 49,
-"sig": "7cee7b6c588f",
-"cost": 245,
+"page": 50,
+"sig": "1587d1f0f5ea",
+"cost": 235,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -8772,9 +9139,9 @@
 },
 "beelzebub": {
 "name": "Beelzebub",
-"page": 50,
-"sig": "90f366aa6901",
-"cost": 255,
+"page": 51,
+"sig": "46987d9fe594",
+"cost": 250,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -8830,9 +9197,9 @@
 },
 "devil": {
 "name": "Devil",
-"page": 51,
-"sig": "aafea99c4ab1",
-"cost": 265,
+"page": 52,
+"sig": "131910aa4141",
+"cost": 255,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -8879,7 +9246,7 @@
 },
 "lucifer": {
 "name": "Lucifer",
-"page": 52,
+"page": 53,
 "sig": "a07cfcff9586",
 "cost": 205,
 "stats": {
@@ -8917,8 +9284,8 @@
 },
 "raum": {
 "name": "Raum",
-"page": 53,
-"sig": "a13e0c8f2dbc",
+"page": 54,
+"sig": "49dad612630b",
 "cost": 250,
 "stats": {
 "thrust": "8\"",
@@ -8939,7 +9306,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Close Action, Penetrator"
+"special": "Close Action, Critical-1, Penetrator"
 },
 {
 "name": "Oculus Beam Array",
@@ -8973,8 +9340,8 @@
 },
 "nephilim": {
 "name": "Nephilim",
-"page": 54,
-"sig": "fc026589aaf1",
+"page": 55,
+"sig": "70a077c854d0",
 "cost": 255,
 "stats": {
 "thrust": "6\"",
@@ -8993,27 +9360,18 @@
 "arc": "F",
 "attack": "3",
 "lock": "3+",
-"damage": "3",
+"damage": "1",
 "type": "E",
-"special": "Close Action, Penetrator"
+"special": "Close Action, Critical-1, Penetrator, Volley-3"
 },
 {
-"name": "Furnace Fangs",
+"name": "Furnace Fang Quad",
 "arc": "FN",
 "attack": "6",
 "lock": "2+",
 "damage": "1",
 "type": "E",
-"special": "Burnthrough-1, Crippling-Fire, Focused"
-},
-{
-"name": "Furnace Fangs",
-"arc": "FN",
-"attack": "6",
-"lock": "2+",
-"damage": "1",
-"type": "E",
-"special": "Burnthrough-1, Crippling-Fire, Focused"
+"special": "Burnthrough-1, Crippling-Fire, Focused, Volley-2"
 },
 {
 "name": "Oculus Beam Array",
@@ -9034,9 +9392,9 @@
 },
 "bael": {
 "name": "Bael",
-"page": 55,
-"sig": "db3c6ece0c99",
-"cost": 305,
+"page": 56,
+"sig": "b4ea7ffef167",
+"cost": 295,
 "stats": {
 "thrust": "6\"",
 "scan": "8\"",
@@ -9097,9 +9455,9 @@
 },
 "samael": {
 "name": "Samael",
-"page": 56,
-"sig": "45588444984b",
-"cost": 285,
+"page": 57,
+"sig": "b61f52c0c2dd",
+"cost": 275,
 "stats": {
 "thrust": "6\"",
 "scan": "8\"",
@@ -9164,9 +9522,9 @@
 },
 "faust": {
 "name": "Faust",
-"page": 57,
-"sig": "e2f6de6c0c76",
-"cost": 265,
+"page": 58,
+"sig": "25e0706b03d3",
+"cost": 255,
 "stats": {
 "thrust": "6\"",
 "scan": "8\"",
@@ -9184,9 +9542,9 @@
 "arc": "F",
 "attack": "3",
 "lock": "3+",
-"damage": "2",
+"damage": "1",
 "type": "E",
-"special": "Close Action, Penetrator"
+"special": "Close Action, Critical-1, Penetrator, Volley-2"
 },
 {
 "name": "Oculus Beam Array",
@@ -9219,17 +9577,17 @@
 }
 },
 "Shaltari_Combined_Fleet_Stats": {
-"file": "Shaltari_Combined_Fleet_Stats_260925.pdf",
+"file": "Shaltari_Combined_Fleet_Stats_261104.pdf",
 "cards": {
 "amberx2": {
 "name": "Amber x 2",
 "page": 4,
-"sig": "2af03b4fe0b9",
-"cost": 245,
+"sig": "4e4a77ecb787",
+"cost": 237,
 "stats": {
 "thrust": "10\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "9",
 "es": "5+",
 "ks": "4+",
@@ -9259,7 +9617,7 @@
 ],
 "loads": [],
 "rules": {
-"Twins": "4c6aaa1af25a"
+"Twins": "fd2d9dfbe188"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -9267,12 +9625,12 @@
 "sapphire": {
 "name": "Sapphire",
 "page": 41,
-"sig": "030b0310f45d",
+"sig": "8d5b80613d92",
 "cost": 150,
 "stats": {
 "thrust": "10\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "13",
 "es": "5+",
 "ks": "4+",
@@ -9288,7 +9646,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Close Action, Scald-1"
+"special": "Close Action, Scald-2"
 },
 {
 "name": "Ion Storm",
@@ -9302,11 +9660,11 @@
 {
 "name": "Gravity Coil Pair",
 "arc": "FN",
-"attack": "3",
+"attack": "4",
 "lock": "2+",
 "damage": "1",
 "type": "E",
-"special": "Impel-2"
+"special": "Impel-2, Reave-1"
 }
 ],
 "loads": [],
@@ -9317,12 +9675,12 @@
 "diamond": {
 "name": "Diamond",
 "page": 48,
-"sig": "a49ea1cc0e78",
+"sig": "41cfcec0cb86",
 "cost": 230,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "8\"",
+"sig": "4\"",
 "hull": "18",
 "es": "4+",
 "ks": "3+",
@@ -9347,7 +9705,16 @@
 "lock": "3+",
 "damage": "2",
 "type": "C",
-"special": "Critical-1"
+"special": "Critical-2, Focused"
+},
+{
+"name": "Harpoon Deluge",
+"arc": "F/S/R",
+"attack": "8",
+"lock": "4+",
+"damage": "1",
+"type": "K",
+"special": "Close Action"
 }
 ],
 "loads": [
@@ -9366,12 +9733,12 @@
 "uranium": {
 "name": "Uranium",
 "page": 60,
-"sig": "0a2a9363c4eb",
+"sig": "47829def00ec",
 "cost": 410,
 "stats": {
 "thrust": "8\"",
 "scan": "14\"",
-"sig": "12\"",
+"sig": "8\"",
 "hull": "22",
 "es": "4+",
 "ks": "3+",
@@ -9440,23 +9807,23 @@
 "voidgate": {
 "name": "Voidgate",
 "page": 8,
-"sig": "50130c736478",
+"sig": "134485469ddd",
 "cost": 15,
 "stats": {
 "thrust": "12\"",
 "scan": "2\"",
-"sig": "2\"",
+"sig": "1\"",
 "hull": "3",
 "es": "5+",
 "ks": "5+",
 "bs": "-",
 "g": "1-3",
-"special": "Descent, Gateship-2 Shield-5+ Open Network"
+"special": "Descent, Gateship-2 Shield-4+ Open Network"
 },
 "weapons": [],
 "loads": [],
 "rules": {
-"Open Network": "58b0cbcf3753"
+"Open Network": "cf079ba62768"
 },
 "lore": "97d170e1550e",
 "famous": "981c7ce4dc3d"
@@ -9496,7 +9863,7 @@
 "helium": {
 "name": "Helium",
 "page": 10,
-"sig": "5b052ff2c7e3",
+"sig": "f0d242ea39cf",
 "cost": 29,
 "stats": {
 "thrust": "16\"",
@@ -9506,23 +9873,23 @@
 "es": "6+",
 "ks": "6+",
 "bs": "-",
-"g": "1-3",
+"g": "1-4",
 "special": "Descent, Shield-5+, Vectored"
 },
 "weapons": [
 {
 "name": "Pulse Blaster",
 "arc": "F/S",
-"attack": "1",
+"attack": "3",
 "lock": "3+",
-"damage": "2",
+"damage": "1",
 "type": "E",
 "special": "Close Action, Penetrator"
 }
 ],
 "loads": [],
 "rules": {
-"Void Skip": "75d1c2b4c47a"
+"Void Skip": "ef636cb66490"
 },
 "lore": "c79cafa6b601",
 "famous": "80f7bc11aac8"
@@ -9530,12 +9897,12 @@
 "topaz": {
 "name": "Topaz",
 "page": 11,
-"sig": "f6e9091c41fb",
-"cost": 43,
+"sig": "2119761a0052",
+"cost": 38,
 "stats": {
 "thrust": "12\"",
 "scan": "10\"",
-"sig": "4\"",
+"sig": "3\"",
 "hull": "4",
 "es": "5+",
 "ks": "4+",
@@ -9562,12 +9929,12 @@
 "jade": {
 "name": "Jade",
 "page": 12,
-"sig": "ac83cecc03f5",
-"cost": 50,
+"sig": "3f9dd6f45965",
+"cost": 45,
 "stats": {
 "thrust": "12\"",
 "scan": "10\"",
-"sig": "4\"",
+"sig": "3\"",
 "hull": "4",
 "es": "5+",
 "ks": "4+",
@@ -9594,12 +9961,12 @@
 "opal": {
 "name": "Opal",
 "page": 13,
-"sig": "aa5e1d7303ae",
-"cost": 45,
+"sig": "4ea183770788",
+"cost": 49,
 "stats": {
 "thrust": "12\"",
 "scan": "10\"",
-"sig": "4\"",
+"sig": "3\"",
 "hull": "4",
 "es": "5+",
 "ks": "4+",
@@ -9620,7 +9987,7 @@
 ],
 "loads": [],
 "rules": {
-"Shield Booster": "08e8af25e95e"
+"Shield Booster": "46dd2768d83f"
 },
 "lore": "6b292d860206",
 "famous": "44488be7b363"
@@ -9628,12 +9995,12 @@
 "amethyst": {
 "name": "Amethyst",
 "page": 14,
-"sig": "4674022a47b6",
-"cost": 43,
+"sig": "0dbb714a8aaa",
+"cost": 39,
 "stats": {
 "thrust": "12\"",
 "scan": "10\"",
-"sig": "4\"",
+"sig": "3\"",
 "hull": "4",
 "es": "5+",
 "ks": "4+",
@@ -9660,12 +10027,12 @@
 "silicon": {
 "name": "Silicon",
 "page": 15,
-"sig": "724a64abfa97",
+"sig": "bb6551e73515",
 "cost": 55,
 "stats": {
-"thrust": "6\"",
+"thrust": "8\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "2\"",
 "hull": "4",
 "es": "4+",
 "ks": "4+",
@@ -9677,14 +10044,20 @@
 {
 "name": "Quad Ion Cannon",
 "arc": "F",
-"attack": "2",
+"attack": "4",
 "lock": "3+",
-"damage": "2",
+"damage": "1",
 "type": "E",
 "special": "Crippling-Navigation Offline"
 }
 ],
-"loads": [],
+"loads": [
+{
+"name": "Boarding Pod",
+"launch": "1",
+"special": "-"
+}
+],
 "rules": {},
 "lore": "21e39140ad9a",
 "famous": "4ecd59b8e81f"
@@ -9692,12 +10065,12 @@
 "selenium": {
 "name": "Selenium",
 "page": 16,
-"sig": "47c985c46091",
-"cost": 55,
+"sig": "8b320ff258f7",
+"cost": 51,
 "stats": {
-"thrust": "6\"",
+"thrust": "8\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "2\"",
 "hull": "4",
 "es": "4+",
 "ks": "4+",
@@ -9733,12 +10106,12 @@
 "strontium": {
 "name": "Strontium",
 "page": 17,
-"sig": "de446801ae98",
-"cost": 58,
+"sig": "4e35d6b391cc",
+"cost": 54,
 "stats": {
-"thrust": "6\"",
+"thrust": "8\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "2\"",
 "hull": "4",
 "es": "4+",
 "ks": "4+",
@@ -9765,25 +10138,25 @@
 "caesium": {
 "name": "Caesium",
 "page": 18,
-"sig": "8d6ca4c4cdfd",
+"sig": "48ea2724a500",
 "cost": 50,
 "stats": {
 "thrust": "20\"",
 "scan": "8\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "3",
-"es": "6+",
-"ks": "4+",
+"es": "5+",
+"ks": "5+",
 "bs": "-",
 "g": "1-3",
-"special": "Shield-5+, Vanguard-4”, Vectored"
+"special": "Descent, Shield-5+, Vanguard-4”, Vectored"
 },
 "weapons": [
 {
 "name": "Light Disruptor",
 "arc": "FN",
-"attack": "3",
-"lock": "3+",
+"attack": "4",
+"lock": "4+",
 "damage": "1",
 "type": "E",
 "special": "Calibre-L"
@@ -9797,12 +10170,12 @@
 "gallium": {
 "name": "Gallium",
 "page": 19,
-"sig": "a3a45af3bf59",
-"cost": 60,
+"sig": "056b9ffb359b",
+"cost": 55,
 "stats": {
 "thrust": "20\"",
 "scan": "8\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "3",
 "es": "6+",
 "ks": "4+",
@@ -9829,12 +10202,12 @@
 "chromium": {
 "name": "Chromium",
 "page": 20,
-"sig": "f1dd06657af8",
+"sig": "cd0feb409021",
 "cost": 60,
 "stats": {
 "thrust": "12\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "5",
 "es": "5+",
 "ks": "4+",
@@ -9846,11 +10219,11 @@
 {
 "name": "Disruption Beamers",
 "arc": "F",
-"attack": "2",
+"attack": "3",
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Fusillade-1"
+"special": "-"
 },
 {
 "name": "Thermal Lance Cannon",
@@ -9859,7 +10232,7 @@
 "lock": "2+",
 "damage": "1",
 "type": "E",
-"special": "Burnthrough-1, Fusillade-1"
+"special": "Burnthrough-1, Fusillade-2"
 }
 ],
 "loads": [],
@@ -9870,12 +10243,12 @@
 "iridium": {
 "name": "Iridium",
 "page": 21,
-"sig": "f87777ade6e3",
-"cost": 60,
+"sig": "36ec55e941f6",
+"cost": 63,
 "stats": {
 "thrust": "12\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "5",
 "es": "5+",
 "ks": "4+",
@@ -9887,11 +10260,11 @@
 {
 "name": "Disruption Beamers",
 "arc": "F",
-"attack": "2",
+"attack": "3",
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Fusillade-1"
+"special": "-"
 },
 {
 "name": "Kinetic Lance",
@@ -9911,12 +10284,12 @@
 "mercury": {
 "name": "Mercury",
 "page": 22,
-"sig": "745f95c156ec",
-"cost": 60,
+"sig": "ab2329c0c56d",
+"cost": 58,
 "stats": {
 "thrust": "12\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "5",
 "es": "5+",
 "ks": "4+",
@@ -9928,11 +10301,11 @@
 {
 "name": "Disruption Beamers",
 "arc": "F",
-"attack": "2",
+"attack": "3",
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Fusillade-1"
+"special": "-"
 },
 {
 "name": "Pulse Ioniser Bank",
@@ -9952,12 +10325,12 @@
 "cobalt": {
 "name": "Cobalt",
 "page": 23,
-"sig": "3cdf284bbf07",
-"cost": 56,
+"sig": "fddf1d9562b4",
+"cost": 52,
 "stats": {
 "thrust": "12\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "5",
 "es": "5+",
 "ks": "4+",
@@ -9969,11 +10342,11 @@
 {
 "name": "Disruption Beamers",
 "arc": "F",
-"attack": "2",
+"attack": "3",
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Fusillade-1"
+"special": "-"
 }
 ],
 "loads": [
@@ -9990,12 +10363,12 @@
 "nefertemofthedawninvisiblelight": {
 "name": "Nefertem of the Dawn - Invisible Light",
 "page": 24,
-"sig": "cc296c7dc311",
+"sig": "600752d8b655",
 "cost": 81,
 "stats": {
 "thrust": "12\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "7",
 "es": "5+",
 "ks": "4+",
@@ -10015,19 +10388,21 @@
 }
 ],
 "loads": [],
-"rules": {},
+"rules": {
+"Silent Shielding": "1541a66b362b"
+},
 "lore": "0db321c1480d",
 "famous": "8d7a4d676e97"
 },
 "aquamarine": {
 "name": "Aquamarine",
 "page": 25,
-"sig": "924bc6db78bd",
+"sig": "69e1c0d67632",
 "cost": 74,
 "stats": {
 "thrust": "12\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "7",
 "es": "5+",
 "ks": "4+",
@@ -10039,11 +10414,11 @@
 {
 "name": "Gravity Coil Pair",
 "arc": "FN",
-"attack": "3",
+"attack": "4",
 "lock": "2+",
 "damage": "1",
 "type": "E",
-"special": "Impel-2"
+"special": "Impel-2, Reave-1"
 },
 {
 "name": "Harpoon Cascade",
@@ -10063,12 +10438,12 @@
 "azurite": {
 "name": "Azurite",
 "page": 26,
-"sig": "b6a31d9eaba6",
-"cost": 76,
+"sig": "99a9314a8ba5",
+"cost": 70,
 "stats": {
 "thrust": "12\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "7",
 "es": "5+",
 "ks": "4+",
@@ -10104,12 +10479,12 @@
 "amber": {
 "name": "Amber",
 "page": 27,
-"sig": "b25d00c0ac7a",
-"cost": 100,
+"sig": "07b771dffd68",
+"cost": 96,
 "stats": {
 "thrust": "10\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "9",
 "es": "5+",
 "ks": "4+",
@@ -10145,12 +10520,12 @@
 "granite": {
 "name": "Granite",
 "page": 28,
-"sig": "2ec39caa5534",
-"cost": 115,
+"sig": "67d511166ea5",
+"cost": 110,
 "stats": {
 "thrust": "10\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "9",
 "es": "5+",
 "ks": "4+",
@@ -10160,22 +10535,13 @@
 },
 "weapons": [
 {
-"name": "Particle Lance",
+"name": "Particle Lance Pair",
 "arc": "FN",
-"attack": "1",
+"attack": "2",
 "lock": "3+",
 "damage": "2",
 "type": "C",
-"special": "Critical-1"
-},
-{
-"name": "Particle Lance",
-"arc": "FN",
-"attack": "1",
-"lock": "3+",
-"damage": "2",
-"type": "C",
-"special": "Critical-1"
+"special": "Critical-2, Focused"
 }
 ],
 "loads": [],
@@ -10186,12 +10552,12 @@
 "turquoise": {
 "name": "Turquoise",
 "page": 29,
-"sig": "411432fe1d7c",
+"sig": "323d91cfc7b1",
 "cost": 90,
 "stats": {
 "thrust": "10\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "9",
 "es": "5+",
 "ks": "4+",
@@ -10207,7 +10573,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Close Action, Scald-1"
+"special": "Close Action, Scald-2"
 },
 {
 "name": "Ion Storm",
@@ -10227,12 +10593,12 @@
 "basalt": {
 "name": "Basalt",
 "page": 30,
-"sig": "978dcb498f4a",
+"sig": "f9aa86f6b560",
 "cost": 108,
 "stats": {
 "thrust": "10\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "9",
 "es": "5+",
 "ks": "4+",
@@ -10258,13 +10624,13 @@
 "special": "-"
 },
 {
-"name": "Optional Launch Mines",
+"name": "Optional Launch Mines & Impel Mines",
 "launch": "2",
 "special": "-"
 }
 ],
 "rules": {
-"Minelayer": "0b752fdf28b1"
+"Minelayer": "1a121889fdda"
 },
 "lore": "14b5d738141b",
 "famous": "a14a539c04ac"
@@ -10272,12 +10638,12 @@
 "emerald": {
 "name": "Emerald",
 "page": 31,
-"sig": "9e4c647280e0",
-"cost": 115,
+"sig": "84d4e6bfed73",
+"cost": 106,
 "stats": {
 "thrust": "10\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "9",
 "es": "5+",
 "ks": "4+",
@@ -10310,12 +10676,12 @@
 "citrine": {
 "name": "Citrine",
 "page": 32,
-"sig": "0c28aba7d613",
-"cost": 130,
+"sig": "088900a2e2a0",
+"cost": 122,
 "stats": {
 "thrust": "10\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "9",
 "es": "5+",
 "ks": "4+",
@@ -10357,12 +10723,12 @@
 "jet": {
 "name": "Jet",
 "page": 33,
-"sig": "dd5946f7ea0f",
+"sig": "1ba498e31e09",
 "cost": 115,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "11",
 "es": "5+",
 "ks": "4+",
@@ -10378,7 +10744,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Close Action, Scald-1"
+"special": "Close Action, Scald-2"
 },
 {
 "name": "Ion Storm",
@@ -10407,12 +10773,12 @@
 "obsidian": {
 "name": "Obsidian",
 "page": 34,
-"sig": "6049c092436d",
-"cost": 135,
+"sig": "613ccdb93912",
+"cost": 130,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "11",
 "es": "5+",
 "ks": "4+",
@@ -10422,13 +10788,13 @@
 },
 "weapons": [
 {
-"name": "Particle Lance",
+"name": "Particle Lance Pair",
 "arc": "FN",
-"attack": "1",
+"attack": "2",
 "lock": "3+",
 "damage": "2",
 "type": "C",
-"special": "Critical-1"
+"special": "Critical-2, Focused"
 },
 {
 "name": "Particle Lance",
@@ -10437,16 +10803,7 @@
 "lock": "3+",
 "damage": "2",
 "type": "C",
-"special": "Critical-1"
-},
-{
-"name": "Particle Lance",
-"arc": "FN",
-"attack": "1",
-"lock": "3+",
-"damage": "2",
-"type": "C",
-"special": "Critical-1"
+"special": "Critical-2, Focused"
 }
 ],
 "loads": [],
@@ -10457,12 +10814,12 @@
 "onyx": {
 "name": "Onyx",
 "page": 35,
-"sig": "b431c87840da",
+"sig": "5389b2341179",
 "cost": 125,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "11",
 "es": "5+",
 "ks": "4+",
@@ -10507,12 +10864,12 @@
 "scoria": {
 "name": "Scoria",
 "page": 36,
-"sig": "72fce40a9880",
-"cost": 175,
+"sig": "053d907506d4",
+"cost": 160,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "11",
 "es": "5+",
 "ks": "4+",
@@ -10522,22 +10879,13 @@
 },
 "weapons": [
 {
-"name": "Particle Lance",
+"name": "Particle Lance Pair",
 "arc": "FN",
-"attack": "1",
+"attack": "2",
 "lock": "3+",
 "damage": "2",
 "type": "C",
-"special": "Critical-1"
-},
-{
-"name": "Particle Lance",
-"arc": "FN",
-"attack": "1",
-"lock": "3+",
-"damage": "2",
-"type": "C",
-"special": "Critical-1"
+"special": "Critical-2, Focused"
 },
 {
 "name": "Disintegrator Battery",
@@ -10563,12 +10911,12 @@
 "setithekinslayerspearofanubis": {
 "name": "Seti the Kinslayer - Spear of Anubis",
 "page": 37,
-"sig": "303e4de46cd6",
+"sig": "4e6081e5405f",
 "cost": 170,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "11",
 "es": "5+",
 "ks": "4+",
@@ -10608,12 +10956,12 @@
 "mesolite": {
 "name": "Mesolite",
 "page": 38,
-"sig": "754235bfca8d",
-"cost": 180,
+"sig": "083c932a1bd4",
+"cost": 166,
 "stats": {
 "thrust": "10\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "12",
 "es": "5+",
 "ks": "4+",
@@ -10634,7 +10982,7 @@
 ],
 "loads": [],
 "rules": {
-"Feature Carrier": "4a8db6bad0e2"
+"Feature Carrier": "cd9481b2d837"
 },
 "lore": "fd64cc1553c5",
 "famous": "55fd766ce4f9"
@@ -10642,12 +10990,12 @@
 "natrolite": {
 "name": "Natrolite",
 "page": 39,
-"sig": "81c6205c049d",
-"cost": 184,
+"sig": "4e529e9577d6",
+"cost": 172,
 "stats": {
 "thrust": "10\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "12",
 "es": "5+",
 "ks": "4+",
@@ -10668,7 +11016,7 @@
 ],
 "loads": [],
 "rules": {
-"Feature Carrier": "4a8db6bad0e2"
+"Feature Carrier": "cd9481b2d837"
 },
 "lore": "6dfcb262ee7f",
 "famous": "66dff8b0c95b"
@@ -10676,12 +11024,12 @@
 "ruby": {
 "name": "Ruby",
 "page": 40,
-"sig": "41c326dfacef",
+"sig": "0fba0ffd1f8b",
 "cost": 160,
 "stats": {
 "thrust": "10\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "13",
 "es": "5+",
 "ks": "4+",
@@ -10706,7 +11054,7 @@
 "lock": "3+",
 "damage": "2",
 "type": "C",
-"special": "Critical-1"
+"special": "Critical-2, Focused"
 }
 ],
 "loads": [],
@@ -10717,12 +11065,12 @@
 "hematite": {
 "name": "Hematite",
 "page": 42,
-"sig": "28869bed251b",
-"cost": 175,
+"sig": "0b01ea3198bb",
+"cost": 165,
 "stats": {
 "thrust": "10\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "13",
 "es": "5+",
 "ks": "4+",
@@ -10749,12 +11097,12 @@
 "goethite": {
 "name": "Goethite",
 "page": 43,
-"sig": "3e0da7bcf475",
-"cost": 210,
+"sig": "caec6f68fe43",
+"cost": 195,
 "stats": {
 "thrust": "10\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "3\"",
 "hull": "13",
 "es": "5+",
 "ks": "4+",
@@ -10787,12 +11135,12 @@
 "spinel": {
 "name": "Spinel",
 "page": 44,
-"sig": "d01d3fc820cc",
-"cost": 225,
+"sig": "ef6dabd58d78",
+"cost": 215,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "4\"",
 "hull": "14",
 "es": "5+",
 "ks": "4+",
@@ -10808,7 +11156,7 @@
 "lock": "3+",
 "damage": "2",
 "type": "C",
-"special": "Critical-1"
+"special": "Critical-2, Focused"
 },
 {
 "name": "Twin Hyperwave Cannon",
@@ -10822,7 +11170,7 @@
 ],
 "loads": [],
 "rules": {
-"Feature Carrier": "4a8db6bad0e2"
+"Feature Carrier": "cd9481b2d837"
 },
 "lore": "3f72715cbf67",
 "famous": "12833fa144e9"
@@ -10830,12 +11178,12 @@
 "painite": {
 "name": "Painite",
 "page": 45,
-"sig": "ba0c12ff65c0",
+"sig": "bbe6435e31de",
 "cost": 190,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "4\"",
 "hull": "14",
 "es": "5+",
 "ks": "4+",
@@ -10860,7 +11208,7 @@
 "lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Close Action, Scald-1"
+"special": "Close Action, Scald-2"
 },
 {
 "name": "Ion Storm",
@@ -10874,7 +11222,7 @@
 ],
 "loads": [],
 "rules": {
-"Feature Carrier": "4a8db6bad0e2"
+"Feature Carrier": "cd9481b2d837"
 },
 "lore": "1dba88153e15",
 "famous": "4153bcb907c6"
@@ -10882,12 +11230,12 @@
 "euclase": {
 "name": "Euclase",
 "page": 46,
-"sig": "a3d6a19ced54",
+"sig": "f2043371f922",
 "cost": 220,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "4\"",
 "hull": "14",
 "es": "5+",
 "ks": "4+",
@@ -10914,7 +11262,7 @@
 }
 ],
 "rules": {
-"Feature Carrier": "4a8db6bad0e2"
+"Feature Carrier": "cd9481b2d837"
 },
 "lore": "26e4d0f196b2",
 "famous": "904a6b73853e"
@@ -10922,12 +11270,12 @@
 "boracite": {
 "name": "Boracite",
 "page": 47,
-"sig": "c9fe450d3965",
-"cost": 200,
+"sig": "f6cf69028cc8",
+"cost": 190,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "6\"",
+"sig": "4\"",
 "hull": "14",
 "es": "5+",
 "ks": "4+",
@@ -10957,7 +11305,7 @@
 ],
 "loads": [],
 "rules": {
-"Feature Carrier": "4a8db6bad0e2"
+"Feature Carrier": "cd9481b2d837"
 },
 "lore": "49c724ef9157",
 "famous": "62e8b834ac5f"
@@ -10965,12 +11313,12 @@
 "platinum": {
 "name": "Platinum",
 "page": 49,
-"sig": "9910b879d5ef",
-"cost": 280,
+"sig": "8f7cf423964c",
+"cost": 265,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "8\"",
+"sig": "4\"",
 "hull": "18",
 "es": "4+",
 "ks": "3+",
@@ -11006,7 +11354,7 @@
 },
 {
 "name": "Fighters & Bombers",
-"launch": "5",
+"launch": "7",
 "special": "-"
 }
 ],
@@ -11019,12 +11367,12 @@
 "gold": {
 "name": "Gold",
 "page": 50,
-"sig": "bd1abf22a270",
-"cost": 285,
+"sig": "1f3994f1404e",
+"cost": 270,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "8\"",
+"sig": "4\"",
 "hull": "18",
 "es": "4+",
 "ks": "3+",
@@ -11037,15 +11385,15 @@
 "name": "Ion Cannonade",
 "arc": "F",
 "attack": "10",
-"lock": "4+",
+"lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Crippling-Navigation Offline"
+"special": "Crippling-Navigation Offline, Reave-1"
 },
 {
 "name": "Microwave Array Bank",
 "arc": "S",
-"attack": "4",
+"attack": "5",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -11060,7 +11408,7 @@
 },
 {
 "name": "Fighters & Bombers",
-"launch": "4",
+"launch": "6",
 "special": "-"
 }
 ],
@@ -11073,12 +11421,12 @@
 "silver": {
 "name": "Silver",
 "page": 51,
-"sig": "3a05a6d3472d",
-"cost": 250,
+"sig": "739a6735e42d",
+"cost": 240,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "8\"",
+"sig": "4\"",
 "hull": "18",
 "es": "4+",
 "ks": "3+",
@@ -11099,20 +11447,29 @@
 {
 "name": "Microwave Array Bank",
 "arc": "S",
-"attack": "4",
+"attack": "5",
 "lock": "3+",
 "damage": "1",
 "type": "E",
 "special": "Close Action, Scald-1, Volley-2"
 },
 {
-"name": "Gravitic Beamer",
+"name": "Gravitic Beamer (Leading)",
 "arc": "F/S",
-"attack": "5",
+"attack": "6",
 "lock": "4+",
 "damage": "1",
-"type": "E",
-"special": "Impel-1, Re-Entry"
+"type": "C",
+"special": "Alt-1, Calibre-L/M, Impel-2, Re-Entry"
+},
+{
+"name": "Gravitic Beamer (Trailing)",
+"arc": "F/S",
+"attack": "4",
+"lock": "4+",
+"damage": "2",
+"type": "C",
+"special": "Alt-1, Arrest-3, Calibre-H/C"
 }
 ],
 "loads": [],
@@ -11125,12 +11482,12 @@
 "bronze": {
 "name": "Bronze",
 "page": 52,
-"sig": "1691ed27a2a5",
-"cost": 230,
+"sig": "e2641a779263",
+"cost": 215,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "8\"",
+"sig": "4\"",
 "hull": "18",
 "es": "4+",
 "ks": "3+",
@@ -11143,28 +11500,37 @@
 "name": "Ion Cannonade",
 "arc": "F",
 "attack": "10",
-"lock": "4+",
+"lock": "3+",
 "damage": "1",
 "type": "E",
-"special": "Crippling-Navigation Offline"
+"special": "Crippling-Navigation Offline, Reave-1"
 },
 {
 "name": "Microwave Array Bank",
 "arc": "S",
-"attack": "4",
+"attack": "5",
 "lock": "3+",
 "damage": "1",
 "type": "E",
 "special": "Close Action, Scald-1, Volley-2"
 },
 {
-"name": "Gravitic Beamer",
+"name": "Gravitic Beamer (Leading)",
 "arc": "F/S",
-"attack": "5",
+"attack": "6",
 "lock": "4+",
 "damage": "1",
-"type": "E",
-"special": "Impel-1, Re-Entry"
+"type": "C",
+"special": "Alt-1, Calibre-L/M, Impel-2, Re-Entry"
+},
+{
+"name": "Gravitic Beamer (Trailing)",
+"arc": "F/S",
+"attack": "4",
+"lock": "4+",
+"damage": "2",
+"type": "C",
+"special": "Alt-1, Arrest-3, Calibre-H/C"
 }
 ],
 "loads": [],
@@ -11177,12 +11543,12 @@
 "copper": {
 "name": "Copper",
 "page": 53,
-"sig": "8e1bc46c40c3",
+"sig": "8ff5473455c2",
 "cost": 200,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "8\"",
+"sig": "4\"",
 "hull": "18",
 "es": "4+",
 "ks": "3+",
@@ -11194,16 +11560,16 @@
 {
 "name": "Mega Thermal Lance Cannon",
 "arc": "FN",
-"attack": "5",
+"attack": "6",
 "lock": "2+",
 "damage": "2",
 "type": "E",
-"special": "Burnthrough-1, Bloom-2"
+"special": "Burnthrough-2, Bloom-2, Focused"
 },
 {
 "name": "Microwave Array Bank",
 "arc": "S",
-"attack": "4",
+"attack": "5",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -11220,12 +11586,12 @@
 "iron": {
 "name": "Iron",
 "page": 54,
-"sig": "58ff6ef1ec5a",
+"sig": "face86afd3e9",
 "cost": 275,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "8\"",
+"sig": "4\"",
 "hull": "18",
 "es": "4+",
 "ks": "3+",
@@ -11257,7 +11623,7 @@
 },
 {
 "name": "Fighters & Bombers",
-"launch": "4",
+"launch": "6",
 "special": "-"
 }
 ],
@@ -11270,12 +11636,12 @@
 "actinium": {
 "name": "Actinium",
 "page": 55,
-"sig": "bdc398ccd06e",
+"sig": "86e749c7b70c",
 "cost": 245,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "8\"",
+"sig": "4\"",
 "hull": "18",
 "es": "4+",
 "ks": "3+",
@@ -11294,18 +11660,27 @@
 "special": "Reave-1, Volley-2"
 },
 {
-"name": "Gravitic Beamer",
+"name": "Gravitic Beamer (Leading)",
 "arc": "F/S",
-"attack": "5",
+"attack": "6",
 "lock": "4+",
 "damage": "1",
-"type": "E",
-"special": "Impel-1, Re-Entry"
+"type": "C",
+"special": "Alt-1, Calibre-L/M, Impel-2, Re-Entry"
+},
+{
+"name": "Gravitic Beamer (Trailing)",
+"arc": "F/S",
+"attack": "4",
+"lock": "4+",
+"damage": "2",
+"type": "C",
+"special": "Alt-1, Arrest-3, Calibre-H/C"
 },
 {
 "name": "Electrosurge Projectors",
 "arc": "B",
-"attack": "3",
+"attack": "4",
 "lock": "4+",
 "damage": "1",
 "type": "E",
@@ -11320,12 +11695,12 @@
 "lanthanum": {
 "name": "Lanthanum",
 "page": 56,
-"sig": "250e1b61d157",
-"cost": 265,
+"sig": "f65b4d8ca8b9",
+"cost": 285,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "8\"",
+"sig": "6\"",
 "hull": "18",
 "es": "4+",
 "ks": "3+",
@@ -11341,21 +11716,21 @@
 "lock": "3+",
 "damage": "2",
 "type": "C",
-"special": "Critical-1"
+"special": "Critical-2, Focused"
 },
 {
 "name": "Mega Thermal Lance Cannon",
 "arc": "FN",
-"attack": "5",
+"attack": "6",
 "lock": "2+",
 "damage": "2",
 "type": "E",
-"special": "Burnthrough-1, Bloom-2"
+"special": "Burnthrough-2, Bloom-2, Focused"
 },
 {
 "name": "Electrosurge Projectors",
 "arc": "B",
-"attack": "3",
+"attack": "4",
 "lock": "4+",
 "damage": "1",
 "type": "E",
@@ -11370,12 +11745,12 @@
 "cerium": {
 "name": "Cerium",
 "page": 57,
-"sig": "22c810e2ac27",
+"sig": "e9af677d7600",
 "cost": 230,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "8\"",
+"sig": "6\"",
 "hull": "18",
 "es": "4+",
 "ks": "3+",
@@ -11387,16 +11762,16 @@
 {
 "name": "Mega Thermal Lance Cannon",
 "arc": "FN",
-"attack": "5",
+"attack": "6",
 "lock": "2+",
 "damage": "2",
 "type": "E",
-"special": "Burnthrough-1, Bloom-2"
+"special": "Burnthrough-2, Bloom-2, Focused"
 },
 {
 "name": "Microwave Array Bank",
 "arc": "S",
-"attack": "4",
+"attack": "5",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -11417,12 +11792,12 @@
 "thorium": {
 "name": "Thorium",
 "page": 58,
-"sig": "b4652fa76e56",
+"sig": "6da9d4cbdae3",
 "cost": 305,
 "stats": {
 "thrust": "8\"",
 "scan": "12\"",
-"sig": "8\"",
+"sig": "6\"",
 "hull": "18",
 "es": "4+",
 "ks": "3+",
@@ -11443,7 +11818,7 @@
 {
 "name": "Electrosurge Projectors",
 "arc": "B",
-"attack": "3",
+"attack": "4",
 "lock": "4+",
 "damage": "1",
 "type": "E",
@@ -11467,7 +11842,7 @@
 },
 {
 "name": "Fighters & Bombers",
-"launch": "4",
+"launch": "6",
 "special": "-"
 }
 ],
@@ -11478,12 +11853,12 @@
 "plutonium": {
 "name": "Plutonium",
 "page": 59,
-"sig": "4829c422278e",
+"sig": "958ec62d19b2",
 "cost": 435,
 "stats": {
 "thrust": "8\"",
 "scan": "14\"",
-"sig": "12\"",
+"sig": "8\"",
 "hull": "22",
 "es": "4+",
 "ks": "3+",
@@ -11552,12 +11927,12 @@
 }
 },
 "UCM_Combined_Fleet_Stats": {
-"file": "UCM_Combined_Fleet_Stats_260828.pdf",
+"file": "UCM_Combined_Fleet_Stats_261104.pdf",
 "cards": {
 "warsaw": {
 "name": "Warsaw",
 "page": 40,
-"sig": "b3b9de7d336f",
+"sig": "0f1530a56f36",
 "cost": 110,
 "stats": {
 "thrust": "7\"",
@@ -11574,7 +11949,7 @@
 {
 "name": "Cobra Heavy Laser Pair",
 "arc": "FN",
-"attack": "6",
+"attack": "8",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -11598,7 +11973,7 @@
 "perth": {
 "name": "Perth",
 "page": 48,
-"sig": "4c4970f25a30",
+"sig": "ae053ed5682a",
 "cost": 145,
 "stats": {
 "thrust": "8\"",
@@ -11615,7 +11990,7 @@
 {
 "name": "Viper Super Heavy Laser",
 "arc": "FN",
-"attack": "8",
+"attack": "9",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -11648,8 +12023,8 @@
 "newyork": {
 "name": "New York",
 "page": 57,
-"sig": "27a2d011623b",
-"cost": 245,
+"sig": "a5627ffbe5f6",
+"cost": 235,
 "stats": {
 "thrust": "6\"",
 "scan": "10\"",
@@ -11689,18 +12064,23 @@
 },
 {
 "name": "Fighters & Bombers",
-"launch": "4",
-"special": "-"
+"launch": "5",
+"special": "Alt-1"
+},
+{
+"name": "Heavy Bombers",
+"launch": "3",
+"special": "Alt-1"
 }
 ],
 "rules": {},
-"lore": "b43fad59e9f6",
+"lore": "1ab6cad9dd47",
 "famous": "981c7ce4dc3d"
 },
 "washington": {
 "name": "Washington",
 "page": 66,
-"sig": "ef01cf3ea7d9",
+"sig": "6a754d8d8a5a",
 "cost": 530,
 "stats": {
 "thrust": "6\"",
@@ -11715,44 +12095,26 @@
 },
 "weapons": [
 {
-"name": "UF-9000 Mass Driver Turret",
+"name": "UF-9000 Mass Driver Turrets",
 "arc": "F/S",
 "attack": "2",
 "lock": "2+",
 "damage": "2",
 "type": "K",
-"special": "Critical-1, Penetrator"
+"special": "Critical-1, Penetrator, Volley-2"
 },
 {
-"name": "UF-9000 Mass Driver Turret",
+"name": "UF-4200 Mass Driver Turret Battery",
 "arc": "F/S",
-"attack": "2",
-"lock": "2+",
-"damage": "2",
-"type": "K",
-"special": "Critical-1, Penetrator"
-},
-{
-"name": "UF-4200 Mass Driver Turret Core Battery",
-"arc": "F/S",
-"attack": "6",
+"attack": "10",
 "lock": "4+",
 "damage": "1",
 "type": "K",
-"special": "Fusillade-3, Volley-2"
-},
-{
-"name": "UF-4200 Mass Driver Turrets",
-"arc": "F/S",
-"attack": "4",
-"lock": "4+",
-"damage": "1",
-"type": "K",
-"special": "Fusillade-2, Volley-2"
+"special": "Fusillade-5, Volley-2"
 },
 {
 "name": "Leviathan Missile Bays",
-"arc": "F/S/R",
+"arc": "F/S",
 "attack": "8",
 "lock": "3+",
 "damage": "1",
@@ -11763,7 +12125,7 @@
 "loads": [
 {
 "name": "Fighters & Bombers",
-"launch": "6",
+"launch": "8",
 "special": "Alt-1"
 },
 {
@@ -11779,15 +12141,15 @@
 "santiago": {
 "name": "Santiago",
 "page": 7,
-"sig": "486c10c8a25a",
-"cost": 20,
+"sig": "7efd694cd672",
+"cost": 23,
 "stats": {
 "thrust": "14\"",
 "scan": "6\"",
 "sig": "2\"",
 "hull": "2",
 "es": "5+",
-"ks": "6+",
+"ks": "5+",
 "bs": "-",
 "g": "2-4",
 "special": "Descent, Rare"
@@ -11811,8 +12173,8 @@
 "lysander": {
 "name": "Lysander",
 "page": 8,
-"sig": "4d22facd8580",
-"cost": 25,
+"sig": "d57ee5c94d9c",
+"cost": 36,
 "stats": {
 "thrust": "12\"",
 "scan": "6\"",
@@ -11822,7 +12184,7 @@
 "ks": "6+",
 "bs": "-",
 "g": "2-4",
-"special": "Descent, Cloak-1, Rare, Vanguard-6”"
+"special": "Descent, Cloak-1, Rare, Vanguard-7”"
 },
 "weapons": [
 {
@@ -11881,8 +12243,8 @@
 "taipei": {
 "name": "Taipei",
 "page": 10,
-"sig": "aa0449a47325",
-"cost": 40,
+"sig": "23ec9ae0952a",
+"cost": 37,
 "stats": {
 "thrust": "10\"",
 "scan": "6\"",
@@ -11922,7 +12284,7 @@
 "jakarta": {
 "name": "Jakarta",
 "page": 11,
-"sig": "78931a9abe89",
+"sig": "dce1df542173",
 "cost": 42,
 "stats": {
 "thrust": "10\"",
@@ -11952,7 +12314,7 @@
 "lock": "3+",
 "damage": "0",
 "type": "E",
-"special": "Anti-Wing, Close Action, Fusillade-2"
+"special": "Anti Wing, Close Action, Fusillade-2"
 }
 ],
 "loads": [],
@@ -11995,15 +12357,15 @@
 "neworleans": {
 "name": "New Orleans",
 "page": 13,
-"sig": "8f86d51b281e",
-"cost": 45,
+"sig": "fe7250109bf1",
+"cost": 42,
 "stats": {
 "thrust": "10\"",
 "scan": "6\"",
 "sig": "3\"",
 "hull": "4",
 "es": "4+",
-"ks": "3+",
+"ks": "4+",
 "bs": "-",
 "g": "1-2",
 "special": "Descent"
@@ -12033,7 +12395,7 @@
 "sheffield": {
 "name": "Sheffield",
 "page": 14,
-"sig": "2e88869ba218",
+"sig": "e4250978df7c",
 "cost": 45,
 "stats": {
 "thrust": "8\"",
@@ -12043,7 +12405,7 @@
 "es": "3+",
 "ks": "4+",
 "bs": "-",
-"g": "1-2",
+"g": "1-4",
 "special": "-"
 },
 "weapons": [
@@ -12063,7 +12425,7 @@
 "lock": "2+",
 "damage": "1",
 "type": "E",
-"special": "Scald-2"
+"special": "Critical-1, Scald-2"
 }
 ],
 "loads": [],
@@ -12074,7 +12436,7 @@
 "detroit": {
 "name": "Detroit",
 "page": 15,
-"sig": "e4470e4c2165",
+"sig": "d28bf547f145",
 "cost": 50,
 "stats": {
 "thrust": "8\"",
@@ -12084,7 +12446,7 @@
 "es": "3+",
 "ks": "4+",
 "bs": "-",
-"g": "1-2",
+"g": "1-4",
 "special": "-"
 },
 "weapons": [
@@ -12115,11 +12477,11 @@
 "istanbul": {
 "name": "Istanbul",
 "page": 16,
-"sig": "eaa10dfe62fd",
-"cost": 50,
+"sig": "721121480a54",
+"cost": 57,
 "stats": {
 "thrust": "6\"",
-"scan": "6\"",
+"scan": "10\"",
 "sig": "4\"",
 "hull": "4",
 "es": "3+",
@@ -12136,7 +12498,7 @@
 "lock": "3+",
 "damage": "2",
 "type": "K",
-"special": "Alt-1"
+"special": "Alt-1, Focused, Penetrator"
 },
 {
 "name": "UF-B-9000s (Bombardment)",
@@ -12145,7 +12507,7 @@
 "lock": "4+",
 "damage": "2",
 "type": "K",
-"special": "Alt-1, Bombardment"
+"special": "Alt-1, Bombardment, Penetrator"
 }
 ],
 "loads": [],
@@ -12156,8 +12518,8 @@
 "vienna": {
 "name": "Vienna",
 "page": 17,
-"sig": "de19a8c13d34",
-"cost": 66,
+"sig": "4671c4b22ba8",
+"cost": 60,
 "stats": {
 "thrust": "6\"",
 "scan": "6\"",
@@ -12188,7 +12550,7 @@
 "reykjavik": {
 "name": "Reykjavik",
 "page": 18,
-"sig": "9f01528ae35d",
+"sig": "6c254d2b5ed7",
 "cost": 45,
 "stats": {
 "thrust": "14\"",
@@ -12209,7 +12571,7 @@
 "lock": "3+",
 "damage": "2",
 "type": "K",
-"special": "-"
+"special": "Focused, Penetrator"
 }
 ],
 "loads": [],
@@ -12220,7 +12582,7 @@
 "nuuk": {
 "name": "Nuuk",
 "page": 19,
-"sig": "4d7dc87db829",
+"sig": "052c9c5213c8",
 "cost": 35,
 "stats": {
 "thrust": "14\"",
@@ -12240,7 +12602,7 @@
 "attack": "1",
 "lock": "4+",
 "damage": "0",
-"type": "E",
+"type": "C",
 "special": "Status"
 }
 ],
@@ -12322,7 +12684,7 @@
 "vancouver": {
 "name": "Vancouver",
 "page": 22,
-"sig": "66619574b92f",
+"sig": "2a2af1d229a4",
 "cost": 55,
 "stats": {
 "thrust": "10\"",
@@ -12350,7 +12712,12 @@
 {
 "name": "Fighters & Bombers",
 "launch": "1",
-"special": "-"
+"special": "Alt-1"
+},
+{
+"name": "Mines",
+"launch": "1",
+"special": "Alt-1"
 }
 ],
 "rules": {},
@@ -12360,7 +12727,7 @@
 "kyiv": {
 "name": "Kyiv",
 "page": 23,
-"sig": "11630aa1cd81",
+"sig": "9a12d5dabc2a",
 "cost": 60,
 "stats": {
 "thrust": "8\"",
@@ -12381,7 +12748,7 @@
 "lock": "3+",
 "damage": "2",
 "type": "K",
-"special": "Fusillade-1, Re-Entry"
+"special": "Fusillade-1, Penetrator, Re-Entry"
 }
 ],
 "loads": [],
@@ -12433,7 +12800,7 @@
 "rhiannonmajorleadentriad": {
 "name": "Rhiannon Major - Leaden Triad",
 "page": 25,
-"sig": "75ab52c2f342",
+"sig": "db1a0c4af801",
 "cost": 71,
 "stats": {
 "thrust": "8\"",
@@ -12448,31 +12815,13 @@
 },
 "weapons": [
 {
-"name": "Artillery Cannon",
+"name": "Artillery Cannons",
 "arc": "F",
-"attack": "1",
+"attack": "3",
 "lock": "4+",
 "damage": "2",
 "type": "K",
-"special": "Calibre-H/C, Fusillade-1, Low Power"
-},
-{
-"name": "Artillery Cannon",
-"arc": "F",
-"attack": "1",
-"lock": "4+",
-"damage": "2",
-"type": "K",
-"special": "Calibre-H/C, Fusillade-1, Low Power"
-},
-{
-"name": "Artillery Cannon",
-"arc": "F",
-"attack": "1",
-"lock": "4+",
-"damage": "2",
-"type": "K",
-"special": "Calibre-H/C, Fusillade-1, Low Power"
+"special": "Calibre-H/C, Critical-1, Fusillade-3"
 }
 ],
 "loads": [],
@@ -12483,7 +12832,7 @@
 "osaka": {
 "name": "Osaka",
 "page": 26,
-"sig": "7ab21ad16201",
+"sig": "42d594182707",
 "cost": 70,
 "stats": {
 "thrust": "10\"",
@@ -12502,9 +12851,9 @@
 "arc": "F/S",
 "attack": "4",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1"
+"special": "-"
 }
 ],
 "loads": [],
@@ -12515,7 +12864,7 @@
 "newcairo": {
 "name": "New Cairo",
 "page": 27,
-"sig": "acd00f9bb14a",
+"sig": "e0b6b786a817",
 "cost": 70,
 "stats": {
 "thrust": "10\"",
@@ -12532,7 +12881,7 @@
 {
 "name": "Cobra Heavy Laser",
 "arc": "FN",
-"attack": "4",
+"attack": "5",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -12585,7 +12934,7 @@
 "rio": {
 "name": "Rio",
 "page": 29,
-"sig": "bb226c705348",
+"sig": "2a4036f3c3f6",
 "cost": 85,
 "stats": {
 "thrust": "8\"",
@@ -12604,9 +12953,9 @@
 "arc": "F/S",
 "attack": "4",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1"
+"special": "-"
 },
 {
 "name": "UF-4200 Mass Driver Turrets",
@@ -12626,8 +12975,8 @@
 "berlin": {
 "name": "Berlin",
 "page": 30,
-"sig": "5ea19333c6ea",
-"cost": 80,
+"sig": "00c1a993a12a",
+"cost": 78,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -12643,7 +12992,7 @@
 {
 "name": "Cobra Heavy Laser",
 "arc": "FN",
-"attack": "4",
+"attack": "5",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -12708,8 +13057,8 @@
 "bruges": {
 "name": "Bruges",
 "page": 32,
-"sig": "689c154be085",
-"cost": 84,
+"sig": "d013e0173cb2",
+"cost": 80,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -12725,7 +13074,7 @@
 {
 "name": "Cobra Heavy Laser",
 "arc": "FN",
-"attack": "4",
+"attack": "5",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -12738,7 +13087,7 @@
 "lock": "2+",
 "damage": "1",
 "type": "E",
-"special": "Scald-2"
+"special": "Critical-1, Scald-2"
 }
 ],
 "loads": [],
@@ -12796,7 +13145,7 @@
 "bucharest": {
 "name": "Bucharest",
 "page": 34,
-"sig": "ef32435f0bc2",
+"sig": "27fbef2a67df",
 "cost": 90,
 "stats": {
 "thrust": "8\"",
@@ -12817,7 +13166,7 @@
 "lock": "2+",
 "damage": "1",
 "type": "E",
-"special": "Scald-2"
+"special": "Critical-1, Scald-2"
 },
 {
 "name": "Piranha Missile Turrets",
@@ -12884,7 +13233,7 @@
 "geneva": {
 "name": "Geneva",
 "page": 36,
-"sig": "251f24fdcdfb",
+"sig": "86d6d124b279",
 "cost": 100,
 "stats": {
 "thrust": "8\"",
@@ -12910,14 +13259,14 @@
 ],
 "loads": [],
 "rules": {},
-"lore": "97d170e1550e",
+"lore": "3cc6cbe034ec",
 "famous": "981c7ce4dc3d"
 },
 "seattle": {
 "name": "Seattle",
 "page": 37,
-"sig": "f166c2bbfeda",
-"cost": 116,
+"sig": "d5a1eca72e2b",
+"cost": 108,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -12935,9 +13284,9 @@
 "arc": "F/S",
 "attack": "4",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1"
+"special": "-"
 }
 ],
 "loads": [
@@ -13002,8 +13351,8 @@
 "sanfrancisco": {
 "name": "San Francisco",
 "page": 39,
-"sig": "1e03f1725cfc",
-"cost": 100,
+"sig": "006d224c8e7e",
+"cost": 95,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -13040,7 +13389,7 @@
 "vilnius": {
 "name": "Vilnius",
 "page": 41,
-"sig": "7aeef2e98b74",
+"sig": "6f683e7ae99c",
 "cost": 115,
 "stats": {
 "thrust": "7\"",
@@ -13059,18 +13408,18 @@
 "arc": "F/S",
 "attack": "4",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1"
+"special": "-"
 },
 {
 "name": "UF-6400 Mass Driver Turrets",
 "arc": "F/S",
 "attack": "4",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1"
+"special": "-"
 },
 {
 "name": "UF-4200 Mass Driver Turrets",
@@ -13090,8 +13439,8 @@
 "edmonton": {
 "name": "Edmonton",
 "page": 42,
-"sig": "4a3e865a2a68",
-"cost": 135,
+"sig": "63af955a0cb1",
+"cost": 130,
 "stats": {
 "thrust": "7\"",
 "scan": "6\"",
@@ -13107,7 +13456,7 @@
 {
 "name": "Cobra Heavy Laser",
 "arc": "FN",
-"attack": "4",
+"attack": "5",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -13118,9 +13467,9 @@
 "arc": "F/S",
 "attack": "4",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1"
+"special": "-"
 }
 ],
 "loads": [
@@ -13137,8 +13486,8 @@
 "lasvegas": {
 "name": "Las Vegas",
 "page": 43,
-"sig": "d524105fc06a",
-"cost": 145,
+"sig": "40cce43b00cb",
+"cost": 155,
 "stats": {
 "thrust": "7\"",
 "scan": "10\"",
@@ -13156,9 +13505,9 @@
 "arc": "F/S",
 "attack": "4",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1"
+"special": "-"
 }
 ],
 "loads": [
@@ -13175,7 +13524,7 @@
 "francismendozaflyingdutchman": {
 "name": "Francis Mendoza - Flying Dutchman",
 "page": 44,
-"sig": "6876bded13be",
+"sig": "49c975f5a008",
 "cost": 136,
 "stats": {
 "thrust": "10\"",
@@ -13192,7 +13541,7 @@
 {
 "name": "Cobra Heavy Laser Pair",
 "arc": "FN",
-"attack": "6",
+"attack": "8",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -13220,13 +13569,13 @@
 "loads": [],
 "rules": {},
 "lore": "f25e9eca6df7",
-"famous": "c36cb1216401"
+"famous": "908e32ac22e9"
 },
 "yokohama": {
 "name": "Yokohama",
 "page": 45,
-"sig": "a4f6e5e67dfc",
-"cost": 160,
+"sig": "03205d797b35",
+"cost": 148,
 "stats": {
 "thrust": "7\"",
 "scan": "8\"",
@@ -13244,9 +13593,9 @@
 "arc": "F/S",
 "attack": "4",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1"
+"special": "-"
 },
 {
 "name": "UF-4200 Mass Driver Turrets",
@@ -13264,7 +13613,7 @@
 "lock": "2+",
 "damage": "1",
 "type": "E",
-"special": "Scald-2"
+"special": "Critical-1, Scald-2"
 },
 {
 "name": "Swordfish Missile Bays",
@@ -13278,14 +13627,14 @@
 ],
 "loads": [],
 "rules": {},
-"lore": "fd5cde719783",
+"lore": "ec173e0a29df",
 "famous": "981c7ce4dc3d"
 },
 "busan": {
 "name": "Busan",
 "page": 46,
-"sig": "8343543c80e3",
-"cost": 166,
+"sig": "ab83f1fc44cd",
+"cost": 156,
 "stats": {
 "thrust": "7\"",
 "scan": "8\"",
@@ -13337,13 +13686,13 @@
 ],
 "loads": [],
 "rules": {},
-"lore": "fd5cde719783",
+"lore": "ec173e0a29df",
 "famous": "981c7ce4dc3d"
 },
 "johannesburg": {
 "name": "Johannesburg",
 "page": 47,
-"sig": "73534731f4e2",
+"sig": "626e901a089a",
 "cost": 165,
 "stats": {
 "thrust": "8\"",
@@ -13362,9 +13711,9 @@
 "arc": "F/S",
 "attack": "4",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1, Volley-2"
+"special": "Volley-2"
 },
 {
 "name": "UF-4200 Mass Driver Turrets",
@@ -13460,8 +13809,8 @@
 "siam": {
 "name": "Siam",
 "page": 51,
-"sig": "b147ea88e14d",
-"cost": 180,
+"sig": "2351dba2afb0",
+"cost": 175,
 "stats": {
 "thrust": "8\"",
 "scan": "8\"",
@@ -13507,8 +13856,8 @@
 "hongkong": {
 "name": "Hong Kong",
 "page": 52,
-"sig": "d229da41451c",
-"cost": 185,
+"sig": "97fdc746c253",
+"cost": 175,
 "stats": {
 "thrust": "7\"",
 "scan": "8\"",
@@ -13524,7 +13873,7 @@
 {
 "name": "Viper Super Heavy Laser",
 "arc": "FN",
-"attack": "8",
+"attack": "9",
 "lock": "3+",
 "damage": "1",
 "type": "E",
@@ -13560,14 +13909,14 @@
 ],
 "loads": [],
 "rules": {},
-"lore": "fd5cde719783",
+"lore": "ec173e0a29df",
 "famous": "981c7ce4dc3d"
 },
 "newdubai": {
 "name": "New Dubai",
 "page": 53,
-"sig": "2b1c770a33d3",
-"cost": 215,
+"sig": "9cb3f5d465ba",
+"cost": 205,
 "stats": {
 "thrust": "7\"",
 "scan": "8\"",
@@ -13616,14 +13965,14 @@
 }
 ],
 "rules": {},
-"lore": "fd5cde719783",
+"lore": "ec173e0a29df",
 "famous": "981c7ce4dc3d"
 },
 "rotterdam": {
 "name": "Rotterdam",
 "page": 54,
-"sig": "f993371b968f",
-"cost": 195,
+"sig": "85532ba9c247",
+"cost": 185,
 "stats": {
 "thrust": "7\"",
 "scan": "8\"",
@@ -13643,7 +13992,7 @@
 "lock": "2+",
 "damage": "1",
 "type": "E",
-"special": "Scald-2"
+"special": "Critical-1, Scald-2"
 },
 {
 "name": "Taipan Laser Turrets",
@@ -13652,7 +14001,7 @@
 "lock": "2+",
 "damage": "1",
 "type": "E",
-"special": "Scald-2"
+"special": "Critical-1, Scald-2"
 },
 {
 "name": "Swordfish Missile Bays",
@@ -13666,14 +14015,14 @@
 ],
 "loads": [],
 "rules": {},
-"lore": "48ffa64e4fd0",
+"lore": "f2987ea38977",
 "famous": "981c7ce4dc3d"
 },
 "milwaukee": {
 "name": "Milwaukee",
 "page": 55,
-"sig": "1488e24f0223",
-"cost": 225,
+"sig": "e02b9b2a88db",
+"cost": 215,
 "stats": {
 "thrust": "7\"",
 "scan": "8\"",
@@ -13731,14 +14080,14 @@
 }
 ],
 "rules": {},
-"lore": "fd5cde719783",
+"lore": "ec173e0a29df",
 "famous": "981c7ce4dc3d"
 },
 "beijing": {
 "name": "Beijing",
 "page": 56,
-"sig": "e2daab20eb3a",
-"cost": 220,
+"sig": "dbadffc287c8",
+"cost": 215,
 "stats": {
 "thrust": "6\"",
 "scan": "10\"",
@@ -13754,7 +14103,7 @@
 {
 "name": "Python Super Heavy Laser",
 "arc": "FN",
-"attack": "5",
+"attack": "6",
 "lock": "3+",
 "damage": "2",
 "type": "E",
@@ -13765,9 +14114,9 @@
 "arc": "F/S",
 "attack": "6",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1"
+"special": "-"
 },
 {
 "name": "UF-4200 Mass Driver Turrets",
@@ -13790,13 +14139,13 @@
 ],
 "loads": [],
 "rules": {},
-"lore": "b43fad59e9f6",
+"lore": "1ab6cad9dd47",
 "famous": "981c7ce4dc3d"
 },
 "tokyo": {
 "name": "Tokyo",
 "page": 58,
-"sig": "8e2893d68880",
+"sig": "10d5461d9650",
 "cost": 225,
 "stats": {
 "thrust": "6\"",
@@ -13813,7 +14162,7 @@
 {
 "name": "Python Super Heavy Laser",
 "arc": "FN",
-"attack": "5",
+"attack": "6",
 "lock": "3+",
 "damage": "2",
 "type": "E",
@@ -13849,13 +14198,13 @@
 ],
 "loads": [],
 "rules": {},
-"lore": "b43fad59e9f6",
+"lore": "1ab6cad9dd47",
 "famous": "981c7ce4dc3d"
 },
 "hanoi": {
 "name": "Hanoi",
 "page": 59,
-"sig": "b2f3e0fad7ff",
+"sig": "c2e9239813f3",
 "cost": 200,
 "stats": {
 "thrust": "6\"",
@@ -13872,11 +14221,11 @@
 {
 "name": "UF-12000 Twin Mass Driver",
 "arc": "FN",
-"attack": "2",
+"attack": "3",
 "lock": "2+",
-"damage": "4",
+"damage": "2",
 "type": "C",
-"special": "Crippling"
+"special": "Crippling, Critical-2, Focused"
 },
 {
 "name": "UF-4200 Mass Driver Turrets",
@@ -13899,13 +14248,13 @@
 ],
 "loads": [],
 "rules": {},
-"lore": "b43fad59e9f6",
+"lore": "1ab6cad9dd47",
 "famous": "981c7ce4dc3d"
 },
 "delhi": {
 "name": "Delhi",
 "page": 60,
-"sig": "18e60d0bdc85",
+"sig": "df66c1741581",
 "cost": 230,
 "stats": {
 "thrust": "6\"",
@@ -13924,9 +14273,9 @@
 "arc": "F/S",
 "attack": "4",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1"
+"special": "-"
 },
 {
 "name": "UF-4200 Mass Driver Turrets",
@@ -13965,13 +14314,13 @@
 }
 ],
 "rules": {},
-"lore": "b43fad59e9f6",
+"lore": "1ab6cad9dd47",
 "famous": "981c7ce4dc3d"
 },
 "babylon": {
 "name": "Babylon",
 "page": 61,
-"sig": "7b2698ea6cbd",
+"sig": "95af19acf46f",
 "cost": 325,
 "stats": {
 "thrust": "6\"",
@@ -13988,7 +14337,7 @@
 {
 "name": "Python Super Heavy Laser",
 "arc": "FN",
-"attack": "5",
+"attack": "6",
 "lock": "3+",
 "damage": "2",
 "type": "E",
@@ -13999,9 +14348,9 @@
 "arc": "F/S",
 "attack": "6",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1"
+"special": "-"
 },
 {
 "name": "UF-4200 Mass Driver Turrets",
@@ -14025,7 +14374,7 @@
 "loads": [
 {
 "name": "Fighters & Bombers",
-"launch": "4",
+"launch": "5",
 "special": "Alt-1"
 },
 {
@@ -14046,7 +14395,7 @@
 "byzantium": {
 "name": "Byzantium",
 "page": 62,
-"sig": "d5c54057839e",
+"sig": "74c22a749da9",
 "cost": 325,
 "stats": {
 "thrust": "6\"",
@@ -14063,7 +14412,7 @@
 {
 "name": "Python Super Heavy Laser",
 "arc": "FN",
-"attack": "5",
+"attack": "6",
 "lock": "3+",
 "damage": "2",
 "type": "E",
@@ -14100,7 +14449,7 @@
 "loads": [
 {
 "name": "Fighters & Bombers",
-"launch": "4",
+"launch": "5",
 "special": "Alt-1"
 },
 {
@@ -14121,8 +14470,8 @@
 "carthage": {
 "name": "Carthage",
 "page": 63,
-"sig": "9aaafe1d821d",
-"cost": 320,
+"sig": "3e187251f3e2",
+"cost": 315,
 "stats": {
 "thrust": "6\"",
 "scan": "10\"",
@@ -14138,11 +14487,11 @@
 {
 "name": "UF-12000 Twin Mass Driver",
 "arc": "FN",
-"attack": "2",
+"attack": "3",
 "lock": "2+",
-"damage": "4",
+"damage": "2",
 "type": "C",
-"special": "Crippling"
+"special": "Crippling, Critical-2, Focused"
 },
 {
 "name": "UF-4200 Mass Driver Turrets",
@@ -14166,7 +14515,7 @@
 "loads": [
 {
 "name": "Fighters & Bombers",
-"launch": "4",
+"launch": "5",
 "special": "Alt-1"
 },
 {
@@ -14187,8 +14536,8 @@
 "thebes": {
 "name": "Thebes",
 "page": 64,
-"sig": "94bbf2b824ff",
-"cost": 310,
+"sig": "fc53c1a8da0f",
+"cost": 305,
 "stats": {
 "thrust": "6\"",
 "scan": "10\"",
@@ -14204,20 +14553,20 @@
 {
 "name": "UF-12000 Twin Mass Driver",
 "arc": "FN",
-"attack": "2",
+"attack": "3",
 "lock": "2+",
-"damage": "4",
+"damage": "2",
 "type": "C",
-"special": "Crippling"
+"special": "Crippling, Critical-2, Focused"
 },
 {
 "name": "UF-6400 Mass Driver Turrets",
 "arc": "F/S",
 "attack": "4",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1"
+"special": "-"
 },
 {
 "name": "UF-4200 Mass Driver Turrets",
@@ -14262,8 +14611,8 @@
 "london": {
 "name": "London",
 "page": 65,
-"sig": "56b5839be085",
-"cost": 435,
+"sig": "819c02dde762",
+"cost": 490,
 "stats": {
 "thrust": "6\"",
 "scan": "12\"",
@@ -14273,66 +14622,39 @@
 "ks": "3+",
 "bs": "5+",
 "g": "1",
-"special": "Aegis-6, Command Ship-2, Reinforced Armour"
+"special": "Aegis-6, Command Ship-1, Reinforced Armour"
 },
 "weapons": [
 {
-"name": "UF-9000 Mass Driver Turret",
+"name": "UF-9000 Mass Driver Turrets",
 "arc": "F/S",
 "attack": "2",
 "lock": "2+",
 "damage": "2",
 "type": "K",
-"special": "Critical-1, Penetrator"
-},
-{
-"name": "UF-9000 Mass Driver Turret",
-"arc": "F/S",
-"attack": "2",
-"lock": "2+",
-"damage": "2",
-"type": "K",
-"special": "Critical-1, Penetrator"
+"special": "Critical-1, Penetrator, Volley-2"
 },
 {
 "name": "UF-6400 Mass Driver Turret Battery",
 "arc": "F/S",
 "attack": "8",
 "lock": "3+",
-"damage": "1",
+"damage": "2",
 "type": "K",
-"special": "Critical-1"
+"special": "Volley-2"
 },
 {
-"name": "UF-6400 Mass Driver Turret Battery",
+"name": "UF-4200 Mass Driver Turret Battery",
 "arc": "F/S",
-"attack": "8",
-"lock": "3+",
-"damage": "1",
-"type": "K",
-"special": "Critical-1"
-},
-{
-"name": "UF-4200 Mass Driver Turret Core Battery",
-"arc": "F/S",
-"attack": "6",
+"attack": "10",
 "lock": "4+",
 "damage": "1",
 "type": "K",
-"special": "Fusillade-3, Volley-2"
-},
-{
-"name": "UF-4200 Mass Driver Turrets",
-"arc": "F/S",
-"attack": "4",
-"lock": "4+",
-"damage": "1",
-"type": "K",
-"special": "Fusillade-2, Volley-2"
+"special": "Fusillade-5, Volley-2"
 },
 {
 "name": "Leviathan Missile Bays",
-"arc": "F/S/R",
+"arc": "F/S",
 "attack": "8",
 "lock": "3+",
 "damage": "1",
@@ -14348,13 +14670,13 @@
 }
 },
 "Civilian_Ships_Scenarios": {
-"file": "Civilian_Ships_Scenarios_261001.pdf",
+"file": "Civilian_Ships_Scenarios_261104.pdf",
 "cards": {
 "hyperyachtsomniferum": {
 "name": "Hyperyacht Somniferum",
 "page": 3,
-"sig": "fa6d9298974d",
-"cost": 80,
+"sig": "6e319a9595e0",
+"cost": 77,
 "stats": {
 "thrust": "9\"",
 "scan": "6\"",
@@ -14364,7 +14686,7 @@
 "ks": "5+",
 "bs": "6+",
 "g": "1",
-"special": "Boardable, Civilian Transport, Unique"
+"special": "-"
 },
 "weapons": [
 {
@@ -14378,17 +14700,15 @@
 }
 ],
 "loads": [],
-"rules": {
-"Mercenary": "3f0f346432fa"
-},
+"rules": {},
 "lore": "0be75829b135",
 "famous": "d3bd01d0d9af"
 },
 "lksdredger": {
 "name": "LKS Dredger",
 "page": 5,
-"sig": "7ceba3222730",
-"cost": 65,
+"sig": "dc7d73cfb4e8",
+"cost": 61,
 "stats": {
 "thrust": "8\"",
 "scan": "6\"",
@@ -14398,11 +14718,11 @@
 "ks": "5+",
 "bs": "6+",
 "g": "1-2",
-"special": "Boardable, Vectored"
+"special": "Boardable, Mercenary (All), Vectored"
 },
 "weapons": [
 {
-"name": "Mining Laser",
+"name": "Mining Maser",
 "arc": "F",
 "attack": "3",
 "lock": "2+",
@@ -14413,8 +14733,7 @@
 ],
 "loads": [],
 "rules": {
-"Industrial Design": "b2d289eac785",
-"Mercenary": "b03637d8f43b"
+"Industrial Design": "b2d289eac785"
 },
 "lore": "35fc91a8494b",
 "famous": "de2f045d9892"
@@ -14422,7 +14741,7 @@
 "mkmasstransporter": {
 "name": "MK Mass Transporter",
 "page": 6,
-"sig": "d001f8d35c54",
+"sig": "14845c2b8847",
 "cost": 41,
 "stats": {
 "thrust": "10\"",
@@ -14433,7 +14752,7 @@
 "ks": "6+",
 "bs": "-",
 "g": "1-2",
-"special": "Boardable, Descent, Rare"
+"special": "Boardable, Descent, Mercenary (All), Rare"
 },
 "weapons": [
 {
@@ -14448,7 +14767,6 @@
 ],
 "loads": [],
 "rules": {
-"Mercenary": "b03637d8f43b",
 "Bulk Lighter": "20bda07300cb"
 },
 "lore": "97d170e1550e",
@@ -14457,7 +14775,7 @@
 "mab67fueltransport": {
 "name": "M.A.B. 67 Fuel Transport",
 "page": 7,
-"sig": "d5664b660d55",
+"sig": "a5fb51a8a743",
 "cost": 55,
 "stats": {
 "thrust": "9\"",
@@ -14468,7 +14786,7 @@
 "ks": "4+",
 "bs": "6+",
 "g": "1-2",
-"special": "Boardable, Civilian Transport, Vectored"
+"special": "-"
 },
 "weapons": [
 {
@@ -14493,8 +14811,7 @@
 "loads": [],
 "rules": {
 "Fuel Transporter": "31fa2c16e1d6",
-"Ignite Reserves": "ca58621fc26a",
-"Mercenary": "3f0f346432fa"
+"Ignite Reserves": "ca58621fc26a"
 },
 "lore": "918b132e084c",
 "famous": "86679ed17ffc"
@@ -14502,7 +14819,7 @@
 "pscinterdictor": {
 "name": "PSC Interdictor",
 "page": 10,
-"sig": "b5b8b34d04aa",
+"sig": "8d442c641070",
 "cost": 48,
 "stats": {
 "thrust": "9\"",
@@ -14513,7 +14830,7 @@
 "ks": "4+",
 "bs": "-",
 "g": "2-4",
-"special": "Boardable, Rapid Drop, Rare, Vectored"
+"special": "-"
 },
 "weapons": [
 {
@@ -14534,8 +14851,7 @@
 }
 ],
 "rules": {
-"UF-2800i Interdiction Mass Drivers": "31c1cb2ae00f",
-"Mercenary": "b03637d8f43b"
+"UF-2800i Interdiction Mass Drivers": "31c1cb2ae00f"
 },
 "lore": "4dcbcd04aade",
 "famous": "ef6ec778cfec"
@@ -14543,7 +14859,7 @@
 "slm9resupplyhauler": {
 "name": "SLM-9 Resupply Hauler",
 "page": 11,
-"sig": "8f033970b753",
+"sig": "46c24460f53c",
 "cost": 35,
 "stats": {
 "thrust": "9\"",
@@ -14554,14 +14870,13 @@
 "ks": "5+",
 "bs": "6+",
 "g": "1",
-"special": "Boardable, Vectored Ressuply and Rearm"
+"special": "Boardable, Mercenary (All), Rare, Vectored Resupply and Rearm"
 },
 "weapons": [],
 "loads": [],
 "rules": {
-"Ressuply and Rearm": "0cbb59560b9f",
-"Flawed Design": "aa88ed3e1cdf",
-"Mercenary": "b03637d8f43b"
+"Resupply and Rearm": "dfa65b044ef1",
+"Flawed Design": "aa88ed3e1cdf"
 },
 "lore": "da61ef3c257e",
 "famous": "7bdc8e339583"
@@ -14569,8 +14884,8 @@
 "ttypetugboat": {
 "name": "T-Type Tugboat",
 "page": 12,
-"sig": "d5d7df01eb21",
-"cost": 60,
+"sig": "75f3f764dd9c",
+"cost": 54,
 "stats": {
 "thrust": "6\"",
 "scan": "4\"",
@@ -14599,13 +14914,12 @@
 "lock": "3+",
 "damage": "2",
 "type": "C",
-"special": "Close Action"
+"special": "Air to Air, Point Blank"
 }
 ],
 "loads": [],
 "rules": {
-"Mercenary": "3f0f346432fa",
-"Drag to Hell": "95954791edde",
+"Drag to Hell": "880e9ed6683d",
 "Tugging Along": "f3f375406c08"
 },
 "lore": "64d08576e826",
@@ -14614,8 +14928,8 @@
 "ex7packetrunner": {
 "name": "EX-7 Packet Runner",
 "page": 13,
-"sig": "c788c0d92e3f",
-"cost": 57,
+"sig": "231348969b36",
+"cost": 54,
 "stats": {
 "thrust": "6\"",
 "scan": "4\"",
@@ -14641,16 +14955,65 @@
 "loads": [],
 "rules": {
 "Feature Carrier": "63183537d156",
-"Space Trucker": "67586bbd16c4",
-"Mercenary": "3f0f346432fa"
+"Space Trucker": "67586bbd16c4"
 },
 "lore": "34a7929b2261",
 "famous": "d33950acca89"
 },
+"kronosbarge": {
+"name": "Kronos Barge",
+"page": 14,
+"sig": "1eac6ecd29ee",
+"cost": 57,
+"stats": {
+"thrust": "10\"",
+"scan": "6\"",
+"sig": "3\"",
+"hull": "6",
+"es": "5+",
+"ks": "5+",
+"bs": "-",
+"g": "1-2",
+"special": "-"
+},
+"weapons": [
+{
+"name": "NC-1 Missiles",
+"arc": "F/S/R",
+"attack": "1",
+"lock": "3+",
+"damage": "1",
+"type": "K",
+"special": "Close Action"
+},
+{
+"name": "Thermal Wake",
+"arc": "R",
+"attack": "5",
+"lock": "4+",
+"damage": "1",
+"type": "E",
+"special": "Flash-1, Scald-1"
+}
+],
+"loads": [
+{
+"name": "Boarding Pods",
+"launch": "2",
+"special": "-"
+}
+],
+"rules": {
+"High Velocity Boarding Pods": "b2b86d91bf0c",
+"Thermal Wake": "5623f3aae5dd"
+},
+"lore": "9cf56f2103de",
+"famous": "8f90706b3e89"
+},
 "dhtypepenaltransport": {
 "name": "DH-Type Penal Transport",
-"page": 15,
-"sig": "a124141e85f2",
+"page": 16,
+"sig": "c0b851cfb8ef",
 "cost": 123,
 "stats": {
 "thrust": "6\"",
@@ -14661,7 +15024,7 @@
 "ks": "4+",
 "bs": "6+",
 "g": "1",
-"special": "Boardable, Civilian Transport, Marines-1, Unique"
+"special": "-"
 },
 "weapons": [
 {
@@ -14685,17 +15048,16 @@
 ],
 "loads": [],
 "rules": {
-"Mercenary": "3f0f346432fa",
-"Penal Legions": "d26c2f968c95"
+"Penal Legions": "85b9d9db9681"
 },
 "lore": "a8b587753a2b",
 "famous": "a1a83ee269db"
 },
 "jahtarstartrader": {
 "name": "Jah’tar Startrader",
-"page": 16,
-"sig": "73a053145121",
-"cost": 113,
+"page": 17,
+"sig": "f81aecfbcdda",
+"cost": 108,
 "stats": {
 "thrust": "12\"",
 "scan": "6\"",
@@ -14705,22 +15067,21 @@
 "ks": "5+",
 "bs": "6+",
 "g": "1",
-"special": "Boardable, Civilian Transport, Aegis-4, Rare Purchased Power"
+"special": "-"
 },
 "weapons": [],
 "loads": [],
 "rules": {
-"Purchased Power": "e3ed792c73d3",
-"Startrader": "20d462065e88"
+"Purchased Power": "9f0063276dd8"
 },
 "lore": "439eedced0c0",
 "famous": "52a65652e83b"
 },
 "mtypebarge": {
 "name": "M-Type Barge",
-"page": 17,
-"sig": "0c02d751c8ee",
-"cost": 95,
+"page": 18,
+"sig": "221816e149d5",
+"cost": 90,
 "stats": {
 "thrust": "9\"",
 "scan": "6\"",
@@ -14730,7 +15091,7 @@
 "ks": "5+",
 "bs": "6+",
 "g": "1",
-"special": "Boardable, Civilian Transport, Monitor"
+"special": "-"
 },
 "weapons": [
 {
@@ -14752,24 +15113,17 @@
 "special": "Close Action"
 }
 ],
-"loads": [
-{
-"name": "Military Outpost",
-"launch": "1",
-"special": "Limited-1"
-}
-],
+"loads": [],
 "rules": {
-"Feature Carrier": "bd79a2e11303",
-"Mercenary": "3f0f346432fa"
+"Feature Carrier": "bd79a2e11303"
 },
 "lore": "c9ae8f68d655",
 "famous": "a2b9c889cdee"
 },
 "obv64oblivionbarge": {
 "name": "OBV-64 Oblivion Barge",
-"page": 19,
-"sig": "05c3d27862bf",
+"page": 20,
+"sig": "7b1fe2a02aa8",
 "cost": 125,
 "stats": {
 "thrust": "6\"",
@@ -14801,17 +15155,16 @@
 }
 ],
 "rules": {
-"Expel Hazards": "b95447bf5e86",
-"Acquired Mines": "8d9286940264",
-"Mercenary": "4617118c2c0d"
+"Expel Hazards": "c4cceb022e24",
+"Acquired Mines": "8d9286940264"
 },
 "lore": "79a6e37dc699",
 "famous": "77032a2d1871"
 },
 "argonaut": {
 "name": "Argonaut",
-"page": 20,
-"sig": "6656d63cc5eb",
+"page": 21,
+"sig": "281cced9cb15",
 "cost": 112,
 "stats": {
 "thrust": "10\"",
@@ -14832,7 +15185,7 @@
 "lock": "3+",
 "damage": "2",
 "type": "E",
-"special": "Scald-2, Sustained Fire"
+"special": "Point Blank, Scald-2, Sustained Fire"
 },
 {
 "name": "Force Wave",
@@ -14846,7 +15199,7 @@
 ],
 "loads": [],
 "rules": {
-"Thermal Lash": "cb854db7b485",
+"Thermal Lash": "e8fced976846",
 "Mind of its Own": "f1e518145901"
 },
 "lore": "32b1f728f5ac",
@@ -14854,11 +15207,11 @@
 },
 "type87terminusharvester": {
 "name": "Type-87 Terminus Harvester",
-"page": 21,
-"sig": "4218cee75938",
-"cost": 210,
+"page": 22,
+"sig": "420ee252ba87",
+"cost": 200,
 "stats": {
-"thrust": "6\"",
+"thrust": "7\"",
 "scan": "6\"",
 "sig": "6\"",
 "hull": "18",
@@ -14866,7 +15219,7 @@
 "ks": "3+",
 "bs": "5+",
 "g": "1",
-"special": "Boardable, Porter F-2, Reinforced Armour, Monitor"
+"special": "-"
 },
 "weapons": [
 {
@@ -14876,25 +15229,23 @@
 "lock": "2+",
 "damage": "3",
 "type": "C",
-"special": "Close Action, Bloom-3"
+"special": "Bloom-3, Point Blank"
 }
 ],
 "loads": [],
 "rules": {
-"Colossal Salvage Cutter": "36b92a6ca746",
 "Scrap Hauler": "ceb5c699b6b1",
 "Scratch Bodge Job": "73ddb3300d77",
-"Industrial Design": "b2d289eac785",
-"Mercenary": "b03637d8f43b"
+"Industrial Design": "b2d289eac785"
 },
 "lore": "b710bd94e1ad",
 "famous": "38372205e3b8"
 },
 "vx22flenser": {
 "name": "VX-22 Flenser",
-"page": 22,
-"sig": "1c0af4350cc6",
-"cost": 50,
+"page": 23,
+"sig": "f446fb2c941a",
+"cost": 45,
 "stats": {
 "thrust": "6\"",
 "scan": "4\"",
@@ -14904,7 +15255,7 @@
 "ks": "4+",
 "bs": "6+",
 "g": "-",
-"special": "Payload F-1, Vectored Sawblade Prow"
+"special": "Mercenary (All), Payload F-1, Vectored Scrap Collection"
 },
 "weapons": [
 {
@@ -14914,25 +15265,23 @@
 "lock": "2+",
 "damage": "2",
 "type": "C",
-"special": "Close Action, Bloom-1"
+"special": "Point Blank, Bloom-1"
 }
 ],
 "loads": [],
 "rules": {
-"Sawblade Prow": "36b92a6ca746",
 "Scrap Collection": "092ac08f97fc",
 "Unload": "3a0b27edffa3",
-"Industrial Design": "b2d289eac785",
-"Mercenary": "b03637d8f43b"
+"Industrial Design": "b2d289eac785"
 },
 "lore": "fa43c95fbc4e",
 "famous": "eab6de3e296e"
 },
 "prk91provenanceark": {
 "name": "PRK-91 Provenance Ark",
-"page": 23,
-"sig": "04fa0bcfe950",
-"cost": 410,
+"page": 24,
+"sig": "d6ac7cb562d9",
+"cost": 400,
 "stats": {
 "thrust": "5\"",
 "scan": "10\"",
@@ -14942,7 +15291,7 @@
 "ks": "4+",
 "bs": "5+",
 "g": "1",
-"special": "Boardable, Civilian Transport"
+"special": "Boardable, Civilian Transport, Mercenary (All)"
 },
 "weapons": [
 {
@@ -14997,7 +15346,7 @@
 "rules": {
 "Genesis Spikes": "db13f0cdad5c",
 "Expansive Radiator Systems": "6e20c8a76890",
-"Mercenary": "4c968b8389fa"
+"Acquired Fighters & Bombers": "30ba94d5d548"
 },
 "lore": "662663a17de4",
 "famous": "afa9de8ca458"
@@ -15005,7 +15354,7 @@
 }
 },
 "Misc_Combined_Ship_Stats": {
-"file": "Misc_Combined_Ship_Stats_250822.pdf",
+"file": "Misc_Combined_Ship_Stats_261104.pdf",
 "cards": {
 "pungarithresher": {
 "name": "Pungari Thresher",
@@ -15044,8 +15393,8 @@
 "hyperyachtaurorum": {
 "name": "Hyperyacht Aurorum",
 "page": 2,
-"sig": "9e9426c55dda",
-"cost": 80,
+"sig": "b572652fdb9c",
+"cost": 76,
 "stats": {
 "thrust": "9\"",
 "scan": "6\"",
@@ -15055,7 +15404,7 @@
 "ks": "5+",
 "bs": "6+",
 "g": "1",
-"special": "Marines-2, Stealth, Unique Type Arc Att Lock DMG Type Special 9K Snub Mass Drivers F 4 2+ 1 K Critical-1 Type Launch Special Fighters & Bombers 1 - Mercenary"
+"special": "Marines-2, Mercenary (All), Hero, Stealth, Unique Type Arc Att Lock DMG Type Special 9K Snub Mass Drivers F 4 2+ 1 K Critical-1 Type Launch Special Fighters & Bombers 1 - Acquired Fighters & Bombers"
 },
 "weapons": [
 {
@@ -15070,7 +15419,7 @@
 ],
 "loads": [],
 "rules": {
-"Mercenary": "97d170e1550e"
+"Acquired Fighters & Bombers": "97d170e1550e"
 },
 "lore": "97d170e1550e",
 "famous": "9e9dc0d7bc14"
@@ -15078,7 +15427,7 @@
 "palatine": {
 "name": "Palatine",
 "page": 3,
-"sig": "7429306919e0",
+"sig": "eb4f8f1e6231",
 "cost": 170,
 "stats": {
 "thrust": "7\"",
@@ -15089,7 +15438,7 @@
 "ks": "4+",
 "bs": "5+",
 "g": "1",
-"special": "Command Ship-1, Detector, Rare Type Arc Att Lock DMG Type Special N-12 Artillery Cannons F 8 4+ 1 K - Advanced Artillery"
+"special": "Command Ship-3, Detector, Rare Type Arc Att Lock DMG Type Special N-12 Artillery Cannons F 8 4+ 1 K - Advanced Artillery"
 },
 "weapons": [
 {
