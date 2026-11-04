@@ -8081,7 +8081,7 @@ let activeGroupId = null;
   // Section header (with or without our own "##"), tolerant of a comma-joined first
   // entry, e.g. "Heavy Groups [235pts],Sarpedon Battleship [235pts]: …".
   const NR_SECT = /^#{0,2}\s*(Light|Medium|Heavy|Super ?heavy|Colossal|Payload|Space Station)s?(?:\s+Groups?)?\s*\[\s*(\d+)\s*pts?\s*\]\s*,?\s*(.*)$/i;
-  const NR_ADM  = /^#{0,2}\s*Admirals?\s*\[\s*(\d+)\s*pts?\s*\]\s*,?\s*(.*)$/i;
+  const NR_ADM  = /^#{0,2}\s*(?:Famous\s+)?Admirals?\s*\[\s*(\d+)\s*pts?\s*\]\s*,?\s*(.*)$/i;
   const NR_TON  = { light:'light', medium:'medium', heavy:'heavy', superheavy:'colossal', colossal:'colossal', payload:'payload', spacestation:'station' };
 
   // Parse a New-Recruit (or our own) plain-text army list into a structure. Returns
@@ -8105,7 +8105,8 @@ let activeGroupId = null;
 
     const SHIP = /^(?:[•\-*]\s*)?(\d+)\s*[x×]\s*(.+?)\s*\[\s*(\d+)\s*pts?\s*\]\s*(?::\s*(.*))?$/i;
     const GROUP_HDR = /\[\s*\d+\s*pts?\s*\]\s*:\s*$/;
-    const SINGLE = /^(.+?)\s*\[\s*(\d+)\s*pts?\s*\]\s*(?::\s*(.*))?$/;
+    // Our own lists bullet single ships too ("• Delhi Battleship [230 pts]").
+    const SINGLE = /^(?:[•\-*]\s*)?(.+?)\s*\[\s*(\d+)\s*pts?\s*\]\s*(?::\s*(.*))?$/;
 
     function handleEntry(line) {
       line = (line || '').trim(); if (!line) return;
@@ -8382,8 +8383,10 @@ let activeGroupId = null;
             const admDef = (factionInfo.admirals || []).find(x => x.id === a.admiralId);
             innate = admDef?.abilities || [];
           }
-          innate.forEach(ab => { out += `    - ${ab.name} (innate)\n`; });
-          (Array.isArray(a.selectedAbilities) ? a.selectedAbilities : []).forEach(n => { out += `    - ${n}\n`; });
+          // Sub-items use "•" too: Discord reads an indented "-" as a markdown
+          // list and nests each line deeper than the last.
+          innate.forEach(ab => { out += `    • ${ab.name} (innate)\n`; });
+          (Array.isArray(a.selectedAbilities) ? a.selectedAbilities : []).forEach(n => { out += `    • ${n}\n`; });
         }
       });
     }
@@ -8410,15 +8413,15 @@ let activeGroupId = null;
           (db && db.loadoutOptions || []).forEach((lo, i) => { const o = lo.options[(s.loadouts && s.loadouts[i]) || 0]; if (o && o.cost) notes.push(o.name); });
           if (s.systems && s.systems.length) { const c = {}; s.systems.forEach(n => c[n] = (c[n] || 0) + 1); notes.push(...Object.entries(c).map(([n, k]) => k > 1 ? `${k}x ${n}` : n)); }
           FEATURE_SLOT_KEYS.forEach(k => { if (s[k]) notes.push(s[k]); });
-          notes.forEach(n => { out += `    - ${n}\n`; });
+          notes.forEach(n => { out += `    • ${n}\n`; });
         });
       });
     });
 
     if (fleet.spaceStation) {
       out += `\n## Space Station [${fleet.spaceStation.cost || 0} pts]\n`;
-      out += `${fleet.spaceStation.name} [${fleet.spaceStation.cost || 0} pts]\n`;
-      (fleet.spaceStation.systems || []).forEach(n => { out += `    - ${n}\n`; });
+      out += `• ${fleet.spaceStation.name} [${fleet.spaceStation.cost || 0} pts]\n`;
+      (fleet.spaceStation.systems || []).forEach(n => { out += `    • ${n}\n`; });
     }
 
     return out.trimEnd();
@@ -9170,6 +9173,10 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-11-04', title: 'Copied lists paste cleanly into Discord', items: [
+      'A copied list marks abilities, refits and features with the same • as the ships, so Discord no longer indents each line deeper than the last.',
+      'Pasting a copied list back in keeps its single ships and its admiral.'
+    ] },
     { date: '2026-11-04', title: 'Deployable Features print in full', items: [
       'A ship’s chosen Deployable Feature now prints its own rules and spells out its specials, such as Aegis-4, under the feature on the printed sheet.',
       'A feature’s torpedoes join the launch asset table at the top of the sheet. The Torpedo Platform’s Medium Torpedo prints with its full stats.',

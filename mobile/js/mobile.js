@@ -5056,10 +5056,13 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-11-04', title: 'Copied lists paste cleanly into Discord', items: [
+      'A copied list marks abilities, refits and features with the same • as the ships, so Discord no longer indents each line deeper than the last.',
+      'Pasting a copied list back in keeps its single ships and its admiral.'
+    ] },
     { date: '2026-11-04', title: 'Deployable Features print in full', items: [
       'A feature’s torpedoes print in their own launch asset table under the feature, with full stats.',
       'Features with their own guns, such as the Ghost Orb Tower, Skybane Halo, Electrosurge Torus and Heavy Calibre Orbital Gun, print those guns’ stats.',
-      'A group whose ships carry different features, loadouts or systems prints a card for each setup, so no ship’s picks are left off.',
       'Thanks to Padomay for asking.'
     ] },
     { date: '2026-11-04', title: 'Dropfleet Commander 2.4', items: [
@@ -6384,8 +6387,10 @@
         }
         if (a.type !== 'Generic') {
           const innate = (src && src.abilities) || [];
-          innate.forEach(ab => { out += `    - ${ab.name} (innate)\n`; });
-          (Array.isArray(a.selectedAbilities) ? a.selectedAbilities : []).forEach(n => { out += `    - ${n}\n`; });
+          // Sub-items use "•" too: Discord reads an indented "-" as a markdown
+          // list and nests each line deeper than the last.
+          innate.forEach(ab => { out += `    • ${ab.name} (innate)\n`; });
+          (Array.isArray(a.selectedAbilities) ? a.selectedAbilities : []).forEach(n => { out += `    • ${n}\n`; });
         }
       });
     }
@@ -6407,20 +6412,20 @@
         profs.forEach(({ s, count }) => {
           const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
           const nm = db ? db.name : s.shipKey;
-          out += count > 1 ? `• ${count}x ${nm} [${(s.points || 0) * count} pts]\n` : `${nm} [${s.points} pts]\n`;
+          out += count > 1 ? `• ${count}x ${nm} [${(s.points || 0) * count} pts]\n` : `• ${nm} [${s.points} pts]\n`;
           const notes = [];
           (db && db.loadoutOptions || []).forEach((lo, i) => { const o = lo.options[(s.loadouts && s.loadouts[i]) || 0]; if (o && o.cost) notes.push(o.name); });
           if (s.systems && s.systems.length) { const c = {}; s.systems.forEach(n => c[n] = (c[n] || 0) + 1); notes.push(...Object.entries(c).map(([n, k]) => k > 1 ? `${k}x ${n}` : n)); }
           FEATURE_SLOT_KEYS.forEach(k => { if (s[k]) notes.push(s[k]); });
-          notes.forEach(n => { out += `    - ${n}\n`; });
+          notes.forEach(n => { out += `    • ${n}\n`; });
         });
       });
     });
 
     if (fleet.spaceStation) {
       out += `\n## Space Station [${fleet.spaceStation.cost || 0} pts]\n`;
-      out += `${fleet.spaceStation.name} [${fleet.spaceStation.cost || 0} pts]\n`;
-      (fleet.spaceStation.systems || []).forEach(n => { out += `    - ${n}\n`; });
+      out += `• ${fleet.spaceStation.name} [${fleet.spaceStation.cost || 0} pts]\n`;
+      (fleet.spaceStation.systems || []).forEach(n => { out += `    • ${n}\n`; });
     }
 
     return out.trimEnd();
@@ -6574,7 +6579,7 @@
   }
 
   const NR_SECT = /^#{0,2}\s*(Light|Medium|Heavy|Super ?heavy|Colossal|Payload|Space Station)s?(?:\s+Groups?)?\s*\[\s*(\d+)\s*pts?\s*\]\s*,?\s*(.*)$/i;
-  const NR_ADM  = /^#{0,2}\s*Admirals?\s*\[\s*(\d+)\s*pts?\s*\]\s*,?\s*(.*)$/i;
+  const NR_ADM  = /^#{0,2}\s*(?:Famous\s+)?Admirals?\s*\[\s*(\d+)\s*pts?\s*\]\s*,?\s*(.*)$/i;
   const NR_TON  = { light: 'light', medium: 'medium', heavy: 'heavy', superheavy: 'colossal', colossal: 'colossal', payload: 'payload', spacestation: 'station' };
 
   // Parse a New-Recruit (or our own) plain-text army list into a structure. Returns
@@ -6596,7 +6601,8 @@
 
     const SHIP = /^(?:[•\-*]\s*)?(\d+)\s*[x×]\s*(.+?)\s*\[\s*(\d+)\s*pts?\s*\]\s*(?::\s*(.*))?$/i;
     const GROUP_HDR = /\[\s*\d+\s*pts?\s*\]\s*:\s*$/;
-    const SINGLE = /^(.+?)\s*\[\s*(\d+)\s*pts?\s*\]\s*(?::\s*(.*))?$/;
+    // Our own lists bullet single ships too ("• Delhi Battleship [230 pts]").
+    const SINGLE = /^(?:[•\-*]\s*)?(.+?)\s*\[\s*(\d+)\s*pts?\s*\]\s*(?::\s*(.*))?$/;
 
     function handleEntry(line) {
       line = (line || '').trim(); if (!line) return;

@@ -5,18 +5,37 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-11-04: Copied lists paste cleanly into Discord
+
+`generateFleetText` (desktop) and `fleetToText` (mobile) wrote sub-items as
+`    - name`. Discord reads an indented hyphen as a markdown list item and nests
+each following one deeper, so an admiral's three abilities stepped across the
+message. Sub-items (abilities, refits, hardpoints, features, station modules)
+now use `    • name`, the same bullet as the ships, which Discord leaves as text.
+Mobile's single-ship lines and both apps' station line gain the leading `• `
+desktop's ship lines already had.
+
+The text importer (both apps) never read that bullet on a single ship:
+`SINGLE` kept "• Delhi Battleship" as the name, the lookup failed and the ship
+was dropped, so a desktop list pasted back in lost every single ship. `SINGLE`
+now takes an optional leading bullet. `NR_ADM` also accepts "Famous Admirals",
+the heading both apps write, so the admiral comes back too. Checked by copying
+a list from each app and importing it, the old mobile format, and a New
+Recruit style list. Sub-items still do not import (features, refits); the
+importer never read them.
+
 ### 2026-11-04: Every Feature Carrier checked on paper
 
 All 30 carriers (the Genitor Tower and the eight two-slot ships included) were
 printed with features in both apps: desktop Cards, Big cards and Table, mobile,
 and the Unit Reference. 48 of 48 feature picks print. Fixes from that pass:
 
-- **Mobile dropped ships in mixed groups.** Its print sheet drew one card per
-  group from `g.ships[0]`, so a group built on desktop with different features
-  per ship lost every feature but the first ship's (a Salamis pair lost Scanner
-  Dome and ICBM Silo). The same went for per-ship loadouts and systems. A mixed
-  group now prints a card per setup, keyed as desktop's buckets are. Mobile's
-  own picker still sets a whole group.
+- **Mobile prints a mixed group in full.** Its print sheet drew one card per
+  group from `g.ships[0]`. Neither app's pickers can mix setups in a group (they
+  set every ship of a type at once), but the legacy payload-group merge in
+  `loadFleets` can (two old Genitor Tower groups with different features), and
+  so can a hand-edited import. Such a group now prints a card per setup, keyed
+  as desktop's buckets are, instead of losing every pick but the first ship's.
 - **Feature block last.** Cards printed the feature and its rules between the
   launch line and the ship's rules, so the two sets of rules ran together. The
   feature now closes the card in Cards and Big cards.
