@@ -5058,6 +5058,7 @@
   const CHANGELOG = [
     { date: '2026-11-04', title: 'Deployable Features print in full', items: [
       'A feature’s torpedoes print in their own launch asset table under the feature, with full stats.',
+      'Features with their own guns, such as the Ghost Orb Tower, Skybane Halo, Electrosurge Torus and Heavy Calibre Orbital Gun, print those guns’ stats.',
       'Thanks to Padomay for asking.'
     ] },
     { date: '2026-11-04', title: 'Dropfleet Commander 2.4', items: [
@@ -7136,19 +7137,33 @@
       const feats = FEATURE_SLOT_KEYS.map(k => inst[k]).filter(Boolean);
       // A feature's torpedoes get the same launch table as the ship's, under it.
       const featLoads = [];
+      const collectRuleAll = collectRule;
       feats.forEach(name => {
         const feat = factionFeatures(f.faction).find(x => x.name === name);
         const parts = [esc(name)];
         if (feat) {
+          // A special the feature card spells out itself (its Calibre-X) keeps the
+          // card's text instead of adding the rulebook's (Calibre-H/C) beside it.
+          const base = n => String(n).split('-')[0].trim().toLowerCase();
+          const own = new Set((feat.rules || []).filter(r => r.description && r.name !== name).map(r => base(r.name)));
+          const collectRule = n => { if (!own.has(base(n))) collectRuleAll(n); };
           (feat.features || []).forEach(x => {
             const bits = [x.es ? `ES ${x.es}` : '', x.ks ? `KS ${x.ks}` : '', x.hull ? `Hull ${x.hull}` : '', x.special && x.special !== '-' ? x.special : ''].filter(Boolean).join(', ');
             if (bits) parts.push(esc(bits));
             if (x.special && x.special !== '-') x.special.split(',').forEach(s => collectRule(s.trim()));
           });
+          // A feature's own guns (Ghost Orb, Electrowave Caster) range by Scan, not arc.
+          (feat.weapons || []).forEach(w => {
+            const sp = w.special && w.special !== '-' ? w.special : '';
+            parts.push(esc(`${w.name}: ${w.scan && w.scan !== '-' ? `Scan ${w.scan}, ` : ''}Att ${w.attack}, Lock ${w.lock}, Dmg ${w.damage}${w.type || ''}${sp ? ', ' + sp : ''}`));
+            if (sp) sp.split(',').forEach(s => collectRule(s.trim()));
+          });
           (feat.loads || []).forEach(l => { if (l && l.name) featLoads.push(l); });
           (feat.rules || []).forEach(r => addRuleText(r.name, r.description));
         }
-        lines.push(['Deployable Feature', parts.join(', ')]);
+        // Name, stats; each gun after a semicolon so its stats read apart.
+        const [statPart, ...gunParts] = parts.slice(1);
+        lines.push(['Deployable Feature', [parts[0] + (statPart ? ', ' + statPart : ''), ...gunParts].join('; ')]);
       });
       const featLaunch = printLaunchTable(laMap, featLoads, collectRule);
 

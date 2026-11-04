@@ -5,6 +5,24 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-11-04: Every Deployable Feature checked on paper
+
+All 18 features (UCM 3, PHR 3, Shaltari 3, Scourge 3, Resistance 3, Bioficer 2)
+were printed on a carrier in both apps. Fixes from that pass:
+
+- **Mobile printed no feature guns.** The Heavy Calibre Orbital Gun, Electrosurge
+  Torus, Skybane Halo and Ghost Orb Tower now print each gun's Scan, Att, Lock,
+  Dmg and specials on the feature line, after a semicolon, with the specials in
+  the glossary. They range by Scan and have no arc, so they stay off the arc
+  weapon table.
+- **Doubled rules.** A feature card that carries its own copy of a rule (the
+  Heavy Calibre Orbital Gun's Calibre-X and Critical-X) no longer also prints
+  the rulebook's Calibre-H/C and Critical-2. Both apps.
+- **Two features on one ship** (Actium, Salamis) print a line each on desktop,
+  instead of one line joined by an interpunct.
+- **"Scan -"** no longer prints for a mounted gun with no Scan, on the fleet
+  sheet or the Unit Reference print.
+
 ### 2026-11-04: Deployable Features print in full
 
 The desktop fleet sheet printed a chosen Deployable Feature as its name and

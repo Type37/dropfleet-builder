@@ -6939,18 +6939,28 @@ let activeGroupId = null;
         if (!n || !d || _featRuleSeen.has(n)) return;
         _featRuleSeen.add(n); featureRuleEntries.push([n, d, p || '']);
       };
+      // A special the feature card spells out itself (its Calibre-X) keeps the
+      // card's text instead of adding the rulebook's (Calibre-H/C) beside it.
+      const _ruleBase = n => String(n).split('-')[0].trim().toLowerCase();
+      let _featOwnBases = new Set();
       const _addFeatSpecials = sp => {
         if (!sp || sp === '-') return;
-        sp.split(',').forEach(s => { const t = s.trim(); const full = t && lookupRuleFull(t); if (full) _addFeatRule(t, full.description, full.page); });
+        sp.split(',').forEach(s => {
+          const t = s.trim();
+          if (!t || _featOwnBases.has(_ruleBase(t))) return;
+          const full = lookupRuleFull(t);
+          if (full) _addFeatRule(t, full.description, full.page);
+        });
       };
       const chosenFeats = FEATURE_SLOT_KEYS.map(k => ship[k]).filter(Boolean);
       if (chosenFeats.length) {
         const featLines = chosenFeats.map(name => {
           const feat = ((shipDB[f.faction] || {}).deployableFeatures || []).find(df => df.name === name);
           if (!feat) return esc(name);
+          _featOwnBases = new Set((feat.rules || []).filter(r => r.description && r.name !== name).map(r => _ruleBase(r.name)));
           // A part named like its feature drops the repeat ("Aegis Platform, ES 3+").
           const bits = (feat.features || []).map(x => { _addFeatSpecials(x.special); return ([x.name === name ? '' : x.name, x.es ? `ES ${x.es}` : '', x.ks ? `KS ${x.ks}` : '', x.hull ? `Hull ${x.hull}` : ''].filter(Boolean).join(' ') + (x.special && x.special !== '-' ? `, ${x.special}` : '')).replace(/^, /, ''); }).filter(Boolean);
-          (feat.weapons || []).forEach(w => { _addFeatSpecials(w.special); bits.push(`${w.name}: ${w.scan ? `Scan ${w.scan}, ` : ''}Att ${w.attack}, Lock ${w.lock}, Dmg ${w.damage}${w.type || ''}${w.special && w.special !== '-' ? ', ' + w.special : ''}`); });
+          (feat.weapons || []).forEach(w => { _addFeatSpecials(w.special); bits.push(`${w.name}: ${w.scan && w.scan !== '-' ? `Scan ${w.scan}, ` : ''}Att ${w.attack}, Lock ${w.lock}, Dmg ${w.damage}${w.type || ''}${w.special && w.special !== '-' ? ', ' + w.special : ''}`); });
           (feat.loads || []).forEach(l => {
             if (!l || !l.name) return;
             allLaunchAssetNames.add(String(l.name));
@@ -6961,8 +6971,8 @@ let activeGroupId = null;
           const fStat = bits.join('; ');
           return `${esc(name)}${fStat ? ', ' + esc(fStat) : ''}`;
         });
-        const label = chosenFeats.length > 1 ? 'Deployable Features:' : 'Deployable Feature:';
-        featHtml = `<div class="dp-systems"><b>${label}</b> ${featLines.join(' &middot; ')}</div>`;
+        // Two features (Actium, Salamis) get a line each.
+        featHtml = featLines.map(l => `<div class="dp-systems"><b>Deployable Feature:</b> ${l}</div>`).join('');
       }
       // Selected refits that aren't weapon/load swaps (those already show in the
       // weapon table / launch line) — e.g. a Drive/Engine Refit or a Cloaking Crest.
@@ -9160,6 +9170,7 @@ let activeGroupId = null;
     { date: '2026-11-04', title: 'Deployable Features print in full', items: [
       'A ship’s chosen Deployable Feature now prints its own rules and spells out its specials, such as Aegis-4, under the feature on the printed sheet.',
       'A feature’s torpedoes join the launch asset table at the top of the sheet. The Torpedo Platform’s Medium Torpedo prints with its full stats.',
+      'A ship carrying two features prints a line for each, and a feature’s own Calibre and Critical text no longer prints beside the rulebook’s.',
       'Thanks to Padomay for asking.'
     ] },
     { date: '2026-11-04', title: 'Dropfleet Commander 2.4', items: [
@@ -11574,7 +11585,7 @@ let activeGroupId = null;
     if (carriers && (fdb.deployableFeatures || []).length) {
       const rows = fdb.deployableFeatures.map(ft => {
         const bits = (ft.features || []).map(x => { addSpecials(x.special); return `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.hull ? ` Hull ${x.hull}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`; });
-        (ft.weapons || []).forEach(w => { addSpecials(w.special); bits.push(`${w.name}: ${w.scan ? `Scan ${w.scan}, ` : ''}Att ${w.attack}, Lock ${w.lock}, Dmg ${w.damage}${w.type || ''}${w.special && w.special !== '-' ? ', ' + w.special : ''}`); });
+        (ft.weapons || []).forEach(w => { addSpecials(w.special); bits.push(`${w.name}: ${w.scan && w.scan !== '-' ? `Scan ${w.scan}, ` : ''}Att ${w.attack}, Lock ${w.lock}, Dmg ${w.damage}${w.type || ''}${w.special && w.special !== '-' ? ', ' + w.special : ''}`); });
         const launch = loadsLine(ft.loads);
         const rules = (ft.rules || []).map(r => printRuleSpan([r.name, r.description || ''])).join('');
         return `<span class="dp-rule"><b>${esc(ft.name)}</b> (${cost(ft.cost)})${bits.length ? ': ' + esc(bits.join('; ')) : ''}${launch ? `; Launch ${launch}` : ''}</span>${rules}`;
