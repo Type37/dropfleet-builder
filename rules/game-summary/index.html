@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dropfleet Commander Game Summary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;1,400&display=block" rel="stylesheet">
+<style>
+@page { size: 11in 8.5in; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --green: #51a640;
+  --green-2: #81c567;
+  --green-3: #d5eacf;
+  --grey: #a6a8aa;
+  --zebra: #d7d8d9;
+  --line: 0.75pt solid #000;
+}
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  font-size: 10pt;
+  line-height: 1;
+  color: #000;
+  background: #fff;
+}
+@media screen {
+  body { background: #8a8a8a; padding: 16px 0; }
+  .page { margin: 0 auto 16px; box-shadow: 0 2px 10px rgba(0,0,0,.35); }
+}
+.page { position: relative; width: 11in; height: 8.5in; background: #fff; break-after: page; }
+.page:last-child { break-after: auto; }
+
+.col { position: absolute; display: flex; flex-direction: column; gap: 5pt; }
+.row { display: flex; gap: 4pt; align-items: flex-start; }
+.row > * { flex: 1 1 0; min-width: 0; }
+
+.box { border: var(--line); background: #fff; }
+.hd { background: var(--green); color: #fff; font-weight: 700; padding: 2.5pt 2pt 2pt; }
+.hd.black { background: #000; }
+.hd.lt { background: var(--green-2); color: #000; }
+.hd.big { font-size: 12pt; padding: 3pt 2pt 2.5pt; }
+.hd + .hd { border-top: 0.75pt solid #fff; }
+
+.body { padding: 2.5pt 2pt 3pt; }
+.body > * + .st { margin-top: 1pt; }
+.st { font-weight: 700; }
+.seq { font-style: italic; padding-left: 17pt; }
+b { font-weight: 700; }
+i, em { font-style: italic; }
+
+ul { list-style: none; }
+li { position: relative; padding-left: 17pt; }
+li::before { content: '\2022'; position: absolute; left: 6pt; }
+li li::before { content: ''; top: 0.38em; left: 6.5pt; width: 3pt; height: 3pt; border: 0.5pt solid #000; border-radius: 50%; }
+.cols2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 4pt; margin-top: 2pt; }
+.cols3 { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 3pt; }
+.cols3.tight li { padding-left: 11pt; }
+.cols3.tight li::before { left: 3pt; }
+
+table { width: 100%; border-collapse: collapse; border-style: hidden; table-layout: fixed; }
+th, td { border: var(--line); padding: 1.5pt 2pt; vertical-align: middle; text-align: center; font-weight: 400; }
+th { background: var(--grey); color: #fff; font-weight: 700; }
+.l { text-align: left; }
+tr.z td { background: var(--zebra); }
+td.res { font-weight: 700; }
+
+/* page 1 */
+.p1 { font-size: 9.5pt; }
+.p1 .hd.big { font-size: 12pt; }
+.order td, .order th { height: 15pt; }
+.crip td { padding: 2pt; }
+.crip td.l, .expl td.l { text-align: left; }
+.expl td { padding: 2pt; height: 26pt; }
+.expl tr.dark td { color: #fff; }
+.credit-mark { position: absolute; left: 10.6pt; top: 550.8pt; width: 52.5pt; height: 51.75pt; }
+.credit-text { position: absolute; left: 61pt; top: 588pt; font-size: 12pt; font-weight: 700; }
+
+/* page 2 */
+.dropsites td { height: 21pt; }
+.dropsites td.notes { vertical-align: top; text-align: left; padding: 3pt 2pt 3pt 0; }
+.features td { height: 22pt; }
+.features td.icon { padding: 1pt; }
+.features td.icon img { width: 17pt; height: 17pt; display: block; margin: 0 auto; object-fit: contain; }
+.abil td { vertical-align: middle; padding: 2pt; }
+.abil td.cost { font-weight: 700; }
+.obj { padding: 0; }
+.obj table td { border: 0; height: 16.5pt; padding: 1pt 2pt; }
+.obj table td.split { border-right: var(--line); }
+.obj table td.kp { border-top: var(--line); border-right: var(--line); text-align: left; }
+.obj table tr.top td { font-weight: 700; }
+.obj .assess { border-top: var(--line); padding: 2pt 2pt 3pt; }
+.assets { font-size: 9pt; }
+.assets td { height: 14pt; padding: 1pt 2pt; }
+.assets tr.fh td { font-weight: 700; color: #fff; }
+.assets tr.fh td:first-child { text-align: left; }
+.assets tr.ucm td { background: var(--green); }
+.assets tr.scourge td { background: #793393; }
+.assets tr.phr td { background: #fad338; color: #000; }
+.assets tr.shaltari td { background: #f69055; color: #000; }
+.assets tr.resistance td { background: #61b3e4; color: #000; }
+.assets tr.bioficer td { background: #ef403f; }
+
+/* page 3 */
+.rules { font-size: 9pt; line-height: 0.96; }
+.rules .rule { padding: 1pt 2pt 1.5pt; border-top: var(--line); }
+.rules .rule:nth-of-type(odd) { background: var(--zebra); }
+.rules h4 { font-size: 9pt; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE 1 ================= -->
+<section class="page p1">
+
+  <div class="col" style="left:11pt; top:10pt; width:187pt;">
+    <div class="box" style="background:#000;">
+      <div class="hd black big">5 GAME ROUND SEQUENCE</div>
+      <div class="hd black">6 Planning Phase</div>
+      <div class="body cols3" style="background:#fff;">
+        <div>1) Ability Point Generation</div>
+        <div>2) Generate Pass Token</div>
+        <div>3) Determine Initiative</div>
+      </div>
+      <div class="hd black">7 Activation Phase</div>
+      <div class="body" style="background:var(--green);">
+        <p class="st">1) Activate Groups</p>
+        <p>Players alternate activating Groups in initiative order or using a pass token</p>
+        <p class="seq">Sequence: Group Order&gt;Move&gt;Attack&gt;Launch</p>
+      </div>
+      <div class="hd black">8 Asset Phase</div>
+      <div class="body" style="background:var(--green-2);">
+        <p class="st">1) Battalion Combat</p>
+        <p>In Initiative order, players select a Dropsite with opposing Battalions and resolve its combat:</p>
+        <ul class="cols3 tight" style="margin:3pt 0;">
+          <li>Dropsite to Feature</li>
+          <li>Dropsite Centric</li>
+          <li>Feature Centric</li>
+          <li>Feature Demolition</li>
+          <li>Battalion Consolidation</li>
+        </ul>
+        <p>Remove Battalions equally until a single players Battalions remain or none remain. Battalions equal to the Hull of a Feature with no enemy Battalions may be removed to destroy it.</p>
+        <p class="st" style="margin-top:3pt;">Activate Dropsite</p>
+        <p>The controlling player attacks and/or launches with Scenario Features only they have Battalions on, then each player activates their deployed Features.</p>
+        <p class="st" style="margin-top:3pt;">2) Boarding Actions</p>
+        <p>Battalions on a Ship are removed equally first. Battalion Carriers that did not Launch may use a chosen Asset that deploys Battalions to remove that many enemy Battalions from the ship. Enemy Battalions remaining on Ships inflict Core hits equal to their amount; each passed Backup save also removes a Battalion. Ships destroyed this way do not roll for explosion and are worth double their points.</p>
+        <p class="st" style="margin-top:3pt;">3) Asset Combat</p>
+        <p class="seq">Sequence: Fighters&gt;Bombers&gt;Torpedoes</p>
+        <p>Player activates all Assets of the same type: all form Wings, all move, then all simultaneously attack. Then proceed to the next player</p>
+      </div>
+      <div class="hd black">9 End Phase</div>
+      <div class="body" style="background:var(--green-3);">
+        <p class="st">1) Repair</p>
+        <p>Roll 1D6 for each repairable Crippling Effect, on a 4+ remove that effect (Fire 3+, Orbital Decay 5+)</p>
+        <p class="st" style="margin-top:1pt; display:flex; gap:28pt;"><span>2) Victory Points</span><span>3) Cleanup</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col" style="left:204pt; top:10pt; width:384pt;">
+    <div class="box">
+      <div class="hd">7.1 Order Summary</div>
+      <table class="order">
+        <colgroup><col style="width:22.5%"><col><col><col><col><col></colgroup>
+        <tr><th class="l">Order</th><th>Turn</th><th>Move</th><th>Attack</th><th>Launch</th><th>Spike</th></tr>
+        <tr><td class="l">General Quarters</td><td>Yes</td><td>Half to Full</td><td>Half Round Up</td><td>Yes</td><td>Remove Two</td></tr>
+        <tr class="z"><td class="l">Silent Running</td><td>No</td><td>Half to Full</td><td>None</td><td>Yes*</td><td>Remove All</td></tr>
+        <tr><td class="l">Weapons Free</td><td>No</td><td>Half to Full</td><td>Any</td><td>Yes</td><td>Add Two</td></tr>
+        <tr class="z"><td class="l">Course Change</td><td>Begin &amp; End</td><td>Up to Half</td><td>One</td><td>Yes*</td><td>Add One</td></tr>
+        <tr><td class="l">Max Thrust</td><td>No</td><td>Full to Double</td><td>None</td><td>No</td><td>Add Two</td></tr>
+        <tr class="z"><td class="l">Damage Control</td><td>Yes</td><td>Up to Half</td><td>1 Close Action</td><td>No</td><td>None</td></tr>
+      </table>
+    </div>
+
+    <div class="row">
+      <div style="flex:0 0 204pt; display:flex; flex-direction:column; gap:5pt;">
+        <div class="box">
+          <div class="hd">7.3 Attack Summary</div>
+          <div class="body">
+            <p class="st">1) Determine Potential Targets</p>
+            <ul><li>Verify Formation Benefits</li></ul>
+            <p class="st">2) Assign Weapons to Targets</p>
+            <p class="st">3) Roll to Hit</p>
+            <ul>
+              <li>Target is Descent Ship in Atmosphere, Lock 6+</li>
+              <li>Target is Non-Descent Ship in Atmosphere, reduce Lock by 1</li>
+              <li>Escape Velocity treats Descent Ships as Non-Descent Ships</li>
+              <li>Bombardment&hellip;
+                <ul>
+                  <li>Ignore penalties when Target in Atmosphere</li>
+                  <li>Target is City, improve Lock by 2</li>
+                  <li>Target in Orbit from Orbit, Lock 6+</li>
+                  <li><i>cannot</i> assign to Target in Orbit from Atmosphere</li>
+                </ul>
+              </li>
+              <li>Verify other Special Rules (Air to Air, Close Action&hellip;)</li>
+            </ul>
+            <p class="st">4) Roll to Save (against Hits)</p>
+            <ul>
+              <li>Check Fighter&ndash;Close Protection</li>
+              <li>Check other Special Rules (Aegis, Shield, Scald&hellip;)</li>
+            </ul>
+            <p class="st">5) Inflict Damage</p>
+            <ul><li>Highest Damage hits to lowest Hull Ship first</li></ul>
+            <p class="st">6) Roll Crippling Effects (Capital Ships Only)</p>
+            <ul><li>In Formation, 10+ is Structural Damage</li></ul>
+            <p class="st">7) Roll Explosions (Capital Ships Only)</p>
+            <ul class="cols2">
+              <li>Range 3/6/9</li>
+              <li>Heavy Ships add 1 to result</li>
+              <li>Only affects Ships in same layer</li>
+              <li>Colossal Ships add 2 to the result</li>
+            </ul>
+          </div>
+        </div>
+        <div class="box">
+          <div class="hd">7.4 Launch Summary</div>
+          <div class="body">
+            <p class="st">Fighters/Bombers/Torpedoes/Mines 6”</p>
+            <p class="st">Bulk Landers/Features 6”</p>
+            <ul><li>Target Dropsite in any Layer. If enemy Battalions on it or its Features, need 2 Bulk Landers to place 1 Battalion</li></ul>
+            <p class="st">Dropships 3”</p>
+            <ul><li>Target Dropsite on same Layer as Carrier</li></ul>
+            <p class="st">Boarding Pods 3”</p>
+            <ul><li>Target Station or enemy Ship on same Layer</li></ul>
+            <p class="st">Drop Pods 3”</p>
+            <ul><li>Target Cities</li></ul>
+            <ul><li>Battalions may be split between Dropsite and one Feature</li></ul>
+            <p class="st">Immediate Combat</p>
+            <ul><li>Fighters launched into base contact with enemy Wings, or Bombers/Torpedoes with Stations or enemy Ships, attack immediately</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="hd">7.3.6 Crippling Damage</div>
+        <table class="crip">
+          <colgroup><col style="width:23pt"><col><col style="width:46pt"></colgroup>
+          <tr><th class="l">Result</th><th class="l">Roll 2D6 for Effect</th><th>Repairable?</th></tr>
+          <tr style="background:#fbf154"><td class="res">2&ndash;3</td><td class="l"><b>Energy Surge</b>: Gain a Spike.</td><td></td></tr>
+          <tr style="background:#f7ed47"><td class="res">4&ndash;5</td><td class="l"><b>Structural Damage</b>: Suffer another point of damage.</td><td></td></tr>
+          <tr style="background:#e3e335"><td class="res">6</td><td class="l"><b>Fire</b>: Gain a Fire Token. At the start of the End Phase, before the Repair step, this ship suffers a point of damage for each Fire Token it has.</td><td>3+</td></tr>
+          <tr style="background:#c7ca33"><td class="res">7</td><td class="l"><b>Defence Systems Offline</b>: Gain a Defence Systems Offline Token. A Ship with a Defence Systems Offline token reduces its Energy, Kinetic, Backup, and Shield saves by 1, and may be targeted by enemy Ships as if their weapons had the Focused special rule, ignoring Formation Benefits if they do.</td><td>4+</td></tr>
+          <tr style="background:#b7bb2e"><td class="res">8</td><td class="l"><b>Scanners Offline</b>: Gain a Scanners Offline token, reducing this Ship’s Scan to 1”.</td><td>4+</td></tr>
+          <tr style="background:#a3a426"><td class="res">9</td><td class="l"><b>Weapons Offline</b>: Gain a Weapons Offline token, preventing this Ship from using Weapons or launching Assets.</td><td>4+</td></tr>
+          <tr style="background:#8f8f1f"><td class="res">10</td><td class="l"><b>Navigation Offline</b>: Gain a Navigation Offline token, reducing this Ship’s total movement to 2” (regardless of Thrust) and preventing it from turning or changing Orbital Layer.</td><td>4+</td></tr>
+          <tr style="background:#7e7e1a"><td class="res">11+</td><td class="l"><b>Orbital Decay</b>: The Ship gains an Orbital Decay token and falls into Atmosphere. Orbital Decay tokens prevent this Ship from moving from Atmosphere into Orbit.</td><td>5+</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col" style="left:593pt; top:10pt; width:191pt;">
+    <div class="box">
+      <div class="hd">7.3.7 Explosion</div>
+      <table class="expl">
+        <colgroup><col style="width:13%"><col></colgroup>
+        <tr><th class="l">Result</th><th class="l">Roll 1D6 for result</th></tr>
+        <tr style="background:#f8c4c4"><td class="res">1</td><td class="l"><b>Burn Up</b>: The exploding Ship is removed from play with no further effects.</td></tr>
+        <tr style="background:#f69e9f"><td class="res">2</td><td class="l"><b>Reactor Rupture</b>: All Groups and Space Stations within double the explosion range gain a Spike.</td></tr>
+        <tr style="background:#f16261"><td class="res">3</td><td class="l"><b>Shredded</b>: All Groups and Space Stations in explosion range suffer 3 Kinetic hits. Assets are removed on a 5+.</td></tr>
+        <tr style="background:#ef403f"><td class="res">4</td><td class="l"><b>Fuel Detonation</b>: All Groups and Space Stations in explosion range suffer 3 Energy hits. Assets are removed on a 4+.</td></tr>
+        <tr class="dark" style="background:#c6181d"><td class="res">5</td><td class="l"><b>Reactor Overload</b>: All Groups and Space Stations in explosion range suffer 3 Core hits. Assets are removed on a 3+.</td></tr>
+        <tr class="dark" style="background:#730302"><td class="res">6+</td><td class="l"><b>Foldspace Catastrophe</b>: All Groups and Space Stations in explosion range suffer 4 damage and gain a Spike. Assets are removed on a 2+.</td></tr>
+      </table>
+    </div>
+
+    <div class="box">
+      <div class="hd lt">8.3 Asset Combat Summary</div>
+      <div class="body">
+        <p class="st">1) Activate Fighters</p>
+        <ul>
+          <li>Form Wings &amp; Move</li>
+          <li>Attack Wings by removing Assets equally</li>
+        </ul>
+        <p class="st">2) Activate Bombers</p>
+        <ul>
+          <li>Form Wings &amp; Move</li>
+          <li>Attack Ships or Stations
+            <ul><li>Verify Saturation Fire (Light or Crippled targets)</li></ul>
+          </li>
+          <li>Remove Attackers</li>
+        </ul>
+        <p class="st">3) Activate Torpedoes</p>
+        <ul>
+          <li>Move</li>
+          <li>Attack Ships or Stations</li>
+        </ul>
+        <p class="st">!) Mines</p>
+        <ul>
+          <li>May Attack enemy Ships in Orbit, or Torpedoes, at end of Move if the Target moves within Mine Thrust</li>
+        </ul>
+        <p class="st">Shooting Down Torpedoes &amp; Clearing Mines</p>
+        <ul>
+          <li>Orbit or Escape Velocity Weapons, Sig 0”, no saves, hit on 6+, each hit reduces Attack by 1</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="hd black big">10 SCENERY</div>
+      <div class="body">
+        <p class="st">10.1 Planetary Ring</p>
+        <ul>
+          <li>Ignore two of Target’s Spikes if it is over 3” beyond the Ring, all if over 6”</li>
+          <li>Assets removed on 3+</li>
+        </ul>
+        <p class="st">10.2 Micrometeor Cloud</p>
+        <ul>
+          <li>Ignore Target’s Spikes</li>
+          <li>Assets removed on 3+</li>
+          <li>Ship suffers 2 Kinetic hits</li>
+        </ul>
+        <p class="st">10.3 Debris Field</p>
+        <ul>
+          <li>Ignore Target’s Signature and Spikes</li>
+          <li>Assets removed on 5+</li>
+          <li>Ship suffers 2 Core hits</li>
+        </ul>
+        <p class="st">10.4 Large Objects</p>
+        <ul>
+          <li>Blocks Line of Sight</li>
+          <li>Destroyed when moved on to</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <img class="credit-mark" src="data:image/png;base64,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" alt="">
+  <div class="credit-text">26.6.10 Yep</div>
+</section>
+
+<!-- ================= PAGE 2 ================= -->
+<section class="page">
+
+  <div class="col" style="left:10pt; top:10pt; width:386pt;">
+    <div class="box">
+      <div class="hd black big">11 DROPSITES</div>
+      <table class="dropsites">
+        <colgroup><col style="width:86pt"><col style="width:22pt"><col style="width:22pt"><col style="width:24pt"><col style="width:22pt"><col style="width:22pt"><col></colgroup>
+        <tr><th class="l">Name</th><th>Scan</th><th>Sig</th><th>Hull</th><th>ES</th><th>KS</th><th class="l">Other Notes</th></tr>
+        <tr><td class="l">Small Space Station</td><td>6</td><td>4</td><td>10</td><td>4+</td><td>4+</td>
+          <td class="notes" rowspan="6">
+            <ul>
+              <li>Dropsite is <b>Controlled</b> if only you have Battalions and/or deployed Features on it</li>
+              <li>Dropsite is <b>Contested</b> if you and an opponent have Battalions and/or deployed Features on it</li>
+              <li>Dropsite is <b>Ruined</b> if less than half Hull remain</li>
+              <li>Dropsite is <b>Levelled</b> if zero Hull remain</li>
+              <li>Dropsite uses best available Save from its Features</li>
+              <li>For each Hull lost, each player removes a Battalion, starting from Features</li>
+              <li>Weapons may be assigned to a Feature instead (Bombardment only against Cities). Features use their own Saves and Hull, and lose their Battalions when destroyed</li>
+            </ul>
+          </td></tr>
+        <tr><td class="l">Medium Space Station</td><td>6</td><td>6</td><td>15</td><td>4+</td><td>4+</td></tr>
+        <tr><td class="l">Large Space Station</td><td>6</td><td>8</td><td>25</td><td>4+</td><td>4+</td></tr>
+        <tr><td class="l">Small City</td><td>6</td><td>0</td><td>10</td><td>5+</td><td>5+</td></tr>
+        <tr><td class="l">Medium City</td><td>6</td><td>0</td><td>15</td><td>5+</td><td>5+</td></tr>
+        <tr><td class="l">Large City</td><td>6</td><td>0</td><td>25</td><td>5+</td><td>5+</td></tr>
+      </table>
+      <div class="hd black">11.3 Features</div>
+      <table class="features">
+        <colgroup>
+          <col style="width:86pt"><col style="width:24pt"><col style="width:18pt"><col style="width:18pt"><col style="width:20pt">
+          <col style="width:48pt"><col style="width:22pt"><col style="width:27pt"><col style="width:21pt"><col style="width:20pt"><col style="width:21pt"><col>
+        </colgroup>
+        <tr><th class="l">Type</th><th></th><th>ES</th><th>KS</th><th>Hull</th><th>Weapon</th><th>Scan</th><th>Attack</th><th>Lock</th><th>Dmg</th><th>Type</th><th>Special</th></tr>
+        <tr><td class="l">Military Outpost</td><td class="icon"><img src="data:image/png;base64,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" alt=""></td><td>3+</td><td>3+</td><td>6</td><td>Missile Halo</td><td>6</td><td>1</td><td>2+</td><td>2</td><td>K</td><td class="l">Close Action, Escape Velocity</td></tr>
+        <tr><td class="l">Orbital Defence Gun</td><td class="icon"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFcAAABWCAIAAAA19p2eAAAACXBIWXMAAA7EAAAOxAGVKw4bAAACGUlEQVR4nO3cTUsbQQDG8dCUolYxGLGUCGrqB9BDQ6rgtdc2IIUaaEFBW/Elq7jpKia+taz1kFsv/QxqFrUFQRLTBKHX1g+hXhVcjekOS24aaxLQif+Hh9xmmPnt7N4yjhzJ5Ry3vYA7ERREUBBBQQQFkWsUzs7PT02zAnpxkS1SwRpZeLBEKVIhmxXDjI2tsdBEWJtWP2ky1lr55JS69EU/ODwqYHG5gk3w5+++48FDR0XE5++68VkwTdP6XV2L3/biy5ZHVXX2o725wrphT+F8+ri9v6v17fO2oE+a9vm87/yeQIe9hZpaV7EK+bPg7nmm//4WTi9PZ1ZkqZZZie7FBhOzJZ+FvEKDv0VN6wOJ2Q/JqCwdSkRGd+cDhlI+hRdtWuarNfXI7rwsHU7OKaml3h9TKKCAAgoooIACCiiggAIKKKCAAgoooIACCiiggAIKKKCAAgoooIACCiiggMIdKAoooIACCiiggAIKKKCAAgoooIACCiiggAIKsii0htPLQ4mINbUs/ZiMhlKLvZuTZVNwd3sje7Hx1MLEr8+yVEktqmk9uK2VTcHV6Xm/M/NqdSxgKLL0dTz05qf68nu/vYXq0v9zXwGpqqkv9f6FCkhzi/cqgisV7PtLjk9ORsdDTme1y/2kztUoaesbmqyPgrGxlcvftPK/Cvct19xUVOBdkiuFN8JZEEFBBAURFERQEEFBBAWRf4tOZYrtb2c7AAAAAElFTkSuQmCC" alt=""></td><td>5+</td><td>5+</td><td>5</td><td>Orbital Gun</td><td>6</td><td>3</td><td>3+</td><td>1</td><td>E</td><td class="l">Burnthrough-1, Escape Velocity</td></tr>
+        <tr><td class="l">Comms Station</td><td class="icon"><img src="data:image/png;base64,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" alt=""></td><td>4+</td><td>4+</td><td>5</td><td class="l" colspan="7"><b>Comms Uplink</b>: If you control this Dropsite, increase the amount of Ability Points you generate by 1. You can only be affected by Comms Uplink once each round.</td></tr>
+        <tr><td class="l">Power Plant</td><td class="icon"><img src="data:image/png;base64,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" alt=""></td><td>5+</td><td>5+</td><td>5</td><td class="l" colspan="7"><b>Volatile</b>: When this Feature is destroyed, all Groups within 3” gain a Spike and this Feature’s Dropsite takes an additional 2D3 damage.</td></tr>
+        <tr><td class="l">Hangar</td><td class="icon"><img src="data:image/png;base64,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" alt=""></td><td>4+</td><td>4+</td><td></td><td class="l" colspan="7">Load: Fighters &amp; Bombers (the Controlling player’s)&emsp;Launch: 2</td></tr>
+      </table>
+    </div>
+
+    <div class="row">
+      <div class="box" style="flex:0 0 188pt;">
+        <div class="hd black">4.2.1.1 Player Core Abilities</div>
+        <table class="abil">
+          <colgroup><col style="width:22pt"><col></colgroup>
+          <tr><th class="l">Cost</th><th class="l">Effect</th></tr>
+          <tr><td class="cost">1</td><td class="l"><b>AP Dice Bonus</b>: Once per Group, Asset, or Dropsite activation, or during the Repair step of the End Phase, after you roll any dice, you can add 1 to the result of one of those dice. This Ability cannot be used on D3s or dice results of a 1, and dice modified by this ability cannot score criticals.</td></tr>
+          <tr><td class="cost">1</td><td class="l"><b>Brace for Impact</b>: After you roll for Crippling Effects, re-roll the Crippling Effect roll.</td></tr>
+          <tr><td class="cost">2</td><td class="l"><b>Contain Reactor</b>: When a player would roll for Explosion, instead of rolling, make the result of an Explosion roll (for you or your opponent) a 2.</td></tr>
+          <tr><td class="cost">2</td><td class="l"><b>Time to Target</b>: After moving a Wing of your Fighters or Bombers, you may move that Wing (or the Wing it combined into) a second time with a Thrust of 6” in any direction. The Wing cannot divide into smaller Wings or form/be formed into larger Wings due to this additional movement.</td></tr>
+        </table>
+      </div>
+
+      <div class="box obj">
+        <div class="hd black big">OBJECTIVES</div>
+        <table>
+          <colgroup><col style="width:17%"><col style="width:16%"><col style="width:17%"><col style="width:18%"><col style="width:16%"><col></colgroup>
+          <tr class="top"><td colspan="3" class="split">Normal / Demolish</td><td colspan="3">Focal</td></tr>
+          <tr><td></td><td>Control/</td><td class="split">Contest/</td><td colspan="3"><b>3VP / 1VP if <u>&gt;</u> half value</b></td></tr>
+          <tr><td></td><td>Levelled</td><td class="split">Ruined</td><td></td><td>High</td><td>Low</td></tr>
+          <tr><td>Small</td><td><b>2VP</b></td><td class="split"><b>0VP</b></td><td>Light</td><td>1</td><td>0</td></tr>
+          <tr><td>Medium</td><td><b>3VP</b></td><td class="split"><b>1VP</b></td><td>Medium</td><td>4</td><td>1</td></tr>
+          <tr><td>Large</td><td><b>4VP</b></td><td class="split"><b>2VP</b></td><td>Heavy</td><td>7</td><td>3</td></tr>
+          <tr><td colspan="3" class="kp"><b>Kill Points</b> 2VP/500PTS</td><td>Colossal</td><td>11</td><td>5</td></tr>
+        </table>
+        <div class="assess">
+          <p class="st">Assess</p>
+          <p>While on General Quarters, any Capital Ship within 6” of a Scenario Dropsite may choose to Assess that Dropsite before or after its movement. If it does, it cannot attack and cannot launch assets. Each Dropsite can only be Assessed by each player once and each Dropsite Assessed awards the Assessing player <b>1VP</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col" style="left:401pt; top:10pt; width:385pt;">
+    <div class="box">
+      <div class="hd black">Select Asset Summary</div>
+      <table class="assets">
+        <colgroup><col style="width:82pt"><col style="width:30pt"><col style="width:30pt"><col style="width:28pt"><col style="width:28pt"><col style="width:28pt"><col style="width:30pt"><col></colgroup>
+        <tr class="fh ucm"><td>UCM Load</td><td>Thrust</td><td>Attack</td><td>Lock</td><td>Dmg</td><td>Type</td><td>Reroll</td><td class="l">Special</td></tr>
+        <tr><td class="l">Light Torpedo</td><td>6</td><td>2</td><td>2+</td><td>2</td><td>K</td><td></td><td class="l">Penetrator</td></tr>
+        <tr class="z"><td class="l">Medium Torpedo</td><td>6</td><td>4</td><td>2+</td><td>2</td><td>K</td><td></td><td class="l">Penetrator</td></tr>
+        <tr><td class="l">Heavy Torpedo</td><td>4</td><td>8</td><td>2+</td><td>2</td><td>K</td><td></td><td class="l">Penetrator</td></tr>
+        <tr class="z"><td class="l">Bombers</td><td>10</td><td>2</td><td>3+</td><td>1</td><td>K</td><td></td><td class="l"></td></tr>
+        <tr><td class="l">Heavy Bombers</td><td>8</td><td>2</td><td>3+</td><td>1</td><td>K</td><td></td><td class="l">Calibre-H/C, Penetrator</td></tr>
+        <tr class="z"><td class="l">Mines</td><td>4</td><td>2</td><td>2+</td><td>2</td><td>K</td><td></td><td class="l"></td></tr>
+        <tr><td class="l">Fighters</td><td>13</td><td></td><td></td><td></td><td></td><td>1</td><td class="l"></td></tr>
+
+        <tr class="fh scourge"><td>Scourge Load</td><td>Thrust</td><td>Attack</td><td>Lock</td><td>Dmg</td><td>Type</td><td>Reroll</td><td class="l">Special</td></tr>
+        <tr><td class="l">Torpedo</td><td>8</td><td>6</td><td>4+</td><td>1</td><td>K</td><td></td><td class="l">Corruptor-2, Crippling-Fire</td></tr>
+        <tr class="z"><td class="l">Bombers</td><td>12</td><td>2</td><td>3+</td><td>1</td><td>K</td><td></td><td class="l">Crippling-Fire. Attacks containing 7 or more Bombers place a second Fire token on the target</td></tr>
+        <tr><td class="l">Mines</td><td>6</td><td>3</td><td>4+</td><td>1</td><td>K</td><td></td><td class="l">Corruptor-1</td></tr>
+        <tr class="z"><td class="l">Fighters</td><td>14</td><td></td><td></td><td></td><td></td><td>2</td><td class="l"></td></tr>
+
+        <tr class="fh phr"><td>PHR Load</td><td>Thrust</td><td>Attack</td><td>Lock</td><td>Dmg</td><td>Type</td><td>Reroll</td><td class="l">Special</td></tr>
+        <tr><td class="l">Torpedo</td><td>6</td><td>4</td><td>2+</td><td>2</td><td>K</td><td></td><td class="l">Penetrator</td></tr>
+        <tr class="z"><td class="l">Bombers</td><td>9</td><td>2</td><td>2+</td><td>1</td><td>K</td><td></td><td class="l"></td></tr>
+        <tr><td class="l">Mines</td><td>4</td><td>2</td><td>2+</td><td>2</td><td>K</td><td></td><td class="l"></td></tr>
+        <tr class="z"><td class="l">Fighters</td><td>12</td><td></td><td></td><td></td><td></td><td>2</td><td class="l"></td></tr>
+
+        <tr class="fh shaltari"><td>Shaltari Load</td><td>Thrust</td><td>Attack</td><td>Lock</td><td>Dmg</td><td>Type</td><td>Reroll</td><td class="l">Special</td></tr>
+        <tr><td class="l">Torpedo</td><td>6</td><td>9</td><td>4+</td><td>1</td><td>C</td><td></td><td class="l">Flash-2</td></tr>
+        <tr class="z"><td class="l">Bombers</td><td>13</td><td>2</td><td>3+</td><td>1</td><td>E</td><td></td><td class="l"></td></tr>
+        <tr><td class="l">Fire Ships</td><td>7</td><td>4</td><td>5+</td><td>1</td><td>K</td><td></td><td class="l"></td></tr>
+        <tr class="z"><td class="l">Mines</td><td>6</td><td>4</td><td>3+</td><td>1</td><td>E</td><td></td><td class="l"></td></tr>
+        <tr><td class="l">Impel Mines</td><td>6</td><td>3</td><td>4+</td><td>1</td><td>E</td><td></td><td class="l">Arrest-4, Impel-1</td></tr>
+        <tr class="z"><td class="l">Fighters</td><td>16</td><td></td><td></td><td></td><td></td><td>1</td><td class="l"></td></tr>
+
+        <tr class="fh resistance"><td>Resistance Load</td><td>Thrust</td><td>Attack</td><td>Lock</td><td>Dmg</td><td>Type</td><td>Reroll</td><td class="l">Special</td></tr>
+        <tr><td class="l">Torpedo</td><td>6</td><td>6</td><td>2+</td><td>1</td><td>K</td><td></td><td class="l">Penetrator</td></tr>
+        <tr class="z"><td class="l">Bombardment Torpedo</td><td>6</td><td>4</td><td>5+</td><td>2</td><td>K</td><td></td><td class="l">Bombardment</td></tr>
+        <tr><td class="l">Bombers</td><td>10</td><td>3</td><td>4+</td><td>1</td><td>K</td><td></td><td class="l"></td></tr>
+        <tr class="z"><td class="l">Fire Ships</td><td>3</td><td>3</td><td>2+</td><td>1</td><td>E</td><td></td><td class="l">When this Load is shared with Bulk Landers, 2 Launch are needed to place 1 Fire Ship</td></tr>
+        <tr><td class="l">Mines</td><td>3</td><td>5</td><td>4+</td><td>1</td><td>K</td><td></td><td class="l"></td></tr>
+        <tr class="z"><td class="l">Fighters</td><td>16</td><td></td><td></td><td></td><td></td><td>3</td><td class="l"></td></tr>
+
+        <tr class="fh bioficer"><td>Bioficer Load</td><td>Thrust</td><td>Attack</td><td>Lock</td><td>Dmg</td><td>Type</td><td>Reroll</td><td class="l">Special</td></tr>
+        <tr><td class="l">Torpedo</td><td>12</td><td>3</td><td>2+</td><td>1</td><td>K</td><td></td><td class="l">Corruptor-2, removed during the Cleanup step of the End Phase</td></tr>
+        <tr class="z"><td class="l">Bombers</td><td>13</td><td>3</td><td>4+</td><td>1</td><td>K</td><td></td><td class="l"></td></tr>
+        <tr><td class="l">Mines</td><td>5</td><td>4</td><td>3+</td><td>1</td><td>K</td><td></td><td class="l"></td></tr>
+        <tr class="z"><td class="l">Fighters</td><td>16</td><td></td><td></td><td></td><td></td><td>1</td><td class="l"></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PAGE 3 ================= -->
+<section class="page">
+
+  <div class="col" style="left:11pt; top:12pt; width:382pt;">
+    <div class="box rules">
+      <div class="hd black" style="font-size:10pt;">14.1 Ship Special Rules Summary</div>
+      <div class="rule">
+        <h4>14.1.1 Aegis-X</h4>
+        <p>All Ships with this rule in a Group in coherency combine their X values into a single value Y.</p>
+        <p>Friendly Groups in coherency within 6” of a Ship with this rule and the same Orbital Layer (including its own Group) gain the benefits of Aegis.</p>
+        <p>When rolling saves against Close Action and Bomber (of any type) attacks, those Groups gain Y additional save dice they may add to their Energy or Kinetic saves. Before rolling to save, the defending player assigns these dice against specific weapons, divided up as they choose (including any modified hits) between any Energy or Kinetic saves.</p>
+        <p>An Aegis Group can only grant the benefits of Aegis once each time a friendly group is attacked.</p>
+        <p>A friendly Group can only benefit from Aegis from one Group each time it is attacked.</p>
+        <p>Aegis has no effect on Backup saves or saves that replace Energy and Kinetic saves (such as Shield saves).</p>
+        <p>In addition, Ships benefiting from Aegis increase the number of bombers required to trigger Saturation Fire by Y.</p>
+      </div>
+      <div class="rule">
+        <h4>14.1.5 Detector</h4>
+        <p>If this Ship is on an order that allows it to attack, this Ship may forgo one allowed Weapon use during its activation. If it does, at the end of its activation place two Spikes on an enemy Group in line of sight. A Group that uses Detector gains a Spike (regardless of the amount of Ships using this rule).</p>
+      </div>
+      <div class="rule">
+        <h4>14.1.6 Escort</h4>
+        <p>At the start of the game, before deployment, assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers.</p>
+      </div>
+      <div class="rule">
+        <h4>14.1.7 Gateship-X</h4>
+        <p>Shaltari Motherships must launch their Dropships via a Ship/Dropsite with this rule (sometimes referred to as Gateships). Each Gateship can have up to X Dropships deployed from it each round. Note: though the launch is measured from the Gateship, it is the Mothership that is launching.</p>
+        <p>When this Ship goes on the Max Thrust or Damage Control orders, it reduces its Gateship-X value to 0 until the start of its next activation.</p>
+      </div>
+      <div class="rule">
+        <h4>14.1.10 Mothership</h4>
+        <p>Shaltari Motherships can only deploy their Dropships via friendly Ships or controlled Dropsites with the Gateship-X special rule (sometimes referred to as Gateships).</p>
+        <p>These Gateships must be within 18” of the Mothership or part of a chain of Gateships with each Gateship in the chain being within 18” of another. Note: though the launch is measured from the Gateship, it is the Mothership that is launching.</p>
+      </div>
+      <div class="rule">
+        <h4>14.1.11 Payload S/L-X</h4>
+        <p>During the Porter Ship’s activation, if it is on an Order that allows it to Launch, you may detach one or more of its Payload Ships and place them within 3” of it. In the round they are detached, these Payloads activate together immediately as part of the Porter Ship’s activation after it has completed its Order. In subsequent rounds, all your Payload Ships count as being part of a single Group. Crippling Effects, Spikes, and other rules that affect an entire Group only affect the targeted Payload Ship.</p>
+        <p>Payload Ships always follow General Quarters Orders, even if its Porter is on different Orders. Payload Ships ignore Coherency rules (and do not gain Formation Benefits), have no Lead Ship, are targeted by attacks individually, and these attacks can only damage the targeted Payload Ship.</p>
+        <p>If a Payload Ship is attached to a Porter Ship when that Ship is destroyed, the Payload Ship is destroyed.</p>
+      </div>
+      <div class="rule">
+        <h4>14.1.12 Porter S/L-X</h4>
+        <p>This Ship may be assigned Payload Ships with the same letter up to a total capacity of X. During a Porter’s activation, it may attach any detached Payload Ships within 3” if it has available capacity. Payload Ships reattached to a Porter Ship are removed from the table to be deployed in a later round.</p>
+        <p>Any tokens, Spikes, or effects affecting the reattached Payload Ship are removed from that Ship.</p>
+      </div>
+      <div class="rule">
+        <h4>14.1.16 Shield-X</h4>
+        <p>This Group/Dropsite has an unmodifiable Shield save of X+.</p>
+        <p>At the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.</p>
+        <p>While a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.</p>
+        <p>A Group on Silent Running loses any shields tokens it has and cannot have shields tokens.</p>
+        <p>Groups that Directly Deploy may start the game with a shields token.</p>
+        <p>Core Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.</p>
+      </div>
+      <div class="rule">
+        <h4>14.1.20 Impetuous</h4>
+        <p>At the start of each round, friendly Groups with this rule improve the Lock of their Weapon Systems by 1 until you activate a friendly Group without this rule.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col" style="left:399pt; top:12pt; width:383pt;">
+    <div class="box rules">
+      <div class="hd black" style="font-size:10pt;">14.2 Weapon Special Rules Summary</div>
+      <div class="rule">
+        <h4>14.2.6 Bombardment</h4>
+        <p>This Weapon ignores the penalties for attacking Cities and Ships in Atmosphere. Improve the Lock of this Weapon by 2 when attacking Cities. When attacking a Ship in Orbit with this weapon, it always hits on a 6+ and can never cause a critical. This weapon cannot be used to attack Ships in Orbit while the attacking Ship is in Atmosphere.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.7 Burnthrough-X</h4>
+        <p>Each of this Weapon’s critical hits reduces the target’s Energy/Kinetic Save by X for hits caused by this Weapon for this attack. Saves made for other Weapons are unaffected. Roll attacks separately for each Burnthrough Weapon.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.8 Calibre-X</h4>
+        <p>Improve the Lock value of this Weapon by 1 when attacking Groups of any of the listed X Tonnage values.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.9 Close Action</h4>
+        <p>This weapon does not benefit from Formation Benefits and can only be assigned to targets within Scan range and on the same Orbital Layer as the attacker.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.10 Corruptor-X</h4>
+        <p>When this Weapon successfully inflicts damage, place X Battalions on the target.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.12 Critical-X</h4>
+        <p>Each of this Weapon’s criticals increases the damage of that hit by X.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.13 Escape Velocity</h4>
+        <p>This weapon ignores the penalty for attacking Ships in Orbit and treats all Ships in Atmosphere as non-Descent Ships, so only reduces its Lock by 1 when attacking Ships in Atmosphere. Close Action weapons with this special rule may be used against targets in Orbit while the attacking Ship is in Atmosphere.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.14 Flash-X</h4>
+        <p>When this Weapon inflicts damage, the damaged Group (or Ship if it ignores the usual coherency rules) gains X Spikes.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.15 Focused</h4>
+        <p>Instead of the normal potential targets for Weapons, this Weapon’s potential targets are either:</p>
+        <ul>
+          <li>A single enemy Ship.</li>
+          <li>A Dropsite containing no friendly Battalions.</li>
+        </ul>
+        <p>Damage caused by this Weapon is allocated to only the target.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.16 Fusillade-X</h4>
+        <p>This Weapon increases its Attack value by X while its Ship is on Weapons Free.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.20 Linked-X</h4>
+        <p>Weapons with the same Linked-X value on the same Ship count as 1 Weapon for Orders purposes. When you attack with a Linked-X Weapon, you attack with all other Weapons on that Ship with the same Linked-X value.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.23 Overcharge</h4>
+        <p>Before assigning Weapons to targets, you may double the Damage value of this Weapon. If you do, this becomes a High-Power Weapon for this activation and each attack roll of 6 causes that attacking Ship to lose this Weapon’s unmodified Damage value in hull points. Only one Weapon per Ship may benefit from this rule per activation.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.26 Scald-X</h4>
+        <p>If this weapon attacks a target within Scan range of the attacking Ship, reduce the target’s Energy / Kinetic save against this weapon’s hits by X (other attacks and weapons are unaffected).</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.27 Status</h4>
+        <p>When you hit with this Weapon, pick one of the following tokens; Defence Systems Offline, Scanners Offline, or Navigation Offline.</p>
+        <p>At the end of the Inflict Damage step, for each unsaved hit from this weapon, choose one of the defending Ships to gain the selected token, regardless of the amount of damage caused by those hits.</p>
+        <p>This token is automatically removed at the end of the affected ship’s next activation or the start of the next End Phase, before making repairs (whichever is first).</p>
+        <p>Tokens gained from this rule are counted separately from normal Crippling Effects. A Ship may only have one of each type of these tokens gained due to this rule.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.29 Volley-X</h4>
+        <p>This Weapon counts as 1 Weapon System for Orders purposes. When you assign this Weapon to a target, you assign it to targets up to X times (either the same or different). Once assigned, treat each allocation as a separate weapon for the subsequent steps in the attack sequence.</p>
+        <p>Broadside Weapons using Volley must alternate arcs when determining and assigning targets (so cannot target the same Group on the same side twice in a row).</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.30 Reave-X</h4>
+        <p>Each of this Weapon’s criticals reduces the Energy/Kinetic save used against that hit by X.</p>
+      </div>
+      <div class="rule">
+        <h4>14.2.31 Anti Wing</h4>
+        <p>This weapon may target enemy Wings as if they were Ships (with a Sig of 0”) but reduces its Lock value by 1 for that attack. If it does, for each hit, remove 1 Fighter or 1 Bomber from that Wing or any other enemy Wing within 3” of the target.</p>
+        <p>When this weapon is assigned to a Torpedo, it reduces its Lock value by 1 instead of always hitting on a 6+.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
