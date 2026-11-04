@@ -5,6 +5,26 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-11-04: Every Feature Carrier checked on paper
+
+All 30 carriers (the Genitor Tower and the eight two-slot ships included) were
+printed with features in both apps: desktop Cards, Big cards and Table, mobile,
+and the Unit Reference. 48 of 48 feature picks print. Fixes from that pass:
+
+- **Mobile dropped ships in mixed groups.** Its print sheet drew one card per
+  group from `g.ships[0]`, so a group built on desktop with different features
+  per ship lost every feature but the first ship's (a Salamis pair lost Scanner
+  Dome and ICBM Silo). The same went for per-ship loadouts and systems. A mixed
+  group now prints a card per setup, keyed as desktop's buckets are. Mobile's
+  own picker still sets a whole group.
+- **Feature block last.** Cards printed the feature and its rules between the
+  launch line and the ship's rules, so the two sets of rules ran together. The
+  feature now closes the card in Cards and Big cards.
+- **Aegis once per card.** A feature special whose rule the ship already has
+  (New Dubai's Aegis-6 with an Aegis Platform's Aegis-4) is not printed again.
+- **Unit Reference** no longer repeats the feature name ("Aegis Platform
+  (+5 pts): ES 3+ KS 3+ Hull 4, Aegis-4").
+
 ### 2026-11-04: Every Deployable Feature checked on paper
 
 All 18 features (UCM 3, PHR 3, Shaltari 3, Scourge 3, Resistance 3, Bioficer 2)

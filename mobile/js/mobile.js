@@ -5059,6 +5059,7 @@
     { date: '2026-11-04', title: 'Deployable Features print in full', items: [
       'A feature’s torpedoes print in their own launch asset table under the feature, with full stats.',
       'Features with their own guns, such as the Ghost Orb Tower, Skybane Halo, Electrosurge Torus and Heavy Calibre Orbital Gun, print those guns’ stats.',
+      'A group whose ships carry different features, loadouts or systems prints a card for each setup, so no ship’s picks are left off.',
       'Thanks to Padomay for asking.'
     ] },
     { date: '2026-11-04', title: 'Dropfleet Commander 2.4', items: [
@@ -7184,6 +7185,29 @@
     const groupsHtml = sortGroupsByWeight(f.battleGroups).map(g => {
       const inst = g.ships[0];
       if (!inst) return '';
+      // Mobile picks for a whole group, but a fleet built on desktop can give each
+      // ship its own features, loadouts or systems. Those print a card per setup,
+      // as desktop does, so no ship's picks are lost.
+      const setupKey = s => `${s.shipKey}:${s.groupCategory}:${JSON.stringify(s.loadouts || {})}:${JSON.stringify(s.systems || [])}:${s.feature || ''}:${s.feature2 || ''}`;
+      const buckets = [];
+      g.ships.forEach(s => {
+        const k = setupKey(s);
+        const b = buckets.find(x => x.k === k);
+        if (b) b.ships.push(s); else buckets.push({ k, ships: [s] });
+      });
+      if (buckets.length > 1) {
+        return buckets.map(b => {
+          const bi = b.ships[0];
+          const bdb = findShip(f.faction, bi.groupCategory, bi.shipKey);
+          if (!bdb) return '';
+          const n = b.ships.length;
+          const pts = b.ships.reduce((t, s) => t + num(s.points), 0);
+          const label = (g.name && g.name !== bdb.name)
+            ? `${esc(g.name)} <span class="pr-group-class">(${n > 1 ? n + '× ' : ''}${esc(bdb.name)})</span>`
+            : `${n > 1 ? n + '× ' : ''}${esc(bdb.name)}`;
+          return shipCard(bdb, bi, n, { label, ptsHtml: `${esc(pts)} pts` });
+        }).join('');
+      }
       const db = findShip(f.faction, inst.groupCategory, inst.shipKey);
       if (!db) return '';
       const qty = g.ships.length;

@@ -7001,10 +7001,12 @@ let activeGroupId = null;
       const shipRuleEntriesAll = [...(db.specialRuleDetails || []).filter(r => r.description).map(r => [r.name, r.description, r.page || '']), ...gainedRuleEntries];
       // Feature rules sit under the feature's own line, unless the ship or its
       // guns already spell the rule out, or it goes to the end glossary.
-      const _shipRuleNameSet = new Set(shipRuleEntriesAll.map(e => e[0]));
+      // A ship with Aegis-6 carrying an Aegis Platform (Aegis-4) explains Aegis once.
+      const _shipRuleBaseSet = new Set([...shipRuleEntriesAll.map(e => e[0]), ...Object.keys(weaponSpecials)].map(_ruleBase));
+      const _featNames = new Set(chosenFeats);
       const featRulesHere = [];
       featureRuleEntries.forEach(e => {
-        if (_shipRuleNameSet.has(e[0]) || weaponSpecials[e[0]]) return;
+        if (!_featNames.has(e[0]) && _shipRuleBaseSet.has(_ruleBase(e[0]))) return;
         if (isHoistedShipRule(e[0])) hoistedShipDefs[e[0]] = { description: e[1], page: e[2] };
         else featRulesHere.push(e);
       });
@@ -7047,7 +7049,8 @@ let activeGroupId = null;
       const hullHtml = dpHullTrack(db.hull, count, db.tonnage);
       const statHtml = `<div class="dp-statrow">${dpStatLine(eff.stats, eff.mods, false)}${hullHtml ? `<div class="dp-statrow-hull">${hullHtml}</div>` : ''}</div>`;
       const weaponsHtml = dpWeaponTable(weaponRows);
-      const abilHtml = `${loadsHtml}${sysHtml}${featHtml}${refitHtml}${rulesHtml}`;
+      // The feature and its rules close the card, so they read as one block.
+      const abilHtml = `${loadsHtml}${sysHtml}${refitHtml}${rulesHtml}${featHtml}`;
       const nameHtml = opts.nameHtml || `${esc(qtyPrefix)}${esc(name)}`;
       const ptsHtml = opts.ptsHtml !== undefined ? opts.ptsHtml
         : (count > 1 ? `${totalPts} pts <span class="dp-each">(${shipPts} ea)</span>` : `${shipPts} pts`);
@@ -7097,7 +7100,7 @@ let activeGroupId = null;
         // rules flow FULL-WIDTH beneath, so the card height matches its content
         // (no empty side gap on weapon-heavy ships).
         const bigArt = artSrc ? `<img class="dp-big-art" src="${esc(artSrc)}" alt="" onerror="(this.closest('.dp-big-art-wrap')||this).remove()">` : '';
-        const belowHtml = `${weaponsHtml || '<span class="dp-zone-empty">No weapons</span>'}${gunRulesHtml}${loadsHtml}${shipRulesHtml}${sysHtml}${featHtml}${refitHtml}`;
+        const belowHtml = `${weaponsHtml || '<span class="dp-zone-empty">No weapons</span>'}${gunRulesHtml}${loadsHtml}${shipRulesHtml}${sysHtml}${refitHtml}${featHtml}`;
         out += `<div class="dp-ship dp-ship-big">
             ${headHtml}
             <div class="dp-big-top">
@@ -9171,6 +9174,7 @@ let activeGroupId = null;
       'A ship’s chosen Deployable Feature now prints its own rules and spells out its specials, such as Aegis-4, under the feature on the printed sheet.',
       'A feature’s torpedoes join the launch asset table at the top of the sheet. The Torpedo Platform’s Medium Torpedo prints with its full stats.',
       'A ship carrying two features prints a line for each, and a feature’s own Calibre and Critical text no longer prints beside the rulebook’s.',
+      'The feature and its rules close the ship’s card. A ship that already has Aegis explains it once when it carries an Aegis Platform.',
       'Thanks to Padomay for asking.'
     ] },
     { date: '2026-11-04', title: 'Dropfleet Commander 2.4', items: [
@@ -11584,7 +11588,8 @@ let activeGroupId = null;
     });
     if (carriers && (fdb.deployableFeatures || []).length) {
       const rows = fdb.deployableFeatures.map(ft => {
-        const bits = (ft.features || []).map(x => { addSpecials(x.special); return `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.hull ? ` Hull ${x.hull}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`; });
+        // A part named like its feature drops the repeat, as on the fleet sheet.
+        const bits = (ft.features || []).map(x => { addSpecials(x.special); return ([x.name === ft.name ? '' : x.name, x.es ? `ES ${x.es}` : '', x.ks ? `KS ${x.ks}` : '', x.hull ? `Hull ${x.hull}` : ''].filter(Boolean).join(' ') + (x.special && x.special !== '-' ? `, ${x.special}` : '')).replace(/^, /, ''); }).filter(Boolean);
         (ft.weapons || []).forEach(w => { addSpecials(w.special); bits.push(`${w.name}: ${w.scan && w.scan !== '-' ? `Scan ${w.scan}, ` : ''}Att ${w.attack}, Lock ${w.lock}, Dmg ${w.damage}${w.type || ''}${w.special && w.special !== '-' ? ', ' + w.special : ''}`); });
         const launch = loadsLine(ft.loads);
         const rules = (ft.rules || []).map(r => printRuleSpan([r.name, r.description || ''])).join('');
