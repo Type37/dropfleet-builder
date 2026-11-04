@@ -5056,6 +5056,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-11-04', title: 'Deployable Features print in full', items: [
+      'A feature’s torpedoes print in their own launch asset table under the feature, with full stats.',
+      'Thanks to Padomay for asking.'
+    ] },
     { date: '2026-11-04', title: 'Dropfleet Commander 2.4', items: [
       'Dropfleet Commander 2.4 is out, with TTCombat’s 4 November ship sheets and the v1.4 Ship Updates. Ship stats, admirals and refits follow them.',
       'The rules reference is the 2.4 rulebook, and ship rules such as Aegis, Escort and Vectored carry the 2.4 wording.',
@@ -7130,23 +7134,23 @@
       });
       if (sysLines.length) lines.push([(db.systemSelection && db.systemSelection.listName) || 'Systems', esc(sysLines.join('; '))]);
       const feats = FEATURE_SLOT_KEYS.map(k => inst[k]).filter(Boolean);
+      // A feature's torpedoes get the same launch table as the ship's, under it.
+      const featLoads = [];
       feats.forEach(name => {
         const feat = factionFeatures(f.faction).find(x => x.name === name);
         const parts = [esc(name)];
         if (feat) {
           (feat.features || []).forEach(x => {
-            const bits = [x.es ? `ES ${x.es}` : '', x.ks ? `KS ${x.ks}` : '', x.special && x.special !== '-' ? x.special : ''].filter(Boolean).join(', ');
+            const bits = [x.es ? `ES ${x.es}` : '', x.ks ? `KS ${x.ks}` : '', x.hull ? `Hull ${x.hull}` : '', x.special && x.special !== '-' ? x.special : ''].filter(Boolean).join(', ');
             if (bits) parts.push(esc(bits));
             if (x.special && x.special !== '-') x.special.split(',').forEach(s => collectRule(s.trim()));
           });
-          (feat.loads || []).forEach(l => {
-            parts.push(esc(`Launch ${l.name} (${l.launch}${l.special && l.special !== '-' ? ', ' + l.special : ''})`));
-            if (l.special && l.special !== '-') l.special.split(',').forEach(s => collectRule(s.trim()));
-          });
+          (feat.loads || []).forEach(l => { if (l && l.name) featLoads.push(l); });
           (feat.rules || []).forEach(r => addRuleText(r.name, r.description));
         }
         lines.push(['Deployable Feature', parts.join(', ')]);
       });
+      const featLaunch = printLaunchTable(laMap, featLoads, collectRule);
 
       const hullHtml = printHullTrack(hullVal, qty, tonnage || tonText);
       const tags = `${tonText ? ` <span class="pr-ton">${esc(tonText)}</span>` : ''}${db.isUnique ? ' <span class="pr-badge">Unique</span>' : ''}`;
@@ -7158,6 +7162,7 @@
         ${launch}
         ${specialNames.length ? `<div class="pr-rules-line"><b>Special:</b> ${specialNames.map(esc).join(', ')}</div>` : ''}
         ${lines.map(([k, v]) => `<div class="pr-opts"><b>${esc(k)}${v ? ':' : ''}</b>${v ? ' ' + v : ''}</div>`).join('')}
+        ${featLaunch}
       </div>`;
     };
 

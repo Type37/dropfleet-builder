@@ -5,6 +5,26 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-11-04: Deployable Features print in full
+
+The desktop fleet sheet printed a chosen Deployable Feature as its name and
+stats only, so "Aegis-4" and the Aegis Platform's own rule never reached the
+paper. `shipCardHtml` now prints the feature's guns and launch on its line,
+then its rules and every special it names (Aegis-4, Limited-4) right under it
+in Cards and Big cards. Table layout and fleet-wide rules send them to the end
+glossary, as with ship rules. The line drops the repeated name ("Aegis Platform,
+ES 3+ KS 3+ Hull 4, Aegis-4").
+
+A feature's loads now feed `allLaunchAssetNames`, so the Torpedo Platform's
+Medium Torpedo gets a row in the launch asset table at the top of the sheet.
+Mobile already printed feature rules; its print sheet now gives a feature's
+loads their own launch table under the feature line (with Hull on the line too)
+instead of a one-line "Launch Medium Torpedo (1, Limited-4)".
+
+Checked in the preview with a Milwaukee carrying each platform: Cards, Big
+cards and Table on desktop, and the mobile print sheet. Asked for by Padomay
+on Discord.
+
 ### 2026-10-30: Unit Reference gets a Civilian Ships tab
 
 The cross-faction Misc ships (18 of them, the civilian, mercenary and astrofauna

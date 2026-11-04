@@ -6930,11 +6930,35 @@ let activeGroupId = null;
       const sysHtml = nonWeaponSystems.length
         ? `<div class="dp-systems"><b>${esc(db.systemSelection ? db.systemSelection.listName : 'Systems')}:</b> ${esc(nonWeaponSystems.join('; '))}</div>` : '';
       let featHtml = '';
+      // A chosen Deployable Feature prints like the rest of the card: its stats,
+      // guns and launch on the line, its torpedoes in the launch reference, and
+      // its own rules plus every special it names in the card's rules.
+      const featureRuleEntries = [];
+      const _featRuleSeen = new Set();
+      const _addFeatRule = (n, d, p) => {
+        if (!n || !d || _featRuleSeen.has(n)) return;
+        _featRuleSeen.add(n); featureRuleEntries.push([n, d, p || '']);
+      };
+      const _addFeatSpecials = sp => {
+        if (!sp || sp === '-') return;
+        sp.split(',').forEach(s => { const t = s.trim(); const full = t && lookupRuleFull(t); if (full) _addFeatRule(t, full.description, full.page); });
+      };
       const chosenFeats = FEATURE_SLOT_KEYS.map(k => ship[k]).filter(Boolean);
       if (chosenFeats.length) {
         const featLines = chosenFeats.map(name => {
           const feat = ((shipDB[f.faction] || {}).deployableFeatures || []).find(df => df.name === name);
-          const fStat = feat ? (feat.features || []).map(x => `${x.name}${x.es ? ` ES ${x.es}` : ''}${x.ks ? ` KS ${x.ks}` : ''}${x.hull ? ` Hull ${x.hull}` : ''}${x.special && x.special !== '-' ? `, ${x.special}` : ''}`).join('; ') : '';
+          if (!feat) return esc(name);
+          // A part named like its feature drops the repeat ("Aegis Platform, ES 3+").
+          const bits = (feat.features || []).map(x => { _addFeatSpecials(x.special); return ([x.name === name ? '' : x.name, x.es ? `ES ${x.es}` : '', x.ks ? `KS ${x.ks}` : '', x.hull ? `Hull ${x.hull}` : ''].filter(Boolean).join(' ') + (x.special && x.special !== '-' ? `, ${x.special}` : '')).replace(/^, /, ''); }).filter(Boolean);
+          (feat.weapons || []).forEach(w => { _addFeatSpecials(w.special); bits.push(`${w.name}: ${w.scan ? `Scan ${w.scan}, ` : ''}Att ${w.attack}, Lock ${w.lock}, Dmg ${w.damage}${w.type || ''}${w.special && w.special !== '-' ? ', ' + w.special : ''}`); });
+          (feat.loads || []).forEach(l => {
+            if (!l || !l.name) return;
+            allLaunchAssetNames.add(String(l.name));
+            _addFeatSpecials(l.special);
+            bits.push(`Launch ${l.name} (${l.launch}${l.special && l.special !== '-' ? ', ' + l.special : ''})`);
+          });
+          (feat.rules || []).forEach(r => _addFeatRule(r.name, r.description, r.page));
+          const fStat = bits.join('; ');
           return `${esc(name)}${fStat ? ', ' + esc(fStat) : ''}`;
         });
         const label = chosenFeats.length > 1 ? 'Deployable Features:' : 'Deployable Feature:';
@@ -6965,6 +6989,16 @@ let activeGroupId = null;
         return [n, def.description, def.page || ''];
       }).filter(e => e[1]);
       const shipRuleEntriesAll = [...(db.specialRuleDetails || []).filter(r => r.description).map(r => [r.name, r.description, r.page || '']), ...gainedRuleEntries];
+      // Feature rules sit under the feature's own line, unless the ship or its
+      // guns already spell the rule out, or it goes to the end glossary.
+      const _shipRuleNameSet = new Set(shipRuleEntriesAll.map(e => e[0]));
+      const featRulesHere = [];
+      featureRuleEntries.forEach(e => {
+        if (_shipRuleNameSet.has(e[0]) || weaponSpecials[e[0]]) return;
+        if (isHoistedShipRule(e[0])) hoistedShipDefs[e[0]] = { description: e[1], page: e[2] };
+        else featRulesHere.push(e);
+      });
+      if (featRulesHere.length && !noRules) featHtml += `<div class="dp-rules">${featRulesHere.map(ruleSpan).join('')}</div>`;
       const shipRuleEntries = shipRuleEntriesAll.filter(e => !isHoistedShipRule(e[0]));
       const hoistedHere = shipRuleEntriesAll.filter(e => isHoistedShipRule(e[0]));
       hoistedHere.forEach(([n, d, p]) => { hoistedShipDefs[n] = { description: d, page: p }; });
@@ -9123,6 +9157,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-11-04', title: 'Deployable Features print in full', items: [
+      'A ship’s chosen Deployable Feature now prints its own rules and spells out its specials, such as Aegis-4, under the feature on the printed sheet.',
+      'A feature’s torpedoes join the launch asset table at the top of the sheet. The Torpedo Platform’s Medium Torpedo prints with its full stats.',
+      'Thanks to Padomay for asking.'
+    ] },
     { date: '2026-11-04', title: 'Dropfleet Commander 2.4', items: [
       'Dropfleet Commander 2.4 is out, with TTCombat’s 4 November ship sheets and the v1.4 Ship Updates. Ship stats, admirals and refits follow them.',
       'The rules reference is the 2.4 rulebook, and ship rules such as Aegis, Escort and Vectored carry the 2.4 wording.',
