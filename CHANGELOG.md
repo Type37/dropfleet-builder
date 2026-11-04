@@ -5,6 +5,30 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-11-04: Genitor Tower no longer asks for a feature
+
+The 2.4 change to `isFeatureCarrier` matched `(choose|must be assigned)
+... Deployable Feature` anywhere in a rule. The Genitor Tower's own rule reads
+"This Deployable Feature must be assigned to a Ship with the Porter special
+rule", so it matched, showed the required picker and raised the missing
+feature warning. Both apps now match "choose ... Deployable Feature" or
+"this Ship must be assigned", so the subject has to be the ship.
+
+Audited every ship in `fleet-data.json` and the six faction files whose rules
+mention a Feature. 29 carriers keep the picker: Bioficer 5 (Gravitational Arc or
+Ghost Orb Tower only), PHR 4, Resistance 5 (Actium and Salamis two slots), Scourge
+3, Shaltari 6 (all two slots), UCM 6. No picker, correctly: Genitor Tower,
+M-Type Barge (fixed Military Outpost), EX-7 Packet Runner (fixed Hangar), and
+four ships whose weapons or rules only mention Features (Scion, Senator,
+Retiarius, Lysander). No famous-admiral flagship is a carrier.
+
+A pick saved on a Genitor Tower under the bug kept adding its cost. New
+`dropStrayFeatures` (desktop on builder open, mobile on fleet open) removes a
+pick from a ship that cannot carry one, or a second pick from a one-slot
+carrier, and recalculates the ship's points. Checked in both apps with a planted
+Gravitational Arc on a Genitor Tower (27 to 15 pts) and a second Ghost Orb Tower
+on a Sluice (dropped, 168 pts kept). The Sluice still shows its required picker.
+
 ### 2026-11-04: Copied lists paste cleanly into Discord
 
 `generateFleetText` (desktop) and `fleetToText` (mobile) wrote sub-items as

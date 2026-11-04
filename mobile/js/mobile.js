@@ -1395,9 +1395,11 @@
     // non-chosen feature and must not show a picker of unrelated faction features.
     const texts = (ship.specialRules || []).map(r => r.description || '');
     if (ship.rulesText) texts.push(ship.rulesText);
-    // 2.4 rewords it "When building your fleet, this Ship must be assigned ...
-    // Deployable Feature", which is still a choice.
-    return texts.some(t => /(choose|must be assigned)[\s\S]*Deployable Feature/i.test(t));
+    // 2.4 rewords it "When building your fleet, this Ship must be assigned ...",
+    // which is still a choice. The subject has to be "this Ship": the Genitor
+    // Tower's own rule reads "This Deployable Feature must be assigned to a Ship
+    // with the Porter special rule", and must not give it a picker.
+    return texts.some(t => /choose[\s\S]*Deployable Feature|this Ship must be assigned/i.test(t));
   }
   // 2.4: "must be assigned ... paying points" makes the feature part of the list;
   // the older "At the start of the game ... choose" wording stays optional.
@@ -1938,9 +1940,30 @@
     navigate('screen-fleet-detail');
   }
 
+  // Drop feature picks a ship cannot hold: a non-carrier, or a second slot on a
+  // one-slot carrier. Before v531 the Genitor Tower showed the carrier picker,
+  // and a pick made there kept adding its points. Needs the faction loaded, so
+  // it runs when the fleet opens rather than in loadFleets.
+  function dropStrayFeatures(fleet) {
+    let changed = false;
+    (fleet.battleGroups || []).forEach(g => (g.ships || []).forEach(s => {
+      if (!FEATURE_SLOT_KEYS.some(k => s[k])) return;
+      const db = findShip(fleet.faction, s.groupCategory, s.shipKey);
+      if (!db) return;
+      const slots = isFeatureCarrier(db) ? featureSlotCount(db) : 0;
+      const stray = FEATURE_SLOT_KEYS.filter((k, i) => i >= slots && s[k]);
+      if (!stray.length) return;
+      stray.forEach(k => delete s[k]);
+      s.points = recalcShipPoints(fleet.faction, db, s);
+      changed = true;
+    }));
+    return changed;
+  }
+
   function renderFleetDetail() {
     const f = activeFleet;
     if (!f) return;
+    if (dropStrayFeatures(f)) saveFleets();
     const pts = fleetPoints(f);
     const size = GAME_SIZES[f.gameSize] || GAME_SIZES.clash;
     const limit = f.pointsLimit || size.max;
@@ -5056,6 +5079,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-11-04', title: 'Genitor Tower no longer asks for a feature', items: [
+      'The Genitor Tower is a Deployable Feature itself, carried by a Porter. Since the 2.4 update it showed the Feature Carrier picker and flagged the list until you chose a Gravitational Arc or Ghost Orb Tower for it. The picker is gone.',
+      'A feature already picked on a Genitor Tower charged its points (12 or 16). Opening the list removes the pick and its points.'
+    ] },
     { date: '2026-11-04', title: 'Copied lists paste cleanly into Discord', items: [
       'A copied list marks abilities, refits and features with the same • as the ships, so Discord no longer indents each line deeper than the last.',
       'Pasting a copied list back in keeps its single ships and its admiral.'
