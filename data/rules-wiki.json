@@ -3654,7 +3654,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "When you Form Wings, you can combine identical Assets in base contact into a single larger Wing. If you do, choose one of those Wings for the rest to be combined with. If any assets in a newly formed Wing have moved."
+           "t": "When you Form Wings, you can combine identical Assets in base contact into a single larger Wing. If you do, choose one of those Wings for the rest to be combined with. If any assets in a newly formed Wing have moved, all assets in that Wing are treated as having moved."
           }
          ]
         },
@@ -3719,7 +3719,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Assets perform each step simultaneously; move all Fighters before forming Wings and form all Wings before attacking."
+           "t": "Assets perform each step simultaneously; form all Wings before moving and move all Wings before attacking."
           }
          ]
         },
@@ -3886,7 +3886,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "D. Remove Unused Attackers"
+           "t": "D. Remove Attackers"
           }
          ]
         },
@@ -3894,7 +3894,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Assets perform each step simultaneously; move all Bombers before forming Wings and form all Wings before attacking."
+           "t": "Assets perform each step simultaneously; form all Wings before moving and move all Wings before attacking."
           }
          ]
         },
@@ -3981,7 +3981,7 @@
          "kind": "h",
          "runs": [
           {
-           "t": "8.3.4.d Remove Unused Bombers"
+           "t": "8.3.4.d Remove Attackers"
           }
          ]
         },
@@ -7614,7 +7614,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "This Ship cannot be the target of Abilities."
+           "t": "The Controlling player cannot target this Ship with Abilities."
           }
          ]
         }

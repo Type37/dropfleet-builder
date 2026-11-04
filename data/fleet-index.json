@@ -269,12 +269,12 @@
    "section": "14.2.11"
   },
   "Crippling-Fire": {
-   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Fire: Gain a Fire Token. At the start of the End Phase, before the Repair step, this Ship suffers a point of damage for each Fire Token it has. Repairable.\nExcept for Fire, a Ship can only have one of each type of Crippling Effect token at a time (Spikes are not a Crippling Effect), even when placed from different sources or at different times. Any duplicate effects are ignored and discarded.",
+   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Fire: Gain a Fire Token. At the start of the End Phase, before the Repair step, this Ship suffers a point of damage for each Fire Token it has. Repairable. This effect is repaired on a roll of a 3+ instead of a 4+.\nExcept for Fire, a Ship can only have one of each type of Crippling Effect token at a time (Spikes are not a Crippling Effect), even when placed from different sources or at different times. Any duplicate effects are ignored and discarded.",
    "page": "49",
    "section": "14.2.11"
   },
   "Crippling-2xFire": {
-   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Gain two Fire Tokens (Fire is the one Crippling Effect a Ship may hold more than one of). At the start of the End Phase, before the Repair step, this Ship suffers a point of damage for each Fire Token it has. Repairable.\nExcept for Fire, a Ship can only have one of each type of Crippling Effect token at a time (Spikes are not a Crippling Effect), even when placed from different sources or at different times. Any duplicate effects are ignored and discarded.",
+   "description": "If an attack from this Weapon scores at least one Critical hit and then damages a Ship (following normal damage allocation rules), the damaged Ship gains this Crippling Effect regardless of Tonnage (in addition to any Crippling Effect from being reduced below half Hull). Gain two Fire Tokens (Fire is the one Crippling Effect a Ship may hold more than one of). At the start of the End Phase, before the Repair step, this Ship suffers a point of damage for each Fire Token it has. Repairable. This effect is repaired on a roll of a 3+ instead of a 4+.\nExcept for Fire, a Ship can only have one of each type of Crippling Effect token at a time (Spikes are not a Crippling Effect), even when placed from different sources or at different times. Any duplicate effects are ignored and discarded.",
    "page": "49",
    "section": "14.2.11"
   },
@@ -394,7 +394,7 @@
    "section": "14.1.24"
   },
   "Civilian Transport": {
-   "description": "This Ship can only choose the General Quarters order.\nThis Ship cannot be attacked unless it is controlled by a player. Players cannot attack a friendly Civilian Transport.\nThis Ship cannot be the target of Abilities.",
+   "description": "This Ship can only choose the General Quarters order.\nThis Ship cannot be attacked unless it is controlled by a player. Players cannot attack a friendly Civilian Transport.\nThe Controlling player cannot target this Ship with Abilities.",
    "page": "48",
    "section": "14.1.25"
   },

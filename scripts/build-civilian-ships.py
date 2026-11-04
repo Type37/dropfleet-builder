@@ -97,7 +97,11 @@ def scenario_only(doc, name):
         m = fitz.Pixmap(doc, smask)
         im.putalpha(Image.frombytes('L', (m.width, m.height), m.samples).resize(im.size, Image.LANCZOS))
     art = slug(name) + '.webp'
-    im.save(os.path.join(ART, art), 'WEBP', quality=88, method=6)
+    # Keep a sharper picture already on disk: the 261104 sheet embeds these at
+    # about half the size of the 261001 ones.
+    dest = os.path.join(ART, art)
+    if not os.path.exists(dest) or Image.open(dest).width < im.width:
+        im.save(dest, 'WEBP', quality=88, method=6)
     return {
         'name': name, 'cost': None, 'tonnage': tonnage, 'art': art,
         'stats': dict(zip(['thrust', 'scan', 'sig', 'hull', 'es', 'ks', 'bs', 'g'], st), special=special),

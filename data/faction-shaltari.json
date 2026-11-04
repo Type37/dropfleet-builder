@@ -1669,7 +1669,7 @@
     "tonnage": "H",
     "featureSlots": 2,
     "lore": "A sister class of the Euclase, the Boracite is configured for pure ship-ship combat through increased firepower. Here, the Euclase’s launch bays are replaced with a linked pair of disintegrator batteries. Coupled with the twinned Thermal Lance Cannons, this ship is at its most deadly when its captain, who must possess time-honed skill, can manoeuvre into an optimal firing position prior to unleashing all weapons, pushing the ship’s enhanced power matrix to the limit. This killing power is supplemented by a standard feature, thus far, of all Shaltari pocket battleships – launch clamps for self-deploying surface assets. On the Boracite, these are often employed as launch and forget assets while en-route to the next kill, although if targets are plentiful, the Boracite may remain on station of unleash salvos of annihilating energy at its foes.",
-    "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
+    "rulesText": "When building your fleet, this Ship must be assigned two deployable features from the Shaltari Deployable Features list (duplicates are allowed) paying points for each. This Ship starts the game carrying those Deployable Features.",
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Starlance",
@@ -1735,7 +1735,7 @@
     "tonnage": "H",
     "featureSlots": 2,
     "lore": "The new Euclase class pocket battleship is among the alien’s most powerful capital ships below full battleship tonnage. Offensively, it mounts twinned Thermal Lance Cannons. These forward-facing weapons are devastating enough, but once the Euclase is in an optimal firing position, the full might of the ship’s cores can be focused though them, increasing firepower at the expense of manoeuvres. Given the drain on the power matrix, the Euclase’s other offensive capabilities are low drain launch options. A substantial fight deck accommodates swarms of fighters and bombers, while the vessel’s enhanced superstructure permits the carrying of self-deploying surface assets. Against the Euclase, enemies of the Shaltari are safe nowhere.",
-    "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
+    "rulesText": "When building your fleet, this Ship must be assigned two deployable features from the Shaltari Deployable Features list (duplicates are allowed) paying points for each. This Ship starts the game carrying those Deployable Features.",
     "famousShips": [
      "Bestride the Universe",
      "Fate’s Hand",
@@ -1813,7 +1813,7 @@
     "tonnage": "H",
     "featureSlots": 2,
     "lore": "Another of the Shaltari’s latest pocket battleships, the Painite is configured largely for planetary assault. Its ability to launch self-deploying surface assets forms the foundation for this, but the addition of twinned Ion Storm batteries enhances this mission profile. With these, the Painite can bombard surface positions to support its landings or direct the weapons’ coruscating energies against enemy vessels above the dropsite. Packing the full firepower of a battlecruiser in addition to its surface deployment mount, the Painite also mounts a linked pair of disintegrator batteries for devastating firepower during flexible manoeuvres. In combination, these capabilities make the Painite a flexible, deadly foe, able to dominate the battlespace in orbit and on the surface in a way few vessels can match.",
-    "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
+    "rulesText": "When building your fleet, this Ship must be assigned two deployable features from the Shaltari Deployable Features list (duplicates are allowed) paying points for each. This Ship starts the game carrying those Deployable Features.",
     "famousShips": [
      "I Cast Shadow",
      "Enflamed Cloud",
@@ -1882,7 +1882,7 @@
     "tonnage": "H",
     "featureSlots": 2,
     "lore": "The Spinel, one of the more ‘common’ variants, packs the previously unknown combination of a twin Hyperwave Cannon and a pair of Particle Lances. Both systems provide the Starchief with superlative, front-facing killing power.",
-    "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
+    "rulesText": "When building your fleet, this Ship must be assigned two deployable features from the Shaltari Deployable Features list (duplicates are allowed) paying points for each. This Ship starts the game carrying those Deployable Features.",
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Lance of Ra",
@@ -2261,7 +2261,7 @@
     "tonnage": "M",
     "featureSlots": 2,
     "lore": "Another recent addition to the 27th century battlespace is the Natrolite supercruiser. Much like its cousin, the Mesolite, this warship packs a battlecruiser-grade linked pair of disintegrator batteries for devastating firepower during flexible manoeuvres. While it offers little else in weaponry, it makes up for this with a docking mount for two stacked self-deploying surface instillations. These have already proven deeply problematic to deal with and represent an increased willingness from the aliens to commit to medium, and even long-term, surface commitments in contested territory. Some suggest this may be in response to  increased Bioficer incursions, possibly an attempt to sway the war to their exacting, unknowable ends before the new foe arrives in force.",
-    "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
+    "rulesText": "When building your fleet, this Ship must be assigned two deployable features from the Shaltari Deployable Features list (duplicates are allowed) paying points for each. This Ship starts the game carrying those Deployable Features.",
     "famousShips": [
      "Barque Solar",
      "Doombringer",
@@ -2321,7 +2321,7 @@
     "tonnage": "M",
     "featureSlots": 2,
     "lore": "While Shaltari battlecruisers are regrettably familiar, some of their latest, lightest derivatives are not. Classified as supercruisers, these ships appear to be brand new. The alien’s choice to increase battlecruiser production and variety suggests a development, but whether that’s the strain or war or simply innovation is unknown. The first Shaltari supercruiser sighting, early in 2679, was the Mesolite. This svelte ship-killer is armed with a twin Hyperwave Cannon, matching the primary armament of the heavier Goethite class. It foregoes other capabilities though in favour of a mount for two stacked self-deploying surface instillations. These vary from the Stellargate, which brings starship-grade teleport technology to the surface, to the Electrowave Caster, a devilish weapons instillation capable of inflicting crippling damage on orbiting starships. The most awe-inspiring and outlandish is the Worldstrider – by far the largest known walker-type construct, thus far. This city block-spanning monstrosity smashes whole instillations beneath its six, tungsten-sheaved legs.",
-    "rulesText": "At the start of the game, before players deploy, choose two Deployable Features from the Shaltari Deployable Features List (duplicates are allowed). This Ship starts the game carrying those Deployable Features.",
+    "rulesText": "When building your fleet, this Ship must be assigned two deployable features from the Shaltari Deployable Features list (duplicates are allowed) paying points for each. This Ship starts the game carrying those Deployable Features.",
     "famousShipsPrefix": "Encountered ships of the class:",
     "famousShips": [
      "Black Pyramid",
@@ -4453,6 +4453,14 @@
       "description": "You may only take one Group of this Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Acquired Fighters & Bombers",
+      "description": "This ship’s Fighters & Bombers use the stats of its parent fleet (if you included this ship in a Scourge fleet, its Fighters & Bombers would follow the Scourge Fighters & Bombers rules)."
+     },
+     {
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -4474,7 +4482,7 @@
    "category": "light",
    "ship": {
     "name": "Hyperyacht Somniferum",
-    "cost": 80,
+    "cost": 77,
     "stats": {
      "thrust": "9\"",
      "scan": "6\"",
@@ -4484,7 +4492,7 @@
      "ks": "5+",
      "bs": "6+",
      "g": "1",
-     "special": "Unique"
+     "special": "Hero, Unique"
     },
     "weapons": [
      {
@@ -4500,10 +4508,18 @@
     "loads": [],
     "specialRules": [
      {
+      "name": "Hero",
+      "description": "You can only include two Groups with this special rule in your fleet. You cannot assign an Admiral to this Ship when building your fleet."
+     },
+     {
       "name": "Unique",
       "description": "You may only take one Group of this Ship.",
       "page": "37",
       "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -4525,7 +4541,7 @@
    "category": "light",
    "ship": {
     "name": "LKS Dredger",
-    "cost": 65,
+    "cost": 61,
     "stats": {
      "thrust": "8\"",
      "scan": "6\"",
@@ -4539,7 +4555,7 @@
     },
     "weapons": [
      {
-      "name": "Mining Laser",
+      "name": "Mining Maser",
       "arc": "F",
       "attack": "3",
       "lock": "2+",
@@ -4553,6 +4569,10 @@
      {
       "name": "Industrial Design",
       "description": "Improve this Group’s Backup save by 2 when rolling to save hits due to Debris Fields."
+     },
+     {
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -4586,11 +4606,17 @@
      "ks": "5+",
      "bs": "6+",
      "g": "1",
-     "special": "Vectored"
+     "special": "Rare, Vectored"
     },
     "weapons": [],
     "loads": [],
     "specialRules": [
+     {
+      "name": "Rare",
+      "description": "You may only take one Group of this Ship in a Skirmish-sized game, two in a Clash, three in a Battle, and four in a Reconquest.",
+      "page": "37",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
      {
       "name": "Vectored",
       "description": "This Ship may make an additional turn, up to 45 degrees, at any point during its movement, regardless of the Order its Group has taken.",
@@ -4598,20 +4624,20 @@
      },
      {
       "name": "Resupply and Rearm",
-      "description": "If this ship ends its movement in base contact with a friendly ship of Medium Tonnage or higher or a Space Station, pick one of the following:\nResupply: That Ship or Space Station recovers 3 Hull points and remove any Crippling Effect tokens.\nRearm: Increase the Limited-X value of any of that Ship or Space Station's Weapons and Launch Assets by 1 until the end of the round."
+      "description": "If this ship ends its movement on the same orbital layer and in base contact with a friendly ship of Medium Tonnage or higher or a Space Station, pick one of the following:\nResupply: That Ship or Space Station recovers 3 Hull points and remove any Crippling Effect tokens.\nRearm: Increase the Limited-X value of any of that Ship or Space Station's Weapons and Launch Assets by 1 until the end of the round. Each Ship or Space Station can only be affected by this rule once."
      },
      {
       "name": "Flawed Design",
       "description": "This Ship cannot use its Resupply and Rearm rule if it is below half of its starting Hull."
      },
      {
-      "name": "Mercenary",
-      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable rule."
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
     "groupMax": 1,
-    "isRare": false,
+    "isRare": true,
     "isUnique": false,
     "tonnage": "L",
     "lore": "A relic from the now liquidated Eden Void Logistics inc, the SLM-9 is a battle tested bulk logistics vessel, trusted for fleet replenishment in high risk environments. Though the company behind its design has since shuttered, the SLM-9 endures as a testament to their engineering prowess and affordability. Its metal cargo frame, hydraulic deployment arms and universal clamps ensure rapid, adaptable resupply of ordnance, fuel, and supplies anywhere. Rugged and inexpensive, the SLM-9 remains a reasonable choice for fleets needing a dependable workhorse at a fraction of the cost of newer models.\n\nUnlike conventional Logistics Vessels that unload cargo gradually, the SLM-9 releases its entire payload in a single, controlled operation. Hydraulic deployment arms manoeuvre the entire cargo bed outward, allowing for structured and efficient transfer without manual unloading.\n\nBuilt for adaptability, the SLM-9's pincer like grappling arms latch onto ships regardless of docking compatibility. Variable force actuators fine tune pressure, securing a stable hold without compromising hull integrity. Whether resupplying warships or assisting stranded vessels, its clamps ensure critical cargo transfer under any conditions.\n\nThe SLM-9's hydraulic deployment arms are its defining feature, but also its greatest liability. If compromised by enemy fire or mechanical failure, the vessel loses its ability to unload cargo entirely, rendering it useless. A damaged deployment system means supplies remain trapped onboard, preventing fleet resupply and turning the ship into dead weight. While reinforced plating offers some protection, direct hits can buckle the arms, leading to catastrophic failure.\n\nDue to its critical vulnerability, the SLM-9 has begun to be phased out in favour of newer resupply haulers with reinforced unloading mechanisms and modular backup systems. The remaining SLM-9 units are considered outdated relics, still operational but increasingly rare.",
@@ -4630,7 +4656,7 @@
    "category": "light",
    "ship": {
     "name": "T-Type Tugboat",
-    "cost": 60,
+    "cost": 54,
     "stats": {
      "thrust": "6\"",
      "scan": "4\"",
@@ -4659,7 +4685,7 @@
       "lock": "3+",
       "damage": "2",
       "type": "C",
-      "special": "Close Action"
+      "special": "Air to Air, Point Blank"
      }
     ],
     "loads": [],
@@ -4683,8 +4709,16 @@
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
+      "name": "Drag to Hell",
+      "description": "After completing an attack with this weapon, remove this Ship from the table. It counts as destroyed at the end of the game."
+     },
+     {
       "name": "Tugging Along",
       "description": "If this Ship is on General Quarters and in base contact with another Ship (friendly or enemy) you may have it Tug that Ship instead of moving normally. If you do, this Ship may turn as normal but only moves up to 3”. The other Ship is then moved the same distance in the same direction, retaining its original facing. Ships can only be tugged this way up to a maximum of 6” each round."
+     },
+     {
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -4769,7 +4803,11 @@
      },
      {
       "name": "Penal Legions",
-      "description": "When taken as part of your fleet, this Ship starts the game with 2 friendly Battalions on it. When any number of enemy Battalions are removed due to Boarding Actions or Battalion Combat on a Space Station within 6” of this Ship, place a single friendly Battalion on this Ship. This Ship’s Boarding Pods and Drop Pods can only be used while it has friendly Battalions on it and each Boarding Pod or Drop Pod launched causes one friendly Battalion on this Ship to be removed."
+      "description": "When taken as part of your fleet, this Ship starts the game with 2 friendly Battalions on it. At the start of this Ship’s activation and when any number of enemy Battalions are removed due to Boarding Actions or Battalion Combat on a Space Station within 6” of this Ship, place a single friendly Battalion on this Ship. This Ship’s Boarding Pods and Drop Pods can only be used while it has friendly Battalions on it and each Boarding Pod or Drop Pod launched causes one friendly Battalion on this Ship to be removed."
+     },
+     {
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -4797,7 +4835,7 @@
    "category": "medium",
    "ship": {
     "name": "Jah’tar Startrader",
-    "cost": 113,
+    "cost": 108,
     "stats": {
      "thrust": "12\"",
      "scan": "6\"",
@@ -4826,7 +4864,11 @@
      },
      {
       "name": "Purchased Power",
-      "description": "This Ship starts the game with 5 wares tokens.\nAt the start of each round, if you control this Ship, you may spend a number of wares tokens on one of the following effects until the end of the round:\nDefence Harmonics - 2 Tokens: Friendly Groups within 6” improve their Energy and Kinetic saves by 1, to a maximum of a 3+.\nEnergy Dissipators - 1 Tokens: Friendly Groups within 9” count as having 2 fewer Spikes.\nGuardian Schoal - 1 Token: Friendly Assets within 9” cannot be the target of enemy weapons with the Anti Wing special rule"
+      "description": "This Ship starts the game with 5 wares tokens.\nAt the start of each round, if you control this Ship, you may spend a number of wares tokens on one of the following effects until the end of the round:\nDefence Harmonics - 2 Tokens: Friendly Groups within 6” improve their Energy and Kinetic saves by 1, to a maximum of a 3+.\nEnergy Dissipators - 1 Tokens: Friendly Groups within 9” count as having 2 fewer Spikes.\nGuardian Shoal - 1 Token: Friendly Assets within 9” cannot be the target of enemy weapons."
+     },
+     {
+      "name": "Mercenary (Non-Scourge, Non-Bioficer)",
+      "description": "This Ship may be used in all faction Fleets except Scourge and Bioficer. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -4850,7 +4892,7 @@
    "category": "medium",
    "ship": {
     "name": "M-Type Barge",
-    "cost": 95,
+    "cost": 90,
     "stats": {
      "thrust": "9\"",
      "scan": "6\"",
@@ -4863,6 +4905,15 @@
      "special": "Monitor"
     },
     "weapons": [
+     {
+      "name": "Deterrence Missiles",
+      "arc": "F/S",
+      "attack": "4",
+      "lock": "3+",
+      "damage": "1",
+      "type": "K",
+      "special": "Close Action"
+     },
      {
       "name": "Deterrence Missiles",
       "arc": "F/S",
@@ -4890,8 +4941,8 @@
       "description": "This Ship starts the game carrying a Military Outpost as a Deployable Feature."
      },
      {
-      "name": "Mercenary",
-      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -4957,15 +5008,15 @@
      },
      {
       "name": "Expel Hazards",
-      "description": "This weapon can only be used against targets within Scan range and on the same Orbital Layer.\nWhile this Ship is below its starting Hull Points, for every 2 Hull Points lost from its starting Hull Points, increase the attack of this weapon by 1."
+      "description": "This weapon can only be used against targets within Scan range and on the same Orbital Layer.\nWhile this Ship is below its starting Hull Points, for every 2 Hull Points lost from its starting Hull Points, increase the attack of this weapon by 1.\nAt the start of the Repair step of the End Phase, if this Ship is not crippled, you may inflict 1 point of damage to it and up to one other Ship in base contact with it."
      },
      {
       "name": "Acquired Mines",
       "description": "This Ship's Mines use the stats of its parent fleet."
      },
      {
-      "name": "Mercenary",
-      "description": "This Ship may be used in any fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -4990,9 +5041,9 @@
    "category": "heavy",
    "ship": {
     "name": "Type-87 Terminus Harvester",
-    "cost": 210,
+    "cost": 200,
     "stats": {
-     "thrust": "6\"",
+     "thrust": "7\"",
      "scan": "6\"",
      "sig": "6\"",
      "hull": 18,
@@ -5010,7 +5061,7 @@
       "lock": "2+",
       "damage": "3",
       "type": "C",
-      "special": "Close Action, Bloom-3"
+      "special": "Bloom-3, Point Blank"
      }
     ],
     "loads": [],
@@ -5028,10 +5079,6 @@
       "description": "Ships with this rule may not use Course Change or Max Thrust orders."
      },
      {
-      "name": "Colossal Salvage Cutter",
-      "description": "This weapon can only be used against targets in base contact."
-     },
-     {
       "name": "Scrap Hauler",
       "description": "If this Group ends its activation within 1\" of a Debris Field, this Group gains a scrap token and cannot gain scrap tokens from that Debris Field for the rest of the game. A Group can have a maximum of 8 scrap tokens at any one time. Any attached Payload ships that have any scrap tokens do not count towards this limit. Whenever another Ship within 6\" of a friendly Ship with this rule is destroyed, pick one of those friendly Ships, that Ship gains a scrap token."
      },
@@ -5044,8 +5091,8 @@
       "description": "Improve this Group’s Backup save by 2 when rolling to save hits due to Debris Fields."
      },
      {
-      "name": "Mercenary",
-      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable rule."
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -5069,7 +5116,7 @@
    "category": "light",
    "ship": {
     "name": "VX-22 Flenser",
-    "cost": 50,
+    "cost": 45,
     "stats": {
      "thrust": "6\"",
      "scan": "4\"",
@@ -5089,7 +5136,7 @@
       "lock": "2+",
       "damage": "2",
       "type": "C",
-      "special": "Close Action, Bloom-1"
+      "special": "Point Blank, Bloom-1"
      }
     ],
     "loads": [],
@@ -5116,8 +5163,8 @@
       "description": "When you attach this Ship to a Porter Ship, you may have the Porter Ship gain all of this Ship's scrap tokens."
      },
      {
-      "name": "Mercenary",
-      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable rule."
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -5142,7 +5189,7 @@
    "category": "colossal",
    "ship": {
     "name": "PRK-91 Provenance Ark",
-    "cost": 410,
+    "cost": 400,
     "stats": {
      "thrust": "5\"",
      "scan": "10\"",
@@ -5155,6 +5202,15 @@
      "special": "-"
     },
     "weapons": [
+     {
+      "name": "Heavy Dual Vent Cannon Turret",
+      "arc": "F/S",
+      "attack": "4",
+      "lock": "3+",
+      "damage": "2",
+      "type": "E",
+      "special": "Fusillade-1, Overcharge, Reave-1"
+     },
      {
       "name": "Heavy Dual Vent Cannon Turret",
       "arc": "F/S",
@@ -5205,8 +5261,12 @@
       "description": "At the start of this Ship's activation, remove two Spikes from it."
      },
      {
-      "name": "Mercenary",
-      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules. This ship's Fighters & Bombers use the stats of its parent fleet (if you included this ship in a Scourge fleet, its Fighters & Bombers would follow the Scourge Fighters & Bombers rules)."
+      "name": "Acquired Fighters & Bombers",
+      "description": "This ship’s Fighters & Bombers use the stats of its parent fleet (if you included this ship in a Scourge fleet, its Fighters & Bombers would follow the Scourge Fighters & Bombers rules)."
+     },
+     {
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -5230,7 +5290,7 @@
    "category": "light",
    "ship": {
     "name": "EX-7 Packet Runner",
-    "cost": 57,
+    "cost": 54,
     "stats": {
      "thrust": "6\"",
      "scan": "4\"",
@@ -5240,7 +5300,7 @@
      "ks": "5+",
      "bs": "6+",
      "g": "1",
-     "special": "Monitor, Reinforced Armour"
+     "special": "Monitor, Rare, Reinforced Armour"
     },
     "weapons": [
      {
@@ -5260,6 +5320,12 @@
       "description": "Ships with this rule may not use Course Change or Max Thrust orders."
      },
      {
+      "name": "Rare",
+      "description": "You may only take one Group of this Ship in a Skirmish-sized game, two in a Clash, three in a Battle, and four in a Reconquest.",
+      "page": "37",
+      "publicationId": "45b0-3e3b-e83d-fd70"
+     },
+     {
       "name": "Reinforced Armour",
       "description": "Weapons rolling to hit this Ship or its Group can only score criticals against it on a result of a 3 higher than its Lock value."
      },
@@ -5272,13 +5338,13 @@
       "description": "This Ship's Hangar Deployable Feature can only be deployed to Space Stations (of any type)."
      },
      {
-      "name": "Mercenary",
-      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
     "groupMax": 1,
-    "isRare": false,
+    "isRare": true,
     "isUnique": false,
     "tonnage": "L",
     "lore": "The EX-7 Packet-Runner is a common courier craft used throughout the territories of the United Colonies of Mankind. Designed for routine parcel and sensitive package transport, it prioritizes simple construction and dependable operation over appearance or refinement. Most examples in service are visibly beaten up and poorly maintained, their worn hulls reflecting constant use and minimal upkeep.\n\nThey are Built around a straightforward modular frame, similar to other workhorse craft like the T-Type utility haulers and the smaller VX-22 Flesners. The EX-7 typically consists of little more than the essentials: cockpit, drive assembly, and standardized cargo racks bolted into a compact hull with the cargo containers mounted underneath.\n\nThough rarely the focus of attention, EX-7 Packet-Runners move a constant flow of everyday freight between stations, depots, and outposts, quietly handling the unglamorous but essential task of keeping day-to-day logistics running. Colonial authorities have repurposed many of these ships for the express purpose of resupplying fighter and bomber support craft. Their cargo containers filled with factory-fresh compliments of fighters and bombers waiting for an appropriate launch platform. Experimental versions of these containers have been developed to effortlessly convert standardised hardpoints on space stations into makeshift hangar bays.",
@@ -5418,8 +5484,8 @@
       "description": "After completing an attack with this Weapon, this Ship is destroyed (a weapon with 0 Attack value does not roll to hit, does not cause any saves to be made, and does not inflict damage due to hits).\n\nWhen this Ship is destroyed (for any reason), it explodes with a Fuel Detonation effect and a range of 3”. Ships damaged by this explosion also gain a Fire token."
      },
      {
-      "name": "Mercenary",
-      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -5484,12 +5550,12 @@
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
-      "name": "Mercenary",
-      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable rule."
-     },
-     {
       "name": "Bulk Lighter",
       "description": "While a Ship with this rule is on the table, you have access to the following Ability:\n\nBattalion Support (1AP): Once per activation, when you deploy Battalions from a Group on any Orbital Layer within 6” of a friendly Ship with the Bulk Lighter rule, choose one of the launching Asset types. If the chosen Asset is either Dropships or Drop Pods, place an additional Battalion. If the chosen Asset is Bulk Landers, place an additional two Battalions. Other Launch Assets are unaffected by this Ability."
+     },
+     {
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 1,
@@ -5561,8 +5627,8 @@
       "description": "While this Group is on the Max Thrust Order, it may attack with one Weapon System. While this Group is on the Weapons Free Order, its UF-2800i Interdiction Mass Drivers have Crippling-Navigation Offline."
      },
      {
-      "name": "Mercenary",
-      "description": "This Ship may be used in any Fleet regardless of faction. When taken as part of your fleet, this Ship loses its Boardable rule."
+      "name": "Mercenary (All)",
+      "description": "This Ship may be used in all faction Fleets. When taken as part of your fleet, this Ship loses its Boardable and Civilian Transport rules."
      }
     ],
     "groupMin": 2,
