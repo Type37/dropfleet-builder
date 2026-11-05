@@ -5916,6 +5916,14 @@
     {
      "name": "Hardpoints",
      "effect": "This Space Station has a Life Support Feature and two Weapons Control Features."
+    },
+    {
+     "name": "Life Support Feature",
+     "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+    },
+    {
+     "name": "Two Weapons Control Features",
+     "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
     }
    ],
    "namesake": "An ephyra is the free-swimming larval stage of a scyphozoan jellyfish, which later matures into the bell-shaped adult medusa. The term is borrowed from [Ephyra](https://en.wikipedia.org/wiki/Ephyra_(mythology)), an Oceanid water-nymph of Greek myth, a daughter of the Titans Oceanus and Tethys."
@@ -5950,6 +5958,14 @@
     {
      "name": "Hardpoints",
      "effect": "This Space Station has a Life Support Feature and two Weapons Control Features."
+    },
+    {
+     "name": "Life Support Feature",
+     "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+    },
+    {
+     "name": "Two Weapons Control Features",
+     "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
     }
    ],
    "namesake": "A [nematocyst](https://en.wikipedia.org/wiki/Cnidocyte) is the venomous stinging organelle housed within the cnidocyte cells of jellyfish, sea anemones, and other cnidarians. It fires a coiled, barbed thread to inject toxin into prey, in one of the fastest mechanical processes in nature."

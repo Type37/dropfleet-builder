@@ -39,9 +39,12 @@ Brutal Scythe Nodules Fusillade-2.
 Space stations. Shaltari Gatestation, Grav Hook, Anchor and Shuriken
 Signature 6" to 2". Shaltari stations had no Hardpoints line, so all four
 gained theirs from the sheet. Grand Station, Astrobotanical Outpost and
-Hypershredder Hardpoints rewritten. The generic Life Support, Launch Control
-and Weapons Control Features are not in the app, so their new text is not
-either.
+Hypershredder Hardpoints rewritten. Station Features. New `scripts/build-station-features.py` writes the eight
+Space Station Features (page 2 of the sheet) to `fleet-index.json` as
+`stationFeatures`, and gives every faction station a rule per built-in
+Feature named in its Hardpoints, with saves, Hull and effect. Stations that
+may buy more get the whole list with points. Buying extra Features in the
+picker is still the open station design item in `docs/2.4-STAGING.md`.
 
 Rearm on every faction's civilian resupply ship reads "affected by Rearm
 once". Calculator presets: Bioficer Lightvice Attack 4, Battleship Scythe

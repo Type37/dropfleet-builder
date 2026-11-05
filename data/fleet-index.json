@@ -526,6 +526,76 @@
    "description": "Nominate one of your Ships of Tonnage M or higher. You may permanently fly that Ship off the board in any opponent's Deployment Zone. If you do and that ship is not Crippled, gain 1VP. If that ship was H or C tonnage, gain 2VP instead."
   }
  ],
+ "stationFeatures": {
+  "source": "Fleet_Space_Stations_261104.pdf p2",
+  "note": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature.",
+  "features": [
+   {
+    "name": "Launch Control",
+    "cost": 5,
+    "es": "*",
+    "ks": "*",
+    "hull": 5,
+    "effect": "This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
+   },
+   {
+    "name": "Weapons Control",
+    "cost": 5,
+    "es": "*",
+    "ks": "*",
+    "hull": 5,
+    "effect": "This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+   },
+   {
+    "name": "Life Support",
+    "cost": 5,
+    "es": "5+",
+    "ks": "5+",
+    "hull": 6,
+    "effect": "When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+   },
+   {
+    "name": "Reactor Core",
+    "cost": 0,
+    "es": "5+",
+    "ks": "5+",
+    "hull": 6,
+    "effect": "When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”."
+   },
+   {
+    "name": "Redundant Systems",
+    "cost": 10,
+    "es": "4+",
+    "ks": "4+",
+    "hull": 7,
+    "effect": "This Space Station gains a 6+ Backup Save."
+   },
+   {
+    "name": "Firing Computer",
+    "cost": 10,
+    "es": "5+",
+    "ks": "5+",
+    "hull": 5,
+    "effect": "This Space Station’s Close Action weapons gain 6” additional range."
+   },
+   {
+    "name": "Defensive Systems",
+    "cost": 20,
+    "es": "2+",
+    "ks": "2+",
+    "hull": 3,
+    "effect": "None."
+   },
+   {
+    "name": "Supercontrol Node",
+    "cost": 25,
+    "es": "4+",
+    "ks": "4+",
+    "hull": 6,
+    "effect": "During the Activation and Asset Phases, you count as controlling this Space Station."
+   }
+  ]
+ },
  "stationArmaments": {
   "note": "Universal armaments/upgrades for the generic Small/Medium/Large Fleet Space Stations. Verbatim from Fleet_Space_Stations_250818.pdf.",
   "requiredBySize": {

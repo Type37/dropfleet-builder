@@ -5086,6 +5086,7 @@
       "Resistance: if you control a Dropsite through the Ark Lander, you may also attack with all its Scenario Feature weapons and launch all its assets.",
       "Bioficer: the Fugue's Lightvice is back to Attack 4. The Cosmic's Barb Stinger is Reave-1. The Binary and Brutal Scythe Nodules are Fusillade-2.",
       "Space stations: Shaltari stations have Signature 2\" and list their Hardpoints. The Shuriken, Grand Station, Astrobotanical Outpost and Hypershredder come with two Weapons Control Features.",
+      "Space stations: each built-in Feature (Life Support, Launch Control, Weapons Control, Reactor Core, Supercontrol Node) shows its saves, Hull and rule. Stations that can buy more Features list all eight with their points.",
       "Rearm reads \"can only be affected by Rearm once\". The calculator's Fugue Lightvice and battleship Scythe Nodule presets match the new cards."
     ]},
     { date: '2026-11-04', title: 'Genitor Tower no longer asks for a feature', items: [

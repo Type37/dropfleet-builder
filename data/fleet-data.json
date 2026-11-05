@@ -488,6 +488,76 @@
    "description": "Nominate one of your Ships of Tonnage M or higher. You may permanently fly that Ship off the board in any opponent's Deployment Zone. If you do and that ship is not Crippled, gain 1VP. If that ship was H or C tonnage, gain 2VP instead."
   }
  ],
+ "stationFeatures": {
+  "source": "Fleet_Space_Stations_261104.pdf p2",
+  "note": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature.",
+  "features": [
+   {
+    "name": "Launch Control",
+    "cost": 5,
+    "es": "*",
+    "ks": "*",
+    "hull": 5,
+    "effect": "This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
+   },
+   {
+    "name": "Weapons Control",
+    "cost": 5,
+    "es": "*",
+    "ks": "*",
+    "hull": 5,
+    "effect": "This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+   },
+   {
+    "name": "Life Support",
+    "cost": 5,
+    "es": "5+",
+    "ks": "5+",
+    "hull": 6,
+    "effect": "When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+   },
+   {
+    "name": "Reactor Core",
+    "cost": 0,
+    "es": "5+",
+    "ks": "5+",
+    "hull": 6,
+    "effect": "When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”."
+   },
+   {
+    "name": "Redundant Systems",
+    "cost": 10,
+    "es": "4+",
+    "ks": "4+",
+    "hull": 7,
+    "effect": "This Space Station gains a 6+ Backup Save."
+   },
+   {
+    "name": "Firing Computer",
+    "cost": 10,
+    "es": "5+",
+    "ks": "5+",
+    "hull": 5,
+    "effect": "This Space Station’s Close Action weapons gain 6” additional range."
+   },
+   {
+    "name": "Defensive Systems",
+    "cost": 20,
+    "es": "2+",
+    "ks": "2+",
+    "hull": 3,
+    "effect": "None."
+   },
+   {
+    "name": "Supercontrol Node",
+    "cost": 25,
+    "es": "4+",
+    "ks": "4+",
+    "hull": 6,
+    "effect": "During the Activation and Asset Phases, you count as controlling this Space Station."
+   }
+  ]
+ },
  "stationArmaments": {
   "note": "Universal armaments/upgrades for the generic Small/Medium/Large Fleet Space Stations. Verbatim from Fleet_Space_Stations_250818.pdf.",
   "requiredBySize": {
@@ -5758,6 +5828,22 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has two Weapons Control Features and a Supercontrol Node Feature and two Reactor Core Features. It may take one additional option from the Space Station Features list."
+      },
+      {
+       "name": "Two Weapons Control Features",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+      },
+      {
+       "name": "Supercontrol Node Feature",
+       "effect": "ES 4+, KS 4+, Hull 6. During the Activation and Asset Phases, you count as controlling this Space Station."
+      },
+      {
+       "name": "Two Reactor Core Features",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”."
+      },
+      {
+       "name": "Space Station Features list",
+       "effect": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature. Launch Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Weapons Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Life Support, 5 pts, ES 5+, KS 5+, Hull 6: When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station. Reactor Core, 0 pts, ES 5+, KS 5+, Hull 6: When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”. Redundant Systems, 10 pts, ES 4+, KS 4+, Hull 7: This Space Station gains a 6+ Backup Save. Firing Computer, 10 pts, ES 5+, KS 5+, Hull 5: This Space Station’s Close Action weapons gain 6” additional range. Defensive Systems, 20 pts, ES 2+, KS 2+, Hull 3: None. Supercontrol Node, 25 pts, ES 4+, KS 4+, Hull 6: During the Activation and Asset Phases, you count as controlling this Space Station."
       }
      ]
     },
@@ -5788,6 +5874,14 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Supercontrol Node Feature. It may take one additional option from the Space Station Features list."
+      },
+      {
+       "name": "Supercontrol Node Feature",
+       "effect": "ES 4+, KS 4+, Hull 6. During the Activation and Asset Phases, you count as controlling this Space Station."
+      },
+      {
+       "name": "Space Station Features list",
+       "effect": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature. Launch Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Weapons Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Life Support, 5 pts, ES 5+, KS 5+, Hull 6: When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station. Reactor Core, 0 pts, ES 5+, KS 5+, Hull 6: When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”. Redundant Systems, 10 pts, ES 4+, KS 4+, Hull 7: This Space Station gains a 6+ Backup Save. Firing Computer, 10 pts, ES 5+, KS 5+, Hull 5: This Space Station’s Close Action weapons gain 6” additional range. Defensive Systems, 20 pts, ES 2+, KS 2+, Hull 3: None. Supercontrol Node, 25 pts, ES 4+, KS 4+, Hull 6: During the Activation and Asset Phases, you count as controlling this Space Station."
       }
      ]
     }
@@ -11787,6 +11881,14 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support Feature and two Weapons Control Features."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Two Weapons Control Features",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
       }
      ]
     },
@@ -11833,6 +11935,14 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support Feature and two Weapons Control Features."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Two Weapons Control Features",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
       }
      ]
     },
@@ -11879,6 +11989,18 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support Feature and two Weapons Control Features, and may take one additional option from the Space Station Features list."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Two Weapons Control Features",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+      },
+      {
+       "name": "Space Station Features list",
+       "effect": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature. Launch Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Weapons Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Life Support, 5 pts, ES 5+, KS 5+, Hull 6: When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station. Reactor Core, 0 pts, ES 5+, KS 5+, Hull 6: When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”. Redundant Systems, 10 pts, ES 4+, KS 4+, Hull 7: This Space Station gains a 6+ Backup Save. Firing Computer, 10 pts, ES 5+, KS 5+, Hull 5: This Space Station’s Close Action weapons gain 6” additional range. Defensive Systems, 20 pts, ES 2+, KS 2+, Hull 3: None. Supercontrol Node, 25 pts, ES 4+, KS 4+, Hull 6: During the Activation and Asset Phases, you count as controlling this Space Station."
       }
      ]
     },
@@ -11925,6 +12047,18 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support Feature and two Weapons Control Features, and may take one additional from the Space Station Features list."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Two Weapons Control Features",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+      },
+      {
+       "name": "Space Station Features list",
+       "effect": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature. Launch Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Weapons Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Life Support, 5 pts, ES 5+, KS 5+, Hull 6: When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station. Reactor Core, 0 pts, ES 5+, KS 5+, Hull 6: When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”. Redundant Systems, 10 pts, ES 4+, KS 4+, Hull 7: This Space Station gains a 6+ Backup Save. Firing Computer, 10 pts, ES 5+, KS 5+, Hull 5: This Space Station’s Close Action weapons gain 6” additional range. Defensive Systems, 20 pts, ES 2+, KS 2+, Hull 3: None. Supercontrol Node, 25 pts, ES 4+, KS 4+, Hull 6: During the Activation and Asset Phases, you count as controlling this Space Station."
       }
      ]
     }
@@ -17640,6 +17774,18 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support Feature and two Weapons Control Features, and may take one additional option from the Space Station Features list."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Two Weapons Control Features",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+      },
+      {
+       "name": "Space Station Features list",
+       "effect": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature. Launch Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Weapons Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Life Support, 5 pts, ES 5+, KS 5+, Hull 6: When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station. Reactor Core, 0 pts, ES 5+, KS 5+, Hull 6: When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”. Redundant Systems, 10 pts, ES 4+, KS 4+, Hull 7: This Space Station gains a 6+ Backup Save. Firing Computer, 10 pts, ES 5+, KS 5+, Hull 5: This Space Station’s Close Action weapons gain 6” additional range. Defensive Systems, 20 pts, ES 2+, KS 2+, Hull 3: None. Supercontrol Node, 25 pts, ES 4+, KS 4+, Hull 6: During the Activation and Asset Phases, you count as controlling this Space Station."
       }
      ]
     },
@@ -17686,6 +17832,18 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support Feature and two Weapons Control Features, and may take one additional option from the Space Station Features list."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Two Weapons Control Features",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+      },
+      {
+       "name": "Space Station Features list",
+       "effect": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature. Launch Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Weapons Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Life Support, 5 pts, ES 5+, KS 5+, Hull 6: When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station. Reactor Core, 0 pts, ES 5+, KS 5+, Hull 6: When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”. Redundant Systems, 10 pts, ES 4+, KS 4+, Hull 7: This Space Station gains a 6+ Backup Save. Firing Computer, 10 pts, ES 5+, KS 5+, Hull 5: This Space Station’s Close Action weapons gain 6” additional range. Defensive Systems, 20 pts, ES 2+, KS 2+, Hull 3: None. Supercontrol Node, 25 pts, ES 4+, KS 4+, Hull 6: During the Activation and Asset Phases, you count as controlling this Space Station."
       }
      ]
     }
@@ -24171,6 +24329,14 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support Feature and two Weapons Control Features."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Two Weapons Control Features",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
       }
      ],
      "namesake": "An ephyra is the free-swimming larval stage of a scyphozoan jellyfish, which later matures into the bell-shaped adult medusa. The term is borrowed from [Ephyra](https://en.wikipedia.org/wiki/Ephyra_(mythology)), an Oceanid water-nymph of Greek myth, a daughter of the Titans Oceanus and Tethys."
@@ -24205,6 +24371,14 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support Feature and two Weapons Control Features."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Two Weapons Control Features",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
       }
      ],
      "namesake": "A [nematocyst](https://en.wikipedia.org/wiki/Cnidocyte) is the venomous stinging organelle housed within the cnidocyte cells of jellyfish, sea anemones, and other cnidarians. It fires a coiled, barbed thread to inject toxin into prey, in one of the fastest mechanical processes in nature."
@@ -30145,6 +30319,22 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support Feature, a Launch Control Feature and a Weapons Control Feature. It must take one additional option from the Space Station Features list."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Launch Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
+      },
+      {
+       "name": "Weapons Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+      },
+      {
+       "name": "Space Station Features list",
+       "effect": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature. Launch Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Weapons Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Life Support, 5 pts, ES 5+, KS 5+, Hull 6: When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station. Reactor Core, 0 pts, ES 5+, KS 5+, Hull 6: When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”. Redundant Systems, 10 pts, ES 4+, KS 4+, Hull 7: This Space Station gains a 6+ Backup Save. Firing Computer, 10 pts, ES 5+, KS 5+, Hull 5: This Space Station’s Close Action weapons gain 6” additional range. Defensive Systems, 20 pts, ES 2+, KS 2+, Hull 3: None. Supercontrol Node, 25 pts, ES 4+, KS 4+, Hull 6: During the Activation and Asset Phases, you count as controlling this Space Station."
       }
      ]
     },
@@ -30189,6 +30379,14 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support Feature and two Weapons Control Features."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Two Weapons Control Features",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
       }
      ]
     },
@@ -30232,6 +30430,14 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support Feature. It must take two additional Features from the Space Station Features list, and may take one additional option from the Space Station Features list."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Space Station Features list",
+       "effect": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature. Launch Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Weapons Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Life Support, 5 pts, ES 5+, KS 5+, Hull 6: When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station. Reactor Core, 0 pts, ES 5+, KS 5+, Hull 6: When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”. Redundant Systems, 10 pts, ES 4+, KS 4+, Hull 7: This Space Station gains a 6+ Backup Save. Firing Computer, 10 pts, ES 5+, KS 5+, Hull 5: This Space Station’s Close Action weapons gain 6” additional range. Defensive Systems, 20 pts, ES 2+, KS 2+, Hull 3: None. Supercontrol Node, 25 pts, ES 4+, KS 4+, Hull 6: During the Activation and Asset Phases, you count as controlling this Space Station."
       }
      ],
      "namesake": "An [anchor](https://en.wikipedia.org/wiki/Anchor) is a heavy metal device lowered from a ship on a chain or cable to hold it in place against wind and current. It grips the seabed either by its weight or by flukes that dig into the bottom."
@@ -30277,6 +30483,18 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support and two Weapons Control Features. It may take one additional option from the Space Station Features list."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Two Weapons Control Features",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+      },
+      {
+       "name": "Space Station Features list",
+       "effect": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature. Launch Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Weapons Control, 5 pts, ES *, KS *, Hull 5: This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Life Support, 5 pts, ES 5+, KS 5+, Hull 6: When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station. Reactor Core, 0 pts, ES 5+, KS 5+, Hull 6: When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”. Redundant Systems, 10 pts, ES 4+, KS 4+, Hull 7: This Space Station gains a 6+ Backup Save. Firing Computer, 10 pts, ES 5+, KS 5+, Hull 5: This Space Station’s Close Action weapons gain 6” additional range. Defensive Systems, 20 pts, ES 2+, KS 2+, Hull 3: None. Supercontrol Node, 25 pts, ES 4+, KS 4+, Hull 6: During the Activation and Asset Phases, you count as controlling this Space Station."
       }
      ],
      "namesake": "A [shuriken](https://en.wikipedia.org/wiki/Shuriken) is a concealed Japanese throwing weapon associated with the samurai and ninja, often a sharpened flat plate or spike of metal. The popular star-shaped form is also known as a throwing star or ninja star."
@@ -36894,6 +37112,14 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support Feature and two Launch Control Features."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Two Launch Control Features",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
       }
      ]
     },
@@ -36923,6 +37149,14 @@
       {
        "name": "Hardpoints",
        "effect": "This Space Station has a Life Support Feature and two Launch Control Features."
+      },
+      {
+       "name": "Life Support Feature",
+       "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+      },
+      {
+       "name": "Two Launch Control Features",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
       }
      ]
     }
