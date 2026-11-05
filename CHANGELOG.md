@@ -5,6 +5,34 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-11-05: Space stations buy Features
+
+Fleet_Space_Stations_261104 page 2: every station has some Features built in
+and may or must buy more. `scripts/build-station-features.py` now writes all of
+it: `stationArmaments` in `fleet-index.json` (Weapon Systems, four Structures,
+eight Features, two Upgrades) and, on each faction station, `featurePicks`
+{required, optional} read from its Hardpoints. It rewrites only the
+`spaceStations` block of each faction file.
+
+Picks, from the sheet: Medium 3, Large 4, Gatestation 1, Anchor 2 plus 1;
+Defence Halo, Orbital Spire, Shuriken, Grand Station, Astrobotanical Outpost,
+Hypershredder and Hypersummoner 1 optional. Generic stations were still on the
+250828 sheet: Medium 55 to 45, Large 90 to 65, armaments "up to" instead of
+"must take", and an upgrade may be one Feature. Defensive Garrison and Forward
+Operating Base added (free, exclusive). Astrobotanical Lab text is the 2.4 one.
+
+Both apps share one rule set: `stationArmamentSpec` returns armMax, featReq,
+featOpt and upgradeCap; Features past featReq + featOpt spend an upgrade slot.
+The warning asks for missing required Features instead of armaments. Desktop's
+station list was dropping `featurePicks` when it copied station fields, and its
+alerts did not refresh after a module change; both fixed. The "Choose its
+armaments after adding it" caption is gone.
+
+Checked by hand in both apps: Anchor (cap 3, warning clears at 2, 100 to 145),
+Large (65, four Features 85, fifth Feature fills an upgrade, Lab fills the
+other, Grid and a sixth Feature refused, Garrison blocks Deep Space Tracking,
+155 total), mobile Anchor 115 with the fourth Feature refused.
+
 ### 2026-11-05: TTCombat's 5 November corrections
 
 TTCombat re-uploaded nine files on 5 November under the same names: the 2.4

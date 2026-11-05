@@ -526,82 +526,18 @@
    "description": "Nominate one of your Ships of Tonnage M or higher. You may permanently fly that Ship off the board in any opponent's Deployment Zone. If you do and that ship is not Crippled, gain 1VP. If that ship was H or C tonnage, gain 2VP instead."
   }
  ],
- "stationFeatures": {
-  "source": "Fleet_Space_Stations_261104.pdf p2",
-  "note": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature.",
-  "features": [
-   {
-    "name": "Launch Control",
-    "cost": 5,
-    "es": "*",
-    "ks": "*",
-    "hull": 5,
-    "effect": "This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
-   },
-   {
-    "name": "Weapons Control",
-    "cost": 5,
-    "es": "*",
-    "ks": "*",
-    "hull": 5,
-    "effect": "This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
-   },
-   {
-    "name": "Life Support",
-    "cost": 5,
-    "es": "5+",
-    "ks": "5+",
-    "hull": 6,
-    "effect": "When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
-   },
-   {
-    "name": "Reactor Core",
-    "cost": 0,
-    "es": "5+",
-    "ks": "5+",
-    "hull": 6,
-    "effect": "When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”."
-   },
-   {
-    "name": "Redundant Systems",
-    "cost": 10,
-    "es": "4+",
-    "ks": "4+",
-    "hull": 7,
-    "effect": "This Space Station gains a 6+ Backup Save."
-   },
-   {
-    "name": "Firing Computer",
-    "cost": 10,
-    "es": "5+",
-    "ks": "5+",
-    "hull": 5,
-    "effect": "This Space Station’s Close Action weapons gain 6” additional range."
-   },
-   {
-    "name": "Defensive Systems",
-    "cost": 20,
-    "es": "2+",
-    "ks": "2+",
-    "hull": 3,
-    "effect": "None."
-   },
-   {
-    "name": "Supercontrol Node",
-    "cost": 25,
-    "es": "4+",
-    "ks": "4+",
-    "hull": 6,
-    "effect": "During the Activation and Asset Phases, you count as controlling this Space Station."
-   }
-  ]
- },
  "stationArmaments": {
-  "note": "Universal armaments/upgrades for the generic Small/Medium/Large Fleet Space Stations. Verbatim from Fleet_Space_Stations_250818.pdf.",
-  "requiredBySize": {
+  "note": "Fleet Space Station options, verbatim from Fleet_Space_Stations_261104.pdf pages 2 to 4. Generic stations take armaments up to armamentMaxBySize, the Features in featuresRequiredBySize, and up to upgradeCapBySize upgrades, where an upgrade may be one Feature. Faction stations buy Features per their featurePicks. Written by scripts/build-station-features.py.",
+  "featuresNote": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature.",
+  "armamentMaxBySize": {
    "Small Space Station": 1,
    "Medium Space Station": 2,
    "Large Space Station": 3
+  },
+  "featuresRequiredBySize": {
+   "Small Space Station": 0,
+   "Medium Space Station": 3,
+   "Large Space Station": 4
   },
   "upgradeCapBySize": {
    "Small Space Station": 1,
@@ -662,14 +598,102 @@
     "category": "Structures",
     "cost": 10,
     "oncePerStation": true,
-    "effect": "When this Space Station targets enemy ships, Spikes on those ships have double their normal effect. So a Spike would increase the target's Signature by 6\" instead of 3\"."
+    "effect": "When this Space Station targets enemy ships, Spikes on those ships have double their normal effect. So a Spike would increase the target’s Signature by 6” instead of 3”."
    },
    {
     "name": "Scanner Uplink",
     "category": "Structures",
     "cost": 15,
     "oncePerStation": true,
-    "effect": "This Space Station's Scan range is increased by 3\". In addition, friendly ships within 3\" of one or more Space Stations with this special rule increase their Scan range by 3\". This special rule ceases to function while this Space Station is controlled by an enemy player."
+    "effect": "This Space Station’s Scan range is increased by 3”. In addition, friendly ships within 3” of one or more Space Stations with this special rule increase their Scan range by 3”. This special rule ceases to function while this Space Station is controlled by an enemy player."
+   },
+   {
+    "name": "Defensive Garrison",
+    "category": "Structures",
+    "cost": 0,
+    "oncePerStation": true,
+    "exclusiveStructure": true,
+    "effect": "This Structure does not cost points and can only be taken by a player that is the Defender in a scenario, choosing the scenario and agreeing with your opponent ahead of time. This Space Station starts the game with 2/3/4 Battalions on it for Small/Medium/Large Space Stations respectively. A Space Station that takes a Defensive Garrison cannot take any other Structures."
+   },
+   {
+    "name": "Forward Operating Base",
+    "category": "Structures",
+    "cost": 0,
+    "oncePerStation": true,
+    "exclusiveStructure": true,
+    "effect": "This Feature does not cost points and can only be taken by a player that is the Attacker in a scenario, choosing the scenario and agreeing with your opponent ahead of time. This Space Station may launch a single Bomber each round in addition to its normal launch (following Launch timing, restrictions, and your faction’s Bombers rules). Instead of attacking normally, you may remove this Bomber to place 2 Battalions on a Ship or Space Station in base contact with it. A Space Station that takes a Forward Operating Base cannot take any other Structures."
+   },
+   {
+    "name": "Launch Control",
+    "category": "Features",
+    "cost": 5,
+    "es": "*",
+    "ks": "*",
+    "hull": 5,
+    "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
+   },
+   {
+    "name": "Weapons Control",
+    "category": "Features",
+    "cost": 5,
+    "es": "*",
+    "ks": "*",
+    "hull": 5,
+    "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+   },
+   {
+    "name": "Life Support",
+    "category": "Features",
+    "cost": 5,
+    "es": "5+",
+    "ks": "5+",
+    "hull": 6,
+    "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+   },
+   {
+    "name": "Reactor Core",
+    "category": "Features",
+    "cost": 0,
+    "es": "5+",
+    "ks": "5+",
+    "hull": 6,
+    "effect": "ES 5+, KS 5+, Hull 6. When this Feature or a Space Station with this feature is destroyed, it explodes with a Reactor Overload Explosion Effect with a range of D6+3”."
+   },
+   {
+    "name": "Redundant Systems",
+    "category": "Features",
+    "cost": 10,
+    "es": "4+",
+    "ks": "4+",
+    "hull": 7,
+    "effect": "ES 4+, KS 4+, Hull 7. This Space Station gains a 6+ Backup Save."
+   },
+   {
+    "name": "Firing Computer",
+    "category": "Features",
+    "cost": 10,
+    "es": "5+",
+    "ks": "5+",
+    "hull": 5,
+    "effect": "ES 5+, KS 5+, Hull 5. This Space Station’s Close Action weapons gain 6” additional range."
+   },
+   {
+    "name": "Defensive Systems",
+    "category": "Features",
+    "cost": 20,
+    "es": "2+",
+    "ks": "2+",
+    "hull": 3,
+    "effect": "ES 2+, KS 2+, Hull 3. None."
+   },
+   {
+    "name": "Supercontrol Node",
+    "category": "Features",
+    "cost": 25,
+    "es": "4+",
+    "ks": "4+",
+    "hull": 6,
+    "effect": "ES 4+, KS 4+, Hull 6. During the Activation and Asset Phases, you count as controlling this Space Station."
    },
    {
     "name": "Astrobotanical Lab",
@@ -677,7 +701,7 @@
     "cost": 30,
     "isUpgrade": true,
     "subtitle": "Exo-Greenhouse",
-    "effect": "Signature Bloom: Friendly Ships within this Space Station's unmodified Signature are Hidden within its Bloom. Enemy Ships targeting a Hidden Ship's Group ignore a Spike for each Hidden Ship in that Group. This rule has no effect while this Space Station is controlled by an enemy player."
+    "effect": "Signature Bloom: Friendly Ships within this Space Station’s unmodified Signature are Hidden within its Bloom. Enemy Ships targeting a Hidden Ship’s Group ignore two Spikes if all Ships in the Group are Hidden. This rule has no effect while this Space Station is controlled by an enemy player."
    },
    {
     "name": "Defence Grid",

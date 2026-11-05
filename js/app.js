@@ -852,7 +852,8 @@ let activeGroupId = null;
       special: ss.stats?.special || '-',
       weapons: ss.weapons || [],
       loads: ss.loads || [],
-      stationRules: ss.stationRules || []
+      stationRules: ss.stationRules || [],
+      featurePicks: ss.featurePicks || null
     }));
     const deployableFeatures = (faction.deployableFeatures || []).map(df => ({
       id: df.id,
@@ -3001,13 +3002,13 @@ let activeGroupId = null;
       warnings.push({ type: 'error', msg: `Only one Famous/Faction Admiral per fleet (you have ${namedCount})` });
     }
 
-    // Generic space station needs its required armaments (soft nudge).
+    // A station that must take Features (Medium, Large, Gatestation, Anchor).
     if (fleet.spaceStation) {
       const spec = stationArmamentSpec(fleet.spaceStation);
-      if (spec) {
-        const { armTotal } = summariseStation(fleet.spaceStation);
-        if (armTotal < spec.required) {
-          warnings.push({ type: 'warn', msg: `${fleet.spaceStation.name}: choose ${spec.required} armament${spec.required > 1 ? 's' : ''} (has ${armTotal})` });
+      if (spec && spec.featReq) {
+        const { featTotal } = summariseStation(fleet.spaceStation, spec);
+        if (featTotal < spec.featReq) {
+          warnings.push({ type: 'warn', msg: `${fleet.spaceStation.name}: choose ${spec.featReq} Feature${spec.featReq > 1 ? 's' : ''} (has ${featTotal})` });
         }
       }
     }
@@ -6352,15 +6353,15 @@ let activeGroupId = null;
     }
     let pickerHtml = '';
     if (spec) {
-      const sum = summariseStation(ss);
+      const sum = summariseStation(ss, spec);
       const chosen = (ss.systems && ss.systems.length)
         ? `<div class="station-rules" style="margin-top:var(--sp-xs)">${ss.systems.map(n => `<span class="badge badge-neutral">${esc(n)}</span>`).join('')}</div>`
         : '';
-      const done = sum.armTotal === spec.required;
+      const done = sum.featTotal >= spec.featReq;
       pickerHtml = `${chosen}
         <button class="btn ${done ? 'btn-outline' : 'btn-primary'} btn-sm" onclick="App.openStationArmaments()" style="margin-top:var(--sp-sm)">
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.5 1.5M11.5 11.5L13 13M13 3l-1.5 1.5M4.5 11.5L3 13"/></svg>
-          ${ss.systems && ss.systems.length ? 'Edit modules' : 'Choose modules'} (${sum.armTotal}/${spec.required})
+          ${ss.systems && ss.systems.length ? 'Edit modules' : 'Choose modules'}${spec.featReq ? ` (${sum.featTotal}/${spec.featReq})` : ''}
         </button>`;
     }
 
@@ -6423,13 +6424,6 @@ let activeGroupId = null;
         ? `<div class="weapon-list" style="margin-top:var(--sp-xs)">${renderWeaponHeader()}${wpns.map(renderWeaponRow).join('')}</div>`
         : '';
       const launchHtml = renderLaunchTable(currentFleet.faction, ss, ss);
-      // Only the generic Small/Medium/Large stations can be armed. A faction station
-      // with no guns of its own (the Bioficer Hypersummoner) was being told to pick
-      // armaments it has no picker for, so ask the picker itself rather than guessing
-      // from an empty weapon list.
-      const genericNote = (stationArmamentSpec(ss) && !wpns.length && !launchHtml)
-        ? `<div class="text-caption" style="margin-top:var(--sp-xs)">Choose its armaments after adding it.</div>`
-        : '';
       return `<div class="station-option${isCurrent ? ' station-option-active' : ''}" onclick="App.selectStation('${ss.id}')">
         <div class="flex items-center justify-between" style="margin-bottom:var(--sp-xs)">
           <span class="station-option-name">${optArt ? `<span class="station-option-thumb"><img src="${thumbUrl(optArt)}" alt="" loading="lazy" onerror="this.closest('.station-option-thumb').remove()"></span>` : ''}${esc(ss.name)}${isCurrent ? ' <span class="badge badge-navy" style="font-size: 12px">Current</span>' : ''}</span>
@@ -6439,7 +6433,6 @@ let activeGroupId = null;
         ${rulesLine}
         ${wpnHtml}
         ${launchHtml}
-        ${genericNote}
       </div>`;
     }).join('');
 
@@ -6472,26 +6465,34 @@ let activeGroupId = null;
     // If the station has required modules (generic Small/Med/Large), pop the
     // modules modal straight away so the player fills them in.
     const spec = stationArmamentSpec(currentFleet.spaceStation);
-    if (spec && spec.required > 0) openStationArmaments();
+    if (spec && spec.featReq > 0) openStationArmaments();
   }
 
-  /* ── Station hardpoints (generic Small/Medium/Large) ───────
-     Mirror of the mobile logic: generic stations draw from the universal
-     stationArmaments (Weapon Systems + Structures fill the 1/2/3 count;
-     Upgrades are extra, cap 1/1/2). Faction-specific stations are fixed. */
+  /* ── Station hardpoints (Fleet_Space_Stations_261104) ───────
+     Mirror of the mobile logic. Generic Small/Medium/Large: armaments up to
+     1/2/3, Features they must take 0/3/4, upgrades 1/1/2 where an upgrade may
+     be one more Feature. Faction stations buy Features per their featurePicks
+     {required, optional}; with none they are fixed and have no picker. */
   function stationArmamentSpec(station) {
     const SA = rawFleetData && rawFleetData.stationArmaments;
-    if (!SA || !SA.requiredBySize) return null;
-    const required = SA.requiredBySize[station.name];
-    if (required == null) return null;
-    return { required, upgradeCap: (SA.upgradeCapBySize || {})[station.name] || 0, options: SA.options || [] };
+    if (!SA || !station) return null;
+    const all = SA.options || [];
+    const armMax = (SA.armamentMaxBySize || {})[station.name];
+    if (armMax != null) {
+      return { generic: true, armMax, featReq: (SA.featuresRequiredBySize || {})[station.name] || 0, featOpt: 0,
+        upgradeCap: (SA.upgradeCapBySize || {})[station.name] || 0, options: all };
+    }
+    const fp = station.featurePicks || ((stationDefFor(station) || {}).featurePicks);
+    if (!fp || !(fp.required || fp.optional)) return null;
+    return { generic: false, armMax: 0, featReq: fp.required || 0, featOpt: fp.optional || 0, upgradeCap: 0,
+      options: all.filter(o => o.category === 'Features') };
   }
   function stationOpt(name) {
     const SA = rawFleetData && rawFleetData.stationArmaments;
     return (SA && SA.options || []).find(o => o.name === name) || null;
   }
   function stationDefFor(station) {
-    const fdb = shipDB[currentFleet && currentFleet.faction];
+    const fdb = currentFleet && shipDB[currentFleet.faction];
     // Match on id, the mobile/shared `stationKey`, or name — so a station that came
     // from a share link or mobile (which store no inline stats) still resolves.
     return (fdb && fdb.spaceStations || []).find(x => x.id === station.id || x.id === station.stationKey || x.name === station.name) || null;
@@ -6502,20 +6503,39 @@ let activeGroupId = null;
     station.baseCost = base;
     station.cost = base + (station.systems || []).reduce((t, n) => t + (stationOpt(n)?.cost || 0), 0);
   }
-  function summariseStation(station) {
-    const counts = {}; let armTotal = 0, upgTotal = 0;
+  // Features past the station's own picks spend an upgrade slot (generic stations).
+  function summariseStation(station, spec) {
+    const counts = {}; let armTotal = 0, upgTotal = 0, featTotal = 0, structs = 0, exclusive = false;
     (station.systems || []).forEach(n => {
       counts[n] = (counts[n] || 0) + 1;
       const o = stationOpt(n);
-      if (o) { if (o.category === 'Upgrades') upgTotal++; else armTotal++; }
+      if (!o) return;
+      if (o.category === 'Upgrades') upgTotal++;
+      else if (o.category === 'Features') featTotal++;
+      else { armTotal++; if (o.category === 'Structures') { structs++; if (o.exclusiveStructure) exclusive = true; } }
     });
-    return { counts, armTotal, upgTotal };
+    const extraFeat = spec ? Math.max(0, featTotal - spec.featReq - spec.featOpt) : 0;
+    return { counts, armTotal, upgTotal, featTotal, structs, exclusive, upgUsed: upgTotal + extraFeat };
   }
   function canAddStationOption(station, opt, spec) {
-    const { counts, armTotal, upgTotal } = summariseStation(station);
-    if (opt.category === 'Upgrades') return upgTotal < spec.upgradeCap;
-    if (opt.oncePerStation && (counts[opt.name] || 0) >= 1) return false;
-    return armTotal < spec.required;
+    const s = summariseStation(station, spec);
+    if (opt.category === 'Upgrades') return s.upgUsed < spec.upgradeCap;
+    if (opt.category === 'Features') return s.featTotal < spec.featReq + spec.featOpt || s.upgUsed < spec.upgradeCap;
+    if (opt.oncePerStation && (s.counts[opt.name] || 0) >= 1) return false;
+    if (opt.category === 'Structures' && (s.exclusive || (opt.exclusiveStructure && s.structs > 0))) return false;
+    return s.armTotal < spec.armMax;
+  }
+  // What a station's picks stand at: Features 2 / 3, Armaments 1 / 2, Upgrades 0 / 1.
+  // readOnly gives the limits alone: Features 3, Armaments up to 2.
+  function stationPickLine(station, spec, readOnly) {
+    const s = summariseStation(readOnly ? { systems: [] } : station, spec);
+    const parts = [];
+    const featCap = spec.featReq + spec.featOpt;
+    const featLimit = spec.featReq ? spec.featReq + (spec.featOpt ? ` plus up to ${spec.featOpt}` : '') : `up to ${spec.featOpt}`;
+    if (featCap) parts.push(['Features', Math.min(s.featTotal, featCap), featCap, featLimit]);
+    if (spec.armMax) parts.push(['Armaments', s.armTotal, spec.armMax, `up to ${spec.armMax}`]);
+    if (spec.upgradeCap) parts.push(['Upgrades', s.upgUsed, spec.upgradeCap, `up to ${spec.upgradeCap}`]);
+    return parts.map(([label, have, of, limit]) => readOnly ? `${label} ${limit}` : `${label} ${have} / ${of}`).join(', ');
   }
   function addStationSystem(name) {
     if (!currentFleet || !currentFleet.spaceStation) return;
@@ -6523,20 +6543,20 @@ let activeGroupId = null;
     const spec = stationArmamentSpec(st); const opt = stationOpt(name);
     if (!spec || !opt || !canAddStationOption(st, opt, spec)) return;
     st.systems = st.systems || []; st.systems.push(name);
-    recalcStationCost(st); saveFleets(); renderStationSlot(); renderStationArmamentsModal(); updatePoints();
+    recalcStationCost(st); saveFleets(); renderStationSlot(); renderStationArmamentsModal(); updatePoints(); renderSidebarAlerts();
   }
   function removeStationSystem(name) {
     if (!currentFleet || !currentFleet.spaceStation) return;
     const st = currentFleet.spaceStation;
     const i = (st.systems || []).lastIndexOf(name); if (i < 0) return;
     st.systems.splice(i, 1);
-    recalcStationCost(st); saveFleets(); renderStationSlot(); renderStationArmamentsModal(); updatePoints();
+    recalcStationCost(st); saveFleets(); renderStationSlot(); renderStationArmamentsModal(); updatePoints(); renderSidebarAlerts();
   }
   // `readOnly` = { faction } lists the armaments for the Unit Reference: prices
   // and full weapon/launch tables, no counters.
   function renderStationArmamentPicker(station, spec, readOnly) {
-    const { counts, armTotal } = summariseStation(readOnly ? { systems: [] } : station);
-    const complete = readOnly || armTotal === spec.required;
+    const { counts, featTotal } = summariseStation(readOnly ? { systems: [] } : station, spec);
+    const complete = readOnly || featTotal >= spec.featReq;
     const launchFaction = readOnly ? readOnly.faction : currentFleet.faction;
     const byCat = {};
     spec.options.forEach(o => { (byCat[o.category] = byCat[o.category] || []).push(o); });
@@ -6607,8 +6627,8 @@ let activeGroupId = null;
     }).join('');
     return `<div class="systems-picker${complete ? '' : ' systems-picker-incomplete'}">
       <div class="systems-picker-head">
-        <span class="systems-picker-title">Armaments, choose ${spec.required}</span>
-        ${readOnly ? '' : `<span class="systems-picker-count">${armTotal} / ${spec.required}</span>`}
+        <span class="systems-picker-title">Modules</span>
+        <span class="systems-picker-count">${stationPickLine(station, spec, readOnly)}</span>
       </div>
       ${body}
     </div>`;
@@ -9196,6 +9216,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-11-05', title: "Space stations buy Features", items: [
+      "Stations can buy Features in the modules picker: Medium must take 3 and Large 4, the Shaltari Gatestation 1 and the Anchor 2 (plus 1 more). The PHR Defence Halo and Orbital Spire, Shaltari Shuriken, Resistance Grand Station and Astrobotanical Outpost, and Bioficer Hypershredder and Hypersummoner may take 1.",
+      "Small, Medium and Large stations follow the 2.4 sheet: Medium is 45 pts and Large 65. Armaments are optional now, up to 1, 2 or 3. An upgrade slot can hold one Feature instead of an Astrobotanical Lab or Defence Grid.",
+      "New Structures: Defensive Garrison and Forward Operating Base, free, and each rules out other Structures. The Astrobotanical Lab's Bloom ignores two Spikes if every Ship in the Group is Hidden."
+    ]},
     { date: '2026-11-05', title: "TTCombat's 5 November corrections", items: [
       "Rules: 7.4.5 Recall Launch is gone. Escort is optional now: you may assign the Group. A Group with a shields token gains a Spike only if at least one attack dice hits. The AP Re-roll note at the end of 6.3 Initiative is gone. Hangars have Hull 5.",
       "UCM: the Istanbul's guns are the UF-B-9000s Mass Driver (Anti-Ship) and (Bombardment). The Havelock's Tip of the Spear counts from a chosen deployment zone only, no board edge.",
@@ -9203,7 +9228,7 @@ let activeGroupId = null;
       "Resistance: if you control a Dropsite through the Ark Lander, you may also attack with all its Scenario Feature weapons and launch all its assets.",
       "Bioficer: the Fugue's Lightvice is back to Attack 4. The Cosmic's Barb Stinger is Reave-1. The Binary and Brutal Scythe Nodules are Fusillade-2.",
       "Space stations: Shaltari stations have Signature 2\" and list their Hardpoints. The Shuriken, Grand Station, Astrobotanical Outpost and Hypershredder come with two Weapons Control Features.",
-      "Space stations: each built-in Feature (Life Support, Launch Control, Weapons Control, Reactor Core, Supercontrol Node) shows its saves, Hull and rule. Stations that can buy more Features list all eight with their points.",
+      "Space stations: each built-in Feature (Life Support, Launch Control, Weapons Control, Reactor Core, Supercontrol Node) shows its saves, Hull and rule.",
       "Rearm reads \"can only be affected by Rearm once\". The calculator's Fugue Lightvice and battleship Scythe Nodule presets match the new cards."
     ]},
     { date: '2026-11-04', title: 'Genitor Tower no longer asks for a feature', items: [
@@ -11564,7 +11589,7 @@ let activeGroupId = null;
           ${names.length ? `<div class="dp-systems"><b>Rules:</b> ${names.map(esc).join(', ')}</div>` : ''}
           ${dpWeaponTable(d.weapons || [])}
           ${launch ? `<div class="dp-loads"><b>Launch:</b> ${launch}</div>` : ''}
-          ${spec ? `<div class="dp-systems"><b>Armaments, choose ${spec.required}</b></div>` : ''}
+          ${spec ? `<div class="dp-systems"><b>Modules:</b> ${esc(stationPickLine(d, spec, true))}</div>` : ''}
         </div></div>`;
       }
       const weapons = (d.weapons || []).map(w => ({ ...w }));

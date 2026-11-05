@@ -6427,12 +6427,26 @@
         "g": "1",
         "special": "-"
       },
-      "specialRules": []
+      "specialRules": [],
+      "stationRules": [
+        {
+          "name": "Hardpoints",
+          "effect": "This Space Station has a Weapons Control and a Life Support Feature. It may take one Armament from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+        },
+        {
+          "name": "Weapons Control Feature",
+          "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+        },
+        {
+          "name": "Life Support Feature",
+          "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+        }
+      ]
     },
     {
       "id": "218b-faf8-ffab-2cd5",
       "name": "Medium Space Station",
-      "cost": 55,
+      "cost": 45,
       "stats": {
         "scan": "6\"",
         "sig": "6\"",
@@ -6443,12 +6457,22 @@
         "g": "1",
         "special": "-"
       },
-      "specialRules": []
+      "specialRules": [],
+      "stationRules": [
+        {
+          "name": "Hardpoints",
+          "effect": "This Space Station has a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+        },
+        {
+          "name": "Life Support Feature",
+          "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+        }
+      ]
     },
     {
       "id": "6f26-fe48-4135-7ed3",
       "name": "Large Space Station",
-      "cost": 90,
+      "cost": 65,
       "stats": {
         "scan": "6\"",
         "sig": "8\"",
@@ -6459,7 +6483,17 @@
         "g": "1",
         "special": "-"
       },
-      "specialRules": []
+      "specialRules": [],
+      "stationRules": [
+        {
+          "name": "Hardpoints",
+          "effect": "This Space Station has a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+        },
+        {
+          "name": "Life Support Feature",
+          "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+        }
+      ]
     },
     {
       "id": "68e9-14ab-4493-0656",
@@ -6489,12 +6523,12 @@
           "effect": "This Space Station has a Life Support Feature and two Launch Control Features."
         },
         {
-         "name": "Life Support Feature",
-         "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+          "name": "Life Support Feature",
+          "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
         },
         {
-         "name": "Two Launch Control Features",
-         "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
+          "name": "Two Launch Control Features",
+          "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
         }
       ]
     },
@@ -6526,12 +6560,12 @@
           "effect": "This Space Station has a Life Support Feature and two Launch Control Features."
         },
         {
-         "name": "Life Support Feature",
-         "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
+          "name": "Life Support Feature",
+          "effect": "ES 5+, KS 5+, Hull 6. When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."
         },
         {
-         "name": "Two Launch Control Features",
-         "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
+          "name": "Two Launch Control Features",
+          "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
         }
       ]
     }
