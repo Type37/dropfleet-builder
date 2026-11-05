@@ -213,7 +213,7 @@
         "specialRules": [
           {
             "name": "Tip of the Spear",
-            "description": "At the start of the game, choose one of your deployment zones or a single board edge. While this Ship is further than 12” away from the chosen deployment zone or board edge, you may re-roll its failed Backup Saves."
+            "description": "At the start of the game, choose one of your deployment zones. While this Ship is further than 12” away from the chosen deployment zone, you may re-roll its failed Backup Saves."
           }
         ],
         "groupMin": 1,
@@ -3717,7 +3717,7 @@
         "specialRules": [
           {
             "name": "Escort",
-            "description": "At the start of the game, before deployment, assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
+            "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           }
@@ -3998,7 +3998,7 @@
           },
           {
             "name": "Escort",
-            "description": "At the start of the game, before deployment, assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
+            "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
             "page": "36",
             "publicationId": "45b0-3e3b-e83d-fd70"
           }
@@ -4038,7 +4038,7 @@
         },
         "weapons": [
           {
-            "name": "UF-B-9000s (Anti-Ship)",
+            "name": "UF-B-9000s Mass Driver (Anti-Ship)",
             "arc": "FN",
             "attack": "3",
             "lock": "3+",
@@ -4047,7 +4047,7 @@
             "special": "Alt-1, Focused, Penetrator"
           },
           {
-            "name": "UF-B-9000s (Bombardment)",
+            "name": "UF-B-9000s Mass Driver (Bombardment)",
             "arc": "F",
             "attack": "2",
             "lock": "4+",
@@ -5093,7 +5093,7 @@
           },
           {
             "name": "Resupply and Rearm",
-            "description": "If this ship ends its movement on the same orbital layer and in base contact with a friendly ship of Medium Tonnage or higher or a Space Station, pick one of the following:\nResupply: That Ship or Space Station recovers 3 Hull points and remove any Crippling Effect tokens.\nRearm: Increase the Limited-X value of any of that Ship or Space Station's Weapons and Launch Assets by 1 until the end of the round. Each Ship or Space Station can only be affected by this rule once."
+            "description": "If this ship ends its movement on the same orbital layer and in base contact with a friendly ship of Medium Tonnage or higher or a Space Station, pick one of the following:\nResupply: That Ship or Space Station recovers 3 Hull points and remove any Crippling Effect tokens.\nRearm: Increase the Limited-X value of any of that Ship or Space Station's Weapons and Launch Assets by 1 until the end of the round. Each Ship or Space Station can only be affected by Rearm once."
           },
           {
             "name": "Flawed Design",

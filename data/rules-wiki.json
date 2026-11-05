@@ -823,7 +823,7 @@
            "kind": "h",
            "runs": [
             {
-             "t": "Innacurate"
+             "t": "Inaccurate"
             }
            ]
           },
@@ -1951,14 +1951,6 @@
        "runs": [
         {
          "t": "In the case of a tie, those players roll off again until a winner is determined."
-        }
-       ]
-      },
-      {
-       "kind": "p",
-       "runs": [
-        {
-         "t": "The AP Re-roll ability cannot be used to re-roll any dice in your roll to determine initiative. Other abilities may still affect this roll."
         }
        ]
       }
@@ -3288,23 +3280,6 @@
        "xrefs": [
         "8.3"
        ]
-      },
-      {
-       "id": "7.4.5",
-       "number": "7.4.5",
-       "heading": "Recall Launch",
-       "page": 21,
-       "body": [
-        {
-         "kind": "p",
-         "runs": [
-          {
-           "t": "If launching a Fighter or Bomber would bring you above your Launch Capacity, you may remove friendly Fighters/Bombers from the table until you would be at your Launch Capacity."
-          }
-         ]
-        }
-       ],
-       "children": []
       }
      ]
     }
@@ -5114,7 +5089,11 @@
            "t": "4+"
           }
          ],
-         [],
+         [
+          {
+           "t": "5"
+          }
+         ],
          [
           {
            "t": "-"
@@ -7148,7 +7127,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "At the start of the game, before deployment, assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers"
+           "t": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers"
           }
          ]
         }
@@ -7405,7 +7384,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "While a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike."
+           "t": "While a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits."
           }
          ]
         },

@@ -5079,6 +5079,15 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-11-05', title: "TTCombat's 5 November corrections", items: [
+      "Rules: 7.4.5 Recall Launch is gone. Escort is optional now: you may assign the Group. A Group with a shields token gains a Spike only if at least one attack dice hits. The AP Re-roll note at the end of 6.3 Initiative is gone. Hangars have Hull 5.",
+      "UCM: the Istanbul's guns are the UF-B-9000s Mass Driver (Anti-Ship) and (Bombardment). The Havelock's Tip of the Spear counts from a chosen deployment zone only, no board edge.",
+      "PHR: the Heracles, Minos, Rhadamanthus and Octavius Heavy Calibre Broadsides are Calibre-H/C, Claudia Rhee's Heracles included. The Antigonus has Holo Interference Field, the same rule as the Agrippa.",
+      "Resistance: if you control a Dropsite through the Ark Lander, you may also attack with all its Scenario Feature weapons and launch all its assets.",
+      "Bioficer: the Fugue's Lightvice is back to Attack 4. The Cosmic's Barb Stinger is Reave-1. The Binary and Brutal Scythe Nodules are Fusillade-2.",
+      "Space stations: Shaltari stations have Signature 2\" and list their Hardpoints. The Shuriken, Grand Station, Astrobotanical Outpost and Hypershredder come with two Weapons Control Features.",
+      "Rearm reads \"can only be affected by Rearm once\". The calculator's Fugue Lightvice and battleship Scythe Nodule presets match the new cards."
+    ]},
     { date: '2026-11-04', title: 'Genitor Tower no longer asks for a feature', items: [
       'The Genitor Tower is a Deployable Feature itself, carried by a Porter. Since the 2.4 update it showed the Feature Carrier picker and flagged the list until you chose a Gravitational Arc or Ghost Orb Tower for it. The picker is gone.',
       'A feature already picked on a Genitor Tower charged its points (12 or 16). Opening the list removes the pick and its points.'

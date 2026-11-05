@@ -169,7 +169,7 @@
       "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H, Penetrator, Volley-2"
+      "special": "Calibre-H/C, Penetrator, Volley-2"
      },
      {
       "name": "Heavy Calibre Broadside",
@@ -178,7 +178,7 @@
       "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H, Penetrator, Volley-2"
+      "special": "Calibre-H/C, Penetrator, Volley-2"
      },
      {
       "name": "Heavy Calibre Broadside",
@@ -187,7 +187,7 @@
       "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H, Penetrator, Volley-2"
+      "special": "Calibre-H/C, Penetrator, Volley-2"
      },
      {
       "name": "Dark Matter Cannon",
@@ -612,7 +612,7 @@
       "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H, Penetrator, Volley-2"
+      "special": "Calibre-H/C, Penetrator, Volley-2"
      },
      {
       "name": "Heavy Calibre Broadside",
@@ -621,7 +621,7 @@
       "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H, Penetrator, Volley-2"
+      "special": "Calibre-H/C, Penetrator, Volley-2"
      },
      {
       "name": "Heavy Calibre Broadside",
@@ -630,7 +630,7 @@
       "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H, Penetrator, Volley-2"
+      "special": "Calibre-H/C, Penetrator, Volley-2"
      },
      {
       "name": "Neutron Missiles",
@@ -1039,7 +1039,7 @@
       "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H, Penetrator, Volley-2"
+      "special": "Calibre-H/C, Penetrator, Volley-2"
      },
      {
       "name": "Neutron Missiles",
@@ -1217,7 +1217,7 @@
       "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H, Penetrator, Volley-2"
+      "special": "Calibre-H/C, Penetrator, Volley-2"
      },
      {
       "name": "Heavy Calibre Broadside",
@@ -1226,7 +1226,7 @@
       "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H, Penetrator, Volley-2"
+      "special": "Calibre-H/C, Penetrator, Volley-2"
      },
      {
       "name": "Heavy Calibre Broadside",
@@ -1235,7 +1235,7 @@
       "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H, Penetrator, Volley-2"
+      "special": "Calibre-H/C, Penetrator, Volley-2"
      },
      {
       "name": "Neutron Missiles",
@@ -1297,7 +1297,7 @@
       "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H, Penetrator, Volley-2"
+      "special": "Calibre-H/C, Penetrator, Volley-2"
      },
      {
       "name": "Heavy Calibre Broadside",
@@ -1306,7 +1306,7 @@
       "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H, Penetrator, Volley-2"
+      "special": "Calibre-H/C, Penetrator, Volley-2"
      },
      {
       "name": "Heavy Calibre Broadside",
@@ -1315,7 +1315,7 @@
       "lock": "4+",
       "damage": "3",
       "type": "K",
-      "special": "Calibre-H, Penetrator, Volley-2"
+      "special": "Calibre-H/C, Penetrator, Volley-2"
      },
      {
       "name": "Dark Matter Cannon",
@@ -1829,7 +1829,7 @@
      "ks": "4+",
      "bs": "6+",
      "g": "1",
-     "special": "Command Ship-1, Holo Deterrence Field, Feature Carrier"
+     "special": "Command Ship-1, Holo Interference Field, Feature Carrier"
     },
     "weapons": [
      {
@@ -1851,8 +1851,8 @@
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
      {
-      "name": "Holo Deterrence Field",
-      "description": "At the end of this Ship’s activation, choose two different Arcs from F/SL/SR/R. Until the start of this Ship’s next activation, enemy Launch Assets that start their move within 6” in the chosen Arcs reduce their Thrust by 2” for that move and cannot be placed in base contact with this Ship."
+      "name": "Holo Interference Field",
+      "description": "At the end of this ship’s activation, you may place a Holo Interference Field within 4” of this ship. These Holo Interference Fields are removed during the Cleanup step of the End Phase and are circular with a 4” diameter (a D6 or custom template are perfect tokens to represent these). Enemy Ships ignore the target’s Spikes and Signature when attacking through a Holo Interference Field. Enemy Fighters & Bombers underneath the Holo Interference Field when it is placed, or that move/ are placed into the Holo Interference Field are removed on a 4+."
      },
      {
       "name": "Feature Carrier",
@@ -3408,7 +3408,7 @@
      },
      {
       "name": "Escort",
-      "description": "At the start of the game, before deployment, assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
+      "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3585,7 +3585,7 @@
     "specialRules": [
      {
       "name": "Escort",
-      "description": "At the start of the game, before deployment, assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
+      "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -4370,7 +4370,7 @@
      },
      {
       "name": "Resupply and Rearm",
-      "description": "If this ship ends its movement on the same orbital layer and in base contact with a friendly ship of Medium Tonnage or higher or a Space Station, pick one of the following:\nResupply: That Ship or Space Station recovers 3 Hull points and remove any Crippling Effect tokens.\nRearm: Increase the Limited-X value of any of that Ship or Space Station's Weapons and Launch Assets by 1 until the end of the round. Each Ship or Space Station can only be affected by this rule once."
+      "description": "If this ship ends its movement on the same orbital layer and in base contact with a friendly ship of Medium Tonnage or higher or a Space Station, pick one of the following:\nResupply: That Ship or Space Station recovers 3 Hull points and remove any Crippling Effect tokens.\nRearm: Increase the Limited-X value of any of that Ship or Space Station's Weapons and Launch Assets by 1 until the end of the round. Each Ship or Space Station can only be affected by Rearm once."
      },
      {
       "name": "Flawed Design",

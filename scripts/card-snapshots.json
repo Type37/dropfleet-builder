@@ -360,7 +360,7 @@
 "fugue": {
 "name": "Fugue",
 "page": 16,
-"sig": "c9606665be94",
+"sig": "bbe6856a9a00",
 "cost": 35,
 "stats": {
 "thrust": "14\"",
@@ -377,7 +377,7 @@
 {
 "name": "Lightvice",
 "arc": "F/S",
-"attack": "3",
+"attack": "4",
 "lock": "2+",
 "damage": "1",
 "type": "K",
@@ -1159,7 +1159,7 @@
 "cosmic": {
 "name": "Cosmic",
 "page": 39,
-"sig": "8504b7305f4b",
+"sig": "732d28aba87b",
 "cost": 88,
 "stats": {
 "thrust": "8\"",
@@ -1189,7 +1189,7 @@
 "lock": "2+",
 "damage": "1",
 "type": "K",
-"special": "Focused, Reave-2"
+"special": "Focused, Reave-1"
 }
 ],
 "loads": [],
@@ -1797,7 +1797,7 @@
 "binary": {
 "name": "Binary",
 "page": 56,
-"sig": "a72355dbf3a0",
+"sig": "ac8205233349",
 "cost": 225,
 "stats": {
 "thrust": "8\"",
@@ -1827,7 +1827,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-1, Burnthrough-1"
+"special": "Anti Wing, Fusillade-2, Burnthrough-1"
 },
 {
 "name": "Scythe Nodule",
@@ -1836,7 +1836,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-1, Burnthrough-1"
+"special": "Anti Wing, Fusillade-2, Burnthrough-1"
 }
 ],
 "loads": [
@@ -1855,7 +1855,7 @@
 "brutal": {
 "name": "Brutal",
 "page": 57,
-"sig": "4c4c13b6b35f",
+"sig": "2ebc2bed8dea",
 "cost": 215,
 "stats": {
 "thrust": "8\"",
@@ -1885,7 +1885,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-1, Burnthrough-1"
+"special": "Anti Wing, Fusillade-2, Burnthrough-1"
 },
 {
 "name": "Scythe Nodule",
@@ -1894,7 +1894,7 @@
 "lock": "4+",
 "damage": "1",
 "type": "E",
-"special": "Anti Wing, Fusillade-1, Burnthrough-1"
+"special": "Anti Wing, Fusillade-2, Burnthrough-1"
 }
 ],
 "loads": [
@@ -2313,7 +2313,7 @@
 "heracles": {
 "name": "Heracles",
 "page": 53,
-"sig": "c1fe709169d6",
+"sig": "9ba2056bf797",
 "cost": 235,
 "stats": {
 "thrust": "6\"",
@@ -2334,7 +2334,7 @@
 "lock": "4+",
 "damage": "3",
 "type": "K",
-"special": "Calibre-H, Penetrator, Volley-2"
+"special": "Calibre-H/C, Penetrator, Volley-2"
 },
 {
 "name": "Heavy Calibre Broadside",
@@ -2343,7 +2343,7 @@
 "lock": "4+",
 "damage": "3",
 "type": "K",
-"special": "Calibre-H, Penetrator, Volley-2"
+"special": "Calibre-H/C, Penetrator, Volley-2"
 },
 {
 "name": "Heavy Calibre Broadside",
@@ -2352,7 +2352,7 @@
 "lock": "4+",
 "damage": "3",
 "type": "K",
-"special": "Calibre-H, Penetrator, Volley-2"
+"special": "Calibre-H/C, Penetrator, Volley-2"
 },
 {
 "name": "Dark Matter Cannon",
@@ -3913,7 +3913,7 @@
 "antigonus": {
 "name": "Antigonus",
 "page": 44,
-"sig": "7d8fe846a556",
+"sig": "36bce59152b0",
 "cost": 170,
 "stats": {
 "thrust": "7\"",
@@ -3939,7 +3939,7 @@
 ],
 "loads": [],
 "rules": {
-"Holo Deterrence Field": "c0e3c3f81f80",
+"Holo Interference Field": "cbcf0487aaaf",
 "Feature Carrier": "edc050458cdd"
 },
 "lore": "97d170e1550e",
@@ -4266,7 +4266,7 @@
 "minos": {
 "name": "Minos",
 "page": 54,
-"sig": "7b0238524b88",
+"sig": "75972692a175",
 "cost": 255,
 "stats": {
 "thrust": "6\"",
@@ -4287,7 +4287,7 @@
 "lock": "4+",
 "damage": "3",
 "type": "K",
-"special": "Calibre-H, Penetrator, Volley-2"
+"special": "Calibre-H/C, Penetrator, Volley-2"
 },
 {
 "name": "Heavy Calibre Broadside",
@@ -4296,7 +4296,7 @@
 "lock": "4+",
 "damage": "3",
 "type": "K",
-"special": "Calibre-H, Penetrator, Volley-2"
+"special": "Calibre-H/C, Penetrator, Volley-2"
 },
 {
 "name": "Heavy Calibre Broadside",
@@ -4305,7 +4305,7 @@
 "lock": "4+",
 "damage": "3",
 "type": "K",
-"special": "Calibre-H, Penetrator, Volley-2"
+"special": "Calibre-H/C, Penetrator, Volley-2"
 },
 {
 "name": "Neutron Missiles",
@@ -4413,7 +4413,7 @@
 "rhadamanthus": {
 "name": "Rhadamanthus",
 "page": 57,
-"sig": "7518ce963eb1",
+"sig": "b183a6a4d440",
 "cost": 205,
 "stats": {
 "thrust": "10\"",
@@ -4434,7 +4434,7 @@
 "lock": "4+",
 "damage": "3",
 "type": "K",
-"special": "Calibre-H, Penetrator, Volley-2"
+"special": "Calibre-H/C, Penetrator, Volley-2"
 },
 {
 "name": "Neutron Missiles",
@@ -4718,7 +4718,7 @@
 "octavius": {
 "name": "Octavius",
 "page": 63,
-"sig": "8982f3d7eb6f",
+"sig": "f80899830864",
 "cost": 315,
 "stats": {
 "thrust": "6\"",
@@ -4739,7 +4739,7 @@
 "lock": "4+",
 "damage": "3",
 "type": "K",
-"special": "Calibre-H, Penetrator, Volley-2"
+"special": "Calibre-H/C, Penetrator, Volley-2"
 },
 {
 "name": "Heavy Calibre Broadside",
@@ -4748,7 +4748,7 @@
 "lock": "4+",
 "damage": "3",
 "type": "K",
-"special": "Calibre-H, Penetrator, Volley-2"
+"special": "Calibre-H/C, Penetrator, Volley-2"
 },
 {
 "name": "Heavy Calibre Broadside",
@@ -4757,7 +4757,7 @@
 "lock": "4+",
 "damage": "3",
 "type": "K",
-"special": "Calibre-H, Penetrator, Volley-2"
+"special": "Calibre-H/C, Penetrator, Volley-2"
 },
 {
 "name": "Neutron Missiles",
@@ -12477,7 +12477,7 @@
 "istanbul": {
 "name": "Istanbul",
 "page": 16,
-"sig": "721121480a54",
+"sig": "f119e498b838",
 "cost": 57,
 "stats": {
 "thrust": "6\"",
@@ -12492,7 +12492,7 @@
 },
 "weapons": [
 {
-"name": "UF-B-9000s (Anti-Ship)",
+"name": "UF-B-9000s Mass Driver (Anti- Ship)",
 "arc": "FN",
 "attack": "3",
 "lock": "3+",
@@ -12501,7 +12501,7 @@
 "special": "Alt-1, Focused, Penetrator"
 },
 {
-"name": "UF-B-9000s (Bombardment)",
+"name": "UF-B-9000s Mass Driver (Bombardment)",
 "arc": "F",
 "attack": "2",
 "lock": "4+",
@@ -14859,7 +14859,7 @@
 "slm9resupplyhauler": {
 "name": "SLM-9 Resupply Hauler",
 "page": 11,
-"sig": "46c24460f53c",
+"sig": "e097259180c7",
 "cost": 35,
 "stats": {
 "thrust": "9\"",
@@ -14875,7 +14875,7 @@
 "weapons": [],
 "loads": [],
 "rules": {
-"Resupply and Rearm": "dfa65b044ef1",
+"Resupply and Rearm": "c941e014c649",
 "Flawed Design": "aa88ed3e1cdf"
 },
 "lore": "da61ef3c257e",

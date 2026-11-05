@@ -5,6 +5,48 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-11-05: TTCombat's 5 November corrections
+
+TTCombat re-uploaded nine files on 5 November under the same names: the 2.4
+rulebook, FAQ v1.4, Ship Updates v1.4, Fleet Space Stations and the Bioficer,
+Civilian, PHR, Resistance and UCM stats. `auto-update.py` picked up the card
+weapon changes. The rest was read by hand from a text diff of each file
+against the 4 November copy.
+
+Rules. The new rulebook PDF only drops 7.4.5 Recall Launch. The other rules
+fixes in TTCombat's list sit in FAQ v1.4 (Escort, Shield, 6.3 marked r1.4) or
+in no file yet (Hangar Hull 5, the Inaccurate spelling). All six are in
+`rules-wiki.json`. The Shield wording ("if at least one attack dice hits",
+from the FAQ) is also in every Shaltari Shield-X entry, the shared rules, the
+scenario glossary and the game summary. Escort's "you may assign" is in the
+shared rules, the PHR and UCM escort ships and the scenario glossary.
+
+UCM. Istanbul weapons renamed to UF-B-9000s Mass Driver (Anti-Ship) and
+(Bombardment); the card reader split "Anti-Ship" over a line break and that
+was fixed by hand. Havelock's Tip of the Spear drops the board edge option.
+
+PHR. Heracles, Minos, Rhadamanthus, Octavius and Claudia Rhee's Heracles
+broadsides are Calibre-H/C. The Brutus is a Pocket Battleship and its card
+still says Calibre-H, so it keeps it. Antigonus takes the Agrippa's Holo
+Interference Field text.
+
+Resistance. Ark Lander points at 8.1.1 and lets the controller fire the
+Dropsite's Scenario Feature weapons and launch its assets.
+
+Bioficer. Fugue Lightvice Att 4, Cosmic Barb Stinger Reave-1, Binary and
+Brutal Scythe Nodules Fusillade-2.
+
+Space stations. Shaltari Gatestation, Grav Hook, Anchor and Shuriken
+Signature 6" to 2". Shaltari stations had no Hardpoints line, so all four
+gained theirs from the sheet. Grand Station, Astrobotanical Outpost and
+Hypershredder Hardpoints rewritten. The generic Life Support, Launch Control
+and Weapons Control Features are not in the app, so their new text is not
+either.
+
+Rearm on every faction's civilian resupply ship reads "affected by Rearm
+once". Calculator presets: Bioficer Lightvice Attack 4, Battleship Scythe
+Nodule Fusillade-2, Istanbul preset names follow the card.
+
 ### 2026-11-04: Genitor Tower no longer asks for a feature
 
 The 2.4 change to `isFeatureCarrier` matched `(choose|must be assigned)

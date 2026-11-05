@@ -132,7 +132,7 @@
      },
      {
       "name": "Shield-3+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 3+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 3+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -224,7 +224,7 @@
      },
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -310,7 +310,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -386,7 +386,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -488,7 +488,7 @@
      },
      {
       "name": "Shield-3+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 3+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 3+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -589,7 +589,7 @@
      },
      {
       "name": "Shield-3+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 3+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 3+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -673,7 +673,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -741,7 +741,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -812,7 +812,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -892,7 +892,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -961,7 +961,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1048,7 +1048,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1147,7 +1147,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1253,7 +1253,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1352,7 +1352,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1457,7 +1457,7 @@
      },
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1565,7 +1565,7 @@
      },
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -1653,7 +1653,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -1719,7 +1719,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -1797,7 +1797,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -1866,7 +1866,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -1932,7 +1932,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -2000,7 +2000,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -2086,7 +2086,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -2170,7 +2170,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -2245,7 +2245,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -2305,7 +2305,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -2380,7 +2380,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2444,7 +2444,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2507,7 +2507,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2579,7 +2579,7 @@
     "specialRules": [
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2653,7 +2653,7 @@
      },
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2710,7 +2710,7 @@
      },
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2778,7 +2778,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2889,7 +2889,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2943,7 +2943,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3006,7 +3006,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3069,7 +3069,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3142,7 +3142,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3212,7 +3212,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3279,7 +3279,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3341,7 +3341,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3396,7 +3396,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3450,7 +3450,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3520,7 +3520,7 @@
      },
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3591,7 +3591,7 @@
      },
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3658,7 +3658,7 @@
      },
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3723,7 +3723,7 @@
      },
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3776,7 +3776,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3834,7 +3834,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3896,7 +3896,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -3954,7 +3954,7 @@
     "specialRules": [
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -4018,7 +4018,7 @@
      },
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -4093,7 +4093,7 @@
      },
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -4149,7 +4149,7 @@
      },
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -4208,7 +4208,7 @@
      },
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves."
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves."
      },
      {
       "name": "Stealth",
@@ -4283,7 +4283,7 @@
      },
      {
       "name": "Shield-4+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -4373,7 +4373,7 @@
      },
      {
       "name": "Shield-5+",
-      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+      "description": "This Group/Dropsite has an unmodifiable Shield save of 5+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
       "page": "48",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -4624,7 +4624,7 @@
      },
      {
       "name": "Resupply and Rearm",
-      "description": "If this ship ends its movement on the same orbital layer and in base contact with a friendly ship of Medium Tonnage or higher or a Space Station, pick one of the following:\nResupply: That Ship or Space Station recovers 3 Hull points and remove any Crippling Effect tokens.\nRearm: Increase the Limited-X value of any of that Ship or Space Station's Weapons and Launch Assets by 1 until the end of the round. Each Ship or Space Station can only be affected by this rule once."
+      "description": "If this ship ends its movement on the same orbital layer and in base contact with a friendly ship of Medium Tonnage or higher or a Space Station, pick one of the following:\nResupply: That Ship or Space Station recovers 3 Hull points and remove any Crippling Effect tokens.\nRearm: Increase the Limited-X value of any of that Ship or Space Station's Weapons and Launch Assets by 1 until the end of the round. Each Ship or Space Station can only be affected by Rearm once."
      },
      {
       "name": "Flawed Design",
@@ -5770,7 +5770,7 @@
    "cost": 75,
    "stats": {
     "scan": "8\"",
-    "sig": "6\"",
+    "sig": "2\"",
     "hull": 10,
     "es": "4+",
     "ks": "4+",
@@ -5792,7 +5792,7 @@
     },
     {
      "name": "Shield-4+",
-     "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+     "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
      "page": "48",
      "publicationId": "45b0-3e3b-e83d-fd70"
     },
@@ -5823,6 +5823,10 @@
     {
      "name": "Gate Node",
      "effect": "This Gatestation's Dropships may only be used while you control it."
+    },
+    {
+     "name": "Hardpoints",
+     "effect": "This Space Station has a Life Support Feature, a Launch Control Feature and a Weapons Control Feature. It must take one additional option from the Space Station Features list."
     }
    ]
   },
@@ -5832,7 +5836,7 @@
    "cost": 75,
    "stats": {
     "scan": "8\"",
-    "sig": "6\"",
+    "sig": "2\"",
     "hull": 10,
     "es": "4+",
     "ks": "4+",
@@ -5843,7 +5847,7 @@
    "specialRules": [
     {
      "name": "Shield-4+",
-     "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+     "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
      "page": "48",
      "publicationId": "45b0-3e3b-e83d-fd70"
     }
@@ -5863,6 +5867,10 @@
     {
      "name": "Gravity Manipulator",
      "effect": "Friendly Ships in Orbit that start their movement within this station's Scan range increase their Group's total movement (after Orders) by 2\". If all Ships in that Group are within this station's Scan range, that Group instead increases its total movement (after Orders) by 4\" and gains Vectored until the end of its activation. Groups can only be affected by this rule once in their activation and only while that Group is in Coherency. This special rule ceases to function while you do not control this station."
+    },
+    {
+     "name": "Hardpoints",
+     "effect": "This Space Station has a Life Support Feature and two Weapons Control Features."
     }
    ]
   },
@@ -5872,7 +5880,7 @@
    "cost": 100,
    "stats": {
     "scan": "12\"",
-    "sig": "6\"",
+    "sig": "2\"",
     "hull": 24,
     "es": "4+",
     "ks": "4+",
@@ -5883,7 +5891,7 @@
    "specialRules": [
     {
      "name": "Shield-4+",
-     "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+     "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
      "page": "48",
      "publicationId": "45b0-3e3b-e83d-fd70"
     },
@@ -5902,6 +5910,10 @@
     {
      "name": "Voidspace Anchor",
      "effect": "When an enemy Group within 6\" of this Space Station activates, that Group may only move up to half of its Thrust this activation regardless of selected Order."
+    },
+    {
+     "name": "Hardpoints",
+     "effect": "This Space Station has a Life Support Feature. It must take two additional Features from the Space Station Features list, and may take one additional option from the Space Station Features list."
     }
    ],
    "namesake": "An [anchor](https://en.wikipedia.org/wiki/Anchor) is a heavy metal device lowered from a ship on a chain or cable to hold it in place against wind and current. It grips the seabed either by its weight or by flukes that dig into the bottom."
@@ -5912,7 +5924,7 @@
    "cost": 140,
    "stats": {
     "scan": "12\"",
-    "sig": "6\"",
+    "sig": "2\"",
     "hull": 24,
     "es": "4+",
     "ks": "4+",
@@ -5923,7 +5935,7 @@
    "specialRules": [
     {
      "name": "Shield-4+",
-     "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
+     "description": "This Group/Dropsite has an unmodifiable Shield save of 4+.\nAt the start of this Group’s or controlled Dropsite’s activation, you may choose to raise its shields. If you do, this group gains a shields token until the start of its next activation.\nWhile a Group/Dropsite has a shields token, it replaces its Energy and Kinetic saves with its Shield save and triples its Signature value (before Spikes). Shield saves are used against all hits from weapons before making Backup saves. Shield saves must be used before making Backup saves against Core hits. After being attacked, a Group with a shields token gains a Spike if at least one attack dice hits.\nA Group on Silent Running loses any shields tokens it has and cannot have shields tokens.\nGroups that Directly Deploy may start the game with a shields token.\nCore Hits caused by Boarding Actions and Saturation Fire cannot be saved by Shield Saves.",
      "page": "48",
      "publicationId": "45b0-3e3b-e83d-fd70"
     }
@@ -5943,6 +5955,10 @@
     {
      "name": "Disintegrator Bank",
      "effect": "Instead of the normal Arcs, Shaltari Shurikens have their own Arcs. A Shuriken has 5 Arcs, each 72 degrees. The easiest way to define these Arcs is to follow the lines of adjacent vertical vanes, measured from the flight stand as normal. Follow these arcs when attacking instead of the normal rules for Arcs. When you assign targets to this weapon, you may only use each Arc once."
+    },
+    {
+     "name": "Hardpoints",
+     "effect": "This Space Station has a Life Support and two Weapons Control Features. It may take one additional option from the Space Station Features list."
     }
    ],
    "namesake": "A [shuriken](https://en.wikipedia.org/wiki/Shuriken) is a concealed Japanese throwing weapon associated with the samurai and ninja, often a sharpened flat plate or spike of metal. The popular star-shaped form is also known as a throwing star or ninja star."

@@ -998,7 +998,7 @@
       "lock": "4+",
       "damage": "1",
       "type": "E",
-      "special": "Anti Wing, Fusillade-1, Burnthrough-1"
+      "special": "Anti Wing, Fusillade-2, Burnthrough-1"
      },
      {
       "name": "Scythe Nodule",
@@ -1007,7 +1007,7 @@
       "lock": "4+",
       "damage": "1",
       "type": "E",
-      "special": "Anti Wing, Fusillade-1, Burnthrough-1"
+      "special": "Anti Wing, Fusillade-2, Burnthrough-1"
      }
     ],
     "loads": [],
@@ -1090,7 +1090,7 @@
       "lock": "4+",
       "damage": "1",
       "type": "E",
-      "special": "Anti Wing, Fusillade-1, Burnthrough-1"
+      "special": "Anti Wing, Fusillade-2, Burnthrough-1"
      },
      {
       "name": "Scythe Nodule",
@@ -1099,7 +1099,7 @@
       "lock": "4+",
       "damage": "1",
       "type": "E",
-      "special": "Anti Wing, Fusillade-1, Burnthrough-1"
+      "special": "Anti Wing, Fusillade-2, Burnthrough-1"
      }
     ],
     "loads": [],
@@ -1684,7 +1684,7 @@
       "lock": "2+",
       "damage": "1",
       "type": "K",
-      "special": "Focused, Reave-2"
+      "special": "Focused, Reave-1"
      }
     ],
     "loads": [],
@@ -2860,7 +2860,7 @@
      {
       "name": "Lightvice",
       "arc": "F/S",
-      "attack": "3",
+      "attack": "4",
       "lock": "2+",
       "damage": "1",
       "type": "K",
@@ -3633,7 +3633,7 @@
      },
      {
       "name": "Resupply and Rearm",
-      "description": "If this ship ends its movement on the same orbital layer and in base contact with a friendly ship of Medium Tonnage or higher or a Space Station, pick one of the following:\nResupply: That Ship or Space Station recovers 3 Hull points and remove any Crippling Effect tokens.\nRearm: Increase the Limited-X value of any of that Ship or Space Station's Weapons and Launch Assets by 1 until the end of the round. Each Ship or Space Station can only be affected by this rule once."
+      "description": "If this ship ends its movement on the same orbital layer and in base contact with a friendly ship of Medium Tonnage or higher or a Space Station, pick one of the following:\nResupply: That Ship or Space Station recovers 3 Hull points and remove any Crippling Effect tokens.\nRearm: Increase the Limited-X value of any of that Ship or Space Station's Weapons and Launch Assets by 1 until the end of the round. Each Ship or Space Station can only be affected by Rearm once."
      },
      {
       "name": "Flawed Design",
@@ -5123,7 +5123,7 @@
     },
     {
      "name": "Hardpoints",
-     "effect": "This Space Station has a Weapons Control Feature, a Supercontrol Node Feature and two Reactor Core Features. It may take one additional option from the Space Station Features list."
+     "effect": "This Space Station has two Weapons Control Features and a Supercontrol Node Feature and two Reactor Core Features. It may take one additional option from the Space Station Features list."
     }
    ]
   },

@@ -567,7 +567,7 @@ const SCN_LEVIATHANS={'Ether Drake':{
 const SCN_SOURCES={
   'Rulebook':'https://cdn.shopify.com/s/files/1/0965/1274/files/A5_Dropfleet_Rulebook_2.3.1_Print_Friendly.pdf?v=1774605669',
   'Scenario Expansion 1':'https://cdn.shopify.com/s/files/1/0965/1274/files/Scenario_Expansion_1_250818.pdf?v=1755254981',
-  'Civilian Ships & Scenarios':'https://cdn.shopify.com/s/files/1/0965/1274/files/Civilian_Ships_Scenarios_261104.pdf?v=1793786159',
+  'Civilian Ships & Scenarios':'https://cdn.shopify.com/s/files/1/0965/1274/files/Civilian_Ships_Scenarios_261104.pdf?v=1793895480',
   'The Ether Drake (1st edition)':'https://cdn.shopify.com/s/files/1/0965/1274/files/Ether_Drake.pdf?439',
   'Automated Dreadnought (1st edition)':'https://cdn.shopify.com/s/files/1/0965/1274/files/Automated_Dreadnought.pdf?444',
   'Advent Scenarios (1st edition)':'https://cdn.shopify.com/s/files/1/0965/1274/files/Advent_Scenarios.pdf?525',

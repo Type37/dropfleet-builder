@@ -4295,7 +4295,7 @@
      },
      {
       "name": "Resupply and Rearm",
-      "description": "If this ship ends its movement on the same orbital layer and in base contact with a friendly ship of Medium Tonnage or higher or a Space Station, pick one of the following:\nResupply: That Ship or Space Station recovers 3 Hull points and remove any Crippling Effect tokens.\nRearm: Increase the Limited-X value of any of that Ship or Space Station's Weapons and Launch Assets by 1 until the end of the round. Each Ship or Space Station can only be affected by this rule once."
+      "description": "If this ship ends its movement on the same orbital layer and in base contact with a friendly ship of Medium Tonnage or higher or a Space Station, pick one of the following:\nResupply: That Ship or Space Station recovers 3 Hull points and remove any Crippling Effect tokens.\nRearm: Increase the Limited-X value of any of that Ship or Space Station's Weapons and Launch Assets by 1 until the end of the round. Each Ship or Space Station can only be affected by Rearm once."
      },
      {
       "name": "Flawed Design",
@@ -5564,7 +5564,7 @@
     },
     {
      "name": "Hardpoints",
-     "effect": "This Space Station has a Life Support Feature. It must take two additional Features from the Space Station Features list, and may take one additional option from the Space Station Features list."
+     "effect": "This Space Station has a Life Support Feature and two Weapons Control Features, and may take one additional option from the Space Station Features list."
     }
    ]
   },
@@ -5610,7 +5610,7 @@
     },
     {
      "name": "Hardpoints",
-     "effect": "This Space Station has a Life Support Feature. It must take two additional Features from the Space Station Features list, and may take one additional option from the Space Station Features list."
+     "effect": "This Space Station has a Life Support Feature and two Weapons Control Features, and may take one additional option from the Space Station Features list."
     }
    ]
   }
@@ -5659,7 +5659,7 @@
    "rules": [
     {
      "name": "Ark Lander",
-     "description": "When this feature is deployed to a Dropsite, 4 friendly Battalions are automatically deployed to that Dropsite.\nWhile Activating Dropsites (during 7.5 Activating Dropsites), if you have more Battalions on this feature than any opponent, you count as controlling the Dropsite this Feature is deployed to. If multiple players count as controlling the same Dropsite this way, this effect is ignored."
+     "description": "When this feature is deployed to a Dropsite, 4 friendly Battalions are automatically deployed to that Dropsite.\nWhile Activating Dropsites (during 8.1.1 Activating Dropsites), if you have more Battalions on this feature than any opponent, you count as controlling the Dropsite this Feature is deployed to and may attack with all its Scenario Feature Weapons and/or launch all available Assets from Scenario Features. If multiple players count as controlling the same Dropsite this way, this effect is ignored."
     }
    ]
   },
