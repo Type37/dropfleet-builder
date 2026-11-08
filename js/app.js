@@ -9284,7 +9284,8 @@ let activeGroupId = null;
     { date: '2026-11-08', title: 'Admiral abilities in Play mode, and photos of your models', items: [
       'AP per turn counts only your highest-level Admiral (rulebook 4.2.1). With two Admirals it added their Levels together. Thanks to RidelasTyren for spotting it.',
       'Play mode has an Abilities button with every Ability your fleet can use: your Admirals’ own and their picks, then ship rules and the Core Abilities. Clicking an Admiral’s name on a group opens it too. Thanks to RazorWing for asking.',
-      'Add a photo of your own model to any ship in Collection with the camera button. It replaces the ship art there and on the printed sheet, so the sheet lines up with the models on the table. Photos stay in the browser you add them in.'
+      'Add a photo of your own model to any ship in Collection with the camera button. It replaces the ship art there and on the printed sheet, so the sheet lines up with the models on the table. Photos stay in the browser you add them in.',
+      'Long ship names on Collection cards show in full. Washington Supercarrier and London Dreadnought were cut off.'
     ] },
     { date: '2026-11-05', title: "Space stations buy Features", items: [
       "Stations can buy Features in the modules picker: Medium must take 3 and Large 4, the Shaltari Gatestation 1 and the Anchor 2 (plus 1 more). The PHR Defence Halo and Orbital Spire, Shaltari Shuriken, Resistance Grand Station and Astrobotanical Outpost, and Bioficer Hypershredder and Hypersummoner may take 1.",

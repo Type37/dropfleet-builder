@@ -2003,7 +2003,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--navy); text-transform: uppercase; letter-spacing: 0.04em;
   margin: var(--sp-md) 0 var(--sp-sm); padding-bottom: 2px; border-bottom: 1px solid var(--stroke-light);
 }
-.coll-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--sp-sm); }
+.coll-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--sp-sm); }
 .coll-card {
   display: flex; align-items: center; gap: var(--sp-sm);
   border: 1px solid var(--stroke-light); border-radius: var(--radius-md);
@@ -2024,7 +2024,7 @@ h1, h2, h3, h4, h5, h6 {
 .coll-photo-del { right: -6px; top: -6px; }
 .coll-photo-btn:hover, .coll-photo-del:hover { color: var(--ink); border-color: var(--navy); }
 .coll-info { display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; }
-.coll-name { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--ink); line-height: 1.2; }
+.coll-name { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--ink); line-height: 1.2; hyphens: auto; overflow-wrap: anywhere; }
 .coll-pts { font-size: var(--text-xs); color: var(--ink-muted); }
 .coll-step { display: flex; align-items: center; gap: 4px; flex: 0 0 auto; }
 .coll-btn {
