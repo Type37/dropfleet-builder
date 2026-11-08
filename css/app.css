@@ -2011,6 +2011,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 .coll-card.owned { border-color: var(--navy); background: var(--warm); }
 .coll-art { width: 46px; height: 46px; object-fit: contain; flex: 0 0 auto; border-radius: var(--radius-sm); background: var(--paper-alt); }
+.coll-art-wrap { position: relative; flex: 0 0 auto; width: 46px; height: 46px; }
+.coll-art-wrap .coll-art { display: block; }
+.coll-art-photo { object-fit: cover; }
+.coll-photo-btn, .coll-photo-del {
+  position: absolute; display: flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; padding: 0; border-radius: 50%; cursor: pointer;
+  border: 1px solid var(--stroke); background: var(--paper); color: var(--ink-muted);
+  font-size: 14px; line-height: 1;
+}
+.coll-photo-btn { right: -6px; bottom: -6px; }
+.coll-photo-del { right: -6px; top: -6px; }
+.coll-photo-btn:hover, .coll-photo-del:hover { color: var(--ink); border-color: var(--navy); }
 .coll-info { display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; }
 .coll-name { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--ink); line-height: 1.2; }
 .coll-pts { font-size: var(--text-xs); color: var(--ink-muted); }
@@ -5976,6 +5988,9 @@ h1, h2, h3, h4, h5, h6 {
 .print-fleet .dp-rules { font-size: 8.5pt; line-height: 1.4; }
 .print-fleet .dp-ship { padding: 5px 8px; }
 .print-fleet .dp-thumb { width: 48px; height: 48px; }
+/* Your own model photo: bigger than the art thumb, so the model is recognisable. */
+.print-fleet .dp-thumb.dp-thumb-photo { width: 72px; height: 72px; object-fit: cover; }
+.pf-big .dp-big-art.dp-big-photo { max-height: 140px; }
 .print-fleet .dp-box { width: 10px; height: 10px; }
 
 
@@ -7548,6 +7563,18 @@ html[data-theme="dark"] .play-ton-P { color: #b79ae0; background: rgba(183,154,2
   letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); flex: 1;
 }
 .play-bg-admiral { font-size: 11px; color: var(--ink-muted); font-weight: 400; text-transform: none; letter-spacing: 0; }
+button.play-bg-admiral {
+  background: none; border: 0; padding: 0; font-family: inherit; cursor: pointer;
+  text-decoration: underline; text-decoration-color: var(--stroke-strong); text-underline-offset: 2px;
+}
+button.play-bg-admiral:hover { color: var(--ink); }
+/* Play mode Abilities dialog */
+.play-abil-group + .play-abil-group { margin-top: var(--sp-lg); }
+.play-abil-label {
+  font-family: var(--font-condensed); font-size: var(--text-sm); font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-muted); margin: 0 0 var(--sp-xs);
+}
+.play-abil-row + .play-abil-row { margin-top: var(--sp-sm); }
 .play-act-btn {
   padding: 3px 10px; border: 1px solid var(--stroke); background: transparent;
   border-radius: var(--radius-md); cursor: pointer; font-size: 11px;

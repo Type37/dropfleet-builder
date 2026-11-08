@@ -3551,8 +3551,9 @@
   }
 
   /* ── Admiral detail (abilities + assignment) ───────────── */
-  function getAdmiralInfo(a) {
-    const faction = FACTIONS[activeFleet.faction];
+  // `fk` defaults to the open fleet; Play mode and print pass the fleet's own.
+  function getAdmiralInfo(a, fk) {
+    const faction = FACTIONS[fk || (activeFleet && activeFleet.faction)];
     if (!faction) return null;
     const def = (faction.admirals || []).find(x => x.id === (a.admiralId || a.shipKey));
     if (!def) return null;
@@ -4596,6 +4597,19 @@
       navigate('screen-play');
     });
   }
+  // Every Ability this fleet can use (fleetAbilityGroups, the same list the
+  // printed sheet carries), so the admirals' Abilities are at hand mid-game.
+  function mShowPlayAbilities() {
+    if (!mPlayFleet) return;
+    const html = fleetAbilityGroups(mPlayFleet).map(g => `<section class="play-abil-group">
+      <h3 class="play-abil-label">${esc(g.label)}</h3>
+      ${g.rows.map(r => `<div class="play-abil-row">
+        <div class="ability-pick-head"><span class="ability-pick-name">${esc(r.name)}</span>${r.cost ? `<span class="ability-pick-cost">${esc(r.cost)}</span>` : ''}</div>
+        ${r.effect ? `<div class="ability-pick-effect">${ruleHtml(r.effect)}</div>` : ''}
+      </div>`).join('')}
+    </section>`).join('');
+    showSheet('Abilities', html);
+  }
   function mShowPlayPassInfo() {
     showSheet('Pass Tokens', '<p>Determine how many Groups each player has on the table, plus any the Scenario states may deploy this turn. If a player has two fewer Groups than the player with the most, they generate a Pass token. For each additional Group fewer, they generate another Pass token.</p><p>Pass tokens do not persist after the Activation Phase.</p>');
   }
@@ -4647,6 +4661,7 @@
             <button class="play-score-btn" onclick="App.mPlayChangeOppVP(1)">+</button>
           </div>
           ${passInfoBtn}
+          <button class="play-pass-info-btn" onclick="App.mShowPlayAbilities()">Abilities</button>
           <div class="play-header-spacer"></div>
           <button class="play-end-round-btn" onclick="App.mPlayEndRound()">End Round</button>
         </div>
@@ -4711,7 +4726,7 @@
     if (bgAdmiral) {
       const _lvl = admiralEffectiveLevel(mPlayFleet, bgAdmiral);
       const _boost = _lvl - (bgAdmiral.level || 0);
-      admiralStr = ` <span class="play-bg-admiral">${esc(bgAdmiral.name || 'Admiral')} (L${_lvl}${_boost > 0 ? `, Lv${bgAdmiral.level || 0} +${_boost} Command Ship` : ''})</span>`;
+      admiralStr = ` <button class="play-bg-admiral" onclick="event.stopPropagation();App.mShowPlayAbilities()">${esc(bgAdmiral.name || 'Admiral')} (L${_lvl}${_boost > 0 ? `, Lv${bgAdmiral.level || 0} +${_boost} Command Ship` : ''})</button>`;
     }
     const spikeCtrl = mPlaySpikeCtrl(bg.id, spikes);
     const orderChips = M_PLAY_ORDERS.map(o => {
@@ -5107,6 +5122,11 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-11-08', title: 'Admiral abilities in Play mode, and photos of your models', items: [
+      'AP per turn counts only your highest-level Admiral (rulebook 4.2.1). With two Admirals it added their Levels together. Thanks to RidelasTyren for spotting it.',
+      'Play mode has an Abilities button with every Ability your fleet can use: your Admirals’ own and their picks, then ship rules and the Core Abilities. Tapping an Admiral’s name on a group opens it too. Thanks to RazorWing for asking.',
+      'Add a photo of your own model to any ship in Collection with the camera button. It replaces the ship art there and on the desktop site’s printed sheet, so the sheet lines up with the models on the table. Photos stay on the device you add them on.'
+    ] },
     { date: '2026-11-05', title: "Space stations buy Features", items: [
       "Stations can buy Features in the modules picker: Medium must take 3 and Large 4, the Shaltari Gatestation 1 and the Anchor 2 (plus 1 more). The PHR Defence Halo and Orbital Spire, Shaltari Shuriken, Resistance Grand Station and Astrobotanical Outpost, and Bioficer Hypershredder and Hypersummoner may take 1.",
       "Small, Medium and Large stations follow the 2.4 sheet: Medium is 45 pts and Large 65. Armaments are optional now, up to 1, 2 or 3. An upgrade slot can hold one Feature instead of an Astrobotanical Lab or Defence Grid.",
@@ -5817,6 +5837,41 @@
        <div class="coll-list" id="coll-list"><div class="coll-loading">Loading…</div></div>`;
     ensureFaction(collectionFaction).then(renderCollectionList);
   }
+  // A photo of your own model (ShipPhotos, kept in this browser) stands in for
+  // the ship art. Desktop's printed sheet uses it too.
+  const CAMERA_SVG = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h2.5L6 3.5h4l1.5 2H14v7.5H2z"/><circle cx="8" cy="9" r="2.4"/></svg>';
+  function collectionArtHtml(fk, key, s) {
+    const photo = window.ShipPhotos ? ShipPhotos.get(fk, key) : null;
+    const art = photo || thumbUrl(shipArtPath(s.name));
+    const img = art
+      ? `<img class="coll-art${photo ? ' coll-art-photo' : ''}" src="${esc(art)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`
+      : '<div class="coll-art"></div>';
+    const k = escAttr(key);
+    return `<div class="coll-art-wrap">
+      ${img}
+      <button class="coll-photo-btn" aria-label="${photo ? 'Replace your photo of' : 'Add a photo of your'} ${esc(s.name)}" onclick="App.collectionPhoto('${fk}','${k}')">${CAMERA_SVG}</button>
+      ${photo ? `<button class="coll-photo-del" aria-label="Remove your photo of ${esc(s.name)}" onclick="App.collectionPhotoRemove('${fk}','${k}')">&times;</button>` : ''}
+    </div>`;
+  }
+  function refreshCollectionArt(fk, key) {
+    const row = document.querySelector(`.coll-row[data-key="${CSS.escape(key)}"]`);
+    const wrap = row && row.querySelector('.coll-art-wrap');
+    const fac = FACTIONS[fk];
+    const g = fac && Array.isArray(fac.groups) && fac.groups.find(x => x.id === key);
+    if (wrap && g && g.ship) wrap.outerHTML = collectionArtHtml(fk, key, g.ship);
+  }
+  function collectionPhoto(fk, key) {
+    if (!window.ShipPhotos) return;
+    ShipPhotos.pick(fk, key)
+      .then(url => { if (url) refreshCollectionArt(fk, key); })
+      .catch(err => showSheet('Photo not saved', `<p>${esc(err && err.message ? err.message : String(err))}</p>`));
+  }
+  function collectionPhotoRemove(fk, key) {
+    if (!window.ShipPhotos) return;
+    ShipPhotos.remove(fk, key)
+      .then(() => refreshCollectionArt(fk, key))
+      .catch(err => showSheet('Photo not removed', `<p>${esc(err && err.message ? err.message : String(err))}</p>`));
+  }
   function renderCollectionList() {
     const list = document.getElementById('coll-list');
     if (!list) return;
@@ -5830,10 +5885,9 @@
       html += `<div class="coll-cat">${esc(CATEGORY_LABELS[cat] || cat)}</div>`;
       inCat.forEach(g => {
         const s = g.ship;
-        const art = thumbUrl(shipArtPath(s.name));
         const n = ownedCount(fk, g.id);
         html += `<div class="coll-row${n > 0 ? ' owned' : ''}" data-key="${esc(g.id)}">
-          ${art ? `<img class="coll-art" src="${esc(art)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<div class="coll-art"></div>'}
+          ${collectionArtHtml(fk, g.id, s)}
           <div class="coll-info"><div class="coll-name">${esc(s.name)}</div><div class="coll-pts">${s.cost || 0} pts</div></div>
           <div class="coll-step">
             <button class="coll-btn coll-btn-minus" ${n === 0 ? 'disabled' : ''} aria-label="Remove one ${esc(s.name)}" onclick="App.collectionAdjust('${fk}','${esc(g.id)}',-1)">&minus;</button>
@@ -6963,7 +7017,7 @@
     const chosenAll = new Set();
     let openTable = null;
     (f.admirals || []).forEach(a => {
-      const info = getAdmiralInfo(a);
+      const info = getAdmiralInfo(a, f.faction);
       if (!info) return;
       const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
       const table = info.table || [];
@@ -7541,6 +7595,8 @@
 
     loadFleets();
     loadCollection();
+    // Your model photos load from IndexedDB after the first paint.
+    if (window.ShipPhotos) ShipPhotos.ready.then(() => { if (document.querySelector('#coll-list .coll-row')) renderCollectionList(); });
 
     // Refresh an already-downloaded offline bundle, silently and only on wifi.
     // Never starts a first download on its own.
@@ -7664,9 +7720,9 @@
     openAdmiralDetail, toggleAdmiralAbility, assignAdmiral, removeActiveAdmiral, closeAbilityModal,
     openStation, addStation, openStationDetail, removeStationPrompt, addStationSystem, removeStationSystem,
     overflow, fleetOverflow, openSettingsSheet, deleteFleetPrompt, duplicateFleet, shareFleet, copyFleetText, copyFleetJSON, exportPdf, exportAllFleets, openLastImported,
-    openCollection, collectionSelectFaction, collectionAdjust,
+    openCollection, collectionSelectFaction, collectionAdjust, collectionPhoto, collectionPhotoRemove,
     importFleetPrompt, doImportText,
-    openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mPlayChangeRound, mPlayEndRound, mPlayChangeVP, mPlayChangeOppVP, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayOrderDown, mPlayOrderMove, mPlayOrderUp, mPlayOrderCancel, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayToggleCripPanel, mPlayCorruptorChange,
+    openMobilePlay, renderMobilePlay, mShowPlayPassInfo, mShowPlayAbilities,mPlayChangeRound, mPlayEndRound, mPlayChangeVP, mPlayChangeOppVP, mPlaySpikeChange, mPlaySetOrder, mPlaySetOrderAndShow, mPlayOrderDown, mPlayOrderMove, mPlayOrderUp, mPlayOrderCancel, mPlayToggleActivation, mPlayHullChange, mPlayCripChange, mPlayCripToggle, mPlayToggleCripPanel, mPlayCorruptorChange,
     mPlayToggleReorder, mPlayMoveGroup, mPlayToggleCollapse, mPlayCollapseAll,
     openSyncModal, closeSyncModal, renderSyncBody, syncGenerate, syncLookup, syncDoJoin, syncNow, syncCopyToken, syncStop, syncDeleteRemote,
     syncSignOut, syncAdoptToken, syncDiscordSignIn, syncDiscordSignOut,

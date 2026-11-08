@@ -307,6 +307,8 @@ let activeGroupId = null;
     loadFleets();
     seedFastplayFleetsIfFirstRun();
     loadCollection();
+    // Your model photos load from IndexedDB after the first paint.
+    if (window.ShipPhotos) ShipPhotos.ready.then(() => { if (document.querySelector('#coll-grid .coll-card')) renderCollectionGrid(); });
     setupRouting();
     initBottomSheetGestures();
     const fb = document.getElementById('footer-feedback');
@@ -1681,6 +1683,46 @@ let activeGroupId = null;
       <div class="coll-grid" id="coll-grid"><div class="coll-loading">Loading…</div></div>`;
     ensureFactionLoaded(collectionFaction).then(renderCollectionGrid);
   }
+  // A photo of your own model (ShipPhotos, kept in this browser) stands in for
+  // the ship art here and on the printed sheet, so the sheet lines up with the
+  // models on the table.
+  function ownPhoto(faction, key) {
+    return (window.ShipPhotos && key) ? ShipPhotos.get(faction, key) : null;
+  }
+  const CAMERA_SVG = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h2.5L6 3.5h4l1.5 2H14v7.5H2z"/><circle cx="8" cy="9" r="2.4"/></svg>';
+  function collectionArtHtml(fk, key, s) {
+    const photo = ownPhoto(fk, key);
+    const art = photo || thumbUrl(s.image || shipArtPath(s.name));
+    const img = art
+      ? `<img class="coll-art${photo ? ' coll-art-photo' : ''}" src="${esc(art)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`
+      : '<div class="coll-art"></div>';
+    const k = escAttr(key);
+    return `<div class="coll-art-wrap">
+      ${img}
+      <button class="coll-photo-btn" title="${photo ? 'Replace your photo' : 'Add a photo of your model'}" aria-label="${photo ? 'Replace your photo of' : 'Add a photo of your'} ${esc(s.name)}" onclick="App.collectionPhoto('${fk}','${k}')">${CAMERA_SVG}</button>
+      ${photo ? `<button class="coll-photo-del" title="Remove your photo" aria-label="Remove your photo of ${esc(s.name)}" onclick="App.collectionPhotoRemove('${fk}','${k}')">&times;</button>` : ''}
+    </div>`;
+  }
+  function refreshCollectionArt(fk, key) {
+    const card = document.querySelector(`.coll-card[data-key="${CSS.escape(key)}"]`);
+    const wrap = card && card.querySelector('.coll-art-wrap');
+    const fdb = shipDB[fk];
+    let s = null;
+    if (fdb && fdb.groups) CATEGORY_ORDER.forEach(cat => { const g = fdb.groups[cat]; if (!s && g && g.ships && g.ships[key]) s = g.ships[key]; });
+    if (wrap && s) wrap.outerHTML = collectionArtHtml(fk, key, s);
+  }
+  function collectionPhoto(fk, key) {
+    if (!window.ShipPhotos) return;
+    ShipPhotos.pick(fk, key)
+      .then(url => { if (url) refreshCollectionArt(fk, key); })
+      .catch(err => showToast(`Photo not saved: ${err && err.message ? err.message : err}`));
+  }
+  function collectionPhotoRemove(fk, key) {
+    if (!window.ShipPhotos) return;
+    ShipPhotos.remove(fk, key)
+      .then(() => refreshCollectionArt(fk, key))
+      .catch(err => showToast(`Photo not removed: ${err && err.message ? err.message : err}`));
+  }
   function renderCollectionGrid() {
     const grid = document.getElementById('coll-grid');
     if (!grid) return;
@@ -1695,10 +1737,9 @@ let activeGroupId = null;
       if (!ships.length) return;
       html += `<div class="coll-cat">${esc(CATEGORY_LABELS[cat] || cat)}</div><div class="coll-cards">`;
       ships.forEach(([key, s]) => {
-        const art = thumbUrl(s.image || shipArtPath(s.name));
         const n = ownedCount(fk, key);
         html += `<div class="coll-card${n > 0 ? ' owned' : ''}" data-key="${esc(key)}">
-          ${art ? `<img class="coll-art" src="${esc(art)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<div class="coll-art"></div>'}
+          ${collectionArtHtml(fk, key, s)}
           <div class="coll-info"><span class="coll-name">${esc(s.name)}</span><span class="coll-pts">${s.points || 0} pts</span></div>
           <div class="coll-step">
             <button class="coll-btn" aria-label="Remove one ${esc(s.name)}" onclick="App.collectionAdjust('${fk}','${esc(key)}',-1)">&minus;</button>
@@ -2693,10 +2734,10 @@ let activeGroupId = null;
     if (glEl) glEl.textContent = '';
 
     // AP/turn, per rulebook 6.1 Ability Point Generation: "Players generate one
-    // Ability Point plus an amount equal to their Admiral's Level." The base point
-    // is per player, not per admiral, so it is added once — and each admiral's
-    // Level is already raised by the Command Ship-X of the hull they are aboard.
-    const admiralAP = (f.admirals || []).reduce((t, a) => t + admiralEffectiveLevel(f, a), 0);
+    // Ability Point plus an amount equal to their Admiral's Level." With several
+    // Admirals only the highest-level one counts (4.2.1), so Levels never add up.
+    // Each Level is already raised by the Command Ship-X of the hull it is aboard.
+    const admiralAP = (f.admirals || []).reduce((t, a) => Math.max(t, admiralEffectiveLevel(f, a)), 0);
     const totalAP = 1 + admiralAP;
     const apEl = document.getElementById('fleet-ap-per-turn');
     const hasFleet = (f.admirals || []).length > 0 || (f.battleGroups || []).length > 0;
@@ -5783,7 +5824,7 @@ let activeGroupId = null;
     const chosenAll = new Set();
     let openTable = null;
     (f.admirals || []).forEach(a => {
-      const info = getAdmiralAbilityInfo(a);
+      const info = getAdmiralAbilityInfo(a, f.faction);
       if (!info) return;
       const sel = Array.isArray(a.selectedAbilities) ? a.selectedAbilities : [];
       const table = info.table || [];
@@ -6069,9 +6110,11 @@ let activeGroupId = null;
   // Resolve a fleet admiral entry's ability data from the faction DB.
   // Returns { innate:[{name,cost,effect}], table:[...], picks:N } or null for
   // generic (abstract) admirals, who do not draw from the Abilities Table.
-  function getAdmiralAbilityInfo(a) {
+  // `faction` defaults to the builder's open fleet; Play mode passes its own.
+  function getAdmiralAbilityInfo(a, faction) {
     if (!a || a.type === 'Generic') return null;
-    const fdb = shipDB[currentFleet.faction];
+    const fk = faction || (currentFleet && currentFleet.faction);
+    const fdb = fk && shipDB[fk];
     if (!fdb) return null;
     const table = fdb.abilitiesTable || [];
     if (a.type === 'Famous' && a.shipKey) {
@@ -7082,11 +7125,13 @@ let activeGroupId = null;
       const qtyPrefix = count > 1 ? `${count}× ` : '';
       const shipPts = Number(ship.points) || 0;
       const totalPts = shipPts * count;
-      const artSrc = db.image || shipArtPath(db.name);
+      // Your own photo of the model (Collection) wins over the ship art.
+      const photo = ownPhoto(f.faction, ship.shipKey);
+      const artSrc = photo || db.image || shipArtPath(db.name);
       // Small thumbnail (normal mode) so the sheet can be matched to the model.
       // Never lazy: the sheet is built and printed at once, before a lazy image loads.
-      const thumbSrc = thumbUrl(artSrc);
-      const thumbHtml = (thumbSrc && !big) ? `<img class="dp-thumb" src="${esc(thumbSrc)}" alt="" onerror="this.remove()">` : '';
+      const thumbSrc = photo || thumbUrl(artSrc);
+      const thumbHtml = (thumbSrc && !big) ? `<img class="dp-thumb${photo ? ' dp-thumb-photo' : ''}" src="${esc(thumbSrc)}" alt="" onerror="this.remove()">` : '';
 
       // Hull tracking boxes sit beside the stat grid, filling the card's width.
       const hullHtml = dpHullTrack(db.hull, count, db.tonnage);
@@ -7142,7 +7187,7 @@ let activeGroupId = null;
         // "Big mode": art + stat grid in a compact top row, then weapons and all
         // rules flow FULL-WIDTH beneath, so the card height matches its content
         // (no empty side gap on weapon-heavy ships).
-        const bigArt = artSrc ? `<img class="dp-big-art" src="${esc(artSrc)}" alt="" onerror="(this.closest('.dp-big-art-wrap')||this).remove()">` : '';
+        const bigArt = artSrc ? `<img class="dp-big-art${photo ? ' dp-big-photo' : ''}" src="${esc(artSrc)}" alt="" onerror="(this.closest('.dp-big-art-wrap')||this).remove()">` : '';
         const belowHtml = `${weaponsHtml || '<span class="dp-zone-empty">No weapons</span>'}${gunRulesHtml}${loadsHtml}${shipRulesHtml}${sysHtml}${refitHtml}${featHtml}`;
         out += `<div class="dp-ship dp-ship-big">
             ${headHtml}
@@ -8643,6 +8688,25 @@ let activeGroupId = null;
     showRuleTooltip(event, event.currentTarget);
   }
 
+  // Every Ability this fleet can use (fleetAbilityGroups, the same list the
+  // printed sheet carries), so the admirals' Abilities are at hand mid-game.
+  function playAbilitiesHtml(f) {
+    return fleetAbilityGroups(f).map(g => `<section class="play-abil-group">
+      <h3 class="play-abil-label">${esc(g.label)}</h3>
+      ${g.rows.map(r => `<div class="play-abil-row">
+        <span class="admiral-pick-head"><span class="admiral-ability-name">${esc(r.name)}</span>${r.cost ? `<span class="admiral-ability-cost">${esc(r.cost)}</span>` : ''}</span>
+        ${r.effect ? `<span class="admiral-ability-effect">${ruleHtml(r.effect)}</span>` : ''}
+      </div>`).join('')}
+    </section>`).join('');
+  }
+  function openPlayAbilities() {
+    if (!playFleet) return;
+    const body = document.getElementById('play-abilities-body');
+    if (!body) return;
+    body.innerHTML = playAbilitiesHtml(playFleet);
+    openModal('modal-play-abilities');
+  }
+
   function renderPlayMode() {
     const el = document.getElementById('view-play');
     if (!playFleet || !playState) { el.innerHTML = '<div class="play-empty">No fleet loaded.</div>'; return; }
@@ -8694,6 +8758,7 @@ let activeGroupId = null;
             <button class="play-score-btn" onclick="App.playChangeOppVP(1)">+</button>
           </div>
           ${passInfoBtn}
+          <button class="play-pass-info-btn" onclick="App.openPlayAbilities()">Abilities</button>
           <div class="play-header-spacer"></div>
           <button class="play-end-round-btn" onclick="App.playEndRound()">End Round</button>
         </div>
@@ -8755,7 +8820,7 @@ let activeGroupId = null;
       // Ship-X of the hull they are aboard.
       const lvl = admiralEffectiveLevel(playFleet, bgAdmiral);
       const boost = lvl - (bgAdmiral.level || 0);
-      admiralStr = ` <span class="play-bg-admiral">${esc(bgAdmiral.name || 'Admiral')} (L${lvl}${boost > 0 ? `, Lv${bgAdmiral.level || 0} +${boost} Command Ship` : ''})</span>`;
+      admiralStr = ` <button class="play-bg-admiral" onclick="App.openPlayAbilities()">${esc(bgAdmiral.name || 'Admiral')} (L${lvl}${boost > 0 ? `, Lv${bgAdmiral.level || 0} +${boost} Command Ship` : ''})</button>`;
     }
 
     const spikeCtrl = playSpikeCtrl(bg.id, spikes);
@@ -9216,6 +9281,11 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-11-08', title: 'Admiral abilities in Play mode, and photos of your models', items: [
+      'AP per turn counts only your highest-level Admiral (rulebook 4.2.1). With two Admirals it added their Levels together. Thanks to RidelasTyren for spotting it.',
+      'Play mode has an Abilities button with every Ability your fleet can use: your Admirals’ own and their picks, then ship rules and the Core Abilities. Clicking an Admiral’s name on a group opens it too. Thanks to RazorWing for asking.',
+      'Add a photo of your own model to any ship in Collection with the camera button. It replaces the ship art there and on the printed sheet, so the sheet lines up with the models on the table. Photos stay in the browser you add them in.'
+    ] },
     { date: '2026-11-05', title: "Space stations buy Features", items: [
       "Stations can buy Features in the modules picker: Medium must take 3 and Large 4, the Shaltari Gatestation 1 and the Anchor 2 (plus 1 more). The PHR Defence Halo and Orbital Spire, Shaltari Shuriken, Resistance Grand Station and Astrobotanical Outpost, and Bioficer Hypershredder and Hypersummoner may take 1.",
       "Small, Medium and Large stations follow the 2.4 sheet: Medium is 45 pts and Large 65. Armaments are optional now, up to 1, 2 or 3. An upgrade slot can hold one Feature instead of an Astrobotanical Lab or Defence Grid.",
@@ -12107,12 +12177,12 @@ let activeGroupId = null;
     // Data hooks for the Combat Calculator (Calc, js/calc-ui.js).
     getCalcData: () => ({ shipDB, factionData, FACTION_LABELS, CATEGORY_ORDER, CATEGORY_LABELS, currentFaction: currentFleet ? currentFleet.faction : null }),
     openNewFleetModal, createFleet, generateRandomFleet, deleteFleet, duplicateFleet, startFactionFleet, editFleetName, sortFleetList,
-    loadDemoFleets, showFleetTab, collectionFaction: selectCollectionFaction, collectionAdjust, loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, editGroupName, toggleFleetCardMenu,
+    loadDemoFleets, showFleetTab, collectionFaction: selectCollectionFaction, collectionAdjust, collectionPhoto, collectionPhotoRemove,loadFastplayFaction, selectFaction, selectGameSize, addGroup, selectGroup, selectFlagship, removeGroup, copyGroup, editGroupName, toggleFleetCardMenu,
     onGripPointerDown,
     openShipSelectModal, filterCategory, toggleShipFilter, toggleMiscShips, toggleBuildableFilter, clearShipFilters, searchShips, clearShipSearch, addShipToGroup, addSameShip, removeLastShip, removeShip, sortShips, changeLoadout, changeFlagshipLoadout, changeFeature, addSystem, removeSystem, toggleSystem,
     openAdmiralModal, addGenericAdmiral, addFactionAdmiral, addFamousAdmiral, addFamousAdmiralFromPicker, removeAdmiral, toggleAdmiralAbility, assignAdmiralShip,
     openStationModal, selectStation, removeStation, addStationSystem, removeStationSystem, openStationArmaments,
-    openPlayMode, playToggleReorder, playMoveGroup, playToggleCollapse, playCollapseAll, showPlayPassInfo, playChangeRound, playEndRound, playChangeVP, playChangeOppVP, playSpikeChange, playSetOrder, playSetOrderAndShow, playOrderDown, playOrderMove, playOrderUp, playOrderCancel, playToggleActivation, playHullChange, playCripChange, playCripToggle, playToggleCripPanel, playToggleFire, playTogglePower, playCorruptorChange,
+    openPlayMode, playToggleReorder, playMoveGroup, playToggleCollapse, playCollapseAll, showPlayPassInfo, openPlayAbilities, playChangeRound, playEndRound, playChangeVP, playChangeOppVP, playSpikeChange, playSetOrder, playSetOrderAndShow, playOrderDown, playOrderMove, playOrderUp, playOrderCancel, playToggleActivation, playHullChange, playCripChange, playCripToggle, playToggleCripPanel, playToggleFire, playTogglePower, playCorruptorChange,
     toggleSidebar, printFleet,
     shareFleet, copyShareURL, copyShareText, copyShareJSON, importSharedFleet, importFleetFromClipboard, doImportFromText, openLastImported,
     openSettings, openChangelog, toggleSetting, setTheme, updateFleetDescription, exportAllFleets,

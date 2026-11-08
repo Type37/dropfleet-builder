@@ -28,6 +28,7 @@ CORE_FILES = [
     'css/app.css',
     'css/mobile-fixes.css',
     'js/rank-insignia.js',
+    'js/ship-photos.js',
     'js/calc-engine.js',
     'js/calc-data.js',
     'js/calc-ui.js',

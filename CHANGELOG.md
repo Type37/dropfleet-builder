@@ -5,6 +5,27 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-11-08: Admiral abilities in Play mode, and photos of your models
+
+AP per turn took the sum of every Admiral's Level. Rulebook 4.2.1: "only your
+highest-level Admiral present on the table counts towards any rules that
+specify one", so `updatePoints` now takes the highest effective Level (Command
+Ship-X included) plus the one point every player generates (6.1). Reported by
+RidelasTyren.
+
+Play mode gets an Abilities button (and the Admiral's name on a group card opens
+the same list). It renders `fleetAbilityGroups`, the list the printed sheet
+uses. `getAdmiralAbilityInfo` (desktop) and `getAdmiralInfo` (mobile) now take
+the fleet's faction: they read the builder's open fleet, which after a reload on
+`#play/<id>` is not the fleet in Play mode, so a Famous Admiral's Abilities went
+missing. Asked for by RazorWing.
+
+Collection cards take a photo of your own model per ship class.
+`js/ship-photos.js` keeps them in IndexedDB (`dfc_photos`), shrunk to a JPEG of
+at most 900px a side, shared by both apps on the same origin. The desktop print
+sheet uses the photo in place of the ship art in Cards and Big cards. Mobile's
+print sheet has no art, so it has no photos either. Nothing syncs online.
+
 ### 2026-11-05: Space stations buy Features
 
 Fleet_Space_Stations_261104 page 2: every station has some Features built in

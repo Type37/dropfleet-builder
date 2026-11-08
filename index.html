@@ -491,6 +491,17 @@
   </div>
 </div>
 
+<!-- Play mode: every Ability the fleet can use -->
+<div class="modal-overlay" id="modal-play-abilities">
+  <div class="modal-panel modal-panel--lg">
+    <div class="modal-header">
+      <h2 class="modal-title">Abilities</h2>
+      <button class="modal-close" aria-label="Close" onclick="App.closeModal('modal-play-abilities')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+    </div>
+    <div class="modal-body" id="play-abilities-body"><!-- Populated by JS --></div>
+  </div>
+</div>
+
 <!-- Secondary Objectives picker Modal -->
 <div class="modal-overlay" id="modal-secondary">
   <div class="modal-panel modal-panel--lg">
@@ -594,6 +605,7 @@
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 <script src="js/rank-insignia.js"></script>
+<script src="js/ship-photos.js"></script>
 <script src="js/offline-sync.js"></script>
 <script src="js/fleet-auth.js"></script>
 <script src="js/fleet-sync.js"></script>
