@@ -59,12 +59,42 @@
   function saveCollection() {
     try { localStorage.setItem('dfc_collection', JSON.stringify(collection)); } catch (e) {}
   }
-  function ownedCount(faction, key) { return (collection[faction] && collection[faction][key]) || 0; }
+  // Civilian and mercenary ships any fleet can take are one set of models, so
+  // they are counted once under `civilian` (the Civilian Ships tab), whichever
+  // fleet asks. Same rule and ids as desktop. Palatine and the Kalium KNCs are
+  // Resistance ships flagged Misc; they stay with their faction.
+  const COLL_FACTION_OWNED_MISC = new Set(['39f3-e983-5400-5b03', '675e-18e1-0e9c-c3f1', '5554-9f7d-880e-8f1f']);
+  const isCivilianGroup = g => !!(g && g.ship && g.ship.additional) && !COLL_FACTION_OWNED_MISC.has(g.id);
+  const collDb = fk => fk === 'civilian' ? 'ucm' : fk;
+  function collectionBucket(faction, key) {
+    if (faction === 'civilian') return 'civilian';
+    const fac = FACTIONS[faction];
+    const g = fac && Array.isArray(fac.groups) && fac.groups.find(x => x.id === key);
+    return g && isCivilianGroup(g) ? 'civilian' : faction;
+  }
+  // A count recorded before the Civilian Ships tab sat under a faction, maybe
+  // under several for the same models. The first read moves the largest across.
+  function adoptLegacyCivilian(key) {
+    if (collection.civilian && collection.civilian[key] != null) return;
+    let n = 0;
+    Object.keys(FACTION_FILES).forEach(fk => {
+      const c = collection[fk];
+      if (c && c[key]) { n = Math.max(n, c[key]); delete c[key]; if (!Object.keys(c).length) delete collection[fk]; }
+    });
+    if (n > 0) { (collection.civilian = collection.civilian || {})[key] = n; saveCollection(); }
+  }
+  function ownedCount(faction, key) {
+    const b = collectionBucket(faction, key);
+    if (b === 'civilian') adoptLegacyCivilian(key);
+    return (collection[b] && collection[b][key]) || 0;
+  }
   function setOwned(faction, key, n) {
     n = Math.max(0, Math.floor(n) || 0);
-    if (!collection[faction]) collection[faction] = {};
-    if (n === 0) delete collection[faction][key]; else collection[faction][key] = n;
-    if (collection[faction] && !Object.keys(collection[faction]).length) delete collection[faction];
+    const b = collectionBucket(faction, key);
+    if (b === 'civilian') adoptLegacyCivilian(key);
+    if (!collection[b]) collection[b] = {};
+    if (n === 0) delete collection[b][key]; else collection[b][key] = n;
+    if (collection[b] && !Object.keys(collection[b]).length) delete collection[b];
     saveCollection();
   }
 
@@ -5122,6 +5152,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-11-15', title: 'Civilian Ships in My Collection', items: [
+      'My Collection has a Civilian Ships tab for the mercenary and civilian ships any fleet can take, so you count them once instead of under every faction. Counts you already recorded move across.',
+      'The Nephilim and Raum lore no longer start with the tail of their ship names.'
+    ] },
     { date: '2026-11-08', title: 'Admiral abilities in Play mode, and photos of your models', items: [
       'AP per turn counts only your highest-level Admiral (rulebook 4.2.1). With two Admirals it added their Levels together. Thanks to RidelasTyren for spotting it.',
       'Play mode has an Abilities button with every Ability your fleet can use: your Admirals’ own and their picks, then ship rules and the Core Abilities. Tapping an Admiral’s name on a group opens it too. Thanks to RazorWing for asking.',
@@ -5827,21 +5861,22 @@
   function renderCollection() {
     const container = document.getElementById('collection-container');
     if (!container) return;
-    const tabs = Object.keys(FACTION_FILES).map(fk => {
-      const lbl = (FACTIONS[fk] && (FACTIONS[fk].shortName || FACTIONS[fk].name)) || fk.toUpperCase();
+    const tabs = [...Object.keys(FACTION_FILES), 'civilian'].map(fk => {
+      const lbl = fk === 'civilian' ? 'Civilian Ships'
+        : (FACTIONS[fk] && (FACTIONS[fk].shortName || FACTIONS[fk].name)) || fk.toUpperCase();
       return `<button class="coll-fac-tab${fk === collectionFaction ? ' active' : ''}" onclick="App.collectionSelectFaction('${fk}')">${esc(lbl)}</button>`;
     }).join('');
     container.innerHTML =
       `<div class="coll-fac-tabs">${tabs}</div>
        <div class="coll-summary" id="coll-summary"></div>
        <div class="coll-list" id="coll-list"><div class="coll-loading">Loading…</div></div>`;
-    ensureFaction(collectionFaction).then(renderCollectionList);
+    ensureFaction(collDb(collectionFaction)).then(renderCollectionList);
   }
   // A photo of your own model (ShipPhotos, kept in this browser) stands in for
   // the ship art. Desktop's printed sheet uses it too.
   const CAMERA_SVG = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h2.5L6 3.5h4l1.5 2H14v7.5H2z"/><circle cx="8" cy="9" r="2.4"/></svg>';
   function collectionArtHtml(fk, key, s) {
-    const photo = window.ShipPhotos ? ShipPhotos.get(fk, key) : null;
+    const photo = window.ShipPhotos ? (ShipPhotos.get(fk, key) || ShipPhotos.get('civilian', key)) : null;
     const art = photo || thumbUrl(shipArtPath(s.name));
     const img = art
       ? `<img class="coll-art${photo ? ' coll-art-photo' : ''}" src="${esc(art)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`
@@ -5856,7 +5891,7 @@
   function refreshCollectionArt(fk, key) {
     const row = document.querySelector(`.coll-row[data-key="${CSS.escape(key)}"]`);
     const wrap = row && row.querySelector('.coll-art-wrap');
-    const fac = FACTIONS[fk];
+    const fac = FACTIONS[collDb(fk)];
     const g = fac && Array.isArray(fac.groups) && fac.groups.find(x => x.id === key);
     if (wrap && g && g.ship) wrap.outerHTML = collectionArtHtml(fk, key, g.ship);
   }
@@ -5876,11 +5911,13 @@
     const list = document.getElementById('coll-list');
     if (!list) return;
     const fk = collectionFaction;
-    const fac = FACTIONS[fk];
+    const fac = FACTIONS[collDb(fk)];
     if (!fac || !Array.isArray(fac.groups)) { list.innerHTML = '<div class="coll-empty">No ships.</div>'; return; }
+    const civ = fk === 'civilian';
+    fac.groups.forEach(g => { if (isCivilianGroup(g)) adoptLegacyCivilian(g.id); });
     let html = '';
     CATEGORY_ORDER.forEach(cat => {
-      const inCat = fac.groups.filter(g => g.category === cat && g.ship);
+      const inCat = fac.groups.filter(g => g.category === cat && g.ship && isCivilianGroup(g) === civ);
       if (!inCat.length) return;
       html += `<div class="coll-cat">${esc(CATEGORY_LABELS[cat] || cat)}</div>`;
       inCat.forEach(g => {
@@ -5912,7 +5949,7 @@
     const fk = collectionFaction;
     const c = collection[fk] || {};
     let total = 0, distinct = 0, pts = 0;
-    Object.entries(c).forEach(([key, n]) => { if (n > 0) { distinct++; total += n; pts += shipCostByKey(fk, key) * n; } });
+    Object.entries(c).forEach(([key, n]) => { if (n > 0) { distinct++; total += n; pts += shipCostByKey(collDb(fk), key) * n; } });
     el.textContent = total
       ? `${total} model${total !== 1 ? 's' : ''}, ${distinct} distinct, ${pts} pts of ships owned`
       : 'Nothing recorded yet. Punch in what you own below.';

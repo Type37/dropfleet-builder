@@ -998,7 +998,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "lore": "The Loss of Victory, Sadness With its heavy plasma beam triad, the Nephilim is one of the most fearsome known ships within close action range. These vast energy weapons can core-out the largest opponents with searing plasma. Additionally, its quad furnace fangs and oculus beams enhance this monster’s lethality. Lastly, like all Scourge super battleships, the class has been encountered either with stealth capabilities or extra drives, both of which help the Nephilim reach killing range.",
+    "lore": "With its heavy plasma beam triad, the Nephilim is one of the most fearsome known ships within close action range. These vast energy weapons can core-out the largest opponents with searing plasma. Additionally, its quad furnace fangs and oculus beams enhance this monster’s lethality. Lastly, like all Scourge super battleships, the class has been encountered either with stealth capabilities or extra drives, both of which help the Nephilim reach killing range.",
     "rulesText": "This Ship must take either a Cloaking Keel, gaining Stealth and Cloak-2, or an Engine Upgrade for +10 points, increasing Thrust by 3”.",
     "famousShipsPrefix": "Infamous ships of the class:",
     "famousShips": [
@@ -1117,7 +1117,7 @@
     "isRare": false,
     "isUnique": false,
     "tonnage": "H",
-    "lore": "The Raven, Killian’s Shadow, Tokyo’s Undoing The Raum was the first Scourge battleship sighted with new capabilities, utilising their latest superstructure design. Entirely different from the ancient leviathans the UCMF were accustomed to facing, these ships are apparently brand new, a major concern. The Raum mounts the newly encountered heavy plasma beam in addition to oculus arrays and substantial launch capacity, making it especially deadly at close quarters. Coupled with its stealthy capabilities, this new threat is already dreaded.",
+    "lore": "The Raum was the first Scourge battleship sighted with new capabilities, utilising their latest superstructure design. Entirely different from the ancient leviathans the UCMF were accustomed to facing, these ships are apparently brand new, a major concern. The Raum mounts the newly encountered heavy plasma beam in addition to oculus arrays and substantial launch capacity, making it especially deadly at close quarters. Coupled with its stealthy capabilities, this new threat is already dreaded.",
     "famousShipsPrefix": "Infamous ships of the class:",
     "famousShips": [
      "Deathcrow",

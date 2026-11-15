@@ -1003,7 +1003,10 @@ let activeGroupId = null;
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M3 2.5a.5.5 0 0 1 .765-.424l10 6a.5.5 0 0 1 0 .848l-10 6A.5.5 0 0 1 3 14.5v-12Z"/></svg>
                 <span class="topbar-action-label">Play</span>
               </button>`;
-            ensureFactionLoaded(currentFleet.faction).then(() => renderBuilder());
+            ensureFactionLoaded(currentFleet.faction).then(() => {
+              if (backfillFlagshipKeys(currentFleet)) saveFleets();
+              renderBuilder();
+            });
             return;
           }
         }
@@ -1551,6 +1554,26 @@ let activeGroupId = null;
     });
   }
 
+  // Faction files load lazily, so at loadFleets time the famous table is usually
+  // not there yet. Mobile marks a famous admiral `type: 'Famous'`, which is enough
+  // on its own; an older entry without it waits for the table (the builder runs
+  // this again once the faction has loaded). Without shipKey the flagship's cost
+  // dropped out of its Tonnage total and an Agency fleet could carry one Heavy
+  // too many.
+  function backfillFlagshipKeys(f) {
+    let changed = false;
+    (f && f.admirals || []).forEach(a => {
+      if (!a || a.shipKey) return;
+      const key = a.admiralId;
+      if (!key) return;
+      if (a.type !== 'Famous' && !shipDB[f.faction]?.groups?.famous_admirals?.ships?.[key]) return;
+      a.shipKey = key;
+      a.type = 'Famous';
+      changed = true;
+    });
+    return changed;
+  }
+
   // ── Persistence ──
   function loadFleets() {
     try { fleets = JSON.parse(localStorage.getItem('dfc_fleets') || '[]'); }
@@ -1573,17 +1596,7 @@ let activeGroupId = null;
     // missing from the overview, and missing from the printed sheet. Resolve the
     // id against the famous table (a Generic or Faction admiral's id is not in it,
     // so they are left alone) and fill in what this app reads.
-    fleets.forEach(f => {
-      (f.admirals || []).forEach(a => {
-        if (!a || a.shipKey) return;
-        const key = a.admiralId;
-        if (!key) return;
-        if (!shipDB[f.faction]?.groups?.famous_admirals?.ships?.[key]) return;
-        a.shipKey = key;
-        a.type = 'Famous';
-        migrated = true;
-      });
-    });
+    fleets.forEach(f => { if (backfillFlagshipKeys(f)) migrated = true; });
 
     // Merge legacy duplicate payload groups (Bioficer Cells) into one group each.
     // Older fleets spawned a separate 1-ship group per copy, which spammed the
@@ -1635,12 +1648,44 @@ let activeGroupId = null;
     catch { collection = {}; }
   }
   function saveCollection() { localStorage.setItem('dfc_collection', JSON.stringify(collection)); }
-  function ownedCount(faction, key) { return (collection[faction] && collection[faction][key]) || 0; }
+  // Civilian and mercenary ships any fleet can take are one set of models on the
+  // shelf, not one per faction, so they are counted once under `civilian` (the
+  // Collection's Civilian Ships tab), whichever fleet asks. Mobile does the same.
+  const COLL_FACTIONS = ['ucm', 'phr', 'scourge', 'shaltari', 'resistance', 'bioficer'];
+  function collectionBucket(faction, key) {
+    if (faction === 'civilian') return 'civilian';
+    const fdb = shipDB[faction];
+    if (fdb && fdb.groups) {
+      for (const cat of CATEGORY_ORDER) {
+        const s = fdb.groups[cat] && fdb.groups[cat].ships && fdb.groups[cat].ships[key];
+        if (s) return isCivilianShip(key, s) ? 'civilian' : faction;
+      }
+    }
+    return faction;
+  }
+  // A count recorded before the Civilian Ships tab sat under a faction, maybe
+  // under several for the same models. The first read moves the largest across.
+  function adoptLegacyCivilian(key) {
+    if (collection.civilian && collection.civilian[key] != null) return;
+    let n = 0;
+    COLL_FACTIONS.forEach(fk => {
+      const c = collection[fk];
+      if (c && c[key]) { n = Math.max(n, c[key]); delete c[key]; if (!Object.keys(c).length) delete collection[fk]; }
+    });
+    if (n > 0) { (collection.civilian = collection.civilian || {})[key] = n; saveCollection(); }
+  }
+  function ownedCount(faction, key) {
+    const b = collectionBucket(faction, key);
+    if (b === 'civilian') adoptLegacyCivilian(key);
+    return (collection[b] && collection[b][key]) || 0;
+  }
   function setOwned(faction, key, n) {
     n = Math.max(0, Math.floor(n) || 0);
-    if (!collection[faction]) collection[faction] = {};
-    if (n === 0) delete collection[faction][key]; else collection[faction][key] = n;
-    if (collection[faction] && !Object.keys(collection[faction]).length) delete collection[faction];
+    const b = collectionBucket(faction, key);
+    if (b === 'civilian') adoptLegacyCivilian(key);
+    if (!collection[b]) collection[b] = {};
+    if (n === 0) delete collection[b][key]; else collection[b][key] = n;
+    if (collection[b] && !Object.keys(collection[b]).length) delete collection[b];
     saveCollection();
   }
   // How many of a ship a fleet uses (ships + famous-admiral flagships) — for the
@@ -1672,22 +1717,22 @@ let activeGroupId = null;
   function renderCollection() {
     const container = document.getElementById('collection-container');
     if (!container) return;
-    const factions = ['ucm', 'phr', 'scourge', 'shaltari', 'resistance', 'bioficer'];
-    const tabs = factions.map(fk => {
-      const lbl = (factionData[fk] && (factionData[fk].shortName || factionData[fk].name)) || fk.toUpperCase();
+    const tabs = [...COLL_FACTIONS, 'civilian'].map(fk => {
+      const lbl = fk === 'civilian' ? UNITS_LABELS.civilian
+        : (factionData[fk] && (factionData[fk].shortName || factionData[fk].name)) || fk.toUpperCase();
       return `<button class="coll-fac-tab${fk === collectionFaction ? ' active' : ''}" onclick="App.collectionFaction('${fk}')">${esc(lbl)}</button>`;
     }).join('');
     container.innerHTML = `
       <div class="coll-fac-tabs">${tabs}</div>
       <div class="coll-summary" id="coll-summary"></div>
       <div class="coll-grid" id="coll-grid"><div class="coll-loading">Loading…</div></div>`;
-    ensureFactionLoaded(collectionFaction).then(renderCollectionGrid);
+    ensureFactionLoaded(unitsDb(collectionFaction)).then(renderCollectionGrid);
   }
   // A photo of your own model (ShipPhotos, kept in this browser) stands in for
   // the ship art here and on the printed sheet, so the sheet lines up with the
   // models on the table.
   function ownPhoto(faction, key) {
-    return (window.ShipPhotos && key) ? ShipPhotos.get(faction, key) : null;
+    return (window.ShipPhotos && key) ? (ShipPhotos.get(faction, key) || ShipPhotos.get('civilian', key)) : null;
   }
   const CAMERA_SVG = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h2.5L6 3.5h4l1.5 2H14v7.5H2z"/><circle cx="8" cy="9" r="2.4"/></svg>';
   function collectionArtHtml(fk, key, s) {
@@ -1706,7 +1751,7 @@ let activeGroupId = null;
   function refreshCollectionArt(fk, key) {
     const card = document.querySelector(`.coll-card[data-key="${CSS.escape(key)}"]`);
     const wrap = card && card.querySelector('.coll-art-wrap');
-    const fdb = shipDB[fk];
+    const fdb = shipDB[unitsDb(fk)];
     let s = null;
     if (fdb && fdb.groups) CATEGORY_ORDER.forEach(cat => { const g = fdb.groups[cat]; if (!s && g && g.ships && g.ships[key]) s = g.ships[key]; });
     if (wrap && s) wrap.outerHTML = collectionArtHtml(fk, key, s);
@@ -1727,13 +1772,17 @@ let activeGroupId = null;
     const grid = document.getElementById('coll-grid');
     if (!grid) return;
     const fk = collectionFaction;
-    const fdb = shipDB[fk];
+    const fdb = shipDB[unitsDb(fk)];
     if (!fdb || !fdb.groups) { grid.innerHTML = '<div class="coll-empty">No ships.</div>'; return; }
+    const civ = fk === 'civilian';
+    CATEGORY_ORDER.forEach(cat => Object.entries((fdb.groups[cat] || {}).ships || {}).forEach(([key, s]) => {
+      if (isCivilianShip(key, s)) adoptLegacyCivilian(key);
+    }));
     let html = '';
     CATEGORY_ORDER.forEach(cat => {
       const g = fdb.groups[cat];
       if (!g || !g.ships) return;
-      const ships = Object.entries(g.ships).filter(([, s]) => s.type !== 'launch_asset');
+      const ships = Object.entries(g.ships).filter(([key, s]) => s.type !== 'launch_asset' && isCivilianShip(key, s) === civ);
       if (!ships.length) return;
       html += `<div class="coll-cat">${esc(CATEGORY_LABELS[cat] || cat)}</div><div class="coll-cards">`;
       ships.forEach(([key, s]) => {
@@ -1759,7 +1808,7 @@ let activeGroupId = null;
     const fk = collectionFaction;
     const c = collection[fk] || {};
     let total = 0, distinct = 0, pts = 0;
-    Object.entries(c).forEach(([key, n]) => { if (n > 0) { distinct++; total += n; pts += shipPointsByKey(fk, key) * n; } });
+    Object.entries(c).forEach(([key, n]) => { if (n > 0) { distinct++; total += n; pts += shipPointsByKey(unitsDb(fk), key) * n; } });
     el.textContent = total
       ? `${total} model${total !== 1 ? 's' : ''}, ${distinct} distinct, ${pts} pts of ships owned`
       : 'Nothing recorded yet. Punch in what you own below.';
@@ -3617,8 +3666,49 @@ let activeGroupId = null;
     // The flagship is a group of its own weight class, so the class chips count it
     // alongside the rest (see flagshipGroups).
     flagshipGroups(f).forEach(fg => { ovClassCounts[fg.cat] = (ovClassCounts[fg.cat] || 0) + 1; });
+
+    // Famous admirals fly their own flagship, a ship on the table, so it shows in
+    // its own weight class's section and that section's group and points tally
+    // (the hull's cost; the card says "incl." because the admiral's price already
+    // holds it). Read-only, managed via the admiral slot.
+    const flagshipCatColor = { light: '#2f6ba0', medium: '#2f7a3a', heavy: '#8a5e10', colossal: '#b83828', payload: '#6a4c9c' };
+    const fsCards = (f.admirals || []).map((a, ai) => {
+      if (a.type !== 'Famous' || !a.shipKey) return null;
+      const fs = shipDB[f.faction]?.groups?.famous_admirals?.ships?.[a.shipKey];
+      if (!fs) return null;
+      const name = flagshipLabel(fs);
+      const cat = fs.shipCategory || 'medium';
+      const catLabel = CATEGORY_LABELS[cat] || cat;
+      const catColor = flagshipCatColor[cat] || 'var(--navy)';
+      const artSrc = fs.image || null;
+      const html = `<div class="overview-group-card card-deco overview-flagship-card overview-flagship-clickable" style="border-left-color:${catColor}" title="${esc(name)} flies ${esc(a.name)}. Click to open its profile" onclick="App.selectFlagship(${ai})" role="button" tabindex="0">
+        <div class="overview-group-top">
+          ${artSrc ? `<div class="overview-group-art"><img src="${esc(thumbUrl(artSrc))}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
+          <div class="overview-group-info">
+            <div class="overview-group-name">${esc(name)}</div>
+            <div class="overview-group-meta">
+              <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size: 12px;padding:1px 6px">${esc(catLabel)}</span>
+              <span class="text-caption">flies with ${esc(a.name)}</span>
+            </div>
+          </div>
+          <div class="overview-group-right">
+            <div class="overview-group-pts overview-flagship-pts">incl.</div>
+          </div>
+        </div>
+      </div>`;
+      return { cat, pts: fs.ship_cost || 0, html };
+    }).filter(Boolean);
+    const fsInCat = cat => fsCards.filter(c => c.cat === cat);
+    const catDivider = (cat, count, pts) => {
+      const color = flagshipCatColor[cat] || 'var(--navy)';
+      return `<div class="overview-cat-divider" style="--cat-color:${color}">
+            <span class="overview-cat-label">${esc(CATEGORY_LABELS[cat] || cat)}</span>
+            <span class="overview-cat-count">${count} group${count !== 1 ? 's' : ''}, ${pts} pts</span>
+          </div>`;
+    };
+
     let lastCat = null;
-    const groupCards = sortedGroups.map(g => {
+    const groupItems = sortedGroups.map(g => {
       const gPts = g.ships.reduce((t, s) => t + (s.points || 0), 0);
       const shipNames = [];
       const shipCounts = {};
@@ -3681,25 +3771,21 @@ let activeGroupId = null;
       const catCount = sortedGroups.filter(sg => {
         const sc = sg.ships.length > 0 ? (sg.ships[0].groupCategory || 'medium') : 'medium';
         return sc === cat;
-      }).length;
+      }).length + fsInCat(cat).length;
       const catSectionPts = sortedGroups.filter(sg => {
         const sc = sg.ships.length > 0 ? (sg.ships[0].groupCategory || 'medium') : 'medium';
         return sc === cat;
-      }).reduce((t, sg) => t + sg.ships.reduce((st, s) => st + (s.points || 0), 0), 0);
+      }).reduce((t, sg) => t + sg.ships.reduce((st, s) => st + (s.points || 0), 0), 0)
+        + fsInCat(cat).reduce((t, c) => t + c.pts, 0);
 
       // Insert section divider when tonnage category changes
-      const sectionDivider = cat !== lastCat
-        ? `<div class="overview-cat-divider" style="--cat-color:${catColor}">
-            <span class="overview-cat-label">${esc(catLabel)}</span>
-            <span class="overview-cat-count">${catCount} group${catCount !== 1 ? 's' : ''}, ${catSectionPts} pts</span>
-          </div>`
-        : '';
+      const sectionDivider = cat !== lastCat ? catDivider(cat, catCount, catSectionPts) : '';
       lastCat = cat;
 
       const gripHtml = ovClassCounts[cat] > 1
         ? `<span class="overview-group-grip" title="Drag to reorder within ${esc(catLabel)}" aria-label="Drag to reorder ${esc(g.name)} within its weight class" onclick="event.stopPropagation()" onpointerdown="App.onGripPointerDown(event,'${g.id}','.overview-group-card')"><svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.3"/><circle cx="7" cy="3" r="1.3"/><circle cx="3" cy="8" r="1.3"/><circle cx="7" cy="8" r="1.3"/><circle cx="3" cy="13" r="1.3"/><circle cx="7" cy="13" r="1.3"/></svg></span>`
         : '';
-      return `${sectionDivider}<div class="overview-group-card card-deco${g.id === activeGroupId ? ' overview-group-active' : ''}" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-current="${g.id === activeGroupId ? 'true' : 'false'}" aria-label="${esc(g.name)}, ${esc(catLabel)}, ${gPts} points" style="cursor:pointer;border-left-color:${catColor}" data-gcat="${cat}" data-gid="${g.id}">
+      return { cat, html: `${sectionDivider}<div class="overview-group-card card-deco${g.id === activeGroupId ? ' overview-group-active' : ''}" onclick="App.selectGroup('${g.id}')" role="button" tabindex="0" aria-current="${g.id === activeGroupId ? 'true' : 'false'}" aria-label="${esc(g.name)}, ${esc(catLabel)}, ${gPts} points" style="cursor:pointer;border-left-color:${catColor}" data-gcat="${cat}" data-gid="${g.id}">
         <div class="overview-group-top">
           ${gripHtml}
           ${artSrc ? `<div class="overview-group-art${artModularClass}"><img src="${artThumb ? thumbUrl(artSrc) : esc(artSrc)}" alt="" onerror="this.closest('.overview-group-art').remove()"></div>` : ''}
@@ -3721,39 +3807,32 @@ let activeGroupId = null;
             ${stepperHtml}
           </div>
         </div>
-      </div>`;
-    }).join('');
+      </div>` };
+    });
 
-    // Famous admirals fly their own flagship — a ship on the table, so it shows
-    // among the groups. Sourced from the admiral; its cost is already in the
-    // admiral's points (no separate pts here → no double-count). Read-only —
-    // managed via the admiral slot.
-    const flagshipCatColor = { light: '#2f6ba0', medium: '#2f7a3a', heavy: '#8a5e10', colossal: '#b83828', payload: '#6a4c9c' };
-    const flagshipCards = (f.admirals || []).map((a, ai) => {
-      if (a.type !== 'Famous' || !a.shipKey) return '';
-      const fs = shipDB[f.faction]?.groups?.famous_admirals?.ships?.[a.shipKey];
-      if (!fs) return '';
-      const name = flagshipLabel(fs);
-      const cat = fs.shipCategory || 'medium';
-      const catLabel = CATEGORY_LABELS[cat] || cat;
-      const catColor = flagshipCatColor[cat] || 'var(--navy)';
-      const artSrc = fs.image || null;
-      return `<div class="overview-group-card card-deco overview-flagship-card overview-flagship-clickable" style="border-left-color:${catColor}" title="${esc(name)} flies ${esc(a.name)}. Click to open its profile" onclick="App.selectFlagship(${ai})" role="button" tabindex="0">
-        <div class="overview-group-top">
-          ${artSrc ? `<div class="overview-group-art"><img src="${esc(thumbUrl(artSrc))}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
-          <div class="overview-group-info">
-            <div class="overview-group-name">${esc(name)}</div>
-            <div class="overview-group-meta">
-              <span class="ship-tonnage-label ship-tonnage-${cat}" style="font-size: 12px;padding:1px 6px">${esc(catLabel)}</span>
-              <span class="text-caption">flies with ${esc(a.name)}</span>
-            </div>
-          </div>
-          <div class="overview-group-right">
-            <div class="overview-group-pts overview-flagship-pts">incl.</div>
-          </div>
-        </div>
-      </div>`;
-    }).join('');
+    // Lay the groups out by weight class with each flagship at the end of its own
+    // class. A class held only by a flagship gets its own section, in weight order.
+    const placedFs = new Set();
+    const emitFsSection = cat => {
+      const cards = fsInCat(cat);
+      if (!cards.length || placedFs.has(cat)) return '';
+      placedFs.add(cat);
+      return catDivider(cat, cards.length, cards.reduce((t, c) => t + c.pts, 0)) + cards.map(c => c.html).join('');
+    };
+    const fsOnlyCatsBefore = order => [...new Set(fsCards.map(c => c.cat))]
+      .filter(c => !placedFs.has(c) && !groupItems.some(it => it.cat === c) && (GROUP_CAT_ORDER[c] ?? 9) < order)
+      .sort((a, b) => (GROUP_CAT_ORDER[a] ?? 9) - (GROUP_CAT_ORDER[b] ?? 9));
+    let groupCards = '';
+    groupItems.forEach((it, i) => {
+      fsOnlyCatsBefore(GROUP_CAT_ORDER[it.cat] ?? 9).forEach(c => { groupCards += emitFsSection(c); });
+      groupCards += it.html;
+      const next = groupItems[i + 1];
+      if (!next || next.cat !== it.cat) {
+        fsInCat(it.cat).forEach(c => { groupCards += c.html; });
+        placedFs.add(it.cat);
+      }
+    });
+    fsOnlyCatsBefore(Infinity).forEach(c => { groupCards += emitFsSection(c); });
 
     // Admirals + Station now render via renderAdmiralSlot / renderStationSlot
     // into the #admiral-slot / #station-slot containers in the sections below.
@@ -3833,7 +3912,7 @@ let activeGroupId = null;
           <div class="overview-section-head is-actions-only">
             <button class="overview-add-group-btn" onclick="App.addGroup()" aria-label="Add a battle group"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg> Add Group</button>
           </div>
-          <div class="overview-groups">${groupCards + flagshipCards}</div>
+          <div class="overview-groups">${groupCards}</div>
           <div class="add-ship-area add-group-cta" onclick="App.addGroup()" role="button" tabindex="0" aria-label="Add a battle group" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();App.addGroup()}">
             <span style="font-size:var(--text-sm);font-weight:var(--weight-semibold)"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px"><path d="M8 3v10M3 8h10"/></svg> Add Group</span>
           </div>
@@ -9281,6 +9360,12 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-11-15', title: 'Civilian Ships in Collection, and a flagship that counts', items: [
+      'Collection has a Civilian Ships tab for the mercenary and civilian ships any fleet can take, so you count them once instead of under every faction. Counts you already recorded move across.',
+      'A famous admiral picked on a phone now counts its flagship toward Heavy points here too. An Agency fleet could go over the Heavy limit by the Bastion’s 225 points.',
+      'A flagship sits in its own weight class in the fleet overview, and that class adds it to its group count and points.',
+      'The Nephilim and Raum lore no longer start with the tail of their ship names.'
+    ] },
     { date: '2026-11-15', title: 'Imminent, Backline and Staggered in the Mission Maker', items: [
       'The Mission Maker can pick Imminent, Backline or Staggered as the Approach, the three deployment types from Scenario Expansion 1. Every player uses the one you pick, and it reads as round by round steps. Random still rolls the rulebook table.'
     ] },
