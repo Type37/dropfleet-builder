@@ -12,6 +12,8 @@ on:
 
 permissions:
   contents: read
+  # write, not read: the job deletes an earlier attempt's upload.
+  actions: write
   pages: write
   id-token: write
 
@@ -31,17 +33,51 @@ jobs:
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment_retry.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Configure Pages
         uses: actions/configure-pages@v6
+      # Same guard as the Dropzone builder, after its Build 525 never reached
+      # Pages (2026-11-15). A re-run keeps the run's earlier artifacts, so
+      # attempt 2 uploads a second github-pages and deploy-pages refuses
+      # ("Multiple artifacts"). Clear an earlier attempt's upload first.
+      - name: Clear an earlier attempt's upload
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for id in $(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts?name=github-pages"                         --jq '.artifacts[].id'); do
+            echo "deleting earlier github-pages artifact $id"
+            gh api -X DELETE "repos/$GITHUB_REPOSITORY/actions/artifacts/$id"
+          done
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v5
         with:
           # The whole repo root is the site (static HTML/JS/CSS/data).
           path: "."
+      # deploy-pages asked for the upload 0.4s after it finalized, GitHub's
+      # artifact list had not caught up ("Found 0 artifact(s)"), and the
+      # deploy failed. Wait until the same API lists it.
+      - name: Wait until GitHub lists the upload
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in $(seq 1 24); do
+            n=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts?name=github-pages"                   --jq '.total_count' 2>/dev/null || echo 0)
+            if [ "${n:-0}" -gt 0 ]; then echo "listed after $i check(s)"; exit 0; fi
+            sleep 5
+          done
+          echo "::warning::github-pages artifact still not listed after 2 minutes; trying the deploy anyway"
+      # And if it still says no, once more after a pause, in this job.
       - name: Deploy to GitHub Pages
         id: deployment
+        continue-on-error: true
+        uses: actions/deploy-pages@v5
+      - name: Pause before the second attempt
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 60
+      - name: Deploy to GitHub Pages (second attempt)
+        id: deployment_retry
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v5
