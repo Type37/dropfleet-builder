@@ -5136,7 +5136,7 @@
     mSavePlayState(); renderMobilePlay();
   }
 
-  /* ── Overflow dispatcher (app-bar ··· button) ──────────── */
+  /* ── Overflow dispatcher (app-bar ⋯ button) ──────────── */
   function overflow() {
     const active = document.querySelector('.screen.active')?.id;
     if (active === 'screen-group-detail') groupOverflow();
@@ -5464,7 +5464,7 @@
     ]},
     { date: '2026-09-13', title: 'Unit Reference', items: [
       'Unit Reference, in Settings under Interactive Rules: every ship each faction fields, grouped Light, Medium, Heavy, Colossal (and Payload for the Bioficers), with the famous admirals’ flagships, the Misc ships and the space stations. Search finds ships by name, weapon or rule.',
-      'Tap a ship for its full ship card: points, stats, weapons, launch, every loadout option, the hardpoint list, the Deployable Features a carrier can take, the Ship Rules and every rule. The ··· menu exports the whole faction as a PDF.',
+      'Tap a ship for its full ship card: points, stats, weapons, launch, every loadout option, the hardpoint list, the Deployable Features a carrier can take, the Ship Rules and every rule. The ⋯ menu exports the whole faction as a PDF.',
       'A desktop Unit Reference link (#units/ucm/new-york) opens the same ship on a phone.',
     ]},
     { date: '2026-09-13', title: 'Desktop app: print a whole faction', items: [
@@ -5830,7 +5830,7 @@
   ];
   function openChangelog() {
     const body = `<p style="font-style:italic;color:var(--fg3);background:var(--bg2);border-left:3px solid var(--accent,#b8902b);padding:8px 10px;border-radius:4px;margin:0 0 12px">TTCombat has not kept the changelog updated or made it public, so this is my interpretation. No promises!</p>`
-      + CHANGELOG.map(e => `<div style="margin-bottom:12px"><div style="font-weight:600;text-transform:uppercase;letter-spacing:.03em;font-size:.85em;border-bottom:1px solid rgba(0,0,0,.12);padding-bottom:2px;margin-bottom:4px">${esc(e.date)} &middot; ${esc(e.title)}</div><ul style="margin:0;padding-left:1.1em">${e.items.map(i => `<li style="margin-bottom:3px">${esc(i)}</li>`).join('')}</ul></div>`).join('');
+      + CHANGELOG.map(e => `<div style="margin-bottom:12px"><div style="font-weight:600;text-transform:uppercase;letter-spacing:.03em;font-size:.85em;border-bottom:1px solid rgba(0,0,0,.12);padding-bottom:2px;margin-bottom:4px">${esc(e.date)}: ${esc(e.title)}</div><ul style="margin:0;padding-left:1.1em">${e.items.map(i => `<li style="margin-bottom:3px">${esc(i)}</li>`).join('')}</ul></div>`).join('');
     showSheet("What's New", body);
   }
   /* ── Collection screen ──────────────────────────────────────

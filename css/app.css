@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
    DROPFLEET COMMANDER — FLEET BUILDER
-   Light Theme · Warm Off-White + Navy · Art Deco Gold Accents
+   Light Theme, Warm Off-White + Navy, Art Deco Gold Accents
    ═══════════════════════════════════════════════════════════════ */
 
 /* Terminal Grotesque Open — Velvetyne / Studio Triple (OFL). Used only for the
@@ -117,8 +117,8 @@
 
   /* Elevation — a strict ladder (Fluent: ambient ring + directional key shadow),
      warm-tinted to the theme. Each tier is unambiguously deeper than the last:
-     sm resting cards · md raised · lg dropdowns/bars · xl popovers/hover ·
-     sheet (28) bottom sheet/side nav · dialog (64) modals. */
+     sm resting cards, md raised, lg dropdowns/bars, xl popovers/hover,
+     sheet (28) bottom sheet/side nav, dialog (64) modals. */
   --shadow-sm: 0 0 1px rgba(28, 26, 23, 0.10), 0 1px 2px rgba(28, 26, 23, 0.06);
   --shadow-md: 0 0 2px rgba(28, 26, 23, 0.08), 0 2px 4px rgba(28, 26, 23, 0.10);
   --shadow-lg: 0 0 2px rgba(28, 26, 23, 0.08), 0 4px 8px rgba(28, 26, 23, 0.12);
@@ -7236,7 +7236,6 @@ body[data-view="builder"] .game-info-footer {
   margin: 0 auto;
 }
 .gif-title { font-weight: var(--weight-bold); color: var(--ink-soft); font-family: var(--font-display); }
-.gif-sep { color: var(--ink-faint); }
 .game-info-footer a { color: var(--navy); text-decoration: none; }
 .game-info-footer a:hover { text-decoration: underline; }
 /* The WarLore wordmark keeps its gold-on-black brand even inside the footer

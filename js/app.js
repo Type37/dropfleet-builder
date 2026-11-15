@@ -1998,7 +1998,7 @@ let activeGroupId = null;
   function renderFactionPicker() {
     const container = document.getElementById('faction-picker');
     // 2x3 grid, column order UCM/PHR/RES then SCOURGE/SHALTARI/BIOFICER, so it
-    // reads: UCM·SCOURGE / PHR·SHALTARI / RES·BIOFICERS (row-major fill).
+    // reads: UCM, SCOURGE / PHR, SHALTARI / RES, BIOFICERS (row-major fill).
     const factions = ['ucm','scourge','phr','shaltari','resistance','bioficer'];
     container.innerHTML = factions.map(key => {
       const name = FACTION_LABELS[key] || (factionData[key] || {}).name || key.toUpperCase();
@@ -10116,7 +10116,7 @@ let activeGroupId = null;
       <p class="changelog-disclaimer">TTCombat has not kept the changelog updated or made it public, so this is my interpretation. No promises!</p>
       ${CHANGELOG.map(e => `
         <div class="changelog-entry">
-          <div class="changelog-date">${esc(e.date)}${e.title ? ` &middot; <span class="changelog-title">${esc(e.title)}</span>` : ''}</div>
+          <div class="changelog-date">${esc(e.date)}${e.title ? `: <span class="changelog-title">${esc(e.title)}</span>` : ''}</div>
           <ul class="changelog-list">${e.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
         </div>`).join('')}
     `;

@@ -841,7 +841,6 @@ function gen(keep){
     V.name==='Orbital Complex'&&t[1]==='C'?t[0]+'S':V.name==='Gridlocked'&&t==='MC'?'MS':V.name==='Secure Comms Array'&&t==='LC'?'LS':t);
   legH+=`<div class="lhdr">Dropsite Reference</div>${dsTable([...new Set(siteTypes.map(t=>DS_INDEX[t]))])}</div>`;
 
-  const comp_note = comp?' · Competitive':'';
 
   const html=`<div class="scenario">
   <div class="rules-col">
