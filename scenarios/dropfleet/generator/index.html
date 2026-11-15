@@ -729,6 +729,12 @@ ${GR}${los}${rings}${depZone(depRoll,players)}${TB}${dimSVG}${sites}${vOverlay}
 }
 
 
+// ─── APPROACH: rulebook d6 table, then Scenario Expansion 1's three modes ────
+// The expansion gives no table for Imminent, Backline or Staggered, so they are picked, never rolled
+const APP=[...AT,...['Imminent','Backline','Staggered'].map(m=>({name:m,nc:false,r:m,b:m}))];
+// The generator has no game size, so Staggered reads X with its size line instead of one number
+const se1Gen=m=>pubSE1(m).split(XN).join('<b>X</b>');
+
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 function r6(){return Math.floor(Math.random()*6);}
 function roll(t,c){let i,n=0;do{i=r6();n++;}while(c&&t[i].nc&&n<30);return{item:t[i],roll:i+1};}
@@ -765,7 +771,7 @@ function gen(keep){
     if(m>=0) return {item:table[m], roll:m+1};
     return roll(table, useComp?comp:false);
   }
-  const {dep,app,lay,vari,obj}=keep&&LAST?LAST:{dep:rollOrPick(DT,'dep',true),app:rollOrPick(AT,'app',true),lay:rollOrPick(LY,'lay',true),vari:rollOrPick(VA,'var',false),obj:rollOrPick(OB,'obj',false)};
+  const {dep,app,lay,vari,obj}=keep&&LAST?LAST:{dep:rollOrPick(DT,'dep',true),app:rollOrPick(APP,'app',true),lay:rollOrPick(LY,'lay',true),vari:rollOrPick(VA,'var',false),obj:rollOrPick(OB,'obj',false)};
   // The Location rolls with the scenario and stays put when only the player count or the pick changes
   const loc0=keep&&LAST?LAST.loc:null;
   LAST={dep,app,lay,vari,obj,loc:loc0==null?Math.floor(Math.random()*SCN_LOCATIONS.length):loc0};
@@ -796,7 +802,9 @@ function gen(keep){
 
   // APPROACH TYPE
   let appH='';
-  if(A.r===A.b){
+  if(SE1_STEPS[A.r]){
+    appH=pill(`All Players: ${A.r}`,'sp-std')+se1Gen(A.r);
+  } else if(A.r===A.b){
     appH=pill(`All Players: ${A.r}`,'sp-std')+`<p class="rule-text">${DM[A.r]}</p>`;
     // If both sides Directly Deploy, add multi-player clause
     if(A.r==="Directly Deploy"){
@@ -852,7 +860,7 @@ function gen(keep){
     </div>
 
     <div class="sec">
-      ${sh(`Approach Type: ${A.name}`,app.roll)}
+      ${sh(`Approach Type: ${A.name}`,app.roll<=6?app.roll:0)}
       <div class="sec-body">${appH}</div>
     </div>
 
@@ -893,13 +901,13 @@ ${varH}
 
 // A shared link (#d1a2l3v4o5p2) opens that scenario instead of rolling a new one
 function fromLink(){
-  const m=location.hash.match(/^#d([1-6])a([1-6])l([1-6])v([1-6])o([1-6])p([2-4])(?:x([a-z0-9-]+))?$/);
+  const m=location.hash.match(/^#d([1-6])a([1-9])l([1-6])v([1-6])o([1-6])p([2-4])(?:x([a-z0-9-]+))?$/);
   if(!m) return false;
   const at=(t,r)=>({item:t[r-1],roll:r});
   // A link with a Location shows it; one without keeps this device's Location setting and rolls a place
   const li=m[7]?SCN_LOCATIONS.findIndex(x=>x.id===m[7]):-1;
   if(m[7]) document.getElementById('locon').checked=true;
-  LAST={dep:at(DT,+m[1]),app:at(AT,+m[2]),lay:at(LY,+m[3]),vari:at(VA,+m[4]),obj:at(OB,+m[5]),loc:li>=0?li:null};
+  LAST={dep:at(DT,+m[1]),app:at(APP,+m[2]),lay:at(LY,+m[3]),vari:at(VA,+m[4]),obj:at(OB,+m[5]),loc:li>=0?li:null};
   const r=document.querySelector(`input[name=players][value="${m[6]}"]`); if(r) r.checked=true;
   return true;
 }
@@ -1028,6 +1036,7 @@ function buildPicks(){
       {v:'4', name:'Counterattack', nc:true,tip:'<div class="tip-text"><b>Counterattack:</b> Red Directly Deploys, Blue uses Close.</div>'},
       {v:'5', name:'Delayed', nc:true,      tip:'<div class="tip-text"><b>Delayed Response:</b> Red uses Close, Blue uses Distant.</div>'},
       {v:'6', name:'Home Fleet', nc:true,   tip:'<div class="tip-text"><b>Home Fleet Disadvantage:</b> Red uses Close, Blue Directly Deploys.</div>'},
+      ...['Imminent','Backline','Staggered'].map((m,i)=>({v:String(7+i), name:m, tip:`<div class="tip-text"><b>${m}:</b> ${SCN_SE1[m].body.join(' ')}</div>`})),
     ]},
         {id:'lay', label:'Layout', items:[
       {v:'',  name:'Random', tip:''},
@@ -1060,7 +1069,7 @@ function buildPicks(){
     sec.items.forEach((item,idx)=>{
       const lbl=document.createElement('label');
       lbl.className='pick-tile'+(item.nc?' nc':'');
-      lbl.innerHTML=`<input type="radio" name="${sec.id}" id="${sec.id}-${idx}" value="${item.v}"${idx===0?' checked':''}><span class="tile-inner">${item.v===''?shuffleIcon('tile-die'):sec.id!=='players'?dieIcon(+item.v,'tile-die'):''}${item.name}</span>`;
+      lbl.innerHTML=`<input type="radio" name="${sec.id}" id="${sec.id}-${idx}" value="${item.v}"${idx===0?' checked':''}><span class="tile-inner">${item.v===''?shuffleIcon('tile-die'):sec.id==='players'?'':+item.v>6?'<span class="tile-die"></span>':dieIcon(+item.v,'tile-die')}${item.name}</span>`;
       if(item.tip){
         lbl.dataset.tip=TIPS.length; TIPS.push(item.tip);
         lbl.addEventListener('pointerenter',()=>ttShow(lbl));

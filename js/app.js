@@ -9281,6 +9281,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-11-15', title: 'Imminent, Backline and Staggered in the Mission Maker', items: [
+      'The Mission Maker can pick Imminent, Backline or Staggered as the Approach, the three deployment types from Scenario Expansion 1. Every player uses the one you pick, and it reads as round by round steps. Random still rolls the rulebook table.'
+    ] },
     { date: '2026-11-08', title: 'Admiral abilities in Play mode, and photos of your models', items: [
       'AP per turn counts only your highest-level Admiral (rulebook 4.2.1). With two Admirals it added their Levels together. Thanks to RidelasTyren for spotting it.',
       'Play mode has an Abilities button with every Ability your fleet can use: your Admirals’ own and their picks, then ship rules and the Core Abilities. Clicking an Admiral’s name on a group opens it too. Thanks to RazorWing for asking.',

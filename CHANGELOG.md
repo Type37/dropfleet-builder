@@ -5,6 +5,16 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-11-15: Imminent, Backline and Staggered in the Mission Maker
+
+Scenario Expansion 1 adds three deployment types but no table to roll them on,
+so the generator's Approach picker gains them as picks 7 to 9 (`APP` in
+`scenarios/dropfleet/generator/index.html`). Random still rolls the rulebook's
+d6 Approach table. A picked mode applies to every player and renders with
+`pubSE1`, the same round by round steps as the Scenario Reference. The generator
+has no game size, so Staggered prints X with its size line. Shared links accept
+`a7` to `a9`.
+
 ### 2026-11-08: Admiral abilities in Play mode, and photos of your models
 
 AP per turn took the sum of every Admiral's Level. Rulebook 4.2.1: "only your
