@@ -114,7 +114,7 @@
    "section": "14.1.5"
   },
   "Escort": {
-   "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
+   "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers.",
    "page": "46",
    "section": "14.1.6"
   },
@@ -9609,7 +9609,7 @@
        },
        {
         "name": "Escort",
-        "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
+        "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -9786,7 +9786,7 @@
       "specialRules": [
        {
         "name": "Escort",
-        "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
+        "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -34602,7 +34602,7 @@
       "specialRules": [
        {
         "name": "Escort",
-        "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
+        "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -34883,7 +34883,7 @@
        },
        {
         "name": "Escort",
-        "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers",
+        "description": "At the start of the game, before deployment, you may assign this Group to escort a friendly Group of H or C Tonnage. An Escort Group and its escorted Group are a pair, no other Groups can be part of this pair. Until either Group is destroyed, the pair activate and perform their actions (moving, turning, attacking, etc) simultaneously and count as a single Group when generating pass tokens. The pair do not need to choose the same Order when they activate. Escort Groups are deployed alongside their escorted Group, ignoring tonnage restrictions for the Escort Group. The pair do not need to be in coherency, however while both Groups are within 6” of each other they ignore Saturation Fire from enemy Bombers.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }

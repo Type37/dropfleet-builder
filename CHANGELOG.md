@@ -5,6 +5,21 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-11-22: Glaive presets in the calculator
+
+The calculator's PHR Glaive presets still carried 2.3 stats: Energy Glaives
+3 attacks at 3+, Glaive Lance 3 at 2+, and the Energy Glaive Battery that 2.4.1
+took off the Romulus. They are now Energy Glaives (Pulse) and (Beam), Glaive
+Lance (Pulse) and (Beam), and Energy Glaives (Beam, Cutting Power) for Gaius
+Chau, encoded with `exportWeapon` and edited in place in both
+`js/calc-data.js` and `scripts/calc-preset-tables.json`. Alt, Volley, Focused
+and High Power have no calculator field. `test-calc-data.mjs` keeps Jafdy's
+original Battery code for its reference matchup.
+
+Also from the 2.4.1 diff: 14.1.6 Escort gains its closing full stop in the
+wiki, the glossary, the scenario terms and the faction files, and
+`scenario-civilian.js` takes the new Buckling sentence.
+
 ### 2026-11-21: TTCombat 2.4.1
 
 TTCombat posted 2.4.1 on 19 November: the A5 rulebook 2.4.1, FAQ v1.4.1, Ship

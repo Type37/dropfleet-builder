@@ -5152,6 +5152,10 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-11-22', title: 'Glaive presets in the calculator', items: [
+      'Calculator: the PHR presets are Energy Glaives (Pulse), Energy Glaives (Beam) and Glaive Lance (Pulse) and (Beam), with their 2.4 stats. Energy Glaives (Beam, Cutting Power) is Gaius Chau’s Romulus when its Pulse Glaives hold fire. The old single Energy Glaives, Glaive Lance and Energy Glaive Battery presets are gone.',
+      'Rules: Escort ends with a full stop, as 2.4.1 prints it. The Civilian Ship cards use the new Buckling wording too.'
+    ] },
     { date: '2026-11-21', title: 'TTCombat 2.4.1', items: [
       'Rules: Buckling hits a non-Descent Ship in Atmosphere immediately after it ends its activation. A Capital Ship that drops below half Hull is Crippled for the rest of the game, even if it is repaired back above half.',
       'Rules: Dropsites activate one at a time in the Asset Phase. In initiative order, each player picks a Dropsite, resolves any Battalion Combat there and then activates it. You can destroy a Feature with your Battalions even if there is no other combat on its Dropsite.',
