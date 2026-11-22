@@ -2701,7 +2701,7 @@
     "specialRules": [
      {
       "name": "Descent",
-      "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+      "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -2962,7 +2962,7 @@
     "specialRules": [
      {
       "name": "Descent",
-      "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+      "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      }
@@ -3701,7 +3701,7 @@
     "specialRules": [
      {
       "name": "Descent",
-      "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+      "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -4879,7 +4879,7 @@
     "specialRules": [
      {
       "name": "Descent",
-      "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+      "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
       "page": "36",
       "publicationId": "45b0-3e3b-e83d-fd70"
      },
@@ -5060,7 +5060,7 @@
     },
     {
      "name": "Weapons Control Feature",
-     "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+     "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
     },
     {
      "name": "Life Support Feature",
@@ -5086,7 +5086,11 @@
    "stationRules": [
     {
      "name": "Hardpoints",
-     "effect": "This Space Station has a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+     "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+    },
+    {
+     "name": "Weapons Control Feature",
+     "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
     },
     {
      "name": "Life Support Feature",
@@ -5112,7 +5116,11 @@
    "stationRules": [
     {
      "name": "Hardpoints",
-     "effect": "This Space Station has a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+     "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+    },
+    {
+     "name": "Weapons Control Feature",
+     "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
     },
     {
      "name": "Life Support Feature",
@@ -5161,7 +5169,7 @@
     },
     {
      "name": "Two Weapons Control Features",
-     "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+     "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
     },
     {
      "name": "Supercontrol Node Feature",
@@ -5403,7 +5411,7 @@
   {
    "name": "Esoteric Ammunition",
    "cost": "1AP",
-   "effect": "When you assign a Group’s weapons to a target, each of the attacking Group’s Weapon Systems with “Barb” in their name gain Bloom-1, Flash-1, and Critical-1 for that attack."
+   "effect": "When you assign a Group’s weapons to a target, each of the attacking Group’s Weapon Systems with “Barb” in their name gain Bloom-1, Flash-1, and Critical-1 for that attack. Weapons with any of those special rules already increase that special rule’s X value by 1 for that attack."
   },
   {
    "name": "Limited Sensor Profile",

@@ -1,12 +1,12 @@
 {
  "source": "https://ttcombat.com/pages/dropfleet-commander-downloads",
  "files": {
-  "A5_Dropfleet_Rulebook_2.4_Print_Friendly": {
-   "filename": "A5_Dropfleet_Rulebook_2.4_Print_Friendly.pdf",
+  "A5_Dropfleet_Rulebook_2.4.1_Print_Friendly": {
+   "filename": "A5_Dropfleet_Rulebook_2.4.1_Print_Friendly.pdf",
    "date": null,
-   "version": "v=1793895346",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/A5_Dropfleet_Rulebook_2.4_Print_Friendly.pdf?v=1793895346",
-   "bytes": 6683546
+   "version": "v=1795104121",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/A5_Dropfleet_Rulebook_2.4.1_Print_Friendly.pdf?v=1795104121",
+   "bytes": 6682241
   },
   "Advent_Scenarios": {
    "filename": "Advent_Scenarios.pdf",
@@ -23,11 +23,11 @@
    "bytes": 1797437
   },
   "Bioficer_Combined_Fleet_Stats": {
-   "filename": "Bioficer_Combined_Fleet_Stats_261104.pdf",
-   "date": "261104",
-   "version": "v=1793895400",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Bioficer_Combined_Fleet_Stats_261104.pdf?v=1793895400",
-   "bytes": 4979280
+   "filename": "Bioficer_Combined_Fleet_Stats_261119.pdf",
+   "date": "261119",
+   "version": "v=1795104121",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Bioficer_Combined_Fleet_Stats_261119.pdf?v=1795104121",
+   "bytes": 4979466
   },
   "Civilian_Ships_Scenarios": {
    "filename": "Civilian_Ships_Scenarios_261104.pdf",
@@ -57,19 +57,19 @@
    "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Dreadhold_FAQ.pdf?v=1766404183",
    "bytes": 1269032
   },
-  "Dropfleet_Commander_FAQ_v1.4": {
-   "filename": "Dropfleet_Commander_FAQ_v1.4.pdf",
+  "Dropfleet_Commander_FAQ_v1.4.1": {
+   "filename": "Dropfleet_Commander_FAQ_v1.4.1.pdf",
    "date": null,
-   "version": "v=1793895541",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_Commander_FAQ_v1.4.pdf?v=1793895541",
-   "bytes": 2420540
+   "version": "v=1795104121",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_Commander_FAQ_v1.4.1.pdf?v=1795104121",
+   "bytes": 2425613
   },
-  "Dropfleet_Commander_Ship_Updates_v1.4": {
-   "filename": "Dropfleet_Commander_Ship_Updates_v1.4.pdf",
+  "Dropfleet_Commander_Ship_Updates_v1.4.1": {
+   "filename": "Dropfleet_Commander_Ship_Updates_v1.4.1.pdf",
    "date": null,
-   "version": "v=1793895599",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_Commander_Ship_Updates_v1.4.pdf?v=1793895599",
-   "bytes": 2756923
+   "version": "v=1795104121",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Dropfleet_Commander_Ship_Updates_v1.4.1.pdf?v=1795104121",
+   "bytes": 2765144
   },
   "Dropfleet_Core_Scenarios": {
    "filename": "Dropfleet_Core_Scenarios_2704ae6b-ad65-48af-a5e2-109efd0e5109.pdf",
@@ -114,11 +114,11 @@
    "bytes": 1829887
   },
   "Fleet_Space_Stations": {
-   "filename": "Fleet_Space_Stations_261104.pdf",
-   "date": "261104",
-   "version": "v=1793895273",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Fleet_Space_Stations_261104.pdf?v=1793895273",
-   "bytes": 8909976
+   "filename": "Fleet_Space_Stations_261119.pdf",
+   "date": "261119",
+   "version": "v=1795104122",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Fleet_Space_Stations_261119.pdf?v=1795104122",
+   "bytes": 8910141
   },
   "LSO_Moon": {
    "filename": "LSO_Moon.pdf",
@@ -142,18 +142,18 @@
    "bytes": 3654223
   },
   "PHR_Combined_Fleet_Stats": {
-   "filename": "PHR_Combined_Fleet_Stats_261104.pdf",
-   "date": "261104",
-   "version": "v=1793895507",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/PHR_Combined_Fleet_Stats_261104.pdf?v=1793895507",
-   "bytes": 4432270
+   "filename": "PHR_Combined_Fleet_Stats_261119.pdf",
+   "date": "261119",
+   "version": "v=1795104121",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/PHR_Combined_Fleet_Stats_261119.pdf?v=1795104121",
+   "bytes": 4433225
   },
   "Resistance_Combined_Fleet_Stats": {
-   "filename": "Resistance_Combined_Fleet_Stats_261104.pdf",
-   "date": "261104",
-   "version": "v=1793895625",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Resistance_Combined_Fleet_Stats_261104.pdf?v=1793895625",
-   "bytes": 4663722
+   "filename": "Resistance_Combined_Fleet_Stats_261119.pdf",
+   "date": "261119",
+   "version": "v=1795104121",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/Resistance_Combined_Fleet_Stats_261119.pdf?v=1795104121",
+   "bytes": 4662836
   },
   "Scenario_Expansion_1": {
    "filename": "Scenario_Expansion_1_250818.pdf",
@@ -191,11 +191,11 @@
    "bytes": 233470
   },
   "UCM_Combined_Fleet_Stats": {
-   "filename": "UCM_Combined_Fleet_Stats_261104.pdf",
-   "date": "261104",
-   "version": "v=1793895310",
-   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/UCM_Combined_Fleet_Stats_261104.pdf?v=1793895310",
-   "bytes": 5372701
+   "filename": "UCM_Combined_Fleet_Stats_261119.pdf",
+   "date": "261119",
+   "version": "v=1795104122",
+   "url": "https://cdn.shopify.com/s/files/1/0965/1274/files/UCM_Combined_Fleet_Stats_261119.pdf?v=1795104122",
+   "bytes": 5372697
   }
  }
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fleet Space Station options from Fleet_Space_Stations_261104.pdf, pages 2 to 4.
+"""Fleet Space Station options from Fleet_Space_Stations_261119.pdf, pages 2 to 4.
 
     python scripts/build-station-features.py
     python scripts/gen-fleet-data.py
@@ -28,9 +28,9 @@ FACTIONS = ["bioficer", "phr", "resistance", "scourge", "shaltari", "ucm"]
 
 FEATURES = [
     {"name": "Launch Control", "cost": 5, "es": "*", "ks": "*", "hull": 5,
-     "effect": "This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."},
+     "effect": "This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Deployed Features may still be used."},
     {"name": "Weapons Control", "cost": 5, "es": "*", "ks": "*", "hull": 5,
-     "effect": "This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."},
+     "effect": "This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."},
     {"name": "Life Support", "cost": 5, "es": "5+", "ks": "5+", "hull": 6,
      "effect": "When this Feature is removed, each player removes a Battalion from this Space Station. If this Space Station started with at least one Life Support Feature and has none remaining, at the end of each Cleanup step, each player removes a Battalion from this Space Station."},
     {"name": "Reactor Core", "cost": 0, "es": "5+", "ks": "5+", "hull": 6,
@@ -79,9 +79,9 @@ GENERIC = {
     "Small Space Station": {"cost": 30, "arm": 1, "feat": 0, "upg": 1,
         "hardpoints": "This Space Station has a Weapons Control and a Life Support Feature. It may take one Armament from the Space Station Armaments list. " + UPGRADE_LINE.format(n=1)},
     "Medium Space Station": {"cost": 45, "arm": 2, "feat": 3, "upg": 1,
-        "hardpoints": "This Space Station has a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. " + UPGRADE_LINE.format(n=1)},
+        "hardpoints": "This Space Station has a Weapons Control and a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. " + UPGRADE_LINE.format(n=1)},
     "Large Space Station": {"cost": 65, "arm": 3, "feat": 4, "upg": 2,
-        "hardpoints": "This Space Station has a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. " + UPGRADE_LINE.format(n=2)},
+        "hardpoints": "This Space Station has a Weapons Control and a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. " + UPGRADE_LINE.format(n=2)},
 }
 NUM = {"a": 1, "an": 1, "one": 1, "two": 2, "three": 3, "four": 4}
 WORD = {2: "Two", 3: "Three", 4: "Four"}
@@ -198,7 +198,7 @@ def armaments():
               "hull": f["hull"], "effect": f"{saves(f)} {f['effect']}"} for f in FEATURES]
     opts += UPGRADES
     return {
-        "note": "Fleet Space Station options, verbatim from Fleet_Space_Stations_261104.pdf pages 2 to 4. "
+        "note": "Fleet Space Station options, verbatim from Fleet_Space_Stations_261119.pdf pages 2 to 4. "
                 "Generic stations take armaments up to armamentMaxBySize, the Features in featuresRequiredBySize, and "
                 "up to upgradeCapBySize upgrades, where an upgrade may be one Feature. Faction stations buy Features "
                 "per their featurePicks. Written by scripts/build-station-features.py.",

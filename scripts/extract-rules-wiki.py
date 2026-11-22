@@ -78,7 +78,7 @@ except ImportError:
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC_DEFAULT = os.path.join(
-    ROOT, "Rules-Mechanics-PDFs", "A5_Dropfleet_Rulebook_2.4_Print_Friendly.pdf")
+    ROOT, "Rules-Mechanics-PDFs", "A5_Dropfleet_Rulebook_2.4.1_Print_Friendly.pdf")
 OUT_DEFAULT = os.path.join(ROOT, "data", "rules-wiki.json")
 
 BOOK_EDITION = "2.4"

@@ -46,12 +46,12 @@ STATHEADER = re.compile(r'Thrust\s+Scan\s+Sig\s+Hull\s+ES\s+KS\s+BS\s+G\s+Specia
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PDFS = {
-    'ucm': 'UCM_Combined_Fleet_Stats_261104.pdf',
-    'phr': 'PHR_Combined_Fleet_Stats_261104.pdf',
+    'ucm': 'UCM_Combined_Fleet_Stats_261119.pdf',
+    'phr': 'PHR_Combined_Fleet_Stats_261119.pdf',
     'scourge': 'Scourge_Combined_Fleet_Stats_261104.pdf',
     'shaltari': 'Shaltari_Combined_Fleet_Stats_261104.pdf',
-    'resistance': 'Resistance_Combined_Fleet_Stats_261104.pdf',
-    'bioficer': 'Bioficer_Combined_Fleet_Stats_261104.pdf',
+    'resistance': 'Resistance_Combined_Fleet_Stats_261119.pdf',
+    'bioficer': 'Bioficer_Combined_Fleet_Stats_261119.pdf',
 }
 
 

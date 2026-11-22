@@ -5,6 +5,29 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-11-21: TTCombat 2.4.1
+
+TTCombat posted 2.4.1 on 19 November: the A5 rulebook 2.4.1, FAQ v1.4.1, Ship
+Updates v1.4.1, and new UCM, PHR, Resistance, Bioficer and Fleet Space Stations
+sheets (`_261119`). `auto-update.py` found no stat changes on the ordinary
+cards. Everything below came from a text diff of each new file against the
+4 November copy, and was copied in word for word.
+
+- Rulebook: 3.1.2.1 Buckling, 5 Game Rounds (Activate Dropsites moves into the
+  Asset Phase), 7.3.6 Crippled for the rest of the game, 8 and 8.1 Battalion
+  Combat & Dropsite Activation, 8.1.1, 11.2.1 Collateral Damage, 14.2.17 High
+  Power, 14.2.31 Anti Wing. Escort, the Shield Spike and the 6.3 note were
+  already in from v532. `patch-rules-wiki.py` keeps the new Game Rounds table.
+- UCM Mass Driver Volley, PHR Weapons Hack, Resistance Big Guns a' Blazing,
+  Bioficer Esoteric Ammunition reworded, in the faction files and `ref/`.
+- PHR Gaius Chau's Romulus: six Energy Glaives (Pulse)/(Beam) profiles replace
+  the three Batteries, Cutting Power reworded, Burnthrough-2 added to its rules.
+- Resistance Xerxes NL-9 Laser Turret Pair: Flash-1, Fusillade-1.
+- Stations: Medium and Large Hardpoints add Weapons Control; Launch and Weapons
+  Control add "Deployed Features may still be used." (`build-station-features.py`).
+- Not changed: the calculator's PHR Energy Glaive presets, which predate the
+  2.4 Pulse/Beam split for every PHR ship, not only the Romulus.
+
 ### 2026-11-15: Imminent, Backline and Staggered in the Mission Maker
 
 Scenario Expansion 1 adds three deployment types but no table to roll them on,

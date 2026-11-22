@@ -521,7 +521,7 @@ const SCENARIOS=[
   // 6 turns -> the standard 6 rounds (12.1); 2-5 Fine / 4-6 Dense debris -> 2-5 Micrometeor Clouds,
   // 4-6 Dense Fields (the counts Shock And Yaw prints, 12.2); Medium Clusters -> Medium Space Stations
   // under Standard Scoring (12.1.5); roundup phase -> End Phase (9); "activated second" -> 2nd initiative (6.3).
-  // Station weapons: Space Station Armaments, Fleet_Space_Stations_261104.pdf page 2.
+  // Station weapons: Space Station Armaments, Fleet_Space_Stations_261119.pdf page 2.
   {id:'dragonslayer', name:'Dragonslayer', src:'The Ether Drake (1st edition)', leviathan:'Ether Drake',
    note:`NB: I converted this from 1st edition's rules. Let me know what you think via <a href="mailto:warlore1@outlook.com">email</a> if you want.`,
    intro:`An Ether Drake has made one of the Cradle World systems its home! Drive the Ether Drake and your opponent away and claim this system.`,

@@ -104,7 +104,7 @@
    "section": "14.1.3"
   },
   "Descent": {
-   "description": "Ships with the Descent special rule are designed to work in Atmosphere and are referred to as Descent Ships, which may be part of Descent Groups. The atmospheric operational depth of these Ships is far lower than normal ships.\nWhen attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+   "description": "Ships with the Descent special rule are designed to work in Atmosphere and are referred to as Descent Ships, which may be part of Descent Groups. The atmospheric operational depth of these Ships is far lower than normal ships.\nWhen attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
    "page": "46",
    "section": "14.1.4"
   },
@@ -219,7 +219,7 @@
    "section": "14.2.3"
   },
   "Anti Wing": {
-   "description": "This weapon may target enemy Wings as if they were Ships (with a Sig of 0”) but reduces its Lock value by 1 for that attack. If it does, for each hit, remove 1 Fighter or 1 Bomber from that Wing or any other enemy Wing within 3” of the target.\nWhen this weapon is assigned to a Torpedo, it reduces its Lock value by 1 instead of always hitting on a 6+.",
+   "description": "This weapon may target enemy Wings as if they were Ships (with a Sig of 0”) but reduces its Lock value by 1 for that attack. If it does, for each hit, remove 1 Fighter or 1 Bomber from that Wing or any other enemy Wing within 3” of the target.\nWhen this weapon is assigned to a Torpedo or Mine, it reduces its Lock value by 1 instead of always hitting on a 6+. Hits from this attack may be used to remove Torpedoes and Mines within 3” of the target.",
    "section": "14.2.31",
    "page": "52"
   },
@@ -314,7 +314,7 @@
    "section": "14.2.16"
   },
   "High Power": {
-   "description": "Unless the attacking Ship is on the Weapons Free Order, attacking with this Weapon counts as attacking with two Weapons (though it only fires once).\nShips with only a single High Power Weapon can only attack with it while on the Weapons Free Order.",
+   "description": "Unless the attacking Ship is on the Weapons Free Order, attacking with this Weapon counts as attacking with two Weapons (though it only fires once).\nShips with only a single Weapon cannot attack with it if that Weapon is High Power, unless on the Weapons Free Order.",
    "page": "50",
    "section": "14.2.17"
   },
@@ -489,7 +489,7 @@
   }
  ],
  "stationArmaments": {
-  "note": "Fleet Space Station options, verbatim from Fleet_Space_Stations_261104.pdf pages 2 to 4. Generic stations take armaments up to armamentMaxBySize, the Features in featuresRequiredBySize, and up to upgradeCapBySize upgrades, where an upgrade may be one Feature. Faction stations buy Features per their featurePicks. Written by scripts/build-station-features.py.",
+  "note": "Fleet Space Station options, verbatim from Fleet_Space_Stations_261119.pdf pages 2 to 4. Generic stations take armaments up to armamentMaxBySize, the Features in featuresRequiredBySize, and up to upgradeCapBySize upgrades, where an upgrade may be one Feature. Faction stations buy Features per their featurePicks. Written by scripts/build-station-features.py.",
   "featuresNote": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature.",
   "armamentMaxBySize": {
    "Small Space Station": 1,
@@ -592,7 +592,7 @@
     "es": "*",
     "ks": "*",
     "hull": 5,
-    "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
+    "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Deployed Features may still be used."
    },
    {
     "name": "Weapons Control",
@@ -601,7 +601,7 @@
     "es": "*",
     "ks": "*",
     "hull": 5,
-    "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+    "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
    },
    {
     "name": "Life Support",
@@ -723,7 +723,7 @@
  },
  "edition": {
   "month": "November 2026",
-  "file": "Dropfleet 2.4"
+  "file": "Dropfleet 2.4.1"
  },
  "factions": {
   "bioficer": {
@@ -3429,7 +3429,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -3690,7 +3690,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -4429,7 +4429,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -5607,7 +5607,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -5788,7 +5788,7 @@
       },
       {
        "name": "Weapons Control Feature",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -5814,7 +5814,11 @@
      "stationRules": [
       {
        "name": "Hardpoints",
-       "effect": "This Space Station has a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+       "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+      },
+      {
+       "name": "Weapons Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -5840,7 +5844,11 @@
      "stationRules": [
       {
        "name": "Hardpoints",
-       "effect": "This Space Station has a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+       "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+      },
+      {
+       "name": "Weapons Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -5889,7 +5897,7 @@
       },
       {
        "name": "Two Weapons Control Features",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Supercontrol Node Feature",
@@ -6131,7 +6139,7 @@
     {
      "name": "Esoteric Ammunition",
      "cost": "1AP",
-     "effect": "When you assign a Group’s weapons to a target, each of the attacking Group’s Weapon Systems with “Barb” in their name gain Bloom-1, Flash-1, and Critical-1 for that attack."
+     "effect": "When you assign a Group’s weapons to a target, each of the attacking Group’s Weapon Systems with “Barb” in their name gain Bloom-1, Flash-1, and Critical-1 for that attack. Weapons with any of those special rules already increase that special rule’s X value by 1 for that attack."
     },
     {
      "name": "Limited Sensor Profile",
@@ -6238,31 +6246,58 @@
         "special": "Critical-1, Focused"
        },
        {
-        "name": "Energy Glaive Battery",
+        "name": "Energy Glaives (Pulse)",
         "arc": "B",
-        "attack": "6",
-        "lock": "3+",
+        "attack": "4",
+        "lock": "4+",
         "damage": "2",
         "type": "E",
-        "special": "Overcharge, Volley-2"
+        "special": "Alt-1, Reave-1, Volley-2"
        },
        {
-        "name": "Energy Glaive Battery",
-        "arc": "B",
-        "attack": "6",
+        "name": "Energy Glaives (Beam)",
+        "arc": "S",
+        "attack": "2",
         "lock": "3+",
-        "damage": "2",
+        "damage": "4",
         "type": "E",
-        "special": "Overcharge, Volley-2"
+        "special": "Alt-1, Reave-2, Fusillade-1"
        },
        {
-        "name": "Energy Glaive Battery",
+        "name": "Energy Glaives (Pulse)",
         "arc": "B",
-        "attack": "6",
-        "lock": "3+",
+        "attack": "4",
+        "lock": "4+",
         "damage": "2",
         "type": "E",
-        "special": "Overcharge, Volley-2"
+        "special": "Alt-2, Reave-1, Volley-2"
+       },
+       {
+        "name": "Energy Glaives (Beam)",
+        "arc": "S",
+        "attack": "2",
+        "lock": "3+",
+        "damage": "4",
+        "type": "E",
+        "special": "Alt-2, Reave-2, Fusillade-1"
+       },
+       {
+        "name": "Energy Glaives (Pulse)",
+        "arc": "B",
+        "attack": "4",
+        "lock": "4+",
+        "damage": "2",
+        "type": "E",
+        "special": "Alt-3, Reave-1, Volley-2"
+       },
+       {
+        "name": "Energy Glaives (Beam)",
+        "arc": "S",
+        "attack": "2",
+        "lock": "3+",
+        "damage": "4",
+        "type": "E",
+        "special": "Alt-3, Reave-2, Fusillade-1"
        }
       ],
       "loads": [],
@@ -6273,11 +6308,15 @@
        },
        {
         "name": "Cutting Power",
-        "description": "If you attack with and do not Overcharge any of this Flagship’s Energy Glaive Batteries, they gain Reave-2 for their attacks this activation."
+        "description": "If you do not attack with any of this Ship’s Energy Glaive (Pulse) weapons, all of this ship’s Energy Glaives (Beam) Weapons replace their Reave-2 with Burnthrough-2 for their attacks this activation."
        },
        {
         "name": "Reave-2",
         "description": "Each of this Weapon’s criticals reduces the Energy/Kinetic save used against that hit by 2.\nE.g. a Reave-1 weapon rolls 3 dice to attack, one is a hit and the other two are a critical. The hit is saved against using the target’s normal save value, the criticals are saved against using the target’s save value reduced by 2."
+       },
+       {
+        "name": "Burnthrough-2",
+        "description": "Each of this Weapon’s critical hits reduces the target’s Energy/Kinetic Save by 2 for hits caused by this Weapon for this attack. Saves made for other Weapons are unaffected. Roll attacks separately for each Burnthrough Weapon."
        }
       ],
       "groupMin": 1,
@@ -9682,7 +9721,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -9957,7 +9996,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -10020,7 +10059,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -10608,7 +10647,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -11689,7 +11728,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -11870,7 +11909,7 @@
       },
       {
        "name": "Weapons Control Feature",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -11896,7 +11935,11 @@
      "stationRules": [
       {
        "name": "Hardpoints",
-       "effect": "This Space Station has a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+       "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+      },
+      {
+       "name": "Weapons Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -11922,7 +11965,11 @@
      "stationRules": [
       {
        "name": "Hardpoints",
-       "effect": "This Space Station has a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+       "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+      },
+      {
+       "name": "Weapons Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -11980,7 +12027,7 @@
       },
       {
        "name": "Two Weapons Control Features",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       }
      ]
     },
@@ -12034,7 +12081,7 @@
       },
       {
        "name": "Two Weapons Control Features",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       }
      ]
     },
@@ -12088,7 +12135,7 @@
       },
       {
        "name": "Two Weapons Control Features",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       }
      ],
      "featurePicks": {
@@ -12146,7 +12193,7 @@
       },
       {
        "name": "Two Weapons Control Features",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       }
      ],
      "featurePicks": {
@@ -12264,7 +12311,7 @@
     {
      "name": "Weapons Hack",
      "cost": "2AP",
-     "effect": "When an opponent assigns weapons to friendly Ships, choose one of the attacking Group’s Weapon Systems. Until the end of the attacking Ships’ activation, that Weapon System automatically misses on rolls of a 2 or less and your opponent cannot use abilities on those weapons. This can cause that opponent’s unresolved abilities on that Weapon System to be negated."
+     "effect": "When an opponent assigns weapons to friendly Ships, choose one of the attacking Group’s Weapon Systems. Until the end of the attacking Ships’ activation, that Weapon System automatically misses on rolls of a 2 or less and your opponent cannot use Abilities (see 4.2.1.1. Abilities and Ability Points) on those weapons. This can cause that opponent’s unresolved Abilities on that Weapon System to be negated."
     },
     {
      "name": "Ship of the Line",
@@ -14006,7 +14053,7 @@
         "lock": "2+",
         "damage": "1",
         "type": "E",
-        "special": "Flash-2, Focused, Fusillade-2, Reave-1, Volley-2"
+        "special": "Flash-1, Focused, Fusillade-1, Reave-1, Volley-2"
        },
        {
         "name": "Heavy Vent Cannons",
@@ -15330,7 +15377,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -15837,7 +15884,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -15899,7 +15946,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -15959,7 +16006,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -16664,7 +16711,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -17600,7 +17647,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -17797,7 +17844,7 @@
       },
       {
        "name": "Weapons Control Feature",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -17823,7 +17870,11 @@
      "stationRules": [
       {
        "name": "Hardpoints",
-       "effect": "This Space Station has a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+       "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+      },
+      {
+       "name": "Weapons Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -17849,7 +17900,11 @@
      "stationRules": [
       {
        "name": "Hardpoints",
-       "effect": "This Space Station has a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+       "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+      },
+      {
+       "name": "Weapons Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -17907,7 +17962,7 @@
       },
       {
        "name": "Two Weapons Control Features",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       }
      ],
      "featurePicks": {
@@ -17965,7 +18020,7 @@
       },
       {
        "name": "Two Weapons Control Features",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       }
      ],
      "featurePicks": {
@@ -18518,7 +18573,7 @@
     {
      "name": "Big Guns a' Blazing",
      "cost": "1AP",
-     "effect": "When you assign a Group's Weapon System with Damage 2 or higher to targets, double the Attack value of that Weapon System and that Weapon System has an unmodifiable Lock value of 4+ and only causes criticals on a 6+ for this attack and cannot have its dice rolls modified in any way. If this Ability affects a Weapon System with an Arc of B, it costs an additional 1AP. If this Ability affects a Weapon System on a Ship of H or C Tonnage, this Ability costs an additional 1AP (additional costs are cumulative)."
+     "effect": "When you assign a Group's Weapon System with Damage value of 2 or higher (before any special rules) to targets, double the Attack value of that Weapon System and that Weapon System has an unmodifiable Lock value of 4+ and only causes criticals on a 6+ for this attack and cannot have its dice rolls modified in any way. If this Ability affects a Weapon System with an Arc of B, it costs an additional 1AP. If this Ability affects a Weapon System on a Ship of H or C Tonnage, this Ability costs an additional 1AP (additional costs are cumulative)."
     },
     {
      "name": "Never Tell Me The Odds",
@@ -22061,7 +22116,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -22124,7 +22179,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -22187,7 +22242,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -22250,7 +22305,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -22304,7 +22359,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -22874,7 +22929,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -24218,7 +24273,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -24399,7 +24454,7 @@
       },
       {
        "name": "Weapons Control Feature",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -24425,7 +24480,11 @@
      "stationRules": [
       {
        "name": "Hardpoints",
-       "effect": "This Space Station has a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+       "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+      },
+      {
+       "name": "Weapons Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -24451,7 +24510,11 @@
      "stationRules": [
       {
        "name": "Hardpoints",
-       "effect": "This Space Station has a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+       "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+      },
+      {
+       "name": "Weapons Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -24496,7 +24559,7 @@
       },
       {
        "name": "Two Weapons Control Features",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       }
      ],
      "namesake": "An ephyra is the free-swimming larval stage of a scyphozoan jellyfish, which later matures into the bell-shaped adult medusa. The term is borrowed from [Ephyra](https://en.wikipedia.org/wiki/Ephyra_(mythology)), an Oceanid water-nymph of Greek myth, a daughter of the Titans Oceanus and Tethys."
@@ -24538,7 +24601,7 @@
       },
       {
        "name": "Two Weapons Control Features",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       }
      ],
      "namesake": "A [nematocyst](https://en.wikipedia.org/wiki/Cnidocyte) is the venomous stinging organelle housed within the cnidocyte cells of jellyfish, sea anemones, and other cnidarians. It fires a coiled, barbed thread to inject toxin into prey, in one of the fastest mechanical processes in nature."
@@ -28166,7 +28229,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -28298,7 +28361,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -28664,7 +28727,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -28739,7 +28802,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -28789,7 +28852,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -29344,7 +29407,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -30191,7 +30254,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -30390,7 +30453,7 @@
       },
       {
        "name": "Weapons Control Feature",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -30416,7 +30479,11 @@
      "stationRules": [
       {
        "name": "Hardpoints",
-       "effect": "This Space Station has a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+       "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+      },
+      {
+       "name": "Weapons Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -30442,7 +30509,11 @@
      "stationRules": [
       {
        "name": "Hardpoints",
-       "effect": "This Space Station has a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+       "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+      },
+      {
+       "name": "Weapons Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -30520,11 +30591,11 @@
       },
       {
        "name": "Launch Control Feature",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Deployed Features may still be used."
       },
       {
        "name": "Weapons Control Feature",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       }
      ],
      "featurePicks": {
@@ -30580,7 +30651,7 @@
       },
       {
        "name": "Two Weapons Control Features",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       }
      ]
     },
@@ -30684,7 +30755,7 @@
       },
       {
        "name": "Two Weapons Control Features",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       }
      ],
      "namesake": "A [shuriken](https://en.wikipedia.org/wiki/Shuriken) is a concealed Japanese throwing weapon associated with the samurai and ninja, often a sharpened flat plate or spike of metal. The popular star-shaped form is also known as a throwing star or ninja star.",
@@ -35031,7 +35102,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        }
@@ -35317,7 +35388,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -35394,7 +35465,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -35980,7 +36051,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -37046,7 +37117,7 @@
       "specialRules": [
        {
         "name": "Descent",
-        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+        "description": "When attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
         "page": "36",
         "publicationId": "45b0-3e3b-e83d-fd70"
        },
@@ -37254,7 +37325,7 @@
       },
       {
        "name": "Weapons Control Feature",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -37280,7 +37351,11 @@
      "stationRules": [
       {
        "name": "Hardpoints",
-       "effect": "This Space Station has a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+       "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take three additional Features, and it may take up to two options from the Space Station Armaments list. This station may be upgraded with 1 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+      },
+      {
+       "name": "Weapons Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -37306,7 +37381,11 @@
      "stationRules": [
       {
        "name": "Hardpoints",
-       "effect": "This Space Station has a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+       "effect": "This Space Station has a Weapons Control and a Life Support Feature. It must take four additional Features, and it may take up to three options from the Space Station Armaments list. This station may be upgraded with 2 of the following: Astrobotanical Lab for +30 points, Defence Grid for +80 points, or one option from the Space Station Features list."
+      },
+      {
+       "name": "Weapons Control Feature",
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
       },
       {
        "name": "Life Support Feature",
@@ -37347,7 +37426,7 @@
       },
       {
        "name": "Two Launch Control Features",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Deployed Features may still be used."
       }
      ]
     },
@@ -37384,7 +37463,7 @@
       },
       {
        "name": "Two Launch Control Features",
-       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
+       "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Deployed Features may still be used."
       }
      ]
     }
@@ -37477,7 +37556,7 @@
     {
      "name": "Mass Driver Volley",
      "cost": "2AP",
-     "effect": "When you assign a “Mass Driver” Weapon System to targets, that Weapon System improves its Lock by 1 for that attack sequence. If that Weapon System already has a Lock value of 2+, it causes criticals on a result of a 3+ for that attack sequence instead."
+     "effect": "When you assign a “Mass Driver” Weapon System to targets, that Weapon System improves its Lock by 1 for that attack sequence. If that Weapon System already has a Lock value of 2+, instead lower the result required to score a critical by 1 for that attack."
     },
     {
      "name": "Atmospheric Bombing Run",

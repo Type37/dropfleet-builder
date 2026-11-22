@@ -1,6 +1,6 @@
 {
 "Bioficer_Combined_Fleet_Stats": {
-"file": "Bioficer_Combined_Fleet_Stats_261104.pdf",
+"file": "Bioficer_Combined_Fleet_Stats_261119.pdf",
 "cards": {
 "catastrophe": {
 "name": "Catastrophe",
@@ -2229,7 +2229,7 @@
 }
 },
 "PHR_Combined_Fleet_Stats": {
-"file": "PHR_Combined_Fleet_Stats_261104.pdf",
+"file": "PHR_Combined_Fleet_Stats_261119.pdf",
 "cards": {
 "achilles": {
 "name": "Achilles",
@@ -4068,7 +4068,7 @@
 "agrippa": {
 "name": "Agrippa",
 "page": 49,
-"sig": "9a462c7da851",
+"sig": "ce3b6417eff1",
 "cost": 160,
 "stats": {
 "thrust": "10\"",
@@ -4875,7 +4875,7 @@
 }
 },
 "Resistance_Combined_Fleet_Stats": {
-"file": "Resistance_Combined_Fleet_Stats_261104.pdf",
+"file": "Resistance_Combined_Fleet_Stats_261119.pdf",
 "cards": {
 "heavycruiser": {
 "name": "Heavy Cruiser",
@@ -6065,7 +6065,7 @@
 "xerxes": {
 "name": "Xerxes",
 "page": 37,
-"sig": "e733fccd2313",
+"sig": "8f2e6703f5a3",
 "cost": 175,
 "stats": {
 "thrust": "7\"",
@@ -6086,7 +6086,7 @@
 "lock": "2+",
 "damage": "1",
 "type": "E",
-"special": "Flash-2 Focused, Fusillade-2, Reave-1, Volley-2"
+"special": "Flash-1 Focused, Fusillade-1, Reave-1, Volley-2"
 },
 {
 "name": "Heavy Vent Cannons",
@@ -11927,7 +11927,7 @@
 }
 },
 "UCM_Combined_Fleet_Stats": {
-"file": "UCM_Combined_Fleet_Stats_261104.pdf",
+"file": "UCM_Combined_Fleet_Stats_261119.pdf",
 "cards": {
 "warsaw": {
 "name": "Warsaw",

@@ -271,8 +271,8 @@ def fix_game_rounds(ch):
         return False
     phases = [
         ("Planning Phase", ["Ability Point Generation.", "Pass Token Generation.", "Determine Initiative."]),
-        ("Activation Phase", ["Players alternate activating Groups.", "Players alternate activating Dropsites."]),
-        ("Asset Phase", ["Battalion Combat.", "Boarding Actions.", "Asset Combat."]),
+        ("Activation Phase", ["Players alternate activating Groups."]),
+        ("Asset Phase", ["Battalion Combat.", "Activate Dropsites", "Boarding Actions.", "Asset Combat."]),
         ("End Phase", ["Repair.", "Victory Points.", "Cleanup."]),
     ]
     src = _plainset(sec["body"])

@@ -1,8 +1,8 @@
 {
  "game": "Dropfleet Commander",
  "book": "A5 Dropfleet Rulebook (Print Friendly)",
- "edition": "2.4",
- "source": "A5_Dropfleet_Rulebook_2.4_Print_Friendly.pdf",
+ "edition": "2.4.1",
+ "source": "A5_Dropfleet_Rulebook_2.4.1_Print_Friendly.pdf",
  "generator": "scripts/extract-rules-wiki.py",
  "verbatim": true,
  "chapters": [
@@ -877,7 +877,7 @@
            "kind": "p",
            "runs": [
             {
-             "t": "A non-Descent Ship that ends its activation in Atmosphere takes D3 damage.",
+             "t": "Immediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage.",
              "b": true
             },
             {
@@ -1823,12 +1823,12 @@
        ],
        [
         {
-         "t": "Players alternate activating Groups.\nPlayers alternate activating Dropsites."
+         "t": "Players alternate activating Groups."
         }
        ],
        [
         {
-         "t": "Battalion Combat.\nBoarding Actions.\nAsset Combat."
+         "t": "Battalion Combat.\nActivate Dropsites\nBoarding Actions.\nAsset Combat."
         }
        ],
        [
@@ -2687,7 +2687,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "The first time any damage reduces a Capital Ship to below half of its starting Hull value, it suffers a Crippling Effect. The defending player rolls 2D6 and consults the table below. Apply the specified effect to that Ship. "
+           "t": "The first time any damage reduces a Capital Ship to below half of its starting Hull value, it becomes Crippled for the rest of the game and suffers a Crippling Effect. The defending player rolls 2D6 and consults the table below. Apply the specified effect to that Ship. "
           },
           {
            "t": "Each Ship is only affected by this roll once, regardless of the number of times it would be reduced below half of its starting Hull Value.",
@@ -3295,7 +3295,7 @@
      "kind": "p",
      "runs": [
       {
-       "t": "1. Battalion Combat."
+       "t": "1. Battalion Combat & Dropsite Activation"
       }
      ]
     },
@@ -3327,7 +3327,7 @@
        "kind": "p",
        "runs": [
         {
-         "t": "Each Dropsite with Battalions belonging to 2 or more players and has not had Battalion Combat resolve this round is eligible for Battalion Combat. In initiative order, each player selects an eligible Dropsite to resolve combat on before moving on to the next. Repeat this until there are no more eligible Dropsites."
+         "t": "Each Dropsite with Battalions belonging to 2 or more players and has not had Battalion Combat resolve this round is eligible for Battalion Combat. In initiative order, each player selects a Dropsite, resolving any Battalion Combat and activating it before moving onto the next Dropsite. Repeat this until there are no more eligible Dropsites."
         }
        ]
       },
@@ -3399,7 +3399,7 @@
        "kind": "p",
        "runs": [
         {
-         "t": "Players with an amount of friendly Battalions on a Feature equal to or greater than that Feature’s remaining Hull that also contains no enemy Battalions may remove all of those Battalions to destroy that Feature."
+         "t": "Players with an amount of friendly Battalions on a Feature equal to or greater than that Feature’s remaining Hull that also contains no enemy Battalions may remove all of those Battalions to destroy that Feature. You may destroy a Feature this way even if no other Battalion Combat happens on its Dropsite."
         }
        ]
       },
@@ -3447,7 +3447,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "After players have completed Battalion Combat for a Dropsite, a player that controls that Dropsite, "
+           "t": "After Battalion Combat for a Dropsite (or immediately if there is none), a player that controls that Dropsite, "
           },
           {
            "t": "ignoring enemy deployed Features",
@@ -4774,7 +4774,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Whenever a Dropsite loses a Hull Point, each player removes that many of their Battalions from the Dropsite. If any Battalions are deployed to Features, remove those before removing Battalions assigned to the Dropsite."
+           "t": "For each Hull Point a Dropsite/Feature loses due to an attack, each player removes one Battalion from that Dropsite. Remove Battalions from attacked Features first, then from other Features, then from the Dropsite itself."
           }
          ]
         }
@@ -8022,7 +8022,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "Ships with only a single High Power Weapon can only attack with it while on the Weapons Free Order."
+           "t": "Ships with only a single Weapon cannot attack with it if that Weapon is High Power, unless on the Weapons Free Order."
           }
          ]
         }
@@ -8364,7 +8364,7 @@
          "kind": "p",
          "runs": [
           {
-           "t": "When this weapon is assigned to a Torpedo, it reduces its Lock value by 1 instead of always hitting on a 6+.”"
+           "t": "When this weapon is assigned to a Torpedo or Mine, it reduces its Lock value by 1 instead of always hitting on a 6+. Hits from this attack may be used to remove Torpedoes and Mines within 3” of the target."
           }
          ]
         }

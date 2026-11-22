@@ -132,8 +132,8 @@ td.res { font-weight: 700; }
       </div>
       <div class="hd black">8 Asset Phase</div>
       <div class="body" style="background:var(--green-2);">
-        <p class="st">1) Battalion Combat</p>
-        <p>In Initiative order, players select a Dropsite with opposing Battalions and resolve its combat:</p>
+        <p class="st">1) Battalion Combat &amp; Dropsite Activation</p>
+        <p>In Initiative order, players select a Dropsite, resolve any Battalion Combat on it, then activate it:</p>
         <ul class="cols3 tight" style="margin:3pt 0;">
           <li>Dropsite to Feature</li>
           <li>Dropsite Centric</li>
@@ -141,7 +141,7 @@ td.res { font-weight: 700; }
           <li>Feature Demolition</li>
           <li>Battalion Consolidation</li>
         </ul>
-        <p>Remove Battalions equally until a single players Battalions remain or none remain. Battalions equal to the Hull of a Feature with no enemy Battalions may be removed to destroy it.</p>
+        <p>Remove Battalions equally until a single players Battalions remain or none remain. Battalions equal to the Hull of a Feature with no enemy Battalions may be removed to destroy it, even with no other combat on that Dropsite.</p>
         <p class="st" style="margin-top:3pt;">Activate Dropsite</p>
         <p>The controlling player attacks and/or launches with Scenario Features only they have Battalions on, then each player activates their deployed Features.</p>
         <p class="st" style="margin-top:3pt;">2) Boarding Actions</p>
@@ -349,7 +349,7 @@ td.res { font-weight: 700; }
               <li>Dropsite is <b>Ruined</b> if less than half Hull remain</li>
               <li>Dropsite is <b>Levelled</b> if zero Hull remain</li>
               <li>Dropsite uses best available Save from its Features</li>
-              <li>For each Hull lost, each player removes a Battalion, starting from Features</li>
+              <li>Per Hull lost to an attack, each player removes a Battalion, attacked Features first</li>
               <li>Weapons may be assigned to a Feature instead (Bombardment only against Cities). Features use their own Saves and Hull, and lose their Battalions when destroyed</li>
             </ul>
           </td></tr>
@@ -599,7 +599,7 @@ td.res { font-weight: 700; }
       <div class="rule">
         <h4>14.2.31 Anti Wing</h4>
         <p>This weapon may target enemy Wings as if they were Ships (with a Sig of 0”) but reduces its Lock value by 1 for that attack. If it does, for each hit, remove 1 Fighter or 1 Bomber from that Wing or any other enemy Wing within 3” of the target.</p>
-        <p>When this weapon is assigned to a Torpedo, it reduces its Lock value by 1 instead of always hitting on a 6+.</p>
+        <p>Torpedo or Mine targets: Lock 1 better, not 6+. Hits may also clear Torpedoes and Mines within 3”.</p>
       </div>
     </div>
   </div>

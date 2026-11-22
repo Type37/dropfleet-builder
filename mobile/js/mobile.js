@@ -5152,6 +5152,17 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-11-21', title: 'TTCombat 2.4.1', items: [
+      'Rules: Buckling hits a non-Descent Ship in Atmosphere immediately after it ends its activation. A Capital Ship that drops below half Hull is Crippled for the rest of the game, even if it is repaired back above half.',
+      'Rules: Dropsites activate one at a time in the Asset Phase. In initiative order, each player picks a Dropsite, resolves any Battalion Combat there and then activates it. You can destroy a Feature with your Battalions even if there is no other combat on its Dropsite.',
+      'Rules: when a Dropsite or Feature loses Hull to an attack, each player removes one Battalion per Hull lost, from the attacked Features first, then other Features, then the Dropsite.',
+      'Rules: a Ship whose only Weapon is High Power can fire it only on Weapons Free. An Anti Wing weapon assigned to a Torpedo or Mine reduces its Lock by 1, and its hits can remove Torpedoes and Mines within 3" of the target.',
+      'UCM: Mass Driver Volley on a 2+ Lock weapon now lowers the roll needed for a critical by 1.',
+      'PHR: Gaius Chau’s Romulus swaps its three Energy Glaive Batteries for three Energy Glaives (Pulse) and (Beam) pairs. Cutting Power: if none of its Pulse Glaives attack, its Beam Glaives swap Reave-2 for Burnthrough-2. Weapons Hack names Abilities as in rulebook 4.2.1.1.',
+      'Resistance: the Xerxes NL-9 Laser Turret Pair is Flash-1 and Fusillade-1. Big Guns a’ Blazing checks Damage before any special rules.',
+      'Bioficer: Esoteric Ammunition adds 1 to Bloom, Flash or Critical on a Barb weapon that already has it.',
+      'Space stations: Medium and Large stations come with a Weapons Control Feature as well as Life Support. Deployed Features still work after a station loses all its Launch or Weapons Control.'
+    ] },
     { date: '2026-11-15', title: 'Civilian Ships in My Collection', items: [
       'My Collection has a Civilian Ships tab for the mercenary and civilian ships any fleet can take, so you count them once instead of under every faction. Counts you already recorded move across.',
       'The Nephilim and Raum lore no longer start with the tail of their ship names.'

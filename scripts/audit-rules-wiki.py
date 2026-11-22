@@ -31,7 +31,7 @@ except ImportError:
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WIKI = os.path.join(ROOT, "data", "rules-wiki.json")
 PDF = os.path.join(ROOT, "Rules-Mechanics-PDFs",
-                   "A5_Dropfleet_Rulebook_2.4_Print_Friendly.pdf")
+                   "A5_Dropfleet_Rulebook_2.4.1_Print_Friendly.pdf")
 
 
 def norm(s):

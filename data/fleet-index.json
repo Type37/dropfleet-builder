@@ -104,7 +104,7 @@
    "section": "14.1.3"
   },
   "Descent": {
-   "description": "Ships with the Descent special rule are designed to work in Atmosphere and are referred to as Descent Ships, which may be part of Descent Groups. The atmospheric operational depth of these Ships is far lower than normal ships.\nWhen attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nA non-Descent Ship that ends its activation in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
+   "description": "Ships with the Descent special rule are designed to work in Atmosphere and are referred to as Descent Ships, which may be part of Descent Groups. The atmospheric operational depth of these Ships is far lower than normal ships.\nWhen attacking a City or a Descent Ship in Atmosphere, that attack always hits on a 6+ and can never cause a critical.\nWhen attacking a non-Descent Ship in Atmosphere, reduce the lock of Weapons attacking it by 1.\nWhen attacking into Orbit from Atmosphere, any attack always hits on a 6+.\nImmediately after ending its activation, a non-Descent Ship in Atmosphere takes D3 damage. Colossal Ships take 2D3 damage instead.",
    "page": "46",
    "section": "14.1.4"
   },
@@ -219,7 +219,7 @@
    "section": "14.2.3"
   },
   "Anti Wing": {
-   "description": "This weapon may target enemy Wings as if they were Ships (with a Sig of 0”) but reduces its Lock value by 1 for that attack. If it does, for each hit, remove 1 Fighter or 1 Bomber from that Wing or any other enemy Wing within 3” of the target.\nWhen this weapon is assigned to a Torpedo, it reduces its Lock value by 1 instead of always hitting on a 6+.",
+   "description": "This weapon may target enemy Wings as if they were Ships (with a Sig of 0”) but reduces its Lock value by 1 for that attack. If it does, for each hit, remove 1 Fighter or 1 Bomber from that Wing or any other enemy Wing within 3” of the target.\nWhen this weapon is assigned to a Torpedo or Mine, it reduces its Lock value by 1 instead of always hitting on a 6+. Hits from this attack may be used to remove Torpedoes and Mines within 3” of the target.",
    "section": "14.2.31",
    "page": "52"
   },
@@ -314,7 +314,7 @@
    "section": "14.2.16"
   },
   "High Power": {
-   "description": "Unless the attacking Ship is on the Weapons Free Order, attacking with this Weapon counts as attacking with two Weapons (though it only fires once).\nShips with only a single High Power Weapon can only attack with it while on the Weapons Free Order.",
+   "description": "Unless the attacking Ship is on the Weapons Free Order, attacking with this Weapon counts as attacking with two Weapons (though it only fires once).\nShips with only a single Weapon cannot attack with it if that Weapon is High Power, unless on the Weapons Free Order.",
    "page": "50",
    "section": "14.2.17"
   },
@@ -527,7 +527,7 @@
   }
  ],
  "stationArmaments": {
-  "note": "Fleet Space Station options, verbatim from Fleet_Space_Stations_261104.pdf pages 2 to 4. Generic stations take armaments up to armamentMaxBySize, the Features in featuresRequiredBySize, and up to upgradeCapBySize upgrades, where an upgrade may be one Feature. Faction stations buy Features per their featurePicks. Written by scripts/build-station-features.py.",
+  "note": "Fleet Space Station options, verbatim from Fleet_Space_Stations_261119.pdf pages 2 to 4. Generic stations take armaments up to armamentMaxBySize, the Features in featuresRequiredBySize, and up to upgradeCapBySize upgrades, where an upgrade may be one Feature. Faction stations buy Features per their featurePicks. Written by scripts/build-station-features.py.",
   "featuresNote": "Each Fleet Space Station has a number of Features automatically, and may have the option to purchase additional Features. If a Space Station has a specific Feature, it does not pay points for that Feature. If it must or may take additional non-specific Features, those Features cost their stated points. Space Stations may have multiple of the same Feature.",
   "armamentMaxBySize": {
    "Small Space Station": 1,
@@ -630,7 +630,7 @@
     "es": "*",
     "ks": "*",
     "hull": 5,
-    "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets."
+    "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Launch Control Features are removed from a Space Station, that Station cannot Launch Assets. Deployed Features may still be used."
    },
    {
     "name": "Weapons Control",
@@ -639,7 +639,7 @@
     "es": "*",
     "ks": "*",
     "hull": 5,
-    "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems."
+    "effect": "ES *, KS *, Hull 5. This feature uses its Space Station’s best available saves. When all Weapons Control Features are removed from a Space Station, that Station cannot use its Weapon Systems. Deployed Features may still be used."
    },
    {
     "name": "Life Support",
@@ -761,6 +761,6 @@
  },
  "edition": {
   "month": "November 2026",
-  "file": "Dropfleet 2.4"
+  "file": "Dropfleet 2.4.1"
  }
 }
