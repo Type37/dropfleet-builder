@@ -9362,6 +9362,10 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-11-24', title: 'Hull specs for most of the fleet', items: [
+      'Lore: length, beam, height and displacement for 122 ships and sculpts, up from 13, taken from TTCombat\u2019s UCM, Scourge, Resistance and PHR compendiums. Frigates and smaller list length and displacement only, as the books do.',
+      'Lore: counts-as sculpts such as the Atlantis, Basilisk and Trident show their own figures in the desktop builder.'
+    ] },
     { date: '2026-11-22', title: 'Glaive presets in the calculator', items: [
       'Calculator: the PHR presets are Energy Glaives (Pulse), Energy Glaives (Beam) and Glaive Lance (Pulse) and (Beam), with their 2.4 stats. Energy Glaives (Beam, Cutting Power) is Gaius Chau’s Romulus when its Pulse Glaives hold fire. The old single Energy Glaives, Glaive Lance and Energy Glaive Battery presets are gone.',
       'Rules: Escort ends with a full stop, as 2.4.1 prints it. The Civilian Ship cards use the new Buckling wording too.'

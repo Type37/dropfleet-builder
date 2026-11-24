@@ -5,6 +5,20 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-11-24: Hull specs for most of the fleet
+
+Length, beam, height and displacement now appear in the lore panel for 122
+ships and sculpts, up from 13. The figures come from TTCombat's faction compendiums:
+Combined_UCM_230818, Combined_Scourge_240402, Combined_Resistance_231215 and
+Combined_PHR_231215. There is no Shaltari compendium, so Shaltari gains only
+the Hyperyacht Aurorum. Frigates and smaller print length and displacement
+only. Counts-as sculpts carry their own figures, shown in the desktop builder.
+
+Two figures are left out. The block labelled Amazon sits on the Phalanx page
+with battlecruiser numbers, and the Palatine's printed 22,331,000m³ exceeds its
+own 585 by 188 by 127m box. Some others look copied between ships (Scipio and
+Leonidas, Sisyphus and Achilles, Collins and Seneca) and stay as printed.
+
 ### 2026-11-22: Glaive presets in the calculator
 
 The calculator's PHR Glaive presets still carried 2.3 stats: Energy Glaives
