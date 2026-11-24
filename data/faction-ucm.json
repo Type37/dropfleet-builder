@@ -407,6 +407,7 @@
       "category": "colossal",
       "ship": {
         "name": "Washington Supercarrier",
+        "specs": {"length": "1,751m", "beam": "575m", "height": "674m", "displacement": "73,643,000m³"},
         "cost": 530,
         "stats": {
           "thrust": "6\"",
@@ -501,6 +502,7 @@
       "category": "colossal",
       "ship": {
         "name": "London Dreadnought",
+        "specs": {"length": "1,751m", "beam": "575m", "height": "674m", "displacement": "69,631,000m³"},
         "cost": 490,
         "stats": {
           "thrust": "6\"",
@@ -1087,6 +1089,7 @@
       "category": "heavy",
       "ship": {
         "name": "Delhi Battleship",
+        "specs": {"length": "1,314m", "beam": "421m", "height": "384m", "displacement": "27,858,000m³"},
         "cost": 230,
         "stats": {
           "thrust": "6\"",
@@ -1224,6 +1227,7 @@
       "category": "heavy",
       "ship": {
         "name": "Hanoi Battleship",
+        "specs": {"length": "1,413m", "beam": "421m", "height": "384m", "displacement": "26,289,000m³"},
         "cost": 200,
         "stats": {
           "thrust": "6\"",
@@ -1339,6 +1343,7 @@
       "category": "heavy",
       "ship": {
         "name": "Tokyo Battleship",
+        "specs": {"length": "1,293m", "beam": "421m", "height": "383m", "displacement": "21,362,000m³"},
         "cost": 225,
         "stats": {
           "thrust": "6\"",
@@ -1462,7 +1467,7 @@
       "category": "heavy",
       "ship": {
         "name": "New York Battleship",
-        "specs": {"length": "1293m", "beam": "421m", "height": "383m", "displacement": "25,253,000m³"},
+        "specs": {"length": "1,293m", "beam": "421m", "height": "383m", "displacement": "25,253,000m³"},
         "cost": 235,
         "stats": {
           "thrust": "6\"",
@@ -1583,6 +1588,7 @@
       "category": "heavy",
       "ship": {
         "name": "Beijing Battleship",
+        "specs": {"length": "1,293m", "beam": "421m", "height": "383m", "displacement": "21,289,000m³"},
         "cost": 215,
         "stats": {
           "thrust": "6\"",
@@ -2079,6 +2085,7 @@
       "category": "heavy",
       "ship": {
         "name": "Venice Command Battlecruiser",
+        "specs": {"length": "1,102m", "beam": "194m", "height": "409m", "displacement": "12,748,000m³"},
         "cost": 185,
         "stats": {
           "thrust": "8\"",
@@ -2153,6 +2160,7 @@
       "category": "heavy",
       "ship": {
         "name": "Rome Battlecruiser",
+        "specs": {"length": "1,131m", "beam": "236m", "height": "368m", "displacement": "15,319,000m³"},
         "cost": 185,
         "stats": {
           "thrust": "8\"",
@@ -2220,6 +2228,7 @@
       "category": "heavy",
       "ship": {
         "name": "Perth Battlecruiser",
+        "specs": {"length": "1,131m", "beam": "236m", "height": "368m", "displacement": "15,319,000m³"},
         "cost": 145,
         "stats": {
           "thrust": "8\"",
@@ -2276,6 +2285,7 @@
         "variants": [
           {
             "name": "Avalon",
+            "specs": {"length": "1,131m", "beam": "236m", "height": "368m", "displacement": "15,319,000m³"},
             "note": "Avalon counts as Perth",
             "image": "assets/art/avalon.webp",
             "lore": "The UCMS Avalon serves as the sister ship to the UCMS Atlantis within the battlecruiser testbed program. Launched 10 years into the program in 2649, she differed from her sister by replacing the primary mass driver turret battery with an enormous Viper super-heavy anti-ship laser, still one of the largest weapons ever to be mounted to a UCM ship."
@@ -2301,6 +2311,7 @@
       "category": "heavy",
       "ship": {
         "name": "Johannesburg Battlecruiser",
+        "specs": {"length": "1,160m", "beam": "236m", "height": "368m", "displacement": "9,609,000m³"},
         "cost": 165,
         "stats": {
           "thrust": "8\"",
@@ -2354,6 +2365,7 @@
         "variants": [
           {
             "name": "Atlantis",
+            "specs": {"length": "1,160m", "beam": "301m", "height": "315m", "displacement": "9,609,000m³"},
             "note": "Atlantis counts as Johannesburg",
             "image": "assets/art/atlantis.webp",
             "lore": "The UCMS Atlantis was the first modern battlecruiser constructed by the UCM and was a testbed for development, sharing some common parts with cruisers. She was designed for battleship-level firepower and cruiser-level speed at the expense of survivability. The primary mission of Atlantis would be to hunt down lesser ships and destroy them quickly in flanking and interdiction operations."
@@ -2761,6 +2773,7 @@
       "category": "medium",
       "ship": {
         "name": "San Francisco Troopship",
+        "specs": {"length": "956m", "beam": "301m", "height": "368m", "displacement": "9,588,000m³"},
         "cost": 95,
         "stats": {
           "thrust": "8\"",
@@ -2870,6 +2883,7 @@
       "category": "medium",
       "ship": {
         "name": "Seattle Fleet Carrier",
+        "specs": {"length": "899m", "beam": "301m", "height": "308m", "displacement": "7,382,000m³"},
         "cost": 108,
         "stats": {
           "thrust": "8\"",
@@ -3233,6 +3247,7 @@
       "category": "medium",
       "ship": {
         "name": "Madrid Cruiser",
+        "specs": {"length": "956m", "beam": "301m", "height": "308m", "displacement": "7,619,000m³"},
         "cost": 86,
         "stats": {
           "thrust": "8\"",
@@ -3289,6 +3304,7 @@
       "category": "medium",
       "ship": {
         "name": "Berlin Cruiser",
+        "specs": {"length": "956m", "beam": "301m", "height": "308m", "displacement": "7,682,000m³"},
         "cost": 78,
         "stats": {
           "thrust": "8\"",
@@ -3354,6 +3370,7 @@
       "category": "medium",
       "ship": {
         "name": "Rio Cruiser",
+        "specs": {"length": "956m", "beam": "301m", "height": "308m", "displacement": "7,570,000m³"},
         "cost": 85,
         "stats": {
           "thrust": "8\"",
@@ -3464,6 +3481,7 @@
       "category": "medium",
       "ship": {
         "name": "New Cairo Light Cruiser",
+        "specs": {"length": "816m", "beam": "301m", "height": "308m", "displacement": "7,302,000m³"},
         "cost": 70,
         "stats": {
           "thrust": "10\"",
@@ -3525,6 +3543,7 @@
       "category": "medium",
       "ship": {
         "name": "Osaka Light Cruiser",
+        "specs": {"length": "816m", "beam": "301m", "height": "308m", "displacement": "7,191,000m³"},
         "cost": 70,
         "stats": {
           "thrust": "10\"",
@@ -3633,6 +3652,7 @@
       "category": "light",
       "ship": {
         "name": "Kyiv Heavy Destroyer",
+        "specs": {"length": "642m", "displacement": "5,339,000m³"},
         "cost": 60,
         "stats": {
           "thrust": "8\"",
@@ -3679,6 +3699,7 @@
       "category": "light",
       "ship": {
         "name": "Vancouver Escort Carrier",
+        "specs": {"length": "642m", "displacement": "4,008,000m³"},
         "cost": 55,
         "stats": {
           "thrust": "10\"",
@@ -3743,6 +3764,7 @@
       "category": "light",
       "ship": {
         "name": "Havana Destroyer",
+        "specs": {"length": "772m", "displacement": "4,305,000m³"},
         "cost": 45,
         "stats": {
           "thrust": "10\"",
@@ -3849,6 +3871,7 @@
       "category": "light",
       "ship": {
         "name": "Nuuk EM Harasser",
+        "specs": {"length": "552m", "displacement": "3,600,000m³"},
         "cost": 35,
         "stats": {
           "thrust": "14\"",
@@ -3910,6 +3933,7 @@
       "category": "light",
       "ship": {
         "name": "Reykjavik Cutter",
+        "specs": {"length": "552m", "displacement": "3,561,000m³"},
         "cost": 45,
         "stats": {
           "thrust": "14\"",
@@ -3965,6 +3989,7 @@
       "category": "light",
       "ship": {
         "name": "Vienna Escort Frigate",
+        "specs": {"length": "530m", "displacement": "3,838,000m³"},
         "cost": 60,
         "stats": {
           "thrust": "6\"",
@@ -4024,6 +4049,7 @@
       "category": "light",
       "ship": {
         "name": "Istanbul Monitor",
+        "specs": {"length": "530m", "displacement": "3,616,000m³"},
         "cost": 57,
         "stats": {
           "thrust": "6\"",
@@ -4184,6 +4210,7 @@
       "category": "light",
       "ship": {
         "name": "New Orleans Strike Carrier",
+        "specs": {"length": "564m", "displacement": "1,777,000m³"},
         "cost": 42,
         "stats": {
           "thrust": "10\"",
@@ -4244,6 +4271,7 @@
       "category": "light",
       "ship": {
         "name": "Lima Detector Frigate",
+        "specs": {"length": "588m", "displacement": "1,928,000m³"},
         "cost": 40,
         "stats": {
           "thrust": "10\"",
@@ -4304,6 +4332,7 @@
       "category": "light",
       "ship": {
         "name": "Jakarta Aegis Frigate",
+        "specs": {"length": "588m", "displacement": "2,044,000m³"},
         "cost": 42,
         "stats": {
           "thrust": "10\"",
@@ -4367,6 +4396,7 @@
       "category": "light",
       "ship": {
         "name": "Taipei Missile Frigate",
+        "specs": {"length": "588m", "displacement": "2,063,000m³"},
         "cost": 37,
         "stats": {
           "thrust": "10\"",
@@ -4423,6 +4453,7 @@
       "category": "light",
       "ship": {
         "name": "Toulon Frigate",
+        "specs": {"length": "588m", "displacement": "2,026,000m³"},
         "cost": 30,
         "stats": {
           "thrust": "10\"",
@@ -4470,6 +4501,7 @@
       "category": "light",
       "ship": {
         "name": "Lysander Stealth Lighter",
+        "specs": {"length": "460m", "displacement": "1,506,000m³"},
         "cost": 36,
         "stats": {
           "thrust": "12\"",
@@ -4689,6 +4721,7 @@
       "category": "light",
       "ship": {
         "name": "Hyperyacht Aurorum",
+        "specs": {"length": "778m", "beam": "254m", "height": "614m", "displacement": "13,760,000m³"},
         "cost": 76,
         "stats": {
           "thrust": "9\"",
@@ -4771,6 +4804,7 @@
       "category": "heavy",
       "ship": {
         "name": "Palatine Command Barge",
+        "specs": {"length": "585m", "beam": "188m", "height": "127m"},
         "cost": 170,
         "stats": {
           "thrust": "7\"",
@@ -4858,6 +4892,7 @@
       "category": "medium",
       "ship": {
         "name": "Centurion Grand Cruiser",
+        "specs": {"length": "940m", "beam": "202m", "height": "349m", "displacement": "12,455,000m³"},
         "cost": 125,
         "stats": {
           "thrust": "5\"",

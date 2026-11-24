@@ -424,6 +424,7 @@
    "category": "colossal",
    "ship": {
     "name": "Cthulhu Dreadnought",
+    "specs": {"length": "2,027m", "beam": "712m", "height": "646m", "displacement": "76,592,000m³"},
     "cost": 505,
     "stats": {
      "thrust": "8\"",
@@ -518,6 +519,7 @@
    "category": "colossal",
    "ship": {
     "name": "Nosferatu Dreadnought",
+    "specs": {"length": "2,027m", "beam": "712m", "height": "646m", "displacement": "75,933,000m³"},
     "cost": 490,
     "stats": {
      "thrust": "8\"",
@@ -1134,6 +1136,7 @@
    "category": "heavy",
    "ship": {
     "name": "Lucifer Battleship",
+    "specs": {"length": "1,466m", "beam": "716m", "height": "263m", "displacement": "30,020,000m³"},
     "cost": 205,
     "stats": {
      "thrust": "11\"",
@@ -1180,6 +1183,7 @@
    "category": "heavy",
    "ship": {
     "name": "Devil Battleship",
+    "specs": {"length": "1,466m", "beam": "716m", "height": "263m", "displacement": "29,759,000m³"},
     "cost": 255,
     "stats": {
      "thrust": "8\"",
@@ -1277,6 +1281,7 @@
    "category": "heavy",
    "ship": {
     "name": "Beelzebub Battleship",
+    "specs": {"length": "1,466m", "beam": "716m", "height": "263m", "displacement": "30,242,000m³"},
     "cost": 250,
     "stats": {
      "thrust": "8\"",
@@ -1384,6 +1389,7 @@
    "category": "heavy",
    "ship": {
     "name": "Dragon Battleship",
+    "specs": {"length": "1,099m", "beam": "716m", "height": "439m", "displacement": "26,045,000m³"},
     "cost": 235,
     "stats": {
      "thrust": "8\"",
@@ -1486,6 +1492,7 @@
    "category": "heavy",
    "ship": {
     "name": "Daemon Battleship",
+    "specs": {"length": "1,099m", "beam": "716m", "height": "439m", "displacement": "25,146,000m³"},
     "cost": 215,
     "stats": {
      "thrust": "8\"",
@@ -1587,6 +1594,7 @@
    "category": "heavy",
    "ship": {
     "name": "Umbra Battlecruiser",
+    "specs": {"length": "1,136m", "beam": "680m", "height": "359m", "displacement": "21,591,000m³"},
     "cost": 225,
     "stats": {
      "thrust": "10\"",
@@ -1667,6 +1675,7 @@
    "category": "heavy",
    "ship": {
     "name": "Shadow Battlecruiser",
+    "specs": {"length": "1,136m", "beam": "680m", "height": "396m", "displacement": "21,234,000m³"},
     "cost": 230,
     "stats": {
      "thrust": "10\"",
@@ -1827,6 +1836,7 @@
     "variants": [
      {
       "name": "Manticore",
+      "specs": {"length": "1,007m", "beam": "401m", "height": "370m", "displacement": "9,478,000m³"},
       "note": "Manticore counts as Banshee",
       "image": "assets/art/manticore.webp"
      }
@@ -1923,6 +1933,7 @@
     "variants": [
      {
       "name": "Basilisk",
+      "specs": {"length": "1,086m", "beam": "401m", "height": "370m", "displacement": "10,042,000m³"},
       "note": "Basilisk counts as Akuma",
       "image": "assets/art/basilisk.webp"
      }
@@ -2023,6 +2034,7 @@
    "category": "medium",
    "ship": {
     "name": "Kulshedra Heavy Carrier",
+    "specs": {"length": "1,007m", "beam": "278m", "height": "354m", "displacement": "8,252,000m³"},
     "cost": 156,
     "stats": {
      "thrust": "8\"",
@@ -2206,6 +2218,7 @@
    "category": "medium",
    "ship": {
     "name": "Raiju Heavy Cruiser",
+    "specs": {"length": "1,007m", "beam": "401m", "height": "354m", "displacement": "8,861,000m³"},
     "cost": 120,
     "stats": {
      "thrust": "8\"",
@@ -2284,6 +2297,7 @@
    "category": "medium",
    "ship": {
     "name": "Hydra Fleet Carrier",
+    "specs": {"length": "1,007m", "beam": "278m", "height": "354m", "displacement": "8,252,000m³"},
     "cost": 130,
     "stats": {
      "thrust": "10\"",
@@ -2374,6 +2388,7 @@
    "category": "medium",
    "ship": {
     "name": "Chimera Troopship",
+    "specs": {"length": "1,007m", "beam": "401m", "height": "354m", "displacement": "9,311,000m³"},
     "cost": 95,
     "stats": {
      "thrust": "10\"",
@@ -2436,6 +2451,7 @@
    "category": "medium",
    "ship": {
     "name": "Wyvern Cruiser",
+    "specs": {"length": "1,007m", "beam": "401m", "height": "354m", "displacement": "8,422,000m³"},
     "cost": 88,
     "stats": {
      "thrust": "10\"",
@@ -2507,6 +2523,7 @@
    "category": "medium",
    "ship": {
     "name": "Sphinx Cruiser",
+    "specs": {"length": "1,007m", "beam": "401m", "height": "354m", "displacement": "8,585,000m³"},
     "cost": 90,
     "stats": {
      "thrust": "10\"",
@@ -2578,6 +2595,7 @@
    "category": "medium",
    "ship": {
     "name": "Ifrit Cruiser",
+    "specs": {"length": "1,007m", "beam": "401m", "height": "354m", "displacement": "8,602,000m³"},
     "cost": 85,
     "stats": {
      "thrust": "10\"",
@@ -2643,6 +2661,7 @@
    "category": "medium",
    "ship": {
     "name": "Yokai Light Cruiser",
+    "specs": {"length": "1,007m", "beam": "231m", "height": "279m", "displacement": "7,652,000m³"},
     "cost": 80,
     "stats": {
      "thrust": "12\"",
@@ -2698,6 +2717,7 @@
    "category": "medium",
    "ship": {
     "name": "Strix Light Cruiser",
+    "specs": {"length": "1,007m", "beam": "231m", "height": "279m", "displacement": "7,491,000m³"},
     "cost": 88,
     "stats": {
      "thrust": "12\"",
@@ -2897,6 +2917,7 @@
    "category": "light",
    "ship": {
     "name": "Revenant Destroyer",
+    "specs": {"length": "754m", "displacement": "4,210,000m³"},
     "cost": 61,
     "stats": {
      "thrust": "10\"",
@@ -2995,6 +3016,7 @@
    "category": "light",
    "ship": {
     "name": "Succubus Destroyer",
+    "specs": {"length": "754m", "displacement": "4,277,000m³"},
     "cost": 65,
     "stats": {
      "thrust": "10\"",
@@ -3093,6 +3115,7 @@
    "category": "light",
    "ship": {
     "name": "Incubus Destroyer",
+    "specs": {"length": "761m", "displacement": "4,290,000m³"},
     "cost": 50,
     "stats": {
      "thrust": "10\"",
@@ -3190,6 +3213,7 @@
    "category": "light",
    "ship": {
     "name": "Parasite Radiation Leech",
+    "specs": {"length": "743m", "displacement": "3,866,000m³"},
     "cost": 48,
     "stats": {
      "thrust": "16\"",
@@ -3255,6 +3279,7 @@
    "category": "light",
    "ship": {
     "name": "Wraith Cutter",
+    "specs": {"length": "743m", "displacement": "4,031,000m³"},
     "cost": 48,
     "stats": {
      "thrust": "16\"",
@@ -3373,6 +3398,7 @@
    "category": "light",
    "ship": {
     "name": "Lamassu Barge",
+    "specs": {"length": "607m", "displacement": "4,451,000m³"},
     "cost": 50,
     "stats": {
      "thrust": "6\"",
@@ -3434,6 +3460,7 @@
    "category": "light",
    "ship": {
     "name": "Shedu Monitor",
+    "specs": {"length": "533m", "displacement": "2,502,000m³"},
     "cost": 48,
     "stats": {
      "thrust": "6\"",
@@ -3494,6 +3521,7 @@
    "category": "light",
    "ship": {
     "name": "Gargoyle Strike Carrier",
+    "specs": {"length": "512m", "displacement": "2,421,000m³"},
     "cost": 40,
     "stats": {
      "thrust": "12\"",
@@ -3554,6 +3582,7 @@
    "category": "light",
    "ship": {
     "name": "Scylla Frigate",
+    "specs": {"length": "512m", "displacement": "1,489,000m³"},
     "cost": 33,
     "stats": {
      "thrust": "12\"",
@@ -3617,6 +3646,7 @@
    "category": "light",
    "ship": {
     "name": "Charybdis Frigate",
+    "specs": {"length": "512m", "displacement": "1,823,000m³"},
     "cost": 34,
     "stats": {
      "thrust": "12\"",
@@ -3680,6 +3710,7 @@
    "category": "light",
    "ship": {
     "name": "Djinn Frigate",
+    "specs": {"length": "541m", "displacement": "1,520,000m³"},
     "cost": 44,
     "stats": {
      "thrust": "12\"",
@@ -3743,6 +3774,7 @@
    "category": "light",
    "ship": {
     "name": "Harpy Frigate",
+    "specs": {"length": "512m", "displacement": "1,476,000m³"},
     "cost": 37,
     "stats": {
      "thrust": "12\"",
@@ -4044,6 +4076,7 @@
    "category": "light",
    "ship": {
     "name": "Hyperyacht Aurorum",
+    "specs": {"length": "778m", "beam": "254m", "height": "614m", "displacement": "13,760,000m³"},
     "cost": 76,
     "stats": {
      "thrust": "9\"",

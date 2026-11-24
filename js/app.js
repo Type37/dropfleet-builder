@@ -435,7 +435,8 @@ let activeGroupId = null;
     return inner ? `<div class="lore-namesake"><span class="lore-namesake-label">Namesake:</span> ${inner}</div>` : '';
   }
 
-  // Hull length and displacement from the ship's tarot card (a handful of ships).
+  // Hull length, beam, height and displacement, from the ship's tarot card or the
+  // TTCombat faction compendium PDFs. Variants (counts-as sculpts) can carry their own.
   function specsDiv(specs) {
     if (!specs) return '';
     const rows = [['Length', specs.length], ['Beam', specs.beam], ['Height', specs.height], ['Displacement', specs.displacement]].filter(r => r[1]);
@@ -5073,7 +5074,8 @@ let activeGroupId = null;
         const vImg = v.image ? `<img src="${esc(v.image)}" alt="${esc(v.name)}" loading="lazy" style="height:56px;width:auto;object-fit:contain;border-radius:var(--radius-sm)" onerror="this.style.display='none'">` : '';
         const vf = variantFamous(v);
         const vNamesake = namesakeDiv(v.namesake, v.name);
-        const vLore = (v.lore || vNamesake) ? `<div class="ship-lore-text" style="border:none;padding:var(--sp-xs) 0 0;background:none;font-size:var(--text-xs)">${v.lore ? formatLore(v.lore, vf.prefix, vf.ships) : ''}${vNamesake}</div>` : '';
+        const vSpecs = specsDiv(v.specs);
+        const vLore = (v.lore || vNamesake || vSpecs) ? `<div class="ship-lore-text" style="border:none;padding:var(--sp-xs) 0 0;background:none;font-size:var(--text-xs)">${v.lore ? formatLore(v.lore, vf.prefix, vf.ships) : ''}${vNamesake}${vSpecs}</div>` : '';
         return `<div style="margin-top:var(--sp-sm);padding:var(--sp-sm);background:var(--paper-alt);border-radius:var(--radius-sm);display:flex;gap:var(--sp-sm);align-items:flex-start">
           ${vImg}
           <div style="flex:1;min-width:0">
@@ -11437,6 +11439,7 @@ let activeGroupId = null;
             <div class="text-muted" style="font-size:var(--text-sm)">${esc(v.note)}</div>
             ${v.lore ? `<div class="text-rules" style="margin-top:var(--sp-xs)">${formatLore(v.lore, vf.prefix, vf.ships)}</div>` : ''}
             ${vNamesake}
+            ${specsDiv(v.specs)}
           </div>
         </div>`; }).join('')}
       </div>`;

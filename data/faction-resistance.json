@@ -1219,6 +1219,7 @@
     "variants": [
      {
       "name": "Olympus",
+      "specs": {"length": "1,346m", "beam": "693m", "height": "527m", "displacement": "58,853,000m³"},
       "note": "Olympus counts as Yi Sun-sin",
       "image": "assets/art/olympus.webp"
      }
@@ -1328,6 +1329,7 @@
     "variants": [
      {
       "name": "Trident",
+      "specs": {"length": "1,346m", "beam": "693m", "height": "527m", "displacement": "58,064,000m³"},
       "note": "Trident counts as Nelson",
       "image": "assets/art/trident.webp"
      }
@@ -1618,6 +1620,7 @@
    "category": "heavy",
    "ship": {
     "name": "Tribune Battlecruiser",
+    "specs": {"length": "1,195m", "beam": "202m", "height": "372m", "displacement": "18,217,000m³"},
     "cost": 200,
     "stats": {
      "thrust": "7\"",
@@ -2078,6 +2081,7 @@
    "category": "heavy",
    "ship": {
     "name": "Triumvir Repair Cruiser",
+    "specs": {"length": "1,192m", "beam": "202m", "height": "372m", "displacement": "22,290,000m³"},
     "cost": 180,
     "stats": {
      "thrust": "7\"",
@@ -2142,6 +2146,7 @@
    "category": "heavy",
    "ship": {
     "name": "Senator Battlecruiser",
+    "specs": {"length": "1,276m", "beam": "202m", "height": "400m", "displacement": "19,600,000m³"},
     "cost": 155,
     "stats": {
      "thrust": "7\"",
@@ -2240,6 +2245,7 @@
    "category": "medium",
    "ship": {
     "name": "Gladiator Grand Cruiser",
+    "specs": {"length": "940m", "beam": "202m", "height": "349m", "displacement": "12,455,000m³"},
     "cost": 144,
     "stats": {
      "thrust": "5\"",
@@ -2851,6 +2857,7 @@
     "variants": [
      {
       "name": "Kalium KNC-5",
+      "specs": {"length": "1,009m", "beam": "214m", "height": "256m", "displacement": "10,854,000m³"},
       "note": "This Ship counts as a Resistance Light Cruiser with one NC-16 Missile Bank and two Vent Cannon Turrets.",
       "image": "assets/art/kalium_knc5.webp",
       "famousShips": [
@@ -2863,6 +2870,7 @@
      },
      {
       "name": "Kalium KNC-12",
+      "specs": {"length": "1,009m", "beam": "237m", "height": "315m", "displacement": "9,886,000m³"},
       "note": "This Ship counts as a Resistance Light Cruiser with one Vent Cannon Turret and two Fighters & Bombers.",
       "image": "assets/art/kalium_knc12.webp",
       "famousShips": [
@@ -3137,6 +3145,7 @@
    "category": "light",
    "ship": {
     "name": "Baleares Pocket Carrier",
+    "specs": {"length": "551m", "displacement": "7,160,000m³"},
     "cost": 52,
     "stats": {
      "thrust": "16\"",
@@ -3199,6 +3208,7 @@
    "category": "light",
    "ship": {
     "name": "Sagitarii Cutter",
+    "specs": {"length": "571m", "displacement": "6,128,000m³"},
     "cost": 30,
     "stats": {
      "thrust": "16\"",
@@ -3690,6 +3700,7 @@
    "category": "medium",
    "ship": {
     "name": "Kalium KNC-5 Line Cruiser",
+    "specs": {"length": "1,009m", "beam": "214m", "height": "256m", "displacement": "10,854,000m³"},
     "cost": 66,
     "stats": {
      "thrust": "9\"",
@@ -3755,6 +3766,7 @@
    "category": "medium",
    "ship": {
     "name": "Kalium KNC-12 Fleet Carrier",
+    "specs": {"length": "1,009m", "beam": "237m", "height": "315m", "displacement": "9,886,000m³"},
     "cost": 113,
     "stats": {
      "thrust": "9\"",
@@ -3888,6 +3900,7 @@
    "category": "light",
    "ship": {
     "name": "Hyperyacht Aurorum",
+    "specs": {"length": "778m", "beam": "254m", "height": "614m", "displacement": "13,760,000m³"},
     "cost": 76,
     "stats": {
      "thrust": "9\"",
@@ -3970,6 +3983,7 @@
    "category": "heavy",
    "ship": {
     "name": "Palatine Command Barge",
+    "specs": {"length": "585m", "beam": "188m", "height": "127m"},
     "cost": 170,
     "stats": {
      "thrust": "7\"",
@@ -4057,6 +4071,7 @@
    "category": "medium",
    "ship": {
     "name": "Centurion Grand Cruiser",
+    "specs": {"length": "940m", "beam": "202m", "height": "349m", "displacement": "12,455,000m³"},
     "cost": 125,
     "stats": {
      "thrust": "5\"",

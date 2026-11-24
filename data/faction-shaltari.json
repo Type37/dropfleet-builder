@@ -4400,6 +4400,7 @@
    "category": "light",
    "ship": {
     "name": "Hyperyacht Aurorum",
+    "specs": {"length": "778m", "beam": "254m", "height": "614m", "displacement": "13,760,000m³"},
     "cost": 76,
     "stats": {
      "thrust": "9\"",

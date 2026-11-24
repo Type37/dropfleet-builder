@@ -412,6 +412,7 @@
    "category": "colossal",
    "ship": {
     "name": "Remus Dreadnought",
+    "specs": {"length": "1,846m", "beam": "603m", "height": "541m", "displacement": "76,964,000m³"},
     "cost": 455,
     "stats": {
      "thrust": "6\"",
@@ -516,6 +517,7 @@
    "category": "colossal",
    "ship": {
     "name": "Romulus Dreadnought",
+    "specs": {"length": "1,912m", "beam": "603m", "height": "513m", "displacement": "74,396,000m³"},
     "cost": 450,
     "stats": {
      "thrust": "6\"",
@@ -1228,6 +1230,7 @@
    "category": "heavy",
    "ship": {
     "name": "Minos Battleship",
+    "specs": {"length": "1,623m", "beam": "637m", "height": "339m", "displacement": "27,928,000m³"},
     "cost": 255,
     "stats": {
      "thrust": "6\"",
@@ -1308,6 +1311,7 @@
    "category": "heavy",
    "ship": {
     "name": "Heracles Battleship",
+    "specs": {"length": "1,623m", "beam": "637m", "height": "339m", "displacement": "27,692,000m³"},
     "cost": 235,
     "stats": {
      "thrust": "6\"",
@@ -1569,6 +1573,7 @@
    "category": "heavy",
    "ship": {
     "name": "Agrippa Battlecruiser",
+    "specs": {"length": "1,252m", "beam": "226m", "height": "674m", "displacement": "23,452,000m³"},
     "cost": 160,
     "stats": {
      "thrust": "10\"",
@@ -1624,6 +1629,7 @@
    "category": "heavy",
    "ship": {
     "name": "Pompeius Battlecruiser",
+    "specs": {"length": "1,306m", "beam": "231m", "height": "674m", "displacement": "24,007,000m³"},
     "cost": 140,
     "stats": {
      "thrust": "10\"",
@@ -1713,6 +1719,7 @@
     "variants": [
      {
       "name": "Scipio",
+      "specs": {"length": "1,177m", "beam": "318m", "height": "344m", "displacement": "13,737,000m³"},
       "note": "Scipio counts as Priam",
       "image": "assets/art/scipio.webp",
       "namesake": "[Scipio Africanus](https://en.wikipedia.org/wiki/Scipio_Africanus) was the Roman general who defeated Hannibal at the Battle of Zama, ending the Second Punic War and securing Rome's dominance over Carthage."
@@ -1781,6 +1788,7 @@
     "variants": [
      {
       "name": "Leonidas",
+      "specs": {"length": "1,177m", "beam": "318m", "height": "344m", "displacement": "13,737,000m³"},
       "note": "Leonidas counts as Agamemnon",
       "image": "assets/art/leonidas.webp",
       "lore": "The Leonidas and Agamemnon are two fearsome battlecruisers of equivalent capability, the latter being more common. Perhaps the Leonidas is built in a smaller shipyard or different planet to the Agamemnon, although that is mere speculation, since little is known about the PHR home planets. Both ships feature awesome firepower, in some ways exceeding that of a UCM battleship, should a captain be in a position to unleash both of their ruinous broadsides to full and disastrous effect."
@@ -2088,6 +2096,7 @@
    "category": "medium",
    "ship": {
     "name": "Orpheus Assault Troopship",
+    "specs": {"length": "990m", "beam": "262m", "height": "321m", "displacement": "9,515,000m³"},
     "cost": 166,
     "stats": {
      "thrust": "7\"",
@@ -2229,6 +2238,7 @@
    "category": "medium",
    "ship": {
     "name": "Hector Heavy Cruiser",
+    "specs": {"length": "1,082m", "beam": "262m", "height": "321m", "displacement": "8,329,000m³"},
     "cost": 130,
     "stats": {
      "thrust": "7\"",
@@ -2294,6 +2304,7 @@
    "category": "medium",
    "ship": {
     "name": "Bellerophon Heavy Cruiser",
+    "specs": {"length": "1,082m", "beam": "262m", "height": "321m", "displacement": "8,228,000m³"},
     "cost": 185,
     "stats": {
      "thrust": "7\"",
@@ -2355,6 +2366,7 @@
    "category": "medium",
    "ship": {
     "name": "Achilles Heavy Cruiser",
+    "specs": {"length": "990m", "beam": "262m", "height": "321m", "displacement": "8,467,000m³"},
     "cost": 142,
     "stats": {
      "thrust": "7\"",
@@ -2474,6 +2486,7 @@
    "category": "medium",
    "ship": {
     "name": "Ikarus Vanguard Carrier",
+    "specs": {"length": "1,013m", "beam": "262m", "height": "311m", "displacement": "8,005,000m³"},
     "cost": 120,
     "stats": {
      "thrust": "8\"",
@@ -2569,6 +2582,7 @@
    "category": "medium",
    "ship": {
     "name": "Orion Cruiser",
+    "specs": {"length": "1,013m", "beam": "262m", "height": "311m", "displacement": "8,139,000m³"},
     "cost": 110,
     "stats": {
      "thrust": "8\"",
@@ -2634,6 +2648,7 @@
    "category": "medium",
    "ship": {
     "name": "Perseus Cruiser",
+    "specs": {"length": "1,013m", "beam": "262m", "height": "311m", "displacement": "8,251,000m³"},
     "cost": 108,
     "stats": {
      "thrust": "8\"",
@@ -2699,6 +2714,7 @@
    "category": "medium",
    "ship": {
     "name": "Ajax Cruiser",
+    "specs": {"length": "1,013m", "beam": "262m", "height": "311m", "displacement": "8,139,000m³"},
     "cost": 110,
     "stats": {
      "thrust": "8\"",
@@ -2812,6 +2828,7 @@
    "category": "medium",
    "ship": {
     "name": "Theseus Light Cruiser",
+    "specs": {"length": "990m", "beam": "262m", "height": "311m", "displacement": "7,438,000m³"},
     "cost": 84,
     "stats": {
      "thrust": "10\"",
@@ -2923,6 +2940,7 @@
    "category": "light",
    "ship": {
     "name": "Odysseus Blockade Runner",
+    "specs": {"length": "691m", "displacement": "6,680,000m³"},
     "cost": 63,
     "stats": {
      "thrust": "12\"",
@@ -2982,6 +3000,7 @@
    "category": "light",
    "ship": {
     "name": "Jason Blockade Runner",
+    "specs": {"length": "691m", "displacement": "5,848,000m³"},
     "cost": 55,
     "stats": {
      "thrust": "12\"",
@@ -3092,6 +3111,7 @@
    "category": "light",
    "ship": {
     "name": "Ariadne Destroyer",
+    "specs": {"length": "666m", "displacement": "5,848,000m³"},
     "cost": 57,
     "stats": {
      "thrust": "8\"",
@@ -3144,6 +3164,7 @@
    "category": "light",
    "ship": {
     "name": "Electra Destroyer",
+    "specs": {"length": "666m", "displacement": "5,325,000m³"},
     "cost": 53,
     "stats": {
      "thrust": "8\"",
@@ -3238,6 +3259,7 @@
    "category": "light",
    "ship": {
     "name": "Ourania Swiftlink",
+    "specs": {"length": "722m", "displacement": "5,209,000m³"},
     "cost": 35,
     "stats": {
      "thrust": "14\"",
@@ -3286,6 +3308,7 @@
    "category": "light",
    "ship": {
     "name": "Pegasus Nano-Hive Cutter",
+    "specs": {"length": "722m", "displacement": "5,177,000m³"},
     "cost": 58,
     "stats": {
      "thrust": "14\"",
@@ -3397,6 +3420,7 @@
    "category": "light",
    "ship": {
     "name": "Pollux Escort Frigate",
+    "specs": {"length": "688m", "displacement": "6,622,000m³"},
     "cost": 61,
     "stats": {
      "thrust": "8\"",
@@ -3465,6 +3489,7 @@
    "category": "light",
    "ship": {
     "name": "Castor Monitor",
+    "specs": {"length": "432m", "displacement": "7,157,000m³"},
     "cost": 52,
     "stats": {
      "thrust": "5\"",
@@ -3518,6 +3543,7 @@
    "category": "light",
    "ship": {
     "name": "Medea Strike Carrier",
+    "specs": {"length": "654m", "displacement": "3,214,000m³"},
     "cost": 50,
     "stats": {
      "thrust": "10\"",
@@ -3578,6 +3604,7 @@
    "category": "light",
    "ship": {
     "name": "Andromeda Escort Carrier",
+    "specs": {"length": "657m", "displacement": "3,212,000m³"},
     "cost": 60,
     "stats": {
      "thrust": "10\"",
@@ -3643,6 +3670,7 @@
    "category": "light",
    "ship": {
     "name": "Calypso Frigate",
+    "specs": {"length": "657m", "displacement": "3,325,000m³"},
     "cost": 40,
     "stats": {
      "thrust": "10\"",
@@ -3701,6 +3729,7 @@
    "category": "light",
    "ship": {
     "name": "Pandora Frigate",
+    "specs": {"length": "657m", "displacement": "2,957,000m³"},
     "cost": 42,
     "stats": {
      "thrust": "10\"",
@@ -3748,6 +3777,7 @@
    "category": "light",
    "ship": {
     "name": "Europa Frigate",
+    "specs": {"length": "667m", "displacement": "3,089,000m³"},
     "cost": 38,
     "stats": {
      "thrust": "10\"",
@@ -3996,6 +4026,7 @@
    "category": "light",
    "ship": {
     "name": "Hyperyacht Aurorum",
+    "specs": {"length": "778m", "beam": "254m", "height": "614m", "displacement": "13,760,000m³"},
     "cost": 76,
     "stats": {
      "thrust": "9\"",
@@ -4078,6 +4109,7 @@
    "category": "heavy",
    "ship": {
     "name": "Palatine Command Barge",
+    "specs": {"length": "585m", "beam": "188m", "height": "127m"},
     "cost": 170,
     "stats": {
      "thrust": "7\"",
@@ -4166,6 +4198,7 @@
    "category": "medium",
    "ship": {
     "name": "Centurion Grand Cruiser",
+    "specs": {"length": "940m", "beam": "202m", "height": "349m", "displacement": "12,455,000m³"},
     "cost": 125,
     "stats": {
      "thrust": "5\"",
