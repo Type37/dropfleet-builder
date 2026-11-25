@@ -3005,12 +3005,15 @@
     const sp = ship.specs || {};
     const specLines = [['Length', sp.length], ['Beam', sp.beam], ['Height', sp.height], ['Displacement', sp.displacement]].filter(r => r[1])
       .map(([k, v]) => `<div class="lore-namesake lore-spec"><span class="lore-namesake-label">${k}:</span> ${esc(v)}</div>`).join('');
+    const crew = ship.crew || [];
+    const crewLine = crew.length ? `<div class="lore-namesake lore-spec"><span class="lore-namesake-label">Permanent UCMF crew:</span>${crew.map(c => `<br>${esc(c)}`).join('')}</div>` : '';
     return `<div class="lore-card">
       <div class="lore-label">Lore</div>
       <div class="lore-body">${paras}</div>
       ${famousList}
       ${namesakeLine}
       ${specLines}
+      ${crewLine}
     </div>`;
   }
 
@@ -5152,6 +5155,9 @@
   // What's New — TTCombat publishes no official changelog, so this is the
   // maintainer's interpretation. Mirrors the desktop changelog.
   const CHANGELOG = [
+    { date: '2026-11-24', title: 'New Orleans crew', items: [
+      'Lore: the New Orleans Strike Carrier lists its permanent UCMF crew, 200 in all: Admiralty Staff, Colonial Marines, Fleet Air Arm aircrew and the rest of the ship\u2019s company.'
+    ] },
     { date: '2026-11-24', title: 'Hull specs for most of the fleet', items: [
       'Lore: length, beam, height and displacement for 122 ships and sculpts, up from 13, taken from TTCombat\u2019s UCM, Scourge, Resistance and PHR compendiums. Frigates and smaller list length and displacement only, as the books do.',
       'Lore: counts-as sculpts such as the Atlantis, Basilisk and Trident show their own figures in the desktop builder.'

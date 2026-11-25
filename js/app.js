@@ -443,6 +443,12 @@ let activeGroupId = null;
     return rows.map(([k, v]) => `<div class="lore-namesake lore-spec"><span class="lore-namesake-label">${k}:</span> ${esc(v)}</div>`).join('');
   }
 
+  // Permanent crew roster (a list of "27 Admiralty Staff" lines), when known.
+  function crewDiv(crew) {
+    if (!crew || !crew.length) return '';
+    return `<div class="lore-namesake lore-spec"><span class="lore-namesake-label">Permanent UCMF crew:</span>${crew.map(c => `<br>${esc(c)}`).join('')}</div>`;
+  }
+
   // Speak a namesake aloud. We feed the respelling (not the raw name) to the
   // synth so it lands close to the intended pronunciation.
   function sayName(btn) {
@@ -774,6 +780,7 @@ let activeGroupId = null;
       famousShips: s.famousShips || [],
       namesake: s.namesake || '',
       specs: s.specs || null,
+      crew: s.crew || [],
       image: shipArtPath(s.name),
       variants: s.variants || [],
       systemSelection: s.systemSelection || null,
@@ -5099,7 +5106,7 @@ let activeGroupId = null;
       const openAttr = settings.autoExpandLore ? ' open' : '';
       loreHtml = `<details class="ship-lore no-print" id="${loreId}"${openAttr}>
         <summary class="ship-lore-toggle">Lore</summary>
-        <div class="ship-lore-text">${formatLore(loreText, dbShip.famousShipsPrefix, dbShip.famousShips)}${nsDiv}${specsDiv(dbShip.specs)}${cityMapHtml(dbShip.name)}</div>
+        <div class="ship-lore-text">${formatLore(loreText, dbShip.famousShipsPrefix, dbShip.famousShips)}${nsDiv}${specsDiv(dbShip.specs)}${crewDiv(dbShip.crew)}${cityMapHtml(dbShip.name)}</div>
       </details>`;
     } else if (nsDiv) {
       // Namesake flavour even when there's no main lore block
@@ -9362,6 +9369,9 @@ let activeGroupId = null;
   // this is the maintainer's best-effort interpretation of edition changes plus
   // the builder's own feature history. Newest first.
   const CHANGELOG = [
+    { date: '2026-11-24', title: 'New Orleans crew', items: [
+      'Lore: the New Orleans Strike Carrier lists its permanent UCMF crew, 200 in all: Admiralty Staff, Colonial Marines, Fleet Air Arm aircrew and the rest of the ship\u2019s company.'
+    ] },
     { date: '2026-11-24', title: 'Hull specs for most of the fleet', items: [
       'Lore: length, beam, height and displacement for 122 ships and sculpts, up from 13, taken from TTCombat\u2019s UCM, Scourge, Resistance and PHR compendiums. Frigates and smaller list length and displacement only, as the books do.',
       'Lore: counts-as sculpts such as the Atlantis, Basilisk and Trident show their own figures in the desktop builder.'
@@ -11455,7 +11465,7 @@ let activeGroupId = null;
     if (dbShip.lore || detailNamesake) {
       loreHtml = `<div class="detail-lore">
         <div class="detail-section-label">Lore</div>
-        <div class="text-rules">${formatLore(dbShip.lore, dbShip.famousShipsPrefix, dbShip.famousShips)}${detailNamesake}${specsDiv(dbShip.specs)}${cityMapHtml(dbShip.name)}</div>
+        <div class="text-rules">${formatLore(dbShip.lore, dbShip.famousShipsPrefix, dbShip.famousShips)}${detailNamesake}${specsDiv(dbShip.specs)}${crewDiv(dbShip.crew)}${cityMapHtml(dbShip.name)}</div>
       </div>`;
     }
 

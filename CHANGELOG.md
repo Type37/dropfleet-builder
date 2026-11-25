@@ -5,6 +5,13 @@ Long form, newest first. The short version is the What's New panel in the app.
 TTCombat publishes no official changelog, so dated edition notes are my reading
 of what changed between stats PDFs.
 
+### 2026-11-24: New Orleans crew
+
+The New Orleans Strike Carrier's lore panel lists its permanent UCMF crew:
+27 Admiralty Staff, 30 Colonial Marines (Ship Security Detail), 20 Fleet Air
+Arm Aircrew and 123 Other Ship's Company. Any ship can carry a `crew` list
+now, shown on desktop and mobile.
+
 ### 2026-11-24: Hull specs for most of the fleet
 
 Length, beam, height and displacement now appear in the lore panel for 122
